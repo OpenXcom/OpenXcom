@@ -32,7 +32,6 @@
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/Ruleset.h"
-#include "LanguageState.h"
 #include "MainMenuState.h"
 
 namespace OpenXcom
@@ -440,18 +439,53 @@ void StartState::think()
 			Log(LOG_INFO) << "Loading resources...";
 			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
 			Log(LOG_INFO) << "Resources loaded successfully.";
-			std::vector<std::string> langs = Language::getList(0);
-			if (langs.empty())
+			Log(LOG_INFO) << "Loading language...";
+			std::string defaultLang = "en-US";
+			// No language set, detect based on system
+			if (Options::getString("language").empty())
 			{
-				throw Exception("No languages available");
+				std::string locale = CrossPlatform::getLocale();
+				std::string lang = locale.substr(0, locale.find_first_of('-'));
+				// Try to load full locale
+				try
+				{
+					_game->loadLanguage(locale);
+				}
+				catch (std::exception)
+				{
+					// Try to load language locale
+					try
+					{
+						_game->loadLanguage(lang);
+					}
+					// Give up, use default
+					catch (std::exception)
+					{
+						_game->loadLanguage(defaultLang);
+					}
+				}
 			}
+			else
+			{
+				// Use options language
+				try
+				{
+					_game->loadLanguage(Options::getString("language"));
+				}
+				// Language not found, use default
+				catch (std::exception)
+				{
+					_game->loadLanguage(defaultLang);
+				}
+			}
+			Log(LOG_INFO) << "Language loaded successfully.";
 			_load = LOADING_SUCCESSFUL;
-
 
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
-			std::string introSoundFile = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
-			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && CrossPlatform::fileExists(introSoundFile))
+			std::string introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
+			std::string introSoundFileWin = CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
+			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && (CrossPlatform::fileExists(introSoundFileDOS) || CrossPlatform::fileExists(introSoundFileWin)))
 			{
 				audioSequence = new AudioSequence(_game->getResourcePack());
 				Flc::flc.realscreen = _game->getScreen();
@@ -517,22 +551,7 @@ void StartState::think()
 		break;
 	case LOADING_SUCCESSFUL:
 		Log(LOG_INFO) << "OpenXcom started successfully!";
-		if (Options::getString("language").empty())
-		{
-			_game->setState(new LanguageState(_game));
-		}
-		else
-		{
-			try
-			{
-				_game->loadLanguage(Options::getString("language"));
-				_game->setState(new MainMenuState(_game));
-			}
-			catch (Exception)
-			{
-				_game->setState(new LanguageState(_game));
-			}
-		}
+		_game->setState(new MainMenuState(_game));
 		break;
 	default:
 		break;

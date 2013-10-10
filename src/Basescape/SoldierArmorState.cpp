@@ -74,24 +74,24 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SoldierArmorState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SoldierArmorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
+	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_ARMOR_FOR"));
+	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName()));
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_txtSoldier->setText(s->getName());
 
 	_txtType->setColor(Palette::blockOffset(13)+5);
-	_txtType->setText(_game->getLanguage()->getString("STR_TYPE"));
+	_txtType->setText(tr("STR_TYPE"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+5);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_lstArmor->setColor(Palette::blockOffset(13));
 	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
@@ -108,13 +108,20 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 		{
 			_armors.push_back(a);
 			std::wstringstream ss;
-			ss << _base->getItems()->getItem(a->getStoreItem());
-			_lstArmor->addRow(2, _game->getLanguage()->getString(a->getType()).c_str(), ss.str().c_str());
+			if (_game->getSavedGame()->getMonthsPassed() > -1)
+			{
+				ss << _base->getItems()->getItem(a->getStoreItem());
+			}
+			else
+			{
+				ss << "-";
+			}
+			_lstArmor->addRow(2, tr(a->getType()).c_str(), ss.str().c_str());
 		}
 		else if (a->getStoreItem() == "STR_NONE")
 		{
 			_armors.push_back(a);
-			_lstArmor->addRow(1, _game->getLanguage()->getString(a->getType()).c_str());
+			_lstArmor->addRow(1, tr(a->getType()).c_str());
 		}
 	}
 	_lstArmor->onMouseClick((ActionHandler)&SoldierArmorState::lstArmorClick);

@@ -78,35 +78,31 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
-	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_craftname").arg(c->getName(_game->getLanguage())));
+	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT").arg(c->getName(_game->getLanguage())));
 
 	_txtName->setColor(Palette::blockOffset(15)+6);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
+	_txtName->setText(tr("STR_NAME_UC"));
 
 	_txtRank->setColor(Palette::blockOffset(15)+6);
-	_txtRank->setText(_game->getLanguage()->getString("STR_RANK"));
+	_txtRank->setText(tr("STR_RANK"));
 
 	_txtCraft->setColor(Palette::blockOffset(15)+6);
-	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss2.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 
 	_txtUsed->setColor(Palette::blockOffset(15)+6);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss3.str());
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
@@ -148,7 +144,7 @@ void CraftSoldiersState::populateList()
 	int row = 0;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 
 		Uint8 color;
 		if ((*i)->getCraft() == c)
@@ -259,7 +255,7 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	if (s->getCraft() == c)
 	{
 		s->setCraft(0);
-		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
+		_lstSoldiers->setCellText(row, 2, tr("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
 	}
 	else if (s->getCraft() && s->getCraft()->getStatus() == "STR_OUT")
@@ -274,12 +270,8 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	}
 	_lstSoldiers->setRowColor(row, color);
 
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss.str());
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss2.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 }
 
 }

@@ -68,22 +68,22 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_DISMANTLE"));
+	_txtTitle->setText(tr("STR_DISMANTLE"));
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setAlign(ALIGN_CENTER);
-	_txtFacility->setText(_game->getLanguage()->getString(_fac->getRules()->getType()));
+	_txtFacility->setText(tr(_fac->getRules()->getType()));
 }
 
 /**

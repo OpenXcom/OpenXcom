@@ -59,7 +59,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y) : Interact
 	_warning = new WarningMessage(224, 24, 48, 176);
 	_stackNumber = new NumberText(15, 15, 0, 0);
 
-	_warning->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+	_warning->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
@@ -131,7 +131,7 @@ void Inventory::drawGrid()
 	_grid->clear();
 	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
-	text.setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+	text.setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 	text.setColor(Palette::blockOffset(4)-1);
 	text.setHighContrast(true);
 
@@ -704,7 +704,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
-									item->setExplodeTurn(1);
+									item->setExplodeTurn(0);
 								}
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}

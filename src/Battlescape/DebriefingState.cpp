@@ -104,7 +104,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -113,16 +113,16 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtTitle->setBig();
 
 	_txtItem->setColor(Palette::blockOffset(8)+5);
-	_txtItem->setText(_game->getLanguage()->getString("STR_LIST_ITEM"));
+	_txtItem->setText(tr("STR_LIST_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtScore->setColor(Palette::blockOffset(8)+5);
-	_txtScore->setText(_game->getLanguage()->getString("STR_SCORE"));
+	_txtScore->setText(tr("STR_SCORE"));
 
 	_txtRecovery->setColor(Palette::blockOffset(8)+5);
-	_txtRecovery->setText(_game->getLanguage()->getString("STR_UFO_RECOVERY"));
+	_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 
 	_txtRating->setColor(Palette::blockOffset(8)+5);
 
@@ -154,18 +154,18 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 		total += (*i)->score;
 		if ((*i)->recovery)
 		{
-			_lstRecovery->addRow(3, _game->getLanguage()->getString((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstRecovery->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
 			recoveryY += 8;
 		}
 		else
 		{
-			_lstStats->addRow(3, _game->getLanguage()->getString((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstStats->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
 			statsY += 8;
 		}
 	}
 	std::wstringstream ss3;
 	ss3 << total;
-	_lstTotal->addRow(2, _game->getLanguage()->getString("STR_TOTAL_UC").c_str(), ss3.str().c_str());
+	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
 
 	// add the points to our activity score
 	if (_region)
@@ -190,28 +190,28 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	}
 
 	// Calculate rating
-	std::wstring rating = _game->getLanguage()->getString("STR_RATING");
+	std::wstring rating;
 	if (total <= -200)
 	{
-		rating += _game->getLanguage()->getString("STR_RATING_TERRIBLE");
+		rating = tr("STR_RATING_TERRIBLE");
 	}
 	else if (total <= 0)
 	{
-		rating += _game->getLanguage()->getString("STR_RATING_POOR");
+		rating = tr("STR_RATING_POOR");
 	}
 	else if (total <= 200)
 	{
-		rating += _game->getLanguage()->getString("STR_RATING_OK");
+		rating = tr("STR_RATING_OK");
 	}
 	else if (total <= 500)
 	{
-		rating += _game->getLanguage()->getString("STR_RATING_GOOD");
+		rating = tr("STR_RATING_GOOD");
 	}
 	else
 	{
-		rating += _game->getLanguage()->getString("STR_RATING_EXCELLENT");
+		rating = tr("STR_RATING_EXCELLENT");
 	}
-	_txtRating->setText(rating);
+	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMMARS")->play();
@@ -450,7 +450,7 @@ void DebriefingState::prepareDebriefing()
 	// alien base disappears (if you didn't abort)
 	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
-		_txtRecovery->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_RECOVERY"));
+		_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 		bool destroyAlienBase = true;
 		if (aborted)
 		{
@@ -682,7 +682,7 @@ void DebriefingState::prepareDebriefing()
 		delete craft;
 		craft = 0; // To avoid a crash down there!!
 		base->getCrafts()->erase(craftIterator);
-		_txtTitle->setText(_game->getLanguage()->getString("STR_CRAFT_IS_LOST"));
+		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 		return;
 	}
 	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && !base->getCrafts()->empty())
@@ -696,19 +696,19 @@ void DebriefingState::prepareDebriefing()
 	{
 		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_SAVED"));
+			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
 		}
 		else if (battle->getMissionType() == "STR_TERROR_MISSION")
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_ALIENS_DEFEATED"));
+			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 		}
 		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_DESTROYED"));
+			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
 		else
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
+			_txtTitle->setText(tr("STR_UFO_IS_RECOVERED"));
 		}
 
 		if (!aborted)
@@ -765,20 +765,20 @@ void DebriefingState::prepareDebriefing()
 	{
 		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_LOST"));
+			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyBase = true;
 		}
 		else if (battle->getMissionType() == "STR_TERROR_MISSION")
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_TERROR_CONTINUES"));
+			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
 		}
 		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_STILL_INTACT"));
+			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}
 		else
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
+			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED"));
 		}
 
 		if (playersSurvived > 0 && !_destroyBase)

@@ -72,31 +72,24 @@ namespace OpenXcom
 		_lstInfo = new TextList(250, 111, 5, 80);
 		add(_lstInfo);
 
-		std::wstringstream ss;
+
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
 		_lstInfo->setColumns(2, 180, 70);
 		_lstInfo->setDot(true);
 		_lstInfo->setBig();
 
-		ss.str(L"");ss.clear();
+		std::wstringstream ss;
 		ss << weapon->getDamage();
-
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DAMAGE").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getRange() << _game->getLanguage()->getString("STR_KM").c_str();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RANGE").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_RANGE").c_str(), tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getAccuracy() << "%";
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ACCURACY").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), Text::formatPercentage(weapon->getAccuracy()).c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getStandardReload() << _game->getLanguage()->getString("STR_S").c_str();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RE_LOAD_TIME").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
 		centerAllSurfaces();

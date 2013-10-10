@@ -49,7 +49,6 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(300, 16, 10, 8);
 	_txtRemaining = new Text(134, 10, 10, 24);
-	_txtLabSpace = new Text(16, 10, 134, 24);
 	_txtName = new Text(64, 10, 10, 40);
 	_txtPsiStrength = new Text(80, 20, 124, 32);
 	_txtPsiSkill = new Text(80, 20, 188, 32);
@@ -66,7 +65,6 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	add(_txtName);
 	add(_txtTitle);
 	add(_txtRemaining);
-	add(_txtLabSpace);
 	add(_txtPsiStrength);
 	add(_txtPsiSkill);
 	add(_txtTraining);
@@ -79,35 +77,31 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AllocatePsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AllocatePsiTrainingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_PSIONIC_TRAINING"));
-		
-	_txtRemaining->setColor(Palette::blockOffset(13)+10);
-	_txtRemaining->setText(_game->getLanguage()->getString("STR_REMAINING_PSI_LAB_CAPACITY"));
+	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 	
-	_labSpace = base->getAvailablePsiLabs()-base->getUsedPsiLabs();
-	std::wstringstream ss;
-	ss << _labSpace;
-	_txtLabSpace->setText(ss.str());
-	_txtLabSpace->setColor(Palette::blockOffset(13));
+	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
+	_txtRemaining->setColor(Palette::blockOffset(13)+10);
+	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
+	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 	
 	_txtName->setColor(Palette::blockOffset(13)+10);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
+	_txtName->setText(tr("STR_NAME"));
 	
 	_txtPsiStrength->setColor(Palette::blockOffset(13)+10);
-	_txtPsiStrength->setText(_game->getLanguage()->getString("STR_PSIONIC__STRENGTH"));
+	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
 
 	_txtPsiSkill->setColor(Palette::blockOffset(13)+10);
-	_txtPsiSkill->setText(_game->getLanguage()->getString("STR_PSIONIC_SKILL_IMPROVEMENT"));
+	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_IMPROVEMENT"));
 
 	_txtTraining->setColor(Palette::blockOffset(13)+10);
-	_txtTraining->setText(_game->getLanguage()->getString("STR_IN_TRAINING"));
+	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(-1, ARROW_VERTICAL);
@@ -119,29 +113,29 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_lstSoldiers->onMouseClick((ActionHandler)&AllocatePsiTrainingState::lstSoldiersClick);
 	_lstSoldiers->onMouseRelease((ActionHandler)&AllocatePsiTrainingState::lstSoldiersRelease);
 	int row = 0;
-	for(std::vector<Soldier*>::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
+	for (std::vector<Soldier*>::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
 	{
-	std::wstringstream ssStr;
-	std::wstringstream ssSkl;
+		std::wstringstream ssStr;
+		std::wstringstream ssSkl;
 		_soldiers.push_back(*s);
-		if((*s)->getCurrentStats()->psiSkill <= 0)
+		if ((*s)->getCurrentStats()->psiSkill <= 0)
 		{
 			ssSkl << "0/+0";
-			ssStr << _game->getLanguage()->getString("STR_UNKNOWN").c_str();
+			ssStr << tr("STR_UNKNOWN").c_str();
 		}
 		else
 		{
 			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
 			ssStr << ((*s)->getCurrentStats()->psiStrength);
 		}
-		if((*s)->isInPsiTraining())
+		if ((*s)->isInPsiTraining())
 		{
-			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), _game->getLanguage()->getString("STR_YES").c_str());
+			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), tr("STR_YES").c_str());
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(13)+5);
 		}
 		else
 		{
-			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), _game->getLanguage()->getString("STR_NO").c_str());
+			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), tr("STR_NO").c_str());
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
 		}
 		row++;
@@ -183,29 +177,26 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action *action)
 	_sel = _lstSoldiers->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if(!_base->getSoldiers()->at(_sel)->isInPsiTraining())
+		if (!_base->getSoldiers()->at(_sel)->isInPsiTraining())
 		{
 			if(_base->getUsedPsiLabs() < _base->getAvailablePsiLabs())
 			{
-				_lstSoldiers->setCellText(_sel, 3, _game->getLanguage()->getString("STR_YES").c_str());
+				_lstSoldiers->setCellText(_sel, 3, tr("STR_YES").c_str());
 				_lstSoldiers->setRowColor(_sel, Palette::blockOffset(13)+5);
 				_labSpace--;
-				std::wstringstream ss;
-				ss << _labSpace;
-				_txtLabSpace->setText(ss.str());
+				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 				_base->getSoldiers()->at(_sel)->setPsiTraining();
 			}
 		}
 		else
 		{
-		_lstSoldiers->setCellText(_sel, 3, _game->getLanguage()->getString("STR_NO").c_str());
+		_lstSoldiers->setCellText(_sel, 3, tr("STR_NO").c_str());
 		_lstSoldiers->setRowColor(_sel, Palette::blockOffset(15)+6);
 		_labSpace++;
-		std::wstringstream ss;
-		ss << _labSpace;
-		_txtLabSpace->setText(ss.str());
+		_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 		_base->getSoldiers()->at(_sel)->setPsiTraining();
 		}
 	}
 }
+
 }

@@ -31,6 +31,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "Globe.h"
 #include "SelectDestinationState.h"
 
 namespace OpenXcom
@@ -75,7 +76,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyOk"));
 	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
@@ -83,19 +84,19 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_LAUNCH_INTERCEPTION"));
+	_txtTitle->setText(tr("STR_LAUNCH_INTERCEPTION"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
-	_txtStatus->setText(_game->getLanguage()->getString("STR_STATUS"));
+	_txtStatus->setText(tr("STR_STATUS"));
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(_game->getLanguage()->getString("STR_BASE"));
+	_txtBase->setText(tr("STR_BASE"));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
-	_txtWeapons->setText(_game->getLanguage()->getString("STR_WEAPONS_CREW_HWPS"));
+	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -104,6 +105,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(6);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 
 	int row = 0;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -119,7 +121,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			}
 			else
 			{
-				ss << (*j)->getNumWeapons();
+				ss << 0;
 			}
 			ss << "/";
 			if ((*j)->getNumSoldiers() > 0)
@@ -128,7 +130,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			}
 			else
 			{
-				ss << (*j)->getNumSoldiers();
+				ss << 0;
 			}
 			ss << "/";
 			if ((*j)->getNumVehicles() > 0)
@@ -137,10 +139,10 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			}
 			else
 			{
-				ss << (*j)->getNumVehicles();
+				ss << 0;
 			}
 			_crafts.push_back(*j);
-			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
+			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), tr((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == "STR_READY")
 			{
 				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
@@ -174,10 +176,24 @@ void InterceptState::btnCancelClick(Action *)
 void InterceptState::lstCraftsClick(Action *)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
+	if ((c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways"))) || c->getStatus() == "STR_OUT")
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));
+	}
+}
+
+/**
+ * Centers on the selected craft.
+ * @param action Pointer to an action.
+ */
+void InterceptState::lstCraftsRightClick(Action *)
+{
+	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
+	if (c->getStatus() == "STR_OUT")
+	{
+		_globe->center(c->getLongitude(), c->getLatitude());
+		_game->popState();
 	}
 }
 

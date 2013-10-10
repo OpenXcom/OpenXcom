@@ -33,9 +33,9 @@ class LoadState : public SavedGameState
 private:
 public:
 	/// Creates the Load Game state.
-	LoadState(Game *game, bool geo);
+	LoadState(Game *game, OptionsOrigin origin);
 	/// Creates the Quick Load Game state.
-	LoadState(Game *game, bool geo, bool showMsg);
+	LoadState(Game *game, OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Load Game state.
 	~LoadState();
 	/// Handler for clicking the Saves list.

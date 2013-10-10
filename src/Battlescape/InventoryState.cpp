@@ -53,7 +53,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Inventory screen.
  * @param game Pointer to the core game.
- * @param tu Inventory Time Unit mode.
+ * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
 InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
@@ -196,10 +196,18 @@ void InventoryState::init()
 		return;
 	}
 	// skip to the first unit with inventory
-	if (!hasInventory(unit))
+	if (!unit->hasInventory())
 	{
+		if (_parent)
+		{
+			_parent->selectNextPlayerUnit(false, false, true);
+		}
+		else
+		{
+			_battleGame->selectNextPlayerUnit(false, false, true);
+		}
 		// no available unit, close inventory
-		if (unit == selectNextUnit())
+		if (_battleGame->getSelectedUnit() == 0)
 		{
 			// starting a mission with just vehicles
 			btnOkClick(0);
@@ -218,6 +226,7 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
+	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
 	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
@@ -259,23 +268,15 @@ void InventoryState::init()
 
 	if (_showMoreStatsInInventoryView && !_tu)
 	{
-		std::wstringstream ss2;
-		ss2 << _game->getLanguage()->getString("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
-		_txtFAcc->setText(ss2.str());
+		_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
 
-		std::wstringstream ss3;
-		ss3 << _game->getLanguage()->getString("STR_REACT") << L'\x01' << unit->getStats()->reactions;
-		_txtReact->setText(ss3.str());
+		_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
 
 		if (unit->getStats()->psiSkill > 0)
 		{
-			std::wstringstream ss4;
-			ss4 << _game->getLanguage()->getString("STR_PSKILL") << L'\x01' << unit->getStats()->psiSkill;
-			_txtPSkill->setText(ss4.str());
+			_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
 
-			std::wstringstream ss5;
-			ss5 << _game->getLanguage()->getString("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
-			_txtPStr->setText(ss5.str());
+			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
 		}
 		else
 		{
@@ -294,19 +295,20 @@ void InventoryState::updateStats()
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 	if (_showMoreStatsInInventoryView)
 	{
-		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
-		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
-		_txtWeight->setText(ss.str());
-		if (Weight > unit->getStats()->strength)
+		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
+		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
+		if (weight > unit->getStats()->strength)
+		{
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
-		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		}
+		else
+		{
+			_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		}
 	}
 	if (_tu)
 	{
-		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << unit->getTimeUnits();
-		_txtTus->setText(ss.str());
+		_txtTus->setText(tr("STR_TUS").arg(unit->getTimeUnits()));
 	}
 }
 
@@ -382,8 +384,17 @@ void InventoryState::btnOkClick(Action *)
 void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
+	{
 		return;
-	selectPreviousUnit();
+	}
+	if (_parent)
+	{
+		_parent->selectPreviousPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_battleGame->selectPreviousPlayerUnit(false, false, true);
+	}
 	init();
 }
 
@@ -394,8 +405,17 @@ void InventoryState::btnPrevClick(Action *)
 void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
+	{
 		return;
-	selectNextUnit();
+	}
+	if (_parent)
+	{
+		_parent->selectNextPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_battleGame->selectNextPlayerUnit(false, false, true);
+	}
 	init();
 }
 
@@ -430,7 +450,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent));
 }
 
 /**
@@ -453,17 +473,17 @@ void InventoryState::invClick(Action *)
 		{
 			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
 			{
-				_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
+				_txtItem->setText(tr(item->getRules()->getName()));
 			}
 			else
 			{
-				_txtItem->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACT"));
+				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 			}
 		}
-		std::wstringstream ss;
+		std::wstring s;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
@@ -479,9 +499,9 @@ void InventoryState::invClick(Action *)
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
-		_txtAmmo->setText(ss.str());
+		_txtAmmo->setText(s);
 	}
 	updateStats();
 }
@@ -508,55 +528,6 @@ void InventoryState::handle(Action *action)
 		}
 	}
 #endif
-}
-
-/**
-* Selects the previous player unit, ignoring units without inventory.
-* @return Pointer to selected unit.
-*/
-BattleUnit *InventoryState::selectPreviousUnit() const
-{
-	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
-	do
-	{
-		if (_parent)
-			_parent->selectPreviousPlayerUnit(false);
-		else
-			_battleGame->selectPreviousPlayerUnit(false);
-		unit = _battleGame->getSelectedUnit();
-	}
-	while (!hasInventory(unit) && unit != current);
-	return unit;
-}
-
-/**
-* Selects the next player unit, ignoring units without inventory.
-* @return Pointer to selected unit.
-*/
-BattleUnit *InventoryState::selectNextUnit() const
-{
-	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
-	do
-	{
-		if (_parent)
-			_parent->selectNextPlayerUnit(false, false);
-		else
-			_battleGame->selectNextPlayerUnit(false, false);
-		unit = _battleGame->getSelectedUnit();
-	}
-	while (!hasInventory(unit) && unit != current);
-	return unit;
-}
-
-/**
-* Checks if a unit has an inventory. Large units and
-* terror units don't have inventories.
-* @param Pointer to battle unit.
-* @return True if an inventory is available, false otherwise.
-*/
-bool InventoryState::hasInventory(BattleUnit *unit) const
-{
-	return ((unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode());
 }
 
 }

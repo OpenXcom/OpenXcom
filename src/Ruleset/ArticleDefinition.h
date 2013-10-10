@@ -215,6 +215,8 @@ namespace OpenXcom
 		ArticleDefinitionArmor();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+
+		std::string text;
 	};
 
 	/**

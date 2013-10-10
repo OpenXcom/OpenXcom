@@ -93,21 +93,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 128);
 
 	// Load fonts
-	Font::loadIndex(CrossPlatform::getDataFile("Language/Font.dat"));
-
-	std::string font[] = {"Big.fnt",
-						  "Small.fnt"};
-
-	for (int i = 0; i < 2; ++i)
+	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/Font.dat"));
+	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
+	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
 	{
-		std::stringstream s;
-		s << "Language/" << font[i];
-		if (font[i] == "Big.fnt")
-			_fonts[font[i]] = new Font(16, 16, 0);
-		else if (font[i] == "Small.fnt")
-			_fonts[font[i]] = new Font(8, 9, -1);
-		_fonts[font[i]]->getSurface()->loadScr(CrossPlatform::getDataFile(s.str()));
-		_fonts[font[i]]->load();
+		std::string id = (*i)["id"].as<std::string>();
+		Font *font = new Font();
+		font->load(*i);
+		_fonts[id] = font;
 	}
 
 	// Load surfaces
@@ -118,32 +111,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		_surfaces["INTERWIN.DAT"]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
-	std::string scrs[] = {"BACK01.SCR",
-						  "BACK02.SCR",
-						  "BACK03.SCR",
-						  "BACK04.SCR",
-						  "BACK05.SCR",
-						  "BACK06.SCR",
-						  "BACK07.SCR",
-						  "BACK08.SCR",
-						  "BACK09.SCR",
-						  "BACK10.SCR",
-						  "BACK11.SCR",
-						  "BACK12.SCR",
-						  "BACK13.SCR",
-						  "BACK14.SCR",
-						  "BACK15.SCR",
-						  "BACK16.SCR",
-						  "BACK17.SCR",
-						  "GEOBORD.SCR",
-						  "UP_BORD2.SCR"};
-
-	for (int i = 0; i < 19; ++i)
+	std::string geograph = CrossPlatform::getDataFolder("GEOGRAPH/");
+	std::vector<std::string> scrs = CrossPlatform::getFolderContents(geograph, "SCR");
+	for (std::vector<std::string>::iterator i = scrs.begin(); i != scrs.end(); ++i)
 	{
-		std::stringstream s;
-		s << "GEOGRAPH/" << scrs[i];
-		_surfaces[scrs[i]] = new Surface(320, 200);
-		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
+		std::string path = geograph + *i;
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i]->loadScr(path);
 	}
 
 	// here we create an "alternate" background surface for the base info screen.
@@ -159,74 +134,26 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		for (int x = 5; x <= 314; ++x)
 			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+10, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
 
-
-	std::string spks[] = {"UP001.SPK",
-						  "UP002.SPK",
-						  "UP003.SPK",
-						  "UP004.SPK",
-						  "UP005.SPK",
-						  "UP006.SPK",
-						  "UP007.SPK",
-						  "UP008.SPK",
-						  "UP009.SPK",
-						  "UP010.SPK",
-						  "UP011.SPK",
-						  "UP012.SPK",
-						  "UP013.SPK",
-						  "UP014.SPK",
-						  "UP015.SPK",
-						  "UP016.SPK",
-						  "UP017.SPK",
-						  "UP018.SPK",
-						  "UP019.SPK",
-						  "UP020.SPK",
-						  "UP021.SPK",
-						  "UP022.SPK",
-						  "UP023.SPK",
-						  "UP024.SPK",
-						  "UP025.SPK",
-						  "UP026.SPK",
-						  "UP027.SPK",
-						  "UP028.SPK",
-						  "UP029.SPK",
-						  "UP030.SPK",
-						  "UP031.SPK",
-						  "UP032.SPK",
-						  "UP033.SPK",
-						  "UP034.SPK",
-						  "UP035.SPK",
-						  "UP036.SPK",
-						  "UP037.SPK",
-						  "UP038.SPK",
-						  "UP039.SPK",
-						  "UP040.SPK",
-						  "UP041.SPK",
-						  "UP042.SPK",
-						  "GRAPHS.SPK"};
-
-	for (int i = 0; i < 43; ++i)
+	std::vector<std::string> spks = CrossPlatform::getFolderContents(geograph, "SPK");
+	for (std::vector<std::string>::iterator i = spks.begin(); i != spks.end(); ++i)
 	{
-		std::stringstream s;
-		s << "GEOGRAPH/" << spks[i];
-		_surfaces[spks[i]] = new Surface(320, 200);
-		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
+		std::string path = geograph + *i;
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i]->loadSpk(path);
 	}
-	
-	std::string lbms[] = {"PICT1.LBM",
-						  "PICT2.LBM",
-						  "PICT3.LBM",
-						  "PICT4.LBM",
-						  "PICT5.LBM",
-						  "PICT6.LBM",
-						  "PICT7.LBM"};
 
-	for (int i = 0; i < 7; ++i)
+	// Load intro
+	std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/");
+	std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
+	for (std::vector<std::string>::iterator i = lbms.begin(); i != lbms.end(); ++i)
 	{
-		std::stringstream s;
-		s << "UFOINTRO/" << lbms[i];
-		_surfaces[lbms[i]] = new Surface(320, 200);
-		_surfaces[lbms[i]]->loadImage(CrossPlatform::getDataFile(s.str()));
+		std::string path = ufointro + *i;
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i]->loadImage(path);
 	}
+
 	// Load surface sets
 	std::string sets[] = {"BASEBITS.PCK",
 						  "INTICON.PCK",
@@ -482,43 +409,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 	
-	//"fix" of hair color of male personal armor
-	SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
-	
-	for(int i=0; i< 16; ++i )
-	{
-		//cheast frame
-		Surface *surf = xcom_1->getFrame(4*8 + i);
-		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-		GraphSubset dim = head.getBaseDomain();
-		surf->lock();
-		dim.beg_y = 6;
-		dim.end_y = 9;
-		head.setDomain(dim);
-		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+5));
-		dim.beg_y = 9;
-		dim.end_y = 10;
-		head.setDomain(dim);
-		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
-		surf->unlock();
-	}
-	
-	for(int i=0; i< 3; ++i )
-	{
-		//fall frame
-		Surface *surf = xcom_1->getFrame(264 + i);
-		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-		GraphSubset dim = head.getBaseDomain();
-		dim.beg_y = 0;
-		dim.end_y = 24;
-		dim.beg_x = 11;
-		dim.end_x = 20;
-		head.setDomain(dim);
-		surf->lock();
-		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
-		surf->unlock();
-	}
-	
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 	bool debugOutput = Options::getBool("debug");
 	
@@ -657,10 +547,10 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					}
 					else
 					{
-						_surfaces["tempSurface"] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+						Surface *temp = new Surface(spritePack->getWidth(), spritePack->getHeight());
 						s.str("");
 						s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](startFrame));
-						_surfaces["tempSurface"]->loadImage(s.str());
+						temp->loadImage(s.str());
 						int xDivision = spritePack->getWidth() / spritePack->getSubX();
 						int yDivision = spritePack->getHeight() / spritePack->getSubY();
 						int offset = startFrame;
@@ -677,14 +567,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 									}
 									_sets[sheetName]->getFrame(offset)->clear();
 									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-									_surfaces["tempSurface"]->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+									temp->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 								}
 								else
 								{
 									if (adding)
 									{
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-										_surfaces["tempSurface"]->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+										temp->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 									}
 									else
 									{
@@ -693,14 +583,13 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 											Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 										}
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-										_surfaces["tempSurface"]->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+										temp->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 									}
 								}
 								++offset;
 							}
 						}
-						delete _surfaces["tempSurface"];
-						_surfaces.erase("tempSurface");
+						delete temp;
 					}
 				}
 			}
@@ -713,7 +602,10 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	std::map<int, Surface*> *handob = _sets["HANDOB.PCK"]->getFrames();
 	for (std::map<int, Surface*>::const_iterator i = handob->begin(); i != handob->end(); ++i)
 	{
-		(i->second)->blit(_sets["HANDOB2.PCK"]->addFrame(i->first));
+		Surface *surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first);
+		Surface *surface2 = i->second;
+		surface1->setPalette(surface2->getPalette());
+		surface2->blit(surface1);
 	}
 
 	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
@@ -863,45 +755,19 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 
 	// Load Battlescape units
-	std::string usets[] = {"SILACOID.PCK",
-							"CELATID.PCK",
-							"HANDOB.PCK",
-							"CYBER.PCK",
-							"FLOOROB.PCK",
-							"SECTOID.PCK",
-							"CIVF.PCK",
-							"CIVM.PCK",
-							"XCOM_1.PCK",
-							"SNAKEMAN.PCK",
-							"XCOM_0.PCK",
-							"CHRYS.PCK",
-							"TANKS.PCK",
-							"FLOATER.PCK",
-							"XCOM_2.PCK",
-							"ZOMBIE.PCK",
-							"MUTON.PCK",
-							"X_REAP.PCK",
-							"ETHEREAL.PCK",
-							"X_ROB.PCK"
-					 };
-
-	for (int i = 0; i < 20; ++i)
+	std::string units = CrossPlatform::getDataFolder("UNITS/");
+	std::vector<std::string> usets = CrossPlatform::getFolderContents(units, "PCK");
+	for (std::vector<std::string>::iterator i = usets.begin(); i != usets.end(); ++i)
 	{
-		std::stringstream s;
-		s << "UNITS/" << usets[i];
-		std::string tab = usets[i].substr(0, usets[i].length()-4) + ".TAB";
-		std::stringstream s2;
-		s2 << "UNITS/" << tab;
-		_sets[usets[i]] = new SurfaceSet(32, 40);
-		_sets[usets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+		std::string path = units + *i;
+		std::string tab = CrossPlatform::getDataFile("UNITS/" + i->substr(0, i->length() - 4) + ".TAB");
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		if (*i != "BIGOBS.PCK")
+			_sets[*i] = new SurfaceSet(32, 40);
+		else
+			_sets[*i] = new SurfaceSet(32, 48);
+		_sets[*i]->loadPck(path, tab);
 	}
-
-	s.str("");
-	s << "UNITS/" << "BIGOBS.PCK";
-	s2.str("");
-	s2 << "UNITS/" << "BIGOBS.TAB";
-	_sets["BIGOBS.PCK"] = new SurfaceSet(32, 48);
-	_sets["BIGOBS.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s << "GEODATA/" << "LOFTEMPS.DAT";
@@ -933,43 +799,54 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
 
-	std::string invs[] = {"MAN_0",
-						  "MAN_1",
-						  "MAN_2",
-						  "MAN_3"};
-	std::string sets[] = {"F0",
-						  "F1",
-						  "F2",
-						  "F3",
-						  "M0",
-						  "M1",
-						  "M2",
-						  "M3"};
-
-	for (int i = 0; i < 4; ++i)
+	// Load Battlescape inventory
+	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
+	std::vector<std::string> invs = CrossPlatform::getFolderContents(ufograph, "SPK");
+	for (std::vector<std::string>::iterator i = invs.begin(); i != invs.end(); ++i)
 	{
-		std::stringstream s1, s1full, s2, s2full;
-		s1 << invs[i] << ".SPK";
-		s1full << "UFOGRAPH/" << s1.str();
-		s2 << invs[i] << sets[0] << ".SPK";
-		s2full << "UFOGRAPH/" << s2.str();
-		// Load fixed inventory image
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s1full.str())))
+		std::string path = ufograph + *i;
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i]->loadSpk(path);
+	}
+
+	//"fix" of hair color of male personal armor
+	if (Options::getBool("battleHairBleach"))
+	{
+		SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
+
+		for (int i = 0; i < 16; ++i)
 		{
-			_surfaces[s1.str()] = new Surface(320, 200);
-			_surfaces[s1.str()]->loadSpk(CrossPlatform::getDataFile(s1full.str()));
+			//chest frame
+			Surface *surf = xcom_1->getFrame(4 * 8 + i);
+			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+			GraphSubset dim = head.getBaseDomain();
+			surf->lock();
+			dim.beg_y = 6;
+			dim.end_y = 9;
+			head.setDomain(dim);
+			ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 5));
+			dim.beg_y = 9;
+			dim.end_y = 10;
+			head.setDomain(dim);
+			ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+			surf->unlock();
 		}
-		// Load gender-based inventory image
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s2full.str())))
+
+		for (int i = 0; i < 3; ++i)
 		{
-			for (int j = 0; j < 8; j++)
-			{
-				std::stringstream s3, s3full;
-				s3 << invs[i] << sets[j] << ".SPK";
-				s3full << "UFOGRAPH/" << s3.str();
-				_surfaces[s3.str()] = new Surface(320, 200);
-				_surfaces[s3.str()]->loadSpk(CrossPlatform::getDataFile(s3full.str()));
-			}
+			//fall frame
+			Surface *surf = xcom_1->getFrame(264 + i);
+			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+			GraphSubset dim = head.getBaseDomain();
+			dim.beg_y = 0;
+			dim.end_y = 24;
+			dim.beg_x = 11;
+			dim.end_x = 20;
+			head.setDomain(dim);
+			surf->lock();
+			ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+			surf->unlock();
 		}
 	}
 }

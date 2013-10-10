@@ -22,6 +22,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <yaml-cpp/yaml.h>
 #include "LocalizedText.h"
 #include "../Savegame/Soldier.h"
 
@@ -30,6 +31,7 @@ namespace OpenXcom
 
 class TextList;
 class ExtraStrings;
+class LanguagePlurality;
 
 /**
  * Contains strings used throughout the game for localization.
@@ -37,8 +39,16 @@ class ExtraStrings;
  */
 class Language
 {
+private:
+	std::string _id;
+	std::map<std::string, LocalizedText> _strings;
+	LanguagePlurality *_handler;
+
+	static std::map<std::string, std::wstring> _names;
+
+	/// Parses a text string loaded from an external file.
+	std::wstring loadString(const std::string &s) const;
 public:
-	class PluralityRules;
 	/// Creates a blank language.
 	Language();
 	/// Cleans up the language.
@@ -57,8 +67,12 @@ public:
 	static void replace(std::wstring &str, const std::wstring &find, const std::wstring &replace);
 	/// Gets list of languages in the data directory.
 	static std::vector<std::string> getList(TextList *list);
+	/// Loads the language from a YAML file.
+	void load(const std::string &filename, ExtraStrings *extras);
 	/// Loads an OpenXcom language file.
 	void loadLng(const std::string &filename, ExtraStrings *extras);
+	/// Gets the language's ID.
+	std::string getId() const;
 	/// Gets the language's name.
 	std::wstring getName() const;
 	/// Outputs the language to a HTML file.
@@ -69,10 +83,6 @@ public:
 	LocalizedText getString(const std::string &id, unsigned n) const;
 	/// Get a gender-depended localized text.
 	const LocalizedText &getString(const std::string &id, SoldierGender gender) const;
-private:
-	std::wstring _name;
-	std::map<std::string, LocalizedText> _strings;
-	PluralityRules *_handler;
 };
 
 }

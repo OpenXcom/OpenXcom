@@ -37,16 +37,14 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Saved Game screen.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  */
-SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo), _showMsg(true), _noUI(false)
+SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin), _showMsg(true), _noUI(false)
 {
 	_screen = false;
+
 	// Create objects
-	WindowPopup p = POPUP_BOTH;
-	if (!geo)
-		p = POPUP_NONE;
-	_window = new Window(this, 320, 200, 0, 0, p);
+	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnCancel = new TextButton(80, 16, 120, 172);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtDelete = new Text(310, 8, 5, 24);
@@ -57,7 +55,7 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo), _
 	_lstSaves = new TextList(288, 120, 8, 40);
 
 	// Set palette
-	if (_geo)
+	if (_origin != OPT_BATTLESCAPE)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	}
@@ -75,78 +73,38 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo), _
 	centerAllSurfaces();
 
 	// Set up objects
-	if (_geo)
-	{
-		_window->setColor(Palette::blockOffset(8)+5);
-		_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setColor(Palette::blockOffset(8)+5);
+	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-		_btnCancel->setColor(Palette::blockOffset(8)+5);
+	_btnCancel->setColor(Palette::blockOffset(8) + 5);
 
-		_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
+	_btnCancel->onMouseClick((ActionHandler) &SavedGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler) &SavedGameState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
 
-		_txtDelete->setColor(Palette::blockOffset(15)-1);
-
-		_txtName->setColor(Palette::blockOffset(15)-1);
-
-		_txtTime->setColor(Palette::blockOffset(15)-1);
-
-		_txtDate->setColor(Palette::blockOffset(15)-1);
-
-		_txtStatus->setColor(Palette::blockOffset(8)+5);
-
-		_lstSaves->setColor(Palette::blockOffset(8)+10);
-		_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
-	}
-	else
-	{
-		_window->setColor(Palette::blockOffset(0));
-		_window->setHighContrast(true);
-		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
-
-		_btnCancel->setColor(Palette::blockOffset(0));
-		_btnCancel->setHighContrast(true);
-
-		_txtTitle->setColor(Palette::blockOffset(0));
-		_txtTitle->setHighContrast(true);
-
-		_txtDelete->setColor(Palette::blockOffset(0));
-		_txtDelete->setHighContrast(true);
-
-		_txtName->setColor(Palette::blockOffset(0));
-		_txtName->setHighContrast(true);
-
-		_txtTime->setColor(Palette::blockOffset(0));
-		_txtTime->setHighContrast(true);
-
-		_txtDate->setColor(Palette::blockOffset(0));
-		_txtDate->setHighContrast(true);
-
-		_txtStatus->setColor(Palette::blockOffset(0));
-		_txtStatus->setHighContrast(true);
-
-		_lstSaves->setColor(Palette::blockOffset(0));
-		_lstSaves->setHighContrast(true);
-	}
-
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SavedGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	
+
+	_txtDelete->setColor(Palette::blockOffset(15)-1);
 	_txtDelete->setAlign(ALIGN_CENTER);
-	_txtDelete->setText(_game->getLanguage()->getString("STR_RIGHT_CLICK_TO_DELETE"));
+	_txtDelete->setText(tr("STR_RIGHT_CLICK_TO_DELETE"));
 
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
+	_txtName->setColor(Palette::blockOffset(15)-1);
+	_txtName->setText(tr("STR_NAME"));
 
-	_txtTime->setText(_game->getLanguage()->getString("STR_TIME"));
+	_txtTime->setColor(Palette::blockOffset(15)-1);
+	_txtTime->setText(tr("STR_TIME"));
 
-	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
+	_txtDate->setColor(Palette::blockOffset(15)-1);
+	_txtDate->setText(tr("STR_DATE"));
 
+	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 
+	_lstSaves->setColor(Palette::blockOffset(8)+10);
+	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
 	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
@@ -156,10 +114,10 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo), _
 /**
  * Initializes all the elements in the Saved Game screen.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(Game *game, bool geo, bool showMsg) : State(game), _geo(geo), _showMsg(showMsg), _noUI(true)
+SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true)
 {
 	if (_showMsg)
 	{
@@ -168,13 +126,13 @@ SavedGameState::SavedGameState(Game *game, bool geo, bool showMsg) : State(game)
 
 		_txtStatus->setBig();
 		_txtStatus->setAlign(ALIGN_CENTER);
-		if (_geo)
-			_txtStatus->setColor(Palette::blockOffset(8)+5);
-		else
+		if (origin == OPT_BATTLESCAPE)
 		{
 			_txtStatus->setColor(Palette::blockOffset(5));
 			_txtStatus->setHighContrast(true);
 		}
+		else
+			_txtStatus->setColor(Palette::blockOffset(8)+5);
 	}
 }
 
@@ -199,9 +157,13 @@ void SavedGameState::init()
 
 	_txtStatus->setText(L"");
 
-	if (_geo)
+	if (_origin != OPT_BATTLESCAPE)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	}
+	else
+	{
+		applyBattlescapeTheme();
 	}
 
 	try
@@ -231,7 +193,7 @@ void SavedGameState::updateList()
  */
 void SavedGameState::updateStatus(const std::string &msg)
 {
-	_txtStatus->setText(_game->getLanguage()->getString(msg));
+	_txtStatus->setText(tr(msg));
 	blit();
 	_game->getScreen()->flip();
 }

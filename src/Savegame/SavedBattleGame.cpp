@@ -38,8 +38,8 @@
 #include "../Engine/Language.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
-#include "../Battlescape/PatrolBAIState.h"
-#include "../Battlescape/AggroBAIState.h"
+#include "../Battlescape/CivilianBAIState.h"
+#include "../Battlescape/AlienBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
@@ -59,7 +59,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _strafeEnabled(false), _sneaky(false),
-                                     _traceAI(false)
+                                     _traceAI(false), _cheating(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
@@ -68,6 +68,13 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
 	_strafeEnabled = Options::getBool("strafe");
 	_sneaky = Options::getBool("sneakyAI");
 	_traceAI = Options::getBool("traceAI");
+
+	_tileSearch.resize(11*11);
+	for (int i = 0; i < 121; ++i)
+	{
+		_tileSearch[i].x = ((i%11) - 5);
+		_tileSearch[i].y = ((i/11) - 5); 
+	}
 }
 
 /**
@@ -199,15 +206,14 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if (const YAML::Node &ai = (*i)["AI"])
 			{
-				std::string state = ai["state"].as<std::string>();
 				BattleAIState *aiState;
-				if (state == "PATROL")
+				if (faction == FACTION_NEUTRAL)
 				{
-					aiState = new PatrolBAIState(this, unit, 0);
+					aiState = new CivilianBAIState(this, unit, 0);
 				}
-				else if (state == "AGGRO")
+				else if (faction == FACTION_HOSTILE)
 				{
-					aiState = new AggroBAIState(this, unit);
+					aiState = new AlienBAIState(this, unit, 0);
 				}
 				else
 				{
@@ -554,104 +560,95 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
 }
 
 /**
- * Selects the previous player unit.
- * TODO move this to BattlescapeState ?
- * @param checkReselect Whether to check if we should reselect a unit.
- * @return Pointer to BattleUnit.
- */
-BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect)
+* Selects the previous player unit.
+* @param checkReselect Whether to check if we should reselect a unit.
+* @param setReselect Don't reselect a unit.
+* @param checkInventory Whether to check if the unit has an inventory.
+* @return Pointer to new selected BattleUnit, NULL if none can be selected.
+* @sa selectPlayerUnit
+*/
+BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
-	std::vector<BattleUnit*>::iterator i = _units.begin();
-	bool bPrev = false;
-	int wraps = 0;
-
-	if (_selectedUnit == 0)
-	{
-		bPrev = true;
-	}
-
-	do
-	{
-		if (bPrev && (*i)->getFaction() == _side && !(*i)->isOut())
-		{
-			if ( !checkReselect || ((*i)->reselectAllowed()))
-				break;
-		}
-		if ((*i) == _selectedUnit)
-		{
-			bPrev = true;
-		}
-		if (i == _units.begin())
-		{
-			i = _units.end();
-			wraps++;
-		}
-		--i;
-		// back to where we started... no more units found
-		if (wraps == 3)
-		{
-			_selectedUnit = 0;
-			return _selectedUnit;
-		}
-	}
-	while (true);
-
-	_selectedUnit = (*i);
-
-	return _selectedUnit;
+	return selectPlayerUnit(-1, checkReselect, setReselect, checkInventory);
 }
 
 /**
  * Selects the next player unit.
- * TODO move this to BattlescapeState ?
  * @param checkReselect Whether to check if we should reselect a unit.
  * @param setReselect Don't reselect a unit.
- * @return Pointer to BattleUnit.
+ * @param checkInventory Whether to check if the unit has an inventory.
+ * @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @sa selectPlayerUnit
  */
-BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setReselect)
+BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
-	std::vector<BattleUnit*>::iterator i = _units.begin();
-	bool bNext = false;
-	int wraps = 0;
+	return selectPlayerUnit(+1, checkReselect, setReselect, checkInventory);
+}
 
-	if (_selectedUnit == 0)
-	{
-		bNext = true;
-	}
-	else
-	if (setReselect)
+/**
+ * Selects the next player unit in a certain direction.
+ * @param dir Direction to select, eg. -1 for previous and 1 for next.
+ * @param checkReselect Whether to check if we should reselect a unit.
+ * @param setReselect Don't reselect a unit.
+ * @param checkInventory Whether to check if the unit has an inventory.
+ * @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ */
+BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool setReselect, bool checkInventory)
+{
+	if (_selectedUnit != 0 && setReselect)
 	{
 		_selectedUnit->dontReselect();
 	}
+	if (_units.empty())
+	{
+		return 0;
+	}
 
+	std::vector<BattleUnit*>::iterator begin, end;
+	if (dir > 0)
+	{
+		begin = _units.begin();
+		end = _units.end()-1;
+	}
+	else if (dir < 0)
+	{
+		begin = _units.end()-1;
+		end = _units.begin();
+	}
+
+	std::vector<BattleUnit*>::iterator i = std::find(_units.begin(), _units.end(), _selectedUnit);
 	do
 	{
-		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut())
-		{
-			if ( !checkReselect || ((*i)->reselectAllowed()))
-				break;
-		}
-		if ((*i) == _selectedUnit)
-		{
-			bNext = true;
-		}
-		++i;
+		// no unit selected
 		if (i == _units.end())
 		{
-			i = _units.begin();
-			wraps++;
+			i = begin;
+			continue;
+		}
+		if (i != end)
+		{
+			i += dir;
+		}
+		// reached the end, wrap-around
+		else
+		{
+			i = begin;
 		}
 		// back to where we started... no more units found
-		if (wraps == 2)
+		if (*i == _selectedUnit)
 		{
-			_selectedUnit = 0;
+			if (checkReselect && !_selectedUnit->reselectAllowed())
+				_selectedUnit = 0;
+			return _selectedUnit;
+		}
+		else if (_selectedUnit == 0 && i == begin)
+		{
 			return _selectedUnit;
 		}
 	}
-	while (true);
+	while (!(*i)->isSelectable(_side, checkReselect, checkInventory));
 
 	_selectedUnit = (*i);
-
 	return _selectedUnit;
 }
 
@@ -787,28 +784,30 @@ void SavedBattleGame::endTurn()
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
+	int liveSoldiers, liveAliens;
+
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+
+	if (_turn >= 20 || liveAliens < 2)
+	{
+		_cheating = true;
+	}
 
 	if (_side == FACTION_PLAYER)
 	{
-		int liveSoldiers, liveAliens;
-
-		_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-
 		// update the "number of turns since last spotted"
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
-			if ((*i)->getTurnsExposed() < 255 && _side == FACTION_PLAYER)
+			if ((*i)->getTurnsExposed() < 255)
 			{
 				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
 			}
-			if (_side == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut()
-				&& (_turn >= 20 || liveAliens < 2))
+			if (_cheating && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 			{
 				(*i)->setTurnsExposed(0);
 			}
 		}
 	}
-
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
@@ -985,6 +984,7 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 	_objectiveDestroyed = flag;
 	if (flag && Options::getBool("battleAutoEnd"))
 	{
+		setSelectedUnit(0);
 		_battleState->getBattleGame()->statePushBack(0);
 	}
 }
@@ -1069,25 +1069,27 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 
 	for (int i = 0; i < end; ++i)
 	{
-			if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
-			Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
-			if ((n->getFlags() > 0 || n->getRank() > 0 || scout)										// for non-scouts we find a node with a desirability above 0
-			    && (!(n->getType() & Node::TYPE_SMALL) 
-					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-				&& (!(n->getType() & Node::TYPE_FLYING) 
-					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-				&& !n->isAllocated() // check if not allocated
-				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
-				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
-				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
-				&& (!scout || n != fromNode)	// scouts push forward
-				&& n->getPosition().x > 0 && n->getPosition().y > 0)
+		if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
+
+		Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+		if ((n->getFlags() > 0 || n->getRank() > 0 || scout)											// for non-scouts we find a node with a desirability above 0
+			&& (!(n->getType() & Node::TYPE_SMALL) || unit->getArmor()->getSize() == 1)					// the small unit bit is not set or the unit is small
+			&& (!(n->getType() & Node::TYPE_FLYING) || unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& !n->isAllocated()																		// check if not allocated
+			&& !(n->getType() & Node::TYPE_DANGEROUS)													// don't go there if an alien got shot there; stupid behavior like that
+			&& setUnitPosition(unit, n->getPosition(), true)											// check if not already occupied
+			&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire()						// you are not a firefighter; do not patrol into fire
+			&& (!scout || n != fromNode)																// scouts push forward
+			&& n->getPosition().x > 0 && n->getPosition().y > 0)
+		{
+			if (!preferred 
+				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+				|| preferred->getFlags() < n->getFlags())
 			{
-				if (!preferred 
-					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-					|| preferred->getFlags() < n->getFlags()) preferred = n;
-				compliantNodes.push_back(n);
+				preferred = n;
 			}
+			compliantNodes.push_back(n);
+		}
 	}
 
 	if (compliantNodes.empty())
@@ -1096,16 +1098,20 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 		if (unit->getArmor()->getSize() > 1 && !scout)
 		{
 			return getPatrolNode(true, unit, fromNode); // move dammit
-		} else return 0;
+		}
+		else
+			return 0;
 	}
 
 	if (scout)
 	{
 		// scout picks a random destination:
 		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
-	} else
+	}
+	else
 	{
 		if (!preferred) return 0;
+
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags(); }
 		return preferred;
@@ -1294,6 +1300,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				{
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
+					(*i)->kneel(false);
 					(*i)->setCache(0);
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
@@ -1409,23 +1416,6 @@ int SavedBattleGame::getDragTimeTolerance() const
 int SavedBattleGame::getDragPixelTolerance() const
 {
 	return _dragPixelTolerance;
-}
-
-/**
- * Gets the number of units that can see the given unit.
- * @param unit The unit to check for visibility.
- * @return The number of spotting units.
- */
-int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
-{
-	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i) // cheating! perhaps only consider visible units here
-	{																															// k
-		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
-		if (find != (*i)->getVisibleUnits()->end())
-			++spotting;
-	}
-	return spotting;
 }
 
 /**
@@ -1650,5 +1640,22 @@ void SavedBattleGame::resetTiles()
 	{
 		_tiles[i]->setDiscovered(false, 2);
 	}
+}
+
+/**
+ * @return the tilesearch vector for use in AI functions.
+ */
+const std::vector<Position> SavedBattleGame::getTileSearch()
+{
+	return _tileSearch;
+}
+
+/**
+ * is the AI allowed to cheat?
+ * @return true if cheating.
+ */
+bool SavedBattleGame::isCheating()
+{
+	return _cheating;
 }
 }

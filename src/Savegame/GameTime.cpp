@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "GameTime.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -196,23 +197,28 @@ int GameTime::getDay() const
  * the cardinal operator for the current ingame day.
  * @return Day string ID.
  */
-std::string GameTime::getDayString() const
+std::wstring GameTime::getDayString(Language *lang) const
 {
+	std::string s;
 	switch (_day)
 	{
 	case 1:
 	case 21:
 	case 31:
-		return "STR_ST";
+		s = "STR_ST";
+		break;
 	case 2:
 	case 22:
-		return "STR_ND";
+		s = "STR_ND";
+		break;
 	case 3:
 	case 23:
-		return "STR_RD";
+		s = "STR_RD";
+		break;
 	default:
-		return "STR_TH";
+		s = "STR_TH";
 	}
+	return lang->getString(s).arg(_day);
 }
 
 /**

@@ -65,29 +65,25 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_OPENXCOM"));
+	_txtTitle->setText(tr("STR_OPENXCOM"));
 
 	_txtTurn->setColor(Palette::blockOffset(0));
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_TURN") << L" " << _battleGame->getTurn();
-	_txtTurn->setText(ss.str());
+	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
 
 	_txtSide->setColor(Palette::blockOffset(0));
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
-	ss.str(L"");
-	ss << _game->getLanguage()->getString("STR_SIDE") << _game->getLanguage()->getString((_battleGame->getSide() == FACTION_PLAYER?"STR_XCOM":"STR_ALIENS"));
-	_txtSide->setText(ss.str());
+	_txtSide->setText(tr("STR_SIDE").arg(tr((_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"))));
 
 	_txtMessage->setColor(Palette::blockOffset(0));
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast(true);
-	_txtMessage->setText(_game->getLanguage()->getString("STR_PRESS_BUTTON_TO_CONTINUE"));
+	_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
 }

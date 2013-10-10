@@ -93,31 +93,33 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_TRANSFER"));
+	_btnOk->setText(tr("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TransferItemsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&TransferItemsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_TRANSFER"));
+	_txtTitle->setText(tr("STR_TRANSFER"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
-	_txtAmountTransfer->setText(_game->getLanguage()->getString("STR_AMOUNT_TO_TRANSFER"));
+	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
+	_txtAmountTransfer->setWordWrap(true);
 
 	_txtAmountDestination->setColor(Palette::blockOffset(13)+10);
-	_txtAmountDestination->setText(_game->getLanguage()->getString("STR_AMOUNT_AT_DESTINATION"));
+	_txtAmountDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
+	_txtAmountDestination->setWordWrap(true);
 
 	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
@@ -160,7 +162,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		std::wstringstream ss, ss2;
 		ss << _baseFrom->getAvailableScientists();
 		ss2 << _baseTo->getAvailableScientists();
-		_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 	if (_baseFrom->getAvailableEngineers() > 0)
 	{
@@ -169,7 +171,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		std::wstringstream ss, ss2;
 		ss << _baseFrom->getAvailableEngineers();
 		ss2 << _baseTo->getAvailableEngineers();
-		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
@@ -182,7 +184,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 			std::wstringstream ss, ss2;
 			ss << qty;
 			ss2 << _baseTo->getItems()->getItem(*i);
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 		}
 	}
 	_distance = getDistance();

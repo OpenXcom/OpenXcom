@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-
+#include <algorithm>
 #include "Ufopaedia.h"
 #include "ArticleStateItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -78,19 +78,19 @@ namespace OpenXcom
 			add(_txtShotType);
 			_txtShotType->setColor(Palette::blockOffset(14)+15);
 			_txtShotType->setWordWrap(true);
-			_txtShotType->setText(_game->getLanguage()->getString("STR_SHOT_TYPE").c_str());
+			_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
 
-			_txtAccuracy = new Text(50, 16, 108, 66);
+			_txtAccuracy = new Text(50, 16, 104, 66);
 			add(_txtAccuracy);
 			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
 			_txtAccuracy->setWordWrap(true);
-			_txtAccuracy->setText(_game->getLanguage()->getString("STR_ACCURACY_UC").c_str());
+			_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
 
-			_txtTuCost = new Text(60, 16, 160, 66);
+			_txtTuCost = new Text(60, 16, 158, 66);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
 			_txtTuCost->setWordWrap(true);
-			_txtTuCost->setText(_game->getLanguage()->getString("STR_TU_COST").c_str());
+			_txtTuCost->setText(tr("STR_TU_COST").c_str());
 
 			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
@@ -108,7 +108,7 @@ namespace OpenXcom
 					tu.erase(tu.end() - 1);
 				}
 				_lstInfo->addRow(3,
-								 _game->getLanguage()->getString("STR_AUTO").c_str(),
+								 tr("STR_SHOT_TYPE_AUTO").c_str(),
 								 Text::formatPercentage(item->getAccuracyAuto()).c_str(),
 								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
@@ -123,7 +123,7 @@ namespace OpenXcom
 					tu.erase(tu.end() - 1);
 				}
 				_lstInfo->addRow(3,
-								 _game->getLanguage()->getString("STR_SNAP").c_str(),
+								 tr("STR_SHOT_TYPE_SNAP").c_str(),
 								 Text::formatPercentage(item->getAccuracySnap()).c_str(),
 								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
@@ -138,7 +138,7 @@ namespace OpenXcom
 					tu.erase(tu.end() - 1);
 				}
 				_lstInfo->addRow(3,
-								 _game->getLanguage()->getString("STR_AIMED").c_str(),
+								 tr("STR_SHOT_TYPE_AIMED").c_str(),
 								 Text::formatPercentage(item->getAccuracyAimed()).c_str(),
 								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
@@ -166,18 +166,18 @@ namespace OpenXcom
 
 		for (int i = 0; i<3; ++i)
 		{
-			_txtAmmoType[i] = new Text(90, 9, 200, 24 + i*49);
+			_txtAmmoType[i] = new Text(90, 9, 190, 24 + i*49);
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 			_txtAmmoType[i]->setAlign(ALIGN_CENTER);
 
-			_txtAmmoDamage[i] = new Text(90, 16, 200, 40 + i*49);
+			_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + i*49);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
 			_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
 			_txtAmmoDamage[i]->setBig();
 
-			_imageAmmo[i] = new Surface(32, 48, 280, 24 + i*49);
+			_imageAmmo[i] = new Surface(32, 48, 280, 16 + i*49);
 			add(_imageAmmo[i]);
 		}
 
@@ -188,13 +188,13 @@ namespace OpenXcom
 				add(_txtDamage);
 				_txtDamage->setColor(Palette::blockOffset(14)+15);
 				_txtDamage->setAlign(ALIGN_CENTER);
-				_txtDamage->setText(_game->getLanguage()->getString("STR_DAMAGE_UC").c_str());
+				_txtDamage->setText(tr("STR_DAMAGE_UC").c_str());
 
 				_txtAmmo = new Text(45, 10, 270, 7);
 				add(_txtAmmo);
 				_txtAmmo->setColor(Palette::blockOffset(14)+15);
 				_txtAmmo->setAlign(ALIGN_CENTER);
-				_txtAmmo->setText(_game->getLanguage()->getString("STR_AMMO").c_str());
+				_txtAmmo->setText(tr("STR_AMMO").c_str());
 
 				if (item->getClipSize() == -1)
 				{
@@ -206,7 +206,7 @@ namespace OpenXcom
 				}
 				else
 				{
-					for (unsigned int i = 0; i < ammo_data->size(); ++i)
+					for (unsigned int i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
 						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
 						if (Ufopaedia::isArticleAvailable(_game, ammo_article))
@@ -226,6 +226,7 @@ namespace OpenXcom
 			case BT_AMMO:
 			case BT_GRENADE:
 			case BT_PROXIMITYGRENADE:
+			case BT_MELEE:
 				setDamageTypeText(_txtAmmoType[0], item);
 
 				ss.str(L"");ss.clear();
@@ -243,26 +244,31 @@ namespace OpenXcom
 		switch(ammo_rule->getDamageType())
 		{
 			case DT_AP:
-				text_field->setText(_game->getLanguage()->getString("STR_ARMOR_PIERCING").c_str());
+				text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
 				break;
 			case DT_HE:
+				text_field->setText(tr("STR_DAMAGE_HIGH_EXPLOSIVE").c_str());
+				break;
 			case DT_SMOKE:
-				text_field->setText(_game->getLanguage()->getString("STR_HIGH_EXPLOSIVE_UC").c_str());
+				text_field->setText(tr("STR_DAMAGE_SMOKE").c_str());
 				break;
 			case DT_IN:
-				text_field->setText(_game->getLanguage()->getString("STR_INCENDIARY").c_str());
+				text_field->setText(tr("STR_DAMAGE_INCENDIARY").c_str());
 				break;
 			case DT_LASER:
-				text_field->setText(_game->getLanguage()->getString("STR_LASER_BEAM").c_str());
+				text_field->setText(tr("STR_DAMAGE_LASER_BEAM").c_str());
 				break;
 			case DT_PLASMA:
-				text_field->setText(_game->getLanguage()->getString("STR_PLASMA_BEAM_UC").c_str());
+				text_field->setText(tr("STR_DAMAGE_PLASMA_BEAM_TYPE").c_str());
 				break;
 			case DT_STUN:
-				text_field->setText(_game->getLanguage()->getString("STR_STUN_UC").c_str());
+				text_field->setText(tr("STR_DAMAGE_STUN").c_str());
+				break;
+			case DT_MELEE:
+				text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
 				break;
 			default:
-				text_field->setText(_game->getLanguage()->getString("STR_UNKNOWN").c_str());
+				text_field->setText(tr("STR_UNKNOWN").c_str());
 				break;
 		}
 	}

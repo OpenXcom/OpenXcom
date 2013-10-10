@@ -67,7 +67,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_txtW2Name = new Text(90, 9, 204, 48);
 	_txtW2Ammo = new Text(60, 9, 204, 64);
 	_txtW2Max = new Text(60, 9, 204, 72);
-	_sprite = new Surface(32, 32, 144, 52);
+	_sprite = new Surface(32, 40, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);
 	_crew = new Surface(220, 18, 85, 96);
@@ -106,7 +106,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -119,15 +119,15 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+10);
-	_btnCrew->setText(_game->getLanguage()->getString("STR_CREW"));
+	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+10);
-	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIPMENT_UC"));
+	_btnEquip->setText(tr("STR_EQUIPMENT_UC"));
 	_btnEquip->onMouseClick((ActionHandler)&CraftInfoState::btnEquipClick);
 
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
-	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&CraftInfoState::btnArmorClick);
 
 	_edtCraft->setColor(Palette::blockOffset(13)+10);
@@ -185,7 +185,7 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << L'%';
+	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(c->getDamagePercentage()));
 	if (c->getStatus() == "STR_REPAIRS")
 	{
 		int damageDays = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate() / 24.0f);
@@ -194,7 +194,7 @@ void CraftInfoState::init()
 	_txtDamage->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << c->getFuelPercentage() << L'%';
+	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(c->getFuelPercentage()));
 	if (c->getStatus() == "STR_REFUELLING")
 	{
 		int fuelDays = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 48.0f);
@@ -250,15 +250,9 @@ void CraftInfoState::init()
 			frame->setY(0);
 			frame->blit(_weapon1);
 
-			_txtW1Name->setText(_game->getLanguage()->getString(w1->getRules()->getType()));
-
-			std::wstringstream ss3;
-			ss3 << _game->getLanguage()->getString("STR_AMMO_") << L'\x01' << w1->getAmmo();
-			_txtW1Ammo->setText(ss3.str());
-
-			std::wstringstream ss4;
-			ss4 << _game->getLanguage()->getString("STR_MAX") << L'\x01' << w1->getRules()->getAmmoMax();
-			_txtW1Max->setText(ss4.str());
+			_txtW1Name->setText(tr(w1->getRules()->getType()));
+			_txtW1Ammo->setText(tr("STR_AMMO_").arg(w1->getAmmo()));
+			_txtW1Max->setText(tr("STR_MAX").arg(w1->getRules()->getAmmoMax()));
 		}
 		else
 		{
@@ -288,15 +282,9 @@ void CraftInfoState::init()
 			frame->setY(0);
 			frame->blit(_weapon2);
 
-			_txtW2Name->setText(_game->getLanguage()->getString(w2->getRules()->getType()));
-
-			std::wstringstream ss5;
-			ss5 << _game->getLanguage()->getString("STR_AMMO_") << L'\x01' << w2->getAmmo();
-			_txtW2Ammo->setText(ss5.str());
-
-			std::wstringstream ss6;
-			ss6 << _game->getLanguage()->getString("STR_MAX") << L'\x01' << w2->getRules()->getAmmoMax();
-			_txtW2Max->setText(ss6.str());
+			_txtW2Name->setText(tr(w2->getRules()->getType()));
+			_txtW2Ammo->setText(tr("STR_AMMO_").arg(w2->getAmmo()));
+			_txtW2Max->setText(tr("STR_MAX").arg(w2->getRules()->getAmmoMax()));
 		}
 		else
 		{

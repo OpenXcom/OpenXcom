@@ -72,7 +72,7 @@ public:
 	/// Is grenade primed?
 	inline bool isPrimed() const {return _explodeTurn < 25;}
 	/// Is countdown over? Run away!
-	inline bool isCountdownOver() {return isPrimed()? --_explodeTurn <= 0 : false;}
+	inline bool isCountdownOver() {return isPrimed()? _explodeTurn-- <= 0 : false;}
 	/// Defuse a grenade.
 	inline void defuse() {_explodeTurn = 25;}
 	/// Spend one bullet.

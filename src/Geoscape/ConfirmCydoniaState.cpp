@@ -58,12 +58,12 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
-	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
-	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -71,7 +71,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
-	_txtMessage->setText(_game->getLanguage()->getString("STR_ARE_YOU_SURE_CYDONIA"));
+	_txtMessage->setText(tr("STR_ARE_YOU_SURE_CYDONIA"));
 }
 
 /**
@@ -96,19 +96,13 @@ void ConfirmCydoniaState::btnYesClick(Action *)
 {
 	_game->popState();
 	_game->popState();
-
-	int month =
-		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
-		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
-		_game->getSavedGame()->getMonthsPassed() ;  // else
-
+	
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType("STR_MARS_CYDONIA_LANDING");
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	bgen.setCraft(_craft);
 	bgen.setAlienRace("STR_SECTOID");
-	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 	bgen.setWorldShade(15);
 	bgen.run();
 

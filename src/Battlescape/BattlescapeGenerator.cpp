@@ -57,7 +57,8 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
-#include "PatrolBAIState.h"
+#include "CivilianBAIState.h"
+#include "AlienBAIState.h"
 #include "Pathfinding.h"
 
 namespace OpenXcom
@@ -132,9 +133,10 @@ void BattlescapeGenerator::setAlienRace(const std::string &alienRace)
 
 /**
  * Sets the alien item level. This is used to determine how advanced the equipment of the aliens will be.
- * - this value should be from 0 to 2.
+ * note: this only applies to "New Battle" type games. we intentionally don't alter the month for those,
+ * because we're using monthsPassed -1 for new battle in other sections of code.
+ * - this value should be from 0 to the size of the itemLevel array in the ruleset (default 9).
  * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
- * - how quick a race evolves varies per race? TODO
  * @param alienItemLevel AlienItemLevel.
  */
 void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
@@ -581,15 +583,30 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
+	int month;
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
+	{
+		month =
+		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
+		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
+		_game->getSavedGame()->getMonthsPassed() ;  // else
+	}
+	else
+	{
+		month = _alienItemLevel;
+	}
 	for (std::vector<DeploymentData>::iterator d = deployment->getDeploymentData()->begin(); d != deployment->getDeploymentData()->end(); ++d)
 	{
 		std::string alienName = race->getMember((*d).alienRank);
 
-		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
-		if( _game->getSavedGame()->getDifficulty() > DIFF_EXPERIENCED )
+		int quantity;
+		
+		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
+			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
+		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
 			quantity = (*d).lowQty+(((*d).highQty-(*d).lowQty)/2) + RNG::generate(0, (*d).dQty); // veteran/genius
-		else if( _game->getSavedGame()->getDifficulty() > DIFF_GENIUS )
-			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super
+		else
+			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super (and beyond?)
 
 		for (int i = 0; i < quantity; i++)
 		{
@@ -598,6 +615,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 				outside = false;
 			Unit *rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
+			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9));
 			if (unit)
 			{
 				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
@@ -613,7 +631,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 				}
 				else
 				{
-					for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
+					for (std::vector<std::string>::iterator it = (*d).itemSets.at(itemLevel).items.begin(); it != (*d).itemSets.at(itemLevel).items.end(); ++it)
 					{
 						RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
 						if (ruleItem)
@@ -655,12 +673,12 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
-			dir = unit->getDirectionTo(craft);
+			dir = unit->directionTo(craft);
 		if (dir != -1)
 			unit->setDirection(dir);
 		else
@@ -697,7 +715,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 
 		// we only add a unit if it has a node to spawn on.
@@ -706,7 +724,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}

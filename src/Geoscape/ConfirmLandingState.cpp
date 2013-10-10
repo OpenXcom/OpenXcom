@@ -60,9 +60,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
-	_txtCraft = new Text(206, 16, 25, 40);
-	_txtTarget = new Text(206, 32, 25, 88);
-	_txtReady = new Text(206, 32, 25, 56);
+	_txtMessage = new Text(206, 48, 25, 40);
 	_txtBegin = new Text(206, 16, 25, 130);
 
 	// Set palette
@@ -71,9 +69,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
-	add(_txtCraft);
-	add(_txtTarget);
-	add(_txtReady);
+	add(_txtMessage);
 	add(_txtBegin);
 
 	centerAllSurfaces();
@@ -83,35 +79,28 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
-	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
-	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_txtCraft->setColor(Palette::blockOffset(8)+10);
-	_txtCraft->setBig();
-	_txtCraft->setAlign(ALIGN_CENTER);
-	_txtCraft->setText(_craft->getName(_game->getLanguage()));
-
-	_txtTarget->setColor(Palette::blockOffset(8)+10);
-	_txtTarget->setBig();
-	_txtTarget->setAlign(ALIGN_CENTER);
-	_txtTarget->setWordWrap(true);
-	_txtTarget->setText(_craft->getDestination()->getName(_game->getLanguage()));
-
-	_txtReady->setColor(Palette::blockOffset(8)+5);
-	_txtReady->setBig();
-	_txtReady->setAlign(ALIGN_CENTER);
-	_txtReady->setText(_game->getLanguage()->getString("STR_READY_TO_LAND_NEAR"));
+	_txtMessage->setColor(Palette::blockOffset(8)+10);
+	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
+	_txtMessage->setBig();
+	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setWordWrap(true);
+	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_NEAR_DESTINATION")
+						 .arg(_craft->getName(_game->getLanguage()))
+						 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
 	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
-	_txtBegin->setText(_game->getLanguage()->getString("STR_BEGIN_MISSION"));
+	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
 }
 
 /**
@@ -133,9 +122,6 @@ void ConfirmLandingState::btnYesClick(Action *)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
-	size_t month = _game->getSavedGame()->getMonthsPassed();
-	if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-		month = _game->getRuleset()->getAlienItemLevels().size()-1;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -168,7 +154,6 @@ void ConfirmLandingState::btnYesClick(Action *)
 	{
 		throw Exception("No mission available!");
 	}
-	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 	bgen.run();
 	_game->pushState(new BriefingState(_game, _craft));
 }

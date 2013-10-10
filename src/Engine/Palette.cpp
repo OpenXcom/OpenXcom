@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new palette.
  */
-Palette::Palette() : _colors(0)
+Palette::Palette() : _colors(0), _count(0)
 {
 }
 
@@ -51,7 +51,8 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
 	if(_colors != 0)
 		throw Exception("loadDat can be run only once");
-	_colors = new SDL_Color[ncolors];
+	_count = ncolors;
+	_colors = new SDL_Color[_count];
 
 	// Load file and put colors in pallete
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -65,7 +66,7 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 
 	Uint8 value[3];
 
-	for (int i = 0; i < ncolors && palFile.read((char*)value, 3); ++i)
+	for (int i = 0; i < _count && palFile.read((char*)value, 3); ++i)
 	{
 		// Correct X-Com colors to RGB colors
 		_colors[i].r = value[0] * 4;
@@ -96,6 +97,39 @@ SDL_Color *Palette::getColors(int offset) const
 Uint32 Palette::getRGBA(SDL_Color* pal, Uint8 color)
 {
 	return ((Uint32) pal[color].r << 24) | ((Uint32) pal[color].g << 16) | ((Uint32) pal[color].b << 8) | (Uint32) 0xFF;
+}
+
+void Palette::savePal(const std::string &file) const
+{
+	std::ofstream out(file.c_str(), std::ios::out | std::ios::binary);
+	short count = _count;
+
+	// RIFF header
+	out << "RIFF";
+	int length = 4 + 4 + 4 + 4 + 2 + 2 + count * 4;
+	out.write((char*) &length, sizeof(length));
+	out << "PAL ";
+
+	// Data chunk
+	out << "data";
+	int data = count * 4 + 4;
+	out.write((char*) &data, sizeof(data));
+	short version = 0x0300;
+	out.write((char*) &version, sizeof(version));
+	out.write((char*) &count, sizeof(count));
+
+	// Colors
+	SDL_Color *color = getColors();
+	for (short i = 0; i < count; ++i)
+	{
+		char c = 0;
+		out.write((char*) &color->r, 1);
+		out.write((char*) &color->g, 1);
+		out.write((char*) &color->b, 1);
+		out.write(&c, 1);
+		color++;
+	}
+	out.close();
 }
 
 }

@@ -74,7 +74,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 	add(_title);
 	_title->setAlign(ALIGN_CENTER);
 	_title->setBig();
-	_title->setText(_game->getLanguage()->getString("STR_SET_TIMER"));
+	_title->setText(tr("STR_SET_TIMER"));
 	_title->setColor(Palette::blockOffset(1)-1);
 	_title->setHighContrast(true);
 
@@ -158,9 +158,9 @@ void PrimeGrenadeState::btnClick(Action *action)
 	if (btnID != -1)
 	{
 		if (_inInventoryView)
-			_grenadeInInventory->setExplodeTurn(1 + btnID);
+			_grenadeInInventory->setExplodeTurn(btnID);
 		else
-			_action->value = 1 + btnID;
+			_action->value = btnID;
 		_game->popState();
 		if (!_inInventoryView) _game->popState();
 	}

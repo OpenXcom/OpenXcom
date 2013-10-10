@@ -37,6 +37,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "InfoboxOKState.h"
+#include "InfoboxState.h"
 #include "../Savegame/Node.h"
 
 namespace OpenXcom
@@ -73,7 +74,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
-    _parent->resetSituationForAI();
 
     if (_unit->getFaction() == FACTION_HOSTILE)
     {
@@ -160,29 +160,20 @@ void UnitDieBState::think()
 			{
 				if (_damageType == DT_NONE)
 				{
-					std::wstringstream ss;
-					ss << _unit->getName(game->getLanguage()) << L'\n';
-					ss << game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender());
-					game->pushState(new InfoboxOKState(game, ss.str()));
+					game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 				else if (Options::getBool("battleNotifyDeath"))
 				{
-					std::wstringstream ss;
-					ss << _unit->getName(game->getLanguage()) << L'\n';
-					ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender());
-					game->pushState(new InfoboxOKState(game, ss.str()));
+					game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 			}
 			else
 			{
-				std::wstringstream ss;
-				ss << _unit->getName(game->getLanguage()) << L'\n';
-				ss << game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender());
-				game->pushState(new InfoboxOKState(game, ss.str()));
+				game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 		// if all units from either faction are killed - auto-end the mission.
-		if (Options::getBool("battleAutoEnd"))
+		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd"))
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
@@ -190,6 +181,7 @@ void UnitDieBState::think()
 
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
+				_parent->getSave()->setSelectedUnit(0);
 				_parent->statePushBack(0);
 			}
 		}

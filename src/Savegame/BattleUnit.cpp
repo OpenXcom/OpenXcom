@@ -28,7 +28,6 @@
 #include "../Engine/Logger.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
-#include "../Battlescape/AggroBAIState.h"
 #include "Soldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
@@ -218,6 +217,8 @@ void BattleUnit::load(const YAML::Node &node)
 	_kills = node["kills"].as<int>(_kills);
 	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
 	_charging = 0;
+	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
+	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 }
 
 /**
@@ -270,6 +271,9 @@ YAML::Node BattleUnit::save() const
 		node["kills"] = _kills;
 	if (_faction == FACTION_PLAYER && _dontReselect)
 		node["dontReselect"] = _dontReselect;
+	node["specab"] = (int)_specab;
+	if (!_spawnUnit.empty())
+		node["spawnUnit"] = _spawnUnit;
 
 	return node;
 }
@@ -533,7 +537,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
-	int dir = getDirectionTo (point);
+	int dir = directionTo (point);
 
 	if (turret)
 	{
@@ -757,10 +761,10 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
- * Returns the soldier's amount of time units.
- * @return Time units.
+ * Returns the direction from this unit to a given point.
+ * @return direction.
  */
-int BattleUnit::getDirectionTo(const Position &point) const
+int BattleUnit::directionTo(const Position &point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1500,14 +1504,7 @@ void BattleUnit::think(BattleAction *action)
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
 	if (_currentAIState)
-	{
-		if (dynamic_cast<AggroBAIState*>(aiState) != 0 && dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
-		{
-			delete aiState;
-			return; // try not to overwrite an existing aggro AI state
-			// I tried using typeid but it does not produce the expected results :(
-		}
-		
+	{		
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
@@ -2493,8 +2490,32 @@ void BattleUnit::setCoverReserve(int reserve)
 {
 	_coverReserve = reserve;
 }
-int BattleUnit::getCoverReserve()
+int BattleUnit::getCoverReserve() const
 {
 	return _coverReserve;
 }
+
+/**
+ * Checks if this unit can be selected. Only alive units
+ * belonging to the faction can be selected.
+ * @param faction The faction to compare with.
+ * @param checkReselect Check if the unit is reselectable.
+ * @param checkInventory Check if the unit has an inventory.
+ * @return True if the unit can be selected, false otherwise.
+ */
+bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const
+{
+	return (_faction == faction && !isOut() && (!checkReselect || reselectAllowed()) && (!checkInventory || hasInventory()));
+}
+
+/**
+ * Checks if this unit has an inventory. Large units and/or
+ * terror units don't have inventories.
+ * @return True if an inventory is available, false otherwise.
+ */
+bool BattleUnit::hasInventory() const
+{
+	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
+
 }

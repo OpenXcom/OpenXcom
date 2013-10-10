@@ -63,7 +63,7 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 	
 	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AlienBaseState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -75,20 +75,17 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	bool set(false);
 	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 	{
-		if((*k)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
+		if ((*k)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
 		{
-			std::wstringstream ss;
-			ss << _game->getLanguage()->getString("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN")
-			    << _game->getLanguage()->getString((*k)->getRules()->getType());
-			_txtTitle->setText(ss.str());
+			_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN").arg(tr((*k)->getRules()->getType())));
 			set = true;
 		}
 	}
 	if(!set)
 	{
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN")
-		    << _game->getLanguage()->getString("STR_UNKNOWN");
+		ss << tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN")
+		    << tr("STR_UNKNOWN");
 		_txtTitle->setText(ss.str());
 	}
 }

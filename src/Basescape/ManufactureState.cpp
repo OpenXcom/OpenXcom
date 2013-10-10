@@ -59,7 +59,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtItem = new Text(80, 9, 10, 52);
 	_txtEngineers = new Text(56, 18, 112, 44);
 	_txtProduced = new Text(56, 18, 168, 44);
-	_txtCost = new Text(40, 27, 222, 44);
+	_txtCost = new Text(44, 27, 222, 44);
 	_txtTimeLeft = new Text(55, 18, 260, 44);
 	_lstManufacture = new TextList(307, 90, 8, 80);
 
@@ -92,18 +92,18 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_btnNew->setColor(Palette::blockOffset(13)+10);
-	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PRODUCTION"));
+	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)&ManufactureState::btnNewProductionClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ManufactureState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_CURRENT_PRODUCTION"));
+	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
@@ -116,28 +116,34 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_txtFunds->setColor(Palette::blockOffset(15)+6);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss4;
-	ss4 << _game->getLanguage()->getString("STR_CURRENT_FUNDS") << L'\x01' << Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtFunds->setText(ss4.str());
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtEngineers->setColor(Palette::blockOffset(15)+1);
-	_txtEngineers->setText(_game->getLanguage()->getString("STR_ENGINEERS__ALLOCATED"));
+	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
+	_txtEngineers->setWordWrap(true);
+	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
-	_txtProduced->setText(_game->getLanguage()->getString("STR_UNITS_PRODUCED"));
+	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
+	_txtProduced->setWordWrap(true);
+	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 	
 	_txtCost->setColor(Palette::blockOffset(15)+1);
-	_txtCost->setText(_game->getLanguage()->getString("STR_COST__PER__UNIT"));
+	_txtCost->setText(tr("STR_COST__PER__UNIT"));
+	_txtCost->setWordWrap(true);
+	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
-	_txtTimeLeft->setText(_game->getLanguage()->getString("STR_DAYS_HOURS_LEFT"));
+	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
+	_txtTimeLeft->setWordWrap(true);
+	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-	_lstManufacture->setColumns(5, 132, 17, 42, 56, 32);
+	_lstManufacture->setColumns(5, 122, 17, 52, 56, 32);
 	_lstManufacture->setAlign(ALIGN_RIGHT);
 	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);
@@ -220,18 +226,12 @@ void ManufactureState::fillProductionList()
 
 			s4 << L"-";
 		}
-		_lstManufacture->addRow (5, _game->getLanguage()->getString((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
+		_lstManufacture->addRow (5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}
 	_lstManufacture->draw();
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_ENGINEERS_AVAILABLE") << L'\x01' << _base->getAvailableEngineers();
-	_txtAvailable->setText(ss.str());
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_ENGINEERS_ALLOCATED") << L'\x01' << _base->getAllocatedEngineers();
-	_txtAllocated->setText(ss2.str());
-	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_WORKSHOP_SPACE_AVAILABLE") << L'\x01' << _base->getFreeWorkshops();
-	_txtSpace->setText(ss3.str());
+	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE").arg(_base->getAvailableEngineers()));
+	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED").arg(_base->getAllocatedEngineers()));
+	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE").arg(_base->getFreeWorkshops()));
 }
 
 /**

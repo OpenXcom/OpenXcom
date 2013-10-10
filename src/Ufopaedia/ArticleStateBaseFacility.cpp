@@ -127,24 +127,24 @@ namespace OpenXcom
 
 		std::wstringstream ss;
 		ss << Text::formatFunding(facility->getBuildCost());
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);
 
 		ss.str(L"");ss.clear();
 		ss << Text::formatFunding(facility->getMonthlyCost());
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
 
 		if (facility->getDefenseValue() > 0)
 		{
 			ss.str(L"");ss.clear();
 			ss << facility->getDefenseValue();
-			_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DEFENSE_VALUE").c_str(), ss.str().c_str());
+			_lstInfo->addRow(2, tr("STR_DEFENSE_VALUE").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(3, 1, Palette::blockOffset(13)+0);
 
 			ss.str(L"");ss.clear();
 			ss << Text::formatPercentage(facility->getHitRatio());
-			_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HIT_RATIO").c_str(), ss.str().c_str());
+			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(4, 1, Palette::blockOffset(13)+0);
 		}
 		centerAllSurfaces();

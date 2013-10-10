@@ -164,7 +164,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 			std::stringstream saveTime;
 			std::wstringstream saveDay, saveMonth, saveYear;
 			saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
-			saveDay << time.getDay() << lang->getString(time.getDayString());
+			saveDay << time.getDayString(lang);
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
 
@@ -209,20 +209,21 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
-		throw Exception("Version mismatch");
+		//throw Exception("Version mismatch");
 	}
 	_time->load(brief["time"]);
 
 	// Get full save data
 	YAML::Node doc = file[1];
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
-	RNG::load(doc);
+	if (doc["rng"] && !Options::getBool("newSeedOnLoad"))
+		RNG::init(doc["rng"].as<int>());
 	_monthsPassed = doc["monthsPassed"].as<int>(_monthsPassed);
 	_radarLines = doc["radarLines"].as<bool>(_radarLines);
 	_detail = doc["detail"].as<bool>(_detail);
-	_graphRegionToggles = doc["GraphRegionToggles"].as<std::string>(_graphRegionToggles);
-	_graphCountryToggles = doc["GraphCountryToggles"].as<std::string>(_graphCountryToggles);
-	_graphFinanceToggles = doc["GraphFinanceToggles"].as<std::string>(_graphFinanceToggles);
+	_graphRegionToggles = doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
+	_graphCountryToggles = doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
+	_graphFinanceToggles = doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
 	_funds = doc["funds"].as< std::vector<int> >(_funds);
 	_maintenance = doc["maintenance"].as< std::vector<int> >(_maintenance);
 	_researchScores = doc["researchScores"].as< std::vector<int> >(_researchScores);
@@ -345,10 +346,10 @@ void SavedGame::save(const std::string &filename) const
 	node["monthsPassed"] = _monthsPassed;
 	node["radarLines"] = _radarLines;
 	node["detail"] = _detail;
-	node["GraphRegionToggles"] = _graphRegionToggles;
-	node["GraphCountryToggles"] = _graphCountryToggles;
-	node["GraphFinanceToggles"] = _graphFinanceToggles;
-	RNG::save(node);
+	node["graphRegionToggles"] = _graphRegionToggles;
+	node["graphCountryToggles"] = _graphCountryToggles;
+	node["graphFinanceToggles"] = _graphFinanceToggles;
+	node["rng"] = RNG::getSeed();
 	node["funds"] = _funds;
 	node["maintenance"] = _maintenance;
 	node["researchScores"] = _researchScores;

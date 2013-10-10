@@ -53,7 +53,7 @@ pathfinding_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
 
 bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
-bulletsprite_DATA = \    
+bulletsprite_DATA = \
 	bin/data/Resources/BulletSprites/BulletSprites.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
@@ -61,41 +61,27 @@ ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
 languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
-	bin/data/Language/Big.fnt \
-	bin/data/Language/Bulgarian.geo \
-	bin/data/Language/Bulgarian.lng \
-	bin/data/Language/Czech.geo \
-	bin/data/Language/Czech.lng \
-	bin/data/Language/Danish.geo \
-	bin/data/Language/Danish.lng \
-	bin/data/Language/English.geo \
-	bin/data/Language/English.lng \
-	bin/data/Language/EnglishUk.geo \
-	bin/data/Language/EnglishUk.lng \
 	bin/data/Language/Font.dat \
-	bin/data/Language/French.geo \
-	bin/data/Language/French.lng \
-	bin/data/Language/German.geo \
-	bin/data/Language/German.lng \
-	bin/data/Language/Hungarian.geo \
-	bin/data/Language/Hungarian.lng \
-	bin/data/Language/Italian.geo \
-	bin/data/Language/Italian.lng \
-	bin/data/Language/Polish.geo \
-	bin/data/Language/Polish.lng \
-	bin/data/Language/Portuguese.geo \
-	bin/data/Language/Portuguese.lng \
-	bin/data/Language/Romanian.geo \
-	bin/data/Language/Romanian.lng \
-	bin/data/Language/Russian.geo \
-	bin/data/Language/Russian.lng \
-	bin/data/Language/Small.fnt \
-	bin/data/Language/Spanish.geo \
-	bin/data/Language/Spanish.lng \
-	bin/data/Language/SpanishAL.geo \
-	bin/data/Language/SpanishAL.lng \
-	bin/data/Language/Ukrainian.geo \
-	bin/data/Language/Ukrainian.lng
+	bin/data/Language/FontBig.png \
+	bin/data/Language/FontSmall.png \
+	bin/data/Language/FontGeoBig.png \
+	bin/data/Language/FontGeoSmall.png \
+	bin/data/Language/bg-BG.yml \
+	bin/data/Language/cs-CZ.yml \
+	bin/data/Language/da.yml \
+	bin/data/Language/de.yml \
+	bin/data/Language/en-GB.yml \
+	bin/data/Language/es.yml \
+	bin/data/Language/es-419.yml \
+	bin/data/Language/fr.yml \
+	bin/data/Language/hu-HU.yml \
+	bin/data/Language/it.yml \
+	bin/data/Language/nl.yml \
+	bin/data/Language/pl-PL.yml \
+	bin/data/Language/pt-PT.yml \
+	bin/data/Language/ro.yml \
+	bin/data/Language/ru.yml \
+	bin/data/Language/uk.yml
 
 namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
@@ -226,8 +212,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ActionMenuItem.h \
 	src/Battlescape/ActionMenuState.cpp \
 	src/Battlescape/ActionMenuState.h \
-	src/Battlescape/AggroBAIState.cpp \
-	src/Battlescape/AggroBAIState.h \
+	src/Battlescape/AlienBAIState.cpp \
+	src/Battlescape/AlienBAIState.h \
 	src/Battlescape/BattleAIState.cpp \
 	src/Battlescape/BattleAIState.h \
 	src/Battlescape/BattlescapeGame.cpp \
@@ -236,8 +222,6 @@ openxcom_SOURCES = \
 	src/Battlescape/BattlescapeGenerator.h \
 	src/Battlescape/BattlescapeMessage.cpp \
 	src/Battlescape/BattlescapeMessage.h \
-	src/Battlescape/BattlescapeOptionsState.cpp \
-	src/Battlescape/BattlescapeOptionsState.h \
 	src/Battlescape/BattlescapeState.cpp \
 	src/Battlescape/BattlescapeState.h \
 	src/Battlescape/BattleState.cpp \
@@ -248,6 +232,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Camera.h \
 	src/Battlescape/CannotReequipState.cpp \
 	src/Battlescape/CannotReequipState.h \
+	src/Battlescape/CivilianBAIState.cpp \
+	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
 	src/Battlescape/ExplosionBState.cpp \
@@ -282,8 +268,6 @@ openxcom_SOURCES = \
 	src/Battlescape/PathfindingNode.h \
 	src/Battlescape/PathfindingOpenSet.cpp \
 	src/Battlescape/PathfindingOpenSet.h \
-	src/Battlescape/PatrolBAIState.cpp \
-	src/Battlescape/PatrolBAIState.h \
 	src/Battlescape/Position.cpp \
 	src/Battlescape/Position.h \
 	src/Battlescape/PrimeGrenadeState.cpp \
@@ -341,6 +325,8 @@ openxcom_SOURCES = \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
+	src/Engine/LanguagePlurality.cpp \
+	src/Engine/LanguagePlurality.h \
 	src/Engine/LocalizedText.cpp \
 	src/Engine/LocalizedText.h \
 	src/Engine/Logger.h \
@@ -387,8 +373,6 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Engine/Zoom.cpp \
 	src/Engine/Zoom.h \
-	src/Geoscape/AbandonGameState.cpp \
-	src/Geoscape/AbandonGameState.h \
 	src/Geoscape/AlienBaseState.cpp \
 	src/Geoscape/AlienBaseState.h \
 	src/Geoscape/AlienTerrorState.cpp \
@@ -424,8 +408,6 @@ openxcom_SOURCES = \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \
 	src/Geoscape/GeoscapeCraftState.h \
-	src/Geoscape/GeoscapeOptionsState.cpp \
-	src/Geoscape/GeoscapeOptionsState.h \
 	src/Geoscape/GeoscapeState.cpp \
 	src/Geoscape/GeoscapeState.h \
 	src/Geoscape/Globe.cpp \
@@ -474,10 +456,14 @@ openxcom_SOURCES = \
 	src/Interface/Cursor.h \
 	src/Interface/FpsCounter.cpp \
 	src/Interface/FpsCounter.h \
+	src/Interface/Frame.cpp \
+	src/Interface/Frame.h \
 	src/Interface/ImageButton.cpp \
 	src/Interface/ImageButton.h \
 	src/Interface/NumberText.cpp \
 	src/Interface/NumberText.h \
+	src/Interface/Slider.cpp \
+	src/Interface/Slider.h \
 	src/Interface/TextButton.cpp \
 	src/Interface/TextButton.h \
 	src/Interface/Text.cpp \
@@ -493,14 +479,10 @@ openxcom_SOURCES = \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
-	src/Menu/AdvancedOptionsState.cpp \
-	src/Menu/AdvancedOptionsState.h \
 	src/Menu/DeleteGameState.cpp \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/LanguageState.cpp \
-	src/Menu/LanguageState.h \
 	src/Menu/LoadState.cpp \
 	src/Menu/LoadState.h \
 	src/Menu/MainMenuState.cpp \
@@ -509,12 +491,22 @@ openxcom_SOURCES = \
 	src/Menu/NewBattleState.h \
 	src/Menu/NewGameState.cpp \
 	src/Menu/NewGameState.h \
-	src/Menu/NoteState.cpp \
-	src/Menu/NoteState.h \
-	src/Menu/OptionsControlsState.cpp \
-	src/Menu/OptionsControlsState.h \
+	src/Menu/OptionsBaseState.cpp \
+	src/Menu/OptionsBaseState.h \
 	src/Menu/OptionsState.cpp \
 	src/Menu/OptionsState.h \
+	src/Menu/OptionsControlsState.cpp \
+	src/Menu/OptionsControlsState.h \
+	src/Menu/OptionsLanguageState.cpp \
+	src/Menu/OptionsLanguageState.h \
+	src/Menu/OptionsAdvancedState.cpp \
+	src/Menu/OptionsAdvancedState.h \
+	src/Menu/OptionsBattlescapeState.cpp \
+	src/Menu/OptionsBattlescapeState.h \
+	src/Menu/AbandonGameState.cpp \
+	src/Menu/AbandonGameState.h \
+	src/Menu/PauseState.cpp \
+	src/Menu/PauseState.h \
 	src/Menu/SavedGameState.cpp \
 	src/Menu/SavedGameState.h \
 	src/Menu/SaveState.cpp \
@@ -681,9 +673,6 @@ openxcom_SOURCES = \
 EXTRA_DIST = \
 	autogen.sh \
 	docs/openxcom.6.xml \
-	src/OpenXcom.2008.sln \
-	src/OpenXcom.2008.vcproj \
-	src/OpenXcom.2008.vcproj.user \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
 	src/OpenXcom.2010.vcxproj.filters \

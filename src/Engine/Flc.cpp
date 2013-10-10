@@ -127,26 +127,14 @@ if((flc.file=fopen(filename, "rb"))==NULL) {
 #endif
 
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-
-  if((flc.HeaderCheck==0x0AF12) || (flc.HeaderCheck==0x0AF11)) { 
+  if((flc.HeaderCheck==SDL_SwapLE16(0x0AF12)) || (flc.HeaderCheck==SDL_SwapLE16(0x0AF11))) { 
     flc.screen_w=flc.HeaderWidth;
     flc.screen_h=flc.HeaderHeight;
 	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
     flc.screen_depth=8;
-    if(flc.HeaderCheck==0x011AF) {
+	if(flc.HeaderCheck == SDL_SwapLE16(0x0AF11)){
       flc.HeaderSpeed*=1000.0/70.0;
     }
-#else
-  if((flc.HeaderCheck==0x0AF12) || (flc.HeaderCheck==0x0AF11)) { 
-    flc.screen_w=flc.HeaderWidth;
-    flc.screen_h=flc.HeaderHeight;
-	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
-    flc.screen_depth=8;
-    if(flc.HeaderCheck==0x0AF11) {
-      flc.HeaderSpeed*=1000.0/70.0;
-    }
-#endif
     return(0);
   }
   return(1);
@@ -249,11 +237,7 @@ void SS2()
       pSrc+=2;
     }
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    if((Count & 0x00c0)==0x0000) {      // 0xc000h = 1100000000000000
-#else
-    if((Count & 0xc000)==0x0000) {      // 0xc000h = 1100000000000000
-#endif
+	if((Count & SDL_SwapLE16(0xc000))==0x0000) {      // 0xc000h = 1100000000000000
       pTmpDst=pDst;
       while(Count--) {
         ColumSkip=*(pSrc++);
@@ -525,7 +509,12 @@ void FlcMain(void (*frameCallBack)())
   
 //#ifndef __NO_FLC
   FlcInitFirstFrame();
-  flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
+#ifdef _WIN32
+  flc.offset = flc.dy * flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel * flc.dx;
+#else
+  SDL_Rect dstRect = {(Sint16)flc.dx, (Sint16)flc.dy, (Uint16)flc.screen_w, (Uint16)flc.screen_h};
+  flc.offset = 0;
+#endif
   while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
@@ -547,16 +536,19 @@ void FlcMain(void (*frameCallBack)())
 
     FlcReadFile(flc.FrameSize);
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    if(flc.FrameCheck!=0x000f1) {
-#else
-    if(flc.FrameCheck!=0x0f100) {
-#endif
+	if(flc.FrameCheck!=SDL_SwapLE16(0x0f100)) {
       FlcDoOneFrame();
       SDLWaitFrame();
       /* TODO: Track which rectangles have really changed */
       //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
-      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
+      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface())
+        SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(),
+#ifdef _WIN32
+                        0
+#else
+                        &dstRect
+#endif
+                       );
       flc.realscreen->flip();
     }
 

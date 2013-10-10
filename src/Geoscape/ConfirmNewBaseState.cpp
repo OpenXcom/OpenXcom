@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ConfirmNewBaseState.h"
-#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -70,36 +69,33 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
-	std::wstringstream ss;
+	std::wstring area;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
-			ss << _game->getLanguage()->getString("STR_AREA_") << L'\x01' << _game->getLanguage()->getString((*i)->getRules()->getType());
+			area = tr((*i)->getRules()->getType());
 			break;
 		}
 	}
 
-	std::wstring s = _game->getLanguage()->getString("STR_COST_");
-	s.erase(s.size()-1, 1);
-	s += L'\x01' + Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);
 	_txtCost->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtCost->setText(s);
+	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
 
 	_txtArea->setColor(Palette::blockOffset(15)-1);
 	_txtArea->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtArea->setText(ss.str());
+	_txtArea->setText(tr("STR_AREA_").arg(area));
 }
 
 /**
