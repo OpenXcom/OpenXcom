@@ -2521,21 +2521,34 @@ bool TileEngine::validateThrow(BattleAction *action)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
-	Position origin = action->actor->getPosition();
-	std::vector<Position> _trajectory;
+
 	// object blocking - can't throw here
 	if (action->type == BA_THROW && _save->getTile(action->target) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		return false;
 	}
 
+	Position origin = action->actor->getPosition();
+	std::vector<Position> trajectory;
+	Tile *tileAbove = _save->getTile(origin + Position(0,0,1));
 	originVoxel = Position(origin.x*16 + 8, origin.y*16 + 8, origin.z*24);
 	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
 	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (origin.z + 1)*24)
 	{
-		origin.z++;
+		if (!tileAbove || !tileAbove->hasNoFloor(0))
+		{
+			while (originVoxel.z > (origin.z + 1)*24)
+			{
+				originVoxel.z--;
+			}
+			originVoxel.z -=4;
+		}
+		else
+		{
+			origin.z++;
+		}
 	}
 
 	// determine the target voxel.
@@ -2545,7 +2558,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 	if (action->type != BA_THROW)
 	{
 		BattleUnit *tu = _save->getTile(action->target)->getUnit();
-		if(!tu && action->target.z > 0)
+		if(!tu && action->target.z > 0 && _save->getTile(action->target)->hasNoFloor(0))
 			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
 		if (tu)
 		{
@@ -2557,8 +2570,8 @@ bool TileEngine::validateThrow(BattleAction *action)
 	double curvature = 1.0;
 	while (!foundCurve && curvature < 5.0)
 	{
-		int check = calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
-		if (check != 5 && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		int check = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action->actor, curvature, 1.0);
+		if (check != 5 && (int)trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}
@@ -2566,7 +2579,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 		{
 			curvature += 1.0;
 		}
-		_trajectory.clear();
+		trajectory.clear();
 	}
 	if (AreSame(curvature, 5.0))
 	{
