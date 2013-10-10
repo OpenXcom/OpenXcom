@@ -790,18 +790,29 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
+		// get the first man up to bat.
 		BattleUnit *reactor = getReactor(spotters, unit);
-		if (reactor != unit)
+		// start iterating through the possible reactors until the current unit is the one with the highest score.
+		while (reactor != unit)
 		{
-			while (true)
+			if (!tryReactionSnap(reactor, unit))
 			{
-				if (!tryReactionSnap(reactor, unit))
-					break;
+				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
+				for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				{
+					if (*i == reactor)
+					{
+						spotters.erase(i);
+						break;
+					}
+				}
+				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
 				reactor = getReactor(spotters, unit);
-				result = true;
-				if (reactor == unit)
-					break;
+				continue;
 			}
+			// nice shot, kid. don't get cocky.
+			reactor = getReactor(spotters, unit);
+			result = true;
 		}
 	}
 	return result;
@@ -832,8 +843,10 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
+				// can actually target the unit
+				canTargetUnit(&originVoxel, tile, &targetVoxel, *i) &&
 				// can actually see the unit
-				canTargetUnit(&originVoxel, tile, &targetVoxel, *i))
+				visible(*i, tile))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -967,14 +980,11 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
 				aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
-				// don't shoot. it's too early in the game or we'll kill ourselves or someone we care about
-				// this will cause the alien to NOT actually fire, but allow the loop to continue in case someone else CAN.
-				// the unit won't get it's time units back, so it won't react again this turn
 				action.targeting = false;
 			}
 		}
 
-		if (action.targeting && unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)))
+		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
 			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
