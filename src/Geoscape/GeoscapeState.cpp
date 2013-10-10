@@ -2024,16 +2024,12 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{
-		size_t month = _game->getSavedGame()->getMonthsPassed();
-		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-			month = _game->getRuleset()->getAlienItemLevels().size()-1;
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_BASE_DEFENSE");
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setBase(base);
 		bgen.setAlienRace(ufo->getAlienRace());
-		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 		musicStop();
 		popup(new BriefingState(_game, 0, base));
