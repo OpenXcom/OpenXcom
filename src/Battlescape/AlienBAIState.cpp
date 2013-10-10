@@ -200,6 +200,19 @@ void AlienBAIState::think(BattleAction *action)
 	setupAttack();
 	setupPatrol();
 
+	if (_psiAction->type != BA_NONE && !_didPsi)
+	{
+		_didPsi = true;
+		action->type = _psiAction->type;
+		action->target = _psiAction->target;
+		action->number -= 1;
+		return;
+	}
+	else
+	{
+		_didPsi = false;
+	}
+
 	bool evaluate = false;
 
 	if (_AIMode == AI_ESCAPE)
@@ -269,73 +282,62 @@ void AlienBAIState::think(BattleAction *action)
 		}
 	}
 	
-	if (_psiAction->type == BA_NONE || _didPsi)
+	switch (_AIMode)
 	{
-		_didPsi = false;
-		switch (_AIMode)
+	case AI_ESCAPE:
+		action->type = _escapeAction->type;
+		action->target = _escapeAction->target;
+		// end this unit's turn.
+		action->finalAction = true;
+		// ignore new targets.
+		action->desperate = true;
+		// spin 180 at the end of your route.
+		_unit->_hidingForTurn = true;
+		// forget about reserving TUs, we need to get out of here.
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		break;
+	case AI_PATROL:
+		action->type = _patrolAction->type;
+		action->target = _patrolAction->target;
+		break;
+	case AI_COMBAT:
+		action->type = _attackAction->type;
+		action->target = _attackAction->target;
+		// this may have changed to a grenade.
+		action->weapon = _attackAction->weapon;
+		if (action->weapon && action->type == BA_THROW && action->weapon->getRules()->getBattleType() == BT_GRENADE)
 		{
-		case AI_ESCAPE:
-			action->type = _escapeAction->type;
-			action->target = _escapeAction->target;
-			// end this unit's turn.
-			action->finalAction = true;
-			// ignore new targets.
-			action->desperate = true;
-			// spin 180 at the end of your route.
-			_unit->_hidingForTurn = true;
-			// forget about reserving TUs, we need to get out of here.
-			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
-			break;
-		case AI_PATROL:
-			action->type = _patrolAction->type;
-			action->target = _patrolAction->target;
-			break;
-		case AI_COMBAT:
-			action->type = _attackAction->type;
-			action->target = _attackAction->target;
-			// this may have changed to a grenade.
-			action->weapon = _attackAction->weapon;
-			if (action->weapon && action->type == BA_THROW && action->weapon->getRules()->getBattleType() == BT_GRENADE)
-			{
-				action->weapon->setExplodeTurn(_save->getTurn());
-				_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
-			}
-			// if this is a firepoint action, set our facing.
-			action->finalFacing = _attackAction->finalFacing;
-			action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
-			// don't worry about reserving TUs, we've factored that in already.
-			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
-			// if this is a "find fire point" action, don't increment the AI counter.
-			if (action->type == BA_WALK && _rifle)
-			{
-				action->number -= 1;
-			}
-			else if (action->type == BA_LAUNCH)
-			{
-				action->waypoints = _attackAction->waypoints;
-			}
-			break;
-		case AI_AMBUSH:
-			action->type = _ambushAction->type;
-			action->target = _ambushAction->target;
-			// face where we think our target will appear.
-			action->finalFacing = _ambushAction->finalFacing;
-			// end this unit's turn.
-			action->finalAction = true;
-			// we've factored in the reserved TUs already, so don't worry.
-			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
-			break;
-		default:
-			break;
+			_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
 		}
+		// if this is a firepoint action, set our facing.
+		action->finalFacing = _attackAction->finalFacing;
+		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
+		// don't worry about reserving TUs, we've factored that in already.
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		// if this is a "find fire point" action, don't increment the AI counter.
+		if (action->type == BA_WALK && _rifle)
+		{
+			action->number -= 1;
+		}
+		else if (action->type == BA_LAUNCH)
+		{
+			action->waypoints = _attackAction->waypoints;
+		}
+		break;
+	case AI_AMBUSH:
+		action->type = _ambushAction->type;
+		action->target = _ambushAction->target;
+		// face where we think our target will appear.
+		action->finalFacing = _ambushAction->finalFacing;
+		// end this unit's turn.
+		action->finalAction = true;
+		// we've factored in the reserved TUs already, so don't worry.
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		break;
+	default:
+		break;
 	}
-	else
-	{
-		_didPsi = true;
-		action->type = _psiAction->type;
-		action->target = _psiAction->target;
-		action->number -= 1;
-	}
+
 	// if we're moving, we'll have to re-evaluate our escape/ambush position.
 	if (action->type == BA_WALK && action->target != _unit->getPosition())
 	{

@@ -210,6 +210,10 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
 		{
+			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+			{
+				_projectileItem->setExplodeTurn(_parent->getSave()->getTurn());
+			}
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);

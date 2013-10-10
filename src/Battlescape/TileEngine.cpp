@@ -790,18 +790,29 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
+		// get the first man up to bat.
 		BattleUnit *reactor = getReactor(spotters, unit);
-		if (reactor != unit)
+		// start iterating through the possible reactors until the current unit is the one with the highest score.
+		while (reactor != unit)
 		{
-			while (true)
+			if (!tryReactionSnap(reactor, unit))
 			{
-				if (!tryReactionSnap(reactor, unit))
-					break;
+				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
+				for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				{
+					if (*i == reactor)
+					{
+						spotters.erase(i);
+						break;
+					}
+				}
+				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
 				reactor = getReactor(spotters, unit);
-				result = true;
-				if (reactor == unit)
-					break;
+				continue;
 			}
+			// nice shot, kid. don't get cocky.
+			reactor = getReactor(spotters, unit);
+			result = true;
 		}
 	}
 	return result;
@@ -832,8 +843,10 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
+				// can actually target the unit
+				canTargetUnit(&originVoxel, tile, &targetVoxel, *i) &&
 				// can actually see the unit
-				canTargetUnit(&originVoxel, tile, &targetVoxel, *i))
+				visible(*i, tile))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -967,14 +980,11 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
 				aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
-				// don't shoot. it's too early in the game or we'll kill ourselves or someone we care about
-				// this will cause the alien to NOT actually fire, but allow the loop to continue in case someone else CAN.
-				// the unit won't get it's time units back, so it won't react again this turn
 				action.targeting = false;
 			}
 		}
 
-		if (action.targeting && unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)))
+		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
 			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
@@ -2511,21 +2521,34 @@ bool TileEngine::validateThrow(BattleAction *action)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
-	Position origin = action->actor->getPosition();
-	std::vector<Position> _trajectory;
+
 	// object blocking - can't throw here
 	if (action->type == BA_THROW && _save->getTile(action->target) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		return false;
 	}
 
+	Position origin = action->actor->getPosition();
+	std::vector<Position> trajectory;
+	Tile *tileAbove = _save->getTile(origin + Position(0,0,1));
 	originVoxel = Position(origin.x*16 + 8, origin.y*16 + 8, origin.z*24);
 	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
 	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (origin.z + 1)*24)
 	{
-		origin.z++;
+		if (!tileAbove || !tileAbove->hasNoFloor(0))
+		{
+			while (originVoxel.z > (origin.z + 1)*24)
+			{
+				originVoxel.z--;
+			}
+			originVoxel.z -=4;
+		}
+		else
+		{
+			origin.z++;
+		}
 	}
 
 	// determine the target voxel.
@@ -2535,7 +2558,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 	if (action->type != BA_THROW)
 	{
 		BattleUnit *tu = _save->getTile(action->target)->getUnit();
-		if(!tu && action->target.z > 0)
+		if(!tu && action->target.z > 0 && _save->getTile(action->target)->hasNoFloor(0))
 			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
 		if (tu)
 		{
@@ -2547,8 +2570,8 @@ bool TileEngine::validateThrow(BattleAction *action)
 	double curvature = 1.0;
 	while (!foundCurve && curvature < 5.0)
 	{
-		int check = calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
-		if (check != 5 && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		int check = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action->actor, curvature, 1.0);
+		if (check != 5 && (int)trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}
@@ -2556,7 +2579,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 		{
 			curvature += 1.0;
 		}
-		_trajectory.clear();
+		trajectory.clear();
 	}
 	if (AreSame(curvature, 5.0))
 	{

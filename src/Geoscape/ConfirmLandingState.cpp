@@ -122,9 +122,6 @@ void ConfirmLandingState::btnYesClick(Action *)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
-	size_t month = _game->getSavedGame()->getMonthsPassed();
-	if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-		month = _game->getRuleset()->getAlienItemLevels().size()-1;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -157,7 +154,6 @@ void ConfirmLandingState::btnYesClick(Action *)
 	{
 		throw Exception("No mission available!");
 	}
-	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 	bgen.run();
 	_game->pushState(new BriefingState(_game, _craft));
 }

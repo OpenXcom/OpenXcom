@@ -130,9 +130,12 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
 	_txtItemLevel->setText(tr("STR_ENEMY_WEAPON_LEVEL"));
 	
-	_itemLevels.push_back("STR_LOW");
-	_itemLevels.push_back("STR_MEDIUM");
-	_itemLevels.push_back("STR_HIGH");
+	for (size_t i = 1; i != _game->getRuleset()->getAlienItemLevels().size(); ++i)
+	{
+		std::stringstream ss;
+		ss << i;
+		_itemLevels.push_back(ss.str());
+	}
 
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
@@ -188,7 +191,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick, 0);
 
 	_btnItemLevel->setColor(Palette::blockOffset(15)-1);
-	_btnItemLevel->setText(tr(_itemLevels[_selItemLevel]));
+	_btnItemLevel->setText(Language::utf8ToWstr(_itemLevels[_selItemLevel]));
 	_btnItemLevel->onMouseClick((ActionHandler)&NewBattleState::btnItemLevelClick, 0);
 
 	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
@@ -487,7 +490,7 @@ void NewBattleState::btnRandomClick(Action *)
 	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
 	_btnCraft->setText(tr(_crafts[_selCraft]));
-	_btnItemLevel->setText(tr(_itemLevels[_selItemLevel]));
+	_btnItemLevel->setText(Language::utf8ToWstr(_itemLevels[_selItemLevel]));
 
 	initSave();
 }
@@ -551,7 +554,7 @@ void NewBattleState::btnItemLevelClick(Action *action)
 	{
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
-	_btnItemLevel->setText(tr(_itemLevels[_selItemLevel]));
+	_btnItemLevel->setText(Language::utf8ToWstr(_itemLevels[_selItemLevel]));
 	Options::setInt("NewBattleItemLevel", _selItemLevel);
 }
 
