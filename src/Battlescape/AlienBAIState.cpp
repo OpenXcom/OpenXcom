@@ -1693,14 +1693,15 @@ void AlienBAIState::grenadeAction()
 			if (tu <= _unit->getStats()->tu)
 			{
 				// are we within range?
+				_attackAction->weapon = grenade;
 				if (_save->getTileEngine()->validateThrow(_attackAction))
 				{
 					_attackAction->type = BA_THROW;
-					_attackAction->weapon = grenade;
 					_attackAction->target = _aggroTarget->getPosition();
 					_rifle = false;
 					_melee = false;
 				}
+
 			}
 		}
 	}
@@ -1769,12 +1770,12 @@ bool AlienBAIState::psiAction()
 		{
 			return false;
 		}
-		
+
 		if (_traceAI)
 		{
 			Log(LOG_INFO) << "making a psionic attack this turn";
 		}
-		
+
 		if (chanceToAttack >= 30)
 		{
 			int controlOdds = 40;
