@@ -1692,12 +1692,17 @@ void AlienBAIState::grenadeAction()
 			// do we have enough TUs to prime and throw the grenade?
 			if (tu <= _unit->getStats()->tu)
 			{
+				BattleAction action;
+				action.weapon = grenade;
+				action.target = _aggroTarget->getPosition();
+				action.type = BA_THROW;
+				action.actor = _unit;
 				// are we within range?
-				if (_save->getTileEngine()->validateThrow(_attackAction))
+				if (_save->getTileEngine()->validateThrow(&action))
 				{
-					_attackAction->type = BA_THROW;
 					_attackAction->weapon = grenade;
-					_attackAction->target = _aggroTarget->getPosition();
+					_attackAction->target = action.target;
+					_attackAction->type = BA_THROW;
 					_rifle = false;
 					_melee = false;
 				}
