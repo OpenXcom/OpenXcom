@@ -216,7 +216,7 @@
     <ClCompile Include="Basescape\CraftsState.cpp" />
     <ClCompile Include="Basescape\CraftWeaponsState.cpp" />
     <ClCompile Include="Basescape\DismantleFacilityState.cpp" />
-    <ClCompile Include="Basescape\ManageAlienContainment.cpp" />
+    <ClCompile Include="Basescape\ManageAlienContainmentState.cpp" />
     <ClCompile Include="Basescape\ManufactureState.cpp" />
     <ClCompile Include="Basescape\NewManufactureListState.cpp" />
     <ClCompile Include="Basescape\ManufactureInfoState.cpp" />
@@ -489,7 +489,7 @@
     <ClInclude Include="Basescape\CraftWeaponsState.h" />
     <ClInclude Include="Basescape\DismantleFacilityState.h" />
     <ClInclude Include="Basescape\NewManufactureListState.h" />
-    <ClInclude Include="Basescape\ManageAlienContainment.h" />
+    <ClInclude Include="Basescape\ManageAlienContainmentState.h" />
     <ClInclude Include="Basescape\ManufactureInfoState.h" />
     <ClInclude Include="Basescape\ManufactureState.h" />
     <ClInclude Include="Basescape\MiniBaseView.h" />
