@@ -212,6 +212,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ActionMenuItem.h \
 	src/Battlescape/ActionMenuState.cpp \
 	src/Battlescape/ActionMenuState.h \
+	src/Battlescape/AliensCrashState.cpp \
+	src/Battlescape/AliensCrashState.h \
 	src/Battlescape/AlienBAIState.cpp \
 	src/Battlescape/AlienBAIState.h \
 	src/Battlescape/BattleAIState.cpp \
@@ -438,6 +440,8 @@ openxcom_SOURCES = \
 	src/Geoscape/PsiTrainingState.h \
 	src/Geoscape/ResearchCompleteState.cpp \
 	src/Geoscape/ResearchCompleteState.h \
+	src/Geoscape/ResearchRequiredState.cpp \
+	src/Geoscape/ResearchRequiredState.h \
 	src/Geoscape/SelectDestinationState.cpp \
 	src/Geoscape/SelectDestinationState.h \
 	src/Geoscape/TargetInfoState.cpp \

@@ -71,6 +71,7 @@
 #include "../Savegame/ResearchProject.h"
 #include "ResearchCompleteState.h"
 #include "../Ruleset/RuleResearch.h"
+#include "ResearchRequiredState.h"
 #include "NewPossibleResearchState.h"
 #include "NewPossibleManufactureState.h"
 #include "../Savegame/Production.h"
@@ -1484,6 +1485,19 @@ void GeoscapeState::time1Day()
 			std::vector<RuleManufacture *> newPossibleManufacture;
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
+			// check for possible researching weapon before clip
+			std::vector<std::string> manufactures = _game->getRuleset()->getManufactureList();
+			for (std::vector<std::string>::iterator man = manufactures.begin(); man != manufactures.end(); ++man)
+			{
+				RuleManufacture *rule = _game->getRuleset()->getManufacture(*man);
+				std::vector<std::string> req = rule->getRequirements();
+				if (rule->getCategory() == "STR_WEAPON" && std::find(req.begin(), req.end(), newResearch->getName()) != req.end() && !_game->getSavedGame()->isResearched(req))
+				{
+					popup(new ResearchRequiredState(_game, _game->getRuleset()->getItem(rule->getName())));
+					break;
+				}
+			}
+
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			if (!newPossibleManufacture.empty())
 			{

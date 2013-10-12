@@ -84,6 +84,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
+	_txtBase->setBig();
 	_txtBase->setText(tr("STR_BASE_").arg(_base->getName()));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
