@@ -238,7 +238,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		_txtW1Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
+		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
 		_txtW2Ammo->setVisible(false);
 	}
 
