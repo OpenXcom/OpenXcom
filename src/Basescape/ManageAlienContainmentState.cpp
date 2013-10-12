@@ -56,7 +56,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base)
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_overCrowded? 288:148, 16, 8, 176);
+	_btnOk = new TextButton(_overCrowded? 304:148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtAvailable =  new Text(190, 9, 10, 24);
