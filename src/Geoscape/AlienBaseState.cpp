@@ -77,16 +77,13 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	{
 		if ((*k)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
 		{
-			_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN").arg(tr((*k)->getRules()->getType())));
+			_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(tr((*k)->getRules()->getType())));
 			set = true;
 		}
 	}
 	if(!set)
 	{
-		std::wstringstream ss;
-		ss << tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN")
-		    << tr("STR_UNKNOWN");
-		_txtTitle->setText(ss.str());
+		_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(tr("STR_UNKNOWN")));
 	}
 }
 

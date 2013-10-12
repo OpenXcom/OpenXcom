@@ -7509,6 +7509,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_HEAVY_PLASMA
+      - STR_HEAVY_PLASMA_CLIP
     space: 4
     time: 1000
     cost: 122000
@@ -7527,6 +7528,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_PLASMA_RIFLE
+      - STR_PLASMA_RIFLE_CLIP
     space: 4
     time: 820
     cost: 88000
@@ -7545,6 +7547,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_PLASMA_PISTOL
+      - STR_PLASMA_PISTOL_CLIP
     space: 3
     time: 600
     cost: 56000
@@ -7563,6 +7566,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_BLASTER_LAUNCHER
+      - STR_BLASTER_BOMB
     space: 5
     time: 1200
     cost: 90000
@@ -7581,6 +7585,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_SMALL_LAUNCHER
+      - STR_STUN_BOMB
     space: 3
     time: 900
     cost: 78000

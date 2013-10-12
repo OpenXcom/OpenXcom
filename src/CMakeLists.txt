@@ -175,6 +175,8 @@ set ( battlescape_src
   Battlescape/CannotReequipState.h
   Battlescape/PathfindingOpenSet.cpp
   Battlescape/PathfindingOpenSet.h
+  Battlescape/AliensCrashState.cpp
+  Battlescape/AliensCrashState.h
 )
 
 set ( engine_src
@@ -320,6 +322,8 @@ set ( geoscape_src
   Geoscape/VictoryState.cpp
   Geoscape/DefeatState.h
   Geoscape/DefeatState.cpp
+  Geoscape/ResearchRequiredState.h
+  Geoscape/ResearchRequiredState.cpp
 )
 
 set ( interface_src
