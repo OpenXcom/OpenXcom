@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
 * This class is the interface used to find plural forms for the different languages.
-* Derived classes implement getKeys() according to the specific language's rules.
+* Derived classes implement getSuffix() according to the specific language's rules.
 */
 class LanguagePlurality
 {

@@ -50,6 +50,8 @@ public:
 	Font();
 	/// Cleans up the font.
 	~Font();
+	static bool isLinebreak(wchar_t c);
+	static bool isSpace(wchar_t c);
 	/// Sets the character index for every font.
 	static void setIndex(const std::wstring &index);
 	/// Loads the font from YAML.

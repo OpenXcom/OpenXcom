@@ -48,6 +48,17 @@ Font::~Font()
 	delete _surface;
 }
 
+bool Font::isLinebreak(wchar_t c)
+{
+	return (c == L'\n' || c == L'\x02');
+}
+
+bool Font::isSpace(wchar_t c)
+{
+	// Consider non-breakable space as a non-space character
+	return (c == L' ' || c == L'\xA0');
+}
+
 /**
 * Loads the characters contained in each font
 * from a UTF-8 string to use as the index.
@@ -180,8 +191,7 @@ int Font::getSpacing() const
 SDL_Rect Font::getCharSize(wchar_t c)
 {
 	SDL_Rect size = { 0, 0, 0, 0 };
-	// Consider non-breakable space as a non-space character
-	if (c != L' ' && c != L'\xa0' && c != '\n' && c != 2)
+	if (c != 1 && !isLinebreak(c) && !isSpace(c))
 	{
 		size.w = _chars[c].w + _spacing;
 		size.h = _chars[c].h + _spacing;
