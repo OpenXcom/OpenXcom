@@ -119,19 +119,12 @@ void NextTurnState::handle(Action *action)
 		}
 		else
 		{
-			if (Options::getInt("autosave") == 1)
+			if (Options::getInt("autosave") == 1 && _battleGame->getSide() == FACTION_PLAYER)
 			{
-				std::wstringstream ss;
-				ss << "Battlescape autosave "
-					<< tr("STR_TURN").arg(_battleGame->getTurn())
-					<< " "
-					<< tr("STR_SIDE").arg(tr(_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"));
-
-				// remove the > characters introduced by STR_TURN and STR_SIDE not a good idea to have these in file names.
-				std::wstring filename = ss.str();
-				Language::replace(filename  , L">", L"");
-
-				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, filename));
+				if (_battleGame->getTurn() == 1)
+					_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, false, L"Battlescape autosave first turn"));
+				else
+					_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, false, L"Battlescape autosave latest turn"));
 			}
 			_state->btnCenterClick(0);
 		}
