@@ -608,7 +608,7 @@ void UnitWalkBState::playMovementSound()
 		else
 		{
 			// play default flying sound
-			if (_unit->getWalkingPhase() == 0 && !_falling)
+			if (_unit->getWalkingPhase() == 1 && !_falling)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
 			}
