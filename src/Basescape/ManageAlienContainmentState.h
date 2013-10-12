@@ -48,7 +48,7 @@ private:
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
 	unsigned int _sel;
-	int _aliensSold;
+	int _aliensSold, _researchedAliens;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel, _containmentLimit;
 	bool _allowChangeListValuesByMouseWheel, _overCrowded;

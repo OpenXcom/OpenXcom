@@ -29,11 +29,13 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Savegame/ResearchProject.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
@@ -47,12 +49,21 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base) : State(game), _base(base), _qtys(), _aliens(), _sel(0), _aliensSold(0)
+ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base) : State(game), _base(base), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
 	_overCrowded = _containmentLimit && _base->getAvailableContainment() < _base->getUsedContainment();
+
+	for(std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin (); iter != _base->getResearch().end (); ++iter)
+	{
+		const RuleResearch *research = (*iter)->getRules();
+		if (_game->getRuleset()->getUnit(research->getName()))
+		{
+			++_researchedAliens;
+		}
+	}
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -122,7 +133,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base)
 
 	_txtUsed->setColor(Palette::blockOffset(13)+10);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment() ));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment() - _researchedAliens));
 
 	_lstAliens->setColor(Palette::blockOffset(13)+10);
 	_lstAliens->setArrowColumn(182, ARROW_VERTICAL);
@@ -389,8 +400,8 @@ void ManageAlienContainmentState::updateStrings()
 	ss2 << getQuantity() - _qtys[_sel];
 	_lstAliens->setCellText(_sel, 1, ss2.str());
 
-	int aliens = _base->getUsedContainment() - _aliensSold;
-	int spaces = _base->getAvailableContainment() - aliens;
+	int aliens = _base->getUsedContainment() - _aliensSold - _researchedAliens;
+	int spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
 	bool enoughSpace = spaces * _containmentLimit >= 0;
 
 	_btnCancel->setVisible(enoughSpace && !_overCrowded);
