@@ -29,6 +29,8 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
+#include "../Menu/SaveState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -117,9 +119,24 @@ void NextTurnState::handle(Action *action)
 		}
 		else
 		{
+			if (Options::getInt("autosave") == 1)
+			{
+				std::wstringstream ss;
+				ss << "Battlescape autosave "
+					<< tr("STR_TURN").arg(_battleGame->getTurn())
+					<< " "
+					<< tr("STR_SIDE").arg(tr(_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"));
+
+				// remove the > characters introduced by STR_TURN and STR_SIDE not a good idea to have these in file names.
+				std::wstring filename = ss.str();
+				Language::replace(filename  , L">", L"");
+
+				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, filename));
+			}
 			_state->btnCenterClick(0);
 		}
 	}
 }
+
 
 }

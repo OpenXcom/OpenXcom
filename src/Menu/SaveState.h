@@ -42,6 +42,8 @@ public:
 	SaveState(Game *game, OptionsOrigin origin);
 	/// Creates the Quick Save Game state.
 	SaveState(Game *game, OptionsOrigin origin, bool showMsg);
+	/// Creates the Auto Save state used in the battlescape.
+	SaveState(Game *game, OptionsOrigin origin, const std::wstring &filename);
 	/// Cleans up the Save Game state.
 	~SaveState();
 	/// Updates the savegame list.

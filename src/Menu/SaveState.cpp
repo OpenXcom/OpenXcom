@@ -68,6 +68,17 @@ SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGame
 }
 
 /**
+ * Creates the Auto Save Game state.
+ * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
+ * @param filename Name of the save file.
+ */
+SaveState::SaveState(Game *game, OptionsOrigin origin, const std::wstring &filename) : SavedGameState(game, origin, false)
+{
+	quickSave(filename);
+}
+
+/**
  *
  */
 SaveState::~SaveState()
