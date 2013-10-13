@@ -96,9 +96,9 @@ void ProjectileFlyBState::init()
 
 	_ammo = weapon->getAmmoItem();
 
-	if (_unit->isOut())
+	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
 	{
-		// something went wrong - we can't shoot when dead or unconscious
+		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		_parent->popState();
 		return;
 	}
