@@ -157,7 +157,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (btnID != -1)
 	{
-		if (_inInventoryView) _grenadeInInventory->setExplodeTurn(1 + btnID);
+		if (_inInventoryView) _grenadeInInventory->setExplodeTurn(0 + btnID);
 		else _action->value = btnID;
 		_game->popState();
 		if (!_inInventoryView) _game->popState();

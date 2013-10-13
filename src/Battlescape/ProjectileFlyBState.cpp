@@ -96,9 +96,9 @@ void ProjectileFlyBState::init()
 
 	_ammo = weapon->getAmmoItem();
 
-	if (_unit->isOut())
+	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
 	{
-		// something went wrong - we can't shoot when dead or unconscious
+		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		_parent->popState();
 		return;
 	}
@@ -212,7 +212,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 			{
-				_projectileItem->setExplodeTurn(_parent->getSave()->getTurn());
+				_projectileItem->setExplodeTurn(0);
 			}
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
@@ -332,7 +332,7 @@ void ProjectileFlyBState::think()
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
-				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() != 0 && item->getExplodeTurn() <= _parent->getSave()->getTurn())
+				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() == 0)
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));

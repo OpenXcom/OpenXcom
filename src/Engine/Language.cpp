@@ -300,7 +300,17 @@ std::vector<std::string> Language::getList(TextList *list)
 		(*i) = i->substr(0, i->length() - 4);
 		if (list != 0)
 		{
-			list->addRow(1, _names[(*i)].c_str());
+			std::wstring name;
+			std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+			if (lang != _names.end())
+			{
+				name = lang->second;
+			}
+			else
+			{
+				name = Language::cpToWstr(*i);
+			}
+			list->addRow(1, name.c_str());
 		}
 	}
 	return langs;
