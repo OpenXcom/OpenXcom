@@ -4256,6 +4256,7 @@ soldiers:
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
+    extraWeight: 6
 units:
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
@@ -4279,6 +4280,7 @@ units:
     deathSound: 10
     intelligence: 3
     aggression: 2
+    extraWeight: 6
   - type: STR_SECTOID_ENGINEER
     race: STR_SECTOID
     rank: STR_LIVE_ENGINEER
@@ -4301,6 +4303,7 @@ units:
     deathSound: 10
     intelligence: 6
     aggression: 2
+    extraWeight: 6
   - type: STR_SECTOID_MEDIC
     race: STR_SECTOID
     rank: STR_LIVE_MEDIC
@@ -4323,6 +4326,7 @@ units:
     deathSound: 10
     intelligence: 5
     aggression: 1
+    extraWeight: 6
   - type: STR_SECTOID_NAVIGATOR
     race: STR_SECTOID
     rank: STR_LIVE_NAVIGATOR
@@ -4345,6 +4349,7 @@ units:
     deathSound: 10
     intelligence: 4
     aggression: 2
+    extraWeight: 6
   - type: STR_SECTOID_LEADER
     race: STR_SECTOID
     rank: STR_LIVE_LEADER
@@ -4367,6 +4372,7 @@ units:
     deathSound: 10
     intelligence: 7
     aggression: 1
+    extraWeight: 6
   - type: STR_SECTOID_COMMANDER
     race: STR_SECTOID
     rank: STR_LIVE_COMMANDER
@@ -4389,6 +4395,7 @@ units:
     deathSound: 10
     intelligence: 8
     aggression: 0
+    extraWeight: 6
   - type: STR_CYBERDISC_TERRORIST
     race: STR_CYBERDISC
     stats:
@@ -4412,6 +4419,7 @@ units:
     moveSound: 40
     intelligence: 5
     aggression: 1
+    extraWeight: 6
     specab: 1
     livingWeapon: true
   - type: STR_FLOATER_SOLDIER
@@ -4438,6 +4446,7 @@ units:
     moveSound: 15
     intelligence: 4
     aggression: 2
+    extraWeight: 6
   - type: STR_FLOATER_ENGINEER
     race: STR_FLOATER
     rank: STR_LIVE_ENGINEER
@@ -4462,6 +4471,7 @@ units:
     moveSound: 15
     intelligence: 7
     aggression: 2
+    extraWeight: 6
   - type: STR_FLOATER_NAVIGATOR
     race: STR_FLOATER
     rank: STR_LIVE_NAVIGATOR
@@ -4486,6 +4496,7 @@ units:
     moveSound: 15
     intelligence: 5
     aggression: 2
+    extraWeight: 6
   - type: STR_FLOATER_MEDIC
     race: STR_FLOATER
     rank: STR_LIVE_MEDIC
@@ -4510,6 +4521,7 @@ units:
     moveSound: 15
     intelligence: 6
     aggression: 1
+    extraWeight: 6
   - type: STR_FLOATER_LEADER
     race: STR_FLOATER
     rank: STR_LIVE_LEADER
@@ -4534,6 +4546,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
+    extraWeight: 6
   - type: STR_FLOATER_COMMANDER
     race: STR_FLOATER
     rank: STR_LIVE_COMMANDER
@@ -4558,6 +4571,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
+    extraWeight: 6
   - type: STR_REAPER_TERRORIST
     race: STR_REAPER
     stats:
@@ -4579,6 +4593,7 @@ units:
     deathSound: 48
     intelligence: 2
     aggression: 2
+    extraWeight: 6
     livingWeapon: true
   - type: STR_TANK_CANNON
     race: STR_TANK_CANNON
@@ -4743,6 +4758,7 @@ units:
     moveSound: 0
     intelligence: 2
     aggression: 2
+    extraWeight: 6
   - type: STR_SNAKEMAN_NAVIGATOR
     race: STR_SNAKEMAN
     rank: STR_LIVE_NAVIGATOR
@@ -4766,6 +4782,7 @@ units:
     moveSound: 0
     intelligence: 3
     aggression: 2
+    extraWeight: 6
   - type: STR_SNAKEMAN_ENGINEER
     race: STR_SNAKEMAN
     rank: STR_LIVE_ENGINEER
@@ -4789,6 +4806,7 @@ units:
     moveSound: 0
     intelligence: 4
     aggression: 2
+    extraWeight: 6
   - type: STR_SNAKEMAN_LEADER
     race: STR_SNAKEMAN
     rank: STR_LIVE_LEADER
@@ -4811,7 +4829,8 @@ units:
     deathSound: 8
     moveSound: 0
     intelligence: 5
-    aggression: 2  
+    aggression: 2
+    extraWeight: 6
   - type: STR_SNAKEMAN_COMMANDER
     race: STR_SNAKEMAN
     rank: STR_LIVE_COMMANDER
@@ -4834,7 +4853,8 @@ units:
     deathSound: 8
     moveSound: 0
     intelligence: 6
-    aggression: 2 
+    aggression: 2
+    extraWeight: 6
   - type: STR_MUTON_SOLDIER
     race: STR_MUTON
     rank: STR_LIVE_SOLDIER
@@ -4857,6 +4877,7 @@ units:
     deathSound: 6
     intelligence: 2
     aggression: 2
+    extraWeight: 6
   - type: STR_MUTON_NAVIGATOR
     race: STR_MUTON
     rank: STR_LIVE_NAVIGATOR
@@ -4878,7 +4899,8 @@ units:
     value: 17
     deathSound: 6
     intelligence: 3
-    aggression: 2 
+    aggression: 2
+    extraWeight: 6
   - type: STR_MUTON_ENGINEER
     race: STR_MUTON
     rank: STR_LIVE_ENGINEER
@@ -4900,7 +4922,8 @@ units:
     value: 19
     deathSound: 6
     intelligence: 4
-    aggression: 2 
+    aggression: 2
+    extraWeight: 6
   - type: STR_ETHEREAL_SOLDIER
     race: STR_ETHEREAL
     rank: STR_LIVE_SOLDIER
@@ -4923,7 +4946,8 @@ units:
     deathSound: 9
     moveSound: 15
     intelligence: 6
-    aggression: 1     
+    aggression: 1
+    extraWeight: 6
   - type: STR_ETHEREAL_LEADER
     race: STR_ETHEREAL
     rank: STR_LIVE_LEADER
@@ -4946,7 +4970,8 @@ units:
     deathSound: 9
     moveSound: 15
     intelligence: 7
-    aggression: 1    
+    aggression: 1
+    extraWeight: 6
   - type: STR_ETHEREAL_COMMANDER
     race: STR_ETHEREAL
     rank: STR_LIVE_COMMANDER
@@ -4969,7 +4994,8 @@ units:
     deathSound: 9
     moveSound: 15
     intelligence: 8
-    aggression: 1 
+    aggression: 1
+    extraWeight: 6
   - type: STR_CHRYSSALID_TERRORIST
     race: STR_CHRYSSALID
     rank: STR_LIVE_TERRORIST
@@ -4993,6 +5019,7 @@ units:
     aggroSound: 49
     intelligence: 4
     aggression: 1
+    extraWeight: 6
     zombieUnit: STR_ZOMBIE
     livingWeapon: true
   - type: STR_SILACOID_TERRORIST
@@ -5018,6 +5045,7 @@ units:
     moveSound: 47
     intelligence: 3
     aggression: 2
+    extraWeight: 6
     specab: 2
     livingWeapon: true
   - type: STR_CELATID_TERRORIST
@@ -5044,6 +5072,7 @@ units:
     moveSound: 16
     intelligence: 3
     aggression: 2
+    extraWeight: 6
     livingWeapon: true
   - type: STR_SECTOPOD_TERRORIST
     race: STR_SECTOPOD
@@ -5067,6 +5096,7 @@ units:
     deathSound: 23
     intelligence: 4
     aggression: 1
+    extraWeight: 6
     livingWeapon: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
@@ -5090,6 +5120,7 @@ units:
     deathSound: 48
     intelligence: 3
     aggression: 2
+    extraWeight: 6
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
 alienRaces:

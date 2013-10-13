@@ -65,6 +65,7 @@ void Unit::load(const YAML::Node &node)
 	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
+	_extraWeight = node["extraWeight"].as<int>(_extraWeight);
 }
 
 /**
@@ -230,4 +231,12 @@ bool Unit::isLivingWeapon() const
 	return _livingWeapon;
 }
 
+/**
+ * Gets the extra weight when calculating the carried weight
+ * @return The extra weight.
+ */
+int Unit::getExtraWeight() const
+{
+	return _extraWeight;
+}
 }

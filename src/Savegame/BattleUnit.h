@@ -113,6 +113,7 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	int _extraWeight;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
