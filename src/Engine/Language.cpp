@@ -486,7 +486,7 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	if (0 == n)
 	{
 		// Try specialized form.
-		s = _strings.find(id + "_0");
+		s = _strings.find(id + "_zero");
 	}
 	if (s == _strings.end())
 	{

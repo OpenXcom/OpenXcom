@@ -315,7 +315,9 @@ void AlienBAIState::think(BattleAction *action)
 		// don't worry about reserving TUs, we've factored that in already.
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
-		if (action->type == BA_WALK && _rifle)
+		if (action->type == BA_WALK && _rifle
+			// so long as we can take a shot afterwards.
+			&& _unit->getTimeUnits() > _unit->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{
 			action->number -= 1;
 		}
@@ -338,11 +340,18 @@ void AlienBAIState::think(BattleAction *action)
 		break;
 	}
 
-	// if we're moving, we'll have to re-evaluate our escape/ambush position.
-	if (action->type == BA_WALK && action->target != _unit->getPosition())
+	if (action->type == BA_WALK)
 	{
-		_escapeTUs = 0;
-		_ambushTUs = 0;
+		// if we're moving, we'll have to re-evaluate our escape/ambush position.
+		if (action->target != _unit->getPosition())
+		{
+			_escapeTUs = 0;
+			_ambushTUs = 0;
+		}
+		else
+		{
+			action->type = BA_NONE;
+		}
 	}
 }
 
