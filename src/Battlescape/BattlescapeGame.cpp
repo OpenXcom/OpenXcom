@@ -399,7 +399,7 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() == 0)  // it's a grenade to explode now
 			{
 				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
@@ -412,7 +412,6 @@ void BattlescapeGame::endTurn()
 			++it;
 		}
 	}
-
 	// check for terrain explosions
 	Tile *t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)
@@ -422,6 +421,17 @@ void BattlescapeGame::endTurn()
 		t = _save->getTileEngine()->checkForTerrainExplosions();
 		statePushBack(0);
 		return;
+	}
+	
+	if (_save->getSide() != FACTION_NEUTRAL)
+	{
+		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
+		{
+				if (((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE) && (*it)->getExplodeTurn() > 0)
+				{
+					(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
+				}
+		}
 	}
 
 	// if all units from either faction are killed - the mission is over.
@@ -616,7 +626,7 @@ void BattlescapeGame::handleNonTargetAction()
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
+				_currentAction.weapon->setExplodeTurn(_currentAction.value);
 			}
 			else
 			{
@@ -1121,9 +1131,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				}
 				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 				{
-					if (ba.weapon->getExplodeTurn() == 0)
+					if (ba.weapon->getExplodeTurn() == -1)
 					{
-						ba.weapon->setExplodeTurn(_save->getTurn());
+						ba.weapon->setExplodeTurn(0);
 					}
 					ba.type = BA_THROW;
 					statePushBack(new ProjectileFlyBState(this, ba));
