@@ -7828,7 +7828,7 @@ ufopaedia:
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_CANNON_UFOPEDIA
-    weapon: STR_ARMOR_PIERCING
+    weapon: STR_DAMAGE_ARMOR_PIERCING
   - id: STR_TANK_ROCKET_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
