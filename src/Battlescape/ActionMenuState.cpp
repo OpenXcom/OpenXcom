@@ -72,7 +72,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	// priming
 	if ((weapon->getBattleType() == BT_GRENADE || weapon->getBattleType() == BT_PROXIMITYGRENADE)
-		&& _action->weapon->getExplodeTurn() == 0)
+		&& !_action->weapon->isPrimed())
 	{
 		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
 	}

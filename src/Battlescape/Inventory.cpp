@@ -549,7 +549,7 @@ void Inventory::mouseClick(Action *action, State *state)
 					else
 					{
 						setSelectedItem(item);
-						if (item->getExplodeTurn() > 0)
+						if (item->isPrimed())
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 						}
@@ -698,17 +698,17 @@ void Inventory::mouseClick(Action *action, State *state)
 						BattleType itemType = item->getRules()->getBattleType();
 						if (BT_GRENADE == itemType || BT_PROXIMITYGRENADE == itemType)
 						{
-							if (0 == item->getExplodeTurn())
+							if (!item->isPrimed())
 							{
 								// Prime that grenade!
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
-									item->setExplodeTurn(1);
+									item->setExplodeTurn(0);
 								}
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
-							else item->setExplodeTurn(0);  // Unprime the grenade
+							else item->defuse();  // Unprime the grenade
 						}
 					}
 				}
@@ -910,7 +910,7 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		// and the same ammo quantity
 		itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity())) &&
 		// and neither is set to explode
-		itemA->getExplodeTurn() == 0 && itemB->getExplodeTurn() == 0 &&
+		!itemA->isPrimed() && !itemB->isPrimed() &&
 		// and neither is a corpse or unconscious unit
 		itemA->getUnit() == 0 && itemB->getUnit() == 0);
 

@@ -69,6 +69,12 @@ public:
 	int getExplodeTurn() const;
 	/// Sets the turn to explode on.
 	void setExplodeTurn(int turn);
+	/// Is grenade primed?
+	inline bool isPrimed() const {return _explodeTurn < 25;}
+	/// Is countdown over? Run away!
+	inline bool isCountdownOver() {return isPrimed()? _explodeTurn-- <= 0 : false;}
+	/// Defuse a grenade.
+	inline void defuse() {_explodeTurn = 25;}
 	/// Spend one bullet.
 	bool spendBullet();
 	/// Gets the item's owner.

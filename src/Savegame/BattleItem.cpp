@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param id The id of the item.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(25), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
 {
 	if (_rules && _rules->getBattleType() == BT_AMMO)
 	{
@@ -149,8 +149,8 @@ RuleItem *BattleItem::getRules() const
 }
 
 /**
- * Gets the turn to explode on. 0 = unprimed grenade
- * @return Explode turn.
+ * Gets the turn to explode on. 25 = unprimed grenade
+ * @return Explode turns left.
  */
 int BattleItem::getExplodeTurn() const
 {
