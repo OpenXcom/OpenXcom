@@ -2324,7 +2324,7 @@ BattleUnit *BattleUnit::getCharging()
  */
 int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 {
-	int weight = 6;
+	int weight = _armor->getWeight();
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
 		if ((*i) == draggingItem) continue;

@@ -38,7 +38,7 @@ private:
 	std::string _type, _spriteSheet, _spriteInv, _corpseItem, _storeItem;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
-	int _size;
+	int _size, _weight;
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
 public:
@@ -76,6 +76,8 @@ public:
 	float getDamageModifier(ItemDamageType dt);
 	/// Gets loftempSet
 	std::vector<int> getLoftempsSet() const;
+	/// Gets the armor's weight.
+	int getWeight();
 };
 
 }
