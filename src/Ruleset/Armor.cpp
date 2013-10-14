@@ -30,10 +30,21 @@ namespace OpenXcom
  * @param movementType The movement type for this armor (walk, fly or slide).
  * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
+Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size), _weight(6)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0;
+	_stats.bravery = 0;
+	_stats.firing = 0;
+	_stats.health = 0;
+	_stats.melee = 0;
+	_stats.psiSkill = 0;
+	_stats.psiStrength = 0;
+	_stats.reactions = 0;
+	_stats.stamina = 0;
+	_stats.strength = 0;
+	_stats.tu = 0;
+	_stats.throwing = 0;
 }
 
 /**
@@ -62,6 +73,8 @@ void Armor::load(const YAML::Node &node)
 	_drawingRoutine = node["drawingRoutine"].as<int>(_drawingRoutine);
 	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
 	_size = node["size"].as<int>(_size);
+	_weight = node["weight"].as<int>(_weight);
+	_stats = node["stats"].as<UnitStats>(_stats);
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
 		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
@@ -203,4 +216,21 @@ std::vector<int> Armor::getLoftempsSet() const
 	return _loftempsSet;
 }
 
+/**
+  * Gets pointer to the armor's stats.
+  * @return stats Pointer to the armor's stats.
+  */
+UnitStats *Armor::getStats()
+{
+	return &_stats;
+}
+
+/**
+ * Gets the armor's weight.
+ * @return the weight of the armor.
+ */
+int Armor::getWeight()
+{
+	return _weight;
+}
 }
