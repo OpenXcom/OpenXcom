@@ -32,6 +32,8 @@ enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, 
 struct UnitStats
 {
 	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
+public:
+	UnitStats& operator+=(const UnitStats& stats) { tu+=stats.tu; stamina+=stats.stamina; health+=stats.health; bravery+=stats.bravery; reactions+=stats.reactions; firing+=stats.firing; throwing+=stats.throwing; strength+=stats.strength; psiStrength+=stats.psiStrength; psiSkill+=stats.psiSkill; melee+=stats.melee; return *this; }
 };
 
 /**

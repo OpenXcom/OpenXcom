@@ -68,6 +68,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_aggression = 1;
 	_specab = SPECAB_NONE;
 	_armor = soldier->getArmor();
+	_stats += *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
@@ -144,6 +145,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
+	_stats += *_armor->getStats();	// armors may modify effective stats
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;

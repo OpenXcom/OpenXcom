@@ -22,6 +22,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
+#include "Unit.h"
 
 namespace OpenXcom
 {
@@ -41,6 +42,7 @@ private:
 	int _size, _weight;
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
+	UnitStats _stats;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
@@ -76,6 +78,8 @@ public:
 	float getDamageModifier(ItemDamageType dt);
 	/// Gets loftempSet
 	std::vector<int> getLoftempsSet() const;
+	/// Gets the armor's stats.
+	UnitStats *getStats();
 	/// Gets the armor's weight.
 	int getWeight();
 };
