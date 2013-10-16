@@ -190,7 +190,7 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 			_terrain->calculateFOV(_unit->getPosition());
-			unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
 			int size = _unit->getArmor()->getSize() - 1;
