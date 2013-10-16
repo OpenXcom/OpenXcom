@@ -59,6 +59,11 @@ bool Font::isSpace(wchar_t c)
 	return (c == L' ' || c == L'\xA0');
 }
 
+bool Font::isNonBreakableSpace(wchar_t c)
+{
+	return (c == L'\xA0');
+}
+
 /**
 * Loads the characters contained in each font
 * from a UTF-8 string to use as the index.
@@ -198,7 +203,10 @@ SDL_Rect Font::getCharSize(wchar_t c)
 	}
 	else
 	{
-		size.w = _width / 2;
+		if (isNonBreakableSpace(c))
+			size.w = _width / 4;
+		else
+			size.w = _width / 2;
 		size.h = _height + _spacing;
 	}
 	// In case anyone mixes them up

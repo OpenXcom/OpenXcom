@@ -79,7 +79,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	add(_txtFactor);
 	for (int scaleText = 0; scaleText != 10; ++scaleText)
 	{
-		_txtScale.push_back(new Text(42, 16, 84, 171 - (scaleText*14)));
+		_txtScale.push_back(new Text(42, 16, 80, 171 - (scaleText*14)));
 		add(_txtScale.at(scaleText));
 	}
 
@@ -547,16 +547,14 @@ void GraphsState::resetScreen()
 void GraphsState::updateScale(double lowerLimit, double upperLimit)
 {
 	double increment = ((upperLimit - lowerLimit) / 9);
-	if (increment == 0)
+	if (increment < 10)
 	{
 		increment = 10;
 	}
 	double text = lowerLimit;
-	for (double i = 0; i < 10; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
-		std::wstringstream ss;
-		ss << static_cast<int>(text) << " ";
-		_txtScale.at(i)->setText(ss.str());
+		_txtScale.at(i)->setText(Text::formatNumber(static_cast<int>(text)));
 		text += increment;
 	}
 }

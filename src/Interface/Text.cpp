@@ -47,12 +47,11 @@ Text::~Text()
 }
 
 /**
- * Takes an integer value and formats it as currency,
- * spacing the thousands and adding a $ sign to the front.
- * @param funds The funding value.
+ * Takes an integer value and formats it as number with separators (spacing the thousands).
+ * @param value The value.
  * @return The formatted string.
  */
-std::wstring Text::formatFunding(int funds)
+std::wstring Text::formatNumber(int value)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -60,29 +59,31 @@ std::wstring Text::formatFunding(int funds)
 	// language, not by system locale.
 	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
-	struct lconv * lc;
-	lc=localeconv();
+	struct lconv * lc = localeconv();
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
-	bool negative = false;
-	if (funds < 0)
-	{
-		negative = true;
-		funds = -funds;
-	}
-	std::wstringstream ss;
-	ss << funds;
-	std::wstring s = ss.str();
+	bool negative = value < 0;
+	std::wstring s(std::to_wstring(static_cast<long long>(negative? -value : value)));
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
 		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
-	s.insert(0, L"$");
 	if (negative)
 		s.insert(0, L"-");
 	return s;
+}
+
+/**
+ * Takes an integer value and formats it as currency,
+ * spacing the thousands and adding a $ sign to the front.
+ * @param funds The funding value.
+ * @return The formatted string.
+ */
+std::wstring Text::formatFunding(int funds)
+{
+	return formatNumber(funds).insert((funds < 0)? 1 : 0, L"$");
 }
 
 /**
