@@ -171,7 +171,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(tr("STR_BASE_UC_").arg(_craft->getBase()->getName()));
+	_txtBase->setText(tr("STR_BASE_UC").arg(_craft->getBase()->getName()));
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
