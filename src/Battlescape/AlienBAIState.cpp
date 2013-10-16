@@ -81,9 +81,9 @@ AlienBAIState::~AlienBAIState()
 void AlienBAIState::load(const YAML::Node &node)
 {
 	int fromNodeID, toNodeID;
-	fromNodeID = node["fromNode"].as<int>();
-	toNodeID = node["toNode"].as<int>();
-	_AIMode = node["AIMode"].as<int>();
+	fromNodeID = node["fromNode"].as<int>(-1);
+	toNodeID = node["toNode"].as<int>(-1);
+	_AIMode = node["AIMode"].as<int>(0);
 	_wasHit = node["wasHit"].as<bool>(false);
 	if (fromNodeID != -1)
 	{
