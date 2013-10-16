@@ -234,7 +234,7 @@ int Projectile::calculateTrajectory(double accuracy)
  * @param accuracy The unit's accuracy.
  * @return True when a trajectory is possible.
  */
-bool Projectile::calculateThrow(double accuracy)
+int Projectile::calculateThrow(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
@@ -301,7 +301,7 @@ bool Projectile::calculateThrow(double accuracy)
 	}
 	if ( AreSame(curvature, 5.0) )
 	{
-		return false;
+		return -1;
 	}
 
 	// apply some accuracy modifiers
@@ -312,9 +312,11 @@ bool Projectile::calculateThrow(double accuracy)
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
+	int retValue = -1;
+
 	_trajectory.clear();
 	// finally do a line calculation and store this trajectory.
-	_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
+	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
 	Position endPoint = _trajectory.at(_trajectory.size() - 1);
 	endPoint.x /= 16;
@@ -324,12 +326,13 @@ bool Projectile::calculateThrow(double accuracy)
 	if (_save->getTile(endPoint) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		_trajectory.clear();
+		retValue = -1;
 		// finally do a line calculation and store this trajectory.
-		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
+		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
 	}
 
 
-	return true;
+	return retValue;
 }
 
 /**
