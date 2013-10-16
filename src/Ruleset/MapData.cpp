@@ -21,6 +21,13 @@
 namespace OpenXcom
 {
 
+// These are here instead of in MapData.h to avoid undefined reference errors
+// while linking with gcc
+const int MapData::O_FLOOR     = 0;
+const int MapData::O_WESTWALL  = 1;
+const int MapData::O_NORTHWALL = 2;
+const int MapData::O_OBJECT    = 3;
+
 /**
  * Creates a new Map Data Object.
  * @param dataset The dataset this object belongs to.

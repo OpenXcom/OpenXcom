@@ -559,34 +559,42 @@ set ( ufopedia_src
 )
 
 set ( data_install_dir bin )
-if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
-  add_definitions ( -D_DEBUG )
-endif ()
-if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
+
+if ( CMAKE_COMPILER_IS_GNUCXX )
+  # fails to compile in previous standards due to missing functions (like to_wstring)
+  add_definitions ( -std=gnu++11 )
+
+  if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
+    add_definitions ( -D_DEBUG )
+  endif ()
+
+  if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING )
     # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
-      -Wsign-compare
-      -Winit-self
-      -Wmissing-include-dirs
-      -Wunknown-pragmas
-      -Wmissing-format-attribute
-      -Wredundant-decls
-      -Winline
-      -Wformat-security
-      -Wtype-limits
-      -Wclobbered
-      -Wempty-body
-      -Wlogical-op
-      -Wuninitialized
-      -Wshadow
-# These two warning options actually generate way too many warnings. Should be enabled later.
-#      -Wignored-qualifiers
-#      -Weffc++
-      )
+        -Wsign-compare
+        -Winit-self
+        -Wmissing-include-dirs
+        -Wunknown-pragmas
+        -Wmissing-format-attribute
+        -Wredundant-decls
+        -Winline
+        -Wformat-security
+        -Wtype-limits
+        -Wclobbered
+        -Wempty-body
+        -Wlogical-op
+        -Wuninitialized
+        -Wshadow
+  # These two warning options actually generate way too many warnings. Should be enabled later.
+  #      -Wignored-qualifiers
+  #      -Weffc++
+        )
+
     if ( FATAL_WARNING )
       add_definitions ( -Werror )
     endif ( FATAL_WARNING )
-endif()
+  endif()
+endif ()
 
 if ( MSVC )
   if ( ENABLE_WARNING )
@@ -693,17 +701,17 @@ if ( APPLE AND CREATE_BUNDLE )
     get_filename_component ( framework_name ${framework} NAME )
     if ( EXISTS "${framework}" )
       if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
-	add_custom_command ( TARGET openxcom
-	  POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name} )
+        add_custom_command ( TARGET openxcom
+          POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
+          COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name}
+          COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name} )
       else ()
-	add_custom_command ( TARGET openxcom
-	  POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name} )
+        add_custom_command ( TARGET openxcom
+          POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name}
+          COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name} )
       endif ()
     endif ()
   endforeach ()
