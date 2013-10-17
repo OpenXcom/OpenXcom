@@ -1091,10 +1091,7 @@ void Globe::drawShadow()
 void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16)
 {
 	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
-	x1+=0.5;
-	y1+=0.5;
-	x2+=0.5;
-	y2+=0.5;
+
 	double deltax = x2-x1, deltay = y2-y1;
 	bool inv;
 	Sint16 tcol;
