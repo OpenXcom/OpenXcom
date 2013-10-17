@@ -2465,7 +2465,6 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.reactions += 6 * diff * _stats.reactions / 100;
 	_stats.strength += 2 * diff * _stats.strength / 100;
 	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
-	_stats.strength += 2 * diff * _stats.strength / 100;
 	_stats.melee += 4 * diff * _stats.melee / 100;
 	_stats.psiSkill += 4 * diff * _stats.psiSkill / 100;
 	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
