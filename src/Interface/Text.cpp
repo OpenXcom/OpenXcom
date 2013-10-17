@@ -51,27 +51,30 @@ Text::~Text()
  * @param value The value.
  * @return The formatted string.
  */
-std::wstring Text::formatNumber(int value)
+std::wstring Text::formatNumber(int value, std::wstring currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
 	// symbols, such as thousands separators, should be determined by the game
 	// language, not by system locale.
-	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
-	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
+	setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc = localeconv();
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
-	bool negative = value < 0;
-	std::wstring s(std::to_wstring(static_cast<long long>(negative? -value : value)));
+	std::wstringstream ss;
+	ss << value;
+	std::wstring s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
 		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
-	if (negative)
-		s.insert(0, L"-");
+	if (!currency.empty())
+	{
+		s.insert((value < 0) ? 1 : 0, currency);
+	}
 	return s;
 }
 
@@ -83,7 +86,7 @@ std::wstring Text::formatNumber(int value)
  */
 std::wstring Text::formatFunding(int funds)
 {
-	return formatNumber(funds).insert((funds < 0)? 1 : 0, L"$");
+	return formatNumber(funds, L"$");
 }
 
 /**
