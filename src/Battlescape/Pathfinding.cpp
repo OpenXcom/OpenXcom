@@ -99,7 +99,11 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	Tile *destinationTile = _save->getTile(endPosition);
 
 	// check if destination is not blocked
-	if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target)) return;
+	if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
+	{
+		return;
+	}
+
 
 	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
 	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
@@ -119,6 +123,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
 	}
+
 	int size = unit->getArmor()->getSize()-1;
 	if (size >= 1)
 	{
@@ -267,19 +272,29 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
+			{
 				return 255;
+			}
 
 			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
+			// (stair check is because we do not want units behind stairs to block movement)
+			if ((isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
+				&& !isOnStairs(startPosition, destinationTile->getPosition()))
+			{
 				return 255;
+			}
 
 			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
 			{
 				// check if we can go this way
 				if (isBlocked(startTile, destinationTile, direction, target))
+				{
 					return 255;
+				}
 				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+				{
 					return 255;
+				}
 			}
 
 			// this will later be used to re-cast the start tile again.
@@ -288,28 +303,28 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// if we are on a stairs try to go up a level
 			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
 			{
-					numberOfPartsGoingUp++;
+				numberOfPartsGoingUp++;
 
-					if (numberOfPartsGoingUp > size)
-					{
-						verticalOffset.z++;
-						endPosition->z++;
-						destinationTile = _save->getTile(*endPosition + offset);
-						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
-						triedStairs = true;
-					}
+				if (numberOfPartsGoingUp > size)
+				{
+					verticalOffset.z++;
+					endPosition->z++;
+					destinationTile = _save->getTile(*endPosition + offset);
+					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+					triedStairs = true;
+				}
 			}
 			else if (!fellDown && _movementType != MT_FLY && belowDestination && canFallDown(destinationTile) && belowDestination->getTerrainLevel() <= -12)
 			{
-					numberOfPartsGoingDown++;
+				numberOfPartsGoingDown++;
 
-					if (numberOfPartsGoingDown == (size + 1)*(size + 1))
-					{
-						endPosition->z--;
-						destinationTile = _save->getTile(*endPosition + offset);
-						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
-						fellDown = true;
-					}
+				if (numberOfPartsGoingDown == (size + 1)*(size + 1))
+				{
+					endPosition->z--;
+					destinationTile = _save->getTile(*endPosition + offset);
+					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+					fellDown = true;
+				}
 			}
 			else if (_movementType == MT_FLY && belowDestination && belowDestination->getUnit() && belowDestination->getUnit() != unit)
 			{
@@ -360,7 +375,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				}
 			}
 			startTile = _save->getTile(startTile->getPosition() + verticalOffset);
-
 
 			if (direction < DIR_UP && numberOfPartsGoingUp != 0)
 			{
@@ -588,7 +602,10 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		if (unit != 0)
 		{
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
-			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible())
+			{
+				return true;		// player know all visible units
+			}
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
@@ -619,6 +636,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 				pos.z--;
 			}
 		}
+
 	}
 	// missiles can't pathfind through closed doors.
 	if (missileTarget != 0 && tile->getMapData(part) &&
@@ -744,18 +762,22 @@ bool Pathfinding::canFallDown(Tile *here, int size)
 	return true;
 }
 /**
- * Determines whether the unit is going up a stairs.
+ * Determines whether the unit is going up a stairs or ramp.
  * @param startPosition The position to start from.
- * @param endPosition The position we wanna reach.
- * @return True if the unit is going up a stairs.
+ * @param endPosition The position we want to reach.
+ * @return True if the unit is going up a stairs or ramp.
  */
 bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endPosition)
 {
+	Tile *t;
+
 	//condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
-	if (_save->getTile(endPosition + Position(0, 1, 0)) && _save->getTile(endPosition + Position(0, 1, 0))->getTerrainLevel() == -16)
+	t = _save->getTile(endPosition + Position(0, 1, 0));
+	if (t && t->getTerrainLevel() == -16)
 	{
+		t = _save->getTile(endPosition + Position(0, 2, 0));
 		// condition 2 : one position further to the south there has to be a terrainlevel -8 object (lower part of the stairs)
-		if (_save->getTile(endPosition + Position(0, 2, 0)) && _save->getTile(endPosition + Position(0, 2, 0))->getTerrainLevel() != -8)
+		if (t && t->getTerrainLevel() != -8)
 		{
 			return false;
 		}
@@ -768,9 +790,11 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 	}
 
 	// same for the east-west oriented stairs.
-	if (_save->getTile(endPosition + Position(1, 0, 0)) && _save->getTile(endPosition + Position(1, 0, 0))->getTerrainLevel() == -16)
+	t = _save->getTile(endPosition + Position(1, 0, 0));
+	if (t && t->getTerrainLevel() == -16)
 	{
-		if (_save->getTile(endPosition + Position(2, 0, 0)) && _save->getTile(endPosition + Position(2, 0, 0))->getTerrainLevel() != -8)
+		t = _save->getTile(endPosition + Position(2, 0, 0));
+		if (t && t->getTerrainLevel() != -8)
 		{
 			return false;
 		}
@@ -779,6 +803,26 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 			return true;
 		}
 	}
+
+	// Skyranger / Avenger ramps
+	t = _save->getTile(endPosition + Position(0, -1, 0));
+	if (t && t->getTerrainLevel() == -20)
+	{
+		t = _save->getTile(endPosition + Position(0, -2, 0));
+		if (t && t->getTerrainLevel() == -12)
+		{
+			t = _save->getTile(endPosition + Position(0, -3, 0));
+			if (t && t->getTerrainLevel() != -4)
+			{
+				return false;
+			}
+			if (startPosition == endPosition + Position(0, -1, 0) || startPosition == endPosition + Position(0, -2, 0) || startPosition == endPosition + Position(0, -3, 0) || startPosition == endPosition + Position(0, -4, 0))
+			{
+				return true;
+			}
+		}
+	}
+
 	return false;
 }
 
