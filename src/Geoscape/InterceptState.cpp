@@ -176,7 +176,7 @@ void InterceptState::btnCancelClick(Action *)
 void InterceptState::lstCraftsClick(Action *)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if ((c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways"))) || c->getStatus() == "STR_OUT")
+	if (c->getStatus() == "STR_READY" || ((c->getStatus() == "STR_OUT" || Options::getBool("craftLaunchAlways")) && !c->getLowFuel()))
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));
