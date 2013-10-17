@@ -61,10 +61,10 @@ private:
 	int _loftID[12];
 	unsigned short _miniMapIndex;
 public:
-	static const int O_FLOOR = 0;
-	static const int O_WESTWALL = 1;
-	static const int O_NORTHWALL = 2;
-	static const int O_OBJECT = 3;
+	static const int O_FLOOR;
+	static const int O_WESTWALL;
+	static const int O_NORTHWALL;
+	static const int O_OBJECT;
 	MapData(MapDataSet *dataset);
 	~MapData();
 	/// Gets the dataset this object belongs to.
