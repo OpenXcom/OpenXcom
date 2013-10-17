@@ -636,7 +636,7 @@ void GeoscapeState::timeAdvance()
 		}
 	}
 
-	_pause = false;
+	_pause = !_dogfightsToBeStarted.empty();
 
 	timeDisplay();
 	_globe->draw();
