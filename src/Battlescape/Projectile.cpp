@@ -242,7 +242,7 @@ int Projectile::calculateThrow(double accuracy)
 	// object blocking - can't throw here
 	if (_action.type == BA_THROW &&_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
-		return false;
+		return -1;
 	}
 
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
