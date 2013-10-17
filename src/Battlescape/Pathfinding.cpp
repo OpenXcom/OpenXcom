@@ -269,10 +269,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
 
-			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
-				return 255;
-
 			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
 			{
 				// check if we can go this way
