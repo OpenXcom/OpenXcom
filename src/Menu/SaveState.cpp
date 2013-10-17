@@ -61,10 +61,11 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
+ * @param filename Name of the save file.
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
+SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg, const std::wstring &filename) : SavedGameState(game, origin, showMsg)
 {
-	quickSave(L"autosave");
+	quickSave(filename);
 }
 
 /**

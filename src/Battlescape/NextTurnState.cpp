@@ -29,6 +29,8 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
+#include "../Menu/SaveState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -117,9 +119,17 @@ void NextTurnState::handle(Action *action)
 		}
 		else
 		{
+			if (Options::getInt("autosave") == 1 && _battleGame->getSide() == FACTION_PLAYER)
+			{
+				if (_battleGame->getTurn() == 1)
+					_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, false, L"Battlescape autosave first turn"));
+				else
+					_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, false, L"Battlescape autosave latest turn"));
+			}
 			_state->btnCenterClick(0);
 		}
 	}
 }
+
 
 }

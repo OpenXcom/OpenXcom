@@ -41,7 +41,7 @@ public:
 	/// Creates the Save Game state.
 	SaveState(Game *game, OptionsOrigin origin);
 	/// Creates the Quick Save Game state.
-	SaveState(Game *game, OptionsOrigin origin, bool showMsg);
+	SaveState(Game *game, OptionsOrigin origin, bool showMsg, const std::wstring &filename = L"autosave");
 	/// Cleans up the Save Game state.
 	~SaveState();
 	/// Updates the savegame list.
