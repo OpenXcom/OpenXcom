@@ -283,7 +283,7 @@ std::wstring Language::fsToWstr(const std::string& src)
 #ifdef _WIN32
 	return Language::cpToWstr(src);
 #else
-	return Language::cpToUtf8(src);
+	return Language::utf8ToWstr(src);
 #endif
 }
 
