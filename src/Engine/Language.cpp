@@ -166,6 +166,21 @@ std::string Language::wstrToCp(const std::wstring& src)
 }
 
 /**
+ * Takes a wide-character string and converts it to an
+ * 8-bit string with the filesystem encoding.
+ * @param src Wide-character string.
+ * @return Filesystem string.
+ */
+std::string Language::wstrToFs(const std::wstring& src)
+{
+#ifdef _WIN32
+	return Language::wstrToCp(src);
+#else
+	return Language::wstrToUtf8(src);
+#endif
+}
+
+/**
  * Takes an 8-bit string encoded in UTF-8 and converts it
  * to a wide-character string.
  * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
@@ -258,6 +273,21 @@ std::wstring Language::cpToWstr(const std::string& src)
 }
 
 /**
+ * Takes an 8-bit string with the filesystem encoding
+ * and converts it to a wide-character string.
+ * @param src Filesystem string.
+ * @return Wide-character string.
+ */
+std::wstring Language::fsToWstr(const std::string& src)
+{
+#ifdef _WIN32
+	return Language::cpToWstr(src);
+#else
+	return Language::cpToUtf8(src);
+#endif
+}
+
+/**
  * Replaces every instance of a substring.
  * @param str The string to modify.
  * @param find The substring to find.
@@ -297,7 +327,7 @@ std::vector<std::string> Language::getList(TextList *list)
 
 	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
 	{
-		(*i) = i->substr(0, i->length() - 4);
+		(*i) = CrossPlatform::noExt(*i);
 		if (list != 0)
 		{
 			std::wstring name;
@@ -308,7 +338,7 @@ std::vector<std::string> Language::getList(TextList *list)
 			}
 			else
 			{
-				name = Language::cpToWstr(*i);
+				name = Language::fsToWstr(*i);
 			}
 			list->addRow(1, name.c_str());
 		}

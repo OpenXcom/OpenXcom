@@ -48,22 +48,6 @@ Font::~Font()
 	delete _surface;
 }
 
-bool Font::isLinebreak(wchar_t c)
-{
-	return (c == L'\n' || c == L'\x02');
-}
-
-bool Font::isSpace(wchar_t c)
-{
-	// Consider non-breakable space as a non-space character
-	return (c == L' ' || c == L'\xA0');
-}
-
-bool Font::isNonBreakableSpace(wchar_t c)
-{
-	return (c == L'\xA0');
-}
-
 /**
 * Loads the characters contained in each font
 * from a UTF-8 string to use as the index.

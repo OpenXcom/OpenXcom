@@ -75,7 +75,7 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
-		std::string file = (*i).substr(0, (*i).length()-4);
+		std::string file = CrossPlatform::noExt(*i);
 		SoldierNamePool *pool = new SoldierNamePool();
 		pool->load(file);
 		_names.push_back(pool);

@@ -21,6 +21,7 @@
 
 #include "../Engine/State.h"
 #include "OptionsBaseState.h"
+#include <vector>
 #include <string>
 
 namespace OpenXcom
@@ -44,6 +45,7 @@ protected:
 	TextList *_lstSaves;
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
+	std::vector<std::string> _saves;
 public:
 	/// Creates the Saved Game state.
 	SavedGameState(Game *game, OptionsOrigin origin);
