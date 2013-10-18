@@ -126,10 +126,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_rank = unit->getRank();
 	_race = unit->getRace();
 	_stats = *unit->getStats();
-	if (faction == FACTION_HOSTILE)
-	{
-		adjustStats(diff);
-	}
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
@@ -146,6 +142,10 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
 	_stats += *_armor->getStats();	// armors may modify effective stats
+	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	}
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -221,6 +221,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_charging = 0;
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
+
 }
 
 /**
@@ -2463,7 +2464,6 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.tu += 4 * diff * _stats.tu / 100;
 	_stats.stamina += 4 * diff * _stats.stamina / 100;
 	_stats.reactions += 6 * diff * _stats.reactions / 100;
-	_stats.strength += 2 * diff * _stats.strength / 100;
 	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
 	_stats.strength += 2 * diff * _stats.strength / 100;
 	_stats.melee += 4 * diff * _stats.melee / 100;
