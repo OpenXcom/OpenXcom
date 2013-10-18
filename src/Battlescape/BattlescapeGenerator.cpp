@@ -1749,7 +1749,11 @@ void BattlescapeGenerator::deployCivilians(int max)
 {
 	if (max)
 	{
-		int number = RNG::generate(0, max);
+		// inevitably someone will point out that ufopaedia says 0-16 civilians.
+		// to that person:  i looked at the code and it says otherwise.
+		// 0 civilians would only be a possibility if there were already 80 units,
+		// or no spawn nodes for civilians.
+		int number = RNG::generate(max/2, max);
 
 		if (number > 0)
 		{
