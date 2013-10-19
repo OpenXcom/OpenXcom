@@ -107,8 +107,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 							continue;
 						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 						{
-						
-							if ((*w) != 0 && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							if ((*w) != 0 && (*w)->getRules()->getClipItem() == _rules->getName() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
 							{
 								(*w)->setRearming(true);
 								(*c)->setStatus("STR_REARMING");
