@@ -137,12 +137,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
-	{
-		SaveState *ss = new SaveState(this, OPT_MENU, false);
-		delete ss;
-	}
-
 	Mix_HaltChannel(-1);
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
@@ -299,6 +293,12 @@ void Game::run()
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
 		}
+	}
+	
+	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+	{
+		SaveState *ss = new SaveState(this, OPT_MENU, false);
+		delete ss;
 	}
 }
 

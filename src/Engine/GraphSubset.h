@@ -21,6 +21,7 @@
 #define	OPENXCOM_GRAPHSUBSET_H
 
 #include <utility>
+#include <algorithm>
 
 namespace OpenXcom
 {

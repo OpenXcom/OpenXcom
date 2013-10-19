@@ -1061,7 +1061,10 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
 
 			// delete the following
-			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+			bool isDiagonal = (dir&1);
+			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
+			int tuCostDiagonal = tuCost + tuCost / 2;
+			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (isDiagonal && tuCost == lastTUCostDiagonal) || (!isDiagonal && tuCostDiagonal == lastTUCost) || lastTUCost == -1)
 				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
 			{
 				_path.push_back(dir);
