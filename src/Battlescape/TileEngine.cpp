@@ -434,7 +434,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 			}
 		}
 		// even if MaxViewDistance will be increased via ruleset, smoke will keep effect
-		unitSeen = visibleDistance <= getMaxVoxelViewDistance() - densityOfSmoke * getMaxViewDistance()/(3 * 20);
+		unitSeen = visibleDistance + densityOfSmoke * getMaxViewDistance()/(3 * 20) <= getMaxVoxelViewDistance();
 	}
 	return unitSeen;
 }
