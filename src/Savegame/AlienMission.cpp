@@ -658,7 +658,7 @@ void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
 	// TODO: Find out what should actually be the location.
 	// For now we use the last non-exit zone of the last UFO for the location.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
-	unsigned zone = ufo ? ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2) : 0;
+	unsigned zone = ufo ? ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2) + 1 : RNG::generate(1, int (regionRules.getMissionZones().size()));
 	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
 	AlienBase *ab = new AlienBase();
 	ab->setAlienRace(_race);
