@@ -204,11 +204,11 @@ void AlienMission::think(Game &engine, const Globe &globe)
 			if (!(*c)->getPact() && !(*c)->getNewPact() && ruleset.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
 			{
 				(*c)->setNewPact();
+				spawnAlienBase(ufo, globe, engine);
 				break;
 			}
 		}
 
-		spawnAlienBase(ufo, globe, engine);
 
 		// Infiltrations loop for ever.
 		_nextWave = 0;
