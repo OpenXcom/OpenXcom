@@ -92,8 +92,8 @@ protected:
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
-	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	unsigned int _maxViewDistance, _maxViewDistanceAtDark, _maxDarknessToSeeUnits;
+	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;

@@ -424,16 +424,17 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		unsigned int visibleDistance = _trajectory.size();
-		unsigned int smoke = 0;
+		unsigned int densityOfSmoke = 0;
 		for (unsigned int i = 0; i < visibleDistance; i++)
 		{
 			Tile *t = _save->getTile(Position(_trajectory.at(i).x/16, _trajectory.at(i).y/16, _trajectory.at(i).z/24));
 			if (t->getFire() == 0)
 			{
-				smoke += t->getSmoke();
+				densityOfSmoke += t->getSmoke();
 			}
 		}
-		unitSeen = visibleDistance + smoke/3 <= getMaxVoxelViewDistance();
+		// even if MaxViewDistance will be increased via ruleset, smoke will keep effect
+		unitSeen = visibleDistance <= getMaxVoxelViewDistance() - densityOfSmoke * getMaxViewDistance()/(3 * 20);
 	}
 	return unitSeen;
 }
