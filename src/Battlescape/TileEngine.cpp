@@ -60,7 +60,10 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
  * @param save Pointer to SavedBattleGame object.
  * @param voxelData List of voxel data.
  */
-TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
+TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData, unsigned int maxViewDistance, unsigned int maxDarknessToSeeUnits, unsigned int maxViewDistanceAtDark) :
+	_save(save), _voxelData(voxelData), _personalLighting(true),
+	MAX_VIEW_DISTANCE(maxViewDistance), MAX_VIEW_DISTANCE_AT_DARK(maxViewDistanceAtDark),
+	MAX_VOXEL_VIEW_DISTANCE(maxViewDistance * 16), MAX_DARKNESS_TO_SEE_UNITS(maxDarknessToSeeUnits)
 {
 }
 
@@ -254,12 +257,12 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	{
 		++pos.z;
 	}
-	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
+	for (int x = 0; x <= getMaxViewDistance(); ++x)
 	{
 		if (direction%2)
 		{
 			y1 = 0;
-			y2 = MAX_VIEW_DISTANCE;
+			y2 = getMaxViewDistance();
 		}
 		else
 		{
@@ -272,7 +275,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 			{
 				const int distanceSqr = x*x + y*y;
 				test.z = z;
-				if (distanceSqr <= MAX_VIEW_DISTANCE*MAX_VIEW_DISTANCE)
+				if (distanceSqr <= getMaxViewDistance() * getMaxViewDistance())
 				{
 					test.x = center.x + signX[direction]*(swap?y:x);
 					test.y = center.y + signY[direction]*(swap?x:y);
@@ -392,10 +395,10 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
+	// aliens can see in the dark, xcom can see at a distance of 9 (MaxViewDistanceAtDark) or less, further if there's enough light.
 	if (currentUnit->getFaction() == FACTION_PLAYER &&
-		distance(currentUnit->getPosition(), tile->getPosition()) > 9 &&
-		tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+		tile->getShade() > getMaxDarknessToSeeUnits() &&
+		distance(currentUnit->getPosition(), tile->getPosition()) > getMaxViewDistanceAtDark())
 	{
 		return false;
 	}
@@ -420,24 +423,17 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		// this is traced in voxel space, with smoke affecting visibility every step of the way
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
-		Tile *t = _save->getTile(currentUnit->getPosition());
-		int visibleDistance = _trajectory.size();
-		for (unsigned int i = 0; i < _trajectory.size(); i++)
+		unsigned int visibleDistance = _trajectory.size();
+		unsigned int smoke = 0;
+		for (unsigned int i = 0; i < visibleDistance; i++)
 		{
-			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
-			{
-				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
-			}
+			Tile *t = _save->getTile(Position(_trajectory.at(i).x/16, _trajectory.at(i).y/16, _trajectory.at(i).z/24));
 			if (t->getFire() == 0)
 			{
-				visibleDistance += t->getSmoke() / 3;
-			}
-			if (visibleDistance > MAX_VOXEL_VIEW_DISTANCE)
-			{
-				unitSeen = false;
-				break;
+				smoke += t->getSmoke();
 			}
 		}
+		unitSeen = visibleDistance + smoke/3 <= getMaxVoxelViewDistance();
 	}
 	return unitSeen;
 }
@@ -757,7 +753,7 @@ void TileEngine::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
+		if (distance(position, (*i)->getPosition()) < getMaxViewDistance())
 		{
 			calculateFOV(*i);
 		}
@@ -829,7 +825,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
-			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
+			distance(unit->getPosition(), (*i)->getPosition()) <= getMaxViewDistance())
 		{
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;

@@ -93,6 +93,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
+	unsigned int _maxViewDistance, _maxViewDistanceAtDark, _maxDarknessToSeeUnits;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
@@ -213,6 +214,12 @@ public:
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Sorts all our lists according to their weight.
 	void sortLists();
+	/// Gets max view distance in BattleScape.
+	inline unsigned int getMaxViewDistance() const {return _maxViewDistance;}
+	/// Gets max view distance at dark in BattleScape.
+	inline unsigned int getMaxViewDistanceAtDark() const {return _maxViewDistanceAtDark;}
+	/// Gets max darkness to see units in BattleScape.
+	inline unsigned int getMaxDarknessToSeeUnits() const {return _maxDarknessToSeeUnits;}
 };
 
 }

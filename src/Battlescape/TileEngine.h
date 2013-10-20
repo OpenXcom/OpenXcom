@@ -41,18 +41,23 @@ class Tile;
 class TileEngine
 {
 private:
-	static const int MAX_VIEW_DISTANCE = 20;
-	static const int MAX_VOXEL_VIEW_DISTANCE = MAX_VIEW_DISTANCE * 16;
-	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
+	unsigned int MAX_VIEW_DISTANCE;	// 20
+	unsigned int MAX_VIEW_DISTANCE_AT_DARK;	// 9
+	unsigned int MAX_VOXEL_VIEW_DISTANCE;	// MAX_VIEW_DISTANCE * 16
+	unsigned int MAX_DARKNESS_TO_SEE_UNITS;	// 9
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
 	bool _personalLighting;
+	inline unsigned int getMaxViewDistance() const {return MAX_VIEW_DISTANCE;}
+	inline unsigned int getMaxViewDistanceAtDark() const {return MAX_VIEW_DISTANCE_AT_DARK;}
+	inline unsigned int getMaxVoxelViewDistance() const {return MAX_VOXEL_VIEW_DISTANCE;}
+	inline unsigned int getMaxDarknessToSeeUnits() const {return MAX_DARKNESS_TO_SEE_UNITS;}
 public:
 	/// Creates a new TileEngine class.
-	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
+	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData, unsigned int maxViewDistance, unsigned int maxViewDistanceAtDark, unsigned int maxDarknessToSeeUnits);
 	/// Cleans up the TileEngine.
 	~TileEngine();
 	/// Calculates sun shading of the whole map.

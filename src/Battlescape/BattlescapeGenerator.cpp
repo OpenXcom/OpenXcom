@@ -294,7 +294,7 @@ void BattlescapeGenerator::run()
 
 	// creates the tile objects
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
-	_save->initUtilities(_res);
+	_save->initUtilities(_res, _game->getRuleset());
 
 	// lets generate the map now and store it inside the tile objects
 	generateMap();
