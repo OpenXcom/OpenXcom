@@ -157,7 +157,7 @@ const char *PolishPlurality::getSuffix(unsigned n) const
 	{
 		return "_few";
 	}
-	else if ((n % 10 >= 0 && n % 10 <= 1) ||
+	else if ((n % 10 <= 1) ||
 			(n % 10 >= 5 && n % 10 <= 9) ||
 			(n % 100 >= 12 && n % 100 <= 14))
 	{

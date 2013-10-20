@@ -164,10 +164,10 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		std::stringstream s;
 		s << "GEOGRAPH/" << sets[i];
 
-		std::string ext = sets[i].substr(sets[i].length()-3, sets[i].length());
+		std::string ext = sets[i].substr(sets[i].find_last_of('.')+1, sets[i].length());
 		if (ext == "PCK")
 		{
-			std::string tab = sets[i].substr(0, sets[i].length()-4) + ".TAB";
+			std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
 			std::stringstream s2;
 			s2 << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
@@ -747,7 +747,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::stringstream s;
 		s << "TERRAIN/" << bsets[i];
-		std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
+		std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
 		std::stringstream s2;
 		s2 << "TERRAIN/" << tab;
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
@@ -760,7 +760,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	for (std::vector<std::string>::iterator i = usets.begin(); i != usets.end(); ++i)
 	{
 		std::string path = units + *i;
-		std::string tab = CrossPlatform::getDataFile("UNITS/" + i->substr(0, i->length() - 4) + ".TAB");
+		std::string tab = CrossPlatform::getDataFile("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
 		std::transform(i->begin(), i->end(), i->begin(), toupper);
 		if (*i != "BIGOBS.PCK")
 			_sets[*i] = new SurfaceSet(32, 40);

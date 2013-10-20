@@ -877,7 +877,7 @@ void BattlescapeGame::popState()
 						getMap()->cacheUnit(_save->getSelectedUnit());
 					}
 					_AIActionCounter = 0;
-					if (_save->selectNextPlayerUnit(true) == 0 && _states.empty())
+					if (_states.empty() && _save->selectNextPlayerUnit(true) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -1281,9 +1281,6 @@ void BattlescapeGame::primaryAction(const Position &pos)
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						}
 						_parentState->updateSoldierInfo();
-						_currentAction.targeting = false;
-						_currentAction.type = BA_NONE;
-						setupCursor();
 					}
 					if (builtinpsi)
 					{

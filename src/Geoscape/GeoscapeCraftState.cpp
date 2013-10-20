@@ -171,15 +171,15 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(tr("STR_BASE_UC_").arg(_craft->getBase()->getName()));
+	_txtBase->setText(tr("STR_BASE_UC").arg(_craft->getBase()->getName()));
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtSpeed->setText(tr("STR_SPEED_").arg(_craft->getSpeed()));
+	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed()));
+	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);

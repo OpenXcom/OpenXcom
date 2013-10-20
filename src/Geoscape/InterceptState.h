@@ -32,6 +32,7 @@ class TextList;
 class Base;
 class Globe;
 class Craft;
+class Target;
 
 /**
  * Intercept window that lets the player launch
@@ -46,16 +47,17 @@ private:
 	TextList *_lstCrafts;
 	Globe *_globe;
 	Base *_base;
+	Target *_target;
 	std::vector<Craft*> _crafts;
 public:
 	/// Creates the Intercept state.
-	InterceptState(Game *game, Globe *globe, Base *base = 0);
+	InterceptState(Game *game, Globe *globe, Base *base = 0, Target *target = 0);
 	/// Cleans up the Intercept state.
 	~InterceptState();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Crafts list.
-	void lstCraftsClick(Action *action);
+	void lstCraftsLeftClick(Action *action);
 	/// Handler for right clicking the Crafts list.
 	void lstCraftsRightClick(Action *action);
 };

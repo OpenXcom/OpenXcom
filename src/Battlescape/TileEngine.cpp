@@ -594,7 +594,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
-			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false, potentialUnit);
+			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false);
 			if (test == 4)
 			{
 				for (int x = 0; x <= targetSize; ++x)
@@ -612,7 +612,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 					}
 				}
 			}
-			else if (test == -1 && hypothetical)
+			else if (test == -1 && hypothetical && !_trajectory.empty())
 			{
 				return true;
 			}

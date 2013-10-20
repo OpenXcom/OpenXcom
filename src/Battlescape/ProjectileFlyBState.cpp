@@ -108,7 +108,10 @@ void ProjectileFlyBState::init()
 	if (_unit->getFaction() != _parent->getSave()->getSide())
 	{
 		// no ammo or target is dead: give the time units back and cancel the shot.
-		if (_ammo == 0 || !_parent->getSave()->getTile(_action.target)->getUnit() || _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
+		if (_ammo == 0
+			|| !_parent->getSave()->getTile(_action.target)->getUnit()
+			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut()
+			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 			_parent->popState();
@@ -209,7 +212,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		if (_projectileImpact != -1)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 			{
@@ -233,7 +237,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
-		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
+		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		if (_projectileImpact != -1)
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
@@ -339,6 +344,14 @@ void ProjectileFlyBState::think()
 				pos.x /= 16;
 				pos.y /= 16;
 				pos.z /= 24;
+				if (pos.y > _parent->getSave()->getMapSizeY())
+				{
+					pos.y--;
+				}
+				if (pos.x > _parent->getSave()->getMapSizeX())
+				{
+					pos.x--;
+				}
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 

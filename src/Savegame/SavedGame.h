@@ -59,6 +59,7 @@ enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GE
 class SavedGame
 {
 private:
+	std::wstring _name;
 	GameDifficulty _difficulty;
 	GameTime *_time;
 	std::vector<int> _funds, _maintenance, _researchScores;
@@ -90,14 +91,18 @@ public:
 	/// Cleans up the saved game.
 	~SavedGame();
 	/// Gets list of saves in the user directory.
-	static void getList(TextList *list, Language *lang);
+	static std::vector<std::string> getList(TextList *list, Language *lang);
 	/// Loads a saved game from YAML.
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML.
 	void save(const std::string &filename) const;
-	/// Gets game difficulty.
+	/// Gets the game name.
+	std::wstring getName() const;
+	/// Sets the game name.
+	void setName(const std::wstring &name);
+	/// Gets the game difficulty.
 	GameDifficulty getDifficulty() const;
-	/// Sets game difficulty.
+	/// Sets the game difficulty.
 	void setDifficulty(GameDifficulty difficulty);
 	/// Gets the current funds.
 	int getFunds() const;

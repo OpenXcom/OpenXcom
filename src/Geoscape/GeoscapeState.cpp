@@ -636,7 +636,7 @@ void GeoscapeState::timeAdvance()
 		}
 	}
 
-	_pause = false;
+	_pause = !_dogfightsToBeStarted.empty();
 
 	timeDisplay();
 	_globe->draw();
@@ -1167,15 +1167,19 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
+						(*j)->setLowFuel(false);
 					}
-					else
+					else if (!(*j)->getLowFuel())
 					{
 						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 										   .arg(tr(item))
 										   .arg((*j)->getName(_game->getLanguage()))
 										   .arg((*i)->getName());
 						popup(new CraftErrorState(_game, this, msg));
-						(*j)->setStatus("STR_READY");
+						if ((*j)->getFuel() > 0)
+							(*j)->setStatus("STR_READY");
+						else
+							(*j)->setLowFuel(true);
 					}
 				}
 			}

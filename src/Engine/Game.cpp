@@ -59,35 +59,34 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
-	if (!Options::getBool("mute"))
+	Options::setBool("mute", false);
+	// Initialize SDL_mixer
+	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
-		// Initialize SDL_mixer
-		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+		Log(LOG_ERROR) << SDL_GetError();
+		Log(LOG_WARNING) << "No sound device detected, audio disabled.";
+		Options::setBool("mute", true);
+	}
+	else
+	{
+		Uint16 format;
+		if (Options::getInt("audioBitDepth") == 8)
+			format = AUDIO_S8;
+		else
+			format = AUDIO_S16SYS;
+		if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
 		{
-			Log(LOG_ERROR) << SDL_GetError();
+			Log(LOG_ERROR) << Mix_GetError();
 			Log(LOG_WARNING) << "No sound device detected, audio disabled.";
 			Options::setBool("mute", true);
 		}
 		else
 		{
-			Uint16 format;
-			if (Options::getInt("audioBitDepth") == 8)
-				format = AUDIO_S8;
-			else
-				format = AUDIO_S16SYS;
-			if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
-			{
-				Log(LOG_ERROR) << Mix_GetError();
-				Log(LOG_WARNING) << "No sound device detected, audio disabled.";
-				Options::setBool("mute", true);
-			}
-			else
-			{
-				Mix_AllocateChannels(16);
-			}
+			Mix_AllocateChannels(16);
+			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		}
-		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 	}
+
 	// trap the mouse inside the window
 	if (Options::getBool("captureMouse"))
 	{
@@ -138,12 +137,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
-	{
-		SaveState *ss = new SaveState(this, OPT_MENU, false);
-		delete ss;
-	}
-
 	Mix_HaltChannel(-1);
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
@@ -300,6 +293,12 @@ void Game::run()
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
 		}
+	}
+	
+	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+	{
+		SaveState *ss = new SaveState(this, OPT_MENU, false);
+		delete ss;
 	}
 }
 

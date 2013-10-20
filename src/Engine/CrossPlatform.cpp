@@ -625,9 +625,43 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 }
 
 /**
-* Gets the current locale of the system in language-COUNTRY format.
-* @return Locale string.
+* Replaces invalid filesystem characters with _.
+* @param filename Original filename.
+* @return Filename without invalid characters
 */
+std::string sanitizeFilename(const std::string &filename)
+{
+	std::string newFilename = filename;
+	for (std::string::iterator i = newFilename.begin(); i != newFilename.end(); ++i)
+	{
+		if ((*i) == '<' ||
+			(*i) == '>' ||
+			(*i) == ':' ||
+			(*i) == '"' || 
+			(*i) == '/' ||
+			(*i) == '?' ||
+			(*i) == '\\')
+		{
+			*i = '_';
+		}
+	}
+	return newFilename;
+}
+
+/**
+ * Removes the extension from a filename.
+ * @param filename Original filename.
+ * @return Filename without the extension.
+ */
+std::string noExt(const std::string &filename)
+{
+	return filename.substr(0, filename.find_last_of('.'));
+}
+
+/**
+ * Gets the current locale of the system in language-COUNTRY format.
+ * @return Locale string.
+ */
 std::string getLocale()
 {
 #ifdef _WIN32

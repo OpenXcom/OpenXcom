@@ -148,7 +148,7 @@ SavedGame::~SavedGame()
  * @param list Text list.
  * @param lang Loaded language.
  */
-void SavedGame::getList(TextList *list, Language *lang)
+std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 {
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
@@ -168,12 +168,16 @@ void SavedGame::getList(TextList *list, Language *lang)
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
 
-			std::string s = file.substr(0, file.length()-4);
-#ifdef _WIN32
-			std::wstring wstr = Language::cpToWstr(s);
-#else
-			std::wstring wstr = Language::utf8ToWstr(s);
-#endif
+			std::wstring wstr;
+			if (doc["name"])
+			{
+				wstr = Language::utf8ToWstr(doc["name"].as<std::string>());
+			}
+			else
+			{
+				std::string s = CrossPlatform::noExt(file);
+				wstr = Language::fsToWstr(s);
+			}
 			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 		}
 		catch (Exception &e)
@@ -187,6 +191,8 @@ void SavedGame::getList(TextList *list, Language *lang)
 			continue;
 		}
 	}
+
+	return saves;
 }
 
 /**
@@ -206,12 +212,22 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	// Get brief save info
 	YAML::Node brief = file[0];
+	/*
 	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
-		//throw Exception("Version mismatch");
+		throw Exception("Version mismatch");
 	}
+	*/
 	_time->load(brief["time"]);
+	if (brief["name"])
+	{
+		_name = Language::utf8ToWstr(brief["name"].as<std::string>());
+	}
+	else
+	{
+		_name = Language::fsToWstr(filename);
+	}
 
 	// Get full save data
 	YAML::Node doc = file[1];
@@ -335,9 +351,15 @@ void SavedGame::save(const std::string &filename) const
 
 	// Saves the brief game info used in the saves list
 	YAML::Node brief;
+	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	brief["build"] = OPENXCOM_VERSION_GIT;
 	brief["time"] = _time->save();
+	if (_battleGame != 0)
+	{
+		brief["mission"] = _battleGame->getMissionType();
+		brief["turn"] = _battleGame->getTurn();
+	}
 	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
@@ -409,6 +431,24 @@ void SavedGame::save(const std::string &filename) const
 	out << node;
 	sav << out.c_str();
 	sav.close();
+}
+
+/**
+ * Returns the game's name shown in Save screens.
+ * @return Difficulty level.
+ */
+std::wstring SavedGame::getName() const
+{
+	return _name;
+}
+
+/**
+ * Changes the game's name shown in Save screens.
+ * @param difficulty New difficulty.
+ */
+void SavedGame::setName(const std::wstring &name)
+{
+	_name = name;
 }
 
 /**

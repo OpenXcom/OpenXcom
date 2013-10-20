@@ -51,7 +51,7 @@ public:
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
 	/// Quick save game.
-	void quickSave(const std::wstring &filename16);
+	void quickSave(const std::string &filename);
 };
 
 }

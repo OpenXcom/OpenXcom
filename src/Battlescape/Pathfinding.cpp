@@ -269,10 +269,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
 
-			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
-				return 255;
-
 			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
 			{
 				// check if we can go this way
@@ -1065,7 +1061,10 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
 
 			// delete the following
-			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+			bool isDiagonal = (dir&1);
+			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
+			int tuCostDiagonal = tuCost + tuCost / 2;
+			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (isDiagonal && tuCost == lastTUCostDiagonal) || (!isDiagonal && tuCostDiagonal == lastTUCost) || lastTUCost == -1)
 				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
 			{
 				_path.push_back(dir);
