@@ -33,21 +33,7 @@ struct UnitStats
 {
 	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
 public:
-	UnitStats& operator+=(const UnitStats& stats)
-	{
-		tu += stats.tu;                     if (tu < 0) tu = 0;
-		stamina += stats.stamina;           if (stamina < 0) stamina = 0;
-		health += stats.health;             if (health < 0) health = 0;
-		bravery += stats.bravery;           if (bravery < 0) bravery = 0;
-		reactions += stats.reactions;       if (reactions < 0) reactions = 0;
-		firing += stats.firing;             if (firing < 0) firing = 0;
-		throwing += stats.throwing;         if (throwing < 0) throwing = 0;
-		strength += stats.strength;         if (strength < 0) strength = 0;
-		psiStrength += stats.psiStrength;   if (psiStrength < 0) psiStrength = 0;
-		psiSkill += stats.psiSkill;         if (psiSkill < 0) psiSkill = 0;
-		melee += stats.melee;               if (melee < 0) melee = 0;
-		return *this;
-	}
+	UnitStats& operator+=(const UnitStats& stats) { tu+=stats.tu; stamina+=stats.stamina; health+=stats.health; bravery+=stats.bravery; reactions+=stats.reactions; firing+=stats.firing; throwing+=stats.throwing; strength+=stats.strength; psiStrength+=stats.psiStrength; psiSkill+=stats.psiSkill; melee+=stats.melee; return *this; }
 };
 
 /**
