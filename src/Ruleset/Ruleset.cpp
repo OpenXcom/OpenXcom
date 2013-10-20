@@ -66,7 +66,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -507,6 +507,7 @@ void Ruleset::loadFile(const std::string &filename)
  	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
  	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
+ 	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		std::string id = (*i)["id"].as<std::string>();
@@ -615,7 +616,7 @@ SavedGame *Ruleset::newSave() const
 		save->getCountries()->push_back(new Country(getCountry(*i)));
 	}
 	// Adjust funding to total $6M
-	int missing = ((6000 - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
+	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
 	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
 	{
 		(*i)->setFunding((*i)->getFunding().back() + missing);
