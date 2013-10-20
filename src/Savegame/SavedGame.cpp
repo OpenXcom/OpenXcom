@@ -599,6 +599,11 @@ int SavedGame::getId(const std::string &name)
 {
 	int id = _ids[name];
 	_ids[name]++;
+	if (id == 0)
+	{
+		_ids[name]++;
+		id++;
+	}
 	return id;
 }
 
