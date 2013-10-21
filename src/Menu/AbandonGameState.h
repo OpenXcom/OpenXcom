@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_NOTESTATE_H
-#define OPENXCOM_NOTESTATE_H
+#ifndef OPENXCOM_ABANDONGAMESTATE_H
+#define OPENXCOM_ABANDONGAMESTATE_H
 
 #include "../Engine/State.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -29,21 +30,25 @@ class Window;
 class Text;
 
 /**
- * Note displayed regarding early build
+ * Abandon Game window shown before
+ * quitting the game from the Geoscape.
  */
-class NoteState : public State
+class AbandonGameState : public State
 {
 private:
-	TextButton *_btnOk;
+	OptionsOrigin _origin;
+	TextButton *_btnYes, *_btnNo;
 	Window *_window;
 	Text *_txtTitle;
 public:
-	/// Creates the Note state.
-	NoteState(Game *game);
-	/// Cleans up the Note state.
-	~NoteState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	/// Creates the Abandon Game state.
+	AbandonGameState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Abandon Game state.
+	~AbandonGameState();
+	/// Handler for clicking the Yes button.
+	void btnYesClick(Action *action);
+	/// Handler for clicking the No button.
+	void btnNoClick(Action *action);
 };
 
 }

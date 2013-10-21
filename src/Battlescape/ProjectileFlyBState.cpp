@@ -32,6 +32,7 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "AlienBAIState.h"
@@ -96,9 +97,9 @@ void ProjectileFlyBState::init()
 
 	_ammo = weapon->getAmmoItem();
 
-	if (_unit->isOut())
+	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
 	{
-		// something went wrong - we can't shoot when dead or unconscious
+		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		_parent->popState();
 		return;
 	}
@@ -107,7 +108,10 @@ void ProjectileFlyBState::init()
 	if (_unit->getFaction() != _parent->getSave()->getSide())
 	{
 		// no ammo or target is dead: give the time units back and cancel the shot.
-		if (_ammo == 0 || !_parent->getSave()->getTile(_action.target)->getUnit() || _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
+		if (_ammo == 0
+			|| !_parent->getSave()->getTile(_action.target)->getUnit()
+			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut()
+			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 			_parent->popState();
@@ -208,8 +212,13 @@ bool ProjectileFlyBState::createNewProjectile()
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		if (_projectileImpact != -1)
 		{
+			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+			{
+				_projectileItem->setExplodeTurn(0);
+			}
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
@@ -228,7 +237,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
-		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
+		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		if (_projectileImpact != -1)
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
@@ -293,7 +303,16 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter < _action.weapon->getRules()->getAutoShots() && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
+		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
+		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
+		bool hasFloor = t && !t->hasNoFloor(bt);
+		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+
+		if (_action.type == BA_AUTOSHOT
+			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
+			&& !_action.actor->isOut()
+			&& _ammo->getAmmoQuantity() != 0
+			&& (hasFloor || unitCanFly))
 		{
 			createNewProjectile();
 		}
@@ -325,10 +344,18 @@ void ProjectileFlyBState::think()
 				pos.x /= 16;
 				pos.y /= 16;
 				pos.z /= 24;
+				if (pos.y > _parent->getSave()->getMapSizeY())
+				{
+					pos.y--;
+				}
+				if (pos.x > _parent->getSave()->getMapSizeX())
+				{
+					pos.x--;
+				}
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
-				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() != 0 && item->getExplodeTurn() <= _parent->getSave()->getTurn())
+				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() == 0)
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));

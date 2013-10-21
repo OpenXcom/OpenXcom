@@ -78,6 +78,7 @@ public:
 	LocalizedText tr(const std::string &id, unsigned n) const;
 	void centerAllSurfaces();
 	void lowerAllSurfaces();
+	void applyBattlescapeTheme();
 	friend class Timer;
 };
 

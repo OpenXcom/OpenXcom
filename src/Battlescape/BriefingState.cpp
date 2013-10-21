@@ -18,6 +18,7 @@
  */
 #include "BriefingState.h"
 #include "BattlescapeState.h"
+#include "AliensCrashState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
@@ -113,7 +114,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
-	std::wstringstream ss;
+	std::wstring s;
 	if (craft)
 	{
 		if (craft->getDestination())
@@ -121,13 +122,13 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 		}
 
-		ss << tr("STR_CRAFT_") << craft->getName(_game->getLanguage());
+		s = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
-	else if(base)
+	else if (base)
 	{
-		ss << tr("STR_BASE_UC_") << base->getName();
+		s = tr("STR_BASE_UC_").arg(base->getName());
 	}
-	_txtCraft->setText(ss.str());
+	_txtCraft->setText(s);
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
@@ -170,10 +171,20 @@ void BriefingState::btnOkClick(Action *)
 {
 	_game->popState();
 	BattlescapeState *bs = new BattlescapeState(_game);
-	_game->pushState(bs);
-	_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
-	_game->pushState(new InventoryState(_game, false, bs));
+	int liveAliens = 0, liveSoldiers = 0;
+	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	if (liveAliens > 0)
+	{
+		_game->pushState(bs);
+		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+		_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
+		_game->pushState(new InventoryState(_game, false, bs));
+	}
+	else
+	{
+		delete bs;
+		_game->pushState(new AliensCrashState(_game));
+	}
 }
 
 }

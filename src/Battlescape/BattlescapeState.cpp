@@ -69,7 +69,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "WarningMessage.h"
-#include "BattlescapeOptionsState.h"
+#include "../Menu/PauseState.h"
 #include "DebriefingState.h"
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
@@ -799,6 +799,16 @@ void BattlescapeState::btnInventoryClick(Action *)
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
 			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
@@ -849,13 +859,14 @@ void BattlescapeState::btnPrevSoldierClick(Action *)
  * Selects the next soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
  * @param setReselect When true, flag the current unit first.
+ * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
+void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -867,13 +878,15 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 /**
  * Selects the previous soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
+ * @param setReselect When true, flag the current unit first.
+ * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
+void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
+		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -897,7 +910,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
 void BattlescapeState::btnHelpClick(Action *)
 {
 	if (allowButtons(true))
-		_game->pushState(new BattlescapeOptionsState(_game));
+		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
 }
 
 /**
@@ -945,7 +958,17 @@ void BattlescapeState::btnStatsClick(Action *action)
 				// on the stats button when the mouse is on the scroll-border
 				b = false;
 		}
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit()));
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
+		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
 	}
 }
 
@@ -1039,7 +1062,7 @@ void BattlescapeState::btnReserveClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
@@ -1368,11 +1391,11 @@ inline void BattlescapeState::handle(Action *action)
 			// not works in debug mode to prevent conflict in hotkeys by default
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new SaveState(_game, false, true));
+				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, true));
 			}
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new LoadState(_game, false, true));
+				_game->pushState(new LoadState(_game, OPT_BATTLESCAPE, true));
 			}
 
 			// voxel view dump
@@ -1867,7 +1890,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 		_btnKneel->invert(0);
@@ -1885,7 +1908,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		if (_battleGame->getSave()->getSelectedUnit())
 		{

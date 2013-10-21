@@ -50,6 +50,12 @@ public:
 	Font();
 	/// Cleans up the font.
 	~Font();
+	/// Checks if a character is a linebreak.
+	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == L'\x02'); }
+	/// Checks if a character is a blank space (includes non-breaking spaces).
+	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == L'\xA0'); }
+	/// Checks if a character is a non-breaking space.
+	static inline bool isNonBreakableSpace(wchar_t c) { return (c == L'\xA0'); }
 	/// Sets the character index for every font.
 	static void setIndex(const std::wstring &index);
 	/// Loads the font from YAML.
@@ -62,8 +68,10 @@ public:
 	int getWidth() const;
 	/// Gets the font's character height.
 	int getHeight() const;
-	/// Gets the horizontal spacing between characters.
+	/// Gets the spacing between characters.
 	int getSpacing() const;
+	/// Gets the size of a particular character;
+	SDL_Rect getCharSize(wchar_t c);
 	/// Gets the font's surface.
 	Surface *getSurface() const;
 

@@ -137,9 +137,6 @@
     <ClCompile Include="Menu\TestState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\LanguageState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\MainMenuState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -266,9 +263,6 @@
     <ClCompile Include="Geoscape\UfoLostState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\AbandonGameState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\BaseNameState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -352,9 +346,6 @@
     </ClCompile>
     <ClCompile Include="Ruleset\SoldierNamePool.cpp">
       <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\NoteState.cpp">
-      <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="Ruleset\MapDataSet.cpp">
       <Filter>Ruleset</Filter>
@@ -497,9 +488,6 @@
     <ClCompile Include="Battlescape\BattlescapeMessage.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\BattlescapeOptionsState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\AbortMissionState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -606,9 +594,6 @@
       <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\GeoscapeOptionsState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\BriefingState.cpp">
@@ -753,9 +738,6 @@
     <ClCompile Include="Interface\ToggleTextButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\AdvancedOptionsState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp">
       <Filter>Ruleset</Filter>
@@ -786,6 +768,30 @@
     </ClCompile>
     <ClCompile Include="Battlescape\CivilianBAIState.cpp">
       <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\PauseState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\AbandonGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsAdvancedState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsBattlescapeState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsBaseState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsLanguageState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\AliensCrashState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ResearchRequiredState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -931,9 +937,6 @@
     <ClInclude Include="Menu\TestState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\LanguageState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\MainMenuState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1057,9 +1060,6 @@
     <ClInclude Include="Geoscape\UfoLostState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\AbandonGameState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\BaseNameState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -1143,9 +1143,6 @@
     </ClInclude>
     <ClInclude Include="Ruleset\SoldierNamePool.h">
       <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\NoteState.h">
-      <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\MapDataSet.h">
       <Filter>Ruleset</Filter>
@@ -1289,9 +1286,6 @@
     <ClInclude Include="Battlescape\BattlescapeMessage.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\BattlescapeOptionsState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\AbortMissionState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1395,9 +1389,6 @@
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\ResearchCompleteState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeOptionsState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\BriefingState.h">
@@ -1543,9 +1534,6 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="aresame.h" />
-    <ClInclude Include="Menu\AdvancedOptionsState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Engine\ShaderDraw.h">
       <Filter>Engine</Filter>
@@ -1596,9 +1584,30 @@
     <ClInclude Include="Battlescape\CivilianBAIState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
+    <ClInclude Include="Menu\PauseState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\AbandonGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsBaseState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsAdvancedState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsBattlescapeState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsLanguageState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\AliensCrashState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ResearchRequiredState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

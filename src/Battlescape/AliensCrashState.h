@@ -16,37 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LANGUAGESTATE_H
-#define OPENXCOM_LANGUAGESTATE_H
+#ifndef OPENXCOM_ALIENSDIEDSTATE_H
+#define OPENXCOM_ALIENSDIEDSTATE_H
 
-#include <vector>
-#include <string>
 #include "../Engine/State.h"
+#include "DebriefingState.h"
 
 namespace OpenXcom
 {
 
+class TextButton;
 class Window;
 class Text;
-class TextList;
 
 /**
- * Language window that lets the player pick a
- * language at the start of the game.
+ * Screen shown when all aliens died
+ * during a crash site.
  */
-class LanguageState : public State
+class AliensCrashState : public State
 {
 private:
+	TextButton *_btnOk;
 	Window *_window;
-	TextList *_lstLanguages;
-	std::vector<std::string> _langs;
+	Text *_txtTitle;
 public:
-	/// Creates the Start state.
-	LanguageState(Game *game);
-	/// Cleans up the Start state.
-	~LanguageState();
-	/// Handler for clicking the Language list.
-	void lstLanguagesClick(Action *action);
+	/// Creates the Aliens Crash state.
+	AliensCrashState(Game *game);
+	/// Cleans up the Aliens Crash state.
+	~AliensCrashState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
 };
 
 }

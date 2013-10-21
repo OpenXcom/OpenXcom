@@ -50,7 +50,7 @@ namespace OpenXcom
  */
 AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node) : BattleAIState(save, unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
 																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
-																				_wasHit(false), _AIMode(AI_PATROL), _fromNode(node), _toNode(0)
+																				_wasHit(false), _didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
 	_traceAI = _save->getTraceSetting();
 
@@ -59,6 +59,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node
 	_ambushAction = new BattleAction();
 	_attackAction = new BattleAction();
 	_patrolAction = new BattleAction();
+	_psiAction = new BattleAction();
 }
 
 /**
@@ -70,6 +71,7 @@ AlienBAIState::~AlienBAIState()
 	delete _ambushAction;
 	delete _attackAction;
 	delete _patrolAction;
+	delete _psiAction;
 }
 
 /**
@@ -79,9 +81,10 @@ AlienBAIState::~AlienBAIState()
 void AlienBAIState::load(const YAML::Node &node)
 {
 	int fromNodeID, toNodeID;
-	fromNodeID = node["fromNode"].as<int>();
-	toNodeID = node["toNode"].as<int>();
-	_AIMode = node["AIMode"].as<int>();
+	fromNodeID = node["fromNode"].as<int>(-1);
+	toNodeID = node["toNode"].as<int>(-1);
+	_AIMode = node["AIMode"].as<int>(0);
+	_wasHit = node["wasHit"].as<bool>(false);
 	if (fromNodeID != -1)
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);
@@ -108,6 +111,7 @@ YAML::Node AlienBAIState::save() const
 	node["fromNode"] = fromNodeID;
 	node["toNode"] = toNodeID;
 	node["AIMode"] = _AIMode;
+	node["wasHit"] = _wasHit;
 	return node;
 }
 
@@ -147,7 +151,9 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	
+	_melee = false;
+	_rifle = false;
+	_blaster = false;
 	
 	if (_traceAI)
 	{
@@ -194,6 +200,19 @@ void AlienBAIState::think(BattleAction *action)
 	setupAttack();
 	setupPatrol();
 
+	if (_psiAction->type != BA_NONE && !_didPsi)
+	{
+		_didPsi = true;
+		action->type = _psiAction->type;
+		action->target = _psiAction->target;
+		action->number -= 1;
+		return;
+	}
+	else
+	{
+		_didPsi = false;
+	}
+
 	bool evaluate = false;
 
 	if (_AIMode == AI_ESCAPE)
@@ -205,7 +224,7 @@ void AlienBAIState::think(BattleAction *action)
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::generate(0, 100) < 10)
+		if (_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::percent(10))
 		{
 			evaluate = true;
 		}
@@ -269,15 +288,13 @@ void AlienBAIState::think(BattleAction *action)
 		action->type = _escapeAction->type;
 		action->target = _escapeAction->target;
 		// end this unit's turn.
-		action->number = 3;
-		// don't do a second action.
-		_unit->dontReselect();
+		action->finalAction = true;
 		// ignore new targets.
 		action->desperate = true;
 		// spin 180 at the end of your route.
 		_unit->_hidingForTurn = true;
 		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		action->type = _patrolAction->type;
@@ -290,18 +307,23 @@ void AlienBAIState::think(BattleAction *action)
 		action->weapon = _attackAction->weapon;
 		if (action->weapon && action->type == BA_THROW && action->weapon->getRules()->getBattleType() == BT_GRENADE)
 		{
-			action->weapon->setExplodeTurn(_save->getTurn());
 			_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
 		}
 		// if this is a firepoint action, set our facing.
 		action->finalFacing = _attackAction->finalFacing;
 		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
 		// don't worry about reserving TUs, we've factored that in already.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
-		if (action->type == BA_WALK && _rifle)
+		if (action->type == BA_WALK && _rifle
+			// so long as we can take a shot afterwards.
+			&& _unit->getTimeUnits() > _unit->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{
 			action->number -= 1;
+		}
+		else if (action->type == BA_LAUNCH)
+		{
+			action->waypoints = _attackAction->waypoints;
 		}
 		break;
 	case AI_AMBUSH:
@@ -310,21 +332,26 @@ void AlienBAIState::think(BattleAction *action)
 		// face where we think our target will appear.
 		action->finalFacing = _ambushAction->finalFacing;
 		// end this unit's turn.
-		action->number = 3;
-		_unit->dontReselect();
-		// ignore newly spotted units.
-		action->desperate = true;
+		action->finalAction = true;
 		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	default:
 		break;
 	}
-	// if we're moving, we'll have to re-evaluate our escape/ambush position.
-	if (action->type == BA_WALK && action->target != _unit->getPosition())
+
+	if (action->type == BA_WALK)
 	{
-		_escapeTUs = 0;
-		_ambushTUs = 0;
+		// if we're moving, we'll have to re-evaluate our escape/ambush position.
+		if (action->target != _unit->getPosition())
+		{
+			_escapeTUs = 0;
+			_ambushTUs = 0;
+		}
+		else
+		{
+			action->type = BA_NONE;
+		}
 	}
 }
 
@@ -340,7 +367,7 @@ void AlienBAIState::setWasHit()
  * Gets whether the unit was hit.
  * @return if it was hit.
  */
-const bool AlienBAIState::getWasHit()
+bool AlienBAIState::getWasHit() const
 {
 	return _wasHit;
 }
@@ -468,6 +495,16 @@ void AlienBAIState::setupPatrol()
 				_toNode = _save->getPatrolNode(!scout, _unit, _fromNode);
 			}
 		}
+		
+		if (_toNode != 0)
+		{
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_save->getPathfinding()->abortPath();
+		}
 	}
 
 	if (_toNode != 0)
@@ -502,6 +539,7 @@ void AlienBAIState::setupAmbush()
 		Position target;
 		const int BASE_SYSTEMATIC_SUCCESS = 100;
 		const int COVER_BONUS = 25;
+		const int FAST_PASS_THRESHOLD = 80;
 		Position origin = _save->getTileEngine()->getSightOriginVoxel(_aggroTarget);
 
 		// we'll use node positions for this, as it gives map makers a good degree of control over how the units will use the environment.
@@ -509,7 +547,7 @@ void AlienBAIState::setupAmbush()
 		{
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
-			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10)
+			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z)
 				continue;
 
 			if (_traceAI)
@@ -548,6 +586,10 @@ void AlienBAIState::setupAmbush()
 							bestScore = score;
 							_ambushTUs = (pos == _unit->getPosition()) ? 1 : ambushTUs;
 							_ambushAction->target = pos;
+							if (bestScore > FAST_PASS_THRESHOLD)
+							{
+								break;
+							}
 						}
 					}
 				}
@@ -608,21 +650,32 @@ void AlienBAIState::setupAttack()
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
 	{
+		if (_unit->getStats()->psiSkill && psiAction())
+		{
+			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
+			return;
+		}
 		if (_blaster)
+		{
 			wayPointAction();
-		if (_unit->getStats()->psiSkill)
-			psiAction();
+		}
 	}
 	
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
 	if (selectNearestTarget())
 	{
 		if (_unit->getGrenadeFromBelt())
+		{
 			grenadeAction();
+		}
 		if (_melee)
+		{
 			meleeAction();
+		}
 		if (_rifle)
+		{
 			projectileAction();
+		}
 	}
 
 	if (_attackAction->type != BA_RETHINK)
@@ -712,7 +765,8 @@ void AlienBAIState::setupEscape()
 			{
 				_escapeAction->target = _unit->lastCover;
 			} 
-		} else if (tries < 121) 
+		}
+		else if (tries < 121) 
 		{
 			// looking for cover
 			_escapeAction->target.x += randomTileSearch[tries].x;
@@ -725,7 +779,8 @@ void AlienBAIState::setupEscape()
 					// maybe don't stay in the same spot? move or something if there's any point to it?
 					_escapeAction->target.x += RNG::generate(-20,20);
 					_escapeAction->target.y += RNG::generate(-20,20);
-				} else
+				}
+				else
 				{
 					score += currentTilePreference;
 				}
@@ -858,7 +913,7 @@ void AlienBAIState::setupEscape()
  * Counts how many targets, both xcom and civilian are known to this unit
  * @return how many targets are known to us.
  */
-const int AlienBAIState::countKnownTargets()
+int AlienBAIState::countKnownTargets() const
 {
 	int knownEnemies = 0;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -879,7 +934,7 @@ const int AlienBAIState::countKnownTargets()
  * @param pos the Position to check for spotters.
  * @return spotters.
  */
-const int AlienBAIState::getSpottingUnits(Position pos)
+int AlienBAIState::getSpottingUnits(Position pos) const
 {
 	// if we don't actually occupy the position being checked, we need to do a virtual LOF check.
 	bool checking = pos != _unit->getPosition();
@@ -917,10 +972,10 @@ const int AlienBAIState::getSpottingUnits(Position pos)
  * This function includes civilians as viable targets.
  * @return viable targets.
  */
-const int AlienBAIState::selectNearestTarget()
+int AlienBAIState::selectNearestTarget()
 {
 	int tally = 0;
-	int closest = 100;
+	_closestDist= 100;
 	_aggroTarget = 0;
 	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
 	origin.z -= 2;
@@ -933,7 +988,7 @@ const int AlienBAIState::selectNearestTarget()
 			{
 				tally++;
 				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
-				if (dist < closest)
+				if (dist < _closestDist)
 				{
 					bool validTarget = false;
 					if (_rifle || !_melee)
@@ -950,7 +1005,7 @@ const int AlienBAIState::selectNearestTarget()
 					}
 					if (validTarget)
 					{
-						closest = dist;
+						_closestDist = dist;
 						_aggroTarget = *i;
 					}
 				}
@@ -958,7 +1013,9 @@ const int AlienBAIState::selectNearestTarget()
 		}
 	}
 	if (_aggroTarget)
+	{
 		return tally;
+	}
 
 	return 0;
 }
@@ -968,7 +1025,7 @@ const int AlienBAIState::selectNearestTarget()
  * used for ambush calculations
  * @return if we found one.
  */
-const bool AlienBAIState::selectClosestKnownEnemy()
+bool AlienBAIState::selectClosestKnownEnemy()
 {
 	_aggroTarget = 0;
 	int minDist = 255;
@@ -997,7 +1054,7 @@ const bool AlienBAIState::selectClosestKnownEnemy()
  * Selects a random known living Xcom or civilian unit.
  * @return if we found one.
  */
-const bool AlienBAIState::selectRandomTarget()
+bool AlienBAIState::selectRandomTarget()
 {
 	int farthest = -100;
 	_aggroTarget = 0;
@@ -1023,7 +1080,7 @@ const bool AlienBAIState::selectRandomTarget()
  * @param maxTUs Maximum time units the path to the target can cost.
  * @return True if a point was found.
  */
-const bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs)
+bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 {
 	int size = _unit->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
@@ -1094,14 +1151,20 @@ void AlienBAIState::evaluateAIMode()
 	if (_knownEnemies)
 	{
 		if (_knownEnemies == 1)
+		{
 			combatOdds *= 1.2;
-		
+		}
+
 		if (_escapeTUs == 0)
 		{
 			if (selectClosestKnownEnemy())
+			{
 				setupEscape();
+			}
 			else
+			{
 				escapeOdds = 0;
+			}
 		}
 	}
 	else
@@ -1179,8 +1242,13 @@ void AlienBAIState::evaluateAIMode()
 	
 	// factor in visible enemies.
 	if (_visibleEnemies)
+	{
 		combatOdds = 10 * combatOdds * (_visibleEnemies + 10) /100;
-
+		if (_closestDist < 5)
+		{
+			ambushOdds = 0;
+		}
+	}
 	// make sure we have an ambush lined up, or don't even consider it.
 	if (_ambushTUs)
 	{
@@ -1275,7 +1343,7 @@ void AlienBAIState::evaluateAIMode()
  * Find a position where we can see our target, and move there.
  * check the 11x11 grid for a position nearby where we can potentially target him.
  */
-const bool AlienBAIState::findFirePoint()
+bool AlienBAIState::findFirePoint()
 {
 	if (!selectClosestKnownEnemy())
 		return false;
@@ -1351,7 +1419,7 @@ const bool AlienBAIState::findFirePoint()
  * @param diff Game difficulty.
  * @return True if it is worthwile creating an explosion in the target position.
  */
-const bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
+bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	if (_save->getTurn() < 3)
@@ -1464,6 +1532,7 @@ void AlienBAIState::meleeAction()
  */
 void AlienBAIState::wayPointAction()
 {
+	_aggroTarget = 0;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end() && _aggroTarget == 0; ++i)
 	{
 		if ((*i)->isOut() ||
@@ -1497,7 +1566,7 @@ void AlienBAIState::wayPointAction()
 		Position CurrentPosition = _unit->getPosition();
 		Position DirectionVector;
 
-		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget);
+		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget, -1);
 		PathDirection = _save->getPathfinding()->dequeuePath();
 		while (PathDirection != -1)
 		{
@@ -1632,12 +1701,17 @@ void AlienBAIState::grenadeAction()
 			// do we have enough TUs to prime and throw the grenade?
 			if (tu <= _unit->getStats()->tu)
 			{
+				BattleAction action;
+				action.weapon = grenade;
+				action.target = _aggroTarget->getPosition();
+				action.type = BA_THROW;
+				action.actor = _unit;
 				// are we within range?
-				if (_save->getTileEngine()->validateThrow(_attackAction))
+				if (_save->getTileEngine()->validateThrow(&action))
 				{
-					_attackAction->type = BA_THROW;
 					_attackAction->weapon = grenade;
-					_attackAction->target = _aggroTarget->getPosition();
+					_attackAction->target = action.target;
+					_attackAction->type = BA_THROW;
 					_rifle = false;
 					_melee = false;
 				}
@@ -1655,14 +1729,16 @@ void AlienBAIState::grenadeAction()
  * @param action Pointer to an action.
  * @return True if a psionic attack is performed.
  */
-void AlienBAIState::psiAction()
+bool AlienBAIState::psiAction()
 {
+	_psiAction->type = BA_NONE;
+	_aggroTarget = 0;
 		// don't let mind controlled soldiers mind control other soldiers.
 	if (_unit->getOriginalFaction() != FACTION_PLAYER
-		// make sure we're actually psi-capable
-		&& _unit->getStats()->psiSkill
 		// and we have the required 25 TUs and can still make it to cover
-		&& _unit->getTimeUnits() > _escapeTUs + 25)
+		&& _unit->getTimeUnits() > _escapeTUs + 25
+		// and we didn't already do a psi action this round
+		&& !_didPsi)
 	{
 		int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 		int chanceToAttack = 0;
@@ -1694,52 +1770,59 @@ void AlienBAIState::psiAction()
 			}
 		}
 
-		if (!_aggroTarget || !chanceToAttack) return;
+		if (!_aggroTarget || !chanceToAttack) return false;
 
 		if (_visibleEnemies && _attackAction->weapon && _attackAction->weapon->getAmmoItem())
 		{
 			if (_attackAction->weapon->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
 			{
-				return;
+				return false;
 			}
 		}
 		else if (RNG::generate(35, 155) >= chanceToAttack)
 		{
-			return;
+			return false;
 		}
-
+		
+		if (_traceAI)
+		{
+			Log(LOG_INFO) << "making a psionic attack this turn";
+		}
+		
 		if (chanceToAttack >= 30)
 		{
-			int controlOrPanic = 60;
+			int controlOdds = 40;
 			int morale = _aggroTarget->getMorale();
 			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
 			if (bravery > 6)
-				controlOrPanic += 15;
-			if ( bravery < 4)
-				controlOrPanic -= 15;
+				controlOdds -= 15;
+			if (bravery < 4)
+				controlOdds += 15;
 			if (morale >= 40)
 			{
 				if (morale - 10 * bravery < 50)
-					controlOrPanic += 15;
+					controlOdds -= 15;
 			}
 			else
 			{
-				controlOrPanic -= 15;
+				controlOdds += 15;
 			}
 			if (!morale)
 			{
-				controlOrPanic = 0;
+				controlOdds = 100;
 			}
-			if (RNG::generate(0, 100) >= controlOrPanic)
+			if (RNG::percent(controlOdds))
 			{
-				_attackAction->type = BA_MINDCONTROL;
-				_attackAction->target = _aggroTarget->getPosition();
-				return;
+				_psiAction->type = BA_MINDCONTROL;
+				_psiAction->target = _aggroTarget->getPosition();
+				return true;
 			}
 		}
-		_attackAction->type = BA_PANIC;
-		_attackAction->target = _aggroTarget->getPosition();
+		_psiAction->type = BA_PANIC;
+		_psiAction->target = _aggroTarget->getPosition();
+		return true;
 	}
+	return false;
 }
 
 /**

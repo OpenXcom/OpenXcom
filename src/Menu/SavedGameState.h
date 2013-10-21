@@ -20,6 +20,8 @@
 #define OPENXCOM__SAVEDGAMESTATE_H
 
 #include "../Engine/State.h"
+#include "OptionsBaseState.h"
+#include <vector>
 #include <string>
 
 namespace OpenXcom
@@ -41,12 +43,14 @@ protected:
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
 	TextList *_lstSaves;
-	bool _geo, _showMsg, _noUI;
+	OptionsOrigin _origin;
+	bool _showMsg, _noUI;
+	std::vector<std::string> _saves;
 public:
 	/// Creates the Saved Game state.
-	SavedGameState(Game *game, bool geo);
+	SavedGameState(Game *game, OptionsOrigin origin);
 	/// Creates the Saved Game state (autosave option).
-	SavedGameState(Game *game, bool geo, bool showMsg);
+	SavedGameState(Game *game, OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();
 	/// Updates the palette.

@@ -231,7 +231,7 @@ void Map::drawTerrain(Surface *surface)
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile)
+	if (_projectile && _explosions.empty())
 	{
 		int part = _projectile->getItem() ? 0 : BULLET_SPRITES-1;
 		for (int i = 0; i <= part; ++i)

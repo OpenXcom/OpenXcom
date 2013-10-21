@@ -19,11 +19,17 @@
 #include "CrossPlatform.h"
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <locale>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
@@ -32,9 +38,11 @@
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
+#ifndef __GNUC__
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
+#endif
 #else
 #include <sys/stat.h>
 #include <cstring>
@@ -614,6 +622,73 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
 	}
 	return filename;
+}
+
+/**
+* Replaces invalid filesystem characters with _.
+* @param filename Original filename.
+* @return Filename without invalid characters
+*/
+std::string sanitizeFilename(const std::string &filename)
+{
+	std::string newFilename = filename;
+	for (std::string::iterator i = newFilename.begin(); i != newFilename.end(); ++i)
+	{
+		if ((*i) == '<' ||
+			(*i) == '>' ||
+			(*i) == ':' ||
+			(*i) == '"' || 
+			(*i) == '/' ||
+			(*i) == '?' ||
+			(*i) == '\\')
+		{
+			*i = '_';
+		}
+	}
+	return newFilename;
+}
+
+/**
+ * Removes the extension from a filename.
+ * @param filename Original filename.
+ * @return Filename without the extension.
+ */
+std::string noExt(const std::string &filename)
+{
+	return filename.substr(0, filename.find_last_of('.'));
+}
+
+/**
+ * Gets the current locale of the system in language-COUNTRY format.
+ * @return Locale string.
+ */
+std::string getLocale()
+{
+#ifdef _WIN32
+	char language[9], country[9];
+
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
+
+	std::stringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
+	/*
+	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
+	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
+
+	return Language::wstrToUtf8(locale);
+	*/
+#else
+	std::locale l("");
+	std::string name = l.name();
+	std::string language = name.substr(0, name.find_first_of('_')-1);
+	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
+	
+	std::stringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
+#endif
 }
 
 }

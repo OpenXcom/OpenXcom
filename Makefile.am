@@ -53,7 +53,7 @@ pathfinding_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
 
 bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
-bulletsprite_DATA = \    
+bulletsprite_DATA = \
 	bin/data/Resources/BulletSprites/BulletSprites.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
@@ -212,6 +212,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ActionMenuItem.h \
 	src/Battlescape/ActionMenuState.cpp \
 	src/Battlescape/ActionMenuState.h \
+	src/Battlescape/AliensCrashState.cpp \
+	src/Battlescape/AliensCrashState.h \
 	src/Battlescape/AlienBAIState.cpp \
 	src/Battlescape/AlienBAIState.h \
 	src/Battlescape/BattleAIState.cpp \
@@ -222,8 +224,6 @@ openxcom_SOURCES = \
 	src/Battlescape/BattlescapeGenerator.h \
 	src/Battlescape/BattlescapeMessage.cpp \
 	src/Battlescape/BattlescapeMessage.h \
-	src/Battlescape/BattlescapeOptionsState.cpp \
-	src/Battlescape/BattlescapeOptionsState.h \
 	src/Battlescape/BattlescapeState.cpp \
 	src/Battlescape/BattlescapeState.h \
 	src/Battlescape/BattleState.cpp \
@@ -375,8 +375,6 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Engine/Zoom.cpp \
 	src/Engine/Zoom.h \
-	src/Geoscape/AbandonGameState.cpp \
-	src/Geoscape/AbandonGameState.h \
 	src/Geoscape/AlienBaseState.cpp \
 	src/Geoscape/AlienBaseState.h \
 	src/Geoscape/AlienTerrorState.cpp \
@@ -412,8 +410,6 @@ openxcom_SOURCES = \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \
 	src/Geoscape/GeoscapeCraftState.h \
-	src/Geoscape/GeoscapeOptionsState.cpp \
-	src/Geoscape/GeoscapeOptionsState.h \
 	src/Geoscape/GeoscapeState.cpp \
 	src/Geoscape/GeoscapeState.h \
 	src/Geoscape/Globe.cpp \
@@ -444,6 +440,8 @@ openxcom_SOURCES = \
 	src/Geoscape/PsiTrainingState.h \
 	src/Geoscape/ResearchCompleteState.cpp \
 	src/Geoscape/ResearchCompleteState.h \
+	src/Geoscape/ResearchRequiredState.cpp \
+	src/Geoscape/ResearchRequiredState.h \
 	src/Geoscape/SelectDestinationState.cpp \
 	src/Geoscape/SelectDestinationState.h \
 	src/Geoscape/TargetInfoState.cpp \
@@ -462,10 +460,14 @@ openxcom_SOURCES = \
 	src/Interface/Cursor.h \
 	src/Interface/FpsCounter.cpp \
 	src/Interface/FpsCounter.h \
+	src/Interface/Frame.cpp \
+	src/Interface/Frame.h \
 	src/Interface/ImageButton.cpp \
 	src/Interface/ImageButton.h \
 	src/Interface/NumberText.cpp \
 	src/Interface/NumberText.h \
+	src/Interface/Slider.cpp \
+	src/Interface/Slider.h \
 	src/Interface/TextButton.cpp \
 	src/Interface/TextButton.h \
 	src/Interface/Text.cpp \
@@ -481,14 +483,10 @@ openxcom_SOURCES = \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
-	src/Menu/AdvancedOptionsState.cpp \
-	src/Menu/AdvancedOptionsState.h \
 	src/Menu/DeleteGameState.cpp \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/LanguageState.cpp \
-	src/Menu/LanguageState.h \
 	src/Menu/LoadState.cpp \
 	src/Menu/LoadState.h \
 	src/Menu/MainMenuState.cpp \
@@ -497,12 +495,22 @@ openxcom_SOURCES = \
 	src/Menu/NewBattleState.h \
 	src/Menu/NewGameState.cpp \
 	src/Menu/NewGameState.h \
-	src/Menu/NoteState.cpp \
-	src/Menu/NoteState.h \
-	src/Menu/OptionsControlsState.cpp \
-	src/Menu/OptionsControlsState.h \
+	src/Menu/OptionsBaseState.cpp \
+	src/Menu/OptionsBaseState.h \
 	src/Menu/OptionsState.cpp \
 	src/Menu/OptionsState.h \
+	src/Menu/OptionsControlsState.cpp \
+	src/Menu/OptionsControlsState.h \
+	src/Menu/OptionsLanguageState.cpp \
+	src/Menu/OptionsLanguageState.h \
+	src/Menu/OptionsAdvancedState.cpp \
+	src/Menu/OptionsAdvancedState.h \
+	src/Menu/OptionsBattlescapeState.cpp \
+	src/Menu/OptionsBattlescapeState.h \
+	src/Menu/AbandonGameState.cpp \
+	src/Menu/AbandonGameState.h \
+	src/Menu/PauseState.cpp \
+	src/Menu/PauseState.h \
 	src/Menu/SavedGameState.cpp \
 	src/Menu/SavedGameState.h \
 	src/Menu/SaveState.cpp \
@@ -669,9 +677,6 @@ openxcom_SOURCES = \
 EXTRA_DIST = \
 	autogen.sh \
 	docs/openxcom.6.xml \
-	src/OpenXcom.2008.sln \
-	src/OpenXcom.2008.vcproj \
-	src/OpenXcom.2008.vcproj.user \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
 	src/OpenXcom.2010.vcxproj.filters \

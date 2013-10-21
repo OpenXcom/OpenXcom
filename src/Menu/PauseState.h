@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_INTERCEPTSTATE_H
-#define OPENXCOM_INTERCEPTSTATE_H
+#ifndef OPENXCOM_PAUSESTATE_H
+#define OPENXCOM_PAUSESTATE_H
 
-#include <vector>
 #include "../Engine/State.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -28,38 +28,36 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class Base;
-class Globe;
-class Craft;
-class Target;
 
 /**
- * Intercept window that lets the player launch
- * crafts into missions from the Geoscape.
+ * Options window shown for loading/saving/quitting the game.
+ * Not to be confused with the Game Options window
+ * for changing game settings during runtime.
  */
-class InterceptState : public State
+class PauseState : public State
 {
 private:
-	TextButton *_btnCancel;
+	OptionsOrigin _origin;
+	TextButton *_btnLoad, *_btnSave, *_btnAbandon, *_btnOptions, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
-	TextList *_lstCrafts;
-	Globe *_globe;
-	Base *_base;
-	Target *_target;
-	std::vector<Craft*> _crafts;
+	Text *_txtTitle;
 public:
-	/// Creates the Intercept state.
-	InterceptState(Game *game, Globe *globe, Base *base = 0, Target *target = 0);
-	/// Cleans up the Intercept state.
-	~InterceptState();
+	/// Creates the Pause state.
+	PauseState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Pause state.
+	~PauseState();
+	/// Updates the palette.
+	void init();
+	/// Handler for clicking the Load Game button.
+	void btnLoadClick(Action *action);
+	/// Handler for clicking the Save Game button.
+	void btnSaveClick(Action *action);
+	/// Handler for clicking the Abandon Game button.
+	void btnAbandonClick(Action *action);
+	/// Handler for clicking the Game Options button.
+	void btnOptionsClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
-	/// Handler for clicking the Crafts list.
-	void lstCraftsLeftClick(Action *action);
-	/// Handler for right clicking the Crafts list.
-	void lstCraftsRightClick(Action *action);
 };
 
 }

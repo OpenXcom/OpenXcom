@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "AdvancedOptionsState.h"
+#include "OptionsAdvancedState.h"
 #include <iostream>
 #include <sstream>
 #include "../Engine/Game.h"
@@ -37,15 +37,15 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Advanced Options window.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
+OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 8);
-	_btnOk = new TextButton(100, 16, 8, 176);
-	_btnCancel = new TextButton(100, 16, 110, 176);
-	_btnDefault = new TextButton(100, 16, 212, 176);
+	_btnOk = new TextButton(148, 16, 8, 176);
+	_btnCancel = new TextButton(148, 16, 164, 176);
 	_lstOptions = new TextList(268, 104, 20, 30);
 	_txtDescription = new Text(280, 32, 20, 142);
 
@@ -53,7 +53,6 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	add(_txtTitle);
 	add(_btnOk);
 	add(_btnCancel);
-	add(_btnDefault);
 	add(_lstOptions);
 	add(_txtDescription);
 
@@ -70,17 +69,13 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&AdvancedOptionsState::btnOkClick);
-	//_btnOk->onKeyboardPress((ActionHandler)&AdvancedOptionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)&OptionsAdvancedState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&OptionsAdvancedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&AdvancedOptionsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&AdvancedOptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-
-	_btnDefault->setColor(Palette::blockOffset(8)+5);
-	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
-	_btnDefault->onMouseClick((ActionHandler)&AdvancedOptionsState::btnDefaultClick);
+	_btnCancel->onMouseClick((ActionHandler)&OptionsAdvancedState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&OptionsAdvancedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 	
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
 	_txtDescription->setWordWrap(true);
@@ -150,15 +145,15 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
-	_lstOptions->onMouseClick((ActionHandler)&AdvancedOptionsState::lstOptionsClick);
-	_lstOptions->onMouseOver((ActionHandler)&AdvancedOptionsState::lstOptionsMouseOver);
-	_lstOptions->onMouseOut((ActionHandler)&AdvancedOptionsState::lstOptionsMouseOut);
+	_lstOptions->onMouseClick((ActionHandler)&OptionsAdvancedState::lstOptionsClick);
+	_lstOptions->onMouseOver((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOver);
+	_lstOptions->onMouseOut((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOut);
 }
 
 /**
  *
  */
-AdvancedOptionsState::~AdvancedOptionsState()
+OptionsAdvancedState::~OptionsAdvancedState()
 {
 	
 }
@@ -167,7 +162,7 @@ AdvancedOptionsState::~AdvancedOptionsState()
  * Saves the options.
  * @param action Pointer to an action.
  */
-void AdvancedOptionsState::btnOkClick(Action *)
+void OptionsAdvancedState::btnOkClick(Action *)
 {
 	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
 	{
@@ -184,49 +179,12 @@ void AdvancedOptionsState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AdvancedOptionsState::btnCancelClick(Action *)
+void OptionsAdvancedState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
 
-/**
- * Restores the Options to default settings.
- * @param action Pointer to an action.
- */
-void AdvancedOptionsState::btnDefaultClick(Action *)
-{
-	int sel = 0;
-	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
-	{
-		if (i->first == "playIntro")
-		{
-			i->second = true;
-			_lstOptions->setCellText(sel, 1, tr("STR_YES").c_str());
-		}
-		else
-		{
-			i->second = false;
-			_lstOptions->setCellText(sel, 1, tr("STR_NO").c_str());
-		}
-		++sel;
-	}
-	
-	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
-	{
-		i->second = 0;
-		if (i->first == "battleNewPreviewPath")
-		{
-			_lstOptions->setCellText(sel, 1, updatePathString(sel - _settingBoolSet.size()).c_str());
-		}
-		else
-		{
-			_lstOptions->setCellText(sel, 1, L"0");
-		}
-		++sel;
-	}
-}
-
-void AdvancedOptionsState::lstOptionsClick(Action *)
+void OptionsAdvancedState::lstOptionsClick(Action *)
 {
 	size_t sel = _lstOptions->getSelectedRow();
 	std::wstring settingText = L"";
@@ -273,7 +231,7 @@ void AdvancedOptionsState::lstOptionsClick(Action *)
 	_lstOptions->setCellText(sel, 1, settingText.c_str());
 }
 
-void AdvancedOptionsState::lstOptionsMouseOver(Action *)
+void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 {
 	size_t sel = _lstOptions->getSelectedRow();
 	std::stringstream ss;
@@ -292,12 +250,12 @@ void AdvancedOptionsState::lstOptionsMouseOver(Action *)
 	_txtDescription->setText(tr(ss.str()).c_str());
 }
 
-void AdvancedOptionsState::lstOptionsMouseOut(Action *)
+void OptionsAdvancedState::lstOptionsMouseOut(Action *)
 {
 	_txtDescription->setText(L"");
 }
 
-std::wstring AdvancedOptionsState::updatePathString(int sel)
+std::wstring OptionsAdvancedState::updatePathString(int sel)
 {
 	switch (_settingIntSet.at(sel).second)
 	{

@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "LanguageState.h"
+#include "OptionsLanguageState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
+#include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/TextButton.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "MainMenuState.h"
 
 namespace OpenXcom
@@ -31,19 +34,20 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Language window.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-LanguageState::LanguageState(Game *game) : State(game)
+OptionsLanguageState::OptionsLanguageState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
 {
 	// Create objects
-	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_lstLanguages = new TextList(224, 136, 40, 34);
-
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_txtTitle = new Text(320, 16, 0, 8);
+	_lstLanguages = new TextList(272, 144, 24, 26);
+	_btnCancel = new TextButton(100, 16, 110, 176);
 
 	add(_window);
+	add(_txtTitle);
 	add(_lstLanguages);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -51,14 +55,23 @@ LanguageState::LanguageState(Game *game) : State(game)
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+	_txtTitle->setText(tr("STR_LANGUAGE"));
+
 	_lstLanguages->setColor(Palette::blockOffset(8)+10);
 	_lstLanguages->setArrowColor(Palette::blockOffset(8)+5);
-	_lstLanguages->setColumns(1, 224);
+	_lstLanguages->setColumns(1, 272);
 	_lstLanguages->setSelectable(true);
 	_lstLanguages->setBackground(_window);
-	_lstLanguages->setMargin(2);
 	_lstLanguages->setAlign(ALIGN_CENTER);
-	_lstLanguages->onMouseClick((ActionHandler)&LanguageState::lstLanguagesClick);
+	_lstLanguages->onMouseClick((ActionHandler)&OptionsLanguageState::lstLanguagesClick);
+
+	_btnCancel->setColor(Palette::blockOffset(8) + 5);
+	_btnCancel->setText(tr("STR_CANCEL"));
+	_btnCancel->onMouseClick((ActionHandler) &OptionsLanguageState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler) &OptionsLanguageState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_langs = Language::getList(_lstLanguages);
 }
@@ -66,7 +79,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 /**
  *
  */
-LanguageState::~LanguageState()
+OptionsLanguageState::~OptionsLanguageState()
 {
 
 }
@@ -76,10 +89,19 @@ LanguageState::~LanguageState()
  * the Main Menu window.
  * @param action Pointer to an action.
  */
-void LanguageState::lstLanguagesClick(Action *)
+void OptionsLanguageState::lstLanguagesClick(Action *)
 {
 	_game->loadLanguage(_langs[_lstLanguages->getSelectedRow()]);
-	_game->setState(new MainMenuState(_game));
+	saveOptions();
+}
+
+/**
+* Returns to the previous screen.
+* @param action Pointer to an action.
+*/
+void OptionsLanguageState::btnCancelClick(Action *)
+{
+	_game->popState();
 }
 
 }

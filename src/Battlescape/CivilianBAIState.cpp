@@ -60,9 +60,9 @@ CivilianBAIState::~CivilianBAIState()
 void CivilianBAIState::load(const YAML::Node &node)
 {
 	int fromNodeID, toNodeID;
-	fromNodeID = node["fromNode"].as<int>();
-	toNodeID = node["toNode"].as<int>();
-	_AIMode = node["AIMode"].as<int>();
+	fromNodeID = node["fromNode"].as<int>(-1);
+	toNodeID = node["toNode"].as<int>(-1);
+	_AIMode = node["AIMode"].as<int>(0);
 	if (fromNodeID != -1)
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);
@@ -154,7 +154,7 @@ void CivilianBAIState::think(BattleAction *action)
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies || _visibleEnemies || RNG::generate(0, 100) < 10)
+		if (_spottingEnemies || _visibleEnemies || RNG::percent(10))
 		{
 			evaluate = true;
 		}
@@ -241,7 +241,7 @@ int CivilianBAIState::selectNearestTarget()
 	return 0;
 }
 
-const int CivilianBAIState::getSpottingUnits(Position pos)
+int CivilianBAIState::getSpottingUnits(Position pos) const
 {
 	bool checking = pos != _unit->getPosition();
 	int tally = 0;
@@ -489,12 +489,27 @@ void CivilianBAIState::setupPatrol()
 	}
 
 	// look for a new node to walk towards
-	if (_toNode == 0)
+	
+	int triesLeft = 5;
+
+	while (_toNode == 0 && triesLeft)
 	{
+		triesLeft--;
+
 		_toNode = _save->getPatrolNode(true, _unit, _fromNode);
 		if (_toNode == 0)
 		{
 			_toNode = _save->getPatrolNode(false, _unit, _fromNode);
+		}
+
+		if (_toNode != 0)
+		{
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_save->getPathfinding()->abortPath();
 		}
 	}
 

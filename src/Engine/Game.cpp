@@ -59,35 +59,34 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
-	if (!Options::getBool("mute"))
+	Options::setBool("mute", false);
+	// Initialize SDL_mixer
+	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
-		// Initialize SDL_mixer
-		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+		Log(LOG_ERROR) << SDL_GetError();
+		Log(LOG_WARNING) << "No sound device detected, audio disabled.";
+		Options::setBool("mute", true);
+	}
+	else
+	{
+		Uint16 format;
+		if (Options::getInt("audioBitDepth") == 8)
+			format = AUDIO_S8;
+		else
+			format = AUDIO_S16SYS;
+		if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
 		{
-			Log(LOG_ERROR) << SDL_GetError();
+			Log(LOG_ERROR) << Mix_GetError();
 			Log(LOG_WARNING) << "No sound device detected, audio disabled.";
 			Options::setBool("mute", true);
 		}
 		else
 		{
-			Uint16 format;
-			if (Options::getInt("audioBitDepth") == 8)
-				format = AUDIO_S8;
-			else
-				format = AUDIO_S16SYS;
-			if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
-			{
-				Log(LOG_ERROR) << Mix_GetError();
-				Log(LOG_WARNING) << "No sound device detected, audio disabled.";
-				Options::setBool("mute", true);
-			}
-			else
-			{
-				Mix_AllocateChannels(16);
-			}
+			Mix_AllocateChannels(16);
+			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		}
-		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 	}
+
 	// trap the mouse inside the window
 	if (Options::getBool("captureMouse"))
 	{
@@ -138,12 +137,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
-	{
-		SaveState *ss = new SaveState(this, true, false);
-		delete ss;
-	}
-
 	Mix_HaltChannel(-1);
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
@@ -202,7 +195,7 @@ void Game::run()
 			ev.type = SDL_MOUSEMOTION;
 			ev.motion.x = x;
 			ev.motion.y = y;
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale());
+			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 			_states.back()->handle(&action);
 		}
 
@@ -240,7 +233,8 @@ void Game::run()
 					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
-					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
+					_processQuitShortcut();
+					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
@@ -300,6 +294,12 @@ void Game::run()
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
 		}
+	}
+	
+	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+	{
+		SaveState *ss = new SaveState(this, OPT_MENU, false);
+		delete ss;
 	}
 }
 
@@ -552,6 +552,21 @@ bool Game::isState(State *state) const
 bool Game::isQuitting() const
 {
 	return _quit;
+}
+
+/**
+ * Sets _quit state when most used close window shortcut if pressed.
+ */
+void Game::_processQuitShortcut()
+{
+#ifdef _WIN32
+	//Alt + F4
+	_quit = _quit || _event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_F4 && _event.key.keysym.mod & KMOD_ALT;
+#elif __APPLE__
+	//Command + Q
+	_quit = _quit || _event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_q && _event.key.keysym.mod & KMOD_LMETA;
+#endif
+	//TODO add other OSs shortcuts.
 }
 
 

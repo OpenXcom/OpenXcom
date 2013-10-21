@@ -30,6 +30,9 @@
 #include "../Ruleset/ExtraStrings.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -47,22 +50,27 @@ Language::Language() : _id(""), _strings(), _handler(0)
 	// maps don't have initializers :(
 	if (_names.empty())
 	{
+		_names["en-US"] = utf8ToWstr("English (US)");
+		_names["en-GB"] = utf8ToWstr("English (UK)");
 		_names["bg-BG"] = utf8ToWstr("Български");
 		_names["cs-CZ"] = utf8ToWstr("Česky");
 		_names["da"] = utf8ToWstr("Dansk");
-		_names["nl"] = utf8ToWstr("Nederlands");
-		_names["en-US"] = utf8ToWstr("English (US)");
-		_names["en-GB"] = utf8ToWstr("English (UK)");
-		_names["fr"] = utf8ToWstr("Français");
 		_names["de"] = utf8ToWstr("Deutsch");
+		_names["es"] = utf8ToWstr("Español (ES)");
+		_names["es-419"] = utf8ToWstr("Español (AL)");
+		_names["fr"] = utf8ToWstr("Français");
+		_names["fi"] = utf8ToWstr("Suomi");
+		_names["grk"] = utf8ToWstr("Ελληνικά");
 		_names["hu-HU"] = utf8ToWstr("Magyar");
 		_names["it"] = utf8ToWstr("Italiano");
+		_names["nl"] = utf8ToWstr("Nederlands");
+		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl-PL"] = utf8ToWstr("Polski");
 		_names["pt-PT"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
-		_names["es"] = utf8ToWstr("Español (ES)");
-		_names["es-419"] = utf8ToWstr("Español (AL)");
+		_names["sv"] = utf8ToWstr("Svenska");
+		_names["tr-TR"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
 	}
 }
@@ -154,6 +162,21 @@ std::string Language::wstrToCp(const std::wstring& src)
 	wcstombs(buffer, src.c_str(), MAX);
 	std::string str(buffer);
 	return str;
+#endif
+}
+
+/**
+ * Takes a wide-character string and converts it to an
+ * 8-bit string with the filesystem encoding.
+ * @param src Wide-character string.
+ * @return Filesystem string.
+ */
+std::string Language::wstrToFs(const std::wstring& src)
+{
+#ifdef _WIN32
+	return Language::wstrToCp(src);
+#else
+	return Language::wstrToUtf8(src);
 #endif
 }
 
@@ -250,6 +273,21 @@ std::wstring Language::cpToWstr(const std::string& src)
 }
 
 /**
+ * Takes an 8-bit string with the filesystem encoding
+ * and converts it to a wide-character string.
+ * @param src Filesystem string.
+ * @return Wide-character string.
+ */
+std::wstring Language::fsToWstr(const std::string& src)
+{
+#ifdef _WIN32
+	return Language::cpToWstr(src);
+#else
+	return Language::utf8ToWstr(src);
+#endif
+}
+
+/**
  * Replaces every instance of a substring.
  * @param str The string to modify.
  * @param find The substring to find.
@@ -289,10 +327,20 @@ std::vector<std::string> Language::getList(TextList *list)
 
 	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
 	{
-		(*i) = i->substr(0, i->length() - 4);
+		(*i) = CrossPlatform::noExt(*i);
 		if (list != 0)
 		{
-			list->addRow(1, _names[(*i)].c_str());
+			std::wstring name;
+			std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+			if (lang != _names.end())
+			{
+				name = lang->second;
+			}
+			else
+			{
+				name = Language::fsToWstr(*i);
+			}
+			list->addRow(1, name.c_str());
 		}
 	}
 	return langs;
@@ -478,7 +526,7 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	if (0 == n)
 	{
 		// Try specialized form.
-		s = _strings.find(id + "_0");
+		s = _strings.find(id + "_zero");
 	}
 	if (s == _strings.end())
 	{

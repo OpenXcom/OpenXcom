@@ -16,43 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_GEOSCAPEOPTIONSSTATE_H
-#define OPENXCOM_GEOSCAPEOPTIONSSTATE_H
+#ifndef OPENXCOM_OPTIONSLANGUAGESTATE_H
+#define OPENXCOM_OPTIONSLANGUAGESTATE_H
 
-#include "../Engine/State.h"
+#include <vector>
+#include <string>
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
 
-class TextButton;
 class Window;
 class Text;
+class TextList;
+class TextButton;
 
 /**
- * Options window shown in the Geoscape for loading/saving
- * and quitting the game.
- * Not to be confused with an actual Settings window that
- * might come later for changing game settings during runtime.
+ * Language window that lets the player pick the language
+ * used for all in-game text.
  */
-class GeoscapeOptionsState : public State
+class OptionsLanguageState : public OptionsBaseState
 {
 private:
-	TextButton *_btnLoad, *_btnSave, *_btnAbandon, *_btnCancel;
-	Window *_window;
 	Text *_txtTitle;
+	Window *_window;
+	TextList *_lstLanguages;
+	TextButton *_btnCancel;
+	std::vector<std::string> _langs;
 public:
-	/// Creates the Geoscape Options state.
-	GeoscapeOptionsState(Game *game);
-	/// Cleans up the Geoscape Options state.
-	~GeoscapeOptionsState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the Load Game button.
-	void btnLoadClick(Action *action);
-	/// Handler for clicking the Save Game button.
-	void btnSaveClick(Action *action);
-	/// Handler for clicking the Abandon Game button.
-	void btnAbandonClick(Action *action);
+	/// Creates the Start state.
+	OptionsLanguageState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Start state.
+	~OptionsLanguageState();
+	/// Handler for clicking the Language list.
+	void lstLanguagesClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };

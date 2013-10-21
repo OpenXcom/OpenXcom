@@ -19,7 +19,7 @@ License:        GPL-2.0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 URL:            http://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz
-Summary:        Open source remake of the original X-COM
+Summary:        Open-source clone of UFO: Enemy Unknown
 BuildRequires:  cmake 
 BuildRequires:  gcc-c++ 
 BuildRequires:  gcc 
@@ -34,7 +34,7 @@ BuildRequires:	libSDL_gfx-devel >= 2.0.21
 BuildRequires:	yaml-cpp-devel >= 0.5.0
 
 %description
-OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA) video game by Microprose, licensed under the GPL and written in C++ / SDL. OpenXcom requires game resources from the original game (DOS, Windows or Steam version)
+OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA) turn-based strategy game by MicroProse. It is written in C++ / SDL and licensed under the GPL. OpenXcom requires game resources from the original game (DOS, Windows or Steam version).
 
 %prep
 %setup -q

@@ -222,10 +222,16 @@ int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 				return -1;
 			}
 		}
-		_trajectory.clear();
 
 		if (doCalcChance)
-			return (test != 4) ? -1 : applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, smokeDensity, true);
+		{
+			if (test != 4 || _trajectory.empty() ||
+				_trajectory.at(0).x/16 != _action.target.x || _trajectory.at(0).y/16 != _action.target.y) // Don't need check z axis.
+				return -1;
+			return applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, smokeDensity, true);
+		}
+
+		_trajectory.clear();
 	}
 
 	// This will results in a new target voxel
@@ -241,7 +247,7 @@ int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
  * @param accuracy The unit's accuracy.
  * @return True when a trajectory is possible.
  */
-bool Projectile::calculateThrow(double accuracy)
+int Projectile::calculateThrow(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
@@ -249,7 +255,7 @@ bool Projectile::calculateThrow(double accuracy)
 	// object blocking - can't throw here
 	if (_action.type == BA_THROW &&_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
-		return false;
+		return -1;
 	}
 
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
@@ -308,7 +314,7 @@ bool Projectile::calculateThrow(double accuracy)
 	}
 	if ( AreSame(curvature, 5.0) )
 	{
-		return false;
+		return -1;
 	}
 
 	// apply some accuracy modifiers
@@ -319,9 +325,11 @@ bool Projectile::calculateThrow(double accuracy)
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
+	int retValue = -1;
+
 	_trajectory.clear();
 	// finally do a line calculation and store this trajectory.
-	_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
+	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
 	Position endPoint = _trajectory.at(_trajectory.size() - 1);
 	endPoint.x /= 16;
@@ -332,11 +340,11 @@ bool Projectile::calculateThrow(double accuracy)
 	{
 		_trajectory.clear();
 		// finally do a line calculation and store this trajectory.
-		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
+		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
 	}
 
 
-	return true;
+	return retValue;
 }
 
 /**
@@ -398,9 +406,9 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 			effectiveAccuracy -= 0.05;
 
 		if (effectiveAccuracy > -0.15)
-			baseDeviation = -0.15 + 0.26 / (effectiveAccuracy + 0.25);
+			baseDeviation = -0.15 + 0.25 / (effectiveAccuracy + 0.25);
 		else
-			baseDeviation = 2.45;	// 2.45 radian - max deviation for worst case.
+			baseDeviation = 2.35;	// 2.35 radian - max deviation for worst case.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)

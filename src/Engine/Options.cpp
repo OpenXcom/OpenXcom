@@ -87,10 +87,10 @@ void createDefault()
 	setBool("mute", false);
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
-	setString("language", "en-US");
+	setString("language", "");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
-	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
+	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
 	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
 	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
@@ -133,6 +133,11 @@ void createDefault()
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
 	setBool("battleHairBleach", true);
+    setBool("keepAspectRatio", false);
+    setBool("cursorInBlackBandsInFullscreen", false);
+    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInBorderlessWindow", false);
+	setBool("newSeedOnLoad", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -142,7 +147,7 @@ void createDefault()
 	setInt("NewBattleDifficulty", 0);
 	setInt("NewBattleDarkness", 0);
 	setInt("NewBattleCraft", 0);
-	
+
 	// new battle loadout data
 	setInt("NewBattle_STR_AC_AP_AMMO", 0);
 	setInt("NewBattle_STR_AC_HE_AMMO", 0);

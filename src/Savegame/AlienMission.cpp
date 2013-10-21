@@ -204,11 +204,11 @@ void AlienMission::think(Game &engine, const Globe &globe)
 			if (!(*c)->getPact() && !(*c)->getNewPact() && ruleset.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
 			{
 				(*c)->setNewPact();
+				spawnAlienBase(ufo, globe, engine);
 				break;
 			}
 		}
 
-		spawnAlienBase(ufo, globe, engine);
 
 		// Infiltrations loop for ever.
 		_nextWave = 0;
@@ -649,12 +649,16 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
 {
 	SavedGame &game = *engine.getSavedGame();
+	if (game.getAlienBases()->size() >= 8)
+	{
+		return;
+	}
 	const Ruleset &ruleset = *engine.getRuleset();
 	// Once the last UFO is spawned, the aliens build their base.
 	// TODO: Find out what should actually be the location.
 	// For now we use the last non-exit zone of the last UFO for the location.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
-	unsigned zone = ufo ? ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2) : 0;
+	unsigned zone = ufo ? ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2) + 1 : RNG::generate(1, int (regionRules.getMissionZones().size()));
 	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
 	AlienBase *ab = new AlienBase();
 	ab->setAlienRace(_race);
