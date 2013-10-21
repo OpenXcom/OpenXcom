@@ -233,10 +233,7 @@ void Game::run()
 					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
-					if(_event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_F4 && _event.key.keysym.mod & KMOD_ALT)
-					{
-						return;
-					}
+					processQuitShortcut();
 					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
@@ -555,6 +552,21 @@ bool Game::isState(State *state) const
 bool Game::isQuitting() const
 {
 	return _quit;
+}
+
+/**
+ * Sets _quit state when most used close window shortcut if pressed.
+ */
+void Game::_processQuitShortcut()
+{
+#ifdef _WIN32
+	//Alt + F4
+	_quit = _quit || _event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_F4 && _event.key.keysym.mod & KMOD_ALT;
+#elif __APPLE__
+	//Command + Q
+	_quit = _quit || _event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_q && _event.key.keysym.mod & KMOD_LMETA;
+#endif
+	//TODO add other OSs shortcuts.
 }
 
 
