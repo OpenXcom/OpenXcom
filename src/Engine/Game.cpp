@@ -233,6 +233,10 @@ void Game::run()
 					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
+					if(_event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_F4 && _event.key.keysym.mod & KMOD_ALT)
+					{
+						return;
+					}
 					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
