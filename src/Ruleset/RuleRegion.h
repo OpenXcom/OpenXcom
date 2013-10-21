@@ -102,6 +102,7 @@ public:
 	const std::vector<double> &getLatMax() const { return _latMax; }
 	/// Gets the minimum latitude.
 	const std::vector<double> &getLatMin() const { return _latMin; }
+	const std::vector<MissionZone> &getMissionZones() const;
 };
 
 }

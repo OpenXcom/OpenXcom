@@ -202,9 +202,13 @@ void Game::run()
 		// Process events
 		while (SDL_PollEvent(&_event))
 		{
+			if (CrossPlatform::isQuitShortcut(_event))
+				_event.type = SDL_QUIT;
 			switch (_event.type)
 			{
-				case SDL_QUIT: _quit = true; break;
+				case SDL_QUIT:
+					_quit = true;
+					break;
 				case SDL_ACTIVEEVENT:
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
@@ -220,9 +224,12 @@ void Game::run()
 					}
 					break;
 				case SDL_VIDEORESIZE:
-					Options::setInt("displayWidth", _event.resize.w);
-					Options::setInt("displayHeight", _event.resize.h);
-					_screen->setResolution(_event.resize.w, _event.resize.h);
+					if (Options::getBool("allowResize"))
+					{
+						Options::setInt("displayWidth", _event.resize.w);
+						Options::setInt("displayHeight", _event.resize.h);
+						_screen->setResolution(_event.resize.w, _event.resize.h);
+					}
 					break;
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
@@ -295,6 +302,7 @@ void Game::run()
 		}
 	}
 	
+	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
 	{
 		SaveState *ss = new SaveState(this, OPT_MENU, false);
@@ -552,6 +560,5 @@ bool Game::isQuitting() const
 {
 	return _quit;
 }
-
 
 }

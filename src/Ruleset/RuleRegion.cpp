@@ -185,4 +185,8 @@ std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 	return std::make_pair(0.0, 0.0);
 }
 
+const std::vector<MissionZone> &RuleRegion::getMissionZones() const
+{
+	return _missionZones;
+}
 }

@@ -597,9 +597,17 @@ void SavedGame::setTime(GameTime time)
  */
 int SavedGame::getId(const std::string &name)
 {
-	int id = _ids[name];
-	_ids[name]++;
-	return id;
+	std::map<std::string, int>::iterator i = _ids.find(name);
+	if (i != _ids.end())
+	{
+		i->second++;
+		return i->second;
+	}
+	else
+	{
+		_ids[name] = 2;
+		return 1;
+	}
 }
 
 /**

@@ -400,8 +400,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	BattleUnit *targetUnit = tile->getUnit();
-	if (currentUnit->getFaction() == targetUnit->getFaction()) return true; // friendlies are always seen
+	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) return true; // friendlies are always seen
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 
@@ -438,10 +437,6 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 				unitSeen = false;
 				break;
 			}
-		}
-		if (t->getUnit() != targetUnit)
-		{
-			unitSeen = false;
 		}
 	}
 	return unitSeen;
@@ -2326,7 +2321,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 				if (liveAliens == 0 || liveSoldiers == 0)
 				{
 					_save->setSelectedUnit(0);
-					_save->getBattleState()->getBattleGame()->statePushBack(0);
+					_save->getBattleState()->getBattleGame()->requestEndTurn();
 				}
 			}
 		}

@@ -8607,6 +8607,7 @@ costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
 timePersonnel: 72
+initialFunding: 6000
 ufoTrajectories:
   - id: P0
     groundTimer: 3000
