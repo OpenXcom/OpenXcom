@@ -112,8 +112,8 @@ void ExplosionBState::init()
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
-			if (t->isDiscovered(0))
-				_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
+
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 		}
 		else
 		{
@@ -129,8 +129,7 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		if (hit && t->getVisible())
-			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
+		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 	}
 }
 
