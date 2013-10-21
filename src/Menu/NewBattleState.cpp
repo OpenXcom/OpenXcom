@@ -485,7 +485,7 @@ void NewBattleState::btnRandomClick(Action *)
 	Options::setInt("NewBattleCraft", _selCraft);
 
 	_btnMissionType->setText(tr(_missionTypes[_selMission]));
-	_btnTerrainType->setText(tr(_terrainTypes[_selTerrain]));
+	_btnTerrainType->setText(tr("STR_"+_terrainTypes[_selTerrain]));
 	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
 	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
