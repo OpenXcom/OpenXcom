@@ -55,8 +55,6 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
-	///Sets _quit state when most used close window shortcut if pressed.
-	void _processQuitShortcut();
 
 #ifdef __MORPHOS__		
 	Uint32 waittime;// = 1000.0f/FPS;
@@ -70,8 +68,6 @@ public:
 	~Game();
 	/// Starts the game's state machine.
 	void run();
-
-
 	/// Quits the game.
 	void quit();
 	/// Sets the game's audio volume.

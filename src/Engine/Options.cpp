@@ -381,12 +381,9 @@ bool init(int argc, char** args)
 	s += "openxcom.log";
 	Logger::logFile() = s;
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
-	if(!file)
+	if (!file)
 	{
-		std::stringstream error;
-		error << "Error: invalid User Folder " << _userFolder << std::endl;
-		std::cout << error.str();
-		return false;
+		throw Exception(s + " not found");
 	}
 	fflush(file);
 	fclose(file);

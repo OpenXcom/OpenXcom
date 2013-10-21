@@ -57,7 +57,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtRating = new Text(180, 8, 125, 24);
 	_txtChange = new Text(300, 8, 16, 32);
 	_txtDesc = new Text(280, 140, 16, 40);
-	_txtFailure = new Text(270, 180, 25, 34);
+	_txtFailure = new Text(290, 128, 15, 34);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);

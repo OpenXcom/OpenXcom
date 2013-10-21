@@ -691,5 +691,22 @@ std::string getLocale()
 #endif
 }
 
+/**
+ * Checks if the system's default quit shortcut was pressed.
+ * @param ev SDL event.
+ * @return Is quitting necessary?
+ */
+bool CrossPlatform::isQuitShortcut(const SDL_Event &ev)
+{
+#ifdef _WIN32
+	// Alt + F4
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_F4 && ev.key.keysym.mod & KMOD_ALT);
+#elif __APPLE__
+	// Command + Q
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
+#endif
+	//TODO add other OSs shortcuts.
+}
+
 }
 }
