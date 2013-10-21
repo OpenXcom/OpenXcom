@@ -224,9 +224,12 @@ void Game::run()
 					}
 					break;
 				case SDL_VIDEORESIZE:
-					Options::setInt("displayWidth", _event.resize.w);
-					Options::setInt("displayHeight", _event.resize.h);
-					_screen->setResolution(_event.resize.w, _event.resize.h);
+					if (Options::getBool("allowResize"))
+					{
+						Options::setInt("displayWidth", _event.resize.w);
+						Options::setInt("displayHeight", _event.resize.h);
+						_screen->setResolution(_event.resize.w, _event.resize.h);
+					}
 					break;
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:

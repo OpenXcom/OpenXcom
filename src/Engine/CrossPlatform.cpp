@@ -696,7 +696,7 @@ std::string getLocale()
  * @param ev SDL event.
  * @return Is quitting necessary?
  */
-bool CrossPlatform::isQuitShortcut(const SDL_Event &ev)
+bool isQuitShortcut(const SDL_Event &ev)
 {
 #ifdef _WIN32
 	// Alt + F4
