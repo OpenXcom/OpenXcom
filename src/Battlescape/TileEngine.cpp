@@ -62,8 +62,8 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
  */
 TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData, unsigned int maxViewDistance, unsigned int maxDarknessToSeeUnits, unsigned int maxViewDistanceAtDark) :
 	_save(save), _voxelData(voxelData), _personalLighting(true),
-	MAX_VIEW_DISTANCE(maxViewDistance), MAX_VIEW_DISTANCE_AT_DARK(maxViewDistanceAtDark),
-	MAX_VOXEL_VIEW_DISTANCE(maxViewDistance * 16), MAX_DARKNESS_TO_SEE_UNITS(maxDarknessToSeeUnits)
+	_maxViewDistance(maxViewDistance), _maxViewDistanceAtDark(maxViewDistanceAtDark),
+	_maxVoxelViewDistance(maxViewDistance * 16), _maxDarknessToSeeUnits(maxDarknessToSeeUnits)
 {
 }
 
