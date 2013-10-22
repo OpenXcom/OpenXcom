@@ -106,7 +106,7 @@ void BaseNameState::nameBase()
 	{
 		_game->popState();
 	}
-	if (!_first || Options::getBool("customInitialBase") )
+	if (!_first || Options::getBool("customInitialBase"))
 	{
 		_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
 	}
