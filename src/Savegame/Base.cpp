@@ -386,7 +386,7 @@ bool Base::insideRadarRange(Target *target) const
 	double range = 0;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->getRules()->getRadarRange() > 0 && (*i)->getBuildTime() == 0)
 		{
 			range = std::max(range, (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180));
 		}
@@ -941,7 +941,7 @@ bool Base::getHyperDetection() const
 {
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isHyperwave())
+		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
 		{
 			return true;
 		}		

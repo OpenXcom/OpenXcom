@@ -1219,36 +1219,46 @@ void GeoscapeState::time30Minutes()
 			if (!(*u)->getDetected())
 			{
 				bool detected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin();
+				for ( ; b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 				{
-					if ((*b)->detect(*u))
+					detected = (*b)->detect(*u);
+					if (detected && (*b)->getHyperDetection())
 					{
-						detected = true;
-						if((*b)->getHyperDetection())
-						{
-							(*u)->setHyperDetected(true);
-						}
+						(*u)->setHyperDetected(true);
 					}
 					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 					{
-						if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
-							continue;
-						if ((*c)->detect(*u))
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
 						{
 							detected = true;
+							break;
 						}
 					}
 				}
 				if (detected)
 				{
 					(*u)->setDetected(true);
+					// If UFO detected by conventional radar, check other bases, maybe they has hyper-wave decoder.
+					if (!(*u)->getHyperDetected())
+					{
+						for ( ; b != _game->getSavedGame()->getBases()->end(); ++b)
+						{
+							if ((*b)->getHyperDetection() && (*b)->insideRadarRange(*u))
+							{
+								(*u)->setHyperDetected(true);
+								break;
+							}
+						}
+					}
 					popup(new UfoDetectedState(_game, (*u), this, true, (*u)->getHyperDetected()));
 				}
 			}
 			else
 			{
 				bool detected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin();
+				for ( ; b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 				{
 					bool insideRange = (*b)->insideRadarRange(*u);
 					detected = detected || insideRange;
@@ -1258,7 +1268,23 @@ void GeoscapeState::time30Minutes()
 					}
 					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 					{
-						detected = detected || (*c)->detect(*u);
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
+						{
+							detected = true;
+							break;
+						}
+					}
+				}
+				// If UFO detected by conventional radar, check other bases, maybe they has hyper-wave decoder.
+				if (detected && !(*u)->getHyperDetected())
+				{
+					for ( ; b != _game->getSavedGame()->getBases()->end(); ++b)
+					{
+						if ((*b)->getHyperDetection() && (*b)->insideRadarRange(*u))
+						{
+							(*u)->setHyperDetected(true);
+							break;
+						}
 					}
 				}
 				if (!detected)
