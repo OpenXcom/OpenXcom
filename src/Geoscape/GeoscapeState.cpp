@@ -1251,7 +1251,7 @@ void GeoscapeState::time30Minutes()
 				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 				{
 					detected = detected || (*b)->insideRadarRange(*u);
-					if((*b)->getHyperDetection())
+					if ((*b)->getHyperDetection() && (*b)->insideRadarRange(*u))
 					{
 						(*u)->setHyperDetected(true);
 					}
