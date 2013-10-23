@@ -62,8 +62,9 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	struct lconv * lc = localeconv();
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
+	bool negative = (value < 0);
 	std::wstringstream ss;
-	ss << value;
+	ss << (negative? -value : value);
 	std::wstring s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
@@ -73,7 +74,11 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	}
 	if (!currency.empty())
 	{
-		s.insert((value < 0) ? 1 : 0, currency);
+		s.insert(0, currency);
+	}
+	if (negative)
+	{
+		s.insert(0, L"-");
 	}
 	return s;
 }
