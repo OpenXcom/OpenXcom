@@ -60,7 +60,7 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
  * @param save Pointer to SavedBattleGame object.
  * @param voxelData List of voxel data.
  */
-TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData, unsigned int maxViewDistance, unsigned int maxDarknessToSeeUnits, unsigned int maxViewDistanceAtDark) :
+TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData, int maxViewDistance, int maxDarknessToSeeUnits, int maxViewDistanceAtDark) :
 	_save(save), _voxelData(voxelData), _personalLighting(true),
 	_maxViewDistance(maxViewDistance), _maxViewDistanceAtDark(maxViewDistanceAtDark),
 	_maxVoxelViewDistance(maxViewDistance * 16), _maxDarknessToSeeUnits(maxDarknessToSeeUnits)
@@ -423,9 +423,9 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		// this is traced in voxel space, with smoke affecting visibility every step of the way
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
-		unsigned int visibleDistance = _trajectory.size();
-		unsigned int densityOfSmoke = 0;
-		for (unsigned int i = 0; i < visibleDistance; i++)
+		int visibleDistance = _trajectory.size();
+		int densityOfSmoke = 0;
+		for (int i = 0; i < visibleDistance; i++)
 		{
 			Tile *t = _save->getTile(Position(_trajectory.at(i).x/16, _trajectory.at(i).y/16, _trajectory.at(i).z/24));
 			if (t->getFire() == 0)
@@ -434,7 +434,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 			}
 		}
 		// even if MaxViewDistance will be increased via ruleset, smoke will keep effect
-		unitSeen = visibleDistance + densityOfSmoke * getMaxViewDistance()/(3 * 20) <= getMaxVoxelViewDistance();
+		unitSeen = visibleDistance <= getMaxVoxelViewDistance() - densityOfSmoke * getMaxViewDistance()/(3 * 20);
 	}
 	return unitSeen;
 }
