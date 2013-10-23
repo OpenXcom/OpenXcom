@@ -2104,7 +2104,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
 	}
 
-	for (unsigned i = atGameStart? DIFF_EXPERIENCED : DIFF_BEGINNER; i <= _game->getSavedGame()->getDifficulty(); ++i)
+	for (int i = atGameStart? DIFF_EXPERIENCED : DIFF_BEGINNER; i <= _game->getSavedGame()->getDifficulty(); ++i)
 	{
 		//
 		// One randomly selected mission.
