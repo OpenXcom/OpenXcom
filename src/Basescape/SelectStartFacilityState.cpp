@@ -30,6 +30,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+#include "../Engine/Options.h"
 #include "PlaceStartFacilityState.h"
 #include "PlaceLiftState.h"
 
