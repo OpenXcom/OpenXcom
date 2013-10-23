@@ -1203,8 +1203,8 @@ craftWeapons:
     reloadCautious: 12
     reloadStandard: 12
     reloadAggressive: 12
-    ammoMax: 99
-    rearmRate: 99
+    ammoMax: 100
+    rearmRate: 100
     launcher: STR_LASER_CANNON
     projectileType: 4
   - type: STR_PLASMA_BEAM_UC

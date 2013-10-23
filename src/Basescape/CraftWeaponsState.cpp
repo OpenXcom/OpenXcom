@@ -114,7 +114,14 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 			_weapons.push_back(w);
 			std::wstringstream ss, ss2;
 			ss << _base->getItems()->getItem(w->getLauncherItem());
-			ss2 << _base->getItems()->getItem(w->getClipItem());
+			if (w->getClipItem() != "")
+			{
+				ss2 << _base->getItems()->getItem(w->getClipItem());
+			}
+			else
+			{
+				ss2 << tr("STR_NOT_AVAILABLE");
+			}
 			_lstWeapons->addRow(3, tr(w->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}

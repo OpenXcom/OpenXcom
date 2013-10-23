@@ -1250,8 +1250,9 @@ void GeoscapeState::time30Minutes()
 				bool detected = false;
 				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 				{
-					detected = detected || (*b)->insideRadarRange(*u);
-					if ((*b)->getHyperDetection() && (*b)->insideRadarRange(*u))
+					bool insideRange = (*b)->insideRadarRange(*u);
+					detected = detected || insideRange;
+					if ((*b)->getHyperDetection() && insideRange)
 					{
 						(*u)->setHyperDetected(true);
 					}
@@ -1263,7 +1264,7 @@ void GeoscapeState::time30Minutes()
 				if (!detected)
 				{
 					(*u)->setDetected(false);
-					(*u)->setHyperDetected(false); // i'm not 100% sure this is correct, need verification.
+					(*u)->setHyperDetected(false);
 					if (!(*u)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));

@@ -29,7 +29,9 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
+#include "../Savegame/Country.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/Options.h"
 
@@ -44,7 +46,6 @@ namespace OpenXcom
  */
 AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state) : State(game), _state(state), _base(base)
 {
-	
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(50, 12, 135, 180);
@@ -72,19 +73,39 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
-	bool set(false);
-	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+
+	// Check location of base
+	std::wstring region, country;
+	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
-		if ((*k)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
+		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude())) 
 		{
-			_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(tr((*k)->getRules()->getType())));
-			set = true;
+			country = tr((*i)->getRules()->getType());
+			break;
 		}
 	}
-	if(!set)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
-		_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(tr("STR_UNKNOWN")));
+		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
+		{
+			region = tr((*i)->getRules()->getType());
+			break;
+		}
 	}
+	std::wstring location;
+	if (!country.empty())
+	{
+		location = tr("STR_COUNTRIES_COMMA").arg(country).arg(region);
+	}
+	else if (!region.empty())
+	{
+		location = region;
+	}
+	else
+	{
+		location = tr("STR_UNKNOWN");
+	}
+	_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(location));
 }
 
 /**
