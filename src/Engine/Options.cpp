@@ -94,7 +94,7 @@ void createDefault()
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
 	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
 	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
-	setInt("battleFireSpeed", 20); // 40, 30, 20, 10, 5, 1
+	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling

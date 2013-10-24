@@ -52,9 +52,19 @@ namespace OpenXcom
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
 {
-	if (_action.weapon && _action.type == BA_THROW)
+	// this is the number of pixels the sprite will move between frames
+	_speed = Options::getInt("battleFireSpeed");
+
+	if (_action.weapon)
 	{
-		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		if (_action.type == BA_THROW)
+		{
+			_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		}
+		else
+		{
+			_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+		}
 	}
 }
 
@@ -432,22 +442,16 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
  */
 bool Projectile::move()
 {
-	_position++;
-	if (_position == _trajectory.size())
+	for (int i = 0; i < _speed; ++i)
 	{
-		_position--;
-		return false;
+		_position++;
+		if (_position == _trajectory.size())
+		{
+			_position--;
+			return false;
+		}
 	}
-	_position++;
-	if (_position == _trajectory.size())
-	{
-		_position--;
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 /**
