@@ -634,8 +634,8 @@ openxcom_SOURCES = \
 	src/Savegame/SerializationHelper.cpp \
 	src/Savegame/Soldier.cpp \
 	src/Savegame/Soldier.h \
-	src/Savegame/SoldierMemorial.cpp \
-	src/Savegame/SoldierMemorial.h \
+	src/Savegame/SoldierDeath.cpp \
+	src/Savegame/SoldierDeath.h \
 	src/Savegame/Target.cpp \
 	src/Savegame/Target.h \
 	src/Savegame/TerrorSite.cpp \

@@ -132,8 +132,6 @@ public:
 	void setTime(GameTime time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
-	/// Initializes te IDs list.
-	void initIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
