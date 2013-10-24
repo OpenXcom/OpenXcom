@@ -67,7 +67,7 @@ language_DATA = \
 	bin/data/Language/FontGeoBig.png \
 	bin/data/Language/FontGeoSmall.png \
 	bin/data/Language/en-GB.yml \
-	bin/data/Language/en-US.yml \
+	bin/data/Language/en-US.yml
 
 namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
