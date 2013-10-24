@@ -488,6 +488,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					for (std::vector<std::string>::iterator k = contents.begin();
 						k != contents.end(); ++k)
 					{
+						if (!isImageFile((*k).substr((*k).length() -4, (*k).length())))
+							continue;
 						try
 						{
 							s.str("");
@@ -851,4 +853,37 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 }
 
+bool XcomResourcePack::isImageFile(std::string extension)
+{
+	std::transform(extension.begin(), extension.end(), extension.begin(), toupper);
+
+	if (
+		// arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
+		/*
+		extension == ".ICO" ||
+		extension == ".CUR" ||
+		extension == ".PNM" ||
+		extension == ".PPM" ||
+		extension == ".PGM" ||
+		extension == ".PBM" ||
+		extension == ".XPM" ||
+		extension == "ILBM" ||
+		// excluding jpeg to avoid inevitable issues due to compression
+		extension == ".JPG" ||
+		extension == "JPEG" ||
+		*/
+		extension == ".BMP" ||
+		extension == ".LBM" ||
+		extension == ".IFF" ||
+		extension == ".PCX" ||
+		extension == ".GIF" ||
+		extension == ".PNG" ||
+		extension == ".TGA" ||
+		extension == ".TIF" ||
+		extension == "TIFF")
+	{
+		return true;
+	}
+	return false;
+}
 }

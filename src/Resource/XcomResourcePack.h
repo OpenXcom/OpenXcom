@@ -38,6 +38,7 @@ public:
 	~XcomResourcePack();
 	/// Loads battlescape specific resources
 	void loadBattlescapeResources();
+	bool isImageFile(std::string extension);
 };
 
 }
