@@ -247,7 +247,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
 	_globeZoom = doc["globeZoom"].as<int>(_globeZoom);
-	initIds(doc["ids"].as< std::map<std::string, int> >(_ids));
+	_ids = doc["ids"].as< std::map<std::string, int> >(_ids);
 
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
@@ -600,33 +600,12 @@ int SavedGame::getId(const std::string &name)
 	std::map<std::string, int>::iterator i = _ids.find(name);
 	if (i != _ids.end())
 	{
-		i->second++;
-		return i->second;
+		return ++(i->second);
 	}
 	else
 	{
-		_ids[name] = 2;
+		_ids[name] = 1;
 		return 1;
-	}
-}
-
-/**
- * Initializes the list of object IDs.
- * @param ids ID number list.
- */
-void SavedGame::initIds(const std::map<std::string, int> &ids)
-{
-	_ids["STR_UFO"] = 1;
-	_ids["STR_LANDING_SITE"] = 1;
-	_ids["STR_CRASH_SITE"] = 1;
-	_ids["STR_WAYPOINT"] = 1;
-	_ids["STR_TERROR_SITE"] = 1;
-	_ids["STR_ALIEN_BASE"] = 1;
-	_ids["STR_SOLDIER"] = 1;
-	_ids["ALIEN_MISSIONS"] = 1;
-	for (std::map<std::string, int>::const_iterator i = ids.begin(); i != ids.end(); ++i)
-	{
-		_ids[i->first] = i->second;
 	}
 }
 

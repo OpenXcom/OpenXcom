@@ -629,14 +629,6 @@ SavedGame *Ruleset::newSave() const
 		save->getRegions()->push_back(new Region(getRegion(*i)));
 	}
 
-	// Set up IDs
-	std::map<std::string, int> ids;
-	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
-	{
-		ids[*i] = 1;
-	}
-	save->initIds(ids);
-
 	// Set up starting base
 	Base *base = new Base(this);
 	base->load(_startingBase, save, true);
