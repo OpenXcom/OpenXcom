@@ -392,7 +392,7 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 				effectiveAccuracy -= 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 		}
 		// If targetUnit not visible by shooter, then chance to hit them reduced on 5%.
-		if (shooterUnit)
+		if (shooterUnit && targetUnit)
 		{
 			std::vector<BattleUnit*>::const_iterator noUnit = shooterUnit->getVisibleUnits()->end();
 			std::vector<BattleUnit*>::const_iterator u = shooterUnit->getVisibleUnits()->begin();
@@ -417,9 +417,9 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 			effectiveAccuracy -= 0.05;
 
 		if (effectiveAccuracy > -0.15)
-			baseDeviation = -0.15 + 0.25 / (effectiveAccuracy + 0.25);
+			baseDeviation = -0.15 + 0.26 / (effectiveAccuracy + 0.25);
 		else
-			baseDeviation = 2.35;	// 2.35 radian - max deviation for worst case.
+			baseDeviation = 2.45;	// 2.45 radian - max deviation for worst case.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
