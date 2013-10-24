@@ -53,6 +53,11 @@ namespace {
  */
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
 {
+	// the last set of mission zones are WAY outside the region.
+	if (zone == region.getMissionZones().size())
+	{
+		zone--;
+	}
 	std::pair<double, double> pos;
 	do
 	{
