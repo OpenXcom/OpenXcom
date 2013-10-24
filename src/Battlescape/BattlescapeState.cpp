@@ -463,11 +463,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
-	_animTimer->start();
 
 	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
-	_gameTimer->start();
 
 	_battleGame = new BattlescapeGame(_save, this);
 
@@ -493,6 +491,8 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	_animTimer->start();
+	_gameTimer->start();
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
