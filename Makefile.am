@@ -66,23 +66,8 @@ language_DATA = \
 	bin/data/Language/FontSmall.png \
 	bin/data/Language/FontGeoBig.png \
 	bin/data/Language/FontGeoSmall.png \
-	bin/data/Language/bg-BG.yml \
-	bin/data/Language/cs-CZ.yml \
-	bin/data/Language/da.yml \
-	bin/data/Language/de.yml \
 	bin/data/Language/en-GB.yml \
 	bin/data/Language/en-US.yml \
-	bin/data/Language/es.yml \
-	bin/data/Language/es-419.yml \
-	bin/data/Language/fr.yml \
-	bin/data/Language/hu-HU.yml \
-	bin/data/Language/it.yml \
-	bin/data/Language/nl.yml \
-	bin/data/Language/pl-PL.yml \
-	bin/data/Language/pt-PT.yml \
-	bin/data/Language/ro.yml \
-	bin/data/Language/ru.yml \
-	bin/data/Language/uk.yml
 
 namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
