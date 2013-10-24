@@ -826,6 +826,10 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 	{
 			// not dead/unconscious
 		if (!(*i)->isOut() &&
+			// not dying
+			(*i)->getHealth() != 0 &&
+			// not about to pass out
+			(*i)->getStunlevel() < (*i)->getHealth() &&
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
