@@ -187,9 +187,28 @@ void SaveState::quickSave(const std::string &filename)
 {
 	if (_showMsg) updateStatus("STR_SAVING_GAME");
 
+	std::string fullPath = Options::getUserFolder() + filename + ".sav";
+	std::string bakPath = fullPath + ".bak";
+
 	try
 	{
+		if (CrossPlatform::fileExists(bakPath))
+		{
+			if (!CrossPlatform::deleteFile(bakPath))
+			{
+				throw Exception("Failed to delete " + filename + ".sav.bak");
+			}
+		}
+		if (CrossPlatform::fileExists(fullPath))
+		{
+			if (rename(fullPath.c_str(), bakPath.c_str()))
+			{
+				throw Exception("Failed to rename " + filename + ".sav");
+			}
+		}
+
 		_game->getSavedGame()->save(filename);
+		CrossPlatform::deleteFile(bakPath);
 	}
 	catch (Exception &e)
 	{
