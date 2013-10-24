@@ -46,6 +46,8 @@
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDeath.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
@@ -552,7 +554,11 @@ void DebriefingState::prepareDebriefing()
 					{
 						if ((*i) == soldier)
 						{
-							delete (*i);
+							(*j)->updateGeoscapeStats(*i);
+							SoldierDeath *death = new SoldierDeath();
+							death->setTime(new GameTime(*save->getTime()));
+							(*i)->die(death);
+							save->getDeadSoldiers()->push_back(*i);
 							base->getSoldiers()->erase(i);
 							break;
 						}
@@ -575,9 +581,9 @@ void DebriefingState::prepareDebriefing()
 		{ // so this unit is not dead...
 			if (oldFaction == FACTION_PLAYER)
 			{
-				(*j)->postMissionProcedures(save);
 				if (((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted)
 				{ // so game is not aborted or aborted and unit is on exit area
+					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
 					if (soldier != 0)
 						recoverItems((*j)->getInventory(), base);		
@@ -599,7 +605,11 @@ void DebriefingState::prepareDebriefing()
 						{
 							if ((*i) == soldier)
 							{
-								delete (*i);
+								(*j)->updateGeoscapeStats(*i);
+								SoldierDeath *death = new SoldierDeath();
+								death->setTime(new GameTime(*save->getTime()));
+								(*i)->die(death);
+								save->getDeadSoldiers()->push_back(*i);
 								base->getSoldiers()->erase(i);
 								break;
 							}

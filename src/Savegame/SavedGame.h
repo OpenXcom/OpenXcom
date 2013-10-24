@@ -45,6 +45,7 @@ class AlienBase;
 class AlienStrategy;
 class AlienMission;
 class Target;
+class Soldier;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -83,6 +84,7 @@ private:
 	std::string _graphCountryToggles;
 	std::string _graphFinanceToggles;
 	std::vector<const RuleResearch *> _poppedResearch;
+	std::vector<Soldier*> _deadSoldiers;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
@@ -238,6 +240,8 @@ public:
 	bool wasResearchPopped(const RuleResearch* research);
 	/// remove a research from the "popped up" array
 	void removePoppedResearch(const RuleResearch* research);
+	/// Gets the list of dead soldiers.
+	std::vector<Soldier*> *getDeadSoldiers();
 
 };
 

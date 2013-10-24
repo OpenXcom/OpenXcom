@@ -262,7 +262,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_txtAmmo2 = new Text(16, 9, _x + 64, _y + 70);
 	_txtDistance = new Text(40, 9, _x + 116, _y + 72);
 	_txtStatus = new Text(150, 9, _x + 4, _y + 85);
-	_btnMinimizedIcon = new ImageButton(32, 20, _minimizedIconX, _minimizedIconY);
+	_btnMinimizedIcon = new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterceptionNumber = new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
 	_animTimer = new Timer(30);

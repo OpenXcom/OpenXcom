@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SOLDIERSSTATE_H
-#define OPENXCOM_SOLDIERSSTATE_H
+#ifndef OPENXCOM_SOLDIERMEMORIALSTATE_H
+#define OPENXCOM_SOLDIERMEMORIALSTATE_H
 
 #include "../Engine/State.h"
 
@@ -31,30 +31,23 @@ class TextList;
 class Base;
 
 /**
- * Soldiers screen that lets the player
- * manage all the soldiers in a base.
+ * Screen that shows all the soldiers
+ * that have died throughout the game.
  */
-class SoldiersState : public State
+class SoldierMemorialState : public State
 {
 private:
-	TextButton *_btnOk, *_btnPsiTraining, *_btnMemorial;
+	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtRecruited, *_txtLost;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtDate, *_txtRecruited, *_txtLost;
 	TextList *_lstSoldiers;
-	Base *_base;
 public:
 	/// Creates the Soldiers state.
-	SoldiersState(Game *game, Base *base);
+	SoldierMemorialState(Game *game);
 	/// Cleans up the Soldiers state.
-	~SoldiersState();
-	/// Updates the soldier names.
-	void init();
+	~SoldierMemorialState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Psi Training button.
-	void btnPsiTrainingClick(Action *action);
-	/// Handler for clicking the Memorial button.
-	void btnMemorialClick(Action *action);
 	/// Handler for clicking the Soldiers list.
 	void lstSoldiersClick(Action *action);
 };

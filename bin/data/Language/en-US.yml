@@ -1204,4 +1204,6 @@ en-US:
   STR_MAXFRAMESKIP_DESC: "This is the maximum number of frames that may be skipped by the draw code during gameplay"
   STR_RESET: "Reset"
   STR_MEMORIAL: "Memorial"
-  STR_TIME_OF_DEATH: "Time of Death"
+  STR_DATE_OF_DEATH: "DATE OF DEATH"
+  STR_SOLDIERS_RECRUITED: "SOLDIERS RECRUITED>{ALT}{0}"
+  STR_SOLDIERS_LOST: "SOLDIERS LOST>{ALT}{0}"

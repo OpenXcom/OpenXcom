@@ -139,6 +139,10 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+	for (std::vector<Soldier*>::iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 
@@ -161,9 +165,8 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 			YAML::Node doc = YAML::LoadFile(fullname);
 			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 			time.load(doc["time"]);
-			std::stringstream saveTime;
-			std::wstringstream saveDay, saveMonth, saveYear;
-			saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
+			std::wstringstream saveTime, saveDay, saveMonth, saveYear;
+			saveTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
 			saveDay << time.getDayString(lang);
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
@@ -178,7 +181,7 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 				std::string s = CrossPlatform::noExt(file);
 				wstr = Language::fsToWstr(s);
 			}
-			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+			list->addRow(5, wstr.c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 		}
 		catch (Exception &e)
 		{
@@ -327,6 +330,13 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
+	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
+	{
+		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
+		s->load(*i, rule);
+		_deadSoldiers.push_back(s);
+	}
+
 	if (const YAML::Node &battle = doc["battleGame"])
 	{
 		_battleGame = new SavedBattleGame();
@@ -424,6 +434,10 @@ void SavedGame::save(const std::string &filename) const
 		node["poppedResearch"].push_back((*i)->getName());
 	}
 	node["alienStrategy"] = _alienStrategy->save();
+	for (std::vector<Soldier*>::const_iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	{
+		node["deadSoldiers"].push_back((*i)->save());
+	}
 	if (_battleGame != 0)
 	{
 		node["battleGame"] = _battleGame->save();
@@ -600,13 +614,12 @@ int SavedGame::getId(const std::string &name)
 	std::map<std::string, int>::iterator i = _ids.find(name);
 	if (i != _ids.end())
 	{
-		i->second++;
-		return i->second;
+		return i->second++;
 	}
 	else
 	{
-		_ids[name] = 2;
-		return 1;
+		_ids[name] = 1;
+		return _ids[name]++;
 	}
 }
 
@@ -1475,6 +1488,15 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 	{
 		_poppedResearch.erase(r);
 	}
+}
+
+/**
+ * Returns the list of dead soldiers.
+ * @return Pointer to soldier list.
+ */
+std::vector<Soldier*> *SavedGame::getDeadSoldiers()
+{
+	return &_deadSoldiers;
 }
 
 }

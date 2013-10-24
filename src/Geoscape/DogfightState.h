@@ -50,7 +50,7 @@ private:
 	InteractiveSurface *_btnMinimize, *_preview, *_weapon1, *_weapon2;
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
 	ImageButton *_mode;
-	ImageButton *_btnMinimizedIcon;
+	InteractiveSurface *_btnMinimizedIcon;
 	Text *_txtAmmo1, *_txtAmmo2, *_txtDistance, *_txtStatus, *_txtInterceptionNumber;
 	Globe *_globe;
 	Craft *_craft;

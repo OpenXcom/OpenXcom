@@ -71,6 +71,7 @@ language_DATA = \
 	bin/data/Language/da.yml \
 	bin/data/Language/de.yml \
 	bin/data/Language/en-GB.yml \
+	bin/data/Language/en-US.yml \
 	bin/data/Language/es.yml \
 	bin/data/Language/es-419.yml \
 	bin/data/Language/fr.yml \
@@ -104,7 +105,8 @@ name_DATA = \
 	bin/data/SoldierName/Romanian.nam \
 	bin/data/SoldierName/Russian.nam \
 	bin/data/SoldierName/Spanish.nam \
-	bin/data/SoldierName/Swedish.nam
+	bin/data/SoldierName/Swedish.nam \
+	bin/data/SoldierName/Turkish.nam
 	
 shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
@@ -194,6 +196,8 @@ openxcom_SOURCES = \
 	src/Basescape/SoldierArmorState.h \
 	src/Basescape/SoldierInfoState.cpp \
 	src/Basescape/SoldierInfoState.h \
+	src/Basescape/SoldierMemorialState.cpp \
+	src/Basescape/SoldierMemorialState.h \
 	src/Basescape/SoldiersState.cpp \
 	src/Basescape/SoldiersState.h \
 	src/Basescape/StoresState.cpp \
@@ -630,6 +634,8 @@ openxcom_SOURCES = \
 	src/Savegame/SerializationHelper.cpp \
 	src/Savegame/Soldier.cpp \
 	src/Savegame/Soldier.h \
+	src/Savegame/SoldierMemorial.cpp \
+	src/Savegame/SoldierMemorial.h \
 	src/Savegame/Target.cpp \
 	src/Savegame/Target.h \
 	src/Savegame/TerrorSite.cpp \
