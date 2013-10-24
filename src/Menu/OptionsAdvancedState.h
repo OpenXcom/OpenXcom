@@ -55,7 +55,7 @@ public:
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking an item on the menu.
-	void lstOptionsClick(Action *action);
+	void lstOptionsPress(Action *action);
 	/// Handler for moving the mouse over a menu item.
 	void lstOptionsMouseOver(Action *action);
 	/// Handler for moving the mouse outside the menu borders.

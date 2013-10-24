@@ -104,6 +104,7 @@ static char const *getHome()
 std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
+	char const *home = getHome();
 	
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:data/");
@@ -138,7 +139,6 @@ std::vector<std::string> findDataFolders()
 #ifdef __HAIKU__
 	list.push_back("/boot/apps/OpenXcom/data/");
 #endif
-	char const *home = getHome();
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
@@ -688,6 +688,25 @@ std::string getLocale()
 	std::stringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
+#endif
+}
+
+/**
+ * Checks if the system's default quit shortcut was pressed.
+ * @param ev SDL event.
+ * @return Is quitting necessary?
+ */
+bool isQuitShortcut(const SDL_Event &ev)
+{
+#ifdef _WIN32
+	// Alt + F4
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_F4 && ev.key.keysym.mod & KMOD_ALT);
+#elif __APPLE__
+	// Command + Q
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
+#else
+	//TODO add other OSs shortcuts.
+	return false;
 #endif
 }
 

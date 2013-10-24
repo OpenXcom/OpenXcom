@@ -102,7 +102,7 @@ void ExplosionBState::init()
 				int Y = RNG::generate(-_power/2,_power/2);
 				Position p = _center;
 				p.x += X; p.y += Y;
-				Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
+				Explosion *explosion = new Explosion(p, RNG::generate(-3,6), true);
 				// add the explosion on the map
 				_parent->getMap()->getExplosions()->insert(explosion);
 			}
@@ -113,7 +113,7 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
 		else
 		{
@@ -129,7 +129,7 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
+		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 	}
 }
 

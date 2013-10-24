@@ -106,12 +106,12 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 	}
 	switch (Options::getInt("battleFireSpeed"))
 	{
-	case 40: _fireSpeed = _btnFireSpeed1; break;
-	case 30: _fireSpeed = _btnFireSpeed2; break;
-	case 20: _fireSpeed = _btnFireSpeed3; break;
-	case 10: _fireSpeed = _btnFireSpeed4; break;
-	case 5: _fireSpeed = _btnFireSpeed5; break;
-	case 1: _fireSpeed = _btnFireSpeed6; break;
+	case 2: _fireSpeed = _btnFireSpeed1; break;
+	case 4: _fireSpeed = _btnFireSpeed2; break;
+	case 6: _fireSpeed = _btnFireSpeed3; break;
+	case 8: _fireSpeed = _btnFireSpeed4; break;
+	case 10: _fireSpeed = _btnFireSpeed5; break;
+	case 12: _fireSpeed = _btnFireSpeed6; break;
 	default: _fireSpeed = 0; break;
 	}
 	switch (Options::getInt("battleXcomSpeed"))
@@ -363,17 +363,17 @@ void OptionsBattlescapeState::btnOkClick(Action *)
 		Options::setInt("battleScrollType", SCROLL_DRAG);
 
 	if (_fireSpeed == _btnFireSpeed1)
-		Options::setInt("battleFireSpeed", 40);
+		Options::setInt("battleFireSpeed", 2);
 	else if (_fireSpeed == _btnFireSpeed2)
-		Options::setInt("battleFireSpeed", 30);
+		Options::setInt("battleFireSpeed", 4);
 	else if (_fireSpeed == _btnFireSpeed3)
-		Options::setInt("battleFireSpeed", 20);
+		Options::setInt("battleFireSpeed", 6);
 	else if (_fireSpeed == _btnFireSpeed4)
-		Options::setInt("battleFireSpeed", 10);
+		Options::setInt("battleFireSpeed", 8);
 	else if (_fireSpeed == _btnFireSpeed5)
-		Options::setInt("battleFireSpeed", 5);
+		Options::setInt("battleFireSpeed", 10);
 	else if (_fireSpeed == _btnFireSpeed6)
-		Options::setInt("battleFireSpeed", 1);
+		Options::setInt("battleFireSpeed", 12);
 
 	if (_xcomSpeed == _btnXcomSpeed1)
 		Options::setInt("battleXcomSpeed", 40);

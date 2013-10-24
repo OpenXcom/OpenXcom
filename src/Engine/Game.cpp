@@ -202,9 +202,13 @@ void Game::run()
 		// Process events
 		while (SDL_PollEvent(&_event))
 		{
+			if (CrossPlatform::isQuitShortcut(_event))
+				_event.type = SDL_QUIT;
 			switch (_event.type)
 			{
-				case SDL_QUIT: _quit = true; break;
+				case SDL_QUIT:
+					_quit = true;
+					break;
 				case SDL_ACTIVEEVENT:
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
@@ -220,9 +224,12 @@ void Game::run()
 					}
 					break;
 				case SDL_VIDEORESIZE:
-					Options::setInt("displayWidth", _event.resize.w);
-					Options::setInt("displayHeight", _event.resize.h);
-					_screen->setResolution(_event.resize.w, _event.resize.h);
+					if (Options::getBool("allowResize"))
+					{
+						Options::setInt("displayWidth", _event.resize.w);
+						Options::setInt("displayHeight", _event.resize.h);
+						_screen->setResolution(_event.resize.w, _event.resize.h);
+					}
 					break;
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
@@ -233,7 +240,6 @@ void Game::run()
 					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
-					_processQuitShortcut();
 					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
@@ -296,6 +302,7 @@ void Game::run()
 		}
 	}
 	
+	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
 	{
 		SaveState *ss = new SaveState(this, OPT_MENU, false);
@@ -553,21 +560,5 @@ bool Game::isQuitting() const
 {
 	return _quit;
 }
-
-/**
- * Sets _quit state when most used close window shortcut if pressed.
- */
-void Game::_processQuitShortcut()
-{
-#ifdef _WIN32
-	//Alt + F4
-	_quit = _quit || _event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_F4 && _event.key.keysym.mod & KMOD_ALT;
-#elif __APPLE__
-	//Command + Q
-	_quit = _quit || _event.type == SDL_KEYDOWN && _event.key.keysym.sym == SDLKey::SDLK_q && _event.key.keysym.mod & KMOD_LMETA;
-#endif
-	//TODO add other OSs shortcuts.
-}
-
 
 }

@@ -52,9 +52,19 @@ namespace OpenXcom
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
 {
-	if (_action.weapon && _action.type == BA_THROW)
+	// this is the number of pixels the sprite will move between frames
+	_speed = Options::getInt("battleFireSpeed");
+
+	if (_action.weapon)
 	{
-		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		if (_action.type == BA_THROW)
+		{
+			_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		}
+		else
+		{
+			_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+		}
 	}
 }
 
@@ -382,14 +392,15 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 				effectiveAccuracy -= 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 		}
 		// If targetUnit not visible by shooter, then chance to hit them reduced on 5%.
-		if (shooterUnit && targetUnit)
+		if (shooterUnit)
 		{
-			bool isTargetVisible = false;
-			for (std::vector<BattleUnit *>::const_iterator u = shooterUnit->getVisibleUnits()->begin(); u != shooterUnit->getVisibleUnits()->begin(); ++u)
+			std::vector<BattleUnit*>::const_iterator noUnit = shooterUnit->getVisibleUnits()->end();
+			std::vector<BattleUnit*>::const_iterator u = shooterUnit->getVisibleUnits()->begin();
+			for ( ; u != noUnit; ++u)
 			{
-				if (isTargetVisible = (*u == targetUnit)) break;
+				if (*u == targetUnit) break;
 			}
-			if (!isTargetVisible)
+			if (u == noUnit)
 				effectiveAccuracy -= 0.05;
 		}
 		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
@@ -523,22 +534,16 @@ double Projectile::approxF(double sigm, double delta)
  */
 bool Projectile::move()
 {
-	_position++;
-	if (_position == _trajectory.size())
+	for (int i = 0; i < _speed; ++i)
 	{
-		_position--;
-		return false;
+		_position++;
+		if (_position == _trajectory.size())
+		{
+			_position--;
+			return false;
+		}
 	}
-	_position++;
-	if (_position == _trajectory.size())
-	{
-		_position--;
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 /**

@@ -311,7 +311,7 @@ void BasescapeState::btnCraftsClick(Action *)
  */
 void BasescapeState::btnFacilitiesClick(Action *)
 {
-	_game->pushState(new BuildFacilitiesState(_game, _base, this, true));
+	_game->pushState(new BuildFacilitiesState(_game, _base, this));
 }
 
 /**

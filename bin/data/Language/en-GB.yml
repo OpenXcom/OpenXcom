@@ -1200,3 +1200,8 @@ en-GB:
   STR_POWER_SUIT_UFOPEDIA: "A powerful new protection for soldiers, this armor is powered by an Elerium energy source and greatly amplifies the speed and strength of the wearer, it offers the best protection yet for combat troops."
   STR_FLYING_SUIT_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-grav navigation technology to allow full freedom of movement across the battlefield."
   STR_ALL_ALIENS_KILLED_IN_CRASH: "All Aliens killed in crash,{NEWLINE}Auto recovery initiated"
+  STR_MAXFRAMESKIP: "Maximum frames skipped"
+  STR_MAXFRAMESKIP_DESC: "This is the maximum number of frames that may be skipped by the draw code during gameplay"
+  STR_RESET: "Reset"
+  STR_MEMORIAL: "Memorial"
+  STR_TIME_OF_DEATH: "Time of Death"

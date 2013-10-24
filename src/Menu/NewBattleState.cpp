@@ -446,6 +446,8 @@ void NewBattleState::btnOkClick(Action *)
 		base = _craft->getBase();
 		_craft = 0;
 	}
+	_game->popState();
+	_game->popState();
 	_game->pushState(new BriefingState(_game, _craft, base));
 	_craft = 0;
 }
