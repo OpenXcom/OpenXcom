@@ -58,8 +58,8 @@ std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenX
 	{
 		pos = region.getRandomPoint(zone);
 	}
-	while (!globe.insideLand(pos.first, pos.second)
-		&& !region.insideRegion(pos.first, pos.second));
+	while (!(globe.insideLand(pos.first, pos.second)
+		&& region.insideRegion(pos.first, pos.second)));
 	return pos;
 
 }
