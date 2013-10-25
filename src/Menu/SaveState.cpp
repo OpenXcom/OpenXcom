@@ -192,15 +192,12 @@ void SaveState::quickSave(const std::string &filename)
 
 	try
 	{
-		if (CrossPlatform::fileExists(bakPath))
+		if (CrossPlatform::fileExists(fullPath))
 		{
-			if (!CrossPlatform::deleteFile(bakPath))
+			if (CrossPlatform::fileExists(bakPath) && !CrossPlatform::deleteFile(bakPath))
 			{
 				throw Exception("Failed to delete " + filename + ".sav.bak");
 			}
-		}
-		if (CrossPlatform::fileExists(fullPath))
-		{
 			if (rename(fullPath.c_str(), bakPath.c_str()))
 			{
 				throw Exception("Failed to rename " + filename + ".sav");
