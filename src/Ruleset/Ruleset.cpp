@@ -503,9 +503,9 @@ void Ruleset::loadFile(const std::string &filename)
 	if (doc["startingBase"])
 		_startingBase = YAML::Node(doc["startingBase"]);
 	_startingTime.load(doc["startingTime"]);
-	_maxViewDistance = doc["maxViewDistance"].as<int>(20);
-	_maxViewDistanceAtDark = doc["maxViewDistanceAtDark"].as<int>(9);
-	_maxDarknessToSeeUnits = doc["maxDarknessToSeeUnits"].as<int>(9);
+	_maxViewDistance = doc["maxViewDistance"].as<int>(_maxViewDistance);
+	_maxViewDistanceAtDark = doc["maxViewDistanceAtDark"].as<int>(_maxViewDistanceAtDark);
+	_maxDarknessToSeeUnits = doc["maxDarknessToSeeUnits"].as<int>(_maxDarknessToSeeUnits);
 	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
 	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
 	_costScientist = doc["costScientist"].as<int>(_costScientist);
