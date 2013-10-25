@@ -26,8 +26,9 @@ namespace OpenXcom
  * Initializes a death event.
  * @time Time when the death occured.
  */
-SoldierDeath::SoldierDeath() : _time(0)
+SoldierDeath::SoldierDeath()
 {
+	_time = new GameTime(0,0,0,0,0,0,0);
 }
 
 /**
