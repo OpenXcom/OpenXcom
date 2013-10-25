@@ -44,7 +44,7 @@ Game *game = 0;
 
 // If you can't tell what the main() is for you should have your
 // programming license revoked...
-int main(int argc, char** args)fjghjghghjjghghj
+int main(int argc, char** args)
 {
 #ifndef _DEBUG
 	try
