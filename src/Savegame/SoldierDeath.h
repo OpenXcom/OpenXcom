@@ -32,7 +32,7 @@ class GameTime;
 class SoldierDeath
 {
 private:
-	GameTime *_time;
+	GameTime _time;
 public:
 	/// Creates a death.
 	SoldierDeath();
@@ -43,7 +43,7 @@ public:
 	/// Saves the death to YAML.
 	YAML::Node save() const;
 	/// Gets the death time.
-	GameTime *getTime() const;
+	GameTime *getTime();
 	/// Sets the death time.
 	void setTime(GameTime *time);
 };
