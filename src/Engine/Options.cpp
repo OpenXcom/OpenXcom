@@ -328,7 +328,7 @@ void loadArgs(int argc, char** args)
  */
 bool showHelp(int argc, char** args)
 {
-	std::stringstream help;
+	std::ostringstream help;
 	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
 	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
@@ -623,7 +623,7 @@ void setString(const std::string& id, const std::string& value)
  */
 void setInt(const std::string& id, int value)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << std::dec << value;
 	_options[id] = ss.str();
 }
@@ -635,7 +635,7 @@ void setInt(const std::string& id, int value)
  */
 void setBool(const std::string& id, bool value)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << std::boolalpha << value;
 	_options[id] = ss.str();
 }

@@ -670,7 +670,7 @@ std::string getLocale()
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
 
-	std::stringstream locale;
+	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
 	/*
@@ -685,7 +685,7 @@ std::string getLocale()
 	std::string language = name.substr(0, name.find_first_of('_')-1);
 	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
 	
-	std::stringstream locale;
+	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
 #endif

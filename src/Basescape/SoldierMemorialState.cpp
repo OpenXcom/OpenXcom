@@ -52,8 +52,8 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	_txtName = new Text(114, 9, 16, 36);
 	_txtRank = new Text(102, 9, 130, 36);
 	_txtDate = new Text(90, 9, 214, 36);
-	_txtRecruited = new Text(110, 9, 16, 24);
-	_txtLost = new Text(110, 9, 214, 24);
+	_txtRecruited = new Text(150, 9, 16, 24);
+	_txtLost = new Text(150, 9, 160, 24);
 	_lstSoldiers = new TextList(288, 120, 8, 44);
 
 	// Set palette
@@ -94,7 +94,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	_txtRank->setText(tr("STR_RANK"));
 
 	_txtDate->setColor(Palette::blockOffset(13)+10);
-	_txtDate->setText(tr("STR_DATE_OF_DEATH"));
+	_txtDate->setText(tr("STR_DATE_UC"));
 
 	int lost = _game->getSavedGame()->getDeadSoldiers()->size();
 	int recruited = lost;

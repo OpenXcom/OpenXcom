@@ -79,7 +79,7 @@ namespace OpenXcom
 	void ArticleState::btnOkClick(Action *)
 	{
 		_game->popState();
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "PALETTES.DAT_" << _palSwitch;
 		_game->setPalette(_game->getResourcePack()->getPalette(ss.str())->getColors());
 	}

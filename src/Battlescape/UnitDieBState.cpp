@@ -248,7 +248,7 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			for (int x = 0; x <= size; x++)
 			{
-				std::stringstream ss;
+				std::ostringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);

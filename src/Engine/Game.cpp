@@ -438,7 +438,7 @@ Language *Game::getLanguage() const
 */
 void Game::loadLanguage(const std::string &filename)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "Language/" << filename << ".yml";
 
 	_lang->load(CrossPlatform::getDataFile(ss.str()), _rules->getExtraStrings()[filename]);
@@ -452,7 +452,7 @@ void Game::loadLanguage(const std::string &filename)
  */
 void Game::loadLng(const std::string &filename)
 {
-	std::stringstream ss, ss2;
+	std::ostringstream ss, ss2;
 	ss << "Language/" << filename << ".lng";
 	ss2 << "Language/" << filename << ".geo";
 

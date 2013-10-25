@@ -1183,7 +1183,7 @@ void BattlescapeGenerator::generateMap()
 					{
 						// lots of crazy stuff here, which is for the hangars (or other large base facilities one may create)
 						std::string mapname = (*i)->getRules()->getMapName();
-						std::stringstream newname;
+						std::ostringstream newname;
 						newname << mapname.substr(0, mapname.size()-2); // strip of last 2 digits
 						int mapnum = atoi(mapname.substr(mapname.size()-2, 2).c_str()); // get number
 						mapnum += num;
@@ -1568,7 +1568,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	int x = xoff, y = yoff, z = 0;
 	char size[3];
 	unsigned char value[4];
-	std::stringstream filename;
+	std::ostringstream filename;
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
 	int terrainObjectID;
 
@@ -1665,7 +1665,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 {
 	int id = 0;
 	char value[24];
-	std::stringstream filename;
+	std::ostringstream filename;
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file

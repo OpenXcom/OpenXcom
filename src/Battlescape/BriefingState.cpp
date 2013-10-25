@@ -144,7 +144,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	}
 
 	_txtTitle->setText(tr(mission));
-	std::stringstream briefingtext;
+	std::ostringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(briefingtext.str()));
 
