@@ -17,14 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierDeath.h"
-#include "GameTime.h"
 
 namespace OpenXcom
 {
 
 /**
  * Initializes a death event.
- * @time Time when the death occured.
+ * @time Time when the death occurred.
  */
 SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0)
 {
@@ -61,7 +60,7 @@ YAML::Node SoldierDeath::save() const
  * Returns the time of death of this soldier.
  * @return Pointer to the time.
  */
-GameTime *SoldierDeath::getTime()
+const GameTime *SoldierDeath::getTime() const
 {
 	return &_time;
 }

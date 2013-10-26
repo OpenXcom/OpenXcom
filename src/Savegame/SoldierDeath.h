@@ -20,6 +20,7 @@
 #define OPENXCOM_SOLDIERDEATH_H
 
 #include <yaml-cpp/yaml.h>
+#include "GameTime.h"
 
 namespace OpenXcom
 {
@@ -43,7 +44,7 @@ public:
 	/// Saves the death to YAML.
 	YAML::Node save() const;
 	/// Gets the death time.
-	GameTime *getTime();
+	const GameTime *getTime() const;
 	/// Sets the death time.
 	void setTime(GameTime *time);
 };
