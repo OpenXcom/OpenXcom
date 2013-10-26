@@ -168,17 +168,18 @@ void ResearchInfoState::buildUi ()
 	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	if (_rule)
 	{
-		_btnCancel->setText(tr("STR_CANCEL"));
+		_btnOk->setText(tr("STR_START_PROJECT"));
+		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress((ActionHandler)&ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 	}
 	else
 	{
+		_btnOk->setText(tr("STR_OK"));
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
 		_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	}
@@ -217,15 +218,9 @@ void ResearchInfoState::btnCancelClick(Action *)
  */
 void ResearchInfoState::setAssignedScientist()
 {
-	std::wstringstream s1;
-	s1 << tr("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
-	std::wstringstream s2;
-	s2 << tr("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << _base->getFreeLaboratories();
-	std::wstringstream s3;
-	s3 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _project->getAssigned ();
-	_txtAvailableScientist->setText(s1.str());
-	_txtAvailableSpace->setText(s2.str());
-	_txtAllocatedScientist->setText(s3.str());
+	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getAvailableScientists()));
+	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC").arg(_base->getFreeLaboratories()));
+	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_project->getAssigned()));
 }
 
 /**

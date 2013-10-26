@@ -16,37 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LANGUAGESTATE_H
-#define OPENXCOM_LANGUAGESTATE_H
+#ifndef OPENXCOM_SOLDIERDEATH_H
+#define OPENXCOM_SOLDIERDEATH_H
 
-#include <vector>
-#include <string>
-#include "../Engine/State.h"
+#include <yaml-cpp/yaml.h>
+#include "GameTime.h"
 
 namespace OpenXcom
 {
 
-class Window;
-class Text;
-class TextList;
+class GameTime;
 
 /**
- * Language window that lets the player pick a
- * language at the start of the game.
+ * Stores info about a soldier's death.
  */
-class LanguageState : public State
+class SoldierDeath
 {
 private:
-	Window *_window;
-	TextList *_lstLanguages;
-	std::vector<std::string> _langs;
+	GameTime _time;
 public:
-	/// Creates the Start state.
-	LanguageState(Game *game);
-	/// Cleans up the Start state.
-	~LanguageState();
-	/// Handler for clicking the Language list.
-	void lstLanguagesClick(Action *action);
+	/// Creates a death.
+	SoldierDeath();
+	/// Cleans up the death.
+	~SoldierDeath();
+	/// Loads the death from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the death to YAML.
+	YAML::Node save() const;
+	/// Gets the death time.
+	const GameTime *getTime() const;
+	/// Sets the death time.
+	void setTime(GameTime *time);
 };
 
 }

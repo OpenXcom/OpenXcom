@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BATTLESCAPEOPTIONSSTATE_H
-#define OPENXCOM_BATTLESCAPEOPTIONSSTATE_H
+#ifndef OPENXCOM_OPTIONSBATTLESCAPESTATE_H
+#define OPENXCOM_OPTIONSBATTLESCAPESTATE_H
 
-#include "../Engine/State.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -32,7 +32,7 @@ class TextButton;
  * Screen that lets the user configure various
  * Battlescape options.
  */
-class BattlescapeOptionsState : public State
+class OptionsBattlescapeState : public OptionsBaseState
 {
 private:
 	Window *_window;
@@ -47,20 +47,16 @@ private:
 	TextButton *_xcomSpeed, *_btnXcomSpeed1, *_btnXcomSpeed2, *_btnXcomSpeed3, *_btnXcomSpeed4, *_btnXcomSpeed5, *_btnXcomSpeed6;
 	Text *_txtAlienSpeed;
 	TextButton *_alienSpeed, *_btnAlienSpeed1, *_btnAlienSpeed2, *_btnAlienSpeed3, *_btnAlienSpeed4, *_btnAlienSpeed5, *_btnAlienSpeed6;
-	TextButton *_btnOk, *_btnLoad, *_btnSave;
-	/// Saves battlescape options.
-	void saveOptions();
+	TextButton *_btnOk, *_btnCancel;
 public:
 	/// Creates the Battlescape Options state.
-	BattlescapeOptionsState(Game *game);
+	OptionsBattlescapeState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Battlescape Options state.
-	~BattlescapeOptionsState();
-	/// Handler for clicking the Ok button.
+	~OptionsBattlescapeState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Load Game button.
-	void btnLoadClick(Action *action);
-	/// Handler for clicking the Save Game button.
-	void btnSaveClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 };
 
 }

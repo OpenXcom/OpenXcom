@@ -19,31 +19,32 @@
 #ifndef OPENXCOM_RNG_H
 #define OPENXCOM_RNG_H
 
-#include <yaml-cpp/yaml.h>
-
 namespace OpenXcom
 {
 
 /**
  * Random Number Generator used throughout the game
- * for all your randomness needs. It's really just the
- * standard C generator, but wrapped in a way that we
- * can store its seed for later use if necessary.
+ * for all your randomness needs. Uses a Mersenne Twister
+ * pseudorandom number generator based on the code sample
+ * from Game Coding Complete 4.
+ * @note http://www.mcshaffry.com/GameCode/
  */
 namespace RNG
 {
 	/// Initializes the generator.
-	void init(long count = -1, unsigned int seed = 0);
-	/// Loads the RNG from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the RNG to YAML.
-	void save(YAML::Node& node);
+	void init();
+	/// Initializes the generator.
+	void init(unsigned int seed);
+	/// Gets the seed in use.
+	unsigned int getSeed();
 	/// Generates a random integer number.
 	int generate(int min, int max);
-	/// Generates a random decimal number.
+	/// Generates a random floating-point number.
 	double generate(double min, double max);
 	/// Get normally distributed value.
 	double boxMuller(double m = 0, double s = 1);
+	/// Generates a percentage chance.
+	bool percent(int value);
 }
 
 }

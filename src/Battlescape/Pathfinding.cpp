@@ -144,7 +144,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		}
 	}
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) && 
+	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	// look for a possible fast and accurate bresenham path and skip A*
@@ -186,7 +186,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 	start->connect(0, 0, 0, endPosition);
 	PathfindingOpenSet openList;
 	openList.push(start);
-	bool missile = (target && maxTUCost == 10000);
+	bool missile = (target && maxTUCost == -1);
 	// if the open list is empty, we've reached the end
 	while(!openList.empty())
 	{
@@ -267,10 +267,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
-				return 255;
-
-			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 				return 255;
 
 			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
@@ -414,11 +410,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 			cost += wallcost;
-			if (_unit->getFaction() == FACTION_HOSTILE && 
-				((destinationTile->getUnit() &&
-				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
-				destinationTile->getUnit() != _unit) ||
-				destinationTile->getFire() > 0))
+			if (_unit->getFaction() == FACTION_HOSTILE &&
+				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
@@ -564,6 +557,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
 			return true; // blocking part
 		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+		if (!tileWest) return true;	// do not look outside of map
 		if (tileWest->getMapData(MapData::O_OBJECT) &&
 			(tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEAST ||
 			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
@@ -575,6 +569,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
 			return true; // blocking part
 		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (!tileNorth) return true; // do not look outside of map
 		if (tileNorth->getMapData(MapData::O_OBJECT) &&
 			(tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLSOUTH ||
 			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
@@ -587,6 +582,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		{
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+			if (_unit && _unit->getFaction() == unit->getFaction()) return true;
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
@@ -816,6 +812,67 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	return false;
 }
 
+/**
+ * Checks if going one step from start to destination in the given direction requires
+ * going through a closed UFO door.
+ * @param direction The direction of travel.
+ * @param start The starting position of the travel.
+ * @param destination Where the travel ends.
+ * @return The TU cost of opening the door. 0 if no UFO door opened.
+  */
+int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination)
+{
+	Tile *s = _save->getTile(start);
+	Tile *d = _save->getTile(destination);
+
+	switch (direction)
+	{
+	case 0:
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		break;
+	case 1:
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 2:
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 3:
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 4:
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		break;
+	case 5:
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 6:
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 7:
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	default:
+		return 0;
+	}
+
+	return 0;
+}
 
 /**
  * Marks tiles for the path preview.
@@ -858,6 +915,9 @@ bool Pathfinding::previewPath(bool bRemove)
 			tu *= 0.75;
 		}
 		energy -= tu / 2;
+
+		tu += getOpeningUfoDoorCost(dir, pos, destination);
+
 		tus -= tu;
 		total += tu;
 		bool reserve = _save->getBattleState()->getBattleGame()->checkReservedTU(_unit, total, true);
@@ -999,7 +1059,10 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
 
 			// delete the following
-			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+			bool isDiagonal = (dir&1);
+			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
+			int tuCostDiagonal = tuCost + tuCost / 2;
+			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (isDiagonal && tuCost == lastTUCostDiagonal) || (!isDiagonal && tuCostDiagonal == lastTUCost) || lastTUCost == -1)
 				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
 			{
 				_path.push_back(dir);

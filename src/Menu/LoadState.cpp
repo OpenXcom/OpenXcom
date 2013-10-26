@@ -20,6 +20,7 @@
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
@@ -38,9 +39,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Load Game screen.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  */
-LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
+LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin)
 {
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
@@ -50,12 +51,12 @@ LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
 /**
  * Creates the Quick Load Game state.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
 {
-	quickLoad(L"autosave");
+	quickLoad("autosave");
 }
 
 /**
@@ -74,27 +75,21 @@ void LoadState::lstSavesPress(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		quickLoad(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+		quickLoad(CrossPlatform::noExt(_saves[_lstSaves->getSelectedRow()]));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->pushState(new DeleteGameState(_game, _geo, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
 	}
 }
 
 /**
  * Quick load game.
- * @param filename16 name of file without ".sav"
+ * @param filename name of file without ".sav"
  */
-void LoadState::quickLoad(const std::wstring &filename16)
+void LoadState::quickLoad(const std::string &filename)
 {
 	if (_showMsg) updateStatus("STR_LOADING_GAME");
-
-#ifdef _WIN32
-		std::string filename = Language::wstrToCp(filename16);
-#else
-		std::string filename = Language::wstrToUtf8(filename16);
-#endif
 
 	SavedGame *s = new SavedGame();
 	try
@@ -115,7 +110,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-		if (_geo)
+		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
@@ -130,7 +125,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-		if (_geo)
+		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));

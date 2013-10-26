@@ -143,6 +143,7 @@ void ManufactureInfoState::buildUi()
 	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
+	_txtAllocatedEngineer->setWordWrap(true);
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+1);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
@@ -152,8 +153,9 @@ void ManufactureInfoState::buildUi()
 	_txtTodo->setBig();
 
 	_txtUnitToProduce->setColor(Palette::blockOffset(15)+1);
-	_txtUnitToProduce->setText(tr("STR_TOTAL_TO_PRODUCE"));
+	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
+	_txtUnitToProduce->setWordWrap(true);
 
 	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
@@ -184,13 +186,13 @@ void ManufactureInfoState::buildUi()
 	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
 	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnStop->setColor(Palette::blockOffset(13)+10);
+	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)&ManufactureInfoState::btnStopClick);
 	if(!_production)
@@ -250,14 +252,8 @@ void ManufactureInfoState::exitState()
  */
 void ManufactureInfoState::setAssignedEngineer()
 {
-	int availableEngineer = _base->getAvailableEngineers();
-	int availableWorkSpace = _base->getFreeWorkshops();
-	std::wstringstream s1;
-	s1 << tr("STR_ENGINEERS_AVAILABLE_UC") << L"\x01" << availableEngineer;
-	_txtAvailableEngineer->setText(s1.str());
-	std::wstringstream s2;
-	s2 << tr("STR_WORKSHOP_SPACE_AVAILABLE_UC") << L"\x01" << availableWorkSpace;
-	_txtAvailableSpace->setText(s2.str());
+	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getAvailableEngineers()));
+	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 	std::wstringstream s3;
 	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());

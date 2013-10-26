@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SaveState.h"
+#include <cstdio>
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Savegame/SavedGame.h"
@@ -37,31 +38,21 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Save Game screen.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  */
-SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
-	
 	_edtSave = new TextEdit(168, 9, 0, 0);
 
 	add(_edtSave);
 
 	// Set up objects
-	if (_geo)
-	{
-		_edtSave->setColor(Palette::blockOffset(8)+10);
-	}
-	else
-	{
-		_edtSave->setColor(Palette::blockOffset(0));
-		_edtSave->setHighContrast(true);
-	}
-
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
 	_lstSaves->onMousePress((ActionHandler)&SaveState::lstSavesPress);
 
+	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
 }
@@ -69,12 +60,13 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 /**
  * Creates the Quick Save Game state.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SaveState::SaveState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
 {
-	quickSave(L"autosave");
+	game->getSavedGame()->setName(L"autosave");
+	quickSave("autosave");
 }
 
 /**
@@ -93,7 +85,8 @@ void SaveState::updateList()
 {
 	_lstSaves->clearList();
 	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
-	SavedGame::getList(_lstSaves, _game->getLanguage());
+	_saves = SavedGame::getList(_lstSaves, _game->getLanguage());
+	_lstSaves->draw();
 }
 
 /**
@@ -137,7 +130,7 @@ void SaveState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
 	{
-		_game->pushState(new DeleteGameState(_game, _geo, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
 	}
 }
 
@@ -151,78 +144,75 @@ void SaveState::edtSaveKeyPress(Action *action)
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		updateStatus("STR_SAVING_GAME");
-		try
-		{
+		_game->getSavedGame()->setName(_edtSave->getText());
+		std::string oldFilename, newFilename;
 #ifdef _WIN32
-			std::string selected = Language::wstrToCp(_selected);
-			std::string filename = Language::wstrToCp(_edtSave->getText());
+		newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_edtSave->getText()));
 #else
-			std::string selected = Language::wstrToUtf8(_selected);
-			std::string filename = Language::wstrToUtf8(_edtSave->getText());
+		newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_edtSave->getText()));
 #endif
-			_game->getSavedGame()->save(filename);
-			std::string oldName = Options::getUserFolder() + selected + ".sav";
-			std::string newName = Options::getUserFolder() + filename + ".sav";
-			if (_selectedRow > 0 && oldName != newName)
+		if (_selectedRow > 0)
+		{
+			oldFilename = CrossPlatform::noExt(_saves[_selectedRow-1]);
+		}
+		else
+		{
+			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
 			{
-				if (!CrossPlatform::deleteFile(oldName))
-				{
-					throw Exception("Failed to overwrite save");
-				}
+				newFilename += "_";
 			}
-			_game->popState();
-			_game->popState();
+			oldFilename = newFilename;
 		}
-		catch (Exception &e)
+		quickSave(oldFilename);
+		if (oldFilename != newFilename)
 		{
-			_edtSave->setVisible(false);
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			{
+				newFilename += "_";
+			}
+			std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
+			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
+			rename(oldPath.c_str(), newPath.c_str());
 		}
-		catch (YAML::Exception &e)
-		{
-			_edtSave->setVisible(false);
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error <<
-			tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-		}
+		_game->popState();
+		_game->popState();
 	}
 }
 
 /**
  * Quick save game.
- * @param filename16 name of file without ".sav"
+ * @param filename name of file without ".sav"
  */
-void SaveState::quickSave(const std::wstring &filename16)
+void SaveState::quickSave(const std::string &filename)
 {
 	if (_showMsg) updateStatus("STR_SAVING_GAME");
 
-#ifdef _WIN32
-		std::string filename = Language::wstrToCp(filename16);
-#else
-		std::string filename = Language::wstrToUtf8(filename16);
-#endif
+	std::string fullPath = Options::getUserFolder() + filename + ".sav";
+	std::string bakPath = fullPath + ".bak";
 
 	try
 	{
+		if (CrossPlatform::fileExists(fullPath))
+		{
+			if (CrossPlatform::fileExists(bakPath) && !CrossPlatform::deleteFile(bakPath))
+			{
+				throw Exception("Failed to delete " + filename + ".sav.bak");
+			}
+			if (rename(fullPath.c_str(), bakPath.c_str()))
+			{
+				throw Exception("Failed to rename " + filename + ".sav");
+			}
+		}
+
 		_game->getSavedGame()->save(filename);
+		CrossPlatform::deleteFile(bakPath);
 	}
 	catch (Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-		if (_geo)
+		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
@@ -232,7 +222,7 @@ void SaveState::quickSave(const std::wstring &filename16)
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-		if (_geo)
+		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));

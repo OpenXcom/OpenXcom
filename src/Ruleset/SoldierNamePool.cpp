@@ -99,16 +99,22 @@ std::wstring SoldierNamePool::genName(SoldierGender *gender) const
 		*gender = GENDER_MALE;
 		size_t first = RNG::generate(0, _maleFirst.size() - 1);
 		name << _maleFirst[first];
-		size_t last = RNG::generate(0, _maleLast.size() - 1);
-		name << " " << _maleLast[last];
+		if (!_maleLast.empty())
+		{
+			size_t last = RNG::generate(0, _maleLast.size() - 1);
+			name << " " << _maleLast[last];
+		}
 	}
 	else
 	{
 		*gender = GENDER_FEMALE;
 		size_t first = RNG::generate(0, _femaleFirst.size() - 1);
 		name << _femaleFirst[first];
-		size_t last = RNG::generate(0, _femaleLast.size() - 1);
-		name << " " << _femaleLast[last];
+		if (!_femaleLast.empty())
+		{
+			size_t last = RNG::generate(0, _femaleLast.size() - 1);
+			name << " " << _femaleLast[last];
+		}
 	}
 	return name.str();
 }

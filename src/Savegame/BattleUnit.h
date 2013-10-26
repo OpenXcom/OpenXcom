@@ -297,6 +297,8 @@ public:
 	void addPsiExp();
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
+	/// Updates the stats of a Geoscape soldier.
+	void updateGeoscapeStats(Soldier *soldier);
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap
@@ -414,7 +416,11 @@ public:
 	/// switch the state of the fire damage tracker.
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
-	int getCoverReserve();
+	int getCoverReserve() const;
+	/// Is this unit selectable?
+	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
+	/// Does this unit have an inventory?
+	bool hasInventory() const;
 };
 
 }

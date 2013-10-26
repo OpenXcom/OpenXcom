@@ -262,7 +262,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_txtAmmo2 = new Text(16, 9, _x + 64, _y + 70);
 	_txtDistance = new Text(40, 9, _x + 116, _y + 72);
 	_txtStatus = new Text(150, 9, _x + 4, _y + 85);
-	_btnMinimizedIcon = new ImageButton(32, 20, _minimizedIconX, _minimizedIconY);
+	_btnMinimizedIcon = new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterceptionNumber = new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
 	_animTimer = new Timer(30);
@@ -818,9 +818,8 @@ void DogfightState::move()
 				// Projectile reached the UFO - determine if it's been hit.
 				if(((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved())) && !_ufo->isCrashed())
 				{
-					int acc = RNG::generate(1, 100);
 					// UFO hit.
-					if (acc <= p->getAccuracy())
+					if (RNG::percent(p->getAccuracy()))
 					{
 						// Formula delivered by Volutar
 						int damage = RNG::generate(p->getDamage() / 2, p->getDamage());
@@ -870,8 +869,7 @@ void DogfightState::move()
 			{
 				if(p->getGlobalType() == CWPGT_MISSILE || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()))
 				{
-					int acc = RNG::generate(1, 100);
-					if(acc <= p->getAccuracy())
+					if(RNG::percent(p->getAccuracy()))
 					{
 						// Formula delivered by Volutar
 						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
@@ -1008,11 +1006,11 @@ void DogfightState::move()
 		AlienMission *mission = _ufo->getMission();
 		mission->ufoShotDown(*_ufo, *_game, *_globe);
 		// Check for retaliation trigger.
-		if (RNG::generate(0, 100) > 4 * (24 - (int)(_game->getSavedGame()->getDifficulty())))
+		if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
 		{
 			// Spawn retaliation mission.
 			std::string targetRegion;
-			if (RNG::generate(0, 100) <= 50 - 6 * (int)(_game->getSavedGame()->getDifficulty()))
+			if (RNG::percent(50 - 6 * (int)(_game->getSavedGame()->getDifficulty())))
 			{
 				// Attack on UFO's mission region
 				targetRegion = _ufo->getMission()->getRegion();
@@ -1272,7 +1270,7 @@ void DogfightState::btnMinimizeClick(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
-		if (_currentDist == STANDOFF_DIST)
+		if (_currentDist >= STANDOFF_DIST)
 		{
 			setMinimized(true);
 			_window->setVisible(false);

@@ -68,7 +68,7 @@ void createDefault()
 #endif
 	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
-	setInt("maxFrameSkip", 8);
+	setInt("maxFrameSkip", 1);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setBool("weaponSelfDestruction", false);
@@ -87,14 +87,14 @@ void createDefault()
 	setBool("mute", false);
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
-	setString("language", "en-US");
+	setString("language", "");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
-	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
+	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
 	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
 	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
-	setInt("battleFireSpeed", 20); // 40, 30, 20, 10, 5, 1
+	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
@@ -132,6 +132,11 @@ void createDefault()
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
 	setBool("battleHairBleach", true);
+    setBool("keepAspectRatio", false);
+    setBool("cursorInBlackBandsInFullscreen", false);
+    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInBorderlessWindow", false);
+	setBool("newSeedOnLoad", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -141,7 +146,7 @@ void createDefault()
 	setInt("NewBattleDifficulty", 0);
 	setInt("NewBattleDarkness", 0);
 	setInt("NewBattleCraft", 0);
-	
+
 	// new battle loadout data
 	setInt("NewBattle_STR_AC_AP_AMMO", 0);
 	setInt("NewBattle_STR_AC_HE_AMMO", 0);
@@ -323,7 +328,7 @@ void loadArgs(int argc, char** args)
  */
 bool showHelp(int argc, char** args)
 {
-	std::stringstream help;
+	std::ostringstream help;
 	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
 	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
@@ -376,12 +381,9 @@ bool init(int argc, char** args)
 	s += "openxcom.log";
 	Logger::logFile() = s;
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
-	if(!file)
+	if (!file)
 	{
-		std::stringstream error;
-		error << "Error: invalid User Folder " << _userFolder << std::endl;
-		std::cout << error.str();
-		return false;
+		throw Exception(s + " not found");
 	}
 	fflush(file);
 	fclose(file);
@@ -621,7 +623,7 @@ void setString(const std::string& id, const std::string& value)
  */
 void setInt(const std::string& id, int value)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << std::dec << value;
 	_options[id] = ss.str();
 }
@@ -633,7 +635,7 @@ void setInt(const std::string& id, int value)
  */
 void setBool(const std::string& id, bool value)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << std::boolalpha << value;
 	_options[id] = ss.str();
 }

@@ -47,31 +47,24 @@ Text::~Text()
 }
 
 /**
- * Takes an integer value and formats it as currency,
- * spacing the thousands and adding a $ sign to the front.
- * @param funds The funding value.
+ * Takes an integer value and formats it as number with separators (spacing the thousands).
+ * @param value The value.
  * @return The formatted string.
  */
-std::wstring Text::formatFunding(int funds)
+std::wstring Text::formatNumber(int value, std::wstring currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
 	// symbols, such as thousands separators, should be determined by the game
 	// language, not by system locale.
-	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
-	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
-	struct lconv * lc;
-	lc=localeconv();
-	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
+	setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
+	struct lconv * lc = localeconv();
+	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
-	bool negative = false;
-	if (funds < 0)
-	{
-		negative = true;
-		funds = -funds;
-	}
+	bool negative = (value < 0);
 	std::wstringstream ss;
-	ss << funds;
+	ss << (negative? -value : value);
 	std::wstring s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
@@ -79,10 +72,26 @@ std::wstring Text::formatFunding(int funds)
 		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
-	s.insert(0, L"$");
+	if (!currency.empty())
+	{
+		s.insert(0, currency);
+	}
 	if (negative)
+	{
 		s.insert(0, L"-");
+	}
 	return s;
+}
+
+/**
+ * Takes an integer value and formats it as currency,
+ * spacing the thousands and adding a $ sign to the front.
+ * @param funds The funding value.
+ * @return The formatted string.
+ */
+std::wstring Text::formatFunding(int funds)
+{
+	return formatNumber(funds, L"$");
 }
 
 /**
@@ -94,8 +103,7 @@ std::wstring Text::formatFunding(int funds)
 std::wstring Text::formatPercentage(int value)
 {
 	std::wstringstream ss;
-	ss << value;
-	ss << "%";
+	ss << value << "%";
 	return ss.str();
 }
 
@@ -243,6 +251,7 @@ void Text::setVerticalAlign(TextVAlign valign)
 void Text::setColor(Uint8 color)
 {
 	_color = color;
+	_color2 = color;
 	_redraw = true;
 }
 
@@ -339,11 +348,11 @@ void Text::processText()
 	for (std::wstring::iterator c = s->begin(); c <= s->end(); ++c)
 	{
 		// End of the line
-		if (c == s->end() || *c == L'\n' || *c == 2)
+		if (c == s->end() || Font::isLinebreak(*c))
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
-			_lineHeight.push_back(font->getHeight() + font->getSpacing());
+			_lineHeight.push_back(font->getCharSize(L'\n').h);
 			width = 0;
 			word = 0;
 			start = true;
@@ -355,23 +364,21 @@ void Text::processText()
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
-		else if (*c == L' ')
+		else if (Font::isSpace(*c))
 		{
 			space = c;
-			width += font->getWidth() / 2;
+			width += font->getCharSize(*c).w;
 			word = 0;
 			start = false;
 		}
 		// Keep track of the width of the last line and word
 		else if (*c != 1)
 		{
-			int charWidth;
-
-			// Consider non-breakable space as a non-space character
-			if (*c == L'\xa0')
-				charWidth = font->getWidth() / 2;
-			else
-				charWidth = font->getChar(*c)->getCrop()->w + font->getSpacing();
+			if (font->getChar(*c) == 0)
+			{
+				*c = L'?';
+			}
+			int charWidth = font->getCharSize(*c).w;
 
 			width += charWidth;
 			word += charWidth;
@@ -381,7 +388,7 @@ void Text::processText()
 			{
 				// Go back to the last space and put a linebreak there
 				*space = L'\n';
-				width -= word + font->getWidth() / 2;
+				width -= word + font->getCharSize(L' ').w;
 				_lineWidth.push_back(width);
 				_lineHeight.push_back(font->getHeight() + font->getSpacing());
 				width = word;
@@ -477,14 +484,14 @@ void Text::draw()
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
 	{
-		if (*c == ' ' || *c == L'\xa0')
+		if (Font::isSpace(*c))
 		{
-			x += font->getWidth() / 2;
+			x += font->getCharSize(*c).w;
 		}
-		else if (*c == '\n' || *c == 2)
+		else if (Font::isLinebreak(*c))
 		{
 			line++;
-			y += font->getHeight() + font->getSpacing();
+			y += font->getCharSize(*c).h;
 			switch (_align)
 			{
 			case ALIGN_LEFT:
@@ -497,14 +504,14 @@ void Text::draw()
 				x = getWidth() - _lineWidth[line];
 				break;
 			}
-			if (*c == 2)
+			if (*c == L'\x02')
 			{
 				font->getSurface()->paletteRestore();
 				font = _small;
 				font->getSurface()->paletteShift(color, mul, mid);
 			}
 		}
-		else if (*c == 1)
+		else if (*c == L'\x01')
 		{
 			font->getSurface()->paletteRestore();
 			color = (color == _color ? _color2 : _color);
@@ -516,7 +523,7 @@ void Text::draw()
 			chr->setX(x);
 			chr->setY(y);
 			chr->blit(this);
-			x += chr->getCrop()->w + font->getSpacing();
+			x += font->getCharSize(*c).w;
 		}
 	}
 

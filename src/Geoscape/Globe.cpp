@@ -1091,10 +1091,7 @@ void Globe::drawShadow()
 void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16)
 {
 	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
-	x1+=0.5;
-	y1+=0.5;
-	x2+=0.5;
-	y2+=0.5;
+
 	double deltax = x2-x1, deltay = y2-y1;
 	bool inv;
 	Sint16 tcol;
@@ -1482,13 +1479,40 @@ void Globe::drawDetail()
 				}
 			}
 		}
+		else if (debugType == 2)
+		{
+			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+			{
+				color = -1;
+				for (std::vector<MissionZone>::const_iterator j = (*i)->getRules()->getMissionZones().begin(); j != (*i)->getRules()->getMissionZones().end(); ++j)
+				{
+					color += 2;
+					for(std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
+					{
+						double lon2 = (*k).lonMax * M_PI / 180;
+							//(*i)->getRules()->getLonMax().at(k);
+						double lon1 = (*k).lonMin * M_PI / 180;
+							//(*i)->getRules()->getLonMin().at(k);
+						double lat2 = (*k).latMax * M_PI / 180;
+							//(*i)->getRules()->getLatMax().at(k);
+						double lat1 = (*k).latMin * M_PI / 180;
+							//(*i)->getRules()->getLatMin().at(k);
+
+						drawVHLine(lon1, lat1, lon2, lat1, color);
+						drawVHLine(lon1, lat2, lon2, lat2, color);
+						drawVHLine(lon1, lat1, lon1, lat2, color);
+						drawVHLine(lon2, lat1, lon2, lat2, color);
+					}
+				}
+			}
+		}
 	}
 	else
 	{
 		if (canSwitchDebugType)
 		{
 			++debugType;
-			if (debugType > 1) debugType = 0;
+			if (debugType > 2) debugType = 0;
 			canSwitchDebugType = false;
 		}
 	}

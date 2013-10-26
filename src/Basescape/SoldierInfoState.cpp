@@ -299,7 +299,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_numPsiStrength->setColor(Palette::blockOffset(13));
 
-	_barPsiStrength->setColor(Palette::blockOffset(11)+4);
+	_barPsiStrength->setColor(Palette::blockOffset(11));
 	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
 	_barPsiStrength->setScale(1.0);
 	_barPsiStrength->setInvert(true);
@@ -309,7 +309,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_numPsiSkill->setColor(Palette::blockOffset(13));
 
-	_barPsiSkill->setColor(Palette::blockOffset(11)+4);
+	_barPsiSkill->setColor(Palette::blockOffset(11));
 	_barPsiSkill->setColor2(Palette::blockOffset(11)+4);
 	_barPsiSkill->setScale(1.0);
 	_barPsiSkill->setInvert(true);
@@ -408,44 +408,38 @@ void SoldierInfoState::init()
 	std::string armorType = s->getArmor()->getType();
 	if (armorType == "STR_NONE_UC")
 	{
-		wsArmor.reserve(15);
-		wsArmor = tr("STR_ARMOR");
-		wsArmor += L"> ";
-		wsArmor += tr(armorType);
+		wsArmor= tr("STR_ARMOR_").arg(tr(armorType));
 	}
 	else
+	{
 		wsArmor = tr(armorType);
+	}
 
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(tr(s->getArmor()->getType()));
 
 	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
 
-	std::wstringstream ss9;
-	ss9 << tr("STR_RANK_") << L'\x01' << tr(s->getRankString());
-	_txtRank->setText(ss9.str());
+	_txtRank->setText(tr("STR_RANK_").arg(tr(s->getRankString())));
 
-	std::wstringstream ss10;
-	ss10 << tr("STR_MISSIONS") << L'\x01' << s->getMissions();
-	_txtMissions->setText(ss10.str());
+	_txtMissions->setText(tr("STR_MISSIONS").arg(s->getMissions()));
 
-	std::wstringstream ss11;
-	ss11 << tr("STR_KILLS") << L'\x01' << s->getKills();
-	_txtKills->setText(ss11.str());
+	_txtKills->setText(tr("STR_KILLS").arg(s->getKills()));
 
-	std::wstringstream ss12;
-	ss12 << tr("STR_CRAFT_") << L'\x01';
+	std::wstring craft;
 	if (s->getCraft() == 0)
-		ss12 << tr("STR_NONE_UC");
+	{
+		craft = tr("STR_NONE_UC");
+	}
 	else
-		ss12 << s->getCraft()->getName(_game->getLanguage());
-	_txtCraft->setText(ss12.str());
+	{
+		craft = s->getCraft()->getName(_game->getLanguage());
+	}
+	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
 
 	if (s->getWoundRecovery() > 0)
 	{
-		std::wstringstream ss13;
-		ss13 << tr("STR_WOUND_RECOVERY") << L'\x01' << tr("STR_DAY", s->getWoundRecovery());
-		_txtRecovery->setText(ss13.str());
+		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", s->getWoundRecovery())));
 	}
 	else
 	{
@@ -454,7 +448,7 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(s->isInPsiTraining());
 
-	if(current->psiSkill > 0)
+	if (current->psiSkill > 0)
 	{
 		std::wstringstream ss14;
 		ss14 << current->psiStrength;

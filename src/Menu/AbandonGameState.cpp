@@ -26,9 +26,9 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
-#include "../Menu/MainMenuState.h"
+#include "MainMenuState.h"
 #include "../Engine/Options.h"
-#include "../Menu/SaveState.h"
+#include "SaveState.h"
 
 namespace OpenXcom
 {
@@ -36,19 +36,27 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Abandon Game screen.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-AbandonGameState::AbandonGameState(Game *game) : State(game)
+AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
-	_btnYes = new TextButton(50, 20, 38, 140);
-	_btnNo = new TextButton(50, 20, 168, 140);
-	_txtTitle = new Text(206, 15, 25, 70);
+	int x;
+	if (_origin == OPT_GEOSCAPE)
+	{
+		x = 20;
+	}
+	else
+	{
+		x = 52;
+	}
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	// Create objects
+	_window = new Window(this, 216, 160, x, 20, POPUP_BOTH);
+	_btnYes = new TextButton(50, 20, x+18, 140);
+	_btnNo = new TextButton(50, 20, x+148, 140);
+	_txtTitle = new Text(206, 15, x+5, 70);
 
 	add(_window);
 	add(_btnYes);
@@ -74,9 +82,12 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wstringstream ss;
-	ss << tr("STR_ABANDON_GAME_QUESTION");
-	_txtTitle->setText(ss.str());
+	_txtTitle->setText(tr("STR_ABANDON_GAME_QUESTION"));
+
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		applyBattlescapeTheme();
+	}
 }
 
 /**
@@ -95,7 +106,7 @@ void AbandonGameState::btnYesClick(Action *)
 {
 	if (Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(_game, true, false);
+		SaveState *ss = new SaveState(_game, _origin, false);
 		delete ss;
 	}
 

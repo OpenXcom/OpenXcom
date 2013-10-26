@@ -40,10 +40,10 @@ protected:
 	BattleUnit *_aggroTarget;
 	int _knownEnemies, _visibleEnemies, _spottingEnemies;
 	int _escapeTUs, _ambushTUs, _reserveTUs;
-	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction;
+	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction, *_psiAction;
 	bool _rifle, _melee, _blaster;
-	bool _traceAI, _wasHit;
-	int _AIMode, _intelligence;
+	bool _traceAI, _wasHit, _didPsi;
+	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
 public:
 	/// Creates a new AlienBAIState linked to the game and a certain unit.
@@ -63,7 +63,7 @@ public:
 	/// Sets the "unit was hit" flag true.
 	void setWasHit();
 	/// Gets whether the unit was hit.
-	const bool getWasHit();
+	bool getWasHit() const;
 	/// setup a patrol objective.
 	void setupPatrol();
 	/// setup an ambush objective.
@@ -73,23 +73,23 @@ public:
 	/// setup an escape objective.
 	void setupEscape();
 	/// count how many xcom/civilian units are known to this unit.
-	const int countKnownTargets();
+	int countKnownTargets() const;
 	/// count how many known XCom units are able to see this unit.
-	const int getSpottingUnits(Position pos);
+	int getSpottingUnits(Position pos) const;
 	/// Selects the nearest target we can see, and return the number of viable targets.
-	const int selectNearestTarget();
+	int selectNearestTarget();
 	/// Selects the closest known xcom unit for ambushing.
-	const bool selectClosestKnownEnemy();
+	bool selectClosestKnownEnemy();
 	/// Selects a random known target.
-	const bool selectRandomTarget();
+	bool selectRandomTarget();
 	/// Selects the nearest reachable point relative to a target.
-	const bool selectPointNearTarget(BattleUnit *target, int maxTUs);
+	bool selectPointNearTarget(BattleUnit *target, int maxTUs) const;
 	/// re-evaluate our situation, and make a decision from our available options.
 	void evaluateAIMode();
 	/// Selects a suitable position from which to attack.
-	const bool findFirePoint();
+	bool findFirePoint();
 	/// Decides if we should throw a grenade/launch a missile to this position.
-	const bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
+	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff) const;
 	/// Attempts to take a melee attack/charge an enemy we can see.
 	void meleeAction();
 	/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
@@ -101,7 +101,7 @@ public:
 	/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
 	void grenadeAction();
 	/// Performs a psionic attack.
-	void psiAction();
+	bool psiAction();
 	/// Performs a melee attack action.
 	void meleeAttack();
 };

@@ -24,6 +24,13 @@ maleFirst:
   - Sudeep
   - Vihaan
   - Yogendra
+  - Sachin
+  - Rahul
+  - Anil
+  - Virender
+  - Kapil
+  - Sourav
+  - Harbhajan
 femaleFirst:
   - Ajita
   - Amma
@@ -70,3 +77,9 @@ maleLast:
   - Joshi
   - Goyal
   - Roy
+  - Tendulkar
+  - Dravid
+  - Kumble
+  - Sehwag
+  - Dev
+  - Ganguly

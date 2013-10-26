@@ -115,9 +115,11 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 
 	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
 	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
+	_txtAmountTransfer->setWordWrap(true);
 
 	_txtAmountDestination->setColor(Palette::blockOffset(13)+10);
 	_txtAmountDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
+	_txtAmountDestination->setWordWrap(true);
 
 	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);

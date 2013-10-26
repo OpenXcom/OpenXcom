@@ -39,9 +39,9 @@ private:
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
-	SaveState(Game *game, bool geo);
+	SaveState(Game *game, OptionsOrigin origin);
 	/// Creates the Quick Save Game state.
-	SaveState(Game *game, bool geo, bool showMsg);
+	SaveState(Game *game, OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Save Game state.
 	~SaveState();
 	/// Updates the savegame list.
@@ -51,7 +51,7 @@ public:
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
 	/// Quick save game.
-	void quickSave(const std::wstring &filename16);
+	void quickSave(const std::string &filename);
 };
 
 }

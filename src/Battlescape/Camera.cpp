@@ -361,7 +361,7 @@ void Camera::scrollXY(int x, int y, bool redraw)
 	while (true);
 
 	_map->refreshSelectorPosition();
-	if (redraw) _map->draw();
+	if (redraw) _map->invalidate();
 }
 
 

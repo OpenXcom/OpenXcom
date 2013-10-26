@@ -189,14 +189,8 @@ void ResearchState::fillProjectList()
 		std::wstring wstr = tr(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 	}
-	std::wstringstream ss;
-	ss << tr("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
-	_txtAvailable->setText(ss.str());
-	std::wstringstream ss2;
-	ss2 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
-	_txtAllocated->setText(ss2.str());
-	std::wstringstream ss3;
-	ss3 << tr("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
-	_txtSpace->setText(ss3.str());
+	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE").arg(_base->getAvailableScientists()));
+	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_base->getAllocatedScientists()));
+	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE").arg(_base->getFreeLaboratories()));
 }
 }

@@ -69,6 +69,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_aggression = 1;
 	_specab = SPECAB_NONE;
 	_armor = soldier->getArmor();
+	_stats += *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
@@ -126,10 +127,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_rank = unit->getRank();
 	_race = unit->getRace();
 	_stats = *unit->getStats();
-	if (faction == FACTION_HOSTILE)
-	{
-		adjustStats(diff);
-	}
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
@@ -145,6 +142,11 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
+	_stats += *_armor->getStats();	// armors may modify effective stats
+	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	}
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -220,6 +222,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_charging = 0;
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
+
 }
 
 /**
@@ -514,18 +517,18 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 	_cacheInvalid = cache;
 }
 
-/*
+/**
  * Gets the walking phase for animation and sound.
- * return phase will always go from 0-7
+ * @return phase will always go from 0-7
  */
 int BattleUnit::getWalkingPhase() const
 {
 	return _walkPhase % 8;
 }
 
-/*
+/**
  * Gets the walking phase for diagonal walking.
- * return phase this will be 0 or 8
+ * @return phase this will be 0 or 8
  */
 int BattleUnit::getDiagonalWalkingPhase() const
 {
@@ -1674,10 +1677,10 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 }
 
 /**
-* Get the "main hand weapon" from the unit.
-* @param quickest Wether to get the quickest weapon, default true
-* @return Pointer to item.
-*/
+ * Get the "main hand weapon" from the unit.
+ * @param quickest Wether to get the quickest weapon, default true
+ * @return Pointer to item.
+ */
 BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 {
 	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
@@ -1703,9 +1706,9 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 }
 
 /**
-* Get a grenade from the belt (used for AI)
-* @return Pointer to item.
-*/
+ * Get a grenade from the belt (used for AI)
+ * @return Pointer to item.
+ */
 BattleItem *BattleUnit::getGrenadeFromBelt() const
 {
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
@@ -1759,68 +1762,74 @@ bool BattleUnit::checkAmmo()
 }
 
 /**
-* Check if this unit is in the exit area.
-* @return Is in the exit area?
-*/
+ * Check if this unit is in the exit area.
+ * @return Is in the exit area?
+ */
 bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
 	return _tile && _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt);
 }
 
 /**
-* Gets the unit height taking into account kneeling/standing.
-* @return Unit's height.
-*/
+ * Gets the unit height taking into account kneeling/standing.
+ * @return Unit's height.
+ */
 int BattleUnit::getHeight() const
 {
 	return isKneeled()?getKneelHeight():getStandHeight();
 }
 
 /**
-* Adds one to the reaction exp counter.
-*/
+ * Adds one to the reaction exp counter.
+ */
 void BattleUnit::addReactionExp()
 {
 	_expReactions++;
 }
 
 /**
-* Adds one to the firing exp counter.
-*/
+ * Adds one to the firing exp counter.
+ */
 void BattleUnit::addFiringExp()
 {
 	_expFiring++;
 }
 
 /**
-* Adds one to the firing exp counter.
-*/
+ * Adds one to the firing exp counter.
+ */
 void BattleUnit::addThrowingExp()
 {
 	_expThrowing++;
 }
 
 /**
-* Adds one to the firing exp counter.
-*/
+ * Adds one to the firing exp counter.
+ */
 void BattleUnit::addPsiExp()
 {
 	_expPsiSkill++;
 }
 
 /**
-* Adds one to the firing exp counter.
-*/
+ * Adds one to the firing exp counter.
+ */
 void BattleUnit::addMeleeExp()
 {
 	_expMelee++;
 }
 
+void BattleUnit::updateGeoscapeStats(Soldier *soldier)
+{
+	soldier->addMissionCount();
+	soldier->addKillCount(_kills);
+}
+
 /**
-* Check if unit eligible for squaddie promotion. If yes, promote the unit.
-* Increase the mission counter. Calculate the experience increases.
-* @return True if the soldier was eligible for squaddie promotion.
-*/
+ * Check if unit eligible for squaddie promotion. If yes, promote the unit.
+ * Increase the mission counter. Calculate the experience increases.
+ * @return True if the soldier was eligible for squaddie promotion.
+ */
 bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 {
 	Soldier *s = geoscape->getSoldier(_id);
@@ -1829,8 +1838,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 		return false;
 	}
 
-	s->addMissionCount();
-	s->addKillCount(_kills);
+	updateGeoscapeStats(s);
 
 	UnitStats *stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
@@ -1885,10 +1893,10 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 }
 
 /**
-* Converts the number of experience to the stat increase.
-* @param Experience counter.
-* @return Stat increase.
-*/
+ * Converts the number of experience to the stat increase.
+ * @param Experience counter.
+ * @return Stat increase.
+ */
 int BattleUnit::improveStat(int exp)
 {
 	double tier = 4.0;
@@ -1903,7 +1911,7 @@ int BattleUnit::improveStat(int exp)
 	return (int)(tier/2.0 + RNG::generate(0.0, tier));
 }
 
-/*
+/**
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
  * @return the unit minimap index
  */
@@ -2349,7 +2357,7 @@ BattleUnit *BattleUnit::getCharging()
  */
 int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 {
-	int weight = 6;
+	int weight = _armor->getWeight();
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
 		if ((*i) == draggingItem) continue;
@@ -2427,7 +2435,7 @@ void BattleUnit::deriveRank()
 	}
 }
 
-/*
+/**
  * this function checks if a tile is visible, using maths.
  * @param pos the position to check against
  * @return what the maths decide
@@ -2477,7 +2485,7 @@ bool BattleUnit::checkViewSector (Position pos) const
 	return false;
 }
 
-/*
+/**
  * common function to adjust a unit's stats according to difficulty setting.
  */
 void BattleUnit::adjustStats(const int diff)
@@ -2486,7 +2494,6 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.tu += 4 * diff * _stats.tu / 100;
 	_stats.stamina += 4 * diff * _stats.stamina / 100;
 	_stats.reactions += 6 * diff * _stats.reactions / 100;
-	_stats.strength += 2 * diff * _stats.strength / 100;
 	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
 	_stats.strength += 2 * diff * _stats.strength / 100;
 	_stats.melee += 4 * diff * _stats.melee / 100;
@@ -2494,7 +2501,7 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
 }
 
-/*
+/**
  * did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
  */
@@ -2503,7 +2510,7 @@ bool BattleUnit::tookFireDamage() const
 	return _hitByFire;
 }
 
-/*
+/**
  * toggle the state of the fire damage tracking boolean.
  */
 void BattleUnit::toggleFireDamage()
@@ -2515,8 +2522,32 @@ void BattleUnit::setCoverReserve(int reserve)
 {
 	_coverReserve = reserve;
 }
-int BattleUnit::getCoverReserve()
+int BattleUnit::getCoverReserve() const
 {
 	return _coverReserve;
 }
+
+/**
+ * Checks if this unit can be selected. Only alive units
+ * belonging to the faction can be selected.
+ * @param faction The faction to compare with.
+ * @param checkReselect Check if the unit is reselectable.
+ * @param checkInventory Check if the unit has an inventory.
+ * @return True if the unit can be selected, false otherwise.
+ */
+bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const
+{
+	return (_faction == faction && !isOut() && (!checkReselect || reselectAllowed()) && (!checkInventory || hasInventory()));
+}
+
+/**
+ * Checks if this unit has an inventory. Large units and/or
+ * terror units don't have inventories.
+ * @return True if an inventory is available, false otherwise.
+ */
+bool BattleUnit::hasInventory() const
+{
+	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
+
 }

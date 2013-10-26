@@ -32,7 +32,6 @@
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/Ruleset.h"
-#include "LanguageState.h"
 #include "MainMenuState.h"
 
 namespace OpenXcom
@@ -442,16 +441,38 @@ void StartState::think()
 			Log(LOG_INFO) << "Resources loaded successfully.";
 			Log(LOG_INFO) << "Loading language...";
 			std::string defaultLang = "en-US";
+			// No language set, detect based on system
 			if (Options::getString("language").empty())
 			{
-				_game->loadLanguage(defaultLang);
+				std::string locale = CrossPlatform::getLocale();
+				std::string lang = locale.substr(0, locale.find_first_of('-'));
+				// Try to load full locale
+				try
+				{
+					_game->loadLanguage(locale);
+				}
+				catch (std::exception)
+				{
+					// Try to load language locale
+					try
+					{
+						_game->loadLanguage(lang);
+					}
+					// Give up, use default
+					catch (std::exception)
+					{
+						_game->loadLanguage(defaultLang);
+					}
+				}
 			}
 			else
 			{
+				// Use options language
 				try
 				{
 					_game->loadLanguage(Options::getString("language"));
 				}
+				// Language not found, use default
 				catch (std::exception)
 				{
 					_game->loadLanguage(defaultLang);

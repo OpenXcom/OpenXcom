@@ -190,14 +190,13 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 			_terrain->calculateFOV(_unit->getPosition());
-			unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			if (_parent->checkForProximityGrenades(_unit))
 			{
 				_parent->popState();
 				return;
 			}
-
 			if (unitSpotted)
 			{
 				_unit->setCache(0);
@@ -275,10 +274,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 			if (_unit->getFaction() == FACTION_HOSTILE &&
-				((_parent->getSave()->getTile(destination)->getUnit() &&
-				_parent->getSave()->getTile(destination)->getUnit()->getFaction() == FACTION_HOSTILE &&
-				_parent->getSave()->getTile(destination)->getUnit() != _unit) ||
-				_parent->getSave()->getTile(destination)->getFire() > 0))
+				_parent->getSave()->getTile(destination)->getFire() > 0)
 			{
 				tu -= 32; // we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 			}
@@ -332,6 +328,8 @@ void UnitWalkBState::think()
 			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
 				_unit->lookAt(dir);
+				_unit->setCache(0);
+				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
 
@@ -372,7 +370,10 @@ void UnitWalkBState::think()
 						>= 28)))  // 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						_action.TU = 0;
-						postPathProcedures();
+						_pf->abortPath();
+						_unit->setCache(0);
+						_parent->getMap()->cacheUnit(_unit);
+						_parent->popState();
 						return;
 					}
 				}
@@ -427,7 +428,7 @@ void UnitWalkBState::think()
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
-		unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
@@ -469,6 +470,10 @@ void UnitWalkBState::postPathProcedures()
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		int dir = _action.finalFacing;
+		if (_action.finalAction)
+		{
+			_unit->dontReselect();
+		}
 		if (_unit->getCharging() != 0)
 		{
 			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());
@@ -573,7 +578,7 @@ void UnitWalkBState::playMovementSound()
 		else
 		{
 			// play default flying sound
-			if (_unit->getWalkingPhase() == 0 && !_falling)
+			if (_unit->getWalkingPhase() == 1 && !_falling)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
 			}

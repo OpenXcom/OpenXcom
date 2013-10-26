@@ -4,78 +4,163 @@ lookWeights:
   - 0
   - 0
 maleFirst:
-  - Anatoly
-  - Andrei
+  - Aleksandr
+  - Aleksey
+  - Anatoliy
+  - Andrey
+  - Anton
+  - Artem
+  - Artur
   - Boris
-  - Dmitry
-  - Gennady
+  - Denis
+  - Dmitriy
+  - Eduard
+  - Evgeniy
+  - Gennadiy
+  - Georgiy
   - Grigoriy
   - Igor
+  - Ilya
   - Ivan
+  - Konstantin
   - Leonid
-  - Mikhail
-  - Nikolai
-  - Sergei
-  - Victor
+  - Maxim
+  - Mihail
+  - Nikolay
+  - Oleg
+  - Pavel
+  - Petr
+  - Roman
+  - Ruslan
+  - Sergey
+  - Stanislav
+  - Vadim
+  - Valentin
+  - Valeriy
+  - Vasiliy
+  - Viktor
+  - Vitaliy
   - Vladimir
-  - Yuri
+  - Vladislav
+  - Vyacheslav
+  - Yuriy
 femaleFirst:
+  - Albina
+  - Aleksandra
+  - Alla
+  - Alyona
+  - Anastasiya
   - Anna
+  - Antonina
+  - Darya
+  - Ekaterina
   - Elena
+  - Evgeniya
   - Galina
   - Inna
   - Irina
+  - Kristina
+  - Kseniya
+  - Larisa
+  - Lidiya
+  - Liliya
+  - Lyubov
   - Lyudmila
+  - Margarita
   - Marina
+  - Mariya
+  - Nadezhda
+  - Natalya
+  - Nina
   - Oksana
+  - Olesya
   - Olga
-  - Tatyana
+  - Raisa
+  - Svetlana
   - Tamara
+  - Tatyana
+  - Valentina
   - Varvara
-  - Yana
+  - Vera
+  - Viktoriya
+  - Yulia
+  - Zinaida
+  - Zoya  
 maleLast:
+  - Alekseev
+  - Andreev
   - Antonov
-  - Belov
-  - Chernov
-  - Doronin
+  - Borisov
+  - Fedorov
+  - Egorov
+  - Grigoryev
   - Gromov
+  - Ivanov
   - Komarov
-  - Korolev
+  - Korolyov
+  - Kozlov
+  - Kuzmin
+  - Kuznetsov
   - Lebedev
-  - Likhachev
-  - Matveev
-  - Mikhailov
+  - Makarov
+  - Mihailov
+  - Morozov
   - Nikitin
+  - Nikolaev
+  - Novikov
+  - Orlov
+  - Pavlov
   - Petrov
+  - Popov
   - Romanov
-  - Samoylenko
-  - Sharov
-  - Shedrin
-  - Shalimov
-  - Tarasov
-  - Voronin
-  - Yakushev
-  - Zhdanovich
+  - Semyonov
+  - Sergeev
+  - Smirnov
+  - Sokolov
+  - Solovyov
+  - Stepanov
+  - Vasilyev
+  - Volkov
+  - Vorobyov
+  - Yakovlev
+  - Zaitsev
+  - Zaharov
 femaleLast:
+  - Alekseeva
+  - Andreeva
   - Antonova
-  - Belova
-  - Chernova
-  - Doronina
+  - Borisova
+  - Fedorova
+  - Egorova
+  - Grigoryeva
   - Gromova
+  - Ivanova
   - Komarova
-  - Koroleva
+  - Korolyova
+  - Kozlova
+  - Kuzmina
+  - Kuznetsova
   - Lebedeva
-  - Likhacheva
-  - Matveeva
-  - Mikhailova
+  - Makarova
+  - Mihailova
+  - Morozova
   - Nikitina
+  - Nikolaeva
+  - Novikova
+  - Orlova
+  - Pavlova
   - Petrova
+  - Popova
   - Romanova
-  - Samoylenko
-  - Sharova
-  - Shedrina
-  - Shalimova
-  - Tarasova
-  - Voronina
-  - Yakusheva
-  - Zhdanovich
+  - Semyonova
+  - Sergeeva
+  - Smirnova
+  - Sokolova
+  - Solovyova
+  - Stepanova
+  - Vasilyeva
+  - Volkova
+  - Vorobyova
+  - Yakovleva
+  - Zaitseva
+  - Zaharova

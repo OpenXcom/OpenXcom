@@ -18,6 +18,7 @@
  */
 #include "Screen.h"
 #include <sstream>
+#include <cmath>
 #include <iomanip>
 #include <limits.h>
 #include "../lodepng.h"
@@ -41,7 +42,7 @@ int Screen::BASE_HEIGHT = 200;
 /// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 void Screen::makeVideoFlags()
 {
-	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
+	_flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_HWPALETTE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
 	if (Options::getBool("allowResize")) _flags |= SDL_RESIZABLE;
@@ -72,7 +73,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
 
 		if (0 == prev) prev = (char*)"";
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
 		
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -80,7 +81,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	setResolution(width, height);
 	if (!_fullscreen  && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{ // We don't want to put the window back to the starting position later when the window is resized.
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
 
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -133,7 +134,7 @@ void Screen::handle(Action *action)
 	}
 	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::getInt("keyScreenshot"))
 	{
-		std::stringstream ss;
+		std::ostringstream ss;
 		int i = 0;
 		do
 		{
@@ -159,7 +160,7 @@ void Screen::flip()
 {
 	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT || isOpenGLEnabled())
 	{
-		Zoom::flipWithZoom(_surface->getSurface(), _screen, &glOutput);
+		Zoom::flipWithZoom(_surface->getSurface(), _screen, _topBlackBand, _bottomBlackBand, _leftBlackBand, _rightBlackBand, &glOutput);
 	}
 	else
 	{
@@ -298,6 +299,73 @@ void Screen::setResolution(int width, int height)
 	_scaleX = getWidth() / (double)BASE_WIDTH;
 	_scaleY = getHeight() / (double)BASE_HEIGHT;
 
+	bool cursorInBlackBands;
+	if (!Options::getBool("keepAspectRatio"))
+	{
+		cursorInBlackBands = false;
+	}
+	else if (_fullscreen)
+	{
+		cursorInBlackBands = Options::getBool("cursorInBlackBandsInFullscreen");
+	}
+	else if (!Options::getBool("borderless"))
+	{
+		cursorInBlackBands = Options::getBool("cursorInBlackBandsInWindow");
+	}
+	else
+	{
+		cursorInBlackBands = Options::getBool("cursorInBlackBandsInBorderlessWindow");
+	}
+
+	if (_scaleX > _scaleY && Options::getBool("keepAspectRatio"))
+	{
+		int targetWidth = floor(_scaleY * (double)BASE_WIDTH);
+		_topBlackBand = _bottomBlackBand = 0;
+		_leftBlackBand = (getWidth() - targetWidth) / 2;
+		if (_leftBlackBand < 0)
+		{
+			_leftBlackBand = 0;
+		}
+		_rightBlackBand = getWidth() - targetWidth - _leftBlackBand;
+		_cursorTopBlackBand = 0;
+
+		if (cursorInBlackBands)
+		{
+			_scaleX = _scaleY;
+			_cursorLeftBlackBand = _leftBlackBand;
+		}
+		else
+		{
+			_cursorLeftBlackBand = 0;
+		}		
+	}
+	else if (_scaleY > _scaleX && Options::getBool("keepAspectRatio"))
+	{
+		int targetHeight = floor(_scaleX * (double)BASE_HEIGHT);
+		_topBlackBand = (getHeight() - targetHeight) / 2;
+		if (_topBlackBand < 0)
+		{
+			_topBlackBand = 0;
+		}
+        _bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
+		_leftBlackBand = _rightBlackBand = 0;
+		_cursorLeftBlackBand = 0;
+
+		if (cursorInBlackBands)
+		{
+			_scaleY = _scaleX;
+			_cursorTopBlackBand = _topBlackBand;
+		}
+		else
+		{
+			_cursorTopBlackBand = 0;
+		}		
+	}
+	else
+	{
+		_topBlackBand = _bottomBlackBand = _leftBlackBand = _rightBlackBand = _cursorTopBlackBand = _cursorLeftBlackBand = 0;
+	}
+
 	if (isOpenGLEnabled()) 
 	{
 		glOutput.init(BASE_WIDTH, BASE_HEIGHT);
@@ -352,6 +420,24 @@ double Screen::getXScale() const
 double Screen::getYScale() const
 {
 	return _scaleY;
+}
+
+/**
+ * Returns the screen's top black forbidden to cursor band's height.
+ * @return Height in pixel.
+ */
+int Screen::getCursorTopBlackBand() const
+{
+	return _cursorTopBlackBand;
+}
+
+/**
+ * Returns the screen's left black forbidden to cursor band's width.
+ * @return Width in pixel.
+ */
+int Screen::getCursorLeftBlackBand() const
+{
+	return _cursorLeftBlackBand;
 }
 
 /**

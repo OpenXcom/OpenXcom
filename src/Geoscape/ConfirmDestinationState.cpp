@@ -51,7 +51,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_window = new Window(this, 224, 72, 16, 64);
 	_btnOk = new TextButton(50, 12, 68, 104);
 	_btnCancel = new TextButton(50, 12, 138, 104);
-	_txtTarget = new Text(214, 32, 21, 72);
+	_txtTarget = new Text(212, 32, 22, 72);
 
 	// Set palette
 	if (w != 0 && w->getId() == 0)
@@ -89,16 +89,14 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTarget->setWordWrap(true);
-	std::wstringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
-		ss << tr("STR_TARGET_WAY_POINT");
+		_txtTarget->setText(tr("STR_TARGET").arg(tr("STR_WAY_POINT")));
 	}
 	else
 	{
-		ss << tr("STR_TARGET") << _target->getName(_game->getLanguage());
+		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
 	}
-	_txtTarget->setText(ss.str());
 }
 
 /**

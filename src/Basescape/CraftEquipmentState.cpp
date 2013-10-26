@@ -125,15 +125,11 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+1);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss;
-	ss << tr("STR_SPACE_AVAILABLE") << L'\x01'<< c->getSpaceAvailable();
-	_txtAvailable->setText(ss.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 
 	_txtUsed->setColor(Palette::blockOffset(15)+1);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << tr("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
-	_txtUsed->setText(ss2.str());
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
@@ -425,12 +421,8 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 1, ss.str());
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
 
-	std::wstringstream ss3;
-	ss3 << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss3.str());
-	std::wstringstream ss4;
-	ss4 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss4.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 }
 
 /**
@@ -633,13 +625,7 @@ void CraftEquipmentState::btnClearClick(Action *)
 void CraftEquipmentState::btnInventoryClick(Action *)
 {
 	Craft *craft = _base->getCrafts()->at(_craft);
-	if (craft->getNumSoldiers() == 0)
-	{
-		std::wstringstream ss;
-		ss << craft->getName(_game->getLanguage()) << L'\n' << tr("STR_NO_CREW");
-		_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
-	}
-	else
+	if (craft->getNumSoldiers() != 0)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 

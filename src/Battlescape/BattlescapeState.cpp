@@ -69,7 +69,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "WarningMessage.h"
-#include "BattlescapeOptionsState.h"
+#include "../Menu/PauseState.h"
 #include "DebriefingState.h"
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
@@ -404,7 +404,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
-		std::stringstream key, tooltip;
+		std::ostringstream key, tooltip;
 		key << "keyBattleCenterEnemy" << (i+1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)&BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
@@ -463,11 +463,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
-	_animTimer->start();
 
 	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
-	_gameTimer->start();
 
 	_battleGame = new BattlescapeGame(_save, this);
 
@@ -493,6 +491,8 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	_animTimer->start();
+	_gameTimer->start();
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
@@ -799,6 +799,16 @@ void BattlescapeState::btnInventoryClick(Action *)
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
 			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
@@ -849,13 +859,14 @@ void BattlescapeState::btnPrevSoldierClick(Action *)
  * Selects the next soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
  * @param setReselect When true, flag the current unit first.
+ * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
+void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -867,13 +878,15 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 /**
  * Selects the previous soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
+ * @param setReselect When true, flag the current unit first.
+ * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
+void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
+		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -897,7 +910,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
 void BattlescapeState::btnHelpClick(Action *)
 {
 	if (allowButtons(true))
-		_game->pushState(new BattlescapeOptionsState(_game));
+		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
 }
 
 /**
@@ -945,7 +958,17 @@ void BattlescapeState::btnStatsClick(Action *action)
 				// on the stats button when the mouse is on the scroll-border
 				b = false;
 		}
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit()));
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
+		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
 	}
 }
 
@@ -1039,7 +1062,7 @@ void BattlescapeState::btnReserveClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
@@ -1368,11 +1391,11 @@ inline void BattlescapeState::handle(Action *action)
 			// not works in debug mode to prevent conflict in hotkeys by default
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new SaveState(_game, false, true));
+				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, true));
 			}
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new LoadState(_game, false, true));
+				_game->pushState(new LoadState(_game, OPT_BATTLESCAPE, true));
 			}
 
 			// voxel view dump
@@ -1485,7 +1508,7 @@ void BattlescapeState::saveAIMap()
 		}
 	}
 
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss.str("");
 	ss << "z = " << tilePos.z;
@@ -1528,7 +1551,7 @@ void BattlescapeState::saveVoxelView()
 	double ang_x,ang_y;
 	bool black;
 	Tile *tile;
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
 	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
@@ -1645,7 +1668,7 @@ void BattlescapeState::saveVoxelView()
  */
 void BattlescapeState::saveVoxelMap()
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	static const unsigned char pal[30]=
 	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
@@ -1867,7 +1890,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 		_btnKneel->invert(0);
@@ -1885,7 +1908,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		if (_battleGame->getSave()->getSelectedUnit())
 		{

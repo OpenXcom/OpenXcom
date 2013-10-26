@@ -72,11 +72,13 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	// HANDOBS.PCK: 128 entries
 	if (_handSprite > 127)
 		_handSprite += modIndex;
-	_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite);
-	// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-	_bulletSprite *= 35;
-	if (_bulletSprite >= 385)
-		_bulletSprite += modIndex;
+	if (node["bulletSprite"])
+	{
+		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
+		_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite) * 35;
+		if (_bulletSprite >= 385)
+			_bulletSprite += modIndex;
+	}
 	_fireSound = node["fireSound"].as<int>(_fireSound);
 	// BATTLE.CAT: 55 entries
 	if (_fireSound > 54)

@@ -126,11 +126,7 @@ namespace OpenXcom
 		ss << ufo->getWeaponRange();
 		_lstInfo->addRow(2, tr("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
 
-		ss.str(L"");ss.clear();
-		ss << ufo->getMaxSpeed();
-		ss << " ";
-		ss << tr("STR_KNOTS");
-		_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), tr("STR_KNOTS").arg(ufo->getMaxSpeed()).c_str());
 
 		_lstInfo->draw();
 	}

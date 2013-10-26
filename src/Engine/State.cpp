@@ -24,13 +24,15 @@
 #include "Font.h"
 #include "Language.h"
 #include "LocalizedText.h"
+#include "Palette.h"
 #include "../Resource/ResourcePack.h"
+#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
-#include "../Basescape/BaseView.h"
-#include "../Battlescape/WarningMessage.h"
+#include "../Interface/ArrowButton.h"
+#include "../Interface/Slider.h"
 
 namespace OpenXcom
 {
@@ -220,6 +222,55 @@ void State::lowerAllSurfaces()
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
+	}
+}
+
+void State::applyBattlescapeTheme()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		Window* window = dynamic_cast<Window*>(*i);
+		if (window)
+		{
+			window->setColor(Palette::blockOffset(0));
+			window->setHighContrast(true);
+			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+		}
+		Text* text = dynamic_cast<Text*>(*i);
+		if (text)
+		{
+			text->setColor(Palette::blockOffset(0));
+			text->setHighContrast(true);
+		}
+		TextButton* button = dynamic_cast<TextButton*>(*i);
+		if (button)
+		{
+			button->setColor(Palette::blockOffset(0));
+			button->setHighContrast(true);
+		}
+		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
+		if (edit)
+		{
+			edit->setColor(Palette::blockOffset(0));
+			edit->setHighContrast(true);
+		}
+		TextList* list = dynamic_cast<TextList*>(*i);
+		if (list)
+		{
+			list->setColor(Palette::blockOffset(0));
+			list->setHighContrast(true);
+		}
+		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
+		if (arrow)
+		{
+			arrow->setColor(Palette::blockOffset(0));
+		}
+		Slider *slider = dynamic_cast<Slider*>(*i);
+		if (slider)
+		{
+			slider->setColor(Palette::blockOffset(0));
+			slider->setHighContrast(true);
+		}
 	}
 }
 

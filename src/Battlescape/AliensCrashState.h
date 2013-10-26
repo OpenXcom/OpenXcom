@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ABANDONGAMESTATE_H
-#define OPENXCOM_ABANDONGAMESTATE_H
+#ifndef OPENXCOM_ALIENSDIEDSTATE_H
+#define OPENXCOM_ALIENSDIEDSTATE_H
 
 #include "../Engine/State.h"
+#include "DebriefingState.h"
 
 namespace OpenXcom
 {
@@ -29,24 +30,22 @@ class Window;
 class Text;
 
 /**
- * Abandon Game window shown before
- * quitting the game from the Geoscape.
+ * Screen shown when all aliens died
+ * during a crash site.
  */
-class AbandonGameState : public State
+class AliensCrashState : public State
 {
 private:
-	TextButton *_btnYes, *_btnNo;
+	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
 public:
-	/// Creates the Abandon Game state.
-	AbandonGameState(Game *game);
-	/// Cleans up the Abandon Game state.
-	~AbandonGameState();
-	/// Handler for clicking the Yes button.
-	void btnYesClick(Action *action);
-	/// Handler for clicking the No button.
-	void btnNoClick(Action *action);
+	/// Creates the Aliens Crash state.
+	AliensCrashState(Game *game);
+	/// Cleans up the Aliens Crash state.
+	~AliensCrashState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
 };
 
 }

@@ -151,6 +151,10 @@ void Map::think()
  */
 void Map::draw()
 {
+	if (!_redraw)
+	{
+		return;
+	}
 	Surface::draw();
 	Tile *t;
 
@@ -226,7 +230,7 @@ void Map::drawTerrain(Surface *surface)
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile)
+	if (_projectile && _explosions.empty())
 	{
 		int part = _projectile->getItem() ? 0 : BULLET_SPRITES-1;
 		for (int i = 0; i <= part; ++i)
@@ -768,8 +772,11 @@ void Map::drawTerrain(Surface *surface)
 			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
 			{
-				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				if ((*i)->getCurrentFrame() >= 0)
+				{
+					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				}
 			}
 			else if ((*i)->isHit())
 			{

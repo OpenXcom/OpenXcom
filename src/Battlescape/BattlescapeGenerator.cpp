@@ -133,9 +133,10 @@ void BattlescapeGenerator::setAlienRace(const std::string &alienRace)
 
 /**
  * Sets the alien item level. This is used to determine how advanced the equipment of the aliens will be.
- * - this value should be from 0 to 2.
+ * note: this only applies to "New Battle" type games. we intentionally don't alter the month for those,
+ * because we're using monthsPassed -1 for new battle in other sections of code.
+ * - this value should be from 0 to the size of the itemLevel array in the ruleset (default 9).
  * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
- * - how quick a race evolves varies per race? TODO
  * @param alienItemLevel AlienItemLevel.
  */
 void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
@@ -582,15 +583,30 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
+	int month;
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
+	{
+		month =
+		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
+		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
+		_game->getSavedGame()->getMonthsPassed() ;  // else
+	}
+	else
+	{
+		month = _alienItemLevel;
+	}
 	for (std::vector<DeploymentData>::iterator d = deployment->getDeploymentData()->begin(); d != deployment->getDeploymentData()->end(); ++d)
 	{
 		std::string alienName = race->getMember((*d).alienRank);
 
-		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
-		if( _game->getSavedGame()->getDifficulty() > DIFF_EXPERIENCED )
+		int quantity;
+		
+		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
+			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
+		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
 			quantity = (*d).lowQty+(((*d).highQty-(*d).lowQty)/2) + RNG::generate(0, (*d).dQty); // veteran/genius
-		else if( _game->getSavedGame()->getDifficulty() > DIFF_GENIUS )
-			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super
+		else
+			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super (and beyond?)
 
 		for (int i = 0; i < quantity; i++)
 		{
@@ -599,6 +615,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 				outside = false;
 			Unit *rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
+			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9));
 			if (unit)
 			{
 				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
@@ -614,7 +631,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 				}
 				else
 				{
-					for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
+					for (std::vector<std::string>::iterator it = (*d).itemSets.at(itemLevel).items.begin(); it != (*d).itemSets.at(itemLevel).items.end(); ++it)
 					{
 						RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
 						if (ruleItem)
@@ -730,6 +747,10 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
 	{
+		// skip flares if not dark enough
+		if (BT_FLARE == item->getRules()->getBattleType() && _worldShade < NIGHT_SHADE_LEVEL)
+			return item;
+
 		bool loaded;
 		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 
@@ -764,7 +785,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 						}
 					}
 				}
-				// only place the weapon onto the soldier when its loaded with its layout-ammo (if any)
+				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
 					item->moveToOwner((*i));
@@ -894,6 +915,26 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					item->setSlotX(3);
 					item->setSlotY(0);
 					break;
+				}
+			}
+			break;
+		case BT_FLARE:
+			// equip these on night-missions
+			if (_worldShade >= NIGHT_SHADE_LEVEL)
+			{
+				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				{
+					// skip the vehicles
+					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
+
+					if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
+					{
+						item->moveToOwner((*i));
+						item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
+						item->setSlotX(1);
+						item->setSlotY(0);
+						break;
+					}
 				}
 			}
 			break;
@@ -1166,7 +1207,7 @@ void BattlescapeGenerator::generateMap()
 					{
 						// lots of crazy stuff here, which is for the hangars (or other large base facilities one may create)
 						std::string mapname = (*i)->getRules()->getMapName();
-						std::stringstream newname;
+						std::ostringstream newname;
 						newname << mapname.substr(0, mapname.size()-2); // strip of last 2 digits
 						int mapnum = atoi(mapname.substr(mapname.size()-2, 2).c_str()); // get number
 						mapnum += num;
@@ -1551,7 +1592,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	int x = xoff, y = yoff, z = 0;
 	char size[3];
 	unsigned char value[4];
-	std::stringstream filename;
+	std::ostringstream filename;
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
 	int terrainObjectID;
 
@@ -1648,7 +1689,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 {
 	int id = 0;
 	char value[24];
-	std::stringstream filename;
+	std::ostringstream filename;
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file
@@ -1732,7 +1773,11 @@ void BattlescapeGenerator::deployCivilians(int max)
 {
 	if (max)
 	{
-		int number = RNG::generate(0, max);
+		// inevitably someone will point out that ufopaedia says 0-16 civilians.
+		// to that person:  i looked at the code and it says otherwise.
+		// 0 civilians would only be a possibility if there were already 80 units,
+		// or no spawn nodes for civilians.
+		int number = RNG::generate(max/2, max);
 
 		if (number > 0)
 		{

@@ -79,7 +79,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	add(_txtFactor);
 	for (int scaleText = 0; scaleText != 10; ++scaleText)
 	{
-		_txtScale.push_back(new Text(42, 16, 84, 171 - (scaleText*14)));
+		_txtScale.push_back(new Text(42, 16, 80, 171 - (scaleText*14)));
 		add(_txtScale.at(scaleText));
 	}
 
@@ -87,7 +87,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	int offset = 0;
 	for (std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
-		_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnRegions.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_regionToggles.push_back(false);
 		_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
@@ -102,7 +102,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		++offset;
 	}
 
-	_btnRegionTotal = new ToggleTextButton(80, 11, 0, offset*11);
+	_btnRegionTotal = new ToggleTextButton(90, 11, 0, offset*11);
 	_regionToggles.push_back(false);
 	_btnRegionTotal->onMouseClick((ActionHandler)&GraphsState::btnRegionListClick);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
@@ -117,7 +117,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	offset = 0;
 	for (std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
-		_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnCountries.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_countryToggles.push_back(false);
 		_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnCountries.at(offset)->setInvertColor(-42 + (4*offset));
@@ -134,7 +134,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		++offset;
 	}
 
-	_btnCountryTotal = new ToggleTextButton(80, 11, 0, offset*11);
+	_btnCountryTotal = new ToggleTextButton(90, 11, 0, offset*11);
 	_countryToggles.push_back(false);
 	_btnCountryTotal->onMouseClick((ActionHandler)&GraphsState::btnCountryListClick);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
@@ -152,7 +152,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	for (int iter = 0; iter != 5; ++iter)
 	{
 		offset = iter;
-		_btnFinances.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnFinances.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_financeToggles.push_back(false);
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
         _btnFinances.at(offset)->setInvertColor(-42 + (4*offset));
@@ -547,16 +547,14 @@ void GraphsState::resetScreen()
 void GraphsState::updateScale(double lowerLimit, double upperLimit)
 {
 	double increment = ((upperLimit - lowerLimit) / 9);
-	if (increment == 0)
+	if (increment < 10)
 	{
 		increment = 10;
 	}
 	double text = lowerLimit;
-	for (double i = 0; i < 10; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
-		std::wstringstream ss;
-		ss << static_cast<int>(text) << " ";
-		_txtScale.at(i)->setText(ss.str());
+		_txtScale.at(i)->setText(Text::formatNumber(static_cast<int>(text)));
 		text += increment;
 	}
 }

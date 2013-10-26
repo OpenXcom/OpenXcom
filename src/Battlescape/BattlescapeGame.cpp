@@ -83,7 +83,7 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
-	
+
 }
 
 
@@ -172,7 +172,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		unit->dontReselect();
 	}
-	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2)
+	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2 || !unit->reselectAllowed())
 	{
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
@@ -240,7 +240,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->_hidingForTurn = false;
 		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
-	AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(ai); // this cast only works when ai was already AlienBAIState at heart
+	//AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(ai); // this cast only works when ai was already AlienBAIState at heart
 
 	BattleAction action;
 	action.actor = unit;
@@ -263,7 +263,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
-	if (aggro != 0)
+	if (unit->getCharging() != 0)
 	{
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
@@ -278,7 +278,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 		if (_save->getTile(action.target))
 		{
-			_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
+			_save->getPathfinding()->calculate(action.actor, action.target);//, _save->getTile(action.target)->getUnit());
 		}
 		if (_save->getPathfinding()->getStartDirection() != -1)
 		{
@@ -309,9 +309,9 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			if (success && action.type == BA_MINDCONTROL)
 			{
 				// show a little infobox with the name of the unit and "... is under alien control"
-				std::wstringstream ss;
-				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL");
-				_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+				Game *game = _parentState->getGame();
+				BattleUnit *unit = _save->getTile(action.target)->getUnit();
+				game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 			}
 			_save->removeItem(action.weapon);
 		}
@@ -399,7 +399,7 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() == 0)  // it's a grenade to explode now
 			{
 				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
@@ -412,7 +412,6 @@ void BattlescapeGame::endTurn()
 			++it;
 		}
 	}
-
 	// check for terrain explosions
 	Tile *t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)
@@ -422,6 +421,17 @@ void BattlescapeGame::endTurn()
 		t = _save->getTileEngine()->checkForTerrainExplosions();
 		statePushBack(0);
 		return;
+	}
+	
+	if (_save->getSide() != FACTION_NEUTRAL)
+	{
+		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
+		{
+				if (((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE) && (*it)->getExplodeTurn() > 0)
+				{
+					(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
+				}
+		}
 	}
 
 	// if all units from either faction are killed - the mission is over.
@@ -557,7 +567,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (hiddenExplosion)
 				{
 					// this is instant death from UFO powersources, without screaming sounds
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true)); 
+					statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
 				}
 				else
 				{
@@ -616,7 +626,7 @@ void BattlescapeGame::handleNonTargetAction()
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
+				_currentAction.weapon->setExplodeTurn(_currentAction.value);
 			}
 			else
 			{
@@ -738,7 +748,7 @@ void BattlescapeGame::handleState()
 		{
 			_states.front()->think();
 		}
-		getMap()->draw(); // redraw map
+		getMap()->invalidate(); // redraw map
 	}
 }
 
@@ -867,7 +877,7 @@ void BattlescapeGame::popState()
 						getMap()->cacheUnit(_save->getSelectedUnit());
 					}
 					_AIActionCounter = 0;
-					if (_save->selectNextPlayerUnit(true) == 0 && _states.empty())
+					if (_states.empty() && _save->selectNextPlayerUnit(true) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -1051,17 +1061,15 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	_save->setSelectedUnit(unit);
 
 	// show a little infobox with the name of the unit and "... is panicking"
-	std::wstringstream ss;
-	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
+	Game *game = _parentState->getGame();
 	if (status == STATUS_PANICKING)
 	{
-		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
+		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
 	else
 	{
-		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender());
+		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
-	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
 
@@ -1123,9 +1131,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				}
 				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 				{
-					if (ba.weapon->getExplodeTurn() == 0)
+					if (ba.weapon->getExplodeTurn() == -1)
 					{
-						ba.weapon->setExplodeTurn(_save->getTurn());
+						ba.weapon->setExplodeTurn(0);
 					}
 					ba.type = BA_THROW;
 					statePushBack(new ProjectileFlyBState(this, ba));
@@ -1183,7 +1191,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 		}
 	}
-	else
+	else if (!_states.empty() && _states.front() != 0)
 	{
 		_states.front()->cancel();
 		return true;
@@ -1232,7 +1240,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
+					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
 					cancelCurrentAction();
 				}
 				else
@@ -1262,21 +1270,17 @@ void BattlescapeGame::primaryAction(const Position &pos)
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{
 						// show a little infobox if it's successful
-						std::wstringstream ss;
+						Game *game = _parentState->getGame();
 						if (_currentAction.type == BA_PANIC)
 						{
 							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
-							ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
+							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
-							ss << _parentState->getGame()->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL");
+							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						}
-						_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 						_parentState->updateSoldierInfo();
-						_currentAction.targeting = false;
-						_currentAction.type = BA_NONE;
-						setupCursor();
 					}
 					if (builtinpsi)
 					{
@@ -1426,11 +1430,15 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Sets the TU reserved type.
  * @param tur A battleactiontype.
+ * @param player is this requested by the player?
  */
-void BattlescapeGame::setTUReserved(BattleActionType tur)
+void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 {
 	_tuReserved = tur;
-	_playerTUReserved = tur;
+	if (player)
+	{
+		_playerTUReserved = tur;
+	}
 }
 
 /**
@@ -1453,6 +1461,11 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 		return;
 
 	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
+
+	if (item->getUnit())
+	{
+		item->getUnit()->setPosition(p);
+	}
 
 	if(newItem)
 	{
@@ -1515,7 +1528,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	unit->setTile(0);
 
 	getSave()->getTile(unit->getPosition())->setUnit(0);
-	std::stringstream newArmor;
+	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(newType)->getArmor();
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";

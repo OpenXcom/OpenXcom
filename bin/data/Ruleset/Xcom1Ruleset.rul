@@ -1203,8 +1203,8 @@ craftWeapons:
     reloadCautious: 12
     reloadStandard: 12
     reloadAggressive: 12
-    ammoMax: 99
-    rearmRate: 99
+    ammoMax: 100
+    rearmRate: 100
     launcher: STR_LASER_CANNON
     projectileType: 4
   - type: STR_PLASMA_BEAM_UC
@@ -3483,15 +3483,18 @@ terrains:
       - name: UBASE_11
         width: 10
         length: 10
-      - name: UBASE_12
-        width: 10
-        length: 10
-      - name: UBASE_13
-        width: 10
-        length: 10
-      - name: UBASE_14
-        width: 10
-        length: 10
+#       UBASE_12 is impassable, 13 and 14 are apparently unused.
+#       in the interest of preserving an original experience,
+#       they have been disabled. delete the hashes to re-enable.
+#      - name: UBASE_12
+#        width: 10
+#        length: 10
+#      - name: UBASE_13
+#        width: 10
+#        length: 10
+#      - name: UBASE_14
+#        width: 10
+#        length: 10
       - name: UBASE_15
         width: 20
         length: 20
@@ -7506,6 +7509,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_HEAVY_PLASMA
+      - STR_HEAVY_PLASMA_CLIP
     space: 4
     time: 1000
     cost: 122000
@@ -7524,6 +7528,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_PLASMA_RIFLE
+      - STR_PLASMA_RIFLE_CLIP
     space: 4
     time: 820
     cost: 88000
@@ -7542,6 +7547,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_PLASMA_PISTOL
+      - STR_PLASMA_PISTOL_CLIP
     space: 3
     time: 600
     cost: 56000
@@ -7560,6 +7566,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_BLASTER_LAUNCHER
+      - STR_BLASTER_BOMB
     space: 5
     time: 1200
     cost: 90000
@@ -7578,6 +7585,7 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_SMALL_LAUNCHER
+      - STR_STUN_BOMB
     space: 3
     time: 900
     cost: 78000
@@ -7820,7 +7828,7 @@ ufopaedia:
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_CANNON_UFOPEDIA
-    weapon: STR_ARMOR_PIERCING
+    weapon: STR_DAMAGE_ARMOR_PIERCING
   - id: STR_TANK_ROCKET_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
@@ -7854,16 +7862,19 @@ ufopaedia:
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_PERSONAL_ARMOR
+    text: STR_PERSONAL_ARMOR_UFOPEDIA
   - id: STR_POWER_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_POWER_SUIT
+    text: STR_POWER_SUIT_UFOPEDIA
   - id: STR_FLYING_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_FLYING_SUIT
+    text: STR_FLYING_SUIT_UFOPEDIA
   - id: STR_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
@@ -7917,10 +7928,6 @@ ufopaedia:
   - id: STR_INCENDIARY_ROCKET
     type_id: 4
     section: STR_NOT_AVAILABLE
-  - id: STR_ROCKET_LAUNCHER
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_ROCKET_LAUNCHER_UFOPEDIA
   - id: STR_LASER_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
@@ -8600,6 +8607,7 @@ costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
 timePersonnel: 72
+initialFunding: 6000
 ufoTrajectories:
   - id: P0
     groundTimer: 3000

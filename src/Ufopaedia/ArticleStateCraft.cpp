@@ -75,13 +75,13 @@ namespace OpenXcom
 		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
 		std::wstringstream ss;
-		ss << tr("STR_MAXIMUM_SPEED_UC") << L'\x01' << craft->getMaxSpeed() << L'\x01' << L'\n';
-		ss << tr("STR_ACCELERATION") << L'\x01' << craft->getAcceleration() << L'\x01' << L'\n';
-		ss << tr("STR_FUEL_CAPACITY") << L'\x01' << craft->getMaxFuel() << L'\x01' << L'\n';
-		ss << tr("STR_WEAPON_PODS") << L'\x01' << craft->getWeapons() << L'\x01' << L'\n';
-		ss << tr("STR_DAMAGE_CAPACITY_UC") << L'\x01' << craft->getMaxDamage() << L'\x01' << L'\n';
-		ss << tr("STR_CARGO_SPACE") << L'\x01' << craft->getSoldiers() << L'\x01' << L'\n';
-		ss << tr("STR_HWP_CAPACITY") << L'\x01' << craft->getVehicles();
+		ss << tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(craft->getMaxSpeed())) << L'\n';
+		ss << tr("STR_ACCELERATION").arg(craft->getAcceleration()) << L'\n';
+		ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(craft->getMaxFuel())) << L'\n';
+		ss << tr("STR_WEAPON_PODS").arg(craft->getWeapons()) << L'\n';
+		ss << tr("STR_DAMAGE_CAPACITY_UC").arg(Text::formatNumber(craft->getMaxDamage())) << L'\n';
+		ss << tr("STR_CARGO_SPACE").arg(craft->getSoldiers()) << L'\n';
+		ss << tr("STR_HWP_CAPACITY").arg(craft->getVehicles());
 		_txtStats->setText(ss.str());
 
 		centerAllSurfaces();

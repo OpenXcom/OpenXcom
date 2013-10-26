@@ -59,8 +59,9 @@ struct BattleAction
 	Position cameraPosition;
     bool desperate; // ignoring newly-spotted units
 	int finalFacing;
+	bool finalAction;
     int number; // first action of turn, second, etc.?
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1) { }
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1), finalAction(false), number(0) { }
 };
 
 /**
@@ -148,7 +149,7 @@ public:
 	/// Requests the end of the turn (wait for explosions etc to really end the turn).
 	void requestEndTurn();
 	/// Sets the TU reserved type.
-	void setTUReserved(BattleActionType tur);
+	void setTUReserved(BattleActionType tur, bool player = true);
 	/// Sets up the cursor taking into account the action.
 	void setupCursor();
 	/// Gets the map.
