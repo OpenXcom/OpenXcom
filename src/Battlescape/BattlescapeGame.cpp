@@ -422,7 +422,7 @@ void BattlescapeGame::endTurn()
 		statePushBack(0);
 		return;
 	}
-	
+
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
@@ -2022,14 +2022,14 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
 					{
 						for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 						{
-							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
 							{
 								Position p;
 								p.x = t->getPosition().x*16 + 8;
 								p.y = t->getPosition().y*16 + 8;
 								p.z = t->getPosition().z*24 + t->getTerrainLevel();
 								statePushNext(new ExplosionBState(this, p, (*i), (*i)->getPreviousOwner()));
-								t->getInventory()->erase(i);
+								getSave()->removeItem(*i);
 								unit->setCache(0);
 								getMap()->cacheUnit(unit);
 								return true;
