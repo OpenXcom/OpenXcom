@@ -190,7 +190,7 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 			_terrain->calculateFOV(_unit->getPosition());
-			unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
 			int size = _unit->getArmor()->getSize() - 1;
@@ -206,14 +206,14 @@ void UnitWalkBState::think()
 							if (t)
 							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 							{
-								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
 								{
 									Position p;
 									p.x = t->getPosition().x*16 + 8;
 									p.y = t->getPosition().y*16 + 8;
 									p.z = t->getPosition().z*24 + t->getTerrainLevel();
 									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
-									t->getInventory()->erase(i);
+									_parent->getSave()->removeItem(*i);
 									_unit->setCache(0);
 									_parent->getMap()->cacheUnit(_unit);
 									_parent->popState();
@@ -301,10 +301,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 			if (_unit->getFaction() == FACTION_HOSTILE &&
-				((_parent->getSave()->getTile(destination)->getUnit() &&
-				_parent->getSave()->getTile(destination)->getUnit()->getFaction() == FACTION_HOSTILE &&
-				_parent->getSave()->getTile(destination)->getUnit() != _unit) ||
-				_parent->getSave()->getTile(destination)->getFire() > 0))
+				_parent->getSave()->getTile(destination)->getFire() > 0)
 			{
 				tu -= 32; // we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 			}
@@ -458,7 +455,7 @@ void UnitWalkBState::think()
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
-		unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
@@ -608,7 +605,7 @@ void UnitWalkBState::playMovementSound()
 		else
 		{
 			// play default flying sound
-			if (_unit->getWalkingPhase() == 0 && !_falling)
+			if (_unit->getWalkingPhase() == 1 && !_falling)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
 			}

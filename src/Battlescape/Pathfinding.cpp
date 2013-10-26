@@ -269,10 +269,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
 
-			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
-				return 255;
-
 			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
 			{
 				// check if we can go this way
@@ -415,10 +411,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 			cost += wallcost;
 			if (_unit->getFaction() == FACTION_HOSTILE &&
-				((destinationTile->getUnit() &&
-				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
-				destinationTile->getUnit() != _unit) ||
-				destinationTile->getFire() > 0))
+				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
@@ -589,6 +582,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		{
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+			if (_unit && _unit->getFaction() == unit->getFaction()) return true;
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
@@ -1065,7 +1059,10 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
 
 			// delete the following
-			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
+			bool isDiagonal = (dir&1);
+			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
+			int tuCostDiagonal = tuCost + tuCost / 2;
+			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (isDiagonal && tuCost == lastTUCostDiagonal) || (!isDiagonal && tuCostDiagonal == lastTUCost) || lastTUCost == -1)
 				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
 			{
 				_path.push_back(dir);

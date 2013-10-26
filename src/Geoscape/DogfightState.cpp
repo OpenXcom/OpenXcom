@@ -262,7 +262,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_txtAmmo2 = new Text(16, 9, _x + 64, _y + 70);
 	_txtDistance = new Text(40, 9, _x + 116, _y + 72);
 	_txtStatus = new Text(150, 9, _x + 4, _y + 85);
-	_btnMinimizedIcon = new ImageButton(32, 20, _minimizedIconX, _minimizedIconY);
+	_btnMinimizedIcon = new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterceptionNumber = new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
 	_animTimer = new Timer(30);
@@ -490,12 +490,12 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_w2Timer->onTimer((StateHandler)&DogfightState::fireWeapon2);
 
 	_ufoWtimer->onTimer((StateHandler)&DogfightState::ufoFireWeapon);
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
-	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty()));
+	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)&DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 30 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 15 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)&DogfightState::animateCraftDamage);
@@ -873,13 +873,16 @@ void DogfightState::move()
 					{
 						// Formula delivered by Volutar
 						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
-						_craft->setDamage(_craft->getDamage() + damage);
-						drawCraftDamage();
-						setStatus("STR_INTERCEPTOR_DAMAGED");
-						_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
-						if (_mode == _btnCautious && _craft->getDamagePercentage() >= 50)
+						if (damage)
 						{
-							_targetDist = STANDOFF_DIST;
+							_craft->setDamage(_craft->getDamage() + damage);
+							drawCraftDamage();
+							setStatus("STR_INTERCEPTOR_DAMAGED");
+							_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
+							if (_mode == _btnCautious && _craft->getDamagePercentage() >= 50)
+							{
+								_targetDist = STANDOFF_DIST;
+							}
 						}
 					}
 					p->remove();
@@ -1183,14 +1186,14 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
-	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty()));
+	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	setStatus("STR_UFO_RETURN_FIRE");
 	CraftWeaponProjectile *p = new CraftWeaponProjectile();
 	p->setType(CWPT_PLASMA_BEAM);
-	p->setAccuracy(40);
+	p->setAccuracy(60);
 	p->setDamage(_ufo->getRules()->getWeaponPower());
 	p->setDirection(D_DOWN);
 	p->setHorizontalPosition(HP_CENTER);
@@ -1217,7 +1220,7 @@ void DogfightState::minimumDistance()
 	}
 	if (max == 0)
 	{
-		_targetDist = 560;
+		_targetDist = STANDOFF_DIST;
 	}
 	else
 	{
@@ -1243,7 +1246,7 @@ void DogfightState::maximumDistance()
 	}
 	if (min == 1000)
 	{
-		_targetDist = 560;
+		_targetDist = STANDOFF_DIST;
 	}
 	else
 	{
@@ -1270,7 +1273,7 @@ void DogfightState::btnMinimizeClick(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
-		if (_currentDist == STANDOFF_DIST)
+		if (_currentDist >= STANDOFF_DIST)
 		{
 			setMinimized(true);
 			_window->setVisible(false);

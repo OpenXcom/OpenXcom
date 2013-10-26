@@ -79,14 +79,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	// Load palettes
 	for (int i = 0; i < 5; ++i)
 	{
-		std::stringstream s1, s2;
+		std::ostringstream s1, s2;
 		s1 << "GEODATA/PALETTES.DAT";
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
 		_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 256, Palette::palOffset(i));
 	}
 
-	std::stringstream s1, s2;
+	std::ostringstream s1, s2;
 	s1 << "GEODATA/BACKPALS.DAT";
 	s2 << "BACKPALS.DAT";
 	_palettes[s2.str()] = new Palette();
@@ -105,7 +105,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	// Load surfaces
 	{
-		std::stringstream s;
+		std::ostringstream s;
 		s << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
 		_surfaces["INTERWIN.DAT"]->loadScr(CrossPlatform::getDataFile(s.str()));
@@ -161,14 +161,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	for (int i = 0; i < 3; ++i)
 	{
-		std::stringstream s;
+		std::ostringstream s;
 		s << "GEOGRAPH/" << sets[i];
 
-		std::string ext = sets[i].substr(sets[i].length()-3, sets[i].length());
+		std::string ext = sets[i].substr(sets[i].find_last_of('.')+1, sets[i].length());
 		if (ext == "PCK")
 		{
-			std::string tab = sets[i].substr(0, sets[i].length()-4) + ".TAB";
-			std::stringstream s2;
+			std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
+			std::ostringstream s2;
 			s2 << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
 			_sets[sets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
@@ -180,11 +180,11 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		}
 	}
 	_sets["SCANG.DAT"] = new SurfaceSet(4, 4);
-	std::stringstream scang;
+	std::ostringstream scang;
 	scang << "GEODATA/" << "SCANG.DAT";
 	_sets["SCANG.DAT"]->loadDat (CrossPlatform::getDataFile(scang.str()));
 	// Load polygons
-	std::stringstream s;
+	std::ostringstream s;
 	s << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(CrossPlatform::getDataFile(s.str()), &_polygons);
 
@@ -299,7 +299,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			// Try digital tracks
 			for (int j = 0; j < 3; ++j)
 			{
-				std::stringstream s;
+				std::ostringstream s;
 				s << "SOUND/" << mus[i] << "." << exts[j];
 				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 				{
@@ -320,7 +320,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				// Try MIDI music
 				else
 				{
-					std::stringstream s;
+					std::ostringstream s;
 					s << "SOUND/" << mus[i] << ".mid";
 					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 					{
@@ -350,7 +350,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		std::string *cats = 0;
 		bool wav = true;
 
-		std::stringstream win, dos;
+		std::ostringstream win, dos;
 		win << "SOUND/" << catsWin[0];
 		dos << "SOUND/" << catsDos[0];
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(win.str())))
@@ -368,13 +368,13 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			if (cats == 0)
 			{
-				std::stringstream ss;
+				std::ostringstream ss;
 				ss << catsDos[i] << " not found";
 				throw Exception(ss.str());
 			}
 			else
 			{
-				std::stringstream s;
+				std::ostringstream s;
 				s << "SOUND/" << cats[i];
 				_sounds[catsId[i]] = new SoundSet();
 				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
@@ -482,12 +482,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 						Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 					}
 					int offset = startFrame;
-					std::stringstream folder;
+					std::ostringstream folder;
 					folder << CrossPlatform::getDataFolder(fileName);
 					std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
 					for (std::vector<std::string>::iterator k = contents.begin();
 						k != contents.end(); ++k)
 					{
+						if (!isImageFile((*k).substr((*k).length() -4, (*k).length())))
+							continue;
 						try
 						{
 							s.str("");
@@ -636,7 +638,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					Log(LOG_INFO) << "Loading sound set from folder: " << fileName << " starting at index: " << startSound;
 				}
 				int offset = startSound;
-				std::stringstream folder;
+				std::ostringstream folder;
 				folder << CrossPlatform::getDataFolder(fileName);
 				std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
 				for (std::vector<std::string>::iterator k = contents.begin();
@@ -697,13 +699,13 @@ XcomResourcePack::~XcomResourcePack()
 void XcomResourcePack::loadBattlescapeResources()
 {
 	// Load Battlescape ICONS
-	std::stringstream s;
+	std::ostringstream s;
 	s << "UFOGRAPH/" << "SPICONS.DAT";
 	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
 	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
 
 	s.str("");
-	std::stringstream s2;
+	std::ostringstream s2;
 	s << "UFOGRAPH/" << "CURSOR.PCK";
 	s2 << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
@@ -745,10 +747,10 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (int i = 0; i < 1; ++i)
 	{
-		std::stringstream s;
+		std::ostringstream s;
 		s << "TERRAIN/" << bsets[i];
-		std::string tab = bsets[i].substr(0, bsets[i].length()-4) + ".TAB";
-		std::stringstream s2;
+		std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
+		std::ostringstream s2;
 		s2 << "TERRAIN/" << tab;
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
 		_sets[bsets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
@@ -760,7 +762,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	for (std::vector<std::string>::iterator i = usets.begin(); i != usets.end(); ++i)
 	{
 		std::string path = units + *i;
-		std::string tab = CrossPlatform::getDataFile("UNITS/" + i->substr(0, i->length() - 4) + ".TAB");
+		std::string tab = CrossPlatform::getDataFile("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
 		std::transform(i->begin(), i->end(), i->begin(), toupper);
 		if (*i != "BIGOBS.PCK")
 			_sets[*i] = new SurfaceSet(32, 40);
@@ -777,7 +779,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (int i = 0; i < 1; ++i)
 	{
-		std::stringstream s;
+		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
@@ -793,7 +795,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (int i = 0; i < 7; ++i)
 	{
-		std::stringstream s;
+		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
@@ -851,4 +853,37 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 }
 
+bool XcomResourcePack::isImageFile(std::string extension)
+{
+	std::transform(extension.begin(), extension.end(), extension.begin(), toupper);
+
+	if (
+		// arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
+		/*
+		extension == ".ICO" ||
+		extension == ".CUR" ||
+		extension == ".PNM" ||
+		extension == ".PPM" ||
+		extension == ".PGM" ||
+		extension == ".PBM" ||
+		extension == ".XPM" ||
+		extension == "ILBM" ||
+		// excluding jpeg to avoid inevitable issues due to compression
+		extension == ".JPG" ||
+		extension == "JPEG" ||
+		*/
+		extension == ".BMP" ||
+		extension == ".LBM" ||
+		extension == ".IFF" ||
+		extension == ".PCX" ||
+		extension == ".GIF" ||
+		extension == ".PNG" ||
+		extension == ".TGA" ||
+		extension == ".TIF" ||
+		extension == "TIFF")
+	{
+		return true;
+	}
+	return false;
+}
 }

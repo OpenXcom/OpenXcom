@@ -49,8 +49,7 @@ void Sound::load(const std::string &filename)
 {
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::wstring wstr = Language::cpToWstr(filename);
-	std::string utf8 = Language::wstrToUtf8(wstr);
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	_sound = Mix_LoadWAV(utf8.c_str());
 	if (_sound == 0)

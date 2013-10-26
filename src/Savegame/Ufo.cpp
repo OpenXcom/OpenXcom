@@ -26,7 +26,9 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
+#include "../aresame.h"
 #include <assert.h>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
 #include <algorithm>
@@ -393,46 +395,77 @@ bool Ufo::isDestroyed() const
 void Ufo::calculateSpeed()
 {
 	MovingTarget::calculateSpeed();
-	if (_speedLon > 0)
+
+	double x = _speedLon;
+	double y = -_speedLat;
+
+	// This section guards vs. divide-by-zero.
+	if (AreSame(x, 0.0) || AreSame(y, 0.0))
 	{
-		if (_speedLat > 0)
+		if (AreSame(x, 0.0) && AreSame(y, 0.0))
 		{
-			_direction = "STR_SOUTH_EAST";
+			_direction = "STR_NONE_UC";
 		}
-		else if (_speedLat < 0)
+		else if (AreSame(x, 0.0))
 		{
-			_direction = "STR_NORTH_EAST";
+			if (y > 0.f)
+			{
+				_direction = "STR_NORTH";
+			}
+			else if (y < 0.f)
+			{
+				_direction = "STR_SOUTH";
+			}
 		}
-		else
+		else if (AreSame(y, 0.0))
 		{
-			_direction = "STR_EAST";
+			if (x > 0.f)
+			{
+				_direction = "STR_EAST";
+			}
+			else if (x < 0.f)
+			{
+				_direction = "STR_WEST";
+			}
 		}
+
+		return;
 	}
-	else if (_speedLon < 0)
+
+	double theta = atan2(y, x); // radians
+	theta = theta * 180.f / M_PI; // +/- 180 deg.
+
+	if (22.5f > theta && theta > -22.5f)
 	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH_WEST";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH_WEST";
-		}
-		else
-		{
-			_direction = "STR_WEST";
-		}
+		_direction = "STR_EAST";
+	}
+	else if (-22.5f > theta && theta > -67.5f)
+	{
+		_direction = "STR_SOUTH_EAST";
+	}
+	else if (-67.5f > theta && theta > -112.5f)
+	{
+		_direction = "STR_SOUTH";
+	}
+	else if (-112.5f > theta && theta > -157.5f)
+	{
+		_direction = "STR_SOUTH_WEST";
+	}
+	else if (-157.5f > theta || theta > 157.5f)
+	{
+		_direction = "STR_WEST";
+	}
+	else if (157.5f > theta && theta > 112.5f)
+	{
+		_direction = "STR_NORTH_WEST";
+	}
+	else if (112.5f > theta && theta > 67.5f)
+	{
+		_direction = "STR_NORTH";
 	}
 	else
 	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH";
-		}
+		_direction = "STR_NORTH_EAST";
 	}
 }
 

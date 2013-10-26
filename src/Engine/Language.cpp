@@ -69,6 +69,7 @@ Language::Language() : _id(""), _strings(), _handler(0)
 		_names["pt-PT"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
+		_names["sv"] = utf8ToWstr("Svenska");
 		_names["tr-TR"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
 	}
@@ -165,6 +166,21 @@ std::string Language::wstrToCp(const std::wstring& src)
 }
 
 /**
+ * Takes a wide-character string and converts it to an
+ * 8-bit string with the filesystem encoding.
+ * @param src Wide-character string.
+ * @return Filesystem string.
+ */
+std::string Language::wstrToFs(const std::wstring& src)
+{
+#ifdef _WIN32
+	return Language::wstrToCp(src);
+#else
+	return Language::wstrToUtf8(src);
+#endif
+}
+
+/**
  * Takes an 8-bit string encoded in UTF-8 and converts it
  * to a wide-character string.
  * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
@@ -257,6 +273,21 @@ std::wstring Language::cpToWstr(const std::string& src)
 }
 
 /**
+ * Takes an 8-bit string with the filesystem encoding
+ * and converts it to a wide-character string.
+ * @param src Filesystem string.
+ * @return Wide-character string.
+ */
+std::wstring Language::fsToWstr(const std::string& src)
+{
+#ifdef _WIN32
+	return Language::cpToWstr(src);
+#else
+	return Language::utf8ToWstr(src);
+#endif
+}
+
+/**
  * Replaces every instance of a substring.
  * @param str The string to modify.
  * @param find The substring to find.
@@ -296,10 +327,20 @@ std::vector<std::string> Language::getList(TextList *list)
 
 	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
 	{
-		(*i) = i->substr(0, i->length() - 4);
+		(*i) = CrossPlatform::noExt(*i);
 		if (list != 0)
 		{
-			list->addRow(1, _names[(*i)].c_str());
+			std::wstring name;
+			std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+			if (lang != _names.end())
+			{
+				name = lang->second;
+			}
+			else
+			{
+				name = Language::fsToWstr(*i);
+			}
+			list->addRow(1, name.c_str());
 		}
 	}
 	return langs;
@@ -485,7 +526,7 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	if (0 == n)
 	{
 		// Try specialized form.
-		s = _strings.find(id + "_0");
+		s = _strings.find(id + "_zero");
 	}
 	if (s == _strings.end())
 	{

@@ -55,7 +55,7 @@ int main(int argc, char** args)
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;
-		std::stringstream title;
+		std::ostringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		game = new Game(title.str());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));

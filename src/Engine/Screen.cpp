@@ -42,7 +42,7 @@ int Screen::BASE_HEIGHT = 200;
 /// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 void Screen::makeVideoFlags()
 {
-	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
+	_flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_HWPALETTE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
 	if (Options::getBool("allowResize")) _flags |= SDL_RESIZABLE;
@@ -73,7 +73,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
 
 		if (0 == prev) prev = (char*)"";
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
 		
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -81,7 +81,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	setResolution(width, height);
 	if (!_fullscreen  && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{ // We don't want to put the window back to the starting position later when the window is resized.
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
 
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -134,7 +134,7 @@ void Screen::handle(Action *action)
 	}
 	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::getInt("keyScreenshot"))
 	{
-		std::stringstream ss;
+		std::ostringstream ss;
 		int i = 0;
 		do
 		{

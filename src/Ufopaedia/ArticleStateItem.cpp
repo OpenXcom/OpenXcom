@@ -42,7 +42,7 @@ namespace OpenXcom
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(150, 32, 5, 24);
+		_txtTitle = new Text(148, 32, 5, 24);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -243,33 +243,31 @@ namespace OpenXcom
 	{
 		switch(ammo_rule->getDamageType())
 		{
-			case DT_AP:
-				text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
-				break;
-			case DT_HE:
-				text_field->setText(tr("STR_DAMAGE_HIGH_EXPLOSIVE").c_str());
-				break;
-			case DT_SMOKE:
-				text_field->setText(tr("STR_DAMAGE_SMOKE").c_str());
-				break;
-			case DT_IN:
-				text_field->setText(tr("STR_DAMAGE_INCENDIARY").c_str());
-				break;
-			case DT_LASER:
-				text_field->setText(tr("STR_DAMAGE_LASER_BEAM").c_str());
-				break;
-			case DT_PLASMA:
-				text_field->setText(tr("STR_DAMAGE_PLASMA_BEAM_TYPE").c_str());
-				break;
-			case DT_STUN:
-				text_field->setText(tr("STR_DAMAGE_STUN").c_str());
-				break;
-			case DT_MELEE:
-				text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
-				break;
-			default:
-				text_field->setText(tr("STR_UNKNOWN").c_str());
-				break;
+		case DT_AP:
+		case DT_MELEE:
+			text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
+			break;
+		case DT_HE:
+			text_field->setText(tr("STR_DAMAGE_HIGH_EXPLOSIVE").c_str());
+			break;
+		case DT_SMOKE:
+			text_field->setText(tr("STR_DAMAGE_SMOKE").c_str());
+			break;
+		case DT_IN:
+			text_field->setText(tr("STR_DAMAGE_INCENDIARY").c_str());
+			break;
+		case DT_LASER:
+			text_field->setText(tr("STR_DAMAGE_LASER_BEAM").c_str());
+			break;
+		case DT_PLASMA:
+			text_field->setText(tr("STR_DAMAGE_PLASMA_BEAM").c_str());
+			break;
+		case DT_STUN:
+			text_field->setText(tr("STR_DAMAGE_STUN").c_str());
+			break;
+		default:
+			text_field->setText(tr("STR_UNKNOWN").c_str());
+			break;
 		}
 	}
 

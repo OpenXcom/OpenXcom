@@ -55,6 +55,8 @@ public:
 	Text(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text.
 	~Text();
+	/// Formats an integer value as number with separators.
+	static std::wstring formatNumber(int value, std::wstring currency = L"");
 	/// Formats an integer value as currency.
 	static std::wstring formatFunding(int funds);
 	/// Formats an integer value as percentage.

@@ -45,6 +45,7 @@ class AlienBase;
 class AlienStrategy;
 class AlienMission;
 class Target;
+class Soldier;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -59,6 +60,7 @@ enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GE
 class SavedGame
 {
 private:
+	std::wstring _name;
 	GameDifficulty _difficulty;
 	GameTime *_time;
 	std::vector<int> _funds, _maintenance, _researchScores;
@@ -82,6 +84,7 @@ private:
 	std::string _graphCountryToggles;
 	std::string _graphFinanceToggles;
 	std::vector<const RuleResearch *> _poppedResearch;
+	std::vector<Soldier*> _deadSoldiers;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
@@ -90,14 +93,18 @@ public:
 	/// Cleans up the saved game.
 	~SavedGame();
 	/// Gets list of saves in the user directory.
-	static void getList(TextList *list, Language *lang);
+	static std::vector<std::string> getList(TextList *list, Language *lang);
 	/// Loads a saved game from YAML.
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML.
 	void save(const std::string &filename) const;
-	/// Gets game difficulty.
+	/// Gets the game name.
+	std::wstring getName() const;
+	/// Sets the game name.
+	void setName(const std::wstring &name);
+	/// Gets the game difficulty.
 	GameDifficulty getDifficulty() const;
-	/// Sets game difficulty.
+	/// Sets the game difficulty.
 	void setDifficulty(GameDifficulty difficulty);
 	/// Gets the current funds.
 	int getFunds() const;
@@ -125,8 +132,6 @@ public:
 	void setTime(GameTime time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
-	/// Initializes te IDs list.
-	void initIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
@@ -233,6 +238,8 @@ public:
 	bool wasResearchPopped(const RuleResearch* research);
 	/// remove a research from the "popped up" array
 	void removePoppedResearch(const RuleResearch* research);
+	/// Gets the list of dead soldiers.
+	std::vector<Soldier*> *getDeadSoldiers();
 
 };
 

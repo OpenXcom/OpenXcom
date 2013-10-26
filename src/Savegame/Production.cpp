@@ -22,8 +22,10 @@
 #include "SavedGame.h"
 #include "ItemContainer.h"
 #include "Craft.h"
+#include "CraftWeapon.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Options.h"
 #include <limits>
 
@@ -96,6 +98,23 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 			}
 			else
 			{
+				// Check if it's ammo to reload a craft
+				if (r->getItem(_rules->getName())->getBattleType() == BT_NONE)
+				{
+					for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+					{
+						if ((*c)->getStatus() != "STR_READY")
+							continue;
+						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						{
+							if ((*w) != 0 && (*w)->getRules()->getClipItem() == _rules->getName() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							{
+								(*w)->setRearming(true);
+								(*c)->setStatus("STR_REARMING");
+							}
+						}
+					}
+				}
 				if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
 					g->setFunds(g->getFunds() + r->getItem(_rules->getName())->getSellCost());
 				else

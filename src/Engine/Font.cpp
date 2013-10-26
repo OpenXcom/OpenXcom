@@ -180,15 +180,17 @@ int Font::getSpacing() const
 SDL_Rect Font::getCharSize(wchar_t c)
 {
 	SDL_Rect size = { 0, 0, 0, 0 };
-	// Consider non-breakable space as a non-space character
-	if (c != L' ' && c != L'\xa0' && c != '\n' && c != 2)
+	if (c != 1 && !isLinebreak(c) && !isSpace(c))
 	{
 		size.w = _chars[c].w + _spacing;
 		size.h = _chars[c].h + _spacing;
 	}
 	else
 	{
-		size.w = _width / 2;
+		if (isNonBreakableSpace(c))
+			size.w = _width / 4;
+		else
+			size.w = _width / 2;
 		size.h = _height + _spacing;
 	}
 	// In case anyone mixes them up

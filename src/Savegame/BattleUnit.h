@@ -296,6 +296,8 @@ public:
 	void addPsiExp();
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
+	/// Updates the stats of a Geoscape soldier.
+	void updateGeoscapeStats(Soldier *soldier);
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap

@@ -19,6 +19,7 @@
 #include "Surface.h"
 #include "Screen.h"
 #include "ShaderDraw.h"
+#include <vector>
 #include <fstream>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
@@ -217,11 +218,13 @@ Surface::~Surface()
 void Surface::loadScr(const std::string &filename)
 {
 	// Load file and put pixels in surface
-	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream imgFile(filename.c_str(), std::ios::binary);
 	if (!imgFile)
 	{
 		throw Exception(filename + " not found");
 	}
+
+	std::vector<char> buffer((std::istreambuf_iterator<char>(imgFile)), (std::istreambuf_iterator<char>()));
 
 	// Lock the surface
 	lock();
@@ -229,20 +232,13 @@ void Surface::loadScr(const std::string &filename)
 	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read((char*)&value, 1))
+	for (std::vector<char>::iterator i = buffer.begin(); i != buffer.end(); ++i)
 	{
-		setPixelIterative(&x, &y, value);
-	}
-
-	if (!imgFile.eof())
-	{
-		throw Exception("Invalid SCR file");
+		setPixelIterative(&x, &y, *i);
 	}
 
 	// Unlock the surface
 	unlock();
-
-	imgFile.close();
 }
 
 /**
@@ -260,8 +256,7 @@ void Surface::loadImage(const std::string &filename)
 
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::wstring wstr = Language::cpToWstr(filename);
-	std::string utf8 = Language::wstrToUtf8(wstr);
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	// Load file
 	_surface = IMG_Load(utf8.c_str());

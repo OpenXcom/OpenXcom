@@ -81,9 +81,9 @@ AlienBAIState::~AlienBAIState()
 void AlienBAIState::load(const YAML::Node &node)
 {
 	int fromNodeID, toNodeID;
-	fromNodeID = node["fromNode"].as<int>();
-	toNodeID = node["toNode"].as<int>();
-	_AIMode = node["AIMode"].as<int>();
+	fromNodeID = node["fromNode"].as<int>(-1);
+	toNodeID = node["toNode"].as<int>(-1);
+	_AIMode = node["AIMode"].as<int>(0);
 	_wasHit = node["wasHit"].as<bool>(false);
 	if (fromNodeID != -1)
 	{
@@ -315,7 +315,9 @@ void AlienBAIState::think(BattleAction *action)
 		// don't worry about reserving TUs, we've factored that in already.
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
-		if (action->type == BA_WALK && _rifle)
+		if (action->type == BA_WALK && _rifle
+			// so long as we can take a shot afterwards.
+			&& _unit->getTimeUnits() > _unit->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{
 			action->number -= 1;
 		}
@@ -338,11 +340,18 @@ void AlienBAIState::think(BattleAction *action)
 		break;
 	}
 
-	// if we're moving, we'll have to re-evaluate our escape/ambush position.
-	if (action->type == BA_WALK && action->target != _unit->getPosition())
+	if (action->type == BA_WALK)
 	{
-		_escapeTUs = 0;
-		_ambushTUs = 0;
+		// if we're moving, we'll have to re-evaluate our escape/ambush position.
+		if (action->target != _unit->getPosition())
+		{
+			_escapeTUs = 0;
+			_ambushTUs = 0;
+		}
+		else
+		{
+			action->type = BA_NONE;
+		}
 	}
 }
 
@@ -1692,12 +1701,17 @@ void AlienBAIState::grenadeAction()
 			// do we have enough TUs to prime and throw the grenade?
 			if (tu <= _unit->getStats()->tu)
 			{
+				BattleAction action;
+				action.weapon = grenade;
+				action.target = _aggroTarget->getPosition();
+				action.type = BA_THROW;
+				action.actor = _unit;
 				// are we within range?
-				if (_save->getTileEngine()->validateThrow(_attackAction))
+				if (_save->getTileEngine()->validateThrow(&action))
 				{
-					_attackAction->type = BA_THROW;
 					_attackAction->weapon = grenade;
-					_attackAction->target = _aggroTarget->getPosition();
+					_attackAction->target = action.target;
+					_attackAction->type = BA_THROW;
 					_rifle = false;
 					_melee = false;
 				}

@@ -60,9 +60,9 @@ CivilianBAIState::~CivilianBAIState()
 void CivilianBAIState::load(const YAML::Node &node)
 {
 	int fromNodeID, toNodeID;
-	fromNodeID = node["fromNode"].as<int>();
-	toNodeID = node["toNode"].as<int>();
-	_AIMode = node["AIMode"].as<int>();
+	fromNodeID = node["fromNode"].as<int>(-1);
+	toNodeID = node["toNode"].as<int>(-1);
+	_AIMode = node["AIMode"].as<int>(0);
 	if (fromNodeID != -1)
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);

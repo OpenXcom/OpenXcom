@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_CROSSPLATFORM_H
 #define OPENXCOM_CROSSPLATFORM_H
 
+#include <SDL.h>
 #include <string>
 #include <vector>
 
@@ -57,8 +58,14 @@ namespace CrossPlatform
 	bool deleteFile(const std::string &path);
 	/// Gets the basename of a file.
 	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
+	/// Sanitizes the characters in a filename.
+	std::string sanitizeFilename(const std::string &filename);
+	/// Removes the extension from a file.
+	std::string noExt(const std::string &file);
 	/// Gets the system locale.
 	std::string getLocale();
+	/// Checks if an event is a quit shortcut.
+	bool isQuitShortcut(const SDL_Event &ev);
 }
 
 }

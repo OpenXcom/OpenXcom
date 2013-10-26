@@ -159,9 +159,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	}
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	std::wstringstream ss;
-	ss << _ufo->getSpeed();
-	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
+	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), Text::formatNumber(_ufo->getSpeed()).c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
 	_lstInfo2->setColor(Palette::blockOffset(8)+5);

@@ -53,7 +53,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 
 	for (int text = 0; text != 2; ++text)
 	{
-		std::stringstream ss2;
+		std::ostringstream ss2;
 		ss2 << "STR_GAME_OVER_" << text+1;
 		_txtText[text]->setText(tr(ss2.str()));
 		_txtText[text]->setWordWrap(true);
@@ -104,7 +104,7 @@ void DefeatState::windowClick(Action *)
 void DefeatState::nextScreen()
 {
 	++_screenNumber;
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+3 << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_screen->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());

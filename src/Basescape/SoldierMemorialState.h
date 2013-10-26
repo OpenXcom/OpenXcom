@@ -16,37 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SELECTSTARTFACILITYSTATE_H
-#define OPENXCOM_SELECTSTARTFACILITYSTATE_H
+#ifndef OPENXCOM_SOLDIERMEMORIALSTATE_H
+#define OPENXCOM_SOLDIERMEMORIALSTATE_H
 
-#include "BuildFacilitiesState.h"
+#include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-class Globe;
+class TextButton;
+class Window;
+class Text;
+class TextList;
+class Base;
 
 /**
- * Window shown with all the facilities
- * available to build.
+ * Screen that shows all the soldiers
+ * that have died throughout the game.
  */
-class SelectStartFacilityState : public BuildFacilitiesState
+class SoldierMemorialState : public State
 {
 private:
-	Globe *_globe;
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtDate, *_txtRecruited, *_txtLost;
+	TextList *_lstSoldiers;
 public:
-	/// Creates the Build Facilities state.
-	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe);
-	/// Cleans up the Build Facilities state.
-	~SelectStartFacilityState();
-	/// Populates the build option list.
-	virtual void populateBuildList();
-	/// Handler for clicking the Reset button.
+	/// Creates the Soldiers state.
+	SoldierMemorialState(Game *game);
+	/// Cleans up the Soldiers state.
+	~SoldierMemorialState();
+	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(Action *action);
-	/// Handler for when the facility is actually built.
-	void facilityBuilt();
+	/// Handler for clicking the Soldiers list.
+	void lstSoldiersClick(Action *action);
 };
 
 }

@@ -171,40 +171,28 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss2;
-	ss2 << tr("STR_BASE_UC_").arg(_craft->getBase()->getName());
-	_txtBase->setText(ss2.str());
+	_txtBase->setText(tr("STR_BASE_UC").arg(_craft->getBase()->getName()));
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss3;
-	ss3 << tr("STR_SPEED_").arg(_craft->getSpeed());
-	_txtSpeed->setText(ss3.str());
+	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss4;
-	ss4 << tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed());
-	_txtMaxSpeed->setText(ss4.str());
+	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss5;
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	ss5 << tr("STR_ALTITUDE_").arg(tr(altitude));
-	_txtAltitude->setText(ss5.str());
+	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss6;
-	ss6 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	_txtFuel->setText(ss6.str());
+	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss62;
-	ss62 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
-	_txtDamage->setText(ss62.str());
+	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -238,7 +226,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		_txtW1Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
+		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
 		_txtW2Ammo->setVisible(false);
 	}
 

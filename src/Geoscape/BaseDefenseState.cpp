@@ -93,7 +93,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_UNDER_ATTACK").arg(_base->getName()));
+	_txtTitle->setText(tr("STR_BASE_UNDER_ATTACK").arg(_base->getName()));
 	_txtInit->setVisible(false);
 
 	_txtInit->setColor(Palette::blockOffset(13)+10);

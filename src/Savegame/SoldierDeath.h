@@ -16,37 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SELECTSTARTFACILITYSTATE_H
-#define OPENXCOM_SELECTSTARTFACILITYSTATE_H
+#ifndef OPENXCOM_SOLDIERDEATH_H
+#define OPENXCOM_SOLDIERDEATH_H
 
-#include "BuildFacilitiesState.h"
+#include <yaml-cpp/yaml.h>
+#include "GameTime.h"
 
 namespace OpenXcom
 {
 
-class Globe;
+class GameTime;
 
 /**
- * Window shown with all the facilities
- * available to build.
+ * Stores info about a soldier's death.
  */
-class SelectStartFacilityState : public BuildFacilitiesState
+class SoldierDeath
 {
 private:
-	Globe *_globe;
+	GameTime _time;
 public:
-	/// Creates the Build Facilities state.
-	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe);
-	/// Cleans up the Build Facilities state.
-	~SelectStartFacilityState();
-	/// Populates the build option list.
-	virtual void populateBuildList();
-	/// Handler for clicking the Reset button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(Action *action);
-	/// Handler for when the facility is actually built.
-	void facilityBuilt();
+	/// Creates a death.
+	SoldierDeath();
+	/// Cleans up the death.
+	~SoldierDeath();
+	/// Loads the death from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the death to YAML.
+	YAML::Node save() const;
+	/// Gets the death time.
+	const GameTime *getTime() const;
+	/// Sets the death time.
+	void setTime(GameTime *time);
 };
 
 }

@@ -747,6 +747,10 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
 	{
+		// skip flares if not dark enough
+		if (BT_FLARE == item->getRules()->getBattleType() && _worldShade < NIGHT_SHADE_LEVEL)
+			return item;
+
 		bool loaded;
 		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 
@@ -781,7 +785,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 						}
 					}
 				}
-				// only place the weapon onto the soldier when its loaded with its layout-ammo (if any)
+				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
 					item->moveToOwner((*i));
@@ -911,6 +915,26 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					item->setSlotX(3);
 					item->setSlotY(0);
 					break;
+				}
+			}
+			break;
+		case BT_FLARE:
+			// equip these on night-missions
+			if (_worldShade >= NIGHT_SHADE_LEVEL)
+			{
+				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				{
+					// skip the vehicles
+					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
+
+					if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
+					{
+						item->moveToOwner((*i));
+						item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
+						item->setSlotX(1);
+						item->setSlotY(0);
+						break;
+					}
 				}
 			}
 			break;
@@ -1183,7 +1207,7 @@ void BattlescapeGenerator::generateMap()
 					{
 						// lots of crazy stuff here, which is for the hangars (or other large base facilities one may create)
 						std::string mapname = (*i)->getRules()->getMapName();
-						std::stringstream newname;
+						std::ostringstream newname;
 						newname << mapname.substr(0, mapname.size()-2); // strip of last 2 digits
 						int mapnum = atoi(mapname.substr(mapname.size()-2, 2).c_str()); // get number
 						mapnum += num;
@@ -1568,7 +1592,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	int x = xoff, y = yoff, z = 0;
 	char size[3];
 	unsigned char value[4];
-	std::stringstream filename;
+	std::ostringstream filename;
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
 	int terrainObjectID;
 
@@ -1665,7 +1689,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 {
 	int id = 0;
 	char value[24];
-	std::stringstream filename;
+	std::ostringstream filename;
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file
@@ -1749,7 +1773,11 @@ void BattlescapeGenerator::deployCivilians(int max)
 {
 	if (max)
 	{
-		int number = RNG::generate(0, max);
+		// inevitably someone will point out that ufopaedia says 0-16 civilians.
+		// to that person:  i looked at the code and it says otherwise.
+		// 0 civilians would only be a possibility if there were already 80 units,
+		// or no spawn nodes for civilians.
+		int number = RNG::generate(max/2, max);
 
 		if (number > 0)
 		{

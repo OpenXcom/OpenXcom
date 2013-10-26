@@ -139,6 +139,10 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+	for (std::vector<Soldier*>::iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 
@@ -148,7 +152,7 @@ SavedGame::~SavedGame()
  * @param list Text list.
  * @param lang Loaded language.
  */
-void SavedGame::getList(TextList *list, Language *lang)
+std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 {
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
@@ -161,20 +165,23 @@ void SavedGame::getList(TextList *list, Language *lang)
 			YAML::Node doc = YAML::LoadFile(fullname);
 			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 			time.load(doc["time"]);
-			std::stringstream saveTime;
-			std::wstringstream saveDay, saveMonth, saveYear;
-			saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
+			std::wstringstream saveTime, saveDay, saveMonth, saveYear;
+			saveTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
 			saveDay << time.getDayString(lang);
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
 
-			std::string s = file.substr(0, file.length()-4);
-#ifdef _WIN32
-			std::wstring wstr = Language::cpToWstr(s);
-#else
-			std::wstring wstr = Language::utf8ToWstr(s);
-#endif
-			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+			std::wstring wstr;
+			if (doc["name"])
+			{
+				wstr = Language::utf8ToWstr(doc["name"].as<std::string>());
+			}
+			else
+			{
+				std::string s = CrossPlatform::noExt(file);
+				wstr = Language::fsToWstr(s);
+			}
+			list->addRow(5, wstr.c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 		}
 		catch (Exception &e)
 		{
@@ -187,6 +194,8 @@ void SavedGame::getList(TextList *list, Language *lang)
 			continue;
 		}
 	}
+
+	return saves;
 }
 
 /**
@@ -206,12 +215,22 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	// Get brief save info
 	YAML::Node brief = file[0];
+	/*
 	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
-		//throw Exception("Version mismatch");
+		throw Exception("Version mismatch");
 	}
+	*/
 	_time->load(brief["time"]);
+	if (brief["name"])
+	{
+		_name = Language::utf8ToWstr(brief["name"].as<std::string>());
+	}
+	else
+	{
+		_name = Language::fsToWstr(filename);
+	}
 
 	// Get full save data
 	YAML::Node doc = file[1];
@@ -231,7 +250,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
 	_globeZoom = doc["globeZoom"].as<int>(_globeZoom);
-	initIds(doc["ids"].as< std::map<std::string, int> >(_ids));
+	_ids = doc["ids"].as< std::map<std::string, int> >(_ids);
 
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
@@ -311,6 +330,13 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
+	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
+	{
+		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
+		s->load(*i, rule);
+		_deadSoldiers.push_back(s);
+	}
+
 	if (const YAML::Node &battle = doc["battleGame"])
 	{
 		_battleGame = new SavedBattleGame();
@@ -335,9 +361,15 @@ void SavedGame::save(const std::string &filename) const
 
 	// Saves the brief game info used in the saves list
 	YAML::Node brief;
+	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	brief["build"] = OPENXCOM_VERSION_GIT;
 	brief["time"] = _time->save();
+	if (_battleGame != 0)
+	{
+		brief["mission"] = _battleGame->getMissionType();
+		brief["turn"] = _battleGame->getTurn();
+	}
 	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
@@ -402,6 +434,10 @@ void SavedGame::save(const std::string &filename) const
 		node["poppedResearch"].push_back((*i)->getName());
 	}
 	node["alienStrategy"] = _alienStrategy->save();
+	for (std::vector<Soldier*>::const_iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	{
+		node["deadSoldiers"].push_back((*i)->save());
+	}
 	if (_battleGame != 0)
 	{
 		node["battleGame"] = _battleGame->save();
@@ -409,6 +445,24 @@ void SavedGame::save(const std::string &filename) const
 	out << node;
 	sav << out.c_str();
 	sav.close();
+}
+
+/**
+ * Returns the game's name shown in Save screens.
+ * @return Difficulty level.
+ */
+std::wstring SavedGame::getName() const
+{
+	return _name;
+}
+
+/**
+ * Changes the game's name shown in Save screens.
+ * @param difficulty New difficulty.
+ */
+void SavedGame::setName(const std::wstring &name)
+{
+	_name = name;
 }
 
 /**
@@ -557,28 +611,15 @@ void SavedGame::setTime(GameTime time)
  */
 int SavedGame::getId(const std::string &name)
 {
-	int id = _ids[name];
-	_ids[name]++;
-	return id;
-}
-
-/**
- * Initializes the list of object IDs.
- * @param ids ID number list.
- */
-void SavedGame::initIds(const std::map<std::string, int> &ids)
-{
-	_ids["STR_UFO"] = 1;
-	_ids["STR_LANDING_SITE"] = 1;
-	_ids["STR_CRASH_SITE"] = 1;
-	_ids["STR_WAYPOINT"] = 1;
-	_ids["STR_TERROR_SITE"] = 1;
-	_ids["STR_ALIEN_BASE"] = 1;
-	_ids["STR_SOLDIER"] = 1;
-	_ids["ALIEN_MISSIONS"] = 1;
-	for (std::map<std::string, int>::const_iterator i = ids.begin(); i != ids.end(); ++i)
+	std::map<std::string, int>::iterator i = _ids.find(name);
+	if (i != _ids.end())
 	{
-		_ids[i->first] = i->second;
+		return i->second++;
+	}
+	else
+	{
+		_ids[name] = 1;
+		return _ids[name]++;
 	}
 }
 
@@ -1427,6 +1468,15 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 	{
 		_poppedResearch.erase(r);
 	}
+}
+
+/**
+ * Returns the list of dead soldiers.
+ * @return Pointer to soldier list.
+ */
+std::vector<Soldier*> *SavedGame::getDeadSoldiers()
+{
+	return &_deadSoldiers;
 }
 
 }

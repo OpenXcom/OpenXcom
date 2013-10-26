@@ -201,8 +201,15 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if (unit->getId() == selectedUnit)
 				_selectedUnit = unit;
+			
+			// silly hack to fix mind controlled aliens
+			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
+			if (unit->getOriginalFaction() == FACTION_HOSTILE)
+			{
+				unit->adjustStats(savedGame->getDifficulty());
+			}
 		}
-		else if (unit->getStatus() != STATUS_DEAD)
+		if (unit->getStatus() != STATUS_DEAD)
 		{
 			if (const YAML::Node &ai = (*i)["AI"])
 			{

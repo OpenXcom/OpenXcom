@@ -157,7 +157,7 @@ void MapDataSet::loadData()
 	MCD mcd;
 
 	// Load Terrain Data from MCD file
-	std::stringstream s;
+	std::ostringstream s;
 	s << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
@@ -233,7 +233,7 @@ void MapDataSet::loadData()
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
-	std::stringstream s1,s2;
+	std::ostringstream s1,s2;
 	s1 << "TERRAIN/" << _name << ".PCK";
 	s2 << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);
