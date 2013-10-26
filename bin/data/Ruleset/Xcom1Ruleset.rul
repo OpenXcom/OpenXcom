@@ -2800,7 +2800,7 @@ ufos:
     speedMax: 4300
     accel: 8
     power: 40
-    range: 22
+    range: 20
     score: 250
     reload: 16
     breakOffTime: 250
@@ -2823,7 +2823,7 @@ ufos:
     speedMax: 4000
     accel: 8
     power: 40
-    range: 20
+    range: 22
     score: 250
     reload: 24
     breakOffTime: 250
@@ -2888,7 +2888,7 @@ ufos:
   - type: STR_BATTLESHIP
     size: STR_VERY_LARGE
     sprite: 6
-    damageMax: 3200
+    damageMax: 3000
     speedMax: 5000
     accel: 6
     power: 140
