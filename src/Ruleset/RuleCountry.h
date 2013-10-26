@@ -26,6 +26,27 @@ namespace OpenXcom
 {
 
 /**
+ * Defines a rectangle in polar coordinates.
+ * It is used to define areas for a mission zone.
+ */
+struct PolarPoint
+{
+	double lon, lat;
+};
+
+struct PolarLine
+{
+	std::vector<PolarPoint> lines;
+	//don't know if needed
+	void swap(PolarLine &other)
+	{
+		lines.swap(other.lines);
+	}
+};
+
+
+class Polyline;
+/**
  * Represents a specific funding country.
  * Contains constant info like its location in the
  * world and starting funding range.
@@ -37,6 +58,7 @@ private:
 	int _fundingBase, _fundingCap;
 	double _labelLon, _labelLat;
 	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
+	std::vector<Polyline *> _borders;
 public:
 	/// Creates a blank country ruleset.
 	RuleCountry(const std::string &type);
@@ -60,8 +82,55 @@ public:
 	const std::vector<double> &getLonMin() const { return _lonMin; }
 	const std::vector<double> &getLatMax() const { return _latMax; }
 	const std::vector<double> &getLatMin() const { return _latMin; }
+	const std::vector<Polyline *> &getBorders() const { return _borders; }
+	void clearBorders();
 };
 
+}
+
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::PolarPoint>
+	{
+		static Node encode(const OpenXcom::PolarPoint& rhs)
+		{
+			Node node;
+			node.push_back(rhs.lon);
+			node.push_back(rhs.lat);
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::PolarPoint& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 2)
+				return false;
+
+			rhs.lon = node[0].as<double>();
+			rhs.lat = node[1].as<double>();
+			return true;
+		}
+	};
+
+	template<>
+	struct convert<OpenXcom::PolarLine>
+	{
+		static Node encode(const OpenXcom::PolarLine& rhs)
+		{
+			Node node;
+			node = rhs.lines;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::PolarLine& rhs)
+		{
+			if (!node.IsSequence())
+				return false;
+
+			rhs.lines = node.as< std::vector<OpenXcom::PolarPoint> >(rhs.lines);
+			return true;
+		}
+	};
 }
 
 #endif

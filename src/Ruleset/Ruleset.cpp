@@ -53,6 +53,7 @@
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Savegame/GameTime.h"
+#include "../Geoscape/Polyline.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "City.h"
@@ -62,6 +63,22 @@
 
 namespace OpenXcom
 {
+
+struct segment
+{
+	double x[4];
+};
+
+class myd4less
+{
+	public:
+		bool operator() (const segment *x, const segment *y)
+		{
+			return x->x[0]<y->x[0] || (x->x[0]==y->x[0] && (x->x[1]<y->x[1] || (x->x[1]==y->x[1] && (x->x[2]<y->x[2] || (x->x[2]==y->x[2] && x->x[3]<y->x[3])))));
+		}
+};
+
+
 
 /**
  * Creates a ruleset with blank sets of rules.
@@ -186,6 +203,10 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
 	{
 		delete i->second;
+	}
+	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
+	{
+		delete *i;
 	}
 }
 
@@ -600,6 +621,72 @@ void Ruleset::loadFiles(const std::string &dirname)
 	{
 		loadFile(dirname + *i);
 	}
+}
+
+/**
+ * Trims all common segments from border polylines into _polylines
+ */
+
+void Ruleset::compactPolylines()
+{
+	std::set<segment*, myd4less> segments;
+	_polylines.clear();
+	//for each country
+	for(std::map<std::string, RuleCountry*>::iterator ctry = _countries.begin(); ctry != _countries.end(); ++ctry)
+	{
+		//for each border
+		for(std::vector<Polyline *>::const_iterator poly=ctry->second->getBorders().begin(); poly !=  ctry->second->getBorders().end(); ++ poly)
+		{
+			//for each non-first point
+			int start=0;
+			for(int i=1; i < (*poly)->getPoints(); i++)
+			{
+				//if the segment is found in set, the current polyline ends here
+				segment *seg=new segment();
+				if(((*poly)->getLongitude(i-1) < (*poly)->getLongitude(i)) || 
+					(((*poly)->getLongitude(i-1) == (*poly)->getLongitude(i)) && ((*poly)->getLatitude(i-1) < (*poly)->getLatitude(i))))
+				{
+					seg->x[0]=(*poly)->getLongitude(i-1);
+					seg->x[1]=(*poly)->getLatitude(i-1);
+					seg->x[2]=(*poly)->getLongitude(i);
+					seg->x[3]=(*poly)->getLatitude(i);
+				}
+				else
+				{
+					seg->x[0]=(*poly)->getLongitude(i);
+					seg->x[1]=(*poly)->getLatitude(i);
+					seg->x[2]=(*poly)->getLongitude(i-1);
+					seg->x[3]=(*poly)->getLatitude(i-1);
+				}
+				if(segments.find(seg)!=segments.end())
+				{
+					//if we have some segments, create the final polyline from start to i-1
+					if(start != i-1)
+						_polylines.push_back(new Polyline(**poly, start, i-1));
+					//the new start is the current point
+					start=i;
+					delete seg;
+				}
+				else
+					segments.insert(seg);
+			}
+			//last point not checked till now
+			if(start != (*poly)->getPoints()-1)
+			{
+				if(start == 0)
+				{
+					_polylines.push_back(new Polyline(**poly));
+				}
+				else
+				{
+					_polylines.push_back(new Polyline(**poly, start, (*poly)->getPoints()-1));
+				}
+			}
+		}
+	}
+	//cleanup unnecessary data
+	for(std::set<segment*, myd4less>::iterator i=segments.begin(); i!=segments.end(); ++i)
+		delete (*i);
 }
 
 /**
@@ -1361,4 +1448,14 @@ void Ruleset::sortLists()
 	list.clear();
 	offset = 0;
 }
+
+/**
+ * Returns the list of polylines in the resource set.
+ * @return Pointer to the list of polylines.
+ */
+std::list<Polyline*> *Ruleset::getPolylines()
+{
+	return &_polylines;
+}
+
 }

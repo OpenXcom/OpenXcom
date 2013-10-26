@@ -31,6 +31,17 @@ Polyline::Polyline(int points) : _points(points)
 	_lon = new double[points];
 }
 
+Polyline::Polyline(const Polyline &p, int from, int to) : _points(to-from+1)
+{
+	_lat = new double[to-from+1];
+	_lon = new double[to-from+1];
+	for(int i=from; i<=to; i++)
+	{
+		_lat[i-from]=p._lat[i];
+		_lon[i-from]=p._lon[i];
+	}
+}
+
 /**
  * Deletes the arrays from memory.
  */

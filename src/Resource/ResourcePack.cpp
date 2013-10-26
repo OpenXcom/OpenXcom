@@ -35,7 +35,7 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _musics()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -61,10 +61,6 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
-	{
-		delete *i;
-	}
-	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
 	{
 		delete *i;
 	}
@@ -122,15 +118,6 @@ SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
 std::list<Polygon*> *ResourcePack::getPolygons()
 {
 	return &_polygons;
-}
-
-/**
- * Returns the list of polylines in the resource set.
- * @return Pointer to the list of polylines.
- */
-std::list<Polyline*> *ResourcePack::getPolylines()
-{
-	return &_polylines;
 }
 
 /**

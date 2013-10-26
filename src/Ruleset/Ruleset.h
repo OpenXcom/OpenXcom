@@ -57,6 +57,7 @@ class MCDPatch;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
+class Polyline;
 
 /**
  * Set of rules and stats for a game.
@@ -95,6 +96,7 @@ protected:
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
+	std::list<Polyline*> _polylines;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
@@ -213,6 +215,10 @@ public:
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Sorts all our lists according to their weight.
 	void sortLists();
+	/// Gets the list of world polylines.
+	std::list<Polyline*> *getPolylines();
+	///  Trims all common segments from border polylines into _polylines
+	void compactPolylines();
 };
 
 }
