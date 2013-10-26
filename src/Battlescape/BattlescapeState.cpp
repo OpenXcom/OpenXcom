@@ -404,7 +404,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
-		std::stringstream key, tooltip;
+		std::ostringstream key, tooltip;
 		key << "keyBattleCenterEnemy" << (i+1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)&BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
@@ -463,11 +463,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
-	_animTimer->start();
 
 	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
-	_gameTimer->start();
 
 	_battleGame = new BattlescapeGame(_save, this);
 
@@ -493,6 +491,8 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	_animTimer->start();
+	_gameTimer->start();
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
@@ -1508,7 +1508,7 @@ void BattlescapeState::saveAIMap()
 		}
 	}
 
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss.str("");
 	ss << "z = " << tilePos.z;
@@ -1551,7 +1551,7 @@ void BattlescapeState::saveVoxelView()
 	double ang_x,ang_y;
 	bool black;
 	Tile *tile;
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
 	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
@@ -1668,7 +1668,7 @@ void BattlescapeState::saveVoxelView()
  */
 void BattlescapeState::saveVoxelMap()
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	static const unsigned char pal[30]=
 	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };

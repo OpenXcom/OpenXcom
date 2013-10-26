@@ -748,7 +748,7 @@ void BattlescapeGame::handleState()
 		{
 			_states.front()->think();
 		}
-		getMap()->draw(); // redraw map
+		getMap()->invalidate(); // redraw map
 	}
 }
 
@@ -1528,7 +1528,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	unit->setTile(0);
 
 	getSave()->getTile(unit->getPosition())->setUnit(0);
-	std::stringstream newArmor;
+	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(newType)->getArmor();
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";

@@ -73,7 +73,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
 
 		if (0 == prev) prev = (char*)"";
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
 		
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -81,7 +81,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	setResolution(width, height);
 	if (!_fullscreen  && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{ // We don't want to put the window back to the starting position later when the window is resized.
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
 
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -134,7 +134,7 @@ void Screen::handle(Action *action)
 	}
 	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::getInt("keyScreenshot"))
 	{
-		std::stringstream ss;
+		std::ostringstream ss;
 		int i = 0;
 		do
 		{

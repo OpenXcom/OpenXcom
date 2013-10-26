@@ -411,10 +411,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 			cost += wallcost;
 			if (_unit->getFaction() == FACTION_HOSTILE &&
-				((destinationTile->getUnit() &&
-				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
-				destinationTile->getUnit() != _unit) ||
-				destinationTile->getFire() > 0))
+				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
@@ -585,6 +582,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		{
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+			if (_unit && _unit->getFaction() == unit->getFaction()) return true;
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
