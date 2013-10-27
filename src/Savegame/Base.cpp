@@ -346,9 +346,9 @@ void Base::setEngineers(int engineers)
  * Returns if a certain target is covered by the base's
  * radar range, taking in account the range and chance.
  * @param target Pointer to target to compare.
- * @return True if it's within range, False otherwise.
+ * @return 0 - not detected, 1 - detected by conventional radar, 2 - detected by hyper-wave decoder.
  */
-bool Base::detect(Target *target) const
+int Base::detect(Target *target) const
 {
 	int chance = 0;
 	double distance = getDistance(target);
@@ -358,13 +358,13 @@ bool Base::detect(Target *target) const
 		{
 			if ((*i)->getRules()->isHyperwave())
 			{
-				return true;
+				return 2;
 			}
 			chance += (*i)->getRules()->getRadarChance();
 		}
 	}
 	if (chance == 0)
-		return false;
+		return 0;
 
 	Ufo *u = dynamic_cast<Ufo*>(target);
 	if (u != 0)
@@ -372,27 +372,33 @@ bool Base::detect(Target *target) const
 		chance = (chance * 100 + u->getVisibility()) / 100;
 	}
 
-	return RNG::percent(chance);
+	return RNG::percent(chance)? 1 : 0;
 }
 
 /**
  * Returns if a certain target is inside the base's
  * radar range, taking in account the positions of both.
  * @param target Pointer to target to compare.
- * @return True if it's inside, False otherwise.
+ * @return 0 - outside radar range, 1 - inside conventional radar range, 2 - inside hyper-wave decoder range.
  */
-bool Base::insideRadarRange(Target *target) const
+int Base::insideRadarRange(Target *target) const
 {
-	double range = 0;
+	double maxRange = 0;
+	double distance = getDistance(target);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getRules()->getRadarRange() > 0 && (*i)->getBuildTime() == 0)
 		{
-			range = std::max(range, (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180));
+			double range = (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180);
+			if ((*i)->getRules()->isHyperwave() && range >= distance)
+			{
+				return 2;
+			}
+			maxRange = std::max(maxRange, range);
 		}
 	}
 	
-	return (getDistance(target) <= range);
+	return (maxRange >= distance)? 1 : 0;
 }
 
 /**
