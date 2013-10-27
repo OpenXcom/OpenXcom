@@ -185,6 +185,8 @@ public:
 	void setKneelReserved(bool reserved);
 	/// Checks the kneel reservation setting.
 	bool getKneelReserved();
+	/// Checks for and triggers proximity grenades.
+	bool checkForProximityGrenades(BattleUnit *unit);
 };
 
 }
