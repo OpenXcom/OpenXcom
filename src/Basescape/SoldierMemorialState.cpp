@@ -113,7 +113,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 
 	_lstSoldiers->setColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setColumns(5, 114, 88, 30, 30, 30);
+	_lstSoldiers->setColumns(5, 114, 88, 30, 25, 35);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
