@@ -716,7 +716,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ||
+				 battle->getMissionType() == "STR_MARS_CYDONIA_LANDING" ||
+				 battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
@@ -786,7 +788,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ||
+				 battle->getMissionType() == "STR_MARS_CYDONIA_LANDING" ||
+				 battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}
