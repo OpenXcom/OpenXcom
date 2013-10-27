@@ -265,12 +265,12 @@ void DebriefingState::btnOkClick(Action *)
 		}
 		if (_noContainment)
 		{
-			_game->pushState (new NoContainmentState(_game));
+			_game->pushState(new NoContainmentState(_game));
 		}
 		else if (_manageContainment)
 		{
-			_game->pushState (new ManageAlienContainmentState(_game, _base));
-			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+			_game->pushState(new ManageAlienContainmentState(_game, _base));
+			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
 }

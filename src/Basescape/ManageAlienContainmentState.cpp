@@ -78,7 +78,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base)
 	_lstAliens = new TextList(287, 120, 8, 44);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	if (_overCrowded)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	}
 
 	add(_window);
 	add(_btnOk);
@@ -94,15 +97,15 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setColor(Palette::blockOffset(15)-1);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
 	_btnOk->onMouseClick((ActionHandler)&ManageAlienContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ManageAlienContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
+	_btnCancel->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&ManageAlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ManageAlienContainmentState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
@@ -113,29 +116,29 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base)
 		_btnOk->setVisible(false);
 	}
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
+	_txtItem->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ALIEN"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+10);
+	_txtQuantity->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtFate->setColor(Palette::blockOffset(13)+10);
+	_txtFate->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_txtFate->setText(tr("STR_REMOVE_SELECTED"));
 
-	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+	_txtAvailable->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
+	_txtAvailable->setSecondaryColor(_overCrowded ? Palette::blockOffset(8)+10 : Palette::blockOffset(13));
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(_base->getAvailableContainment() - _base->getUsedContainment()));
 
-	_txtUsed->setColor(Palette::blockOffset(13)+10);
-	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
+	_txtUsed->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
+	_txtUsed->setSecondaryColor(_overCrowded ? Palette::blockOffset(8)+10 : Palette::blockOffset(13));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment() - _researchedAliens));
 
-	_lstAliens->setColor(Palette::blockOffset(13)+10);
+	_lstAliens->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
 	_lstAliens->setArrowColumn(182, ARROW_VERTICAL);
 	_lstAliens->setColumns(4, 150, 60, 22, 55);
 	_lstAliens->setSelectable(true);
