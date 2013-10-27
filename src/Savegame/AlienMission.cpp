@@ -651,7 +651,7 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 	}
 }
 
-void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
+void AlienMission::spawnAlienBase(Ufo* , const Globe &globe, Game &engine)
 {
 	SavedGame &game = *engine.getSavedGame();
 	if (game.getAlienBases()->size() >= 8)

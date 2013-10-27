@@ -104,7 +104,9 @@ static char const *getHome()
 std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
+#ifndef _WIN32
 	char const *home = getHome();
+#endif
 	
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:data/");
