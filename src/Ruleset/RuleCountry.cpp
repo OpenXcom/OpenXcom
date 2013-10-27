@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include "RuleCountry.h"
 #include "../Engine/RNG.h"
+#include "../Geoscape/Polyline.h"
 #include <math.h>
 
 namespace OpenXcom
@@ -38,6 +39,7 @@ RuleCountry::RuleCountry(const std::string &type) : _type(type), _fundingBase(0)
  */
 RuleCountry::~RuleCountry()
 {
+	_borders.clear();
 }
 
 /**
@@ -59,6 +61,20 @@ void RuleCountry::load(const YAML::Node &node)
 		_lonMax.push_back(areas[i][1] * M_PI / 180);
 		_latMin.push_back(areas[i][2] * M_PI / 180);
 		_latMax.push_back(areas[i][3] * M_PI / 180);
+	}
+	std::vector<PolarLine> borders;
+	borders = node["borders"].as< std::vector<PolarLine> >(borders);
+	for(std::vector<PolarLine>::iterator iter=borders.begin(); iter != borders.end(); ++iter)
+	{
+		//each element will be a polyline
+		Polyline *p=new Polyline(iter->lines.size());
+		int i=0;
+		for(std::vector<PolarPoint>::iterator iterp=iter->lines.begin(); iterp != iter->lines.end(); ++iterp, ++i)
+		{
+			p->setLatitude(i,iterp->lat * M_PI / 180);
+			p->setLongitude(i,iterp->lon * M_PI / 180);
+		}
+		_borders.push_back(p);
 	}
 }
 
@@ -133,5 +149,10 @@ bool RuleCountry::insideCountry(double lon, double lat) const
 			return true;
 	}
 	return false;
+}
+
+void RuleCountry::clearBorders()
+{
+	_borders.clear();
 }
 }

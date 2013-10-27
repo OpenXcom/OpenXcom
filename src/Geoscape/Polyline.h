@@ -35,6 +35,8 @@ private:
 public:
 	/// Creates a polyline with a number of points.
 	Polyline(int points);
+	/// Create a polyline by subsetting another polyline
+	Polyline(const Polyline &p, int from, int to);
 	/// Cleans up the polyline.
 	~Polyline();
 	/// Gets the latitude of a point.

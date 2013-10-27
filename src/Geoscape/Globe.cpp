@@ -1348,7 +1348,7 @@ void Globe::drawDetail()
 		// Lock the surface
 		_countries->lock();
 
-		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); ++i)
+		for (std::list<Polyline*>::iterator i = _game->getRuleset()->getPolylines()->begin(); i != _game->getRuleset()->getPolylines()->end(); ++i)
 		{
 			Sint16 x[2], y[2];
 			for (int j = 0; j < (*i)->getPoints() - 1; ++j)
