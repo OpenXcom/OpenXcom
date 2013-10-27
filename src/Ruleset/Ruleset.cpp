@@ -214,11 +214,30 @@ void Ruleset::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleCountry *rule;
 		if (_countries.find(type) != _countries.end())
 		{
 			rule = _countries[type];
+			if(eraseKey)
+			{
+				_countries.erase(type);
+				for(std::vector<std::string>::iterator i=_countriesIndex.begin();i!=_countriesIndex.end();++i)
+					if((*i)==type)
+					{
+						_countriesIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleCountry(type);
@@ -230,11 +249,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleRegion *rule;
 		if (_regions.find(type) != _regions.end())
 		{
 			rule = _regions[type];
+			if(eraseKey)
+			{
+				_regions.erase(type);
+				for(std::vector<std::string>::iterator i=_regionsIndex.begin();i!=_regionsIndex.end();++i)
+					if((*i)==type)
+					{
+						_regionsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleRegion(type);
@@ -246,11 +284,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["facilities"].begin(); i != doc["facilities"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleBaseFacility *rule;
 		if (_facilities.find(type) != _facilities.end())
 		{
 			rule = _facilities[type];
+			if(eraseKey)
+			{
+				_facilities.erase(type);
+				for(std::vector<std::string>::iterator i=_facilitiesIndex.begin();i!=_facilitiesIndex.end();++i)
+					if((*i)==type)
+					{
+						_facilitiesIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleBaseFacility(type);
@@ -263,11 +320,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["crafts"].begin(); i != doc["crafts"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleCraft *rule;
 		if (_crafts.find(type) != _crafts.end())
 		{
 			rule = _crafts[type];
+			if(eraseKey)
+			{
+				_crafts.erase(type);
+				for(std::vector<std::string>::iterator i=_craftsIndex.begin();i!=_craftsIndex.end();++i)
+					if((*i)==type)
+					{
+						_craftsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleCraft(type);
@@ -280,11 +356,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["craftWeapons"].begin(); i != doc["craftWeapons"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleCraftWeapon *rule;
 		if (_craftWeapons.find(type) != _craftWeapons.end())
 		{
 			rule = _craftWeapons[type];
+			if(eraseKey)
+			{
+				_craftWeapons.erase(type);
+				for(std::vector<std::string>::iterator i=_craftWeaponsIndex.begin();i!=_craftWeaponsIndex.end();++i)
+					if((*i)==type)
+					{
+						_craftWeaponsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleCraftWeapon(type);
@@ -296,11 +391,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["items"].begin(); i != doc["items"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleItem *rule;
 		if (_items.find(type) != _items.end())
 		{
 			rule = _items[type];
+			if(eraseKey)
+			{
+				_items.erase(type);
+				for(std::vector<std::string>::iterator i=_itemsIndex.begin();i!=_itemsIndex.end();++i)
+					if((*i)==type)
+					{
+						_itemsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleItem(type);
@@ -313,11 +427,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleUfo *rule;
 		if (_ufos.find(type) != _ufos.end())
 		{
 			rule = _ufos[type];
+			if(eraseKey)
+			{
+				_ufos.erase(type);
+				for(std::vector<std::string>::iterator i=_ufosIndex.begin();i!=_ufosIndex.end();++i)
+					if((*i)==type)
+					{
+						_ufosIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleUfo(type);
@@ -329,11 +462,24 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
 	{
 		std::string type = (*i)["id"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleInventory *rule;
 		if (_invs.find(type) != _invs.end())
 		{
 			rule = _invs[type];
+			if(eraseKey)
+			{
+				_invs.erase(type);
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleInventory(type);
@@ -344,11 +490,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["terrains"].begin(); i != doc["terrains"].end(); ++i)
 	{
 		std::string type = (*i)["name"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleTerrain *rule;
 		if (_terrains.find(type) != _terrains.end())
 		{
 			rule = _terrains[type];
+			if(eraseKey)
+			{
+				_terrains.erase(type);
+				for(std::vector<std::string>::iterator i=_terrainIndex.begin();i!=_terrainIndex.end();++i)
+					if((*i)==type)
+					{
+						_terrainIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleTerrain(type);
@@ -360,11 +525,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		Armor *rule;
 		if (_armors.find(type) != _armors.end())
 		{
 			rule = _armors[type];
+			if(eraseKey)
+			{
+				_armors.erase(type);
+				for(std::vector<std::string>::iterator i=_armorsIndex.begin();i!=_armorsIndex.end();++i)
+					if((*i)==type)
+					{
+						_armorsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new Armor(type, "", 0);
@@ -376,11 +560,24 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleSoldier *rule;
 		if (_soldiers.find(type) != _soldiers.end())
 		{
 			rule = _soldiers[type];
+			if(eraseKey)
+			{
+				_soldiers.erase(type);
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleSoldier(type);
@@ -391,11 +588,24 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["units"].begin(); i != doc["units"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		Unit *rule;
 		if (_units.find(type) != _units.end())
 		{
 			rule = _units[type];
+			if(eraseKey)
+			{
+				_units.erase(type);
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new Unit(type, "", "");
@@ -406,11 +616,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["alienRaces"].begin(); i != doc["alienRaces"].end(); ++i)
 	{
 		std::string type = (*i)["id"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		AlienRace *rule;
 		if (_alienRaces.find(type) != _alienRaces.end())
 		{
 			rule = _alienRaces[type];
+			if(eraseKey)
+			{
+				_alienRaces.erase(type);
+				for(std::vector<std::string>::iterator i=_aliensIndex.begin();i!=_aliensIndex.end();++i)
+					if((*i)==type)
+					{
+						_aliensIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new AlienRace(type);
@@ -422,11 +651,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["alienDeployments"].begin(); i != doc["alienDeployments"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		AlienDeployment *rule;
 		if (_alienDeployments.find(type) != _alienDeployments.end())
 		{
 			rule = _alienDeployments[type];
+			if(eraseKey)
+			{
+				_alienDeployments.erase(type);
+				for(std::vector<std::string>::iterator i=_deploymentsIndex.begin();i!=_deploymentsIndex.end();++i)
+					if((*i)==type)
+					{
+						_deploymentsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new AlienDeployment(type);
@@ -438,11 +686,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["research"].begin(); i != doc["research"].end(); ++i)
 	{
 		std::string type = (*i)["name"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleResearch *rule;
 		if (_research.find(type) != _research.end())
 		{
 			rule = _research[type];
+			if(eraseKey)
+			{
+				_research.erase(type);
+				for(std::vector<std::string>::iterator i=_researchIndex.begin();i!=_researchIndex.end();++i)
+					if((*i)==type)
+					{
+						_researchIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleResearch(type);
@@ -455,11 +722,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["manufacture"].begin(); i != doc["manufacture"].end(); ++i)
 	{
 		std::string type = (*i)["name"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		RuleManufacture *rule;
 		if (_manufacture.find(type) != _manufacture.end())
 		{
 			rule = _manufacture[type];
+			if(eraseKey)
+			{
+				_manufacture.erase(type);
+				for(std::vector<std::string>::iterator i=_manufactureIndex.begin();i!=_manufactureIndex.end();++i)
+					if((*i)==type)
+					{
+						_manufactureIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			rule = new RuleManufacture(type);
@@ -472,11 +758,30 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["ufopaedia"].begin(); i != doc["ufopaedia"].end(); ++i)
 	{
 		std::string id = (*i)["id"].as<std::string>();
+		bool eraseKey=false;
+		if(id[id.length()-1]=='%')
+		{
+			id.resize(id.length()-1);
+			eraseKey=true;
+		}
 		ArticleDefinition *rule;
 		if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
 		{
 			rule = _ufopaediaArticles[id];
+			if(eraseKey)
+			{
+				_ufopaediaArticles.erase(id);
+				for(std::vector<std::string>::iterator i=_ufopaediaIndex.begin();i!=_ufopaediaIndex.end();++i)
+					if((*i)==id)
+					{
+						_ufopaediaIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			UfopaediaTypeId type = (UfopaediaTypeId)(*i)["type_id"].as<int>();
@@ -511,10 +816,23 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		std::string id = (*i)["id"].as<std::string>();
+		bool eraseKey=false;
+		if(id[id.length()-1]=='%')
+		{
+			id.resize(id.length()-1);
+			eraseKey=true;
+		}
 		if (_ufoTrajectories.find(id) != _ufoTrajectories.end())
 		{
 			_ufoTrajectories[id]->load(*i);
+			if(eraseKey)
+			{
+				_ufoTrajectories.erase(id);
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			std::auto_ptr<UfoTrajectory> rule(new UfoTrajectory);
@@ -525,10 +843,29 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["alienMissions"].begin(); i != doc["alienMissions"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		bool eraseKey=false;
+		if(type[type.length()-1]=='%')
+		{
+			type.resize(type.length()-1);
+			eraseKey=true;
+		}
 		if (_alienMissions.find(type) != _alienMissions.end())
 		{
 			_alienMissions[type]->load(*i);
+			if(eraseKey)
+			{
+				_alienMissions.erase(type);
+				for(std::vector<std::string>::iterator i=_alienMissionsIndex.begin();i!=_alienMissionsIndex.end();++i)
+					if((*i)==type)
+					{
+						_alienMissionsIndex.erase(i);
+						break;
+					}
+				continue;
+			}
 		}
+		else if(eraseKey)
+			continue;
 		else
 		{
 			std::auto_ptr<RuleAlienMission> rule(new RuleAlienMission());
