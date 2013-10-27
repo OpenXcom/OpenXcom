@@ -546,9 +546,9 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
 		{
 			// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-			if (_save->getTiles()[i] && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
+			if (_save->getTiles()[i] &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT &&
 				!_save->getTiles()[i]->getMapData(MapData::O_OBJECT) &&
 				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
 			{
@@ -600,7 +600,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 		std::string alienName = race->getMember((*d).alienRank);
 
 		int quantity;
-		
+
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
 			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
 		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
@@ -747,10 +747,6 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
 	{
-		// skip flares if not dark enough
-		if (BT_FLARE == item->getRules()->getBattleType() && _worldShade < NIGHT_SHADE_LEVEL)
-			return item;
-
 		bool loaded;
 		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 
@@ -767,6 +763,14 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 			{
 				if (item->getRules()->getType() != (*j)->getItemType()
 				|| (*i)->getItem((*j)->getSlot(), (*j)->getSlotX(), (*j)->getSlotY())) continue;
+
+				// skip autoequipped flares if not dark enough
+				if (BT_FLARE == item->getRules()->getBattleType()
+					&& _worldShade < NIGHT_SHADE_LEVEL
+					&& (*j)->getSlot() == "STR_LEFT_SHOULDER"
+					&& (*j)->getSlotX() == 1
+					&& (*j)->getSlotY() == 0)
+					continue;
 
 				if ("NONE" == (*j)->getAmmoItem())
 					loaded = true;
@@ -1735,7 +1739,7 @@ void BattlescapeGenerator::fuelPowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) 
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem *elerium = new BattleItem(_game->getRuleset()->getItem("STR_ELERIUM_115"), _save->getCurrentItemId());
