@@ -149,7 +149,7 @@ public:
 	/// Requests the end of the turn (wait for explosions etc to really end the turn).
 	void requestEndTurn();
 	/// Sets the TU reserved type.
-	void setTUReserved(BattleActionType tur, bool player = true);
+	void setTUReserved(BattleActionType tur, bool player);
 	/// Sets up the cursor taking into account the action.
 	void setupCursor();
 	/// Gets the map.
