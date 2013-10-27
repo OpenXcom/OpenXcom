@@ -339,6 +339,7 @@ void SoldierInfoState::init()
 		_soldier = 0;
 	}
 	Soldier *s = _base->getSoldiers()->at(_soldier);
+	_edtSoldier->setBig();
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
