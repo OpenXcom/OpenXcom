@@ -113,7 +113,6 @@ namespace OpenXcom
 		_lstInfo->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 
-		_lstInfo->draw();
 		centerAllSurfaces();
 	}
 

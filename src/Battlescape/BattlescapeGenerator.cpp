@@ -677,7 +677,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
 			dir = unit->directionTo(craft);
 		if (dir != -1)
 			unit->setDirection(dir);
@@ -1754,7 +1754,7 @@ void BattlescapeGenerator::explodePowerSources()
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::generate(0,100) < 75)
+			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
@@ -1783,7 +1783,7 @@ void BattlescapeGenerator::deployCivilians(int max)
 		{
 			for (int i = 0; i < number; ++i)
 			{
-				if (RNG::generate(0,100) < 50)
+				if (RNG::percent(50))
 				{
 					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
 				}

@@ -86,7 +86,6 @@ void SaveState::updateList()
 	_lstSaves->clearList();
 	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
 	_saves = SavedGame::getList(_lstSaves, _game->getLanguage());
-	_lstSaves->draw();
 }
 
 /**

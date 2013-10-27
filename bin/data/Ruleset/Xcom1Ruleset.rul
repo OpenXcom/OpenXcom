@@ -1189,7 +1189,7 @@ craftWeapons:
     reloadStandard: 2
     reloadAggressive: 2
     ammoMax: 200
-    rearmRate: 50
+    rearmRate: 100
     launcher: STR_CANNON
     clip: STR_CANNON_ROUNDS_X50
     projectileType: 2
@@ -1204,7 +1204,7 @@ craftWeapons:
     reloadStandard: 12
     reloadAggressive: 12
     ammoMax: 100
-    rearmRate: 100
+    rearmRate: 50
     launcher: STR_LASER_CANNON
     projectileType: 4
   - type: STR_PLASMA_BEAM_UC
@@ -1217,7 +1217,7 @@ craftWeapons:
     reloadStandard: 12
     reloadAggressive: 12
     ammoMax: 100
-    rearmRate: 100
+    rearmRate: 50
     launcher: STR_PLASMA_BEAM
     projectileType: 5
   - type: STR_FUSION_BALL_UC
@@ -2739,7 +2739,7 @@ ufos:
     range: 0
     score: 50
     reload: 56
-    breakOffTime: 200
+    breakOffTime: 100
     battlescapeTerrainData:
       name: UFO1A
       mapDataSets:
@@ -2758,8 +2758,8 @@ ufos:
     power: 20
     range: 15
     score: 75
-    reload: 56
-    breakOffTime: 250
+    reload: 28
+    breakOffTime: 125
     battlescapeTerrainData:
       name: UFO_110
       mapDataSets:
@@ -2780,8 +2780,8 @@ ufos:
     power: 20
     range: 34
     score: 125
-    reload: 48
-    breakOffTime: 300
+    reload: 24
+    breakOffTime: 150
     battlescapeTerrainData:
       name: UFO_120
       mapDataSets:
@@ -2797,13 +2797,13 @@ ufos:
     size: STR_MEDIUM_UC
     sprite: 4
     damageMax: 500
-    speedMax: 4000
+    speedMax: 4300
     accel: 8
     power: 40
-    range: 22
+    range: 20
     score: 250
-    reload: 48
-    breakOffTime: 500
+    reload: 16
+    breakOffTime: 250
     battlescapeTerrainData:
       name: UFO_140
       mapDataSets:
@@ -2820,13 +2820,13 @@ ufos:
     size: STR_MEDIUM_UC
     sprite: 3
     damageMax: 500
-    speedMax: 4300
+    speedMax: 4000
     accel: 8
     power: 40
-    range: 20
+    range: 22
     score: 250
-    reload: 32
-    breakOffTime: 500
+    reload: 24
+    breakOffTime: 250
     battlescapeTerrainData:
       name: UFO_130
       mapDataSets:
@@ -2848,8 +2848,8 @@ ufos:
     power: 60
     range: 36
     score: 400
-    reload: 24
-    breakOffTime: 3000
+    reload: 12
+    breakOffTime: 1500
     battlescapeTerrainData:
       name: UFO_170
       mapDataSets:
@@ -2871,8 +2871,8 @@ ufos:
     power: 120
     range: 42
     score: 500
-    reload: 24
-    breakOffTime: 2000
+    reload: 12
+    breakOffTime: 1000
     battlescapeTerrainData:
       name: UFO_150
       mapDataSets:
@@ -2888,14 +2888,14 @@ ufos:
   - type: STR_BATTLESHIP
     size: STR_VERY_LARGE
     sprite: 6
-    damageMax: 3200
+    damageMax: 3000
     speedMax: 5000
     accel: 6
-    power: 148
+    power: 140
     range: 65
     score: 700
-    reload: 24
-    breakOffTime: 4000
+    reload: 12
+    breakOffTime: 2000
     battlescapeTerrainData:
       name: UFO_160
       mapDataSets:
@@ -3666,7 +3666,7 @@ armors:
     storeItem: STR_PERSONAL_ARMOR
     frontArmor: 50
     sideArmor: 40
-    rearArmor: 40
+    rearArmor: 30
     underArmor: 30
     damageModifier:
       - 1.0
