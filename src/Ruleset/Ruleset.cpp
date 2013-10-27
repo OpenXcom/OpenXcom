@@ -585,6 +585,17 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
+  // refresh _psiRequirements for psiStrengthEval
+	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+	{
+		RuleBaseFacility *rule = getBaseFacility(*i);
+		if (0 < rule->getPsiLaboratories())
+		{
+			_psiRequirements = rule->getRequirements();
+			break;
+		}
+	}
+
 	_modIndex += 1000;
 }
 
@@ -1353,4 +1364,13 @@ void Ruleset::sortLists()
 	list.clear();
 	offset = 0;
 }
+
+/**
+ * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+ */
+std::vector<std::string> Ruleset::getPsiRequirements()
+{
+	return _psiRequirements;
+}
+
 }

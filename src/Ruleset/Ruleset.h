@@ -100,6 +100,7 @@ protected:
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder;
+	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
@@ -213,6 +214,8 @@ public:
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Sorts all our lists according to their weight.
 	void sortLists();
+	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+	std::vector<std::string> getPsiRequirements();
 };
 
 }

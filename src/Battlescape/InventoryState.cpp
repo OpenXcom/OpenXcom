@@ -275,12 +275,18 @@ void InventoryState::init()
 		if (unit->getStats()->psiSkill > 0)
 		{
 			_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
-
-			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
 		}
 		else
 		{
 			_txtPSkill->setText(L"");
+		}
+
+		if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+		{
+			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
+		}
+		else
+		{
 			_txtPStr->setText(L"");
 		}
 	}
