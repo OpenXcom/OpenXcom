@@ -59,7 +59,7 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	// language, not by system locale.
 	setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
-	struct lconv * lc = localeconv();
+	//struct lconv * lc = localeconv();
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = (value < 0);

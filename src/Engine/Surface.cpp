@@ -229,7 +229,6 @@ void Surface::loadScr(const std::string &filename)
 	// Lock the surface
 	lock();
 
-	Uint8 value;
 	int x = 0, y = 0;
 
 	for (std::vector<char>::iterator i = buffer.begin(); i != buffer.end(); ++i)

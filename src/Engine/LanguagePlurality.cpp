@@ -75,7 +75,7 @@ public:
 	static LanguagePlurality *create() { return new NoSingular; }
 };
 
-const char *NoSingular::getSuffix(unsigned n) const
+const char *NoSingular::getSuffix(unsigned) const
 {
 	return "_other";
 }
