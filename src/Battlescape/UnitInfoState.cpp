@@ -30,6 +30,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Surface.h"
 #include "../Savegame/Base.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "../Engine/Options.h"
