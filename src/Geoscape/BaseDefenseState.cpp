@@ -63,7 +63,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_ufo = ufo;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 16, 6);
+	_txtTitle = new Text(300, 17, 16, 6);
 	_txtInit = new Text(300, 10, 16, 24);
 	_lstDefenses = new TextList(300, 130, 16, 40);
 	_btnOk = new TextButton(120, 18, 100, 170);

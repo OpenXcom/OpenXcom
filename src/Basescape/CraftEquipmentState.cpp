@@ -68,7 +68,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk = new TextButton((craftHasACrew || isNewBattle)? 148:288, 16, (craftHasACrew || isNewBattle)? 164:16, 176);
 	_btnClear = new TextButton(148, 16, 8, 176);
 	_btnInventory = new TextButton(148, 16, 8, 176);
-	_txtTitle = new Text(300, 16, 16, 7);
+	_txtTitle = new Text(300, 17, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
 	_txtAvailable = new Text(110, 9, 16, 24);

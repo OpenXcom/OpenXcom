@@ -57,8 +57,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnTarget = new TextButton(192, 12, 32, 140);
 	_btnPatrol = new TextButton(192, 12, 32, 156);
 	_btnCancel = new TextButton(192, 12, 32, 172);
-	_txtTitle = new Text(200, 16, 32, 20);
-	_txtStatus = new Text(210, 16, 32, 36);
+	_txtTitle = new Text(200, 17, 32, 20);
+	_txtStatus = new Text(210, 17, 32, 36);
 	_txtBase = new Text(200, 9, 32, 52);
 	_txtSpeed = new Text(200, 9, 32, 60);
 	_txtMaxSpeed = new Text(200, 9, 32, 68);
@@ -69,7 +69,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtW1Ammo = new Text(60, 9, 164, 92);
 	_txtW2Name = new Text(120, 9, 32, 100);
 	_txtW2Ammo = new Text(60, 9, 164, 100);
-	_txtRedirect = new Text(230, 16, 13, 108);
+	_txtRedirect = new Text(230, 17, 13, 108);
 	_txtSoldier = new Text(60, 9, 164, 68);
 	_txtHWP = new Text(60, 9, 164, 76);
 

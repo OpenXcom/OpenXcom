@@ -70,7 +70,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
-	_txtName = new Text(200, 16, 36, 6);
+	_txtName = new Text(200, 17, 36, 6);
 	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
 	if (_showMoreStatsInInventoryView)
 	{

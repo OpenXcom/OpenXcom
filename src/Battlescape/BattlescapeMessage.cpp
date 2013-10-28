@@ -34,11 +34,11 @@ namespace OpenXcom
 BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y) : Surface(width, height, x, y)
 {
 	_window = new Window(0, width, height, x, y, POPUP_NONE);
-	_window->setColor(Palette::blockOffset(0));
+	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 
 	_text = new Text(width, height, x, y);
-	_text->setColor(Palette::blockOffset(0));
+	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setHighContrast(true);

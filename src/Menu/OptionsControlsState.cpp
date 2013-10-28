@@ -120,7 +120,7 @@ OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : O
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 8);
 	_lstControls = new TextList(288, 136, 8, 30);
 
 	add(_window);

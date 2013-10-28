@@ -46,8 +46,8 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_window = new Window(this, 224, 120, 16, 40, POPUP_BOTH);
 	_btnOk = new TextButton(90, 18, 30, 120);
 	_btnOk5Secs = new TextButton(90, 18, 136, 120);
-	_txtTitle = new Text(214, 16, 21, 60);
-	_txtMessage = new Text(214, 16, 21, 90);
+	_txtTitle = new Text(214, 17, 21, 60);
+	_txtMessage = new Text(214, 17, 21, 90);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

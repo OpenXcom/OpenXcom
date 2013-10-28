@@ -52,10 +52,10 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	// Create objects
 	_window = new Window(this, 220, 160, 50, 20, POPUP_BOTH);
 	_btnCancel = new TextButton(140, 16, 90, 156);
-	_txtTitle = new Text(208, 16, 56, 28);
+	_txtTitle = new Text(208, 17, 56, 28);
 	_txtArmament = new Text(76, 9, 66, 52);
-	_txtQuantity = new Text(50, 9, 145, 52);
-	_txtAmmunition = new Text(68, 16, 195, 44);
+	_txtQuantity = new Text(50, 9, 140, 52);
+	_txtAmmunition = new Text(68, 17, 200, 44);
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette

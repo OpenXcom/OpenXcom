@@ -49,7 +49,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	// Create objects
 	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
 	_btnOk = new TextButton(162, 12, 47, 118);
-	_txtTitle = new Text(182, 16, 37, 70);
+	_txtTitle = new Text(182, 17, 37, 70);
 	_edtName = new TextEdit(127, 16, 59, 94);
 
 	// Set palette

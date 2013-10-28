@@ -62,7 +62,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 8);
 	_txtSales = new Text(190, 9, 10, 24);
 	_txtFunds = new Text(114, 9, 200, 24);
 	_txtItem = new Text(130, 9, 10, 32);

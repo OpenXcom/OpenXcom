@@ -47,9 +47,9 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	// Create objects
 	_screen = false;
 	_window = new Window(this, 320, 144, 0, 0);
-	_txtInExit = new Text(304, 16, 16, 25);
-	_txtOutsideExit = new Text(304, 16, 16, 50);
-	_txtAbort = new Text(320, 16, 0, 75);
+	_txtInExit = new Text(304, 17, 16, 25);
+	_txtOutsideExit = new Text(304, 17, 16, 50);
+	_txtAbort = new Text(320, 17, 0, 75);
 	_btnOk = new TextButton(120, 16, 16, 110);
 	_btnCancel = new TextButton(120, 16, 184, 110);
 
@@ -85,16 +85,16 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	}
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(0));
+	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtInExit->setColor(Palette::blockOffset(0));
+	_txtInExit->setColor(Palette::blockOffset(0)-1);
 	_txtInExit->setBig();
 	_txtInExit->setHighContrast(true);
 	_txtInExit->setText(tr("STR_UNITS_IN_EXIT_AREA", _inExitArea));
 
-	_txtOutsideExit->setColor(Palette::blockOffset(0));
+	_txtOutsideExit->setColor(Palette::blockOffset(0)-1);
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setHighContrast(true);
 	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
@@ -103,19 +103,19 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 		_txtInExit->setVisible(false);
 		_txtOutsideExit->setVisible(false);
 	}
-	_txtAbort->setColor(Palette::blockOffset(0));
+	_txtAbort->setColor(Palette::blockOffset(0)-1);
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
 	_txtAbort->setHighContrast(true);
 	_txtAbort->setText(tr("STR_ABORT_MISSION_QUESTION"));
 
-	_btnOk->setColor(Palette::blockOffset(0));
+	_btnOk->setColor(Palette::blockOffset(0)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AbortMissionState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnCancel->setColor(Palette::blockOffset(0));
+	_btnCancel->setColor(Palette::blockOffset(0)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);

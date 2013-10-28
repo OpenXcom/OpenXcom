@@ -43,7 +43,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 8);
+	_txtTitle = new Text(320, 17, 0, 8);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_lstOptions = new TextList(268, 104, 20, 30);

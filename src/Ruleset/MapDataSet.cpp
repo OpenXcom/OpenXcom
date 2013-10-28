@@ -107,6 +107,7 @@ void MapDataSet::loadData()
 	int objNumber = 0;
 
 	// the struct below helps to read the xcom file format
+	#pragma pack(push, 1)
 	struct MCD
 	{
 	unsigned char Frame[8];
@@ -153,6 +154,7 @@ void MapDataSet::loadData()
 	unsigned char u61;
 	unsigned char u62;
 	};
+	#pragma pack(pop)
 
 	MCD mcd;
 

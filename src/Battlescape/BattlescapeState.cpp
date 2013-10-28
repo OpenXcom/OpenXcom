@@ -439,7 +439,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	_txtTooltip->setColor(Palette::blockOffset(0));
+	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
 	_btnReserveNone->copy(_icons);

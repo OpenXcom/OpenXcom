@@ -56,7 +56,7 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_text->setBig();
 	_text->setWordWrap(true);
 	_text->setText(msg);
-	_text->setColor(Palette::blockOffset(0));
+	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setHighContrast(true);
 	_text->setPalette(_frame->getPalette());
 

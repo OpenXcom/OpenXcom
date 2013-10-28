@@ -44,20 +44,20 @@ ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : I
 	_txtDescription->setFonts(big, small);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
-	_txtDescription->setColor(Palette::blockOffset(0));
+	_txtDescription->setColor(Palette::blockOffset(0)-1);
 	_txtDescription->setVisible(true);
 
 	_txtAcc = new Text(100, 20, 140, 13);
 	_txtAcc->setFonts(big, small);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
-	_txtAcc->setColor(Palette::blockOffset(0));
+	_txtAcc->setColor(Palette::blockOffset(0)-1);
 
 	_txtTU = new Text(80, 20, 210, 13);
 	_txtTU->setFonts(big, small);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
-	_txtTU->setColor(Palette::blockOffset(0));
+	_txtTU->setColor(Palette::blockOffset(0)-1);
 }
 
 /**
