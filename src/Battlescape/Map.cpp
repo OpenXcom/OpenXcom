@@ -172,7 +172,7 @@ void Map::draw()
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
 		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
-		if (t && (((*i)->isBig() && t->isDiscovered(0)) || t->getVisible()))
+		if (t && ((*i)->isBig() || t->getVisible()))
 		{
 			explosionInFOV = true;
 		}
