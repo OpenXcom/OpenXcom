@@ -49,6 +49,7 @@ bool operator>>(const YAML::Node &node, TrajectoryWaypoint &wp);
 class UfoTrajectory
 {
 public:
+	UfoTrajectory(const std::string &id);
 	/**
 	 * Gets the trajectory's ID.
 	 * @return The trajectory's ID.

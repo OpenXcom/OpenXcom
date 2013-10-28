@@ -58,6 +58,10 @@ namespace YAML
 namespace OpenXcom
 {
 
+UfoTrajectory::UfoTrajectory(const std::string &id) : _id(id)
+{
+}
+
 /**
  * Overwrites trajectory data with the data stored in @a node.
  * Only the fields contained in the node will be overwritten.
