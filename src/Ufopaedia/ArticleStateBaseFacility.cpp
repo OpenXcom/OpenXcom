@@ -42,7 +42,7 @@ namespace OpenXcom
 		RuleBaseFacility *facility = _game->getRuleset()->getBaseFacility(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(200, 16, 10, 24);
+		_txtTitle = new Text(200, 17, 10, 24);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());

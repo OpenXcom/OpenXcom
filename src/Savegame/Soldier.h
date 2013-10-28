@@ -37,6 +37,7 @@ class RuleSoldier;
 class Armor;
 class Language;
 class EquipmentLayoutItem;
+class SoldierDeath;
 
 /**
  * Represents a soldier hired by the player.
@@ -58,6 +59,7 @@ private:
 	bool _recentlyPromoted, _psiTraining;
 	Armor *_armor;
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
+	SoldierDeath *_death;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
@@ -129,6 +131,10 @@ public:
 	void setPsiTraining();
 	/// returns this soldier's psionic improvement score for this month.
 	int getImprovement();
+	/// Gets the soldier death info.
+	SoldierDeath *getDeath() const;
+	/// Kills the soldier.
+	void die(SoldierDeath *death);
 };
 
 }

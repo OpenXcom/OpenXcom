@@ -45,11 +45,11 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(298, 16, 16, 8);
-	_txtBase = new Text(298, 16, 16, 24);
+	_txtTitle = new Text(298, 17, 16, 8);
+	_txtBase = new Text(298, 17, 16, 24);
 	_txtName = new Text(94, 9, 16, 40);
 	_txtStatus = new Text(50, 9, 110, 40);
-	_txtWeapon = new Text(50, 16, 160, 40);
+	_txtWeapon = new Text(50, 17, 160, 40);
 	_txtCrew = new Text(58, 9, 210, 40);
 	_txtHwp = new Text(46, 9, 268, 40);
 	_lstCrafts = new TextList(288, 118, 8, 58);

@@ -823,6 +823,10 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 	{
 			// not dead/unconscious
 		if (!(*i)->isOut() &&
+			// not dying
+			(*i)->getHealth() != 0 &&
+			// not about to pass out
+			(*i)->getStunlevel() < (*i)->getHealth() &&
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
@@ -912,18 +916,7 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		weapon->getAmmoItem() &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
 	{
-		Position originVoxel = getSightOriginVoxel(unit);
-		originVoxel.z -= 2;
-		Position targetVoxel = getSightOriginVoxel(target);
-		targetVoxel.z -= 2;
-		std::vector<Position> trajectory;
-		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4 &&
-			trajectory.back().x / 16 == targetVoxel.x / 16 &&
-			trajectory.back().y / 16 == targetVoxel.y / 16 &&
-			trajectory.back().z / 24 == targetVoxel.z / 24)
-		{
-			return true;
-		}
+		return true;
 	}
 	return false;
 }
@@ -2116,13 +2109,22 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 int TileEngine::castedShade(const Position& voxel)
 {
 	int zstart = voxel.z;
+	Position tmpCoord = voxel / Position(16,16,24);
+	Tile *t = _save->getTile(tmpCoord);
+	while (t && t->isVoid() && !t->getUnit())
+	{
+		zstart = tmpCoord.z* 24;
+		--tmpCoord.z;
+		t = _save->getTile(tmpCoord);
+	}
+
 	Position tmpVoxel = voxel;
 	int z;
+
 	for (z = zstart; z>0; z--)
 	{
 		tmpVoxel.z = z;
 		if (voxelCheck(tmpVoxel, 0) != -1) break;
-
 	}
     return z;
 }
@@ -2164,11 +2166,15 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
-	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
+	Tile *tile = _save->getTile(voxel / Position(16, 16, 24));
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return 5;
+	}
+	if (tile->isVoid() && tile->getUnit() == 0)
+	{
+		return -1;
 	}
 
 	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())

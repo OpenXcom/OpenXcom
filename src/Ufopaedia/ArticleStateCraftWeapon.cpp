@@ -78,9 +78,7 @@ namespace OpenXcom
 		_lstInfo->setDot(true);
 		_lstInfo->setBig();
 
-		std::wstringstream ss;
-		ss << weapon->getDamage();
-		_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), Text::formatNumber(weapon->getDamage()).c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
 		_lstInfo->addRow(2, tr("STR_RANGE").c_str(), tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());

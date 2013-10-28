@@ -61,7 +61,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
 	_txtMessage = new Text(206, 64, 25, 40);
-	_txtBegin = new Text(206, 16, 25, 130);
+	_txtBegin = new Text(206, 17, 25, 130);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);

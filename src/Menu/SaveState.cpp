@@ -86,7 +86,6 @@ void SaveState::updateList()
 	_lstSaves->clearList();
 	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
 	_saves = SavedGame::getList(_lstSaves, _game->getLanguage());
-	_lstSaves->draw();
 }
 
 /**
@@ -187,9 +186,25 @@ void SaveState::quickSave(const std::string &filename)
 {
 	if (_showMsg) updateStatus("STR_SAVING_GAME");
 
+	std::string fullPath = Options::getUserFolder() + filename + ".sav";
+	std::string bakPath = fullPath + ".bak";
+
 	try
 	{
+		if (CrossPlatform::fileExists(fullPath))
+		{
+			if (CrossPlatform::fileExists(bakPath) && !CrossPlatform::deleteFile(bakPath))
+			{
+				throw Exception("Failed to delete " + filename + ".sav.bak");
+			}
+			if (rename(fullPath.c_str(), bakPath.c_str()))
+			{
+				throw Exception("Failed to rename " + filename + ".sav");
+			}
+		}
+
 		_game->getSavedGame()->save(filename);
+		CrossPlatform::deleteFile(bakPath);
 	}
 	catch (Exception &e)
 	{

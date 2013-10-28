@@ -56,7 +56,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnIncome = new InteractiveSurface(32, 24, 224, 0);
 	_btnFinance = new InteractiveSurface(32, 24, 256, 0);
 	_btnGeoscape = new InteractiveSurface(32, 24, 288, 0);
-	_txtTitle = new Text(220, 16, 100, 28);
+	_txtTitle = new Text(220, 17, 100, 28);
 	_txtFactor = new Text(38, 11, 96, 28);
 	_txtMonths = new TextList(205, 8, 115, 183);
 	_txtYears = new TextList(200, 8, 121, 191);
@@ -87,7 +87,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	int offset = 0;
 	for (std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
-		_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnRegions.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_regionToggles.push_back(false);
 		_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
@@ -102,7 +102,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		++offset;
 	}
 
-	_btnRegionTotal = new ToggleTextButton(80, 11, 0, offset*11);
+	_btnRegionTotal = new ToggleTextButton(90, 11, 0, offset*11);
 	_regionToggles.push_back(false);
 	_btnRegionTotal->onMouseClick((ActionHandler)&GraphsState::btnRegionListClick);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
@@ -117,7 +117,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	offset = 0;
 	for (std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
-		_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnCountries.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_countryToggles.push_back(false);
 		_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnCountries.at(offset)->setInvertColor(-42 + (4*offset));
@@ -134,7 +134,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		++offset;
 	}
 
-	_btnCountryTotal = new ToggleTextButton(80, 11, 0, offset*11);
+	_btnCountryTotal = new ToggleTextButton(90, 11, 0, offset*11);
 	_countryToggles.push_back(false);
 	_btnCountryTotal->onMouseClick((ActionHandler)&GraphsState::btnCountryListClick);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
@@ -152,7 +152,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	for (int iter = 0; iter != 5; ++iter)
 	{
 		offset = iter;
-		_btnFinances.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnFinances.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_financeToggles.push_back(false);
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
         _btnFinances.at(offset)->setInvertColor(-42 + (4*offset));

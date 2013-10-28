@@ -47,7 +47,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_base = base;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 10, 8);
+	_txtTitle = new Text(300, 17, 10, 8);
 	_txtRemaining = new Text(134, 10, 10, 24);
 	_txtName = new Text(64, 10, 10, 40);
 	_txtPsiStrength = new Text(80, 20, 124, 32);

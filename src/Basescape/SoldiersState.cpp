@@ -33,6 +33,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
+#include "SoldierMemorialState.h"
 
 namespace OpenXcom
 {
@@ -48,9 +49,19 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnPsiTraining = new TextButton(148, 16, 8, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	if (isPsiBtnVisible)
+	{
+		_btnOk = new TextButton(96, 16, 216, 176);
+		_btnPsiTraining = new TextButton(96, 16, 112, 176);
+		_btnMemorial = new TextButton(96, 16, 8, 176);
+	}
+	else
+	{
+		_btnOk = new TextButton(148, 16, 164, 176);
+		_btnPsiTraining = new TextButton(148, 16, 164, 176);
+		_btnMemorial = new TextButton(148, 16, 8, 176);
+	}
+	_txtTitle = new Text(310, 17, 5, 8);
 	_txtName = new Text(114, 9, 16, 32);
 	_txtRank = new Text(102, 9, 130, 32);
 	_txtCraft = new Text(82, 9, 222, 32);
@@ -62,6 +73,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	add(_window);
 	add(_btnOk);
 	add(_btnPsiTraining);
+	add(_btnMemorial);
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
@@ -83,6 +95,10 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsiTraining->onMouseClick((ActionHandler)&SoldiersState::btnPsiTrainingClick);
 	_btnPsiTraining->setVisible(isPsiBtnVisible);
+
+	_btnMemorial->setColor(Palette::blockOffset(13)+10);
+	_btnMemorial->setText(tr("STR_MEMORIAL"));
+	_btnMemorial->onMouseClick((ActionHandler)&SoldiersState::btnMemorialClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -150,6 +166,15 @@ void SoldiersState::btnOkClick(Action *)
 void SoldiersState::btnPsiTrainingClick(Action *)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base));
+}
+
+/**
+ * Opens the Memorial screen.
+ * @param action Pointer to an action.
+ */
+void SoldiersState::btnMemorialClick(Action *)
+{
+	_game->pushState(new SoldierMemorialState(_game));
 }
 
 /**

@@ -35,7 +35,6 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
-class BattlescapeState;
 class Node;
 class Surface;
 class RuleInventory;
@@ -95,7 +94,7 @@ private:
 	int _turnsExposed;
 	std::string _zombieUnit, _spawnUnit;
 	std::string _activeHand;
-	
+
 	// static data
 	std::string _type;
 	std::string _rank;
@@ -198,6 +197,8 @@ public:
 	void healStun(int power);
 	/// Gets the unit's stun level.
 	int getStunlevel() const;
+	/// Knocks the unit out instantly.
+	void knockOut(BattlescapeGame *battle);
 	/// Start falling sequence.
 	void startFalling();
 	/// Increment the falling sequence.
@@ -296,6 +297,8 @@ public:
 	void addPsiExp();
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
+	/// Updates the stats of a Geoscape soldier.
+	void updateGeoscapeStats(Soldier *soldier);
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap
@@ -390,7 +393,7 @@ public:
 	UnitFaction getOriginalFaction() const;
 	/// call this after the default copy constructor deletes the cache?
 	void invalidateCache();
-	
+
 	Unit *getUnitRules() const { return _unitRules; }
 
 	/// scratch value for AI's left hand to tell its right hand what's up...

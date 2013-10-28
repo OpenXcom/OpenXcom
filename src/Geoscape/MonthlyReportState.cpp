@@ -52,12 +52,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(50, 12, 135, 180);
-	_txtTitle = new Text(300, 16, 16, 8);
-	_txtMonth = new Text(110, 8, 16, 24);
-	_txtRating = new Text(180, 8, 125, 24);
-	_txtChange = new Text(300, 8, 16, 32);
+	_txtTitle = new Text(300, 17, 16, 8);
+	_txtMonth = new Text(110, 9, 16, 24);
+	_txtRating = new Text(180, 9, 125, 24);
+	_txtChange = new Text(300, 9, 16, 32);
 	_txtDesc = new Text(280, 140, 16, 40);
-	_txtFailure = new Text(270, 180, 25, 34);
+	_txtFailure = new Text(290, 128, 15, 34);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);

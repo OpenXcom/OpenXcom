@@ -101,6 +101,7 @@ protected:
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder;
+	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
@@ -220,6 +221,8 @@ public:
 	inline unsigned int getMaxViewDistanceAtDark() const {return _maxViewDistanceAtDark;}
 	/// Gets max darkness to see units in BattleScape.
 	inline unsigned int getMaxDarknessToSeeUnits() const {return _maxDarknessToSeeUnits;}
+	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval).
+	std::vector<std::string> getPsiRequirements();
 };
 
 }

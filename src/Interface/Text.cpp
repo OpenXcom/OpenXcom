@@ -57,13 +57,14 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	// It is inconsistent with the in-game language selection: locale-specific
 	// symbols, such as thousands separators, should be determined by the game
 	// language, not by system locale.
-	setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
-	setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
-	struct lconv * lc = localeconv();
+	//setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
+	//struct lconv * lc = localeconv();
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
+	bool negative = (value < 0);
 	std::wstringstream ss;
-	ss << value;
+	ss << (negative? -value : value);
 	std::wstring s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
@@ -73,7 +74,11 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	}
 	if (!currency.empty())
 	{
-		s.insert((value < 0) ? 1 : 0, currency);
+		s.insert(0, currency);
+	}
+	if (negative)
+	{
+		s.insert(0, L"-");
 	}
 	return s;
 }

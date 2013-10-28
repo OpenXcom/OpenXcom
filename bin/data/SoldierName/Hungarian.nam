@@ -1,780 +1,425 @@
-lookWeight:
+lookWeights:
   - 50
   - 50
   - 0
   - 0
 maleFirst:
-  - Alp
-  - Alparslan
-  - Alpay
-  - Alper
-  - Altan
-  - Altay
-  - Anil
-  - Arda
-  - Atilla
-  - Ayberk
-  - Aydemir
-  - Aydin
-  - Ayhan
-  - Aykut
-  - Aytek
-  - Bahadir
-  - Baris
-  - Barlas
-  - Batikan
-  - Batu
-  - Batuhan
-  - Berk
-  - Berkay
-  - Birol
-  - Bleda
-  - Bora
-  - Boran
-  - Cagatay
-  - Caglar
-  - Cagri
-  - Celik
-  - Cengiz
-  - Cetin
-  - Coskun
-  - Demir
-  - Demirkan
-  - Deniz
-  - Dogu
-  - Dogukan
-  - Dogus
-  - Doruk
-  - Duman
-  - Durmus
-  - Dursun
-  - Durukan
-  - Efe
-  - Engin
-  - Erdal
-  - Eren
-  - Erhan
-  - Erkan
-  - Erol
-  - Ertug
-  - Ertugrul
-  - Giray
-  - Gokay
-  - Gokhan
-  - Gunduz
-  - Gurhan
-  - Gurkan
-  - Guven
-  - Hakan
-  - Ilbey
-  - Ilhan
-  - Ilker
-  - Ilter
-  - Istemi
-  - Istemihan
-  - Kaan
-  - Kagan
-  - Kaya
-  - Koray
-  - Korhan
-  - Korkut
-  - Kursat
-  - Kutalmis
-  - Kutlu
-  - Kutlug
-  - Mengi
-  - Mengu
-  - Mete
-  - Metehan
-  - Oguz
-  - Oguzhan
-  - Okan
-  - Oktay
-  - Olcayto
-  - Onur
-  - Orhan
-  - Orkut
-  - Ozan
-  - Ozcan
-  - Ozdemir
-  - Ozer
-  - Ozgur
-  - Ozkan
-  - Ozker
-  - Savas
-  - Selcuk
-  - Sener
-  - Senol
-  - Sezer
-  - Soner
-  - Tamer
-  - Taner
-  - Tardu
-  - Tarkan
-  - Taylan
-  - Teoman
-  - Tolga
-  - Tosun
-  - Tugay
-  - Tuna
-  - Tunc
-  - Tuncay
-  - Turan
-  - Turgay
-  - Turgut
-  - Turker
-  - Ugur
-  - Umut
-  - Ushan
-  - Vural
-  - Yalcin
-  - Yalim
-  - Yalin
-  - Yasar
-  - Yavuz
-  - Yigit
-  - Yildiray
-  - Yildirim
-  - Yilmaz
-  - Laszlo
-  - Istvan
-  - Jozsef
-  - Janos
-  - Zoltan
-  - Sandor
-  - Ferenc
-  - Gabor
-  - Attila
-  - Peter
-  - Tamas
-  - Zsolt
-  - Tibor
-  - Andras
-  - Imre
-  - Csaba
-  - Lajos
-  - Gyorgy
-  - Gyula
-  - Balazs
-  - Mihaly
-  - Karoly
-  - Bela
-  - Robert
-  - David
-  - Miklos
-  - Daniel
+  - Abel
   - Adam
-  - Krisztian
-  - Norbert
-  - Bence
-  - Pal
-  - Mate
-  - Antal
-  - Szabolcs
-  - Roland
-  - Gergo
-  - Balint
-  - Richard
-  - Mark
-  - Gergely
+  - Adrian
   - Akos
-  - Levente
-  - Viktor
-  - Geza
-  - Arpad
-  - Marton
-  - Jeno
-  - Kalman
-  - Kristof
-  - Patrik
-  - Martin
-  - Barnabas
-  - Erno
-  - Milan
-  - Dominik
-  - Endre
-  - Matyas
-  - Dezso
-  - Marcell
-  - Aron
-  - Nandor
-  - Szilard
-  - Vilmos
-  - Erik
-  - Zsombor
-  - Botond
-  - Otto
+  - Albert
   - Alex
-  - Oliver
-  - Denes
-  - Kornel
-  - Bertalan
+  - Andor
+  - Andras
+  - Antal
+  - Arnold
+  - Aron
+  - Arpad
+  - Attila
+  - Balazs
+  - Balint
+  - Barna
+  - Barnabas
+  - Bela
+  - Bence
+  - Bendeguz
   - Benedek
   - Benjamin
-  - Rudolf
-  - Adrian
-  - Albert
-  - Kevin
-  - Zalan
-  - Vince
-  - Gyozo
-  - Ervin
-  - Zsigmond
-  - Gusztav
-  - Andor
-  - Szilveszter
-  - Ivan
-  - Elemer
-  - Barna
-  - Arnold
-  - Tivadar
-  - Emil
-  - Henrik
+  - Bertalan
+  - Botond
+  - Csaba
   - Csongor
+  - Daniel
+  - David
+  - Denes
+  - Dezso
+  - Dominik
+  - Elemer
+  - Emil
+  - Endre
+  - Erik
+  - Erno
+  - Ervin
+  - Ferenc
+  - Gabor
+  - Gergely
+  - Gergo
+  - Geza
+  - Gusztav
+  - Gyorgy
+  - Gyozo
+  - Gyula
+  - Henrik
+  - Imre
+  - Istvan
+  - Ivan
+  - Janos
+  - Jeno
+  - Jozsef
+  - Kalman
+  - Karoly
+  - Kevin
+  - Kornel
+  - Kristof
+  - Krisztian
   - Krisztofer
-  - Abel
-  - Noel
+  - Lajos
+  - Laszlo
+  - Levente
   - Lorant
-  - Bendeguz
+  - Marcell
+  - Mark
+  - Martin
+  - Marton
+  - Mate
+  - Matyas
+  - Mihaly
+  - Miklos
+  - Milan
+  - Nandor
+  - Noel
+  - Norbert
+  - Oliver
+  - Otto
+  - Pal
+  - Patrik
+  - Peter
+  - Richard
+  - Robert
+  - Roland
+  - Rudolf
+  - Sandor
+  - Szabolcs
+  - Szilard
+  - Szilveszter
+  - Tamas
+  - Tibor
+  - Tivadar
+  - Viktor
+  - Vilmos
+  - Vince
+  - Zalan
+  - Zoltan
+  - Zsigmond
+  - Zsolt
+  - Zsombor
 femaleFirst:
-  - Aggie
+  - Adrienn
   - Agi
-  - Agotha
-  - Agoti
+  - Agnes
+  - Agota
   - Alberta
   - Alexa
   - Alexandra
-  - Alisz
   - Aliz
-  - Anasztaizia
-  - Anci
+  - Anasztazia
+  - Andrea
+  - Anett
   - Angyalka
+  - Aniko
+  - Anita
+  - Anna
+  - Annamaria
   - Aranka
   - Aurelia
-  - Bela
+  - Barbara
+  - Beata
+  - Beatrix
   - Bella
-  - Belle
+  - Bernadett
   - Berta
-  - Bertuska
+  - Bettina
+  - Bianka
+  - Boglarka
   - Bora
-  - Borhala
+  - Borbala
   - Boriska
   - Borka
-  - Borsala
-  - Brosca
-  - Broska
+  - Brigitta
   - Cili
-  - Czigany
-  - Darda
-  - Dorika
+  - Csilla
+  - Dia
+  - Diana
+  - Dora
+  - Dorina
   - Dorottya
-  - Duci
-  - Ema
+  - Edina
+  - Edit
+  - Emese
+  - Emma
+  - Eniko
   - Erika
   - Ernesztina
-  - Erssike
-  - Erzebet
+  - Erzsebet
   - Erzsi
-  - Erzsok
-  - Eszti
+  - Eszter
   - Etel
-  - Etilka
-  - Evacska
-  - Evike
-  - Fereng
-  - Ferike
-  - Firenze
-  - Florka
+  - Etelka
+  - Eva
+  - Evelin
+  - Fanni
   - Franciska
-  - Frici
-  - Gisella
+  - Gabriella
   - Gitta
-  - Gizi
+  - Gizella
+  - Gyongyi
+  - Gyorgyi
   - Hajna
+  - Hajnalka
+  - Hanna
+  - Henrietta
   - Ibolya
-  - IcaIlka
+  - Ica
+  - Ildiko
+  - Ilka
   - Ilona
+  - Iren
   - Irenke
+  - Irma
   - Janka
-  - Juci
-  - Jucika
-  - Julcsa
+  - Jolan
+  - Judit
+  - Julia
+  - Julianna
   - Juliska
   - Karola
-  - Karole
   - Karolina
-  - Kat
-  - Katakin
   - Katalin
   - Katarina
   - Kati
   - Katinka
+  - Kinga
+  - Kitti
+  - Klara
+  - Klaudia
   - Kriszta
-  - Ktisztina
-  - Lenci
+  - Krisztina
+  - Laura
+  - Lili
+  - Lilla
   - Linka
   - Liza
-  - Malcsi
-  - Malika
+  - Magdolna
   - Mara
-  - Marcsa
+  - Margit
   - Margo
+  - Maria
+  - Mariann
   - Marianna
   - Marika
-  - Martuska
-  - Nancsi
-  - Ninacska
-  - Nusa
-  - Nusi
-  - Orzsebet
-  - Paliki
-  - Piroska
-  - Rez
-  - Roza
-  - Rozalia
-  - Sarika
-  - Sasa
-  - Teca
-  - Treszka
-  - Tzigane
-  - Vicuska
-  - Viktoria
-  - Virag
-  - Viva
-  - Zigana
-  - ZsaZsa
-  - Zsofia
-  - Zsofika
-  - Zsuska
-  - Zsuzsanna
-  - Zsuzsi
-  - Maria
-  - Erzsebet
-  - Katalin
-  - Ilona
-  - Eva
-  - Anna
-  - Zsuzsanna
-  - Margit
-  - Julianna
-  - Judit
-  - Agnes
-  - Andrea
-  - Ildiko
-  - Erika
-  - Krisztina
-  - Iren
-  - Magdolna
-  - Eszter
-  - Monika
-  - Edit
-  - Gabriella
-  - Szilvia
-  - Anita
   - Marta
-  - Rozalia
-  - Aniko
-  - Viktoria
-  - Piroska
-  - Timea
-  - Klara
-  - Ibolya
-  - Tunde
-  - Gizella
-  - Dora
-  - Zsofia
-  - Veronika
-  - Terezia
-  - Alexandra
-  - Csilla
-  - Nikolett
   - Melinda
-  - Adrienn
-  - Marianna
-  - Beata
-  - Reka
-  - Renata
+  - Monika
+  - Nikolett
+  - Nikoletta
+  - Noemi
   - Nora
-  - Jolan
-  - Bernadett
-  - Rita
-  - Barbara
-  - Vivien
-  - Brigitta
-  - Eniko
-  - Edina
-  - Hajnalka
-  - Gyongyi
-  - Etelka
+  - Olga
   - Orsolya
   - Petra
-  - Borbala
-  - Terez
-  - Valeria
-  - Boglarka
-  - Noemi
-  - Annamaria
-  - Nikoletta
-  - Kitti
-  - Fanni
-  - Aranka
+  - Piroska
+  - Reka
+  - Renata
+  - Rita
   - Roza
-  - Emese
-  - Laura
-  - Lilla
-  - Anett
-  - Klaudia
-  - Kinga
-  - Beatrix
-  - Zita
+  - Rozalia
   - Rozsa
-  - Zsanett
-  - Irma
-  - Emma
-  - Dorina
   - Sara
-  - Gyorgyi
-  - Julia
-  - Henrietta
-  - Lili
-  - Bianka
-  - Diana
-  - Mariann
   - Sarolta
-  - Bettina
-  - Olga
-  - Dorottya
   - Szabina
+  - Szilvia
+  - Terez
+  - Terezia
+  - Timea
+  - Tunde
+  - Valeria
+  - Veronika
+  - Viktoria
   - Virag
-  - Evelin
-  - Hanna
+  - Vivien
+  - Zita
+  - ZsaZsa
+  - Zsanett
+  - Zsofia
+  - Zsuzska
+  - Zsuzsanna
+  - Zsuzsi
 maleLast:
-  - Nagy
-  - Kovacs
-  - Toth
-  - Szabo
-  - Horvath
-  - Varga
-  - Kiss
-  - Molnar
-  - Nemeth
-  - Farkas
-  - Balogh
-  - Papp
-  - Takacs
-  - Juhasz
-  - Lakatos
-  - Meszaros
-  - Olah
-  - Simon
-  - Racz
-  - Fekete
-  - Szilagyi
-  - Torok
-  - Feher
-  - Gal
-  - Balazs
-  - Kis
-  - Szucs
-  - Kocsis
-  - Pinter
-  - Fodor
-  - Orsos
-  - Szalai
-  - Magyar
-  - Sipos
-  - Lukacs
-  - Gulyas
-  - Biro
-  - Kiraly
-  - Katona
-  - Laszlo
-  - Jakab
-  - Fazekas
-  - Sandor
-  - Boros
-  - Bogdan
-  - Balog
-  - Kelemen
-  - Somogyi
-  - Antal
-  - Orosz
-  - Vincze
-  - Fulop
-  - Veres
-  - Varadi
-  - Hegedus
-  - Deak
-  - Pap
-  - Budai
-  - Balint
-  - Illes
-  - Pal
-  - Voros
-  - Bognar
-  - Vass
-  - Szoke
-  - Lengyel
-  - Fabian
-  - Szucs
-  - Bodnar
-  - Halasz
-  - Hajdu
-  - Kozma
-  - Mate
-  - Pasztor
-  - Jonas
-  - Gaspar
-  - Szekely
-  - Bakos
-  - Major
-  - Dudas
-  - Virag
-  - Hegedus
-  - Orban
-  - Novak
-  - Soos
-  - Barna
-  - Nemes
-  - Tamas
-  - Pataki
-  - Farago
-  - Borbely
-  - Kerekes
-  - Szekeres
-  - Balla
-  - Barta
-  - Csonka
-  - Dobos
-  - Peter
-  - Vegh
-  - Abduvaliyev
-  - Ajkler
-  - Aladar
   - Alfoldi
-  - Andras
   - Andrassy
   - Annus
+  - Antal
   - Arany
-  - Arpad
-  - Artali
-  - Bakics
+  - Bakos
   - Balassa
+  - Balazs
+  - Balint
   - Balla
-  - Baltar
-  - Balzar
+  - Balog
+  - Balogh
   - Barati
+  - Barna
   - Barsony
+  - Barta
   - Bartok
-  - Basirius
   - Bathory
-  - Belkacem
-  - Benyacs
   - Berzevicky
-  - Blazsanyik
+  - Biro
   - Bocskay
-  - Borbala
+  - Bodnar
+  - Bogdan
+  - Bognar
+  - Borbely
   - Bori
   - Boros
-  - Buksbaum
-  - Burian
-  - Cizinski
-  - Corvinus
-  - Csaba
-  - Csapek
-  - Csillac
+  - Budai
   - Csillag
-  - Csollang
   - Csollany
+  - Csonka
   - Csurgo
   - Czako
   - Czene
-  - Czingler
   - Czobor
   - Dardai
   - Daroczy
   - Deak
-  - Demko
-  - Divos
   - Dobos
   - Doczi
-  - Dohnanyi
   - Dombi
-  - Dorati
-  - Doroftei
   - Dozsa
-  - Dvorzsak
+  - Dudas
   - Egerszegi
-  - Ella
   - Eotvos
+  - Fabian
+  - Farago
   - Farkas
   - Fazekas
   - Feher
-  - Fen
-  - Ferency
-  - Firkusny
-  - Fodes
-  - Foldenyi
+  - Fekete
+  - Ferenczy
+  - Fodor
   - Forgach
   - Forgacs
-  - Gabor
-  - Gabris
+  - Fulop
+  - Gal
   - Gaspar
-  - Gazda
   - Gazdag
-  - Gecsek
-  - Gerber
   - Gero
-  - Gersek
-  - Geza
-  - Goenzc
-  - Gotz
-  - Groditje
   - Guba
-  - Guran
-  - Gurka
+  - Gulyas
   - Gyorffy
   - Gyulai
+  - Hajdu
+  - Halasz
   - Halmai
   - Hamori
   - Hankiss
-  - Hara
-  - Harnely
-  - Hawlik
   - Hedervary
-  - Hedevary
-  - Heidt
-  - Hlady
-  - Hoka
-  - Holba
+  - Hegedus
   - Hollo
-  - Horansky
+  - Horanszky
   - Horthy
-  - Horvarth
   - Horvath
-  - Horvath
-  - Houdini
-  - Hruby
   - Hrutka
   - Hunyadi
   - Illes
   - Illeshazy
   - Ilyes
-  - Imanci
   - Istvanffy
   - Jagadics
-  - Jager
+  - Jakab
   - Jaszi
   - Jokai
+  - Jonas
   - Joo
-  - Joska
-  - Kajetan
+  - Juhasz
   - Kalanyos
   - Kaldi
   - Kallay
-  - Kalman
   - Kammerer
   - Karolyi
-  - Kasnar
+  - Katona
   - Kazinczy
-  - Keblovszki
-  - Keblovszkij
-  - Keblovszky
+  - Kelemen
   - Kemeny
   - Kerekes
   - Kertes
-  - Khuen
-  - Kingl
   - Kiraly
+  - Kis
   - Kiss
   - Knesevich
   - Koban
   - Kocsis
   - Kodaly
   - Koranyi
-  - Korsas
   - Kortosi
-  - Kosos
   - Kossuth
-  - Kovac
   - Kovacs
   - Kovago
-  - Kratz
-  - Kroditier
-  - Krosko
-  - Kucnecov
-  - Kucska
+  - Kozma
   - Kulcsar
   - Kun
-  - Kurtag
   - Kurti
   - Kurtosi
   - Kurutz
-  - Kuti  - Kiss
+  - Kuti
   - Kutsera
-  - Lajos
-  - Lajtha
   - Lajtos
   - Lakatos
-  - Lascaris
+  - Laszlo
   - Lehotka
-  - Lerch
+  - Lengyel
   - Ligeti
   - Liptak
-  - Listzes
-  - Lobo
-  - Lubik
+  - Lisztes
   - Lugosi
-  - Lusano
+  - Lukacs
   - Madar
-  - Magnoni
-  - Maitra
+  - Magyar
+  - Major
   - Malek
-  - Maloros
   - Mandula
   - Markovits
+  - Mate
   - Matyus
   - Mecs
+  - Meszaros
   - Mindszenty
-  - Mintyin
   - Molnar
-  - Munkcasi
+  - Munkacsy
   - Nadasdy
   - Nagy
-  - Nagy
-  - Nejedly
+  - Nemes
   - Nemeth
   - Noszaly
-  - Novalskin
+  - Novak
   - Nyilas
   - Nyilasi
-  - Oimeracz
+  - Olah
   - Onodi
+  - Orban
   - Orczy
-  - Ordina
-  - Oubouhou
+  - Orosz
+  - Orsos
+  - Pal
   - Palagyi
   - Pandy
+  - Pap
+  - Papp
   - Partos
+  - Pasztor
+  - Pataki
   - Pazmany
   - Pecely
   - Perneky
+  - Peter
   - Petofi
-  - Petrahn
-  - Piota
-  - Pisont
-  - Pocsine
-  - Pokolytsch
-  - Polichnai
-  - Poltari
+  - Pinter
   - Pongratz
-  - Poth
-  - Potiorek
-  - Prihoda
-  - Protesi
   - Pulszky
+  - Racz
   - Rakosi
-  - Rdzsavolgygi
   - Redik
   - Revay
   - Rezessy
@@ -782,28 +427,22 @@ maleLast:
   - Rosner
   - Rosza
   - Rubik
-  - Sacchetti
   - Safar
-  - Sagi
   - Sandor
-  - Sapszon
-  - Sarf
-  - Schlyter
   - Sebok
   - Sereny
-  - Sjsiengel
-  - Sohnker
+  - Simon
+  - Sipos
   - Soltesz
   - Solti
   - Solymosi
+  - Somogyi
   - Soos
-  - Stark
-  - Stourzh
   - Supola
   - Suto
   - Svarcz
   - Szabo
-  - Szabo
+  - Szalai
   - Szalay
   - Szatmary
   - Szechenyi
@@ -812,13 +451,13 @@ maleLast:
   - Szelepcsenyi
   - Szeman
   - Szemere
-  - Szigete
-  - Szokefagy
+  - Szilagyi
+  - Szoke
   - Szucs
   - Szuhay
-  - Szuhonkobecker
   - Tabory
-  - Telek
+  - Takacs
+  - Tamas
   - Teleki
   - Temesvari
   - Tessedik
@@ -827,28 +466,26 @@ maleLast:
   - Tokes
   - Tokody
   - Tolgyesi
+  - Torok
   - Toth
-  - Toth
-  - Ujaky
+  - Ujlaky
   - Urbanik
-  - Vaga
-  - Vambery
+  - Vajda
   - Vamosi
+  - Varadi
   - Varga
   - Varkonyi
-  - Vasary
-  - Vaszi
-  - Vavra
-  - Veligan
+  - Vass
+  - Vegh
   - Verboczy
-  - Verzi
-  - Vetec
+  - Veres
   - Vidrai
-  - Wajda
+  - Vincze
+  - Virag
+  - Voros
   - Wessely
   - Zatony
-  - Zavadsky
-  - Zinzendorff
+  - Zavadszky
   - Zrinyi
   - Zsivozky
   - Zsoldos

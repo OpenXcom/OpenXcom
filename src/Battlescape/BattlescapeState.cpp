@@ -404,7 +404,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
-		std::stringstream key, tooltip;
+		std::ostringstream key, tooltip;
 		key << "keyBattleCenterEnemy" << (i+1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)&BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
@@ -439,7 +439,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	_txtTooltip->setColor(Palette::blockOffset(0));
+	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
 	_btnReserveNone->copy(_icons);
@@ -463,11 +463,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
-	_animTimer->start();
 
 	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
-	_gameTimer->start();
 
 	_battleGame = new BattlescapeGame(_save, this);
 
@@ -493,6 +491,8 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	_animTimer->start();
+	_gameTimer->start();
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
@@ -1066,13 +1066,13 @@ void BattlescapeState::btnReserveClick(Action *action)
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
-			_battleGame->setTUReserved(BA_NONE);
+			_battleGame->setTUReserved(BA_NONE, true);
 		else if (_reserve == _btnReserveSnap)
-			_battleGame->setTUReserved(BA_SNAPSHOT);
+			_battleGame->setTUReserved(BA_SNAPSHOT, true);
 		else if (_reserve == _btnReserveAimed)
-			_battleGame->setTUReserved(BA_AIMEDSHOT);
+			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
 		else if (_reserve == _btnReserveAuto)
-			_battleGame->setTUReserved(BA_AUTOSHOT);
+			_battleGame->setTUReserved(BA_AUTOSHOT, true);
 	}
 }
 
@@ -1179,7 +1179,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && leftHandItem->needsAmmo())
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible(true);
 			if (leftHandItem->getAmmoItem())
@@ -1194,7 +1194,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && rightHandItem->needsAmmo())
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible(true);
 			if (rightHandItem->getAmmoItem())
@@ -1508,7 +1508,7 @@ void BattlescapeState::saveAIMap()
 		}
 	}
 
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss.str("");
 	ss << "z = " << tilePos.z;
@@ -1551,7 +1551,7 @@ void BattlescapeState::saveVoxelView()
 	double ang_x,ang_y;
 	bool black;
 	Tile *tile;
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
 	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
@@ -1668,7 +1668,7 @@ void BattlescapeState::saveVoxelView()
  */
 void BattlescapeState::saveVoxelMap()
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	static const unsigned char pal[30]=
 	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };

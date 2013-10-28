@@ -549,23 +549,24 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	std::stringstream ss, ss2;
-	std::wstringstream ss3, ss4, ss5;
-
 	if (_showFundsOnGeoscape)
 	{
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
-	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-	_txtSec->setText(Language::utf8ToWstr(ss.str()));
+	std::wstringstream ss;
+	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
+	_txtSec->setText(ss.str());
 
-	ss2 << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
-	_txtMin->setText(Language::utf8ToWstr(ss2.str()));
+	std::wstringstream ss2;
+	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
+	_txtMin->setText(ss2.str());
 
+	std::wstringstream ss3;
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
+	std::wstringstream ss4;
 	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
@@ -573,6 +574,7 @@ void GeoscapeState::timeDisplay()
 
 	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
+	std::wstringstream ss5;
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
 }
@@ -1250,8 +1252,9 @@ void GeoscapeState::time30Minutes()
 				bool detected = false;
 				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 				{
-					detected = detected || (*b)->insideRadarRange(*u);
-					if((*b)->getHyperDetection())
+					bool insideRange = (*b)->insideRadarRange(*u);
+					detected = detected || insideRange;
+					if ((*b)->getHyperDetection() && insideRange)
 					{
 						(*u)->setHyperDetected(true);
 					}
@@ -1263,7 +1266,7 @@ void GeoscapeState::time30Minutes()
 				if (!detected)
 				{
 					(*u)->setDetected(false);
-					(*u)->setHyperDetected(false); // i'm not 100% sure this is correct, need verification.
+					(*u)->setHyperDetected(false);
 					if (!(*u)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
@@ -1633,16 +1636,15 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi, _globe));
 
 	// Handle Xcom Operatives discovering bases
-	if(_game->getSavedGame()->getAlienBases()->size())
+	if(!_game->getSavedGame()->getAlienBases()->empty())
 	{
-		bool _baseDiscovered = false;
 		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			if(!(*b)->isDiscovered() && RNG::percent(5) && !_baseDiscovered)
+			if(!(*b)->isDiscovered() && RNG::percent(5))
 			{
 				(*b)->setDiscovered(true);
-				_baseDiscovered = true;
 				popup(new AlienBaseState(_game, *b, this));
+				break;
 			}
 		}
 	}

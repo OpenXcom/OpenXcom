@@ -79,6 +79,7 @@ void showError(const std::string &error)
 	Log(LOG_FATAL) << error;
 }
 
+#ifndef _WIN32
 /**
  * Gets the user's home folder according to the system.
  * @return Absolute path to home folder.
@@ -95,6 +96,7 @@ static char const *getHome()
 #endif
 	return home;
 }
+#endif
 
 /**
  * Builds a list of predefined paths for the Data folder
@@ -104,7 +106,6 @@ static char const *getHome()
 std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
-	
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:data/");
 	return list;
@@ -135,10 +136,10 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
+	char const *home = getHome();
 #ifdef __HAIKU__
 	list.push_back("/boot/apps/OpenXcom/data/");
 #endif
-	char const *home = getHome();
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
@@ -670,7 +671,7 @@ std::string getLocale()
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
 
-	std::stringstream locale;
+	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
 	/*
@@ -685,9 +686,28 @@ std::string getLocale()
 	std::string language = name.substr(0, name.find_first_of('_')-1);
 	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
 	
-	std::stringstream locale;
+	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
+#endif
+}
+
+/**
+ * Checks if the system's default quit shortcut was pressed.
+ * @param ev SDL event.
+ * @return Is quitting necessary?
+ */
+bool isQuitShortcut(const SDL_Event &ev)
+{
+#ifdef _WIN32
+	// Alt + F4
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_F4 && ev.key.keysym.mod & KMOD_ALT);
+#elif __APPLE__
+	// Command + Q
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
+#else
+	//TODO add other OSs shortcuts.
+	return false;
 #endif
 }
 

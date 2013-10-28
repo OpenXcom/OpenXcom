@@ -42,7 +42,7 @@ namespace OpenXcom
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(150, 32, 5, 24);
+		_txtTitle = new Text(148, 32, 5, 24);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -74,19 +74,19 @@ namespace OpenXcom
 		// SHOT STATS TABLE (for firearms only)
 		if (item->getBattleType() == BT_FIREARM)
 		{
-			_txtShotType = new Text(100, 16, 8, 66);
+			_txtShotType = new Text(100, 17, 8, 66);
 			add(_txtShotType);
 			_txtShotType->setColor(Palette::blockOffset(14)+15);
 			_txtShotType->setWordWrap(true);
 			_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
 
-			_txtAccuracy = new Text(50, 16, 104, 66);
+			_txtAccuracy = new Text(50, 17, 104, 66);
 			add(_txtAccuracy);
 			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
 			_txtAccuracy->setWordWrap(true);
 			_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
 
-			_txtTuCost = new Text(60, 16, 158, 66);
+			_txtTuCost = new Text(60, 17, 158, 66);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
 			_txtTuCost->setWordWrap(true);
@@ -196,7 +196,7 @@ namespace OpenXcom
 				_txtAmmo->setAlign(ALIGN_CENTER);
 				_txtAmmo->setText(tr("STR_AMMO").c_str());
 
-				if (item->getClipSize() == -1)
+				if (ammo_data->empty())
 				{
 					setDamageTypeText(_txtAmmoType[0], item);
 

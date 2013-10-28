@@ -21,6 +21,7 @@
 #include "../Engine/Language.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
+#include "../Savegame/SoldierDeath.h"
 #include "../Ruleset/SoldierNamePool.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
@@ -36,7 +37,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
 {
 	if (names != 0)
 	{
@@ -85,6 +86,7 @@ Soldier::~Soldier()
 	{
 		delete *i;
 	}
+	delete _death;
 }
 
 /**
@@ -112,6 +114,11 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
 	}
+	if (node["death"])
+	{
+		_death = new SoldierDeath();
+		_death->load(node["death"]);
+	}
 }
 
 /**
@@ -134,14 +141,20 @@ YAML::Node Soldier::save() const
 	node["look"] = (int)_look;
 	node["missions"] = _missions;
 	node["kills"] = _kills;
-	node["recovery"] = _recovery;
+	if (_recovery > 0)
+		node["recovery"] = _recovery;
 	node["armor"] = _armor->getType();
-	node["psiTraining"] = _psiTraining;
+	if (_psiTraining)
+		node["psiTraining"] = _psiTraining;
 	node["improvement"] = _improvement;
 	if (!_equipmentLayout.empty())
 	{
 		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
 			node["equipmentLayout"].push_back((*i)->save());
+	}
+	if (_death != 0)
+	{
+		node["death"] = _death->save();
 	}
 	return node;
 }
@@ -229,9 +242,8 @@ std::string Soldier::getRankString() const
 	case RANK_COMMANDER:
 		return "STR_COMMANDER";
 	default:
-		break;
+		return "";
 	}
-	return "";
 }
 
 /**
@@ -503,4 +515,35 @@ int Soldier::getImprovement()
 {
 	return _improvement;
 }
+
+/**
+ * Returns the soldier's death details.
+ * @return Pointer to death data. NULL if no death has occured.
+ */
+SoldierDeath *Soldier::getDeath() const
+{
+	return _death;
+}
+
+/**
+ * Kills the soldier in the Geoscape.
+ * @param death Pointer to death data.
+ */
+void Soldier::die(SoldierDeath *death)
+{
+	delete _death;
+	_death = death;
+
+	// Clean up associations
+	_craft = 0;
+	_psiTraining = false;
+	_recentlyPromoted = false;
+	_recovery = 0;
+	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+	{
+		delete *i;
+	}
+	_equipmentLayout.clear();
+}
+
 }

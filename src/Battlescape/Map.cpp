@@ -151,6 +151,10 @@ void Map::think()
  */
 void Map::draw()
 {
+	if (!_redraw)
+	{
+		return;
+	}
 	Surface::draw();
 	Tile *t;
 
@@ -168,7 +172,7 @@ void Map::draw()
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
 		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
-		if (t && (((*i)->isBig() && t->isDiscovered(0)) || t->getVisible()))
+		if (t && ((*i)->isBig() || t->getVisible()))
 		{
 			explosionInFOV = true;
 		}
@@ -222,11 +226,13 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
-
+	static int flip = 1;
+	int _animFrameNew;
+	
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile)
+	if (_projectile && _explosions.empty())
 	{
 		int part = _projectile->getItem() ? 0 : BULLET_SPRITES-1;
 		for (int i = 0; i <= part; ++i)
@@ -756,7 +762,20 @@ void Map::drawTerrain(Surface *surface)
 		{
 			offset.y += 4;
 		}
-		_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
+		if (flip == 1) 
+		{
+			_animFrameNew = _animFrame;
+		}
+		else 
+		{
+			_animFrameNew = 7 - _animFrame;
+		}
+		if (_animFrameNew == 7) flip = -1;
+		if (_animFrameNew == 0) flip =  1;
+		if (this->getCursorType() != CT_NONE)
+		{
+			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrameNew, 0);
+		}
 	}
 	delete _numWaypid;
 
@@ -768,8 +787,11 @@ void Map::drawTerrain(Surface *surface)
 			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
 			{
-				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				if ((*i)->getCurrentFrame() >= 0)
+				{
+					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				}
 			}
 			else if ((*i)->isHit())
 			{

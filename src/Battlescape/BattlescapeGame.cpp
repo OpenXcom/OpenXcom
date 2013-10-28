@@ -422,7 +422,7 @@ void BattlescapeGame::endTurn()
 		statePushBack(0);
 		return;
 	}
-	
+
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
@@ -748,7 +748,7 @@ void BattlescapeGame::handleState()
 		{
 			_states.front()->think();
 		}
-		getMap()->draw(); // redraw map
+		getMap()->invalidate(); // redraw map
 	}
 }
 
@@ -1528,7 +1528,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	unit->setTile(0);
 
 	getSave()->getTile(unit->getPosition())->setUnit(0);
-	std::stringstream newArmor;
+	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(newType)->getArmor();
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
@@ -1998,4 +1998,49 @@ bool BattlescapeGame::getKneelReserved()
 	}
 	return false;
 }
+
+/**
+ * Checks if a unit has moved next to a proximity grenade.
+ * Checks one tile around the unit in every direction.
+ * For a large unit we check every tile it occupies.
+ * @param unit Pointer to a unit.
+ * @return True if a proximity grenade was triggered.
+ */
+bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
+{
+	int size = unit->getArmor()->getSize() - 1;
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			for (int tx = -1; tx < 2; tx++)
+			{
+				for (int ty = -1; ty < 2; ty++)
+				{
+					Tile *t = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+					if (t)
+					{
+						for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+						{
+							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
+							{
+								Position p;
+								p.x = t->getPosition().x*16 + 8;
+								p.y = t->getPosition().y*16 + 8;
+								p.z = t->getPosition().z*24 + t->getTerrainLevel();
+								statePushNext(new ExplosionBState(this, p, (*i), (*i)->getPreviousOwner()));
+								getSave()->removeItem(*i);
+								unit->setCache(0);
+								getMap()->cacheUnit(unit);
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
 }

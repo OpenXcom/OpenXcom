@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_CROSSPLATFORM_H
 #define OPENXCOM_CROSSPLATFORM_H
 
+#include <SDL.h>
 #include <string>
 #include <vector>
 
@@ -63,6 +64,8 @@ namespace CrossPlatform
 	std::string noExt(const std::string &file);
 	/// Gets the system locale.
 	std::string getLocale();
+	/// Checks if an event is a quit shortcut.
+	bool isQuitShortcut(const SDL_Event &ev);
 }
 
 }

@@ -70,7 +70,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
-	_txtName = new Text(200, 16, 36, 6);
+	_txtName = new Text(200, 17, 36, 6);
 	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
 	if (_showMoreStatsInInventoryView)
 	{
@@ -220,7 +220,7 @@ void InventoryState::init()
 	}
 
 	if (_parent)
-		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition());
+		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
 	unit->setCache(0);
 	_soldier->clear();
@@ -275,12 +275,18 @@ void InventoryState::init()
 		if (unit->getStats()->psiSkill > 0)
 		{
 			_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
-
-			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
 		}
 		else
 		{
 			_txtPSkill->setText(L"");
+		}
+
+		if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+		{
+			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
+		}
+		else
+		{
 			_txtPStr->setText(L"");
 		}
 	}

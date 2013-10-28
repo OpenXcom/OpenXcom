@@ -50,6 +50,8 @@ private:
 	std::vector<int> _textures;
 
 	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
+
+	void updateButtons();
 public:
 	/// Creates the New Battle state.
 	NewBattleState(Game *game);

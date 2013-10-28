@@ -56,7 +56,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 9);
+	_txtTitle = new Text(320, 17, 0, 9);
 	_txtMissionType = new Text(100, 9, 5, 30);
 	_txtTerrainType = new Text(100, 9, 110, 30);
 	_txtAlienRace = new Text(100, 9, 215, 30);
@@ -132,7 +132,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	
 	for (size_t i = 1; i != _game->getRuleset()->getAlienItemLevels().size(); ++i)
 	{
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << i;
 		_itemLevels.push_back(ss.str());
 	}
@@ -183,31 +183,24 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_selCraft = Options::getInt("NewBattleCraft");
 
 	_btnMissionType->setColor(Palette::blockOffset(15)-1);
-	_btnMissionType->setText(tr(_missionTypes[_selMission]));
 	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick, 0);
 
 	_btnTerrainType->setColor(Palette::blockOffset(15)-1);
-	_btnTerrainType->setText(tr("STR_"+_terrainTypes[_selTerrain]));
 	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick, 0);
 
 	_btnItemLevel->setColor(Palette::blockOffset(15)-1);
-	_btnItemLevel->setText(Language::utf8ToWstr(_itemLevels[_selItemLevel]));
 	_btnItemLevel->onMouseClick((ActionHandler)&NewBattleState::btnItemLevelClick, 0);
 
 	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
-	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
 	_btnAlienRace->onMouseClick((ActionHandler)&NewBattleState::btnAlienRaceClick, 0);
 
 	_btnDifficulty->setColor(Palette::blockOffset(15)-1);
-	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDifficulty->onMouseClick((ActionHandler)&NewBattleState::btnDifficultyClick, 0);
 
 	_btnDarkness->setColor(Palette::blockOffset(15)-1);
-	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
 	_btnDarkness->onMouseClick((ActionHandler)&NewBattleState::btnDarknessClick, 0);
 
 	_btnCraft->setColor(Palette::blockOffset(15)-1);
-	_btnCraft->setText(tr(_crafts[_selCraft]));
 	_btnCraft->onMouseClick((ActionHandler)&NewBattleState::btnCraftClick, 0);
 
 	_btnEquip->setColor(Palette::blockOffset(8)+5);
@@ -229,6 +222,8 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_music = true;
+
+	updateButtons();
 }
 
 /**
@@ -260,6 +255,25 @@ void NewBattleState::updateIndex(size_t &index, std::vector<std::string> &list, 
 	{
 		index += change;
 	}
+}
+
+/**
+ * Updates the contents of the mission setting buttons.
+ */
+void NewBattleState::updateButtons()
+{
+	_btnMissionType->setText(tr(_missionTypes[_selMission]));
+	_btnTerrainType->setText(tr("STR_"+_terrainTypes[_selTerrain]));
+	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
+	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
+	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+	_btnCraft->setText(tr(_crafts[_selCraft]));
+	std::stringstream ss;
+	int month = 0;
+	ss << std::dec << _itemLevels[_selItemLevel];
+	ss >> std::dec >> month;
+	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
+	_btnItemLevel->setText(tr(time.getMonthString()));
 }
 
 /**
@@ -446,6 +460,8 @@ void NewBattleState::btnOkClick(Action *)
 		base = _craft->getBase();
 		_craft = 0;
 	}
+	_game->popState();
+	_game->popState();
 	_game->pushState(new BriefingState(_game, _craft, base));
 	_craft = 0;
 }
@@ -484,13 +500,7 @@ void NewBattleState::btnRandomClick(Action *)
 	Options::setInt("NewBattleDarkness", _selDarkness);
 	Options::setInt("NewBattleCraft", _selCraft);
 
-	_btnMissionType->setText(tr(_missionTypes[_selMission]));
-	_btnTerrainType->setText(tr(_terrainTypes[_selTerrain]));
-	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
-	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
-	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
-	_btnCraft->setText(tr(_crafts[_selCraft]));
-	_btnItemLevel->setText(Language::utf8ToWstr(_itemLevels[_selItemLevel]));
+	updateButtons();
 
 	initSave();
 }
@@ -554,7 +564,12 @@ void NewBattleState::btnItemLevelClick(Action *action)
 	{
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
-	_btnItemLevel->setText(Language::utf8ToWstr(_itemLevels[_selItemLevel]));
+	std::stringstream ss;
+	int month = 0;
+	ss << std::dec << _itemLevels[_selItemLevel];
+	ss >> std::dec >> month;
+	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
+	_btnItemLevel->setText(tr(time.getMonthString()));
 	Options::setInt("NewBattleItemLevel", _selItemLevel);
 }
 

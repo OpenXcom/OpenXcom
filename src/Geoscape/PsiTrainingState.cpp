@@ -42,7 +42,7 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 10, 16);
+	_txtTitle = new Text(300, 17, 10, 16);
 	_btnOk = new TextButton(160, 14, 80, 174);
 
 	// Set palette

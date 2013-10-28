@@ -588,6 +588,17 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
+  // refresh _psiRequirements for psiStrengthEval
+	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+	{
+		RuleBaseFacility *rule = getBaseFacility(*i);
+		if (0 < rule->getPsiLaboratories())
+		{
+			_psiRequirements = rule->getRequirements();
+			break;
+		}
+	}
+
 	_modIndex += 1000;
 }
 
@@ -631,14 +642,6 @@ SavedGame *Ruleset::newSave() const
 	{
 		save->getRegions()->push_back(new Region(getRegion(*i)));
 	}
-
-	// Set up IDs
-	std::map<std::string, int> ids;
-	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
-	{
-		ids[*i] = 1;
-	}
-	save->initIds(ids);
 
 	// Set up starting base
 	Base *base = new Base(this);
@@ -1364,4 +1367,13 @@ void Ruleset::sortLists()
 	list.clear();
 	offset = 0;
 }
+
+/**
+ * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+ */
+std::vector<std::string> Ruleset::getPsiRequirements()
+{
+	return _psiRequirements;
+}
+
 }
