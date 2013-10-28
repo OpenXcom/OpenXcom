@@ -107,7 +107,7 @@ namespace OpenXcom
 		
 		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
 				
-		if (item->getClipSize() != -1)
+		if (!item->getCompatibleAmmo()->empty())
 		{
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 

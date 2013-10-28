@@ -592,7 +592,7 @@ void DebriefingState::prepareDebriefing()
 						base->getItems()->addItem(type);
 						RuleItem *tankRule = _game->getRuleset()->getItem(type);
 						BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-						if (tankRule->getClipSize() != -1 && 0 != ammoItem && 0 < ammoItem->getAmmoQuantity())
+						if (!tankRule->getCompatibleAmmo()->empty() && 0 != ammoItem && 0 < ammoItem->getAmmoQuantity())
 							base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
 					}
 				}
@@ -945,10 +945,10 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 			ReequipStat stat = {i->first, missing, craft->getName(_game->getLanguage())};
 			_missingItems.push_back(stat);
 		}
-		if (tankRule->getClipSize() == -1)
+		if (tankRule->getCompatibleAmmo()->empty())
 		{ // so this tank does NOT require ammo
 			for (int j = 0; j < canBeAdded; ++j)
-				craft->getVehicles()->push_back(new Vehicle(tankRule, 255));
+				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize()));
 			base->getItems()->removeItem(i->first, canBeAdded);
 		}
 		else
@@ -1058,7 +1058,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						// It's a weapon, count any rounds left in the clip.
 						{
 							BattleItem *clip = (*it)->getAmmoItem();
-							if (clip && (*it)->getRules()->getClipSize() != -1)
+							if (clip && clip->getRules()->getClipSize() > 0)
 							{
 								_rounds[clip->getRules()] += clip->getAmmoQuantity();
 							}
