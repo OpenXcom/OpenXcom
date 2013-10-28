@@ -2090,7 +2090,27 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	terrorMission->start();
 	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
 
-	if (!atGameStart)
+	if (atGameStart)
+	{
+		//
+		// Sectoid Research at base's region.
+		//
+		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
+		std::string targetRegion =
+		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
+		// Choose race for this mission.
+		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
+		AlienMission *otherMission = new AlienMission(missionRules);
+		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+		otherMission->setRegion(targetRegion, *_game->getRuleset());
+		otherMission->setRace("STR_SECTOID");
+		otherMission->start(150);
+		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
+		// Make sure this combination never comes up again.
+		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
+	}
+
+	for (int i = atGameStart? DIFF_EXPERIENCED : DIFF_BEGINNER; i <= _game->getSavedGame()->getDifficulty(); ++i)
 	{
 		//
 		// One randomly selected mission.
@@ -2109,25 +2129,6 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
 		// Make sure this combination never comes up again.
 		strategy.removeMission(targetRegion, targetMission);
-	}
-	else
-	{
-		//
-		// Sectoid Research at base's region.
-		//
-		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		std::string targetRegion =
-		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
-		// Choose race for this mission.
-		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
-		AlienMission *otherMission = new AlienMission(missionRules);
-		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-		otherMission->setRegion(targetRegion, *_game->getRuleset());
-		otherMission->setRace("STR_SECTOID");
-		otherMission->start(150);
-		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
-		// Make sure this combination never comes up again.
-		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
 	}
 }
 
