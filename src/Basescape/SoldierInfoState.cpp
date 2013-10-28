@@ -29,6 +29,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
 #include "../Engine/Surface.h"
+#include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"

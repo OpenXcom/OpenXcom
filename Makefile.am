@@ -145,6 +145,8 @@ openxcom_SOURCES = \
 	src/Basescape/CraftWeaponsState.h \
 	src/Basescape/DismantleFacilityState.cpp \
 	src/Basescape/DismantleFacilityState.h \
+	src/Basescape/ManageAlienContainmentState.cpp \
+	src/Basescape/ManageAlienContainmentState.h \
 	src/Basescape/ManufactureInfoState.cpp \
 	src/Basescape/ManufactureInfoState.h \
 	src/Basescape/ManufactureStartState.cpp \

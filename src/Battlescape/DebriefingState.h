@@ -51,6 +51,7 @@ class DebriefingState : public State
 private:
 	Region *_region;
 	Country *_country;
+	Base *_base;
 	std::vector<DebriefingStat*> _stats;
 	TextButton *_btnOk;
 	Window *_window;
@@ -66,7 +67,7 @@ private:
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
 	/// Reequips a craft after a mission.
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
-	bool _noContainment, _destroyBase;
+	bool _noContainment, _manageContainment, _destroyBase;
 	int _containmentLimit;
 public:
 	/// Creates the Debriefing state.

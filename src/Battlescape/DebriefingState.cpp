@@ -53,11 +53,13 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
 #include <sstream>
+#include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/RNG.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
+#include "../Basescape/ManageAlienContainmentState.h"
 
 namespace OpenXcom
 {
@@ -66,7 +68,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _destroyBase(false)
+DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
@@ -263,7 +265,12 @@ void DebriefingState::btnOkClick(Action *)
 		}
 		if (_noContainment)
 		{
-			_game->pushState (new NoContainmentState(_game));
+			_game->pushState(new NoContainmentState(_game));
+		}
+		else if (_manageContainment)
+		{
+			_game->pushState(new ManageAlienContainmentState(_game, _base));
+			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
 }
@@ -424,6 +431,8 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+
+	_base = base;
 
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
@@ -586,7 +595,7 @@ void DebriefingState::prepareDebriefing()
 					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
 					if (soldier != 0)
-						recoverItems((*j)->getInventory(), base);		
+						recoverItems((*j)->getInventory(), base);
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);
@@ -645,14 +654,15 @@ void DebriefingState::prepareDebriefing()
 				{
 					// more points if it's not researched
 					addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10);
-					if (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) > 0)
-					{
-						base->getItems()->addItem(type, 1);
-					}
-					else
+					if (base->getAvailableContainment() == 0)
 					{
 						_noContainment = true;
 						base->getItems()->addItem(corpseItem, 1);
+					}
+					else
+					{
+						base->getItems()->addItem(type, 1);
+						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0;
 					}
 				}
 				else
@@ -765,7 +775,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 				// recover items from the floor
-				recoverItems(battle->getTiles()[i]->getInventory(), base);		
+				recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
 		else
@@ -773,7 +783,7 @@ void DebriefingState::prepareDebriefing()
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
-					recoverItems(battle->getTiles()[i]->getInventory(), base);		
+					recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
 	}
@@ -805,7 +815,7 @@ void DebriefingState::prepareDebriefing()
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
-					recoverItems(battle->getTiles()[i]->getInventory(), base);		
+					recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
 	}
@@ -1016,14 +1026,15 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						{
 							// more points if it's not researched
 							addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*it)->getUnit()->getValue() * 2) - 10);
-							if (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) > 0)
-							{
-								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
-							}
-							else
+							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;
 								base->getItems()->addItem((*it)->getRules()->getName(), 1);
+							}
+							else
+							{
+								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
+								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0);
 							}
 						}
 						else
