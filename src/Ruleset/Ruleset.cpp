@@ -478,14 +478,14 @@ void Ruleset::loadFiles(const std::string &dirname)
 /**
  *
  */
-template <class T>
+template <typename T>
 T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
 {
 	T *rule = 0;
 	if (node[key])
 	{
 		std::string type = node[key].as<std::string>();
-		std::map<std::string, T*>::iterator i = map->find(type);
+		typename std::map<std::string, T*>::iterator i = map->find(type);
 		if (i != map->end())
 		{
 			rule = i->second;
@@ -503,7 +503,7 @@ T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std
 	else if (node["delete"])
 	{
 		std::string type = node["delete"].as<std::string>();
-		std::map<std::string, T*>::iterator i = map->find(type);
+		typename std::map<std::string, T*>::iterator i = map->find(type);
 		if (i != map->end())
 		{
 			map->erase(i);
