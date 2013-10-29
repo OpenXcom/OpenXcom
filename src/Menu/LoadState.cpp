@@ -31,7 +31,6 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"
 #include "../Battlescape/BattlescapeState.h"
-#include "../Ruleset/Ruleset.h"
 #include "DeleteGameState.h"
 
 namespace OpenXcom
@@ -96,7 +95,6 @@ void LoadState::quickLoad(const std::string &filename)
 	try
 	{
 		s->load(filename, _game->getRuleset());
-		_game->getRuleset()->	compactPolylines();
 		_game->setSavedGame(s);
 		_game->setState(new GeoscapeState(_game));
 		if (_game->getSavedGame()->getSavedBattle() != 0)

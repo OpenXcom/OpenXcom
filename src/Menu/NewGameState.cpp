@@ -109,7 +109,6 @@ NewGameState::~NewGameState()
 void NewGameState::newGame(GameDifficulty diff)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave());
-	_game->getRuleset()->compactPolylines();
 	_game->getSavedGame()->setDifficulty(diff);
 	GeoscapeState *gs = new GeoscapeState(_game);
 	_game->setState(gs);
