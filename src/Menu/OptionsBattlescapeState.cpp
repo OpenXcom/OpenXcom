@@ -44,7 +44,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 10);
+	_txtTitle = new Text(320, 17, 0, 10);
 
 	_txtScrollSpeed = new Text(130, 9, 16, 32);
 	_btnScrollSpeed1 = new TextButton(22, 14, 16, 42);

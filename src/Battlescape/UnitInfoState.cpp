@@ -30,6 +30,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Surface.h"
 #include "../Savegame/Base.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "../Engine/Options.h"
@@ -458,7 +459,7 @@ void UnitInfoState::init()
 	_barStrength->setMax(_unit->getStats()->strength);
 	_barStrength->setValue(_unit->getStats()->strength);
 
-	if (_unit->getStats()->psiSkill > 0)
+	if (_unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		ss.str(L"");
 		ss << _unit->getStats()->psiStrength;
@@ -466,15 +467,24 @@ void UnitInfoState::init()
 		_barPsiStrength->setMax(_unit->getStats()->psiStrength);
 		_barPsiStrength->setValue(_unit->getStats()->psiStrength);
 
+		_txtPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+	}
+
+	if (_unit->getStats()->psiSkill > 0)
+	{
 		ss.str(L"");
 		ss << _unit->getStats()->psiSkill;
 		_numPsiSkill->setText(ss.str());
 		_barPsiSkill->setMax(_unit->getStats()->psiSkill);
 		_barPsiSkill->setValue(_unit->getStats()->psiSkill);
-
-		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);
@@ -482,10 +492,6 @@ void UnitInfoState::init()
 	}
 	else
 	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-
 		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);

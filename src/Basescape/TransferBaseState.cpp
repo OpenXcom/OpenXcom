@@ -46,10 +46,10 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	// Create objects
 	_window = new Window(this, 280, 140, 20, 30);
 	_btnCancel = new TextButton(264, 16, 28, 146);
-	_txtTitle = new Text(270, 16, 25, 38);
+	_txtTitle = new Text(270, 17, 25, 38);
 	_txtFunds = new Text(250, 9, 30, 54);
-	_txtName = new Text(130, 16, 28, 64);
-	_txtArea = new Text(130, 16, 160, 64);
+	_txtName = new Text(130, 17, 28, 64);
+	_txtArea = new Text(130, 17, 160, 64);
 	_lstBases = new TextList(248, 64, 28, 80);
 
 	// Set palette

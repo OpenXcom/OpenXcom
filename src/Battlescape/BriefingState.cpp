@@ -52,9 +52,9 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
-	_txtTitle = new Text(300, 16, 16, 24);
-	_txtTarget = new Text(300, 16, 16, 40);
-	_txtCraft = new Text(300, 16, 16, 56);
+	_txtTitle = new Text(300, 17, 16, 24);
+	_txtTarget = new Text(300, 17, 16, 40);
+	_txtCraft = new Text(300, 17, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();

@@ -209,7 +209,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 			if (!(*c)->getPact() && !(*c)->getNewPact() && ruleset.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
 			{
 				(*c)->setNewPact();
-				spawnAlienBase(ufo, globe, engine);
+				spawnAlienBase(globe, engine);
 				break;
 			}
 		}
@@ -220,7 +220,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_rule.getType() == "STR_ALIEN_BASE" && _nextWave == _rule.getWaveCount())
 	{
-		spawnAlienBase(ufo, globe, engine);
+		spawnAlienBase(globe, engine);
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
@@ -651,7 +651,7 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 	}
 }
 
-void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
+void AlienMission::spawnAlienBase(const Globe &globe, Game &engine)
 {
 	SavedGame &game = *engine.getSavedGame();
 	if (game.getAlienBases()->size() >= 8)

@@ -79,6 +79,7 @@ void showError(const std::string &error)
 	Log(LOG_FATAL) << error;
 }
 
+#ifndef _WIN32
 /**
  * Gets the user's home folder according to the system.
  * @return Absolute path to home folder.
@@ -95,6 +96,7 @@ static char const *getHome()
 #endif
 	return home;
 }
+#endif
 
 /**
  * Builds a list of predefined paths for the Data folder
@@ -104,8 +106,6 @@ static char const *getHome()
 std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
-	char const *home = getHome();
-	
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:data/");
 	return list;
@@ -136,6 +136,7 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
+	char const *home = getHome();
 #ifdef __HAIKU__
 	list.push_back("/boot/apps/OpenXcom/data/");
 #endif

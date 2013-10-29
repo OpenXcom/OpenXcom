@@ -204,7 +204,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		{
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
-				_action->value = 1;
+				_action->value = 0;
 				_game->popState();
 			}
 			else

@@ -56,7 +56,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 9);
+	_txtTitle = new Text(320, 17, 0, 9);
 	_txtMissionType = new Text(100, 9, 5, 30);
 	_txtTerrainType = new Text(100, 9, 110, 30);
 	_txtAlienRace = new Text(100, 9, 215, 30);

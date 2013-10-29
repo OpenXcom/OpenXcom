@@ -158,7 +158,7 @@ void UnitDieBState::think()
 			Game *game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_damageType == DT_NONE)
+				if (_damageType == DT_NONE && _unit->getArmor()->getSize() == 1)
 				{
 					game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
@@ -239,7 +239,10 @@ void UnitDieBState::convertUnitToCorpse()
 		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
-		_parent->getSave()->getTile(lastPosition)->setUnit(0);
+		if (_parent->getSave()->getTile(lastPosition)->getUnit() == _unit)	// check in case unit was displaced by another unit
+		{
+			_parent->getSave()->getTile(lastPosition)->setUnit(0);
+		}
 	}
 	else
 	{
@@ -252,7 +255,10 @@ void UnitDieBState::convertUnitToCorpse()
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
-				_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
+				{
+					_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+				}
 				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
 				i++;
 			}

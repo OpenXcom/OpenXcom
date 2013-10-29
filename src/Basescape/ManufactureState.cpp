@@ -51,7 +51,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnNew = new TextButton(148, 16, 8, 176);
 	_btnOk = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 8);
 	_txtAvailable = new Text(150, 9, 8, 24);
 	_txtAllocated = new Text(150, 9, 160, 24);
 	_txtSpace = new Text(150, 9, 8, 34);

@@ -43,7 +43,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 8);
+	_txtTitle = new Text(320, 17, 0, 8);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_lstOptions = new TextList(268, 104, 20, 30);
@@ -107,6 +107,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool>("researchedItemsWillSpent", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
 
 	_boolQuantity = _settingBoolSet.size();

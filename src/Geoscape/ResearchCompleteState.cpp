@@ -46,7 +46,7 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_window = new Window(this, 224, 140, 48, 30, POPUP_BOTH);
 	_btnOk = new TextButton(80, 16, 64, 146);
 	_btnReport = new TextButton(80, 16, 176, 146);
-	_txtTitle = new Text(224, 16, 48, 88);
+	_txtTitle = new Text(224, 17, 48, 88);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

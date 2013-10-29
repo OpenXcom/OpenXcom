@@ -30,21 +30,10 @@ namespace OpenXcom
  * @param movementType The movement type for this armor (walk, fly or slide).
  * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size), _weight(0)
+Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
-		_damageModifier[i] = 1.0;
-	_stats.bravery = 0;
-	_stats.firing = 0;
-	_stats.health = 0;
-	_stats.melee = 0;
-	_stats.psiSkill = 0;
-	_stats.psiStrength = 0;
-	_stats.reactions = 0;
-	_stats.stamina = 0;
-	_stats.strength = 0;
-	_stats.tu = 0;
-	_stats.throwing = 0;
+		_damageModifier[i] = 1.0f;
 }
 
 /**

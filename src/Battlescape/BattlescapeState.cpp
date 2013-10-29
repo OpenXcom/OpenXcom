@@ -439,7 +439,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	_txtTooltip->setColor(Palette::blockOffset(0));
+	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
 	_btnReserveNone->copy(_icons);
@@ -1066,13 +1066,13 @@ void BattlescapeState::btnReserveClick(Action *action)
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
-			_battleGame->setTUReserved(BA_NONE);
+			_battleGame->setTUReserved(BA_NONE, true);
 		else if (_reserve == _btnReserveSnap)
-			_battleGame->setTUReserved(BA_SNAPSHOT);
+			_battleGame->setTUReserved(BA_SNAPSHOT, true);
 		else if (_reserve == _btnReserveAimed)
-			_battleGame->setTUReserved(BA_AIMEDSHOT);
+			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
 		else if (_reserve == _btnReserveAuto)
-			_battleGame->setTUReserved(BA_AUTOSHOT);
+			_battleGame->setTUReserved(BA_AUTOSHOT, true);
 	}
 }
 
@@ -1179,7 +1179,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && leftHandItem->needsAmmo())
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible(true);
 			if (leftHandItem->getAmmoItem())
@@ -1194,7 +1194,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && rightHandItem->needsAmmo())
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible(true);
 			if (rightHandItem->getAmmoItem())

@@ -1207,3 +1207,8 @@ en-US:
   STR_DATE_UC: "DATE"
   STR_SOLDIERS_RECRUITED: "SOLDIERS RECRUITED>{ALT}{0}"
   STR_SOLDIERS_LOST: "SOLDIERS LOST>{ALT}{0}"
+  STR_PSISTRENGTHEVAL: "Psi-Strength Evaluation"
+  STR_PSISTRENGTHEVAL_DESC: "Evaluates the psionic strength of all soldiers after the appropriate research has been completed."
+  STR_REMOVE_SELECTED: "Remove Selected"
+  STR_CONTAINMENT_EXCEEDED: "ALIEN CONTAINMENT LIMITS EXCEEDED!{SMALLLINE}Insufficient containment space at {0}. You must remove excess aliens from containment (who will then die)."
+  STR_MANAGE_CONTAINMENT: "Manage Alien Containment"

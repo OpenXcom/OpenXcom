@@ -46,10 +46,10 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(300, 16, 10, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtItem = new Text(142, 8, 10, 32);
-	_txtQuantity = new Text(88, 8, 152, 32);
-	_txtSpaceUsed = new Text(74, 8, 240, 32);
+	_txtTitle = new Text(310, 17, 5, 8);
+	_txtItem = new Text(142, 9, 10, 32);
+	_txtQuantity = new Text(88, 9, 152, 32);
+	_txtSpaceUsed = new Text(74, 9, 240, 32);
 	_lstStores = new TextList(288, 128, 8, 40);
 
 	// Set palette

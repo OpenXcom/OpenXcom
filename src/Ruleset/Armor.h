@@ -45,7 +45,7 @@ private:
 	UnitStats _stats;
 public:
 	/// Creates a blank armor ruleset.
-	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
+	Armor(const std::string &type);
 	/// Cleans up the armor ruleset.
 	~Armor();
 	/// Loads the armor data from YAML.
