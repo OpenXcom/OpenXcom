@@ -31,7 +31,6 @@ Unit::Unit(const std::string &type) : _type(type), _race(""), _rank(""), _armor(
 																		_value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE),
 																		_zombieUnit(""), _spawnUnit(""), _livingWeapon(false)
 {
-	_stats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 }
 
 /**

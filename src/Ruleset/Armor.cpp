@@ -32,7 +32,6 @@ namespace OpenXcom
  */
 Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0)
 {
-	_stats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
 }
