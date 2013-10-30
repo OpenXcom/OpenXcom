@@ -351,10 +351,10 @@ void Base::setEngineers(int engineers)
 int Base::detect(Target *target) const
 {
 	int chance = 0;
-	double distance = getDistance(target);
+	double distance = getDistance(target) * 60.0 * (180.0 / M_PI);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180) >= distance)
+		if ((*i)->getRules()->getRadarRange() >= distance && (*i)->getBuildTime() == 0)
 		{
 			if ((*i)->getRules()->isHyperwave())
 			{
@@ -363,8 +363,7 @@ int Base::detect(Target *target) const
 			chance += (*i)->getRules()->getRadarChance();
 		}
 	}
-	if (chance == 0)
-		return 0;
+	if (chance == 0) return 0;
 
 	Ufo *u = dynamic_cast<Ufo*>(target);
 	if (u != 0)
@@ -383,22 +382,21 @@ int Base::detect(Target *target) const
  */
 int Base::insideRadarRange(Target *target) const
 {
-	double maxRange = 0;
-	double distance = getDistance(target);
+	bool insideRange = false;
+	double distance = getDistance(target) * 60.0 * (180.0 / M_PI);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getRules()->getRadarRange() > 0 && (*i)->getBuildTime() == 0)
+		if ((*i)->getRules()->getRadarRange() >= distance && (*i)->getBuildTime() == 0)
 		{
-			double range = (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-			if ((*i)->getRules()->isHyperwave() && range >= distance)
+			if ((*i)->getRules()->isHyperwave())
 			{
 				return 2;
 			}
-			maxRange = std::max(maxRange, range);
+			insideRange = true;
 		}
 	}
-	
-	return (maxRange >= distance)? 1 : 0;
+
+	return insideRange? 1 : 0;
 }
 
 /**
