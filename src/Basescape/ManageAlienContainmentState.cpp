@@ -87,7 +87,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base,
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 		_color  = Palette::blockOffset(13)+10;
 		_color2 = Palette::blockOffset(13);
 	}
@@ -107,7 +107,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base,
 
 	// Set up objects
 	_window->setColor(_color);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
 
 	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
