@@ -170,11 +170,14 @@ void Map::draw()
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
-		std::set<Explosion*>::iterator i = _explosions.begin();
-		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
-		if (t && ((*i)->isBig() || t->getVisible()))
+		for (std::set<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
-			explosionInFOV = true;
+			t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
+			if (t && ((*i)->isBig() || t->getVisible()))
+			{
+				explosionInFOV = true;
+				break;
+			}
 		}
 	}
 
