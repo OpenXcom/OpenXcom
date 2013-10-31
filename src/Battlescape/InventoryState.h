@@ -71,6 +71,10 @@ public:
 	void btnRankClick(Action *action);
 	/// Handler for clicking the Unload button.
 	void invClick(Action *action);
+	/// Handler for showing item info.
+	void invMouseOver(Action *action);
+	/// Handler for hiding item info.
+	void invMouseOut(Action *action);
 	/// Handles keypresses.
 	void handle(Action *action);
 };

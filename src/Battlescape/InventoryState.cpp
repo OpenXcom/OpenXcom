@@ -160,6 +160,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyBattleInventory"));
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
@@ -172,6 +173,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
+	_inv->onMouseOver((ActionHandler)&InventoryState::invMouseOver);
+	_inv->onMouseOut((ActionHandler)&InventoryState::invMouseOut);
 }
 
 /**
@@ -433,11 +436,13 @@ void InventoryState::btnUnloadClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
-		_inv->unload();
-		_txtItem->setText(L"");
-		_txtAmmo->setText(L"");
-		_selAmmo->clear();
-		updateStats();
+		if (_inv->unload())
+		{
+			_txtItem->setText(L"");
+			_txtAmmo->setText(L"");
+			_selAmmo->clear();
+			updateStats();
+		}
 	}
 }
 
@@ -465,10 +470,21 @@ void InventoryState::btnRankClick(Action *)
  */
 void InventoryState::invClick(Action *)
 {
-	BattleItem *item = _inv->getSelectedItem();
-	_txtItem->setText(L"");
-	_txtAmmo->setText(L"");
-	_selAmmo->clear();
+	updateStats();
+}
+
+/**
+ * Shows item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invMouseOver(Action *)
+{
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
+	BattleItem *item = _inv->getMouseOverItem();
 	if (item != 0)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -506,10 +522,36 @@ void InventoryState::invClick(Action *)
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
 			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+			_selAmmo->clear();
+		}
+		else
+		{
+			_selAmmo->clear();
 		}
 		_txtAmmo->setText(s);
 	}
-	updateStats();
+	else
+	{
+		_txtItem->setText(L"");
+		_txtAmmo->setText(L"");
+		_selAmmo->clear();
+	}
+}
+
+/**
+ * Hides item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invMouseOut(Action *)
+{
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
+	_txtItem->setText(L"");
+	_txtAmmo->setText(L"");
+	_selAmmo->clear();
 }
 
 /**

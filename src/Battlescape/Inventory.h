@@ -45,6 +45,7 @@ private:
 	WarningMessage *_warning;
 	BattleUnit *_selUnit;
 	BattleItem *_selItem;
+	BattleItem *_mouseOverItem;
 	bool _tu;
 	int _groundOffset;
 	std::map<int, std::map<int, int> > _stackLevel;
@@ -77,6 +78,10 @@ public:
 	BattleItem *getSelectedItem() const;
 	/// Sets the currently selected item.
 	void setSelectedItem(BattleItem *item);
+	/// Gets the mouse over item.
+	BattleItem *getMouseOverItem() const;
+	/// Sets the mouse over item.
+	void setMouseOverItem(BattleItem *item);
 	/// Handles timers.
 	void think();
 	/// Blits the inventory onto another surface.
