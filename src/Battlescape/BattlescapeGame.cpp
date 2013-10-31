@@ -1279,6 +1279,9 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+							_currentAction.targeting = false;
+							_currentAction.type = BA_NONE;
+							setupCursor();
 						}
 						_parentState->updateSoldierInfo();
 					}
