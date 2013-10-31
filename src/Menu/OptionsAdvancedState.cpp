@@ -136,13 +136,9 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 		{
 			ss << updatePathString(sel - _settingBoolSet.size()).c_str();
 		}
-		else if (i->first == "maxFrameSkip")
-		{
-			ss << i->second - 1;
-		}
 		else
 		{
-			ss << (*i).second;
+			ss << i->second;
 		}
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
@@ -244,15 +240,15 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 			break;
 		case 3: // frame skip
 			_settingIntSet.at(intSel).second += increment;
-			if (_settingIntSet.at(intSel).second == 12)
+			if (_settingIntSet.at(intSel).second > 10)
 			{
-				_settingIntSet.at(intSel).second = 1;
+				_settingIntSet.at(intSel).second = 0;
 			}
-			if (_settingIntSet.at(intSel).second == 0)
+			if (_settingIntSet.at(intSel).second < 0)
 			{
-				_settingIntSet.at(intSel).second = 11;
+				_settingIntSet.at(intSel).second = 10;
 			}
-			ss << _settingIntSet.at(intSel).second - 1;
+			ss << _settingIntSet.at(intSel).second;
 			break;
 		default:
 			_settingIntSet.at(intSel).second += increment;

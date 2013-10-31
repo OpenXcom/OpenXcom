@@ -775,6 +775,7 @@ dirent_mbstowcs_s(
     size_t count)
 {
     int error;
+	setlocale(LC_ALL, "");
 
 #if defined(_MSC_VER)  &&  _MSC_VER >= 1400
 
@@ -812,6 +813,7 @@ dirent_mbstowcs_s(
 
 #endif
 
+	setlocale(LC_ALL, "C");
     return error;
 }
 
@@ -825,6 +827,7 @@ dirent_wcstombs_s(
     size_t count)
 {
     int error;
+	setlocale(LC_ALL, "");
 
 #if defined(_MSC_VER)  &&  _MSC_VER >= 1400
 
@@ -862,6 +865,7 @@ dirent_wcstombs_s(
 
 #endif
 
+	setlocale(LC_ALL, "C");
     return error;
 }
 

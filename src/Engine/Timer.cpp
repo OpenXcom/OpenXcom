@@ -116,7 +116,7 @@ void Timer::think(State* state, Surface* surface)
 	{
 		if ((now - _frameSkipStart) >= _interval)
 		{
-			for (int i = 0; i < maxFrameSkip && isRunning() && (now - _frameSkipStart) >= _interval; ++i)
+			for (int i = 0; i <= maxFrameSkip && isRunning() && (now - _frameSkipStart) >= _interval; ++i)
 			{
 				if (state != 0 && _state != 0)
 				{

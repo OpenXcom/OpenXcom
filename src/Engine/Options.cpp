@@ -68,7 +68,7 @@ void createDefault()
 #endif
 	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
-	setInt("maxFrameSkip", 1);
+	setInt("maxFrameSkip", 0);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setBool("weaponSelfDestruction", false);
