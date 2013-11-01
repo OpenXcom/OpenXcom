@@ -368,7 +368,7 @@ int Base::detect(Target *target) const
 	Ufo *u = dynamic_cast<Ufo*>(target);
 	if (u != 0)
 	{
-		chance = (chance * 100 + u->getVisibility()) / 100;
+		chance = chance * (100 + u->getVisibility()) / 100;
 	}
 
 	return RNG::percent(chance)? 1 : 0;
