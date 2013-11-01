@@ -4,33 +4,23 @@ lookWeights:
   - 4
   - 4
 maleFirst:
-  - Aaron
-  - Abraham
-  - Abran
-  - Adan
+  - Aarón
+  - Adán
   - Alberto
   - Alejandro
   - Alfonso
-  - Andres
-  - Angel
-  - Angelo
+  - Andrés
+  - Ángel
   - Antonio
-  - Arsenio
   - Augusto
   - Benedicto
-  - Benjamin
+  - Benjamín
   - Carlos
-  - Celestino
-  - Chente
-  - Christopher
   - Daniel
   - David
   - Diego
-  - Dino
-  - Diogenes
-  - Dion
   - Eduardo
-  - Elias
+  - Elías
   - Eliseo
   - Enrique
   - Emanuel
@@ -39,7 +29,7 @@ maleFirst:
   - Esteban
   - Fabio
   - Felipe
-  - Felix
+  - Félix
   - Fernando
   - Fidel
   - Fortunato
@@ -47,87 +37,70 @@ maleFirst:
   - Gabriel
   - Gerardo
   - Hugo
-  - Isaac
-  - Isaias
   - Ismael
-  - Ivan
-  - Jacob
+  - Iván
   - Jacobo
   - Jaime
   - Javier
-  - Jesus
+  - Jesús
   - Joel
   - Jorge
-  - Jose
+  - José
   - Juan
-  - Julian
+  - Julián
   - Leo
   - Leonardo
-  - Lino
-  - Luca
   - Lucas
   - Luis
   - Manuel
   - Marco
   - Marcos
-  - Martin
-  - Matias
+  - Martín
+  - Matías
   - Mateo
   - Maximiliano
   - Miguel
-  - Moises
   - Nataniel
-  - Nicanor
-  - Nicolas
-  - Noe
+  - Nicolás
+  - Noé
   - Octavio
   - Orlando
   - Oscar
   - Pablo
   - Pedro
   - Rafael
-  - Ramon
-  - Raul
-  - Rene
+  - Ramón
+  - Raúl
+  - René
   - Ricardo
-  - Rigoberto
   - Roberto
   - Rolando
   - Salvador
   - Santiago
-  - Sebastian
-  - Set
+  - Sebastián
   - Sergio
   - Silvestre
-  - Socrates
   - Stefano
   - Teodoro
   - Tito
-  - Tomas
-  - Transito
-  - Umberto
-  - Valentin
+  - Tomás
+  - Humberto
+  - Valentín
   - Vicente
-  - Victor
+  - Víctor
   - Xavier
 femaleFirst:
-  - Anne
-  - Abigail
   - Adriana
   - Aida
   - Alejandra
   - Alexia
   - Alma
   - Ana
-  - Anastasia
-  - Angela
-  - Angelica
-  - Angelina
-  - Anna
+  - Ángela
+  - Angélica
   - Aurora
-  - Barbara
+  - Bárbara
   - Bianca
-  - Blanca
   - Brenda
   - Carina
   - Carla
@@ -136,32 +109,24 @@ femaleFirst:
   - Catalina
   - Claudia
   - Cristina
-  - Desiree
   - Dolores
   - Dora
   - Elena
   - Eliana
-  - Elizabeth
   - Elvira
   - Ema
-  - Esmerelda
-  - Estrella
+  - Esmeralda
   - Eva
   - Felicia
   - Fiona
-  - Flor
   - Gabriela
-  - Gladis
   - Gloria
   - Guadalupe
-  - Hannah
-  - Ines
-  - Isabella
-  - Jasmin
-  - Jessica
+  - Inés
+  - Isabel
+  - Jésica
   - Juana
   - Laura
-  - Liana
   - Lidia
   - Liliana
   - Linda
@@ -170,121 +135,113 @@ femaleFirst:
   - Magdalena
   - Marcela
   - Margarita
-  - Maria
+  - María
   - Mariana
-  - Maricela
   - Marisol
-  - Monica
+  - Mónica
   - Nadia
   - Nancy
   - Natalia
-  - Noemi
+  - Noemí
   - Olivia
   - Patricia
   - Paulina
   - Raquel
-  - Reyna
   - Rosa
   - Selena
-  - Sofia
+  - Sofía
   - Sonia
-  - Talia
+  - Talía
   - Tatiana
   - Teresa
-  - Tina
   - Vanesa
-  - Veronica
+  - Verónica
   - Victoria
   - Yolanda
-  - Yesenia
 maleLast:
   - Aguilar
   - Alba
   - Alonso
   - Alvarado
-  - Alvarez
-  - Avila
-  - Calderon
+  - Álvarez
+  - Ávila
+  - Calderón
   - Campos
-  - Cardenas
+  - Cárdenas
   - Castilla
   - Cervantes
-  - Chavez
+  - Chávez
   - Cortez
   - Cruz
-  - Delacruz
+  - De La Cruz
   - De La Rosa
-  - Diaz
-  - Dominguez
+  - Díaz
+  - Domínguez
   - Estrada
-  - Falcon
-  - Fernandez
+  - Falcón
+  - Fernández
   - Figueroa
   - Flores
   - Fuentes
-  - Garcia
+  - García
   - Garza
-  - Gomez
-  - Gonzalez
+  - Gómez
+  - González
   - Guerrero
-  - Gutierrez
-  - Guzman
-  - Hernandez
+  - Gutiérrez
+  - Guzmán
+  - Hernández
   - Herrera
-  - Jimenez
-  - Juarez
-  - Leon
+  - Jiménez
+  - Juárez
+  - León
   - Lima
-  - Lopez
+  - López
   - Loya
   - Lucio
   - Luna
-  - Marciano
-  - Mariano
-  - Martinez
+  - Martínez
   - Medina
-  - Mejia
-  - Mendez
+  - Mejía
+  - Méndez
   - Mendoza
   - Miranda
   - Montero
   - Montes
   - Morales
   - Moreno
-  - Munoz
+  - Muñoz
   - Navarro
-  - Nunez
+  - Núñez
   - Ortega
   - Ortiz
   - Pacheco
   - Pascual
-  - Perez
-  - Ramirez
+  - Pérez
+  - Ramírez
   - Ramos
   - Reyes
-  - Rios
+  - Ríos
   - Rivera
-  - Rodriguez
+  - Rodríguez
   - Romero
   - Rosa
   - Ruiz
-  - Sanchez
+  - Sánchez
   - Sandoval
   - Santa Cruz
   - Santana
   - Santiago
   - Santos
-  - Silvestre
-  - Sinaloa
   - Sosa
-  - Soto
-  - Suarez
+  - De Soto
+  - Suárez
   - Tapia
   - Torres
   - Trejo
-  - Trevino
+  - Treviño
   - Trujillo
   - Valdez
-  - Vasquez
+  - Vásquez
   - Vega
-  - Velasquez
+  - Velásquez
