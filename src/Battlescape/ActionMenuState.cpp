@@ -174,6 +174,13 @@ void ActionMenuState::handle(Action *action)
 	{
 		_game->popState();
 	}
+	else if (action->getDetails()->type == SDL_KEYDOWN &&
+		(action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyCancel") ||
+		action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseLeftHand") ||
+		action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseRightHand")))
+	{
+		_game->popState();
+	}
 }
 
 /**

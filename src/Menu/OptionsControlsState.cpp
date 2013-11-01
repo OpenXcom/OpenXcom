@@ -76,6 +76,8 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 	{"keyBattlePrevUnit", "STR_PREVIOUS_UNIT", SDLK_UNKNOWN},
 	{"keyBattleNextUnit", "STR_NEXT_UNIT", SDLK_UNKNOWN},
 	{"keyBattleDeselectUnit", "STR_DESELECT_UNIT", SDLK_UNKNOWN},
+	{"keyBattleUseLeftHand", "STR_USE_LEFT_HAND", SDLK_UNKNOWN},
+	{"keyBattleUseRightHand", "STR_USE_RIGHT_HAND", SDLK_UNKNOWN},
 	{"keyBattleInventory", "STR_INVENTORY", SDLK_UNKNOWN},
 	{"keyBattleMap", "STR_MINIMAP", SDLK_UNKNOWN},
 	{"keyBattleOptions", "STR_OPTIONS", SDLK_UNKNOWN},
