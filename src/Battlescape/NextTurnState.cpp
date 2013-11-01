@@ -86,6 +86,10 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
+
+	_timer = new Timer(NEXT_TURN_DELAY);
+	_timer->onTimer((StateHandler)&NextTurnState::close);
+	_timer->start();
 }
 
 /**
@@ -93,7 +97,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-
+	delete _timer;
 }
 
 /**
@@ -106,19 +110,35 @@ void NextTurnState::handle(Action *action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		_game->popState();
+		close();
+	}
+}
 
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-		if (liveAliens == 0 || liveSoldiers == 0)
-		{
-			_state->finishBattle(false, liveSoldiers);
-		}
-		else
-		{
-			_state->btnCenterClick(0);
-		}
+/**
+ * Keeps the timer running.
+ */
+void NextTurnState::think()
+{
+	_timer->think(this, 0);
+}
+
+/**
+ * Closes the window.
+ */
+void NextTurnState::close()
+{
+	_game->popState();
+
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	if (liveAliens == 0 || liveSoldiers == 0)
+	{
+		_state->finishBattle(false, liveSoldiers);
+	}
+	else
+	{
+		_state->btnCenterClick(0);
 	}
 }
 
