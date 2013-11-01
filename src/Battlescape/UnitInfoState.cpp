@@ -566,6 +566,10 @@ void UnitInfoState::handle(Action *action)
 		{
 			_game->popState();
 		}
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
+		{
+			_game->popState();
+		}
 	}
 }
 
