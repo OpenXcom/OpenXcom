@@ -1376,6 +1376,19 @@ inline void BattlescapeState::handle(Action *action)
 					debug(L"Resetting tile visibility");
 					_save->resetTiles();
 				}
+				// "ctrl-k" - kill all aliens
+				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_k && (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Influenza bacterium dispersed");
+					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
+					{
+						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+						{
+							(*i)->instaKill();
+							(*i)->getTile()->setUnit(0);
+						}
+					}
+				}
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
