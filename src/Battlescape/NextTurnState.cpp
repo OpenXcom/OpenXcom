@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state)
+NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _timer(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -86,6 +86,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
+
+	if (Options::getBool("skipNextTurnScreen"))
+	{
+		_timer = new Timer(NEXT_TURN_DELAY);
+		_timer->onTimer((StateHandler)&NextTurnState::close);
+		_timer->start();
+	}
 }
 
 /**
@@ -93,7 +100,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-
+	delete _timer;
 }
 
 /**
@@ -106,19 +113,38 @@ void NextTurnState::handle(Action *action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		_game->popState();
+		close();
+	}
+}
 
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-		if (liveAliens == 0 || liveSoldiers == 0)
-		{
-			_state->finishBattle(false, liveSoldiers);
-		}
-		else
-		{
-			_state->btnCenterClick(0);
-		}
+/**
+ * Keeps the timer running.
+ */
+void NextTurnState::think()
+{
+	if (_timer)
+	{
+		_timer->think(this, 0);
+	}
+}
+
+/**
+ * Closes the window.
+ */
+void NextTurnState::close()
+{
+	_game->popState();
+
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	if (liveAliens == 0 || liveSoldiers == 0)
+	{
+		_state->finishBattle(false, liveSoldiers);
+	}
+	else
+	{
+		_state->btnCenterClick(0);
 	}
 }
 

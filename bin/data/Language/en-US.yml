@@ -1184,6 +1184,8 @@ en-US:
   STR_ALLOWPSIONICCAPTURE_DESC: "Mind-controlling all remaining aliens results in victory, and they count as live captures."
   STR_ANYTIMEPSITRAINING: "Psionic training at any time"
   STR_ANYTIMEPSITRAINING_DESC: "You can at any time send soldiers into (or remove from) psionic training. Remember, initial training takes from 30 to 60 days."
+  STR_SKIPNEXTTURNSCREEN: "Skip \"Next Turn\" screen"
+  STR_SKIPNEXTTURNSCREEN_DESC: "\"Next Turn\" screens during battle are advanced automatically after a short delay."
   STR_NOT_ENOUGH_SPACE: "Not Enough Space!"
   STR_WEAPONSELFDESTRUCTION: "Alien weapon self destruction"
   STR_WEAPONSELFDESTRUCTION_DESC: "Weapons carried by aliens will self destruct if their owner is killed, like in XCOM 2012."
