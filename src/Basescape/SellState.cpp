@@ -338,7 +338,7 @@ void SellState::btnCancelClick(Action *)
 void SellState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->start();
 }
 
 /**
@@ -376,7 +376,7 @@ void SellState::lstItemsLeftArrowClick(Action *action)
 void SellState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->start();
 }
 
 /**

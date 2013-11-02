@@ -65,8 +65,11 @@ Timer::~Timer()
  */
 void Timer::start()
 {
-	_frameSkipStart = _start = slowTick();
-	_running = true;
+	if (!_running)
+	{
+		_frameSkipStart = _start = slowTick();
+		_running = true;
+	}
 }
 
 /**

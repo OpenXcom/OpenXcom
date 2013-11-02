@@ -235,7 +235,7 @@ void ManageAlienContainmentState::btnCancelClick(Action *)
 void ManageAlienContainmentState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstAliens->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->start();
 }
 
 /**
@@ -273,7 +273,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action *action)
 void ManageAlienContainmentState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstAliens->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->start();
 }
 
 /**
