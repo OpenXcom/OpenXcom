@@ -1814,7 +1814,7 @@ void GeoscapeState::btnRotateLeftPress(Action *)
  */
 void GeoscapeState::btnRotateLeftRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -1832,7 +1832,7 @@ void GeoscapeState::btnRotateRightPress(Action *)
  */
 void GeoscapeState::btnRotateRightRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -1850,7 +1850,7 @@ void GeoscapeState::btnRotateUpPress(Action *)
  */
 void GeoscapeState::btnRotateUpRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**
@@ -1868,7 +1868,7 @@ void GeoscapeState::btnRotateDownPress(Action *)
  */
 void GeoscapeState::btnRotateDownRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**

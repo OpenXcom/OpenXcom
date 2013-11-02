@@ -48,8 +48,6 @@ private:
 	static const int NUM_LANDSHADES = 48;
 	static const int NUM_SEASHADES = 72;
 	static const int NEAR_RADIUS = 25;
-	static const double QUAD_LONGITUDE;
-	static const double QUAD_LATITUDE;
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
@@ -109,6 +107,10 @@ public:
 	void rotateDown();
 	/// Stops rotating the globe.
 	void rotateStop();
+	/// Stops longitude rotation of the globe.
+	void rotateStopLon();
+	/// Stops latitude rotation of the globe.
+	void rotateStopLat();
 	/// Zooms the globe in.
 	void zoomIn();
 	/// Zooms the globe out.
