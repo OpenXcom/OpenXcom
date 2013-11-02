@@ -279,6 +279,8 @@ void UnitFallBState::think()
 				(*unit)->setCache(0);
 				_terrain->calculateFOV(*unit);
 				_parent->checkForProximityGrenades(*unit);
+				if (_parent->getTileEngine()->checkReactionFire(*unit))
+					_parent->getPathfinding()->abortPath();
 				unit = _parent->getSave()->getFallingUnits()->erase(unit);
 			}
 		}

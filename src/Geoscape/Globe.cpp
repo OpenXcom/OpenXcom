@@ -1680,27 +1680,27 @@ void Globe::mouseRelease(Action *action, State *state)
  */
 void Globe::mouseClick(Action *action, State *state)
 {
-	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
-
-	// Check for errors
-	if (lat == lat && lon == lon)
+	InteractiveSurface::mouseClick(action, state);
+	
+	// Handle globe control
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		InteractiveSurface::mouseClick(action, state);
+		double lon, lat;
+		cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
 
-		// Handle globe control
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		// Check for errors
+		if (lat == lat && lon == lon)
 		{
 			center(lon, lat);
 		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		{
-			zoomIn();
-		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		{
-			zoomOut();
-		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
+		zoomIn();
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		zoomOut();
 	}
 }
 

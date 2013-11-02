@@ -315,7 +315,7 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 			}
-			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
+			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL && !_parent->getSave()->getUnitsFalling())
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}

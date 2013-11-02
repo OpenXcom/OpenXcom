@@ -273,7 +273,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 	if (action.type == BA_WALK)
 	{
-		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;
+		ss << L"Walking to " << action.target;
 		_parentState->debug(ss.str());
 
 		if (_save->getTile(action.target))
@@ -299,7 +299,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 
 		ss.clear();
-		ss << L"Attack type=" << action.type << " target="<< action.target.x << " "<< action.target.y << " "<< action.target.z << " weapon=" << action.weapon->getRules()->getName().c_str();
+		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
 		statePushBack(new ProjectileFlyBState(this, action));
@@ -583,7 +583,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					}
 				}
 			}
-			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit((*j), (*j)->getSpawnUnit());

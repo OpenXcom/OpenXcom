@@ -1220,24 +1220,23 @@ void GeoscapeState::time30Minutes()
 			}
 			if (!(*u)->getDetected())
 			{
-				bool detected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				bool detected = false, hyperdetected = false;
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
 				{
-					if ((*b)->detect(*u))
+					switch ((*b)->detect(*u))
 					{
+					case 2:	// hyper-wave decoder
+						(*u)->setHyperDetected(true);
+						hyperdetected = true;
+					case 1: // conventional radar
 						detected = true;
-						if((*b)->getHyperDetection())
-						{
-							(*u)->setHyperDetected(true);
-						}
 					}
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
 					{
-						if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
-							continue;
-						if ((*c)->detect(*u))
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
 						{
 							detected = true;
+							break;
 						}
 					}
 				}
@@ -1249,18 +1248,28 @@ void GeoscapeState::time30Minutes()
 			}
 			else
 			{
-				bool detected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				bool detected = false, hyperdetected = false;
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
 				{
-					bool insideRange = (*b)->insideRadarRange(*u);
-					detected = detected || insideRange;
-					if ((*b)->getHyperDetection() && insideRange)
+					switch ((*b)->insideRadarRange(*u))
 					{
+					case 2:	// hyper-wave decoder
+						detected = true;
+						hyperdetected = true;
 						(*u)->setHyperDetected(true);
+						break;
+					case 1: // conventional radar
+						detected = true;
+						hyperdetected = (*u)->getHyperDetected();
 					}
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
 					{
-						detected = detected || (*c)->detect(*u);
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
+						{
+							detected = true;
+							hyperdetected = (*u)->getHyperDetected();
+							break;
+						}
 					}
 				}
 				if (!detected)
