@@ -1170,13 +1170,13 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							// power 50 - 150%
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
 							}
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
 								{
-									(*it)->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ *2), type);
 								}
 							}
 						}
