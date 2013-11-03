@@ -41,6 +41,7 @@ class RuleTerrain;
 class MapDataSet;
 class ResourcePack;
 class RuleSoldier;
+class StateAppearance;
 class Unit;
 class Armor;
 class ArticleDefinition;
@@ -78,6 +79,7 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
+	std::map<std::string, StateAppearance*> _stateAppearance;
 	std::map<std::string, Unit*> _units;
 	std::map<std::string, AlienRace*> _alienRaces;
 	std::map<std::string, AlienDeployment*> _alienDeployments;
@@ -154,6 +156,8 @@ public:
 	MapDataSet *getMapDataSet(const std::string &name);
 	/// Gets soldier unit rules.
 	RuleSoldier *getSoldier(const std::string &name) const;
+	/// Gets data about appearance of a screen.
+	StateAppearance *getAppearance(const std::string &name) const;
 	/// Gets generated unit rules.
 	Unit *getUnit(const std::string &name) const;
 	/// Gets alien race rules.

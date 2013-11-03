@@ -33,6 +33,7 @@
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
+#include "StateAppearance.h"
 #include "Unit.h"
 #include "AlienRace.h"
 #include "AlienDeployment.h"
@@ -128,6 +129,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, StateAppearance*>::iterator i = _stateAppearance.begin(); i != _stateAppearance.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -297,6 +302,14 @@ void Ruleset::loadFile(const std::string &filename)
  	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
 		RuleSoldier *rule = loadRule(*i, &_soldiers);
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
+	for (YAML::const_iterator i = doc["stateAppearance"].begin(); i != doc["stateAppearance"].end(); ++i)
+	{
+		StateAppearance *rule = loadRule(*i, &_stateAppearance);
 		if (rule != 0)
 		{
 			rule->load(*i);
@@ -775,6 +788,17 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
 {
 	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
 	if (_soldiers.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the info about appearance of a screen.
+ * @param name Name of screen.
+ * @return Rules for the screen.
+ */
+StateAppearance *Ruleset::getAppearance(const std::string &name) const
+{
+	std::map<std::string, StateAppearance*>::const_iterator i = _stateAppearance.find(name);
+	if (_stateAppearance.end() != i) return i->second; else return 0;
 }
 
 /**

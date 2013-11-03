@@ -4256,6 +4256,16 @@ soldiers:
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
+stateAppearance:
+  - type: STR_RESEARCHSTATE
+    background: BACK05.SCR
+    palette: BACKPALS.DAT
+#[AC_PALETTE, AC_BORDERS, AC_BUTTONS, AC_MAIN, AC_SECOND, AC_COLOR6, AC_COLOR7, AC_COLOR8]
+    colors: [ 0x10, 0xDA, 0xF6, 0xDA, 0xD0, 0xF6 ]
+  - type: STR_CRAFTSSTATE
+    background: BACK14.SCR
+    palette: BACKPALS.DAT
+    colors: [ 0x30, 0xF1, 0xDA, 0xF1, 0xDA ]
 units:
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
