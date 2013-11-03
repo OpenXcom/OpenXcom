@@ -288,7 +288,10 @@ void UnitWalkBState::think()
 				tu *= 0.75;
 				energy *= 1.5;
 			}
-
+			if (dir >= Pathfinding::DIR_UP)
+			{
+				energy = 0;
+			}
 			if (tu > _unit->getTimeUnits())
 			{
 				if (_parent->getPanicHandled() && tu < 255)
