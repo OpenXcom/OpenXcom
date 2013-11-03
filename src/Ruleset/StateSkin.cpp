@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "StateAppearance.h"
+#include "StateSkin.h"
 
 namespace YAML
 {
 	template<>
-	struct convert<OpenXcom::AppearanceColors>
+	struct convert<OpenXcom::SkinColors>
 	{
-		static Node encode(const OpenXcom::AppearanceColors& rhs)
+		static Node encode(const OpenXcom::SkinColors& rhs)
 		{
 			Node node;
 			for (int i = 0; i < 8; ++i)
@@ -36,7 +36,7 @@ namespace YAML
 			return node;
 		}
 
-		static bool decode(const Node& node, OpenXcom::AppearanceColors& rhs)
+		static bool decode(const Node& node, OpenXcom::SkinColors& rhs)
 		{
 			if(!node.IsSequence() || node.size() < 4)
 				return false;
@@ -52,17 +52,17 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a StateAppearance with certain data.
+ * Initializes a StateSkin with certain data.
  * @param type String defining the type.
  */
-StateAppearance::StateAppearance(const std::string &type) : _background(""), _palette(""), _highContrast(false), _colors(0)
+StateSkin::StateSkin(const std::string &type) : _background(""), _palette(""), _highContrast(false), _colors(0)
 {
 }
 
 /**
- * Cleans up the StateAppearance.
+ * Cleans up the StateSkin.
  */
-StateAppearance::~StateAppearance()
+StateSkin::~StateSkin()
 {
 }
 
@@ -70,12 +70,12 @@ StateAppearance::~StateAppearance()
  * Loads the StateAppearance from YAML.
  * @param node YAML node.
  */
-void StateAppearance::load(const YAML::Node& node)
+void StateSkin::load(const YAML::Node& node)
 {
 	_background = node["background"].as<std::string>(_background);
 	_palette = node["palette"].as<std::string>(_palette);
 	_highContrast = node["highContrast"].as<bool>(_highContrast);
-	_colors = node["colors"].as<AppearanceColors>(_colors);
+	_colors = node["colors"].as<SkinColors>(_colors);
 }
 
 

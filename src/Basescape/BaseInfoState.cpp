@@ -32,6 +32,7 @@
 #include "MiniBaseView.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Ruleset/StateSkin.h"
 #include "MonthlyCostsState.h"
 #include "TransfersState.h"
 #include "StoresState.h"
@@ -48,6 +49,8 @@ namespace OpenXcom
  */
 BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : State(game), _base(base), _state(state)
 {
+	StateSkin *skin = game->getRuleset()->getSkin("STR_BASEINFOSTATE");
+
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -162,7 +165,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	{
 		ss << "ALT";
 	}
-	ss << "BACK07.SCR";
+	ss << skin->getBackground();
 	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
@@ -177,131 +180,131 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	}
 	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
+	_btnOk->setColor(skin->getColorButtons());
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnTransfers->setColor(Palette::blockOffset(15)+6);
+	_btnTransfers->setColor(skin->getColorButtons());
 	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
 	_btnTransfers->onMouseClick((ActionHandler)&BaseInfoState::btnTransfersClick);
 
-	_btnStores->setColor(Palette::blockOffset(15)+6);
+	_btnStores->setColor(skin->getColorButtons());
 	_btnStores->setText(tr("STR_STORES_UC"));
 	_btnStores->onMouseClick((ActionHandler)&BaseInfoState::btnStoresClick);
 
-	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+6);
+	_btnMonthlyCosts->setColor(skin->getColorButtons());
 	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)&BaseInfoState::btnMonthlyCostsClick);
 
-	_edtBase->setColor(Palette::blockOffset(15)+1);
+	_edtBase->setColor(skin->getColorMain());
 	_edtBase->setBig();
 	_edtBase->onKeyboardPress((ActionHandler)&BaseInfoState::edtBaseKeyPress);
 
 
-	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
+	_txtPersonnel->setColor(skin->getColorMain());
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
-	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
+	_txtSoldiers->setColor(skin->getColorSecond());
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
 
-	_numSoldiers->setColor(Palette::blockOffset(13));
+	_numSoldiers->setColor(skin->getColor(SC_COLOR6));
 
 	_barSoldiers->setColor(Palette::blockOffset(1));
 	_barSoldiers->setScale(1.0);
 
-	_txtEngineers->setColor(Palette::blockOffset(13)+5);
+	_txtEngineers->setColor(skin->getColorSecond());
 	_txtEngineers->setText(tr("STR_ENGINEERS"));
 
-	_numEngineers->setColor(Palette::blockOffset(13));
+	_numEngineers->setColor(skin->getColor(SC_COLOR6));
 
 	_barEngineers->setColor(Palette::blockOffset(1));
 	_barEngineers->setScale(1.0);
 
-	_txtScientists->setColor(Palette::blockOffset(13)+5);
+	_txtScientists->setColor(skin->getColorSecond());
 	_txtScientists->setText(tr("STR_SCIENTISTS"));
 
-	_numScientists->setColor(Palette::blockOffset(13));
+	_numScientists->setColor(skin->getColor(SC_COLOR6));
 
 	_barScientists->setColor(Palette::blockOffset(1));
 	_barScientists->setScale(1.0);
 
 
-	_txtSpace->setColor(Palette::blockOffset(15)+1);
+	_txtSpace->setColor(skin->getColorMain());
 	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_AVAILABLE"));
 
-	_txtQuarters->setColor(Palette::blockOffset(13)+5);
+	_txtQuarters->setColor(skin->getColorSecond());
 	_txtQuarters->setText(tr("STR_LIVING_QUARTERS_PLURAL"));
 
-	_numQuarters->setColor(Palette::blockOffset(13));
+	_numQuarters->setColor(skin->getColor(SC_COLOR6));
 
 	_barQuarters->setColor(Palette::blockOffset(3));
 	_barQuarters->setScale(0.5);
 
-	_txtStores->setColor(Palette::blockOffset(13)+5);
+	_txtStores->setColor(skin->getColorSecond());
 	_txtStores->setText(tr("STR_STORES"));
 
-	_numStores->setColor(Palette::blockOffset(13));
+	_numStores->setColor(skin->getColor(SC_COLOR6));
 
 	_barStores->setColor(Palette::blockOffset(3));
 	_barStores->setScale(0.5);
 
-	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
+	_txtLaboratories->setColor(skin->getColorSecond());
 	_txtLaboratories->setText(tr("STR_LABORATORIES"));
 
-	_numLaboratories->setColor(Palette::blockOffset(13));
+	_numLaboratories->setColor(skin->getColor(SC_COLOR6));
 
 	_barLaboratories->setColor(Palette::blockOffset(3));
 	_barLaboratories->setScale(0.5);
 
-	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
+	_txtWorkshops->setColor(skin->getColorSecond());
 	_txtWorkshops->setText(tr("STR_WORK_SHOPS"));
 
-	_numWorkshops->setColor(Palette::blockOffset(13));
+	_numWorkshops->setColor(skin->getColor(SC_COLOR6));
 
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
 	if (_containmentLimit)
 	{
-		_txtContainment->setColor(Palette::blockOffset(13)+5);
+		_txtContainment->setColor(skin->getColorSecond());
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
 
-		_numContainment->setColor(Palette::blockOffset(13));
+		_numContainment->setColor(skin->getColor(SC_COLOR6));
 
 		_barContainment->setColor(Palette::blockOffset(3));
 		_barContainment->setScale(0.5);
 	}
 
-	_txtHangars->setColor(Palette::blockOffset(13)+5);
+	_txtHangars->setColor(skin->getColorSecond());
 	_txtHangars->setText(tr("STR_HANGARS"));
 
-	_numHangars->setColor(Palette::blockOffset(13));
+	_numHangars->setColor(skin->getColor(SC_COLOR6));
 
 	_barHangars->setColor(Palette::blockOffset(3));
 	_barHangars->setScale(18.0);
 
 
-	_txtDefense->setColor(Palette::blockOffset(13)+5);
+	_txtDefense->setColor(skin->getColorSecond());
 	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));
 
-	_numDefense->setColor(Palette::blockOffset(13));
+	_numDefense->setColor(skin->getColor(SC_COLOR6));
 
 	_barDefense->setColor(Palette::blockOffset(2));
 	_barDefense->setScale(0.125);
 
-	_txtShortRange->setColor(Palette::blockOffset(13)+5);
+	_txtShortRange->setColor(skin->getColorSecond());
 	_txtShortRange->setText(tr("STR_SHORT_RANGE_DETECTION"));
 
-	_numShortRange->setColor(Palette::blockOffset(13));
+	_numShortRange->setColor(skin->getColor(SC_COLOR6));
 
 	_barShortRange->setColor(Palette::blockOffset(8));
 	_barShortRange->setScale(25.0);
 
-	_txtLongRange->setColor(Palette::blockOffset(13)+5);
+	_txtLongRange->setColor(skin->getColorSecond());
 	_txtLongRange->setText(tr("STR_LONG_RANGE_DETECTION"));
 
-	_numLongRange->setColor(Palette::blockOffset(13));
+	_numLongRange->setColor(skin->getColor(SC_COLOR6));
 
 	_barLongRange->setColor(Palette::blockOffset(8));
 	_barLongRange->setScale(25.0);

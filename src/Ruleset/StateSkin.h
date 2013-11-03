@@ -16,42 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_STATEAPPEARANCE_H
-#define OPENXCOM_STATEAPPEARANCE_H
+#ifndef OPENXCOM_STATESKIN_H
+#define OPENXCOM_STATESKIN_H
 
 #include <string>
 #include <yaml-cpp/yaml.h>
 
-enum AppearanceColor{AC_PALETTE = 0, AC_BORDERS, AC_BUTTONS, AC_MAIN, AC_SECOND, AC_COLOR6, AC_COLOR7, AC_COLOR8};
+enum SkinColor {SC_PALETTE = 0, SC_BORDERS, SC_BUTTONS, SC_MAIN, SC_SECOND, SC_COLOR6, SC_COLOR7, SC_COLOR8};
 
 namespace OpenXcom
 {
 
-union AppearanceColors
+union SkinColors
 {
 	Uint8 c[8];
 	Uint64 raw;
-	AppearanceColors() : raw(0) {}
-	AppearanceColors(Uint64 ac) : raw(ac) {}
-	inline AppearanceColors& operator=(const AppearanceColors& ac) { raw = ac.raw; return *this; }
+	SkinColors() : raw(0) {}
+	SkinColors(Uint64 sc) : raw(sc) {}
+	inline SkinColors& operator=(const SkinColors& sc) { raw = sc.raw; return *this; }
 };
 
 /**
  * Represents a appearance properties of screens in the game.
  */
-class StateAppearance
+class StateSkin
 {
 private:
 //	std::string _state;
 	std::string _background;
 	std::string _palette;
 	bool _highContrast;
-	AppearanceColors _colors;
+	SkinColors _colors;
 public:
 	/// Creates a new StateAppearance.
-	StateAppearance(const std::string &type);
+	StateSkin(const std::string &type);
 	/// Cleans up the StateAppearance.
-	~StateAppearance();
+	~StateSkin();
 	/// Loads the StateAppearance from YAML.
 	void load(const YAML::Node& node);
 	/// Gets name of backgroung picture.
@@ -61,13 +61,13 @@ public:
 	/// Gets info about contrast.
 	inline bool isHighContrast() const { return _highContrast; }
 	/// Gets a custom color.
-	inline Uint8 getColor(AppearanceColor idx) const { return _colors.c[idx]; }
+	inline Uint8 getColor(unsigned idx) const { return _colors.c[idx]; }
 	/// Gets a specific color.
-	inline Uint8 getColorPalette() const { return _colors.c[AC_PALETTE]; }
-	inline Uint8 getColorBorders() const { return _colors.c[AC_BORDERS]; }
-	inline Uint8 getColorButtons() const { return _colors.c[AC_BUTTONS]; }
-	inline Uint8 getColorMain() const { return _colors.c[AC_MAIN]; }
-	inline Uint8 getColorSecond() const { return _colors.c[AC_SECOND]; }
+	inline Uint8 getColorPalette() const { return _colors.c[SC_PALETTE]; }
+	inline Uint8 getColorBorders() const { return _colors.c[SC_BORDERS]; }
+	inline Uint8 getColorButtons() const { return _colors.c[SC_BUTTONS]; }
+	inline Uint8 getColorMain() const { return _colors.c[SC_MAIN]; }
+	inline Uint8 getColorSecond() const { return _colors.c[SC_SECOND]; }
 };
 
 }

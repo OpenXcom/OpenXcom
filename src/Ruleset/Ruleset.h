@@ -41,7 +41,6 @@ class RuleTerrain;
 class MapDataSet;
 class ResourcePack;
 class RuleSoldier;
-class StateAppearance;
 class Unit;
 class Armor;
 class ArticleDefinition;
@@ -55,6 +54,7 @@ class RuleAlienMission;
 class City;
 class Base;
 class MCDPatch;
+class StateSkin;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
@@ -79,7 +79,6 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
-	std::map<std::string, StateAppearance*> _stateAppearance;
 	std::map<std::string, Unit*> _units;
 	std::map<std::string, AlienRace*> _alienRaces;
 	std::map<std::string, AlienDeployment*> _alienDeployments;
@@ -93,6 +92,7 @@ protected:
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
+	std::map<std::string, StateSkin*> _stateSkins;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
@@ -156,8 +156,6 @@ public:
 	MapDataSet *getMapDataSet(const std::string &name);
 	/// Gets soldier unit rules.
 	RuleSoldier *getSoldier(const std::string &name) const;
-	/// Gets data about appearance of a screen.
-	StateAppearance *getAppearance(const std::string &name) const;
 	/// Gets generated unit rules.
 	Unit *getUnit(const std::string &name) const;
 	/// Gets alien race rules.
@@ -212,6 +210,8 @@ public:
 	const YAML::Node &getStartingBase();
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
+	/// Gets data about appearance of a screen.
+	StateSkin *getSkin(const std::string &name) const;
 	/// Gets the list of external Sprites.
 	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
 	/// Gets the list of external Sounds.
