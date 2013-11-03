@@ -604,6 +604,7 @@ void AlienBAIState::setupAmbush()
 				// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 				Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
 			Position currentPos = _aggroTarget->getPosition();
+			_save->getPathfinding()->setUnit(_aggroTarget);
 			Position nextPos;
 			size_t tries = path.size();
 			// hypothetically walk the target through the path.
