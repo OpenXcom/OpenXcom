@@ -1433,6 +1433,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 	if (player)
 	{
 		_playerTUReserved = tur;
+		_save->setTUReserved(tur);
 	}
 }
 
@@ -1977,6 +1978,7 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
 	_kneelReserved = reserved;
+	_save->setKneelReserved(reserved);
 }
 
 /**
