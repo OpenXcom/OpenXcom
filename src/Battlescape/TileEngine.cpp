@@ -1705,6 +1705,8 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
  *		  0 normal door opened, make a squeaky sound and you can walk through;
  *		  1 ufo door is starting to open, make a whoosh sound, don't walk through;
  *		  3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
+ *		  4 not enough TUs
+ *		  5 would contravene fire reserve
  */
 int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 {
@@ -1774,7 +1776,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				tile = _save->getTile(unit->getPosition() + Position(x,y,z) + i->first);
 				if (tile)
 				{
-					door = tile->openDoor(i->second, unit, _save->getDebugMode());
+					door = tile->openDoor(i->second, unit, false);
 					if (door != -1)
 					{
 						part = i->second;
@@ -1807,14 +1809,21 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 
 	if (door == 0 || door == 1)
 	{
-		unit->spendTimeUnits(TUCost);
-		calculateFOV(unit->getPosition());
-		// look from the other side (may be need check reaction fire?)
-		std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
-		for (size_t i = 0; i < vunits->size(); ++i)
+		if (_save->getBattleState()->getBattleGame()->checkReservedTU(unit, TUCost))
 		{
-			calculateFOV(vunits->at(i));
+			if (unit->spendTimeUnits(TUCost))
+			{
+				calculateFOV(unit->getPosition());
+				// look from the other side (may be need check reaction fire?)
+				std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
+				for (size_t i = 0; i < vunits->size(); ++i)
+				{
+					calculateFOV(vunits->at(i));
+				}
+			}
+			else return 4;
 		}
+		return 5;
 	}
 
 	return door;
