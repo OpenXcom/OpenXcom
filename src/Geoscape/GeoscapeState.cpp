@@ -2002,10 +2002,7 @@ void GeoscapeState::startDogfight()
 {
 	if(!_globe->isZoomedInToMax())
 	{
-		if(!_zoomInEffectTimer->isRunning())
-		{
-			_zoomInEffectTimer->start();
-		}
+		_zoomInEffectTimer->start();
 	}
 	else
 	{

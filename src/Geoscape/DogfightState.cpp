@@ -614,10 +614,7 @@ void DogfightState::drawCraftDamage()
 	}
 	if(_craft->getDamagePercentage() != 0)
 	{
-		if(!_craftDamageAnimTimer->isRunning())
-		{
-			_craftDamageAnimTimer->start();
-		}
+		_craftDamageAnimTimer->start();
 		int damagePercentage = _craft->getDamagePercentage();
 		int rowsToColor = (int)floor((double)_craftHeight * (double)(damagePercentage / 100.));
 		if(rowsToColor == 0)

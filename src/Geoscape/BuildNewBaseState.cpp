@@ -193,7 +193,7 @@ void BuildNewBaseState::globeHover(Action *action)
 {
 	_mousex = (int)floor(action->getAbsoluteXMouse());
 	_mousey = (int)floor(action->getAbsoluteYMouse());
-	if (!_hoverTimer->isRunning()) _hoverTimer->start();
+	_hoverTimer->start();
 }
 
 void BuildNewBaseState::hoverRedraw(void)
