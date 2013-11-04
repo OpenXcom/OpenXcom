@@ -448,7 +448,7 @@ void BasescapeState::viewRightClick(Action *)
 		_game->pushState(new ManufactureState(_game, _base));
 
 	else if (f->getRules()->getAliens() > 0)
-		_game->pushState(new ManageAlienContainmentState(_game, _base));
+		_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_GEOSCAPE));
 
 	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
 		_game->popState();
