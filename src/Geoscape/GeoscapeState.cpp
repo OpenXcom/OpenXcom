@@ -1502,15 +1502,18 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
 			// check for possible researching weapon before clip
-			std::vector<std::string> manufactures = _game->getRuleset()->getManufactureList();
-			for (std::vector<std::string>::iterator man = manufactures.begin(); man != manufactures.end(); ++man)
+			if (newResearch)
 			{
-				RuleManufacture *rule = _game->getRuleset()->getManufacture(*man);
-				std::vector<std::string> req = rule->getRequirements();
-				if (newResearch && rule->getCategory() == "STR_WEAPON" && std::find(req.begin(), req.end(), newResearch->getName()) != req.end() && !_game->getSavedGame()->isResearched(req))
+				RuleItem *item = _game->getRuleset()->getItem(newResearch->getName());
+				if (item && item->getBattleType() == BT_FIREARM && !item->getCompatibleAmmo()->empty())
 				{
-					popup(new ResearchRequiredState(_game, _game->getRuleset()->getItem(rule->getName())));
-					break;
+					RuleManufacture *man = _game->getRuleset()->getManufacture(item->getType());
+					std::vector<std::string> req = man->getRequirements();
+					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+					if (man && ammo && std::find(req.begin(), req.end(), ammo->getType()) != req.end() && !_game->getSavedGame()->isResearched(man->getRequirements()))
+					{
+						popup(new ResearchRequiredState(_game, item));
+					}
 				}
 			}
 
