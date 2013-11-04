@@ -20,6 +20,7 @@
 #define OPENXCOM_PAUSESTATE_H
 
 #include "../Engine/State.h"
+#include "../Ruleset/StateSkin.h"
 #include "OptionsBaseState.h"
 
 namespace OpenXcom
@@ -41,6 +42,7 @@ private:
 	TextButton *_btnLoad, *_btnSave, *_btnAbandon, *_btnOptions, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle;
+	StateSkin *_skin;
 public:
 	/// Creates the Pause state.
 	PauseState(Game *game, OptionsOrigin origin);

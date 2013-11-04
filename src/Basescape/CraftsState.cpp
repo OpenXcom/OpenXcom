@@ -43,7 +43,7 @@ namespace OpenXcom
  */
 CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 {
-	StateSkin *skin = game->getRuleset()->getSkin("STR_CRAFTSSTATE");
+	StateSkin *skin = game->getRuleset()->getSkin("CRAFTSSTATE");
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

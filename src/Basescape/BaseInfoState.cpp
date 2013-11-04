@@ -49,7 +49,7 @@ namespace OpenXcom
  */
 BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : State(game), _base(base), _state(state)
 {
-	StateSkin *skin = game->getRuleset()->getSkin("STR_BASEINFOSTATE");
+	StateSkin *skin = game->getRuleset()->getSkin("BASEINFOSTATE");
 
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	// Create objects

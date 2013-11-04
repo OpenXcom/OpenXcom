@@ -24,6 +24,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Ruleset/StateSkin.h"
 #include "AbandonGameState.h"
 #include "LoadState.h"
 #include "SaveState.h"
@@ -40,6 +41,7 @@ namespace OpenXcom
  */
 PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
 {
+	_skin = game->getRuleset()->getSkin((_origin != OPT_BATTLESCAPE)? "PAUSESTATE_GEO" : "PAUSESTATE_BATTLE");
 	_screen = false;
 
 	int x;
@@ -62,9 +64,9 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_txtTitle = new Text(206, 15, x+5, 32);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_skin->isPaletteAvailable())
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->setPalette(_game->getResourcePack()->getPalette(_skin->getPalette())->getColors(_skin->getColorPalette()), Palette::backPos, 16);
 	}
 
 	add(_window);
@@ -78,44 +80,46 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setColor(_skin->getColorBorders());
+	_window->setBackground(_game->getResourcePack()->getSurface(_skin->getBackground()));
+	_window->setHighContrast(_skin->isHighContrast());
 
-	_btnLoad->setColor(Palette::blockOffset(15)-1);
+	_btnLoad->setColor(_skin->getColorButtons());
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);
+	_btnLoad->setHighContrast(_skin->isHighContrast());
 
-	_btnSave->setColor(Palette::blockOffset(15)-1);
+	_btnSave->setColor(_skin->getColorButtons());
 	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&PauseState::btnSaveClick);
+	_btnSave->setHighContrast(_skin->isHighContrast());
 
-	_btnAbandon->setColor(Palette::blockOffset(15)-1);
+	_btnAbandon->setColor(_skin->getColorButtons());
 	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
 	_btnAbandon->onMouseClick((ActionHandler)&PauseState::btnAbandonClick);
+	_btnAbandon->setHighContrast(_skin->isHighContrast());
 
-	_btnOptions->setColor(Palette::blockOffset(15)-1);
+	_btnOptions->setColor(_skin->getColorButtons());
 	_btnOptions->setText(tr("STR_GAME_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&PauseState::btnOptionsClick);
+	_btnOptions->setHighContrast(_skin->isHighContrast());
 
-	_btnCancel->setColor(Palette::blockOffset(15)-1);
+	_btnCancel->setColor(_skin->getColorButtons());
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->setHighContrast(_skin->isHighContrast());
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setColor(_skin->getColorMain());
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
+	_txtTitle->setHighContrast(_skin->isHighContrast());
 
 	if (Options::getInt("autosave") >= 2)
 	{
 		_btnSave->setVisible(false);
 		_btnLoad->setVisible(false);
-	}
-
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		applyBattlescapeTheme();
 	}
 }
 
@@ -134,9 +138,9 @@ PauseState::~PauseState()
 void PauseState::init()
 {
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_skin->isPaletteAvailable())
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->setPalette(_game->getResourcePack()->getPalette(_skin->getPalette())->getColors(_skin->getColorPalette()), Palette::backPos, 16);
 	}
 }
 
