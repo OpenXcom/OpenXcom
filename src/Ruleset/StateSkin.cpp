@@ -28,10 +28,9 @@ namespace YAML
 			Node node;
 			for (int i = 0; i < 8; ++i)
 			{
-				if (rhs.c[i] != 0)
-					node.push_back(rhs.c[i]);
-				else
+				if (i >= 4 && rhs.c[i] == 0)
 					break;
+				node.push_back(rhs.c[i]);
 			}
 			return node;
 		}

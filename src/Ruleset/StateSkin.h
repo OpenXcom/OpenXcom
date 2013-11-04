@@ -57,11 +57,11 @@ public:
 	/// Gets name of backgroung picture.
 	inline std::string getBackground() const { return _background; }
 	/// Gets information about the presence of background.
-	inline bool isBackgroundAvailable() const { return _background.empty(); }
+	inline bool isBackgroundAvailable() const { return !_background.empty(); }
 	/// Gets name of palette.
 	inline std::string getPalette() const { return _palette; }
 	/// Gets information about the presence of palette.
-	inline bool isPaletteAvailable() const { return _palette.empty(); }
+	inline bool isPaletteAvailable() const { return !_palette.empty(); }
 	/// Gets information about contrast.
 	inline bool isHighContrast() const { return _highContrast; }
 	/// Gets a custom color.
