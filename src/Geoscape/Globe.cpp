@@ -60,10 +60,8 @@
 namespace OpenXcom
 {
 
-const double Globe::QUAD_LONGITUDE = 0.05;
-const double Globe::QUAD_LATITUDE = 0.2;
-const double Globe::ROTATE_LONGITUDE = 0.25;
-const double Globe::ROTATE_LATITUDE = 0.15;
+const double Globe::ROTATE_LONGITUDE = 0.10;
+const double Globe::ROTATE_LATITUDE = 0.06;
 
 namespace
 {
@@ -270,7 +268,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_blinkTimer = new Timer(100);
 	_blinkTimer->onTimer((SurfaceHandler)&Globe::blink);
 	_blinkTimer->start();
-	_rotTimer = new Timer(50);
+	_rotTimer = new Timer(20);
 	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
 
 	// Globe markers
@@ -613,7 +611,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 void Globe::rotateLeft()
 {
 	_rotLon = -ROTATE_LONGITUDE;
-	_rotTimer->start();
+	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
 /**
@@ -622,7 +620,7 @@ void Globe::rotateLeft()
 void Globe::rotateRight()
 {
 	_rotLon = ROTATE_LONGITUDE;
-	_rotTimer->start();
+	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
 /**
@@ -631,7 +629,7 @@ void Globe::rotateRight()
 void Globe::rotateUp()
 {
 	_rotLat = -ROTATE_LATITUDE;
-	_rotTimer->start();
+	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
 /**
@@ -640,7 +638,7 @@ void Globe::rotateUp()
 void Globe::rotateDown()
 {
 	_rotLat = ROTATE_LATITUDE;
-	_rotTimer->start();
+	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
 /**
@@ -651,6 +649,24 @@ void Globe::rotateStop()
 	_rotLon = 0.0;
 	_rotLat = 0.0;
 	_rotTimer->stop();
+}
+
+/**
+ * Resets longitude rotation speed and timer.
+ */
+void Globe::rotateStopLon()
+{
+	_rotLon = 0.0;
+	if (abs(_rotLat) < ROTATE_LATITUDE / 2) _rotTimer->stop();
+}
+
+/**
+ * Resets latitude rotation speed and timer.
+ */
+void Globe::rotateStopLat()
+{
+	_rotLat = 0.0;
+	if (abs(_rotLon) < ROTATE_LONGITUDE / 2) _rotTimer->stop();
 }
 
 /**
