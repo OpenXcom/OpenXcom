@@ -1679,28 +1679,27 @@ void Globe::mouseRelease(Action *action, State *state)
  * @param state State that the action handlers belong to.
  */
 void Globe::mouseClick(Action *action, State *state)
-{
-	InteractiveSurface::mouseClick(action, state);
-	
-	// Handle globe control
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		double lon, lat;
-		cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
-
-		// Check for errors
-		if (lat == lat && lon == lon)
-		{
-			center(lon, lat);
-		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+{	
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		zoomIn();
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		zoomOut();
+	}
+
+	double lon, lat;
+	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	
+	// Check for errors
+	if (lat == lat && lon == lon)
+	{
+		InteractiveSurface::mouseClick(action, state);
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			center(lon, lat);
+		}
 	}
 }
 
