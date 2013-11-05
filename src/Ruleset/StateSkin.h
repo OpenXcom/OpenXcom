@@ -47,6 +47,7 @@ private:
 	std::string _palette;
 	bool _highContrast;
 	SkinColors _colors;
+	std::vector<unsigned> _barColors;
 public:
 	/// Creates a new StateAppearance.
 	StateSkin(const std::string &type);
@@ -72,6 +73,11 @@ public:
 	inline Uint8 getColorButtons() const { return _colors.c[SC_BUTTONS]; }
 	inline Uint8 getColorMain() const { return _colors.c[SC_MAIN]; }
 	inline Uint8 getColorSecond() const { return _colors.c[SC_SECOND]; }
+	/// Gets color of a bar (each bar can contain up to 4 different colors).
+	inline Uint8 getColor0Bar(unsigned idx) const { return (_barColors.size() > idx)? _barColors.at(idx) & 0xFF : 0; }
+	inline Uint8 getColor1Bar(unsigned idx) const { return (_barColors.size() > idx)? (_barColors.at(idx) >> 8) & 0xFF : 0; }
+	inline Uint8 getColor2Bar(unsigned idx) const { return (_barColors.size() > idx)? (_barColors.at(idx) >> 16) & 0xFF : 0; }
+	inline Uint8 getColor3Bar(unsigned idx) const { return (_barColors.size() > idx)? (_barColors.at(idx) >> 24) & 0xFF : 0; }
 };
 
 }

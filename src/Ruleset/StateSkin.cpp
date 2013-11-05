@@ -75,6 +75,7 @@ void StateSkin::load(const YAML::Node& node)
 	_palette = node["palette"].as<std::string>(_palette);
 	_highContrast = node["highContrast"].as<bool>(_highContrast);
 	_colors = node["colors"].as<SkinColors>(_colors);
+	_barColors = node["bars"].as< std::vector<unsigned> >(_barColors);
 }
 
 

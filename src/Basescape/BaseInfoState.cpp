@@ -210,7 +210,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numSoldiers->setColor(skin->getColor(SC_COLOR6));
 
-	_barSoldiers->setColor(Palette::blockOffset(1));
+	_barSoldiers->setColor(skin->getColor0Bar(0));
 	_barSoldiers->setScale(1.0);
 
 	_txtEngineers->setColor(skin->getColorSecond());
@@ -218,7 +218,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numEngineers->setColor(skin->getColor(SC_COLOR6));
 
-	_barEngineers->setColor(Palette::blockOffset(1));
+	_barEngineers->setColor(skin->getColor0Bar(0));
 	_barEngineers->setScale(1.0);
 
 	_txtScientists->setColor(skin->getColorSecond());
@@ -226,7 +226,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numScientists->setColor(skin->getColor(SC_COLOR6));
 
-	_barScientists->setColor(Palette::blockOffset(1));
+	_barScientists->setColor(skin->getColor0Bar(0));
 	_barScientists->setScale(1.0);
 
 
@@ -238,7 +238,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numQuarters->setColor(skin->getColor(SC_COLOR6));
 
-	_barQuarters->setColor(Palette::blockOffset(3));
+	_barQuarters->setColor(skin->getColor0Bar(1));
 	_barQuarters->setScale(0.5);
 
 	_txtStores->setColor(skin->getColorSecond());
@@ -246,7 +246,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numStores->setColor(skin->getColor(SC_COLOR6));
 
-	_barStores->setColor(Palette::blockOffset(3));
+	_barStores->setColor(skin->getColor0Bar(1));
 	_barStores->setScale(0.5);
 
 	_txtLaboratories->setColor(skin->getColorSecond());
@@ -254,7 +254,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numLaboratories->setColor(skin->getColor(SC_COLOR6));
 
-	_barLaboratories->setColor(Palette::blockOffset(3));
+	_barLaboratories->setColor(skin->getColor0Bar(1));
 	_barLaboratories->setScale(0.5);
 
 	_txtWorkshops->setColor(skin->getColorSecond());
@@ -262,7 +262,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numWorkshops->setColor(skin->getColor(SC_COLOR6));
 
-	_barWorkshops->setColor(Palette::blockOffset(3));
+	_barWorkshops->setColor(skin->getColor0Bar(1));
 	_barWorkshops->setScale(0.5);
 
 	if (_containmentLimit)
@@ -272,7 +272,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 		_numContainment->setColor(skin->getColor(SC_COLOR6));
 
-		_barContainment->setColor(Palette::blockOffset(3));
+		_barContainment->setColor(skin->getColor0Bar(1));
 		_barContainment->setScale(0.5);
 	}
 
@@ -281,7 +281,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numHangars->setColor(skin->getColor(SC_COLOR6));
 
-	_barHangars->setColor(Palette::blockOffset(3));
+	_barHangars->setColor(skin->getColor0Bar(1));
 	_barHangars->setScale(18.0);
 
 
@@ -290,7 +290,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numDefense->setColor(skin->getColor(SC_COLOR6));
 
-	_barDefense->setColor(Palette::blockOffset(2));
+	_barDefense->setColor(skin->getColor0Bar(2));
 	_barDefense->setScale(0.125);
 
 	_txtShortRange->setColor(skin->getColorSecond());
@@ -298,7 +298,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numShortRange->setColor(skin->getColor(SC_COLOR6));
 
-	_barShortRange->setColor(Palette::blockOffset(8));
+	_barShortRange->setColor(skin->getColor0Bar(3));
 	_barShortRange->setScale(25.0);
 
 	_txtLongRange->setColor(skin->getColorSecond());
@@ -306,7 +306,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_numLongRange->setColor(skin->getColor(SC_COLOR6));
 
-	_barLongRange->setColor(Palette::blockOffset(8));
+	_barLongRange->setColor(skin->getColor0Bar(3));
 	_barLongRange->setScale(25.0);
 }
 

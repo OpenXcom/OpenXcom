@@ -9195,6 +9195,7 @@ skins:
   - type: BASEINFOSTATE
     background: BACK07.SCR
     colors: [ 0, 0, 0xF6, 0xF1, 0xD5, 0xD0 ]
+    bars: [ 0x0010, 0x0030, 0x0020, 0x0080 ]
   - type: RESEARCHSTATE
     background: BACK05.SCR
     palette: BACKPALS.DAT
