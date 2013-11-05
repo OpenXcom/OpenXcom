@@ -496,13 +496,6 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
-	if (firstInit && playableUnitSelected())
-	{
-		_battleGame->setupCursor();
-		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-		firstInit = false;
-	}
-	_txtTooltip->setText(L"");
 	// Update reserve settings
 	_battleGame->setTUReserved(_save->getTUReserved(), true);
 	switch (_save->getTUReserved())
@@ -520,10 +513,17 @@ void BattlescapeState::init()
 		_reserve = _btnReserveNone;
 		break;
 	}
-	_btnReserveNone->setGroup(&_reserve);
-	_btnReserveSnap->setGroup(&_reserve);
-	_btnReserveAimed->setGroup(&_reserve);
-	_btnReserveAuto->setGroup(&_reserve);
+	if (firstInit && playableUnitSelected())
+	{
+		_battleGame->setupCursor();
+		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		firstInit = false;
+		_btnReserveNone->setGroup(&_reserve);
+		_btnReserveSnap->setGroup(&_reserve);
+		_btnReserveAimed->setGroup(&_reserve);
+		_btnReserveAuto->setGroup(&_reserve);
+	}
+	_txtTooltip->setText(L"");
 	if (_save->getKneelReserved())
 	{
 		_btnReserveKneel->invert(0);
