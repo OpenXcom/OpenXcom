@@ -189,7 +189,7 @@ void UnitFallBState::think()
 					}
 
 					// Check in each compass direction.
-					for (int dir = 0; dir < Pathfinding::DIR_UP && !escapeFound; dir++)
+					for (int dir = Pathfinding::DIR_HN; dir < Pathfinding::DIR_UP && !escapeFound; dir++)
 					{
 						Position offset;
 						Pathfinding::directionToVector(dir, &offset);

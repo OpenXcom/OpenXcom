@@ -1155,7 +1155,7 @@ void SavedBattleGame::prepareNewTurn()
 			if ((*i)->getFire())
 			{
 				// propegate in four cardinal directions (0, 2, 4, 6)
-				for (int dir = 0; dir <= 6; dir += 2)
+				for (int dir = Pathfinding::DIR_HN; dir < Pathfinding::DIR_UP; dir += Pathfinding::DIR_CARD_STEP)
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
@@ -1222,7 +1222,7 @@ void SavedBattleGame::prepareNewTurn()
 			if ((*i)->getSmoke())
 			{
 				// spread in four cardinal directions
-				for (int dir = 0; dir <= 6; dir += 2)
+				for (int dir = Pathfinding::DIR_HN; dir < Pathfinding::DIR_UP; dir += Pathfinding::DIR_CARD_STEP)
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
@@ -1250,7 +1250,7 @@ void SavedBattleGame::prepareNewTurn()
 				t->addSmoke((*i)->getSmoke()/2);
 			}
 			// then it spreads in the four cardinal directions.
-			for (int dir = 0; dir <= 6; dir += 2)
+			for (int dir = Pathfinding::DIR_HN; dir < Pathfinding::DIR_UP; dir += Pathfinding::DIR_CARD_STEP)
 			{
 				Pathfinding::directionToVector(dir, &pos);
 				t = getTile((*i)->getPosition() + pos);
@@ -1607,7 +1607,7 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 		return true;
 	}
 
-	for (int dir = 0; dir <= 7; ++dir)
+	for (int dir = Pathfinding::DIR_HN; dir < Pathfinding::DIR_UP; ++dir)
 	{
 		Position offset;
 		getPathfinding()->directionToVector(dir, &offset);

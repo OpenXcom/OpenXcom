@@ -59,14 +59,17 @@ private:
 	bool _pathPreviewed;
 	bool _strafeMove;
 	int _totalTUCost;
+	Tile *getTile(const Position& origin, int direction) const;
 public:
+	enum directions {DIR_HN, DIR_HNE, DIR_HE, DIR_HSE, DIR_HS, DIR_HSW, DIR_HW, DIR_HNW,
+		DIR_UP, DIR_UN, DIR_UNE, DIR_UE, DIR_USE, DIR_US, DIR_USW, DIR_UW, DIR_UNW,
+		DIR_DOWN, DIR_DN, DIR_DNE, DIR_DE, DIR_DSE, DIR_DS, DIR_DSW, DIR_DW, DIR_DNW, DIR_TOTAL};
+	static const int DIR_CARD_STEP = 2;
 	std::vector<int> _path;
 	/// Determines whether the unit is going up a stairs.
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	/// Determines whether or not movement between starttile and endtile is possible in the direction.
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
-	static const int DIR_UP = 8;
-	static const int DIR_DOWN = 9;
 	enum bigWallTypes{ BLOCK = 1, BIGWALLNESW, BIGWALLNWSE, BIGWALLWEST, BIGWALLNORTH, BIGWALLEAST, BIGWALLSOUTH, BIGWALLEASTANDSOUTH};
 	static const int O_BIGWALL = -1;
 	/// Creates a new Pathfinding class.
@@ -76,7 +79,15 @@ public:
 	/// Calculates the shortest path.
 	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
 	/// Converts direction to a vector.
-	static void directionToVector(const int direction, Position *vector);
+	static void directionToVector(int direction, Position *vector);
+	/// Converts direction to a vector - horizontal component only.
+	static void directionToVectorH(int direction, Position *vector);
+	/// Converts a 3d direction into horizontal direction
+	static int horizontalDirection(int direction);
+	/// handles turning
+	static void turnRight(int &direction);
+	static void turnLeft(int &direction);
+	static void turn(int &direction, int toDirection);
 	/// Converts a vector to a direction.
 	static void vectorToDirection(const Position &vector, int &dir);
 	/// Checks whether a path is ready and gives the first direction.
@@ -90,7 +101,7 @@ public:
 	/// Gets the strafe move setting.
 	bool getStrafeMove() const;
 	/// Checks, for the up/down button, if the movement is valid.
-	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
+	int costUpDown(BattleUnit *bu, Position startPosition, const int direction);
 	/// Previews the path.
 	bool previewPath(bool bRemove = false);
 	/// Removes the path preview.

@@ -206,7 +206,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 		}
 
 		// Try all reachable neighbours.
-		for (int direction = 0; direction < 10; direction++)
+		for (int direction = DIR_HN; direction < DIR_TOTAL; direction++)
 		{
 			Position nextPos;
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, target, missile);
@@ -331,14 +331,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			else if (direction >= DIR_UP)
 			{
 				// check if we can go up or down through gravlift or fly
-				if (validateUpDown(unit, startPosition + offset, direction))
-				{
-					cost = 8; // vertical movement by flying suit or grav lift
-				}
-				else
-				{
+				cost = costUpDown(unit, startPosition + offset, direction);
+				if (cost == 255)
 					return 255;
-				}
 			}
 
 			// check if we have floor, else fall down
@@ -368,13 +363,13 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 
 			int wallcost = 0; // walking through rubble walls
-			if (direction == 7 || direction == 0 || direction == 1)
+			if (direction == DIR_HNW || direction == DIR_HN || direction == DIR_HNE)
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 1 || direction == 2 || direction == 3)
+			if (direction == DIR_HNE || direction == DIR_HE || direction == DIR_HSE)
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 3 || direction == 4 || direction == 5)
+			if (direction == DIR_HSE || direction == DIR_HS || direction == DIR_HSW)
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 5 || direction == 6 || direction == 7)
+			if (direction == DIR_HSW || direction == DIR_HW || direction == DIR_HNW)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
 			// check if the destination tile can be walked over
@@ -416,7 +411,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
-			if (_save->getStrafeSetting() && _strafeMove) {
+			if (_save->getStrafeSetting() && _strafeMove) 
+			{
 				if (size) {
 					// 4-tile units not supported.
 					// Turn off strafe move and continue
@@ -468,14 +464,28 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
  * @param direction Source direction.
  * @param vector Pointer to a position (which acts as a vector).
  */
-void Pathfinding::directionToVector(const int direction, Position *vector)
+void Pathfinding::directionToVector(int direction, Position *vector)
 {
-	int x[10] = {0, 1, 1, 1, 0, -1, -1, -1,0,0};
-	int y[10] = {-1, -1, 0, 1, 1, 1, 0, -1,0,0};
-	int z[10] = {0, 0, 0, 0, 0, 0, 0, 0, 1, -1};
+	int x[DIR_TOTAL] = {0, 1, 1, 1, 0, -1, -1, -1, 0, 0, 1, 1, 1, 0, -1, -1, -1, 0, 0, 1, 1, 1, 0, -1, -1, -1};
+	int y[DIR_TOTAL] = {-1, -1, 0, 1, 1, 1, 0, -1, 0, -1, -1, 0, 1, 1, 1, 0, -1, 0, -1, -1, 0, 1, 1, 1, 0, -1};
+	int z[DIR_TOTAL] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 	vector->x = x[direction];
 	vector->y = y[direction];
 	vector->z = z[direction];
+}
+
+/**
+ * Converts direction to a vector (horizontal component only). Direction starts north = 0 and goes clockwise.
+ * @param direction Source direction.
+ * @param vector Pointer to a position (which acts as a vector).
+ */
+void Pathfinding::directionToVectorH(int direction, Position *vector)
+{
+	int x[DIR_TOTAL] = {0, 1, 1, 1, 0, -1, -1, -1, 0, 0, 1, 1, 1, 0, -1, -1, -1, 0, 0, 1, 1, 1, 0, -1, -1, -1};
+	int y[DIR_TOTAL] = {-1, -1, 0, 1, 1, 1, 0, -1, 0, -1, -1, 0, 1, 1, 1, 0, -1, 0, -1, -1, 0, 1, 1, 1, 0, -1};
+	vector->x = x[direction];
+	vector->y = y[direction];
+	vector->z = 0;
 }
 
 /**
@@ -783,33 +793,273 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
  * @param direction Up or Down
  * @return bool Whether it's valid.
  */
-bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const int direction)
+int Pathfinding::costUpDown(BattleUnit *bu, Position startPosition, const int direction)
 {
 	Position endPosition;
 	directionToVector(direction, &endPosition);
 	endPosition += startPosition;
 	Tile *startTile = _save->getTile(startPosition);
-	Tile *belowStart = _save->getTile(startPosition + Position(0,0,-1));
 	Tile *destinationTile = _save->getTile(endPosition);
+	//pure vertical cost, vertical diagonal cost, and vertical horizontal diagonal cost determined by Pitagora 
+	const int verticalCost = 8, verticalDiagonalCost = 9, verticalHorizontalDiagonalCost = 10, maxCost = 255;
+	//gravlifts enforce verticals to pure up and down
 	if (startTile->getMapData(MapData::O_FLOOR) && destinationTile && destinationTile->getMapData(MapData::O_FLOOR) &&
-		(startTile->getMapData(MapData::O_FLOOR)->isGravLift() && destinationTile->getMapData(MapData::O_FLOOR)->isGravLift()))
+		startTile->getMapData(MapData::O_FLOOR)->isGravLift() && destinationTile->getMapData(MapData::O_FLOOR)->isGravLift() && 
+		(direction == DIR_UP || direction == DIR_DOWN))
 	{
-		return true;
+		return verticalCost;
 	}
 	else
 	{
 		if (bu->getArmor()->getMovementType() == MT_FLY)
 		{
-			if ((direction == DIR_UP && destinationTile && !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
-				|| (direction == DIR_DOWN && destinationTile && startTile->hasNoFloor(belowStart)) // falling down only possible when there is no floor
-				)
+			Tile *tadj1,*tadj2,*tadj3, *tadj4, *tadj5, *tadj6;
+			switch(direction)
 			{
-				return true;
+				case DIR_UP:
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR))
+						return verticalCost;
+					else
+						return maxCost;
+				case DIR_UN:
+					//destination tile and adjacent UP - no floors
+					//start tile and adjacent UP - no north wall
+					tadj1=getTile(startPosition, DIR_UP);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) && 
+							!startTile->getMapData(MapData::O_NORTHWALL) && !tadj1->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_UNE:
+					//destination tile, adjacent UP, adjacent UPNORTH and adjacent UPEAST - no floor
+					//destination tile, adjacent UPEAST, adjacent EAST and adjacent NE - no west wall
+					//start tile, adjacent UP, adjacent UPEAST and adjacent EAST - no north wall
+					tadj1=getTile(startPosition, DIR_UP);
+					tadj2=getTile(startPosition, DIR_UN);
+					tadj3=getTile(startPosition, DIR_UE);
+					tadj4=getTile(startPosition, DIR_HE);
+					tadj5=getTile(startPosition, DIR_HNE);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) &&
+							tadj2 && !tadj2->getMapData(MapData::O_FLOOR) && tadj3 && !tadj3->getMapData(MapData::O_FLOOR) &&
+							!destinationTile->getMapData(MapData::O_WESTWALL) && !tadj3->getMapData(MapData::O_WESTWALL) &&
+							tadj4 && !tadj4->getMapData(MapData::O_WESTWALL) && tadj5 && !tadj5->getMapData(MapData::O_WESTWALL) &&
+							!startTile->getMapData(MapData::O_NORTHWALL) && !tadj1->getMapData(MapData::O_NORTHWALL) &&
+							!tadj3->getMapData(MapData::O_NORTHWALL) && !tadj4->getMapData(MapData::O_NORTHWALL))
+						return verticalHorizontalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_UE:
+					//destination tile and adjacent UP - no floors
+					//destination tile and adjacent EAST - no west wall
+					tadj1=getTile(startPosition, DIR_UP);
+					tadj2=getTile(startPosition, DIR_HE);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) &&
+							!destinationTile->getMapData(MapData::O_WESTWALL) && tadj2 && !tadj2->getMapData(MapData::O_WESTWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_USE:
+					//destination tile, adjacent UP, adjacent UPSOUTH and adjacent UPEAST - no floor
+					//destination tile, adjacent UPEAST, adjacent EAST and adjacent SE - no west wall
+					//destination tile, adjacent UPSOUTH, adjacent SOUTH and adjacent SE - no north wall
+					tadj1=getTile(startPosition, DIR_UP);
+					tadj2=getTile(startPosition, DIR_US);
+					tadj3=getTile(startPosition, DIR_UE);
+					tadj4=getTile(startPosition, DIR_HE);
+					tadj5=getTile(startPosition, DIR_HSE);
+					tadj6=getTile(startPosition, DIR_HS);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) &&
+							tadj2 && !tadj2->getMapData(MapData::O_FLOOR) && tadj3 && !tadj3->getMapData(MapData::O_FLOOR) &&
+							!destinationTile->getMapData(MapData::O_WESTWALL) && !tadj3->getMapData(MapData::O_WESTWALL) &&
+							tadj4 && !tadj4->getMapData(MapData::O_WESTWALL) && tadj5 && !tadj5->getMapData(MapData::O_WESTWALL) &&
+							!destinationTile->getMapData(MapData::O_NORTHWALL) && !tadj2->getMapData(MapData::O_NORTHWALL) &&
+							tadj6 && !tadj6->getMapData(MapData::O_NORTHWALL) && !tadj5->getMapData(MapData::O_NORTHWALL))
+						return verticalHorizontalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_US:
+					//destination tile and adjacent UP - no floors
+					//destination tile and adjacent SOUTH - no north wall
+					tadj1=getTile(startPosition, DIR_UP);
+					tadj2=getTile(startPosition, DIR_HS);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) && 
+							!destinationTile->getMapData(MapData::O_NORTHWALL) && tadj2 && !tadj2->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_USW:
+					//destination tile, adjacent UP, adjacent UPSOUTH and adjacent UPWEST - no floor
+					//start tile, adjacent UP, adjacent SOUTH and adjacent US - no west wall
+					//destination tile, adjacent UPSOUTH, adjacent SOUTH and adjacent SW - no north wall
+					tadj1=getTile(startPosition, DIR_UP);
+					tadj2=getTile(startPosition, DIR_US);
+					tadj3=getTile(startPosition, DIR_UW);
+					tadj4=getTile(startPosition, DIR_HS);
+					tadj5=getTile(startPosition, DIR_HSW);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) &&
+							tadj2 && !tadj2->getMapData(MapData::O_FLOOR) && tadj3 && !tadj3->getMapData(MapData::O_FLOOR) &&
+							!startTile->getMapData(MapData::O_WESTWALL) && !tadj1->getMapData(MapData::O_WESTWALL) &&
+							tadj4 && !tadj4->getMapData(MapData::O_WESTWALL) && !tadj2->getMapData(MapData::O_WESTWALL) &&
+							!destinationTile->getMapData(MapData::O_NORTHWALL) && !tadj2->getMapData(MapData::O_NORTHWALL) &&
+							!tadj4->getMapData(MapData::O_NORTHWALL) && tadj5 && !tadj5->getMapData(MapData::O_NORTHWALL))
+						return verticalHorizontalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_UW:
+					//destination tile and adjacent UP - no floors
+					//start tile and adjacent UP - no west wall
+					tadj1=getTile(startPosition, DIR_UP);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) && 
+							!destinationTile->getMapData(MapData::O_WESTWALL) && !tadj1->getMapData(MapData::O_WESTWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_UNW:
+					//destination tile, adjacent UP, adjacent UPNORTH and adjacent UPWEST - no floor
+					//start tile, adjacent UP, adjacent NORTH and adjacent UPNORTH - no west wall
+					//start tile, adjacent WEST, adjacent UP and adjacent UPWEST - no north wall
+					tadj1=getTile(startPosition, DIR_UP);
+					tadj2=getTile(startPosition, DIR_UN);
+					tadj3=getTile(startPosition, DIR_UW);
+					tadj4=getTile(startPosition, DIR_HN);
+					tadj5=getTile(startPosition, DIR_HW);
+					if(destinationTile && !destinationTile->getMapData(MapData::O_FLOOR) && tadj1 && !tadj1->getMapData(MapData::O_FLOOR) &&
+							tadj2 && !tadj2->getMapData(MapData::O_FLOOR) && tadj3 && !tadj3->getMapData(MapData::O_FLOOR) &&
+							!startTile->getMapData(MapData::O_WESTWALL) && !tadj1->getMapData(MapData::O_WESTWALL) &&
+							tadj4 && !tadj4->getMapData(MapData::O_WESTWALL) && !tadj2->getMapData(MapData::O_WESTWALL) &&
+							!startTile->getMapData(MapData::O_NORTHWALL) && !tadj1->getMapData(MapData::O_NORTHWALL) &&
+							!tadj2->getMapData(MapData::O_NORTHWALL) && tadj5 && !tadj5->getMapData(MapData::O_NORTHWALL))
+						return verticalHorizontalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DOWN:
+					if(destinationTile && startTile->hasNoFloor(destinationTile))
+						return verticalCost;
+					else
+						return maxCost;
+				case DIR_DN:
+					//start tile and adjacent NORTH - no floors - need adjacent DOWN and destination
+					//start tile and adjacent DOWN - no north wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HN);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && destinationTile && tadj2->hasNoFloor(destinationTile) &&
+							!startTile->getMapData(MapData::O_NORTHWALL) && !tadj1->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DNE:
+					//start tile, adjacent NORTH, adjacent NE and adjacent EAST - no floor - need adjacent DOWN, DOWNNORTH, destination, DOWNEAST
+					//destination tile, adjacent DOWNEAST, adjacent EAST and adjacent NE - no west wall
+					//start tile, adjacent DOWN, adjacent DOWNEAST and adjacent EAST - no north wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HN);
+					tadj3=getTile(startPosition, DIR_DN);
+					tadj4=getTile(startPosition, DIR_HNE);
+					tadj5=getTile(startPosition, DIR_HE);
+					tadj6=getTile(startPosition, DIR_DE);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && tadj3 && tadj2->hasNoFloor(tadj3) && 
+							tadj4 && destinationTile && tadj4->hasNoFloor(destinationTile) && tadj5 && tadj6 && tadj5->hasNoFloor(tadj6) && 
+							!destinationTile->getMapData(MapData::O_WESTWALL) && !tadj6->getMapData(MapData::O_WESTWALL) &&
+							!tadj4->getMapData(MapData::O_WESTWALL) && !tadj5->getMapData(MapData::O_WESTWALL) &&
+							!startTile->getMapData(MapData::O_NORTHWALL) && !tadj1->getMapData(MapData::O_NORTHWALL) &&
+							!tadj6->getMapData(MapData::O_NORTHWALL) && !tadj5->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DE:
+					//start tile and adjacent EAST - no floors - need adjacent DOWN and destination
+					//destination tile and adjacent EAST - no west wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HE);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && destinationTile && tadj2->hasNoFloor(destinationTile) &&
+							!destinationTile->getMapData(MapData::O_WESTWALL) && !tadj2->getMapData(MapData::O_WESTWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DSE:
+					//start tile, adjacent SOUTH, adjacent SE and adjacent EAST - no floor - need adjacent DOWN, DOWNSOUTH, destination, DOWNEAST
+					//destination tile, adjacent DOWNEAST, adjacent EAST and adjacent SE - no west wall
+					//destination tile, adjacent DOWNSOUTH, adjacent SE and adjacent SOUTH - no north wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HS);
+					tadj3=getTile(startPosition, DIR_DS);
+					tadj4=getTile(startPosition, DIR_HSE);
+					tadj5=getTile(startPosition, DIR_HE);
+					tadj6=getTile(startPosition, DIR_DE);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && tadj3 && tadj2->hasNoFloor(tadj3) && 
+							tadj4 && destinationTile && tadj4->hasNoFloor(destinationTile) && tadj5 && tadj6 && tadj5->hasNoFloor(tadj6) && 
+							!destinationTile->getMapData(MapData::O_WESTWALL) && !tadj6->getMapData(MapData::O_WESTWALL) &&
+							!tadj4->getMapData(MapData::O_WESTWALL) && !tadj5->getMapData(MapData::O_WESTWALL) &&
+							!destinationTile->getMapData(MapData::O_NORTHWALL) && !tadj3->getMapData(MapData::O_NORTHWALL) &&
+							!tadj4->getMapData(MapData::O_NORTHWALL) && !tadj2->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DS:
+					//start tile and adjacent SOUTH - no floors - need adjacent DOWN and destination
+					//destination tile and adjacent SOUTH - no north wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HS);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && destinationTile && tadj2->hasNoFloor(destinationTile) &&
+							!destinationTile->getMapData(MapData::O_NORTHWALL) && !tadj2->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DSW:
+					//start tile, adjacent SOUTH, adjacent SW and adjacent WEST - no floor - need adjacent DOWN, DOWNSOUTH, destination, DOWNWEST
+					//start tile, adjacent DOWN, adjacent SOUTH and adjacent DOWNSOUTH - no west wall
+					//destination tile, adjacent DOWNSOUTH, adjacent SW and adjacent SOUTH - no north wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HS);
+					tadj3=getTile(startPosition, DIR_DS);
+					tadj4=getTile(startPosition, DIR_HSW);
+					tadj5=getTile(startPosition, DIR_HW);
+					tadj6=getTile(startPosition, DIR_DW);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && tadj3 && tadj2->hasNoFloor(tadj3) && 
+							tadj4 && destinationTile && tadj4->hasNoFloor(destinationTile) && tadj5 && tadj6 && tadj5->hasNoFloor(tadj6) && 
+							!startTile->getMapData(MapData::O_WESTWALL) && !tadj1->getMapData(MapData::O_WESTWALL) &&
+							!tadj2->getMapData(MapData::O_WESTWALL) && !tadj3->getMapData(MapData::O_WESTWALL) &&
+							!destinationTile->getMapData(MapData::O_NORTHWALL) && !tadj3->getMapData(MapData::O_NORTHWALL) &&
+							!tadj4->getMapData(MapData::O_NORTHWALL) && !tadj2->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DW:
+					//start tile and adjacent WEST - no floors - need adjacent DOWN and destination
+					//starting tile and adjacent DOWN - no west wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HW);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && destinationTile && tadj2->hasNoFloor(destinationTile) &&
+							!startTile->getMapData(MapData::O_WESTWALL) && !tadj1->getMapData(MapData::O_WESTWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				case DIR_DNW:
+					//start tile, adjacent NORTH, adjacent NW and adjacent WEST - no floor - need adjacent DOWN, DOWNNORTH, destination, DOWNWEST
+					//start tile, adjacent DOWN, adjacent NORTH and adjacent DOWNNORTH - no west wall
+					//start tile, adjacent DOWN, adjacent WEST and adjacent DOWNWEST - no north wall
+					tadj1=getTile(startPosition, DIR_DOWN);
+					tadj2=getTile(startPosition, DIR_HN);
+					tadj3=getTile(startPosition, DIR_DN);
+					tadj4=getTile(startPosition, DIR_HNW);
+					tadj5=getTile(startPosition, DIR_HW);
+					tadj6=getTile(startPosition, DIR_DW);
+					if(tadj1 && startTile->hasNoFloor(tadj1) && tadj2 && tadj3 && tadj2->hasNoFloor(tadj3) && 
+							tadj4 && destinationTile && tadj4->hasNoFloor(destinationTile) && tadj5 && tadj6 && tadj5->hasNoFloor(tadj6) && 
+							!startTile->getMapData(MapData::O_WESTWALL) && !tadj1->getMapData(MapData::O_WESTWALL) &&
+							!tadj2->getMapData(MapData::O_WESTWALL) && !tadj3->getMapData(MapData::O_WESTWALL) &&
+							!startTile->getMapData(MapData::O_NORTHWALL) && !tadj1->getMapData(MapData::O_NORTHWALL) &&
+							!tadj5->getMapData(MapData::O_NORTHWALL) && !tadj6->getMapData(MapData::O_NORTHWALL))
+						return verticalDiagonalCost;
+					else
+						return maxCost;
+				default:
+					return maxCost;
 			}
 		}
 	}
 
-	return false;
+	return maxCost;
 }
 
 /**
@@ -827,41 +1077,41 @@ int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position d
 
 	switch (direction)
 	{
-	case 0:
+	case DIR_HN:
 		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
 			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
 		break;
-	case 1:
+	case DIR_HNE:
 		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
 			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
 		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
 			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
 		break;
-	case 2:
+	case DIR_HE:
 		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
 			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
 		break;
-	case 3:
+	case DIR_HSE:
 		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
 			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
 		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
 			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
 		break;
-	case 4:
+	case DIR_HS:
 		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
 			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
 		break;
-	case 5:
+	case DIR_HSW:
 		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
 			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
 		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
 			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
 		break;
-	case 6:
+	case DIR_HW:
 		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
 			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
 		break;
-	case 7:
+	case DIR_HNW:
 		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
 			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
 		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
@@ -1126,7 +1376,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		Position const &currentPos = currentNode->getPosition();
 
 		// Try all reachable neighbours.
-		for (int direction = 0; direction < 10; direction++)
+		for (int direction = 0; direction < DIR_TOTAL; direction++)
 		{
 			Position nextPos;
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
@@ -1191,5 +1441,95 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	{
 		_movementType = MT_WALK;
 	}
-};
+}
+
+/**
+ * Helper - returns the tile faced from origin towards direction.
+ * @param origin The point of origin's position.
+ * @param direction the direction towards the adjacent(almost) position whose tile should be returned.
+ * @return the tile.
+ */
+Tile *Pathfinding::getTile(const Position& origin, int direction) const
+{
+	Position endPosition;
+	directionToVector(direction, &endPosition);
+	endPosition += origin;
+	return _save->getTile(endPosition);
+}
+/**
+ * Helper - returns the tile faced from origin towards direction.
+ * @param origin The point of origin's position.
+ * @param direction the direction towards the adjacent(almost) position whose tile should be returned.
+ * @return the tile.
+ */
+int Pathfinding::horizontalDirection(int direction)
+{
+	if(direction < 0)
+		return -1;
+	else if(direction < DIR_UP)
+		return direction;
+	else if(direction < DIR_DOWN)
+		return direction - DIR_UN;
+	else if( direction < DIR_TOTAL)
+		return direction - DIR_DN;
+	else
+		return -1;
+}
+void Pathfinding::turnRight(int &direction)
+{
+	switch(direction)
+	{
+		case DIR_HNW:
+			direction = DIR_HN;
+			return;
+		case DIR_UNW:
+			direction = DIR_UN;
+			return;
+		case DIR_DNW:
+			direction = DIR_DN;
+			return;
+		case DIR_UP:
+		case DIR_DOWN:
+			return;
+		default:
+			++direction;
+	}
+}
+void Pathfinding::turnLeft(int &direction)
+{
+	switch(direction)
+	{
+		case DIR_HN:
+			direction = DIR_HNW;
+			return;
+		case DIR_UN:
+			direction = DIR_UNW;
+			return;
+		case DIR_DN:
+			direction = DIR_DNW;
+			return;
+		case DIR_UP:
+		case DIR_DOWN:
+			return;
+		default:
+			--direction;
+	}
+}
+
+void Pathfinding::turn(int &direction, int toDirection)
+{
+	int dirfrom=horizontalDirection(direction), dirto=horizontalDirection(toDirection);
+	if(dirfrom == -1 || dirto == -1)
+		return;
+	if(dirto - dirfrom <= -4)
+		turnRight(direction);
+	else if(dirto < dirfrom)
+		turnLeft(direction);
+	else if(dirto == difrom)
+		return;
+	else if(dirto - dirfrom <= 4 )
+		turnRight(direction);
+	else
+		turnLeft(direction);
+}
 }
