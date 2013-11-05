@@ -1823,7 +1823,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 			}
 			else return 4;
 		}
-		return 5;
+		else return 5;
 	}
 
 	return door;
