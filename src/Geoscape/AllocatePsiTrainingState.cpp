@@ -118,15 +118,21 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 		std::wstringstream ssStr;
 		std::wstringstream ssSkl;
 		_soldiers.push_back(*s);
-		if ((*s)->getCurrentStats()->psiSkill <= 0)
+		if ((*s)->getCurrentStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-			ssSkl << "0/+0";
-			ssStr << tr("STR_UNKNOWN").c_str();
+			ssStr << ((*s)->getCurrentStats()->psiStrength);
 		}
 		else
 		{
+			ssStr << tr("STR_UNKNOWN").c_str();
+		}
+		if ((*s)->getCurrentStats()->psiSkill > 0)
+		{
 			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+		}
+		else
+		{
+			ssSkl << "0/+0";
 		}
 		if ((*s)->isInPsiTraining())
 		{
