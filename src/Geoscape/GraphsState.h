@@ -76,12 +76,12 @@ public:
 	void btnIncomeClick(Action *action);
 	/// Handler for clicking the finance icon.
 	void btnFinanceClick(Action *action);
-	/// Handler for clicking on a region button.
-	void btnRegionListClick(Action *action);
-	/// Handler for clicking on a country button.
-	void btnCountryListClick(Action *action);
-	/// Handler for clicking  on a finances button.
-	void btnFinanceListClick(Action *action);
+	/// Handler for pressing on a region button.
+	void btnRegionListPress(Action *action);
+	/// Handler for pressing on a country button.
+	void btnCountryListPress(Action *action);
+	/// Handler for pressing on a finances button.
+	void btnFinanceListPress(Action *action);
 	/// Reset all the elements on screen.
 	void resetScreen();
 	/// Update the scale 
