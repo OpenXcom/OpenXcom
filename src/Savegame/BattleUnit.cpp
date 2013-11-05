@@ -468,7 +468,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 	if (!cache)
 	{
 		_pos = _destination;
-		end = 1;
+		end = 2;
 	}
 
 	_walkPhase++;
