@@ -41,7 +41,7 @@ namespace OpenXcom
  */
 PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
 {
-	_skin = game->getRuleset()->getSkin((_origin != OPT_BATTLESCAPE)? "PAUSESTATE_GEO" : "PAUSESTATE_BATTLE");
+	setSkin((_origin != OPT_BATTLESCAPE)? "PAUSESTATE_GEO" : "PAUSESTATE_BATTLE");
 	_screen = false;
 
 	int x;

@@ -41,10 +41,8 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
+CraftsState::CraftsState(Game *game, Base *base) : State(game, "CRAFTSSTATE"), _base(base)
 {
-	StateSkin *skin = game->getRuleset()->getSkin("CRAFTSSTATE");
-
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
@@ -58,7 +56,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts = new TextList(288, 118, 8, 58);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette(skin->getPalette())->getColors(skin->getColorPalette()), Palette::backPos, 16);
+	_game->setPalette(_game->getResourcePack()->getPalette(_skin->getPalette())->getColors(_skin->getColorPalette()), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -74,40 +72,40 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(skin->getColorBorders());
-	_window->setBackground(_game->getResourcePack()->getSurface(skin->getBackground()));
+	_window->setColor(_skin->getColorBorders());
+	_window->setBackground(_game->getResourcePack()->getSurface(_skin->getBackground()));
 
-	_btnOk->setColor(skin->getColorButtons());
+	_btnOk->setColor(_skin->getColorButtons());
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_txtTitle->setColor(skin->getColorMain());
+	_txtTitle->setColor(_skin->getColorMain());
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
-	_txtBase->setColor(skin->getColorMain());
+	_txtBase->setColor(_skin->getColorMain());
 	_txtBase->setBig();
 	_txtBase->setText(tr("STR_BASE_").arg(_base->getName()));
 
-	_txtName->setColor(skin->getColorMain());
+	_txtName->setColor(_skin->getColorMain());
 	_txtName->setText(tr("STR_NAME_UC"));
 
-	_txtStatus->setColor(skin->getColorMain());
+	_txtStatus->setColor(_skin->getColorMain());
 	_txtStatus->setText(tr("STR_STATUS"));
 
-	_txtWeapon->setColor(skin->getColorMain());
+	_txtWeapon->setColor(_skin->getColorMain());
 	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
 	_txtWeapon->setWordWrap(true);
 
-	_txtCrew->setColor(skin->getColorMain());
+	_txtCrew->setColor(_skin->getColorMain());
 	_txtCrew->setText(tr("STR_CREW"));
 
-	_txtHwp->setColor(skin->getColorMain());
+	_txtHwp->setColor(_skin->getColorMain());
 	_txtHwp->setText(tr("STR_HWPS"));
 
-	_lstCrafts->setColor(skin->getColorSecond());
-	_lstCrafts->setArrowColor(skin->getColorMain());
+	_lstCrafts->setColor(_skin->getColorSecond());
+	_lstCrafts->setArrowColor(_skin->getColorMain());
 	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);

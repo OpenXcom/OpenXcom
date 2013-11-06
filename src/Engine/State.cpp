@@ -41,10 +41,14 @@ namespace OpenXcom
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
  * @param game Pointer to the core game.
+ * @param skinName Name of a skin of this state.
  */
-State::State(Game *game) : _game(game), _surfaces(), _screen(true)
+State::State(Game *game, const std::string &skinName) : _game(game), _surfaces(), _screen(true)
 {
-
+	if (!skinName.empty())
+		_skin = _game->getRuleset()->getSkin(skinName);
+	else
+		_skin = 0;
 }
 
 /**
@@ -274,5 +278,26 @@ void State::applyBattlescapeTheme()
 		}
 	}
 }
+
+/**
+ * Sets a new skin to this state.
+ * @param skinName Name of a skin.
+ * @parem apply True if skin should be applied at once [false by default].
+ * @return Ptr to new StateSkin. 0 otherwise, if skin can't be setted.
+ */
+StateSkin *State::setSkin(const std::string &skinName, bool apply)
+{
+	StateSkin *tmpSkin = _game->getRuleset()->getSkin(skinName);
+
+	if (tmpSkin != 0)
+		_skin = tmpSkin;
+
+//	TODO: rewrite applyBattlescapeTheme() as private applySkin()
+//	if (tmpSkin != 0 && apply)
+//		applySkin();
+
+	return tmpSkin;
+}
+
 
 }
