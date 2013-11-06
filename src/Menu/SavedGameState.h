@@ -41,7 +41,7 @@ class SavedGameState : public State
 protected:
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
+	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete, *_txtDetails;
 	TextList *_lstSaves;
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
@@ -61,6 +61,10 @@ public:
 	void updateStatus(const std::string &msg);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for moving the mouse over a list item.
+	void lstSavesMouseOver(Action *action);
+	/// Handler for moving the mouse outside the list borders.
+	void lstSavesMouseOut(Action *action);
 };
 
 }
