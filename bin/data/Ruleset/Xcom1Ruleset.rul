@@ -9191,6 +9191,28 @@ MCDPatches:
         deathTile: 75
       - MCDIndex: 73
         deathTile: 76
+skins:
+  - type: BASEINFOSTATE
+    background: BACK07.SCR
+    colors: [ 0, 0, 0xF6, 0xF1, 0xD5, 0xD0 ]
+    bars: [ 0x0010, 0x0030, 0x0020, 0x0080 ]
+  - type: RESEARCHSTATE
+    background: BACK05.SCR
+    palette: BACKPALS.DAT
+#[SC_PALETTE, SC_BORDERS, SC_BUTTONS, SC_MAIN, SC_SECOND, SC_COLOR6, SC_COLOR7, SC_COLOR8]
+    colors: [ 0x10, 0xDA, 0xF6, 0xDA, 0xD0, 0xF6 ]
+  - type: CRAFTSSTATE
+    background: BACK14.SCR
+    palette: BACKPALS.DAT
+    colors: [ 0x30, 0xF1, 0xDA, 0xF1, 0xDA ]
+  - type: PAUSESTATE_GEO
+    background: BACK01.SCR
+    palette: BACKPALS.DAT
+    colors: [ 0, 0xEF, 0xEF, 0xEF ]
+  - type: PAUSESTATE_BATTLE
+    background: TAC00.SCR
+    highContrast: true
+    colors: [ 0, 0xFF, 0xFF, 0xFF ]
 extraSprites:
   - type: Pathfinding
     width: 64

@@ -802,6 +802,9 @@
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\StateSkin.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1625,6 +1628,9 @@
     </ClInclude>
     <ClInclude Include="Basescape\SoldierMemorialState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StateSkin.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

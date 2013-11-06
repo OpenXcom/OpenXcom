@@ -33,6 +33,7 @@
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
+#include "StateSkin.h"
 #include "Unit.h"
 #include "AlienRace.h"
 #include "AlienDeployment.h"
@@ -172,6 +173,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, StateSkin*>::iterator i = _stateSkins.begin(); i != _stateSkins.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -413,6 +418,14 @@ void Ruleset::loadFile(const std::string &filename)
 			patch->load(*i);
 			_MCDPatches[type] = patch.release();
 			_MCDPatchesIndex.push_back(type);
+		}
+	}
+	for (YAML::const_iterator i = doc["skins"].begin(); i != doc["skins"].end(); ++i)
+	{
+		StateSkin *rule = loadRule(*i, &_stateSkins);
+		if (rule != 0)
+		{
+			rule->load(*i);
 		}
 	}
  	for (YAML::const_iterator i = doc["extraSprites"].begin(); i != doc["extraSprites"].end(); ++i)
@@ -1091,6 +1104,17 @@ MCDPatch *Ruleset::getMCDPatch(const std::string id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
 	if (_MCDPatches.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the info about appearance of a screen.
+ * @param name Name of screen.
+ * @return Rules for the screen.
+ */
+StateSkin *Ruleset::getSkin(const std::string &name) const
+{
+	std::map<std::string, StateSkin*>::const_iterator i = _stateSkins.find(name);
+	if (_stateSkins.end() != i) return i->second; else return 0;
 }
 
 /**

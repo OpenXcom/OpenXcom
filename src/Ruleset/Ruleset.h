@@ -54,6 +54,7 @@ class RuleAlienMission;
 class City;
 class Base;
 class MCDPatch;
+class StateSkin;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
@@ -91,6 +92,7 @@ protected:
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
+	std::map<std::string, StateSkin*> _stateSkins;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
@@ -208,6 +210,8 @@ public:
 	const YAML::Node &getStartingBase();
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
+	/// Gets data about appearance of a screen.
+	StateSkin *getSkin(const std::string &name) const;
 	/// Gets the list of external Sprites.
 	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
 	/// Gets the list of external Sounds.

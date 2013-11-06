@@ -31,6 +31,7 @@ class Game;
 class Surface;
 class Action;
 class LocalizedText;
+class StateSkin;
 
 /**
  * A game state that receives user input and reacts accordingly.
@@ -44,12 +45,13 @@ class State
 {
 protected:
 	Game *_game;
+	StateSkin *_skin;
 	std::vector<Surface*> _surfaces;
 	bool _screen;
 
 public:
 	/// Creates a new state linked to a game.
-	State(Game* game);
+	State(Game* game, const std::string &skinName = "");
 	/// Cleans up the state.
 	virtual ~State();
 	/// Adds a child element to the state.
@@ -79,6 +81,8 @@ public:
 	void centerAllSurfaces();
 	void lowerAllSurfaces();
 	void applyBattlescapeTheme();
+	/// Sets a new skin to the state.
+	StateSkin *setSkin(const std::string &skinName, bool apply = false);
 	friend class Timer;
 };
 
