@@ -50,7 +50,7 @@ void RuleManufacture::load(const YAML::Node &node, int listOrder)
 	_time = node["time"].as<int>(_time);
 	_cost = node["cost"].as<int>(_cost);
 	_requiredItems = node["requiredItems"].as< std::map<std::string, int> >(_requiredItems);
-	if (node["producedItems"]) _producedItems = node["producedItems"].as<std::map<std::string,int>>(_producedItems);
+	_producedItems = node["producedItems"].as< std::map<std::string, int> >(_producedItems);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
