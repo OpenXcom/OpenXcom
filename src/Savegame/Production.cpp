@@ -90,19 +90,19 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		int count = 0;
 		do
 		{
-			if (_rules->getCategory() == "STR_CRAFT")
-				for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i) // if building more than just a craft
+			for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
+			{
+				if (RuleCraft *ruleCraft = r->getCraft(i->first))
 					for (int j = 0; j < i->second; ++j) // if this project means building more crafts at once (which is highly unlikely:)
 					// TODO: Should check the available hangars against the number of crafts beeing built (to avoid a crash!)
 					{
-						Craft *craft = new Craft(r->getCraft(i->first), b, g->getId(i->first));
+						Craft *craft = new Craft(ruleCraft, b, g->getId(i->first));
 						craft->setStatus("STR_REFUELLING");
 						b->getCrafts()->push_back(craft);
 					}
-			else
-			{
-				// Check if it's ammo to reload a craft
-				for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
+				else
+				{
+					// Check if it's ammo to reload a craft
 					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
 						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
@@ -119,11 +119,11 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 							}
 						}
 					}
-				for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
 					if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
 					else
 						b->getItems()->addItem(i->first, i->second);
+				}
 			}
 			if (!canManufactureMoreItemsPerHour) break;
 			count++;
