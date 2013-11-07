@@ -91,34 +91,39 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		do
 		{
 			if (_rules->getCategory() == "STR_CRAFT")
-			{
-				Craft *craft = new Craft(r->getCraft(_rules->getName()), b, g->getId(_rules->getName()));
-				craft->setStatus("STR_REFUELLING");
-				b->getCrafts()->push_back(craft);
-			}
+				for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i) // if building more than just a craft
+					for (int j = 0; j < i->second; ++j) // if this project means building more crafts at once (which is highly unlikely:)
+					// TODO: Should check the available hangars against the number of crafts beeing built (to avoid a crash!)
+					{
+						Craft *craft = new Craft(r->getCraft(i->first), b, g->getId(i->first));
+						craft->setStatus("STR_REFUELLING");
+						b->getCrafts()->push_back(craft);
+					}
 			else
 			{
 				// Check if it's ammo to reload a craft
-				if (r->getItem(_rules->getName())->getBattleType() == BT_NONE)
-				{
-					for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+				for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
+					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
-						if ((*c)->getStatus() != "STR_READY")
-							continue;
-						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 						{
-							if ((*w) != 0 && (*w)->getRules()->getClipItem() == _rules->getName() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							if ((*c)->getStatus() != "STR_READY")
+								continue;
+							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 							{
-								(*w)->setRearming(true);
-								(*c)->setStatus("STR_REARMING");
+								if ((*w) != 0 && (*w)->getRules()->getClipItem() == i->first && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+								{
+									(*w)->setRearming(true);
+									(*c)->setStatus("STR_REARMING");
+								}
 							}
 						}
 					}
-				}
-				if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
-					g->setFunds(g->getFunds() + r->getItem(_rules->getName())->getSellCost());
-				else
-					b->getItems()->addItem(_rules->getName(), 1);
+				for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
+					if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
+						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
+					else
+						b->getItems()->addItem(i->first, i->second);
 			}
 			if (!canManufactureMoreItemsPerHour) break;
 			count++;
