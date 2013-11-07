@@ -32,9 +32,9 @@ namespace OpenXcom
 class RuleManufacture
 {
 private:
-	std::string _name, _category;
+	std::string _name, _producedItem, _category;
 	std::vector<std::string> _requires;
-	int _space, _time, _cost;
+	int _space, _time, _cost, _produceQty;
 	std::map<std::string, int> _requiredItems;
 	int _listOrder;
 public:
@@ -44,6 +44,8 @@ public:
 	void load(const YAML::Node& node, int listOrder);
 	/// Gets the manufacture name.
 	std::string getName () const;
+	///Get the name of the produced item (it is the same as getName in most cases, and by default)
+	std::string getProducedItem() const;
 	/// Gets the manufacture category.
 	std::string getCategory () const;
 	/// Gets the manufacture's requirements.
@@ -54,6 +56,8 @@ public:
 	int getManufactureTime () const;
 	/// Gets the cost of manufacturing one object.
 	int getManufactureCost () const;
+	///Get the number of objects to manufacture instead of one (it is 1 in most cases, and by default)
+	int getProduceQty() const;
 	/// Gets the list of items required to manufacture one object.
 	const std::map<std::string, int> & getRequiredItems() const;
 	/// Gets the list weight for this manufacture item.

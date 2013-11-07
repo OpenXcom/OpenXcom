@@ -24,7 +24,7 @@ namespace OpenXcom
  * Creates a new Manufacture.
  * @param name The unique manufacture name.
  */
-RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(0), _time(0), _cost(0), _listOrder(0)
+RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _producedItem(name), _space(0), _time(0), _cost(0), _listOrder(0), _produceQty(1)
 {
 }
 
@@ -35,12 +35,15 @@ RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(
  */
 void RuleManufacture::load(const YAML::Node &node, int listOrder)
 {
-	_name = node["name"].as<std::string>(_name);
+	if (_name == _producedItem) _producedItem = _name = node["name"].as<std::string>(_name);
+	else _name = node["name"].as<std::string>(_name);
+	if (node["producedItem"]) _producedItem = node["producedItem"].as<std::string>(_producedItem);
 	_category = node["category"].as<std::string>(_category);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_space = node["space"].as<int>(_space);
 	_time = node["time"].as<int>(_time);
 	_cost = node["cost"].as<int>(_cost);
+	if (node["produceQty"]) _produceQty = node["produceQty"].as<int>(_produceQty);
 	_requiredItems = node["requiredItems"].as< std::map<std::string, int> >(_requiredItems);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
@@ -56,6 +59,15 @@ void RuleManufacture::load(const YAML::Node &node, int listOrder)
 std::string RuleManufacture::getName () const
 {
 	return _name;
+}
+
+/**
+ * Get the name of the produced item (it is the same as getName in most cases, and by default)
+ * @return the name
+*/
+std::string RuleManufacture::getProducedItem() const
+{
+  return _producedItem;
 }
 
 /**
@@ -105,6 +117,14 @@ int RuleManufacture::getManufactureCost () const
 	return _cost;
 }
 
+/**
+ * Get the number of objects to manufacture instead of one (it is 1 in most cases, and by default)
+ * @return the number
+*/
+int RuleManufacture::getProduceQty() const
+{
+  return _produceQty;
+}
 /**
  * Gets the list of items required to manufacture one object.
  * @return The list of items required to manufacture one object.

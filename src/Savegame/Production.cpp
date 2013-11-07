@@ -92,14 +92,14 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		{
 			if (_rules->getCategory() == "STR_CRAFT")
 			{
-				Craft *craft = new Craft(r->getCraft(_rules->getName()), b, g->getId(_rules->getName()));
+				Craft *craft = new Craft(r->getCraft(_rules->getProducedItem()), b, g->getId(_rules->getProducedItem()));
 				craft->setStatus("STR_REFUELLING");
 				b->getCrafts()->push_back(craft);
 			}
 			else
 			{
 				// Check if it's ammo to reload a craft
-				if (r->getItem(_rules->getName())->getBattleType() == BT_NONE)
+				if (r->getItem(_rules->getProducedItem())->getBattleType() == BT_NONE)
 				{
 					for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 					{
@@ -107,7 +107,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 							continue;
 						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 						{
-							if ((*w) != 0 && (*w)->getRules()->getClipItem() == _rules->getName() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							if ((*w) != 0 && (*w)->getRules()->getClipItem() == _rules->getProducedItem() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
 							{
 								(*w)->setRearming(true);
 								(*c)->setStatus("STR_REARMING");
@@ -116,9 +116,9 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 					}
 				}
 				if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
-					g->setFunds(g->getFunds() + r->getItem(_rules->getName())->getSellCost());
+					g->setFunds(g->getFunds() + (r->getItem(_rules->getProducedItem())->getSellCost() * _rules->getProduceQty()));
 				else
-					b->getItems()->addItem(_rules->getName(), 1);
+					b->getItems()->addItem(_rules->getProducedItem(), _rules->getProduceQty());
 			}
 			if (!canManufactureMoreItemsPerHour) break;
 			count++;
