@@ -1002,6 +1002,7 @@ en-GB:
   STR_PRESS_BUTTON_TO_CONTINUE: "Press button to continue"
   STR_MIND_CONTROL: "Mind Control"
   STR_PANIC_UNIT: "Panic Unit"
+  STR_MORALE_ATTACK_SUCCESSFUL: "Morale Attack Successful"
   STR_MIND_CONTROL_SUCCESSFUL: "Mind Control Successful"
   STR_HAS_GONE_BERSERK_MALE: "{0}{NEWLINE}has gone Berserk"
   STR_HAS_GONE_BERSERK_FEMALE: "{0}{NEWLINE}has gone Berserk"

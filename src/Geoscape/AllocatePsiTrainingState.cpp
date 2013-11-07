@@ -33,6 +33,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
