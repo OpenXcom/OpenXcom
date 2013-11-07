@@ -119,6 +119,17 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 							}
 						}
 					}
+					// Check if it's fuel to refuel a craft
+					if (r->getItem(i->first)->getBattleType() == BT_NONE)
+					{
+						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+						{
+							if ((*c)->getStatus() != "STR_READY")
+								continue;
+							if ((*c)->getRules()->getRefuelItem() == i->first && 100 > (*c)->getFuelPercentage())
+								(*c)->setStatus("STR_REFUELLING");
+						}
+					}
 					if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
 					else
