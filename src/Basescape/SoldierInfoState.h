@@ -40,9 +40,10 @@ class SoldierInfoState : public State
 private:
 	Base *_base;
 	size_t _soldier;
+	Soldier *s;
 
 	Surface *_bg, *_rank;
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;
 	Text *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
 	TextEdit *_edtSoldier;
 
@@ -56,6 +57,8 @@ public:
 	~SoldierInfoState();
 	/// Updates the soldier info.
 	void init();
+	/// Set the soldier Id.
+	void setSoldierId(size_t soldier);
 	/// Handler for pressing a key on the Name edit.
 	void edtSoldierKeyPress(Action *action);
 	/// Handler for clicking the OK button.
@@ -68,6 +71,8 @@ public:
 	void btnArmorClick(Action *action);
 	/// Handler for clicking the Sack button.
 	void btnSackClick(Action *action);
+	/// Handler for clicking the Diary button.
+	void btnDiaryClick(Action *action);
 };
 
 }

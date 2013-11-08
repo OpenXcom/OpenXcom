@@ -802,9 +802,13 @@
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\SoldierDiaryInfoState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryState.cpp" />
+    <ClCompile Include="Savegame\SoldierDiary.cpp" />
+    <ClCompile Include="Savegame\SoldierRecords.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryTotalsState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Basescape\ManufactureState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
@@ -1559,6 +1563,12 @@
     <ClInclude Include="Engine\ShaderRepeat.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\ShaderRotate.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FixedFloat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\GraphSubset.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -1620,6 +1630,11 @@
     <ClInclude Include="Basescape\SoldierMemorialState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
+    <ClInclude Include="Basescape\SoldierDiaryInfoState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryState.h" />
+    <ClInclude Include="Savegame\SoldierDiary.h" />
+    <ClInclude Include="Savegame\SoldierRecords.h" />
+    <ClInclude Include="Basescape\SoldierDiaryTotalsState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1658,8 +1673,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

@@ -48,6 +48,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDeath.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
@@ -69,7 +70,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
+DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false), _missionTime(0, 0, 0, 0, 0, 0, 0)
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
@@ -200,24 +201,42 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	if (total <= -200)
 	{
 		rating = tr("STR_RATING_TERRIBLE");
+		_missionRating = "STR_RATING_TERRIBLE";
 	}
 	else if (total <= 0)
 	{
 		rating = tr("STR_RATING_POOR");
+		_missionRating = "STR_RATING_POOR";
 	}
 	else if (total <= 200)
 	{
 		rating = tr("STR_RATING_OK");
+		_missionRating = "STR_RATING_OK";
 	}
 	else if (total <= 500)
 	{
 		rating = tr("STR_RATING_GOOD");
+		_missionRating = "STR_RATING_GOOD";
 	}
 	else
 	{
 		rating = tr("STR_RATING_EXCELLENT");
+		_missionRating = "STR_RATING_EXCELLENT";
 	}
+	_missionScore = total;
 	_txtRating->setText(tr("STR_RATING").arg(rating));
+
+	SavedGame *save = _game->getSavedGame();
+	SavedBattleGame *battle = save->getSavedBattle();
+	_missionDaylight = save->getSavedBattle()->getGlobalShade();
+	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+	{
+		if ((*j)->getGeoscapeSoldier())
+		{
+			(*j)->getGeoscapeSoldier()->getDiary()->addSoldierDiaryEntry(_missionTime, _missionRegion, _missionCountry, _missionType, _missionUFO, (*j)->getGeoscapeSoldier()->getTempKills(), _missionSuccess, _missionScore, _missionRating, _missionRace, _missionDaylight);
+			(*j)->getGeoscapeSoldier()->clearTempKills();
+		}
+	}
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMMARS")->play();
@@ -361,6 +380,15 @@ void DebriefingState::prepareDebriefing()
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
+	/// Diary stuff
+	_missionTime = *save->getTime();
+	_missionType = battle->getMissionType();
+	// Defined later
+	_missionRegion = "STR_REGION_UNKNOWN"; 
+	_missionCountry = "STR_COUNTRY_UNKNOWN";
+	_missionUFO = "NO_UFO";
+	_missionSuccess = success;
+	_missionRace = "STR_UNKNOWN";
 
 	int playerInExitArea = 0; // if this stays 0 the craft is lost...
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
@@ -378,6 +406,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_region = (*k);
+						_missionRegion = _region->getRules()->getType();
 						break;
 					}
 				}
@@ -386,6 +415,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
+						_missionCountry= _country->getRules()->getType();
 						break;
 					}
 				}
@@ -452,6 +482,8 @@ void DebriefingState::prepareDebriefing()
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 	{
+		_missionUFO = (*i)->getRules()->getType();
+		_missionRace = (*i)->getAlienRace();
 		if ((*i)->isInBattlescape())
 		{
 			if (!aborted)
@@ -472,6 +504,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
+			_missionRace = (*i)->getAlienRace();
 			delete *i;
 			save->getTerrorSites()->erase(i);
 			break;
@@ -527,6 +560,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i)->isInBattlescape())
 			{
+				_missionRace = (*i)->getAlienRace();
 				if (destroyAlienBase)
 				{
 					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);

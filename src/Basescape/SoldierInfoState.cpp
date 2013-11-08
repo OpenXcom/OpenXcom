@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierInfoState.h"
+#include "SoldierDiaryState.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -35,6 +36,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/Armor.h"
@@ -61,10 +63,11 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnArmor = new TextButton(110, 14, 130, 33);	// (60, 14, 130, 33);
 	_edtSoldier = new TextEdit(200, 16, 40, 9);
 	_btnSack = new TextButton(60, 14, 260, 33); 	// (60, 14, 248, 10);
+	_btnDiary = new TextButton(60, 14, 260, 48);
 //	_txtArmor = new Text(120, 9, 194, 38);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
-	_txtKills = new Text(100, 9, 230, 48);
+	_txtKills = new Text(100, 9, 200, 48);
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
 	_txtPsionic = new Text(150, 9, 0, 66);
@@ -117,6 +120,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_btnArmor);
 	add(_edtSoldier);
 	add(_btnSack);
+	add(_btnDiary);
 //	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
@@ -194,6 +198,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
+
+	_btnDiary->setColor(Palette::blockOffset(15)+6);
+	_btnDiary->setText(tr("STR_DIARY"));
+	_btnDiary->onMouseClick((ActionHandler)&SoldierInfoState::btnDiaryClick);
 
 //	_txtArmor->setColor(Palette::blockOffset(13));
 
@@ -340,7 +348,7 @@ void SoldierInfoState::init()
 	{
 		_soldier = 0;
 	}
-	Soldier *s = _base->getSoldiers()->at(_soldier);
+	s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setBig();
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
@@ -493,6 +501,14 @@ void SoldierInfoState::init()
 }
 
 /**
+ * Set the soldier Id.
+ */
+void SoldierInfoState::setSoldierId(size_t soldier)
+{
+	_soldier = soldier;
+}
+
+/**
  * Changes the soldier's name.
  * @param action Pointer to an action.
  */
@@ -566,6 +582,15 @@ void SoldierInfoState::btnSackClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
 	_game->pushState(new SackSoldierState(_game, _base, soldier));
+}
+
+/**
+ * Shows the Diary Soldier window.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::btnDiaryClick(Action *)
+{
+	_game->pushState(new SoldierDiaryState(_game, _base, _soldier, this));
 }
 
 }

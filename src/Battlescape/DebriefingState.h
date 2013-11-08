@@ -37,6 +37,7 @@ class Base;
 class Region;
 class Country;
 class RuleItem;
+class GameTime;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -59,6 +60,11 @@ private:
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
+	std::string _missionRegion, _missionCountry, _missionType, _missionUFO, _missionRace;
+	GameTime _missionTime;
+	int _missionScore, _missionDaylight;
+	bool _missionSuccess;
+	std::string _missionRating;
 	/// Adds to the debriefing stats.
 	void addStat(const std::string &name, int quantity, int score);
 	/// Prepares debriefing.

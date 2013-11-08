@@ -22,6 +22,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Ruleset/Unit.h"
+#include "../Savegame/SoldierDiary.h"
 
 namespace OpenXcom
 {
@@ -38,6 +39,8 @@ class Armor;
 class Language;
 class EquipmentLayoutItem;
 class SoldierDeath;
+class SoldierDiary;
+class SoldierDiaryKills;
 
 /**
  * Represents a soldier hired by the player.
@@ -60,6 +63,8 @@ private:
 	Armor *_armor;
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 	SoldierDeath *_death;
+	SoldierDiary *_diary;
+	std::vector<SoldierDiaryKills*> _tempKills;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
@@ -135,6 +140,14 @@ public:
 	SoldierDeath *getDeath() const;
 	/// Kills the soldier.
 	void die(SoldierDeath *death);
+	/// Gets the soldier's diary.
+	SoldierDiary *getDiary();
+	/// Gets soldier's temp kills.
+	std::vector<SoldierDiaryKills*> getTempKills() const;
+	/// Add soldier's temp kills.
+	void addTempKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState);
+	/// Clear soldier's temp kills.
+	void clearTempKills();
 };
 
 }
