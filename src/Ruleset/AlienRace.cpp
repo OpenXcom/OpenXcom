@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank alien race.
  * @param id String defining the id.
  */
-AlienRace::AlienRace(const std::string &id): _id(id), _members()
+AlienRace::AlienRace(const std::string &id): _id(id), _members(), _useSurface(true), _useSubmerged(false)
 {
 }
 
@@ -41,6 +41,8 @@ void AlienRace::load(const YAML::Node &node)
 {
 	_id = node["id"].as<std::string>(_id);
 	_members = node["members"].as< std::vector<std::string> >(_members);
+	_useSurface = node["useSurface"].as<bool>(_useSurface);
+	_useSubmerged = node["useSubmerged"].as<bool>(_useSubmerged);
 }
 
 /**
@@ -63,4 +65,20 @@ std::string AlienRace::getMember(int id) const
 	return _members[id];
 }
 
+/**
+ * Test whether is airborne capable.
+ * @return true if air to air.
+ */
+bool AlienRace::getSurface() const
+{
+	return _useSurface;
+}
+/**
+ * Test whether is underwater capable.
+ * @return true if submersible.
+ */
+bool AlienRace::getSubmerged() const
+{
+	return _useSubmerged;
+}
 }

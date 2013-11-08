@@ -95,10 +95,11 @@ void BattlescapeGenerator::setCraft(Craft *craft)
  * Sets the ufo involved in the battle.
  * @param ufo Pointer to UFO.
  */
-void BattlescapeGenerator::setUfo(Ufo *ufo)
+void BattlescapeGenerator::setUfo(Ufo *ufo, bool submerged)
 {
 	_ufo = ufo;
 	_ufo->setInBattlescape(true);
+	_save->setSubmerged(submerged);
 }
 
 /**
@@ -158,10 +159,11 @@ void BattlescapeGenerator::setBase(Base *base)
  * Sets the terror site involved in the battle.
  * @param terror Pointer to terror site.
  */
-void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
+void BattlescapeGenerator::setTerrorSite(TerrorSite *terror, bool submerged)
 {
 	_terror = terror;
 	_terror->setInBattlescape(true);
+	_save->setSubmerged(submerged);
 }
 
 
@@ -192,7 +194,7 @@ void BattlescapeGenerator::nextStage()
 	}
 	_save->resetTurnCounter();
 
-	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getSubmerged() ? _save->getMissionType() + "_SUBMERGED" : _save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
 	_worldShade = ruleDeploy->getShade();
@@ -270,7 +272,8 @@ void BattlescapeGenerator::nextStage()
  */
 void BattlescapeGenerator::run()
 {
-	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getSubmerged() ? (_ufo?_ufo->getRules()->getType():_save->getMissionType()) +	"_SUBMERGED" : 
+			(_ufo?_ufo->getRules()->getType():_save->getMissionType()));
 
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 
@@ -362,8 +365,17 @@ void BattlescapeGenerator::deployXCOM()
 		for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
 		{
 			BattleUnit *unit = addXCOMVehicle(*i);
-			if (unit && !_save->getSelectedUnit())
-				_save->setSelectedUnit(unit);
+			if((!_save->getSubmerged() && (*i)->getRules()->getSurface()) || (_save->getSubmerged() &&(*i)->getRules()->getSubmerged()))
+			{
+				//vehicle can ve used is OK
+				if (unit && !_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
+			}
+			else
+			{
+				//unusable vehicles - add them with TU 0 - idles...
+				unit->setIdle();
+			}
 		}
 	}
 	else if (_base != 0)
@@ -372,8 +384,17 @@ void BattlescapeGenerator::deployXCOM()
 		for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 		{
 			BattleUnit *unit = addXCOMVehicle(*i);
-			if (unit && !_save->getSelectedUnit())
-				_save->setSelectedUnit(unit);
+			if((!_save->getSubmerged() && (*i)->getRules()->getSurface()) || (_save->getSubmerged() &&(*i)->getRules()->getSubmerged()))
+			{
+				//vehicle can ve used is OK
+				if (unit && !_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
+			}
+			else
+			{
+				//unusable vehicles - add them with TU 0 - idles...
+				unit->setIdle();
+			}
 		}
 	}
 
@@ -384,8 +405,16 @@ void BattlescapeGenerator::deployXCOM()
 			(_craft == 0 && (*i)->getWoundRecovery() == 0 && ((*i)->getCraft() == 0 || (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{
 			BattleUnit *unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
-			if (unit && !_save->getSelectedUnit())
-				_save->setSelectedUnit(unit);
+			if((_save->getSubmerged() && (*i)->getArmor()->getAmphibious()) || !_save->getSubmerged())
+			{
+				if (unit && !_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
+			}
+			else
+			{
+				// set them idle or kill them outright (no breathing)?
+				unit->setIdle(); // be merciful for now...
+			}
 		}
 	}
 
@@ -1793,10 +1822,11 @@ void BattlescapeGenerator::deployCivilians(int max)
  * Sets the alien base involved in the battle.
  * @param base Pointer to alien base.
  */
-void BattlescapeGenerator::setAlienBase(AlienBase *base)
+void BattlescapeGenerator::setAlienBase(AlienBase *base, bool submerged)
 {
 	_alienBase = base;
 	_alienBase->setInBattlescape(true);
+	_save->setSubmerged(submerged);
 }
 
 /**

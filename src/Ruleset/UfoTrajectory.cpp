@@ -24,7 +24,12 @@ const char *altitudeString[] = {
 	"STR_VERY_LOW",
 	"STR_LOW_UC",
 	"STR_HIGH_UC",
-	"STR_VERY_HIGH"
+	"STR_VERY_HIGH",
+	"STR_SHALLOW",
+	"STR_NORMAL_UC",
+	"STR_DEEP_UC",
+	"STR_VERY_DEEP",
+	"STR_BOTTOM"
 };
 }
 
@@ -79,9 +84,26 @@ void UfoTrajectory::load(const YAML::Node &node)
  * @param wp The waypoint.
  * @return The altitude.
  */
-std::string UfoTrajectory::getAltitude(unsigned wp) const
+int UfoTrajectory::getAltitude(unsigned wp) const
 {
-	return altitudeString[_waypoints[wp].altitude];
+	return _waypoints[wp].altitude;
 }
 
+/**
+ * Gets the altitude string.
+ * @param wp The waypoint.
+ * @return The altitude.
+ */
+std::string UfoTrajectory::getAltitudeString(unsigned alt)
+{
+	return altitudeString[alt];
+}
+
+int UfoTrajectory::getAltitudeFromString(const std::string &str)
+{
+	for(int i=0; i < MAX_ALTITUDES;i++)
+		if(str == altitudeString[i])
+			return i;
+	return MAX_ALTITUDES;
+}
 }

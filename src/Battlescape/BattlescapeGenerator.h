@@ -103,7 +103,7 @@ public:
 	/// Sets the XCom craft.
 	void setCraft(Craft *craft);
 	/// Sets the ufo.
-	void setUfo(Ufo* ufo);
+	void setUfo(Ufo* ufo, bool submerged=false);
 	/// Sets the polygon texture.
 	void setWorldTexture(int texture);
 	/// Sets the polygon shade.
@@ -115,9 +115,9 @@ public:
 	/// Sets the XCom base.
 	void setBase(Base *base);
 	/// Sets the terror site.
-	void setTerrorSite(TerrorSite* site);
+	void setTerrorSite(TerrorSite* site, bool submerged=false);
 	/// Sets the alien base
-	void setAlienBase(AlienBase* base);
+	void setAlienBase(AlienBase* base, bool submerged=false);
 	/// Runs the generator.
 	void run();
 	/// Sets up the next stage (for cydonia/tftd terror missions).

@@ -248,15 +248,16 @@ int MapData::getTUCost(MovementType movementType) const
 {
 	switch (movementType)
 	{
-	case MT_WALK:
-		return _TUWalk;
-		break;
-	case MT_FLY:
-		return _TUFly;
-		break;
-	case MT_SLIDE:
-		return _TUSlide;
-		break;
+		case MT_WALK:
+			return _TUWalk;
+			break;
+		case MT_FLY:
+			return _TUFly;
+			break;
+		case MT_SLIDE:
+			return _TUSlide;
+			break;
+		default: ;
 	}
 	return 0;
 }

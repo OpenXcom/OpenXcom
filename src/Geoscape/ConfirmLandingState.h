@@ -43,9 +43,10 @@ private:
 	Text *_txtMessage, *_txtBegin;
 	TextButton *_btnYes, *_btnNo;
 	GeoscapeState *_state;
+	bool _submerged;
 public:
 	/// Creates the Confirm Landing state.
-	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state);
+	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state, bool submerged=false);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
 	/// Handler for clicking the Yes button.

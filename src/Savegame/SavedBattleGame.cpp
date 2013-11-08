@@ -59,7 +59,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _strafeEnabled(false), _sneaky(false),
-                                     _traceAI(false), _cheating(false)
+                                     _traceAI(false), _cheating(false), _submerged(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
@@ -121,6 +121,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_missionType = node["missionType"].as<std::string>(_missionType);
 	_globalShade = node["globalshade"].as<int>(_globalShade);
 	_turn = node["turn"].as<int>(_turn);
+	_submerged = node["submerged"].as<bool>(_submerged);
 	int selectedUnit = node["selectedUnit"].as<int>();
 
 	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
@@ -346,6 +347,7 @@ YAML::Node SavedBattleGame::save() const
 	node["missionType"] = _missionType;
 	node["globalshade"] = _globalShade;
 	node["turn"] = _turn;
+	node["submerged"] = _submerged;  // for fast access
 	node["selectedUnit"] = (_selectedUnit?_selectedUnit->getId():-1);
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
@@ -1664,5 +1666,14 @@ const std::vector<Position> SavedBattleGame::getTileSearch()
 bool SavedBattleGame::isCheating()
 {
 	return _cheating;
+}
+
+void SavedBattleGame::setSubmerged(bool submerged)
+{
+	_submerged=submerged;
+}
+bool SavedBattleGame::getSubmerged() const
+{
+	return _submerged;
 }
 }

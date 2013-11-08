@@ -25,7 +25,7 @@
 
 namespace OpenXcom
 {
-
+enum Altitudes { BOTTOM, VERY_DEEP, DEEP, NORMAL, SHALLOW, GROUND = 0, VERY_LOW, LOW, HIGH, VERY_HIGH, MAX_ALTITUDES};
 /**
  * Information for points on a UFO trajectory.
  */
@@ -73,8 +73,11 @@ public:
 	unsigned getZone(unsigned wp) const { return _waypoints[wp].zone; }
 
 	/// Gets the altitude at a waypoint.
-	std::string getAltitude(unsigned wp) const;
+	int getAltitude(unsigned wp) const;
 
+	/// Gets the altitude string
+	static std::string getAltitudeString(unsigned alt);
+	static int getAltitudeFromString(const std::string &str);
 	/**
 	 * Gets the speed percentage at a waypoint.
 	 * @param wp The waypoint.

@@ -1227,7 +1227,11 @@ void BattlescapeGame::primaryAction(const Position &pos)
 
 	if (_currentAction.targeting && _save->getSelectedUnit())
 	{
-		if (_currentAction.type == BA_LAUNCH)
+		if(_save->getSubmerged() && !_currentAction.weapon->getRules()->getSubmerged())
+			_parentState->warning("STR_NO_SUBMERGE_USE");
+		else if(!_save->getSubmerged() && !_currentAction.weapon->getRules()->getSurface())
+			_parentState->warning("STR_NO_SURFACE_USE");
+		else if (_currentAction.type == BA_LAUNCH)
 		{
 			_parentState->showLaunchButton(true);
 			_currentAction.waypoints.push_back(pos);

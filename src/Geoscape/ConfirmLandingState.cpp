@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param shade Shade of the landing site.
  * @param state Pointer to Geoscape.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state)
+ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state, bool submerged) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state), _submerged(submerged)
 {
 	_screen = false;
 
@@ -135,19 +135,19 @@ void ConfirmLandingState::btnYesClick(Action *)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
-		bgen.setUfo(u);
+		bgen.setUfo(u, _submerged);
 		bgen.setAlienRace(u->getAlienRace());
 	}
 	else if (t != 0)
 	{
 		bgame->setMissionType("STR_TERROR_MISSION");
-		bgen.setTerrorSite(t);
+		bgen.setTerrorSite(t, _submerged);
 		bgen.setAlienRace(t->getAlienRace());
 	}
 	else if (b != 0)
 	{
 		bgame->setMissionType("STR_ALIEN_BASE_ASSAULT");
-		bgen.setAlienBase(b);
+		bgen.setAlienBase(b, _submerged);
 		bgen.setAlienRace(b->getAlienRace());
 	}
 	else

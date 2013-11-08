@@ -945,11 +945,11 @@ void DogfightState::move()
 				{
 					if (_mode == _btnCautious)
 					{
-						minimumDistance();
+						_targetDist=minimumDistance(_craft->getWeapons());
 					}
 					else if (_mode == _btnStandard)
 					{
-						maximumDistance();
+						_targetDist=maximumDistance(_craft->getWeapons());
 					}
 				}
 			}
@@ -1085,7 +1085,8 @@ void DogfightState::move()
 					}
 				}
 			}
-			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+			bool inLand=_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude());
+			if (!inLand && !_ufo->getRules()->getAmphibious())
 			{
 				_ufo->setStatus(Ufo::DESTROYED);
 				_destroyUfo = true;
@@ -1093,7 +1094,7 @@ void DogfightState::move()
 			else
 			{
 				_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
-				_ufo->setAltitude("STR_GROUND");
+				_ufo->setAltitude(inLand ? GROUND : BOTTOM);
 				if (_ufo->getCrashId() == 0)
 				{
 					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
@@ -1206,10 +1207,10 @@ void DogfightState::ufoFireWeapon()
  * Sets the craft to the minimum distance
  * required to fire a weapon.
  */
-void DogfightState::minimumDistance()
+int DogfightState::minimumDistance(const std::vector<CraftWeapon*> *weapons)
 {
 	int max = 0;
-	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
+	for (std::vector<CraftWeapon*>::const_iterator i = weapons->begin(); i != weapons->end(); ++i)
 	{
 		if (*i == 0)
 			continue;
@@ -1220,11 +1221,11 @@ void DogfightState::minimumDistance()
 	}
 	if (max == 0)
 	{
-		_targetDist = STANDOFF_DIST;
+		return STANDOFF_DIST;
 	}
 	else
 	{
-		_targetDist = max * 8;
+		return max * 8;
 	}
 }
 
@@ -1232,10 +1233,10 @@ void DogfightState::minimumDistance()
  * Sets the craft to the maximum distance
  * required to fire a weapon.
  */
-void DogfightState::maximumDistance()
+int DogfightState::maximumDistance(const std::vector<CraftWeapon*> *weapons)
 {
 	int min = 1000;
-	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
+	for (std::vector<CraftWeapon*>::const_iterator i = weapons->begin(); i != weapons->end(); ++i)
 	{
 		if (*i == 0)
 			continue;
@@ -1246,12 +1247,21 @@ void DogfightState::maximumDistance()
 	}
 	if (min == 1000)
 	{
-		_targetDist = STANDOFF_DIST;
+		return STANDOFF_DIST;
 	}
 	else
 	{
-		_targetDist = min * 8;
+		return min * 8;
 	}
+}
+
+/**
+ * Sets the craft to the aggressive distance
+ * required to fire a weapon.
+ */
+int DogfightState::aggressiveDistance()
+{
+	return 64;
 }
 
 /**
@@ -1325,23 +1335,32 @@ void DogfightState::btnStandoffClick(Action *)
  * Switches to Cautious mode (maximum weapon range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnCautiousClick(Action *)
+void DogfightState::genericAttackClick(const std::string &status, int distance)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		_end = false;
-		setStatus("STR_CAUTIOUS_ATTACK");
-		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		setStatus(status);
+		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0  && 
+			((_craft->getAltitude() >= VERY_LOW && _craft->getWeapons()->at(0)->getRules()->getSurface()) ||
+			(_craft->getAltitude() <= SHALLOW && _craft->getWeapons()->at(0)->getRules()->getSubmerged() )))
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * _timeScale);
 		}
-		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0 && 
+			(( _craft->getAltitude() >= VERY_LOW && _craft->getWeapons()->at(1)->getRules()->getSurface()) ||
+			(_craft->getAltitude() <= SHALLOW && _craft->getWeapons()->at(1)->getRules()->getSubmerged() )))
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * _timeScale);
 		}
-		minimumDistance();
+		_targetDist=distance;
 		_ufoEscapeTimer->start();
 	}
+}
+
+void DogfightState::btnCautiousClick(Action *)
+{
+	genericAttackClick("STR_CAUTIOUS_ATTACK", minimumDistance(_craft->getWeapons()));
 }
 
 /**
@@ -1350,21 +1369,7 @@ void DogfightState::btnCautiousClick(Action *)
  */
 void DogfightState::btnStandardClick(Action *)
 {
-	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
-	{
-		_end = false;
-		setStatus("STR_STANDARD_ATTACK");
-		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
-		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * _timeScale);
-		}
-		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
-		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * _timeScale);
-		}
-		maximumDistance();
-		_ufoEscapeTimer->start();
-	}
+	genericAttackClick("STR_STANDARD_ATTACK", maximumDistance(_craft->getWeapons()));
 }
 
 /**
@@ -1373,21 +1378,7 @@ void DogfightState::btnStandardClick(Action *)
  */
 void DogfightState::btnAggressiveClick(Action *)
 {
-	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
-	{
-		_end = false;
-		setStatus("STR_AGGRESSIVE_ATTACK");
-		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
-		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * _timeScale);
-		}
-		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
-		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * _timeScale);
-		}
-		_targetDist = 64;
-		_ufoEscapeTimer->start();
-	}
+	genericAttackClick("STR_AGGRESSIVE_ATTACK", aggressiveDistance());
 }
 
 /**

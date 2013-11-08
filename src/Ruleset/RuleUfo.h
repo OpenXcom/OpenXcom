@@ -42,6 +42,7 @@ private:
 	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime;
 	RuleTerrain *_battlescapeTerrainData;
 	std::string _modSprite;
+	bool _amphibious, _engageSurface, _engageSubmerged;
 public:
 	/// Creates a blank UFO ruleset.
 	RuleUfo(const std::string &type);
@@ -77,6 +78,11 @@ public:
 	int getBreakOffTime() const;
 	/// Gets the name of the surface that represents this UFO.
 	std::string getModSprite() const;
+	/// Is sub
+	bool getAmphibious() const;
+	/// gets the weapon usage type
+	bool getEngageSurface() const;
+	bool getEngageSubmerged() const;
 };
 
 }

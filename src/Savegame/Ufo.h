@@ -20,6 +20,7 @@
 #define OPENXCOM_UFO_H
 
 #include "MovingTarget.h"
+#include "../Ruleset/UfoTrajectory.h"
 #include <string>
 #include <yaml-cpp/yaml.h>
 
@@ -28,7 +29,6 @@ namespace OpenXcom
 
 class RuleUfo;
 class AlienMission;
-class UfoTrajectory;
 class SavedGame;
 class Ruleset;
 
@@ -41,11 +41,12 @@ class Ruleset;
 class Ufo : public MovingTarget
 {
 public:
-	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
+	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED, NAVIGATING, TOUCHED_DOWN };
 private:
 	RuleUfo *_rules;
 	int _id, _crashId, _landId, _damage;
-	std::string _direction, _altitude;
+	std::string _direction;
+	int _altitude;
 	enum UfoStatus _status;
 	unsigned _secondsRemaining;
 	bool _inBattlescape;
@@ -91,9 +92,9 @@ public:
 	/// Gets the UFO's direction.
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.
-	std::string getAltitude() const;
+	int getAltitude() const;
 	/// Sets the UFO's altitude.
-	void setAltitude(const std::string &altitude);
+	void setAltitude(int altitude);
 	/// Gets the UFO status
 	enum UfoStatus getStatus() const { return _status; }
 	/// Set the UFO's status.

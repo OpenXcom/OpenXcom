@@ -41,13 +41,13 @@ private:
 	Craft *_craft;
 	Globe *_globe;
 	Waypoint *_waypoint;
-
+	bool _cannotEngage;
 	TextButton *_btnBase, *_btnTarget, *_btnPatrol, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtStatus, *_txtBase, *_txtSpeed, *_txtMaxSpeed, *_txtAltitude, *_txtFuel, *_txtDamage, *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo, *_txtRedirect, *_txtSoldier, *_txtHWP;
 public:
 	/// Creates the Geoscape Craft state.
-	GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint);
+	GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint, bool cannotEngage=false);
 	/// Cleans up the Geoscape Craft state.
 	~GeoscapeCraftState();
 	/// Updates the palette.

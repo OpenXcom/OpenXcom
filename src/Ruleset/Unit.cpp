@@ -229,5 +229,4 @@ bool Unit::isLivingWeapon() const
 {
 	return _livingWeapon;
 }
-
 }

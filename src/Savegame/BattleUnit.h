@@ -112,6 +112,7 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	bool _idle;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -421,6 +422,9 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// mark the unit as idle - i.e cannot move whole battle
+	void setIdle();
+	bool getIdle() const;
 };
 
 }

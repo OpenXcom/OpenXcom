@@ -337,16 +337,26 @@ void Craft::setStatus(const std::string &status)
  * Returns the current altitude of the craft.
  * @return Altitude.
  */
-std::string Craft::getAltitude() const
+int Craft::getAltitude() const
 {
 	Ufo *u = dynamic_cast<Ufo*>(_dest);
-	if (u && u->getAltitude() != "STR_GROUND")
+	if (u && u->getAltitude() != GROUND)
 	{
-		return u->getAltitude();
+		if(u->getAltitude() <= SHALLOW)
+		{
+			if(!_rules->getAmphibious())
+				return VERY_LOW;
+			else if(u->getAltitude() == BOTTOM)
+				return SHALLOW;
+			else
+				return u->getAltitude();
+		}
+		else
+			return u->getAltitude();
 	}
 	else
 	{
-		return "STR_VERY_LOW";
+		return VERY_LOW;
 	}
 }
 

@@ -76,6 +76,7 @@ private:
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 	std::vector<Position> _tileSearch;
+	bool _submerged;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -242,6 +243,9 @@ public:
 	const std::vector<Position> getTileSearch();
 	/// check if the AI has engaged cheat mode.
 	bool isCheating();
+	/// submerged accessor
+	void setSubmerged(bool submerged);
+	bool getSubmerged() const;
 };
 
 }

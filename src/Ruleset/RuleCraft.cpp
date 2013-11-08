@@ -31,7 +31,7 @@ RuleCraft::RuleCraft(const std::string &type) :
     _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0),
     _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
 	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0),
-	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
+	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _amphibious(false), _engageSurface(true), _engageSubmerged(false), _listOrder(0)
 {
 
 }
@@ -82,6 +82,9 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 		_battlescapeTerrainData = rule;
 	}
 	_spacecraft = node["spacecraft"].as<bool>(_spacecraft);
+	_amphibious = node["amphibious"].as<bool>(_amphibious);
+	_engageSurface = node["engageSurface"].as<bool>(_engageSurface);
+	_engageSubmerged = node["engageSubmerged"].as<bool>(_engageSubmerged);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
@@ -302,6 +305,32 @@ bool RuleCraft::getSpacecraft() const
 int RuleCraft::getListOrder() const
 {
 	 return _listOrder;
+}
+
+/**
+ * Test whether is underwater capable.
+ * @return true if submersible.
+ */
+bool RuleCraft::getAmphibious() const
+{
+	return _amphibious;
+}
+
+/**
+ * Test whether is airborne capable.
+ * @return true if air to air.
+ */
+bool RuleCraft::getEngageSurface() const
+{
+	return _engageSurface;
+}
+/**
+ * Test whether is underwater capable.
+ * @return true if submersible.
+ */
+bool RuleCraft::getEngageSubmerged() const
+{
+	return _engageSubmerged;
 }
 }
 

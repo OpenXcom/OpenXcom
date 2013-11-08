@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param movementType The movement type for this armor (walk, fly or slide).
  * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0)
+Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _amphibious(false)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -71,6 +71,7 @@ void Armor::load(const YAML::Node &node)
 			_damageModifier[i] = dmg[i].as<float>();
 		}
 	}
+	_amphibious = node["amphibious"].as<bool>(_amphibious);
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
 		_loftempsSet.push_back(node["loftemps"].as<int>());
@@ -173,9 +174,15 @@ int Armor::getDrawingRoutine() const
  * Useful for determining whether the armor can fly.
  * @return The movement type.
  */
-MovementType Armor::getMovementType() const
+MovementType Armor::getMovementType(bool underwater) const
 {
-	return _movementType;
+	if(_movementType == MT_FLOAT)
+		if(underwater)
+			return MT_FLY;
+		else
+			return MT_WALK;
+	else
+		return _movementType;
 }
 
 /**
@@ -221,5 +228,14 @@ UnitStats *Armor::getStats()
 int Armor::getWeight()
 {
 	return _weight;
+}
+
+/**
+ * Test whether is underwater capable.
+ * @return true if submersible.
+ */
+bool Armor::getAmphibious() const
+{
+	return _amphibious;
 }
 }

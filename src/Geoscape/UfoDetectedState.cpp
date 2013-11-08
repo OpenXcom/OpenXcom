@@ -52,7 +52,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	{
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
 	}
-	if (_ufo->getAltitude() == "STR_GROUND" && _ufo->getLandId() == 0)
+	if (((_ufo->getAltitude() == GROUND) || (_ufo->getAltitude() == BOTTOM)) && _ufo->getLandId() == 0)
 	{
 		_ufo->setLandId(_game->getSavedGame()->getId("STR_LANDING_SITE"));
 	}
@@ -149,8 +149,8 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->setDot(true);
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
-	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(altitude).c_str());
+	std::string altitude = _ufo->getAltitude() == GROUND ? "STR_GROUNDED" : UfoTrajectory::getAltitudeString(_ufo->getAltitude());
+	_lstInfo->addRow(2, _ufo->getAltitude() >= VERY_LOW ? tr("STR_ALTITUDE").c_str() : tr("STR_DEPTH").c_str(), tr(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)

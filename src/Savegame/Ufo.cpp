@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
-  , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
+  , _altitude(HIGH), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
   , _detected(false), _hyperDetected(false), _shootingAt(0)
 {
@@ -109,7 +109,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	_crashId = node["crashId"].as<int>(_crashId);
 	_landId = node["landId"].as<int>(_landId);
 	_damage = node["damage"].as<int>(_damage);
-	_altitude = node["altitude"].as<std::string>(_altitude);
+	_altitude = node["altitude"].as<int>(_altitude);
 	_direction = node["direction"].as<std::string>(_direction);
 	_detected = node["detected"].as<bool>(_detected);
 	_hyperDetected = node["hyperDetected"].as<bool>(_hyperDetected);
@@ -139,13 +139,21 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 		{
 			_status = CRASHED;
 		}
-		else if (_altitude == "STR_GROUND")
+		else if (_altitude == GROUND)
 		{
 			_status = LANDED;
 		}
-		else
+		else if (_altitude == BOTTOM)
+		{
+			_status = TOUCHED_DOWN;
+		}
+		else  if (_altitude > SHALLOW )
 		{
 			_status = FLYING;
+		}
+		else
+		{
+			_status = NAVIGATING;
 		}
 	}
 	int missionID = node["mission"].as<int>();
@@ -249,9 +257,11 @@ std::wstring Ufo::getName(Language *lang) const
 	switch (_status)
 	{
 	case FLYING:
+	case NAVIGATING:
 	case DESTROYED: // Destroyed also means leaving Earth.
 		return lang->getString("STR_UFO_").arg(_id);
 		break;
+	case TOUCHED_DOWN:
 	case LANDED:
 		return lang->getString("STR_LANDING_SITE_").arg(_landId);
 		break;
@@ -346,7 +356,7 @@ std::string Ufo::getDirection() const
  * Returns the current altitude of the UFO.
  * @return Altitude.
  */
-std::string Ufo::getAltitude() const
+int Ufo::getAltitude() const
 {
 	return _altitude;
 }
@@ -355,16 +365,16 @@ std::string Ufo::getAltitude() const
  * Changes the current altitude of the UFO.
  * @param altitude Altitude.
  */
-void Ufo::setAltitude(const std::string &altitude)
+void Ufo::setAltitude(int altitude)
 {
 	_altitude = altitude;
-	if (_altitude != "STR_GROUND")
+	if ((_altitude != GROUND) && (_altitude != BOTTOM))
 	{
-		_status = FLYING;
+		_status = _altitude > SHALLOW ? FLYING : NAVIGATING;
 	}
 	else
 	{
-		_status = isCrashed() ? CRASHED : LANDED;
+		_status = isCrashed() ? CRASHED : (_altitude != GROUND ? TOUCHED_DOWN : LANDED);
 	}
 }
 
@@ -477,6 +487,7 @@ void Ufo::think()
 	switch (_status)
 	{
 	case FLYING:
+	case NAVIGATING:
 		move();
 		if (reachedDestination())
 		{
@@ -485,6 +496,7 @@ void Ufo::think()
 		}
 		break;
 	case LANDED:
+	case TOUCHED_DOWN:
 		assert(_secondsRemaining >= 5 && "Wrong time management.");
 		_secondsRemaining -= 5;
 		break;
@@ -562,15 +574,15 @@ int Ufo::getVisibility() const
 		size = 30;
 
 	int visibility = 0;
-	if (_altitude == "STR_GROUND")
+	if (_altitude == GROUND || _altitude == BOTTOM)
 		visibility = -30;
-	else if (_altitude == "STR_VERY_LOW")
+	else if (_altitude == VERY_LOW || _altitude == SHALLOW)
 		visibility = size - 20;
-	else if (_altitude == "STR_LOW_UC")
+	else if (_altitude == LOW || _altitude == NORMAL)
 		visibility = size - 10;
-	else if (_altitude == "STR_HIGH_UC")
+	else if (_altitude == HIGH || _altitude == DEEP)
 		visibility = size;
-	else if (_altitude == "STR_VERY_HIGH")
+	else if (_altitude == VERY_HIGH || _altitude == VERY_DEEP)
 		visibility = size - 10;
 
 	return visibility;

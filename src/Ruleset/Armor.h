@@ -43,6 +43,7 @@ private:
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
+	bool _amphibious;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -71,7 +72,7 @@ public:
 	/// Gets the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
 	/// Gets whether the armor can fly.
-	MovementType getMovementType() const;
+	MovementType getMovementType(bool underwater=false) const;
 	/// Gets whether this is a normal or big unit.
 	int getSize() const;
 	/// Gets damage modifier.
@@ -82,6 +83,8 @@ public:
 	UnitStats *getStats();
 	/// Gets the armor's weight.
 	int getWeight();
+	/// Is diving suit
+	bool getAmphibious() const;
 };
 
 }

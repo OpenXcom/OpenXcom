@@ -36,6 +36,7 @@ class Timer;
 class Globe;
 class Craft;
 class Ufo;
+class CraftWeapon;
 class CraftWeaponProjectile;
 
 /**
@@ -64,8 +65,16 @@ private:
 	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
 	int _x, _y, _minimizedIconX, _minimizedIconY;
 
-	// Ends the dogfight.
+	/// Ends the dogfight.
 	void endDogfight();
+	/// generic attack click function
+	void genericAttackClick(const std::string &status, int distance);
+	/// Sets the craft to minimum distance.
+	static int minimumDistance(const std::vector<CraftWeapon*> *weapons);
+	/// Sets the craft to maximum distance.
+	static int  maximumDistance(const std::vector<CraftWeapon*> *weapons);
+	/// Sets the craft to aggressive distance.
+	static int  aggressiveDistance();
 
 public:
 	/// Creates the Dogfight state.
@@ -84,10 +93,6 @@ public:
 	void fireWeapon2();
 	// Fires UFO weapon.
 	void ufoFireWeapon();
-	// Sets the craft to minimum distance.
-	void minimumDistance();
-	// Sets the craft to maximum distance.
-	void maximumDistance();
 	/// Changes the status text.
 	void setStatus(const std::string &status);
 	/// Handler for clicking the Minimize button.

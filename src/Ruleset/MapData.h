@@ -42,7 +42,8 @@ enum SpecialTileType{TILE=0,
 					END_POINT,
 					MUST_DESTROY};
 
-enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE};
+//MT_FLOAT is MT_FLY underwater and MT_WALK on surface
+enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT};
 
 /**
  * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...

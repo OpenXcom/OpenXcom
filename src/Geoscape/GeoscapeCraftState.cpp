@@ -47,16 +47,26 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param waypoint Pointer to the last UFO position (if redirecting the craft).
  */
-GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint) : State(game), _craft(craft), _globe(globe), _waypoint(waypoint)
+GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint, bool cannotEngage) : State(game), _craft(craft), _globe(globe), _waypoint(waypoint), _cannotEngage(cannotEngage)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 240, 184, 8, 8, POPUP_BOTH);
-	_btnBase = new TextButton(192, 12, 32, 124);
-	_btnTarget = new TextButton(192, 12, 32, 140);
-	_btnPatrol = new TextButton(192, 12, 32, 156);
-	_btnCancel = new TextButton(192, 12, 32, 172);
+	// the cancel button does't show on can't engage
+	if(cannotEngage)
+	{
+		_btnBase = new TextButton(192, 12, 32, 140);
+		_btnTarget = new TextButton(192, 12, 32, 156);
+		_btnPatrol = new TextButton(192, 12, 32, 172);
+	}
+	else
+	{
+		_btnBase = new TextButton(192, 12, 32, 124);
+		_btnTarget = new TextButton(192, 12, 32, 140);
+		_btnPatrol = new TextButton(192, 12, 32, 156);
+		_btnCancel = new TextButton(192, 12, 32, 172);
+	}
 	_txtTitle = new Text(200, 17, 32, 20);
 	_txtStatus = new Text(210, 17, 32, 36);
 	_txtBase = new Text(200, 9, 32, 52);
@@ -153,7 +163,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 			{
 				status = tr("STR_TAILING_UFO");
 			}
-			else if (u->getStatus() == Ufo::FLYING)
+			else if ((u->getStatus() == Ufo::FLYING) || (u->getStatus() == Ufo::NAVIGATING))
 			{
 				status = tr("STR_INTERCEPTING_UFO").arg(u->getId());
 			}
@@ -167,7 +177,19 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 			status = tr("STR_DESTINATION_UC_").arg(_craft->getDestination()->getName(_game->getLanguage()));
 		}
 	}
-	_txtStatus->setText(tr("STR_STATUS_").arg(status));
+	// add reason of engagement refusal
+	if(cannotEngage)
+	{
+		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
+		if(u->getAltitude() >= VERY_LOW && !_craft->getRules()->getEngageSurface())
+			_txtStatus->setText(tr("STR_CANNOT_ENGAGE_AIRBORNE_").arg(status)); //cannot engage airborne targets
+		else if(u->getAltitude() != BOTTOM)
+			_txtStatus->setText(tr("STR_CANNOT_ENGAGE_SUBMERGED_").arg(status)); //cannot engage airborne targets
+		else
+			_txtStatus->setText(tr("STR_CANNOT_SUBMERGE_").arg(status)); //cannot touch down
+	}
+	else
+		_txtStatus->setText(tr("STR_STATUS_").arg(status));
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -183,8 +205,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
+	std::string altitude = _craft->getAltitude() == GROUND ? "STR_GROUNDED" : UfoTrajectory::getAltitudeString(_craft->getAltitude());
+	if(craft->getAltitude() < GROUND)
+		_txtAltitude->setText(tr("STR_DEPTH_").arg(tr(altitude)));
+	else
+		_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);

@@ -45,7 +45,7 @@ private:
 	std::string _refuelItem;
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
 	RuleTerrain *_battlescapeTerrainData;
-	bool _spacecraft;
+	bool _spacecraft, _amphibious, _engageSurface, _engageSubmerged;
 	int _listOrder;
 public:
 	/// Creates a blank craft ruleset.
@@ -98,6 +98,11 @@ public:
 	bool getSpacecraft() const;
 	/// Gets the list weight for this craft.
 	int getListOrder() const;
+	/// Is sub
+	bool getAmphibious() const;
+	/// gets the weapon usage type
+	bool getEngageSurface() const;
+	bool getEngageSubmerged() const;
 };
 
 }

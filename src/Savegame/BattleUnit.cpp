@@ -52,7 +52,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsExposed(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+																_turnsExposed(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _idle(false), _hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -1377,17 +1377,22 @@ void BattleUnit::prepareNewTurn()
 
 	_unitsSpottedThisTurn.clear();
 
-	// recover TUs
-	int TURecovery = getStats()->tu;
-	float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
-	if (encumbrance < 1)
+	if(_idle)
+		_tu = 0;
+	else
 	{
-	  TURecovery = int(encumbrance * TURecovery);
+		// recover TUs
+		int TURecovery = getStats()->tu;
+		float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
+		if (encumbrance < 1)
+		{
+			TURecovery = int(encumbrance * TURecovery);
+		}
+		// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
+		TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
+		_tu = TURecovery;
 	}
-	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
-	setTimeUnits(TURecovery);
-
+	
 	// recover energy
 	if (!isOut())
 	{
@@ -2550,4 +2555,14 @@ bool BattleUnit::hasInventory() const
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
 
+void BattleUnit::setIdle() 
+{
+	_idle = true;
+	_tu = 0;
+}
+
+bool BattleUnit::getIdle() const
+{
+	return _idle;
+}
 }

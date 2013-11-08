@@ -38,6 +38,7 @@ private:
 	std::string _type;
 	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearmRate, _projectileSpeed;
 	CraftWeaponProjectileType _projectileType;
+	bool _useSurface, _useSubmerged;
 	std::string _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
@@ -76,6 +77,9 @@ public:
 	CraftWeaponProjectileType getProjectileType() const;
 	/// Gets the craft weapon's projectile speed.
 	int getProjectileSpeed() const;
+	/// gets the weapon usage type
+	bool getSurface() const;
+	bool getSubmerged() const;
 };
 
 }

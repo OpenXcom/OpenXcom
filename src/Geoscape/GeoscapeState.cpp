@@ -663,6 +663,7 @@ void GeoscapeState::time5Seconds()
 		switch ((*i)->getStatus())
 		{
 		case Ufo::FLYING:
+		case Ufo::NAVIGATING:
 			if (!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
 			{
 				(*i)->think();
@@ -699,14 +700,15 @@ void GeoscapeState::time5Seconds()
 						}
 						else
 						{
-                            handleBaseDefense(base, *i);
-                            return;
+							handleBaseDefense(base, *i);
+							return;
 						}
 					}
 				}
 			}
 			break;
 		case Ufo::LANDED:
+		case Ufo::TOUCHED_DOWN:
 			(*i)->think();
 			if ((*i)->getSecondsRemaining() == 0)
 			{
@@ -800,6 +802,7 @@ void GeoscapeState::time5Seconds()
 					switch (u->getStatus())
 					{
 					case Ufo::FLYING:
+					case Ufo::NAVIGATING:
 						// Not more than 4 interceptions at a time.
 						if(_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
@@ -808,39 +811,54 @@ void GeoscapeState::time5Seconds()
 						}
 						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
-							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
+							//here check craft engage capabilities vs ufo altitude
+							if((u->getAltitude() < GROUND && (!(*j)->getRules()->getEngageSubmerged() || !(*j)->getRules()->getAmphibious()))
+									|| (u->getAltitude() > GROUND && !(*j)->getRules()->getEngageSurface()))
+								popup(new GeoscapeCraftState(_game, (*j), _globe, 0, true)); // new state impossible dogfight +cause
+							else
+							{
+								//only if possible start the dogfights
+								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 
-							if(!_dogfightStartTimer->isRunning())
-							{
-								_pause = true;
-								timerReset();
-								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
-								startDogfight();
-								_dogfightStartTimer->start();
-							}
-							if(!_battleMusic)
-							{
-								// Set music
-								_game->getResourcePack()->getMusic("GMINTER")->play();
-								_battleMusic = true;
+								if(!_dogfightStartTimer->isRunning())
+								{
+									_pause = true;
+									timerReset();
+									_globe->center((*j)->getLongitude(), (*j)->getLatitude());
+									startDogfight();
+									_dogfightStartTimer->start();
+								}
+								if(!_battleMusic)
+								{
+									// Set music
+									_game->getResourcePack()->getMusic("GMINTER")->play();
+									_battleMusic = true;
+								}
 							}
 						}
 						break;
 					case Ufo::LANDED:
+					case Ufo::TOUCHED_DOWN:
 					case Ufo::CRASHED:
 					case Ufo::DESTROYED: // Just before expiration
 						if ((*j)->getNumSoldiers() > 0 || (*j)->getNumVehicles() > 0)
 						{
 							if(!(*j)->isInDogfight())
 							{
-								// look up polygons texture
-								int texture, shade;
-								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
-								timerReset();
-								popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+								bool submerged = (u->getAltitude() < GROUND);
+								if(submerged && !(*j)->getRules()->getAmphibious())
+									popup(new GeoscapeCraftState(_game, (*j), _globe, 0, true)); // new state impossible touch down +cause
+								else
+								{
+									// look up polygons texture
+									int texture, shade;
+									_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
+									timerReset();
+									popup(new ConfirmLandingState(_game, *j, texture, shade, this, submerged));
+								}
 							}
 						}
-						else if (u->getStatus() != Ufo::LANDED)
+						else if ((u->getStatus() == Ufo::CRASHED) || (u->getStatus() == Ufo::DESTROYED))
 						{
 							(*j)->returnToBase();
 						}
@@ -871,12 +889,13 @@ void GeoscapeState::time5Seconds()
 				{
 					if (b->isDiscovered())
 					{
-						if((*j)->getNumSoldiers() > 0)
+						bool surface = _globe->insideLand(b->getLongitude(),b->getLatitude());
+						if(((*j)->getNumSoldiers() > 0) && ((*j)->getRules()->getAmphibious() || surface))
 						{
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+							popup(new ConfirmLandingState(_game, *j, texture, shade, this, !surface));
 						}
 						else
 						{
@@ -1195,8 +1214,10 @@ void GeoscapeState::time30Minutes()
 		switch ((*u)->getStatus())
 		{
 		case Ufo::LANDED:
+		case Ufo::TOUCHED_DOWN:
 			points++;
 		case Ufo::FLYING:
+		case Ufo::NAVIGATING:
 			points++;
 			// Get area
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)

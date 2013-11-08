@@ -27,7 +27,8 @@ namespace OpenXcom
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _battlescapeTerrainData(0), _modSprite("")
+RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _battlescapeTerrainData(0), _modSprite(""),
+	_amphibious(false), _engageSurface(true), _engageSubmerged(false)
 {
 }
 
@@ -56,6 +57,9 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 	_range = node["range"].as<int>(_range);
 	_score = node["score"].as<int>(_score);
 	_reload = node["reload"].as<int>(_reload);
+	_amphibious = node["amphibious"].as<bool>(_amphibious);
+	_engageSurface = node["engageSurface"].as<bool>(_engageSurface);
+	_engageSubmerged = node["engageSubmerged"].as<bool>(_engageSubmerged);
 	_breakOffTime = node["breakOffTime"].as<int>(_breakOffTime);
 	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
@@ -221,4 +225,29 @@ std::string RuleUfo::getModSprite() const
 	return _modSprite;
 }
 
+/**
+ * Test whether is underwater capable.
+ * @return true if submersible.
+ */
+bool RuleUfo::getAmphibious() const
+{
+	return _amphibious;
+}
+
+/**
+ * Test whether is airborne capable.
+ * @return true if air to air.
+ */
+bool RuleUfo::getEngageSurface() const
+{
+	return _engageSurface;
+}
+/**
+ * Test whether is underwater capable.
+ * @return true if submersible.
+ */
+bool RuleUfo::getEngageSubmerged() const
+{
+	return _engageSubmerged;
+}
 }

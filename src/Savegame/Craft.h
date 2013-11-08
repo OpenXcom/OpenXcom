@@ -87,7 +87,7 @@ public:
 	/// Sets the craft's status.
 	void setStatus(const std::string &status);
 	/// Gets the craft's altitude.
-	std::string getAltitude() const;
+	int getAltitude() const;
 	/// Sets the craft's destination.
 	void setDestination(Target *dest);
 	/// Gets the craft's amount of weapons.

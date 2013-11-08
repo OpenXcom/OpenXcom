@@ -65,6 +65,7 @@ private:
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
 	int _listOrder, _range, _bulletSpeed, _autoShots;
+	bool _useSurface, _useSubmerged;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -182,6 +183,9 @@ public:
 	int getBulletSpeed() const;
 	/// How many auto shots does this weapon fire.
 	int getAutoShots() const;
+	/// gets the weapon usage type
+	bool getSurface() const;
+	bool getSubmerged() const;
 };
 
 }

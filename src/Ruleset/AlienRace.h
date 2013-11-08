@@ -37,6 +37,7 @@ class AlienRace
 private:
 	std::string _id;
 	std::vector<std::string> _members;
+	bool  _useSurface, _useSubmerged;
 public:
 	/// Creates a blank alien race ruleset.
 	AlienRace(const std::string &id);
@@ -48,6 +49,9 @@ public:
 	std::string getId() const;
 	/// Gets a certain member of this alien race family.
 	std::string getMember(int id) const;
+	/// gets the unit usage type
+	bool getSurface() const;
+	bool getSubmerged() const;
 };
 
 }
