@@ -94,7 +94,6 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 			{
 				if (RuleCraft *ruleCraft = r->getCraft(i->first))
 					for (int j = 0; j < i->second; ++j) // if this project means building more crafts at once (which is highly unlikely:)
-					// TODO: Should check the available hangars against the number of crafts beeing built (to avoid a crash!)
 					{
 						Craft *craft = new Craft(ruleCraft, b, g->getId(i->first));
 						craft->setStatus("STR_REFUELLING");

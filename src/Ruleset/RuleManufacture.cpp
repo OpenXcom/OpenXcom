@@ -140,4 +140,17 @@ int RuleManufacture::getListOrder() const
 {
 	return _listOrder;
 }
+
+/**
+ * Gets the count of the crafts resulted by completing one "item" of the manufacture-project.
+ * @return The count of crafts.
+ */
+int RuleManufacture::getCraftCount(const Ruleset *r) const
+{
+	int result = 0;
+	for (std::map<std::string,int>::const_iterator i = _producedItems.begin(); i != _producedItems.end(); ++i)
+		if (r->getCraft(i->first)) result += i->second;
+	return result;
+}
+
 }
