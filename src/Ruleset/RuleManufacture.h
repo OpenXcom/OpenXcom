@@ -26,6 +26,8 @@
 namespace OpenXcom
 {
 
+class Ruleset;
+
 /**
  * Represents the information needed to manufacture an object.
  */
