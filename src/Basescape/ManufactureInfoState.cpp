@@ -228,6 +228,7 @@ void ManufactureInfoState::btnStopClick (Action *)
  */
 void ManufactureInfoState::btnOkClick (Action *)
 {
+	if (0 == _production->getAmountTotal()) return; // Do not allow to start a project with zero units to produce!
 	if(_item)
 	{
 		_production->startItem(_base, _game->getSavedGame());
