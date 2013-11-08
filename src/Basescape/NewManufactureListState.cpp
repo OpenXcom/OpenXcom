@@ -123,8 +123,7 @@ void NewManufactureListState::btnOkClick(Action *)
 void NewManufactureListState::lstProdClick (Action *)
 {
 	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
-	int cc = rule->getCraftCount(_game->getRuleset());
-	if (0 < cc && _base->getAvailableHangars() < _base->getUsedHangars() + cc)
+	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}

@@ -372,11 +372,7 @@ void ManufactureInfoState::lessEngineerClick(Action * action)
 void ManufactureInfoState::moreUnit(int change)
 {
 	if (0 >= change) return;
-	int cc = _production->getRules()->getCraftCount(_game->getRuleset());
-	int freeHangars = 0;
-	// (0 < cc) means completing one "item" of this project results at least one craft!
-	if (0 < cc) freeHangars = _base->getAvailableHangars() - _base->getUsedHangars();
-	if (0 < cc && freeHangars < cc)
+	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_timerMoreUnit->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
@@ -385,7 +381,8 @@ void ManufactureInfoState::moreUnit(int change)
 	{
 		int units = _production->getAmountTotal();
 		change = std::min(std::numeric_limits<int>::max()-units, change);
-		if (0 < cc) change = std::min(freeHangars/cc, change);
+		if (_production->getRules()->getCategory() == "STR_CRAFT")
+			change = std::min(_base->getAvailableHangars() - _base->getUsedHangars(), change);
 		_production->setAmountTotal(units+change);
 		setAssignedEngineer();
 	}

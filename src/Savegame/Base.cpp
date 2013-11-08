@@ -666,10 +666,9 @@ int Base::getUsedHangars() const
 	}
 	for (std::vector<Production*>::const_iterator i = _productions.begin(); i != _productions.end(); ++i)
 	{
-		int cc = (*i)->getRules()->getCraftCount(_rule);
-		if (0 < cc)
+		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
 		{
-			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced()) * cc;
+			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
 		}
 	}
 	return total;

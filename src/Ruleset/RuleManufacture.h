@@ -63,8 +63,6 @@ public:
 	const std::map<std::string, int> & getProducedItems() const;
 	/// Gets the list weight for this manufacture item.
 	int getListOrder() const;
-	/// Gets the count of the crafts resulted by completing one "item" of the manufacture-project.
-	int getCraftCount(const Ruleset *r) const;
 };
 
 }
