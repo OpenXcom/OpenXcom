@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1), _threadGeo(0), _threadBattle(0)
+SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1), _threadGeo(0), _threadBattle(0)
 {
 	// Start asynchronous save
 	if (boost::thread::hardware_concurrency() != 1)
@@ -109,7 +109,7 @@ void SaveState::updateList()
 {
 	_lstSaves->clearList();
 	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
-	_saves = SavedGame::getList(_lstSaves, _game->getLanguage());
+	_saves = SavedGame::getList(_lstSaves, _game->getLanguage(), &_details);
 }
 
 /**

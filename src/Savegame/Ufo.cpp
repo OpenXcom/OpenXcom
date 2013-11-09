@@ -17,6 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ufo.h"
+#include <assert.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <sstream>
+#include <algorithm>
+#include "../aresame.h"
 #include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
@@ -26,12 +32,6 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
-#include "../aresame.h"
-#include <assert.h>
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <sstream>
-#include <algorithm>
 
 namespace OpenXcom
 {
