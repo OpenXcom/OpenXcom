@@ -116,7 +116,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtDetails->setText(L"");
+	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 }
 
 /**
@@ -191,7 +191,7 @@ void SavedGameState::init()
 void SavedGameState::updateList()
 {
 	_lstSaves->clearList();
-	_saves = SavedGame::getList(_lstSaves, _game->getLanguage());
+	_saves = SavedGame::getList(_lstSaves, _game->getLanguage(), &_details);
 }
 
 /**
@@ -217,38 +217,17 @@ void SavedGameState::btnCancelClick(Action *)
 void SavedGameState::lstSavesMouseOver(Action *)
 {
 	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
-	if (0 > sel)
+	std::wstring wstr;
+	if (sel >= 0 && sel < _saves.size())
 	{
-		_txtDetails->setText(L"");
-		return;
-	}
-	std::string fullname = Options::getUserFolder() + _saves[sel];
-	std::wstring wstr=L"";
-	try
-	{
-		YAML::Node doc = YAML::LoadFile(fullname);
-		if (doc["turn"])
-		{
-			wstr = tr("STR_BATTLESCAPE"); wstr += L": ";
-			wstr += tr(doc["mission"].as<std::string>()); wstr += L", ";
-			wstr += tr("STR_TURN").arg(Language::utf8ToWstr(doc["turn"].as<std::string>()));
-		}
-		else wstr = tr("STR_GEOSCAPE");
-	}
-	catch (Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-	}
-	catch (YAML::Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
+		wstr = _details[sel];
 	}
 	_txtDetails->setText(tr("STR_DETAILS").arg(wstr));
 }
 
 void SavedGameState::lstSavesMouseOut(Action *)
 {
-	_txtDetails->setText(L"");
+	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 }
 
 }

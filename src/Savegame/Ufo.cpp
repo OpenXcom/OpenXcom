@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-// this MUST be the first line:
-#define _USE_MATH_DEFINES
-
 #include "Ufo.h"
+#include <assert.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <sstream>
+#include <algorithm>
+#include "../aresame.h"
 #include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
@@ -30,11 +32,6 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
-#include "../aresame.h"
-#include <assert.h>
-#include <cmath>
-#include <sstream>
-#include <algorithm>
 
 namespace OpenXcom
 {
