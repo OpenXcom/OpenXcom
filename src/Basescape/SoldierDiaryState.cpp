@@ -19,7 +19,8 @@
 #include "SoldierDiaryState.h"
 #include "SoldierInfoState.h"
 #include "SoldierDiaryInfoState.h"
-#include "SoldierDiaryTotalsState.h"
+#include "SoldierDiaryKillsState.h"
+#include "SoldierDiaryMissionsState.h"
 #include <string>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -50,12 +51,13 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(96, 16, 216, 176);
-	_btnTotals = new TextButton(96, 16, 8, 176);
+	_btnKills = new TextButton(96, 16, 8, 176);
+	_btnMissions = new TextButton(96, 16, 112, 176);
 	_btnPrev = new TextButton(28, 14, 8, 8);
 	_btnNext = new TextButton(28, 14, 284, 8);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtLocation = new Text(114, 9, 16, 36);
-	_txtStatus = new Text(102, 9, 130, 36);
+	_txtStatus = new Text(102, 9, 120, 36);
 	_txtDate = new Text(90, 9, 218, 36);
 	_lstDiary= new TextList(288, 120, 8, 44);
 
@@ -64,7 +66,8 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 
 	add(_window);
 	add(_btnOk);
-	add(_btnTotals);
+	add(_btnKills);
+	add(_btnMissions);
 	add(_btnPrev);
 	add(_btnNext); 
 	add(_txtTitle);
@@ -84,9 +87,13 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnTotals->setColor(Palette::blockOffset(13)+10);
-	_btnTotals->setText(tr("STR_TOTALS"));
-	_btnTotals->onMouseClick((ActionHandler)&SoldierDiaryState::btnTotalsClick);
+	_btnKills->setColor(Palette::blockOffset(13)+10);
+	_btnKills->setText(tr("STR_TOTAL_KILLS"));
+	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryState::btnKillsClick);
+	
+	_btnMissions->setColor(Palette::blockOffset(13)+10);
+	_btnMissions->setText(tr("STR_TOTAL_MISSIONS"));
+	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryState::btnMissionsClick);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
@@ -204,10 +211,20 @@ void SoldierDiaryState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierDiaryState::btnTotalsClick(Action *)
+void SoldierDiaryState::btnKillsClick(Action *)
 {
-	_game->pushState(new SoldierDiaryTotalsState(_game, _base, _soldier, this));
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this));
 }
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void SoldierDiaryState::btnMissionsClick(Action *)
+{
+	_game->pushState(new SoldierDiaryMissionsState(_game, _base, _soldier, this));
+}
+
 
 /**
  * Goes to the previous soldier.

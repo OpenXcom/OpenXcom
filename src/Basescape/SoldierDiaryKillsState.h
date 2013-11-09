@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SOLDIERDIARYSTOTALSSTATE_H
-#define OPENXCOM_SOLDIERDIARYSTOTALSSTATE_H
+#ifndef OPENXCOM_SOLDIERDIARYKILLSSTATE_H
+#define OPENXCOM_SOLDIERDIARYKILLSSTATE_H
 
 #include "../Engine/State.h"
 
@@ -29,12 +29,12 @@ class Window;
 class Text;
 class TextList;
 class Base;
+class SoldierDiaryState;
 
 /**
- * Medals screen that lets the player
- * see all the medals a soldier has.
+ * Diary screen that lists totals.
  */
-class SoldierDiaryTotalsState : public State
+class SoldierDiaryKillsState : public State
 {
 private:
 	Base *_base;
@@ -43,14 +43,14 @@ private:
 
 	TextButton *_btnOk, *_btnPrev, *_btnNext;
 	Window *_window;
-	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon, *_txtUFO;
-	TextList *_lstRank, *_lstRace, *_lstWeapon, *_lstUFO;
+	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon;
+	TextList *_lstRank, *_lstRace, *_lstWeapon;
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryTotalsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState);
+	SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState);
 	/// Cleans up the Soldiers state.
-	~SoldierDiaryTotalsState();
+	~SoldierDiaryKillsState();
 	/// Updates the soldier info.
 	void init();
 	/// Handler for clicking the OK button.

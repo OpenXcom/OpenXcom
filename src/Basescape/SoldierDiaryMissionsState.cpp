@@ -18,7 +18,7 @@
  */
 #include "SoldierDiaryState.h"
 #include "SoldierInfoState.h"
-#include "SoldierDiaryTotalsState.h"
+#include "SoldierDiaryMissionsState.h"
 #include <string>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -44,7 +44,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryTotalsState::SoldierDiaryTotalsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState) : State(game), _base(base), _soldier(soldier), _soldierDiaryState(soldierDiaryState)
+SoldierDiaryMissionsState::SoldierDiaryMissionsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState) : State(game), _base(base), _soldier(soldier), _soldierDiaryState(soldierDiaryState)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -52,14 +52,12 @@ SoldierDiaryTotalsState::SoldierDiaryTotalsState(Game *game, Base *base, size_t 
 	_btnPrev = new TextButton(28, 14, 8, 8);
 	_btnNext = new TextButton(28, 14, 284, 8);
 	_txtTitle = new Text(310, 16, 5, 8);
-	_txtRace = new Text(76, 9, 8, 24);
-	_txtRank = new Text(76, 9, 84, 24);
-	_txtWeapon = new Text(76, 9, 160, 24);
-	_txtUFO = new Text(76, 9, 236, 24);
-	_lstRace = new TextList(76, 140, 8, 33);
-	_lstRank = new TextList(76, 140, 84, 33);
-	_lstWeapon = new TextList(76, 140, 160, 33);
-	_lstUFO = new TextList(76, 140, 236, 33);
+	_txtLocation = new Text(76, 9, 16, 36);
+	_txtType = new Text(76, 9, 104, 36);
+	_txtUFO = new Text(76, 9, 222, 36);
+	_lstLocation = new TextList(90, 140, 16, 44);
+	_lstType = new TextList(110, 140, 104, 44);
+	_lstUFO = new TextList(90, 140, 222, 44);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -69,13 +67,11 @@ SoldierDiaryTotalsState::SoldierDiaryTotalsState(Game *game, Base *base, size_t 
 	add(_btnPrev);
 	add(_btnNext); 
 	add(_txtTitle);
-	add(_txtRace);
-	add(_txtRank);
-	add(_txtWeapon);
+	add(_txtLocation);
+	add(_txtType);
 	add(_txtUFO);
-	add(_lstRace);
-	add(_lstRank);
-	add(_lstWeapon);
+	add(_lstLocation);
+	add(_lstType);
 	add(_lstUFO);
 
 	centerAllSurfaces();
@@ -86,53 +82,48 @@ SoldierDiaryTotalsState::SoldierDiaryTotalsState(Game *game, Base *base, size_t 
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryTotalsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryTotalsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryMissionsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryMissionsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
-	_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryTotalsState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryMissionsState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
-	_btnNext->onMouseClick((ActionHandler)&SoldierDiaryTotalsState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler)&SoldierDiaryMissionsState::btnNextClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	// Text is decided in init()
 
-	_txtRace->setColor(Palette::blockOffset(15)+1);
-	_txtRace->setText(tr("STR_RACE"));
+	_txtLocation->setColor(Palette::blockOffset(15)+1);
+	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
 
-	_txtRank->setColor(Palette::blockOffset(15)+1);
-	_txtRank->setText(tr("STR_RANK"));
-
-	_txtWeapon->setColor(Palette::blockOffset(15)+1);
-	_txtWeapon->setText(tr("STR_WEAPON"));
+	_txtType->setColor(Palette::blockOffset(15)+1);
+	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
 
 	_txtUFO->setColor(Palette::blockOffset(15)+1);
-	_txtUFO->setText(tr("STR_UFO"));
+	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
 
-	_lstRace->setColor(Palette::blockOffset(13)+10);
-	_lstRace->setArrowColor(Palette::blockOffset(15)+1);
-	_lstRace->setColumns(2, 66, 6);
-	_lstRace->setBackground(_window);
+	_lstLocation->setColor(Palette::blockOffset(13)+10);
+	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
+	_lstLocation->setColumns(2, 70, 10);
+	_lstLocation->setBackground(_window);
+	_lstLocation->setDot(true);
 
-	_lstRank->setColor(Palette::blockOffset(13)+10);
-	_lstRank->setArrowColor(Palette::blockOffset(15)+1);
-	_lstRank->setColumns(2, 66, 6);
-	_lstRank->setBackground(_window);
-
-	_lstWeapon->setColor(Palette::blockOffset(13)+10);
-	_lstWeapon->setArrowColor(Palette::blockOffset(15)+1);
-	_lstWeapon->setColumns(2, 66, 6);
-	_lstWeapon->setBackground(_window);
+	_lstType->setColor(Palette::blockOffset(13)+10);
+	_lstType->setArrowColor(Palette::blockOffset(15)+1);
+	_lstType->setColumns(2, 100, 10);
+	_lstType->setBackground(_window);
+	_lstType->setDot(true);
 
 	_lstUFO->setColor(Palette::blockOffset(13)+10);
 	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
-	_lstUFO->setColumns(2, 66, 6);
+	_lstUFO->setColumns(2, 70, 10);
 	_lstUFO->setBackground(_window);
+	_lstUFO->setDot(true);
 
 	init(); // Populate the list
 }
@@ -140,7 +131,7 @@ SoldierDiaryTotalsState::SoldierDiaryTotalsState(Game *game, Base *base, size_t 
 /**
  *
  */
-SoldierDiaryTotalsState::~SoldierDiaryTotalsState()
+SoldierDiaryMissionsState::~SoldierDiaryMissionsState()
 {
 
 }
@@ -149,45 +140,33 @@ SoldierDiaryTotalsState::~SoldierDiaryTotalsState()
  *  Clears all the variables and reinitializes the list of medals for the soldier.
  *
  */
-void SoldierDiaryTotalsState::init()
+void SoldierDiaryMissionsState::init()
 {
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_txtTitle->setText(s->getName());
-	_lstRace->clearList();
-	_lstRank->clearList();
-	_lstWeapon->clearList();
+	_lstLocation->clearList();
+	_lstType->clearList();
 	_lstUFO->clearList();
-	std::map<std::string, int> _raceTotals = s->getDiary()->getAlienRaceTotal();
-	std::map<std::string, int> _rankTotals = s->getDiary()->getAlienRankTotal();
-	std::map<std::string, int> _weaponTotals = s->getDiary()->getWeaponTotal();
+	std::map<std::string, int> _locationTotals = s->getDiary()->getRegionTotal();
+	std::map<std::string, int> _typeTotals = s->getDiary()->getTypeTotal();
 	std::map<std::string, int> _UFOTotals = s->getDiary()->getUFOTotal();
-	// int _scoreTotal = s->getDiary()->getScoreTotal();
 
-	for (std::map<std::string, int>::const_iterator i = _raceTotals.begin() ; i != _raceTotals.end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _locationTotals.begin() ; i != _locationTotals.end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
 		ss1 << tr((*i).first.c_str());
 		ss2 << (*i).second;
-		_lstRace->addRow(2, ss1.str().c_str(), ss2.str().c_str());
+		_lstLocation->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
-	for (std::map<std::string, int>::const_iterator i = _rankTotals.begin() ; i != _rankTotals.end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _typeTotals.begin() ; i != _typeTotals.end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
 		ss1 << tr((*i).first.c_str());
 		ss2 << (*i).second;
-		_lstRank->addRow(2, ss1.str().c_str(), ss2.str().c_str());
-	}
-
-	for (std::map<std::string, int>::const_iterator i = _weaponTotals.begin() ; i != _weaponTotals.end() ; ++i)
-	{
-		std::wstringstream ss1, ss2;
-
-		ss1 << tr((*i).first.c_str());
-		ss2 << (*i).second;
-		_lstWeapon->addRow(2, ss1.str().c_str(), ss2.str().c_str());
+		_lstType->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
 	for (std::map<std::string, int>::const_iterator i = _UFOTotals.begin() ; i != _UFOTotals.end() ; ++i)
@@ -199,14 +178,13 @@ void SoldierDiaryTotalsState::init()
 		ss2 << (*i).second;
 		_lstUFO->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierDiaryTotalsState::btnOkClick(Action *)
+void SoldierDiaryMissionsState::btnOkClick(Action *)
 {
 	_soldierDiaryState->setSoldierId(_soldier);
 	_game->popState();
@@ -216,7 +194,7 @@ void SoldierDiaryTotalsState::btnOkClick(Action *)
  * Goes to the previous soldier.
  * @param action Pointer to an action.
  */
-void SoldierDiaryTotalsState::btnPrevClick(Action *)
+void SoldierDiaryMissionsState::btnPrevClick(Action *)
 {
 	if (_soldier == 0)
 		_soldier = _base->getSoldiers()->size() - 1;
@@ -229,7 +207,7 @@ void SoldierDiaryTotalsState::btnPrevClick(Action *)
  * Goes to the next soldier.
  * @param action Pointer to an action.
  */
-void SoldierDiaryTotalsState::btnNextClick(Action *)
+void SoldierDiaryMissionsState::btnNextClick(Action *)
 {
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())

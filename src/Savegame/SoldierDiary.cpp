@@ -329,8 +329,14 @@ std::string SoldierDiaryEntries::getMissionCountry() const
 /**
  *
  */
-std::string SoldierDiaryEntries::getMissionType() const
+std::string SoldierDiaryEntries::getMissionType()
 {
+	if		(_missionType == "STR_UFO_CRASH_RECOVERY")	_missionType = "STR_UFO_CRASH_RECOVERY_LC";
+	else if (_missionType == "STR_UFO_GROUND_ASSAULT")	_missionType = "STR_UFO_GROUND_ASSAULT_LC";
+	else if (_missionType == "STR_BASE_DEFENSE")		_missionType = "STR_BASE_DEFENSE_LC";
+	else if (_missionType == "STR_ALIEN_BASE_ASSAULT")	_missionType = "STR_ALIEN_BASE_ASSAULT_LC";
+	else if (_missionType == "STR_TERROR_MISSION")		_missionType = "STR_TERROR_MISSION_LC";
+
 	return _missionType;
 }
 

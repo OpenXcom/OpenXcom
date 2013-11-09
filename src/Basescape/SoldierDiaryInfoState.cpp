@@ -55,9 +55,9 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	_txtScore = new Text(222, 9, 49, 66);
 	_txtMissionType= new Text(222, 9, 49, 75);
 	_txtUFO = new Text(222, 9, 49, 84);
-	_txtKills = new Text(130, 9, 179, 66);
-	_txtRace = new Text(130, 9, 179, 75);
-	_txtDaylight = new Text(130, 9, 179, 84);
+	_txtKills = new Text(130, 9, 187, 66);
+	_txtRace = new Text(130, 9, 187, 75);
+	_txtDaylight = new Text(130, 9, 187, 84);
 	_lstKills = new TextList(222, 36, 49, 97);
 
 	// Set palette
@@ -98,22 +98,27 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	std::string _missionRace = _soldierDiaryEntries[_rowEntry]->getMissionRace();
 
 	_txtScore->setColor(Palette::blockOffset(13)+5);
+	_txtScore->setSecondaryColor(Palette::blockOffset(13));
 	_txtScore->setAlign(ALIGN_LEFT);
 	_txtScore->setText(tr("STR_SCORE_VALUE").arg(_score));
 
 	_txtKills->setColor(Palette::blockOffset(13)+5);
+	_txtKills->setSecondaryColor(Palette::blockOffset(13));
 	_txtKills->setAlign(ALIGN_LEFT);
 	_txtKills->setText(tr("STR_KILLS").arg(_kills));
 
 	_txtMissionType->setColor(Palette::blockOffset(13)+5);
+	_txtMissionType->setSecondaryColor(Palette::blockOffset(13));
 	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(_missionType)));
 
 	_txtUFO->setColor(Palette::blockOffset(13)+5);
+	_txtUFO->setSecondaryColor(Palette::blockOffset(13));
 	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(_UFO)));
 	_txtUFO->setVisible(true);
 	if (_UFO == "NO_UFO") _txtUFO->setVisible(false);
 
 	_txtRace->setColor(Palette::blockOffset(13)+5);
+	_txtRace->setSecondaryColor(Palette::blockOffset(13));
 	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(_missionRace)));
 	_txtRace->setVisible(true);
 	if (_missionRace == "STR_UNKNOWN") _txtUFO->setVisible(false);
@@ -121,11 +126,19 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	int _time = _soldierDiaryEntries[_rowEntry]->getMissionDaylight();
 
 	_txtDaylight->setColor(Palette::blockOffset(13)+5);
-	_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(_time));
+	_txtDaylight->setSecondaryColor(Palette::blockOffset(13));
+	if (_time == 0)
+	{
+		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
+	}
+	else
+	{
+		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_NIGHT")));
+	}
 
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
-	_lstKills->setColumns(3, 50, 80, 80);
+	_lstKills->setColumns(3, 40, 90, 80);
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
 	_lstKills->setMargin(8);

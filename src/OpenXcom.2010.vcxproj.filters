@@ -806,7 +806,8 @@
     <ClCompile Include="Basescape\SoldierDiaryState.cpp" />
     <ClCompile Include="Savegame\SoldierDiary.cpp" />
     <ClCompile Include="Savegame\SoldierRecords.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryTotalsState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryKillsState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryMissionsState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basescape\ManufactureState.h">
@@ -1634,7 +1635,8 @@
     <ClInclude Include="Basescape\SoldierDiaryState.h" />
     <ClInclude Include="Savegame\SoldierDiary.h" />
     <ClInclude Include="Savegame\SoldierRecords.h" />
-    <ClInclude Include="Basescape\SoldierDiaryTotalsState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryKillsState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryMissionsState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

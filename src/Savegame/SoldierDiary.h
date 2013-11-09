@@ -104,7 +104,7 @@ public:
 	/// Get
 	std::string getMissionCountry() const;
 	/// Get
-	std::string getMissionType() const;
+	std::string getMissionType();
 	/// Get
 	std::string getMissionUFO() const;
 	/// Get
