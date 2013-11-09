@@ -604,14 +604,15 @@ void AlienBAIState::setupAmbush()
 				// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 				Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
 			Position currentPos = _aggroTarget->getPosition();
-			int dir = path.back();
-			path.pop_back();
+			_save->getPathfinding()->setUnit(_aggroTarget);
 			Position nextPos;
+			size_t tries = path.size();
 			// hypothetically walk the target through the path.
-			while (path.size())
+			while (tries > 0)
 			{
-				_save->getPathfinding()->directionToVector(dir, &nextPos);
-				currentPos += nextPos;
+				_save->getPathfinding()->getTUCost(currentPos, path.back(), &nextPos, _aggroTarget, 0, false);
+				path.pop_back();
+				currentPos = nextPos;
 				Tile *tile = _save->getTile(currentPos);
 				Position target;
 				// do a virtual fire calculation
@@ -621,8 +622,7 @@ void AlienBAIState::setupAmbush()
 					_ambushAction->finalFacing = _save->getTileEngine()->getDirectionTo(_ambushAction->target, currentPos);
 					break;
 				}
-				dir = path.back();
-				path.pop_back();
+				--tries;
 			}
 			if (_traceAI)
 			{

@@ -1,48 +1,131 @@
 lookWeight:
+  - 2
+  - 3
+  - 94
   - 1
-  - 1
-  - 92
-  - 6
 maleFirst:
   - Akinori
+  - Akira
+  - Daisuke
+  - Hachiro
+  - Hayate
+  - Hibiki
+  - Hideo
+  - Ichiro
+  - Isamu
   - Isao
   - Jungo
+  - Katsuo
   - Kenji
   - Masaharu
   - Masanori
   - Naohiro
+  - Ren
+  - Ryo
+  - Saburo
   - Shigeo
   - Shigeru
+  - Shin
+  - Shinobu
   - Shuji
+  - Shun
+  - Takashi
   - Tatsuo
   - Toshio
   - Yasuaki
   - Yataka
+  - Yoshiro
   - Yuzo
 femaleFirst:
+  - Aiko
+  - Akane
+  - Ayako
+  - Fuyuko
+  - Haruko
+  - Hitomi
+  - Junko
+  - Kokoro
+  - Mako
   - Mariko
   - Michiko
+  - Midori
+  - Misato
+  - Mitsuko
+  - Miu
+  - Miyako
+  - Naomi
+  - Natsumi
+  - Reiko
+  - Sakiko
   - Sata
+  - Sayoko
+  - Shun
   - Sumie
+  - Tsukiko
+  - Ume
   - Yoko
+  - Yoshi
+  - Yumiko
+  - Yuriko
 maleLast:
-  - Akira
+  - Abe
+  - Chiba
+  - Eguchi
   - Fujimoto
+  - Fujita
+  - Fujiwara
+  - Hasegawa
+  - Hashimoto
+  - Hirano
+  - Ikeda
   - Ishii
+  - Ito
   - Iwahara
   - Iwasaki
+  - Kato
+  - Kawakami
+  - Kikuchi
+  - Kimura
+  - Kobayashi
   - Kojima
+  - Kondo
   - Koyama
-  - Matsumara
+  - Masuda
+  - Matsuda
+  - Matsui
+  - Matsumura
+  - Matsushita
+  - Minase
+  - Miyamoto
+  - Miyazaki
+  - Mori
   - Morita
+  - Musashi
+  - Nakajima
+  - Nakamura
+  - Nakano
   - Noguchi
+  - Ogawa
   - Okabe
   - Okamoto
+  - Ono
+  - Saito
   - Sato
+  - Shibata
+  - Shimada
   - Shimaoka
+  - Shizuma
   - Shoji
+  - Suzuki
+  - Takahashi
+  - Tanaka
   - Tanida
   - Tanikawa
+  - Uchida
+  - Ueda
+  - Ukita
+  - Watanabe
   - Yamanaka
   - Yamashita
   - Yamazaki
+  - Yoshimiya

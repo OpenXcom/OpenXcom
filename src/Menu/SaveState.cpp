@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
 	_edtSave = new TextEdit(168, 9, 0, 0);
@@ -63,7 +63,7 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
+SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, 1, showMsg)
 {
 	game->getSavedGame()->setName(L"autosave");
 	quickSave("autosave");

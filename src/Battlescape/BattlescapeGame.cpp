@@ -583,11 +583,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					}
 				}
 			}
-			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
-			{
-				(*j)->setSpecialAbility(SPECAB_NONE);
-				convertUnit((*j), (*j)->getSpawnUnit());
-			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
@@ -1274,7 +1269,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						if (_currentAction.type == BA_PANIC)
 						{
 							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
-							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
@@ -1438,6 +1433,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 	if (player)
 	{
 		_playerTUReserved = tur;
+		_save->setTUReserved(tur);
 	}
 }
 
@@ -1511,9 +1507,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		std::wstringstream ss;
-		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender());
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
 	}
 
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
@@ -1984,6 +1978,7 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
 	_kneelReserved = reserved;
+	_save->setKneelReserved(reserved);
 }
 
 /**

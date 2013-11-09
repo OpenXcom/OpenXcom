@@ -168,8 +168,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug = new Text(300, 10, 20, 0);
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
-	_reserve = _btnReserveNone;
-
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
@@ -498,13 +496,39 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
+	// Update reserve settings
+	_battleGame->setTUReserved(_save->getTUReserved(), true);
+	switch (_save->getTUReserved())
+	{
+	case BA_SNAPSHOT:
+		_reserve = _btnReserveSnap;
+		break;
+	case BA_AIMEDSHOT:
+		_reserve = _btnReserveAimed;
+		break;
+	case BA_AUTOSHOT:
+		_reserve = _btnReserveAuto;
+		break;
+	default:
+		_reserve = _btnReserveNone;
+		break;
+	}
 	if (firstInit && playableUnitSelected())
 	{
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
+		_btnReserveNone->setGroup(&_reserve);
+		_btnReserveSnap->setGroup(&_reserve);
+		_btnReserveAimed->setGroup(&_reserve);
+		_btnReserveAuto->setGroup(&_reserve);
 	}
 	_txtTooltip->setText(L"");
+	if (_save->getKneelReserved())
+	{
+		_btnReserveKneel->invert(0);
+	}
+	_battleGame->setKneelReserved(_save->getKneelReserved());
 }
 
 /**
@@ -1906,7 +1930,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
-		_btnKneel->invert(0);
+		_btnReserveKneel->invert(0);
 	}
 }
 
