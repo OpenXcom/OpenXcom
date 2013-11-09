@@ -201,7 +201,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if (unit->getId() == selectedUnit)
 				_selectedUnit = unit;
-			
+
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
@@ -759,32 +759,16 @@ int SavedBattleGame::getTurn() const
  */
 void SavedBattleGame::endTurn()
 {
-	if (_side == FACTION_PLAYER)
+	switch(_side)
 	{
-		if (_selectedUnit && _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
-			_lastSelectedUnit = _selectedUnit;
-		_side = FACTION_HOSTILE;
-	}
-	else if (_side == FACTION_HOSTILE)
-	{
+	case FACTION_HOSTILE:
 		_side = FACTION_NEUTRAL;
-		// if there is no neutral team, we skip this and instantly prepare the new turn for the player
-		if (selectNextPlayerUnit() == 0)
+		if (selectNextPlayerUnit())
 		{
-			prepareNewTurn();
-			_turn++;
-			_side = FACTION_PLAYER;
-			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
-				_selectedUnit = _lastSelectedUnit;
-			else
-				selectNextPlayerUnit();
-			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
-				selectNextPlayerUnit();
+			// there is a neutral team
+			break;
 		}
-
-	}
-	else if (_side == FACTION_NEUTRAL)
-	{
+	case FACTION_NEUTRAL:
 		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
@@ -794,7 +778,14 @@ void SavedBattleGame::endTurn()
 			selectNextPlayerUnit();
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
+		break;
+	case FACTION_PLAYER:
+		if (_selectedUnit && _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
+			_lastSelectedUnit = _selectedUnit;
+		_side = FACTION_HOSTILE;
+		break;
 	}
+
 	int liveSoldiers, liveAliens;
 
 	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
