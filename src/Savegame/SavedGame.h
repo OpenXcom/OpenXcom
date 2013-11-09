@@ -98,12 +98,12 @@ public:
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML file.
 	void save(const std::string &filename, const YAML::Emitter &emGeo, const YAML::Emitter &emBattle) const;
-	/// Saves the brief game info to a YAML emitter.
-	void saveBrief(YAML::Emitter &out) const;
-	/// Saves the GeoScape game info to a YAML emitter.
-	void saveGeo(YAML::Emitter &out) const;
-	/// Saves the BattleScape game info to a YAML emitter.
-	void saveBattle(YAML::Emitter &out) const;
+	/// Saves the brief game info to a YAML node.
+	void saveBrief(YAML::Node &node) const;
+	/// Saves the GeoScape game info to a YAML node.
+	void saveGeo(YAML::Node &node) const;
+	/// Saves the BattleScape game info to a YAML node.
+	void saveBattle(YAML::Node &node) const;
 	/// Gets the game name.
 	std::wstring getName() const;
 	/// Sets the game name.

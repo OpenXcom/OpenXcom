@@ -22,7 +22,6 @@
 #include <iomanip>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
-#include <boost/thread.hpp>
 #include "../version.h"
 #include "../Engine/Logger.h"
 #include "../Ruleset/Ruleset.h"
@@ -361,7 +360,11 @@ void SavedGame::save(const std::string &filename, const YAML::Emitter &emGeo, co
 	}
 
 	YAML::Emitter out;
-	saveBrief(out);
+	YAML::Node brief;
+
+	saveBrief(brief);
+	out << brief << YAML::BeginDoc;
+
 	sav << out.c_str() << emGeo.c_str();
 	if (emBattle.size() > 0)
 	{
@@ -371,12 +374,11 @@ void SavedGame::save(const std::string &filename, const YAML::Emitter &emGeo, co
 }
 
 /**
- * Saves the brief game info into YAML emitter.
- * @param out YAML emitter.
+ * Saves the brief game info into YAML node.
+ * @param brief a YAML node.
  */
-void SavedGame::saveBrief(YAML::Emitter &out) const
+void SavedGame::saveBrief(YAML::Node &brief) const
 {
-	YAML::Node brief;
 	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	brief["build"] = OPENXCOM_VERSION_GIT;
@@ -386,18 +388,14 @@ void SavedGame::saveBrief(YAML::Emitter &out) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
-
-	out << brief;
-	out << YAML::BeginDoc;
 }
 
 /**
- * Saves the GeoScape game info into YAML emitter.
- * @param out YAML emitter.
+ * Saves the GeoScape game info into YAML node.
+ * @param node a YAML node.
  */
-void SavedGame::saveGeo(YAML::Emitter &out) const
+void SavedGame::saveGeo(YAML::Node &node) const
 {
-	YAML::Node node;
 	node["difficulty"] = (int)_difficulty;
 	node["monthsPassed"] = _monthsPassed;
 	node["radarLines"] = _radarLines;
@@ -462,24 +460,16 @@ void SavedGame::saveGeo(YAML::Emitter &out) const
 	{
 		node["deadSoldiers"].push_back((*i)->save());
 	}
-
-	boost::this_thread::interruption_requested();
-	out << node;
 }
 
 /**
- * Saves the BattleScape game info into YAML emitter.
- * @param out YAML emitter.
+ * Saves the BattleScape game info into YAML node.
+ * @param node a YAML node.
  */
-void SavedGame::saveBattle(YAML::Emitter &out) const
+void SavedGame::saveBattle(YAML::Node &node) const
 {
-	if (_battleGame == 0) return;
-
-	YAML::Node node;
+//	if (_battleGame == 0) return;
 	node["battleGame"] = _battleGame->save();
-
-	boost::this_thread::interruption_requested();
-	out << node;
 }
 
 /**

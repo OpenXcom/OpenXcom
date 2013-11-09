@@ -45,9 +45,9 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 	// Start asynchronous save
 	if (boost::thread::hardware_concurrency() != 1)
 	{
-		_threadGeo = new boost::thread(asyncSaveGeo, game, boost::ref(_emGeo));
-		if (game->getSavedGame()->getSavedBattle() != 0)
-			_threadBattle = new boost::thread(asyncSaveBattle, game, boost::ref(_emBattle));
+		_threadGeo = new boost::thread(asyncSaveGeo, _game, boost::ref(_emGeo));
+		if (_game->getSavedGame()->getSavedBattle() != 0)
+			_threadBattle = new boost::thread(asyncSaveBattle, _game, boost::ref(_emBattle));
 	}
 
 	// Create objects
@@ -77,9 +77,9 @@ SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGame
 
 	if (boost::thread::hardware_concurrency() != 1)
 	{
-		_threadGeo = new boost::thread(asyncSaveGeo, game, boost::ref(_emGeo));
-		if (game->getSavedGame()->getSavedBattle() != 0)
-			_threadBattle = new boost::thread(asyncSaveBattle, game, boost::ref(_emBattle));
+		_threadGeo = new boost::thread(asyncSaveGeo, _game, boost::ref(_emGeo));
+		if (_game->getSavedGame()->getSavedBattle() != 0)
+			_threadBattle = new boost::thread(asyncSaveBattle, _game, boost::ref(_emBattle));
 	}
 
 	game->getSavedGame()->setName(L"autosave");
@@ -232,8 +232,12 @@ void SaveState::quickSave(const std::string &filename)
 		}
 		else
 		{
-			_game->getSavedGame()->saveGeo(_emGeo);
-			_game->getSavedGame()->saveBattle(_emBattle);
+			// One core system
+			asyncSaveGeo(_game, _emGeo);
+			if (_game->getSavedGame()->getSavedBattle() != 0)
+			{
+				asyncSaveBattle(_game, _emBattle);
+			}
 		}
 		_game->getSavedGame()->save(filename, _emGeo, _emBattle);
 		CrossPlatform::deleteFile(bakPath);
@@ -267,7 +271,11 @@ void SaveState::quickSave(const std::string &filename)
  */
 void SaveState::asyncSaveGeo(Game *game, YAML::Emitter &emGeo)
 {
-	game->getSavedGame()->saveGeo(emGeo);
+	YAML::Node node;
+	game->getSavedGame()->saveGeo(node);
+
+	boost::this_thread::interruption_requested();
+	emGeo << node;
 }
 
 /**
@@ -277,7 +285,12 @@ void SaveState::asyncSaveGeo(Game *game, YAML::Emitter &emGeo)
  */
 void SaveState::asyncSaveBattle(Game *game, YAML::Emitter &emBattle)
 {
-	game->getSavedGame()->saveBattle(emBattle);
+	YAML::Node node;
+	game->getSavedGame()->saveBattle(node);
+
+	boost::this_thread::interruption_requested();
+	emBattle << node;
 }
+
 
 }

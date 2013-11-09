@@ -38,8 +38,8 @@ private:
 	TextEdit *_edtSave;
 	std::wstring _selected;
 	int _previousSelectedRow, _selectedRow;
-	YAML::Emitter _emGeo, _emBattle;
 	boost::thread *_threadGeo, *_threadBattle;
+	YAML::Emitter _emGeo, _emBattle;
 public:
 	/// Creates the Save Game state.
 	SaveState(Game *game, OptionsOrigin origin);
