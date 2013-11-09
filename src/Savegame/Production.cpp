@@ -25,6 +25,7 @@
 #include "CraftWeapon.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Options.h"
 #include <limits>
@@ -90,35 +91,50 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		int count = 0;
 		do
 		{
-			if (_rules->getCategory() == "STR_CRAFT")
+			for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
 			{
-				Craft *craft = new Craft(r->getCraft(_rules->getName()), b, g->getId(_rules->getName()));
-				craft->setStatus("STR_REFUELLING");
-				b->getCrafts()->push_back(craft);
-			}
-			else
-			{
-				// Check if it's ammo to reload a craft
-				if (r->getItem(_rules->getName())->getBattleType() == BT_NONE)
+				if (_rules->getCategory() == "STR_CRAFT")
 				{
-					for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+					Craft *craft = new Craft(r->getCraft(i->first), b, g->getId(i->first));
+					craft->setStatus("STR_REFUELLING");
+					b->getCrafts()->push_back(craft);
+					break;
+				}
+				else
+				{
+					// Check if it's ammo to reload a craft
+					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
-						if ((*c)->getStatus() != "STR_READY")
-							continue;
-						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 						{
-							if ((*w) != 0 && (*w)->getRules()->getClipItem() == _rules->getName() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							if ((*c)->getStatus() != "STR_READY")
+								continue;
+							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 							{
-								(*w)->setRearming(true);
-								(*c)->setStatus("STR_REARMING");
+								if ((*w) != 0 && (*w)->getRules()->getClipItem() == i->first && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+								{
+									(*w)->setRearming(true);
+									(*c)->setStatus("STR_REARMING");
+								}
 							}
 						}
 					}
+					// Check if it's fuel to refuel a craft
+					if (r->getItem(i->first)->getBattleType() == BT_NONE)
+					{
+						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+						{
+							if ((*c)->getStatus() != "STR_READY")
+								continue;
+							if ((*c)->getRules()->getRefuelItem() == i->first && 100 > (*c)->getFuelPercentage())
+								(*c)->setStatus("STR_REFUELLING");
+						}
+					}
+					if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
+						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
+					else
+						b->getItems()->addItem(i->first, i->second);
 				}
-				if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
-					g->setFunds(g->getFunds() + r->getItem(_rules->getName())->getSellCost());
-				else
-					b->getItems()->addItem(_rules->getName(), 1);
 			}
 			if (!canManufactureMoreItemsPerHour) break;
 			count++;
