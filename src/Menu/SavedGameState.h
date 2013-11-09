@@ -46,11 +46,12 @@ protected:
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
 	std::vector<std::string> _saves;
+	int _firstValidRow;
 public:
 	/// Creates the Saved Game state.
-	SavedGameState(Game *game, OptionsOrigin origin);
+	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow);
 	/// Creates the Saved Game state (autosave option).
-	SavedGameState(Game *game, OptionsOrigin origin, bool showMsg);
+	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();
 	/// Updates the palette.

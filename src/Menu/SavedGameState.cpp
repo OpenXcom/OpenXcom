@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin), _showMsg(true), _noUI(false)
+SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow) : State(game), _origin(origin), _firstValidRow(firstValidRow), _showMsg(true), _noUI(false)
 {
 	_screen = false;
 
@@ -125,7 +125,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), 
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true)
+SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg) : State(game), _origin(origin), _firstValidRow(firstValidRow), _showMsg(showMsg), _noUI(true)
 {
 	if (_showMsg)
 	{
@@ -216,7 +216,12 @@ void SavedGameState::btnCancelClick(Action *)
 
 void SavedGameState::lstSavesMouseOver(Action *)
 {
-	size_t sel = _lstSaves->getSelectedRow();
+	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
+	if (0 > sel)
+	{
+		_txtDetails->setText(L"");
+		return;
+	}
 	std::string fullname = Options::getUserFolder() + _saves[sel];
 	std::wstring wstr=L"";
 	try
