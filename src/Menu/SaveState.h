@@ -20,6 +20,7 @@
 #define OPENXCOM__SAVESTATE_H
 
 #include <string>
+#include <boost/thread.hpp>
 #include "SavedGameState.h"
 
 namespace OpenXcom
@@ -37,6 +38,8 @@ private:
 	TextEdit *_edtSave;
 	std::wstring _selected;
 	int _previousSelectedRow, _selectedRow;
+	YAML::Emitter _emGeo, _emBattle;
+	boost::thread *_threadGeo, *_threadBattle;
 public:
 	/// Creates the Save Game state.
 	SaveState(Game *game, OptionsOrigin origin);
@@ -52,6 +55,10 @@ public:
 	void lstSavesPress(Action *action);
 	/// Quick save game.
 	void quickSave(const std::string &filename);
+	/// Envelope for multithreaded save of GeoScape.
+	static void asyncSaveGeo(Game *game, YAML::Emitter &emGeo);
+	/// Envelope for multithreaded save of BattleScape.
+	static void asyncSaveBattle(Game *game, YAML::Emitter &emBattle);
 };
 
 }

@@ -40,8 +40,16 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1), _threadGeo(0), _threadBattle(0)
 {
+	// Start asynchronous save
+	if (boost::thread::hardware_concurrency() != 1)
+	{
+		_threadGeo = new boost::thread(asyncSaveGeo, game, boost::ref(_emGeo));
+		if (game->getSavedGame()->getSavedBattle() != 0)
+			_threadBattle = new boost::thread(asyncSaveBattle, game, boost::ref(_emBattle));
+	}
+
 	// Create objects
 	_edtSave = new TextEdit(168, 9, 0, 0);
 
@@ -63,8 +71,17 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
+SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg), _threadGeo(0), _threadBattle(0)
 {
+	if (_showMsg) updateStatus("STR_SAVING_GAME");
+
+	if (boost::thread::hardware_concurrency() != 1)
+	{
+		_threadGeo = new boost::thread(asyncSaveGeo, game, boost::ref(_emGeo));
+		if (game->getSavedGame()->getSavedBattle() != 0)
+			_threadBattle = new boost::thread(asyncSaveBattle, game, boost::ref(_emBattle));
+	}
+
 	game->getSavedGame()->setName(L"autosave");
 	quickSave("autosave");
 }
@@ -74,7 +91,14 @@ SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGame
  */
 SaveState::~SaveState()
 {
+	if (_threadBattle) _threadBattle->interrupt();
+	if (_threadGeo) _threadGeo->interrupt();
 
+	if (_threadBattle) _threadBattle->join();
+	if (_threadGeo) _threadGeo->join();
+
+	delete _threadBattle;
+	delete _threadGeo;
 }
 
 /**
@@ -184,8 +208,6 @@ void SaveState::edtSaveKeyPress(Action *action)
  */
 void SaveState::quickSave(const std::string &filename)
 {
-	if (_showMsg) updateStatus("STR_SAVING_GAME");
-
 	std::string fullPath = Options::getUserFolder() + filename + ".sav";
 	std::string bakPath = fullPath + ".bak";
 
@@ -203,7 +225,17 @@ void SaveState::quickSave(const std::string &filename)
 			}
 		}
 
-		_game->getSavedGame()->save(filename);
+		if (_threadGeo)
+		{
+			_threadGeo->join();
+			if (_threadBattle) _threadBattle->join();
+		}
+		else
+		{
+			_game->getSavedGame()->saveGeo(_emGeo);
+			_game->getSavedGame()->saveBattle(_emBattle);
+		}
+		_game->getSavedGame()->save(filename, _emGeo, _emBattle);
 		CrossPlatform::deleteFile(bakPath);
 	}
 	catch (Exception &e)
@@ -226,6 +258,26 @@ void SaveState::quickSave(const std::string &filename)
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
+}
+
+/**
+ * Envelope for multithreaded save of GeoScape.
+ * @param game Pointer to the core game.
+ * @param emGeo YAML Emitter for save a info.
+ */
+void SaveState::asyncSaveGeo(Game *game, YAML::Emitter &emGeo)
+{
+	game->getSavedGame()->saveGeo(emGeo);
+}
+
+/**
+ * Envelope for multithreaded save of BattleScape.
+ * @param game Pointer to the core game.
+ * @param emBattle YAML Emitter for save a info.
+ */
+void SaveState::asyncSaveBattle(Game *game, YAML::Emitter &emBattle)
+{
+	game->getSavedGame()->saveBattle(emBattle);
 }
 
 }

@@ -96,8 +96,14 @@ public:
 	static std::vector<std::string> getList(TextList *list, Language *lang);
 	/// Loads a saved game from YAML.
 	void load(const std::string &filename, Ruleset *rule);
-	/// Saves a saved game to YAML.
-	void save(const std::string &filename) const;
+	/// Saves a saved game to YAML file.
+	void save(const std::string &filename, const YAML::Emitter &emGeo, const YAML::Emitter &emBattle) const;
+	/// Saves the brief game info to a YAML emitter.
+	void saveBrief(YAML::Emitter &out) const;
+	/// Saves the GeoScape game info to a YAML emitter.
+	void saveGeo(YAML::Emitter &out) const;
+	/// Saves the BattleScape game info to a YAML emitter.
+	void saveBattle(YAML::Emitter &out) const;
 	/// Gets the game name.
 	std::wstring getName() const;
 	/// Sets the game name.
