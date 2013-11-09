@@ -927,7 +927,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
 	int phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase();
-	int dir = unit->getDirection();
+	int dir = unit->getDirection(), vdir = unit->getVerticalDirection();
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
 	int size = unit->getArmor()->getSize();
@@ -940,13 +940,12 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 			midphase = 1;
 	}
 
-	if (unit->getVerticalDirection())
+	if ( vdir == Pathfinding::DIR_UP || vdir == Pathfinding::DIR_DOWN)
 	{
 		midphase = 4;
 		endphase = 8;
 	}
-	else
-	if ((unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING))
+	else 	if ((unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING))
 	{
 		if (phase < midphase)
 		{

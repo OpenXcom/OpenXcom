@@ -412,6 +412,8 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 	if (direction >= Pathfinding::DIR_UP)
 	{
 		_verticalDirection = direction;
+		if(direction != Pathfinding::DIR_UP && direction != Pathfinding::DIR_DOWN)
+			_direction = Pathfinding::horizontalDirection(direction);
 		_status = STATUS_FLYING;
 	}
 	else
@@ -447,14 +449,14 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
 	int middle, end;
-	if (_verticalDirection)
+	if (_verticalDirection == Pathfinding::DIR_UP || _verticalDirection == Pathfinding::DIR_DOWN)
 	{
 		middle = 4;
 		end = 8;
 	}
 	else
 	{
-		// diagonal walking takes double the steps
+		// diagonal takes double
 		middle = 4 + 4 * (_direction % 2);
 		end = 8 + 8 * (_direction % 2);
 		if (_armor->getSize() > 1)

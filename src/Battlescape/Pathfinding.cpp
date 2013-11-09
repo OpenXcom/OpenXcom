@@ -1525,7 +1525,7 @@ void Pathfinding::turn(int &direction, int toDirection)
 		turnRight(direction);
 	else if(dirto < dirfrom)
 		turnLeft(direction);
-	else if(dirto == difrom)
+	else if(dirto == dirfrom)
 		return;
 	else if(dirto - dirfrom <= 4 )
 		turnRight(direction);
