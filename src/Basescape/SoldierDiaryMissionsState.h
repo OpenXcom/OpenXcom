@@ -41,7 +41,7 @@ private:
 	size_t _soldier;
 	SoldierDiaryState *_soldierDiaryState;
 
-	TextButton *_btnOk, *_btnPrev, *_btnNext;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills;
 	Window *_window;
 	Text *_txtTitle, *_txtLocation, *_txtType, *_txtUFO;
 	TextList *_lstLocation, *_lstType, *_lstUFO;
@@ -59,6 +59,8 @@ public:
 	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
+	/// Handler for clicking the Kills button.
+	void btnKillsClick(Action *action);
 };
 
 }

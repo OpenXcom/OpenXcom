@@ -20,7 +20,6 @@
 #include "SoldierInfoState.h"
 #include "SoldierDiaryInfoState.h"
 #include "SoldierDiaryKillsState.h"
-#include "SoldierDiaryMissionsState.h"
 #include <string>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -213,7 +212,8 @@ void SoldierDiaryState::btnOkClick(Action *)
  */
 void SoldierDiaryState::btnKillsClick(Action *)
 {
-	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this));
+	bool _displayKills = true;
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _displayKills));
 }
 
 /**
@@ -222,7 +222,8 @@ void SoldierDiaryState::btnKillsClick(Action *)
  */
 void SoldierDiaryState::btnMissionsClick(Action *)
 {
-	_game->pushState(new SoldierDiaryMissionsState(_game, _base, _soldier, this));
+	bool _displayKills = false;
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _displayKills));
 }
 
 

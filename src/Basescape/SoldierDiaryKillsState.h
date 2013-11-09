@@ -41,14 +41,18 @@ private:
 	size_t _soldier;
 	SoldierDiaryState *_soldierDiaryState;
 
-	TextButton *_btnOk, *_btnPrev, *_btnNext;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions;
 	Window *_window;
 	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon;
+	Text *_txtLocation, *_txtType, *_txtUFO;
 	TextList *_lstRank, *_lstRace, *_lstWeapon;
+	TextList *_lstLocation, *_lstType, *_lstUFO;
+
+	bool _displayKills, _displayMissions;
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState);
+	SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState, bool displayKills);
 	/// Cleans up the Soldiers state.
 	~SoldierDiaryKillsState();
 	/// Updates the soldier info.
@@ -59,6 +63,10 @@ public:
 	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
+	/// Handler for clicking the Kills button.
+	void btnKillsToggle(Action *action);
+	/// Handler for clicking the Missions button.
+	void btnMissionsToggle(Action *action);
 };
 
 }

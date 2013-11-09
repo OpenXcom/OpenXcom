@@ -18,6 +18,7 @@
  */
 #include "SoldierDiaryState.h"
 #include "SoldierInfoState.h"
+#include "SoldierDiaryKillsState.h"
 #include "SoldierDiaryMissionsState.h"
 #include <string>
 #include "../Engine/Game.h"
@@ -51,13 +52,14 @@ SoldierDiaryMissionsState::SoldierDiaryMissionsState(Game *game, Base *base, siz
 	_btnOk = new TextButton(96, 16, 216, 176);
 	_btnPrev = new TextButton(28, 14, 8, 8);
 	_btnNext = new TextButton(28, 14, 284, 8);
+	_btnKills = new TextButton(208, 26, 16, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
-	_txtLocation = new Text(76, 9, 16, 36);
-	_txtType = new Text(76, 9, 104, 36);
-	_txtUFO = new Text(76, 9, 222, 36);
-	_lstLocation = new TextList(90, 140, 16, 44);
-	_lstType = new TextList(110, 140, 104, 44);
-	_lstUFO = new TextList(90, 140, 222, 44);
+	_txtLocation = new Text(76, 18, 16, 36);
+	_txtType = new Text(76, 18, 104, 36);
+	_txtUFO = new Text(76, 18, 222, 36);
+	_lstLocation = new TextList(90, 140, 16, 52);
+	_lstType = new TextList(110, 140, 104, 52);
+	_lstUFO = new TextList(90, 140, 222, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -66,6 +68,7 @@ SoldierDiaryMissionsState::SoldierDiaryMissionsState(Game *game, Base *base, siz
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext); 
+	add(_btnKills);
 	add(_txtTitle);
 	add(_txtLocation);
 	add(_txtType);
@@ -93,6 +96,10 @@ SoldierDiaryMissionsState::SoldierDiaryMissionsState(Game *game, Base *base, siz
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierDiaryMissionsState::btnNextClick);
 
+	_btnKills->setColor(Palette::blockOffset(13)+10);
+	_btnKills->setText(tr("STR_KILLS_TOTAL"));
+	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryMissionsState::btnKillsClick);
+
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -100,12 +107,15 @@ SoldierDiaryMissionsState::SoldierDiaryMissionsState(Game *game, Base *base, siz
 
 	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
+	_txtLocation->setWordWrap(true);
 
 	_txtType->setColor(Palette::blockOffset(15)+1);
 	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
+	_txtType->setWordWrap(true);
 
 	_txtUFO->setColor(Palette::blockOffset(15)+1);
 	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
+	_txtUFO->setWordWrap(true);
 
 	_lstLocation->setColor(Palette::blockOffset(13)+10);
 	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
@@ -214,5 +224,16 @@ void SoldierDiaryMissionsState::btnNextClick(Action *)
 		_soldier = 0;
 	init();
 }
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void SoldierDiaryMissionsState::btnKillsClick(Action *)
+{
+	bool it = true;
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, it));
+}
+
 
 }
