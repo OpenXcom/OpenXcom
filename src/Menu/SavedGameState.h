@@ -46,6 +46,7 @@ protected:
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
 	std::vector<std::string> _saves;
+	std::vector<std::wstring> _details;
 	int _firstValidRow;
 public:
 	/// Creates the Saved Game state.

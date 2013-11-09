@@ -151,9 +151,11 @@ SavedGame::~SavedGame()
  * and adds them to a text list.
  * @param list Text list.
  * @param lang Loaded language.
+ * @param details List of savegame details.
  */
-std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
+std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std::vector<std::wstring> *details)
 {
+	details->clear();
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
 	for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
@@ -170,6 +172,18 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 			saveDay << time.getDayString(lang);
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
+
+			std::wstringstream info;
+			if (doc["turn"])
+			{
+				info << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+				info << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+			}
+			else
+			{
+				info << lang->getString("STR_GEOSCAPE");
+			}
+			details->push_back(info.str());
 
 			std::wstring wstr;
 			if (doc["name"])
