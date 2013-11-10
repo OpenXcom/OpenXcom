@@ -66,6 +66,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("3dFlight", false);
 	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
 	setInt("maxFrameSkip", 0);
@@ -133,10 +134,10 @@ void createDefault()
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
 	setBool("battleHairBleach", true);
-    setBool("keepAspectRatio", false);
-    setBool("cursorInBlackBandsInFullscreen", false);
-    setBool("cursorInBlackBandsInWindow", true);
-    setBool("cursorInBlackBandsInBorderlessWindow", false);
+	setBool("keepAspectRatio", false);
+	setBool("cursorInBlackBandsInFullscreen", false);
+	setBool("cursorInBlackBandsInWindow", true);
+	setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
 
 	// new battle mode data

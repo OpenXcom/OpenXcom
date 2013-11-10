@@ -1212,3 +1212,5 @@ en-US:
   STR_REMOVE_SELECTED: "Remove Selected"
   STR_CONTAINMENT_EXCEEDED: "ALIEN CONTAINMENT LIMITS EXCEEDED!{SMALLLINE}Insufficient containment space at {0}. You must remove excess aliens from containment (who will then die)."
   STR_MANAGE_CONTAINMENT: "Manage Alien Containment"
+  STR_3DFLIGHT: "Battlescape full 3D flight."
+  STR_3DFLIGHT_DESC: "Enables full 3D flight (vertical + horizontal simultaneously) for flying units in battlescape."

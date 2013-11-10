@@ -28,6 +28,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattlescapeState.h"
@@ -206,7 +207,10 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 		}
 
 		// Try all reachable neighbours.
-		for (int direction = DIR_HN; direction < DIR_TOTAL; direction++)
+		// protected by option
+		bool full3d = Options::getBool("3dFlight");
+		int maxDir = ( full3d ? DIR_TOTAL : DIR_DN);
+		for (int direction = DIR_HN; direction < maxDir; direction = ((!full3d && direction == DIR_UP) ? DIR_DOWN : direction + 1))
 		{
 			Position nextPos;
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, target, missile);
@@ -1376,7 +1380,10 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		Position const &currentPos = currentNode->getPosition();
 
 		// Try all reachable neighbours.
-		for (int direction = 0; direction < DIR_TOTAL; direction++)
+		// protected by option
+		bool full3d = Options::getBool("3dFlight");
+		int maxDir = ( full3d ? DIR_TOTAL : DIR_DN);
+		for (int direction = DIR_HN; direction < maxDir; direction = ((!full3d && direction == DIR_UP) ? DIR_DOWN : direction + 1))
 		{
 			Position nextPos;
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
