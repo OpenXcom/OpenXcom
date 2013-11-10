@@ -464,7 +464,6 @@
     <ClCompile Include="Savegame\Node.cpp" />
     <ClCompile Include="Savegame\SoldierDeath.cpp" />
     <ClCompile Include="Savegame\SoldierDiary.cpp" />
-    <ClCompile Include="Savegame\SoldierRecords.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />
     <ClCompile Include="Savegame\TerrorSite.cpp" />
     <ClCompile Include="Savegame\Tile.cpp" />
@@ -687,6 +686,7 @@
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
     <ClInclude Include="Ruleset\ArticleDefinition.h" />
@@ -743,7 +743,6 @@
     <ClInclude Include="Savegame\Node.h" />
     <ClInclude Include="Savegame\SoldierDeath.h" />
     <ClInclude Include="Savegame\SoldierDiary.h" />
-    <ClInclude Include="Savegame\SoldierRecords.h" />
     <ClInclude Include="Savegame\Target.h" />
     <ClInclude Include="Savegame\TerrorSite.h" />
     <ClInclude Include="Savegame\Tile.h" />
@@ -769,6 +768,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

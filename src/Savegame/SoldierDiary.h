@@ -68,8 +68,7 @@ public:
 };
 
 /**
- * The entry is like the title. Simle details like
- * mission region/type, total aliens, etc.
+ * The entry is like the title. Details from each mission.
  */
 class SoldierDiaryEntries
 {
@@ -81,16 +80,14 @@ private:
 	int _score;
 	std::string _alienRace;
 	int _missionDaylight;
-	// int _alienTotal;
-	// int _daysWounded;
-	// bool _wasMindControlled, _panicked, _fellUnconcious;
+	int _daysWounded;
 
 	std::vector<SoldierDiaryKills*> _missionKills;
 public:
 	/// Creates a new diary and loads its contents from YAML.
 	SoldierDiaryEntries(const YAML::Node& node);
 	/// Creates a diary.
-	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight);
+	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded);
 	/// Cleans up the diary.
 	~SoldierDiaryEntries();
 	/// Loads the diary information from YAML.
@@ -125,6 +122,8 @@ public:
 	int getMissionDaylight() const;
 	/// Get
 	int getMissionStunTotal() const;
+	/// Get
+	int getDaysWounded() const;
 };
 
 class SoldierDiary
@@ -145,7 +144,7 @@ public:
 	/// Get the diary entries
 	std::vector<SoldierDiaryEntries*> getSoldierDiaryEntries();
 	/// Add an entry to the diary
-	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight);
+	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded);
 	/// Get
 	std::map<std::string, int> getAlienRankTotal() const;
 	/// Get
@@ -172,6 +171,8 @@ public:
 	int getWinTotal() const;
 	/// Get
 	int getStunTotal() const;
+	/// Get
+	int getDaysWoundedTotal() const;
 };
 
 

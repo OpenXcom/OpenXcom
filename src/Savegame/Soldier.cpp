@@ -169,7 +169,10 @@ YAML::Node Soldier::save() const
 	{
 		node["death"] = _death->save();
 	}
-	node["diary"] = _diary->save();
+	if (!_diary->getSoldierDiaryEntries().empty())
+	{
+		node["diary"] = _diary->save();
+	}
 	if (!_tempKills.empty())
 	{
 		for (std::vector<SoldierDiaryKills*>::const_iterator i = _tempKills.begin() ; i != _tempKills.end() ; ++i)

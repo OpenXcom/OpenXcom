@@ -43,7 +43,7 @@ private:
 
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtScore, *_txtKills, *_txtMissionType, *_txtUFO, *_txtRace, *_txtDaylight;
+	Text *_txtTitle, *_txtScore, *_txtKills, *_txtMissionType, *_txtUFO, *_txtRace, *_txtDaylight, *_txtDaysWounded;
 	TextList *_lstKills;
 
 	int _rowEntry;

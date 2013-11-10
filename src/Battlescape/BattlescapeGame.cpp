@@ -499,14 +499,18 @@ void BattlescapeGame::endTurn()
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
     std::string _alienRank, _alienRace;
-    std::string _weapon, _weaponAmmo;
+    std::string _weapon = "STR_WEAPON_UNKNOWN";
+	std::string _weaponAmmo = "STR_WEAPON_UNKNOWN";
     AlienState _alienState;
 
         // Fetch the murder weapon
     if (murderer && murderer->getGeoscapeSoldier())
     {
-        _weaponAmmo = murderweapon->getRules()->getName();
-        _weapon = _weaponAmmo;
+        if (murderweapon)
+		{
+			_weaponAmmo = murderweapon->getRules()->getName();
+			_weapon = _weaponAmmo;
+		}
 
         BattleItem *weapon = murderer->getItem("STR_RIGHT_HAND");
         if (weapon)

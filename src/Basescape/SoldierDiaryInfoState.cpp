@@ -58,7 +58,8 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	_txtKills = new Text(130, 9, 187, 66);
 	_txtRace = new Text(130, 9, 187, 75);
 	_txtDaylight = new Text(130, 9, 187, 84);
-	_lstKills = new TextList(222, 36, 49, 97);
+	_txtDaysWounded = new Text(130, 9, 187, 93);
+	_lstKills = new TextList(222, 27, 49, 106);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -72,6 +73,7 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	add(_txtUFO);
 	add(_txtRace);
 	add(_txtDaylight);
+	add(_txtDaysWounded);
 	add(_lstKills);
 
 	centerAllSurfaces();
@@ -93,6 +95,7 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	std::vector<SoldierDiaryEntries*> _soldierDiaryEntries = s->getDiary()->getSoldierDiaryEntries();
 	int _score = _soldierDiaryEntries[_rowEntry]->getMissionScore();
 	int _kills = _soldierDiaryEntries[_rowEntry]->getMissionKillTotal();
+	int _daysWounded = _soldierDiaryEntries[_rowEntry]->getDaysWounded();
 	std::string _missionType = _soldierDiaryEntries[_rowEntry]->getMissionType();
 	std::string _UFO = _soldierDiaryEntries[_rowEntry]->getMissionUFO();
 	std::string _missionRace = _soldierDiaryEntries[_rowEntry]->getMissionRace();
@@ -136,6 +139,11 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_NIGHT")));
 	}
 
+	_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
+	_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
+	_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(_daysWounded));
+	if (_daysWounded == 0) _txtDaysWounded->setVisible(false);
+
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
 	_lstKills->setColumns(3, 40, 90, 80);
@@ -161,7 +169,6 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 			Race << tr(_kills->getAlienRace().c_str());
 			Rank << tr(_kills->getAlienRank().c_str());
 			Weapon << tr(_kills->getWeapon().c_str());
-			Ammo << tr(_kills->getWeaponAmmo().c_str());
 
 			std::wstringstream Unit, Status;
 			Unit << Race.str().c_str() << " " << Rank.str().c_str();

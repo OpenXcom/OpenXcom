@@ -58,21 +58,21 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_btnMissions = new TextButton(96, 16, 112, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
 	// Kill stats
-	_txtRace = new Text(90, 9, 16, 36);
-	_txtRank = new Text(90, 9, 114, 36);
-	_txtWeapon = new Text(90, 9, 212, 36);
-	_lstRace = new TextList(90, 140, 16, 44);
-	_lstRank = new TextList(90, 140, 114, 44);
-	_lstWeapon = new TextList(90, 140, 212, 44);
+	_txtRace = new Text(90, 18, 16, 36);
+	_txtRank = new Text(90, 18, 114, 36);
+	_txtWeapon = new Text(90, 18, 212, 36);
+	_lstRace = new TextList(90, 140, 16, 52);
+	_lstRank = new TextList(90, 140, 114, 52);
+	_lstWeapon = new TextList(90, 140, 212, 52);
 	_lstKillTotals = new TextList(288, 9, 8, 167);
 	// Mission stats
 	_txtLocation = new Text(90, 18, 16, 36);
-	_txtType = new Text(110, 18, 104, 36);
+	_txtType = new Text(110, 18, 108, 36);
 	_txtUFO = new Text(90, 18, 222, 36);
 	_lstLocation = new TextList(90, 140, 16, 52);
-	_lstType = new TextList(110, 140, 104, 52);
+	_lstType = new TextList(110, 140, 108, 52);
 	_lstUFO = new TextList(90, 140, 222, 52);
-	_lstMissionTotals = new TextList(288, 9, 8, 167);
+	_lstMissionTotals = new TextList(296, 9, 8, 167);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -133,12 +133,15 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 
 	_txtRace->setColor(Palette::blockOffset(15)+1);
 	_txtRace->setText(tr("STR_KILLS_BY_RACE"));
+	_txtRace->setWordWrap(true);
 
 	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_KILLS_BY_RANK"));
-	
+	_txtRank->setWordWrap(true);
+
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_KILLS_BY_WEAPON"));
+	_txtWeapon->setWordWrap(true);
 
 	_lstRace->setColor(Palette::blockOffset(13)+10);
 	_lstRace->setArrowColor(Palette::blockOffset(15)+1);
@@ -163,10 +166,6 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstKillTotals->setColumns(2, 98, 98);
 	_lstKillTotals->setMargin(8);
 	_lstKillTotals->setBackground(_window);
-	Soldier *s = _base->getSoldiers()->at(_soldier);
-	int _killTotal = s->getDiary()->getKillTotal();
-	int _stunTotal = s->getDiary()->getStunTotal();
-	_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_killTotal).c_str(), tr("STR_STUNS").arg(_stunTotal).c_str());
 	
 	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
@@ -182,7 +181,7 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	
 	_lstLocation->setColor(Palette::blockOffset(13)+10);
 	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
-	_lstLocation->setColumns(2, 70, 10);
+	_lstLocation->setColumns(2, 80, 10);
 	_lstLocation->setBackground(_window);
 	_lstLocation->setDot(true);
 	
@@ -194,19 +193,16 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	
 	_lstUFO->setColor(Palette::blockOffset(13)+10);
 	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
-	_lstUFO->setColumns(2, 70, 10);
+	_lstUFO->setColumns(2, 80, 10);
 	_lstUFO->setBackground(_window);
 	_lstUFO->setDot(true);
 
 	_lstMissionTotals->setColor(Palette::blockOffset(15)+1);
 	_lstMissionTotals->setSecondaryColor(Palette::blockOffset(13)+10);
-	_lstMissionTotals->setColumns(3, 88, 118, 96);
+	_lstMissionTotals->setColumns(4, 68, 68, 68, 84);
 	_lstMissionTotals->setMargin(8);
 	_lstMissionTotals->setBackground(_window);
-	int _missionTotal = s->getDiary()->getMissionTotal();
-	int _winTotal = s->getDiary()->getWinTotal();
-	int _scoreTotal = s->getDiary()->getScoreTotal();
-	_lstMissionTotals->addRow(3, tr("STR_MISSIONS").arg(_missionTotal).c_str(), tr("STR_WINS").arg(_winTotal).c_str(), tr("STR_SCORE_VALUE").arg(_scoreTotal).c_str());
+	
 
 
 	init(); // Populate the list
@@ -221,7 +217,7 @@ SoldierDiaryKillsState::~SoldierDiaryKillsState()
 }
 
 /**
- *  Clears all the variables and reinitializes the list of medals for the soldier.
+ *  Clears all the variables and reinitializes the list of kills or missions for the soldier.
  *
  */
 void SoldierDiaryKillsState::init()
@@ -246,6 +242,17 @@ void SoldierDiaryKillsState::init()
 	_btnKills->setVisible(_displayMissions);
 
 	Soldier *s = _base->getSoldiers()->at(_soldier);
+	int _missionTotal = s->getDiary()->getMissionTotal();
+	int _winTotal = s->getDiary()->getWinTotal();
+	int _scoreTotal = s->getDiary()->getScoreTotal();
+	int _killTotal = s->getDiary()->getKillTotal();
+	int _stunTotal = s->getDiary()->getStunTotal();
+	int _daysWoundedTotal = s->getDiary()->getDaysWoundedTotal();
+	_lstKillTotals->clearList();
+	_lstMissionTotals->clearList();
+	_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_killTotal).c_str(), tr("STR_STUNS").arg(_stunTotal).c_str());
+	_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_missionTotal).c_str(), tr("STR_WINS").arg(_winTotal).c_str(), tr("STR_SCORE_VALUE").arg(_scoreTotal).c_str(), tr("STR_DAYS_WOUNDED").arg(_daysWoundedTotal).c_str());
+
 	_txtTitle->setText(s->getName());
 	_lstRace->clearList();
 	_lstRank->clearList();
