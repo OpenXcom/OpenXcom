@@ -199,7 +199,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
-			if (unit->getId() == selectedUnit)
+			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
 			
 			// silly hack to fix mind controlled aliens
