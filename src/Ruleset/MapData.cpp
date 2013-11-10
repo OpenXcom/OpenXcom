@@ -158,14 +158,12 @@ int MapData::getBlock(ItemDamageType type) const
 	{
 	case DT_NONE:
 		return _block[1];
-	case DT_HE:
-		return _block[2];
 	case DT_SMOKE:
 		return _block[3];
+	case DT_HE:
 	case DT_IN:
-		return _block[4];
 	case DT_STUN:
-		return _block[5];
+		return _block[2];
 	default:
 		break;
 	}
@@ -187,9 +185,9 @@ void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int sm
 	_block[0] = lightBlock; // not used...
 	_block[1] = visionBlock==1?255:0;
 	_block[2] = HEBlock;
-	_block[3] = smokeBlock==1?255:0;
-	_block[4] = fireBlock==1?255:0;
-	_block[5] = gasBlock==1?255:0;
+	_block[3] = smokeBlock==1?256:0;
+	_block[4] = fireBlock;
+	_block[5] = gasBlock;
 }
 
 /**
