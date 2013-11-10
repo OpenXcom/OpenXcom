@@ -45,8 +45,8 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon;
 	Text *_txtLocation, *_txtType, *_txtUFO;
-	TextList *_lstRank, *_lstRace, *_lstWeapon;
-	TextList *_lstLocation, *_lstType, *_lstUFO;
+	TextList *_lstRank, *_lstRace, *_lstWeapon, *_lstKillTotals;
+	TextList *_lstLocation, *_lstType, *_lstUFO, *_lstMissionTotals;
 
 	bool _displayKills, _displayMissions;
 

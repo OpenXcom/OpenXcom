@@ -164,6 +164,14 @@ public:
 	std::map<std::string, int> getUFOTotal() const;
 	/// Get
 	int getScoreTotal() const;
+	/// Get
+	int getKillTotal() const;
+	/// Get
+	int getMissionTotal() const;
+	/// Get
+	int getWinTotal() const;
+	/// Get
+	int getStunTotal() const;
 };
 
 

@@ -215,12 +215,62 @@ std::map<std::string, int> SoldierDiary::getUFOTotal() const
  */
 int SoldierDiary::getScoreTotal() const
 {
-	int _scoreTotal;
+	int _scoreTotal = 0;
 	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
 	{
 		_scoreTotal += (*i)->getMissionScore();
 	}
 	return _scoreTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getKillTotal() const
+{
+	int _killTotal = 0;
+	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
+	{
+		_killTotal += (*i)->getMissionKillTotal();
+	}
+	return _killTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getMissionTotal() const
+{
+	return _diaryEntries.size();
+}
+
+/**
+ *
+ */
+int SoldierDiary::getWinTotal() const
+{
+	int _winTotal = 0;
+	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
+	{
+		if ((*i)->getMissionSuccess())
+		{
+			_winTotal++;
+		}
+	}
+	return _winTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getStunTotal() const
+{
+	int _stunTotal = 0;
+	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
+	{
+		_stunTotal += (*i)->getMissionStunTotal();
+	}
+	return _stunTotal;
 }
 
 /**
