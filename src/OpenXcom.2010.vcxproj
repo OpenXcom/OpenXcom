@@ -677,7 +677,6 @@
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
     <ClInclude Include="Ruleset\ArticleDefinition.h" />
@@ -758,9 +757,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
