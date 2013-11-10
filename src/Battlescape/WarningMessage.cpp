@@ -34,9 +34,11 @@ namespace OpenXcom
  */
 WarningMessage::WarningMessage(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _fade(0)
 {
-	_text = new Text(width, 9, 0, (height - 8) / 2);
+	_text = new Text(width, height, 0, 0);
 	_text->setHighContrast(true);
 	_text->setAlign(ALIGN_CENTER);
+	_text->setVerticalAlign(ALIGN_MIDDLE);
+	_text->setWordWrap(true);
 
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&WarningMessage::fade);
