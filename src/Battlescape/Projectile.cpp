@@ -364,7 +364,7 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin Startposition of the trajectory.
+ * @param origin Start position of the trajectory.
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
@@ -457,6 +457,19 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 		}
 	}
 
+	if (doCalcChance)
+	{
+		BattleUnit* targetUnit = targetTile? targetTile->getUnit() : 0;
+		if (targetUnit)
+		{
+			int loftemps = targetUnit->getLoftemps();
+			if (loftemps > 5) loftemps = 8;
+			return vanillaHit(origin, target, accuracy, 1 + 2 * loftemps, targetUnit->getHeight());
+		}
+		else
+			return -1;
+	}
+
 	int xDist = abs(origin.x - target->x);
 	int yDist = abs(origin.y - target->y);
 	int zDist = abs(origin.z - target->z);
@@ -506,7 +519,7 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
  * Approximation of the F-function (cumulative distribution function).
  * @param sigm Standart deviation (in radians).
  * @param delta Half of the angle of view of the profile of the enemy (in radians).
- * @return Chance to hit from 0 to 1.
+ * @return Chance to hit (from 0 to 1).
  */
 double Projectile::approxF(double sigm, double delta)
 {
@@ -515,6 +528,74 @@ double Projectile::approxF(double sigm, double delta)
 	double r = 0.2820947918 * a * (exp(-a * a) + 2*exp(-0.25 * a * a) + 1.0);	// 1/(2*sqrt(pi)) = 0.2820947918
 
 	return (r > 1.0)? 1.0 : r;
+}
+
+/**
+ * Calculation of the probability of hitting (vanilla version).
+ * @param origin Start position of the trajectory.
+ * @param target Endpoint of the trajectory.
+ * @param accuracy Accuracy modifier.
+ * @param d Diameter of target.
+ * @param h Height of target.
+ * @return Chance to hit (from 0 to 100).
+ */
+int Projectile::vanillaHit(const Position& origin, Position *target, double accuracy, int d, int h)
+{
+	if (accuracy > 1.09) return 100;	// We have hit. I guarantee it!
+
+	double mayMiss, mayHit, guarantHit;
+	if (accuracy > 1.01)
+	{
+		mayMiss = 0.00;
+		mayHit = 1.09 - accuracy;
+		guarantHit = 1.01 - mayMiss - mayHit;
+	}
+	else if (accuracy > 0.09)
+	{
+		mayMiss = 1.01 - accuracy;
+		mayHit = 0.08;
+		guarantHit = 1.01 - mayMiss - mayHit;
+	}
+	else
+	{
+		mayMiss = 1.01 - accuracy;
+		mayHit = accuracy;
+		guarantHit = 0.00;
+	}
+
+	double maxDevMiss = mayMiss + 0.5;
+	double maxDevHit = 0.09;
+	double dx = origin.x - target->x;
+	double dy = origin.y - target->y;
+	double dz = origin.z - target->z;
+	double rangeRatio = sqrt(dx*dx + dy*dy + dz*dz) / 2.0;
+
+	double r = (mayMiss * approxHit(rangeRatio, maxDevMiss, d, h)
+		+ mayHit * approxHit(rangeRatio, maxDevHit, d, h)
+		+ guarantHit) / 1.01;
+
+	return (int) (0.5 + 100.0 * r);
+}
+
+/**
+ * Approximation of vanillas chance to hit.
+ * @param dev Deviation (vanilla meaning).
+ * @param rangeRatio Distance/2.
+ * @param d Diameter of target.
+ * @param h Height of target.
+ * @return Chance to hit (from 0 to 1).
+ */
+double Projectile::approxHit(double rangeRatio, double dev, int d, int h)
+{
+	// x-y square
+	dev *= rangeRatio;
+	if (dev <= d) return 1.0;
+	double r = d/dev + (1 - d/dev) * (2 * d)/(dev + d);
+
+	// z axis
+	dev /= 4.0;
+	if (dev <= h) return r;
+	return r * (h/dev + (1 - h/dev) * (2 * h)/(dev + h));
 }
 
 /**
