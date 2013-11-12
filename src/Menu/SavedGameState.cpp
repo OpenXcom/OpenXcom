@@ -38,8 +38,9 @@ namespace OpenXcom
  * Initializes all the elements in the Saved Game screen.
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
+ * @param firstValidRow Which row in the list of saves is first.
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow) : State(game), _origin(origin), _firstValidRow(firstValidRow), _showMsg(true), _noUI(false)
+SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow) : State(game), _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow)
 {
 	_screen = false;
 
@@ -125,7 +126,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true)
+SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true), _firstValidRow(0)
 {
 	if (_showMsg)
 	{
@@ -218,7 +219,7 @@ void SavedGameState::lstSavesMouseOver(Action *)
 {
 	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 	std::wstring wstr;
-	if (sel >= 0 && sel < _saves.size())
+	if (sel >= 0 && sel < (int)_saves.size())
 	{
 		wstr = _details[sel];
 	}

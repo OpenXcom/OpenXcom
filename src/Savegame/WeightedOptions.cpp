@@ -29,9 +29,12 @@ namespace OpenXcom
  * Each time this is called, the returned value can be different.
  * @return The key of the selected choice.
  */
-const std::string &WeightedOptions::choose() const
+const std::string WeightedOptions::choose() const
 {
-	assert(0 != _totalWeight);
+	if (_totalWeight == 0)
+	{
+		return "";
+	}
 	unsigned var = RNG::generate(0, _totalWeight);
 	std::map<std::string, unsigned>::const_iterator ii = _choices.begin();
 	for (; ii != _choices.end(); ++ii)

@@ -1267,14 +1267,9 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						// show a little infobox if it's successful
 						Game *game = _parentState->getGame();
 						if (_currentAction.type == BA_PANIC)
-						{
-							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
-						}
 						else if (_currentAction.type == BA_MINDCONTROL)
-						{
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
-						}
 						_parentState->updateSoldierInfo();
 					}
 					if (builtinpsi)

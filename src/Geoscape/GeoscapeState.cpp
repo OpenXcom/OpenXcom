@@ -1451,7 +1451,7 @@ void GeoscapeState::time1Day()
 						_game->getRuleset()->getUnit(
 							research->getName()
 						)->getArmor()
-					)->getCorpseItem()
+					)->getCorpseGeoscape()
 				); // ;)
 			}
 			if((*iter)->getRules()->getGetOneFree().size() != 0)
@@ -2108,7 +2108,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// One randomly selected mission.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		const std::string &targetRegion = strategy.chooseRandomRegion();
+		const std::string &targetRegion = strategy.chooseRandomRegion(_game->getRuleset());
 		const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
