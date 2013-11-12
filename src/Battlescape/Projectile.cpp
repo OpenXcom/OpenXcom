@@ -181,54 +181,60 @@ int Projectile::calculateTrajectory(double accuracy)
 		{
 			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &targetVoxel, bu))
 			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
 			}
 		}
 		else
 		{
 			// target nothing, targets the middle of the tile
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-		if (test == 4 && !_trajectory.empty())
+		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
 		{
 			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (_save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
+			if (test == 4 && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
 			{
 				hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 			}
-		}
-		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
-		{
-			//skip already estimated hitPos
-			if (test != 4)
-			{
-				hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			}
+
 			if (hitPos != _action.target && _action.result == "")
 			{
 				if (test == 2)
 				{
-					if (hitPos.y - 1 == _action.target.y)
+					if (hitPos.y - 1 != _action.target.y)
 					{
 						_trajectory.clear();
-						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+						return -1;
 					}
 				}
-				if (test == 1)
+				else if (test == 1)
 				{
-					if (hitPos.x - 1 == _action.target.x)
+					if (hitPos.x - 1 != _action.target.x)
 					{
 						_trajectory.clear();
-						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+						return -1;
 					}
 				}
-				_trajectory.clear();
-				return -1;
+				else if (test == 4)
+				{
+					BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
+					BattleUnit *targetUnit = targetTile->getUnit();
+					if (hitUnit != targetUnit)
+					{
+						_trajectory.clear();
+						return -1;
+					}
+				}
+				else
+				{
+					_trajectory.clear();
+					return -1;
+				}
 			}
 		}
-		_trajectory.clear();
 	}
+	_trajectory.clear();
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
