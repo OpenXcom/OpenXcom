@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin)
+LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 0)
 {
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
@@ -54,7 +54,7 @@ LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
+LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, 0,showMsg)
 {
 	quickLoad("autosave");
 }
@@ -109,7 +109,7 @@ void LoadState::quickLoad(const std::string &filename)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
@@ -124,7 +124,7 @@ void LoadState::quickLoad(const std::string &filename)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else

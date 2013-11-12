@@ -49,7 +49,7 @@ AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *
 	_btnCentre = new TextButton(200, 16, 28, 140);
 	_btnCancel = new TextButton(200, 16, 28, 160);
 	_txtTitle = new Text(246, 32, 5, 48);
-	_txtCity = new Text(246, 16, 5, 80);
+	_txtCity = new Text(246, 17, 5, 80);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);

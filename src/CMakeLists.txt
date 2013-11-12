@@ -78,6 +78,10 @@ set ( basescape_src
   Basescape/PlaceStartFacilityState.cpp
   Basescape/SelectStartFacilityState.h
   Basescape/SelectStartFacilityState.cpp
+  Basescape/SoldierMemorialState.cpp
+  Basescape/SoldierMemorialState.h
+  Basescape/ManageAlienContainmentState.h
+  Basescape/ManageAlienContainmentState.cpp
 )
 
 set ( battlescape_src
@@ -527,6 +531,8 @@ set ( savegame_src
   Savegame/AlienStrategy.h
   Savegame/SerializationHelper.cpp
   Savegame/SerializationHelper.h
+  Savegame/SoldierDeath.h
+  Savegame/SoldierDeath.cpp
 )
 
 set ( ufopedia_src

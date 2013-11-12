@@ -175,11 +175,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::vector<std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
 	{
 		delete i->second;
 	}
-	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -213,261 +213,136 @@ void Ruleset::loadFile(const std::string &filename)
 
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleCountry *rule;
-		if (_countries.find(type) != _countries.end())
+		RuleCountry *rule = loadRule(*i, &_countries, &_countriesIndex);
+		if (rule != 0)
 		{
-			rule = _countries[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new RuleCountry(type);
-			_countries[type] = rule;
-			_countriesIndex.push_back(type);
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleRegion *rule;
-		if (_regions.find(type) != _regions.end())
+		RuleRegion *rule = loadRule(*i, &_regions, &_regionsIndex);
+		if (rule != 0)
 		{
-			rule = _regions[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new RuleRegion(type);
-			_regions[type] = rule;
-			_regionsIndex.push_back(type);
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["facilities"].begin(); i != doc["facilities"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleBaseFacility *rule;
-		if (_facilities.find(type) != _facilities.end())
+		RuleBaseFacility *rule = loadRule(*i, &_facilities, &_facilitiesIndex);
+		if (rule != 0)
 		{
-			rule = _facilities[type];
+			_facilityListOrder += 100;
+			rule->load(*i, _modIndex, _facilityListOrder);
 		}
-		else
-		{
-			rule = new RuleBaseFacility(type);
-			_facilities[type] = rule;
-			_facilitiesIndex.push_back(type);
-		}
-		_facilityListOrder += 100;
-		rule->load(*i, _modIndex, _facilityListOrder);
 	}
  	for (YAML::const_iterator i = doc["crafts"].begin(); i != doc["crafts"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleCraft *rule;
-		if (_crafts.find(type) != _crafts.end())
+		RuleCraft *rule = loadRule(*i, &_crafts, &_craftsIndex);
+		if (rule != 0)
 		{
-			rule = _crafts[type];
+			_craftListOrder += 100;
+			rule->load(*i, this, _modIndex, _craftListOrder);
 		}
-		else
-		{
-			rule = new RuleCraft(type);
-			_crafts[type] = rule;
-			_craftsIndex.push_back(type);
-		}
-		_craftListOrder += 100;
-		rule->load(*i, this, _modIndex, _craftListOrder);
 	}
  	for (YAML::const_iterator i = doc["craftWeapons"].begin(); i != doc["craftWeapons"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleCraftWeapon *rule;
-		if (_craftWeapons.find(type) != _craftWeapons.end())
+		RuleCraftWeapon *rule = loadRule(*i, &_craftWeapons, &_craftWeaponsIndex);
+		if (rule != 0)
 		{
-			rule = _craftWeapons[type];
+			rule->load(*i, _modIndex);
 		}
-		else
-		{
-			rule = new RuleCraftWeapon(type);
-			_craftWeapons[type] = rule;
-			_craftWeaponsIndex.push_back(type);
-		}
-		rule->load(*i, _modIndex);
 	}
  	for (YAML::const_iterator i = doc["items"].begin(); i != doc["items"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleItem *rule;
-		if (_items.find(type) != _items.end())
+		RuleItem *rule = loadRule(*i, &_items, &_itemsIndex);
+		if (rule != 0)
 		{
-			rule = _items[type];
+			_itemListOrder += 100;
+			rule->load(*i, _modIndex, _itemListOrder);
 		}
-		else
-		{
-			rule = new RuleItem(type);
-			_items[type] = rule;
-			_itemsIndex.push_back(type);
-		}
-		_itemListOrder += 100;
-		rule->load(*i, _modIndex, _itemListOrder);
 	}
  	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleUfo *rule;
-		if (_ufos.find(type) != _ufos.end())
+		RuleUfo *rule = loadRule(*i, &_ufos, &_ufosIndex);
+		if (rule != 0)
 		{
-			rule = _ufos[type];
+			rule->load(*i, this);
 		}
-		else
-		{
-			rule = new RuleUfo(type);
-			_ufos[type] = rule;
-			_ufosIndex.push_back(type);
-		}
-		rule->load(*i, this);
 	}
  	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
 	{
-		std::string type = (*i)["id"].as<std::string>();
-		RuleInventory *rule;
-		if (_invs.find(type) != _invs.end())
+		RuleInventory *rule = loadRule(*i, &_invs, 0, "id");
+		if (rule != 0)
 		{
-			rule = _invs[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new RuleInventory(type);
-			_invs[type] = rule;
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["terrains"].begin(); i != doc["terrains"].end(); ++i)
 	{
-		std::string type = (*i)["name"].as<std::string>();
-		RuleTerrain *rule;
-		if (_terrains.find(type) != _terrains.end())
+		RuleTerrain *rule = loadRule(*i, &_terrains, &_terrainIndex, "name");
+		if (rule != 0)
 		{
-			rule = _terrains[type];
+			rule->load(*i, this);
 		}
-		else
-		{
-			rule = new RuleTerrain(type);
-			_terrains[type] = rule;
-			_terrainIndex.push_back(type);
-		}
-		rule->load(*i, this);
 	}
  	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		Armor *rule;
-		if (_armors.find(type) != _armors.end())
+		Armor *rule = loadRule(*i, &_armors, &_armorsIndex);
+		if (rule != 0)
 		{
-			rule = _armors[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new Armor(type, "", 0);
-			_armors[type] = rule;
-			_armorsIndex.push_back(type);
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		RuleSoldier *rule;
-		if (_soldiers.find(type) != _soldiers.end())
+		RuleSoldier *rule = loadRule(*i, &_soldiers);
+		if (rule != 0)
 		{
-			rule = _soldiers[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new RuleSoldier(type);
-			_soldiers[type] = rule;
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["units"].begin(); i != doc["units"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		Unit *rule;
-		if (_units.find(type) != _units.end())
+		Unit *rule = loadRule(*i, &_units);
+		if (rule != 0)
 		{
-			rule = _units[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new Unit(type, "", "");
-			_units[type] = rule;
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["alienRaces"].begin(); i != doc["alienRaces"].end(); ++i)
 	{
-		std::string type = (*i)["id"].as<std::string>();
-		AlienRace *rule;
-		if (_alienRaces.find(type) != _alienRaces.end())
+		AlienRace *rule = loadRule(*i, &_alienRaces, &_aliensIndex, "id");
+		if (rule != 0)
 		{
-			rule = _alienRaces[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new AlienRace(type);
-			_alienRaces[type] = rule;
-			_aliensIndex.push_back(type);
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["alienDeployments"].begin(); i != doc["alienDeployments"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		AlienDeployment *rule;
-		if (_alienDeployments.find(type) != _alienDeployments.end())
+		AlienDeployment *rule = loadRule(*i, &_alienDeployments, &_deploymentsIndex);
+		if (rule != 0)
 		{
-			rule = _alienDeployments[type];
+			rule->load(*i);
 		}
-		else
-		{
-			rule = new AlienDeployment(type);
-			_alienDeployments[type] = rule;
-			_deploymentsIndex.push_back(type);
-		}
-		rule->load(*i);
 	}
  	for (YAML::const_iterator i = doc["research"].begin(); i != doc["research"].end(); ++i)
 	{
-		std::string type = (*i)["name"].as<std::string>();
-		RuleResearch *rule;
-		if (_research.find(type) != _research.end())
+		RuleResearch *rule = loadRule(*i, &_research, &_researchIndex, "name");
+		if (rule != 0)
 		{
-			rule = _research[type];
+			_researchListOrder += 100;
+			rule->load(*i, _researchListOrder);
 		}
-		else
-		{
-			rule = new RuleResearch(type);
-			_research[type] = rule;
-			_researchIndex.push_back(type);
-		}
-		_researchListOrder += 100;
-		rule->load(*i, _researchListOrder);
 	}
  	for (YAML::const_iterator i = doc["manufacture"].begin(); i != doc["manufacture"].end(); ++i)
 	{
-		std::string type = (*i)["name"].as<std::string>();
-		RuleManufacture *rule;
-		if (_manufacture.find(type) != _manufacture.end())
+		RuleManufacture *rule = loadRule(*i, &_manufacture, &_manufactureIndex, "name");
+		if (rule != 0)
 		{
-			rule = _manufacture[type];
+			_manufactureListOrder += 100;
+			rule->load(*i, _manufactureListOrder);
 		}
-		else
-		{
-			rule = new RuleManufacture(type);
-			_manufacture[type] = rule;
-			_manufactureIndex.push_back(type);
-		}
-		_manufactureListOrder += 100;
-		rule->load(*i, _manufactureListOrder);
 	}
  	for (YAML::const_iterator i = doc["ufopaedia"].begin(); i != doc["ufopaedia"].end(); ++i)
 	{
@@ -510,31 +385,18 @@ void Ruleset::loadFile(const std::string &filename)
  	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
-		std::string id = (*i)["id"].as<std::string>();
-		if (_ufoTrajectories.find(id) != _ufoTrajectories.end())
+		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
+		if (rule != 0)
 		{
-			_ufoTrajectories[id]->load(*i);
-		}
-		else
-		{
-			std::auto_ptr<UfoTrajectory> rule(new UfoTrajectory);
 			rule->load(*i);
-			_ufoTrajectories[id] = rule.release();
 		}
 	}
  	for (YAML::const_iterator i = doc["alienMissions"].begin(); i != doc["alienMissions"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		if (_alienMissions.find(type) != _alienMissions.end())
+		RuleAlienMission *rule = loadRule(*i, &_alienMissions, &_alienMissionsIndex);
+		if (rule != 0)
 		{
-			_alienMissions[type]->load(*i);
-		}
-		else
-		{
-			std::auto_ptr<RuleAlienMission> rule(new RuleAlienMission());
 			rule->load(*i);
-			_alienMissions[type] = rule.release();
-			_alienMissionsIndex.push_back(type);
 		}
 	}
  	_alienItemLevels = doc["alienItemLevels"].as< std::vector< std::vector<int> > >(_alienItemLevels);
@@ -585,6 +447,17 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
+  // refresh _psiRequirements for psiStrengthEval
+	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+	{
+		RuleBaseFacility *rule = getBaseFacility(*i);
+		if (0 < rule->getPsiLaboratories())
+		{
+			_psiRequirements = rule->getRequirements();
+			break;
+		}
+	}
+
 	_modIndex += 1000;
 }
 
@@ -600,6 +473,44 @@ void Ruleset::loadFiles(const std::string &dirname)
 	{
 		loadFile(dirname + *i);
 	}
+}
+
+/**
+ *
+ */
+template <typename T>
+T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
+{
+	T *rule = 0;
+	if (node[key])
+	{
+		std::string type = node[key].as<std::string>();
+		typename std::map<std::string, T*>::iterator i = map->find(type);
+		if (i != map->end())
+		{
+			rule = i->second;
+		}
+		else
+		{
+			rule = new T(type);
+			(*map)[type] = rule;
+			if (index != 0)
+			{
+				index->push_back(type);
+			}
+		}
+	}
+	else if (node["delete"])
+	{
+		std::string type = node["delete"].as<std::string>();
+		typename std::map<std::string, T*>::iterator i = map->find(type);
+		if (i != map->end())
+		{
+			map->erase(i);
+		}
+	}
+
+	return rule;
 }
 
 /**
@@ -628,14 +539,6 @@ SavedGame *Ruleset::newSave() const
 	{
 		save->getRegions()->push_back(new Region(getRegion(*i)));
 	}
-
-	// Set up IDs
-	std::map<std::string, int> ids;
-	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
-	{
-		ids[*i] = 1;
-	}
-	save->initIds(ids);
 
 	// Set up starting base
 	Base *base = new Base(this);
@@ -1361,4 +1264,13 @@ void Ruleset::sortLists()
 	list.clear();
 	offset = 0;
 }
+
+/**
+ * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+ */
+std::vector<std::string> Ruleset::getPsiRequirements()
+{
+	return _psiRequirements;
+}
+
 }

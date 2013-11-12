@@ -168,8 +168,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug = new Text(300, 10, 20, 0);
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
-	_reserve = _btnReserveNone;
-
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
@@ -404,7 +402,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
-		std::stringstream key, tooltip;
+		std::ostringstream key, tooltip;
 		key << "keyBattleCenterEnemy" << (i+1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)&BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
@@ -439,7 +437,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	_txtTooltip->setColor(Palette::blockOffset(0));
+	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
 	_btnReserveNone->copy(_icons);
@@ -498,13 +496,39 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
+	// Update reserve settings
+	_battleGame->setTUReserved(_save->getTUReserved(), true);
+	switch (_save->getTUReserved())
+	{
+	case BA_SNAPSHOT:
+		_reserve = _btnReserveSnap;
+		break;
+	case BA_AIMEDSHOT:
+		_reserve = _btnReserveAimed;
+		break;
+	case BA_AUTOSHOT:
+		_reserve = _btnReserveAuto;
+		break;
+	default:
+		_reserve = _btnReserveNone;
+		break;
+	}
 	if (firstInit && playableUnitSelected())
 	{
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
+		_btnReserveNone->setGroup(&_reserve);
+		_btnReserveSnap->setGroup(&_reserve);
+		_btnReserveAimed->setGroup(&_reserve);
+		_btnReserveAuto->setGroup(&_reserve);
 	}
 	_txtTooltip->setText(L"");
+	if (_save->getKneelReserved())
+	{
+		_btnReserveKneel->invert(0);
+	}
+	_battleGame->setKneelReserved(_save->getKneelReserved());
 }
 
 /**
@@ -680,7 +704,7 @@ void BattlescapeState::mapClick(Action *action)
 	if (_save->getDebugMode())
 	{
 		std::wstringstream ss;
-		ss << L"Clicked " << pos.x << " "<< pos.y << " "<< pos.z;
+		ss << L"Clicked " << pos;
 		debug(ss.str());
 	}
 
@@ -1066,13 +1090,13 @@ void BattlescapeState::btnReserveClick(Action *action)
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
-			_battleGame->setTUReserved(BA_NONE);
+			_battleGame->setTUReserved(BA_NONE, true);
 		else if (_reserve == _btnReserveSnap)
-			_battleGame->setTUReserved(BA_SNAPSHOT);
+			_battleGame->setTUReserved(BA_SNAPSHOT, true);
 		else if (_reserve == _btnReserveAimed)
-			_battleGame->setTUReserved(BA_AIMEDSHOT);
+			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
 		else if (_reserve == _btnReserveAuto)
-			_battleGame->setTUReserved(BA_AUTOSHOT);
+			_battleGame->setTUReserved(BA_AUTOSHOT, true);
 	}
 }
 
@@ -1179,7 +1203,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && leftHandItem->needsAmmo())
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible(true);
 			if (leftHandItem->getAmmoItem())
@@ -1194,7 +1218,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && rightHandItem->needsAmmo())
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible(true);
 			if (rightHandItem->getAmmoItem())
@@ -1376,12 +1400,28 @@ inline void BattlescapeState::handle(Action *action)
 					debug(L"Resetting tile visibility");
 					_save->resetTiles();
 				}
+				// "ctrl-k" - kill all aliens
+				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_k && (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Influenza bacterium dispersed");
+					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
+					{
+						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+						{
+							(*i)->instaKill();
+							if ((*i)->getTile())
+							{
+								(*i)->getTile()->setUnit(0);
+							}
+						}
+					}
+				}
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
 					saveVoxelMap();
 				}
-				// f9 - ai 
+				// f9 - ai
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
 				{
 					saveAIMap();
@@ -1475,7 +1515,7 @@ void BattlescapeState::saveAIMap()
 				Position pos(tilePos.x, tilePos.y, z);
 				t = _save->getTile(pos);
 				BattleUnit *wat = t->getUnit();
-				if (wat) 
+				if (wat)
 				{
 					switch(wat->getFaction())
 					{
@@ -1508,7 +1548,7 @@ void BattlescapeState::saveAIMap()
 		}
 	}
 
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss.str("");
 	ss << "z = " << tilePos.z;
@@ -1551,7 +1591,7 @@ void BattlescapeState::saveVoxelView()
 	double ang_x,ang_y;
 	bool black;
 	Tile *tile;
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
 	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
@@ -1668,7 +1708,7 @@ void BattlescapeState::saveVoxelView()
  */
 void BattlescapeState::saveVoxelMap()
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	static const unsigned char pal[30]=
 	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
@@ -1893,7 +1933,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
-		_btnKneel->invert(0);
+		_btnReserveKneel->invert(0);
 	}
 }
 

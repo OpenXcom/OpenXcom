@@ -30,8 +30,9 @@ PathfindingOpenSet::~PathfindingOpenSet()
 {
 	while (!_queue.empty())
 	{
-		delete _queue.top();
+		OpenSetEntry *entry = _queue.top();
 		_queue.pop();
+		delete entry;
 	}
 }
 
@@ -42,8 +43,9 @@ void PathfindingOpenSet::removeDiscarded()
 {
 	while (!_queue.empty() && !_queue.top()->_node)
 	{
-		delete _queue.top();
+		OpenSetEntry *entry = _queue.top();
 		_queue.pop();
+		delete entry;
 	}
 }
 
@@ -55,9 +57,10 @@ void PathfindingOpenSet::removeDiscarded()
 PathfindingNode *PathfindingOpenSet::pop()
 {
 	assert(!empty());
-	PathfindingNode *nd = _queue.top()->_node;
-	delete _queue.top();
+	OpenSetEntry *entry = _queue.top();
+	PathfindingNode *nd = entry->_node;
 	_queue.pop();
+	delete entry;
 	nd->_openentry = 0;
 
 	// Discarded entries might be visible now.

@@ -196,6 +196,7 @@
 #include "./Basescape/BasescapeState.h"
 #include "./Basescape/SelectStartFacilityState.h"
 #include "./Basescape/BaseView.h"
+#include "./Basescape/ManageAlienContainmentState.h"
 #include "./Basescape/ManufactureState.h"
 #include "./Basescape/PlaceFacilityState.h"
 #include "./Basescape/StoresState.h"

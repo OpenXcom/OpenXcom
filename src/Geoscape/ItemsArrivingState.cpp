@@ -53,10 +53,10 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
 	_btnOk = new TextButton(142, 16, 16, 166);
 	_btnOk5Secs = new TextButton(142, 16, 162, 166);
-	_txtTitle = new Text(310, 16, 5, 18);
-	_txtItem = new Text(114, 8, 16, 34);
-	_txtQuantity = new Text(54, 8, 152, 34);
-	_txtDestination = new Text(112, 8, 212, 34);
+	_txtTitle = new Text(310, 17, 5, 18);
+	_txtItem = new Text(114, 9, 16, 34);
+	_txtQuantity = new Text(54, 9, 152, 34);
+	_txtDestination = new Text(112, 9, 212, 34);
 	_lstTransfers = new TextList(271, 112, 14, 50);
 
 	// Set palette

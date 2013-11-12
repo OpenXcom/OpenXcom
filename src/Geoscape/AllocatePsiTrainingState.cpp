@@ -33,6 +33,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -47,7 +48,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_base = base;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 10, 8);
+	_txtTitle = new Text(300, 17, 10, 8);
 	_txtRemaining = new Text(134, 10, 10, 24);
 	_txtName = new Text(64, 10, 10, 40);
 	_txtPsiStrength = new Text(80, 20, 124, 32);
@@ -118,15 +119,21 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 		std::wstringstream ssStr;
 		std::wstringstream ssSkl;
 		_soldiers.push_back(*s);
-		if ((*s)->getCurrentStats()->psiSkill <= 0)
+		if ((*s)->getCurrentStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-			ssSkl << "0/+0";
-			ssStr << tr("STR_UNKNOWN").c_str();
+			ssStr << ((*s)->getCurrentStats()->psiStrength);
 		}
 		else
 		{
+			ssStr << tr("STR_UNKNOWN").c_str();
+		}
+		if ((*s)->getCurrentStats()->psiSkill > 0)
+		{
 			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+		}
+		else
+		{
+			ssSkl << "0/+0";
 		}
 		if ((*s)->isInPsiTraining())
 		{

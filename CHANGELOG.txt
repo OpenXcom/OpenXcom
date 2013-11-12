@@ -17,6 +17,9 @@ New features:
 - New Battle will now load available terrains from the ruleset instead of having them hardcoded.
 - New Battle now allows unlimited items to be assigned to the craft.
 - New Battle only assigns mixed alien races for the Final Base Assualt mission.
+- Showing some details of a savegame on the save screen by mouse hovering.
+- New Advanced-Option: Psi-Strength Evaluation after the appropriate research has been completed. Default: OFF
+- New attribute in the manufacture section of the ruleset: producedItems
 
   Geoscape:
 - Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.

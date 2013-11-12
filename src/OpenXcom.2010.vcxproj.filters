@@ -575,6 +575,9 @@
     <ClCompile Include="Basescape\ManufactureStartState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\ManageAlienContainmentState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
     <ClCompile Include="Basescape\ManufactureInfoState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -793,10 +796,19 @@
     <ClCompile Include="Geoscape\ResearchRequiredState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\SoldierDeath.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierMemorialState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Basescape\ManufactureState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ManageAlienContainmentState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\MiniBaseView.h">
@@ -1607,6 +1619,12 @@
     </ClInclude>
     <ClInclude Include="Geoscape\ResearchRequiredState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SoldierDeath.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierMemorialState.h">
+      <Filter>Basescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

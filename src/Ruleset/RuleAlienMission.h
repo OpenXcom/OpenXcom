@@ -61,12 +61,13 @@ struct MissionWave
 class RuleAlienMission
 {
 public:
+	RuleAlienMission(const std::string &type);
 	/// Releases all resources held by the mission.
 	~RuleAlienMission();
-	/// Get sthe mission's type.
+	/// Gets the mission's type.
 	const std::string &getType() const { return _type; }
 	/// Gets a race based on the game time and the racial distribution.
-	const std::string &generateRace(const unsigned monthsPassed) const;
+	const std::string generateRace(const unsigned monthsPassed) const;
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
 	/// Gets the number of waves.

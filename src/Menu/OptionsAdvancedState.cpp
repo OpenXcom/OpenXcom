@@ -43,7 +43,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 8);
+	_txtTitle = new Text(320, 17, 0, 8);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_lstOptions = new TextList(268, 104, 20, 30);
@@ -107,6 +107,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool>("researchedItemsWillSpent", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
 
 	_boolQuantity = _settingBoolSet.size();
@@ -135,13 +136,9 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 		{
 			ss << updatePathString(sel - _settingBoolSet.size()).c_str();
 		}
-		else if (i->first == "maxFrameSkip")
-		{
-			ss << i->second - 1;
-		}
 		else
 		{
-			ss << (*i).second;
+			ss << i->second;
 		}
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
@@ -243,15 +240,15 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 			break;
 		case 3: // frame skip
 			_settingIntSet.at(intSel).second += increment;
-			if (_settingIntSet.at(intSel).second == 12)
+			if (_settingIntSet.at(intSel).second > 10)
 			{
-				_settingIntSet.at(intSel).second = 1;
+				_settingIntSet.at(intSel).second = 0;
 			}
-			if (_settingIntSet.at(intSel).second == 0)
+			if (_settingIntSet.at(intSel).second < 0)
 			{
-				_settingIntSet.at(intSel).second = 11;
+				_settingIntSet.at(intSel).second = 10;
 			}
-			ss << _settingIntSet.at(intSel).second - 1;
+			ss << _settingIntSet.at(intSel).second;
 			break;
 		default:
 			_settingIntSet.at(intSel).second += increment;
@@ -266,7 +263,7 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 {
 	size_t sel = _lstOptions->getSelectedRow();
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::string settingName;
 	if (sel < _boolQuantity)
 	{

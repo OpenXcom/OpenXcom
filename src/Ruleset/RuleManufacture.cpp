@@ -26,6 +26,7 @@ namespace OpenXcom
  */
 RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(0), _time(0), _cost(0), _listOrder(0)
 {
+	_producedItems[name] = 1;
 }
 
 /**
@@ -35,13 +36,21 @@ RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(
  */
 void RuleManufacture::load(const YAML::Node &node, int listOrder)
 {
+	bool same = (1 == _producedItems.size() && _name == _producedItems.begin()->first);
 	_name = node["name"].as<std::string>(_name);
+	if (same)
+	{
+		int value = _producedItems.begin()->second;
+		_producedItems.clear();
+		_producedItems[_name] = value;
+	}
 	_category = node["category"].as<std::string>(_category);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_space = node["space"].as<int>(_space);
 	_time = node["time"].as<int>(_time);
 	_cost = node["cost"].as<int>(_cost);
 	_requiredItems = node["requiredItems"].as< std::map<std::string, int> >(_requiredItems);
+	_producedItems = node["producedItems"].as< std::map<std::string, int> >(_producedItems);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
@@ -112,6 +121,15 @@ int RuleManufacture::getManufactureCost () const
 const std::map<std::string, int> & RuleManufacture::getRequiredItems() const
 {
 	return _requiredItems;
+}
+
+/**
+ * Gets the list of items produced by completing "one object" of this project.
+ * @return The list of items produced by completing "one object" of this project.
+*/
+const std::map<std::string, int> & RuleManufacture::getProducedItems() const
+{
+	return _producedItems;
 }
 
 /**

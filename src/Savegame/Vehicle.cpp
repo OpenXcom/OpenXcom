@@ -74,6 +74,10 @@ RuleItem *Vehicle::getRules() const
  */
 int Vehicle::getAmmo() const
 {
+	if (_ammo == -1)
+	{
+		return 255;
+	}
 	return _ammo;
 }
 
@@ -83,7 +87,10 @@ int Vehicle::getAmmo() const
  */
 void Vehicle::setAmmo(int ammo)
 {
-	_ammo = ammo;
+	if (_ammo != -1)
+	{
+		_ammo = ammo;
+	}
 }
 
 }

@@ -35,7 +35,7 @@ private:
 	std::string _name, _category;
 	std::vector<std::string> _requires;
 	int _space, _time, _cost;
-	std::map<std::string, int> _requiredItems;
+	std::map<std::string, int> _requiredItems, _producedItems;
 	int _listOrder;
 public:
 	/// Creates a new manufacture.
@@ -56,6 +56,9 @@ public:
 	int getManufactureCost () const;
 	/// Gets the list of items required to manufacture one object.
 	const std::map<std::string, int> & getRequiredItems() const;
+	/// Gets the list of items produced by completing "one object" of this project.
+	/// by default: it contains only the "name" item with a value of 1.
+	const std::map<std::string, int> & getProducedItems() const;
 	/// Gets the list weight for this manufacture item.
 	int getListOrder() const;
 };

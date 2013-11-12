@@ -55,7 +55,7 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 
 	for (int text = 0; text != 5; ++text)
 	{
-		std::stringstream ss2;
+		std::ostringstream ss2;
 		ss2 << "STR_VICTORY_" << text+1;
 		_txtText[text]->setText(tr(ss2.str()));
 		_txtText[text]->setWordWrap(true);
@@ -109,7 +109,7 @@ void VictoryState::nextScreen()
 	int offset = 0;
 	if(_screenNumber>3)
 		offset = 2;
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+offset << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_screen->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());

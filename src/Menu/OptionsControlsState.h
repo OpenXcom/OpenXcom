@@ -52,6 +52,7 @@ private:
 	int _countGeneral, _countGeo, _countBattle;
 	int _selected;
 	KeyOption *_selKey;
+	Uint8 _colorGroup, _colorSel, _colorNormal;
 
 	void addControls(KeyOption keys[], int count);
 	std::string ucWords(std::string str);
@@ -60,6 +61,8 @@ public:
 	OptionsControlsState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Controls state.
 	~OptionsControlsState();
+	/// Fills controls list.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

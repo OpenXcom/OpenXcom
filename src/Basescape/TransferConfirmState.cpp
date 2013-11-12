@@ -45,9 +45,9 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_window = new Window(this, 320, 80, 0, 60);
 	_btnCancel = new TextButton(128, 16, 176, 115);
 	_btnOk = new TextButton(128, 16, 16, 115);
-	_txtTitle = new Text(310, 16, 5, 75);
-	_txtCost = new Text(60, 16, 110, 95);
-	_txtTotal = new Text(100, 16, 170, 95);
+	_txtTitle = new Text(310, 17, 5, 75);
+	_txtCost = new Text(60, 17, 110, 95);
+	_txtTotal = new Text(100, 17, 170, 95);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

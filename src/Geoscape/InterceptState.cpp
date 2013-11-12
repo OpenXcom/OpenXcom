@@ -52,11 +52,11 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	// Create objects
 	_window = new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
 	_btnCancel = new TextButton(288, 16, 16, 146);
-	_txtTitle = new Text(300, 16, 10, 46);
+	_txtTitle = new Text(300, 17, 10, 46);
 	_txtCraft = new Text(86, 9, 14, 70);
 	_txtStatus = new Text(70, 9, 100, 70);
 	_txtBase = new Text(80, 9, 170, 70);
-	_txtWeapons = new Text(80, 16, 238, 62);
+	_txtWeapons = new Text(80, 17, 238, 62);
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
 	// Set palette

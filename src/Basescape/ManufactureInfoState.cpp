@@ -85,8 +85,8 @@ void ManufactureInfoState::buildUi()
 	_btnStop = new TextButton (button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 	_txtAvailableEngineer = new Text(width - 4 * button_x_border, button_height, start_x + button_x_border, start_y + 2 * button_height);
 	_txtAvailableSpace = new Text(width - 4 * button_x_border, button_height, start_x + button_x_border, start_y + 2.7f * button_height);
-	_txtAllocatedEngineer = new Text(button_width, 2*button_height, start_x + button_x_border, start_y + 3.5f * button_height);
-	_txtUnitToProduce = new Text(button_width, 2*button_height, width - button_width - button_x_border, start_y + 3.5f * button_height);
+	_txtAllocatedEngineer = new Text(button_width - 1 * button_x_border, 2*button_height, start_x + button_x_border, start_y + 3.5f * button_height);
+	_txtUnitToProduce = new Text(button_width - 4 * button_x_border, 2*button_height, width - button_width - button_x_border, start_y + 3.5f * button_height);
 	_txtEngineerUp = new Text(button_width, 2*button_height, start_x + 3*button_x_border, start_y + 6 * button_height);
 	_txtEngineerDown = new Text(button_width, 2*button_height, start_x + 3*button_x_border, start_y + 7.5f * button_height);
 	_txtUnitUp = new Text(button_width, 2*button_height, width - button_width - button_x_border + 3*button_x_border, start_y + 6 * button_height);
@@ -228,6 +228,7 @@ void ManufactureInfoState::btnStopClick (Action *)
  */
 void ManufactureInfoState::btnOkClick (Action *)
 {
+	if (0 == _production->getAmountTotal()) return; // Do not allow to start a project with zero units to produce!
 	if(_item)
 	{
 		_production->startItem(_base, _game->getSavedGame());

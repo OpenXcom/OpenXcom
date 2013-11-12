@@ -51,7 +51,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnNew = new TextButton(148, 16, 8, 176);
 	_btnOk = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 8);
 	_txtAvailable = new Text(150, 9, 8, 24);
 	_txtAllocated = new Text(150, 9, 160, 24);
 	_txtSpace = new Text(150, 9, 8, 34);
@@ -228,7 +228,6 @@ void ManufactureState::fillProductionList()
 		}
 		_lstManufacture->addRow (5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}
-	_lstManufacture->draw();
 	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE").arg(_base->getAvailableEngineers()));
 	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED").arg(_base->getAllocatedEngineers()));
 	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE").arg(_base->getFreeWorkshops()));

@@ -48,7 +48,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(112, 16, 200, 176);
 	_lstFacilities = new TextList(112, 104, 200, 64);
-	_txtTitle = new Text(118, 16, 197, 48);
+	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

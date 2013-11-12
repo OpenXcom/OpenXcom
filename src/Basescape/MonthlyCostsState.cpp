@@ -45,7 +45,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(300, 20, 10, 170);
-	_txtTitle = new Text(310, 16, 5, 12);
+	_txtTitle = new Text(310, 17, 5, 12);
 	_txtCost = new Text(80, 9, 115, 32);
 	_txtQuantity = new Text(55, 9, 195, 32);
 	_txtTotal = new Text(60, 9, 249, 32);

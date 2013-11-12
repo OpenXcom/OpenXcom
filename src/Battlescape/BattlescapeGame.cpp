@@ -273,7 +273,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 	if (action.type == BA_WALK)
 	{
-		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;
+		ss << L"Walking to " << action.target;
 		_parentState->debug(ss.str());
 
 		if (_save->getTile(action.target))
@@ -299,7 +299,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 
 		ss.clear();
-		ss << L"Attack type=" << action.type << " target="<< action.target.x << " "<< action.target.y << " "<< action.target.z << " weapon=" << action.weapon->getRules()->getName().c_str();
+		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
 		statePushBack(new ProjectileFlyBState(this, action));
@@ -422,7 +422,7 @@ void BattlescapeGame::endTurn()
 		statePushBack(0);
 		return;
 	}
-	
+
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
@@ -582,11 +582,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 					}
 				}
-			}
-			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
-			{
-				(*j)->setSpecialAbility(SPECAB_NONE);
-				convertUnit((*j), (*j)->getSpawnUnit());
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
@@ -1274,7 +1269,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						if (_currentAction.type == BA_PANIC)
 						{
 							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
-							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
@@ -1438,6 +1433,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 	if (player)
 	{
 		_playerTUReserved = tur;
+		_save->setTUReserved(tur);
 	}
 }
 
@@ -1511,9 +1507,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		std::wstringstream ss;
-		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender());
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
 	}
 
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
@@ -1528,7 +1522,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	unit->setTile(0);
 
 	getSave()->getTile(unit->getPosition())->setUnit(0);
-	std::stringstream newArmor;
+	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(newType)->getArmor();
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
@@ -1984,6 +1978,7 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
 	_kneelReserved = reserved;
+	_save->setKneelReserved(reserved);
 }
 
 /**
@@ -1998,4 +1993,49 @@ bool BattlescapeGame::getKneelReserved()
 	}
 	return false;
 }
+
+/**
+ * Checks if a unit has moved next to a proximity grenade.
+ * Checks one tile around the unit in every direction.
+ * For a large unit we check every tile it occupies.
+ * @param unit Pointer to a unit.
+ * @return True if a proximity grenade was triggered.
+ */
+bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
+{
+	int size = unit->getArmor()->getSize() - 1;
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			for (int tx = -1; tx < 2; tx++)
+			{
+				for (int ty = -1; ty < 2; ty++)
+				{
+					Tile *t = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+					if (t)
+					{
+						for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+						{
+							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
+							{
+								Position p;
+								p.x = t->getPosition().x*16 + 8;
+								p.y = t->getPosition().y*16 + 8;
+								p.z = t->getPosition().z*24 + t->getTerrainLevel();
+								statePushNext(new ExplosionBState(this, p, (*i), (*i)->getPreviousOwner()));
+								getSave()->removeItem(*i);
+								unit->setCache(0);
+								getMap()->cacheUnit(unit);
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
 }

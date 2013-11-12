@@ -20,6 +20,7 @@
 #define OPENXCOM_ARMOR_H
 
 #include <string>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
 #include "Unit.h"
@@ -36,7 +37,8 @@ class Armor
 {
 private:
 	static const int DAMAGE_TYPES = 10;
-	std::string _type, _spriteSheet, _spriteInv, _corpseItem, _storeItem;
+	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem;
+	std::vector<std::string> _corpseBattle;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
 	int _size, _weight;
@@ -45,7 +47,7 @@ private:
 	UnitStats _stats;
 public:
 	/// Creates a blank armor ruleset.
-	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
+	Armor(const std::string &type);
 	/// Cleans up the armor ruleset.
 	~Armor();
 	/// Loads the armor data from YAML.
@@ -64,8 +66,10 @@ public:
 	int getRearArmor() const;
 	/// Gets the under armor level.
 	int getUnderArmor() const;
-	/// Gets the corpse item.
-	std::string getCorpseItem() const;
+	/// Gets the Geoscape corpse item.
+	std::string getCorpseGeoscape() const;
+	/// Gets the Battlescape corpse item.
+	const std::vector<std::string> &getCorpseBattlescape() const;
 	/// Gets the stores item.
 	std::string getStoreItem() const;
 	/// Gets the battlescape drawing routine ID.

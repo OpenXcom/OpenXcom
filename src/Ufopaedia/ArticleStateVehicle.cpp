@@ -44,7 +44,7 @@ namespace OpenXcom
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(310, 16, 5, 23);
+		_txtTitle = new Text(310, 17, 5, 23);
 		_txtInfo = new Text(300, 150, 10, 122);
 		_lstStats = new TextList(300, 89, 10, 48);
 
@@ -107,7 +107,7 @@ namespace OpenXcom
 		
 		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
 				
-		if (item->getClipSize() != -1)
+		if (!item->getCompatibleAmmo()->empty())
 		{
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 

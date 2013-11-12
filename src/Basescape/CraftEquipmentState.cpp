@@ -68,7 +68,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk = new TextButton((craftHasACrew || isNewBattle)? 148:288, 16, (craftHasACrew || isNewBattle)? 164:16, 176);
 	_btnClear = new TextButton(148, 16, 8, 176);
 	_btnInventory = new TextButton(148, 16, 8, 176);
-	_txtTitle = new Text(300, 16, 16, 7);
+	_txtTitle = new Text(300, 17, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
 	_txtAvailable = new Text(110, 9, 16, 24);
@@ -451,7 +451,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	// Convert vehicle to item
 	if (item->isFixed())
 	{
-		if(item->getClipSize() != -1)
+		if(!item->getCompatibleAmmo()->empty())
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
@@ -542,7 +542,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		if (room > 0)
 		{
 			change = std::min(room, change);
-			if(item->getClipSize() != -1)
+			if(!item->getCompatibleAmmo()->empty())
 			{
 				// We want to redistribute all the available ammo among the vehicles,
 				// so first we note the total number of vehicles we want in the craft
@@ -556,7 +556,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 				int canBeAdded = std::min(newVehiclesCount, baqty);
 				if (canBeAdded > 0)
 				{
-					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
 					int remainder = 0;
 					if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 					int newAmmo;
@@ -583,11 +583,11 @@ void CraftEquipmentState::moveRightByValue(int change)
 			else
 				for (int i=0; i < change; ++i)
 				{
-					c->getVehicles()->push_back(new Vehicle(item, 255));
-						if (_game->getSavedGame()->getMonthsPassed() != -1)
-						{
-							_base->getItems()->removeItem(_items[_sel]);
-						}
+					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize()));
+					if (_game->getSavedGame()->getMonthsPassed() != -1)
+					{
+						_base->getItems()->removeItem(_items[_sel]);
+					}
 				}
 		}
 	}

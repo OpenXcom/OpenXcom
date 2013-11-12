@@ -68,7 +68,7 @@ void UnitWalkBState::init()
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
-	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z << "," << " to " << _target.x << "," << _target.y << "," << _target.z;}
+	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition() << "," << " to " << _target;}
 	int dir = _pf->getStartDirection();
 	if (!_action.strafe && dir != -1 && dir != _unit->getDirection())
 	{
@@ -192,37 +192,10 @@ void UnitWalkBState::think()
 			_terrain->calculateFOV(_unit->getPosition());
 			unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
-			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
-			int size = _unit->getArmor()->getSize() - 1;
-			for (int x = size; x >= 0; x--)
+			if (_parent->checkForProximityGrenades(_unit))
 			{
-				for (int y = size; y >= 0; y--)
-				{
-					for (int tx = -1; tx < 2; tx++)
-					{
-						for (int ty = -1; ty < 2; ty++)
-						{
-							Tile *t = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
-							if (t)
-							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
-							{
-								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
-								{
-									Position p;
-									p.x = t->getPosition().x*16 + 8;
-									p.y = t->getPosition().y*16 + 8;
-									p.z = t->getPosition().z*24 + t->getTerrainLevel();
-									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
-									_parent->getSave()->removeItem(*i);
-									_unit->setCache(0);
-									_parent->getMap()->cacheUnit(_unit);
-									_parent->popState();
-									return;
-								}
-							}
-						}
-					}
-				}
+				_parent->popState();
+				return;
 			}
 			if (unitSpotted)
 			{
@@ -301,10 +274,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 			if (_unit->getFaction() == FACTION_HOSTILE &&
-				((_parent->getSave()->getTile(destination)->getUnit() &&
-				_parent->getSave()->getTile(destination)->getUnit()->getFaction() == FACTION_HOSTILE &&
-				_parent->getSave()->getTile(destination)->getUnit() != _unit) ||
-				_parent->getSave()->getTile(destination)->getFire() > 0))
+				_parent->getSave()->getTile(destination)->getFire() > 0)
 			{
 				tu -= 32; // we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 			}
@@ -318,7 +288,10 @@ void UnitWalkBState::think()
 				tu *= 0.75;
 				energy *= 1.5;
 			}
-
+			if (dir >= Pathfinding::DIR_UP)
+			{
+				energy = 0;
+			}
 			if (tu > _unit->getTimeUnits())
 			{
 				if (_parent->getPanicHandled() && tu < 255)

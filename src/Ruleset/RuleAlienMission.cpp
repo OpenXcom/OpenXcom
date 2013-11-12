@@ -51,6 +51,10 @@ namespace YAML
 namespace OpenXcom
 {
 
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type)
+{
+}
+
 /**
  * Loads the mission data from a YAML node.
  * @param node YAML node.
@@ -117,7 +121,7 @@ void RuleAlienMission::load(const YAML::Node &node)
  * @param monthsPassed The number of months that have passed in the game world.
  * @return The string id of the race.
  */
-const std::string &RuleAlienMission::generateRace(const unsigned monthsPassed) const
+const std::string RuleAlienMission::generateRace(const unsigned monthsPassed) const
 {
 	std::vector<std::pair<unsigned, WeightedOptions*> >::const_reverse_iterator rc = _raceDistribution.rbegin();
 	while (monthsPassed < rc->first)

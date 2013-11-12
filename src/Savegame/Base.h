@@ -95,9 +95,9 @@ public:
 	/// Sets the base's engineers.
 	void setEngineers(int engineers);
 	/// Checks if a target is detected by the base's radar.
-	bool detect(Target *target) const;
+	int detect(Target *target) const;
 	/// Checks if a target is inside the base's radar range.
-	bool insideRadarRange(Target *target) const;
+	int insideRadarRange(Target *target) const;
 	/// Gets the base's available soldiers.
 	int getAvailableSoldiers(bool checkCombatReadiness = false) const;
 	/// Gets the base's total soldiers.

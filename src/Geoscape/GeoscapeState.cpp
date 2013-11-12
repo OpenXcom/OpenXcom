@@ -549,23 +549,24 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	std::stringstream ss, ss2;
-	std::wstringstream ss3, ss4, ss5;
-
 	if (_showFundsOnGeoscape)
 	{
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
-	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-	_txtSec->setText(Language::utf8ToWstr(ss.str()));
+	std::wstringstream ss;
+	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
+	_txtSec->setText(ss.str());
 
-	ss2 << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
-	_txtMin->setText(Language::utf8ToWstr(ss2.str()));
+	std::wstringstream ss2;
+	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
+	_txtMin->setText(ss2.str());
 
+	std::wstringstream ss3;
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
+	std::wstringstream ss4;
 	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
@@ -573,6 +574,7 @@ void GeoscapeState::timeDisplay()
 
 	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
+	std::wstringstream ss5;
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
 }
@@ -1218,24 +1220,23 @@ void GeoscapeState::time30Minutes()
 			}
 			if (!(*u)->getDetected())
 			{
-				bool detected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				bool detected = false, hyperdetected = false;
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
 				{
-					if ((*b)->detect(*u))
+					switch ((*b)->detect(*u))
 					{
+					case 2:	// hyper-wave decoder
+						(*u)->setHyperDetected(true);
+						hyperdetected = true;
+					case 1: // conventional radar
 						detected = true;
-						if((*b)->getHyperDetection())
-						{
-							(*u)->setHyperDetected(true);
-						}
 					}
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
 					{
-						if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
-							continue;
-						if ((*c)->detect(*u))
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
 						{
 							detected = true;
+							break;
 						}
 					}
 				}
@@ -1247,18 +1248,28 @@ void GeoscapeState::time30Minutes()
 			}
 			else
 			{
-				bool detected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				bool detected = false, hyperdetected = false;
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
 				{
-					bool insideRange = (*b)->insideRadarRange(*u);
-					detected = detected || insideRange;
-					if ((*b)->getHyperDetection() && insideRange)
+					switch ((*b)->insideRadarRange(*u))
 					{
+					case 2:	// hyper-wave decoder
+						detected = true;
+						hyperdetected = true;
 						(*u)->setHyperDetected(true);
+						break;
+					case 1: // conventional radar
+						detected = true;
+						hyperdetected = (*u)->getHyperDetected();
 					}
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
 					{
-						detected = detected || (*c)->detect(*u);
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
+						{
+							detected = true;
+							hyperdetected = (*u)->getHyperDetected();
+							break;
+						}
 					}
 				}
 				if (!detected)
@@ -1440,7 +1451,7 @@ void GeoscapeState::time1Day()
 						_game->getRuleset()->getUnit(
 							research->getName()
 						)->getArmor()
-					)->getCorpseItem()
+					)->getCorpseGeoscape()
 				); // ;)
 			}
 			if((*iter)->getRules()->getGetOneFree().size() != 0)
@@ -1491,15 +1502,18 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
 			// check for possible researching weapon before clip
-			std::vector<std::string> manufactures = _game->getRuleset()->getManufactureList();
-			for (std::vector<std::string>::iterator man = manufactures.begin(); man != manufactures.end(); ++man)
+			if (newResearch)
 			{
-				RuleManufacture *rule = _game->getRuleset()->getManufacture(*man);
-				std::vector<std::string> req = rule->getRequirements();
-				if (newResearch && rule->getCategory() == "STR_WEAPON" && std::find(req.begin(), req.end(), newResearch->getName()) != req.end() && !_game->getSavedGame()->isResearched(req))
+				RuleItem *item = _game->getRuleset()->getItem(newResearch->getName());
+				if (item && item->getBattleType() == BT_FIREARM && !item->getCompatibleAmmo()->empty())
 				{
-					popup(new ResearchRequiredState(_game, _game->getRuleset()->getItem(rule->getName())));
-					break;
+					RuleManufacture *man = _game->getRuleset()->getManufacture(item->getType());
+					std::vector<std::string> req = man->getRequirements();
+					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+					if (man && ammo && std::find(req.begin(), req.end(), ammo->getType()) != req.end() && !_game->getSavedGame()->isResearched(man->getRequirements()))
+					{
+						popup(new ResearchRequiredState(_game, item));
+					}
 				}
 			}
 
@@ -2094,7 +2108,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// One randomly selected mission.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		const std::string &targetRegion = strategy.chooseRandomRegion();
+		const std::string &targetRegion = strategy.chooseRandomRegion(_game->getRuleset());
 		const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);

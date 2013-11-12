@@ -346,53 +346,57 @@ void Base::setEngineers(int engineers)
  * Returns if a certain target is covered by the base's
  * radar range, taking in account the range and chance.
  * @param target Pointer to target to compare.
- * @return True if it's within range, False otherwise.
+ * @return 0 - not detected, 1 - detected by conventional radar, 2 - detected by hyper-wave decoder.
  */
-bool Base::detect(Target *target) const
+int Base::detect(Target *target) const
 {
 	int chance = 0;
-	double distance = getDistance(target);
+	double distance = getDistance(target) * 60.0 * (180.0 / M_PI);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180) >= distance)
+		if ((*i)->getRules()->getRadarRange() >= distance && (*i)->getBuildTime() == 0)
 		{
 			if ((*i)->getRules()->isHyperwave())
 			{
-				return true;
+				return 2;
 			}
 			chance += (*i)->getRules()->getRadarChance();
 		}
 	}
-	if (chance == 0)
-		return false;
+	if (chance == 0) return 0;
 
 	Ufo *u = dynamic_cast<Ufo*>(target);
 	if (u != 0)
 	{
-		chance = (chance * 100 + u->getVisibility()) / 100;
+		chance = chance * (100 + u->getVisibility()) / 100;
 	}
 
-	return RNG::percent(chance);
+	return RNG::percent(chance)? 1 : 0;
 }
 
 /**
  * Returns if a certain target is inside the base's
  * radar range, taking in account the positions of both.
  * @param target Pointer to target to compare.
- * @return True if it's inside, False otherwise.
+ * @return 0 - outside radar range, 1 - inside conventional radar range, 2 - inside hyper-wave decoder range.
  */
-bool Base::insideRadarRange(Target *target) const
+int Base::insideRadarRange(Target *target) const
 {
-	double range = 0;
+	bool insideRange = false;
+	double distance = getDistance(target) * 60.0 * (180.0 / M_PI);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->getRules()->getRadarRange() >= distance && (*i)->getBuildTime() == 0)
 		{
-			range = std::max(range, (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180));
+			if ((*i)->getRules()->isHyperwave())
+			{
+				return 2;
+			}
+			insideRange = true;
 		}
 	}
-	
-	return (getDistance(target) <= range);
+
+	return insideRange? 1 : 0;
 }
 
 /**
@@ -941,7 +945,7 @@ bool Base::getHyperDetection() const
 {
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isHyperwave())
+		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
 		{
 			return true;
 		}		
@@ -1177,9 +1181,9 @@ void Base::setupDefenses()
 		RuleItem *rule = _rule->getItem(itemId);
 		if (rule->isFixed())
 		{
-			if (rule->getClipSize() == -1) // so this vehicle does not need ammo
+			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
-				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, 255));
+				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, rule->getClipSize()));
 				_items->removeItem(itemId, iqty);
 			}
 			else // so this vehicle needs ammo

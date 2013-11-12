@@ -438,10 +438,33 @@ Language *Game::getLanguage() const
 */
 void Game::loadLanguage(const std::string &filename)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "Language/" << filename << ".yml";
 
-	_lang->load(CrossPlatform::getDataFile(ss.str()), _rules->getExtraStrings()[filename]);
+	ExtraStrings *strings = 0;
+	std::map<std::string, ExtraStrings *> extraStrings = _rules->getExtraStrings();
+	if (!extraStrings.empty())
+	{
+		if (extraStrings.find(filename) != extraStrings.end())
+		{
+			strings = extraStrings[filename];
+		}
+		// Fallback
+		else if (extraStrings.find("en-US") != extraStrings.end())
+		{
+			strings = extraStrings["en-US"];
+		}
+		else if (extraStrings.find("en-GB") != extraStrings.end())
+		{
+			strings = extraStrings["en-GB"];
+		}
+		else
+		{
+			strings = extraStrings.begin()->second;
+		}
+	}
+
+	_lang->load(CrossPlatform::getDataFile(ss.str()), strings);
 
 	Options::setString("language", filename);
 }
@@ -452,7 +475,7 @@ void Game::loadLanguage(const std::string &filename)
  */
 void Game::loadLng(const std::string &filename)
 {
-	std::stringstream ss, ss2;
+	std::ostringstream ss, ss2;
 	ss << "Language/" << filename << ".lng";
 	ss2 << "Language/" << filename << ".geo";
 

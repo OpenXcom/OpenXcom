@@ -57,7 +57,7 @@ OptionsState::OptionsState(Game *game, OptionsOrigin origin) : OptionsBaseState(
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 8);
+	_txtTitle = new Text(320, 17, 0, 8);
 	_btnLanguage = new TextButton(100, 16, 8, 154);
 	_btnControls = new TextButton(100, 16, 110, 154);
 	_btnAdvanced = new TextButton(100, 16, 212, 154);
@@ -67,7 +67,7 @@ OptionsState::OptionsState(Game *game, OptionsOrigin origin) : OptionsBaseState(
 
 	_txtDisplayResolution = new Text(140, 9, 28, 32);
 	_txtDisplayWidth = new TextEdit(48, 16, 30, 47);
-	_txtDisplayX = new Text(16, 16, 76, 47);
+	_txtDisplayX = new Text(16, 17, 76, 47);
 	_txtDisplayHeight = new TextEdit(48, 16, 88, 47);
 	_btnDisplayUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 140, 36);
 	_btnDisplayDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 140, 58);

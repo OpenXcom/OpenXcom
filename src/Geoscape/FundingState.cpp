@@ -45,7 +45,7 @@ FundingState::FundingState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(50, 12, 135, 180);
-	_txtTitle = new Text(320, 16, 0, 8);
+	_txtTitle = new Text(320, 17, 0, 8);
 	_txtCountry = new Text(100, 9, 32, 30);
 	_txtFunding = new Text(100, 9, 140, 30);
 	_txtChange = new Text(72, 9, 240, 30);

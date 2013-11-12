@@ -216,6 +216,7 @@
     <ClCompile Include="Basescape\CraftsState.cpp" />
     <ClCompile Include="Basescape\CraftWeaponsState.cpp" />
     <ClCompile Include="Basescape\DismantleFacilityState.cpp" />
+    <ClCompile Include="Basescape\ManageAlienContainmentState.cpp" />
     <ClCompile Include="Basescape\ManufactureState.cpp" />
     <ClCompile Include="Basescape\NewManufactureListState.cpp" />
     <ClCompile Include="Basescape\ManufactureInfoState.cpp" />
@@ -234,6 +235,7 @@
     <ClCompile Include="Basescape\SellState.cpp" />
     <ClCompile Include="Basescape\SoldierArmorState.cpp" />
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
+    <ClCompile Include="Basescape\SoldierMemorialState.cpp" />
     <ClCompile Include="Basescape\SoldiersState.cpp" />
     <ClCompile Include="Basescape\StoresState.cpp" />
     <ClCompile Include="Basescape\TransferBaseState.cpp" />
@@ -453,6 +455,7 @@
     <ClCompile Include="Savegame\SerializationHelper.cpp" />
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
+    <ClCompile Include="Savegame\SoldierDeath.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />
     <ClCompile Include="Savegame\TerrorSite.cpp" />
     <ClCompile Include="Savegame\Tile.cpp" />
@@ -489,6 +492,7 @@
     <ClInclude Include="Basescape\CraftWeaponsState.h" />
     <ClInclude Include="Basescape\DismantleFacilityState.h" />
     <ClInclude Include="Basescape\NewManufactureListState.h" />
+    <ClInclude Include="Basescape\ManageAlienContainmentState.h" />
     <ClInclude Include="Basescape\ManufactureInfoState.h" />
     <ClInclude Include="Basescape\ManufactureState.h" />
     <ClInclude Include="Basescape\MiniBaseView.h" />
@@ -506,6 +510,7 @@
     <ClInclude Include="Basescape\SellState.h" />
     <ClInclude Include="Basescape\SoldierArmorState.h" />
     <ClInclude Include="Basescape\SoldierInfoState.h" />
+    <ClInclude Include="Basescape\SoldierMemorialState.h" />
     <ClInclude Include="Basescape\SoldiersState.h" />
     <ClInclude Include="Basescape\StoresState.h" />
     <ClInclude Include="Basescape\TransferBaseState.h" />
@@ -727,6 +732,7 @@
     <ClInclude Include="Savegame\SerializationHelper.h" />
     <ClInclude Include="Savegame\Soldier.h" />
     <ClInclude Include="Savegame\Node.h" />
+    <ClInclude Include="Savegame\SoldierDeath.h" />
     <ClInclude Include="Savegame\Target.h" />
     <ClInclude Include="Savegame\TerrorSite.h" />
     <ClInclude Include="Savegame\Tile.h" />

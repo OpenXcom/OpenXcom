@@ -41,16 +41,18 @@ class SavedGameState : public State
 protected:
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
+	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete, *_txtDetails;
 	TextList *_lstSaves;
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
 	std::vector<std::string> _saves;
+	std::vector<std::wstring> _details;
+	int _firstValidRow;
 public:
 	/// Creates the Saved Game state.
-	SavedGameState(Game *game, OptionsOrigin origin);
+	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow);
 	/// Creates the Saved Game state (autosave option).
-	SavedGameState(Game *game, OptionsOrigin origin, bool showMsg);
+	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();
 	/// Updates the palette.
@@ -61,6 +63,10 @@ public:
 	void updateStatus(const std::string &msg);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for moving the mouse over a list item.
+	void lstSavesMouseOver(Action *action);
+	/// Handler for moving the mouse outside the list borders.
+	void lstSavesMouseOut(Action *action);
 };
 
 }

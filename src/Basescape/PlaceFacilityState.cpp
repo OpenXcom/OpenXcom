@@ -53,11 +53,11 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_btnCancel = new TextButton(112, 16, 200, 176);
 	_txtFacility = new Text(110, 9, 202, 50);
 	_txtCost = new Text(110, 9, 202, 62);
-	_numCost = new Text(110, 16, 202, 70);
+	_numCost = new Text(110, 17, 202, 70);
 	_txtTime = new Text(110, 9, 202, 90);
-	_numTime = new Text(110, 16, 202, 98);
+	_numTime = new Text(110, 17, 202, 98);
 	_txtMaintenance = new Text(110, 9, 202, 118);
-	_numMaintenance = new Text(110, 16, 202, 126);
+	_numMaintenance = new Text(110, 17, 202, 126);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);

@@ -52,7 +52,7 @@ namespace OpenXcom
 		_window = new Window(this, 256, 180, 32, 10, POPUP_BOTH);
 
 		// set title
-		_txtTitle = new Text(224, 16, 48, 33);
+		_txtTitle = new Text(224, 17, 48, 33);
 
 		// set buttons
 		int y = 50;

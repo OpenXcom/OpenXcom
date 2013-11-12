@@ -17,6 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ufo.h"
+#include <assert.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <sstream>
+#include <algorithm>
+#include "../aresame.h"
 #include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
@@ -26,12 +32,6 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
-#include "../aresame.h"
-#include <assert.h>
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <sstream>
-#include <algorithm>
 
 namespace OpenXcom
 {
@@ -105,7 +105,7 @@ private:
 void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 {
 	MovingTarget::load(node);
-	_id = _crashId = _landId = node["id"].as<int>(_id);
+	_id = node["id"].as<int>(_id);
 	_crashId = node["crashId"].as<int>(_crashId);
 	_landId = node["landId"].as<int>(_landId);
 	_damage = node["damage"].as<int>(_damage);

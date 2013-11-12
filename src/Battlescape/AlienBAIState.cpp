@@ -154,7 +154,7 @@ void AlienBAIState::think(BattleAction *action)
 	_melee = false;
 	_rifle = false;
 	_blaster = false;
-	
+
 	if (_traceAI)
 	{
 		Log(LOG_INFO) << "Unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
@@ -250,7 +250,7 @@ void AlienBAIState::think(BattleAction *action)
 	{
 		evaluate = true;
 	}
-	
+
 
 	if (_save->isCheating() && _AIMode != AI_COMBAT)
 	{
@@ -281,7 +281,7 @@ void AlienBAIState::think(BattleAction *action)
 			Log(LOG_INFO) << "Re-Evaluated, now using " << AIMode << " behaviour";
 		}
 	}
-	
+
 	switch (_AIMode)
 	{
 	case AI_ESCAPE:
@@ -495,7 +495,7 @@ void AlienBAIState::setupPatrol()
 				_toNode = _save->getPatrolNode(!scout, _unit, _fromNode);
 			}
 		}
-		
+
 		if (_toNode != 0)
 		{
 			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
@@ -569,7 +569,7 @@ void AlienBAIState::setupAmbush()
 				{
 					int score = BASE_SYSTEMATIC_SUCCESS;
 					score -= ambushTUs;
-				
+
 					// make sure our enemy can reach here too.
 					_save->getPathfinding()->calculate(_aggroTarget, pos);
 
@@ -604,14 +604,15 @@ void AlienBAIState::setupAmbush()
 				// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 				Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
 			Position currentPos = _aggroTarget->getPosition();
-			int dir = path.back();
-			path.pop_back();
+			_save->getPathfinding()->setUnit(_aggroTarget);
 			Position nextPos;
+			size_t tries = path.size();
 			// hypothetically walk the target through the path.
-			while (path.size())
+			while (tries > 0)
 			{
-				_save->getPathfinding()->directionToVector(dir, &nextPos);
-				currentPos += nextPos;
+				_save->getPathfinding()->getTUCost(currentPos, path.back(), &nextPos, _aggroTarget, 0, false);
+				path.pop_back();
+				currentPos = nextPos;
 				Tile *tile = _save->getTile(currentPos);
 				Position target;
 				// do a virtual fire calculation
@@ -621,12 +622,11 @@ void AlienBAIState::setupAmbush()
 					_ambushAction->finalFacing = _save->getTileEngine()->getDirectionTo(_ambushAction->target, currentPos);
 					break;
 				}
-				dir = path.back();
-				path.pop_back();
+				--tries;
 			}
 			if (_traceAI)
 			{
-				Log(LOG_INFO) << "Ambush estimation will move to " << _ambushAction->target.x << ", " << _ambushAction->target.y << ", " << _ambushAction->target.z;
+				Log(LOG_INFO) << "Ambush estimation will move to " << _ambushAction->target;
 			}
 			return;
 		}
@@ -646,6 +646,7 @@ void AlienBAIState::setupAmbush()
 void AlienBAIState::setupAttack()
 {
 	_attackAction->type = BA_RETHINK;
+	_psiAction->type = BA_NONE;
 
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
@@ -660,7 +661,7 @@ void AlienBAIState::setupAttack()
 			wayPointAction();
 		}
 	}
-	
+
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
 	if (selectNearestTarget())
 	{
@@ -684,11 +685,11 @@ void AlienBAIState::setupAttack()
 		{
 			if (_attackAction->type != BA_WALK)
 			{
-				Log(LOG_INFO) << "Attack estimation desires to shoot at " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z;
+				Log(LOG_INFO) << "Attack estimation desires to shoot at " << _attackAction->target;
 			}
 			else
 			{
-				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z;
+				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target;
 			}
 		}
 		return;
@@ -700,7 +701,7 @@ void AlienBAIState::setupAttack()
 		{
 			if (_traceAI)
 			{
-				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z;
+				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target;
 			}
 			return;
 		}
@@ -732,7 +733,7 @@ void AlienBAIState::setupEscape()
 	Position bestTile(0, 0, 0);
 
 	Tile *tile = 0;
-	
+
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = 10;
 	const int FIRE_PENALTY = 40;
@@ -1172,7 +1173,7 @@ void AlienBAIState::evaluateAIMode()
 		combatOdds = 0;
 		escapeOdds = 0;
 	}
-	
+
 	// take our current mode into consideration
 	switch (_AIMode)
 	{
@@ -1207,7 +1208,7 @@ void AlienBAIState::evaluateAIMode()
 	{
 		escapeOdds *= 1.1;
 	}
-	
+
 	// take our aggression into consideration
 	switch (_unit->getAggression())
 	{
@@ -1239,7 +1240,7 @@ void AlienBAIState::evaluateAIMode()
 	{
 		escapeOdds /= 2;
 	}
-	
+
 	// factor in visible enemies.
 	if (_visibleEnemies)
 	{
@@ -1268,7 +1269,7 @@ void AlienBAIState::evaluateAIMode()
 
 	// generate a random number to represent our decision.
 	int decision = 1 + RNG::generate(0, patrolOdds + ambushOdds + escapeOdds + combatOdds);
-	
+
 	if (decision > escapeOdds)
 	{
 		if (decision > escapeOdds + ambushOdds)
@@ -1298,7 +1299,7 @@ void AlienBAIState::evaluateAIMode()
 		_AIMode = AI_COMBAT;
 	}
 
-	
+
 	// enforce the validity of our decision, and try fallback behaviour according to priority.
 	if (_AIMode == AI_COMBAT)
 	{
@@ -1399,13 +1400,13 @@ bool AlienBAIState::findFirePoint()
 		_attackAction->type = BA_WALK;
 		if (_traceAI)
 		{
-			Log(LOG_INFO) << "Firepoint found at " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z << ", with a score of: " << bestScore;
+			Log(LOG_INFO) << "Firepoint found at " << _attackAction->target << ", with a score of: " << bestScore;
 		}
 		return true;
 	}
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << "Firepoint failed, best estimation was: " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z << ", with a score of: " << bestScore;
+		Log(LOG_INFO) << "Firepoint failed, best estimation was: " << _attackAction->target << ", with a score of: " << bestScore;
 	}
 
 	return false;
@@ -1520,7 +1521,7 @@ void AlienBAIState::meleeAction()
 			meleeAttack();
 		}
 	}
-	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "AlienBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << " at: "  << _attackAction->target.x << "," << _attackAction->target.y << "," << _attackAction->target.z; }
+	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "AlienBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << " at: "  << _attackAction->target; }
 	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "CHARGE!"; }
 }
 
@@ -1731,7 +1732,6 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
-	_psiAction->type = BA_NONE;
 	_aggroTarget = 0;
 		// don't let mind controlled soldiers mind control other soldiers.
 	if (_unit->getOriginalFaction() != FACTION_PLAYER
@@ -1783,12 +1783,12 @@ bool AlienBAIState::psiAction()
 		{
 			return false;
 		}
-		
+
 		if (_traceAI)
 		{
 			Log(LOG_INFO) << "making a psionic attack this turn";
 		}
-		
+
 		if (chanceToAttack >= 30)
 		{
 			int controlOdds = 40;

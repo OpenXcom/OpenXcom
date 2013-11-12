@@ -139,6 +139,10 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+	for (std::vector<Soldier*>::iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 
@@ -147,9 +151,11 @@ SavedGame::~SavedGame()
  * and adds them to a text list.
  * @param list Text list.
  * @param lang Loaded language.
+ * @param details List of savegame details.
  */
-std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
+std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std::vector<std::wstring> *details)
 {
+	details->clear();
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
 	for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
@@ -161,12 +167,23 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 			YAML::Node doc = YAML::LoadFile(fullname);
 			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 			time.load(doc["time"]);
-			std::stringstream saveTime;
-			std::wstringstream saveDay, saveMonth, saveYear;
-			saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
+			std::wstringstream saveTime, saveDay, saveMonth, saveYear;
+			saveTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
 			saveDay << time.getDayString(lang);
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
+
+			std::wstringstream info;
+			if (doc["turn"])
+			{
+				info << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+				info << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+			}
+			else
+			{
+				info << lang->getString("STR_GEOSCAPE");
+			}
+			details->push_back(info.str());
 
 			std::wstring wstr;
 			if (doc["name"])
@@ -178,7 +195,7 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 				std::string s = CrossPlatform::noExt(file);
 				wstr = Language::fsToWstr(s);
 			}
-			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+			list->addRow(5, wstr.c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 		}
 		catch (Exception &e)
 		{
@@ -247,7 +264,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
 	_globeZoom = doc["globeZoom"].as<int>(_globeZoom);
-	initIds(doc["ids"].as< std::map<std::string, int> >(_ids));
+	_ids = doc["ids"].as< std::map<std::string, int> >(_ids);
 
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
@@ -326,6 +343,13 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_poppedResearch.push_back(rule->getResearch(research));
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
+
+	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
+	{
+		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
+		s->load(*i, rule);
+		_deadSoldiers.push_back(s);
+	}
 
 	if (const YAML::Node &battle = doc["battleGame"])
 	{
@@ -424,6 +448,10 @@ void SavedGame::save(const std::string &filename) const
 		node["poppedResearch"].push_back((*i)->getName());
 	}
 	node["alienStrategy"] = _alienStrategy->save();
+	for (std::vector<Soldier*>::const_iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	{
+		node["deadSoldiers"].push_back((*i)->save());
+	}
 	if (_battleGame != 0)
 	{
 		node["battleGame"] = _battleGame->save();
@@ -600,33 +628,12 @@ int SavedGame::getId(const std::string &name)
 	std::map<std::string, int>::iterator i = _ids.find(name);
 	if (i != _ids.end())
 	{
-		i->second++;
-		return i->second;
+		return i->second++;
 	}
 	else
 	{
-		_ids[name] = 2;
-		return 1;
-	}
-}
-
-/**
- * Initializes the list of object IDs.
- * @param ids ID number list.
- */
-void SavedGame::initIds(const std::map<std::string, int> &ids)
-{
-	_ids["STR_UFO"] = 1;
-	_ids["STR_LANDING_SITE"] = 1;
-	_ids["STR_CRASH_SITE"] = 1;
-	_ids["STR_WAYPOINT"] = 1;
-	_ids["STR_TERROR_SITE"] = 1;
-	_ids["STR_ALIEN_BASE"] = 1;
-	_ids["STR_SOLDIER"] = 1;
-	_ids["ALIEN_MISSIONS"] = 1;
-	for (std::map<std::string, int>::const_iterator i = ids.begin(); i != ids.end(); ++i)
-	{
-		_ids[i->first] = i->second;
+		_ids[name] = 1;
+		return _ids[name]++;
 	}
 }
 
@@ -1475,6 +1482,15 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 	{
 		_poppedResearch.erase(r);
 	}
+}
+
+/**
+ * Returns the list of dead soldiers.
+ * @return Pointer to soldier list.
+ */
+std::vector<Soldier*> *SavedGame::getDeadSoldiers()
+{
+	return &_deadSoldiers;
 }
 
 }

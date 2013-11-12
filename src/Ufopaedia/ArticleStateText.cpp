@@ -33,7 +33,7 @@ namespace OpenXcom
 	ArticleStateText::ArticleStateText(Game *game, ArticleDefinitionText *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
 	{
 		// add screen elements
-		_txtTitle = new Text(296, 16, 5, 23);
+		_txtTitle = new Text(296, 17, 5, 23);
 		_txtInfo = new Text(296, 150, 10, 48);
 
 		// Set palette
