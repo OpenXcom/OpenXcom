@@ -405,32 +405,38 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		return;
 	}
 
-	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	double maxDeviation = 2.5;
-	// minDeviation is the min angle deviation for accuracy 100% in degrees
-	double minDeviation = 0.4;
-	double dRot, dTilt;
-	double rotation, tilt;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	// check if we hit
-	if (RNG::generate(0.0, 1.0) < accuracy)
-	{
-		// we hit, so no deviation
-		dRot = 0;
-		dTilt = 0;
-	}
+	int xDist = abs(origin.x - target->x);
+	int yDist = abs(origin.y - target->y);
+	int zDist = abs(origin.z - target->z);
+	int xyShift, zShift;
+
+	if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
+		xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
 	else
-	{
-		dRot = RNG::boxMuller(0, baseDeviation);
-		dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
-	}
+		xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
+
+	if (xyShift <= zDist)				//slight z deviation
+		zShift = xyShift / 2 + zDist;
+	else
+		zShift = xyShift + zDist / 2;
+
+	int deviation = RNG::generate(0, 100) - (accuracy * 100);
+
+	if (deviation >= 0)
+		deviation += 50;				// add extra spread to "miss" cloud
+	else
+		deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
+	
+	deviation = std::max(1, zShift * deviation / 200);	//range ratio
+		
+	target->x += RNG::generate(0, deviation) - deviation / 2;
+	target->y += RNG::generate(0, deviation) - deviation / 2;
+	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
+	
+	double rotation, tilt;
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
 	tilt = atan2(double(target->z - origin.z),
 		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
-	// add deviations
-	rotation += dRot;
-	tilt += dTilt;
 	// calculate new target
 	// this new target can be very far out of the map, but we don't care about that right now
 	double cos_fi = cos(tilt * M_PI / 180.0);
@@ -441,7 +447,6 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
 	target->z = (int)(origin.z + maxRange * sin_fi);
 }
-
 /**
  * Moves further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.
