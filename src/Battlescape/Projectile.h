@@ -50,7 +50,8 @@ private:
 	int applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, int smokeDensity = 0, bool doCalcChance = false);
 	/// Approximation of the F-function (cumulative distribution function).
 	static double approxF(double sigm, double delta);
-	static double approxHit(double rangeRatio, double dev, int d, int h);
+	/// Approximation of vanillas chance to hit.
+	static double approxHit(double dev, int d, int h);
 	/// Calculation of the probability of hitting (vanilla version).
 	static int vanillaHit(const Position& origin, Position *target, double accuracy, int d, int h);
 public:

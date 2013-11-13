@@ -81,7 +81,7 @@ Projectile::~Projectile()
  * @param accuracy The unit's accuracy.
  * @param doCalcChance Do only clculating probability of hitting to unit. Default = false.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire)
- *			or chance to hit (-1 none; 0-99 percent)
+ *			or chance to hit (-1 none; 0-100 percent)
  */
 int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 {
@@ -553,7 +553,7 @@ int Projectile::vanillaHit(const Position& origin, Position *target, double accu
 	else if (accuracy > 0.09)
 	{
 		mayMiss = 1.01 - accuracy;
-		mayHit = 0.08;
+		mayHit = 0.09;
 		guarantHit = 1.01 - mayMiss - mayHit;
 	}
 	else
@@ -563,32 +563,25 @@ int Projectile::vanillaHit(const Position& origin, Position *target, double accu
 		guarantHit = 0.00;
 	}
 
-	double maxDevMiss = mayMiss + 0.5;
-	double maxDevHit = 0.09;
 	double dx = origin.x - target->x;
 	double dy = origin.y - target->y;
 	double dz = origin.z - target->z;
-	double rangeRatio = sqrt(dx*dx + dy*dy + dz*dz) / 2.0;
+	double range = sqrt(dx*dx + dy*dy + dz*dz);
 
-	double r = (mayMiss * approxHit(rangeRatio, maxDevMiss, d, h)
-		+ mayHit * approxHit(rangeRatio, maxDevHit, d, h)
-		+ guarantHit) / 1.01;
-
-	return (int) (0.5 + 100.0 * r);
+	return (int) (0.5 + 100.0 * (mayMiss * approxHit(range * (mayMiss + 0.5) / 2.0, d, h)
+		+ mayHit * approxHit(range * 0.09 / 2.0, d, h) + guarantHit) / 1.01);
 }
 
 /**
  * Approximation of vanillas chance to hit.
  * @param dev Deviation (vanilla meaning).
- * @param rangeRatio Distance/2.
  * @param d Diameter of target.
  * @param h Height of target.
  * @return Chance to hit (from 0 to 1).
  */
-double Projectile::approxHit(double rangeRatio, double dev, int d, int h)
+double Projectile::approxHit(double dev, int d, int h)
 {
 	// x-y square
-	dev *= rangeRatio;
 	if (dev <= d) return 1.0;
 	double r = d/dev + (1 - d/dev) * (2 * d)/(dev + d);
 
