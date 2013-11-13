@@ -462,12 +462,40 @@ void DebriefingState::prepareDebriefing()
 			break;
 		}
 	}
+
+	// lets see what happens with units
+
+	// first, we evaluate how many surviving XCom units there are, and how many are conscious
+	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+	{
+		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
+		{
+			if ((*j)->getStatus() == STATUS_UNCONSCIOUS || (*j)->getFaction() == FACTION_HOSTILE)
+			{
+				playersUnconscious++;
+			}
+			playersSurvived++;
+		}
+	}
+	// if all our men are unconscious, the aliens get to have their way with them.
+	if (playersUnconscious == playersSurvived)
+	{
+		playersSurvived = 0;
+		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+		{
+			if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
+			{
+				(*j)->instaKill();
+			}
+		}
+	}
+
 	// alien base disappears (if you didn't abort)
 	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
 		_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 		bool destroyAlienBase = true;
-		if (aborted)
+		if (aborted || playersSurvived == 0)
 		{
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
@@ -479,6 +507,7 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 		}
+		success = destroyAlienBase;
 		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 		{
 			if ((*i)->isInBattlescape())
@@ -486,7 +515,6 @@ void DebriefingState::prepareDebriefing()
 				if (destroyAlienBase)
 				{
 					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
-					success = true;
 					// Take care to remove supply missions for this base.
 					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
 								ClearAlienBase(*i));
@@ -503,34 +531,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// lets see what happens with units
-
-	// first, we evaluate how many surviving XCom units there are, and how many are conscious
-	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
-	{
-		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
-		{
-			if ((*j)->getStatus() == STATUS_UNCONSCIOUS || (*j)->getFaction() == FACTION_HOSTILE)
-			{
-				playersUnconscious++;
-			}
-			playersSurvived++;
-		}
-	}
-
-	// if all our men are unconscious, the aliens get to have their way with them.
-	if (playersUnconscious == playersSurvived)
-	{
-		playersSurvived = 0;
-		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
-		{
-			if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
-			{
-				(*j)->instaKill();
-			}
-		}
-	}
-
+	// time to care for units.
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		UnitStatus status = (*j)->getStatus();
