@@ -41,6 +41,20 @@ InteractiveSurface::~InteractiveSurface()
 {
 }
 
+bool InteractiveSurface::isButtonHandled(Uint8 button)
+{
+	bool handled = (_click.find(0) != _click.end() ||
+					_press.find(0) != _press.end() ||
+					_release.find(0) != _release.end());
+	if (!handled && button != 0)
+	{
+		handled = (_click.find(button) != _click.end() ||
+				   _press.find(button) != _press.end() ||
+				   _release.find(button) != _release.end());
+	}
+	return handled;
+}
+
 bool InteractiveSurface::isButtonPressed(Uint8 button)
 {
 	if (button == 0)

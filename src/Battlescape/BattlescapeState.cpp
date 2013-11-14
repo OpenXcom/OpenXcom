@@ -126,14 +126,12 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
 	_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
 	_btnStats = new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
-	_btnReserveNone = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 33);
-	_btnReserveSnap = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
-	_btnReserveAimed = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 45);
-	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
-	// TODO: the following two are set for TFTD, but are unavailable except via hotkey
-	// until the battleScape UI layout is defined in the ruleset
-	_btnReserveKneel = new ImageButton(10, 21, _icons->getX() + 43, _icons->getY() + 34);
-	_btnZeroTUs = new ImageButton(10, 21, _icons->getX() + 97, _icons->getY() + 34);
+	_btnReserveNone = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 33);
+	_btnReserveSnap = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 33);
+	_btnReserveAimed = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 45);
+	_btnReserveAuto = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 45);
+	_btnReserveKneel = new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
+	_btnZeroTUs = new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
@@ -390,12 +388,17 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnReserveKneel->onMouseClick((ActionHandler)&BattlescapeState::btnReserveKneelClick);
-	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick);
-	// todo: make these visible based on ruleset and assign them to their own button
-	_btnReserveKneel->setVisible(false);
-	_btnZeroTUs->setVisible(false);
-	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
-	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
+	_btnReserveKneel->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
+	_btnReserveKneel->setTooltip("STR_RESERVE_TUS_FOR_KNEEL");
+	_btnReserveKneel->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
+	_btnReserveKneel->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+
+	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick, SDL_BUTTON_RIGHT);
+	_btnZeroTUs->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
+	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
+	_btnZeroTUs->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
+	_btnZeroTUs->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
@@ -455,6 +458,12 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto->copy(_icons);
 	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
+
+	_btnReserveKneel->copy(_icons);
+	_btnReserveKneel->setColor(Palette::blockOffset(2)+3);
+
+	_btnZeroTUs->copy(_icons);
+	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
 
 	// Set music
 	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
@@ -526,7 +535,7 @@ void BattlescapeState::init()
 	_txtTooltip->setText(L"");
 	if (_save->getKneelReserved())
 	{
-		_btnReserveKneel->invert(0);
+		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
 	}
 	_battleGame->setKneelReserved(_save->getKneelReserved());
 }
@@ -1409,7 +1418,10 @@ inline void BattlescapeState::handle(Action *action)
 						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 						{
 							(*i)->instaKill();
-							(*i)->getTile()->setUnit(0);
+							if ((*i)->getTile())
+							{
+								(*i)->getTile()->setUnit(0);
+							}
 						}
 					}
 				}
@@ -1930,7 +1942,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
-		_btnReserveKneel->invert(0);
+		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
 	}
 }
 

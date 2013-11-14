@@ -41,6 +41,8 @@ private:
 	TextList *_list;
 	Timer *_timer;
 	bool _listButton;
+protected:
+	bool isButtonHandled(Uint8 button = 0);
 public:
 	/// Creates a new arrow button with the specified size and position.
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);

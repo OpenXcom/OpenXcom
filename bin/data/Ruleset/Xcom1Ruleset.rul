@@ -3642,7 +3642,8 @@ armors:
     spriteSheet: XCOM_0.PCK
     spriteInv: MAN_0
     storeItem: STR_NONE
-    corpseItem: STR_CORPSE
+    corpseBattle:
+      - STR_CORPSE
     frontArmor: 12
     sideArmor: 8
     rearArmor: 5
@@ -3662,7 +3663,8 @@ armors:
   - type: STR_PERSONAL_ARMOR_UC
     spriteSheet: XCOM_1.PCK
     spriteInv: MAN_1
-    corpseItem: STR_CORPSE_ARMOR
+    corpseBattle:
+      - STR_CORPSE_ARMOR
     storeItem: STR_PERSONAL_ARMOR
     frontArmor: 50
     sideArmor: 40
@@ -3683,7 +3685,8 @@ armors:
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2
-    corpseItem: STR_CORPSE_SUIT
+    corpseBattle:
+      - STR_CORPSE_SUIT
     storeItem: STR_POWER_SUIT
     frontArmor: 100
     sideArmor: 80
@@ -3704,7 +3707,8 @@ armors:
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
-    corpseItem: STR_CORPSE_SUIT
+    corpseBattle:
+      - STR_CORPSE_SUIT
     storeItem: STR_FLYING_SUIT
     frontArmor: 110
     sideArmor: 90
@@ -3725,7 +3729,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: SECTOID_ARMOR0
     spriteSheet: SECTOID.PCK
-    corpseItem: STR_SECTOID_CORPSE
+    corpseBattle:
+      - STR_SECTOID_CORPSE
     frontArmor: 4
     sideArmor: 3
     rearArmor: 2
@@ -3744,7 +3749,8 @@ armors:
     loftempsSet: [ 2 ]
   - type: FLOATER_ARMOR0
     spriteSheet: FLOATER.PCK
-    corpseItem: STR_FLOATER_CORPSE
+    corpseBattle:
+      - STR_FLOATER_CORPSE
     frontArmor: 8
     sideArmor: 6
     rearArmor: 4
@@ -3765,7 +3771,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: FLOATER_ARMOR1
     spriteSheet: FLOATER.PCK
-    corpseItem: STR_FLOATER_CORPSE
+    corpseBattle:
+      - STR_FLOATER_CORPSE
     frontArmor: 16
     sideArmor: 12
     rearArmor: 8
@@ -3786,7 +3793,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: FLOATER_ARMOR2
     spriteSheet: FLOATER.PCK
-    corpseItem: STR_FLOATER_CORPSE
+    corpseBattle:
+      - STR_FLOATER_CORPSE
     frontArmor: 24
     sideArmor: 18
     rearArmor: 12
@@ -3807,7 +3815,12 @@ armors:
     loftempsSet: [ 3 ]
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
-    corpseItem: CYBERDISC_CORPSE_
+    corpseBattle:
+      - CYBERDISC_CORPSE_1
+      - CYBERDISC_CORPSE_2
+      - CYBERDISC_CORPSE_3
+      - CYBERDISC_CORPSE_4
+    corpseGeo: STR_CYBERDISC_CORPSE
     frontArmor: 34
     sideArmor: 34
     rearArmor: 34
@@ -3829,7 +3842,12 @@ armors:
     loftempsSet: [ 92, 89, 90, 91 ]
   - type: REAPER_ARMOR
     spriteSheet: X_REAP.PCK
-    corpseItem: REAPER_CORPSE_
+    corpseBattle:
+      - REAPER_CORPSE_1
+      - REAPER_CORPSE_2
+      - REAPER_CORPSE_3
+      - REAPER_CORPSE_4
+    corpseGeo: STR_REAPER_CORPSE
     frontArmor: 28
     sideArmor: 28
     rearArmor: 28
@@ -3850,7 +3868,12 @@ armors:
     loftempsSet: [ 92, 89, 90, 91 ]
   - type: SECTOPOD_ARMOR
     spriteSheet: X_ROB.PCK
-    corpseItem: SECTOPOD_CORPSE_
+    corpseBattle:
+      - SECTOPOD_CORPSE_1
+      - SECTOPOD_CORPSE_2
+      - SECTOPOD_CORPSE_3
+      - SECTOPOD_CORPSE_4
+    corpseGeo: STR_SECTOPOD_CORPSE
     frontArmor: 145
     sideArmor: 130
     rearArmor: 100
@@ -3871,7 +3894,11 @@ armors:
     loftempsSet: [ 92, 89, 90, 91 ]
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
-    corpseItem: TANK_CORPSE_
+    corpseBattle:
+      - TANK_CORPSE_1
+      - TANK_CORPSE_2
+      - TANK_CORPSE_3
+      - TANK_CORPSE_4
     frontArmor: 90
     sideArmor: 75
     rearArmor: 60
@@ -3892,7 +3919,11 @@ armors:
     loftempsSet: [ 92, 89, 90, 91 ]
   - type: HOVERTANK_ARMOR
     spriteSheet: TANKS.PCK
-    corpseItem: HOVERTANK_CORPSE_
+    corpseBattle:
+      - HOVERTANK_CORPSE_1
+      - HOVERTANK_CORPSE_2
+      - HOVERTANK_CORPSE_3
+      - HOVERTANK_CORPSE_4
     frontArmor: 130
     sideArmor: 130
     rearArmor: 130
@@ -3914,7 +3945,8 @@ armors:
     loftempsSet: [ 92, 89, 90, 91 ]
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
-    corpseItem: CIVM_CORPSE
+    corpseBattle:
+      - CIVM_CORPSE
     frontArmor: 0
     sideArmor: 0
     rearArmor: 0
@@ -3934,7 +3966,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
-    corpseItem: CIVF_CORPSE
+    corpseBattle:
+      - CIVF_CORPSE
     frontArmor: 0
     sideArmor: 0
     rearArmor: 0
@@ -3954,7 +3987,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR0
     spriteSheet: SNAKEMAN.PCK
-    corpseItem: STR_SNAKEMAN_CORPSE
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
     frontArmor: 20
     sideArmor: 18
     rearArmor: 16
@@ -3974,7 +4008,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR1
     spriteSheet: SNAKEMAN.PCK
-    corpseItem: STR_SNAKEMAN_CORPSE
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
     frontArmor: 20
     sideArmor: 24
     rearArmor: 22
@@ -3994,7 +4029,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR2
     spriteSheet: SNAKEMAN.PCK
-    corpseItem: STR_SNAKEMAN_CORPSE
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
     frontArmor: 26
     sideArmor: 26
     rearArmor: 22
@@ -4014,7 +4050,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: MUTON_ARMOR0
     spriteSheet: MUTON.PCK
-    corpseItem: STR_MUTON_CORPSE
+    corpseBattle:
+      - STR_MUTON_CORPSE
     frontArmor: 20
     sideArmor: 20
     rearArmor: 20
@@ -4034,7 +4071,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: MUTON_ARMOR1
     spriteSheet: MUTON.PCK
-    corpseItem: STR_MUTON_CORPSE
+    corpseBattle:
+      - STR_MUTON_CORPSE
     frontArmor: 24
     sideArmor: 24
     rearArmor: 24
@@ -4054,7 +4092,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: MUTON_ARMOR2
     spriteSheet: MUTON.PCK
-    corpseItem: STR_MUTON_CORPSE
+    corpseBattle:
+      - STR_MUTON_CORPSE
     frontArmor: 28
     sideArmor: 28
     rearArmor: 28
@@ -4074,7 +4113,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: ETHEREAL_ARMOR0
     spriteSheet: ETHEREAL.PCK
-    corpseItem: STR_ETHEREAL_CORPSE
+    corpseBattle:
+      - STR_ETHEREAL_CORPSE
     frontArmor: 35
     sideArmor: 35
     rearArmor: 35
@@ -4095,7 +4135,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: ETHEREAL_ARMOR1
     spriteSheet: ETHEREAL.PCK
-    corpseItem: STR_ETHEREAL_CORPSE
+    corpseBattle:
+      - STR_ETHEREAL_CORPSE
     frontArmor: 40
     sideArmor: 40
     rearArmor: 40
@@ -4116,7 +4157,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: ETHEREAL_ARMOR2
     spriteSheet: ETHEREAL.PCK
-    corpseItem: STR_ETHEREAL_CORPSE
+    corpseBattle:
+      - STR_ETHEREAL_CORPSE
     frontArmor: 45
     sideArmor: 45
     rearArmor: 45
@@ -4137,7 +4179,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: CHRYSSALID_ARMOR
     spriteSheet: CHRYS.PCK
-    corpseItem: STR_CHRYSSALID_CORPSE
+    corpseBattle:
+      - STR_CHRYSSALID_CORPSE
     frontArmor: 34
     sideArmor: 34
     rearArmor: 34
@@ -4157,7 +4200,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: ZOMBIE_ARMOR
     spriteSheet: ZOMBIE.PCK
-    corpseItem: STR_ZOMBIE_CORPSE
+    corpseBattle:
+      - STR_ZOMBIE_CORPSE
     frontArmor: 4
     sideArmor: 4
     rearArmor: 4
@@ -4177,7 +4221,8 @@ armors:
     loftempsSet: [ 3 ]
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
-    corpseItem: STR_SILACOID_CORPSE
+    corpseBattle:
+      - STR_SILACOID_CORPSE
     frontArmor: 50
     sideArmor: 50
     rearArmor: 50
@@ -4197,7 +4242,8 @@ armors:
     loftempsSet: [ 5 ]
   - type: CELATID_ARMOR
     spriteSheet: CELATID.PCK
-    corpseItem: STR_CELATID_CORPSE
+    corpseBattle:
+      - STR_CELATID_CORPSE
     frontArmor: 20
     sideArmor: 20
     rearArmor: 20
@@ -7828,7 +7874,7 @@ ufopaedia:
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_CANNON_UFOPEDIA
-    weapon: STR_DAMAGE_ARMOR_PIERCING
+    weapon: STR_CANNON
   - id: STR_TANK_ROCKET_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS

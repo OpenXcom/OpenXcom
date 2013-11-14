@@ -47,8 +47,10 @@ protected:
 	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
 	bool _isHovered, _isFocused, _listButton;
 
-	/// Is any mouse button pressed?
+	/// Is this mouse button pressed?
 	bool isButtonPressed(Uint8 button = 0);
+	/// Is this mouse button event handled?
+	virtual bool isButtonHandled(Uint8 button = 0);
 	/// Set a mouse button's internal state.
 	void setButtonPressed(Uint8 button, bool pressed);
 public:

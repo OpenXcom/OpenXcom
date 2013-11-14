@@ -222,7 +222,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 					_game->getRuleset()->getUnit(
 						_aliens[i]
 					)->getArmor()
-				)->getCorpseItem(), _qtys[i]
+				)->getCorpseGeoscape(), _qtys[i]
 			); // ;)
 		}
 	}

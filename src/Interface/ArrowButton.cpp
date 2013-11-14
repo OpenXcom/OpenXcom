@@ -46,6 +46,18 @@ ArrowButton::~ArrowButton()
 	delete _timer;
 }
 
+bool ArrowButton::isButtonHandled(Uint8 button)
+{
+	if (_list != 0)
+	{
+		return (button == SDL_BUTTON_LEFT || button == SDL_BUTTON_RIGHT);
+	}
+	else
+	{
+		return ImageButton::isButtonHandled(button);
+	}
+}
+
 /**
  * Changes the color for the image button.
  * @param color Color value.
