@@ -251,12 +251,6 @@ void TextButton::draw()
  */
 void TextButton::mousePress(Action *action, State *state)
 {
-	if (soundPress != 0 && _group == 0 &&
-		action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
-	{
-		soundPress->play();
-	}
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _group != 0)
 	{
 		TextButton *old = *_group;
@@ -264,9 +258,19 @@ void TextButton::mousePress(Action *action, State *state)
 		if (old != 0)
 			old->draw();
 	}
-	draw();
+
+	if (isButtonHandled(action->getDetails()->button.button))
+	{		
+		if (soundPress != 0 && _group == 0 &&
+			action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
+		{
+			soundPress->play();
+		}
+
+		draw();
+		//_redraw = true;
+	}
 	InteractiveSurface::mousePress(action, state);
-	//_redraw = true;
 }
 
 /**
@@ -276,9 +280,12 @@ void TextButton::mousePress(Action *action, State *state)
  */
 void TextButton::mouseRelease(Action *action, State *state)
 {
-	draw();
+	if (isButtonHandled(action->getDetails()->button.button))
+	{	
+		draw();
+		//_redraw = true;
+	}
 	InteractiveSurface::mouseRelease(action, state);
-	//_redraw = true;
 }
 
 }
