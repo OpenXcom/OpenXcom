@@ -103,42 +103,21 @@ void ResearchCompleteState::btnReportClick(Action *)
 	_game->popState();
 	std::string name;
 	std::string bonusName;
-	int palSwitch = 0;
-	if(_bonus)
+	if (_bonus)
 	{
 		if (_bonus->getLookup() == "")
 			bonusName = _bonus->getName();
 		else
 			bonusName = _bonus->getLookup();
-		ArticleDefinition *art = _game->getRuleset()->getUfopaediaArticle(bonusName);
-		switch(art->getType())
-		{
-		case UFOPAEDIA_TYPE_BASE_FACILITY:
-			palSwitch = 1;
-			break;
-		case UFOPAEDIA_TYPE_CRAFT:
-		case UFOPAEDIA_TYPE_TEXTIMAGE:
-		case UFOPAEDIA_TYPE_TEXT:
-		case UFOPAEDIA_TYPE_VEHICLE:
-			palSwitch = 3;
-			break;
-		case UFOPAEDIA_TYPE_ITEM:
-		case UFOPAEDIA_TYPE_CRAFT_WEAPON:
-		case UFOPAEDIA_TYPE_ARMOR:
-			palSwitch = 4;
-			break;
-		default:
-			break;
-		}
-		Ufopaedia::openArticle(_game, bonusName, 0);
+		Ufopaedia::openArticle(_game, bonusName);
 	}
-	if(_research)
+	if (_research)
 	{
 		if (_research->getLookup() == "")
-			name = _research->getName ();
+			name = _research->getName();
 		else
 			name = _research->getLookup();
-		Ufopaedia::openArticle(_game, name, palSwitch);
+		Ufopaedia::openArticle(_game, name);
 	}
 }
 
