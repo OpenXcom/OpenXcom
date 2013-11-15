@@ -57,7 +57,7 @@ bulletsprite_DATA = \
 	bin/data/Resources/BulletSprites/BulletSprites.png
 
 uispritedir =  $(pkgdatadir)/data/Resources/UI/
-uispritedir_DATA = \
+uisprite_DATA = \
 	bin/data/Resources/UI/reserve.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
@@ -698,6 +698,7 @@ EXTRA_DIST = \
 	$(name_DATA) \
 	$(pathfinding_DATA) \
 	$(bulletsprite_DATA) \
+	$(uisprite_DATA) \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \
