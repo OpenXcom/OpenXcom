@@ -475,7 +475,7 @@ void BattlescapeGame::endTurn()
 			setupCursor();
 		}
 	}
-	else
+	else if (Options::getBool("battleAutoEnd"))
 	{
 		_parentState->finishBattle(false,liveSoldiers);
 		return;
