@@ -774,7 +774,7 @@ void SavedBattleGame::endTurn()
 			prepareNewTurn();
 			_turn++;
 			_side = FACTION_PLAYER;
-			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
+			if (_lastSelectedUnit && _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))
 				_selectedUnit = _lastSelectedUnit;
 			else
 				selectNextPlayerUnit();
@@ -788,7 +788,7 @@ void SavedBattleGame::endTurn()
 		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
-		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
+		if (_lastSelectedUnit && _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
