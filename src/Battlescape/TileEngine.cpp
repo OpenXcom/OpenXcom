@@ -2520,9 +2520,9 @@ bool TileEngine::validateThrow(BattleAction *action)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
-
+	Tile *tile = _save->getTile(action->target);
 	// object blocking - can't throw here
-	if (action->type == BA_THROW && _save->getTile(action->target) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	if (!tile || (action->type == BA_THROW && tile && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255))
 	{
 		return false;
 	}
@@ -2556,8 +2556,8 @@ bool TileEngine::validateThrow(BattleAction *action)
 	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
 	if (action->type != BA_THROW)
 	{
-		BattleUnit *tu = _save->getTile(action->target)->getUnit();
-		if(!tu && action->target.z > 0 && _save->getTile(action->target)->hasNoFloor(0))
+		BattleUnit *tu = tile->getUnit();
+		if(!tu && action->target.z > 0 && tile->hasNoFloor(0))
 			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
 		if (tu)
 		{
@@ -2585,7 +2585,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 		return false;
 	}
 
-	return ProjectileFlyBState::validThrowRange(action);
+	return ProjectileFlyBState::validThrowRange(action, originVoxel, tile);
 }
 
 /**
