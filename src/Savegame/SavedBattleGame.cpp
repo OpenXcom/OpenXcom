@@ -759,6 +759,9 @@ int SavedBattleGame::getTurn() const
  */
 void SavedBattleGame::endTurn()
 {
+	int liveSoldiers, liveAliens;
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+
 	switch(_side)
 	{
 	case FACTION_HOSTILE:
@@ -776,7 +779,7 @@ void SavedBattleGame::endTurn()
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
-		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
+		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER && liveSoldiers > 0)
 			selectNextPlayerUnit();
 		break;
 	case FACTION_PLAYER:
@@ -785,10 +788,6 @@ void SavedBattleGame::endTurn()
 		_side = FACTION_HOSTILE;
 		break;
 	}
-
-	int liveSoldiers, liveAliens;
-
-	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 
 	if (_turn >= 20 || liveAliens < 2)
 	{
