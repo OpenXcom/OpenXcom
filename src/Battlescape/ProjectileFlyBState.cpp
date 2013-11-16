@@ -469,7 +469,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level)
 {
     double curZ = level + 0.5;
-    double olddz, dz = 1.0;
+    double dz = 1.0;
     int dist = 0;
     while (dist < 4000) //just in case
     {
