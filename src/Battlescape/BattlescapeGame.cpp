@@ -475,6 +475,11 @@ void BattlescapeGame::endTurn()
 			setupCursor();
 		}
 	}
+	else
+	{
+		_parentState->finishBattle(false,liveSoldiers);
+		return;
+	}
 
 	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
 	{
