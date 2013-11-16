@@ -28,6 +28,8 @@ namespace OpenXcom
 class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
+class Tile;
+
 /**
  * A projectile state.
  */
