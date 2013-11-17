@@ -679,10 +679,10 @@ void GeoscapeState::time5Seconds()
 					}
 					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 					{
-						const TerrorSite &ts = *_game->getSavedGame()->getTerrorSites()->back();
-						const City *city = _game->getRuleset()->locateCity(ts.getLongitude(), ts.getLatitude());
+						TerrorSite *ts = _game->getSavedGame()->getTerrorSites()->back();
+						const City *city = _game->getRuleset()->locateCity(ts->getLongitude(), ts->getLatitude());
 						assert(city);
-						popup(new AlienTerrorState(_game, city, this));
+						popup(new AlienTerrorState(_game, ts, city->getName(), this));
 					}
 					// If UFO was destroyed, don't spawn missions
 					if ((*i)->getStatus() == Ufo::DESTROYED)
