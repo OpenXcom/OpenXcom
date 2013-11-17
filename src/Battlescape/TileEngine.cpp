@@ -2072,8 +2072,9 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	int y = origin.y;
 	int z = origin.z;
 	int i = 8;
-
-	while (z > 0) {
+	Position lastPosition = Position(x,y,z);
+	while (z > 0) 
+	{
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
 		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
 		z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
@@ -2082,15 +2083,21 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 			trajectory->push_back(Position(x, y, z));
 		}
 		//passes through this point?
-		int result = voxelCheck(Position(x, y, z), excludeUnit);
+		Position nextPosition = Position(x,y,z);
+		int result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
 		if (result != -1)
 		{
+			if (lastPosition.z < nextPosition.z)
+			{
+				result = 5;
+			}
 			if (!storeTrajectory && trajectory != 0)
 			{ // store the position of impact
-				trajectory->push_back(Position(x, y, z));
+				trajectory->push_back(nextPosition);
 			}
 			return result;
 		}
+		lastPosition = Position(x,y,z);
 		++i;
 	}
 	if (!storeTrajectory && trajectory != 0)

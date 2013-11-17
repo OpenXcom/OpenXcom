@@ -225,6 +225,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
+			_action.TU = 0;
 			_parent->popState();
 			return false;
 		}
@@ -458,10 +459,6 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	int ydiff = action->target.y - action->actor->getPosition().y;
 	int zdiff = action->target.z - action->actor->getPosition().z;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
-
-	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
-	// throwing up the roof of this building lets your throw 2 tiles less further
-	realDistance += zdiff*2;
 
 	return realDistance <= maxDistance;
 }
