@@ -1649,6 +1649,8 @@ void SavedBattleGame::resetTiles()
 {
 	for (int i = 0; i != getMapSizeXYZ(); ++i)
 	{
+		_tiles[i]->setDiscovered(false, 0);
+		_tiles[i]->setDiscovered(false, 1);
 		_tiles[i]->setDiscovered(false, 2);
 	}
 }
