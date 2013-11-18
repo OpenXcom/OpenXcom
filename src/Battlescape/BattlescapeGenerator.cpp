@@ -600,7 +600,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 		std::string alienName = race->getMember((*d).alienRank);
 
 		int quantity;
-		
+
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
 			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
 		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
@@ -825,16 +825,16 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					{
 						for (std::vector<std::string>::iterator it = (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->begin(); it != (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
 						{
-							if (*it == item->getRules()->getType())
+							if (*it == item->getRules()->getType()
+								&& !(*bu)->getItem("STR_BELT", 1)
+								&& item->getRules()->getInventoryHeight() == 1
+								&& (item->getRules()->getInventoryWidth() == 1 || !(*bu)->getItem("STR_BELT", 2)))
 							{
-								if (!(*bu)->getItem("STR_BELT", 1) && item->getRules()->getInventoryHeight() == 1)
-								{
-									item->moveToOwner((*bu));
-									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-									item->setSlotX(1);
-									placed = true;
-									break;
-								}
+								item->moveToOwner((*bu));
+								item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+								item->setSlotX(1);
+								placed = true;
+								break;
 							}
 						}
 					}
