@@ -220,11 +220,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	unit->setVisible(false);
 
 	_save->getTileEngine()->calculateFOV(unit->getPosition()); // might need this populate _visibleUnit for a newly-created alien
-        // it might also help chryssalids realize they've zombified someone and need to move on
+		// it might also help chryssalids realize they've zombified someone and need to move on
 		// it should also hide units when they've killed the guy spotting them
-        // it's also for good luck
+		// it's also for good luck
 
-    BattleAIState *ai = unit->getCurrentAIState();
+	BattleAIState *ai = unit->getCurrentAIState();
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
@@ -245,7 +245,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	BattleAction action;
 	action.actor = unit;
-    action.number = _AIActionCounter;
+	action.number = _AIActionCounter;
 	unit->think(&action);
 
 	if (action.type == BA_RETHINK)
@@ -254,7 +254,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->think(&action);
 	}
 
-    _AIActionCounter = action.number;
+	_AIActionCounter = action.number;
 
 	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
 	{
@@ -498,51 +498,51 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
-    std::string _alienRank, _alienRace;
-    std::string _weapon = "STR_WEAPON_UNKNOWN";
+	std::string _alienRank, _alienRace;
+	std::string _weapon = "STR_WEAPON_UNKNOWN";
 	std::string _weaponAmmo = "STR_WEAPON_UNKNOWN";
-    AlienState _alienState;
+	AlienState _alienState;
 
-        // Fetch the murder weapon
-    if (murderer && murderer->getGeoscapeSoldier())
-    {
-        if (murderweapon)
+		// Fetch the murder weapon
+	if (murderer && murderer->getGeoscapeSoldier())
+	{
+		if (murderweapon)
 		{
 			_weaponAmmo = murderweapon->getRules()->getName();
 			_weapon = _weaponAmmo;
 		}
 
-        BattleItem *weapon = murderer->getItem("STR_RIGHT_HAND");
-        if (weapon)
-        {
-            for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
-            {
-                if ((*c) == _weaponAmmo)
-                {
-                    _weapon = weapon->getRules()->getName();
-                }
-            }
-        }
-        weapon = murderer->getItem("STR_LEFT_HAND");
-        if (weapon)
-        {
-            for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
-            {
-                if ((*c) == _weaponAmmo)
-                {
-                    _weapon = weapon->getRules()->getName();
-                }
-            }
-        }
-    }
-    
+		BattleItem *weapon = murderer->getItem("STR_RIGHT_HAND");
+		if (weapon)
+		{
+			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
+			{
+				if ((*c) == _weaponAmmo)
+				{
+					_weapon = weapon->getRules()->getName();
+				}
+			}
+		}
+		weapon = murderer->getItem("STR_LEFT_HAND");
+		if (weapon)
+		{
+			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
+			{
+				if ((*c) == _weaponAmmo)
+				{
+					_weapon = weapon->getRules()->getName();
+				}
+			}
+		}
+	}
+	
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-        BattleUnit *victim = (*j);
-        
-        // Decide victim race and rank
-        if (victim->getFaction() == FACTION_HOSTILE) 
-        {
+		BattleUnit *victim = (*j);
+		
+		// Decide victim race and rank
+		if (victim->getFaction() == FACTION_HOSTILE) 
+		{
 			if (!victim->getRankString().empty())
 			{
 				_alienRank = victim->getRankString();
@@ -551,25 +551,28 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				_alienRank = "STR_LIVE_TERRORIST";
 			}
-            _alienRace = victim->getUnitRules()->getRace();
-        }
-        else if (victim->getFaction() == FACTION_PLAYER)
-        {
-            _alienRank = victim->getGeoscapeSoldier()->getRankString();
-            _alienRace = "STR_HUMAN";
-        }
-        else
-        {
-            _alienRank = "STR_CIVILIAN";
-            _alienRace = "STR_HUMAN";
-        }
-        
+			_alienRace = victim->getUnitRules()->getRace();
+		}
+		else if (victim->getFaction() == FACTION_PLAYER)
+		{
+			_alienRank = victim->getGeoscapeSoldier()->getRankString();
+			_alienRace = "STR_HUMAN";
+		}
+		else
+		{
+			_alienRank = "STR_CIVILIAN";
+			_alienRace = "STR_HUMAN";
+		}
+		
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
-            _alienState = KILLED;
+			_alienState = KILLED;
 			if (murderer)
 			{
-                if (murderer->getFaction() == FACTION_PLAYER) murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
+				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
+				{
+					murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
+				}
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
 				int modifier = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
@@ -655,7 +658,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			_alienState = STUNNED;
-			if (murderer && murderer->getFaction() == FACTION_PLAYER) murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
+			if (murderer && murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER) murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 		}
 	}
@@ -876,7 +879,7 @@ void BattlescapeGame::popState()
 	BattleAction action = _states.front()->getAction();
 
 	if (action.actor && action.result.length() > 0 && action.actor->getFaction() == FACTION_PLAYER
-    && _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
+	&& _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
 	{
 		_parentState->warning(action.result);
 		actionFailed = true;
@@ -1025,7 +1028,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  */
 bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 {
-    BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
+	BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
 	if (_save->getSide() != FACTION_PLAYER) // aliens reserve TUs as a percentage rather than just enough for a single action.
 	{
@@ -1804,8 +1807,8 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 		}
 	}
 
-    if (worthToTake)
-    {
+	if (worthToTake)
+	{
 		// use bad logic to determine if we'll have room for the item
 		int freeSlots = 25;
 		for (std::vector<BattleItem*>::iterator i = action->actor->getInventory()->begin(); i != action->actor->getInventory()->end(); ++i)
