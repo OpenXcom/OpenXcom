@@ -655,7 +655,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			_alienState = STUNNED;
-			if (murderer->getFaction() == FACTION_PLAYER) murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
+			if (murderer && murderer->getFaction() == FACTION_PLAYER) murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 		}
 	}
