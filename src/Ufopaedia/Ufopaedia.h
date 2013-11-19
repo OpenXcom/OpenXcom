@@ -61,7 +61,7 @@ namespace OpenXcom
 		static bool isArticleAvailable(Game *game, ArticleDefinition *article);
 
 		/// open Ufopaedia on a certain entry.
-		static void openArticle(Game *game, std::string &article_id, int palSwitch);
+		static void openArticle(Game *game, std::string &article_id);
 
 		/// open Ufopaedia article from a given article definition.
 		static void openArticle(Game *game, ArticleDefinition *article);
@@ -96,7 +96,7 @@ namespace OpenXcom
 		static ArticleDefinitionList getAvailableArticles(Game *game);
 
 		/// create a new state object from article definition.
-		static ArticleState *createArticleState(Game *game, ArticleDefinition *article, int palSwitch);
+		static ArticleState *createArticleState(Game *game, ArticleDefinition *article);
 	};
 }
 

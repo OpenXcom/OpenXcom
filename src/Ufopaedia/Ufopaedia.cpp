@@ -92,36 +92,36 @@ namespace OpenXcom
 	 * @param article Article definition to create from.
 	 * @returns Article state object if created, 0 otherwise.
 	 */
-	ArticleState *Ufopaedia::createArticleState(Game *game, ArticleDefinition *article, int palSwitch)
+	ArticleState *Ufopaedia::createArticleState(Game *game, ArticleDefinition *article)
 	{
 		switch(article->getType())
 		{
 			case UFOPAEDIA_TYPE_CRAFT:
-				return new ArticleStateCraft(game, static_cast<ArticleDefinitionCraft *> (article), palSwitch);
+				return new ArticleStateCraft(game, static_cast<ArticleDefinitionCraft *> (article));
 				break;
 			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
-				return new ArticleStateCraftWeapon(game, static_cast<ArticleDefinitionCraftWeapon *> (article), palSwitch);
+				return new ArticleStateCraftWeapon(game, static_cast<ArticleDefinitionCraftWeapon *> (article));
 				break;
 			case UFOPAEDIA_TYPE_VEHICLE:
-				return new ArticleStateVehicle(game, static_cast<ArticleDefinitionVehicle *> (article), palSwitch);
+				return new ArticleStateVehicle(game, static_cast<ArticleDefinitionVehicle *> (article));
 				break;
 			case UFOPAEDIA_TYPE_ITEM:
-				return new ArticleStateItem(game, static_cast<ArticleDefinitionItem *> (article), palSwitch);
+				return new ArticleStateItem(game, static_cast<ArticleDefinitionItem *> (article));
 				break;
 			case UFOPAEDIA_TYPE_ARMOR:
-				return new ArticleStateArmor(game, static_cast<ArticleDefinitionArmor *> (article), palSwitch);
+				return new ArticleStateArmor(game, static_cast<ArticleDefinitionArmor *> (article));
 				break;
 			case UFOPAEDIA_TYPE_BASE_FACILITY:
-				return new ArticleStateBaseFacility(game, static_cast<ArticleDefinitionBaseFacility *> (article), palSwitch);
+				return new ArticleStateBaseFacility(game, static_cast<ArticleDefinitionBaseFacility *> (article));
 				break;
 			case UFOPAEDIA_TYPE_TEXT:
-				return new ArticleStateText(game, static_cast<ArticleDefinitionText *> (article), palSwitch);
+				return new ArticleStateText(game, static_cast<ArticleDefinitionText *> (article));
 				break;
 			case UFOPAEDIA_TYPE_TEXTIMAGE:
-				return new ArticleStateTextImage(game, static_cast<ArticleDefinitionTextImage *> (article), palSwitch);
+				return new ArticleStateTextImage(game, static_cast<ArticleDefinitionTextImage *> (article));
 				break;
 			case UFOPAEDIA_TYPE_UFO:
-				return new ArticleStateUfo(game, static_cast<ArticleDefinitionUfo *> (article), palSwitch);
+				return new ArticleStateUfo(game, static_cast<ArticleDefinitionUfo *> (article));
 				break;
 			default: break;
 		}
@@ -138,7 +138,7 @@ namespace OpenXcom
 		_current_index = getArticleIndex(game, article->id);
 		if (_current_index != (size_t) -1)
 		{
-			game->pushState(createArticleState(game, article, 0));
+			game->pushState(createArticleState(game, article));
 		}
 	}
 
@@ -148,13 +148,13 @@ namespace OpenXcom
 	 * @param game Pointer to actual game.
 	 * @param article_id Article id to find.
 	 */
-	void Ufopaedia::openArticle(Game *game, std::string &article_id, int palSwitch)
+	void Ufopaedia::openArticle(Game *game, std::string &article_id)
 	{
 		_current_index = getArticleIndex(game, article_id);
 		if (_current_index != (size_t) -1)
 		{
 			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(article_id);
-			game->pushState(createArticleState(game, article, palSwitch));
+			game->pushState(createArticleState(game, article));
 		}
 	}
 
@@ -184,7 +184,7 @@ namespace OpenXcom
 			_current_index++;
 		}
 		game->popState();
-		game->pushState(createArticleState(game, articles[_current_index], 0));
+		game->pushState(createArticleState(game, articles[_current_index]));
 	}
 
 	/**
@@ -204,7 +204,7 @@ namespace OpenXcom
 			_current_index--;
 		}
 		game->popState();
-		game->pushState(createArticleState(game, articles[_current_index], 0));
+		game->pushState(createArticleState(game, articles[_current_index]));
 	}
 
 	/**

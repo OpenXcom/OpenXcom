@@ -40,7 +40,7 @@ namespace OpenXcom
 	{
 	protected:
 		/// constructor (protected, so it can only be instantiated by derived classes)
-		ArticleState(Game *game, std::string article_id, int palSwitch);
+		ArticleState(Game *game, std::string article_id);
 		/// destructor
 		virtual ~ArticleState();
 
@@ -69,8 +69,6 @@ namespace OpenXcom
 		TextButton *_btnOk;
 		TextButton *_btnPrev;
 		TextButton *_btnNext;
-
-		int _palSwitch;
 	};
 }
 

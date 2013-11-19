@@ -36,7 +36,7 @@ namespace OpenXcom
 	class ArticleStateTextImage : public ArticleState
 	{
 	public:
-		ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs, int palSwitch);
+		ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs);
 		virtual ~ArticleStateTextImage();
 
 	protected:

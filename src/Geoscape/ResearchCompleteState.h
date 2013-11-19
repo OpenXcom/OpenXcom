@@ -36,7 +36,7 @@ class RuleResearch;
 class ResearchCompleteState : public State
 {
 	Window *_window;
-	Text *_txtTitle;
+	Text *_txtTitle, *_txtResearch;
     TextButton *_btnReport, *_btnOk;
 	const RuleResearch * _research, * _bonus;
 public:
