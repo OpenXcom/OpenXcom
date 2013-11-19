@@ -1456,7 +1456,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
 			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
-			if (collidesWith == 4)
+			if (collidesWith == V_UNIT)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1577,12 +1577,12 @@ void AlienBAIState::wayPointAction()
 			Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
 			Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
 			CollidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
-			if (CollidesWith > -1 && CollidesWith < 4)
+			if (CollidesWith > V_EMPTY && CollidesWith < V_UNIT)
 			{
 				_attackAction->waypoints.push_back(LastPosition);
 				LastWayPoint = LastPosition;
 			}
-			else if (CollidesWith == 4)
+			else if (CollidesWith == V_UNIT)
 			{
 				BattleUnit* target = _save->getTile(CurrentPosition)->getUnit();
 				if (target == _aggroTarget)

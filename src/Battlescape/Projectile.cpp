@@ -143,7 +143,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// Store this target voxel.
 		targetTile = _save->getTile(_action.target);
 		Position hitPos;
-		int test = -1;
+		int test = V_EMPTY;
 		if (targetTile->getUnit() != 0)
 		{
 			if (_origin == _action.target || targetTile->getUnit() == _action.actor)
@@ -190,46 +190,46 @@ int Projectile::calculateTrajectory(double accuracy)
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
+		if (test != V_EMPTY && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
 		{
 			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (test == 4 && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
+			if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
 			{
 				hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 			}
 
 			if (hitPos != _action.target && _action.result == "")
 			{
-				if (test == 2)
+				if (test == V_NORTHWALL)
 				{
 					if (hitPos.y - 1 != _action.target.y)
 					{
 						_trajectory.clear();
-						return -1;
+						return V_EMPTY;
 					}
 				}
-				else if (test == 1)
+				else if (test == V_WESTWALL)
 				{
 					if (hitPos.x - 1 != _action.target.x)
 					{
 						_trajectory.clear();
-						return -1;
+						return V_EMPTY;
 					}
 				}
-				else if (test == 4)
+				else if (test == V_UNIT)
 				{
 					BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
 					BattleUnit *targetUnit = targetTile->getUnit();
 					if (hitUnit != targetUnit)
 					{
 						_trajectory.clear();
-						return -1;
+						return V_EMPTY;
 					}
 				}
 				else
 				{
 					_trajectory.clear();
-					return -1;
+					return V_EMPTY;
 				}
 			}
 		}
@@ -258,7 +258,7 @@ int Projectile::calculateThrow(double accuracy)
 	// object blocking - can't throw here
 	if (_action.type == BA_THROW &&_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
-		return -1;
+		return V_EMPTY;
 	}
 
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
@@ -302,10 +302,12 @@ int Projectile::calculateThrow(double accuracy)
 
 	// we try 4 different curvatures to try and reach our goal.
 	double curvature = 1.0;
+	int retValue = V_EMPTY;
+
 	while (!foundCurve && curvature < 5.0)
 	{
 		int check = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
-		if (check != 5 && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		if (check != V_OUTOFBOUNDS && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}
@@ -317,18 +319,17 @@ int Projectile::calculateThrow(double accuracy)
 	}
 	if ( AreSame(curvature, 5.0) )
 	{
-		return -1;
+		return V_EMPTY;
 	}
 
 	// apply some accuracy modifiers
-	if (accuracy > 1)
-		accuracy = 1;
+	if (accuracy > 1.0)
+		accuracy = 1.0;
 	static const double maxDeviation = 0.08;
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
-	int retValue = -1;
 
 	_trajectory.clear();
 	// finally do a line calculation and store this trajectory.

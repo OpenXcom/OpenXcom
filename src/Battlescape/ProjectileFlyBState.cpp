@@ -203,11 +203,11 @@ bool ProjectileFlyBState::createNewProjectile()
 	_parent->setStateInterval(1000/60);
 
 	// let it calculate a trajectory
-	_projectileImpact = -1;
+	_projectileImpact = V_EMPTY;
 	if (_action.type == BA_THROW)
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
-		if (_projectileImpact != -1)
+		if (_projectileImpact == V_FLOOR)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 			{
@@ -233,7 +233,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
-		if (_projectileImpact != -1)
+		if (_projectileImpact != V_EMPTY)
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
@@ -260,7 +260,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	else
 	{
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
-		if (_projectileImpact != -1 || _action.type == BA_LAUNCH)
+		if (_projectileImpact != V_EMPTY || _action.type == BA_LAUNCH)
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
