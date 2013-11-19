@@ -543,6 +543,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		// Decide victim race and rank
 		if (victim->getFaction() == FACTION_HOSTILE) 
 		{
+			// Terrorists don't have a rank... create one
 			if (!victim->getRankString().empty())
 			{
 				_alienRank = victim->getRankString();
@@ -551,7 +552,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				_alienRank = "STR_LIVE_TERRORIST";
 			}
-			_alienRace = victim->getUnitRules()->getRace();
+
+			// In case of mindcontrolled soldier
+			if (victim->getGeoscapeSoldier())
+			{
+				_alienRace = "STR_HUMAN";
+			}
+			else
+			{
+				_alienRace = victim->getUnitRules()->getRace();
+			}
 		}
 		else if (victim->getFaction() == FACTION_PLAYER)
 		{
