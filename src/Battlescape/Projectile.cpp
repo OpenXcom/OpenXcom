@@ -310,6 +310,7 @@ int Projectile::calculateThrow(double accuracy)
 		if (check != V_OUTOFBOUNDS && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
+			retValue = check;
 		}
 		else
 		{
@@ -330,23 +331,24 @@ int Projectile::calculateThrow(double accuracy)
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
+	int result = V_OUTOFBOUNDS;
 
-	_trajectory.clear();
-	// finally do a line calculation and store this trajectory.
-	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
-
-	Position endPoint = _trajectory.at(_trajectory.size() - 1);
-	endPoint.x /= 16;
-	endPoint.y /= 16;
-	endPoint.z /= 24;
-	// check if the item would land on a tile with a blocking object, if so then we let it fly without deviation, it must land on a valid tile in that case
-	if (_save->getTile(endPoint) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	// finally do a line calculation and store this trajectory, make sure it's valid.
+	while (result == V_OUTOFBOUNDS)
 	{
 		_trajectory.clear();
-		// finally do a line calculation and store this trajectory.
-		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
-	}
+		result = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
+		Position endPoint = _trajectory.back();
+		endPoint.x /= 16;
+		endPoint.y /= 16;
+		endPoint.z /= 24;
+		// check if the item would land on a tile with a blocking object
+		if (_save->getTile(endPoint) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+		{
+			result = V_OUTOFBOUNDS;
+		}
+	}
 
 	return retValue;
 }
