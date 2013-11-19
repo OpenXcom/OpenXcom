@@ -59,7 +59,7 @@ public:
 	/// Sets the craft weapon's rearming status
 	void setRearming(bool rearming);
 	/// Rearms the craft weapon.
-	void rearm();
+	int rearm(const int available, const int clipSize);
 	/// Fires the craft weapon. Used during dogfights.
 	CraftWeaponProjectile* fire() const;
 };

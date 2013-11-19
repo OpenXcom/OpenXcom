@@ -1321,7 +1321,7 @@ void GeoscapeState::time1Hour()
 			}
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
-				std::string s = (*j)->rearm();
+				std::string s = (*j)->rearm(_game->getRuleset());
 				if (s != "")
 				{
 					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")

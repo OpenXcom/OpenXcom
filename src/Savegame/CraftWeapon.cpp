@@ -121,14 +121,36 @@ void CraftWeapon::setRearming(bool rearming)
 
 /**
  * Rearms this craft weapon's ammo.
+ * @param available number of clips available.
+ * @param clipSize number of rounds in said clips.
+ * @return number of clips used.
  */
-void CraftWeapon::rearm()
+int CraftWeapon::rearm(const int available, const int clipSize)
 {
-	setAmmo(_ammo + _rules->getRearmRate());
-	if (_ammo == _rules->getAmmoMax())
+	int used = 0;
+
+	if (clipSize > 0)
 	{
+		const int needed = std::max(1, (_rules->getAmmoMax() - _ammo) / clipSize);
+		used = std::min(_rules->getRearmRate() / clipSize, needed);
+	}
+
+	if (available >= used)
+	{
+		setAmmo(_ammo + _rules->getRearmRate());
+	}
+	else
+	{
+		setAmmo(_ammo + (clipSize * available));
+	}
+
+	if (_ammo >= _rules->getAmmoMax())
+	{
+		_ammo = _rules->getAmmoMax();
 		_rearming = false;
 	}
+
+	return used;
 }
 
 /*

@@ -1267,20 +1267,24 @@ items:
     costBuy: 3000
     costSell: 2400
     transferTime: 48
+    clipSize: 1
   - type: STR_AVALANCHE_MISSILES
     size: 1.5
     costBuy: 9000
     costSell: 7200
     transferTime: 48
+    clipSize: 1
   - type: STR_CANNON_ROUNDS_X50
     size: 0
     costBuy: 1240
     costSell: 1012
     transferTime: 96
+    clipSize: 50
   - type: STR_FUSION_BALL
     size: 0.6
     costSell: 53300
     transferTime: 48
+    clipSize: 1
   - type: STR_TANK_CANNON
     size: 6
     costBuy: 420000
