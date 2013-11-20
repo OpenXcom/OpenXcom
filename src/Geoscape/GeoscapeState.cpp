@@ -1747,6 +1747,7 @@ void GeoscapeState::globeClick(Action *action)
  */
 void GeoscapeState::btnInterceptClick(Action *)
 {
+	_globe->rotateStop();
 	_game->pushState(new InterceptState(_game, _globe));
 }
 
@@ -1756,6 +1757,7 @@ void GeoscapeState::btnInterceptClick(Action *)
  */
 void GeoscapeState::btnBasesClick(Action *)
 {
+	_globe->rotateStop();
 	timerReset();
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
@@ -1773,6 +1775,7 @@ void GeoscapeState::btnBasesClick(Action *)
  */
 void GeoscapeState::btnGraphsClick(Action *)
 {
+	_globe->rotateStop();
 	_game->pushState(new GraphsState(_game));
 }
 
@@ -1782,6 +1785,7 @@ void GeoscapeState::btnGraphsClick(Action *)
  */
 void GeoscapeState::btnUfopaediaClick(Action *)
 {
+	_globe->rotateStop();
 	Ufopaedia::open(_game);
 }
 
@@ -1791,6 +1795,7 @@ void GeoscapeState::btnUfopaediaClick(Action *)
  */
 void GeoscapeState::btnOptionsClick(Action *)
 {
+	_globe->rotateStop();
 	_game->pushState(new PauseState(_game, OPT_GEOSCAPE));
 }
 
@@ -1800,6 +1805,7 @@ void GeoscapeState::btnOptionsClick(Action *)
  */
 void GeoscapeState::btnFundingClick(Action *)
 {
+	_globe->rotateStop();
 	_game->pushState(new FundingState(_game));
 }
 
