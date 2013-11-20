@@ -27,6 +27,7 @@ namespace OpenXcom
 
 class RuleCraftWeapon;
 class CraftWeaponProjectile;
+class Ruleset;
 
 /**
  * Represents a craft weapon equipped by a craft.
@@ -62,6 +63,9 @@ public:
 	int rearm(const int available, const int clipSize);
 	/// Fires the craft weapon. Used during dogfights.
 	CraftWeaponProjectile* fire() const;
+	/// get how many clips are loaded into this weapon.
+	int getClipsLoaded(Ruleset* ruleset);
+
 };
 
 }

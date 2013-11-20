@@ -18,6 +18,8 @@
  */
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
 #include "CraftWeaponProjectile.h"
 
 namespace OpenXcom
@@ -166,6 +168,24 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 	p->setDamage(this->getRules()->getDamage());
 	p->setRange(this->getRules()->getRange());
 	return p;
+}
+
+/*
+ * get how many clips are loaded into this weapon.
+ * @param ruleset a pointer to the core ruleset.
+ * @return number of clips loaded.
+ */
+int CraftWeapon::getClipsLoaded(Ruleset *ruleset)
+{
+	int retVal = (int)floor((double)_ammo / _rules->getRearmRate());
+	RuleItem *clip = ruleset->getItem(_rules->getClipItem());
+
+	if (clip && clip->getClipSize() > 0)
+	{
+		retVal = (int)floor((double)_ammo / clip->getClipSize());
+	}
+
+	return retVal;
 }
 
 }
