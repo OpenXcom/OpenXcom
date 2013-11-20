@@ -92,6 +92,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
+	int _maxViewDistance, _maxViewDistanceAtDark, _maxDarknessToSeeUnits;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
@@ -216,7 +217,13 @@ public:
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Sorts all our lists according to their weight.
 	void sortLists();
-	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+	/// Gets max view distance in BattleScape.
+	inline unsigned int getMaxViewDistance() const {return _maxViewDistance;}
+	/// Gets max view distance at dark in BattleScape.
+	inline unsigned int getMaxViewDistanceAtDark() const {return _maxViewDistanceAtDark;}
+	/// Gets max darkness to see units in BattleScape.
+	inline unsigned int getMaxDarknessToSeeUnits() const {return _maxDarknessToSeeUnits;}
+	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval).
 	std::vector<std::string> getPsiRequirements();
 };
 

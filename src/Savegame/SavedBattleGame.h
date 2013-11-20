@@ -92,7 +92,7 @@ public:
 	/// Sets the dimensions of the map and initializes it.
 	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 	/// Initialises the pathfinding and tileengine.
-	void initUtilities(ResourcePack *res);
+	void initUtilities(ResourcePack *res, Ruleset *rules);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Sets the mission type.

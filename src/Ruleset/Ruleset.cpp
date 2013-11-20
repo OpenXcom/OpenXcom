@@ -377,12 +377,15 @@ void Ruleset::loadFile(const std::string &filename)
  	//_startingBase->load(i->second, 0);
 	if (doc["startingBase"])
 		_startingBase = YAML::Node(doc["startingBase"]);
- 	_startingTime.load(doc["startingTime"]);
- 	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
- 	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
- 	_costScientist = doc["costScientist"].as<int>(_costScientist);
- 	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
- 	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
+	_startingTime.load(doc["startingTime"]);
+	_maxViewDistance = doc["maxViewDistance"].as<int>(_maxViewDistance);
+	_maxViewDistanceAtDark = doc["maxViewDistanceAtDark"].as<int>(_maxViewDistanceAtDark);
+	_maxDarknessToSeeUnits = doc["maxDarknessToSeeUnits"].as<int>(_maxDarknessToSeeUnits);
+	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
+	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
+	_costScientist = doc["costScientist"].as<int>(_costScientist);
+	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
+	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");

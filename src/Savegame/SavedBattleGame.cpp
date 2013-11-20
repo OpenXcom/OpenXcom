@@ -300,7 +300,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
  */
 void SavedBattleGame::loadMapResources(Game *game)
 {
-	ResourcePack *res = game->getResourcePack();
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->loadData();
@@ -324,7 +323,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 		}
 	}
 
-	initUtilities(res);
+	initUtilities(game->getResourcePack(), game->getRuleset());
 	getTileEngine()->calculateSunShading();
 	getTileEngine()->calculateTerrainLighting();
 	getTileEngine()->calculateUnitLighting();
@@ -460,10 +459,10 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
  * Initializes the map utilities.
  * @param res Pointer to resource pack.
  */
-void SavedBattleGame::initUtilities(ResourcePack *res)
+void SavedBattleGame::initUtilities(ResourcePack *res, Ruleset *rules)
 {
 	_pathfinding = new Pathfinding(this);
-	_tileEngine = new TileEngine(this, res->getVoxelData());
+	_tileEngine = new TileEngine(this, res->getVoxelData(), rules->getMaxViewDistance(), rules->getMaxViewDistanceAtDark(), rules->getMaxDarknessToSeeUnits());
 }
 
 /**

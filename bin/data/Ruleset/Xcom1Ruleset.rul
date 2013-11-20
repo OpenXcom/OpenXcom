@@ -8653,6 +8653,9 @@ startingTime:
   day: 1
   month: 1
   year: 1999
+maxViewDistance: 20
+maxViewDistanceAtDark: 9
+maxDarknessToSeeUnits: 9
 costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
