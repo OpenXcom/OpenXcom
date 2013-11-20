@@ -19,6 +19,8 @@
 #include "NextTurnState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/Timer.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
