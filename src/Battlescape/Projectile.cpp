@@ -130,7 +130,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		originVoxel.z += 12;
 	}
 
-	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0)
+	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_save->getBattleGame()->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
