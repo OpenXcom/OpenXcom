@@ -838,10 +838,10 @@ bool Pathfinding::previewPath(bool bRemove)
 	int size = _unit->getArmor()->getSize() - 1;
 	int total = 0;
 	bool switchBack = false;
-	if (_save->getBattleState()->getBattleGame()->getReservedAction() == BA_NONE)
+	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
 	bool running = (SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
@@ -860,7 +860,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		tus -= tu;
 		total += tu;
-		bool reserve = _save->getBattleState()->getBattleGame()->checkReservedTU(_unit, total, true);
+		bool reserve = _save->getBattleGame()->checkReservedTU(_unit, total, true);
 		pos = destination;
 		for (int x = size; x >= 0; x--)
 		{
@@ -891,7 +891,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 	if (switchBack)
 	{
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 	}
 	return true;
 }
