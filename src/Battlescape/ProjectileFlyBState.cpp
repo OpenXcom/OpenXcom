@@ -457,7 +457,6 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16;
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
-	int zdiff = action->target.z - action->actor->getPosition().z;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 
 	return realDistance <= maxDistance;
