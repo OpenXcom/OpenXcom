@@ -477,8 +477,8 @@ void BattlescapeGame::endTurn()
 	}
 	else if (Options::getBool("battleAutoEnd"))
 	{
-		_parentState->finishBattle(false,liveSoldiers);
-		return;
+		// make sure we hit the statement below
+		_endTurnRequested = true;
 	}
 
 	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
