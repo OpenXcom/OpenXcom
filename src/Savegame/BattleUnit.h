@@ -279,6 +279,8 @@ public:
 	BattleItem *getMainHandWeapon(bool quickest = true) const;
 	/// Gets a grenade from the belt, if any.
 	BattleItem *getGrenadeFromBelt() const;
+	/// Gets a suitable ammo clip from the unit's inventory.
+	BattleItem *getCompatibleAmmo(BattleItem *weapon);
 	/// Reloads righthand weapon if needed.
 	bool checkAmmo();
 	/// Check if this unit is in the exit area

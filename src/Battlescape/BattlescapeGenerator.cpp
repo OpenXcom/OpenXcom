@@ -822,21 +822,22 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				bool placed = false;
 				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
 				{
-					if ((*bu)->getMainHandWeapon() && (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo())
+					BattleItem *weapon = (*bu)->getMainHandWeapon();
+					if (weapon && weapon->getRules()->getCompatibleAmmo())
 					{
-						for (std::vector<std::string>::iterator it = (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->begin(); it != (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
+						for (std::vector<std::string>::iterator it = weapon->getRules()->getCompatibleAmmo()->begin(); it != weapon->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
 						{
-							if (*it == item->getRules()->getType())
+							if (*it == item->getRules()->getType()
+								&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
+								&& item->getRules()->getInventoryHeight() == 1
+								&& !(*bu)->getCompatibleAmmo(weapon))
 							{
-								if (item->getRules()->getInventoryHeight() == 1 && !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
-								{
-									item->moveToOwner((*bu));
-									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-									item->setSlotX(1);
-									item->setSlotY(0);
-									placed = true;
-									break;
-								}
+								item->moveToOwner((*bu));
+								item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+								item->setSlotX(1);
+								item->setSlotY(0);
+								placed = true;
+								break;
 							}
 						}
 					}

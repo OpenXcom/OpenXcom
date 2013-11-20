@@ -1730,20 +1730,12 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 }
 
 /**
- * Check if we have ammo and reload if needed (used for AI)
+ * Checks the unit's inventory for compatible ammunition for the given weapon.
+ * @param weapon The weapon.
+ * @return The ammo clip if a suitable clip was found, null otherwise.
  */
-bool BattleUnit::checkAmmo()
+BattleItem *BattleUnit::getCompatibleAmmo(BattleItem *weapon)
 {
-	BattleItem *weapon = getItem("STR_RIGHT_HAND");
-	if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
-	{
-		weapon = getItem("STR_LEFT_HAND");
-		if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
-		{
-			return false;
-		}
-	}
-	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
 	BattleItem *ammo = 0;
 	bool wrong = true;
 	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
@@ -1760,13 +1752,37 @@ bool BattleUnit::checkAmmo()
 		if (!wrong) break;
 	}
 
-	if (wrong) return false; // didn't find any compatible ammo in inventory
+	if (wrong)
+		return 0;
+	else
+		return ammo;
+}
 
-	spendTimeUnits(15);
-	weapon->setAmmoItem(ammo);
-	ammo->moveToOwner(0);
-
-	return true;
+/**
+ * Check if we have ammo and reload if needed (used for AI).
+ * @return True, if weapon was reloaded.
+ */
+bool BattleUnit::checkAmmo()
+{
+	BattleItem *weapon = getItem("STR_RIGHT_HAND");
+	if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
+	{
+		weapon = getItem("STR_LEFT_HAND");
+		if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
+		{
+			return false;
+		}
+	}
+	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
+	BattleItem *ammo = getCompatibleAmmo(weapon);
+	if (ammo)
+	{
+		spendTimeUnits(15);
+		weapon->setAmmoItem(ammo);
+		ammo->moveToOwner(0);
+		return true;
+	}
+	return false;
 }
 
 /**
