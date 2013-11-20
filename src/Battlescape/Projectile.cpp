@@ -256,7 +256,10 @@ int Projectile::calculateThrow(double accuracy)
 	bool foundCurve = false;
 
 	// object blocking - can't throw here
-	if (_action.type == BA_THROW &&_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	if (_action.type == BA_THROW
+		&& _save->getTile(_action.target)
+		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)
+		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		return V_EMPTY;
 	}
@@ -307,7 +310,7 @@ int Projectile::calculateThrow(double accuracy)
 	while (!foundCurve && curvature < 5.0)
 	{
 		int check = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
-		if (check != V_OUTOFBOUNDS && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		if (check != V_OUTOFBOUNDS && (_trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
 			foundCurve = true;
 			retValue = check;
@@ -329,13 +332,13 @@ int Projectile::calculateThrow(double accuracy)
 	static const double maxDeviation = 0.08;
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	double deviation = RNG::boxMuller(0, baseDeviation);
 
 	int result = V_OUTOFBOUNDS;
 
 	// finally do a line calculation and store this trajectory, make sure it's valid.
 	while (result == V_OUTOFBOUNDS)
 	{
+		double deviation = RNG::boxMuller(0, baseDeviation);
 		_trajectory.clear();
 		result = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
@@ -344,7 +347,10 @@ int Projectile::calculateThrow(double accuracy)
 		endPoint.y /= 16;
 		endPoint.z /= 24;
 		// check if the item would land on a tile with a blocking object
-		if (_save->getTile(endPoint) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+		if (_action.type == BA_THROW
+			&& _save->getTile(endPoint)
+			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)
+			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 		{
 			result = V_OUTOFBOUNDS;
 		}
