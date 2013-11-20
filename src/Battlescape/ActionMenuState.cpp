@@ -20,6 +20,7 @@
 #include <sstream>
 #include <cmath>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
