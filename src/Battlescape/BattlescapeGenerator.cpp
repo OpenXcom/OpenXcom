@@ -865,9 +865,14 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				}
 			}
 			break;
-		case BT_FIREARM:
 		case BT_MELEE:
+			if (!secondPass)
+			{
+				break;
+			}
+		case BT_FIREARM:
 			// maybe we find ammo on the ground to load it with
+
 			if (item->getRules()->getCompatibleAmmo()->empty() || item->getAmmoItem())
 			{
 				loaded = true;
