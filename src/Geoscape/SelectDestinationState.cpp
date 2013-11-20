@@ -158,6 +158,7 @@ SelectDestinationState::~SelectDestinationState()
 void SelectDestinationState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_globe->rotateStop();
 }
 
 /**
