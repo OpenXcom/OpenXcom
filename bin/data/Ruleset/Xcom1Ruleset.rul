@@ -9254,3 +9254,8 @@ extraSprites:
     subY: 3
     files:
       0: Resources/BulletSprites/BulletSprites.png
+  - type: GeoscapeBackground
+    width: 540
+    height: 270
+    files:
+      0: Resources/GeoscapeBackground/

@@ -119,7 +119,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
 
 	// Create objects
-	_bg = new Surface(320, 200, screenWidth-320, screenHeight/2-100);
+	_bg = new Surface(screenWidth, screenHeight, 0, 0);
 	_globe = new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, 0, 0);
 
 	_btnIntercept = new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
@@ -217,7 +217,35 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_txtDebug);
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
+	Surface *bgRes = _game->getResourcePack()->getSurface("GEOBORD.SCR");
+	// Render hi-res background if base resolution is higher than default
+	if (screenWidth > bgRes->getWidth() || screenHeight > bgRes->getHeight())
+	{
+		SurfaceSet *bgResHiSet = _game->getResourcePack()->getSurfaceSet("GeoscapeBackground");
+		if (bgResHiSet != 0 && bgResHiSet->getFrame(0) != 0)
+		{
+			// Center hi-res bg image
+			Surface *bgResHi = bgResHiSet->getFrame(0);
+			bgResHi->setX(screenWidth/2 - bgResHi->getWidth()/2);
+			bgResHi->setY(screenHeight/2 - bgResHi->getHeight()/2);
+			bgResHi->blit(_bg);
+
+			// Crop default bg image to show only the menu
+			int menuWidth = 64;
+			bgRes->setX(screenWidth - menuWidth);
+			bgRes->setY(screenHeight/2 - bgRes->getHeight()/2);
+			bgRes->getCrop()->x = bgRes->getWidth() - menuWidth;
+			bgRes->getCrop()->w = menuWidth;
+			bgRes->getCrop()->h = bgRes->getHeight();
+		}
+		else
+		{
+			// Position bg image at the right side
+			bgRes->setX(screenWidth - bgRes->getWidth());
+			bgRes->setY(screenHeight/2 - bgRes->getHeight()/2);
+		}
+	}
+	bgRes->blit(_bg);
 
 	_btnIntercept->setFonts(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"));
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
