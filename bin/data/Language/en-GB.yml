@@ -1100,6 +1100,8 @@ en-GB:
   STR_PREVIOUS_UNIT: "Select Previous Unit"
   STR_NEXT_UNIT: "Select Next Unit"
   STR_DESELECT_UNIT: "Don't Reselect Unit"
+  STR_USE_LEFT_HAND: "Use Left Hand Item"
+  STR_USE_RIGHT_HAND: "Use Right Hand Item"
   STR_INVENTORY: "Inventory"
   STR_MINIMAP: "Minimap"
   STR_MULTI_LEVEL_VIEW: "Multi-Level View"
