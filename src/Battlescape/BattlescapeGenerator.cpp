@@ -812,6 +812,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 	{
 		bool loaded = false;
 		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+		RuleInventory *lefthand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 
 		switch (item->getRules()->getBattleType())
 		{
@@ -898,6 +899,28 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 						item->moveToOwner((*i));
 						item->setSlot(righthand);
 						break;
+					}
+				}
+
+				// setup satisfying pistol/stun rod combination if conditions are met
+				if (!item->getOwner() && item->getRules()->getBattleType() == BT_MELEE)
+				{
+					for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+					{
+						BattleItem *weaponRightHand = (*bu)->getItem("STR_RIGHT_HAND");
+						BattleItem *weaponLeftHand = (*bu)->getItem("STR_LEFT_HAND");
+						if (weaponRightHand && !weaponRightHand->getRules()->isTwoHanded() && !weaponLeftHand)
+						{
+							item->moveToOwner((*bu));
+							item->setSlot(lefthand);
+							break;
+						}
+						else if (weaponLeftHand && !weaponLeftHand->getRules()->isTwoHanded() && !weaponRightHand)
+						{
+							item->moveToOwner((*bu));
+							item->setSlot(righthand);
+							break;
+						}
 					}
 				}
 			}
