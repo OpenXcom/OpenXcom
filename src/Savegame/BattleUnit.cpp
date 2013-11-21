@@ -1678,7 +1678,7 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 
 /**
  * Get the "main hand weapon" from the unit.
- * @param quickest Wether to get the quickest weapon, default true
+ * @param quickest Whether to get the quickest weapon, default true
  * @return Pointer to item.
  */
 BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
@@ -1686,11 +1686,19 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
 	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
 
-	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
+	// ignore weapons without ammo (rules out grenades)
 	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
-		return weaponLeftHand;
+		weaponRightHand = 0;
 	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
+		weaponLeftHand = 0;
+
+	// if there is only one weapon, it's easy:
+	if (weaponRightHand && !weaponLeftHand)
 		return weaponRightHand;
+	else if (!weaponRightHand && weaponLeftHand)
+		return weaponLeftHand;
+	else if (!weaponRightHand && !weaponLeftHand)
+		return 0;
 
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
