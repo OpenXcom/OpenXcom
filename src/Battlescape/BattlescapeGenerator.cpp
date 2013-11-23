@@ -458,14 +458,16 @@ void BattlescapeGenerator::deployXCOM()
 		placeItemByLayout(*i);
 	}
 	// auto-equip soldiers (only soldiers without layout)
-	for (std::vector<BattleItem*>::reverse_iterator i = _craftInventoryTile->getInventory()->rbegin(); i != _craftInventoryTile->getInventory()->rend(); ++i)
+	std::sort (_craftInventoryTile->getInventory()->begin(), _craftInventoryTile->getInventory()->end(), CompareItems(_game));
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, false);
 	}
-	for (std::vector<BattleItem*>::reverse_iterator i = _craftInventoryTile->getInventory()->rbegin(); i != _craftInventoryTile->getInventory()->rend(); ++i)
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, true);
 	}
+
 	// clean up moved items
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end();)
@@ -802,6 +804,12 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 
 /**
  * Adds an item to an XCom soldier (auto-equip).
+ *
+ * First time round, that is when secondPass is false, assigns only firearms,
+ * as long as the unit can carry it without encumberance while also carrying more standard issue XCom kit.
+ *
+ * Second time round, all items are assignable, with firearms no longer encumbrance checked.
+ * Non firearms are assigned only if the unit does not become encumbered.
  * @param item Pointer to the Item.
  * @param secondPass Is this the second time through the equipping routine?
  * @return Pointer to the Item.
@@ -809,7 +817,8 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
-	if (item->getSlot() == ground)
+	if (item->getSlot() == ground
+		&& (secondPass || item->getRules()->getBattleType() == BT_FIREARM))
 	{
 		bool loaded = false;
 		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");

@@ -383,6 +383,9 @@ void Ruleset::loadFile(const std::string &filename)
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
  	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
  	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
+
+	_autoEquipWeights = doc["autoEquipWeights"].as< std::map<std::string, int> >(_autoEquipWeights);
+
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
@@ -1132,6 +1135,11 @@ std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 	return _extraStrings;
 }
 
+const std::map<std::string, int> &Ruleset::getAutoEquipWeights() const
+{
+	return _autoEquipWeights;
+}
+
 /**
  * Sorts all our lists according to their weight.
  */
@@ -1171,7 +1179,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		while (list.find(getBaseFacility(*i)->getListOrder() + offset) != list.end())
@@ -1187,7 +1195,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
 	{
 		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
@@ -1203,7 +1211,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	int alternateEntry = 0;
 	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
 	{
@@ -1228,7 +1236,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
 	{
 		while (list.find(getUfopaediaArticle(*i)->getListOrder() + offset) != list.end())
@@ -1244,7 +1252,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _researchIndex.begin(); i != _researchIndex.end(); ++i)
 	{
 		while (list.find(getResearch(*i)->getListOrder() + offset) != list.end())
@@ -1260,7 +1268,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _manufactureIndex.begin(); i != _manufactureIndex.end(); ++i)
 	{
 		while (list.find(getManufacture(*i)->getListOrder() + offset) != list.end())

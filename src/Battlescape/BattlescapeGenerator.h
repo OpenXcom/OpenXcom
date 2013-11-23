@@ -19,6 +19,11 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
+#include "../Savegame/BattleItem.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Engine/Game.h"
+
 namespace OpenXcom
 {
 
@@ -35,7 +40,6 @@ class RuleItem;
 class Unit;
 class AlienRace;
 class AlienDeployment;
-class Game;
 class Base;
 class TerrorSite;
 class AlienBase;
@@ -95,6 +99,40 @@ private:
 	void deployCivilians(int max);
 	/// Gets battlescape terrain.
 	RuleTerrain *getTerrain(int tex, double lat);
+
+
+	/**
+	 * Compares BattleItems based on auto equip weightings.
+	 */
+	class CompareItems : public std::binary_function<BattleItem*, BattleItem*, bool>
+	{
+	private:
+		Game *_game;
+		std::map<std::string, int> _weights;
+	public:
+		CompareItems(Game *game) : _game(game), _weights(_game->getRuleset()->getAutoEquipWeights())
+		{
+		}
+
+		/**
+		 * Compares items @a *a and @a *b.
+		 * @param a Pointer to first item.
+		 * @param b Pointer to second item.
+		 * @return True if battle item @a *a comes after @a *b.
+		 * @see RuleItem
+		 */
+		bool operator()(BattleItem* a, BattleItem* b) const
+		{
+			// Handle items not in the weightings map.
+			if (_weights.count(a->getRules()->getName()) == 0)
+				return false;
+			if (_weights.count(b->getRules()->getName()) == 0)
+				return true;
+
+			return _weights.find(a->getRules()->getName())->second > _weights.find(b->getRules()->getName())->second;
+		}
+	};
+
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
