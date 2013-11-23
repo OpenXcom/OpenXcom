@@ -283,6 +283,8 @@ public:
 	BattleItem *getCompatibleAmmo(BattleItem *weapon);
 	/// Reloads righthand weapon if needed.
 	bool checkAmmo();
+	/// Determines whether the unit is carrying an item.
+	bool isCarrying(std::string item);
 	/// Check if this unit is in the exit area
 	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.

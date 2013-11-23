@@ -1759,6 +1759,21 @@ BattleItem *BattleUnit::getCompatibleAmmo(BattleItem *weapon)
 }
 
 /**
+ * Determines whether the unit is carrying one of the specified item.
+ * @param item The item to search for.
+ * @return True, if the unit is carrying one of the item.
+ */
+bool BattleUnit::isCarrying(std::string item)
+{
+	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	{
+		if ((*i)->getRules()->getName() == item)
+			return true;
+	}
+	return false;
+}
+
+/**
  * Check if we have ammo and reload if needed (used for AI).
  * @return True, if weapon was reloaded.
  */
