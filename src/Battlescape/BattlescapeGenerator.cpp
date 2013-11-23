@@ -905,23 +905,36 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					}
 				}
 
-				// setup satisfying pistol/stun rod combination if conditions are met
-				if (!item->getOwner() && item->getRules()->getBattleType() == BT_MELEE)
+				if (item->getRules()->getBattleType() == BT_MELEE)
 				{
+					// setup satisfying pistol/stun rod combination
 					for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 					{
 						BattleItem *weaponRightHand = (*bu)->getItem("STR_RIGHT_HAND");
 						BattleItem *weaponLeftHand = (*bu)->getItem("STR_LEFT_HAND");
-						if (weaponRightHand && !weaponRightHand->getRules()->isTwoHanded() && !weaponLeftHand)
+						if (weaponRightHand && !weaponLeftHand
+							&& !weaponRightHand->getRules()->isTwoHanded()
+							&& !(*bu)->isCarrying(item->getRules()->getName()))
 						{
 							item->moveToOwner((*bu));
 							item->setSlot(lefthand);
+							placed = true;
 							break;
 						}
-						else if (weaponLeftHand && !weaponLeftHand->getRules()->isTwoHanded() && !weaponRightHand)
+					}
+					if (placed) break;
+
+					// try to place in backpack
+					for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+					{
+						if (!(*bu)->isCarrying(item->getRules()->getName())
+							&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 2, 0)
+							&& (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight())
 						{
-							item->moveToOwner((*bu));
-							item->setSlot(righthand);
+							item->moveToOwner(*bu);
+							item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+							item->setSlotX(2);
+							item->setSlotY(0);
 							break;
 						}
 					}
