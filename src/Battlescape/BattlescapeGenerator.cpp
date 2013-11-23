@@ -828,17 +828,33 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					{
 						for (std::vector<std::string>::iterator it = weapon->getRules()->getCompatibleAmmo()->begin(); it != weapon->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
 						{
+							// Only give the ammo to a unit who has a compatible weapon and no spare clip already
 							if (*it == item->getRules()->getType()
-								&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
-								&& item->getRules()->getInventoryHeight() == 1
-								&& !(*bu)->getCompatibleAmmo(weapon))
+								&& !(*bu)->getCompatibleAmmo(weapon)
+								&& (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight())
 							{
-								item->moveToOwner((*bu));
-								item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-								item->setSlotX(1);
-								item->setSlotY(0);
-								placed = true;
-								break;
+								// regular ammo goes in belts
+								if (item->getRules()->getInventoryHeight() == 1
+									&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
+								{
+									item->moveToOwner(*bu);
+									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+									item->setSlotX(1);
+									item->setSlotY(0);
+									placed = true;
+									break;
+								}
+								// rockets and blaster shells go in back packs
+								else if (item->getRules()->getInventoryHeight() > 1
+									&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 0, 0))
+								{
+									item->moveToOwner(*bu);
+									item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+									item->setSlotX(0);
+									item->setSlotY(0);
+									placed = true;
+									break;
+								}
 							}
 						}
 					}
