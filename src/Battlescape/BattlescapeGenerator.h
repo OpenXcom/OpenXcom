@@ -32,11 +32,9 @@ class Craft;
 class Ufo;
 class RuleTerrain;
 class ResourcePack;
-class BattleItem;
 class MapBlock;
 class Vehicle;
 class Tile;
-class RuleItem;
 class Unit;
 class AlienRace;
 class AlienDeployment;
@@ -99,7 +97,6 @@ private:
 	void deployCivilians(int max);
 	/// Gets battlescape terrain.
 	RuleTerrain *getTerrain(int tex, double lat);
-
 
 	/**
 	 * Compares BattleItems based on auto equip weightings.

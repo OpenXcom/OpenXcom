@@ -164,9 +164,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
-	
+
 	lastCover = Position(-1, -1, -1);
-	
+
 }
 
 
@@ -472,7 +472,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 	}
 
 	_walkPhase++;
-	
+
 
 	if (_walkPhase == middle)
 	{
@@ -495,7 +495,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 			// Finish strafing move facing the correct way.
 			_direction = _faceDirection;
 			_faceDirection = -1;
-		} 
+		}
 
 		// motion points calculation for the motion scanner blips
 		if (_armor->getSize() > 1)
@@ -505,7 +505,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		else
 		{
 			// sectoids actually have less motion points
-			// but instead of create yet another variable, 
+			// but instead of create yet another variable,
 			// I used the height of the unit instead (logical)
 			if (getStandHeight() > 16)
 				_motionPoints += 4;
@@ -1532,7 +1532,7 @@ void BattleUnit::think(BattleAction *action)
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
 	if (_currentAIState)
-	{		
+	{
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
@@ -1732,30 +1732,24 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 /**
  * Checks the unit's inventory for compatible ammunition for the given weapon.
  * @param weapon The weapon.
- * @return The ammo clip if a suitable clip was found, null otherwise.
+ * @return The ammo clip, if a suitable clip was found, null otherwise.
  */
 BattleItem *BattleUnit::getCompatibleAmmo(BattleItem *weapon)
 {
 	BattleItem *ammo = 0;
-	bool wrong = true;
-	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	bool found = false;
+	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i < getInventory()->end() && !found; ++i)
 	{
 		ammo = (*i);
-		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
+		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c < weapon->getRules()->getCompatibleAmmo()->end() && !found; ++c)
 		{
 			if ((*c) == ammo->getRules()->getType())
 			{
-				wrong = false;
-				break;
+				found = true;
 			}
 		}
-		if (!wrong) break;
 	}
-
-	if (wrong)
-		return 0;
-	else
-		return ammo;
+	return found ? ammo : 0;
 }
 
 /**
@@ -1774,7 +1768,7 @@ bool BattleUnit::isCarrying(std::string item)
 }
 
 /**
- * Check if we have ammo and reload if needed (used for AI).
+ * Checks if we have ammo and reloads if needed (used for AI).
  * @return True, if weapon was reloaded.
  */
 bool BattleUnit::checkAmmo()
@@ -2076,7 +2070,7 @@ int BattleUnit::getMotionPoints() const
  */
 Armor *BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
 /**
  * Get unit's name.
@@ -2201,7 +2195,7 @@ bool BattleUnit::isFearable() const
 
 /**
   * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
-  * @return intelligence 
+  * @return intelligence
   */
 int BattleUnit::getIntelligence() const
 {
