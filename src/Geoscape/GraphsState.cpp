@@ -310,6 +310,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	_btnFinance->onMousePress((ActionHandler)&GraphsState::btnFinanceClick);
 	_btnGeoscape->onMousePress((ActionHandler)&GraphsState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyGeoGraphs"));
 
 	centerAllSurfaces();
 }

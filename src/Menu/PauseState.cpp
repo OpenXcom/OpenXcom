@@ -101,6 +101,10 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	if (origin == OPT_GEOSCAPE)
+		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyGeoOptions"));
+	else if (origin == OPT_BATTLESCAPE)
+		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyBattleOptions"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);

@@ -72,6 +72,7 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
 	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
 	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyBattleMap"));
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
