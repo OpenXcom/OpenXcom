@@ -257,6 +257,7 @@ void TextButton::mousePress(Action *action, State *state)
 		*_group = this;
 		if (old != 0)
 			old->draw();
+		draw();
 	}
 
 	if (isButtonHandled(action->getDetails()->button.button))

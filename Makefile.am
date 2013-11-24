@@ -56,6 +56,10 @@ bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
 bulletsprite_DATA = \
 	bin/data/Resources/BulletSprites/BulletSprites.png
 
+uispritedir =  $(pkgdatadir)/data/Resources/UI/
+uisprite_DATA = \
+	bin/data/Resources/UI/reserve.png
+
 rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
@@ -694,6 +698,7 @@ EXTRA_DIST = \
 	$(name_DATA) \
 	$(pathfinding_DATA) \
 	$(bulletsprite_DATA) \
+	$(uisprite_DATA) \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \

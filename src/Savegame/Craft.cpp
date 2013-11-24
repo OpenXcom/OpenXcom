@@ -713,7 +713,7 @@ void Craft::refuel()
  * while it's docked in the base.
  * @return The ammo ID missing for rearming, or "" if none.
  */
-std::string Craft::rearm()
+std::string Craft::rearm(Ruleset *rules)
 {
 	std::string ammo = "";
 	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; ++i)
@@ -725,14 +725,27 @@ std::string Craft::rearm()
 		}
 		if (*i != 0 && (*i)->isRearming())
 		{
-			if ((*i)->getRules()->getClipItem() == "" || _base->getItems()->getItem((*i)->getRules()->getClipItem()) > 0)
+			std::string clip = (*i)->getRules()->getClipItem();
+			int available = _base->getItems()->getItem(clip);
+			if (clip == "")
 			{
-				(*i)->rearm();
-				_base->getItems()->removeItem((*i)->getRules()->getClipItem());
+				(*i)->rearm(0, 0);
+			}
+			else if (available > 0)
+			{
+				int used = (*i)->rearm(available, rules->getItem(clip)->getClipSize());
+
+				if (used > available)
+				{
+					ammo = clip;
+					(*i)->setRearming(false);
+				}
+
+				_base->getItems()->removeItem(clip, used);
 			}
 			else
 			{
-				ammo = (*i)->getRules()->getClipItem();
+				ammo = clip;
 				(*i)->setRearming(false);
 			}
 			break;

@@ -43,6 +43,7 @@ enum SpecialTileType{TILE=0,
 					MUST_DESTROY};
 
 enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE};
+enum VoxelType{ V_EMPTY = -1, V_FLOOR, V_WESTWALL, V_NORTHWALL, V_OBJECT, V_UNIT, V_OUTOFBOUNDS };
 
 /**
  * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...

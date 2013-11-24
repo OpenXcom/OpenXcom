@@ -21,6 +21,7 @@
 #include <sstream>
 #include "BattlescapeGenerator.h"
 #include "TileEngine.h"
+#include "Inventory.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -827,11 +828,12 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 						{
 							if (*it == item->getRules()->getType())
 							{
-								if (!(*bu)->getItem("STR_BELT", 1) && item->getRules()->getInventoryHeight() == 1)
+								if (item->getRules()->getInventoryHeight() == 1 && !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
 								{
 									item->moveToOwner((*bu));
 									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
 									item->setSlotX(1);
+									item->setSlotY(0);
 									placed = true;
 									break;
 								}
@@ -851,12 +853,14 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
 				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 
-				if (!(*i)->getItem("STR_BELT"))
+				if (!Inventory::overlapItems(*i, item, _game->getRuleset()->getInventory("STR_BELT"), 0, 0))
 				{
 					// at this point we are assuming (1,0) is not occupied already (with eg. a grenade)
 					// (this is relevant in the case of HIGH EXPLOSIVE which occupies two slot)
 					item->moveToOwner((*i));
 					item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+					item->setSlotX(0);
+					item->setSlotY(0);
 					break;
 				}
 			}
@@ -903,7 +907,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
 				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 
-				if (!(*i)->getItem("STR_BELT",3,0))
+				if (!Inventory::overlapItems(*i, item, _game->getRuleset()->getInventory("STR_BELT"), 3, 0))
 				{
 					// at this point we are assuming (3,1) is not occupied already (with eg. a grenade)
 					item->moveToOwner((*i));
@@ -921,7 +925,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
 				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 
-				if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
+				if (!Inventory::overlapItems(*i, item, _game->getRuleset()->getInventory("STR_LEFT_SHOULDER"), 1, 0))
 				{
 					item->moveToOwner((*i));
 					item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));

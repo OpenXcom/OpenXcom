@@ -43,10 +43,11 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 224, 140, 48, 30, POPUP_BOTH);
+	_window = new Window(this, 230, 140, 45, 30, POPUP_BOTH);
 	_btnOk = new TextButton(80, 16, 64, 146);
 	_btnReport = new TextButton(80, 16, 176, 146);
-	_txtTitle = new Text(224, 17, 48, 88);
+	_txtTitle = new Text(230, 17, 45, 70);
+	_txtResearch = new Text(230, 17, 45, 96);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -55,6 +56,7 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	add(_btnOk);
 	add(_btnReport);
 	add(_txtTitle);
+	add(_txtResearch);
 
 	centerAllSurfaces();
 
@@ -66,6 +68,7 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
@@ -75,6 +78,14 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_RESEARCH_COMPLETED"));
+
+	_txtResearch->setColor(Palette::blockOffset(8)+10);
+	_txtResearch->setAlign(ALIGN_CENTER);
+	_txtResearch->setBig();
+	if (research)
+	{
+		_txtResearch->setText(tr(research->getName()));
+	}
 }
 
 /**
@@ -103,42 +114,21 @@ void ResearchCompleteState::btnReportClick(Action *)
 	_game->popState();
 	std::string name;
 	std::string bonusName;
-	int palSwitch = 0;
-	if(_bonus)
+	if (_bonus)
 	{
 		if (_bonus->getLookup() == "")
 			bonusName = _bonus->getName();
 		else
 			bonusName = _bonus->getLookup();
-		ArticleDefinition *art = _game->getRuleset()->getUfopaediaArticle(bonusName);
-		switch(art->getType())
-		{
-		case UFOPAEDIA_TYPE_BASE_FACILITY:
-			palSwitch = 1;
-			break;
-		case UFOPAEDIA_TYPE_CRAFT:
-		case UFOPAEDIA_TYPE_TEXTIMAGE:
-		case UFOPAEDIA_TYPE_TEXT:
-		case UFOPAEDIA_TYPE_VEHICLE:
-			palSwitch = 3;
-			break;
-		case UFOPAEDIA_TYPE_ITEM:
-		case UFOPAEDIA_TYPE_CRAFT_WEAPON:
-		case UFOPAEDIA_TYPE_ARMOR:
-			palSwitch = 4;
-			break;
-		default:
-			break;
-		}
-		Ufopaedia::openArticle(_game, bonusName, 0);
+		Ufopaedia::openArticle(_game, bonusName);
 	}
-	if(_research)
+	if (_research)
 	{
 		if (_research->getLookup() == "")
-			name = _research->getName ();
+			name = _research->getName();
 		else
 			name = _research->getLookup();
-		Ufopaedia::openArticle(_game, name, palSwitch);
+		Ufopaedia::openArticle(_game, name);
 	}
 }
 

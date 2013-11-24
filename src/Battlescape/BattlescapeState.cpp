@@ -361,7 +361,16 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnStats->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
+	_btnLeftHandItem->onKeyboardPress((ActionHandler)&BattlescapeState::btnLeftHandItemClick, (SDLKey)Options::getInt("keyBattleUseLeftHand"));
+	_btnLeftHandItem->setTooltip("STR_USE_LEFT_HAND");
+	_btnLeftHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
+	_btnLeftHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
+	_btnRightHandItem->onKeyboardPress((ActionHandler)&BattlescapeState::btnRightHandItemClick, (SDLKey)Options::getInt("keyBattleUseRightHand"));
+	_btnRightHandItem->setTooltip("STR_USE_RIGHT_HAND");
+	_btnRightHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
+	_btnRightHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveNone->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveNone"));
@@ -1011,9 +1020,10 @@ void BattlescapeState::btnStatsClick(Action *action)
  */
 void BattlescapeState::btnLeftHandItemClick(Action *)
 {
-	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
+		_battleGame->cancelCurrentAction();
+
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
 		_map->cacheUnits();
 		_map->draw();
@@ -1028,9 +1038,10 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
  */
 void BattlescapeState::btnRightHandItemClick(Action *)
 {
-	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
 	{
+		_battleGame->cancelCurrentAction();
+
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 		_map->cacheUnits();
 		_map->draw();
@@ -1743,7 +1754,7 @@ void BattlescapeState::saveVoxelMap()
 					dist*=0.9f;
 				}
 
-				if (test==5)
+				if (test == V_OUTOFBOUNDS)
 				{
 					tile = _save->getTile(Position(x/16, y/16, z/12));
 					if (tile->getUnit())

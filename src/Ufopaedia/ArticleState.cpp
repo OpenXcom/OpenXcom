@@ -36,8 +36,8 @@ namespace OpenXcom
 	 * @param game Pointer to current game.
 	 * @param article_id The article id of this article state instance.
 	 */
-	ArticleState::ArticleState(Game *game, std::string article_id, int palSwitch) :
-		State(game), _id(article_id), _palSwitch(palSwitch)
+	ArticleState::ArticleState(Game *game, std::string article_id) :
+		State(game), _id(article_id)
 	{
 		// init background and navigation elements
 		_bg = new Surface(320, 200, 0, 0);
@@ -79,9 +79,7 @@ namespace OpenXcom
 	void ArticleState::btnOkClick(Action *)
 	{
 		_game->popState();
-		std::ostringstream ss;
-		ss << "PALETTES.DAT_" << _palSwitch;
-		_game->setPalette(_game->getResourcePack()->getPalette(ss.str())->getColors());
+		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	}
 
 	/**

@@ -179,12 +179,18 @@ void AlienBAIState::think(BattleAction *action)
 
 	if (action->weapon)
 	{
-		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
+		RuleItem *rule = action->weapon->getRules();
+		if (rule->getBattleType() == BT_FIREARM)
+		{
+			if (!rule->isWaypoint())
+				_rifle = true;
+			else
+				_blaster = true;
+		}
+		else if (rule->getBattleType() == BT_MELEE)
+		{
 			_melee = true;
-		else if (!action->weapon->getRules()->isWaypoint())
-			_rifle = true;
-		else
-			_blaster = true;
+		}
 	}
 
 	if (_spottingEnemies && !_escapeTUs)
@@ -294,7 +300,7 @@ void AlienBAIState::think(BattleAction *action)
 		// spin 180 at the end of your route.
 		_unit->_hidingForTurn = true;
 		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		action->type = _patrolAction->type;
@@ -313,7 +319,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->finalFacing = _attackAction->finalFacing;
 		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
 		// don't worry about reserving TUs, we've factored that in already.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
 		if (action->type == BA_WALK && _rifle
 			// so long as we can take a shot afterwards.
@@ -334,7 +340,7 @@ void AlienBAIState::think(BattleAction *action)
 		// end this unit's turn.
 		action->finalAction = true;
 		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	default:
 		break;
@@ -1456,7 +1462,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
 			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
-			if (collidesWith == 4)
+			if (collidesWith == V_UNIT)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1577,12 +1583,12 @@ void AlienBAIState::wayPointAction()
 			Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
 			Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
 			CollidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
-			if (CollidesWith > -1 && CollidesWith < 4)
+			if (CollidesWith > V_EMPTY && CollidesWith < V_UNIT)
 			{
 				_attackAction->waypoints.push_back(LastPosition);
 				LastWayPoint = LastPosition;
 			}
-			else if (CollidesWith == 4)
+			else if (CollidesWith == V_UNIT)
 			{
 				BattleUnit* target = _save->getTile(CurrentPosition)->getUnit();
 				if (target == _aggroTarget)

@@ -28,6 +28,7 @@ namespace OpenXcom
 class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
+class Tile;
 
 /**
  * A projectile state.
@@ -56,7 +57,9 @@ public:
 	/// Runs state functionality every cycle.
 	void think();
 	/// Validates the throwing range.
-	static bool validThrowRange(BattleAction *action);
+	static bool validThrowRange(BattleAction *action, Position origin, Tile *target);
+	static int getMaxThrowDistance(int weight, int strength, int level);
+
 };
 
 }

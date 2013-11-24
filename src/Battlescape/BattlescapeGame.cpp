@@ -476,7 +476,10 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
-	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
+	bool battleComplete = liveAliens == 0 || liveSoldiers == 0;
+
+	if ((_save->getSide() != FACTION_NEUTRAL || battleComplete)
+		&& _endTurnRequested)
 	{
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}

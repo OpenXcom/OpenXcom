@@ -158,6 +158,7 @@ SelectDestinationState::~SelectDestinationState()
 void SelectDestinationState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_globe->rotateStop();
 }
 
 /**
@@ -226,7 +227,7 @@ void SelectDestinationState::btnRotateLeftPress(Action *)
  */
 void SelectDestinationState::btnRotateLeftRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -244,7 +245,7 @@ void SelectDestinationState::btnRotateRightPress(Action *)
  */
 void SelectDestinationState::btnRotateRightRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -262,7 +263,7 @@ void SelectDestinationState::btnRotateUpPress(Action *)
  */
 void SelectDestinationState::btnRotateUpRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**
@@ -280,7 +281,7 @@ void SelectDestinationState::btnRotateDownPress(Action *)
  */
 void SelectDestinationState::btnRotateDownRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**

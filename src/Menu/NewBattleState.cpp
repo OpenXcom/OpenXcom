@@ -130,10 +130,10 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
 	_txtItemLevel->setText(tr("STR_ENEMY_WEAPON_LEVEL"));
 	
-	for (size_t i = 1; i != _game->getRuleset()->getAlienItemLevels().size(); ++i)
+	for (size_t i = 0; i != _game->getRuleset()->getAlienItemLevels().size(); ++i)
 	{
 		std::ostringstream ss;
-		ss << i;
+		ss << i + 1;
 		_itemLevels.push_back(ss.str());
 	}
 
@@ -268,12 +268,14 @@ void NewBattleState::updateButtons()
 	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
 	_btnCraft->setText(tr(_crafts[_selCraft]));
-	std::stringstream ss;
-	int month = 0;
-	ss << std::dec << _itemLevels[_selItemLevel];
-	ss >> std::dec >> month;
+	int month = _selItemLevel + 1;
 	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
-	_btnItemLevel->setText(tr(time.getMonthString()));
+	std::wostringstream ss;
+	ss << month << L" (" << tr(time.getMonthString());
+	if (month == _itemLevels.size())
+		ss << L"+";
+	ss << L")";
+	_btnItemLevel->setText(ss.str());
 }
 
 /**
@@ -429,7 +431,7 @@ void NewBattleState::btnOkClick(Action *)
 		_craft->setDestination(u);
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
-		if (_terrainTypes[_selTerrain] == "FOREST")
+		if (_terrainTypes[_selTerrain] == "STR_FOREST")
 		{
 			u->setLatitude(-0.5);
 		}
@@ -564,12 +566,14 @@ void NewBattleState::btnItemLevelClick(Action *action)
 	{
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
-	std::stringstream ss;
-	int month = 0;
-	ss << std::dec << _itemLevels[_selItemLevel];
-	ss >> std::dec >> month;
+	int month = _selItemLevel + 1;
 	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
-	_btnItemLevel->setText(tr(time.getMonthString()));
+	std::wostringstream ss;
+	ss << month << L" (" << tr(time.getMonthString());
+	if (month == _itemLevels.size())
+		ss << L"+";
+	ss << L")";
+	_btnItemLevel->setText(ss.str());
 	Options::setInt("NewBattleItemLevel", _selItemLevel);
 }
 

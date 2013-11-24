@@ -19,7 +19,7 @@
 #include "Ufo.h"
 #include <assert.h>
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
 #include <sstream>
 #include <algorithm>
 #include "../aresame.h"

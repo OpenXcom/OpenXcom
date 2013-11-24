@@ -215,7 +215,6 @@ void BasescapeState::init()
 			if (*i == _base)
 			{
 				exists = true;
-        break;
 			}
 		}
 		// If base was removed, select first one
