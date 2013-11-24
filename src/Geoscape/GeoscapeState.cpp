@@ -1365,8 +1365,7 @@ void GeoscapeState::time1Hour()
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				popup(new ProductionCompleteState(_game, tr(j->first->getRules()->getName()), (*i)->getName(), j->second));
-				timerReset();
+				popup(new ProductionCompleteState(_game, (*i),  tr(j->first->getRules()->getName()), this, j->second));
 			}
 		}
 	}
@@ -1425,8 +1424,7 @@ void GeoscapeState::time1Day()
 				(*j)->build();
 				if ((*j)->getBuildTime() == 0)
 				{
-					timerReset();
-					popup(new ProductionCompleteState(_game, tr((*j)->getRules()->getType()), (*i)->getName(), PROGRESS_CONSTRUCTION));
+					popup(new ProductionCompleteState(_game, (*i),  tr((*j)->getRules()->getType()), this, PROGRESS_CONSTRUCTION));
 				}
 			}
 		}

@@ -1216,4 +1216,5 @@ en-GB:
   STR_DEAD_ALIENS: "Dead Aliens"
   STR_CONTAINMENT_EXCEEDED: "ALIEN CONTAINMENT LIMITS EXCEEDED!{SMALLLINE}Insufficient containment space at {0}. You must remove excess aliens from containment (who will then die)."
   STR_MANAGE_CONTAINMENT: "Manage Alien Containment"
-  STR_DETAILS: "Details: {ALT}{0}"
+  STR_DETAILS: "DETAILS> {ALT}{0}"
+  STR_GO_TO_BASE: "Go to Base"
