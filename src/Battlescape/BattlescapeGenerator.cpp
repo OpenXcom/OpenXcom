@@ -457,8 +457,9 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		placeItemByLayout(*i);
 	}
+
 	// auto-equip soldiers (only soldiers without layout)
-	std::sort (_craftInventoryTile->getInventory()->begin(), _craftInventoryTile->getInventory()->end(), CompareItems(_game));
+	std::sort (_craftInventoryTile->getInventory()->begin(), _craftInventoryTile->getInventory()->end(), CompareItems());
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, false);

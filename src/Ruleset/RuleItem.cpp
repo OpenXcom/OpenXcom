@@ -134,6 +134,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	{
 		_listOrder = listOrder;
 	}
+	_autoEquipWeight = node["autoEquipWeight"].as<int>(_autoEquipWeight);
 }
 
 /**
@@ -662,12 +663,22 @@ int RuleItem::getBulletSpeed() const
 }
 
 /**
-* Gets the amount of auto shots fired by this weapon.
-* @return The shots.
-*/
+ * Gets the amount of auto shots fired by this weapon.
+ * @return The shots.
+ */
 int RuleItem::getAutoShots() const
 {
 	return _autoShots;
+}
+
+/**
+ * Gets the autoequip weighting for this item.
+ * This is used by the auto equip routine in the battle generator.
+ * @return The autoequip weight.
+ */
+int RuleItem::getAutoEquipWeight() const
+{
+	return _autoEquipWeight;
 }
 
 }

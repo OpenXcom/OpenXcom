@@ -383,7 +383,6 @@ void Ruleset::loadFile(const std::string &filename)
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
  	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
  	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
-	_autoEquipWeights = doc["autoEquipWeights"].as< std::map<std::string, int> >(_autoEquipWeights);
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
@@ -1131,15 +1130,6 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
 std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
-}
-
-/**
- * Gets the autoequip weightings.
- * @return The autoequip weightings.
- */
-const std::map<std::string, int> &Ruleset::getAutoEquipWeights() const
-{
-	return _autoEquipWeights;
 }
 
 /**

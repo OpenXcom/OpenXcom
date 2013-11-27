@@ -1455,6 +1455,7 @@ items:
     handSprite: 96
     bulletSprite: 1
     fireSound: 4
+    autoEquipWeight: 45
     compatibleAmmo:
       - STR_PISTOL_CLIP
     accuracySnap: 60
@@ -1480,6 +1481,7 @@ items:
     battleType: 2
     armor: 12
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -1490,6 +1492,7 @@ items:
     handSprite: 0
     bulletSprite: 2
     fireSound: 4
+    autoEquipWeight: 70
     compatibleAmmo:
       - STR_RIFLE_CLIP
     accuracyAuto: 35
@@ -1515,6 +1518,7 @@ items:
     damageType: 1
     clipSize: 20
     battleType: 2
+    autoEquipWeight: 40
   - type: STR_HEAVY_CANNON
     size: 0.3
     costBuy: 6400
@@ -1525,6 +1529,7 @@ items:
     handSprite: 24
     bulletSprite: 4
     fireSound: 2
+    autoEquipWeight: 45
     compatibleAmmo:
       - STR_HC_AP_AMMO
       - STR_HC_HE_AMMO
@@ -1553,6 +1558,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -1569,6 +1575,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -1585,6 +1592,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -1595,6 +1603,7 @@ items:
     handSprite: 32
     bulletSprite: 3
     fireSound: 2
+    autoEquipWeight: 65
     compatibleAmmo:
       - STR_AC_AP_AMMO
       - STR_AC_HE_AMMO
@@ -1624,6 +1633,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    autoEquipWeight: 40
   - type: STR_AC_HE_AMMO
     size: 0.1
     costBuy: 700
@@ -1639,6 +1649,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    autoEquipWeight: 40
   - type: STR_AC_I_AMMO
     size: 0.1
     costBuy: 650
@@ -1655,6 +1666,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -1665,6 +1677,7 @@ items:
     handSprite: 72
     bulletSprite: 0
     fireSound: 52
+    autoEquipWeight: 50
     compatibleAmmo:
       - STR_SMALL_ROCKET
       - STR_LARGE_ROCKET
@@ -1692,6 +1705,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    autoEquipWeight: 40
   - type: STR_LARGE_ROCKET
     size: 0.2
     costBuy: 900
@@ -1707,6 +1721,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    autoEquipWeight: 40
   - type: STR_INCENDIARY_ROCKET
     size: 0.2
     costBuy: 1200
@@ -1722,6 +1737,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    autoEquipWeight: 40
   - type: STR_LASER_PISTOL
     size: 0.1
     costSell: 20000
@@ -1745,6 +1761,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
+    autoEquipWeight: 75
   - type: STR_LASER_RIFLE
     size: 0.2
     costSell: 36900
@@ -1769,6 +1786,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    autoEquipWeight: 85
   - type: STR_HEAVY_LASER
     size: 0.3
     costSell: 61000
@@ -1791,6 +1809,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    autoEquipWeight: 90
   - type: STR_GRENADE
     size: 0.1
     costBuy: 300
@@ -1802,6 +1821,7 @@ items:
     damageType: 3
     battleType: 4
     blastRadius: 5
+    autoEquipWeight: 30
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1813,6 +1833,7 @@ items:
     damageType: 9
     battleType: 4
     blastRadius: 5
+    autoEquipWeight: 30
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1824,6 +1845,7 @@ items:
     damageType: 3
     battleType: 5
     blastRadius: 5
+    autoEquipWeight: 30
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1837,6 +1859,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 5
+    autoEquipWeight: 15
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -1845,6 +1868,7 @@ items:
     floorSprite: 23
     battleType: 7
     tuUse: 25
+    autoEquipWeight: 1
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -1863,6 +1887,7 @@ items:
     energyRecovery: 10
     tuUse: 10
     flatRate: true
+    autoEquipWeight: 25
   - type: STR_PSI_AMP
     requires:
       - STR_PSI_AMP
@@ -1879,6 +1904,7 @@ items:
     invHeight: 3
     tuUse: 25
     flatRate: true
+    autoEquipWeight: 5
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
@@ -1896,6 +1922,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    autoEquipWeight: 20
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -1906,6 +1933,7 @@ items:
     power: 15
     battleType: 10
     armor: 8
+    autoEquipWeight: 10
   - type: STR_CORPSE
     weight: 22
     bigSprite: 45
@@ -1942,6 +1970,7 @@ items:
     handSprite: 40
     bulletSprite: 8
     fireSound: 18
+    autoEquipWeight: 100
     compatibleAmmo:
       - STR_HEAVY_PLASMA_CLIP
     accuracyAuto: 50
@@ -1973,6 +2002,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_PLASMA_RIFLE
     requires:
       - STR_PLASMA_RIFLE
@@ -1984,6 +2014,7 @@ items:
     handSprite: 48
     bulletSprite: 8
     fireSound: 18
+    autoEquipWeight: 95
     compatibleAmmo:
       - STR_PLASMA_RIFLE_CLIP
     accuracyAuto: 55
@@ -2015,6 +2046,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_PLASMA_PISTOL
     requires:
       - STR_PLASMA_PISTOL
@@ -2026,6 +2058,7 @@ items:
     handSprite: 104
     bulletSprite: 8
     fireSound: 18
+    autoEquipWeight: 80
     compatibleAmmo:
       - STR_PLASMA_PISTOL_CLIP
     accuracyAuto: 50
@@ -2056,6 +2089,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_BLASTER_LAUNCHER
     requires:
       - STR_BLASTER_LAUNCHER
@@ -2067,6 +2101,7 @@ items:
     handSprite: 56
     bulletSprite: 10
     fireSound: 53
+    autoEquipWeight: 60
     compatibleAmmo:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
@@ -2098,6 +2133,7 @@ items:
     recoveryPoints: 1
     blastRadius: 11
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_SMALL_LAUNCHER
     requires:
       - STR_SMALL_LAUNCHER
@@ -2109,6 +2145,7 @@ items:
     handSprite: 64
     bulletSprite: 9
     fireSound: 53
+    autoEquipWeight: 55
     compatibleAmmo:
       - STR_STUN_BOMB
     accuracySnap: 65
@@ -2137,6 +2174,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    autoEquipWeight: 40
   - type: STR_ALIEN_GRENADE
     requires:
       - STR_ALIEN_GRENADE
@@ -2151,6 +2189,7 @@ items:
     recoveryPoints: 1
     blastRadius: 5
     attraction: 1
+    autoEquipWeight: 30
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -2175,6 +2214,7 @@ items:
     tuUse: 50
     recoveryPoints: 1
     attraction: 1
+    autoEquipWeight: 5
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -8645,47 +8685,6 @@ startingBase:
     STR_STINGRAY_MISSILES: 25
   scientists: 10
   engineers: 10
-autoEquipWeights:
-    STR_HEAVY_PLASMA: 100
-    STR_PLASMA_RIFLE: 95
-    STR_HEAVY_LASER: 90
-    STR_LASER_RIFLE: 85
-    STR_PLASMA_PISTOL: 80
-    STR_LASER_PISTOL: 75
-    STR_RIFLE: 70
-    STR_PISTOL: 65
-    STR_BLASTER_LAUNCHER: 60
-    STR_SMALL_LAUNCHER: 55
-    STR_AUTO_CANNON: 50
-    STR_HEAVY_CANNON: 50
-    STR_ROCKET_LAUNCHER: 50
-    STR_PISTOL_CLIP: 40
-    STR_RIFLE_CLIP: 40
-    STR_PLASMA_PISTOL_CLIP: 40
-    STR_PLASMA_RIFLE_CLIP: 40
-    STR_HEAVY_PLASMA_CLIP: 40
-    STR_AC_AP_AMMO: 40
-    STR_AC_I_AMMO: 40
-    STR_AC_HE_AMMO: 40
-    STR_SMALL_ROCKET: 40
-    STR_LARGE_ROCKET: 40
-    STR_INCENDIARY_ROCKET: 40
-    STR_HC_I_AMMO: 40
-    STR_HC_HE_AMMO: 40
-    STR_HC_AP_AMMO: 40
-    STR_STUN_BOMB: 40
-    STR_BLASTER_BOMB: 40
-    STR_SMOKE_GRENADE: 30
-    STR_GRENADE: 30
-    STR_ALIEN_GRENADE: 30
-    STR_PROXIMITY_GRENADE: 30
-    STR_MEDI_KIT: 25
-    STR_STUN_ROD: 20
-    STR_HIGH_EXPLOSIVE: 15
-    STR_ELECTRO_FLARE: 10
-    STR_PSI_AMP: 5
-    STR_MIND_PROBE: 5
-    STR_MOTION_SCANNER: 1
 startingTime:
   second: 0
   minute: 0

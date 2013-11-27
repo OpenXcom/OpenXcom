@@ -103,30 +103,17 @@ private:
 	 */
 	class CompareItems : public std::binary_function<BattleItem*, BattleItem*, bool>
 	{
-	private:
-		Game *_game;
-		std::map<std::string, int> _weights;
 	public:
-		CompareItems(Game *game) : _game(game), _weights(_game->getRuleset()->getAutoEquipWeights())
-		{
-		}
-
 		/**
 		 * Compares items @a *a and @a *b.
 		 * @param a Pointer to first item.
 		 * @param b Pointer to second item.
-		 * @return True if battle item @a *a comes after @a *b.
+		 * @return True if battle item @a *a has a higher weighting than @a *b.
 		 * @see RuleItem
 		 */
 		bool operator()(BattleItem* a, BattleItem* b) const
 		{
-			// Handle items not in the weightings map.
-			if (_weights.count(a->getRules()->getName()) == 0)
-				return false;
-			if (_weights.count(b->getRules()->getName()) == 0)
-				return true;
-
-			return _weights.find(a->getRules()->getName())->second > _weights.find(b->getRules()->getName())->second;
+			return a->getRules()->getAutoEquipWeight() > b->getRules()->getAutoEquipWeight();
 		}
 	};
 
