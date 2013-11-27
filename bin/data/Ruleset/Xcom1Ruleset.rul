@@ -1904,7 +1904,7 @@ items:
     invHeight: 3
     tuUse: 25
     flatRate: true
-    autoEquipWeight: 5
+    autoEquipWeight: -1
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
@@ -2214,7 +2214,7 @@ items:
     tuUse: 50
     recoveryPoints: 1
     attraction: 1
-    autoEquipWeight: 5
+    autoEquipWeight: -1
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000

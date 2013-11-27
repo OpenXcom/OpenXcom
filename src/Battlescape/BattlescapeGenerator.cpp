@@ -817,13 +817,18 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  */
 BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
+	// If true, item is elegible to be equipped in the first pass and encumbrance checking is skipped.
+	bool forcing = item->getRules()->getAutoEquipWeight() > 999;
+
+	bool loaded = false;
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
+	RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+	RuleInventory *lefthand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+
 	if (item->getSlot() == ground
-		&& (secondPass || item->getRules()->getBattleType() == BT_FIREARM))
+		&& (secondPass || item->getRules()->getBattleType() == BT_FIREARM || forcing)
+		&& item->getRules()->getAutoEquipWeight() > -1)
 	{
-		bool loaded = false;
-		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
-		RuleInventory *lefthand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 
 		switch (item->getRules()->getBattleType())
 		{
@@ -841,7 +846,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 							// Only give the ammo to a unit who has a compatible weapon and no spare clip already
 							if (*it == item->getRules()->getType()
 								&& !(*bu)->getCompatibleAmmo(weapon)
-								&& (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight())
+								&& (forcing || (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight()))
 							{
 								// regular ammo goes in belts
 								if (item->getRules()->getInventoryHeight() == 1
@@ -881,7 +886,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
 				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 0, 0)) continue;	// Spare belt slot(s)
-				if ((*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// Do not encumber
+				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// Do not encumber
 
 				item->moveToOwner(*bu);
 				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
@@ -915,11 +920,10 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
 					if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
 					if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
-
 					if ((*bu)->getItem("STR_RIGHT_HAND")) continue;	// Skip units with a weapon already.
 
 					// Ideally want a unit that can carry this weapon, extra ammo and a bit of extra kit.
-					if (!secondPass && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight() + 12) continue;
+					if (!forcing && !secondPass && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight() + 12) continue;
 
 					placed = true;
 					item->moveToOwner(*bu);
@@ -956,7 +960,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 					{
 						if (!(*bu)->isCarrying(item->getRules()->getName())
 							&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 2, 0)
-							&& (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight())
+							&& (forcing || (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight()))
 						{
 							item->moveToOwner(*bu);
 							item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
@@ -975,7 +979,8 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
 				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 3, 0)) continue;	// need belt space
-				if ((*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
+				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
+
 
 				item->moveToOwner(*bu);
 				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
@@ -991,7 +996,9 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
 				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_LEFT_SHOULDER"), 1, 0)) continue;	// free shoulder space
-				if ((*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
+				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
+
+
 
 				item->moveToOwner(*bu);
 				item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
