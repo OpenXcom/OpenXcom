@@ -20,9 +20,7 @@
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
 #include "../Savegame/BattleItem.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Engine/Game.h"
 
 namespace OpenXcom
 {
@@ -38,6 +36,7 @@ class Tile;
 class Unit;
 class AlienRace;
 class AlienDeployment;
+class Game;
 class Base;
 class TerrorSite;
 class AlienBase;

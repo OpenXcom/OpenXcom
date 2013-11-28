@@ -550,9 +550,9 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
 		{
 			// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-			if (_save->getTiles()[i] && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
+			if (_save->getTiles()[i] &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT &&
 				!_save->getTiles()[i]->getMapData(MapData::O_OBJECT) &&
 				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
 			{
@@ -820,56 +820,53 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 	// If true, item is elegible to be equipped in the first pass and encumbrance checking is skipped.
 	bool forcing = item->getRules()->getAutoEquipWeight() > 999;
 
-	bool loaded = false;
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
-	RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
-	RuleInventory *lefthand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 
 	if (item->getSlot() == ground
 		&& (secondPass || item->getRules()->getBattleType() == BT_FIREARM || forcing)
 		&& item->getRules()->getAutoEquipWeight() > -1)
 	{
+		bool loaded = false;
+		bool placed = false;
+		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+		RuleInventory *lefthand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 
 		switch (item->getRules()->getBattleType())
 		{
 		case BT_AMMO:
-			if (secondPass)
+			for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
 			{
-				bool placed = false;
-				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
+				BattleItem *weapon = (*bu)->getMainHandWeapon();
+				if (weapon && weapon->getRules()->getCompatibleAmmo())
 				{
-					BattleItem *weapon = (*bu)->getMainHandWeapon();
-					if (weapon && weapon->getRules()->getCompatibleAmmo())
+					for (std::vector<std::string>::iterator it = weapon->getRules()->getCompatibleAmmo()->begin(); it != weapon->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
 					{
-						for (std::vector<std::string>::iterator it = weapon->getRules()->getCompatibleAmmo()->begin(); it != weapon->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
+						// Only give the ammo to a unit who has a compatible weapon and no spare clip already
+						if (*it == item->getRules()->getType()
+							&& !(*bu)->getCompatibleAmmo(weapon)
+							&& (forcing || (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight()))
 						{
-							// Only give the ammo to a unit who has a compatible weapon and no spare clip already
-							if (*it == item->getRules()->getType()
-								&& !(*bu)->getCompatibleAmmo(weapon)
-								&& (forcing || (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight()))
+							// regular ammo goes in belts
+							if (item->getRules()->getInventoryHeight() == 1
+								&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
 							{
-								// regular ammo goes in belts
-								if (item->getRules()->getInventoryHeight() == 1
-									&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
-								{
-									item->moveToOwner(*bu);
-									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-									item->setSlotX(1);
-									item->setSlotY(0);
-									placed = true;
-									break;
-								}
-								// rockets and blaster shells go in back packs
-								else if (item->getRules()->getInventoryHeight() > 1
-									&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 0, 0))
-								{
-									item->moveToOwner(*bu);
-									item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
-									item->setSlotX(0);
-									item->setSlotY(0);
-									placed = true;
-									break;
-								}
+								item->moveToOwner(*bu);
+								item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+								item->setSlotX(1);
+								item->setSlotY(0);
+								placed = true;
+								break;
+							}
+							// rockets and blaster shells go in back packs
+							else if (item->getRules()->getInventoryHeight() > 1
+								&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 0, 0))
+							{
+								item->moveToOwner(*bu);
+								item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+								item->setSlotX(0);
+								item->setSlotY(0);
+								placed = true;
+								break;
 							}
 						}
 					}
@@ -914,7 +911,6 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 			if (loaded)
 			{
 				// find the first soldier with a free right hand to equip weapons
-				bool placed = false;
 				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 				{
 					// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
@@ -981,7 +977,6 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 3, 0)) continue;	// need belt space
 				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
 
-
 				item->moveToOwner(*bu);
 				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
 				item->setSlotX(3);
@@ -997,8 +992,6 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
 				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_LEFT_SHOULDER"), 1, 0)) continue;	// free shoulder space
 				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
-
-
 
 				item->moveToOwner(*bu);
 				item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
