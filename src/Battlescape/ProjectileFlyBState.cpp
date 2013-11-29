@@ -442,7 +442,7 @@ void ProjectileFlyBState::cancel()
 bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin, Tile *target)
 {
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	int offset = 1;
+	int offset = 2;
 	if (action->type != BA_THROW && target->getUnit())
 	{
 		offset = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
