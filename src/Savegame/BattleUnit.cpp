@@ -1595,6 +1595,10 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 		_status = STATUS_WALKING;
 		_floating = false;
 	}
+	else if (_status == STATUS_STANDING && _armor->getMovementType() == MT_FLY)
+	{
+		_floating = _tile->hasNoFloor(tileBelow);
+	}
 }
 
 /**

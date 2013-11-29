@@ -1391,7 +1391,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			if (x==0 && y==0)
 			{
-				bu->setPosition(position + Position(x,y,0));
+				bu->setPosition(position);
 			}
 			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
 		}
