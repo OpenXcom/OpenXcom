@@ -137,6 +137,9 @@ public:
 	void recalculateFOV();
 	/// Get direction to a certain point
 	int getDirectionTo(const Position &origin, const Position &target) const;
+	/// determine the origin voxel of a given action.
+	Position getOriginVoxel(BattleAction &action, Tile *tile);
+
 };
 
 }

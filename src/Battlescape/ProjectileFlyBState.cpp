@@ -127,7 +127,6 @@ void ProjectileFlyBState::init()
 	// (in case of reaction "shots" with a melee weapon)
 	if (weapon->getRules()->getBattleType() == BT_MELEE && _action.type == BA_SNAPSHOT)
 		_action.type = BA_HIT;
-	Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0,0,2);
 
 	switch (_action.type)
 	{
@@ -156,7 +155,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 	case BA_THROW:
-		if (!validThrowRange(&_action, originVoxel, _parent->getSave()->getTile(_action.target)))
+		if (!validThrowRange(&_action, _parent->getTileEngine()->getOriginVoxel(_action, 0), _parent->getSave()->getTile(_action.target)))
 		{
 			// out of range
 			_action.result = "STR_OUT_OF_RANGE";

@@ -85,50 +85,8 @@ int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
-	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
-	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
-	// maybe if i get around to making that function to calculate a firepoint origin for fire point estimations i'll use the array above
-	// so i'll leave it commented for the time being.
-
-	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
-	int offset = 8 * bu->getArmor()->getSize();
-
-	// take into account soldier height and terrain level if the projectile is launched from a soldier
-	if (_action.actor->getPosition() == _origin)
-	{
-		// calculate offset of the starting point of the projectile
-		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-
-		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
-		originVoxel.z -= 4;
-		Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
-		if (originVoxel.z >= (_origin.z + 1)*24)
-		{
-			if (tileAbove && tileAbove->hasNoFloor(0))
-			{
-				_origin.z++;
-			}
-			else
-			{
-				while (originVoxel.z >= (_origin.z + 1)*24)
-				{
-					originVoxel.z--;
-				}
-				originVoxel.z -= 4;
-			}
-		}
-		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
-		originVoxel.x += offset;
-		originVoxel.y += offset;
-	}
-	else
-	{
-		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 12;
-	}
+	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
 
 	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_save->getBattleGame()->getPanicHandled())
 	{
@@ -255,38 +213,7 @@ int Projectile::calculateThrow(double accuracy)
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
 
-	// object blocking - can't throw here
-	if (_action.type == BA_THROW
-		&& _save->getTile(_action.target)
-		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)
-		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-	{
-		return V_EMPTY;
-	}
-
-	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
-	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-	BattleUnit *bu = _save->getTile(_origin)->getUnit();
-	Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
-	if(!bu)
-		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
-	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
-	originVoxel.z -= 3;
-	if (originVoxel.z >= (_origin.z + 1)*24)
-	{
-		if (!tileAbove || !tileAbove->hasNoFloor(0))
-		{
-			while (originVoxel.z > (_origin.z + 1)*24)
-			{
-				originVoxel.z--;
-			}
-			originVoxel.z -=4;
-		}
-		else
-		{
-			_origin.z++;
-		}
-	}
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
 
 	// determine the target voxel.
 	// aim at the center of the floor
