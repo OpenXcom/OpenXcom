@@ -2534,78 +2534,57 @@ int TileEngine::faceWindow(const Position &position)
 /**
  * Validates a throw action.
  * @param action The action to validate.
+ * @param originVoxel The origin point of the action.
+ * @param targetVoxel The target point of the action.
+ * @param curvature The curvature of the throw.
+ * @param voxelType The type of voxel at which this parabola terminates.
  * @return Validity of action.
  */
-bool TileEngine::validateThrow(BattleAction *action)
+bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType)
 {
-	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
-	Tile *tile = _save->getTile(action->target);
+	double curvature = 1.0;
+	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
-	if (!tile || (action->type == BA_THROW && tile && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255))
+	if ((action.type == BA_THROW
+		&& targetTile
+		&& targetTile->getMapData(MapData::O_OBJECT)
+		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+		|| ProjectileFlyBState::validThrowRange(&action, originVoxel, targetTile) == false)
 	{
 		return false;
 	}
 
-	Position origin = action->actor->getPosition();
-	std::vector<Position> trajectory;
-	Tile *tileAbove = _save->getTile(origin + Position(0,0,1));
-	originVoxel = Position(origin.x*16 + 8, origin.y*16 + 8, origin.z*24);
-	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
-	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
-	originVoxel.z -= 3;
-	if (originVoxel.z >= (origin.z + 1)*24)
-	{
-		if (!tileAbove || !tileAbove->hasNoFloor(0))
-		{
-			while (originVoxel.z > (origin.z + 1)*24)
-			{
-				originVoxel.z--;
-			}
-			originVoxel.z -=4;
-		}
-		else
-		{
-			origin.z++;
-		}
-	}
+	// we try 8 different curvatures to try and reach our goal.
+	int test = V_OUTOFBOUNDS;
 
-	// determine the target voxel.
-	// aim at the center of the floor
-	targetVoxel = Position(action->target.x*16 + 8, action->target.y*16 + 8, action->target.z*24 + 2);
-	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
-	if (action->type != BA_THROW)
-	{
-		BattleUnit *tu = tile->getUnit();
-		if(!tu && action->target.z > 0 && tile->hasNoFloor(0))
-			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
-		if (tu)
-		{
-			targetVoxel.z += (tu->getHeight() / 2) + tu->getFloatHeight();
-		}
-	}
-
-	// we try 4 different curvatures to try and reach our goal.
-	double curvature = 1.0;
 	while (!foundCurve && curvature < 5.0)
 	{
-		int check = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action->actor, curvature, 1.0);
-		if (check != 5 && (int)trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		std::vector<Position> trajectory;
+		test = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action.actor, curvature, Position(0,0,0));
+		if (test != V_OUTOFBOUNDS && (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
+			if (voxelType)
+			{
+				*voxelType = test;
+			}
 			foundCurve = true;
 		}
 		else
 		{
-			curvature += 1.0;
+			curvature += 0.5;
 		}
-		trajectory.clear();
 	}
 	if (AreSame(curvature, 5.0))
 	{
 		return false;
 	}
+	if (curve)
+	{
+		*curve = curvature;
+	}
 
-	return ProjectileFlyBState::validThrowRange(action, originVoxel, tile);
+	return true;
 }
 
 /**

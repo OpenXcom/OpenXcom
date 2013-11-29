@@ -210,80 +210,55 @@ int Projectile::calculateTrajectory(double accuracy)
  */
 int Projectile::calculateThrow(double accuracy)
 {
-	Position originVoxel, targetVoxel;
-	bool foundCurve = false;
-
+	Tile *targetTile = _save->getTile(_action.target);
+	Position origin = _action.actor->getPosition();
+		
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
+	Position targetVoxel = _action.target * Position(16,16,24) + Position(8,8, (2 + -targetTile->getTerrainLevel()));
 
-	// determine the target voxel.
-	// aim at the center of the floor
-	targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
-	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
 	if (_action.type != BA_THROW)
 	{
-		BattleUnit *tu = _save->getTile(_action.target)->getUnit();
-		if(!tu && _action.target.z > 0 && _save->getTile(_action.target)->hasNoFloor(0))
-			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z-1))->getUnit();
+		BattleUnit *tu = targetTile->getUnit();
+		if(!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
+			tu = _save->getTile(_action.target - Position(0, 0, 1))->getUnit();
 		if (tu)
 		{
-			targetVoxel.z += (tu->getHeight()/2) + tu->getFloatHeight();
+			targetVoxel.z += ((tu->getHeight()/2) + tu->getFloatHeight()) - 2;
 		}
 	}
 
-	// we try 4 different curvatures to try and reach our goal.
-	double curvature = 1.0;
-	int retValue = V_EMPTY;
-
-	while (!foundCurve && curvature < 5.0)
+	double curvature = 0.0;
+	int retVal = V_OUTOFBOUNDS;
+	if (_save->getTileEngine()->validateThrow(_action, originVoxel, targetVoxel, &curvature, &retVal))
 	{
-		int check = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
-		if (check != V_OUTOFBOUNDS && (_trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
+		int test = V_OUTOFBOUNDS;
+		// finally do a line calculation and store this trajectory, make sure it's valid.
+		while (test == V_OUTOFBOUNDS)
 		{
-			foundCurve = true;
-			retValue = check;
+			Position deltas = targetVoxel;
+			// apply some accuracy modifiers
+			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), true); //calling for best flavor
+			deltas -= targetVoxel;
+			_trajectory.clear();
+			test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
+
+			Position endPoint = _trajectory.back();
+			endPoint.x /= 16;
+			endPoint.y /= 16;
+			endPoint.z /= 24;
+			Tile *endTile = _save->getTile(endPoint);
+			// check if the item would land on a tile with a blocking object
+			if (_action.type == BA_THROW
+				&& endTile
+				&& endTile->getMapData(MapData::O_OBJECT)
+				&& endTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+			{
+				test = V_OUTOFBOUNDS;
+			}
 		}
-		else
-		{
-			curvature += 1.0;
-		}
-		_trajectory.clear();
+		return retVal;
 	}
-	if ( AreSame(curvature, 5.0) )
-	{
-		return V_EMPTY;
-	}
-
-	// apply some accuracy modifiers
-	if (accuracy > 1.0)
-		accuracy = 1.0;
-	static const double maxDeviation = 0.08;
-	static const double minDeviation = 0;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-
-	int result = V_OUTOFBOUNDS;
-
-	// finally do a line calculation and store this trajectory, make sure it's valid.
-	while (result == V_OUTOFBOUNDS)
-	{
-		double deviation = RNG::boxMuller(0, baseDeviation);
-		_trajectory.clear();
-		result = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
-
-		Position endPoint = _trajectory.back();
-		endPoint.x /= 16;
-		endPoint.y /= 16;
-		endPoint.z /= 24;
-		// check if the item would land on a tile with a blocking object
-		if (_action.type == BA_THROW
-			&& _save->getTile(endPoint)
-			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)
-			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-		{
-			result = V_OUTOFBOUNDS;
-		}
-	}
-
-	return retValue;
+	return V_OUTOFBOUNDS;
 }
 
 /**

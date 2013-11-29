@@ -122,7 +122,7 @@ public:
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
-	bool validateThrow(BattleAction *action);
+	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0);
 	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
 	/// Creates a vector of units that can spot this unit.

@@ -1701,27 +1701,26 @@ void AlienBAIState::grenadeAction()
 	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
 	{
 		int tu = 4; // 4TUs for picking up the grenade
-		if(_unit->getFaction() == FACTION_HOSTILE)
+		tu += _unit->getActionTUs(BA_PRIME, grenade);
+		tu += _unit->getActionTUs(BA_THROW, grenade);
+		// do we have enough TUs to prime and throw the grenade?
+		if (tu <= _unit->getStats()->tu)
 		{
-			tu += _unit->getActionTUs(BA_PRIME, grenade);
-			tu += _unit->getActionTUs(BA_THROW, grenade);
-			// do we have enough TUs to prime and throw the grenade?
-			if (tu <= _unit->getStats()->tu)
+			BattleAction action;
+			action.weapon = grenade;
+			action.target = _aggroTarget->getPosition();
+			action.type = BA_THROW;
+			action.actor = _unit;
+			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+			Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
+			// are we within range?
+			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel))
 			{
-				BattleAction action;
-				action.weapon = grenade;
-				action.target = _aggroTarget->getPosition();
-				action.type = BA_THROW;
-				action.actor = _unit;
-				// are we within range?
-				if (_save->getTileEngine()->validateThrow(&action))
-				{
-					_attackAction->weapon = grenade;
-					_attackAction->target = action.target;
-					_attackAction->type = BA_THROW;
-					_rifle = false;
-					_melee = false;
-				}
+				_attackAction->weapon = grenade;
+				_attackAction->target = action.target;
+				_attackAction->type = BA_THROW;
+				_rifle = false;
+				_melee = false;
 			}
 		}
 	}
