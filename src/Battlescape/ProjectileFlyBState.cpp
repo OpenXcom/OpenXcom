@@ -232,7 +232,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
-		if (_projectileImpact != V_EMPTY)
+		if (_projectileImpact != V_EMPTY && _projectileImpact != V_OUTOFBOUNDS)
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
@@ -442,11 +442,11 @@ void ProjectileFlyBState::cancel()
 bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin, Tile *target)
 {
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	int offset = 2;
-	if (action->type != BA_THROW && target->getUnit())
+	if (action->type != BA_THROW)
 	{
-		offset = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
+		return true;
 	}
+	int offset = 2;
 	int zd = (origin.z)-((action->target.z * 24 + offset) - target->getTerrainLevel());
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem() && action->weapon->getAmmoItem() != action->weapon)
