@@ -164,9 +164,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
-	
+
 	lastCover = Position(-1, -1, -1);
-	
+
 }
 
 
@@ -472,7 +472,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 	}
 
 	_walkPhase++;
-	
+
 
 	if (_walkPhase == middle)
 	{
@@ -1532,7 +1532,7 @@ void BattleUnit::think(BattleAction *action)
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
 	if (_currentAIState)
-	{		
+	{
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
@@ -1583,7 +1583,10 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 {
 	_tile = tile;
 	if (!_tile)
+	{
+		_floating = false;
 		return;
+	}
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _armor->getMovementType() == MT_FLY)
 	{
@@ -1595,7 +1598,8 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 		_status = STATUS_WALKING;
 		_floating = false;
 	}
-	else if (_status == STATUS_STANDING && _armor->getMovementType() == MT_FLY)
+	// unit could have revived midair
+	else if (_status == STATUS_UNCONSCIOUS && _armor->getMovementType() == MT_FLY)
 	{
 		_floating = _tile->hasNoFloor(tileBelow);
 	}
