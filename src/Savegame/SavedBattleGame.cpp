@@ -871,6 +871,15 @@ BattlescapeState *SavedBattleGame::getBattleState()
 }
 
 /**
+ * Gets the BattlescapeState.
+ * @return Pointer to the BattlescapeState.
+ */
+BattlescapeGame *SavedBattleGame::getBattleGame()
+{
+	return _battleState->getBattleGame();
+}
+
+/**
  * Sets the BattlescapeState.
  * @param bs A Pointer to a BattlescapeState.
  */
@@ -1382,7 +1391,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			if (x==0 && y==0)
 			{
-				bu->setPosition(position + Position(x,y,0));
+				bu->setPosition(position);
 			}
 			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
 		}

@@ -82,7 +82,7 @@ public:
 	/// Calculates a line trajectory.
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0, int *smokeRawData = 0);
 	/// Calculates a parabola trajectory.
-	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
+	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta);
 	/// Gets the origin voxel of a unit's eyesight.
 	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	/// Checks visibility of a unit on this tile.
@@ -122,7 +122,7 @@ public:
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
-	bool validateThrow(BattleAction *action);
+	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0);
 	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
 	/// Creates a vector of units that can spot this unit.
@@ -137,6 +137,9 @@ public:
 	void recalculateFOV();
 	/// Get direction to a certain point
 	int getDirectionTo(const Position &origin, const Position &target) const;
+	/// determine the origin voxel of a given action.
+	Position getOriginVoxel(BattleAction &action, Tile *tile);
+
 };
 
 }

@@ -179,12 +179,18 @@ void AlienBAIState::think(BattleAction *action)
 
 	if (action->weapon)
 	{
-		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
+		RuleItem *rule = action->weapon->getRules();
+		if (rule->getBattleType() == BT_FIREARM)
+		{
+			if (!rule->isWaypoint())
+				_rifle = true;
+			else
+				_blaster = true;
+		}
+		else if (rule->getBattleType() == BT_MELEE)
+		{
 			_melee = true;
-		else if (!action->weapon->getRules()->isWaypoint())
-			_rifle = true;
-		else
-			_blaster = true;
+		}
 	}
 
 	if (_spottingEnemies && !_escapeTUs)
@@ -294,7 +300,7 @@ void AlienBAIState::think(BattleAction *action)
 		// spin 180 at the end of your route.
 		_unit->_hidingForTurn = true;
 		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		action->type = _patrolAction->type;
@@ -313,7 +319,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->finalFacing = _attackAction->finalFacing;
 		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
 		// don't worry about reserving TUs, we've factored that in already.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
 		if (action->type == BA_WALK && _rifle
 			// so long as we can take a shot afterwards.
@@ -334,7 +340,7 @@ void AlienBAIState::think(BattleAction *action)
 		// end this unit's turn.
 		action->finalAction = true;
 		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	default:
 		break;
@@ -1695,27 +1701,26 @@ void AlienBAIState::grenadeAction()
 	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
 	{
 		int tu = 4; // 4TUs for picking up the grenade
-		if(_unit->getFaction() == FACTION_HOSTILE)
+		tu += _unit->getActionTUs(BA_PRIME, grenade);
+		tu += _unit->getActionTUs(BA_THROW, grenade);
+		// do we have enough TUs to prime and throw the grenade?
+		if (tu <= _unit->getStats()->tu)
 		{
-			tu += _unit->getActionTUs(BA_PRIME, grenade);
-			tu += _unit->getActionTUs(BA_THROW, grenade);
-			// do we have enough TUs to prime and throw the grenade?
-			if (tu <= _unit->getStats()->tu)
+			BattleAction action;
+			action.weapon = grenade;
+			action.target = _aggroTarget->getPosition();
+			action.type = BA_THROW;
+			action.actor = _unit;
+			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+			Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
+			// are we within range?
+			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel))
 			{
-				BattleAction action;
-				action.weapon = grenade;
-				action.target = _aggroTarget->getPosition();
-				action.type = BA_THROW;
-				action.actor = _unit;
-				// are we within range?
-				if (_save->getTileEngine()->validateThrow(&action))
-				{
-					_attackAction->weapon = grenade;
-					_attackAction->target = action.target;
-					_attackAction->type = BA_THROW;
-					_rifle = false;
-					_melee = false;
-				}
+				_attackAction->weapon = grenade;
+				_attackAction->target = action.target;
+				_attackAction->type = BA_THROW;
+				_rifle = false;
+				_melee = false;
 			}
 		}
 	}

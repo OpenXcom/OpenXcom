@@ -52,8 +52,6 @@ private:
 
 	/// Moves an item to a specified slot.
 	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
-	/// Checks for item overlap.
-	bool overlapItems(BattleItem *item, RuleInventory *slot, int x, int y) const;
 	/// Gets the slot in the specified position.
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:
@@ -93,6 +91,8 @@ public:
 	bool fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning);
 	/// Checks if two items can be stacked on one another.
 	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
+	/// Checks for item overlap.
+	static bool overlapItems(BattleUnit *unit, BattleItem *item, RuleInventory *slot, int x = 0, int y = 0);
 };
 
 }

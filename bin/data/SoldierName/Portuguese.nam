@@ -33,6 +33,7 @@ maleFirst:
   - Helder
   - Henrique
   - Hugo
+  - Ivo
   - Jaime
   - Joao
   - Joaquim
@@ -42,11 +43,11 @@ maleFirst:
   - Leonardo
   - Leonel
   - Luis
-  - Marco
-  - Mario
   - Manuel
   - Marcelo
   - Marcio
+  - Marco
+  - Mario
   - Miguel
   - Nelson
   - Nuno
@@ -64,6 +65,7 @@ maleFirst:
   - Sergio
   - Tiago
   - Telmo
+  - Tomas
   - Vasco
   - Vitor
 femaleFirst:
@@ -105,8 +107,8 @@ femaleFirst:
   - Gabriela
   - Gloria
   - Helena
-  - Ines
   - Ilda
+  - Ines
   - Irene
   - Isabel
   - Joana
@@ -129,6 +131,7 @@ femaleFirst:
   - Matilde
   - Monica
   - Natalia
+  - Nadia
   - Olivia
   - Patricia
   - Paula
@@ -150,7 +153,6 @@ femaleFirst:
 maleLast:
   - Abrantes
   - Abreu
-  - Afonso
   - Agostinho
   - Albano
   - Albuquerque
@@ -160,6 +162,7 @@ maleLast:
   - Amaro
   - Amaral
   - Andrade
+  - Anjos
   - Antunes
   - Araujo
   - Assis
@@ -172,7 +175,6 @@ maleLast:
   - Bastos
   - Bento
   - Beja
-  - Bernardo
   - Borges
   - Brandao
   - Brito
@@ -208,6 +210,7 @@ maleLast:
   - Dionisio
   - Domingos
   - Duarte
+  - Esteves
   - Farinha
   - Fernandes
   - Ferreira
@@ -217,16 +220,18 @@ maleLast:
   - Fragoso
   - Fragata
   - Francisco
+  - Franco
+  - Freire
   - Freitas
   - Fonseca
   - Fontes
   - Fortes
   - Furtado
-  - Futre
+  - Galvao
   - Gama
   - Garcia
-  - Gomes
   - Godinho
+  - Gomes
   - Goncalves
   - Gouveia
   - Graca
@@ -239,7 +244,6 @@ maleLast:
   - Homem
   - Horta
   - Jacinto
-  - Joaquim
   - Jesus
   - Lameiras
   - Laranjeiro
@@ -260,9 +264,11 @@ maleLast:
   - Mateus
   - Matias
   - Matos
+  - Maximo
   - Meireles
   - Melo
   - Mendes
+  - Mendonca
   - Mestre
   - Mira
   - Miranda
@@ -275,15 +281,16 @@ maleLast:
   - Moura
   - Mourinho
   - Nascimento
-  - Neves
   - Neto
+  - Neves
+  - Nobrega
   - Nogueira
   - Noronha
+  - Nunes
   - Oliveira
   - Pacheco
-  - Paiva
   - Pais
-  - Paulo
+  - Paiva
   - Parreira
   - Pato
   - Peixe
@@ -295,11 +302,12 @@ maleLast:
   - Pinho
   - Pinto
   - Pires
-  - Povoa
   - Portugal
+  - Povoa
   - Prata
   - Queiros
   - Raimundo
+  - Ramalho
   - Ramos
   - Raposo
   - Rato
@@ -316,18 +324,19 @@ maleLast:
   - Roseiro
   - Salgado
   - Salgueiro
+  - Sampaio
   - Sanches
   - Santana
   - Santos
   - Sebastiao
   - Semedo
   - Sequeira
-  - Serrao
   - Serra
+  - Serrao
   - Serras
   - Silva
-  - Silvino
   - Silvestre
+  - Silvino
   - Simoes
   - Soares
   - Sobral

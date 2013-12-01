@@ -78,6 +78,16 @@ void MCDPatch::load(const YAML::Node &node)
 			int terrainHeight = (*i)["terrainHeight"].as<int>();
 			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
 		}
+		if ((*i)["specialType"])
+		{
+			int specialType = (*i)["specialType"].as<int>();
+			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
+		}
+		if ((*i)["LOFTS"])
+		{
+			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
+			_LOFTS.push_back(std::make_pair(MCDIndex, lofts));
+		}
 	}
 }
 
@@ -110,6 +120,19 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _terrainHeight.begin(); i != _terrainHeight.end(); ++i)
 	{
 		dataSet->getObjects()->at(i->first)->setTerrainLevel(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _specialTypes.begin(); i != _specialTypes.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setSpecialType(i->second, dataSet->getObjects()->at(i->first)->getObjectType());
+	}
+	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator i = _LOFTS.begin(); i != _LOFTS.end(); ++i)
+	{
+		int layer = 0;
+		for (std::vector<int>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
+		{
+			dataSet->getObjects()->at(i->first)->setLoftID(*j, layer);
+			++layer;
+		}
 	}
 }
 

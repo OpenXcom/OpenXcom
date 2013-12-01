@@ -36,6 +36,7 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "GeoscapeState.h"
 #include "../Engine/Options.h"
+#include "../Basescape/BasescapeState.h"
 
 namespace OpenXcom
 {
@@ -45,14 +46,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
  */
-ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State(game), _state(state)
+ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State(game), _state(state), _base(0)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
 	_btnOk = new TextButton(142, 16, 16, 166);
-	_btnOk5Secs = new TextButton(142, 16, 162, 166);
+	_btnGotoBase = new TextButton(142, 16, 162, 166);
 	_txtTitle = new Text(310, 17, 5, 18);
 	_txtItem = new Text(114, 9, 16, 34);
 	_txtQuantity = new Text(54, 9, 152, 34);
@@ -64,7 +65,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 
 	add(_window);
 	add(_btnOk);
-	add(_btnOk5Secs);
+	add(_btnGotoBase);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtQuantity);
@@ -82,10 +83,10 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
-	_btnOk5Secs->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOk5SecsClick, (SDLKey)Options::getInt("keyOk"));
+	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+	_btnGotoBase->onMouseClick((ActionHandler)&ItemsArrivingState::btnGotoBaseClick);
+	_btnGotoBase->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnGotoBaseClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -114,6 +115,8 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 		{
 			if ((*j)->getHours() == 0)
 			{
+				_base = (*i);
+
 				// Check if it's ammo to reload a craft
 				if ((*j)->getType() == TRANSFER_ITEM && _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
 				{
@@ -174,13 +177,14 @@ void ItemsArrivingState::btnOkClick(Action *)
 }
 
 /**
- * Reduces the speed to 5 Secs and returns to the previous screen.
+ * Goes to the base for the respective transfer.
  * @param action Pointer to an action.
  */
-void ItemsArrivingState::btnOk5SecsClick(Action *)
+void ItemsArrivingState::btnGotoBaseClick(Action *)
 {
 	_state->timerReset();
 	_game->popState();
+	_game->pushState(new BasescapeState(_game, _base, _state->getGlobe()));
 }
 
 }

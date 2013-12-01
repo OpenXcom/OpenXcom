@@ -18,6 +18,8 @@
  */
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
 #include "CraftWeaponProjectile.h"
 
 namespace OpenXcom
@@ -121,14 +123,36 @@ void CraftWeapon::setRearming(bool rearming)
 
 /**
  * Rearms this craft weapon's ammo.
+ * @param available number of clips available.
+ * @param clipSize number of rounds in said clips.
+ * @return number of clips used.
  */
-void CraftWeapon::rearm()
+int CraftWeapon::rearm(const int available, const int clipSize)
 {
-	setAmmo(_ammo + _rules->getRearmRate());
-	if (_ammo == _rules->getAmmoMax())
+	int used = 0;
+
+	if (clipSize > 0)
 	{
+		const int needed = std::max(1, (_rules->getAmmoMax() - _ammo) / clipSize);
+		used = std::min(_rules->getRearmRate() / clipSize, needed);
+	}
+
+	if (available >= used)
+	{
+		setAmmo(_ammo + _rules->getRearmRate());
+	}
+	else
+	{
+		setAmmo(_ammo + (clipSize * available));
+	}
+
+	if (_ammo >= _rules->getAmmoMax())
+	{
+		_ammo = _rules->getAmmoMax();
 		_rearming = false;
 	}
+
+	return used;
 }
 
 /*
@@ -144,6 +168,24 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 	p->setDamage(this->getRules()->getDamage());
 	p->setRange(this->getRules()->getRange());
 	return p;
+}
+
+/*
+ * get how many clips are loaded into this weapon.
+ * @param ruleset a pointer to the core ruleset.
+ * @return number of clips loaded.
+ */
+int CraftWeapon::getClipsLoaded(Ruleset *ruleset)
+{
+	int retVal = (int)floor((double)_ammo / _rules->getRearmRate());
+	RuleItem *clip = ruleset->getItem(_rules->getClipItem());
+
+	if (clip && clip->getClipSize() > 0)
+	{
+		retVal = (int)floor((double)_ammo / clip->getClipSize());
+	}
+
+	return retVal;
 }
 
 }

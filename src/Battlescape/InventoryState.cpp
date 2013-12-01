@@ -62,7 +62,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// remove any path preview if in the middle of a battlegame
-	if(tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
+	if (tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
 	{
 		_battleGame->getPathfinding()->removePreview();
 	}
@@ -72,14 +72,11 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(200, 17, 36, 6);
 	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
-	if (_showMoreStatsInInventoryView)
-	{
-		_txtWeight = new Text(70, 9, 245, 24);
-		_txtFAcc = new Text(40, 9, 245, 32);
-		_txtReact = new Text(40, 9, 245, 40);
-		_txtPSkill = new Text(40, 9, 245, 48);
-		_txtPStr = new Text(40, 9, 245, 56);
-	}
+	_txtWeight = new Text(70, 9, 245, 24);
+	_txtFAcc = new Text(40, 9, 245, 32);
+	_txtReact = new Text(40, 9, 245, 40);
+	_txtPSkill = new Text(40, 9, 245, 48);
+	_txtPStr = new Text(40, 9, 245, 56);
 	_txtItem = new Text(160, 9, 128, 140);
 	_txtAmmo = new Text(66, 24, 254, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
@@ -95,14 +92,11 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	add(_soldier);
 	add(_txtName);
 	add(_txtTus);
-	if (_showMoreStatsInInventoryView)
-	{
-		add(_txtWeight);
-		add(_txtFAcc);
-		add(_txtReact);
-		add(_txtPSkill);
-		add(_txtPStr);
-	}
+	add(_txtWeight);
+	add(_txtFAcc);
+	add(_txtReact);
+	add(_txtPSkill);
+	add(_txtPStr);
 	add(_txtItem);
 	add(_txtAmmo);
 	add(_btnOk);
@@ -127,28 +121,25 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtTus->setSecondaryColor(Palette::blockOffset(1));
 	_txtTus->setHighContrast(true);
 
-	if (_showMoreStatsInInventoryView)
-	{
-		_txtWeight->setColor(Palette::blockOffset(4));
-		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
-		_txtWeight->setHighContrast(true);
+	_txtWeight->setColor(Palette::blockOffset(4));
+	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+	_txtWeight->setHighContrast(true);
 
-		_txtFAcc->setColor(Palette::blockOffset(4));
-		_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
-		_txtFAcc->setHighContrast(true);
+	_txtFAcc->setColor(Palette::blockOffset(4));
+	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
+	_txtFAcc->setHighContrast(true);
 
-		_txtReact->setColor(Palette::blockOffset(4));
-		_txtReact->setSecondaryColor(Palette::blockOffset(1));
-		_txtReact->setHighContrast(true);
+	_txtReact->setColor(Palette::blockOffset(4));
+	_txtReact->setSecondaryColor(Palette::blockOffset(1));
+	_txtReact->setHighContrast(true);
 
-		_txtPSkill->setColor(Palette::blockOffset(4));
-		_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
-		_txtPSkill->setHighContrast(true);
+	_txtPSkill->setColor(Palette::blockOffset(4));
+	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
+	_txtPSkill->setHighContrast(true);
 
-		_txtPStr->setColor(Palette::blockOffset(4));
-		_txtPStr->setSecondaryColor(Palette::blockOffset(1));
-		_txtPStr->setHighContrast(true);
-	}
+	_txtPStr->setColor(Palette::blockOffset(4));
+	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
+	_txtPStr->setHighContrast(true);
 
 	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
@@ -160,6 +151,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyBattleInventory"));
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
@@ -172,6 +164,13 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
+
+	_txtTus->setVisible(_tu);
+	_txtWeight->setVisible(_showMoreStatsInInventoryView);
+	_txtFAcc->setVisible(_showMoreStatsInInventoryView && !_tu);
+	_txtReact->setVisible(_showMoreStatsInInventoryView && !_tu);
+	_txtPSkill->setVisible(_showMoreStatsInInventoryView && !_tu);
+	_txtPStr->setVisible(_showMoreStatsInInventoryView && !_tu);
 }
 
 /**
@@ -207,7 +206,7 @@ void InventoryState::init()
 			_battleGame->selectNextPlayerUnit(false, false, true);
 		}
 		// no available unit, close inventory
-		if (_battleGame->getSelectedUnit() == 0)
+		if (_battleGame->getSelectedUnit() == 0 || !_battleGame->getSelectedUnit()->hasInventory())
 		{
 			// starting a mission with just vehicles
 			btnOkClick(0);
@@ -266,30 +265,6 @@ void InventoryState::init()
 		}
 	}
 
-	if (_showMoreStatsInInventoryView && !_tu)
-	{
-		_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
-
-		_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
-
-		if (unit->getStats()->psiSkill > 0)
-		{
-			_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
-		}
-		else
-		{
-			_txtPSkill->setText(L"");
-		}
-
-		if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
-		{
-			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
-		}
-		else
-		{
-			_txtPStr->setText(L"");
-		}
-	}
 	updateStats();
 }
 
@@ -299,22 +274,40 @@ void InventoryState::init()
 void InventoryState::updateStats()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
-	if (_showMoreStatsInInventoryView)
+
+	_txtTus->setText(tr("STR_TUS").arg(unit->getTimeUnits()));
+
+	int weight = unit->getCarriedWeight(_inv->getSelectedItem());
+	_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
+	if (weight > unit->getStats()->strength)
 	{
-		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
-		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
-		if (weight > unit->getStats()->strength)
-		{
-			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
-		}
-		else
-		{
-			_txtWeight->setSecondaryColor(Palette::blockOffset(1));
-		}
+		_txtWeight->setSecondaryColor(Palette::blockOffset(2));
 	}
-	if (_tu)
+	else
 	{
-		_txtTus->setText(tr("STR_TUS").arg(unit->getTimeUnits()));
+		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+	}
+	
+	_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
+
+	_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
+
+	if (unit->getStats()->psiSkill > 0)
+	{
+		_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
+	}
+	else
+	{
+		_txtPSkill->setText(L"");
+	}
+
+	if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	{
+		_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
+	}
+	else
+	{
+		_txtPStr->setText(L"");
 	}
 }
 

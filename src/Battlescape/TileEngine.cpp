@@ -975,8 +975,8 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
-			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
-			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));
+			_save->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleGame(), action));
+			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleGame(), action));
 			return true;
 		}
 	}
@@ -1049,7 +1049,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				if (type != DT_STUN && type != DT_HE)
 				{
 					Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
-					_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
+					_save->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleGame(), p, 0, bu, 0));
 				}
 			}
 
@@ -1774,7 +1774,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				tile = _save->getTile(unit->getPosition() + Position(x,y,z) + i->first);
 				if (tile)
 				{
-					door = tile->openDoor(i->second, unit, _save->getBattleState()->getBattleGame()->getReservedAction());
+					door = tile->openDoor(i->second, unit, _save->getBattleGame()->getReservedAction());
 					if (door != -1)
 					{
 						part = i->second;
@@ -1807,7 +1807,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 
 	if (TUCost != 0)
 	{
-		if (_save->getBattleState()->getBattleGame()->checkReservedTU(unit, TUCost))
+		if (_save->getBattleGame()->checkReservedTU(unit, TUCost))
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
@@ -2071,18 +2071,20 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
  * @param trajectory A vector of positions in which the trajectory is stored.
  * @param excludeUnit Makes sure the trajectory does not hit the shooter itself.
  * @param curvature How high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example.
- * @param accuracy Is the deviation of the angles it should take into account. 1.0 is perfection.
+ * @param delta Is the deviation of the angles it should take into account, 0,0,0 is perfection.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy)
+int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta)
 {
 	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
+
+	if (AreSame(ro, 0.0)) return V_EMPTY;//just in case
 
 	double fi = acos((double)(target.z - origin.z) / ro);
 	double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
 
-	fi *= accuracy;
-	te *= accuracy;
+	te += (delta.x / ro) / 2 * M_PI; //horizontal magic value
+	fi += ((delta.z + delta.y) / ro) / 14 * M_PI * curvature; //another magic value (vertical), to make it in line with fire spread
 
 	double zA = sqrt(ro)*curvature;
 	double zK = 4.0 * zA / ro / ro;
@@ -2347,11 +2349,11 @@ bool TileEngine::psiAttack(BattleAction *action)
 			{
 				int liveAliens = 0;
 				int liveSoldiers = 0;
-				_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+				_save->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 				if (liveAliens == 0 || liveSoldiers == 0)
 				{
 					_save->setSelectedUnit(0);
-					_save->getBattleState()->getBattleGame()->requestEndTurn();
+					_save->getBattleGame()->requestEndTurn();
 				}
 			}
 		}
@@ -2540,78 +2542,57 @@ int TileEngine::faceWindow(const Position &position)
 /**
  * Validates a throw action.
  * @param action The action to validate.
+ * @param originVoxel The origin point of the action.
+ * @param targetVoxel The target point of the action.
+ * @param curvature The curvature of the throw.
+ * @param voxelType The type of voxel at which this parabola terminates.
  * @return Validity of action.
  */
-bool TileEngine::validateThrow(BattleAction *action)
+bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType)
 {
-	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
-	Tile *tile = _save->getTile(action->target);
+	double curvature = 1.0;
+	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
-	if (!tile || (action->type == BA_THROW && tile && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255))
+	if ((action.type == BA_THROW
+		&& targetTile
+		&& targetTile->getMapData(MapData::O_OBJECT)
+		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+		|| ProjectileFlyBState::validThrowRange(&action, originVoxel, targetTile) == false)
 	{
 		return false;
 	}
 
-	Position origin = action->actor->getPosition();
-	std::vector<Position> trajectory;
-	Tile *tileAbove = _save->getTile(origin + Position(0,0,1));
-	originVoxel = Position(origin.x*16 + 8, origin.y*16 + 8, origin.z*24);
-	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
-	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
-	originVoxel.z -= 3;
-	if (originVoxel.z >= (origin.z + 1)*24)
-	{
-		if (!tileAbove || !tileAbove->hasNoFloor(0))
-		{
-			while (originVoxel.z > (origin.z + 1)*24)
-			{
-				originVoxel.z--;
-			}
-			originVoxel.z -=4;
-		}
-		else
-		{
-			origin.z++;
-		}
-	}
+	// we try 8 different curvatures to try and reach our goal.
+	int test = V_OUTOFBOUNDS;
 
-	// determine the target voxel.
-	// aim at the center of the floor
-	targetVoxel = Position(action->target.x*16 + 8, action->target.y*16 + 8, action->target.z*24 + 2);
-	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
-	if (action->type != BA_THROW)
-	{
-		BattleUnit *tu = tile->getUnit();
-		if(!tu && action->target.z > 0 && tile->hasNoFloor(0))
-			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
-		if (tu)
-		{
-			targetVoxel.z += (tu->getHeight() / 2) + tu->getFloatHeight();
-		}
-	}
-
-	// we try 4 different curvatures to try and reach our goal.
-	double curvature = 1.0;
 	while (!foundCurve && curvature < 5.0)
 	{
-		int check = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action->actor, curvature, 1.0);
-		if (check != 5 && (int)trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		std::vector<Position> trajectory;
+		test = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action.actor, curvature, Position(0,0,0));
+		if (test != V_OUTOFBOUNDS && (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
+			if (voxelType)
+			{
+				*voxelType = test;
+			}
 			foundCurve = true;
 		}
 		else
 		{
-			curvature += 1.0;
+			curvature += 0.5;
 		}
-		trajectory.clear();
 	}
 	if (AreSame(curvature, 5.0))
 	{
 		return false;
 	}
+	if (curve)
+	{
+		*curve = curvature;
+	}
 
-	return ProjectileFlyBState::validThrowRange(action, originVoxel, tile);
+	return true;
 }
 
 /**
@@ -2674,5 +2655,74 @@ int TileEngine::getDirectionTo(const Position &origin, const Position &target) c
 		dir = 0;
 	}
 	return dir;
+}
+
+Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
+{
+	
+	const int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
+	const int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+	if (!tile)
+	{
+		tile = action.actor->getTile();
+	}
+
+	Position origin = tile->getPosition();
+	Tile *tileAbove = _save->getTile(origin + Position(0,0,1));
+	Position originVoxel = Position(origin.x*16, origin.y*16, origin.z*24);
+
+	// take into account soldier height and terrain level if the projectile is launched from a soldier
+	if (action.actor->getPosition() == origin || action.type != BA_LAUNCH)
+	{
+		// calculate offset of the starting point of the projectile
+		originVoxel.z += -tile->getTerrainLevel();
+
+		originVoxel.z += action.actor->getHeight() + action.actor->getFloatHeight();
+		
+		if (action.type == BA_THROW)
+		{
+			originVoxel.z -= 3;
+		}
+		else
+		{
+			originVoxel.z -= 4;
+		}
+
+		if (originVoxel.z >= (origin.z + 1)*24)
+		{
+			if (tileAbove && tileAbove->hasNoFloor(0))
+			{
+				origin.z++;
+			}
+			else
+			{
+				while (originVoxel.z >= (origin.z + 1)*24)
+				{
+					originVoxel.z--;
+				}
+				originVoxel.z -= 4;
+			}
+		}
+		int offset = 0;
+		if (action.actor->getArmor()->getSize() > 1)
+		{
+			offset = 16;
+		}
+		else if(action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !action.weapon->getRules()->isTwoHanded())
+		{
+			offset = 8;
+		}
+		int direction = getDirectionTo(origin, action.target);
+		originVoxel.x += dirXshift[direction+offset]*action.actor->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction+offset]*action.actor->getArmor()->getSize();
+	}
+	else
+	{
+		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 12;
+	}
+	return originVoxel;
 }
 }

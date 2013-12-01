@@ -162,6 +162,7 @@ void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
+	_globe->rotateStop();
 	_globe->setNewBaseHover();
 }
 
@@ -268,7 +269,7 @@ void BuildNewBaseState::btnRotateLeftPress(Action *)
  */
 void BuildNewBaseState::btnRotateLeftRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -286,7 +287,7 @@ void BuildNewBaseState::btnRotateRightPress(Action *)
  */
 void BuildNewBaseState::btnRotateRightRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -304,7 +305,7 @@ void BuildNewBaseState::btnRotateUpPress(Action *)
  */
 void BuildNewBaseState::btnRotateUpRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**
@@ -322,7 +323,7 @@ void BuildNewBaseState::btnRotateDownPress(Action *)
  */
 void BuildNewBaseState::btnRotateDownRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**

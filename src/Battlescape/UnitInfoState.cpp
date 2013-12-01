@@ -562,7 +562,8 @@ void UnitInfoState::handle(Action *action)
 		{
 			btnPrevClick(action);
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel"))
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel") ||
+				 action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
 		{
 			_game->popState();
 		}

@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class NumberText;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;

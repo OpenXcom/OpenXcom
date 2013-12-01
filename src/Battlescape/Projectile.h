@@ -47,7 +47,7 @@ private:
 	unsigned int _position;
 	Surface *_sprite;
 	int _speed;
-	int applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, int smokeDensity = 0, bool doCalcChance = false);
+	int applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, bool throwing = false, int smokeDensity = 0, bool doCalcChance = false);
 	/// Approximation of the F-function (cumulative distribution function).
 	static double approxF(double sigm, double delta);
 	/// Approximation of vanillas chance to hit.
