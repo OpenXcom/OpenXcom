@@ -32,6 +32,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
@@ -537,8 +538,13 @@ void CraftEquipmentState::moveRightByValue(int change)
 	// Do we need to convert item to vehicle?
 	if (item->isFixed())
 	{
+		int size = 4;
+		if (_game->getRuleset()->getUnit(item->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(item->getType())->getArmor())->getSize();
+		}
 		// Check if there's enough room
-		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
+		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / size);
 		if (room > 0)
 		{
 			change = std::min(room, change);
@@ -564,7 +570,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					{
 						newAmmo = newAmmoPerVehicle;
 						if (i<remainder) ++newAmmo;
-						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
+						c->getVehicles()->push_back(new Vehicle(item, newAmmo, size));
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
 							_base->getItems()->removeItem(ammo->getType(), newAmmo);
@@ -583,7 +589,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			else
 				for (int i=0; i < change; ++i)
 				{
-					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize()));
+					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 					{
 						_base->getItems()->removeItem(_items[_sel]);

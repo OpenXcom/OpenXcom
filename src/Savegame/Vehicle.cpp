@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
  */
-Vehicle::Vehicle(RuleItem *rules, int ammo) : _rules(rules), _ammo(ammo)
+Vehicle::Vehicle(RuleItem *rules, int ammo, int size) : _rules(rules), _ammo(ammo), _size(size)
 {
 }
 
@@ -45,6 +45,7 @@ Vehicle::~Vehicle()
 void Vehicle::load(const YAML::Node &node)
 {
 	_ammo = node["ammo"].as<int>(_ammo);
+	_size = node["size"].as<int>(_size);
 }
 
 /**
@@ -56,6 +57,7 @@ YAML::Node Vehicle::save() const
 	YAML::Node node;
 	node["type"] = _rules->getType();
 	node["ammo"] = _ammo;
+	node["size"] = _size;
 	return node;
 }
 
@@ -93,4 +95,12 @@ void Vehicle::setAmmo(int ammo)
 	}
 }
 
+/**
+ * Returns the sizer of in this vehicle.
+ * @return Weapon ammo.
+ */
+int Vehicle::getSize() const
+{
+	return _size;
+}
 }
