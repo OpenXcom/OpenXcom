@@ -955,4 +955,12 @@ int TextList::getScroll()
 	return _scroll;
 }
 
+/*
+ * set the scroll depth.
+ * @param scroll set the scroll depth to this.
+ */
+void TextList::setScroll(int scroll)
+{
+	_scroll = scroll;
+}
 }
