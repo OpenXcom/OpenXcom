@@ -173,6 +173,8 @@ public:
 	void mouseOut(Action *action, State *state);
 	/// get the scroll depth
 	int getScroll();
+	/// set the scroll depth
+	void setScroll(int scroll);
 };
 
 }
