@@ -1583,7 +1583,10 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 {
 	_tile = tile;
 	if (!_tile)
+	{
+		_floating = false;
 		return;
+	}
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _armor->getMovementType() == MT_FLY)
 	{
@@ -1595,9 +1598,9 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 		_status = STATUS_WALKING;
 		_floating = false;
 	}
-	else if (_status == STATUS_STANDING && _armor->getMovementType() == MT_FLY)
+	else if (_status == STATUS_UNCONSCIOUS)
 	{
-		_floating = _tile->hasNoFloor(tileBelow);
+		_floating = _armor->getMovementType() == MT_FLY && _tile->hasNoFloor(tileBelow);
 	}
 }
 

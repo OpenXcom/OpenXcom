@@ -897,11 +897,17 @@ void SavedBattleGame::resetUnitTiles()
 	{
 		if (!(*i)->isOut())
 		{
+			int size = (*i)->getArmor()->getSize() - 1;
 			if ((*i)->getTile() && (*i)->getTile()->getUnit() == (*i))
 			{
-				(*i)->getTile()->setUnit(0); // XXX XXX XXX doesn't this fail to clear 3 out of 4 tiles for 2x2 units?
+				for (int x = size; x >= 0; x--)
+				{
+					for (int y = size; y >= 0; y--)
+					{
+						getTile((*i)->getTile()->getPosition() + Position(x,y,0))->setUnit(0);
+					}
+				}
 			}
-			int size = (*i)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -1366,7 +1372,8 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		for (int y = size; y >= 0; y--)
 		{
 			Tile *t = getTile(position + Position(x,y,0));
-			if (t == 0 || (t->getUnit() != 0 && t->getUnit() != bu) || t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255)
+			Tile *tb = getTile(position + Position(x,y,-1));
+			if (t == 0 || (t->getUnit() != 0 && t->getUnit() != bu) || t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255 || (t->hasNoFloor(tb) && bu->getArmor()->getMovementType() != MT_FLY))
 			{
 				return false;
 			}
