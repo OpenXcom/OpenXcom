@@ -570,12 +570,16 @@ void CraftEquipmentState::moveRightByValue(int change)
 					{
 						newAmmo = newAmmoPerVehicle;
 						if (i<remainder) ++newAmmo;
-						c->getVehicles()->push_back(new Vehicle(item, newAmmo, size));
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
 							_base->getItems()->removeItem(ammo->getType(), newAmmo);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
+						else
+						{
+							newAmmo = ammo->getClipSize();
+						}
+						c->getVehicles()->push_back(new Vehicle(item, newAmmo, size));
 					}
 				}
 				if (oldVehiclesCount >= canBeAdded)
