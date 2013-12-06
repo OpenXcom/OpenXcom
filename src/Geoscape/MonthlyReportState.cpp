@@ -46,7 +46,7 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : State(game), _psi(psi), _gameOver(false), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
+MonthlyReportState::MonthlyReportState( bool psi, Globe *globe) :  _psi(psi), _gameOver(false), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
 {
 	_globe = globe;
 	// Create objects
@@ -240,14 +240,14 @@ void MonthlyReportState::btnOkClick(Action *)
 	{
 		_game->popState();
 		if (_psi)
-			_game->pushState (new PsiTrainingState(_game));
+            _game->pushState (new PsiTrainingState);
 	}
 	else
 	{
 		if (_txtFailure->getVisible())
 		{
 			_game->popState();
-			_game->pushState (new DefeatState(_game));
+            _game->pushState (new DefeatState);
 		}
 		else
 		{

@@ -249,7 +249,7 @@ void Game::run()
 					{
 						if (action.getDetails()->type == SDL_KEYDOWN && action.getDetails()->key.keysym.sym == SDLK_t && (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							setState(new TestState(this));
+                            setState(new TestState);
 						}
 					}
 					break;
@@ -305,7 +305,7 @@ void Game::run()
 	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(this, OPT_MENU, false);
+        SaveState *ss = new SaveState(OPT_MENU, false);
 		delete ss;
 	}
 }

@@ -51,7 +51,7 @@ private:
 	TextList *_lstTargets;
 public:
 	/// Creates the Multiple Targets state.
-	MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state);
+    MultipleTargetsState( std::vector<Target*> targets, Craft *craft, GeoscapeState *state);
 	/// Cleans up the Multiple Targets state.
 	~MultipleTargetsState();
 	/// Updates the window.

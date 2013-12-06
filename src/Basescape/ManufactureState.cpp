@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(base)
+ManufactureState::ManufactureState( Base *base) :  _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -188,7 +188,7 @@ void ManufactureState::btnOkClick(Action *)
  */
 void ManufactureState::btnNewProductionClick(Action *)
 {
-	_game->pushState(new NewManufactureListState(_game, _base));
+    _game->pushState(new NewManufactureListState( _base));
 }
 
 /**
@@ -240,7 +240,7 @@ void ManufactureState::fillProductionList()
 void ManufactureState::lstManufactureClick(Action *)
 {
 	const std::vector<Production *> productions(_base->getProductions ());
-	_game->pushState(new ManufactureInfoState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
+    _game->pushState(new ManufactureInfoState( _base, productions[_lstManufacture->getSelectedRow()]));
 }
 
 }

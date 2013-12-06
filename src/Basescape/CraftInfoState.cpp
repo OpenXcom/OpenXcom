@@ -48,7 +48,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(game), _base(base), _craft(craft)
+CraftInfoState::CraftInfoState( Base *base, size_t craft) :  _base(base), _craft(craft)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -325,7 +325,7 @@ void CraftInfoState::btnOkClick(Action *)
  */
 void CraftInfoState::btnW1Click(Action *)
 {
-	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 0));
+    _game->pushState(new CraftWeaponsState( _base, _craft, 0));
 }
 
 /**
@@ -335,7 +335,7 @@ void CraftInfoState::btnW1Click(Action *)
  */
 void CraftInfoState::btnW2Click(Action *)
 {
-	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 1));
+    _game->pushState(new CraftWeaponsState( _base, _craft, 1));
 }
 
 /**
@@ -344,7 +344,7 @@ void CraftInfoState::btnW2Click(Action *)
  */
 void CraftInfoState::btnCrewClick(Action *)
 {
-	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
+    _game->pushState(new CraftSoldiersState( _base, _craft));
 }
 
 /**
@@ -353,7 +353,7 @@ void CraftInfoState::btnCrewClick(Action *)
  */
 void CraftInfoState::btnEquipClick(Action *)
 {
-	_game->pushState(new CraftEquipmentState(_game, _base, _craft));
+    _game->pushState(new CraftEquipmentState( _base, _craft));
 }
 
 /**
@@ -362,7 +362,7 @@ void CraftInfoState::btnEquipClick(Action *)
  */
 void CraftInfoState::btnArmorClick(Action *)
 {
-	_game->pushState(new CraftArmorState(_game, _base, _craft));
+    _game->pushState(new CraftArmorState( _base, _craft));
 }
 
 /**

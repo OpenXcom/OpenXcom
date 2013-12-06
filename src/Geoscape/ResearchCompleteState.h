@@ -41,7 +41,7 @@ class ResearchCompleteState : public State
 	const RuleResearch * _research, * _bonus;
 public:
 	/// Creates the EndResearch state.
-	ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus);
+    ResearchCompleteState(const RuleResearch * research, const RuleResearch * bonus);
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.

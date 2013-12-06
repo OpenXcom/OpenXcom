@@ -42,7 +42,7 @@ private:
 	std::wstring _id;
 public:
 	/// Creates the Ufo Lost state.
-	UfoLostState(Game *game, std::wstring id);
+    UfoLostState( std::wstring id);
 	/// Cleans up the Ufo Lost state.
 	~UfoLostState();
 	/// Updates the palette.

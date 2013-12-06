@@ -59,7 +59,7 @@ private:
 	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
 public:
 	/// Creates the Geoscape state.
-	GeoscapeState(Game *game);
+    GeoscapeState();
 	/// Cleans up the Geoscape state.
 	~GeoscapeState();
 	/// Handle keypresses.

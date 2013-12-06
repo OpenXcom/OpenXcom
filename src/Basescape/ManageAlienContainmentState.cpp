@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
+ManageAlienContainmentState::ManageAlienContainmentState( Base *base, OptionsOrigin origin) :  _base(base), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);

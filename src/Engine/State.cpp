@@ -37,14 +37,19 @@
 namespace OpenXcom
 {
 
+
+/**
+ * Initialize static pointer to master Game object.
+ */
+Game* State::_game = 0;
+
 /**
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game *game) : _game(game), _surfaces(), _screen(true)
+State::State() : _surfaces(), _screen(true)
 {
-
 }
 
 /**
@@ -273,6 +278,11 @@ void State::applyBattlescapeTheme()
 			slider->setHighContrast(true);
 		}
 	}
+}
+
+void State::setGamePtr(Game* game)
+{
+    _game = game;
 }
 
 }

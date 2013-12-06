@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+OptionsBaseState::OptionsBaseState( OptionsOrigin origin) :  _origin(origin)
 {
 }
 
@@ -64,16 +64,16 @@ void OptionsBaseState::saveOptions()
 	Options::save();
 	if (_origin == OPT_MENU)
 	{
-		_game->setState(new MainMenuState(_game));
+        _game->setState(new MainMenuState);
 	}
 	else if (_origin == OPT_GEOSCAPE)
 	{
-		_game->setState(new GeoscapeState(_game));
+        _game->setState(new GeoscapeState);
 	}
 	else if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setState(new GeoscapeState(_game));
-		BattlescapeState *bs = new BattlescapeState(_game);
+        _game->setState(new GeoscapeState);
+        BattlescapeState *bs = new BattlescapeState;
 		_game->pushState(bs);
 		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 	}

@@ -45,7 +45,7 @@ private:
 	GeoscapeState *_state;
 public:
 	/// Creates the Confirm Landing state.
-	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state);
+    ConfirmLandingState( Craft *craft, int texture, int shade, GeoscapeState *state);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
 	/// Handler for clicking the Yes button.

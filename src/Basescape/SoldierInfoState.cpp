@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
  */
-SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : State(game), _base(base), _soldier(soldier)
+SoldierInfoState::SoldierInfoState( Base *base, size_t soldier) :  _base(base), _soldier(soldier)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -554,7 +554,7 @@ void SoldierInfoState::btnArmorClick(Action *)
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
 	{
-		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
+        _game->pushState(new SoldierArmorState( _base, _soldier));
 	}
 }
 
@@ -565,7 +565,7 @@ void SoldierInfoState::btnArmorClick(Action *)
 void SoldierInfoState::btnSackClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
-	_game->pushState(new SackSoldierState(_game, _base, soldier));
+    _game->pushState(new SackSoldierState( _base, soldier));
 }
 
 }

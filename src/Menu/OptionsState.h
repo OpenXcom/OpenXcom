@@ -65,7 +65,7 @@ private:
 	int _musicVolume, _soundVolume;
 public:
 	/// Creates the Options state.
-	OptionsState(Game *game, OptionsOrigin origin);
+    OptionsState( OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsState();
 	/// Initilizes the Options state.

@@ -56,7 +56,7 @@ private:
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:
 	/// Creates a new inventory view at the specified position and size.
-	Inventory(Game *game, int width, int height, int x = 0, int y = 0);
+    Inventory(Game* game, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the inventory.
 	~Inventory();
 	/// Sets the inventory's palette.

@@ -45,7 +45,7 @@ private:
 	Text *_txtTitle, *_txtSoldier;
 public:
 	/// Creates the Sack Soldier state.
-	SackSoldierState(Game *game, Base *base, Soldier *soldier);
+    SackSoldierState( Base *base, Soldier *soldier);
 	/// Cleans up the Sack Soldier state.
 	~SackSoldierState();
 	/// Handler for clicking the OK button.

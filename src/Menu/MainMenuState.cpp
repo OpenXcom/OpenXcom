@@ -40,7 +40,7 @@ namespace OpenXcom
  * Initializes all the elements in the Main Menu window.
  * @param game Pointer to the core game.
  */
-MainMenuState::MainMenuState(Game *game) : State(game)
+MainMenuState::MainMenuState()
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
@@ -128,7 +128,7 @@ void MainMenuState::init()
  */
 void MainMenuState::btnNewGameClick(Action *)
 {
-	_game->pushState(new NewGameState(_game));
+    _game->pushState(new NewGameState);
 }
 
 /**
@@ -137,7 +137,7 @@ void MainMenuState::btnNewGameClick(Action *)
  */
 void MainMenuState::btnNewBattleClick(Action *)
 {
-	_game->pushState(new NewBattleState(_game));
+    _game->pushState(new NewBattleState);
 }
 
 /**
@@ -146,7 +146,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, OPT_MENU));
+    _game->pushState(new LoadState( OPT_MENU));
 }
 
 /**
@@ -155,7 +155,7 @@ void MainMenuState::btnLoadClick(Action *)
  */
 void MainMenuState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game, OPT_MENU));
+    _game->pushState(new OptionsState( OPT_MENU));
 }
 
 /**

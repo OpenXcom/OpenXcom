@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier Pointer to the soldier to sack.
  */
-SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : State(game), _base(base), _soldier(soldier)
+SackSoldierState::SackSoldierState( Base *base, Soldier *soldier) :  _base(base), _soldier(soldier)
 {
 	_screen = false;
 

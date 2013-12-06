@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game *game, const std::string &id, Uint8 color, std::string bg, Uint8 bgColor) : State(game)
+ErrorMessageState::ErrorMessageState( const std::string &id, Uint8 color, std::string bg, Uint8 bgColor)
 {
 	create(id, L"", color, bg, bgColor);
 }
@@ -50,7 +50,7 @@ ErrorMessageState::ErrorMessageState(Game *game, const std::string &id, Uint8 co
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game *game, const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor) : State(game)
+ErrorMessageState::ErrorMessageState( const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor)
 {
 	create("", msg, color, bg, bgColor);
 }

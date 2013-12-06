@@ -35,7 +35,7 @@ namespace OpenXcom
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
  */
-ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State(game)
+ResearchRequiredState::ResearchRequiredState( RuleItem *item)
 {
 	_screen = false;
 

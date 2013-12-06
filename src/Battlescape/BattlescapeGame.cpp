@@ -311,7 +311,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 				// show a little infobox with the name of the unit and "... is under alien control"
 				Game *game = _parentState->getGame();
 				BattleUnit *unit = _save->getTile(action.target)->getUnit();
-				game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+                game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 			}
 			_save->removeItem(action.weapon);
 		}
@@ -481,7 +481,7 @@ void BattlescapeGame::endTurn()
 	if ((_save->getSide() != FACTION_NEUTRAL || battleComplete)
 		&& _endTurnRequested)
 	{
-		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
+        _parentState->getGame()->pushState(new NextTurnState(_save, _parentState));
 	}
 	_endTurnRequested = false;
 
@@ -1062,11 +1062,11 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	Game *game = _parentState->getGame();
 	if (status == STATUS_PANICKING)
 	{
-		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+        game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
 	else
 	{
-		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+        game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
@@ -1238,7 +1238,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
+                    _parentState->getGame()->pushState (new UnitInfoState( _save->selectUnit(pos), _parentState));
 					cancelCurrentAction();
 				}
 				else
@@ -1270,9 +1270,9 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						// show a little infobox if it's successful
 						Game *game = _parentState->getGame();
 						if (_currentAction.type == BA_PANIC)
-							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+                            game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
 						else if (_currentAction.type == BA_MINDCONTROL)
-							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+                            game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						_parentState->updateSoldierInfo();
 					}
 					if (builtinpsi)
@@ -1505,7 +1505,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
+        _parentState->getGame()->pushState(new InfoboxState( _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
 	}
 
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)

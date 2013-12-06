@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsBattlescapeState::OptionsBattlescapeState( OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	_screen = false;
 

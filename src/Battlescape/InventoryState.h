@@ -48,7 +48,7 @@ private:
 	BattlescapeState *_parent;
 public:
 	/// Creates the Inventory state.
-	InventoryState(Game *game, bool tu, BattlescapeState *parent);
+    InventoryState( bool tu, BattlescapeState *parent);
 	/// Cleans up the Inventory state.
 	~InventoryState();
 	/// Updates all soldier info.

@@ -36,7 +36,7 @@ namespace OpenXcom
  * Initializes all the elements in the Defeat screen.
  * @param game Pointer to the core game.
  */
-DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
+DefeatState::DefeatState() :  _screenNumber(0)
 {
 	// Create objects
 	_screen = new InteractiveSurface(320, 200, 0, 0);
@@ -94,7 +94,7 @@ void DefeatState::windowClick(Action *)
 	if(_screenNumber == 2)
 	{
 		_game->popState();
-		_game->setState(new MainMenuState(_game));
+        _game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 	else

@@ -73,7 +73,7 @@ private:
 	int _previewSetting;
 public:
 	/// Creates a new map at the specified position and size.
-	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
+    Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
 	~Map();
 	/// Initializes the map.

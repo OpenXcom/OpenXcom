@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param shade Shade of the landing site.
  * @param state Pointer to Geoscape.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state)
+ConfirmLandingState::ConfirmLandingState( Craft *craft, int texture, int shade, GeoscapeState *state) :  _craft(craft), _texture(texture), _shade(shade), _state(state)
 {
 	_screen = false;
 
@@ -155,7 +155,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		throw Exception("No mission available!");
 	}
 	bgen.run();
-	_game->pushState(new BriefingState(_game, _craft));
+    _game->pushState(new BriefingState( _craft));
 }
 
 /**

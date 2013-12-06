@@ -85,7 +85,7 @@ private:
 	Cord getSunDirection(double lon, double lat) const;
 public:
 	/// Creates a new globe at the specified position and size.
-	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
+    Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.
 	~Globe();
 	/// Loads a set of polygons from a DAT file.

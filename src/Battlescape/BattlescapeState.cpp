@@ -91,7 +91,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
+BattlescapeState::BattlescapeState() :  _popups()
 {
 	//game->getScreen()->setScale(1.0);
 	int screenWidth = Options::getInt("baseXResolution");
@@ -143,9 +143,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
-	_btnLaunch = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 0);
+    _btnLaunch = new InteractiveSurface(32, 24, _game->getScreen()->getWidth() / _game->getScreen()->getXScale() - 32, 0);
 	_btnLaunch->setVisible(false);
-	_btnPsi = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 25);
+    _btnPsi = new InteractiveSurface(32, 24, _game->getScreen()->getWidth() / _game->getScreen()->getXScale() - 32, 25);
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
@@ -851,7 +851,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 
 		_battleGame->cancelCurrentAction(true);
 
-		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
+        _game->pushState(new InventoryState( !_save->getDebugMode(), this));
 	}
 }
 
@@ -952,7 +952,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
 void BattlescapeState::btnHelpClick(Action *)
 {
 	if (allowButtons(true))
-		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
+        _game->pushState(new PauseState( OPT_BATTLESCAPE));
 }
 
 /**
@@ -975,7 +975,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
 void BattlescapeState::btnAbortClick(Action *)
 {
 	if (allowButtons())
-		_game->pushState(new AbortMissionState(_game, _save, this));
+        _game->pushState(new AbortMissionState( _save, this));
 }
 
 /**
@@ -1010,7 +1010,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 
 		_battleGame->cancelCurrentAction(true);
 
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
+        if (b) popup(new UnitInfoState( _save->getSelectedUnit(), this));
 	}
 }
 
@@ -1307,7 +1307,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()) || _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			_battleGame->getCurrentAction()->weapon = item;
-			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+            popup(new ActionMenuState( _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
 		}
 		else
 		{
@@ -1451,11 +1451,11 @@ inline void BattlescapeState::handle(Action *action)
 			// not works in debug mode to prevent conflict in hotkeys by default
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, true));
+                _game->pushState(new SaveState( OPT_BATTLESCAPE, true));
 			}
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new LoadState(_game, OPT_BATTLESCAPE, true));
+                _game->pushState(new LoadState( OPT_BATTLESCAPE, true));
 			}
 
 			// voxel view dump
@@ -1826,7 +1826,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		bgen.setAlienRace("STR_MIXED");
 		bgen.nextStage();
 		_game->popState();
-		_game->pushState(new BriefingState(_game, 0, 0));
+        _game->pushState(new BriefingState( 0, 0));
 	}
 	else
 	{
@@ -1840,11 +1840,11 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			// this concludes to defeat when in mars or mars landing mission
 			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState (new DefeatState(_game));
+                _game->pushState (new DefeatState);
 			}
 			else
 			{
-				_game->pushState(new DebriefingState(_game));
+                _game->pushState(new DebriefingState);
 			}
 		}
 		else
@@ -1853,11 +1853,11 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			// this concludes to victory when in mars mission
 			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState (new VictoryState(_game));
+                _game->pushState (new VictoryState);
 			}
 			else
 			{
-				_game->pushState(new DebriefingState(_game));
+                _game->pushState(new DebriefingState);
 			}
 		}
 		_game->getCursor()->setColor(Palette::blockOffset(15)+12);

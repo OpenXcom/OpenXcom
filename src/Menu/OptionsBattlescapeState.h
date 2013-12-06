@@ -50,7 +50,7 @@ private:
 	TextButton *_btnOk, *_btnCancel;
 public:
 	/// Creates the Battlescape Options state.
-	OptionsBattlescapeState(Game *game, OptionsOrigin origin);
+    OptionsBattlescapeState( OptionsOrigin origin);
 	/// Cleans up the Battlescape Options state.
 	~OptionsBattlescapeState();
 	/// Handler for clicking the OK button.

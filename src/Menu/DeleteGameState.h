@@ -45,7 +45,7 @@ private:
 	OptionsOrigin _origin;
 public:
 	/// Creates the Confirm state.
-	DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent);
+    DeleteGameState( OptionsOrigin origin, const std::wstring &save, SavedGameState *parent);
 	/// Cleans up the Confirm state.
 	~DeleteGameState();
 	/// Handler for clicking the confirm button.
