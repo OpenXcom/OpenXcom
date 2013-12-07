@@ -65,7 +65,7 @@ private:
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
 	int _listOrder, _range, _bulletSpeed, _autoShots;
-	int _autoEquipWeight;
+	int _equipPriority;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -183,8 +183,8 @@ public:
 	int getBulletSpeed() const;
 	/// How many auto shots does this weapon fire.
 	int getAutoShots() const;
-	/// Gets the autoequip weighting;
-	int getAutoEquipWeight() const;
+	/// Gets the equip priority.
+	int getEquipPriority() const;
 };
 
 }

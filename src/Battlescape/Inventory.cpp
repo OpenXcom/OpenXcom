@@ -784,6 +784,8 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	if (_selUnit != 0)
 	{
+		std::sort (_selUnit->getTile()->getInventory()->begin(), _selUnit->getTile()->getInventory()->end(), CompareItems());
+
 		// first move all items out of the way - a big number in X direction
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{

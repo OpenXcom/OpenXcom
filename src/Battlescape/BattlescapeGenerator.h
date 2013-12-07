@@ -19,9 +19,6 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
-#include "../Savegame/BattleItem.h"
-#include "../Ruleset/RuleItem.h"
-
 namespace OpenXcom
 {
 
@@ -30,9 +27,11 @@ class Craft;
 class Ufo;
 class RuleTerrain;
 class ResourcePack;
+class BattleItem;
 class MapBlock;
 class Vehicle;
 class Tile;
+class RuleItem;
 class Unit;
 class AlienRace;
 class AlienDeployment;
@@ -96,26 +95,6 @@ private:
 	void deployCivilians(int max);
 	/// Gets battlescape terrain.
 	RuleTerrain *getTerrain(int tex, double lat);
-
-	/**
-	 * Compares BattleItems based on auto equip weightings.
-	 */
-	class CompareItems : public std::binary_function<BattleItem*, BattleItem*, bool>
-	{
-	public:
-		/**
-		 * Compares items @a *a and @a *b.
-		 * @param a Pointer to first item.
-		 * @param b Pointer to second item.
-		 * @return True if battle item @a *a has a higher weighting than @a *b.
-		 * @see RuleItem
-		 */
-		bool operator()(BattleItem* a, BattleItem* b) const
-		{
-			return a->getRules()->getAutoEquipWeight() > b->getRules()->getAutoEquipWeight();
-		}
-	};
-
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);

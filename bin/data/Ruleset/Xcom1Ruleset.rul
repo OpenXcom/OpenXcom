@@ -1455,7 +1455,7 @@ items:
     handSprite: 96
     bulletSprite: 1
     fireSound: 4
-    autoEquipWeight: 45
+    equipPriority: 45
     compatibleAmmo:
       - STR_PISTOL_CLIP
     accuracySnap: 60
@@ -1481,7 +1481,7 @@ items:
     battleType: 2
     armor: 12
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -1492,7 +1492,7 @@ items:
     handSprite: 0
     bulletSprite: 2
     fireSound: 4
-    autoEquipWeight: 70
+    equipPriority: 70
     compatibleAmmo:
       - STR_RIFLE_CLIP
     accuracyAuto: 35
@@ -1518,7 +1518,7 @@ items:
     damageType: 1
     clipSize: 20
     battleType: 2
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_HEAVY_CANNON
     size: 0.3
     costBuy: 6400
@@ -1529,7 +1529,7 @@ items:
     handSprite: 24
     bulletSprite: 4
     fireSound: 2
-    autoEquipWeight: 45
+    equipPriority: 45
     compatibleAmmo:
       - STR_HC_AP_AMMO
       - STR_HC_HE_AMMO
@@ -1558,7 +1558,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -1575,7 +1575,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -1592,7 +1592,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -1603,7 +1603,7 @@ items:
     handSprite: 32
     bulletSprite: 3
     fireSound: 2
-    autoEquipWeight: 65
+    equipPriority: 65
     compatibleAmmo:
       - STR_AC_AP_AMMO
       - STR_AC_HE_AMMO
@@ -1633,7 +1633,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_AC_HE_AMMO
     size: 0.1
     costBuy: 700
@@ -1649,7 +1649,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_AC_I_AMMO
     size: 0.1
     costBuy: 650
@@ -1666,7 +1666,7 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -1677,7 +1677,7 @@ items:
     handSprite: 72
     bulletSprite: 0
     fireSound: 52
-    autoEquipWeight: 50
+    equipPriority: 50
     compatibleAmmo:
       - STR_SMALL_ROCKET
       - STR_LARGE_ROCKET
@@ -1705,7 +1705,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_LARGE_ROCKET
     size: 0.2
     costBuy: 900
@@ -1721,7 +1721,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_INCENDIARY_ROCKET
     size: 0.2
     costBuy: 1200
@@ -1737,7 +1737,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_LASER_PISTOL
     size: 0.1
     costSell: 20000
@@ -1761,7 +1761,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    autoEquipWeight: 75
+    equipPriority: 75
   - type: STR_LASER_RIFLE
     size: 0.2
     costSell: 36900
@@ -1786,7 +1786,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    autoEquipWeight: 85
+    equipPriority: 85
   - type: STR_HEAVY_LASER
     size: 0.3
     costSell: 61000
@@ -1809,7 +1809,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    autoEquipWeight: 90
+    equipPriority: 90
   - type: STR_GRENADE
     size: 0.1
     costBuy: 300
@@ -1821,7 +1821,7 @@ items:
     damageType: 3
     battleType: 4
     blastRadius: 5
-    autoEquipWeight: 30
+    equipPriority: 30
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1833,7 +1833,7 @@ items:
     damageType: 9
     battleType: 4
     blastRadius: 5
-    autoEquipWeight: 30
+    equipPriority: 30
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1845,7 +1845,7 @@ items:
     damageType: 3
     battleType: 5
     blastRadius: 5
-    autoEquipWeight: 30
+    equipPriority: 30
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1859,7 +1859,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 5
-    autoEquipWeight: 15
+    equipPriority: 15
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -1868,7 +1868,7 @@ items:
     floorSprite: 23
     battleType: 7
     tuUse: 25
-    autoEquipWeight: 1
+    equipPriority: 1
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -1887,7 +1887,7 @@ items:
     energyRecovery: 10
     tuUse: 10
     flatRate: true
-    autoEquipWeight: 25
+    equipPriority: 25
   - type: STR_PSI_AMP
     requires:
       - STR_PSI_AMP
@@ -1904,7 +1904,7 @@ items:
     invHeight: 3
     tuUse: 25
     flatRate: true
-    autoEquipWeight: -1
+    equipPriority: -1
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
@@ -1922,7 +1922,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    autoEquipWeight: 20
+    equipPriority: 20
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -1933,7 +1933,7 @@ items:
     power: 15
     battleType: 10
     armor: 8
-    autoEquipWeight: 10
+    equipPriority: 10
   - type: STR_CORPSE
     weight: 22
     bigSprite: 45
@@ -1970,7 +1970,7 @@ items:
     handSprite: 40
     bulletSprite: 8
     fireSound: 18
-    autoEquipWeight: 100
+    equipPriority: 100
     compatibleAmmo:
       - STR_HEAVY_PLASMA_CLIP
     accuracyAuto: 50
@@ -2002,7 +2002,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_PLASMA_RIFLE
     requires:
       - STR_PLASMA_RIFLE
@@ -2014,7 +2014,7 @@ items:
     handSprite: 48
     bulletSprite: 8
     fireSound: 18
-    autoEquipWeight: 95
+    equipPriority: 95
     compatibleAmmo:
       - STR_PLASMA_RIFLE_CLIP
     accuracyAuto: 55
@@ -2046,7 +2046,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_PLASMA_PISTOL
     requires:
       - STR_PLASMA_PISTOL
@@ -2058,7 +2058,7 @@ items:
     handSprite: 104
     bulletSprite: 8
     fireSound: 18
-    autoEquipWeight: 80
+    equipPriority: 80
     compatibleAmmo:
       - STR_PLASMA_PISTOL_CLIP
     accuracyAuto: 50
@@ -2089,7 +2089,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_BLASTER_LAUNCHER
     requires:
       - STR_BLASTER_LAUNCHER
@@ -2101,7 +2101,7 @@ items:
     handSprite: 56
     bulletSprite: 10
     fireSound: 53
-    autoEquipWeight: 60
+    equipPriority: 60
     compatibleAmmo:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
@@ -2133,7 +2133,7 @@ items:
     recoveryPoints: 1
     blastRadius: 11
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_SMALL_LAUNCHER
     requires:
       - STR_SMALL_LAUNCHER
@@ -2145,7 +2145,7 @@ items:
     handSprite: 64
     bulletSprite: 9
     fireSound: 53
-    autoEquipWeight: 55
+    equipPriority: 55
     compatibleAmmo:
       - STR_STUN_BOMB
     accuracySnap: 65
@@ -2174,7 +2174,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
-    autoEquipWeight: 40
+    equipPriority: 40
   - type: STR_ALIEN_GRENADE
     requires:
       - STR_ALIEN_GRENADE
@@ -2189,7 +2189,7 @@ items:
     recoveryPoints: 1
     blastRadius: 5
     attraction: 1
-    autoEquipWeight: 30
+    equipPriority: 30
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -2214,7 +2214,7 @@ items:
     tuUse: 50
     recoveryPoints: 1
     attraction: 1
-    autoEquipWeight: -1
+    equipPriority: -1
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000

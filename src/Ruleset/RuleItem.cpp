@@ -134,7 +134,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	{
 		_listOrder = listOrder;
 	}
-	_autoEquipWeight = node["autoEquipWeight"].as<int>(_autoEquipWeight);
+	_equipPriority = node["equipPriority"].as<int>(_equipPriority);
 }
 
 /**
@@ -672,13 +672,13 @@ int RuleItem::getAutoShots() const
 }
 
 /**
- * Gets the autoequip weighting for this item.
- * This is used by the auto equip routine in the battle generator.
- * @return The autoequip weight.
+ * Gets the equip priority for this item.
+ * This is used by the auto equip routine in the battle generator and to sort items on the ground.
+ * @return The equip priority.
  */
-int RuleItem::getAutoEquipWeight() const
+int RuleItem::getEquipPriority() const
 {
-	return _autoEquipWeight;
+	return _equipPriority;
 }
 
 }

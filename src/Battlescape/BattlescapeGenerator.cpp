@@ -459,7 +459,7 @@ void BattlescapeGenerator::deployXCOM()
 	}
 
 	// auto-equip soldiers (only soldiers without layout)
-	std::sort (_craftInventoryTile->getInventory()->begin(), _craftInventoryTile->getInventory()->end(), CompareItems());
+	std::sort (_craftInventoryTile->getInventory()->begin(), _craftInventoryTile->getInventory()->end(), Inventory::CompareItems());
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, false);
@@ -818,13 +818,13 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
 	// If true, item is elegible to be equipped in the first pass and encumbrance checking is skipped.
-	bool forcing = item->getRules()->getAutoEquipWeight() > 999;
+	bool forcing = item->getRules()->getEquipPriority() > 999;
 
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 
 	if (item->getSlot() == ground
 		&& (secondPass || item->getRules()->getBattleType() == BT_FIREARM || forcing)
-		&& item->getRules()->getAutoEquipWeight() > -1)
+		&& item->getRules()->getEquipPriority() > -1)
 	{
 		bool loaded = false;
 		bool placed = false;
