@@ -201,7 +201,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
-			
+
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
@@ -1627,19 +1627,22 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 		return true;
 	}
 
+	bool unitCanFly = unit->getArmor()->getMovementType() == MT_FLY;
 	for (int dir = 0; dir <= 7; ++dir)
 	{
 		Position offset;
 		getPathfinding()->directionToVector(dir, &offset);
 		Tile *t = getTile(entryPoint + offset);
+		Tile *bt = getTile(entryPoint + offset + Position(0, 0, -1));
 		if (t && !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+			&& (!t->hasNoFloor(bt) || unitCanFly)
 			&& setUnitPosition(unit, entryPoint + offset))
 		{
 			return true;
 		}
 	}
 
-	if (unit->getArmor()->getMovementType() == MT_FLY)
+	if (unitCanFly)
 	{
 		Tile *t = getTile(entryPoint + Position(0, 0, 1));
 		if (t && t->hasNoFloor(getTile(entryPoint)) && setUnitPosition(unit, entryPoint + Position(0, 0, 1)))
