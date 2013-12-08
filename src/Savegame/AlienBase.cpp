@@ -19,6 +19,7 @@
 #include "AlienBase.h"
 #include <sstream>
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -103,7 +104,10 @@ void AlienBase::setId(int id)
  */
 std::wstring AlienBase::getName(Language *lang) const
 {
-	return lang->getString("STR_ALIEN_BASE_").arg(_discovered);
+	if (Options::getBool("nameAlienBasesByDiscoveryOrder"))
+		return lang->getString("STR_ALIEN_BASE_").arg(_discovered);
+	else
+		return lang->getString("STR_ALIEN_BASE_").arg(_id);
 }
 
 /**
