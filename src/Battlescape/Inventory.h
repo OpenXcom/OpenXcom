@@ -110,8 +110,6 @@ public:
 		 */
 		bool operator()(BattleItem* itemA, BattleItem* itemB) const
 		{
-			//std::cout << itemA->getRules()->getName() << " " << itemA->getRules()->getEquipPriority() << " " <<
-				//	itemB->getRules()->getName() << " " << itemB->getRules()->getEquipPriority() << std::endl;
 			if (itemA->getRules()->getEquipPriority() == itemB->getRules()->getEquipPriority())
 			{
 				int qtyA = 0;
@@ -121,10 +119,14 @@ public:
 					qtyA = itemA->getHealQuantity() + itemA->getStimulantQuantity() + itemA->getPainKillerQuantity();
 				else if (itemA->getRules()->getBattleType() == BT_AMMO)
 					qtyA = itemA->getAmmoQuantity();
+				else if (itemA->getAmmoItem())
+					qtyA = itemA->getAmmoItem()->getAmmoQuantity();
 				if (itemB->getRules()->getBattleType() == BT_MEDIKIT)
 					qtyB = itemB->getHealQuantity() + itemB->getStimulantQuantity() + itemB->getPainKillerQuantity();
 				else if (itemB->getRules()->getBattleType() == BT_AMMO)
 					qtyB = itemB->getAmmoQuantity();
+				else if (itemB->getAmmoItem())
+					qtyB = itemB->getAmmoItem()->getAmmoQuantity();
 
 				return qtyA > qtyB;
 			}
