@@ -1599,9 +1599,11 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 		_status = STATUS_WALKING;
 		_floating = false;
 	}
-	else if (_status == STATUS_UNCONSCIOUS)
+	else
 	{
 		_floating = _armor->getMovementType() == MT_FLY && _tile->hasNoFloor(tileBelow);
+		if (_floating)
+			kneel(false);
 	}
 }
 

@@ -201,7 +201,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
-			
+
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
@@ -231,8 +231,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
-	// matches up tiles and units
-	resetUnitTiles();
 
 	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
 	{
@@ -323,6 +321,9 @@ void SavedBattleGame::loadMapResources(Game *game)
 			}
 		}
 	}
+
+	// matches up tiles and units
+	resetUnitTiles();
 
 	initUtilities(res);
 	getTileEngine()->calculateSunShading();
@@ -916,7 +917,6 @@ void SavedBattleGame::resetUnitTiles()
 					t->setUnit((*i), getTile(t->getPosition() + Position(0,0,-1)));
 				}
 			}
-
 		}
 		if ((*i)->getFaction() == FACTION_PLAYER)
 		{
