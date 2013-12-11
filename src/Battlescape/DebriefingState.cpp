@@ -944,11 +944,12 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	{
 		int qty = base->getItems()->getItem(i->first);
 		RuleItem *tankRule = _game->getRuleset()->getItem(i->first);
-				int size = 4;
-				if (_game->getRuleset()->getUnit(tankRule->getType()))
-				{
-					size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
-				}
+		int size = 4;
+		if (_game->getRuleset()->getUnit(tankRule->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
+			size *= size;
+		}
 		int canBeAdded = std::min(qty, i->second);
 		if (qty < i->second)
 		{ // missing tanks
