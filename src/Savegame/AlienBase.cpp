@@ -19,6 +19,7 @@
 #include "AlienBase.h"
 #include <sstream>
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -26,7 +27,7 @@ namespace OpenXcom
 /**
  * Initializes an alien base
  */
-AlienBase::AlienBase() : Target(), _id(0), _inBattlescape(false), _discovered(false)
+AlienBase::AlienBase() : Target(), _id(0), _inBattlescape(false), _discovered(0)
 {
 }
 
@@ -47,7 +48,7 @@ void AlienBase::load(const YAML::Node &node)
 	_id = node["id"].as<int>(_id);
 	_race = node["race"].as<std::string>(_race);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
-	_discovered = node["discovered"].as<bool>(_discovered);
+	_discovered = node["discovered"].as<int>(_discovered);
 }
 
 /**
@@ -103,7 +104,10 @@ void AlienBase::setId(int id)
  */
 std::wstring AlienBase::getName(Language *lang) const
 {
-	return lang->getString("STR_ALIEN_BASE_").arg(_id);
+	if (Options::getBool("nameAlienBasesByDiscoveryOrder"))
+		return lang->getString("STR_ALIEN_BASE_").arg(_discovered);
+	else
+		return lang->getString("STR_ALIEN_BASE_").arg(_id);
 }
 
 /**
@@ -155,7 +159,7 @@ bool AlienBase::isDiscovered() const
  * Sets the alien base's discovered status.
  * @param discovered.
  */
-void AlienBase::setDiscovered(bool discovered)
+void AlienBase::setDiscovered(int discovered)
 {
 	_discovered = discovered;
 }

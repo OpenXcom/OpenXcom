@@ -139,6 +139,7 @@ void createDefault()
     setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
+	setBool("nameAlienBasesByDiscoveryOrder", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

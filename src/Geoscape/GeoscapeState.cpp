@@ -1007,7 +1007,7 @@ void GeoscapeState::time10Minutes()
 							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
 							if (RNG::percent(50-((*j)->getDistance(*b) / range) * 50) && !(*b)->isDiscovered())
 							{
-								(*b)->setDiscovered(true);
+								(*b)->setDiscovered(_game->getSavedGame()->getId("STR_ALIEN_BASE_DISCOVERED"));
 							}
 						}
 					}
@@ -1653,7 +1653,7 @@ void GeoscapeState::time1Month()
 		{
 			if(!(*b)->isDiscovered() && RNG::percent(5))
 			{
-				(*b)->setDiscovered(true);
+				(*b)->setDiscovered(_game->getSavedGame()->getId("STR_ALIEN_BASE_DISCOVERED"));
 				popup(new AlienBaseState(_game, *b, this));
 				break;
 			}
@@ -2050,7 +2050,7 @@ int GeoscapeState::getFirstFreeDogfightSlot()
  */
 void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 {
-    // Whatever happens in the base defense, the UFO has finished its duty
+	// Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
 
 	if (base->getAvailableSoldiers(true) > 0)
@@ -2067,7 +2067,7 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 	}
 	else
 	{
-	    // Please garrison your bases in future
+		// Please garrison your bases in future
 		popup(new BaseDestroyedState(_game, base));
 	}
 }
