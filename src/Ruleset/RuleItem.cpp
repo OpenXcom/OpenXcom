@@ -134,6 +134,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	{
 		_listOrder = listOrder;
 	}
+	_equipPriority = node["equipPriority"].as<int>(_equipPriority);
 }
 
 /**
@@ -662,12 +663,22 @@ int RuleItem::getBulletSpeed() const
 }
 
 /**
-* Gets the amount of auto shots fired by this weapon.
-* @return The shots.
-*/
+ * Gets the amount of auto shots fired by this weapon.
+ * @return The shots.
+ */
 int RuleItem::getAutoShots() const
 {
 	return _autoShots;
+}
+
+/**
+ * Gets the equip priority for this item.
+ * This is used by the auto equip routine in the battle generator and to sort items on the ground.
+ * @return The equip priority.
+ */
+int RuleItem::getEquipPriority() const
+{
+	return _equipPriority;
 }
 
 }

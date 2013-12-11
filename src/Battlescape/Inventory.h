@@ -20,6 +20,8 @@
 #define OPENXCOM_INVENTORY_H
 
 #include "../Engine/InteractiveSurface.h"
+#include "../Savegame/BattleItem.h"
+#include "../Ruleset/RuleItem.h"
 #include <map>
 #include <string>
 
@@ -29,7 +31,6 @@ namespace OpenXcom
 class RuleInventory;
 class Game;
 class WarningMessage;
-class BattleItem;
 class BattleUnit;
 class NumberText;
 
@@ -93,6 +94,45 @@ public:
 	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
 	/// Checks for item overlap.
 	static bool overlapItems(BattleUnit *unit, BattleItem *item, RuleInventory *slot, int x = 0, int y = 0);
+
+	/**
+	 * Compares BattleItems based on their equip priorities and, for ammo and medikits, on quantities remaining.
+	 */
+	class CompareItems : public std::binary_function<BattleItem*, BattleItem*, bool>
+	{
+	public:
+		/**
+		 * Compares items @a *a and @a *b.
+		 * @param a Pointer to first item.
+		 * @param b Pointer to second item.
+		 * @return True if battle item @a *a has a higher priority than @a *b, or if it has a higher quantity remaining.
+		 * @see RuleItem
+		 */
+		bool operator()(BattleItem* itemA, BattleItem* itemB) const
+		{
+			if (itemA->getRules()->getEquipPriority() == itemB->getRules()->getEquipPriority())
+			{
+				int qtyA = 0;
+				int qtyB = 0;
+
+				if (itemA->getRules()->getBattleType() == BT_MEDIKIT)
+					qtyA = itemA->getHealQuantity() + itemA->getStimulantQuantity() + itemA->getPainKillerQuantity();
+				else if (itemA->getRules()->getBattleType() == BT_AMMO)
+					qtyA = itemA->getAmmoQuantity();
+				else if (itemA->getAmmoItem())
+					qtyA = itemA->getAmmoItem()->getAmmoQuantity();
+				if (itemB->getRules()->getBattleType() == BT_MEDIKIT)
+					qtyB = itemB->getHealQuantity() + itemB->getStimulantQuantity() + itemB->getPainKillerQuantity();
+				else if (itemB->getRules()->getBattleType() == BT_AMMO)
+					qtyB = itemB->getAmmoQuantity();
+				else if (itemB->getAmmoItem())
+					qtyB = itemB->getAmmoItem()->getAmmoQuantity();
+
+				return qtyA > qtyB;
+			}
+			return itemA->getRules()->getEquipPriority() > itemB->getRules()->getEquipPriority();
+		}
+	};
 };
 
 }

@@ -457,15 +457,18 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		placeItemByLayout(*i);
 	}
+
 	// auto-equip soldiers (only soldiers without layout)
-	for (std::vector<BattleItem*>::reverse_iterator i = _craftInventoryTile->getInventory()->rbegin(); i != _craftInventoryTile->getInventory()->rend(); ++i)
+	std::sort (_craftInventoryTile->getInventory()->begin(), _craftInventoryTile->getInventory()->end(), Inventory::CompareItems());
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, false);
 	}
-	for (std::vector<BattleItem*>::reverse_iterator i = _craftInventoryTile->getInventory()->rbegin(); i != _craftInventoryTile->getInventory()->rend(); ++i)
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, true);
 	}
+
 	// clean up moved items
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end();)
@@ -547,9 +550,9 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
 		{
 			// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-			if (_save->getTiles()[i] && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
+			if (_save->getTiles()[i] &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT &&
 				!_save->getTiles()[i]->getMapData(MapData::O_OBJECT) &&
 				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
 			{
@@ -601,7 +604,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 		std::string alienName = race->getMember((*d).alienRank);
 
 		int quantity;
-		
+
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
 			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
 		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
@@ -802,41 +805,68 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 
 /**
  * Adds an item to an XCom soldier (auto-equip).
+ *
+ * First time round, that is when secondPass is false, assigns only firearms,
+ * as long as the unit can carry it without encumberance while also carrying more standard issue XCom kit.
+ *
+ * Second time round, all items are assignable, with firearms no longer encumbrance checked.
+ * Non firearms are assigned only if the unit does not become encumbered.
  * @param item Pointer to the Item.
  * @param secondPass Is this the second time through the equipping routine?
  * @return Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
+	// If true, item is elegible to be equipped in the first pass and encumbrance checking is skipped.
+	bool forcing = item->getRules()->getEquipPriority() > 999;
+
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
-	if (item->getSlot() == ground)
+
+	if (item->getSlot() == ground
+		&& (secondPass || item->getRules()->getBattleType() == BT_FIREARM || forcing)
+		&& item->getRules()->getEquipPriority() > -1)
 	{
 		bool loaded = false;
+		bool placed = false;
 		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+		RuleInventory *lefthand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 
 		switch (item->getRules()->getBattleType())
 		{
 		case BT_AMMO:
-			if (secondPass)
+			for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
 			{
-				bool placed = false;
-				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
+				BattleItem *weapon = (*bu)->getMainHandWeapon();
+				if (weapon && weapon->getRules()->getCompatibleAmmo())
 				{
-					if ((*bu)->getMainHandWeapon() && (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo())
+					for (std::vector<std::string>::iterator it = weapon->getRules()->getCompatibleAmmo()->begin(); it != weapon->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
 					{
-						for (std::vector<std::string>::iterator it = (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->begin(); it != (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
+						// Only give the ammo to a unit who has a compatible weapon and no spare clip already
+						if (*it == item->getRules()->getType()
+							&& !(*bu)->getCompatibleAmmo(weapon)
+							&& (forcing || (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight()))
 						{
-							if (*it == item->getRules()->getType())
+							// regular ammo goes in belts
+							if (item->getRules()->getInventoryHeight() == 1
+								&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
 							{
-								if (item->getRules()->getInventoryHeight() == 1 && !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 1, 0))
-								{
-									item->moveToOwner((*bu));
-									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-									item->setSlotX(1);
-									item->setSlotY(0);
-									placed = true;
-									break;
-								}
+								item->moveToOwner(*bu);
+								item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+								item->setSlotX(1);
+								item->setSlotY(0);
+								placed = true;
+								break;
+							}
+							// rockets and blaster shells go in back packs
+							else if (item->getRules()->getInventoryHeight() > 1
+								&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 0, 0))
+							{
+								item->moveToOwner(*bu);
+								item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+								item->setSlotX(0);
+								item->setSlotY(0);
+								placed = true;
+								break;
 							}
 						}
 					}
@@ -847,26 +877,23 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 		case BT_PROXIMITYGRENADE:
 		case BT_SCANNER:
 			// find the first soldier with a free belt slot to equip grenades
-			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 			{
 				// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
-				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+				if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
+				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 0, 0)) continue;	// Spare belt slot(s)
+				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// Do not encumber
 
-				if (!Inventory::overlapItems(*i, item, _game->getRuleset()->getInventory("STR_BELT"), 0, 0))
-				{
-					// at this point we are assuming (1,0) is not occupied already (with eg. a grenade)
-					// (this is relevant in the case of HIGH EXPLOSIVE which occupies two slot)
-					item->moveToOwner((*i));
-					item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-					item->setSlotX(0);
-					item->setSlotY(0);
-					break;
-				}
+				item->moveToOwner(*bu);
+				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				item->setSlotX(0);
+				item->setSlotY(0);
+				break;
 			}
 			break;
-		case BT_FIREARM:
 		case BT_MELEE:
+		case BT_FIREARM:
 			// maybe we find ammo on the ground to load it with
 			if (item->getRules()->getCompatibleAmmo()->empty() || item->getAmmoItem())
 			{
@@ -874,7 +901,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 			}
 			for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end() && !loaded; ++i)
 			{
-				if ((*i)->getSlot() == ground && item->setAmmoItem((*i)) == 0)
+				if ((*i)->getSlot() == ground && item->setAmmoItem(*i) == 0)
 				{
 					(*i)->setSlot(righthand);
 					loaded = true;
@@ -884,55 +911,93 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 			if (loaded)
 			{
 				// find the first soldier with a free right hand to equip weapons
-				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 				{
 					// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
-					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-					if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+					if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
+					if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+					if ((*bu)->getItem("STR_RIGHT_HAND")) continue;	// Skip units with a weapon already.
 
-					if (!(*i)->getItem("STR_RIGHT_HAND"))
+					// Ideally want a unit that can carry this weapon, extra ammo and a bit of extra kit.
+					if (!forcing && !secondPass && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight() + 12) continue;
+
+					placed = true;
+					item->moveToOwner(*bu);
+					item->setSlot(righthand);
+					break;
+				}
+				if (placed) break;
+
+				// At this point, we possibly have a heavy weapon that our units are too weak to carry;
+				// skip for now as we might have something lighter like a pistol.
+				if (!secondPass) break;
+
+				if (item->getRules()->getBattleType() == BT_MELEE)
+				{
+					// setup satisfying pistol/stun rod combination
+					for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 					{
-						item->moveToOwner((*i));
-						item->setSlot(righthand);
-						break;
+						BattleItem *weaponRightHand = (*bu)->getItem("STR_RIGHT_HAND");
+						BattleItem *weaponLeftHand = (*bu)->getItem("STR_LEFT_HAND");
+						if (weaponRightHand && !weaponLeftHand
+							&& !weaponRightHand->getRules()->isTwoHanded()
+							&& !(*bu)->isCarrying(item->getRules()->getName()))
+						{
+							item->moveToOwner(*bu);
+							item->setSlot(lefthand);
+							placed = true;
+							break;
+						}
+					}
+					if (placed) break;
+
+					// try to place in backpack
+					for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+					{
+						if (!(*bu)->isCarrying(item->getRules()->getName())
+							&& !Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BACK_PACK"), 2, 0)
+							&& (forcing || (*bu)->getStats()->strength >= (*bu)->getCarriedWeight() + item->getRules()->getWeight()))
+						{
+							item->moveToOwner(*bu);
+							item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+							item->setSlotX(2);
+							item->setSlotY(0);
+							break;
+						}
 					}
 				}
 			}
 			break;
 		case BT_MEDIKIT:
-			// find the first soldier with a free belt for medikit (2 spaces)
-			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 			{
 				// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
-				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+				if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
+				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_BELT"), 3, 0)) continue;	// need belt space
+				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
 
-				if (!Inventory::overlapItems(*i, item, _game->getRuleset()->getInventory("STR_BELT"), 3, 0))
-				{
-					// at this point we are assuming (3,1) is not occupied already (with eg. a grenade)
-					item->moveToOwner((*i));
-					item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-					item->setSlotX(3);
-					item->setSlotY(0);
-					break;
-				}
+				item->moveToOwner(*bu);
+				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				item->setSlotX(3);
+				item->setSlotY(0);
+				break;
 			}
 			break;
 		case BT_FLARE:
-			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 			{
 				// skip the vehicles
-				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+				if ((*bu)->getArmor()->getSize() > 1 || 0 == (*bu)->getGeoscapeSoldier()) continue;
+				if (!((*bu)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+				if (Inventory::overlapItems(*bu, item, _game->getRuleset()->getInventory("STR_LEFT_SHOULDER"), 1, 0)) continue;	// free shoulder space
+				if (!forcing && (*bu)->getStats()->strength < (*bu)->getCarriedWeight() + item->getRules()->getWeight()) continue;	// don't encumber
 
-				if (!Inventory::overlapItems(*i, item, _game->getRuleset()->getInventory("STR_LEFT_SHOULDER"), 1, 0))
-				{
-					item->moveToOwner((*i));
-					item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
-					item->setSlotX(1);
-					item->setSlotY(0);
-					break;
-				}
+				item->moveToOwner(*bu);
+				item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
+				item->setSlotX(1);
+				item->setSlotY(0);
+				break;
 			}
 			break;
 		default:
@@ -947,7 +1012,6 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 	}
 	return item;
 }
-
 
 /**
  * Adds an item to the game and assigns it to a unit.
@@ -1732,7 +1796,7 @@ void BattlescapeGenerator::fuelPowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) 
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem *elerium = new BattleItem(_game->getRuleset()->getItem("STR_ELERIUM_115"), _save->getCurrentItemId());

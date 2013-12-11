@@ -446,8 +446,7 @@ void Ruleset::loadFile(const std::string &filename)
 			_extraStringsIndex.push_back(type);
 		}
 	}
-
-  // refresh _psiRequirements for psiStrengthEval
+	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		RuleBaseFacility *rule = getBaseFacility(*i);
@@ -1123,6 +1122,7 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
 {
 	return _extraSounds;
 }
+
 /**
  * Gets the list of external strings.
  * @return The list of external strings.
@@ -1171,7 +1171,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		while (list.find(getBaseFacility(*i)->getListOrder() + offset) != list.end())
@@ -1187,7 +1187,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
 	{
 		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
@@ -1203,7 +1203,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	int alternateEntry = 0;
 	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
 	{
@@ -1228,7 +1228,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
 	{
 		while (list.find(getUfopaediaArticle(*i)->getListOrder() + offset) != list.end())
@@ -1244,7 +1244,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _researchIndex.begin(); i != _researchIndex.end(); ++i)
 	{
 		while (list.find(getResearch(*i)->getListOrder() + offset) != list.end())
@@ -1260,7 +1260,7 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _manufactureIndex.begin(); i != _manufactureIndex.end(); ++i)
 	{
 		while (list.find(getManufacture(*i)->getListOrder() + offset) != list.end())
