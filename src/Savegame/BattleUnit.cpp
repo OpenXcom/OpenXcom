@@ -1585,6 +1585,7 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 	if (!_tile)
 	{
 		_floating = false;
+		_kneeled = false;
 		return;
 	}
 	// unit could have changed from flying to walking or vice versa
