@@ -39,7 +39,7 @@ private:
 	int _ammo, _size;
 public:
 	/// Creates a vehicle of the specified type.
-	Vehicle(RuleItem *rules, int ammo, int space);
+	Vehicle(RuleItem *rules, int ammo, int size);
 	/// Cleans up the vehicle.
 	~Vehicle();
 	/// Loads the vehicle from YAML.

@@ -806,7 +806,7 @@ int Craft::getSpaceUsed() const
 	int vehicleSpaceUsed = 0;
 	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
-		vehicleSpaceUsed += (*i)->getSize() * (*i)->getSize();
+		vehicleSpaceUsed += (*i)->getSize();
 	}
 	return getNumSoldiers() + vehicleSpaceUsed;
 }
