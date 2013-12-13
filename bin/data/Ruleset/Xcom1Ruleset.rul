@@ -9162,6 +9162,15 @@ MCDPatches:
         bigWall: 2
       - MCDIndex: 13
         bigWall: 7
+        LOFTS: [44,44,44,44,44,44,44,44,44,44,44,44]
+      - MCDIndex: 54
+        TUSlide: 2
+  - type: PLANE
+    data:
+      - MCDIndex: 49
+        LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
+      - MCDIndex: 51
+        LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
   - type: U_EXT02
     data:
       - MCDIndex: 2
