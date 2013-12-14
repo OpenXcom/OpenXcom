@@ -2720,4 +2720,55 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 	}
 	return originVoxel;
 }
+
+/*
+ * mark a region of the map as "dangerous" for a turn.
+ * @param pos is the epicenter of the explosion.
+ * @param radius how far to spread out.
+ * @param unit the unit that is triggering this action.
+ */
+void TileEngine::setDangerZone(Position pos, int radius, BattleUnit *unit)
+{
+	Tile *tile = _save->getTile(pos);
+	if (!tile)
+	{
+		return;
+	}
+	// set the epicenter as dangerous
+	tile->setDangerous();
+	Position originVoxel = (pos * Position(16,16,24)) + Position(8,8,12 + -tile->getTerrainLevel());
+	Position targetVoxel;
+	for (int x = -radius; x != radius; ++x)
+	{
+		for (int y = -radius; y != radius; ++y)
+		{
+			// we can skip the epicenter
+			if (x != 0 || y != 0)
+			{
+				// make sure we're within the radius
+				if ((x*x)+(y*y) <= (radius*radius))
+				{
+					tile = _save->getTile(pos + Position(x,y,0));
+					if (tile)
+					{
+						targetVoxel = ((pos + Position(x,y,0)) * Position(16,16,24)) + Position(8,8,12 + -tile->getTerrainLevel());
+						std::vector<Position> trajectory;
+						// we'll trace a line here, ignoring all units, to check if the explosion will reach this point
+						// granted this won't properly account for explosions tearing through walls, but then we can't really
+						// know that kind of information before the fact, so let's have the AI assume that the wall (or tree)
+						// is enough to protect them.
+						if (calculateLine(originVoxel, targetVoxel, false, &trajectory, unit, true, false, unit) == V_EMPTY)
+						{
+							if (trajectory.size() && (trajectory.back() / Position(16,16,24)) == pos + Position(x,y,0))
+							{
+								tile->setDangerous();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 }
