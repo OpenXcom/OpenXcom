@@ -1198,7 +1198,7 @@ void Base::setupDefenses()
 				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
 				if (0 >= baqty || 0 >= iqty) { ++i; continue; }
 				int canBeAdded = std::min(iqty, baqty);
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
 				int remainder = 0;
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 				int newAmmo;

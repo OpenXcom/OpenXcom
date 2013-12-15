@@ -47,7 +47,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0), _overlaps(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0), _overlaps(0), _danger(false)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -782,6 +782,7 @@ void Tile::prepareNewTurn()
 		}
 	}
 	_overlaps = 0;
+	_danger = false;
 }
 
 /**
@@ -874,6 +875,22 @@ int Tile::getOverlaps() const
 void Tile::addOverlap()
 {
 	++_overlaps;
+}
+
+/*
+ * set the danger flag on this tile.
+ */
+void Tile::setDangerous()
+{
+	_danger = true;
+}
+
+/*
+ * @return the danger flag for this tile.
+ */
+bool Tile::getDangerous()
+{
+	return _danger;
 }
 
 }

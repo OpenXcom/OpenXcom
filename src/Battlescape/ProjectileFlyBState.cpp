@@ -357,6 +357,10 @@ void ProjectileFlyBState::think()
 				else
 				{
 					_parent->dropItem(pos, item);
+					if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+					{
+						_parent->getTileEngine()->setDangerZone(pos, item->getRules()->getExplosionRadius(), _action.actor);
+					}
 				}
 			}
 			else if (_action.type == BA_LAUNCH && _action.waypoints.size() > 1 && _projectileImpact == -1)
