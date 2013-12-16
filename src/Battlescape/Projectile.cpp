@@ -194,10 +194,23 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	_trajectory.clear();
 
-	// apply some accuracy modifiers (todo: calculate this)
+	// even guided missiles drift, but how much is based on
+	// the shooter's faction, rather than accuracy.
+	if (_action.type == BA_LAUNCH)
+	{
+		if (_action.actor->getFaction() == FACTION_PLAYER)
+		{
+			accuracy = 0.60;
+		}
+		else
+		{
+			accuracy = 0.55;
+		}
+	}
+
+	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
+	applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
