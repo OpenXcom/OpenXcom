@@ -188,7 +188,7 @@ void ExplosionBState::explode()
 				&& victim
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty()
-				&& victim->getSpecialAbility() == SPECAB_NONE)
+				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);
