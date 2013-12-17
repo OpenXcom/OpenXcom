@@ -2186,19 +2186,19 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	Tile *tile = _save->getTile(voxel / Position(16, 16, 24));
+	Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return V_OUTOFBOUNDS;
 	}
-	if (tile->isVoid() && tile->getUnit() == 0)
+	if (tile->isVoid() && tile->getUnit() == 0 && (!tileBelow || tileBelow->getUnit() == 0))
 	{
 		return V_EMPTY;
 	}
 
 	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
 		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
 			return V_FLOOR;
 	}
@@ -2457,7 +2457,7 @@ Tile *TileEngine::applyGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir)
 {
-	return validMeleeRange(attacker->getPosition(), dir, attacker, target);
+	return validMeleeRange(attacker->getPosition(), dir, attacker, target, 0);
 }
 
 /**
@@ -2468,7 +2468,7 @@ bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int d
  * @param target The unit we want to attack, 0 for any unit.
  * @return True when the range is valid.
  */
-bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target)
+bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest)
 {
 	if (direction < 0 || direction > 7)
 	{
@@ -2484,12 +2484,17 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attack
 			Tile *origin (_save->getTile(Position(pos + Position(x, y, 0))));
 			Tile *targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
 			Tile *aboveTargetTile (_save->getTile(Position(pos + Position(x, y, 1) + p)));
+			Tile *belowTargetTile (_save->getTile(Position(pos + Position(x, y, -1) + p)));
 
 			if (targetTile && origin)
 			{
 				if (origin->getTerrainLevel() <= -16 && aboveTargetTile && !aboveTargetTile->hasNoFloor(targetTile))
 				{
 					targetTile = aboveTargetTile;
+				}
+				else if (belowTargetTile && targetTile->hasNoFloor(belowTargetTile) && !targetTile->getUnit() && belowTargetTile->getTerrainLevel() <= -16)
+				{
+					targetTile = belowTargetTile;
 				}
 				if (targetTile->getUnit())
 				{
@@ -2500,6 +2505,10 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attack
 						Position targetVoxel;
 						if (canTargetUnit(&originVoxel, targetTile, &targetVoxel, attacker))
 						{
+							if (dest)
+							{
+								*dest = targetTile->getPosition();
+							}
 							return true;
 						}
 					}

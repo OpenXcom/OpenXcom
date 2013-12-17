@@ -1007,7 +1007,7 @@ int AlienBAIState::selectNearestTarget()
 					if (selectPointNearTarget(*i, _unit->getTimeUnits()))
 					{
 						int dir = _save->getTileEngine()->getDirectionTo(_attackAction->target, (*i)->getPosition());
-						validTarget = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i);
+						validTarget = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i, 0);
 					}
 				}
 				if (validTarget)
@@ -1094,7 +1094,7 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
 				int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
-				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target);
+				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
 				bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
 
 				if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
