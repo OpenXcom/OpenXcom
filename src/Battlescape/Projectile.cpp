@@ -207,7 +207,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		{
 			accuracy = 0.55;
 		}
-		extendLine = false;
+		extendLine = _action.waypoints.size() <= 1;
 	}
 
 	// apply some accuracy modifiers.
