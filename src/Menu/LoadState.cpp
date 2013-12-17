@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 0)
+LoadState::LoadState( OptionsOrigin origin) : SavedGameState(origin, 0)
 {
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
@@ -54,7 +54,7 @@ LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, 0,showMsg)
+LoadState::LoadState( OptionsOrigin origin, bool showMsg) : SavedGameState(origin, 0,showMsg)
 {
 	quickLoad("autosave");
 }
@@ -79,7 +79,7 @@ void LoadState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+        _game->pushState(new DeleteGameState( _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
 	}
 }
 
@@ -96,11 +96,11 @@ void LoadState::quickLoad(const std::string &filename)
 	{
 		s->load(filename, _game->getRuleset());
 		_game->setSavedGame(s);
-		_game->setState(new GeoscapeState(_game));
+        _game->setState(new GeoscapeState);
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
-			BattlescapeState *bs = new BattlescapeState(_game);
+            BattlescapeState *bs = new BattlescapeState;
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
@@ -111,9 +111,9 @@ void LoadState::quickLoad(const std::string &filename)
 		std::wstringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+            _game->pushState(new ErrorMessageState( error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+            _game->pushState(new ErrorMessageState( error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);
@@ -126,9 +126,9 @@ void LoadState::quickLoad(const std::string &filename)
 		std::wstringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+            _game->pushState(new ErrorMessageState( error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+            _game->pushState(new ErrorMessageState( error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);

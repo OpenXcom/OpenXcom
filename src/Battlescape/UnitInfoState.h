@@ -55,7 +55,7 @@ private:
 	Bar *_barFrontArmor, *_barLeftArmor, *_barRightArmor, *_barRearArmor, *_barUnderArmor;
 public:
 	/// Creates the Unit Info state.
-	UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent);
+    UnitInfoState( BattleUnit *unit, BattlescapeState *parent);
 	/// Cleans up the Unit Info state.
 	~UnitInfoState();
 	/// Updates the unit info.

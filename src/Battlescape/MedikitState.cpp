@@ -119,7 +119,7 @@ MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
  * @param targetUnit The wounded unit.
  * @param action The healing action.
  */
-MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action) : State (game), _targetUnit(targetUnit), _action(action)
+MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action) : _targetUnit(targetUnit), _action(action)
 {
 	_unit = action->actor;
 	_item = action->weapon;

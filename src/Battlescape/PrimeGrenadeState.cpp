@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to  the action.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
+PrimeGrenadeState::PrimeGrenadeState( BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) :  _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 

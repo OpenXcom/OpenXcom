@@ -36,7 +36,7 @@ namespace OpenXcom
  * Initializes all the elements in the Victory screen.
  * @param game Pointer to the core game.
  */
-VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
+VictoryState::VictoryState() :  _screenNumber(0)
 {
 	// Create objects
 	_screen = new InteractiveSurface(320, 200, 0, 0);
@@ -96,7 +96,7 @@ void VictoryState::windowClick(Action *)
 	if(_screenNumber == 5)
 	{
 		_game->popState();
-		_game->setState(new MainMenuState(_game));
+        _game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 	else

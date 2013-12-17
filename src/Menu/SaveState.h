@@ -39,9 +39,9 @@ private:
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
-	SaveState(Game *game, OptionsOrigin origin);
+    SaveState( OptionsOrigin origin);
 	/// Creates the Quick Save Game state.
-	SaveState(Game *game, OptionsOrigin origin, bool showMsg);
+    SaveState( OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Save Game state.
 	~SaveState();
 	/// Updates the savegame list.

@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft in the mission.
  * @param base Pointer to the base in the mission.
  */
-BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
+BriefingState::BriefingState( Craft *craft, Base *base)
 {
 	_screen = false;
 	// Create objects
@@ -170,20 +170,20 @@ BriefingState::~BriefingState()
 void BriefingState::btnOkClick(Action *)
 {
 	_game->popState();
-	BattlescapeState *bs = new BattlescapeState(_game);
+    BattlescapeState *bs = new BattlescapeState;
 	int liveAliens = 0, liveSoldiers = 0;
 	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);
 		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-		_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
-		_game->pushState(new InventoryState(_game, false, bs));
+        _game->pushState(new NextTurnState( _game->getSavedGame()->getSavedBattle(), bs));
+        _game->pushState(new InventoryState( false, bs));
 	}
 	else
 	{
 		delete bs;
-		_game->pushState(new AliensCrashState(_game));
+        _game->pushState(new AliensCrashState);
 	}
 }
 

@@ -52,7 +52,7 @@ struct GraphButInfo
  * Initializes all the elements in the Graphs screen.
  * @param game Pointer to the core game.
  */
-GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCountriesOffset(0)
+GraphsState::GraphsState() :  _butRegionsOffset(0), _butCountriesOffset(0)
 {
 	// Create objects
 	_bg = new InteractiveSurface(320, 200, 0, 0);

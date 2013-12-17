@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+PauseState::PauseState( OptionsOrigin origin) :  _origin(origin)
 {
 	_screen = false;
 
@@ -150,7 +150,7 @@ void PauseState::init()
  */
 void PauseState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, _origin));
+    _game->pushState(new LoadState( _origin));
 }
 
 /**
@@ -159,7 +159,7 @@ void PauseState::btnLoadClick(Action *)
  */
 void PauseState::btnSaveClick(Action *)
 {
-	_game->pushState(new SaveState(_game, _origin));
+    _game->pushState(new SaveState( _origin));
 }
 
 /**
@@ -168,7 +168,7 @@ void PauseState::btnSaveClick(Action *)
 */
 void PauseState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game, _origin));
+    _game->pushState(new OptionsState( _origin));
 }
 
 /**
@@ -177,7 +177,7 @@ void PauseState::btnOptionsClick(Action *)
  */
 void PauseState::btnAbandonClick(Action *)
 {
-	_game->pushState(new AbandonGameState(_game, _origin));
+    _game->pushState(new AbandonGameState( _origin));
 }
 
 /**

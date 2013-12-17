@@ -43,7 +43,7 @@ private:
 	Text *_txtMessage;
 public:
 	/// Creates the Craft Error state.
-	CraftErrorState(Game *game, GeoscapeState *state, const std::wstring &msg);
+    CraftErrorState( GeoscapeState *state, const std::wstring &msg);
 	/// Cleans up the Craft Error state.
 	~CraftErrorState();
 	/// Updates the palette.

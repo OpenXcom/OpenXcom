@@ -110,7 +110,7 @@ KeyOption OptionsControlsState::_controlsBattle[] =
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin), _selected(-1), _selKey(0)
+OptionsControlsState::OptionsControlsState( OptionsOrigin origin) : OptionsBaseState(origin), _selected(-1), _selKey(0)
 {
 	_countGeneral = 4;
 	_countGeo = 20;
@@ -135,7 +135,7 @@ OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : O
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+    _window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));

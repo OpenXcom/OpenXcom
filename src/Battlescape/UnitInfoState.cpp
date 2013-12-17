@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param unit Pointer to the selected unit.
  * @param parent Pointer to parent Battlescape.
  */
-UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent) : State(game), _unit(unit), _parent(parent)
+UnitInfoState::UnitInfoState( BattleUnit *unit, BattlescapeState *parent) :  _unit(unit), _parent(parent)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);

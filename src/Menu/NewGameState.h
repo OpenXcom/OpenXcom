@@ -43,7 +43,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the New Game state.
-	NewGameState(Game *game);
+    NewGameState();
 	/// Cleans up the New Game state.
 	~NewGameState();
 	/// Creates a new game.

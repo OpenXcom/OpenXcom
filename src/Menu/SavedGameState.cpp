@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow) : State(game), _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow)
+SavedGameState::SavedGameState( OptionsOrigin origin, int firstValidRow) :  _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow)
 {
 	_screen = false;
 
@@ -76,7 +76,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+    _window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8) + 5);
 
@@ -125,7 +125,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true), _firstValidRow(firstValidRow)
+SavedGameState::SavedGameState( OptionsOrigin origin, int firstValidRow, bool showMsg) :  _origin(origin), _showMsg(showMsg), _noUI(true), _firstValidRow(firstValidRow)
 {
 	if (_showMsg)
 	{

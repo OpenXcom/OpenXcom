@@ -235,7 +235,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _ufoHitFrame(0), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _interceptionsCount(0), _interceptionNumber(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
+DogfightState::DogfightState( Globe *globe, Craft *craft, Ufo *ufo) :  _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _ufoHitFrame(0), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _interceptionsCount(0), _interceptionNumber(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
 {
 	_screen = false;
 

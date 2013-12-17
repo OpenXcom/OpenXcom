@@ -43,13 +43,13 @@ class LocalizedText;
 class State
 {
 protected:
-	Game *_game;
+    static Game* _game;
 	std::vector<Surface*> _surfaces;
 	bool _screen;
 
 public:
 	/// Creates a new state linked to a game.
-	State(Game* game);
+    State();
 	/// Cleans up the state.
 	virtual ~State();
 	/// Adds a child element to the state.
@@ -79,6 +79,7 @@ public:
 	void centerAllSurfaces();
 	void lowerAllSurfaces();
 	void applyBattlescapeTheme();
+    static void setGamePtr(Game* game);
 	friend class Timer;
 };
 

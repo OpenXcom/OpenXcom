@@ -50,7 +50,7 @@ const std::string OptionsState::GL_STRING = " (OpenGL)";
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsState::OptionsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsState::OptionsState( OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	_wClicked = false;
 	_hClicked = false;
@@ -402,7 +402,7 @@ void OptionsState::btnDefaultClick(Action *)
 	
 	_game->popState();
 	*/
-	_game->pushState(new OptionsBattlescapeState(_game, _origin));
+    _game->pushState(new OptionsBattlescapeState( _origin));
 }
 
 /**
@@ -411,7 +411,7 @@ void OptionsState::btnDefaultClick(Action *)
  */
 void OptionsState::btnLanguageClick(Action *)
 {
-	_game->pushState(new OptionsLanguageState(_game, _origin));
+    _game->pushState(new OptionsLanguageState( _origin));
 }
 
 /**
@@ -420,7 +420,7 @@ void OptionsState::btnLanguageClick(Action *)
  */
 void OptionsState::btnControlsClick(Action *)
 {
-	_game->pushState(new OptionsControlsState(_game, _origin));
+    _game->pushState(new OptionsControlsState( _origin));
 }
 
 /**
@@ -517,7 +517,7 @@ void OptionsState::btnDisplayFilterClick(Action *action)
 
 void OptionsState::btnAdvancedClick(Action *)
 {
-	_game->pushState(new OptionsAdvancedState(_game, _origin));
+    _game->pushState(new OptionsAdvancedState( _origin));
 }
 
 }

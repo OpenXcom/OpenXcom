@@ -38,7 +38,7 @@ namespace OpenXcom
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
  */
-PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(0), _base3(0), _base4(0), _base5(0), _base6(0), _base7(0), _base8(0)
+PsiTrainingState::PsiTrainingState() :  _base1(0), _base2(0), _base3(0), _base4(0), _base5(0), _base6(0), _base7(0), _base8(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -173,34 +173,34 @@ void PsiTrainingState::btnOkClick(Action *)
 
 void PsiTrainingState::btnBase1Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base1));
+    _game->pushState (new AllocatePsiTrainingState( _base1));
 }
 void PsiTrainingState::btnBase2Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base2));
+    _game->pushState (new AllocatePsiTrainingState( _base2));
 }
 void PsiTrainingState::btnBase3Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base3));
+    _game->pushState (new AllocatePsiTrainingState( _base3));
 }
 void PsiTrainingState::btnBase4Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base4));
+    _game->pushState (new AllocatePsiTrainingState( _base4));
 }
 void PsiTrainingState::btnBase5Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base5));
+    _game->pushState (new AllocatePsiTrainingState( _base5));
 }
 void PsiTrainingState::btnBase6Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base6));
+    _game->pushState (new AllocatePsiTrainingState( _base6));
 }
 void PsiTrainingState::btnBase7Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base7));
+    _game->pushState (new AllocatePsiTrainingState( _base7));
 }
 void PsiTrainingState::btnBase8Click(Action *)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base8));
+    _game->pushState (new AllocatePsiTrainingState( _base8));
 }
 }

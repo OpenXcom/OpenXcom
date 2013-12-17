@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the Basescape state.
  */
-BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : State(game), _base(base), _state(state)
+BaseInfoState::BaseInfoState( Base *base, BasescapeState *state) :  _base(base), _state(state)
 {
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	// Create objects
@@ -457,7 +457,7 @@ void BaseInfoState::btnOkClick(Action *)
  */
 void BaseInfoState::btnTransfersClick(Action *)
 {
-	_game->pushState(new TransfersState(_game, _base));
+    _game->pushState(new TransfersState( _base));
 }
 
 /**
@@ -466,7 +466,7 @@ void BaseInfoState::btnTransfersClick(Action *)
  */
 void BaseInfoState::btnStoresClick(Action *)
 {
-	_game->pushState(new StoresState(_game, _base));
+    _game->pushState(new StoresState( _base));
 }
 
 /**
@@ -475,7 +475,7 @@ void BaseInfoState::btnStoresClick(Action *)
  */
 void BaseInfoState::btnMonthlyCostsClick(Action *)
 {
-	_game->pushState(new MonthlyCostsState(_game, _base));
+    _game->pushState(new MonthlyCostsState( _base));
 }
 
 }

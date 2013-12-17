@@ -41,7 +41,7 @@ namespace OpenXcom
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
  */
-StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
+StartState::StartState() :  _load(LOADING_NONE)
 {
 	// Create objects
 	int dx = (Options::getInt("baseXResolution") - 320) / 2;
@@ -551,7 +551,7 @@ void StartState::think()
 		break;
 	case LOADING_SUCCESSFUL:
 		Log(LOG_INFO) << "OpenXcom started successfully!";
-		_game->setState(new MainMenuState(_game));
+        _game->setState(new MainMenuState);
 		break;
 	default:
 		break;

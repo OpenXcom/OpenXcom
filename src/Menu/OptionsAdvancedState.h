@@ -47,7 +47,7 @@ private:
 	std::vector<std::pair<std::string, int> > _settingIntSet;
 public:
 	/// Creates the Advanced state.
-	OptionsAdvancedState(Game *game, OptionsOrigin origin);
+    OptionsAdvancedState( OptionsOrigin origin);
 	/// Cleans up the Advanced state.
 	~OptionsAdvancedState();
 	/// Handler for clicking the OK button.

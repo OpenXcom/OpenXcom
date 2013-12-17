@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param base Pointer to base to show contained crafts (NULL to show all crafts).
  * @param target Pointer to target to intercept (NULL to ask user for target).
  */
-InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *target) : State(game), _globe(globe), _base(base), _target(target), _crafts()
+InterceptState::InterceptState( Globe *globe, Base *base, Target *target) :  _globe(globe), _base(base), _target(target), _crafts()
 {
 	_screen = false;
 
@@ -184,11 +184,11 @@ void InterceptState::lstCraftsLeftClick(Action *)
 		_game->popState();
 		if (_target == 0)
 		{
-			_game->pushState(new SelectDestinationState(_game, c, _globe));
+            _game->pushState(new SelectDestinationState( c, _globe));
 		}
 		else
 		{
-			_game->pushState(new ConfirmDestinationState(_game, c, _target));
+            _game->pushState(new ConfirmDestinationState( c, _target));
 		}
 	}
 }

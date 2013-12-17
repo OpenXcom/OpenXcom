@@ -69,7 +69,7 @@ private:
 	int getCraftIndex(unsigned selected) const;
 public:
 	/// Creates the Sell state.
-	SellState(Game *game, Base *base);
+    SellState( Base *base);
 	/// Cleans up the Sell state.
 	~SellState();
 	/// Runs the timers.

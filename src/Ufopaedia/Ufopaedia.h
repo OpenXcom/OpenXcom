@@ -96,7 +96,7 @@ namespace OpenXcom
 		static ArticleDefinitionList getAvailableArticles(Game *game);
 
 		/// create a new state object from article definition.
-		static ArticleState *createArticleState(Game *game, ArticleDefinition *article);
+        static ArticleState *createArticleState(ArticleDefinition *article);
 	};
 }
 

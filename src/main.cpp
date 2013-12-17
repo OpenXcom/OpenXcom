@@ -59,7 +59,8 @@ int main(int argc, char** args)
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		game = new Game(title.str());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
-		game->setState(new StartState(game));
+        State::setGamePtr(game);
+        game->setState(new StartState);
 		game->run();
 #ifndef _DEBUG
 	}

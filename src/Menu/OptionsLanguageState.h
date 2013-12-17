@@ -45,7 +45,7 @@ private:
 	std::vector<std::string> _langs;
 public:
 	/// Creates the Start state.
-	OptionsLanguageState(Game *game, OptionsOrigin origin);
+    OptionsLanguageState( OptionsOrigin origin);
 	/// Cleans up the Start state.
 	~OptionsLanguageState();
 	/// Handler for clicking the Language list.

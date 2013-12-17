@@ -52,7 +52,7 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
+NewBattleState::NewBattleState() :  _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -455,7 +455,7 @@ void NewBattleState::btnOkClick(Action *)
 	bgen.setAlienItemlevel(_selItemLevel);
 
 	bgen.run();
-	//_game->pushState(new BattlescapeState(_game));
+    //_game->pushState(new BattlescapeState);
 	Base *base = 0;
 	if (_missionTypes[_selMission] == "STR_BASE_DEFENSE")
 	{
@@ -464,7 +464,7 @@ void NewBattleState::btnOkClick(Action *)
 	}
 	_game->popState();
 	_game->popState();
-	_game->pushState(new BriefingState(_game, _craft, base));
+    _game->pushState(new BriefingState( _craft, base));
 	_craft = 0;
 }
 
@@ -513,7 +513,7 @@ void NewBattleState::btnRandomClick(Action *)
  */
 void NewBattleState::btnEquipClick(Action *)
 {
-	_game->pushState(new CraftInfoState(_game, _game->getSavedGame()->getBases()->front(), 0));
+    _game->pushState(new CraftInfoState( _game->getSavedGame()->getBases()->front(), 0));
 }
 
 /**

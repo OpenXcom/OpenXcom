@@ -43,7 +43,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the Pause state.
-	PauseState(Game *game, OptionsOrigin origin);
+    PauseState( OptionsOrigin origin);
 	/// Cleans up the Pause state.
 	~PauseState();
 	/// Updates the palette.

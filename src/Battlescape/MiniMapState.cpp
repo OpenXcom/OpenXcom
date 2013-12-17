@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param camera The Battlescape camera.
  * @param battleGame The Battlescape save.
  */
-MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State(game)
+MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame)
 {
 	_surface = new InteractiveSurface(320, 200);
 	_miniMapView = new MiniMapView(222, 150, 49, 15, game, camera, battleGame);

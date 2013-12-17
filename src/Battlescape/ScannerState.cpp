@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to an action.
  */
-ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _action(action)
+ScannerState::ScannerState (Game * game, BattleAction *action) : _action(action)
 {
 	_surface1 = new InteractiveSurface(320, 200);
 	_surface2 = new InteractiveSurface(320, 200);

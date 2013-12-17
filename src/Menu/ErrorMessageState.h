@@ -42,9 +42,9 @@ private:
 	void create(const std::string &str, const std::wstring &wstr, Uint8 color, std::string bg, Uint8 bgColor);
 public:
 	/// Creates the Error state.
-	ErrorMessageState(Game *game, const std::string &id, Uint8 color, std::string bg, Uint8 bgColor);
+    ErrorMessageState( const std::string &id, Uint8 color, std::string bg, Uint8 bgColor);
 	/// Creates the Error state.
-	ErrorMessageState(Game *game, const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor);
+    ErrorMessageState( const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor);
 	/// Cleans up the Error state.
 	~ErrorMessageState();
 	/// Handler for clicking the OK button.

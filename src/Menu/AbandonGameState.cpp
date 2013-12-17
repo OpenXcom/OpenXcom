@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+AbandonGameState::AbandonGameState( OptionsOrigin origin) :  _origin(origin)
 {
 	_screen = false;
 
@@ -106,11 +106,11 @@ void AbandonGameState::btnYesClick(Action *)
 {
 	if (Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(_game, _origin, false);
+        SaveState *ss = new SaveState( _origin, false);
 		delete ss;
 	}
 
-	_game->setState(new MainMenuState(_game));
+    _game->setState(new MainMenuState);
 	_game->setSavedGame(0);
 }
 

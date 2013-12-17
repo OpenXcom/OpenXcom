@@ -71,7 +71,7 @@ private:
 	int _containmentLimit;
 public:
 	/// Creates the Debriefing state.
-	DebriefingState(Game *game);
+    DebriefingState();
 	/// Cleans up the Debriefing state.
 	~DebriefingState();
 	/// Handler for clicking the OK button.

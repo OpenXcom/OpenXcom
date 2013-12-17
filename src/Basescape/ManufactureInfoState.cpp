@@ -44,7 +44,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
-ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, RuleManufacture * item) : State (game), _base(base), _item(item), _production(0)
+ManufactureInfoState::ManufactureInfoState (Base * base, RuleManufacture * item) : _base(base), _item(item), _production(0)
 {
 	buildUi();
 }
@@ -55,7 +55,7 @@ ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, RuleManufa
  * @param base Pointer to the base to get info from.
  * @param production The Production to modify.
  */
-ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, Production * production) : State (game), _base(base), _item(0), _production(production)
+ManufactureInfoState::ManufactureInfoState (Base * base, Production * production) : _base(base), _item(0), _production(production)
 {
 	buildUi();
 }
@@ -375,7 +375,7 @@ void ManufactureInfoState::moreUnit(int change)
 	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_timerMoreUnit->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+        _game->pushState(new ErrorMessageState( "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
 	else
 	{

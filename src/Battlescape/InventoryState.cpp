@@ -56,7 +56,7 @@ namespace OpenXcom
  * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
-InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
+InventoryState::InventoryState( bool tu, BattlescapeState *parent) :  _tu(tu), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
@@ -449,7 +449,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent));
+    _game->pushState(new UnitInfoState( _battleGame->getSelectedUnit(), _parent));
 }
 
 /**

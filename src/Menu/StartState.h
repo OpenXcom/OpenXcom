@@ -39,7 +39,7 @@ private:
 	LoadingPhase _load;
 public:
 	/// Creates the Start state.
-	StartState(Game *game);
+    StartState();
 	/// Cleans up the Start state.
 	~StartState();
 	/// Loads the game resources.

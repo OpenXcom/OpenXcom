@@ -49,7 +49,7 @@ private:
 	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
 public:
 	/// Creates the Craft Info state.
-	CraftInfoState(Game *game, Base *base, size_t craft);
+    CraftInfoState( Base *base, size_t craft);
 	/// Cleans up the Craft Info state.
 	~CraftInfoState();
 	/// Updates the craft info.

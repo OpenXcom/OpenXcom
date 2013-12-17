@@ -51,7 +51,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Inventory::Inventory(Game *game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _groundOffset(0)
+Inventory::Inventory(Game* game, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _groundOffset(0)
 {
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
@@ -707,7 +707,7 @@ void Inventory::mouseClick(Action *action, State *state)
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 									item->setExplodeTurn(0);
 								}
-								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
+                                else _game->pushState(new PrimeGrenadeState( 0, true, item));
 							}
 							else item->setExplodeTurn(-1);  // Unprime the grenade
 						}

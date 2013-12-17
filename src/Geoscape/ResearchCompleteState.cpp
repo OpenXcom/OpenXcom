@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param research Pointer to the completed research.
  */
-ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus): State (game), _research(research), _bonus(bonus)
+ResearchCompleteState::ResearchCompleteState(const RuleResearch * research, const RuleResearch * bonus): _research(research), _bonus(bonus)
 {
 	_screen = false;
 
