@@ -158,7 +158,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Vehicle *v = new Vehicle(rule->getItem(type), 0);
+		Vehicle *v = new Vehicle(rule->getItem(type), 0, 4);
 		v->load(*i);
 		_vehicles.push_back(v);
 	}
@@ -803,7 +803,12 @@ int Craft::getSpaceAvailable() const
  */
 int Craft::getSpaceUsed() const
 {
-	return getNumSoldiers() + getNumVehicles() * 4;
+	int vehicleSpaceUsed = 0;
+	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	{
+		vehicleSpaceUsed += (*i)->getSize();
+	}
+	return getNumSoldiers() + vehicleSpaceUsed;
 }
 
 /**

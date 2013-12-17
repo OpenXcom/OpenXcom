@@ -104,6 +104,7 @@ public:
 	bool psiAction();
 	/// Performs a melee attack action.
 	void meleeAttack();
+	bool validTarget(BattleUnit* unit, bool assessDanger, bool includeCivs) const;
 };
 
 }

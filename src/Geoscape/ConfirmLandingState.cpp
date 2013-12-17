@@ -32,6 +32,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
+#include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
@@ -109,6 +110,16 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 ConfirmLandingState::~ConfirmLandingState()
 {
 
+}
+
+/*
+ * Make sure we aren't returning to base.
+ */
+void ConfirmLandingState::init()
+{
+	Base* b = dynamic_cast<Base*>(_craft->getDestination());
+	if (b == _craft->getBase())
+		_game->popState();
 }
 
 /**

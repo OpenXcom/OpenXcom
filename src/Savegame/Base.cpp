@@ -29,6 +29,7 @@
 #include "Soldier.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleResearch.h"
 #include "Transfer.h"
@@ -1181,9 +1182,14 @@ void Base::setupDefenses()
 		RuleItem *rule = _rule->getItem(itemId);
 		if (rule->isFixed())
 		{
+			int size = 4;
+			if (_rule->getUnit(itemId))
+			{
+				size = _rule->getArmor(_rule->getUnit(itemId)->getArmor())->getSize();
+			}
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
-				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, rule->getClipSize()));
+				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
 				_items->removeItem(itemId, iqty);
 			}
 			else // so this vehicle needs ammo
@@ -1192,7 +1198,7 @@ void Base::setupDefenses()
 				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
 				if (0 >= baqty || 0 >= iqty) { ++i; continue; }
 				int canBeAdded = std::min(iqty, baqty);
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
 				int remainder = 0;
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 				int newAmmo;
@@ -1200,7 +1206,7 @@ void Base::setupDefenses()
 				{
 					newAmmo = newAmmoPerVehicle;
 					if (j<remainder) ++newAmmo;
-					_vehicles.push_back(new Vehicle(rule, newAmmo));
+					_vehicles.push_back(new Vehicle(rule, newAmmo, size));
 					_items->removeItem(ammo->getType(), newAmmo);
 				}
 				_items->removeItem(itemId, canBeAdded);

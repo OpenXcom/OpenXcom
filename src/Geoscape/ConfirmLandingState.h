@@ -48,6 +48,8 @@ public:
 	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
+	/// initialize the state, make a sanity check.
+	void init();
 	/// Handler for clicking the Yes button.
 	void btnYesClick(Action *action);
 	/// Handler for clicking the No button.

@@ -572,7 +572,7 @@ void FlcMain(void (*frameCallBack)())
 		}
 		if (finalFrame) SDL_Delay(50);
 	} while (!flc.quit && finalFrame && SDL_GetTicks() - pauseStart < 10000); // 10 sec pause but we're actually just fading out and going to main menu when the music ends
-	if (finalFrame) flc.quit = true;;
+	if (finalFrame) flc.quit = true;
   }
 //#endif
 } /* FlcMain */
