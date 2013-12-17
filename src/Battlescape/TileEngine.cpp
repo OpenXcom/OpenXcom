@@ -2186,12 +2186,12 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	Tile *tile = _save->getTile(voxel / Position(16, 16, 24));
-	Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return V_OUTOFBOUNDS;
 	}
+	Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
 	if (tile->isVoid() && tile->getUnit() == 0 && (!tileBelow || tileBelow->getUnit() == 0))
 	{
 		return V_EMPTY;
