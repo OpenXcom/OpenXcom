@@ -194,6 +194,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 	_trajectory.clear();
 
+	bool extendLine = true;
 	// even guided missiles drift, but how much is based on
 	// the shooter's faction, rather than accuracy.
 	if (_action.type == BA_LAUNCH)
@@ -206,11 +207,12 @@ int Projectile::calculateTrajectory(double accuracy)
 		{
 			accuracy = 0.55;
 		}
+		extendLine = false;
 	}
 
 	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
+	applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, extendLine);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -250,7 +252,7 @@ int Projectile::calculateThrow(double accuracy)
 		{
 			Position deltas = targetVoxel;
 			// apply some accuracy modifiers
-			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), true); //calling for best flavor
+			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false); //calling for best flavor
 			deltas -= targetVoxel;
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
@@ -281,8 +283,9 @@ int Projectile::calculateThrow(double accuracy)
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
+ * @param extendLine should this line get extended to maximum distance?
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool throwing)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -320,7 +323,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
-		if (!throwing)
+		if (extendLine)
 		{
 			// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
 			target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
@@ -359,7 +362,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	target->y += RNG::generate(0, deviation) - deviation / 2;
 	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
 	
-	if (!throwing)
+	if (extendLine)
 	{
 		double rotation, tilt;
 		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
