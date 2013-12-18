@@ -1419,7 +1419,7 @@ bool AlienBAIState::findFirePoint()
  * @param diff Game difficulty.
  * @return True if it is worthwile creating an explosion in the target position.
  */
-bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff) const
+bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	if (_save->getTurn() < 3)
@@ -1436,10 +1436,12 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	if (injurylevel > (attackingUnit->getStats()->health / 3) * 2)
 		desperation += 3;
 
-	int efficacy = desperation + enemiesAffected;
-	if (distance <= radius)
-		efficacy -= 3;
+	int efficacy = desperation;
 
+	if (attackingUnit->getPosition().z == targetPos.z && distance <= radius)
+	{
+		efficacy -= 4;
+	}
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
@@ -1462,16 +1464,19 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 					++enemiesAffected;
 					++efficacy;
 				}
-				else if ((*i)->getFaction() == _unit->getFaction())
+				else if ((*i)->getFaction() == attackingUnit->getFaction())
 					efficacy -= 2; // friendlies count double
 			}
 		}
 	}
-	// spice things up a bit by adding a random number based on difficulty level
-	efficacy += RNG::generate(0, diff+1) - RNG::generate(0,5);
-	if (efficacy > 0 || enemiesAffected >= 10)
-		return true;
-	return false;
+	// don't throw grenades at single targets, unless morale is in the danger zone
+	// or we're halfway towards panicking while bleeding to death.
+	if (grenade && desperation < 6 && enemiesAffected < 2)
+	{
+		return false;
+	}
+
+	return (efficacy > 0 || enemiesAffected >= 10);
 }
 
 /**
@@ -1687,7 +1692,7 @@ void AlienBAIState::grenadeAction()
 	// do we have a grenade on our belt?
 	BattleItem *grenade = _unit->getGrenadeFromBelt();
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
-	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
+	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff, true))
 	{
 		int tu = 4; // 4TUs for picking up the grenade
 		tu += _unit->getActionTUs(BA_PRIME, grenade);
