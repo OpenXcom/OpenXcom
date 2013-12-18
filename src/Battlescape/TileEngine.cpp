@@ -2725,7 +2725,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
 		originVoxel.x += 8;
 		originVoxel.y += 8;
-		originVoxel.z += 12;
+		originVoxel.z += 16;
 	}
 	return originVoxel;
 }

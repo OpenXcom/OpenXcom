@@ -1574,8 +1574,8 @@ void AlienBAIState::wayPointAction()
 			LastPosition = CurrentPosition;
 			_save->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
 			CurrentPosition = CurrentPosition + DirectionVector;
-			Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
-			Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
+			Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+16);
+			Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+16);
 			CollidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
 			if (CollidesWith > V_EMPTY && CollidesWith < V_UNIT)
 			{

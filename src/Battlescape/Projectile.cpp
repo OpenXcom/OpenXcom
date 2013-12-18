@@ -87,11 +87,23 @@ int Projectile::calculateTrajectory(double accuracy)
 	Tile *targetTile = 0;
 	BattleUnit *bu = _action.actor;
 	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
-
 	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_save->getBattleGame()->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 16);
+		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
+		if (_action.type == BA_LAUNCH)
+		{
+			if (_action.target != _origin)
+			{
+				// launched missiles go slightly higher than the middle.
+				targetVoxel.z = 16;
+			}
+			else
+			{
+				// unless two waypoints are placed on the same tile, in which case target the floor.
+				targetVoxel.z = 2;
+			}
+		}
 	}
 	else
 	{
