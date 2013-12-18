@@ -53,6 +53,34 @@ void ExtraSprites::load(const YAML::Node &node, int modIndex)
 }
 
 /**
+ * Saves the extra sprite set to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node ExtraSprites::save() const
+{
+	YAML::Node node;
+	node["files"] = _sprites;
+	node["width"] = _width;
+	node["height"] = _height;
+	node["singleImage"] = _singleImage;
+	node["subX"] = _subX;
+	node["subY"] = _subY;
+	node["modIndex"] = _modIndex; // for dumping
+	return node;
+}
+
+/**
+ * Saves the extra sprite set to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node ExtraSprites::save(const std::string& type) const
+{
+	YAML::Node node = save();
+	node["type"] = type;
+	return node;
+}
+
+/**
  * Gets the list of sprites defined my this mod.
  * @return The list of sprites.
  */

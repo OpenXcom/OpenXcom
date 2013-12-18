@@ -46,6 +46,13 @@ public:
 	~RuleCraftWeapon();
 	/// Loads craft weapon data from YAML.
 	void load(const YAML::Node& node, int modIndex);
+	/// Saves craft weapon data to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves craft weapon data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the craft weapon's type.
 	std::string getType() const;
 	/// Gets the craft weapon's sprite.

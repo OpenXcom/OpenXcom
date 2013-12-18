@@ -55,6 +55,24 @@ void RuleSoldier::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the unit to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleSoldier::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["minStats"] = _minStats;
+	node["maxStats"] = _maxStats;
+	node["statCaps"] = _statCaps;
+	node["armor"] = _armor;
+	node["standHeight"] = _standHeight;
+	node["kneelHeight"] = _kneelHeight;
+	node["floatHeight"] = _floatHeight;
+	return node;
+}
+
+/**
  * Returns the language string that names
  * this unit. Each unit type has a unique name.
  * @return Unit name.

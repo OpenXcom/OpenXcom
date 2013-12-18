@@ -90,6 +90,39 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 }
 
 /**
+ * Saves the craft to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleCraft::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["requires"] = _requires;
+	node["sprite"] = _sprite;
+	node["fuelMax"] = _fuelMax;
+	node["damageMax"] = _damageMax;
+	node["speedMax"] = _speedMax;
+	node["accel"] = _accel;
+	node["weapons"] = _weapons;
+	node["soldiers"] = _soldiers;
+	node["vehicles"] = _vehicles;
+	node["costBuy"] = _costBuy;
+	node["costRent"] = _costRent;
+	node["costSell"] = _costSell;
+	node["refuelItem"] = _refuelItem;
+	node["repairRate"] = _repairRate;
+	node["refuelRate"] = _refuelRate;
+	node["radarRange"] = _radarRange;
+	node["transferTime"] = _transferTime;
+	node["score"] = _score;
+	if (_battlescapeTerrainData)
+		node["battlescapeTerrainData"] = _battlescapeTerrainData->save();
+	node["spacecraft"] = _spacecraft;
+	node["listOrder"] = _listOrder;
+	return node;
+}
+
+/**
  * Gets the language string that names
  * this craft. Each craft type has a unique name.
  * @return The craft's name.

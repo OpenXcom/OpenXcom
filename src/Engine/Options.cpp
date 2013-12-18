@@ -42,6 +42,7 @@ std::string _dataFolder = "";
 std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
+std::string _dumpRulesetFile = "";
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
@@ -295,6 +296,10 @@ void loadArgs(int argc, char** args)
 				{
 					_userFolder = CrossPlatform::endPath(args[i+1]);
 				}
+				else if (argname == "dumpruleset")
+				{
+					_dumpRulesetFile = args[i+1];
+				}
 				else
 				{
 					// case insensitive lookup of the argument
@@ -339,6 +344,10 @@ bool showHelp(int argc, char** args)
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-user PATH" << std::endl;
 	help << "        use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "-dumpRuleset PATH" << std::endl;
+	help << "        use PATH as destination for ruleset dump (for testing)" << std::endl;
+	help << "        a dash sends it to standard output (the same place as this information)" << std::endl;
+	help << "        an empty PATH means do not dump ruleset and is the default" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
 	help << "-help" << std::endl;
@@ -567,6 +576,16 @@ std::vector<std::string> *getDataList()
 std::string getUserFolder()
 {
 	return _userFolder;
+}
+
+/**
+ * Returns the full file path for ruleset dump.
+ * This string is empty when disabled.
+ * @return Full path to destination file for reueset dump.
+ */
+std::string getDumpRulesetFile()
+{
+	return _dumpRulesetFile;
 }
 
 /**

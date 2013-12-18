@@ -49,6 +49,28 @@ void ExtraStrings::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the extra strings set to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node ExtraStrings::save() const
+{
+	YAML::Node node;
+	node["strings"] = _strings;
+	return node;
+}
+
+/**
+ * Saves the extra strings set to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node ExtraStrings::save(const std::string& type) const
+{
+	YAML::Node node = save();
+	node["type"] = type;
+	return node;
+}
+
+/**
  * Gets the list of strings defined my this mod.
  * @return The list of strings.
  */

@@ -57,6 +57,8 @@ namespace Options
 	std::vector<std::string> *getDataList();
 	/// Gets the game's user folder.
 	std::string getUserFolder();
+	/// Gets the full file path for dumping the ruleset.
+	std::string getDumpRulesetFile();
 	/// Sets the game's data, user and config folders.
 	void setFolders();
 	/// Update game options from config file and command line.

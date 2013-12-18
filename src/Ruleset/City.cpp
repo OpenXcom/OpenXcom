@@ -52,6 +52,19 @@ void City::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node City::save(const std::string &name) const
+{
+	YAML::Node node;
+	node["name"] = name;
+	node["lon"] = _lon * 180 / M_PI;
+	node["lat"] = _lat * 180 / M_PI;
+	return node;
+}
+
+/**
  * Returns the name of the city.
  * @return The city's name.
  */

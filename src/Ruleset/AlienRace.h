@@ -44,6 +44,13 @@ public:
 	~AlienRace();
 	/// Loads alien race data from YAML.
 	void load(const YAML::Node& node);
+	/// Saves alien race data to YAML.
+	YAML::Node save(const std::string &id) const;
+	/**
+	 * Saves the alien race YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_id); }
 	/// Gets the alien race's id.
 	std::string getId() const;
 	/// Gets a certain member of this alien race family.

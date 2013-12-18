@@ -70,6 +70,13 @@ public:
 	const std::string generateRace(const unsigned monthsPassed) const;
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
+	/// Saves the alien mission data to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the alien mission data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the number of waves.
 	unsigned getWaveCount() const { return _waves.size(); }
 	/// Gets the full wave information.

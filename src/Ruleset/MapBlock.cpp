@@ -54,6 +54,25 @@ void MapBlock::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the map block to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node MapBlock::save(const std::string &name) const
+{
+	YAML::Node node;
+	node["name"] = name;
+	node["width"] = _size_x;
+	node["length"] = _size_y;
+	node["height"] = _size_z;
+	node["type"] = (int)_type;
+	node["type"] = (int)_subType;
+	node["subType"] = (int)_subType;
+	node["frequency"] = _frequency;
+	node["maxCount"] = _maxCount;
+	return node;
+}
+
+/**
  * Gets the MapBlock name (string).
  * @return The name.
  */

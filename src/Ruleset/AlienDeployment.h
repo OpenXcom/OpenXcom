@@ -69,6 +69,13 @@ public:
 	~AlienDeployment();
 	/// Loads Alien Deployment data from YAML.
 	void load(const YAML::Node& node);
+	/// Saves the Alien Deployment to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the Alien Deployment YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the Alien Deployment's type.
 	std::string getType() const;
 	/// Gets a pointer to the data.

@@ -49,6 +49,26 @@ void RuleResearch::load(const YAML::Node &node, int listOrder)
 }
 
 /**
+ * Saves the research project to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleResearch::save(const std::string &name) const
+{
+	YAML::Node node;
+	node["name"] = name;
+	node["lookup"] = _lookup;
+	node["cost"] = _cost;
+	node["points"] = _points;
+	node["dependencies"] = _dependencies;
+	node["unlocks"] = _unlocks;
+	node["getOneFree"] = _getOneFree;
+	node["requires"] = _requires;
+	node["needItem"] = _needItem;
+	node["listOrder"] = _listOrder;
+	return node;
+}
+
+/**
  * Gets the cost of this ResearchProject.
  * @return The cost of this ResearchProject (in man/day).
  */

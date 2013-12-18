@@ -19,6 +19,7 @@
 #include "MCDPatch.h"
 #include "MapDataSet.h"
 #include "MapData.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -37,6 +38,29 @@ MCDPatch::~MCDPatch()
 {
 }
 
+struct PairFirstComp {
+	template<typename Second>
+	bool operator()(const std::pair<size_t, Second>& lhs, const std::pair<size_t, Second>& rhs)
+	{
+		return lhs.first < rhs.first;
+	}
+};
+// Inserts value or replaces the pair with the same first item if ait exists
+template<typename Container, typename Second>
+static typename Container::iterator insert_replace(Container& container, const std::pair<size_t, Second>& value)
+{
+	typename Container::iterator end = container.end();
+	typename Container::iterator lower = std::lower_bound(container.begin(), end, value, PairFirstComp());
+	typename Container::iterator upper = std::upper_bound(lower, end, value, PairFirstComp());
+	
+	if(lower != upper)
+	{
+		*lower = value;
+		return lower;
+	}
+	return container.insert(upper, value);
+}
+
 /**
  * Loads the MCD Patch from a YAML file.
  * TODO: fill this out with more data.
@@ -51,44 +75,118 @@ void MCDPatch::load(const YAML::Node &node)
 		if ((*i)["bigWall"])
 		{
 			int bigWall = (*i)["bigWall"].as<int>();
-			_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
+			insert_replace(_bigWalls, std::make_pair(MCDIndex, bigWall));
 		}
 		if ((*i)["TUWalk"])
 		{
 			int TUWalk = (*i)["TUWalk"].as<int>();
-			_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
+			insert_replace(_TUWalks, std::make_pair(MCDIndex, TUWalk));
 		}
 		if ((*i)["TUFly"])
 		{
 			int TUFly = (*i)["TUFly"].as<int>();
-			_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
+			insert_replace(_TUFlys, std::make_pair(MCDIndex, TUFly));
 		}
 		if ((*i)["TUSlide"])
 		{
 			int TUSlide = (*i)["TUSlide"].as<int>();
-			_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
+			insert_replace(_TUSlides, std::make_pair(MCDIndex, TUSlide));
 		}
 		if ((*i)["deathTile"])
 		{
 			int deathTile = (*i)["deathTile"].as<int>();
-			_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
+			insert_replace(_deathTiles, std::make_pair(MCDIndex, deathTile));
 		}
 		if ((*i)["terrainHeight"])
 		{
 			int terrainHeight = (*i)["terrainHeight"].as<int>();
-			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
+			insert_replace(_terrainHeight, std::make_pair(MCDIndex, terrainHeight));
 		}
 		if ((*i)["specialType"])
 		{
 			int specialType = (*i)["specialType"].as<int>();
-			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
+			insert_replace(_specialTypes, std::make_pair(MCDIndex, specialType));
 		}
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
-			_LOFTS.push_back(std::make_pair(MCDIndex, lofts));
+			insert_replace(_LOFTS, std::make_pair(MCDIndex, lofts));
 		}
 	}
+}
+
+/**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node MCDPatch::save() const
+{
+	YAML::Node node;
+	YAML::Node data;
+	size_t i_bigWalls = 0, i_TUWalks = 0, i_TUFlys = 0, i_TUSlides = 0, i_deathTiles = 0, i_terrainHeight = 0, i_specialTypes = 0;
+	bool stop = false;
+	for (size_t i = 0; !stop; ++i)
+	{
+		YAML::Node item;
+		stop = true;
+		if (i_bigWalls < _bigWalls.size())
+		{
+			stop = false;
+			if (_bigWalls[i_bigWalls].first == i)
+			{
+				item["bigWall"] = _bigWalls[i_bigWalls++].second;
+			}
+		}
+		if (i_TUWalks < _TUWalks.size())
+		{
+			stop = false;
+			if (_TUWalks[i_TUWalks].first == i)
+			{
+				item["TUWalk"] = _TUWalks[i_TUWalks++].second;
+			}
+		}
+		if (i_TUFlys < _TUFlys.size())
+		{
+			stop = false;
+			if (_TUFlys[i_TUFlys].first == i)
+			{
+				item["TUFly"] = _TUWalks[i_TUFlys++].second;
+			}
+		}
+		if (i_TUSlides < _TUSlides.size())
+		{
+			stop = false;
+			if (_TUSlides[i_TUSlides].first == i)
+			{
+				item["TUSlide"] = _TUSlides[i_TUSlides++].second;
+			}
+		}
+		if (i_deathTiles < _deathTiles.size())
+		{
+			stop = false;
+			if (_deathTiles[i_deathTiles].first == i)
+			{
+				item["TUSlide"] = _deathTiles[i_deathTiles++].second;
+			}
+		}
+		if (item.size())
+		{
+			data[i] = item;
+		}
+	}
+	node["data"] = data;
+	return node;
+}
+
+/**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node MCDPatch::save(const std::string& type) const
+{
+	YAML::Node node = save();
+	node["type"] = type;
+	return node;
 }
 
 /**

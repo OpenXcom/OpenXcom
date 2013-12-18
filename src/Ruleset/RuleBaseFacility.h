@@ -51,6 +51,13 @@ public:
 	~RuleBaseFacility();
 	/// Loads the facility from YAML.
 	void load(const YAML::Node& node, int modIndex, int listOrder);
+	/// Saves the facility to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the facility YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the facility's type.
 	std::string getType() const;
 	/// Gets the facility's requirements.

@@ -58,6 +58,13 @@ public:
 
 	/// Loads trajectory data from YAML.
 	void load(const YAML::Node &node);
+	/// Saves trajectory data to YAML.
+	YAML::Node save(const std::string &id) const;
+	/**
+	 * Saves the trajectory data to a YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_id); }
 
 	/**
 	 * Gets the number of waypoints in this trajectory.

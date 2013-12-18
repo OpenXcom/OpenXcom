@@ -81,6 +81,39 @@ void RuleRegion::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleRegion::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["cost"] = _cost;
+	YAML::Node areas;
+	for (size_t i = 0; i != _lonMin.size(); ++i)
+	{
+		YAML::Node area;
+		area.push_back(_lonMin[i] * 180 / M_PI);
+		area.push_back(_lonMax[i] * 180 / M_PI);
+		area.push_back(_latMin[i] * 180 / M_PI);
+		area.push_back(_latMax[i] * 180 / M_PI);
+		areas.push_back(area);
+	}
+	node["areas"] = areas;
+	YAML::Node cities;
+	for (std::vector<City*>::const_iterator it = _cities.begin(), end = _cities.end(); it != end; ++it)
+	{
+		cities.push_back((*it)->save());
+	}
+	node["cities"] = cities;
+	node["missionWeights"] = _missionWeights.save();
+	node["regionWeight"] = _regionWeight;
+	node["missionZones"] = _missionZones;
+	node["missionRegion"] = _missionRegion;
+	return node;
+}
+
+/**
  * Gets the language string that names
  * this region. Each region type
  * has a unique name.

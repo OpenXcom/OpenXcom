@@ -54,6 +54,13 @@ public:
 	~RuleCraft();
 	/// Loads craft data from YAML.
 	void load(const YAML::Node& node, Ruleset *ruleset, int modIndex, int nextCraftIndex);
+	/// Saves the craft data to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the craft data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.

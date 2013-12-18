@@ -89,6 +89,26 @@ void AlienDeployment::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the alien base to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node AlienDeployment::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["data"] = _data;
+	node["width"] = _width;
+	node["length"] = _length;
+	node["height"] = _height;
+	node["civilians"] = _civilians;
+	node["roadTypeOdds"] = _roadTypeOdds;
+	node["terrain"] = _terrain;
+	node["shade"] = _shade;
+	node["nextStage"] = _nextStage;
+	return node;
+}
+
+/**
  * Returns the language string that names
  * this deployment. Each deployment type has a unique name.
  * @return Deployment name.

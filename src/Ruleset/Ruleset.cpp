@@ -17,7 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ruleset.h"
+#include <iostream>
 #include <fstream>
+#include <yaml-cpp/emitter.h>
 #include "../aresame.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
@@ -58,7 +60,6 @@
 #include "City.h"
 #include "MCDPatch.h"
 #include "../Engine/Logger.h"
-#include <algorithm>
 
 namespace OpenXcom
 {
@@ -462,6 +463,70 @@ void Ruleset::loadFile(const std::string &filename)
 }
 
 /**
+ * Dumps the Ruleset to YAML.
+ * @return YAML node.
+ */
+YAML::Node Ruleset::dumpYaml() const
+{
+	YAML::Node doc;
+	Log(LOG_INFO) << "Generating YAML dump of Ruleset...";
+	doc["countries"] = saveSeq(_countries, _countriesIndex);
+	doc["regions"] = saveSeq(_regions, _regionsIndex);
+	doc["facilities"] = saveSeq(_facilities, _facilitiesIndex);
+	doc["crafts"] = saveSeq(_crafts, _craftsIndex);
+	doc["craftWeapons"] = saveSeq(_craftWeapons, _craftWeaponsIndex);
+	doc["items"] = saveSeq(_items, _itemsIndex);
+	doc["ufos"] = saveSeq(_ufos, _ufosIndex);
+	doc["invs"] = saveSeq(_invs);
+	doc["terrains"] = saveSeq(_terrains);
+	doc["armors"] = saveSeq(_armors, _armorsIndex);
+	doc["soldiers"] = saveSeq(_soldiers);
+	doc["units"] = saveSeq(_units);
+	doc["alienRaces"] = saveSeq(_alienRaces);
+	doc["alienDeployments"] = saveSeq(_alienDeployments);
+	doc["research"] = saveSeq(_research, _researchIndex);
+	doc["manufacture"] = saveSeq(_manufacture, _manufactureIndex);
+	doc["ufopaedia"] = saveSeq(_ufopaediaArticles, _ufopaediaIndex);
+	if (_startingBase)
+		 doc["startingBase"] = _startingBase;
+	doc["startingTime"] = _startingTime.save();
+	doc["costSoldier"] = _costSoldier;
+	doc["costEngineer"] = _costEngineer;
+	doc["costScientist"] = _costScientist;
+	doc["timePersonnel"] = _timePersonnel;
+	doc["initialFunding"] = _initialFunding;
+	doc["ufopaedia"] = saveSeq(_ufopaediaArticles, _ufopaediaIndex);
+	doc["ufoTrajectories"] = saveSeq(_ufoTrajectories);
+	doc["alienMissions"] = saveSeq(_alienMissions, _alienMissionsIndex);
+	doc["alienItemLevels"] = _alienItemLevels;
+	doc["MCDPatches"] = saveSeq(_MCDPatches, _MCDPatchesIndex);
+	doc["extraSprites"] = saveSeq(_extraSprites);
+	doc["extraSounds"] = saveSeq(_extraSounds);
+	doc["extraStrings"] = saveSeq(_extraStrings);
+	Log(LOG_INFO) << "Generated YAML dump of Ruleset.";
+	return doc;
+}
+
+/**
+ */
+void Ruleset::dumpYamlToFile(const std::string& filename) const
+{
+	if (filename.empty())  return;
+	YAML::Emitter emitter;
+	emitter << dumpYaml();
+	if (filename == "-")
+	{
+		std::cout << emitter.c_str();
+		Log(LOG_INFO) << "Ruleset dumped to standard output";
+	}
+	else
+	{
+		std::ofstream(filename) << emitter.c_str();
+		Log(LOG_INFO) << "Ruleset dumped to " << filename;
+	}
+}
+
+/**
  * Loads the contents of all the rule files in the given directory.
  * @param dirname The name of an existing directory containing rule files.
  */
@@ -519,6 +584,45 @@ T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std
 	}
 
 	return rule;
+}
+
+/**
+ *
+ */
+template <typename T>
+YAML::Node Ruleset::saveSeq(const std::map<std::string, T*> &map, const std::vector<std::string> &index) const
+{
+	YAML::Node node(YAML::NodeType::Sequence);
+	for (typename std::vector<std::string>::const_iterator i = index.begin(), end = index.end(); i != end; ++i)
+		if (T *item = map.find(*i)->second)
+			node.push_back(item->save(*i));
+	return node;
+}
+
+/**
+ *
+ */
+template <typename T>
+YAML::Node Ruleset::saveSeq(const std::map<std::string, T*> &map) const
+{
+	YAML::Node node(YAML::NodeType::Sequence);
+	for (typename std::map<std::string, T*>::const_iterator i = map.begin(), end = map.end(); i != end; ++i)
+		if (T *item = i->second)
+			node.push_back(item->save(i->first));
+	return node;
+}
+
+/**
+ *
+ */
+template <typename T>
+YAML::Node Ruleset::saveSeq(const std::vector<std::pair<std::string, T*> > &map) const
+{
+	YAML::Node node(YAML::NodeType::Sequence);
+	for (typename std::vector<std::pair<std::string, T*> >::const_iterator i = map.begin(), end = map.end(); i != end; ++i)
+		if (T *item = i->second)
+			node.push_back(item->save(i->first));
+	return node;
 }
 
 /**

@@ -67,6 +67,29 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 }
 
 /**
+ * Saves the UFO to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleUfo::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["size"] = _size;
+	node["sprite"] = _sprite;
+	node["damageMax"] = _damageMax;
+	node["speedMax"] = _speedMax;
+	node["accel"] = _accel;
+	node["power"] = _power;
+	node["range"] = _range;
+	node["score"] = _score;
+	node["reload"] = _reload;
+	node["breakOffTime"] = _breakOffTime;
+	node["battlescapeTerrainData"] = _battlescapeTerrainData->save();
+	node["modSprite"] = _modSprite;
+	return node;
+}
+
+/**
  * Gets the language string that names
  * this UFO. Each UFO type has a unique name.
  * @return The Ufo's name.

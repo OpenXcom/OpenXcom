@@ -76,6 +76,32 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 }
 
 /**
+ * Saves the terrain to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleTerrain::save(const std::string &name) const
+{
+	YAML::Node node;
+	node["name"] = name;
+	node["largeBlockLimit"] = _largeBlockLimit;
+	node["textures"] = _textures;
+	node["hemisphere"] = _hemisphere;
+	YAML::Node mapDataSets;
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(), end = _mapDataSets.end(); i != end; ++i)
+	{
+		mapDataSets.push_back((*i)->getName());
+	}
+	node["mapDataSets"] = mapDataSets;
+	YAML::Node mapBlocks;
+	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(), end = _mapBlocks.end(); i != end; ++i)
+	{
+		mapBlocks.push_back((*i)->save());
+	}
+	node["mapBlocks"] = mapBlocks;
+	return node;
+}
+
+/**
  * Gets the array of mapblocks.
  * @return Pointer to the array of mapblocks.
  */

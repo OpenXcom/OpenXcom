@@ -84,6 +84,38 @@ void Armor::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the armor to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node Armor::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["spriteSheet"] = _spriteSheet;
+	node["spriteInv"] = _spriteInv;
+	node["corpseBattle"] = _corpseBattle;
+	node["corpseGeo"] = _corpseGeo;
+	node["storeItem"] = _storeItem;
+	node["frontArmor"] = _frontArmor;
+	node["sideArmor"] = _sideArmor;
+	node["rearArmor"] = _rearArmor;
+	node["underArmor"] = _underArmor;
+	node["drawingRoutine"] = _drawingRoutine;
+	node["movementType"] = (int)_movementType;
+	node["size"] = _size;
+	node["weight"] = _weight;
+	node["stats"] = _stats;
+	YAML::Node dmg;
+	for (size_t i = 0; i < DAMAGE_TYPES; ++i)
+	{
+		dmg[i].push_back<float>(_damageModifier[i]);
+	}
+	node["damageModifier"] = dmg;
+	node["loftempsSet"] = _loftempsSet;
+	return node;
+}
+
+/**
  * Returns the language string that names
  * this armor. Each armor has a unique name. Coveralls, Power Suit,...
  * @return The armor name.
