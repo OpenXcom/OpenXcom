@@ -54,6 +54,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Options.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
@@ -458,6 +459,7 @@ void BattlescapeGenerator::deployXCOM()
 	}
 	
 	// auto-equip soldiers (only soldiers without layout)
+	if (!Options::getBool("disableAutoEquip"))
 	{
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
