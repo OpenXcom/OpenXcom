@@ -140,6 +140,7 @@ void createDefault()
     setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
+	setBool("disableAutoEquip", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

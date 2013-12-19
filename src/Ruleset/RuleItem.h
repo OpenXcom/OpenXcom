@@ -189,6 +189,10 @@ public:
 	int getBulletSpeed() const;
 	/// How many auto shots does this weapon fire.
 	int getAutoShots() const;
+	/// is this item a 2 handed weapon?
+	bool isRifle() const;
+	/// is this item a single handed weapon?
+	bool isPistol() const;
 };
 
 }
