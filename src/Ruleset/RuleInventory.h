@@ -49,6 +49,7 @@ private:
 	InventoryType _type;
 	std::vector<RuleSlot> _slots;
 	std::map<std::string, int> _costs;
+	int _listOrder;
 public:
 	static const int SLOT_W = 16;
 	static const int SLOT_H = 16;
@@ -59,7 +60,7 @@ public:
 	/// Cleans up the inventory ruleset.
 	~RuleInventory();
 	/// Loads inventory data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int listOrder);
 	/// Gets the inventory's id.
 	std::string getId() const;
 	/// Gets the X position of the inventory.
@@ -76,6 +77,7 @@ public:
 	bool fitItemInSlot(RuleItem *item, int x, int y) const;
 	/// Gets a certain cost in the inventory.
 	int getCost(RuleInventory *slot) const;
+	int getListOrder() const;
 };
 
 }
