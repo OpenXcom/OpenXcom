@@ -89,6 +89,7 @@ YAML::Node RuleInventory::save(const std::string &id) const
 	node["type"] = (int)_type;
 	node["slots"] = _slots;
 	node["costs"] = _costs;
+	node["listOrder"] = _listOrder;
 	return node;
 }
 
