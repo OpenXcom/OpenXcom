@@ -98,7 +98,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("customInitialBase", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("skipIntro", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showFundsOnGeoscape", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("disableAutoEquip", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", false));
