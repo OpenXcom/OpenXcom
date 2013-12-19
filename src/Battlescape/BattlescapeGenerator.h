@@ -75,10 +75,8 @@ private:
 	BattleUnit *addCivilian(Unit *rules);
 	/// Places an item on a soldier based on equipment layout.
 	BattleItem* placeItemByLayout(BattleItem *item);
-	/// Adds an item to the game.
-	BattleItem* addItem(BattleItem *item, bool secondPass);
-	/// Adds an item to a unit.
-	BattleItem* addItem(RuleItem *item, BattleUnit *unit);
+	/// Adds an item to a unit and the game.
+	bool addItem(BattleItem *item, BattleUnit *unit);
 	/// Loads an XCom MAP file.
 	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false);
 	/// Loads an XCom RMP file.
