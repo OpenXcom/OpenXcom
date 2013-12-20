@@ -944,7 +944,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 
 		if (loaded)
 		{
-			if (!unit->getItem("STR_RIGHT_HAND") && unit->getStats()->strength >= weight)
+			if (!unit->getItem("STR_RIGHT_HAND") && unit->getStats()->strength * 0.66 >= weight)
 			{
 				item->moveToOwner(unit);
 				item->setSlot(rightHand);
