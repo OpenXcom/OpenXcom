@@ -20,7 +20,6 @@ namespace OpenXcom
 {
 #ifndef __NO_SHADERS
 
-#define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 #ifndef __APPLE__
 extern PFNGLCREATEPROGRAMPROC glCreateProgram;
 extern PFNGLUSEPROGRAMPROC glUseProgram;
