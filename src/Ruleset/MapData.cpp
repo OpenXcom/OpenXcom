@@ -38,6 +38,12 @@ MapData::~MapData()
 
 }
 
+/* Explicit storage for MapData constants. */
+const int MapData::O_FLOOR;
+const int MapData::O_WESTWALL;
+const int MapData::O_NORTHWALL;
+const int MapData::O_OBJECT;
+
 /**
  * Gets the dataset this object belongs to.
  * @return Pointer to MapDataSet.
