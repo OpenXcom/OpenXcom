@@ -461,54 +461,64 @@ void BattlescapeGenerator::deployXCOM()
 	// auto-equip soldiers (only soldiers without layout)
 	if (!Options::getBool("disableAutoEquip"))
 	{
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		for (int pass = 0; pass != 4; ++pass)
 		{
-			if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
+			for (std::vector<BattleItem*>::iterator j = _craftInventoryTile->getInventory()->begin(); j != _craftInventoryTile->getInventory()->end();)
 			{
-				continue;
-			}
-
-			for (int pass = 0; pass != 4; ++pass)
-			{
-				for (std::vector<BattleItem*>::iterator j = _craftInventoryTile->getInventory()->begin(); j != _craftInventoryTile->getInventory()->end();)
+				if ((*j)->getSlot() == ground)
 				{
-					if ((*j)->getSlot() == ground)
-					{
-						bool add = false;
+					bool add = false;
 
-						switch (pass)
-						{
-						// priority 1: rifles.
-						case 0:
-							add = (*j)->getRules()->isRifle();
-							break;
-						// priority 2: pistols (assuming no rifles were found).
-						case 1:
-							add = !(*i)->getItem("STR_RIGHT_HAND") && (*j)->getRules()->isPistol();
-							break;
-						// priority 3: ammunition.
-						case 2:
-							add = ((*i)->getItem("STR_RIGHT_HAND") && (*j)->getRules()->getBattleType() == BT_AMMO);
-							break;
-						// priority 4: leftovers.
-						case 3:
-							add = !(*j)->getRules()->isPistol() &&
-									!(*j)->getRules()->isRifle() &&
-									(*j)->getRules()->getBattleType() != BT_AMMO &&
-									((*j)->getRules()->getBattleType() != BT_FLARE || _worldShade >= 9);
-							break;
-						default:
-							break;
-						}
+					switch (pass)
+					{
+					// priority 1: rifles.
+					case 0:
+						add = (*j)->getRules()->isRifle();
+						break;
+					// priority 2: pistols (assuming no rifles were found).
+					case 1:
+						add = (*j)->getRules()->isPistol();
+						break;
+					// priority 3: ammunition.
+					case 2:
+						add = (*j)->getRules()->getBattleType() == BT_AMMO;
+						break;
+					// priority 4: leftovers.
+					case 3:
+						add = !(*j)->getRules()->isPistol() &&
+								!(*j)->getRules()->isRifle() &&
+								((*j)->getRules()->getBattleType() != BT_FLARE || _worldShade >= 9);
+						break;
+					default:
+						break;
+					}
 				
-						if (add && addItem(*j, *i))
+					if (add)
+					{
+						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 						{
-							j = _craftInventoryTile->getInventory()->erase(j);
+							if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
+							{
+								continue;
+							}
+							// let's not be greedy, we'll only take a second extra clip
+							// if everyone else has had a chance to take a first.
+							bool allowSecondClip = (pass == 3);
+
+							if (addItem(*j, *i, allowSecondClip))
+							{
+								j = _craftInventoryTile->getInventory()->erase(j);
+								add = false;
+								break;
+							}
+						}
+						if (!add)
+						{
 							continue;
 						}
 					}
-					++j;
 				}
+				++j;
 			}
 		}
 	}
@@ -859,9 +869,10 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  * Adds an item to an XCom soldier (auto-equip).
  * @param item Pointer to the Item.
  * @param unit Pointer to the Unit.
+ * @param allowSecondClip allow the unit to take a second clip or not. (only applies to xcom soldiers, aliens are allowed regardless of this flag)
  * @return if the item was placed or not.
  */
-bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit)
+bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip)
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	RuleInventory *rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
@@ -869,6 +880,9 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit)
 	bool loaded = false;
 	BattleItem *weapon = unit->getItem("STR_RIGHT_HAND");
 	int weight = 0;
+
+	// tanks and aliens don't care about weight or multiple items,
+	// their loadouts are defined in the rulesets and more or less set in stone.
 	if (unit->getFaction() == FACTION_PLAYER && unit->hasInventory())
 	{
 		weight = unit->getCarriedWeight() + item->getRules()->getWeight();
@@ -876,12 +890,29 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit)
 		{
 			weight += item->getAmmoItem()->getRules()->getWeight();
 		}
-		for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
+		// allow all weapons to be loaded by avoiding this check,
+		// they'll return false later anyway if the unit has something in his hand.
+		if (item->getRules()->getCompatibleAmmo()->empty())
 		{
-			if (item->getRules()->getType() == (*i)->getRules()->getType())
+			int tally = 0;
+			for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 			{
-				// we already have one, thanks.
-				return false;
+				if (item->getRules()->getType() == (*i)->getRules()->getType())
+				{
+					if (allowSecondClip && item->getRules()->getBattleType() == BT_AMMO)
+					{
+						tally++;
+						if (tally == 2)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						// we already have one, thanks.
+						return false;
+					}
+				}
 			}
 		}
 	}
@@ -890,13 +921,13 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit)
 	{
 	case BT_FIREARM:
 	case BT_MELEE:
-		// maybe we find ammo on the ground to load it with
 		if (item->getAmmoItem() || unit->getFaction() != FACTION_PLAYER || !unit->hasInventory())
 		{
 			loaded = true;
 		}
 		if (unit->getFaction() == FACTION_PLAYER)
 		{
+			// let's try to load this weapon, whether we equip it or not.
 			for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end() && !loaded; ++i)
 			{
 				if ((*i)->getSlot() == ground && item->setAmmoItem((*i)) == 0)
@@ -922,21 +953,23 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit)
 		}
 		break;
 	case BT_AMMO:
-		if (!weapon)
-		{
-			break;
-		}
-		if ((weapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) && !weapon->getAmmoItem() && weapon->setAmmoItem(item) == 0)
-		{
-			item->setSlot(rightHand);
-			placed = true;
-			break;
-		}
-		if (weapon->getRules()->getCompatibleAmmo()->empty() ||
+		// no weapon, or our weapon takes no ammo, or this ammo isn't compatible.
+		// we won't be needing this. move on.
+		if (!weapon || weapon->getRules()->getCompatibleAmmo()->empty() ||
 			std::find(weapon->getRules()->getCompatibleAmmo()->begin(),
 			weapon->getRules()->getCompatibleAmmo()->end(),
 			item->getRules()->getType()) == weapon->getRules()->getCompatibleAmmo()->end())
 		{
+			break;
+		}
+		// xcom weapons will already be loaded, aliens and tanks, however, get their ammo added afterwards.
+		// so let's try to load them here.
+		if ((weapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!weapon->getAmmoItem() &&
+			weapon->setAmmoItem(item) == 0)
+		{
+			item->setSlot(rightHand);
+			placed = true;
 			break;
 		}
 	default:
