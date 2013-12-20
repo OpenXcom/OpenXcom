@@ -268,7 +268,7 @@ void NewBattleState::updateButtons()
 	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
 	_btnCraft->setText(tr(_crafts[_selCraft]));
-	int month = _selItemLevel + 1;
+	unsigned int month = _selItemLevel + 1;
 	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
 	std::wostringstream ss;
 	ss << month << L" (" << tr(time.getMonthString());
@@ -566,7 +566,7 @@ void NewBattleState::btnItemLevelClick(Action *action)
 	{
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
-	int month = _selItemLevel + 1;
+	unsigned int month = _selItemLevel + 1;
 	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
 	std::wostringstream ss;
 	ss << month << L" (" << tr(time.getMonthString());
