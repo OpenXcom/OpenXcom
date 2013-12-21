@@ -810,7 +810,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
  * @param item Pointer to the Item.
  * @return Pointer to the Item.
  */
-BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
+bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
@@ -843,6 +843,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 						if ((*k)->getRules()->getType() == (*j)->getAmmoItem() && (*k)->getSlot() == ground
 						&& item->setAmmoItem((*k)) == 0)
 						{
+							_save->getItems()->push_back(*k);
 							(*k)->setSlot(righthand);
 							loaded = true;
 							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
@@ -857,12 +858,13 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 					item->setSlotX((*j)->getSlotX());
 					item->setSlotY((*j)->getSlotY());
 					item->setExplodeTurn((*j)->getExplodeTurn());
-					return item;
+					_save->getItems()->push_back(item);
+					return true;
 				}
 			}
 		}
 	}
-	return item;
+	return false;
 }
 
 /**
