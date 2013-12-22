@@ -2530,7 +2530,7 @@ items:
     handSprite: 104
     hitSound: 48
     power: 70
-    damageType: 2
+    damageType: 7
     accuracyMelee: 92
     tuMelee: 15
     clipSize: -1
