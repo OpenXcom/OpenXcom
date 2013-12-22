@@ -60,7 +60,21 @@ std::string strGLError(GLenum glErr)
 
 #ifndef __NO_SHADERS
 
-#define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
+/* Helper types to convert between object pointers and function pointers.
+   Although ignored by some compilers, this conversion is an extension
+   and not guaranteed to be sane for every architecture.
+ */
+typedef void (*GenericFunctionPointer)();
+typedef union {
+    GenericFunctionPointer FunctionPointer;
+    void *ObjectPointer;
+} UnsafePointerContainer;
+
+inline static GenericFunctionPointer glGetProcAddress(const char *name) {
+    UnsafePointerContainer pc;
+    pc.ObjectPointer = SDL_GL_GetProcAddress(name);
+    return pc.FunctionPointer;
+}
 
 #ifndef __APPLE__
 PFNGLCREATEPROGRAMPROC glCreateProgram = 0;

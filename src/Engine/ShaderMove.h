@@ -34,7 +34,7 @@ class ShaderMove : public helper::ShaderBase<Pixel>
 	
 public:
 	typedef helper::ShaderBase<Pixel> _base;
-	friend class helper::controler<ShaderMove<Pixel> >;
+	friend struct helper::controler<ShaderMove<Pixel> >;
 	
 	inline ShaderMove(Surface* s):
 		_base(s),

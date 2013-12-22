@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x Position on the x-axis.
  * @param y Position on the y-asis.
  */
-ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false), _action(BA_NONE), _tu(0)
+ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _highlighted(false), _action(BA_NONE), _tu(0)
 {
 	_frame = new Frame(getWidth(), getHeight(), 0, 0);
 	_frame->setHighContrast(true);

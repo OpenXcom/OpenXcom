@@ -1131,5 +1131,5 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	{
 		_movementType = MT_WALK;
 	}
-};
+}
 }

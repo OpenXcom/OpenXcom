@@ -37,7 +37,6 @@ class RuleTerrain;
 class MapBlock
 {
 private:
-	RuleTerrain *_terrain;
 	std::string _name;
 	int _size_x, _size_y, _size_z;
 	MapBlockType _type, _subType;

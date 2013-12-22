@@ -707,6 +707,7 @@ bool isQuitShortcut(const SDL_Event &ev)
 	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
 #else
 	//TODO add other OSs shortcuts.
+    (void)ev;
 	return false;
 #endif
 }
