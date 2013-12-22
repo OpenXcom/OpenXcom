@@ -37,9 +37,9 @@ class Target
 protected:
 	double _lon, _lat;
 	std::vector<Target*> _followers;
-public:
 	/// Creates a target.
 	Target();
+public:
 	/// Cleans up the target.
 	virtual ~Target();
 	/// Loads the moving target from YAML.

@@ -42,7 +42,7 @@ private:
 	MapBlockType _type, _subType;
 	int _frequency, _timesUsed, _maxCount;
 public:
-	MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type);
+	MapBlock(std::string name, int size_x, int size_y, MapBlockType type);
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);

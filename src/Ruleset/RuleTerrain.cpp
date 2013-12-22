@@ -64,7 +64,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_mapBlocks.clear();
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
-			MapBlock *map = new MapBlock(this, (*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
+			MapBlock *map = new MapBlock((*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
 			map->load(*i);
 			_mapBlocks.push_back(map);
 		}

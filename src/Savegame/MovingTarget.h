@@ -39,9 +39,9 @@ protected:
 
 	/// Calculates a new speed vector to the destination.
 	virtual void calculateSpeed();
-public:
 	/// Creates a moving target.
 	MovingTarget();
+public:
 	/// Cleans up the moving target.
 	virtual ~MovingTarget();
 	/// Loads the moving target from YAML.

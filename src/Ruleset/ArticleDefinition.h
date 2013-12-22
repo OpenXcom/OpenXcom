@@ -58,7 +58,7 @@ namespace OpenXcom
 		/// Gets the type of article definition.
 		UfopaediaTypeId getType() const;
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, int listOrder);
+		virtual void load(const YAML::Node& node, int listOrder);
 		/// Gets the article's list weight.
 		int getListOrder() const;
 

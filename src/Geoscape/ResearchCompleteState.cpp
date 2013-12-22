@@ -37,6 +37,7 @@ namespace OpenXcom
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
  * @param research Pointer to the completed research.
+ * @param bonus Pointer to bonus unlocked research.
  */
 ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus): State (game), _research(research), _bonus(bonus)
 {
@@ -47,7 +48,7 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_btnOk = new TextButton(80, 16, 64, 146);
 	_btnReport = new TextButton(80, 16, 176, 146);
 	_txtTitle = new Text(230, 17, 45, 70);
-	_txtResearch = new Text(230, 17, 45, 96);
+	_txtResearch = new Text(230, 32, 45, 96);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -82,6 +83,7 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_txtResearch->setColor(Palette::blockOffset(8)+10);
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
+	_txtResearch->setWordWrap(true);
 	if (research)
 	{
 		_txtResearch->setText(tr(research->getName()));
@@ -102,7 +104,7 @@ void ResearchCompleteState::init()
  */
 void ResearchCompleteState::btnOkClick(Action *)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**
