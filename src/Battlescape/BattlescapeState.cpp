@@ -251,14 +251,20 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
 	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
 
+	// Add in custom reserve buttons
+	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
+	Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+	tftdIcons->setX(48);
+	tftdIcons->setY(176);
+	tftdIcons->blit(icons);
+
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
-	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
-	SDL_Rect *r = s->getCrop();
+	SDL_Rect *r = icons->getCrop();
 	r->x = 0;
 	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
-	s->blit(_icons);
+	icons->blit(_icons);
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
