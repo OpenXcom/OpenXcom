@@ -671,25 +671,20 @@ std::string getLocale()
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
 
-	std::ostringstream locale;
-	locale << language << "-" << country;
-	return locale.str();
-	/*
-	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
-	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
-
-	return Language::wstrToUtf8(locale);
-	*/
 #else
 	std::locale l("");
 	std::string name = l.name();
+	if (name.empty()) {
+		Log(LOG_INFO) << "Locale not found. Defaulting to en_US";
+		name = "en_US";
+	}
 	std::string language = name.substr(0, name.find_first_of('_')-1);
 	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
-	
+#endif
+
 	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
-#endif
 }
 
 /**
