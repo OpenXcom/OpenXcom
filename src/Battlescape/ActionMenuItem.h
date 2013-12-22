@@ -39,7 +39,6 @@ class Frame;
 class ActionMenuItem : public InteractiveSurface
 {
 private:
-	int _id;
 	bool _highlighted;
 	BattleActionType _action;
 	int _tu;

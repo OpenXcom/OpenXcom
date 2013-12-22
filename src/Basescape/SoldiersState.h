@@ -39,7 +39,7 @@ class SoldiersState : public State
 private:
 	TextButton *_btnOk, *_btnPsiTraining, *_btnMemorial;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtRecruited, *_txtLost;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft;
 	TextList *_lstSoldiers;
 	Base *_base;
 public:
