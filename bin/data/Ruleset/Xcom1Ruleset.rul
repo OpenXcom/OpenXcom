@@ -6040,6 +6040,30 @@ alienDeployments:
     terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 0
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
       - alienRank: 5
         lowQty: 5
         highQty: 7
@@ -6159,30 +6183,6 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
-      - alienRank: 6
-        lowQty: 1
-        highQty: 3
-        dQty: 1
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
-      - alienRank: 7
-        lowQty: 0
-        highQty: 2
-        dQty: 1
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
     width: 50
     length: 50
     height: 2
