@@ -43,7 +43,6 @@ protected:
 	int _x, _y;
 	SDL_Rect _crop;
 	bool _visible, _hidden, _redraw;
-	SDL_Color *_originalColors;
 	void *_alignedBuffer;
 	int _dx, _dy;
 	std::string _tooltip;
@@ -193,10 +192,6 @@ public:
 	void lock();
 	/// Unlocks the surface.
 	void unlock();
-	/// Offsets and optionally inverts the surface palette's colors by a set amount.
-	void paletteShift(int off, int mul, int mid = 0);
-	/// Restores the original palette.
-	void paletteRestore();
 	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
 	/// Invalidate the surface: force it to be redrawn
@@ -207,7 +202,7 @@ public:
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.
 	void setTooltip(const std::string &tooltip);
-	
+
 };
 
 }
