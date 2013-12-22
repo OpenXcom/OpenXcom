@@ -9263,3 +9263,9 @@ extraSprites:
     subY: 3
     files:
       0: Resources/BulletSprites/BulletSprites.png
+  - type: TFTDReserve
+    width: 59
+    height: 24
+    singleImage: true
+    files:
+      0: Resources/UI/reserve.png
