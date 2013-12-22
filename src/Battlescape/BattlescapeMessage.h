@@ -47,8 +47,8 @@ public:
 	void setBackground(Surface *background);
 	/// Sets the Battlescape message's text.
 	void setText(const std::wstring &message);
-	/// Sets the Battlescape message's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the Battlescape message's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the Battlescape message's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Blits the warning message.

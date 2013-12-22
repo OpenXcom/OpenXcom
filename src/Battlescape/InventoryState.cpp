@@ -275,7 +275,7 @@ void InventoryState::updateStats()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
-	_txtTus->setText(tr("STR_TUS").arg(unit->getTimeUnits()));
+	_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
 	int weight = unit->getCarriedWeight(_inv->getSelectedItem());
 	_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
@@ -288,13 +288,13 @@ void InventoryState::updateStats()
 		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	}
 
-	_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
+	_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
 
-	_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
+	_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 
 	if (unit->getStats()->psiSkill > 0)
 	{
-		_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
+		_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(unit->getStats()->psiSkill));
 	}
 	else
 	{
@@ -303,7 +303,7 @@ void InventoryState::updateStats()
 
 	if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
-		_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
+		_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
 	}
 	else
 	{

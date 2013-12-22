@@ -470,31 +470,6 @@ void Game::loadLanguage(const std::string &filename)
 }
 
 /**
- * Changes the language currently in use by the game.
- * @param filename Filename of the language file.
- */
-void Game::loadLng(const std::string &filename)
-{
-	std::ostringstream ss, ss2;
-	ss << "Language/" << filename << ".lng";
-	ss2 << "Language/" << filename << ".geo";
-
-	_lang->loadLng(CrossPlatform::getDataFile(ss.str()), _rules->getExtraStrings()[filename]);
-
-	std::auto_ptr<Surface> sidebar(new Surface(64, 154));
-	if (CrossPlatform::getDataFile(ss2.str()) != "")
-	{
-		sidebar->setPalette(_res->getSurface("GEOBORD.SCR")->getPalette());
-		sidebar->loadScr(CrossPlatform::getDataFile(ss2.str()));
-	}
-	sidebar->setX(256);
-	sidebar->setY(0);
-	sidebar->blit(_res->getSurface("GEOBORD.SCR"));
-
-	Options::setString("language", filename);
-}
-
-/**
  * Returns the resource pack currently in use by the game.
  * @return Pointer to the resource pack.
  */

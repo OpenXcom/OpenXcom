@@ -1179,7 +1179,7 @@ void Globe::drawRadars()
 		return;
 /*	Text *label = new Text(80, 9, 0, 0);
 	label->setPalette(getPalette());
-	label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 	label->setAlign(ALIGN_LEFT);
 	label->setColor(Palette::blockOffset(15)-1);
 */
@@ -1390,7 +1390,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(15)-1);
 
@@ -1418,7 +1418,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(8)+10);
 

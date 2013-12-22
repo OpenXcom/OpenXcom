@@ -63,16 +63,19 @@ BaseView::~BaseView()
 }
 
 /**
- * Changes the various fonts for the text to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void BaseView::setFonts(Font *big, Font *small)
+void BaseView::initText(Font *big, Font *small, Language *lang)
 {
 	_big = big;
 	_small = small;
+	_lang = lang;
 }
 
 /**
@@ -543,7 +546,7 @@ void BaseView::draw()
 		{
 			Text *text = new Text(GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
 			text->setPalette(getPalette());
-			text->setFonts(_big, _small);
+			text->initText(_big, _small, _lang);
 			text->setX((*i)->getX() * GRID_SIZE);
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();

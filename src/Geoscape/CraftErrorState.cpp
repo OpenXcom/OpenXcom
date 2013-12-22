@@ -66,7 +66,7 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	_btnOk->onKeyboardPress((ActionHandler)&CraftErrorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&CraftErrorState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress((ActionHandler)&CraftErrorState::btnOk5SecsClick, (SDLKey)Options::getInt("keyOk"));
 

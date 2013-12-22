@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Font;
+class Language;
 
 enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
@@ -41,6 +42,7 @@ class Text : public Surface
 {
 private:
 	Font *_big, *_small, *_font;
+	Language *_lang;
 	std::wstring _text, _wrappedText;
 	std::vector<int> _lineWidth, _lineHeight;
 	bool _wrap, _invert, _contrast;
@@ -50,6 +52,8 @@ private:
 
 	/// Processes the contained text.
 	void processText();
+	/// Gets the X position of a text line.
+	int getLineX(int line) const;
 public:
 	/// Creates a new text with the specified size and position.
 	Text(int width, int height, int x = 0, int y = 0);
@@ -67,8 +71,8 @@ public:
 	void setSmall();
 	/// Gets the text's current font.
 	Font *getFont() const;
-	/// Sets the text's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the resources for the text.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text's string.
 	void setText(const std::wstring &text);
 	/// Gets the text's string.

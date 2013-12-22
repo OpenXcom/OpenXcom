@@ -205,18 +205,18 @@ std::wstring GameTime::getDayString(Language *lang) const
 	case 1:
 	case 21:
 	case 31:
-		s = "STR_ST";
+		s = "STR_DATE_FIRST";
 		break;
 	case 2:
 	case 22:
-		s = "STR_ND";
+		s = "STR_DATE_SECOND";
 		break;
 	case 3:
 	case 23:
-		s = "STR_RD";
+		s = "STR_DATE_THIRD";
 		break;
 	default:
-		s = "STR_TH";
+		s = "STR_DATE_FOURTH";
 	}
 	return lang->getString(s).arg(_day);
 }

@@ -90,8 +90,6 @@ public:
 	Language *getLanguage() const;
 	/// Loads a new language for the game.
 	void loadLanguage(const std::string &filename);
-	/// Loads a new language for the game.
-	void loadLng(const std::string &filename);
 	/// Gets the currently loaded resource pack.
 	ResourcePack *getResourcePack() const;
 	/// Sets a new resource pack for the game.

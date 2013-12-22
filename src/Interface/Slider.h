@@ -25,6 +25,7 @@ namespace OpenXcom
 {
 
 class Font;
+class Language;
 class Frame;
 class TextButton;
 
@@ -50,8 +51,8 @@ public:
 	void setX(int x);
 	/// Sets the Y position of the surface.
 	void setY(int y);
-	/// Sets the slider's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the slider's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the slider's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the slider's color.

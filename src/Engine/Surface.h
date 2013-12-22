@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Font;
+class Language;
 
 /**
  * Element that is blit (rendered) onto the screen.
@@ -73,8 +74,8 @@ public:
 	virtual void draw();
 	/// Blits this surface onto another one.
 	virtual void blit(Surface *surface);
-	/// Sets the surface's various fonts.
-	virtual void setFonts(Font *, Font *) {};
+	/// Initializes the surface's various text resources.
+	virtual void initText(Font *, Font *, Language *) {};
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
     /// Draws a filled rectangle on the surface.

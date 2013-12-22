@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class Font;
 class Timer;
 
 /**
@@ -59,8 +58,8 @@ public:
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
-	/// Sets the text edit's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the text edit's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text's string.
 	void setText(const std::wstring &text);
 	/// Gets the text edit's string.

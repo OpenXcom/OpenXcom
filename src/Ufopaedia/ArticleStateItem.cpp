@@ -90,7 +90,7 @@ namespace OpenXcom
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
 			_txtTuCost->setWordWrap(true);
-			_txtTuCost->setText(tr("STR_TU_COST").c_str());
+			_txtTuCost->setText(tr("STR_TIME_UNIT_COST").c_str());
 
 			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
@@ -166,12 +166,14 @@ namespace OpenXcom
 
 		for (int i = 0; i<3; ++i)
 		{
-			_txtAmmoType[i] = new Text(90, 9, 190, 24 + i*49);
+			_txtAmmoType[i] = new Text(82, 16, 194, 20 + i*49);
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 			_txtAmmoType[i]->setAlign(ALIGN_CENTER);
+			_txtAmmoType[i]->setVerticalAlign(ALIGN_MIDDLE);
+			_txtAmmoType[i]->setWordWrap(true);
 
-			_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + i*49);
+			_txtAmmoDamage[i] = new Text(82, 17, 194, 40 + i*49);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
 			_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
@@ -184,13 +186,13 @@ namespace OpenXcom
 		switch (item->getBattleType())
 		{
 			case BT_FIREARM:
-				_txtDamage = new Text(80, 10, 200, 7);
+				_txtDamage = new Text(82, 10, 194, 7);
 				add(_txtDamage);
 				_txtDamage->setColor(Palette::blockOffset(14)+15);
 				_txtDamage->setAlign(ALIGN_CENTER);
 				_txtDamage->setText(tr("STR_DAMAGE_UC").c_str());
 
-				_txtAmmo = new Text(45, 10, 270, 7);
+				_txtAmmo = new Text(42, 10, 272, 7);
 				add(_txtAmmo);
 				_txtAmmo->setColor(Palette::blockOffset(14)+15);
 				_txtAmmo->setAlign(ALIGN_CENTER);

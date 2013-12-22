@@ -993,7 +993,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 				switch (effectiveTuReserved)
 				{
 				case BA_NONE: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING"); break;
-				default: _parentState->warning("STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING");
+				default: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING");
 				}
 			}
 			else

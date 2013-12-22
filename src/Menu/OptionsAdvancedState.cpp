@@ -295,7 +295,7 @@ std::wstring OptionsAdvancedState::updatePathString(int sel)
 	case 1:
 		return tr("STR_ARROWS");
 	case 2:
-		return tr("STR_TU_COST");
+		return tr("STR_TIME_UNIT_COST");
 	case 3:
 		return tr("STR_FULL");
 	default:

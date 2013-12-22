@@ -25,8 +25,9 @@
 namespace OpenXcom
 {
 
-class State;
+class Game;
 class Font;
+class Language;
 class Text;
 class Frame;
 
@@ -46,7 +47,7 @@ private:
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
 	/// Creates a new ActionMenuItem.
-	ActionMenuItem(int id, Font *big, Font *small, int x, int y);
+	ActionMenuItem(int id, Game *game, int x, int y);
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assigns an action to it.

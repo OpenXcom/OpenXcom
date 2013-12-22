@@ -7764,7 +7764,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7781,7 +7781,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 132
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7798,7 +7798,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7813,7 +7813,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 110
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7830,7 +7830,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5

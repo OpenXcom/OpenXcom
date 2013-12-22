@@ -203,8 +203,6 @@ std::map<std::string, LanguagePlurality::PFCreate> LanguagePlurality::s_factoryF
  * If the language was not found, a default with the same rules as English is returned.
  * @param language The target language.
  * @return A newly created LanguagePlurality instance for the given language.
- * @todo Make sure the rest of the languages we support in OpenXcom are ok with
- * the English rules for plurality.
  * @internal The first time this is called, we populate the language => rules mapping.
  */
 LanguagePlurality *LanguagePlurality::create(const std::string &language)
@@ -220,6 +218,10 @@ LanguagePlurality *LanguagePlurality::create(const std::string &language)
 		s_factoryFunctions.insert(std::make_pair("ro", &RomanianPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("ru", &CyrillicPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("uk", &CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ja-JP", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("ko", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-CN", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-TW", &NoSingular::create));
 	}
 	PFCreate creator = &OneSingular::create;
 	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);
