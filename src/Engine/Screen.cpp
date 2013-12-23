@@ -376,11 +376,13 @@ void Screen::setResolution(int width, int height)
 
 	if (isOpenGLEnabled()) 
 	{
+#ifndef __NO_OPENGL
 		glOutput.init(BASE_WIDTH, BASE_HEIGHT);
 		glOutput.linear = Options::getBool("useOpenGLSmoothing"); // setting from shader file will override this, though
 		glOutput.set_shader(CrossPlatform::getDataFile(Options::getString("useOpenGLShader")).c_str());
 		glOutput.setVSync(Options::getBool("vSyncForOpenGL"));
 		OpenGL::checkErrors = Options::getBool("checkOpenGLErrors");
+#endif
 	}
 
 	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
@@ -455,22 +457,20 @@ int Screen::getCursorLeftBlackBand() const
 void Screen::screenshot(const std::string &filename) const
 {
 	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
-
-
+	
 	if (isOpenGLEnabled())
 	{
+#ifndef __NO_OPENGL
 		GLenum format = GL_RGB;
-
-		#ifndef __NO_OPENGL
 
 		for (int y = 0; y < getHeight(); ++y)
 		{
 			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
 		}
 		glErrorCheck();
-		
-		#endif
-	} else
+#endif
+	}
+	else
 	{
 		SDL_BlitSurface(_screen, 0, screenshot, 0);
 	}
