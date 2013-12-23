@@ -294,8 +294,16 @@ void Screen::setResolution(int width, int height)
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)
 	{
-		throw Exception(SDL_GetError());
+		Log(LOG_ERROR) << SDL_GetError();
+		Log(LOG_INFO) << "Attempting to set display to default resolution...";
+		_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+		if (_screen == 0)
+		{
+			throw Exception(SDL_GetError());
+		}
 	}
+	Options::setInt("displayWidth", getWidth());
+	Options::setInt("displayHeoght", getHeight());
 	_scaleX = getWidth() / (double)BASE_WIDTH;
 	_scaleY = getHeight() / (double)BASE_HEIGHT;
 
