@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1), _threadGeo(0), _threadBattle(0)
 {
-	// Start asynchronous save
+	// Start of asynchronous saving
 	if (boost::thread::hardware_concurrency() != 1)
 	{
 		_threadGeo = new boost::thread(asyncSaveGeo, _game, boost::ref(_emGeo));
@@ -75,6 +75,7 @@ SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGame
 {
 	if (_showMsg) updateStatus("STR_SAVING_GAME");
 
+	// Start of asynchronous saving
 	if (boost::thread::hardware_concurrency() != 1)
 	{
 		_threadGeo = new boost::thread(asyncSaveGeo, _game, boost::ref(_emGeo));
@@ -232,13 +233,14 @@ void SaveState::quickSave(const std::string &filename)
 		}
 		else
 		{
-			// One core system
+			// For one core systems will be only one thread
 			asyncSaveGeo(_game, _emGeo);
 			if (_game->getSavedGame()->getSavedBattle() != 0)
 			{
 				asyncSaveBattle(_game, _emBattle);
 			}
 		}
+
 		_game->getSavedGame()->save(filename, _emGeo, _emBattle);
 		CrossPlatform::deleteFile(bakPath);
 	}
@@ -265,7 +267,7 @@ void SaveState::quickSave(const std::string &filename)
 }
 
 /**
- * Envelope for multithreaded save of GeoScape.
+ * Wrapper for multithreaded saving of GeoScape.
  * @param game Pointer to the core game.
  * @param emGeo YAML Emitter for save a info.
  */
@@ -279,7 +281,7 @@ void SaveState::asyncSaveGeo(Game *game, YAML::Emitter &emGeo)
 }
 
 /**
- * Envelope for multithreaded save of BattleScape.
+ * Wrapper for multithreaded saving of BattleScape.
  * @param game Pointer to the core game.
  * @param emBattle YAML Emitter for save a info.
  */

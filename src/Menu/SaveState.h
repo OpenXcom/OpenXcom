@@ -55,9 +55,9 @@ public:
 	void lstSavesPress(Action *action);
 	/// Quick save game.
 	void quickSave(const std::string &filename);
-	/// Envelope for multithreaded save of GeoScape.
+	/// Wrapper for multithreaded saving of GeoScape.
 	static void asyncSaveGeo(Game *game, YAML::Emitter &emGeo);
-	/// Envelope for multithreaded save of BattleScape.
+	/// Wrapper for multithreaded saving of BattleScape.
 	static void asyncSaveBattle(Game *game, YAML::Emitter &emBattle);
 };
 
