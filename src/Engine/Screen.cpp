@@ -303,7 +303,7 @@ void Screen::setResolution(int width, int height)
 		}
 	}
 	Options::setInt("displayWidth", getWidth());
-	Options::setInt("displayHeoght", getHeight());
+	Options::setInt("displayHeight", getHeight());
 	_scaleX = getWidth() / (double)BASE_WIDTH;
 	_scaleY = getHeight() / (double)BASE_HEIGHT;
 
