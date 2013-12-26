@@ -26,6 +26,7 @@ namespace OpenXcom
 
 class Text;
 class Font;
+class Language;
 class Sound;
 
 /**
@@ -60,8 +61,8 @@ public:
 	void setSmall();
 	/// Gets the text button's current font.
 	Font *getFont() const;
-	/// Sets the text button's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the text edit's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text button's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the text button's text.

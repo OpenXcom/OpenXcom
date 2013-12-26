@@ -28,6 +28,8 @@
 
 namespace OpenXcom
 {
+enum TextDirection { DIRECTION_LTR, DIRECTION_RTL };
+enum TextWrapping { WRAP_WORDS, WRAP_LETTERS };
 
 class TextList;
 class ExtraStrings;
@@ -43,8 +45,11 @@ private:
 	std::string _id;
 	std::map<std::string, LocalizedText> _strings;
 	LanguagePlurality *_handler;
+	TextDirection _direction;
+	TextWrapping _wrap;
 
 	static std::map<std::string, std::wstring> _names;
+	static std::vector<std::string> _rtl, _cjk;
 
 	/// Parses a text string loaded from an external file.
 	std::wstring loadString(const std::string &s) const;
@@ -73,8 +78,6 @@ public:
 	static std::vector<std::string> getList(TextList *list);
 	/// Loads the language from a YAML file.
 	void load(const std::string &filename, ExtraStrings *extras);
-	/// Loads an OpenXcom language file.
-	void loadLng(const std::string &filename, ExtraStrings *extras);
 	/// Gets the language's ID.
 	std::string getId() const;
 	/// Gets the language's name.
@@ -87,6 +90,10 @@ public:
 	LocalizedText getString(const std::string &id, unsigned n) const;
 	/// Get a gender-depended localized text.
 	const LocalizedText &getString(const std::string &id, SoldierGender gender) const;
+	/// Gets the direction of text in this language.
+	TextDirection getTextDirection() const;
+	/// Gets the wrapping of text in this language.
+	TextWrapping getTextWrapping() const;
 };
 
 }

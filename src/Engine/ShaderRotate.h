@@ -160,7 +160,7 @@ class ShaderRotate : public helper::ShaderBase<const Pixel>
 {
 public:
 	typedef helper::ShaderBase<const Pixel> _base;
-	friend class helper::controler<ShaderRotate<Pixel> >;
+	friend struct helper::controler<ShaderRotate<Pixel> >;
 	
 private:
 	typedef helper::FF_Point point;

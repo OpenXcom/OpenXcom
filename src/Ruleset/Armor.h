@@ -35,8 +35,9 @@ namespace OpenXcom
  */
 class Armor
 {
-private:
+public:	
 	static const int DAMAGE_TYPES = 10;
+private:
 	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem;
 	std::vector<std::string> _corpseBattle;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;

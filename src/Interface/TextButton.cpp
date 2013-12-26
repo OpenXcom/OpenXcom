@@ -110,15 +110,17 @@ Font *TextButton::getFont() const
 }
 
 /**
- * Changes the various fonts for the text label to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void TextButton::setFonts(Font *big, Font *small)
+void TextButton::initText(Font *big, Font *small, Language *lang)
 {
-	_text->setFonts(big, small);
+	_text->initText(big, small, lang);
 	_redraw = true;
 }
 

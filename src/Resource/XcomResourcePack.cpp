@@ -795,15 +795,6 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
 
-	// Add in custom reserve buttons
-	Surface *icons = new Surface(59, 24);
-	icons->loadImage(CrossPlatform::getDataFile("Resources/UI/reserve.png"));
-	icons->setX(48);
-	icons->setY(176);
-	_surfaces["ICONS.PCK"]->setPalette(icons->getPalette());
-	icons->blit(_surfaces["ICONS.PCK"]);
-	delete icons;
-
 	// Load Battlescape inventory
 	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
 	std::vector<std::string> invs = CrossPlatform::getFolderContents(ufograph, "SPK");

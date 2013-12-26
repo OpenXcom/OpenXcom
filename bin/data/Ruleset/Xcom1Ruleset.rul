@@ -2530,7 +2530,7 @@ items:
     handSprite: 104
     hitSound: 48
     power: 70
-    damageType: 2
+    damageType: 7
     accuracyMelee: 92
     tuMelee: 15
     clipSize: -1
@@ -6040,6 +6040,30 @@ alienDeployments:
     terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 0
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
       - alienRank: 5
         lowQty: 5
         highQty: 7
@@ -6159,30 +6183,6 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
-      - alienRank: 6
-        lowQty: 1
-        highQty: 3
-        dQty: 1
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
-      - alienRank: 7
-        lowQty: 0
-        highQty: 2
-        dQty: 1
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
     width: 50
     length: 50
     height: 2
@@ -7764,7 +7764,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7781,7 +7781,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 132
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7798,7 +7798,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7813,7 +7813,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 110
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7830,7 +7830,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -9130,6 +9130,8 @@ MCDPatches:
         bigWall: 6
       - MCDIndex: 48
         bigWall: 2
+      - MCDIndex: 54
+        TUFly: 2
       - MCDIndex: 56
         terrainHeight: -7
   - type: LIGHTNIN
@@ -9163,8 +9165,6 @@ MCDPatches:
       - MCDIndex: 13
         bigWall: 7
         LOFTS: [44,44,44,44,44,44,44,44,44,44,44,44]
-      - MCDIndex: 54
-        TUSlide: 2
   - type: PLANE
     data:
       - MCDIndex: 49
@@ -9263,3 +9263,9 @@ extraSprites:
     subY: 3
     files:
       0: Resources/BulletSprites/BulletSprites.png
+  - type: TFTDReserve
+    width: 59
+    height: 24
+    singleImage: true
+    files:
+      0: Resources/UI/reserve.png

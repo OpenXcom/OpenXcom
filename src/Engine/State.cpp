@@ -73,9 +73,9 @@ void State::add(Surface *surface)
 	// Set palette
 	surface->setPalette(_game->getScreen()->getPalette());
 
-	// Set default fonts
-	if (_game->getResourcePack())
-		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	// Set default text resources
+	if (_game->getLanguage() && _game->getResourcePack())
+		surface->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 
 	_surfaces.push_back(surface);
 }
@@ -264,7 +264,7 @@ void State::applyBattlescapeTheme()
 		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
 		if (arrow)
 		{
-			arrow->setColor(Palette::blockOffset(0)-1);
+			arrow->setColor(Palette::blockOffset(0));
 		}
 		Slider *slider = dynamic_cast<Slider*>(*i);
 		if (slider)

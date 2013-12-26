@@ -84,13 +84,17 @@ void Slider::setY(int y)
 }
 
 /**
- * Changes the various fonts for the slider to use.
+ * Changes the various resources needed for text rendering.
+ * The different fonts need to be passed in advance since the
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void Slider::setFonts(Font *big, Font *small)
+void Slider::initText(Font *big, Font *small, Language *lang)
 {
-	_button->setFonts(big, small);
+	_button->initText(big, small, lang);
 }
 
 /**

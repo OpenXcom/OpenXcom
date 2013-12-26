@@ -37,13 +37,12 @@ class RuleTerrain;
 class MapBlock
 {
 private:
-	RuleTerrain *_terrain;
 	std::string _name;
 	int _size_x, _size_y, _size_z;
 	MapBlockType _type, _subType;
 	int _frequency, _timesUsed, _maxCount;
 public:
-	MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type);
+	MapBlock(std::string name, int size_x, int size_y, MapBlockType type);
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);

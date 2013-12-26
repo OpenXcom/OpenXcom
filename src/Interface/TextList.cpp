@@ -228,7 +228,7 @@ void TextList::addRow(int cols, ...)
 		// Place text
 		Text* txt = new Text(_columns[i], _font->getHeight(), _margin + rowX, getY());
 		txt->setPalette(this->getPalette());
-		txt->setFonts(_big, _small);
+		txt->initText(_big, _small, _lang);
 		txt->setColor(_color);
 		txt->setSecondaryColor(_color2);
 		if (_align[i])
@@ -362,16 +362,18 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Changes the various fonts of the text in the list
+ * Changes the resources for the text in the list
  * and calculates the selector and visible amount of rows.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void TextList::setFonts(Font *big, Font *small)
+void TextList::initText(Font *big, Font *small, Language *lang)
 {
 	_big = big;
 	_small = small;
 	_font = small;
+	_lang = lang;
 
 	delete _selector;
 	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());

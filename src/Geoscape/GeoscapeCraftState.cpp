@@ -66,12 +66,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtFuel = new Text(120, 9, 32, 84);
 	_txtDamage = new Text(75, 9, 164, 84);
 	_txtW1Name = new Text(120, 9, 32, 92);
-	_txtW1Ammo = new Text(60, 9, 164, 92);
+	_txtW1Ammo = new Text(80, 9, 164, 92);
 	_txtW2Name = new Text(120, 9, 32, 100);
-	_txtW2Ammo = new Text(60, 9, 164, 100);
+	_txtW2Ammo = new Text(80, 9, 164, 100);
 	_txtRedirect = new Text(230, 17, 13, 108);
 	_txtSoldier = new Text(60, 9, 164, 68);
-	_txtHWP = new Text(60, 9, 164, 76);
+	_txtHWP = new Text(80, 9, 164, 76);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
