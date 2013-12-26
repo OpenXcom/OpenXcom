@@ -1559,12 +1559,6 @@
     <ClInclude Include="Engine\ShaderRepeat.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ShaderRotate.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\FixedFloat.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GraphSubset.h">
       <Filter>Engine</Filter>
     </ClInclude>
