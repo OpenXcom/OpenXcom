@@ -1011,7 +1011,7 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 	if (flag && Options::getBool("battleAutoEnd"))
 	{
 		setSelectedUnit(0);
-		_battleState->getBattleGame()->statePushBack(0);
+		_battleState->getBattleGame()->requestEndTurn();
 	}
 }
 
