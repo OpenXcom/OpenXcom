@@ -1017,6 +1017,7 @@ void BattlescapeGenerator::generateMap()
 	int x = 0, y = 0;
 	int blocksToDo = 0;
 	std::vector< std::vector<MapBlock*> > blocks;
+	std::vector< std::vector<bool> > storageBlocks;
 	std::vector< std::vector<bool> > landingzone;
 	std::vector< std::vector<int> > segments;
 	int craftX = 0, craftY = 0;
@@ -1032,6 +1033,7 @@ void BattlescapeGenerator::generateMap()
 
 	blocks.resize((_mapsize_x / 10), std::vector<MapBlock*>((_mapsize_y / 10)));
 	landingzone.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));
+	storageBlocks.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));
 	segments.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),0));
 
 	blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
@@ -1164,6 +1166,7 @@ void BattlescapeGenerator::generateMap()
 						if (mapnum < 10) newname << 0;
 						newname << mapnum;
 						blocks[x][y] = _terrain->getMapBlock(newname.str());
+						storageBlocks[x][y] = ((*i)->getRules()->getStorage() > 0);
 						num++;
 					}
 				}
@@ -1337,9 +1340,25 @@ void BattlescapeGenerator::generateMap()
 					continue;
 
 				// general stores - there is where the items are put
-				if (blocks[i][j] == _terrain->getMapBlock("XBASE_07"))
+				if (storageBlocks[i][j])
 				{
-					_craftInventoryTile = _save->getTile(Position(i*10,(j*10)+5,1));
+					for (int k = i * 10; k != (i + 1) * 10; ++k)
+					{
+						for (int l = j * 10; l != (j + 1) * 10; ++l)
+						{
+							// we only want every other tile, giving us a "checkerboard" pattern
+							if ((k+l) % 2 == 0)
+							{
+								Tile *t = _save->getTile(Position(k,l,1));
+
+								if (t && t->getMapData(MapData::O_FLOOR) && !t->getMapData(MapData::O_OBJECT))
+								{
+									_save->getStorageSpace().push_back(Position(k, l, 1));
+								}
+							}
+						}
+					}
+					_craftInventoryTile = _save->getTile(Position(i*10+5,(j*10)+5,1));
 				}
 
 				// drill east
