@@ -8447,7 +8447,7 @@ ufopaedia:
       - STR_UFO_POWER_SOURCE
     image_id: UP032.SPK
     text: STR_UFO_POWER_SOURCE_UFOPEDIA
-    text_width: 160
+    text_width: 163
   - id: STR_UFO_NAVIGATION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8455,7 +8455,7 @@ ufopaedia:
       - STR_UFO_NAVIGATION
     image_id: UP033.SPK
     text: STR_UFO_NAVIGATION_UFOPEDIA
-    text_width: 145
+    text_width: 147
   - id: STR_UFO_CONSTRUCTION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8471,7 +8471,7 @@ ufopaedia:
       - STR_ALIEN_FOOD
     image_id: UP035.SPK
     text: STR_ALIEN_FOOD_UFOPEDIA
-    text_width: 170
+    text_width: 173
   - id: STR_ALIEN_REPRODUCTION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8479,7 +8479,7 @@ ufopaedia:
       - STR_ALIEN_REPRODUCTION
     image_id: UP036.SPK
     text: STR_ALIEN_REPRODUCTION_UFOPEDIA
-    text_width: 165
+    text_width: 167
   - id: STR_ALIEN_ENTERTAINMENT
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8487,7 +8487,7 @@ ufopaedia:
       - STR_ALIEN_ENTERTAINMENT
     image_id: UP037.SPK
     text: STR_ALIEN_ENTERTAINMENT_UFOPEDIA
-    text_width: 145
+    text_width: 146
   - id: STR_ALIEN_SURGERY
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8495,7 +8495,7 @@ ufopaedia:
       - STR_ALIEN_SURGERY
     image_id: UP038.SPK
     text: STR_ALIEN_SURGERY_UFOPEDIA
-    text_width: 105
+    text_width: 108
   - id: STR_EXAMINATION_ROOM
     type_id: 7
     section: STR_UFO_COMPONENTS

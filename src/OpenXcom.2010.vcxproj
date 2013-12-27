@@ -575,7 +575,6 @@
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\FastLineClip.h" />
-    <ClInclude Include="Engine\FixedFloat.h" />
     <ClInclude Include="Engine\Flc.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
@@ -601,7 +600,6 @@
     <ClInclude Include="Engine\ShaderDrawHelper.h" />
     <ClInclude Include="Engine\ShaderMove.h" />
     <ClInclude Include="Engine\ShaderRepeat.h" />
-    <ClInclude Include="Engine\ShaderRotate.h" />
     <ClInclude Include="Engine\Sound.h" />
     <ClInclude Include="Engine\SoundSet.h" />
     <ClInclude Include="Engine\State.h" />

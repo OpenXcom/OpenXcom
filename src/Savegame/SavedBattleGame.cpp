@@ -924,7 +924,37 @@ void SavedBattleGame::resetUnitTiles()
 		}
 	}
 }
+ 
+/**
+ * Gives access to the "storage space" vector, for distribution of items in base defense missions.
+ */
+std::vector<Position> &SavedBattleGame::getStorageSpace()
+{
+	return _storageSpace;
+}
 
+/**
+ * Move all the leftover items in base defense missions to random locations in the storage facilities
+ * @param t the tile where all our goodies are initially stored.
+ */
+void SavedBattleGame::randomizeItemLocations(Tile *t)
+{
+	if (!_storageSpace.empty())
+	{
+		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end();)
+		{
+			if ((*it)->getSlot()->getId() == "STR_GROUND")
+			{
+				getTile(_storageSpace.at(RNG::generate(0, _storageSpace.size() -1)))->addItem(*it, (*it)->getSlot());
+				it = t->getInventory()->erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+}
 /**
  * Removes an item from the game. Eg. when ammo item is depleted.
  * @param item The Item to remove.
