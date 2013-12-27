@@ -1358,7 +1358,8 @@ void BattlescapeGenerator::generateMap()
 							}
 						}
 					}
-					_craftInventoryTile = _save->getTile(Position(i*10+5,(j*10)+5,1));
+					// let's put the inventory tile on the lower floor, just to be safe.
+					_craftInventoryTile = _save->getTile(Position((i*10)+5,(j*10)+5,0));
 				}
 
 				// drill east
