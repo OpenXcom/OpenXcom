@@ -26,9 +26,9 @@ namespace OpenXcom
 
 class BattleUnit;
 class Text;
+class TextButton;
 class Bar;
 class Surface;
-class InteractiveSurface;
 class SavedBattleGame;
 class BattlescapeState;
 
@@ -59,7 +59,7 @@ private:
 	Text *_txtFrontArmor, *_txtLeftArmor, *_txtRightArmor, *_txtRearArmor, *_txtUnderArmor;
 	Text *_numFrontArmor, *_numLeftArmor, *_numRightArmor, *_numRearArmor, *_numUnderArmor;
 	Bar *_barFrontArmor, *_barLeftArmor, *_barRightArmor, *_barRearArmor, *_barUnderArmor;
-	InteractiveSurface *_btnPrev, *_btnNext;
+	TextButton *_btnPrev, *_btnNext;
 public:
 	/// Creates the Unit Info state.
 	UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent, bool fromInventory, bool mindProbe);

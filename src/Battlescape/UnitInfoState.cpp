@@ -28,8 +28,8 @@
 #include "../Engine/Palette.h"
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Engine/Surface.h"
-#include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
@@ -53,7 +53,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
-	_txtName = new Text(312, 192, 4, 4);
+	_txtName = new Text(292, 192, 24, 4);
 
 	_txtTimeUnits = new Text(120, 9, 8, 31);
 	_numTimeUnits = new Text(18, 9, 150, 31);
@@ -125,8 +125,8 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	if (!_mindProbe)
 	{
-		_btnPrev = new InteractiveSurface(23, 22, 0, 0);
-		_btnNext = new InteractiveSurface(23, 22, 297, 0);
+		_btnPrev = new TextButton(20, 18, 2, 2);
+		_btnNext = new TextButton(20, 18, 298, 2);
 	}
 
 	add(_bg);
@@ -209,7 +209,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 	centerAllSurfaces();
 
 	// Set up objects
-	_game->getResourcePack()->getSurface(_mindProbe ? "UNIBORD.PCK" : "ALTUNIBORD.PCK")->blit(_bg);
+	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
@@ -389,8 +389,12 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	if (!_mindProbe)
 	{
+		_btnPrev->setText(L"<<");
+		_btnPrev->setColor(Palette::blockOffset(4));
 		_btnPrev->onMouseClick((ActionHandler)&UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress((ActionHandler)&UnitInfoState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+		_btnNext->setText(L">>");
+		_btnNext->setColor(Palette::blockOffset(4));
 		_btnNext->onMouseClick((ActionHandler)&UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress((ActionHandler)&UnitInfoState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
 	}
