@@ -795,6 +795,16 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
 
+	// here we create an "alternate" background of the Unit Info Screen, we copy the previous and next buttons from the Inventory screen.
+	_surfaces["ALTUNIBORD.PCK"] = new Surface(320, 200);
+	_surfaces["ALTUNIBORD.PCK"]->loadSpk(CrossPlatform::getDataFile("UFOGRAPH/UNIBORD.PCK"));
+	for (int y = 1; y <= 23; ++y)
+		for (int x = 273; x <= 295; ++x)
+			_surfaces["ALTUNIBORD.PCK"]->setPixel(x-273, y-1, _surfaces["TAC01.SCR"]->getPixel(x,y));
+	for (int y = 1; y <= 23; ++y)
+		for (int x = 297; x <= 320; ++x)
+			_surfaces["ALTUNIBORD.PCK"]->setPixel(x, y-1, _surfaces["TAC01.SCR"]->getPixel(x,y));
+
 	// Load Battlescape inventory
 	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
 	std::vector<std::string> invs = CrossPlatform::getFolderContents(ufograph, "SPK");

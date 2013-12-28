@@ -29,6 +29,7 @@
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
 #include "../Engine/Surface.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
@@ -46,8 +47,10 @@ namespace OpenXcom
  * @param unit Pointer to the selected unit.
  * @param parent Pointer to parent Battlescape.
  */
-UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent) : State(game), _unit(unit), _parent(parent)
+UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent, bool fromInventory, bool mindProbe) : State(game), _unit(unit), _parent(parent), _fromInventory(fromInventory), _mindProbe(mindProbe)
 {
+	_battleGame = _game->getSavedGame()->getSavedBattle();
+
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_txtName = new Text(312, 192, 4, 4);
@@ -120,6 +123,12 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 	_numUnderArmor = new Text(18, 9, 150, 191);
 	_barUnderArmor = new Bar(170, 5, 170, 192);
 
+	if (!_mindProbe)
+	{
+		_btnPrev = new InteractiveSurface(23, 22, 0, 0);
+		_btnNext = new InteractiveSurface(23, 22, 297, 0);
+	}
+
 	add(_bg);
 	add(_txtName);
 
@@ -191,10 +200,16 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 	add(_numUnderArmor);
 	add(_barUnderArmor);
 
+	if (!_mindProbe)
+	{
+		add(_btnPrev);
+		add(_btnNext);
+	}
+
 	centerAllSurfaces();
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
+	_game->getResourcePack()->getSurface(_mindProbe ? "UNIBORD.PCK" : "ALTUNIBORD.PCK")->blit(_bg);
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
@@ -372,6 +387,14 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 	_barUnderArmor->setColor(Palette::blockOffset(5));
 	_barUnderArmor->setScale(1.0);
 
+	if (!_mindProbe)
+	{
+		_btnPrev->onMouseClick((ActionHandler)&UnitInfoState::btnPrevClick);
+		_btnPrev->onKeyboardPress((ActionHandler)&UnitInfoState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+		_btnNext->onMouseClick((ActionHandler)&UnitInfoState::btnNextClick);
+		_btnNext->onKeyboardPress((ActionHandler)&UnitInfoState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+	}
+
 }
 
 /**
@@ -536,7 +559,6 @@ void UnitInfoState::init()
 void UnitInfoState::handle(Action *action)
 {
 	State::handle(action);
-	//SavedBattleGame *battleGame = _game->getSavedGame()->getSavedBattle();
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -545,22 +567,22 @@ void UnitInfoState::handle(Action *action)
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			btnNextClick(action);
+			if (!_mindProbe) btnNextClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			btnPrevClick(action);
+			if (!_mindProbe) btnPrevClick(action);
 		}
 	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			btnNextClick(action);
+			if (!_mindProbe) btnNextClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			btnPrevClick(action);
+			if (!_mindProbe) btnPrevClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel") ||
 				 action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
@@ -571,20 +593,20 @@ void UnitInfoState::handle(Action *action)
 }
 
 /**
-* Selects the previous soldier.
+* Selects the previous unit.
 * @param action Pointer to an action.
 */
 void UnitInfoState::btnPrevClick(Action *)
 {
 	if (_parent)
-	{
-		_parent->selectPreviousPlayerUnit(false, false, true);
+	{ // so we are here from a Battlescape Game
+		_parent->selectPreviousPlayerUnit(false, false, _fromInventory);
 	}
 	else
-	{
-		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(false, false, true);
+	{ // so we are here from the Craft Equipment screen
+		_battleGame->selectPreviousPlayerUnit(false, false, true);
 	}
-	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	_unit = _battleGame->getSelectedUnit();
 	if (_unit != 0)
 	{
 		init();
@@ -596,20 +618,20 @@ void UnitInfoState::btnPrevClick(Action *)
 }
 
 /**
-* Selects the next soldier.
+* Selects the next unit.
 * @param action Pointer to an action.
 */
 void UnitInfoState::btnNextClick(Action *)
 {
 	if (_parent)
-	{
-		_parent->selectNextPlayerUnit(false, false, true);
+	{ // so we are here from a Battlescape Game
+		_parent->selectNextPlayerUnit(false, false, _fromInventory);
 	}
 	else
-	{
-		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(false, false, true);
+	{ // so we are here from the Craft Equipment screen
+		_battleGame->selectNextPlayerUnit(false, false, true);
 	}
-	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	_unit = _battleGame->getSelectedUnit();
 	if (_unit != 0)
 	{
 		init();
