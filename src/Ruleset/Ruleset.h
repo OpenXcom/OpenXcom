@@ -123,7 +123,7 @@ public:
 	/// Saves ruleset to YAML.
 	YAML::Node dumpYaml() const;
 	/// Saves ruleset to YAML file.
-	void dumpYamlToFile(const std::string &filename) const;
+	void dumpYamlToFile(const std::string &filename, const std::string &baseFilename) const;
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.

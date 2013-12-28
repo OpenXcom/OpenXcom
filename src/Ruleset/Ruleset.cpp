@@ -496,7 +496,6 @@ YAML::Node Ruleset::dumpYaml() const
 	doc["costScientist"] = _costScientist;
 	doc["timePersonnel"] = _timePersonnel;
 	doc["initialFunding"] = _initialFunding;
-	doc["ufopaedia"] = saveSeq(_ufopaediaArticles, _ufopaediaIndex);
 	doc["ufoTrajectories"] = saveSeq(_ufoTrajectories);
 	doc["alienMissions"] = saveSeq(_alienMissions, _alienMissionsIndex);
 	doc["alienItemLevels"] = _alienItemLevels;
@@ -509,8 +508,11 @@ YAML::Node Ruleset::dumpYaml() const
 }
 
 /**
+ * Dumps the Ruleset to YAML using optional baseFilename as the differential base.
+ * @param filename YAML filename.
+ * @param baseFilename YAML filename for the optional differential base (empty means no base).
  */
-void Ruleset::dumpYamlToFile(const std::string& filename) const
+void Ruleset::dumpYamlToFile(const std::string& filename, const std::string &baseFilename) const
 {
 	if (filename.empty())  return;
 	YAML::Emitter emitter;

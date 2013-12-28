@@ -43,6 +43,8 @@ std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::string _dumpRulesetFile = "";
+std::string _dumpRulesetBaseFile = "";
+bool _recursiveDumping = false;
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
@@ -349,6 +351,13 @@ bool showHelp(int argc, char** args)
 	help << "        use PATH as destination for ruleset dump (for testing)" << std::endl;
 	help << "        a dash sends it to standard output (the same place as this information)" << std::endl;
 	help << "        an empty PATH means do not dump ruleset and is the default" << std::endl << std::endl;
+//TODO: implement
+// 	help << "-dumpRulesets PATH_PREFIX" << std::endl;
+// 	help << "        use PATH_PREFIX + \"_\" + number + \".rul\" as destination for ruleset dump (for testing)" << std::endl;
+// 	help << "        an empty PATH_PREFIX means do not dump ruleset and is the default" << std::endl << std::endl;
+// 	help << "-dumpRulesetBase PATH" << std::endl;
+// 	help << "        use PATH as base for a differential ruleset dump (for testing)" << std::endl;
+// 	help << "        an empty PATH means do a complete dump" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
 	help << "-help" << std::endl;
@@ -582,11 +591,21 @@ std::string getUserFolder()
 /**
  * Returns the full file path for ruleset dump.
  * This string is empty when disabled.
- * @return Full path to destination file for reueset dump.
+ * @return Full path to destination file for ruleset dump.
  */
 std::string getDumpRulesetFile()
 {
 	return _dumpRulesetFile;
+}
+
+/**
+ * Returns the full file path for ruleset dump base.
+ * This string is empty when disabled.
+ * @return Full path to base file for ruleset dump.
+ */
+std::string getDumpRulesetBaseFile()
+{
+	return _dumpRulesetBaseFile;
 }
 
 /**

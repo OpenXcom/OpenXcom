@@ -123,9 +123,10 @@ YAML::Node MCDPatch::save() const
 {
 	YAML::Node node;
 	YAML::Node data;
-	size_t i_bigWalls = 0, i_TUWalks = 0, i_TUFlys = 0, i_TUSlides = 0, i_deathTiles = 0, i_terrainHeight = 0, i_specialTypes = 0;
+	size_t i_bigWalls = 0, i_TUWalks = 0, i_TUFlys = 0, i_TUSlides = 0,
+	       i_deathTiles = 0, i_terrainHeight = 0, i_specialTypes = 0, i_LOFTS = 0;
 	bool stop = false;
-	for (size_t i = 0; !stop; ++i)
+	for (size_t i = 0; true; ++i)
 	{
 		YAML::Node item;
 		stop = true;
@@ -150,7 +151,7 @@ YAML::Node MCDPatch::save() const
 			stop = false;
 			if (_TUFlys[i_TUFlys].first == i)
 			{
-				item["TUFly"] = _TUWalks[i_TUFlys++].second;
+				item["TUFly"] = _TUFlys[i_TUFlys++].second;
 			}
 		}
 		if (i_TUSlides < _TUSlides.size())
@@ -169,10 +170,33 @@ YAML::Node MCDPatch::save() const
 				item["TUSlide"] = _deathTiles[i_deathTiles++].second;
 			}
 		}
-		if (item.size())
+		if (i_terrainHeight < _terrainHeight.size())
 		{
-			data[i] = item;
+			stop = false;
+			if (_terrainHeight[i_terrainHeight].first == i)
+			{
+				item["terrainHeight"] = _terrainHeight[i_terrainHeight++].second;
+			}
 		}
+		if (i_specialTypes < _specialTypes.size())
+		{
+			stop = false;
+			if (_specialTypes[i_specialTypes].first == i)
+			{
+				item["specialType"] = _specialTypes[i_specialTypes++].second;
+			}
+		}
+		if (i_LOFTS < _LOFTS.size())
+		{
+			stop = false;
+			if (_LOFTS[i_LOFTS].first == i)
+			{
+				item["LOFTS"] = _LOFTS[i_LOFTS++].second;
+			}
+		}
+		if (stop) break;
+		item["MCDIndex"] = i;
+		data.push_back(item);
 	}
 	node["data"] = data;
 	return node;

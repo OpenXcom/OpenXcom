@@ -59,6 +59,10 @@ namespace Options
 	std::string getUserFolder();
 	/// Gets the full file path for dumping the ruleset.
 	std::string getDumpRulesetFile();
+	/// Gets the full file path for the differential base for dumping the ruleset.
+	std::string getDumpRulesetBaseFile();
+	/// Gets whether dumping the ruleset is recursive or not.
+	bool getDumpRulesetRecursively();
 	/// Sets the game's data, user and config folders.
 	void setFolders();
 	/// Update game options from config file and command line.
