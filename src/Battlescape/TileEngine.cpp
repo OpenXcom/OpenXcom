@@ -1092,10 +1092,9 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		power /= 2;
 	}
 
-	int exHeight = Options::getInt("battleExplosionHeight");
+	int exHeight = std::max(0, std::min(3, Options::getInt("battleExplosionHeight")));
 	int vertdec = 1000; //default flat explosion
-	if (exHeight<0) exHeight = 0;
-	if (exHeight>3) exHeight = 3;
+
 	switch (exHeight)
 	{
 	case 1:
@@ -1165,9 +1164,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (type == DT_STUN)
+						switch (type)
 						{
-							// power 50 - 200%
+						case DT_STUN:
+							// power 0 - 200%
 							if (dest->getUnit())
 							{
 								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
@@ -1179,66 +1179,71 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ *2), type);
 								}
 							}
-						}
-						if (type == DT_HE)
-						{
-							// power 50 - 150%
-							if (dest->getUnit())
+							break;
+						case DT_HE:
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
-							}
-							bool done = false;
-							while (!done)
-							{
-								done = dest->getInventory()->empty();
-								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
+								// power 50 - 150%
+								if (dest->getUnit())
 								{
-									if (power_ > (*it)->getRules()->getArmor())
+									dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+								}
+								bool done = false;
+								while (!done)
+								{
+									done = dest->getInventory()->empty();
+									for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
 									{
-										if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-											(*it)->getUnit()->instaKill();
-										_save->removeItem((*it));
-										break;
-									}
-									else
-									{
-										++it;
-										done = it == dest->getInventory()->end();
+										if (power_ > (*it)->getRules()->getArmor())
+										{
+											if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+												(*it)->getUnit()->instaKill();
+											_save->removeItem((*it));
+											break;
+										}
+										else
+										{
+											++it;
+											done = it == dest->getInventory()->end();
+										}
 									}
 								}
 							}
-						}
+							break;
 
-						if (type == DT_SMOKE)
-						{
+						case DT_SMOKE:
 							// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 							if (dest->getSmoke() < 10)
 							{
 								dest->setFire(0);
 								dest->setSmoke(RNG::generate(7, 15));
 							}
-						}
+							break;
 
-						if (type == DT_IN && !dest->isVoid())
-						{
-							if (dest->getFire() == 0)
+						case DT_IN:
+							if (!dest->isVoid())
 							{
-								dest->setFire(dest->getFuel() + 1);
-								dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
-							}
-							if (dest->getUnit())
-							{
-								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
-								if (resistance > 0.0)
+								if (dest->getFire() == 0)
 								{
-									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
-									int burnTime = RNG::generate(0, int(5 * resistance));
-									if (dest->getUnit()->getFire() < burnTime)
+									dest->setFire(dest->getFuel() + 1);
+									dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
+								}
+								if (dest->getUnit())
+								{
+									float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
+									if (resistance > 0.0)
 									{
-										dest->getUnit()->setFire(burnTime); // catch fire and burn
+										dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+										int burnTime = RNG::generate(0, int(5 * resistance));
+										if (dest->getUnit()->getFire() < burnTime)
+										{
+											dest->getUnit()->setFire(burnTime); // catch fire and burn
+										}
 									}
 								}
 							}
+							break;
+						default:
+							break;
 						}
 
 						if (unit && dest->getUnit() && dest->getUnit()->getFaction() != unit->getFaction())
