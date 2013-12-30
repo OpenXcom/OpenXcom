@@ -66,10 +66,10 @@ public:
 	~BaseInfoState();
 	/// Updates the base stats.
 	void init();
+	/// Sets a new base to display.
+	void setBase(Base *base);
 	/// Handler for changing the text on the Name edit.
 	void edtBaseChange(Action *action);
-	/// Handler for clicking the mini base view.
-	void miniClick(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Transfers button.

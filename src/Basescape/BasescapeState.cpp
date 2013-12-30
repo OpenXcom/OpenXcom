@@ -66,7 +66,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	// Create objects
 	_txtFacility = new Text(192, 9, 0, 0);
 	_view = new BaseView(192, 192, 0, 8);
-	_mini = new MiniBaseView(128, 16, 192, 41);
+	_mini = new MiniBaseView(_game->getSavedGame()->getBases(), (NewBaseSelectedHandler)&BasescapeState::setBase, 128, 16, 192, 41);
 	_edtBase = new TextEdit(127, 17, 193, 0);
 	_txtLocation = new Text(126, 9, 194, 16);
 	_txtFunds = new Text(126, 9, 194, 24);
@@ -114,16 +114,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_view->onKeyboardPress((ActionHandler)&BasescapeState::handleKeyPress);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
-	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-			break;
-		}
-	}
-	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
+	_mini->setSelectedBase(_base);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 
@@ -223,7 +214,7 @@ void BasescapeState::init()
 		if (!exists)
 		{
 			_base = _game->getSavedGame()->getBases()->front();
-			_mini->setSelectedBase(0);
+			_mini->setSelectedBase(_base);
 		}
 	}
 	else
@@ -258,14 +249,18 @@ void BasescapeState::init()
 void BasescapeState::setBase(Base *base)
 {
 	_base = base;
-	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-			break;
-		}
-	}
+	_game->getSavedGame()->setSelectedBase(base);
+	init();
+}
+
+/**
+ * Changes the base currently displayed on screen. (and sets the miniBaseView also!)
+ * @param base Pointer to new base to display.
+ */
+void BasescapeState::setBaseAndMini(Base *base)
+{
+	_base = base;
+	_mini->setSelectedBase(base);
 	init();
 }
 
@@ -486,22 +481,6 @@ void BasescapeState::viewMouseOver(Action *)
 void BasescapeState::viewMouseOut(Action *)
 {
 	_txtFacility->setText(L"");
-}
-
-/**
- * Selects a new base to display.
- * @param action Pointer to an action.
- */
-void BasescapeState::miniClick(Action *)
-{
-	size_t base = _mini->getHoveredBase();
-	if (base < _game->getSavedGame()->getBases()->size())
-	{
-		_mini->setSelectedBase(base);
-		_base = _game->getSavedGame()->getBases()->at(base);
-		_game->getSavedGame()->setSelectedBase(base);
-		init();
-	}
 }
 
 /**

@@ -50,7 +50,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
-	_mini = new MiniBaseView(128, 16, 182, 8);
+	_mini = new MiniBaseView(_game->getSavedGame()->getBases(), (NewBaseSelectedHandler)&BaseInfoState::setBase, 128, 16, 182, 8);
 	_btnOk = new TextButton(30, 14, 10, 180);
 	_btnTransfers = new TextButton(80, 14, 46, 180);
 	_btnStores = new TextButton(80, 14, 132, 180);
@@ -168,16 +168,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
-	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-			break;
-		}
-	}
-	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
+	_mini->setSelectedBase(_base);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
@@ -424,19 +415,14 @@ void BaseInfoState::edtBaseChange(Action *action)
 }
 
 /**
- * Selects a new base to display.
- * @param action Pointer to an action.
+ * Changes the base currently displayed on screen.
+ * @param base Pointer to new base to display.
  */
-void BaseInfoState::miniClick(Action *)
+void BaseInfoState::setBase(Base *base)
 {
-	size_t base = _mini->getHoveredBase();
-	if (base < _game->getSavedGame()->getBases()->size())
-	{
-		_mini->setSelectedBase(base);
-		_base = _game->getSavedGame()->getBases()->at(base);
-		_state->setBase(_base);
-		init();
-	}
+	_base = base;
+	_state->setBaseAndMini(base);
+	init();
 }
 
 /**
