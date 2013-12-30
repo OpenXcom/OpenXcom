@@ -1044,8 +1044,8 @@ void BattlescapeGenerator::generateMap()
 		// pick a random ufo mapblock, can have all kinds of sizes
 		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 
-		ufoX = RNG::generate(0, (_mapsize_y / 10) - ufoMap->getSizeX() / 10);
-		ufoY = RNG::generate(0, (_mapsize_x / 10) - ufoMap->getSizeY() / 10);
+		ufoX = RNG::generate(0, (_mapsize_x / 10) - ufoMap->getSizeX() / 10);
+		ufoY = RNG::generate(0, (_mapsize_y / 10) - ufoMap->getSizeY() / 10);
 
 		for (int i = 0; i < ufoMap->getSizeX() / 10; ++i)
 		{
@@ -1066,8 +1066,8 @@ void BattlescapeGenerator::generateMap()
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 		while (!placed)
 		{
-			craftX = RNG::generate(0, (_mapsize_y/10)- craftMap->getSizeX() / 10);
-			craftY = RNG::generate(0, (_mapsize_x/10)- craftMap->getSizeY() / 10);
+			craftX = RNG::generate(0, (_mapsize_x/10)- craftMap->getSizeX() / 10);
+			craftY = RNG::generate(0, (_mapsize_y/10)- craftMap->getSizeY() / 10);
 			placed = true;
 			// check if this place is ok
 			for (int i = 0; i < craftMap->getSizeX() / 10; ++i)
@@ -1109,8 +1109,8 @@ void BattlescapeGenerator::generateMap()
 		// make sure the road(s) are not crossing the craft landing site
 		while ((roadX >= craftX && roadX < craftX + (craftMap->getSizeX() / 10)) || (roadY >= craftY && roadY < craftY + (craftMap->getSizeY() / 10)))
 		{
-			roadX = RNG::generate(0, (_mapsize_y/10)- 1);
-			roadY = RNG::generate(0, (_mapsize_x/10)- 1);
+			roadX = RNG::generate(0, (_mapsize_x/10)- 1);
+			roadY = RNG::generate(0, (_mapsize_y/10)- 1);
 		}
 		if (TwoRoads)
 		{
@@ -1190,8 +1190,8 @@ void BattlescapeGenerator::generateMap()
 	/* determine positioning of base modules */
 	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		int randX = RNG::generate(0, (_mapsize_y/10)- 2);
-		int randY = RNG::generate(0, (_mapsize_x/10)- 2);
+		int randX = RNG::generate(0, (_mapsize_x/10)- 2);
+		int randY = RNG::generate(0, (_mapsize_y/10)- 2);
 		// add the command center
 		blocks[randX][randY] = _terrain->getRandomMapBlock(20, (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")?MT_FINALCOMM:MT_UBASECOMM);
 		blocksToDo--;
@@ -1207,8 +1207,8 @@ void BattlescapeGenerator::generateMap()
 		{
 			while (blocks[randX][randY] != NULL)
 			{
-				randX = RNG::generate(0, (_mapsize_y/10)- 1);
-				randY = RNG::generate(0, (_mapsize_x/10)- 1);
+				randX = RNG::generate(0, (_mapsize_x/10)- 1);
+				randY = RNG::generate(0, (_mapsize_y/10)- 1);
 			}
 			// add the lift
 			blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
@@ -1217,13 +1217,13 @@ void BattlescapeGenerator::generateMap()
 	}
 	else if (_save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
 	{
-		int randX = RNG::generate(0, (_mapsize_y/10)- 2);
-		int randY = RNG::generate(0, (_mapsize_x/10)- 2);
+		int randX = RNG::generate(0, (_mapsize_x/10)- 2);
+		int randY = RNG::generate(0, (_mapsize_y/10)- 2);
 		// add one lift
 		while (blocks[randX][randY] != NULL || landingzone[randX][randY])
 		{
-			randX = RNG::generate(0, (_mapsize_y/10)- 1);
-			randY = RNG::generate(0, (_mapsize_x/10)- 1);
+			randX = RNG::generate(0, (_mapsize_x/10)- 1);
+			randY = RNG::generate(0, (_mapsize_y/10)- 1);
 		}
 		// add the lift
 		blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
@@ -1237,8 +1237,8 @@ void BattlescapeGenerator::generateMap()
 	int tries = 0;
 	while (curLarge != maxLarge && tries <= 50)
 	{
-		int randX = RNG::generate(0, (_mapsize_y/10)- 2);
-		int randY = RNG::generate(0, (_mapsize_x/10)- 2);
+		int randX = RNG::generate(0, (_mapsize_x/10)- 2);
+		int randY = RNG::generate(0, (_mapsize_y/10)- 2);
 		if (!blocks[randX][randY] && !blocks[randX + 1][randY] && !blocks[randX + 1][randY + 1] && !blocks[randX][randY + 1]
 		&& !landingzone[randX][randY] && !landingzone[randX + 1][randY] && !landingzone[randX][randY + 1] && !landingzone[randX + 1][randY + 1])
 		{
