@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-MiniBaseView::MiniBaseView(std::vector<Base*> *bases, NewBaseSelectedHandler newBaseSelectedHandler, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(bases), _newBaseSelectedHandler(newBaseSelectedHandler), _texture(0), _base(0)
+MiniBaseView::MiniBaseView(std::vector<Base*> *bases, NewBaseSelectedHandler newBaseSelectedHandler, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(bases), _startIndex(0), _newBaseSelectedHandler(newBaseSelectedHandler), _texture(0), _base(0)
 {
 }
 
@@ -69,7 +69,16 @@ void MiniBaseView::setSelectedBase(Base *base)
 	{
 		if (_bases->at(i) == base)
 		{
-			_base = i;
+			if (i >= MAX_BASES-1)
+			{
+				if (i < _bases->size()-1) _base = MAX_BASES-2; else _base = MAX_BASES-1;
+				_startIndex = i - _base;
+			}
+			else
+			{
+				_base = i;
+				_startIndex = 0;
+			}
 			break;
 		}
 	}
@@ -100,11 +109,11 @@ void MiniBaseView::draw()
 		_texture->getFrame(41)->blit(this);
 
 		// Draw facilities
-		if (i < _bases->size())
+		if (_startIndex+i < _bases->size())
 		{
 			SDL_Rect r;
 			lock();
-			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
+			for (std::vector<BaseFacility*>::iterator f = _bases->at(_startIndex+i)->getFacilities()->begin(); f != _bases->at(_startIndex+i)->getFacilities()->end(); ++f)
 			{
 				int pal;
 				if ((*f)->getBuildTime() == 0)
@@ -149,11 +158,19 @@ void MiniBaseView::mouseClick(Action *action, State *state)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
 	{
 		size_t base = (int)floor(action->getRelativeXMouse() / ((MINI_SIZE + 2) * action->getXScale()));
-		if (base < _bases->size())
+		if (_startIndex+base < _bases->size())
 		{
+			if (MAX_BASES-1 == base && _startIndex+base+1 < _bases->size())
+			{
+				++_startIndex; --base;
+			}
+			else if (0 == base && _startIndex > 0)
+			{
+				--_startIndex; ++base;
+			}
 			_base = base;
 			_redraw = true;
-			(state->*_newBaseSelectedHandler)(_bases->at(base));
+			(state->*_newBaseSelectedHandler)(_bases->at(_startIndex+base));
 		}
 	}
 	InteractiveSurface::mouseClick(action, state);

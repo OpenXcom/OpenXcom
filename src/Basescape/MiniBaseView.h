@@ -42,7 +42,7 @@ private:
 
 	std::vector<Base*> *_bases;
 	SurfaceSet *_texture;
-	size_t _base;
+	size_t _base, _startIndex;
 	NewBaseSelectedHandler _newBaseSelectedHandler;
 public:
 	static const size_t MAX_BASES = 8;

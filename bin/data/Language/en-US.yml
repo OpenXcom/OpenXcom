@@ -1138,6 +1138,8 @@ en-US:
   STR_CRAFTLAUNCHALWAYS_DESC: "Craft can be launched even when they aren't ready, overriding the need for maintenance."
   STR_CUSTOMINITIALBASE: "Custom initial base"
   STR_CUSTOMINITIALBASE_DESC: "When starting a new game, you can manually place your starting facilities instead of using the default layout."
+  STR_UNLIMITEDBASES: "Unlimited bases"
+  STR_UNLIMITEDBASES_DESC: "You can build any number of bases, even more than 8. Of course the aliens are also able to build more than 8, if this is turned on. The first and the last item of the mini base view are auto-scrolling the view."
   STR_GLOBESEASONS: "Globe realistic lighting"
   STR_GLOBESEASONS_DESC: "Uses more realistic projection of sunlight on the Geoscape according to Earth's axial tilt."
   STR_PLAYINTRO: "Play intro"
