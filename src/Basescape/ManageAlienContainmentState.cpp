@@ -73,9 +73,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base,
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtAvailable =  new Text(190, 9, 10, 24);
 	_txtUsed = new Text(110, 9, 136, 24);
-	_txtItem = new Text(130, 9, 10, 41);
+	_txtItem = new Text(120, 9, 10, 41);
 	_txtLiveAliens = new Text(54, 18, 136, 32);
-	_txtDeadAliens = new Text(96, 18, 220, 32);
+	_txtDeadAliens = new Text(54, 18, 220, 32);
 	_lstAliens = new TextList(280, 112, 8, 53);
 
 	// Set palette
