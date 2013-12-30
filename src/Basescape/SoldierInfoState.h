@@ -40,7 +40,6 @@ class SoldierInfoState : public State
 private:
 	Base *_base;
 	size_t _soldier;
-	Soldier *s;
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;

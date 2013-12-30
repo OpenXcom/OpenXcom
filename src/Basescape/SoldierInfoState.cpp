@@ -348,7 +348,7 @@ void SoldierInfoState::init()
 	{
 		_soldier = 0;
 	}
-	s = _base->getSoldiers()->at(_soldier);
+	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setBig();
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();

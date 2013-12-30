@@ -484,7 +484,9 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-            _missionUFO = (*i)->getRules()->getType();
+			std::stringstream wss;
+			wss << (*i)->getName(_game->getLanguage()).c_str();
+			_missionUFO = wss.str();
             _missionRace = (*i)->getAlienRace();
 			if (!aborted)
 			{
