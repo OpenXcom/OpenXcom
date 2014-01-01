@@ -56,7 +56,7 @@ private:
 	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats, *_btnLaunch, *_btnPsi;
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto, *_btnReserveKneel, *_btnZeroTUs;
-	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
+	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem, *_btnRightReload, *_btnLeftReload;
 	static const int VISIBLE_MAX = 10;
 	InteractiveSurface *_btnVisibleUnit[VISIBLE_MAX];
 	NumberText *_numVisibleUnit[VISIBLE_MAX];
@@ -204,7 +204,11 @@ public:
 	void btnReserveKneelClick(Action *action);
 	/// Handler for clicking the expend all TUs button.
 	void btnZeroTUsClick(Action *action);
-	/// Handler for showing tooltip.
+	/// Handler for clicking the reload button.
+	void btnLeftReloadClick(Action *action);
+	/// Handler for clicking the reload button.
+	void btnRightReloadClick(Action *action);
+	/// Handler for showing tooltip. /// Handler for showing tooltip.
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);

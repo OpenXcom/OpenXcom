@@ -291,7 +291,7 @@ regions:
     missionWeights:
       STR_ALIEN_RESEARCH: 25
       STR_ALIEN_BASE: 35
-    missionZones:
+    missionZones:  # lonMin lonMax latMin latMax
       -
         - [291.125, 296.25, 68.25, 70.5]
         - [129.625, 152.75, 69.75, 73.625]
@@ -914,7 +914,6 @@ facilities:
     monthlyCost: 30000
     labs: 50
     mapName: XBASE_02
-    destructible: true
   - type: STR_WORKSHOP
     spriteShape: 1
     spriteFacility: 20
@@ -923,7 +922,6 @@ facilities:
     monthlyCost: 35000
     workshops: 50
     mapName: XBASE_03
-    destructible: true
   - type: STR_SMALL_RADAR_SYSTEM
     spriteShape: 2
     spriteFacility: 21
@@ -933,7 +931,6 @@ facilities:
     radarRange: 1500
     radarChance: 10
     mapName: XBASE_04
-    destructible: true
   - type: STR_LARGE_RADAR_SYSTEM
     spriteShape: 1
     spriteFacility: 22
@@ -943,7 +940,6 @@ facilities:
     radarRange: 2250
     radarChance: 20
     mapName: XBASE_05
-    destructible: true
   - type: STR_MISSILE_DEFENSES
     spriteShape: 2
     spriteFacility: 23
@@ -955,7 +951,6 @@ facilities:
     fireSound: 5
     hitSound: 10
     mapName: XBASE_06
-    destructible: true
   - type: STR_GENERAL_STORES
     spriteShape: 1
     spriteFacility: 24
@@ -985,7 +980,6 @@ facilities:
     fireSound: 8
     hitSound: 10
     mapName: XBASE_09
-    destructible: true
   - type: STR_PLASMA_DEFENSES
     requires:
       - STR_PLASMA_DEFENSE
@@ -999,7 +993,6 @@ facilities:
     fireSound: 9
     hitSound: 10
     mapName: XBASE_10
-    destructible: true
   - type: STR_FUSION_BALL_DEFENSES
     requires:
       - STR_FUSION_DEFENSE
@@ -1013,7 +1006,45 @@ facilities:
     fireSound: 7
     hitSound: 10
     mapName: XBASE_11
-    destructible: true
+  - type: STR_GAUSS_DEFENSES
+    requires:
+      - STR_GAUSS_DEFENSE
+    spriteShape: 3
+    spriteFacility: 26
+    buildCost: 400000
+    buildTime: 24
+    monthlyCost: 10000
+    defense: 600
+    hitRatio: 60
+    fireSound: 8
+    hitSound: 10
+    mapName: XBASE_09
+  - type: STR_RAIL_DEFENSES
+    requires:
+      - STR_RAIL_DEFENSE
+    spriteShape: 3
+    spriteFacility: 27
+    buildCost: 600000
+    buildTime: 34
+    monthlyCost: 12000
+    defense: 900
+    hitRatio: 70
+    fireSound: 9
+    hitSound: 10
+    mapName: XBASE_10
+  - type: STR_STR_DISRUPTOR_DEFENSES
+    requires:
+      - STR_DISRUPTOR_DEFENSE
+    spriteShape: 3
+    spriteFacility: 28
+    buildCost: 800000
+    buildTime: 34
+    monthlyCost: 14000
+    defense: 1200
+    hitRatio: 80
+    fireSound: 7
+    hitSound: 10
+    mapName: XBASE_11	
   - type: STR_GRAV_SHIELD
     requires:
       - STR_GRAV_SHIELD
@@ -1024,7 +1055,6 @@ facilities:
     buildTime: 38
     monthlyCost: 15000
     mapName: XBASE_12
-    destructible: true
   - type: STR_MIND_SHIELD
     requires:
       - STR_MIND_SHIELD
@@ -1035,7 +1065,6 @@ facilities:
     buildTime: 33
     monthlyCost: 5000
     mapName: XBASE_13
-    destructible: true
   - type: STR_PSIONIC_LABORATORY
     requires:
       - STR_PSI_LAB
@@ -1046,7 +1075,6 @@ facilities:
     monthlyCost: 16000
     psiLabs: 10
     mapName: XBASE_14
-    destructible: true
   - type: STR_HYPER_WAVE_DECODER
     requires:
       - STR_HYPER_WAVE_DECODER
@@ -1059,7 +1087,6 @@ facilities:
     radarRange: 2400
     radarChance: 100
     mapName: XBASE_15
-    destructible: true
   - type: STR_HANGAR
     spriteShape: 9
     spriteFacility: 9
@@ -1246,6 +1273,82 @@ craftWeapons:
     clip: STR_FUSION_BALL
     projectileType: 3
     projectileSpeed: 8
+# Item Definitions:
+#  - type: Internal item name, reference to string defined in .lng, must be unique. (string)
+#    name: used to replace type name, if defined (string)
+#    requires: this corresponds to a research entry, if one is defined, then that research is required to use this item (string)
+#    size: How much space this item takes up in storage. (float) (default 0.0)
+#    costBuy: Cost in purchase menu. undefined/0 = cannot buy. (int) (default 0)
+#    costSell: Value in sell menu. undefined/0 = cannot sell. (int) (default 0)
+#    transferTime: time (in hours) to transfer this item (int) (default factor of distance vs weight)
+#    weight: Weight penalty to soldiers carrying this item. (int) (default 0)
+#    bigSprite: Sprite reference in BigObs.pck. -1 for none. values higher than 56 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=BIGOBS.PCK)
+#    floorSprite: Sprite reference in FloorOb.pck. -1 for none. values higher than 72 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
+#    handSprite: Sprite reference in HandOb.pck. -1 for none. values higher than 128 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
+#    bulletSprite: Projectile sprite. (int) 0 = rocket, 1 = pistol bullet, 2 = rifle bullet, 3 = auto cannon bullet, 
+#    4 = heavy cannon bullet, 5 = small laser, 6 = laser rifle, 7 = heavy laser, 8 = plasma, 9 = small launcher, 10 = blaster launcher
+#       note: if you are adding a new projectile (for example 11), its corresponding sprite definition must be 35 times this number
+#       (so for projectile 11, you'd need to define the extraSprites 385+)
+#    fireSound: Sound effect Reference in Sample2.cat. -1 for none. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitSound: Sound effect Reference in Sample2.cat. -1 for none. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitAnimation: reference in smoke.pck for "hit" explosion. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (0-2 * 18) (int) (http://www.ufopaedia.org/index.php?title=SMOKE.PCK)
+#       NOTE - melee and psi-amp weapons use HIT.PCK instead, DO NOT define a hitAnimation for these types.
+#    power: average damage of the weapon, in most cases, the damage will be +- 50% (int)
+#    compatibleAmmo:
+#      - Name of ammo item 1
+#      - Name of ammo item 2
+#      - etc.
+#    damageType: What kind of damage does this do? (int)
+#        0 = NONE, 1 = ARMOR PIERCING, 2 = INCENDIARY, 3 = HIGH EXPLOSIVE, 4 = LASER, 5 = PLASMA,
+#        6 = STUN, 7 = MELEE, 8 = ACID, 9 = SMOKE
+#    accuracyAuto: Auto-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
+#    accuracySnap: Snap-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
+#    accuracyAimed: Aimed-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
+#    tuAuto: Auto-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    tuSnap: Snap-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    tuAimed: Aimed-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    clipSize: How many bullets in this clip? -1 for infinite. (int) (default 0)
+#    accuracyMelee: Melee accuracy, as a percentage, affected by the unit's melee skill. (int)
+#    tuMelee: Melee time unit usage, as a percentage of the attacking unit's TU. (int)
+#    battleType: What kind of item is this? (int) (default 0)
+#        0 = NONE, 1 = FIREARM, 2 = AMMO, 3 = MELEE, 4 = GRENADE, 5 = PROXIMITYGRENADE, 6 = MEDIKIT,
+#        7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE
+#    twoHanded: Is this a two-handed weapon. (boolean) (default false)
+#    waypoint: Does this weapon use waypoints or direct fire? (boolean) (default false)
+#    fixedWeapon: can this item be dropped? (boolean) (default true)
+#    invWidth: Width of this item in the inventory screen. (int) (default 1)
+#    invHeight: Height of this item in the inventory screen. (int) (default 1)
+#    painKiller: 10
+#    heal: 10
+#    stimulant: 10
+#    healAmount: 1
+#    healthAmount: 3
+#    stun: 4
+#    energy: 10
+#    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int) (default 0)
+#    recoveryPoints: How many points does XCom get for recovering this item? (int) (default 0)
+#    armor: How much damage is needed to destoy this item on the ground. (int) (default 0)
+#    recover: Tally this item for end of mission results? (boolean) (default false)
+#    turretType: Which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
+#    liveAlien: Does this require containment? (boolean) (default false)
+#    blastRadius: How big of an explosion does this cause? 0 for none. (int) (default -1, meaning "use formula")
+#    flatRate: Does using this weapon charge a flat rate for TU usage? (boolean) (default false)
+#    arcingShot: Does this weapon fire in an arc? (boolean) (default false)
+#    attraction: Represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
+#    listOrder: Where in the lists should this item appear? (int) (default: 100 higher than the previous item that was defined, starting at 100)
+#    maxRange: The maximum range at which this weapon can operate, 0 for "no limit" (int) (default 0)
+#    bulletSpeed: how much faster (or slower, if you use a negative number) is a projectile fired from this weapon
+#       compared to the average? (int) (default 0)
+#    raceUse: what type of unit can use the item (int)(default 0)
+#       0 = ALL, 1 = HUMAN, 2 = ALIEN, 3 = CIVILIAN
+#
+#    
 items:
   - type: STR_STINGRAY_LAUNCHER
     size: 0.8
@@ -1274,6 +1377,22 @@ items:
     size: 1.2
     costSell: 267300
     transferTime: 48
+  - type: STR_GAUSS_CANNON
+    size: 6
+    costSell: 250000
+    transferTime: 48
+  - type: STR_RAIL_CANNON
+    size: 6
+    costSell: 250000
+    transferTime: 48
+  - type: STR_EMP_CANNON
+    size: 6
+    costSell: 250000
+    transferTime: 48	
+  - type: STR_DISRUPTOR_CANNON
+    size: 1.2
+    costSell: 267300
+    transferTime: 48	
   - type: STR_STINGRAY_MISSILES
     size: 0.4
     costBuy: 3000
@@ -1319,44 +1438,6 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 0
-  - type: STR_HWP_CANNON_SHELLS
-    size: 0.1
-    costBuy: 200
-    costSell: 100
-    transferTime: 48
-    weight: 1
-    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 12
-    floorSprite: 12
-    hitSound: 13
-    hitAnimation: 26
-    power: 60
-    damageType: 1
-    clipSize: 30
-    battleType: 2
-    invWidth: 2
-    invHeight: 1
-  - type: STR_TANK_ROCKET_LAUNCHER
-    size: 6
-    costBuy: 480000
-    costSell: 360000
-    transferTime: 96
-    weight: 1
-    bigSprite: 42
-    floorSprite: 0
-    handSprite: 0
-    bulletSprite: 0
-    fireSound: 52
-    compatibleAmmo:
-      - STR_HWP_ROCKETS
-    accuracySnap: 55
-    accuracyAimed: 115
-    tuSnap: 45
-    tuAimed: 75
-    battleType: 1
-    fixedWeapon: true
-    invWidth: 2
-    invHeight: 3
-    turretType: 1
   - type: STR_HWP_ROCKETS
     size: 0.6
     costBuy: 3000
@@ -1373,74 +1454,6 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-  - type: STR_TANK_LASER_CANNON
-    size: 6
-    costSell: 594000
-    transferTime: 96
-    weight: 1
-    bigSprite: 54
-    floorSprite: 0
-    handSprite: 0
-    bulletSprite: 5
-    fireSound: 11
-    hitSound: 19
-    hitAnimation: 36
-    power: 110
-    damageType: 4
-    accuracySnap: 50
-    accuracyAimed: 85
-    tuSnap: 33
-    tuAimed: 75
-    battleType: 1
-    fixedWeapon: true
-    clipSize: -1
-    invWidth: 2
-    invHeight: 3
-    turretType: 2
-  - type: STR_HOVERTANK_PLASMA
-    size: 6
-    costSell: 980000
-    transferTime: 96
-    weight: 1
-    bigSprite: 40
-    floorSprite: 0
-    handSprite: 0
-    bulletSprite: 8
-    fireSound: 18
-    hitSound: 19
-    power: 110
-    damageType: 5
-    hitAnimation: 46
-    accuracySnap: 85
-    accuracyAimed: 100
-    tuSnap: 30
-    tuAimed: 60
-    battleType: 1
-    fixedWeapon: true
-    clipSize: -1
-    invWidth: 2
-    invHeight: 3
-    turretType: 3
-  - type: STR_HOVERTANK_LAUNCHER
-    size: 6
-    costSell: 1043000
-    transferTime: 96
-    weight: 1
-    bigSprite: 40
-    floorSprite: 0
-    handSprite: 0
-    bulletSprite: 10
-    fireSound: 53
-    compatibleAmmo:
-      - STR_HWP_FUSION_BOMB
-    accuracyAimed: 100
-    tuAimed: 66
-    battleType: 1
-    fixedWeapon: true
-    waypoint: true
-    invWidth: 2
-    invHeight: 3
-    turretType: 4
   - type: STR_HWP_FUSION_BOMB
     size: 0.6
     costSell: 31500
@@ -1456,19 +1469,111 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 1
+    armor: 20
+    blastRadius: 11
+  - type: STR_GAUSS_CANNON_SHELLS
+    size: 0.1
+    costBuy: 200
+    costSell: 100
+    transferTime: 48
+    weight: 1
+    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 12
+    floorSprite: 12
+    hitSound: 13
+    hitAnimation: 26
+    power: 60
+    damageType: 1
+    clipSize: 30
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+  - type: STR_RAIL_CANNON_SHELLS
+    size: 0.1
+    costBuy: 200
+    costSell: 100
+    transferTime: 48
+    weight: 1
+    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 12
+    floorSprite: 12
+    hitSound: 13
+    hitAnimation: 26
+    power: 60
+    damageType: 1
+    clipSize: 30
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+  - type: STR_HWP_CANNON_SHELLS
+    size: 0.1
+    costBuy: 200
+    costSell: 100
+    transferTime: 48
+    weight: 1
+    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 12
+    floorSprite: 12
+    hitSound: 13
+    hitAnimation: 26
+    power: 60
+    damageType: 1
+    clipSize: 30
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+  - type: STR_COMBAT_KNIFE
+    size: 0.1
+    costBuy: 100
+    costSell: 50
+    weight: 4
+    bigSprite: 57
+    floorSprite: 73
+    handSprite: 128
+    hitSound: 39
+    hitAnimation: 0
+    power: 60
+    damageType: 7
+    accuracyMelee: 80
+    tuMelee: 12
+    battleType: 3
+    twoHanded: false
+    invWidth: 1
+    invHeight: 2
+    armor: 12
+  - type: STR_PLASMA_KNIFE
+    size: 0.1
+    costSell: 100
+    weight: 3
+    bigSprite: 58
+    floorSprite: 73
+    handSprite: 128
+    hitSound: 39
+    hitAnimation: 0
+    power: 80
+    damageType: 7
+    accuracyMelee: 95
+    tuMelee: 12
+    battleType: 3
+    twoHanded: false
+    invWidth: 1
+    invHeight: 2
+    armor: 14
     blastRadius: 11
   - type: STR_PISTOL
     size: 0.1
     costBuy: 800
     costSell: 600
     weight: 5
-    bigSprite: 3
+    bigSprite: 59
     floorSprite: 3
     handSprite: 96
     bulletSprite: 1
     fireSound: 4
     compatibleAmmo:
-      - STR_PISTOL_CLIP
+      - STR_PISTOL_CLIP_AP
+      - STR_PISTOL_CLIP_HE
+      - STR_PISTOL_CLIP_NL
     accuracySnap: 60
     accuracyAimed: 78
     tuSnap: 18
@@ -1477,12 +1582,12 @@ items:
     invWidth: 1
     invHeight: 2
     attraction: 1
-  - type: STR_PISTOL_CLIP
+  - type: STR_PISTOL_CLIP_AP
     size: 0.1
     costBuy: 70
     costSell: 52
     weight: 3
-    bigSprite: 4
+    bigSprite: 60
     floorSprite: 4
     hitSound: 22
     hitAnimation: 26
@@ -1492,253 +1597,106 @@ items:
     battleType: 2
     armor: 12
     attraction: 1
+  - type: STR_PISTOL_CLIP_HE
+    size: 0.1
+    costBuy: 70
+    costSell: 52
+    weight: 3
+    bigSprite: 61
+    floorSprite: 4
+    hitSound: 22
+    hitAnimation: 26
+    power: 40
+    damageType: 3
+    clipSize: 12
+    battleType: 2
+    armor: 12
+    attraction: 1
+  - type: STR_PISTOL_CLIP_NL
+    size: 0.1
+    costBuy: 70
+    costSell: 52
+    weight: 3
+    bigSprite: 62
+    floorSprite: 4
+    hitSound: 22
+    hitAnimation: 26
+    power: 50
+    damageType: 6
+    clipSize: 12
+    battleType: 2
+    armor: 12
+    attraction: 1	
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
     costSell: 2250
     weight: 8
-    bigSprite: 1
+    bigSprite: 63
     floorSprite: 1
     handSprite: 0
     bulletSprite: 2
     fireSound: 4
     compatibleAmmo:
-      - STR_RIFLE_CLIP
-    accuracyAuto: 35
-    accuracySnap: 60
-    accuracyAimed: 110
+      - STR_RIFLE_CLIP_AP
+      - STR_RIFLE_CLIP_HE
+      - STR_RIFLE_CLIP_NL
+    accuracyAuto: 55
+    accuracySnap: 75
+    accuracyAimed: 95
     tuAuto: 35
     tuSnap: 25
-    tuAimed: 80
+    tuAimed: 50
     battleType: 1
     twoHanded: true
     invWidth: 1
     invHeight: 3
-  - type: STR_RIFLE_CLIP
+  - type: STR_RIFLE_CLIP_AP
     size: 0.1
     costBuy: 200
     costSell: 150
     weight: 3
-    bigSprite: 2
+    bigSprite: 64
     floorSprite: 2
     hitSound: 22
     hitAnimation: 26
-    power: 30
+    power: 40
     damageType: 1
     clipSize: 20
     battleType: 2
-  - type: STR_HEAVY_CANNON
-    size: 0.3
-    costBuy: 6400
-    costSell: 4800
-    weight: 18
-    bigSprite: 11
-    floorSprite: 11
-    handSprite: 24
-    bulletSprite: 4
-    fireSound: 2
-    compatibleAmmo:
-      - STR_HC_AP_AMMO
-      - STR_HC_HE_AMMO
-      - STR_HC_I_AMMO
-    accuracySnap: 60
-    accuracyAimed: 90
-    tuSnap: 33
-    tuAimed: 80
-    battleType: 1
-    twoHanded: true
-    invWidth: 2
-    invHeight: 3
-  - type: STR_HC_AP_AMMO
+    armor: 20
+  - type: STR_RIFLE_CLIP_HE
     size: 0.1
-    costBuy: 300
-    costSell: 225
-    weight: 6
-    bigSprite: 12
-    floorSprite: 12
-    hitSound: 13
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 65
+    floorSprite: 2
+    hitSound: 22
     hitAnimation: 26
-    power: 56
-    damageType: 1
-    clipSize: 6
-    battleType: 2
-    invWidth: 2
-    invHeight: 1
-    attraction: 1
-  - type: STR_HC_HE_AMMO
-    size: 0.1
-    costBuy: 500
-    costSell: 275
-    weight: 6
-    bigSprite: 13
-    floorSprite: 13
-    hitSound: 0
-    hitAnimation: 0
-    power: 52
+    power: 50
     damageType: 3
-    clipSize: 6
+    clipSize: 20
     battleType: 2
-    invWidth: 2
-    invHeight: 1
-    attraction: 1
-  - type: STR_HC_I_AMMO
+    armor: 20
+  - type: STR_RIFLE_CLIP_NL
     size: 0.1
-    costBuy: 400
-    costSell: 300
-    weight: 6
-    bigSprite: 14
-    floorSprite: 14
-    hitSound: 0
-    hitAnimation: 0
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 66
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
     power: 60
-    damageType: 2
-    clipSize: 6
+    damageType: 6
+    clipSize: 20
     battleType: 2
-    invWidth: 2
-    invHeight: 1
-    attraction: 1
-  - type: STR_AUTO_CANNON
-    size: 0.3
-    costBuy: 13500
-    costSell: 10125
-    weight: 19
-    bigSprite: 7
-    floorSprite: 7
-    handSprite: 32
-    bulletSprite: 3
-    fireSound: 2
-    compatibleAmmo:
-      - STR_AC_AP_AMMO
-      - STR_AC_HE_AMMO
-      - STR_AC_I_AMMO
-    accuracyAuto: 32
-    accuracySnap: 56
-    accuracyAimed: 82
-    tuAuto: 40
-    tuSnap: 33
-    tuAimed: 80
-    battleType: 1
-    twoHanded: true
-    invWidth: 2
-    invHeight: 3
-  - type: STR_AC_AP_AMMO
-    size: 0.1
-    costBuy: 500
-    costSell: 400
-    weight: 5
-    bigSprite: 8
-    floorSprite: 8
-    hitSound: 13
-    hitAnimation: 26
-    power: 42
-    damageType: 1
-    clipSize: 14
-    battleType: 2
-    invWidth: 2
-    invHeight: 1
-  - type: STR_AC_HE_AMMO
-    size: 0.1
-    costBuy: 700
-    costSell: 560
-    weight: 5
-    bigSprite: 9
-    floorSprite: 9
-    hitSound: 0
-    hitAnimation: 0
-    power: 44
-    damageType: 3
-    clipSize: 14
-    battleType: 2
-    invWidth: 2
-    invHeight: 1
-  - type: STR_AC_I_AMMO
-    size: 0.1
-    costBuy: 650
-    costSell: 520
-    weight: 5
-    bigSprite: 10
-    floorSprite: 10
-    hitSound: 0
-    hitAnimation: 0
-    power: 42
-    damageType: 2
-    clipSize: 14
-    battleType: 2
-    invWidth: 2
-    invHeight: 1
-    attraction: 1
-  - type: STR_ROCKET_LAUNCHER
-    size: 0.4
-    costBuy: 4000
-    costSell: 3000
-    weight: 10
-    bigSprite: 15
-    floorSprite: 15
-    handSprite: 72
-    bulletSprite: 0
-    fireSound: 52
-    compatibleAmmo:
-      - STR_SMALL_ROCKET
-      - STR_LARGE_ROCKET
-      - STR_INCENDIARY_ROCKET
-    accuracySnap: 55
-    accuracyAimed: 115
-    tuSnap: 45
-    tuAimed: 75
-    battleType: 1
-    twoHanded: true
-    invWidth: 2
-    invHeight: 3
-  - type: STR_SMALL_ROCKET
-    size: 0.2
-    costBuy: 600
-    costSell: 480
-    weight: 6
-    bigSprite: 16
-    floorSprite: 16
-    hitSound: 0
-    hitAnimation: 0
-    power: 75
-    damageType: 3
-    clipSize: 1
-    battleType: 2
-    invWidth: 1
-    invHeight: 3
-  - type: STR_LARGE_ROCKET
-    size: 0.2
-    costBuy: 900
-    costSell: 720
-    weight: 8
-    bigSprite: 17
-    floorSprite: 17
-    hitSound: 0
-    hitAnimation: 0
-    power: 100
-    damageType: 3
-    clipSize: 1
-    battleType: 2
-    invWidth: 1
-    invHeight: 3
-  - type: STR_INCENDIARY_ROCKET
-    size: 0.2
-    costBuy: 1200
-    costSell: 960
-    weight: 8
-    bigSprite: 18
-    floorSprite: 18
-    hitSound: 0
-    hitAnimation: 0
-    power: 90
-    damageType: 2
-    clipSize: 1
-    battleType: 2
-    invWidth: 1
-    invHeight: 3
   - type: STR_LASER_PISTOL
     size: 0.1
     costSell: 20000
     weight: 7
-    bigSprite: 5
+    bigSprite: 67
     floorSprite: 5
     handSprite: 112
     bulletSprite: 5
@@ -1761,7 +1719,78 @@ items:
     size: 0.2
     costSell: 36900
     weight: 8
-    bigSprite: 0
+    bigSprite: 68
+    floorSprite: 0
+    handSprite: 8
+    bulletSprite: 6
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 60
+    damageType: 4
+    accuracyAuto: 45
+    accuracySnap: 65
+    accuracyAimed: 80
+    tuAuto: 34
+    tuSnap: 25
+    tuAimed: 50
+    clipSize: -1
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+  - type: STR_HEAVY_LASER
+    size: 0.3
+    costSell: 61000
+    weight: 18
+    bigSprite: 69
+    floorSprite: 6
+    handSprite: 16
+    bulletSprite: 7
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 85
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 84
+    tuSnap: 33
+    tuAimed: 75
+    clipSize: -1
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_EMP_PISTOL
+    size: 0.1
+    costSell: 20000
+    weight: 7
+    bigSprite: 70
+    floorSprite: 5
+    handSprite: 112
+    bulletSprite: 5
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 46
+    damageType: 4
+    accuracyAuto: 28
+    accuracySnap: 40
+    accuracyAimed: 68
+    tuAuto: 25
+    tuSnap: 20
+    tuAimed: 55
+    clipSize: -1
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    armor: 20
+  - type: STR_EMP_RIFLE
+    size: 0.2
+    costSell: 36900
+    weight: 8
+    bigSprite: 71
     floorSprite: 0
     handSprite: 8
     bulletSprite: 6
@@ -1781,11 +1810,12 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-  - type: STR_HEAVY_LASER
+    armor: 20
+  - type: STR_HEAVY_EMP
     size: 0.3
     costSell: 61000
     weight: 18
-    bigSprite: 6
+    bigSprite: 72
     floorSprite: 6
     handSprite: 16
     bulletSprite: 7
@@ -1803,187 +1833,340 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-  - type: STR_GRENADE
+    armor: 20
+  - type: STR_RAIL_PISTOL
     size: 0.1
-    costBuy: 300
-    costSell: 240
-    weight: 3
-    bigSprite: 19
-    floorSprite: 19
-    power: 50
-    damageType: 3
-    battleType: 4
-    blastRadius: 5
-  - type: STR_SMOKE_GRENADE
-    size: 0.1
-    costBuy: 150
-    costSell: 120
-    weight: 3
-    bigSprite: 20
-    floorSprite: 20
-    power: 60
-    damageType: 9
-    battleType: 4
-    blastRadius: 5
-  - type: STR_PROXIMITY_GRENADE
-    size: 0.1
-    costBuy: 500
-    costSell: 400
-    weight: 3
-    bigSprite: 21
-    floorSprite: 21
-    power: 70
-    damageType: 3
-    battleType: 5
-    blastRadius: 5
-  - type: STR_HIGH_EXPLOSIVE
-    size: 0.25
-    costBuy: 1500
-    costSell: 1200
-    weight: 6
-    bigSprite: 22
-    floorSprite: 22
-    power: 110
-    damageType: 3
-    battleType: 4
-    invWidth: 2
-    invHeight: 1
-    blastRadius: 5
-  - type: STR_MOTION_SCANNER
-    size: 0.1
-    costSell: 45600
-    weight: 3
-    bigSprite: 23
-    floorSprite: 23
-    battleType: 7
-    tuUse: 25
-  - type: STR_MEDI_KIT
-    size: 0.1
-    costSell: 46500
-    weight: 5
-    bigSprite: 24
-    floorSprite: 24
-    battleType: 6
+    costSell: 20000
+    weight: 7
+    bigSprite: 73
+    floorSprite: 5
+    handSprite: 112
+    bulletSprite: 5
+    fireSound: 11
+    compatibleAmmo:
+      - STR_RAIL_KINETIC_AMMO
+      - STR_RAIL_EMP_AMMO
+      - STR_RAIL_PLASMA_AMMO
+      - STR_RAIL_FUSION_AMMO
+    hitSound: 19
+    hitAnimation: 36
+    power: 46
+    damageType: 4
+    accuracyAuto: 28
+    accuracySnap: 40
+    accuracyAimed: 68
+    tuAuto: 25
+    tuSnap: 20
+    tuAimed: 55
+    battleType: 1
     invWidth: 1
     invHeight: 2
-    painKiller: 10
-    heal: 10
-    stimulant: 10
-    woundRecovery: 1
-    healthRecovery: 3
-    stunRecovery: 4
-    energyRecovery: 10
-    tuUse: 10
-    flatRate: true
-  - type: STR_PSI_AMP
-    requires:
-      - STR_PSI_AMP
-    size: 0.1
-    costSell: 194700
-    weight: 10
-    bigSprite: 33
-    floorSprite: 32
-    handSprite: 88
-    hitSound: 36
-    battleType: 9
-    twoHanded: true
-    invWidth: 1
-    invHeight: 3
-    tuUse: 25
-    flatRate: true
-  - type: STR_STUN_ROD
-    size: 0.1
-    costBuy: 1260
-    costSell: 945
-    weight: 6
-    bigSprite: 26
-    floorSprite: 26
-    handSprite: 80
-    hitSound: 54
-    power: 65
-    damageType: 6
-    accuracyMelee: 100
-    tuMelee: 30
-    battleType: 3
-    twoHanded: true
-    invWidth: 1
-    invHeight: 3
-  - type: STR_ELECTRO_FLARE
-    size: 0.1
-    costBuy: 60
-    costSell: 40
-    weight: 3
-    bigSprite: 55
-    floorSprite: 72
-    power: 15
-    battleType: 10
-    armor: 8
-  - type: STR_CORPSE
-    weight: 22
-    bigSprite: 45
-    floorSprite: 39
-    invWidth: 2
-    invHeight: 3
-    recover: false
-  - type: STR_CORPSE_ARMOR
-    name: STR_CORPSE
-    weight: 24
-    bigSprite: 28
-    floorSprite: 40
-    invWidth: 2
-    invHeight: 3
-    armor: 30
-    recover: false
-  - type: STR_CORPSE_SUIT
-    name: STR_CORPSE
-    weight: 26
-    bigSprite: 44
-    floorSprite: 41
-    invWidth: 2
-    invHeight: 3
-    armor: 40
-    recover: false
-  - type: STR_HEAVY_PLASMA
-    requires:
-      - STR_HEAVY_PLASMA
+    armor: 20
+  - type: STR_RAIL_RIFLE
     size: 0.2
-    costSell: 171600
+    costSell: 36900
     weight: 8
-    bigSprite: 30
-    floorSprite: 29
-    handSprite: 40
-    bulletSprite: 8
-    fireSound: 18
+    bigSprite: 74
+    floorSprite: 0
+    handSprite: 8
+    bulletSprite: 6
+    fireSound: 11
     compatibleAmmo:
-      - STR_HEAVY_PLASMA_CLIP
-    accuracyAuto: 50
-    accuracySnap: 75
-    accuracyAimed: 110
-    tuAuto: 35
-    tuSnap: 30
-    tuAimed: 60
+      - STR_RAIL_KINETIC_AMMO
+      - STR_RAIL_EMP_AMMO
+      - STR_RAIL_PLASMA_AMMO
+      - STR_RAIL_FUSION_AMMO
+    hitSound: 19
+    hitAnimation: 36
+    power: 60
+    damageType: 4
+    accuracyAuto: 46
+    accuracySnap: 65
+    accuracyAimed: 100
+    tuAuto: 34
+    tuSnap: 25
+    tuAimed: 50
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_HEAVY_RAIL
+    size: 0.3
+    costSell: 61000
+    weight: 18
+    bigSprite: 75
+    floorSprite: 6
+    handSprite: 16
+    bulletSprite: 7
+    fireSound: 11
+    compatibleAmmo:
+      - STR_RAIL_KINETIC_AMMO
+      - STR_RAIL_EMP_AMMO
+      - STR_RAIL_PLASMA_AMMO
+      - STR_RAIL_FUSION_AMMO
+    hitSound: 19
+    hitAnimation: 36
+    power: 85
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 84
+    tuSnap: 33
+    tuAimed: 75
     battleType: 1
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    recoveryPoints: 5
-    armor: 50
-    attraction: 1
-  - type: STR_HEAVY_PLASMA_CLIP
-    requires:
-      - STR_HEAVY_PLASMA_CLIP
+    armor: 20	
+  - type: STR_RAIL_AUTOGUN
     size: 0.3
-    costSell: 9590
+    costSell: 61000
+    weight: 18
+    bigSprite: 76
+    floorSprite: 6
+    handSprite: 16
+    bulletSprite: 7
+    fireSound: 11
+    compatibleAmmo:
+      - STR_RAIL_KINETIC_AMMO
+      - STR_RAIL_EMP_AMMO
+      - STR_RAIL_PLASMA_AMMO
+      - STR_RAIL_FUSION_AMMO
+    hitSound: 19
+    hitAnimation: 36
+    power: 85
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 84
+    tuSnap: 33
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_RAIL_KINETIC_AMMO
+    size: 0.1
+    costSell: 150
     weight: 3
-    bigSprite: 25
+    bigSprite: 77
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 30
+    damageType: 1
+    clipSize: 20
+    battleType: 2
+    armor: 20
+  - type: STR_RAIL_EMP_AMMO
+    size: 0.1
+    costSell: 150
+    weight: 3
+    bigSprite: 78
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 30
+    damageType: 3
+    clipSize: 10
+    battleType: 2
+    armor: 20
+  - type: STR_RAIL_PLASMA_AMMO
+    size: 0.1
+    costSell: 150
+    weight: 3
+    bigSprite: 79
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 40
+    damageType: 6
+    clipSize: 30
+    battleType: 2
+    armor: 20	
+  - type: STR_RAIL_FUSION_AMMO
+    size: 0.1
+    costSell: 150
+    weight: 3
+    bigSprite: 80
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 40
+    damageType: 6
+    clipSize: 30
+    battleType: 2
+    armor: 20
+  - type: STR_GAUSS_PISTOL
+    size: 0.1
+    costSell: 20000
+    weight: 7
+    bigSprite: 81
+    floorSprite: 5
+    handSprite: 112
+    bulletSprite: 5
+    fireSound: 11
+    compatibleAmmo:
+      - STR_GAUSS_PISTOL_CLIP
+    hitSound: 19
+    hitAnimation: 36
+    power: 46
+    damageType: 4
+    accuracyAuto: 28
+    accuracySnap: 40
+    accuracyAimed: 68
+    tuAuto: 25
+    tuSnap: 20
+    tuAimed: 55
+    clipSize: -1
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    armor: 20
+  - type: STR_GAUSS_PISTOL_CLIP
+    requires:
+      - STR_STR_GAUSS_PISTOL_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 82
     floorSprite: 33
     hitSound: 19
     hitAnimation: 46
-    power: 115
+    power: 52
     damageType: 5
-    clipSize: 35
+    clipSize: 26
     battleType: 2
     recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_GAUSS_RIFLE
+    size: 0.2
+    costSell: 36900
+    weight: 8
+    bigSprite: 83
+    floorSprite: 0
+    handSprite: 8
+    bulletSprite: 6
+    fireSound: 11
+    compatibleAmmo:
+      - STR_GAUSS_RIFLE_CLIP
+    hitSound: 19
+    hitAnimation: 36
+    power: 60
+    damageType: 4
+    accuracyAuto: 46
+    accuracySnap: 65
+    accuracyAimed: 100
+    tuAuto: 34
+    tuSnap: 25
+    tuAimed: 50
+    clipSize: -1
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_GAUSS_RIFLE_CLIP
+    requires:
+      - STR_STR_GAUSS_RIFLE_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 84
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 52
+    damageType: 5
+    clipSize: 26
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_HEAVY_GAUSS
+    size: 0.3
+    costSell: 61000
+    weight: 18
+    bigSprite: 85
+    floorSprite: 6
+    handSprite: 16
+    bulletSprite: 7
+    fireSound: 11
+    compatibleAmmo:
+      - STR_HEAVY_GAUSS_CLIP
+    hitSound: 19
+    hitAnimation: 36
+    power: 85
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 84
+    tuSnap: 33
+    tuAimed: 75
+    clipSize: -1
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_HEAVY_GAUSS_CLIP
+    requires:
+      - STR_STR_HEAVY_GAUSS_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 86
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 52
+    damageType: 5
+    clipSize: 26
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_PLASMA_PISTOL
+    requires:
+      - STR_PLASMA_PISTOL
+    size: 0.1
+    costSell: 84000
+    weight: 3
+    bigSprite: 87
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_PLASMA_PISTOL_CLIP
+    accuracyAuto: 50
+    accuracySnap: 65
+    accuracyAimed: 85
+    tuAuto: 30
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    recoveryPoints: 3
+    armor: 45
+    attraction: 1
+  - type: STR_PLASMA_PISTOL_CLIP
+    requires:
+      - STR_PLASMA_PISTOL_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 88
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 52
+    damageType: 5
+    clipSize: 26
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
     attraction: 1
   - type: STR_PLASMA_RIFLE
     requires:
@@ -1991,7 +2174,7 @@ items:
     size: 0.2
     costSell: 126500
     weight: 5
-    bigSprite: 31
+    bigSprite: 89
     floorSprite: 30
     handSprite: 48
     bulletSprite: 8
@@ -2017,7 +2200,7 @@ items:
     size: 0.1
     costSell: 6290
     weight: 3
-    bigSprite: 41
+    bigSprite: 90
     floorSprite: 33
     hitSound: 19
     hitAnimation: 46
@@ -2026,14 +2209,915 @@ items:
     clipSize: 28
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
-  - type: STR_PLASMA_PISTOL
+    armor: 20
+    attraction: 1	
+  - type: STR_HEAVY_PLASMA
     requires:
-      - STR_PLASMA_PISTOL
+      - STR_HEAVY_PLASMA
+    size: 0.2
+    costSell: 171600
+    weight: 8
+    bigSprite: 91
+    floorSprite: 29
+    handSprite: 40
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_HEAVY_PLASMA_CLIP
+    accuracyAuto: 50
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    armor: 50
+    attraction: 1
+  - type: STR_HEAVY_PLASMA_CLIP
+    requires:
+      - STR_HEAVY_PLASMA_CLIP
+    size: 0.3
+    costSell: 9590
+    weight: 3
+    bigSprite: 92
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 115
+    damageType: 5
+    clipSize: 35
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_DISRUPTOR_PISTOL
     size: 0.1
     costSell: 84000
     weight: 3
-    bigSprite: 32
+    bigSprite: 93
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_DISRUPTOR_PISTOL_CLIP
+    accuracyAuto: 50
+    accuracySnap: 65
+    accuracyAimed: 85
+    tuAuto: 30
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    recoveryPoints: 3
+    armor: 45
+    attraction: 1
+  - type: STR_DISRUPTOR_PISTOL_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 94
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 52
+    damageType: 5
+    clipSize: 26
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_DISRUPTOR_RIFLE
+    size: 0.2
+    costSell: 126500
+    weight: 5
+    bigSprite: 95
+    floorSprite: 30
+    handSprite: 48
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_DISRUPTOR_RIFLE_CLIP
+    accuracyAuto: 55
+    accuracySnap: 86
+    accuracyAimed: 100
+    tuAuto: 36
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    recoveryPoints: 4
+    armor: 50
+    attraction: 1
+  - type: STR_DISRUPTOR_RIFLE_CLIP
+    size: 0.1
+    costSell: 6290
+    weight: 3
+    bigSprite: 96
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 80
+    damageType: 5
+    clipSize: 28
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1	
+  - type: STR_HEAVY_DISRUPTOR
+    size: 0.2
+    costSell: 171600
+    weight: 8
+    bigSprite: 97
+    floorSprite: 29
+    handSprite: 40
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_HEAVY_DISRUPTOR_CLIP
+    accuracyAuto: 50
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    armor: 50
+    attraction: 1
+  - type: STR_HEAVY_DISRUPTOR_CLIP
+    size: 0.3
+    costSell: 9590
+    weight: 3
+    bigSprite: 98
+    floorSprite: 33
+    hitSound: 19
+    hitAnimation: 46
+    power: 115
+    damageType: 5
+    clipSize: 35
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_AUTO_CANNON
+    size: 0.3
+    costBuy: 13500
+    costSell: 10125
+    weight: 19
+    bigSprite: 99
+    floorSprite: 7
+    handSprite: 32
+    bulletSprite: 3
+    fireSound: 2
+    compatibleAmmo:
+      - STR_AC_AP_AMMO
+      - STR_AC_HE_AMMO
+      - STR_AC_I_AMMO
+      - STR_AC_NL_AMMO
+    accuracyAuto: 32
+    accuracySnap: 56
+    accuracyAimed: 82
+    tuAuto: 40
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_AC_AP_AMMO
+    size: 0.1
+    costBuy: 500
+    costSell: 400
+    weight: 5
+    bigSprite: 100
+    floorSprite: 8
+    hitSound: 13
+    hitAnimation: 26
+    power: 42
+    damageType: 1
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+  - type: STR_AC_HE_AMMO
+    size: 0.1
+    costBuy: 700
+    costSell: 560
+    weight: 5
+    bigSprite: 101
+    floorSprite: 9
+    hitSound: 0
+    hitAnimation: 0
+    power: 44
+    damageType: 3
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+  - type: STR_AC_I_AMMO
+    size: 0.1
+    costBuy: 650
+    costSell: 520
+    weight: 5
+    bigSprite: 102
+    floorSprite: 10
+    hitSound: 0
+    hitAnimation: 0
+    power: 42
+    damageType: 2
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+    attraction: 1
+  - type: STR_AC_NL_AMMO
+    size: 0.1
+    costBuy: 650
+    costSell: 520
+    weight: 5
+    bigSprite: 103
+    floorSprite: 10
+    hitSound: 0
+    hitAnimation: 0
+    power: 42
+    damageType: 6
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+    attraction: 1
+  - type: STR_HEAVY_CANNON
+    size: 0.3
+    costBuy: 6400
+    costSell: 4800
+    weight: 18
+    bigSprite: 104
+    floorSprite: 11
+    handSprite: 24
+    bulletSprite: 4
+    fireSound: 2
+    compatibleAmmo:
+      - STR_HC_AP_AMMO
+      - STR_HC_HE_AMMO
+      - STR_HC_I_AMMO
+      - STR_HC_NL_AMMO
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_HC_AP_AMMO
+    size: 0.1
+    costBuy: 300
+    costSell: 225
+    weight: 6
+    bigSprite: 105
+    floorSprite: 12
+    hitSound: 13
+    hitAnimation: 26
+    power: 56
+    damageType: 1
+    clipSize: 6
+    battleType: 2
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    attraction: 1
+  - type: STR_HC_HE_AMMO
+    size: 0.1
+    costBuy: 500
+    costSell: 275
+    weight: 6
+    bigSprite: 106
+    floorSprite: 13
+    hitSound: 0
+    hitAnimation: 0
+    power: 52
+    damageType: 3
+    clipSize: 6
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+    attraction: 1
+  - type: STR_HC_I_AMMO
+    size: 0.1
+    costBuy: 400
+    costSell: 300
+    weight: 6
+    bigSprite: 107
+    floorSprite: 14
+    hitSound: 0
+    hitAnimation: 0
+    power: 60
+    damageType: 2
+    clipSize: 6
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+    attraction: 1
+  - type: STR_HC_NL_AMMO
+    size: 0.1
+    costBuy: 650
+    costSell: 520
+    weight: 5
+    bigSprite: 108
+    floorSprite: 10
+    hitSound: 0
+    hitAnimation: 0
+    power: 42
+    damageType: 6
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+    attraction: 1
+  - type: STR_SNIPER_RIFLE
+    size: 0.2
+    costBuy: 3000
+    costSell: 2250
+    weight: 8
+    bigSprite: 109
+    floorSprite: 1
+    handSprite: 0
+    bulletSprite: 2
+    fireSound: 4
+    compatibleAmmo:
+      - STR_SNIPER_RIFLE_CLIP
+    accuracySnap: 110
+    accuracyAimed: 200
+    tuSnap: 35
+    tuAimed: 55
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_SNIPER_RIFLE_CLIP
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 110
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 65
+    damageType: 1
+    clipSize: 10
+    battleType: 2
+    armor: 20
+  - type: STR_SHOTGUN
+    size: 0.2
+    costBuy: 3000
+    costSell: 2250
+    weight: 8
+    bigSprite: 111
+    floorSprite: 1
+    handSprite: 0
+    bulletSprite: 2
+    fireSound: 4
+    compatibleAmmo:
+      - STR_SHOTGUN_SHELLS
+      - STR_SHOTGUN_SHELLS_AP
+      - STR_SHOTGUN_SHELLS_FC
+      - STR_SHOTGUN_SHELLS_DB
+      - STR_SHOTGUN_SHELLS_NL
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 45
+    tuAimed: 55
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_SHOTGUN_SHELLS
+    size: 0.1
+    costBuy: 200
+    costSell: 112
+    weight: 3
+    bigSprite: 106
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 40
+    damageType: 1
+    clipSize: 20
+    battleType: 2
+    armor: 20
+  - type: STR_SHOTGUN_SHELLS_AP
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 113
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 45
+    damageType: 1
+    clipSize: 20
+    battleType: 2
+    armor: 20
+  - type: STR_SHOTGUN_SHELLS_FC
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 114
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 50
+    damageType: 3
+    clipSize: 10
+    battleType: 2
+    armor: 20
+  - type: STR_SHOTGUN_SHELLS_DB
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 115
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 55
+    damageType: 3
+    clipSize: 10
+    battleType: 2
+    armor: 20
+  - type: STR_SHOTGUN_SHELLS_NL
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 116
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 60
+    damageType: 6
+    clipSize: 30
+    battleType: 2
+    armor: 20
+  - type: STR_GRENADE_LAUNCHER
+    size: 0.2
+    costBuy: 3000
+    costSell: 2250
+    weight: 8
+    bigSprite: 117
+    floorSprite: 1
+    handSprite: 0
+    bulletSprite: 2
+    fireSound: 4
+    compatibleAmmo:
+      - STR_GL_EXPLOSIVE
+      - STR_GL_SMOKE
+      - STR_GL_INCENDIARY
+      - STR_GL_STUN_GAS
+    accuracySnap: 60
+    accuracyAimed: 80
+    tuSnap: 25
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    arcingshot: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_GL_EXPLOSIVE
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 118
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 70
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    armor: 20
+  - type: STR_GL_SMOKE
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 119
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 80
+    damageType: 1
+    clipSize: 1
+    battleType: 2
+    armor: 20
+  - type: STR_GL_INCENDIARY
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 3
+    bigSprite: 120
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 75
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    armor: 20
+  - type: STR_GL_STUN_GAS
+    size: 0.1
+    costSell: 150
+    weight: 3
+    bigSprite: 121
+    floorSprite: 2
+    hitSound: 22
+    hitAnimation: 26
+    power: 70
+    damageType: 6
+    clipSize: 1
+    battleType: 2
+    armor: 20	
+  - type: STR_FLAME_THROWER
+    size: 0.2
+    costBuy: 3000
+    costSell: 2250
+    weight: 8
+    bigSprite: 122
+    floorSprite: 1
+    handSprite: 0
+    bulletSprite: 2
+    fireSound: 4
+    compatibleAmmo:
+      - STR_FT_FUEL_POD
+    accuracyAimed: 150
+    tuAimed: 40
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_FT_FUEL_POD
+    size: 0.2
+    costBuy: 1200
+    costSell: 960
+    weight: 8
+    bigSprite: 123
+    floorSprite: 18
+    hitSound: 0
+    hitAnimation: 0
+    power: 90
+    damageType: 2
+    clipSize: 6
+    battleType: 2
+    invWidth: 1
+    invHeight: 2
+    armor: 20	
+  - type: STR_ROCKET_LAUNCHER
+    size: 0.4
+    costBuy: 4000
+    costSell: 3000
+    weight: 10
+    bigSprite: 124
+    floorSprite: 15
+    handSprite: 72
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_SMALL_ROCKET
+      - STR_LARGE_ROCKET
+      - STR_INCENDIARY_ROCKET
+    accuracySnap: 55
+    accuracyAimed: 115
+    tuSnap: 45
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_SMALL_ROCKET
+    size: 0.2
+    costBuy: 600
+    costSell: 480
+    weight: 6
+    bigSprite: 125
+    floorSprite: 16
+    hitSound: 0
+    hitAnimation: 0
+    power: 75
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_LARGE_ROCKET
+    size: 0.2
+    costBuy: 900
+    costSell: 720
+    weight: 8
+    bigSprite: 126
+    floorSprite: 17
+    hitSound: 0
+    hitAnimation: 0
+    power: 100
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_INCENDIARY_ROCKET
+    size: 0.2
+    costBuy: 1200
+    costSell: 960
+    weight: 8
+    bigSprite: 127
+    floorSprite: 18
+    hitSound: 0
+    hitAnimation: 0
+    power: 90
+    damageType: 2
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_GRENADE
+    size: 0.1
+    costBuy: 300
+    costSell: 240
+    weight: 3
+    bigSprite: 128
+    floorSprite: 19
+    power: 50
+    damageType: 3
+    battleType: 4
+    blastRadius: 5
+  - type: STR_SMOKE_GRENADE
+    size: 0.1
+    costBuy: 150
+    costSell: 120
+    weight: 3
+    bigSprite: 129
+    floorSprite: 20
+    power: 60
+    damageType: 9
+    battleType: 4
+    blastRadius: 5
+  - type: STR_INCENDIARY_GRENADE
+    size: 0.1
+    costBuy: 150
+    costSell: 120
+    weight: 3
+    bigSprite: 130
+    floorSprite: 20
+    power: 60
+    damageType: 2
+    battleType: 4
+    armor: 20
+    blastRadius: 5
+  - type: STR_STUN_GAS_GRENADE
+    size: 0.1
+    costSell: 120
+    weight: 3
+    bigSprite: 131
+    floorSprite: 20
+    power: 60
+    damageType: 2
+    battleType: 4
+    armor: 20
+    blastRadius: 5
+  - type: STR_EMP_GRENADE
+    size: 0.1
+    costSell: 120
+    weight: 3
+    bigSprite: 132
+    floorSprite: 20
+    power: 60
+    damageType: 2
+    battleType: 4
+    armor: 20
+    blastRadius: 5
+  - type: STR_MINE
+    size: 0.1
+    costBuy: 500
+    costSell: 400
+    weight: 3
+    bigSprite: 133
+    floorSprite: 21
+    power: 70
+    damageType: 3
+    battleType: 5
+    blastRadius: 5
+  - type: STR_INCENDIARY_MINE
+    size: 0.1
+    costBuy: 400
+    costSell: 340
+    weight: 3
+    bigSprite: 134
+    floorSprite: 19
+    power: 70
+    damageType: 2
+    battleType: 5
+    armor: 40
+    blastRadius: 8
+  - type: STR_EMP_MINE
+    size: 0.1
+    costSell: 340
+    weight: 3
+    bigSprite: 135
+    floorSprite: 19
+    power: 70
+    damageType: 2
+    battleType: 5
+    armor: 40
+    blastRadius: 8
+  - type: STR_ELECTRO_FLARE
+    size: 0.1
+    costBuy: 60
+    costSell: 40
+    weight: 3
+    bigSprite: 136
+    floorSprite: 72
+    power: 15
+    battleType: 10
+    armor: 8
+    blastRadius: 5
+  - type: STR_HIGH_EXPLOSIVE
+    size: 0.25
+    costBuy: 1500
+    costSell: 1200
+    weight: 6
+    bigSprite: 137
+    floorSprite: 22
+    power: 110
+    damageType: 3
+    battleType: 4
+    invWidth: 2
+    invHeight: 1
+    blastRadius: 5
+  - type: STR_STUN_ROD
+    size: 0.1
+    costBuy: 1260
+    costSell: 945
+    weight: 6
+    bigSprite: 138
+    floorSprite: 26
+    handSprite: 80
+    hitSound: 54
+    power: 65
+    damageType: 6
+    accuracyMelee: 100
+    tuMelee: 30
+    battleType: 3
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+    blastRadius: 5
+  - type: STR_MEDI_KIT
+    size: 0.1
+    costSell: 46500
+    weight: 5
+    bigSprite: 139
+    floorSprite: 24
+    battleType: 6
+    invWidth: 1
+    invHeight: 2
+    painKiller: 10
+    heal: 10
+    stimulant: 10
+    healAmount: 1
+    healthAmount: 3
+    stun: 4
+    energy: 10
+    tuUse: 10
+    flatRate: true
+    armor: 20
+  - type: STR_MOTION_SCANNER
+    size: 0.1
+    costSell: 45600
+    weight: 3
+    bigSprite: 140
+    floorSprite: 23
+    battleType: 7
+    tuUse: 25
+    armor: 20  
+  - type: STR_PERSONAL_SHIELD
+    size: 0.1
+    costSell: 45600
+    weight: 3
+    bigSprite: 141
+    floorSprite: 23
+    battleType: 0
+    tuUse: 25
+    armor: 20    
+  - type: STR_PERSONAL_CLOAK
+    size: 0.1
+    costSell: 45600
+    weight: 3
+    bigSprite: 142
+    floorSprite: 23
+    battleType: 0
+    tuUse: 25
+    armor: 20   
+  - type: STR_SMALL_LAUNCHER
+    requires:
+      - STR_ALIEN_SMALL_LAUNCHER
+    size: 0.2
+    costSell: 120000
+    weight: 10
+    bigSprite: 143
+    floorSprite: 36
+    handSprite: 64
+    bulletSprite: 9
+    fireSound: 53
+    compatibleAmmo:
+      - STR_STUN_BOMB
+    accuracySnap: 65
+    accuracyAimed: 110
+    tuSnap: 40
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 2
+    recoveryPoints: 4
+    armor: 20
+    attraction: 1
+  - type: STR_ALIEN_SMALL_LAUNCHER
+    size: 0.2
+    costSell: 120000
+    weight: 10
+    bigSprite: 144
+    floorSprite: 36
+    handSprite: 64
+    bulletSprite: 9
+    fireSound: 53
+    compatibleAmmo:
+      - STR_STUN_BOMB
+    accuracySnap: 65
+    accuracyAimed: 110
+    tuSnap: 40
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 2
+    recoveryPoints: 4
+    armor: 20
+    attraction: 1
+    raceUse: 2
+  - type: STR_STUN_BOMB
+    requires:
+      - STR_STUN_BOMB
+    size: 0.1
+    costSell: 15200
+    weight: 3
+    bigSprite: 145
+    floorSprite: 37
+    hitSound: 0
+    hitAnimation: 0
+    power: 90
+    damageType: 6
+    clipSize: 1
+    battleType: 2
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_ALIEN_PLASMA_PISTOL
+    size: 0.1
+    costSell: 84000
+    weight: 3
+    bigSprite: 146
     floorSprite: 31
     handSprite: 104
     bulletSprite: 8
@@ -2052,21 +3136,54 @@ items:
     recoveryPoints: 3
     armor: 45
     attraction: 1
-  - type: STR_PLASMA_PISTOL_CLIP
-    requires:
-      - STR_PLASMA_PISTOL_CLIP
-    size: 0.1
-    costSell: 4440
-    weight: 3
-    bigSprite: 34
-    floorSprite: 33
-    hitSound: 19
-    hitAnimation: 46
-    power: 52
-    damageType: 5
-    clipSize: 26
-    battleType: 2
-    recoveryPoints: 1
+    raceUse: 2
+  - type: STR_ALIEN_PLASMA_RIFLE
+    size: 0.2
+    costSell: 126500
+    weight: 5
+    bigSprite: 147
+    floorSprite: 30
+    handSprite: 48
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_PLASMA_RIFLE_CLIP
+    accuracyAuto: 55
+    accuracySnap: 86
+    accuracyAimed: 100
+    tuAuto: 36
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    recoveryPoints: 4
+    armor: 50
+    attraction: 1
+  - type: STR_ALIEN_HEAVY_PLASMA
+    size: 0.2
+    costSell: 171600
+    weight: 8
+    bigSprite: 148
+    floorSprite: 29
+    handSprite: 40
+    bulletSprite: 8
+    fireSound: 18
+    compatibleAmmo:
+      - STR_HEAVY_PLASMA_CLIP
+    accuracyAuto: 50
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    armor: 50
     attraction: 1
   - type: STR_BLASTER_LAUNCHER
     requires:
@@ -2074,7 +3191,7 @@ items:
     size: 0.3
     costSell: 144000
     weight: 16
-    bigSprite: 35
+    bigSprite: 149
     floorSprite: 34
     handSprite: 56
     bulletSprite: 10
@@ -2097,7 +3214,7 @@ items:
     size: 0.2
     costSell: 17028
     weight: 3
-    bigSprite: 36
+    bigSprite: 150
     floorSprite: 35
     hitSound: 0
     hitAnimation: 0
@@ -2108,46 +3225,9 @@ items:
     invWidth: 1
     invHeight: 2
     recoveryPoints: 1
+<<<<<<< HEAD
+    armor: 20
     blastRadius: 11
-    attraction: 1
-  - type: STR_SMALL_LAUNCHER
-    requires:
-      - STR_SMALL_LAUNCHER
-    size: 0.2
-    costSell: 120000
-    weight: 10
-    bigSprite: 37
-    floorSprite: 36
-    handSprite: 64
-    bulletSprite: 9
-    fireSound: 53
-    compatibleAmmo:
-      - STR_STUN_BOMB
-    accuracySnap: 65
-    accuracyAimed: 110
-    tuSnap: 40
-    tuAimed: 75
-    battleType: 1
-    twoHanded: true
-    invWidth: 2
-    invHeight: 2
-    recoveryPoints: 4
-    attraction: 1
-  - type: STR_STUN_BOMB
-    requires:
-      - STR_STUN_BOMB
-    size: 0.1
-    costSell: 15200
-    weight: 3
-    bigSprite: 38
-    floorSprite: 37
-    hitSound: 0
-    hitAnimation: 0
-    power: 90
-    damageType: 6
-    clipSize: 1
-    battleType: 2
-    recoveryPoints: 1
     attraction: 1
   - type: STR_ALIEN_GRENADE
     requires:
@@ -2155,30 +3235,37 @@ items:
     size: 0.1
     costSell: 14850
     weight: 3
-    bigSprite: 39
+    bigSprite: 151
     floorSprite: 38
     power: 90
     damageType: 3
     battleType: 4
     recoveryPoints: 1
+    armor: 20
     blastRadius: 5
     attraction: 1
-  - type: STR_ELERIUM_115
+  - type: STR_ALIEN_MINE
+    requires:
+      - STR_ALIEN_MINE
     size: 0.1
-    costSell: 5000
+    costSell: 14850
     weight: 3
-    bigSprite: 56
-    floorSprite: 37
-    invWidth: 1
-    invHeight: 1
-    attraction: 4
+    bigSprite: 152
+    floorSprite: 38
+    power: 120
+    damageType: 3
+    battleType: 4
+    recoveryPoints: 1
+    armor: 20
+    blastRadius: 7
+    attraction: 1
   - type: STR_MIND_PROBE
     requires:
       - STR_MIND_PROBE
     size: 0.1
     costSell: 304000
     weight: 5
-    bigSprite: 29
+    bigSprite: 153
     floorSprite: 28
     hitSound: 37    
     battleType: 8
@@ -2186,12 +3273,159 @@ items:
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
-    attraction: 1
+    armor: 20
+    attraction: 1  
+  - type: STR_PSI_AMP
+    requires:
+      - STR_PSI_AMP
+    size: 0.1
+    costSell: 194700
+    weight: 10
+    bigSprite: 154
+    floorSprite: 32
+    handSprite: 88
+    hitSound: 36
+    battleType: 9
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    tuUse: 25
+    flatRate: true
+    armor: 20
+  - type: STR_HOVERTANK_LAUNCHER
+    size: 6
+    costSell: 1043000
+    transferTime: 96
+    weight: 1
+    bigSprite: 155
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 10
+    fireSound: 53
+    compatibleAmmo:
+      - STR_HWP_FUSION_BOMB
+    accuracyAimed: 100
+    tuAimed: 66
+    battleType: 1
+    fixedWeapon: true
+    waypoint: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 4
+  - type: STR_TANK_ROCKET_LAUNCHER
+    size: 6
+    costBuy: 480000
+    costSell: 360000
+    transferTime: 96
+    weight: 1
+    bigSprite: 156
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_HWP_ROCKETS
+    accuracySnap: 55
+    accuracyAimed: 115
+    tuSnap: 45
+    tuAimed: 75
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 1
+  - type: STR_HOVERTANK_PLASMA
+    size: 6
+    costSell: 980000
+    transferTime: 96
+    weight: 1
+    bigSprite: 157
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 8
+    fireSound: 18
+    hitSound: 19
+    power: 110
+    damageType: 5
+    hitAnimation: 46
+    accuracySnap: 85
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    clipSize: -1
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 3
+  - type: STR_TANK_LASER_CANNON
+    size: 6
+    costSell: 594000
+    transferTime: 96
+    weight: 1
+    bigSprite: 158
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 5
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 110
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 85
+    tuSnap: 33
+    tuAimed: 75
+    battleType: 1
+    fixedWeapon: true
+    clipSize: -1
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 2
+  - type: STR_CORPSE
+    weight: 22
+    bigSprite: 159
+    floorSprite: 39
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    recover: false
+  - type: STR_CORPSE_ARMOR
+    name: STR_CORPSE
+    weight: 24
+    bigSprite: 160
+    floorSprite: 40
+    invWidth: 2
+    invHeight: 3
+    armor: 30
+    recover: false
+  - type: STR_CORPSE_SUIT
+    name: STR_CORPSE
+    weight: 26
+    bigSprite: 161
+    floorSprite: 41
+    invWidth: 2
+    invHeight: 3
+    armor: 40
+    recover: false
+  - type: STR_CORPSE_ION
+    name: STR_CORPSE
+    weight: 26
+    bigSprite: 162
+    floorSprite: 41
+    invWidth: 2
+    invHeight: 3
+    armor: 40
+    recover: false	
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
     weight: 30
-    bigSprite: 46
+    bigSprite: 163
     floorSprite: 42
     invWidth: 2
     invHeight: 3
@@ -2202,7 +3436,7 @@ items:
     size: 0.4
     costSell: 20000
     weight: 40
-    bigSprite: 50
+    bigSprite: 164
     floorSprite: 46
     invWidth: 2
     invHeight: 3
@@ -2213,7 +3447,7 @@ items:
     size: 0.4
     costSell: 20000
     weight: 25
-    bigSprite: 49
+    bigSprite: 165
     floorSprite: 45
     invWidth: 2
     invHeight: 3
@@ -2224,7 +3458,7 @@ items:
     size: 0.4
     costSell: 20000
     weight: 40
-    bigSprite: 48
+    bigSprite: 166
     floorSprite: 44
     invWidth: 2
     invHeight: 3
@@ -2235,7 +3469,7 @@ items:
     size: 0.4
     costSell: 20000
     weight: 20
-    bigSprite: 52
+    bigSprite: 167
     floorSprite: 48
     invWidth: 2
     invHeight: 3
@@ -2246,7 +3480,7 @@ items:
     size: 0.4
     costSell: 20000
     weight: 35
-    bigSprite: 47
+    bigSprite: 168
     floorSprite: 43
     invWidth: 2
     invHeight: 3
@@ -2257,7 +3491,7 @@ items:
     size: 0.4
     costSell: 20000
     weight: 40
-    bigSprite: 51
+    bigSprite: 169
     floorSprite: 47
     invWidth: 2
     invHeight: 3
@@ -2268,12 +3502,23 @@ items:
     size: 0.4
     costSell: 20000
     weight: 40
-    bigSprite: 53
+    bigSprite: 170
     floorSprite: 49
     invWidth: 2
     invHeight: 3
     recoveryPoints: 3
     battleType: 11
+    armor: 20
+  - type: STR_ELERIUM_115
+    size: 0.1
+    costSell: 5000
+    weight: 3
+    bigSprite: 171
+    floorSprite: 37
+    invWidth: 1
+    invHeight: 1
+    armor: 20
+    attraction: 4
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
@@ -2460,6 +3705,9 @@ items:
   - type: STR_FLYING_SUIT
     size: 0.8
     costSell: 115000
+  - type: STR_ION_ARMOR
+    size: 0.8
+    costSell: 150000
   - type: CYBERDISC_WEAPON
     weight: 3
     bigSprite: 40
@@ -2542,7 +3790,7 @@ items:
     handSprite: 104
     hitSound: 48
     power: 70
-    damageType: 7
+    damageType: 2
     accuracyMelee: 92
     tuMelee: 15
     clipSize: -1
@@ -2755,7 +4003,7 @@ ufos:
     range: 0
     score: 50
     reload: 56
-    breakOffTime: 100
+    breakOffTime: 200
     battlescapeTerrainData:
       name: UFO1A
       mapDataSets:
@@ -2925,48 +4173,38 @@ ufos:
           width: 30
           length: 30
 invs:
-  - id: STR_GROUND
-    x: 0
-    y: 152
-    type: 2
+  - id: STR_BACK_PACK
+    x: 263
+    y: 90
+    slots:
+      - [0, 0]
+      - [1, 0]
+      - [2, 0]
+      - [3, 0]
+      - [0, 1]
+      - [1, 1]
+      - [2, 1]
+      - [3, 1]
+      - [0, 2]
+      - [1, 2]
+      - [2, 2]
+      - [3, 2]
+      - [0, 3]
+      - [1, 3]
+      - [2, 3]
+      - [3, 3]
     costs:
-      STR_BACK_PACK: 20
       STR_BELT: 12
+      STR_GROUND: 10
       STR_LEFT_HAND: 8
-      STR_LEFT_LEG: 10
-      STR_LEFT_SHOULDER: 12
+      STR_LEFT_LEG: 16
+      STR_LEFT_SHOULDER: 14
       STR_RIGHT_HAND: 8
-      STR_RIGHT_LEG: 10
-      STR_RIGHT_SHOULDER: 12
-  - id: STR_RIGHT_HAND
-    x: 0
-    y: 63
-    type: 1
-    costs:
-      STR_BACK_PACK: 14
-      STR_BELT: 8
-      STR_GROUND: 2
-      STR_LEFT_HAND: 4
-      STR_LEFT_LEG: 10
-      STR_LEFT_SHOULDER: 10
-      STR_RIGHT_LEG: 8
-      STR_RIGHT_SHOULDER: 10
-  - id: STR_LEFT_HAND
-    x: 128
-    y: 63
-    type: 1
-    costs:
-      STR_BACK_PACK: 14
-      STR_BELT: 8
-      STR_GROUND: 2
-      STR_LEFT_LEG: 8
-      STR_LEFT_SHOULDER: 10
-      STR_RIGHT_HAND: 4
-      STR_RIGHT_LEG: 10
-      STR_RIGHT_SHOULDER: 10
+      STR_RIGHT_LEG: 16
+      STR_RIGHT_SHOULDER: 14
   - id: STR_BELT
-    x: 192
-    y: 104
+    x: 263
+    y: 240
     slots:
       - [0, 0]
       - [1, 0]
@@ -2983,24 +4221,35 @@ invs:
       STR_RIGHT_HAND: 4
       STR_RIGHT_LEG: 10
       STR_RIGHT_SHOULDER: 12
-  - id: STR_RIGHT_LEG
-    x: 0
-    y: 120
-    slots:
-      - [0, 0]
-      - [1, 0]
+  - id: STR_GROUND
+    x: 1
+    y: 474 
+    type: 2
     costs:
-      STR_BACK_PACK: 18
-      STR_BELT: 10
-      STR_GROUND: 6
-      STR_LEFT_HAND: 6
+      STR_BACK_PACK: 20
+      STR_BELT: 12
+      STR_LEFT_HAND: 8
       STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 12
+      STR_RIGHT_HAND: 8
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 12
+  - id: STR_LEFT_HAND
+    x: 190
+    y: 142
+    type: 1
+    costs:
+      STR_BACK_PACK: 14
+      STR_BELT: 8
+      STR_GROUND: 2
+      STR_LEFT_LEG: 8
       STR_LEFT_SHOULDER: 10
       STR_RIGHT_HAND: 4
+      STR_RIGHT_LEG: 10
       STR_RIGHT_SHOULDER: 10
   - id: STR_LEFT_LEG
-    x: 128
-    y: 120
+    x: 190
+    y: 260
     slots:
       - [0, 0]
       - [1, 0]
@@ -3013,24 +4262,9 @@ invs:
       STR_RIGHT_HAND: 6
       STR_RIGHT_LEG: 10
       STR_RIGHT_SHOULDER: 10
-  - id: STR_RIGHT_SHOULDER
-    x: 16
-    y: 37
-    slots:
-      - [0, 0]
-      - [1, 0]
-    costs:
-      STR_BACK_PACK: 16
-      STR_BELT: 10
-      STR_GROUND: 4
-      STR_LEFT_HAND: 3
-      STR_LEFT_LEG: 12
-      STR_LEFT_SHOULDER: 8
-      STR_RIGHT_HAND: 3
-      STR_RIGHT_LEG: 12
   - id: STR_LEFT_SHOULDER
-    x: 112
-    y: 37
+    x: 173
+    y: 90
     slots:
       - [0, 0]
       - [1, 0]
@@ -3043,28 +4277,49 @@ invs:
       STR_RIGHT_HAND: 3
       STR_RIGHT_LEG: 12
       STR_RIGHT_SHOULDER: 8
-  - id: STR_BACK_PACK
-    x: 192
-    y: 37
+  - id: STR_RIGHT_HAND
+    x: 10
+    y: 142
+    type: 1
+    costs:
+      STR_BACK_PACK: 14
+      STR_BELT: 8
+      STR_GROUND: 2
+      STR_LEFT_HAND: 4
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_LEG: 8
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_RIGHT_LEG
+    x: 10
+    y: 260
     slots:
       - [0, 0]
       - [1, 0]
-      - [2, 0]
-      - [0, 1]
-      - [1, 1]
-      - [2, 1]
-      - [0, 2]
-      - [1, 2]
-      - [2, 2]
     costs:
-      STR_BELT: 12
-      STR_GROUND: 10
-      STR_LEFT_HAND: 8
-      STR_LEFT_LEG: 16
-      STR_LEFT_SHOULDER: 14
-      STR_RIGHT_HAND: 8
-      STR_RIGHT_LEG: 16
-      STR_RIGHT_SHOULDER: 14
+      STR_BACK_PACK: 18
+      STR_BELT: 10
+      STR_GROUND: 6
+      STR_LEFT_HAND: 6
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_RIGHT_SHOULDER
+    x: 27
+    y: 90
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 16
+      STR_BELT: 10
+      STR_GROUND: 4
+      STR_LEFT_HAND: 3
+      STR_LEFT_LEG: 12
+      STR_LEFT_SHOULDER: 8
+      STR_RIGHT_HAND: 3
+      STR_RIGHT_LEG: 12
 terrains:
   - name: CULTA
     mapDataSets:
@@ -3499,18 +4754,18 @@ terrains:
       - name: UBASE_11
         width: 10
         length: 10
+      - name: UBASE_12
+        width: 10
+        length: 10
+      - name: UBASE_13
+        width: 10
+        length: 10
+      - name: UBASE_14
+        width: 10
+        length: 10
 #       UBASE_12 is impassable, 13 and 14 are apparently unused.
 #       in the interest of preserving an original experience,
 #       they have been disabled. delete the hashes to re-enable.
-#      - name: UBASE_12
-#        width: 10
-#        length: 10
-#      - name: UBASE_13
-#        width: 10
-#        length: 10
-#      - name: UBASE_14
-#        width: 10
-#        length: 10
       - name: UBASE_15
         width: 20
         length: 20
@@ -3741,6 +4996,29 @@ armors:
       - 0.8
       - 1.0
       - 1.0
+      - 0.0
+    loftempsSet: [ 3 ]
+  - type: STR_ION_ARMOR_UC
+    spriteSheet: XCOM_2.PCK
+    spriteInv: MAN_3
+    corpseBattle: 
+      - STR_CORPSE_ION
+    storeItem: STR_ION_ARMOR
+    frontArmor: 130
+    sideArmor: 110
+    rearArmor: 100
+    underArmor: 90
+    movementType: 1
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.0
+      - 1.0
+      - 1.0
+      - 0.9
+      - 0.7
+      - 1.0
+      - 0.6
       - 0.0
     loftempsSet: [ 3 ]
   - type: SECTOID_ARMOR0
@@ -5250,16 +6528,16 @@ alienDeployments:
         percentageOutsideUfo: 60
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 4
         lowQty: 1
@@ -5268,14 +6546,14 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_MIND_PROBE
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
     width: 40
     length: 40
@@ -5289,15 +6567,15 @@ alienDeployments:
         percentageOutsideUfo: 65
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
       - alienRank: 4
@@ -5307,15 +6585,15 @@ alienDeployments:
         percentageOutsideUfo: 25
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_MIND_PROBE
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5326,16 +6604,16 @@ alienDeployments:
         percentageOutsideUfo: 35
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_MIND_PROBE
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
             - STR_MIND_PROBE
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
@@ -5351,14 +6629,14 @@ alienDeployments:
         percentageOutsideUfo: 70
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 4
@@ -5368,14 +6646,14 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
       - alienRank: 3
@@ -5385,17 +6663,17 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
@@ -5407,11 +6685,11 @@ alienDeployments:
         percentageOutsideUfo: 30
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
@@ -5424,17 +6702,17 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_ALIEN_GRENADE
@@ -5451,14 +6729,14 @@ alienDeployments:
         percentageOutsideUfo: 70
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5469,18 +6747,19 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_MINE
       - alienRank: 3
         lowQty: 2
         highQty: 4
@@ -5488,16 +6767,16 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
@@ -5508,15 +6787,15 @@ alienDeployments:
         percentageOutsideUfo: 30
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5527,15 +6806,15 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5551,16 +6830,16 @@ alienDeployments:
         percentageOutsideUfo: 70
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5571,15 +6850,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
       - alienRank: 3
@@ -5589,17 +6868,17 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
@@ -5610,15 +6889,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5629,15 +6908,15 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5677,15 +6956,15 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5696,15 +6975,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5715,16 +6994,16 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5735,11 +7014,11 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
@@ -5755,11 +7034,11 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5776,13 +7055,13 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_ALIEN_GRENADE
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5829,15 +7108,15 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5848,15 +7127,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5867,15 +7146,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
@@ -5886,15 +7165,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5905,15 +7184,15 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -5929,16 +7208,16 @@ alienDeployments:
         percentageOutsideUfo: 70
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -5949,15 +7228,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
       - alienRank: 3
@@ -5967,17 +7246,17 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_ALIEN_GRENADE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
@@ -5988,15 +7267,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6007,15 +7286,15 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6052,6 +7331,125 @@ alienDeployments:
     terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
+      - alienRank: 5
+        lowQty: 5
+        highQty: 7
+        dQty: 4
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_ALIEN_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_ALIEN_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_ALIEN_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_ALIEN_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_ALIEN_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_ALIEN_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_ALIEN_SMALL_LAUNCHER
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_ALIEN_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_ALIEN_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_BLASTER_LAUNCHER
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+      - alienRank: 1
+        lowQty: 2
+        highQty: 4
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_ALIEN_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+          -
+            - STR_BLASTER_LAUNCHER
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+      - alienRank: 0
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+          -
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+          -
+            - STR_ALIEN_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
       - alienRank: 6
         lowQty: 1
         highQty: 3
@@ -6076,125 +7474,6 @@ alienDeployments:
             []
           -
             []
-      - alienRank: 5
-        lowQty: 5
-        highQty: 7
-        dQty: 4
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            - STR_PLASMA_PISTOL
-            - STR_PLASMA_PISTOL_CLIP
-            - STR_PLASMA_PISTOL_CLIP
-          -
-            - STR_PLASMA_RIFLE
-            - STR_PLASMA_RIFLE_CLIP
-            - STR_PLASMA_RIFLE_CLIP
-          -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
-      - alienRank: 4
-        lowQty: 1
-        highQty: 2
-        dQty: 0
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            - STR_PLASMA_PISTOL
-            - STR_PLASMA_PISTOL_CLIP
-            - STR_PLASMA_PISTOL_CLIP
-          -
-            - STR_PLASMA_RIFLE
-            - STR_PLASMA_RIFLE_CLIP
-            - STR_PLASMA_RIFLE_CLIP
-          -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
-      - alienRank: 3
-        lowQty: 1
-        highQty: 1
-        dQty: 0
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            - STR_PLASMA_PISTOL
-            - STR_PLASMA_PISTOL_CLIP
-            - STR_PLASMA_PISTOL_CLIP
-          -
-            - STR_PLASMA_RIFLE
-            - STR_PLASMA_RIFLE_CLIP
-            - STR_PLASMA_RIFLE_CLIP
-          -
-            - STR_SMALL_LAUNCHER
-            - STR_STUN_BOMB
-            - STR_STUN_BOMB
-            - STR_STUN_BOMB
-      - alienRank: 2
-        lowQty: 1
-        highQty: 2
-        dQty: 0
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            - STR_PLASMA_PISTOL
-            - STR_PLASMA_PISTOL_CLIP
-            - STR_PLASMA_PISTOL_CLIP
-          -
-            - STR_PLASMA_RIFLE
-            - STR_PLASMA_RIFLE_CLIP
-            - STR_PLASMA_RIFLE_CLIP
-          -
-            - STR_BLASTER_LAUNCHER
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-      - alienRank: 1
-        lowQty: 2
-        highQty: 4
-        dQty: 0
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            - STR_PLASMA_RIFLE
-            - STR_PLASMA_RIFLE_CLIP
-            - STR_PLASMA_RIFLE_CLIP
-          -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
-          -
-            - STR_BLASTER_LAUNCHER
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-      - alienRank: 0
-        lowQty: 1
-        highQty: 1
-        dQty: 0
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
-          -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
-          -
-            - STR_HEAVY_PLASMA
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
     width: 50
     length: 50
     height: 2
@@ -6209,15 +7488,15 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6228,15 +7507,15 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -6247,16 +7526,16 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_SMALL_LAUNCHER
+            - STR_ALIEN_SMALL_LAUNCHER
             - STR_STUN_BOMB
             - STR_STUN_BOMB
             - STR_STUN_BOMB
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -6267,11 +7546,11 @@ alienDeployments:
         percentageOutsideUfo: 20
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
@@ -6287,11 +7566,11 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
@@ -6308,19 +7587,19 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_ALIEN_GRENADE
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_ALIEN_GRENADE
           -
-            - STR_BLASTER_LAUNCHER
+            - STR_ALIEN_BLASTER_LAUNCHER
             - STR_BLASTER_BOMB
             - STR_BLASTER_BOMB
             - STR_BLASTER_BOMB
@@ -6363,13 +7642,13 @@ alienDeployments:
         percentageOutsideUfo: 60
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 1
@@ -6379,13 +7658,13 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 0
@@ -6395,13 +7674,13 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_PLASMA_PISTOL
+            - STR_ALIEN_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
           -
-            - STR_PLASMA_RIFLE
+            - STR_ALIEN_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 6
@@ -6431,17 +7710,17 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6452,17 +7731,17 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6497,17 +7776,17 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6518,17 +7797,17 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6539,17 +7818,17 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
           -
-            - STR_HEAVY_PLASMA
+            - STR_ALIEN_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
@@ -6599,12 +7878,185 @@ research:
     points: 15
     dependencies:
       - STR_LASER_CANNON
+  - name: STR_GAUSS_WEAPONS
+    cost: 60
+    points: 15
+    dependencies:
+      - STR_ALIEN_PLASMA_PISTOL
+      - STR_LASER_RIFLE
+  - name: STR_GAUSS_PISTOL
+    cost: 110
+    points: 15
+    dependencies:
+      - STR_GAUSS_WEAPONS
+  - name: STR_GAUSS_PISTOL_CLIP
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_GAUSS_WEAPONS
+  - name: STR_GAUSS_RIFLE
+    cost: 350
+    points: 15
+    dependencies:
+      - STR_GAUSS_PISTOL
+  - name: STR_GAUSS_RIFLE_CLIP
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_GAUSS_PISTOL
+  - name: STR_HEAVY_GAUSS
+    cost: 500
+    points: 15
+    dependencies:
+      - STR_GAUSS_RIFLE
+  - name: STR_HEAVY_GAUSS_CLIP
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_GAUSS_RIFLE
+  - name: STR_GAUSS_CANNON
+    cost: 600
+    points: 20
+    dependencies:
+      - STR_HEAVY_GAUSS
+  - name: STR_GAUSS_CANNON_SHELLS
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_HEAVY_GAUSS
+  - name: STR_GAUSS_DEFENSE
+    cost: 700
+    points: 20
+    dependencies:
+      - STR_GAUSS_CANNON
+  - name: STR_RAIL_WEAPONS
+    cost: 50
+    points: 10
+    dependencies:
+      - STR_HEAVY_LASER
+      - STR_ALIEN_ALLOYS
+  - name: STR_RAIL_PISTOL
+    cost: 100
+    points: 10
+    dependencies:
+      - STR_RAIL_WEAPONS
+  - name: STR_RAIL_RIFLE
+    cost: 300
+    points: 10
+    dependencies:
+      - STR_RAIL_PISTOL
+  - name: STR_HEAVY_RAIL
+    cost: 460
+    points: 10
+    dependencies:
+      - STR_RAIL_RIFLE
+  - name: STR_RAIL_KINETIC_AMMO
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_RAIL_WEAPONS
+  - name: STR_RAIL_EMP_AMMO
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_RAIL_WEAPONS
+      - STR_EMP_WEAPONS
+  - name: STR_RAIL_PLASMA_AMMO
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_RAIL_WEAPONS
+      - STR_PLASMA_WEAPONS
+  - name: STR_RAIL_FUSION_AMMO
+    cost: 400
+    points: 5
+    dependencies:
+      - STR_RAIL_WEAPONS
+      - STR_BLASTER_BOMB
+  - name: STR_RAIL_CANNON
+    cost: 420
+    points: 15
+    dependencies:
+      - STR_HEAVY_RAIL
+  - name: STR_RAIL_DEFENSE
+    cost: 510
+    points: 15
+    dependencies:
+      - STR_RAIL_CANNON
+  - name: STR_EMP_WEAPONS
+    cost: 50
+    points: 10
+    dependencies:
+      - STR_RAIL_PISTOL
+      - STR_HEAVY_PLASMA
+  - name: STR_EMP_PISTOL
+    cost: 100
+    points: 10
+    dependencies:
+      - STR_EMP_WEAPONS
+  - name: STR_EMP_RIFLE
+    cost: 300
+    points: 10
+    dependencies:
+      - STR_EMP_PISTOL
+  - name: STR_HEAVY_EMP
+    cost: 460
+    points: 10
+    dependencies:
+      - STR_EMP_RIFLE
+  - name: STR_EMP_CANNON
+    cost: 420
+    points: 15
+    dependencies:
+      - STR_HEAVY_EMP
+  - name: STR_EMP_DEFENSE
+    cost: 510
+    points: 15
+    dependencies:
+      - STR_EMP_CANNON
+  - name: STR_DISRUPTOR_WEAPONS
+    cost: 50
+    points: 10
+    dependencies:
+      - STR_EMP_PISTOL
+      - STR_GAUSS_DEFENSE
+  - name: STR_DISRUPTOR_PISTOL
+    cost: 100
+    points: 10
+    dependencies:
+      - STR_DISRUPTOR_WEAPONS
+  - name: STR_DISRUPTOR_RIFLE
+    cost: 300
+    points: 10
+    dependencies:
+      - STR_DISRUPTOR_PISTOL
+  - name: STR_HEAVY_DISRUPTOR
+    cost: 460
+    points: 10
+    dependencies:
+      - STR_DISRUPTOR_RIFLE
+  - name: STR_DISRUPTOR_CANNON
+    cost: 420
+    points: 15
+    dependencies:
+      - STR_HEAVY_DISRUPTOR
+  - name: STR_DISRUPTOR_DEFENSE
+    cost: 510
+    points: 15
+    dependencies:
+      - STR_DISRUPTOR_CANNON
   - name: STR_MOTION_SCANNER
     cost: 180
     points: 20
   - name: STR_MEDI_KIT
     cost: 210
     points: 20
+  - name: STR_PLASMA_KNIFE
+    cost: 900
+    points: 10
+    dependencies:
+      - STR_ALIEN_ALLOYS
+      - STR_PLASMA_WEAPONS
   - name: STR_ALIEN_ALLOYS
     cost: 400
     points: 30
@@ -6618,6 +8070,10 @@ research:
     points: 30
     needItem: true
   - name: STR_ALIEN_GRENADE
+    cost: 200
+    points: 20
+    needItem: true
+  - name: STR_ALIEN_MINE
     cost: 200
     points: 20
     needItem: true
@@ -6700,6 +8156,12 @@ research:
     dependencies:
       - STR_POWER_SUIT
       - STR_UFO_NAVIGATION
+  - name: STR_ION_ARMOR
+    cost: 530
+    points: 30
+    dependencies:
+      - STR_FLYING_SUIT
+      - STR_DISRUPTOR_WEAPONS
   - name: STR_FUSION_DEFENSE
     cost: 800
     points: 25
@@ -6716,14 +8178,6 @@ research:
     points: 25
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
-  - name: STR_HEAVY_PLASMA
-    cost: 800
-    points: 30
-    needItem: true
-  - name: STR_HEAVY_PLASMA_CLIP
-    cost: 400
-    points: 7
-    needItem: true
   - name: STR_HYPER_WAVE_DECODER
     cost: 670
     points: 25
@@ -6767,21 +8221,51 @@ research:
     points: 25
     dependencies:
       - STR_PLASMA_CANNON
-  - name: STR_PLASMA_PISTOL
+  - name: STR_PLASMA_WEAPONS
+    cost: 60
+    points: 15
+    dependencies:
+      - STR_ALIEN_PLASMA_PISTOL
+  - name: STR_ALIEN_PLASMA_PISTOL
     cost: 600
     points: 20
     needItem: true
+  - name: STR_ALIEN_PLASMA_RIFLE
+    cost: 700
+    points: 25
+    needItem: true
+  - name: STR_ALIEN_HEAVY_PLASMA
+    cost: 800
+    points: 30
+    needItem: true
+  - name: STR_PLASMA_PISTOL
+    cost: 600
+    points: 20
+    dependencies:
+      - STR_PLASMA_WEAPONS
   - name: STR_PLASMA_PISTOL_CLIP
     cost: 400
     points: 5
     needItem: true
   - name: STR_PLASMA_RIFLE
-    cost: 700
-    points: 25
-    needItem: true
+    cost: 600
+    points: 20
+    dependencies:
+      - STR_PLASMA_PISTOL
+      - STR_ALIEN_PLASMA_RIFLE
   - name: STR_PLASMA_RIFLE_CLIP
     cost: 400
     points: 6
+    needItem: true
+  - name: STR_HEAVY_PLASMA
+    cost: 800
+    points: 30
+    dependencies:
+      - STR_PLASMA_RIFLE
+      - STR_ALIEN_HEAVY_PLASMA
+  - name: STR_HEAVY_PLASMA_CLIP
+    cost: 400
+    points: 7
     needItem: true
   - name: STR_POWER_SUIT
     cost: 205
@@ -6790,6 +8274,12 @@ research:
       - STR_ELERIUM_115
       - STR_UFO_POWER_SOURCE
       - STR_PERSONAL_ARMOR
+  - name: STR_ION_SUIT
+    cost: 205
+    points: 20
+    dependencies:
+      - STR_POWER_SUIT
+      - STR_DISRUPTOR_WEAPONS  
   - name: STR_PSI_AMP
     cost: 500
     points: 20
@@ -6807,7 +8297,7 @@ research:
       - STR_ETHEREAL_SOLDIER
       - STR_SECTOID_LEADER
       - STR_SECTOID_COMMANDER
-  - name: STR_SMALL_LAUNCHER
+  - name: STR_ALIEN_SMALL_LAUNCHER
     cost: 550
     points: 30
     needItem: true
@@ -7474,6 +8964,36 @@ manufacture:
     cost: 226000
     requiredItems:
       STR_ELERIUM_115: 15
+  - name: STR_GAUSS_CANNON
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_GAUSS_CANNON
+    space: 6
+    time: 300
+    cost: 182000
+  - name: STR_RAIL_CANNON
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_RAIL_CANNON
+    space: 8
+    time: 500
+    cost: 226000  
+  - name: STR_EMP_CANNON
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_EMP_CANNON
+    space: 6
+    time: 300
+    cost: 182000
+  - name: STR_DISRUPTOR_CANNON
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_DISRUPTOR_CANNON
+    space: 8
+    time: 500
+    cost: 226000
+    requiredItems:
+      STR_ELERIUM_115: 20  
   - name: STR_FUSION_BALL
     category: STR_CRAFT_AMMUNITION
     requires:
@@ -7523,6 +9043,16 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 8
       STR_ELERIUM_115: 5
+  - name: STR_PLASMA_KNIFE
+    category: STR_EQUIPMENT
+    requires:
+      - STR_PLASMA_KNIFE
+    space: 4
+    time: 220
+    cost: 34000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+      STR_ELERIUM: 1 
   - name: STR_LASER_PISTOL
     category: STR_WEAPON
     requires:
@@ -7544,6 +9074,209 @@ manufacture:
     space: 4
     time: 700
     cost: 32000
+  - name: STR_GAUSS_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_GAUSS_PISTOL
+    space: 2
+    time: 300
+    cost: 8000
+  - name: STR_GAUSS_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_GAUSS_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+  - name: STR_HEAVY_GAUSS
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_GAUSS
+    space: 4
+    time: 700
+    cost: 32000
+  - name: STR_EMP_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_EMP_PISTOL
+    space: 2
+    time: 300
+    cost: 8000
+  - name: STR_EMP_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_EMP_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+  - name: STR_HEAVY_EMP
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_EMP
+    space: 4
+    time: 700
+    cost: 32000
+  - name: STR_RAIL_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_RAIL_PISTOL
+    space: 2
+    time: 300
+    cost: 8000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 2
+  - name: STR_RAIL_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_RAIL_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 4
+  - name: STR_HEAVY_RAIL
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_RAIL
+    space: 4
+    time: 700
+    cost: 32000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 6
+  - name: STR_RAIL_AUTOGUN
+    category: STR_WEAPON
+    requires:
+      - STR_RAIL_AUTOGUN
+    space: 4
+    time: 700
+    cost: 32000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 6	  
+  - name: STR_RAIL_KINETIC_AMMO
+    category: STR_AMMUNITION
+    requires:
+      - STR_RAIL_KINETIC_AMMO
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_RAIL_EMP_AMMO
+    category: STR_AMMUNITION
+    requires:
+      - STR_RAIL_EMP_AMMO
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_RAIL_PLASMA_AMMO
+    category: STR_AMMUNITION
+    requires:
+      - STR_RAIL_PLASMA_AMMO
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_RAIL_FUSION_AMMO
+    category: STR_AMMUNITION
+    requires:
+      - STR_RAIL_WEAPONS
+      - STR_FUSION_BALL
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_PLASMA_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_PLASMA_PISTOL
+    space: 3
+    time: 600
+    cost: 56000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+      STR_POWER_CELL: 2
+      STR_SMALL_CONTAIMENT_FIELD: 1
+  - name: STR_PLASMA_PISTOL_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_PLASMA_PISTOL_CLIP
+    space: 4
+    time: 60
+    cost: 2000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_PLASMA_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_PLASMA_RIFLE
+      - STR_PLASMA_RIFLE_CLIP
+    space: 4
+    time: 820
+    cost: 88000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+      STR_POWER_CELL: 4
+      STR_MEDIUM_CONTAIMENT_FIELD: 1
+  - name: STR_PLASMA_RIFLE_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_PLASMA_RIFLE_CLIP
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ELERIUM_115: 2
+  - name: STR_HEAVY_PLASMA
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_PLASMA
+    space: 4
+    time: 1000
+    cost: 122000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+      STR_POWER_CELL: 6
+      STR_LARGE_CONTAIMENT_FIELD: 1
+  - name: STR_HEAVY_PLASMA_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_HEAVY_PLASMA_CLIP
+    space: 4
+    time: 80
+    cost: 6000
+    requiredItems:
+      STR_ELERIUM_115: 3
+  - name: STR_DISRUPTOR_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_DISRUPTOR_PISTOL
+    space: 2
+    time: 300
+    cost: 8000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 2
+  - name: STR_DISRUPTOR_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_DISRUPTOR_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 4
+  - name: STR_HEAVY_DISRUPTOR
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_DISRUPTOR
+    space: 4
+    time: 700
+    cost: 32000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 6	  
   - name: STR_MOTION_SCANNER
     category: STR_EQUIPMENT
     requires:
@@ -7565,63 +9298,6 @@ manufacture:
     space: 6
     time: 500
     cost: 160000
-    requiredItems:
-      STR_ELERIUM_115: 1
-  - name: STR_HEAVY_PLASMA
-    category: STR_WEAPON
-    requires:
-      - STR_HEAVY_PLASMA
-      - STR_HEAVY_PLASMA_CLIP
-    space: 4
-    time: 1000
-    cost: 122000
-    requiredItems:
-      STR_ALIEN_ALLOYS: 1
-  - name: STR_HEAVY_PLASMA_CLIP
-    category: STR_AMMUNITION
-    requires:
-      - STR_HEAVY_PLASMA_CLIP
-    space: 4
-    time: 80
-    cost: 6000
-    requiredItems:
-      STR_ELERIUM_115: 3
-  - name: STR_PLASMA_RIFLE
-    category: STR_WEAPON
-    requires:
-      - STR_PLASMA_RIFLE
-      - STR_PLASMA_RIFLE_CLIP
-    space: 4
-    time: 820
-    cost: 88000
-    requiredItems:
-      STR_ALIEN_ALLOYS: 1
-  - name: STR_PLASMA_RIFLE_CLIP
-    category: STR_AMMUNITION
-    requires:
-      - STR_PLASMA_RIFLE_CLIP
-    space: 4
-    time: 80
-    cost: 3000
-    requiredItems:
-      STR_ELERIUM_115: 2
-  - name: STR_PLASMA_PISTOL
-    category: STR_WEAPON
-    requires:
-      - STR_PLASMA_PISTOL
-      - STR_PLASMA_PISTOL_CLIP
-    space: 3
-    time: 600
-    cost: 56000
-    requiredItems:
-      STR_ALIEN_ALLOYS: 1
-  - name: STR_PLASMA_PISTOL_CLIP
-    category: STR_AMMUNITION
-    requires:
-      - STR_PLASMA_PISTOL_CLIP
-    space: 4
-    time: 60
-    cost: 2000
     requiredItems:
       STR_ELERIUM_115: 1
   - name: STR_BLASTER_LAUNCHER
@@ -7646,7 +9322,7 @@ manufacture:
   - name: STR_SMALL_LAUNCHER
     category: STR_WEAPON
     requires:
-      - STR_SMALL_LAUNCHER
+      - STR_ALIEN_SMALL_LAUNCHER
       - STR_STUN_BOMB
     space: 3
     time: 900
@@ -7671,6 +9347,15 @@ manufacture:
     cost: 6700
     requiredItems:
       STR_ELERIUM_115: 2
+  - name: STR_ALIEN_MINE
+    category: STR_WEAPON
+    requires:
+      - STR_ALIEN_MINE
+    space: 2
+    time: 300
+    cost: 7500
+    requiredItems:
+      STR_ELERIUM_115: 3
   - name: STR_MIND_PROBE
     category: STR_EQUIPMENT
     requires:
@@ -7709,6 +9394,16 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 5
       STR_ELERIUM_115: 16
+  - name: STR_ION_ARMOR
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_ION_ARMOR
+    space: 20
+    time: 1800
+    cost: 70000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 10
   - name: STR_ALIEN_ALLOYS
     category: STR_UFO_COMPONENT
     requires:
@@ -7776,7 +9471,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 160
+      width: 140
       height: 60
     rect_text:
       x: 5
@@ -7793,7 +9488,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 132
-      width: 160
+      width: 140
       height: 60
     rect_text:
       x: 5
@@ -7810,7 +9505,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 160
+      width: 140
       height: 60
     rect_text:
       x: 5
@@ -7825,7 +9520,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 110
-      width: 160
+      width: 140
       height: 60
     rect_text:
       x: 5
@@ -7842,7 +9537,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 160
+      width: 140
       height: 60
     rect_text:
       x: 5
@@ -7886,11 +9581,39 @@ ufopaedia:
       - STR_PLASMA_CANNON
     image_id: UP011.SPK
     text: STR_PLASMA_BEAM_UFOPEDIA
+  - id: STR_GAUSS_CANNON_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_EMP_CANNON
+    image_id: UP010.SPK
+    text: STR_GAUSS_CANNON_UFOPEDIA
+  - id: STR_RAIL_CANNON_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_RAIL_CANNON
+    image_id: UP011.SPK
+    text: STR_RAIL_CANNON_UFOPEDIA	
+  - id: STR_EMP_CANNON_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_EMP_CANNON
+    image_id: UP010.SPK
+    text: STR_EMP_CANNON_UFOPEDIA
+  - id: STR_DISRUPTOR_CANNON_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_DISRUPTOR_CANNON
+    image_id: UP011.SPK
+    text: STR_DISRUPTOR_CANNON_UFOPEDIA	
   - id: STR_TANK_CANNON
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_CANNON_UFOPEDIA
-    weapon: STR_CANNON
+    weapon: STR_ARMOR_PIERCING
   - id: STR_TANK_ROCKET_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
@@ -7924,70 +9647,53 @@ ufopaedia:
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_PERSONAL_ARMOR
-    text: STR_PERSONAL_ARMOR_UFOPEDIA
   - id: STR_POWER_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_POWER_SUIT
-    text: STR_POWER_SUIT_UFOPEDIA
   - id: STR_FLYING_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_FLYING_SUIT
-    text: STR_FLYING_SUIT_UFOPEDIA
+  - id: STR_ION_ARMOR_UC
+    type_id: 5
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_ION_ARMOR
+  - id: STR_COMBAT_KNIFE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_COMBAT_KNIFE_UFOPEDIA
+  - id: STR_PLASMA_KNIFE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_PLASMA_KNIFE_UFOPEDIA
   - id: STR_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     text: STR_PISTOL_UFOPEDIA
-  - id: STR_PISTOL_CLIP
+  - id: STR_PISTOL_CLIP_AP
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_PISTOL_CLIP_HE
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_PISTOL_CLIP_NL
     type_id: 4
     section: STR_NOT_AVAILABLE
   - id: STR_RIFLE
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     text: STR_RIFLE_UFOPEDIA
-  - id: STR_RIFLE_CLIP
+  - id: STR_RIFLE_CLIP_AP
     type_id: 4
     section: STR_NOT_AVAILABLE
-  - id: STR_HEAVY_CANNON
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_HEAVY_CANNON_UFOPEDIA
-  - id: STR_HC_AP_AMMO
+  - id: STR_RIFLE_CLIP_HE
     type_id: 4
     section: STR_NOT_AVAILABLE
-  - id: STR_HC_HE_AMMO
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_HC_I_AMMO
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_AUTO_CANNON
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_AUTO_CANNON_UFOPEDIA
-  - id: STR_AC_AP_AMMO
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_AC_HE_AMMO
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_AC_I_AMMO
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_ROCKET_LAUNCHER
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_ROCKET_LAUNCHER_UFOPEDIA
-  - id: STR_SMALL_ROCKET
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_LARGE_ROCKET
-    type_id: 4
-    section: STR_NOT_AVAILABLE
-  - id: STR_INCENDIARY_ROCKET
+  - id: STR_RIFLE_CLIP_NL
     type_id: 4
     section: STR_NOT_AVAILABLE
   - id: STR_LASER_PISTOL
@@ -8008,75 +9714,81 @@ ufopaedia:
     requires:
       - STR_HEAVY_LASER
     text: STR_HEAVY_LASER_UFOPEDIA
-  - id: STR_GRENADE
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_GRENADE_UFOPEDIA
-  - id: STR_SMOKE_GRENADE
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_SMOKE_GRENADE_UFOPEDIA
-  - id: STR_PROXIMITY_GRENADE
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_PROXIMITY_GRENADE_UFOPEDIA
-  - id: STR_HIGH_EXPLOSIVE
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_HIGH_EXPLOSIVE_UFOPEDIA
-  - id: STR_MOTION_SCANNER
+  - id: STR_GAUSS_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
-      - STR_MOTION_SCANNER
-    text: STR_MOTION_SCANNER_UFOPEDIA
-  - id: STR_MEDI_KIT
+      - STR_GAUSS_PISTOL
+    text: STR_GAUSS_PISTOL_UFOPEDIA
+  - id: STR_GAUSS_RIFLE
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
-      - STR_MEDI_KIT
-    text: STR_MEDI_KIT_UFOPEDIA
-  - id: STR_PSI_AMP
+      - STR_GAUSS_RIFLE
+    text: STR_GAUSS_RIFLE_UFOPEDIA
+  - id: STR_HEAVY_GAUSS
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
-      - STR_PSI_AMP
-    text: STR_PSI_AMP_UFOPEDIA
-  - id: STR_STUN_ROD
+      - STR_HEAVY_GAUSS
+    text: STR_HEAVY_GAUSS_UFOPEDIA
+  - id: STR_EMP_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_STUN_ROD_UFOPEDIA
-  - id: STR_ELECTRO_FLARE
+    requires:
+      - STR_EMP_PISTOL
+    text: STR_EMP_PISTOL_UFOPEDIA
+  - id: STR_EMP_RIFLE
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_ELECTRO_FLARE_UFOPEDIA
-  - id: STR_HEAVY_PLASMA
-    type_id: 4
-    section: STR_ALIEN_ARTIFACTS
     requires:
-      - STR_HEAVY_PLASMA
-    text: STR_PLASMA_RIFLE_UFOPEDIA
-  - id: STR_HEAVY_PLASMA_CLIP
+      - STR_EMP_RIFLE
+    text: STR_EMP_RIFLE_UFOPEDIA
+  - id: STR_HEAVY_EMP
     type_id: 4
-    section: STR_ALIEN_ARTIFACTS
+    section: STR_WEAPONS_AND_EQUIPMENT
     requires:
-      - STR_HEAVY_PLASMA_CLIP
-    text: STR_HEAVY_PLASMA_CLIP_UFOPEDIA
-  - id: STR_PLASMA_RIFLE
+      - STR_HEAVY_EMP
+    text: STR_HEAVY_EMP_UFOPEDIA
+  - id: STR_RAIL_PISTOL
     type_id: 4
-    section: STR_ALIEN_ARTIFACTS
+    section: STR_WEAPONS_AND_EQUIPMENT
     requires:
-      - STR_PLASMA_RIFLE
-    text: STR_PLASMA_RIFLE_UFOPEDIA
-  - id: STR_PLASMA_RIFLE_CLIP
+      - STR_RAIL_PISTOL
+    text: STR_RAIL_PISTOL_UFOPEDIA
+  - id: STR_RAIL_RIFLE
     type_id: 4
-    section: STR_ALIEN_ARTIFACTS
+    section: STR_WEAPONS_AND_EQUIPMENT
     requires:
-      - STR_PLASMA_RIFLE_CLIP
-    text: STR_PLASMA_RIFLE_CLIP_UFOPEDIA
+      - STR_RAIL_RIFLE
+    text: STR_RAIL_RIFLE_UFOPEDIA
+  - id: STR_HEAVY_RAIL
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_HEAVY_RAIL
+    text: STR_HEAVY_RAIL_UFOPEDIA
+  - id: STR_RAIL_AUTOGUN
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_RAIL_AUTOGUN
+    text: STR_RAIL_AUTOGUN_UFOPEDIA
+  - id: STR_RAIL_KINETIC_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_RAIL_EMP_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_RAIL_PLASMA_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_RAIL_FUSION_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
   - id: STR_PLASMA_PISTOL
     type_id: 4
-    section: STR_ALIEN_ARTIFACTS
+    section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_PLASMA_PISTOL
     text: STR_PLASMA_PISTOL_UFOPEDIA
@@ -8086,6 +9798,264 @@ ufopaedia:
     requires:
       - STR_PLASMA_PISTOL_CLIP
     text: STR_PLASMA_PISTOL_CLIP_UFOPEDIA
+  - id: STR_PLASMA_RIFLE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_PLASMA_RIFLE
+    text: STR_PLASMA_RIFLE_UFOPEDIA
+  - id: STR_PLASMA_RIFLE_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_PLASMA_RIFLE_CLIP
+    text: STR_PLASMA_RIFLE_CLIP_UFOPEDIA
+  - id: STR_HEAVY_PLASMA
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_HEAVY_PLASMA
+    text: STR_PLASMA_RIFLE_UFOPEDIA
+  - id: STR_HEAVY_PLASMA_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_HEAVY_PLASMA_CLIP
+    text: STR_HEAVY_PLASMA_CLIP_UFOPEDIA
+  - id: STR_DISRUPTOR_PISTOL
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_DISRUPTOR_PISTOL
+    text: STR_DISRUPTOR_PISTOL_UFOPEDIA
+  - id: STR_DISRUPTOR_PISTOL_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_DISRUPTOR_PISTOL_CLIP
+    text: STR_DISRUPTOR_PISTOL_CLIP_UFOPEDIA
+  - id: STR_DISRUPTOR_RIFLE
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_DISRUPTOR_RIFLE
+    text: STR_DISRUPTOR_RIFLE_UFOPEDIA
+  - id: STR_DISRUPTOR_RIFLE_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_DISRUPTOR_RIFLE_CLIP
+    text: STR_DISRUPTOR_RIFLE_CLIP_UFOPEDIA
+  - id: STR_HEAVY_DISRUPTOR
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_HEAVY_DISRUPTOR
+    text: STR_HEAVY_DISRUPTOR_UFOPEDIA
+  - id: STR_HEAVY_DISRUPTOR_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_HEAVY_DISRUPTOR_CLIP
+    text: STR_HEAVY_DISRUPTOR_CLIP_UFOPEDIA
+  - id: STR_AUTO_CANNON
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_AUTO_CANNON_UFOPEDIA
+  - id: STR_AC_AP_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_AC_HE_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_AC_I_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_AC_NL_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HEAVY_CANNON
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_HEAVY_CANNON_UFOPEDIA
+  - id: STR_HC_AP_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HC_HE_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HC_I_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HC_NL_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_SNIPER_RIFLE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_SNIPER_RIFLE_UFOPEDIA
+  - id: STR_SNIPER_RIFLE_CLIP
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_SHOTGUN
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_SHOTGUN_UFOPEDIA
+  - id: STR_SHOTGUN_SHELLS
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_SHOTGUN_SHELLS_AP
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_SHOTGUN_SHELLS_FC
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_SHOTGUN_SHELLS_DB
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_SHOTGUN_SHELLS_NL
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_GRENADE_LAUNCHER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_GRENADE_LAUNCHER_UFOPEDIA
+  - id: STR_GL_EXPLOSIVE
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_GL_SMOKE
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_GL_INCENDIARY
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_GL_STUN_GAS
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_FLAME_THROWER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_FLAME_THROWER_UFOPEDIA
+  - id: STR_FT_FUEL_POD
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_ROCKET_LAUNCHER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_ROCKET_LAUNCHER_UFOPEDIA
+  - id: STR_SMALL_ROCKET
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_LARGE_ROCKET
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_INCENDIARY_ROCKET
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_GRENADE_UFOPEDIA
+  - id: STR_SMOKE_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_SMOKE_GRENADE_UFOPEDIA
+  - id: STR_INCENDIARY_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_INCENDIARY_GRENADE_UFOPEDIA
+  - id: STR_STUN_GAS_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_STUN_GAS_GRENADE_UFOPEDIA
+  - id: STR_EMP_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_EMP_GRENADE_UFOPEDIA
+  - id: STR_MINE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_MINE_UFOPEDIA
+  - id: STR_INCENDIARY_MINE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_INCENDIARY_MINE_UFOPEDIA
+  - id: STR_EMP_MINE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_EMP_MINE_UFOPEDIA
+  - id: STR_ELECTRO_FLARE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_ELECTRO_FLARE_UFOPEDIA
+  - id: STR_HIGH_EXPLOSIVE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_HIGH_EXPLOSIVE_UFOPEDIA
+  - id: STR_STUN_ROD
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_STUN_ROD_UFOPEDIA
+  - id: STR_MEDI_KIT
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_MEDI_KIT
+    text: STR_MEDI_KIT_UFOPEDIA
+  - id: STR_MOTION_SCANNER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_MOTION_SCANNER
+    text: STR_MOTION_SCANNER_UFOPEDIA 
+  - id: STR_PERSONAL_SHIELD
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_PERSONAL_SHIELD
+    text: STR_PERSONAL_SHIELD_UFOPEDIA  
+  - id: STR_PERSONAL_CLOAK
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_PERSONAL_CLOAK
+    text: STR_PERSONAL_CLOAK_UFOPEDIA 
+  - id: STR_SMALL_LAUNCHER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_ALIEN_SMALL_LAUNCHER
+    text: STR_SMALL_LAUNCHER_UFOPEDIA
+  - id: STR_ALIEN_SMALL_LAUNCHER
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_ALIEN_SMALL_LAUNCHER
+    text: STR_ALIEN_SMALL_LAUNCHER_UFOPEDIA
+  - id: STR_STUN_BOMB
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_STUN_BOMB
+    text: STR_STUN_BOMB_UFOPEDIA
+  - id: STR_ALIEN_PLASMA_PISTOL
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_ALIEN_PLASMA_PISTOL
+    text: STR_ALIEN_PLASMA_PISTOL_UFOPEDIA
+  - id: STR_ALIEN_PLASMA_RIFLE
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_ALIEN_PLASMA_RIFLE
+    text: STR_ALIEN_PLASMA_RIFLE_UFOPEDIA
+  - id: STR_ALIEN_HEAVY_PLASMA
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_ALIEN_HEAVY_PLASMA
+    text: STR_ALIEN_HEAVY_PLASMA_UFOPEDIA
   - id: STR_BLASTER_LAUNCHER
     type_id: 4
     section: STR_ALIEN_ARTIFACTS
@@ -8098,36 +10068,36 @@ ufopaedia:
     requires:
       - STR_BLASTER_BOMB
     text: STR_BLASTER_BOMB_UFOPEDIA
-  - id: STR_SMALL_LAUNCHER
-    type_id: 4
-    section: STR_ALIEN_ARTIFACTS
-    requires:
-      - STR_SMALL_LAUNCHER
-    text: STR_SMALL_LAUNCHER_UFOPEDIA
-  - id: STR_STUN_BOMB
-    type_id: 4
-    section: STR_ALIEN_ARTIFACTS
-    requires:
-      - STR_STUN_BOMB
-    text: STR_STUN_BOMB_UFOPEDIA
   - id: STR_ALIEN_GRENADE
     type_id: 4
     section: STR_ALIEN_ARTIFACTS
     requires:
       - STR_ALIEN_GRENADE
     text: STR_ALIEN_GRENADE_UFOPEDIA
-  - id: STR_ELERIUM_115
+  - id: STR_ALIEN_MINE
     type_id: 4
     section: STR_ALIEN_ARTIFACTS
     requires:
-      - STR_ELERIUM_115
-    text: STR_ELERIUM_115_UFOPEDIA
+      - STR_ALIEN_MINE
+    text: STR_ALIEN_MINE_UFOPEDIA
   - id: STR_MIND_PROBE
     type_id: 4
     section: STR_ALIEN_ARTIFACTS
     text: STR_MIND_PROBE_UFOPEDIA
     requires:
       - STR_MIND_PROBE
+  - id: STR_PSI_AMP
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_PSI_AMP
+    text: STR_PSI_AMP_UFOPEDIA
+  - id: STR_ELERIUM_115
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_ELERIUM_115
+    text: STR_ELERIUM_115_UFOPEDIA
   - id: STR_ACCESS_LIFT
     type_id: 6
     section: STR_BASE_FACILITIES
@@ -8182,6 +10152,24 @@ ufopaedia:
     text: STR_FUSION_BALL_DEFENSES_UFOPEDIA
     requires:
       - STR_FUSION_DEFENSE
+  - id: STR_GAUSS_DEFENSES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_GAUSS_DEFENSE
+    text: STR_GAUSS_DEFENSES_UFOPEDIA
+  - id: STR_RAIL_DEFENSES
+    type_id: 6
+    section: STR_RAIL_FACILITIES
+    requires:
+      - STR_RAIL_DEFENSE
+    text: STR_RAIL_DEFENSES_UFOPEDIA
+  - id: STR_DISRUPTOR_DEFENSES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_DISRUPTOR_DEFENSES_UFOPEDIA
+    requires:
+      - STR_DISRUPTOR_DEFENSE
   - id: STR_GRAV_SHIELD
     type_id: 6
     section: STR_BASE_FACILITIES
@@ -8459,7 +10447,7 @@ ufopaedia:
       - STR_UFO_POWER_SOURCE
     image_id: UP032.SPK
     text: STR_UFO_POWER_SOURCE_UFOPEDIA
-    text_width: 163
+    text_width: 160
   - id: STR_UFO_NAVIGATION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8467,7 +10455,7 @@ ufopaedia:
       - STR_UFO_NAVIGATION
     image_id: UP033.SPK
     text: STR_UFO_NAVIGATION_UFOPEDIA
-    text_width: 147
+    text_width: 145
   - id: STR_UFO_CONSTRUCTION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8483,7 +10471,7 @@ ufopaedia:
       - STR_ALIEN_FOOD
     image_id: UP035.SPK
     text: STR_ALIEN_FOOD_UFOPEDIA
-    text_width: 173
+    text_width: 170
   - id: STR_ALIEN_REPRODUCTION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8491,7 +10479,7 @@ ufopaedia:
       - STR_ALIEN_REPRODUCTION
     image_id: UP036.SPK
     text: STR_ALIEN_REPRODUCTION_UFOPEDIA
-    text_width: 167
+    text_width: 165
   - id: STR_ALIEN_ENTERTAINMENT
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8499,7 +10487,7 @@ ufopaedia:
       - STR_ALIEN_ENTERTAINMENT
     image_id: UP037.SPK
     text: STR_ALIEN_ENTERTAINMENT_UFOPEDIA
-    text_width: 146
+    text_width: 145
   - id: STR_ALIEN_SURGERY
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8507,7 +10495,7 @@ ufopaedia:
       - STR_ALIEN_SURGERY
     image_id: UP038.SPK
     text: STR_ALIEN_SURGERY_UFOPEDIA
-    text_width: 108
+    text_width: 105
   - id: STR_EXAMINATION_ROOM
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8573,90 +10561,158 @@ ufopaedia:
       - STR_SUPPLY_SHIP
     text: STR_SUPPLY_SHIP_UFOPEDIA
 startingBase:
-  facilities:
-    - type: STR_ACCESS_LIFT
-      x: 2
-      y: 2
-    - type: STR_HANGAR
-      x: 2
-      y: 0
-    - type: STR_HANGAR
-      x: 0
-      y: 4
-    - type: STR_HANGAR
-      x: 4
-      y: 4
-    - type: STR_LIVING_QUARTERS
-      x: 3
-      y: 2
-    - type: STR_GENERAL_STORES
-      x: 2
-      y: 3
-    - type: STR_LABORATORY
-      x: 3
-      y: 3
-    - type: STR_WORKSHOP
-      x: 4
-      y: 3
-    - type: STR_SMALL_RADAR_SYSTEM
-      x: 1
-      y: 3
-  randomSoldiers: 8
-  crafts:
-    - type: STR_SKYRANGER
-      id: 1
-      fuel: 1500
-      damage: 0
-      items:
-        STR_GRENADE: 8
-        STR_HC_AP_AMMO: 2
-        STR_HC_HE_AMMO: 2
-        STR_HEAVY_CANNON: 1
-        STR_PISTOL: 3
-        STR_PISTOL_CLIP: 5
-        STR_RIFLE: 6
-        STR_RIFLE_CLIP: 12
-      status: STR_READY
-    - type: STR_INTERCEPTOR
-      id: 1
-      fuel: 1000
-      damage: 0
-      weapons:
-        - type: STR_STINGRAY
-          ammo: 6
-        - type: STR_CANNON_UC
-          ammo: 200
-      status: STR_READY
-    - type: STR_INTERCEPTOR
-      id: 2
-      fuel: 1000
-      damage: 0
-      weapons:
-        - type: STR_STINGRAY
-          ammo: 6
-        - type: STR_CANNON_UC
-          ammo: 200
-  items:
-    STR_AC_AP_AMMO: 6
-    STR_AUTO_CANNON: 1
-    STR_AVALANCHE_LAUNCHER: 1
-    STR_AVALANCHE_MISSILES: 10
-    STR_CANNON: 2
-    STR_CANNON_ROUNDS_X50: 1
-    STR_GRENADE: 5
-    STR_HC_AP_AMMO: 6
-    STR_HEAVY_CANNON: 1
-    STR_PISTOL: 2
-    STR_PISTOL_CLIP: 8
-    STR_RIFLE: 2
-    STR_RIFLE_CLIP: 8
-    STR_ROCKET_LAUNCHER: 1
-    STR_SMALL_ROCKET: 4
-    STR_SMOKE_GRENADE: 5
-    STR_STINGRAY_LAUNCHER: 1
-    STR_STINGRAY_MISSILES: 25
-  scientists: 10
-  engineers: 10
+  - lon: 0.0
+    lat: 0.0
+    name: ""
+    inBattlescape: false
+    facilities:
+      - type: STR_ACCESS_LIFT
+        x: 2
+        y: 2
+        buildTime: 0
+      - type: STR_HANGAR
+        x: 2
+        y: 0
+        buildTime: 0
+      - type: STR_HANGAR
+        x: 0
+        y: 4
+        buildTime: 0
+      - type: STR_HANGAR
+        x: 4
+        y: 4
+        buildTime: 0
+      - type: STR_LIVING_QUARTERS
+        x: 3
+        y: 2
+        buildTime: 0
+      - type: STR_GENERAL_STORES
+        x: 2
+        y: 3
+        buildTime: 0
+      - type: STR_LABORATORY
+        x: 3
+        y: 3
+        buildTime: 0
+      - type: STR_WORKSHOP
+        x: 4
+        y: 3
+        buildTime: 0
+      - type: STR_SMALL_RADAR_SYSTEM
+        x: 1
+        y: 3
+        buildTime: 0
+    randomSoldiers: 8
+    soldiers:
+      []
+    crafts:
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_SKYRANGER
+        id: 1
+        fuel: 1500
+        damage: 0
+        weapons:
+          []
+        items:
+          STR_GRENADE: 8
+          STR_HC_AP_AMMO: 2
+          STR_HC_HE_AMMO: 2
+          STR_HEAVY_CANNON: 1
+          STR_PISTOL: 3
+          STR_PISTOL_CLIP_AP: 5
+          STR_RIFLE: 6
+          STR_RIFLE_CLIP_AP: 12
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_INTERCEPTOR
+        id: 1
+        fuel: 1000
+        damage: 0
+        weapons:
+          - type: STR_STINGRAY
+            ammo: 6
+            rearming: false
+          - type: STR_CANNON_UC
+            ammo: 200
+            rearming: false
+        items:
+          {}
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_INTERCEPTOR
+        id: 2
+        fuel: 1000
+        damage: 0
+        weapons:
+          - type: STR_STINGRAY
+            ammo: 6
+            rearming: false
+          - type: STR_CANNON_UC
+            ammo: 200
+            rearming: false
+        items:
+          {}
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+    items:
+      STR_AC_AP_AMMO: 6
+      STR_AUTO_CANNON: 1
+      STR_AVALANCHE_LAUNCHER: 1
+      STR_AVALANCHE_MISSILES: 10
+      STR_CANNON: 2
+      STR_CANNON_ROUNDS_X50: 1
+      STR_GRENADE: 5
+      STR_HC_AP_AMMO: 6
+      STR_HEAVY_CANNON: 1
+      STR_PISTOL: 2
+      STR_PISTOL_CLIP_AP: 8
+      STR_RIFLE: 2
+      STR_RIFLE_CLIP_AP: 8
+      STR_ROCKET_LAUNCHER: 1
+      STR_SMALL_ROCKET: 4
+      STR_SMOKE_GRENADE: 5
+      STR_STINGRAY_LAUNCHER: 1
+      STR_STINGRAY_MISSILES: 25
+    scientists: 10
+    engineers: 10
+    transfers:
+      []
+    research:
+      []
+    productions:
+      []
 startingTime:
   second: 0
   minute: 0
@@ -9275,9 +11331,124 @@ extraSprites:
     subY: 3
     files:
       0: Resources/BulletSprites/BulletSprites.png
-  - type: TFTDReserve
-    width: 59
-    height: 24
+  - type: ICONS.PCK
     singleImage: true
+    width: 640
+    height: 400
     files:
-      0: Resources/UI/reserve.png
+      0: Resources/UI/UI.png
+  - type: BIGOBS.PCK
+    width: 1219
+    height: 492
+    subX: 53
+    subY: 82
+    files:
+      57: Resources/CompilationMod/BigObs/bigobs.png
+  - type: FLOOROB.PCK
+    files:
+      73: Resources/CompilationMod/FloorObs/CombatKnife.gif
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      128: Resources/CompilationMod/HandObs/CombatKnife.png
+  - type: TAC01.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/TAC01.PNG
+  - type: BACK06.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK06.PNG
+  - type: BACK07.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK07.PNG
+  - type: BACK08.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK08.PNG
+    singleImage: true
+  - type: BACK09.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK09.PNG
+  - type: BACK10.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK10.PNG
+  - type: BACK11.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK11.PNG
+  - type: BACK18.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK18.PNG
+  - type: BACK19.SCR
+    singleImage: true
+    width: 960
+    height: 600
+    files:
+      0: Resources/CompilationMod/BG/BACK19.PNG
+#
+# 
+#New spritesheet Example:
+#  - type: GIANTBUNNY.PCK
+#    width: 32
+#    height: 40
+#    files:
+#      0: Resources/Bunny/Bunny00.png
+#      1: Resources/Bunny/Bunny01.bmp
+#      2: Resources/Bunny/Bunny02.gif
+#
+#Extra Sounds:
+# type should correspond to one of the following: 
+#   - BATTLE.CAT     - battlescape noises, original cat file has 55 entries (0-54) 
+#                      see http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT
+#   - GMINTRO.CAT    - some intro sounds, probably best not to mess with these.
+#   - SAMPLE3.CAT    - some more intro sounds, probably best not to mess with these.
+#   - GEO.CAT        - geoscape/UI noises, original cat file has 14 entries (0-13)
+#                      see http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE.CAT
+#extraSounds:
+#  - type: BATTLE.CAT
+#    files:
+#      55: Resources/Sounds/sample.wav
+#Extra strings:
+# type must correspond to the filename of the language you want to add to
+# the rest should be fairly straight forward
+#extraStrings:
+#  - type: English
+#    strings:
+#      STR_SNIPER_RIFLE: Sniper Rifle
+#      STR_SNIPER_RIFLE_CLIP: Sniper Rifle Clip
+#  - type: EnglishUk
+#    strings:
+#      STR_SNIPER_RIFLE: Sniper Rifle
+#      STR_SNIPER_RIFLE_CLIP: Sniper Rifle Clip
+#  - type: German
+#    strings:
+#      STR_SNIPER_RIFLE: Scharfschützengewehr
+#      STR_SNIPER_RIFLE_CLIP: Scharfschützengewehrmunition
+#  - type: Russian
+#    strings:
+#      STR_SNIPER_RIFLE: ??????????? ????????
+#      STR_SNIPER_RIFLE_CLIP: ??????? ? ?????. ????????

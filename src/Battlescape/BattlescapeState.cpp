@@ -83,6 +83,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Menu/SaveState.h"
 #include "../Menu/LoadState.h"
+#include "../Ruleset/RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -96,8 +97,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	//game->getScreen()->setScale(1.0);
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
-	int iconsWidth = 320;
-	int iconsHeight = 56;
+	int iconsWidth = 960;
+	int iconsHeight = 104;
 	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
@@ -107,33 +108,36 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	int visibleMapHeight = screenHeight - iconsHeight;
 	_map = new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
 
-	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
-	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
+	_numLayers = new NumberText(3, 5, _icons->getX() + 340, _icons->getY() + 74);
+	_rank = new Surface(33, 31, _icons->getX() + 384, _icons->getY() + 71);
 
 	// Create buttons
-	_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
-	_btnUnitDown = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 16);
-	_btnMapUp = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY());
-	_btnMapDown = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 16);
-	_btnShowMap = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY());
-	_btnKneel = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 16);
-	_btnInventory = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY());
-	_btnCenter = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 16);
-	_btnNextSoldier = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
-	_btnNextStop = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
-	_btnShowLayers = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
-	_btnHelp = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
-	_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
-	_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
-	_btnStats = new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
-	_btnReserveNone = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 33);
-	_btnReserveSnap = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 33);
-	_btnReserveAimed = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 45);
-	_btnReserveAuto = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 45);
-	_btnReserveKneel = new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
-	_btnZeroTUs = new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33);
-	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
-	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
+	_btnUnitUp = new InteractiveSurface(31, 16, _icons->getX() + 164, _icons->getY() + 69);
+	_btnUnitDown = new InteractiveSurface(31, 16, _icons->getX() + 164, _icons->getY() + 86);
+	_btnMapUp = new InteractiveSurface(31, 16, _icons->getX() + 195, _icons->getY() + 69);
+	_btnMapDown = new InteractiveSurface(31, 16, _icons->getX() + 195, _icons->getY() + 86);
+	_btnShowMap = new InteractiveSurface(31, 16, _icons->getX() + 226, _icons->getY() + 69);
+	_btnKneel = new InteractiveSurface(31, 16, _icons->getX() + 226, _icons->getY() + 86);
+	_btnInventory = new InteractiveSurface(31, 16, _icons->getX() + 257, _icons->getY() + 69);
+	_btnCenter = new InteractiveSurface(31, 16, _icons->getX() + 257, _icons->getY() + 86);
+	_btnNextSoldier = new InteractiveSurface(31, 16, _icons->getX() + 288, _icons->getY() + 69);
+	_btnNextStop = new InteractiveSurface(31, 16, _icons->getX() + 288, _icons->getY() + 86);
+	_btnShowLayers = new InteractiveSurface(31, 16, _icons->getX() + 319, _icons->getY() + 69);
+	_btnHelp = new InteractiveSurface(31, 16, _icons->getX() + 319, _icons->getY() + 86);
+	_btnEndTurn = new InteractiveSurface(31, 16, _icons->getX() + 350, _icons->getY() + 69);
+	_btnAbort = new InteractiveSurface(31, 16, _icons->getX() + 350, _icons->getY() + 86);
+	_btnStats = new InteractiveSurface(100, 25, _icons->getX() + 460, _icons->getY() + 76);
+	_btnReserveNone = new ImageButton(29, 16, _icons->getX() + 91, _icons->getY() + 69);
+	_btnReserveSnap = new ImageButton(29, 16, _icons->getX() + 120, _icons->getY() + 69);
+	_btnReserveAimed = new ImageButton(29, 16, _icons->getX() + 91, _icons->getY() + 86);
+	_btnReserveAuto = new ImageButton(17, 11, _icons->getX() + 120, _icons->getY() + 86);
+	_btnReserveKneel = new ImageButton(14, 33, _icons->getX() + 149, _icons->getY() + 69);
+	_btnZeroTUs = new ImageButton(14, 33, _icons->getX() + 77, _icons->getY() + 69);
+	_btnLeftHandItem = new InteractiveSurface(47, 73, _icons->getX() + 15, _icons->getY() + 8);
+	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 12, _icons->getY() + 9);
+    _btnLeftReload = new ImageButton(18, 18, _icons->getX() + 6, _icons->getY() + 84); //Activates reload screen for left hand
+    _btnLeftReload->onMouseClick((ActionHandler)&BattlescapeState::btnLeftReloadClick);
+  //_btnLeftThrow = new ImageButton(18, 18, _icons->getX() + 52, _icons->getY() + 84);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 	for (int i = 0; i < VISIBLE_MAX; ++i)
@@ -141,27 +145,30 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
 	}
-	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
-	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
+    _btnRightReload = new ImageButton(18, 18, _icons->getX() + 579, _icons->getY() + 84); //Activates reload screen for right hand
+    _btnRightReload->onMouseClick((ActionHandler)&BattlescapeState::btnRightReloadClick);
+    //_btnRightThrow = new ImageButton(18, 18, _icons->getX() + 933, _icons->getY() + 84); //Activates throw screen for right hand
+	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); //624 need to be added // center number 10
+	_warning = new WarningMessage(205, 24, _icons->getX() + 170, _icons->getY() + 72);
 	_btnLaunch = new InteractiveSurface(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnLaunch->setVisible(false);
 	_btnPsi = new InteractiveSurface(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
-	_txtName = new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
+	_txtName = new Text(140, 10, _icons->getX() + 418, _icons->getY() + 66);
 
-	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
-	_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
+	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 418, _icons->getY() + 76);
+	_barTimeUnits = new Bar(95, 5, _icons->getX() + 460, _icons->getY() + 76);
 
-	_numEnergy = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 42);
-	_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
+	_numEnergy = new NumberText(15, 5, _icons->getX() + 439, _icons->getY() + 76);
+	_barEnergy = new Bar(95, 5, _icons->getX() + 460, _icons->getY() + 83);
 
-	_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 50);
-	_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
+	_numHealth = new NumberText(15, 5, _icons->getX() + 418, _icons->getY() + 90);
+	_barHealth= new Bar(95, 5, _icons->getX() + 460, _icons->getY() + 90);
 
-	_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 50);
-	_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
+	_numMorale = new NumberText(15, 5, _icons->getX() + 439, _icons->getY() + 90);
+	_barMorale = new Bar(95, 5, _icons->getX() + 460, _icons->getY() + 97);
 
 	_txtDebug = new Text(300, 10, 20, 0);
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
@@ -227,6 +234,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_btnReserveKneel);
 	add(_btnZeroTUs);
 	add(_btnLeftHandItem);
+	add(_btnRightReload);
+	add(_btnLeftReload);
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
@@ -261,7 +270,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	SDL_Rect *r = icons->getCrop();
 	r->x = 0;
-	r->y = 200 - iconsHeight;
+	r->y = 600 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
 	icons->blit(_icons);
@@ -371,7 +380,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnLeftHandItem->setTooltip("STR_USE_LEFT_HAND");
 	_btnLeftHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnLeftHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
 	_btnRightHandItem->onKeyboardPress((ActionHandler)&BattlescapeState::btnRightHandItemClick, (SDLKey)Options::getInt("keyBattleUseRightHand"));
 	_btnRightHandItem->setTooltip("STR_USE_RIGHT_HAND");
@@ -417,6 +425,18 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
+
+	_btnLeftReload->onMouseClick((ActionHandler)&BattlescapeState::btnLeftReloadClick);
+	_btnLeftReload->onKeyboardPress((ActionHandler)&BattlescapeState::btnLeftReloadClick, (SDLKey)Options::getInt("keyBattleLeftReload"));
+	_btnLeftReload->setTooltip("STR_RELOAD_LEFT_HAND_WEAPON");
+	_btnLeftReload->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
+	_btnLeftReload->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+
+	_btnRightReload->onMouseClick((ActionHandler)&BattlescapeState::btnRightReloadClick);
+	_btnRightReload->onKeyboardPress((ActionHandler)&BattlescapeState::btnRightReloadClick, (SDLKey)Options::getInt("keyBattleRightReload"));
+	_btnRightReload->setTooltip("STR_RELOAD_RIGHT_HAND_WEAPON");
+	_btnRightReload->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
+	_btnRightReload->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
@@ -856,7 +876,6 @@ void BattlescapeState::btnInventoryClick(Action *)
 		}
 
 		_battleGame->cancelCurrentAction(true);
-
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
@@ -1311,10 +1330,12 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	if (item && !_battleGame->isBusy())
 	{
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()) || _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
-		{
-			_battleGame->getCurrentAction()->weapon = item;
-			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
-		}
+			{
+				// fuck it, let's hardcode this instead of doing math like we should.
+				const int offset = item->getSlot()->getId() == "STR_RIGHT_HAND" ? 90 : -130; 
+				_battleGame->getCurrentAction()->weapon = item;
+				popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), (Options::getInt("baseXResolution")/2)-140 + offset, _icons->getY()+16));
+			}
 		else
 		{
 			warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
@@ -1985,9 +2006,9 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 }
 
 /**
-* Shows a tooltip for the appropriate button.
-* @param action Pointer to an action.
-*/
+ * Shows a tooltip for the appropriate button.
+ * @param action Pointer to an action.
+ */
 void BattlescapeState::txtTooltipIn(Action *action)
 {
 	if (allowButtons() && Options::getBool("battleTooltips"))
@@ -1998,9 +2019,9 @@ void BattlescapeState::txtTooltipIn(Action *action)
 }
 
 /**
-* Clears the tooltip text.
-* @param action Pointer to an action.
-*/
+ * Clears the tooltip text.
+ * @param action Pointer to an action.
+ */
 void BattlescapeState::txtTooltipOut(Action *action)
 {
 	if (allowButtons() && Options::getBool("battleTooltips"))
@@ -2009,6 +2030,32 @@ void BattlescapeState::txtTooltipOut(Action *action)
 		{
 			_txtTooltip->setText(L"");
 		}
+	}
+}
+
+/**
+ * Reload weapon in left hand.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnLeftReloadClick(Action *)
+{
+	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo("STR_LEFT_HAND"))
+	{
+		_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+		updateSoldierInfo();
+	}
+}
+
+/**
+ * Reload weapon in right hand.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnRightReloadClick(Action *)
+{
+	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo("STR_RIGHT_HAND"))
+	{
+		_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+		updateSoldierInfo();
 	}
 }
 
