@@ -51,8 +51,8 @@ private:
 	std::map<std::string, int> _costs;
 	int _listOrder;
 public:
-	static const int SLOT_W = 16;
-	static const int SLOT_H = 16;
+	static const int SLOT_W = 28;
+	static const int SLOT_H = 28;
 	static const int HAND_W = 2;
 	static const int HAND_H = 3;
 	/// Creates a blank inventory ruleset.
