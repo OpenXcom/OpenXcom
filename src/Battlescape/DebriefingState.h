@@ -38,6 +38,7 @@ class Base;
 class Region;
 class Country;
 class RuleItem;
+class Soldier;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -75,6 +76,7 @@ private:
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _manageContainment, _destroyBase;
 	int _containmentLimit;
+	std::vector<Soldier*> _soldiersCommended;
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

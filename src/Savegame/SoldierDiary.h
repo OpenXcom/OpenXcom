@@ -24,8 +24,6 @@
 #include <string>
 #include "GameTime.h"
 
-
-
 namespace OpenXcom
 {
 
@@ -126,10 +124,43 @@ public:
 	int getDaysWounded() const;
 };
 
+class SoldierCommendations
+{
+private:
+	std::string  _commendationName;
+	int  _decorationLevel;
+	bool _isNew;
+public:
+	/// Creates a new commendation and loads its contents from YAML.
+	SoldierCommendations(const YAML::Node& node);
+	/// Creates a commendation.
+	SoldierCommendations(std::string commendationName, int decorationLevel, bool isNew);
+	/// Cleans up the commendation.
+	~SoldierCommendations();
+	/// Loads the commendation information from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the commendation information to YAML.
+	YAML::Node save() const;
+	/// Get commendation name.
+	std::string getCommendationName() const;
+	/// Get the commendation's decoration level's name.
+	std::string getDecorationLevelName();
+	/// Get the commendation's decoration level's int.
+	int getDecorationLevelInt();
+	/// Get the newness of the commendation.
+	bool isNew();
+	/// Set the commendation newness to false.
+	void makeOld();
+	/// Increment decoration level.
+	// Sets _isNew to true.
+	void addDecoration();
+};
+
 class SoldierDiary
 {
 private:
 	std::vector<SoldierDiaryEntries*> _diaryEntries;
+	std::vector<SoldierCommendations*> _commendations;
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
@@ -173,9 +204,13 @@ public:
 	int getStunTotal() const;
 	/// Get
 	int getDaysWoundedTotal() const;
+	/// Get commendations
+	std::vector<SoldierCommendations*> *getSoldierCommendations();
+	/// Manage commendations, true if a medal is awarded.
+	bool manageCommendations();
+	/// Award commendations
+	void awardCommendation(std::string commendationName);
 };
-
-
 
 }
 

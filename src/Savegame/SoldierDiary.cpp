@@ -47,6 +47,10 @@ SoldierDiary::~SoldierDiary()
 	{
 		delete *i;
 	}
+	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin(); i != _commendations.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 
@@ -60,6 +64,11 @@ void SoldierDiary::load(const YAML::Node& node)
 		for (YAML::const_iterator i = diaryEntries.begin(); i != diaryEntries.end(); ++i)
 			_diaryEntries.push_back(new SoldierDiaryEntries(*i));
 	}
+	if (const YAML::Node &commendations = node["commendations"])
+	{
+		for (YAML::const_iterator i = commendations.begin(); i != commendations.end(); ++i)
+			_commendations.push_back(new SoldierCommendations(*i));
+	}
 }
 
 /**
@@ -70,6 +79,8 @@ YAML::Node SoldierDiary::save() const
 	YAML::Node node;
 	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin(); i != _diaryEntries.end(); ++i)
 			node["diaryEntries"].push_back((*i)->save());
+	for (std::vector<SoldierCommendations*>::const_iterator i = _commendations.begin(); i != _commendations.end(); ++i)
+			node["commendations"].push_back((*i)->save());
 	return node;
 }
 
@@ -284,6 +295,64 @@ int SoldierDiary::getDaysWoundedTotal() const
 		_daysWounded += (*i)->getDaysWounded();
 	}
 	return _daysWounded;
+}
+
+/**
+ * Get soldier commendations.
+ * @return SoldierCommendations soldier commendations.
+ */
+std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
+{
+	return &_commendations;
+}
+
+/**
+ * Manage the soldier's commendations.
+ * Award new ones, if deserved.
+ * @return bool Has a commendation been awarded?
+ */
+bool SoldierDiary::manageCommendations()
+{
+	std::string _commendationName;
+	bool awardedCommendation = false;
+
+	/**
+	 * Merit Star - based on kill count.
+	 */
+	_commendationName = "STR_MERIT_STAR";
+	if (getKillTotal() > 1)
+	{
+		awardCommendation(_commendationName);
+		awardedCommendation = true;
+	}
+
+	return awardedCommendation;
+}
+
+/**
+ * Award commendations to the soldier.
+ * @param string Commendation Name.
+ */
+void SoldierDiary::awardCommendation(std::string _commendationName)
+{
+	if (_commendations.empty())
+	{
+		_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
+	}
+	else
+	{
+		for (std::vector<SoldierCommendations*>::const_iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
+		{
+			if ( (*i)->getCommendationName() == _commendationName)
+			{
+				(*i)->addDecoration();
+			}
+			else
+			{
+				_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
+			}
+		}
+	}
 }
 
 /**
@@ -599,6 +668,121 @@ std::string SoldierDiaryKills::getWeaponAmmo() const
 AlienState SoldierDiaryKills::getAlienState() const
 {
 	return _alienState;
+}
+
+/**
+ * Initializes a new commendation entry from YAML.
+ * @param node YAML node.
+ */
+SoldierCommendations::SoldierCommendations(const YAML::Node &node)
+{
+	load(node);
+}
+
+/**
+ * Initializes a soldier commendation.
+ */
+SoldierCommendations::SoldierCommendations(std::string commendationName, int decorationLevel, bool isNew) : _commendationName(commendationName), _decorationLevel(decorationLevel), _isNew(isNew)
+{
+}
+
+/**
+ *
+ */
+SoldierCommendations::~SoldierCommendations()
+{
+}
+
+/**
+ * Loads the commendation from a YAML file.
+ * @param node YAML node.
+ */
+void SoldierCommendations::load(const YAML::Node &node)
+{
+	_commendationName = node["commendationName"].as<std::string>(_commendationName);
+	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
+	_isNew = node["isNew"].as<bool>(_isNew);
+}
+
+/**
+ * Saves the commendation to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node SoldierCommendations::save() const
+{
+	YAML::Node node;
+	node["commendationName"] = _commendationName;
+	node["decorationLevel"] = _decorationLevel;
+	node["isNew"] = _isNew;
+	return node;
+}
+
+/**
+ * Get the soldier's commendation's name.
+ * @return string Commendation name.
+ */
+std::string SoldierCommendations::getCommendationName() const
+{
+	return _commendationName;
+}
+
+/**
+ * Get the soldier commendation level's name.
+ * @return string Commendation level.
+ */
+std::string SoldierCommendations::getDecorationLevelName()
+{
+	switch (_decorationLevel)
+	{
+    case 0:		return "STR_NO_AWARD";
+    case 1:		return "STR_1ST_AWARD";
+    case 2:		return "STR_2ND_AWARD";
+    case 3:		return "STR_3RD_AWARD";
+    case 4:		return "STR_4TH_AWARD";
+    case 5:		return "STR_5TH_AWARD";
+    case 6:		return "STR_6TH_AWARD";
+    case 7:		return "STR_7TH_AWARD";
+    case 8:		return "STR_8TH_AWARD";
+    case 9:		return "STR_9TH_AWARD";
+    case 10:    return "STR_10TH_AWARD";
+
+    default:	return "AWARD LEVEL ERROR";
+	}
+}
+
+/**
+ * Get the soldier commendation level's int.
+ * @return int Commendation level.
+ */
+int SoldierCommendations::getDecorationLevelInt()
+{
+	return _decorationLevel;
+}
+/**
+ * Get newness of commendation.
+ * @return bool Is the commendation new?
+ */
+bool SoldierCommendations::isNew()
+{
+	return _isNew;
+}
+
+/**
+ * Set the newness of the commendation to old.
+ */
+void SoldierCommendations::makeOld()
+{
+	_isNew = false;
+}
+
+/**
+ * Add a level of decoration to the commendation.
+ * Set isNew to false.
+ */
+void SoldierCommendations::addDecoration()
+{
+	_decorationLevel++;
+	_isNew = true;
 }
 
 }

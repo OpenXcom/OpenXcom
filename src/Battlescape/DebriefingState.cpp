@@ -28,6 +28,7 @@
 #include "../Interface/Window.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
+#include "CommendationState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCountry.h"
@@ -275,6 +276,10 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else if (!_destroyBase)
 	{
+		if (!_soldiersCommended.empty())
+		{
+			_game->pushState(new CommendationState(_game, _soldiersCommended));
+		}
 		if (_game->getSavedGame()->handlePromotions())
 		{
 			_game->pushState(new PromotionsState(_game));
@@ -666,7 +671,18 @@ void DebriefingState::prepareDebriefing()
 					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
 					if (soldier != 0)
+					{
 						recoverItems((*j)->getInventory(), base);
+
+						if (soldier->getRank() > 0)
+						{
+							if (soldier->getDiary()->manageCommendations())
+							{
+								_soldiersCommended.push_back(soldier);
+							}
+							
+						}
+					}
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);
