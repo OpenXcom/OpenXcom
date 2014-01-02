@@ -319,13 +319,22 @@ bool SoldierDiary::manageCommendations()
 	/**
 	 * Merit Star - based on kill count.
 	 */
-	_commendationName = "STR_MERIT_STAR";
-	if (getKillTotal() > 1)
+	_commendationName = "STR_MEDAL_MERIT_STAR_NAME";
+	if (getKillTotal() > 0)
 	{
 		awardCommendation(_commendationName);
 		awardedCommendation = true;
 	}
 
+	/**
+	 * Military Cross - based on mission count.
+	 */
+	_commendationName = "STR_MEDAL_MILITARY_CROSS_NAME";
+	if (getMissionTotal() > 0)
+	{
+		awardCommendation(_commendationName);
+		awardedCommendation = true;
+	}
 	return awardedCommendation;
 }
 
@@ -341,7 +350,7 @@ void SoldierDiary::awardCommendation(std::string _commendationName)
 	}
 	else
 	{
-		for (std::vector<SoldierCommendations*>::const_iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
+		for (std::vector<SoldierCommendations*>::const_iterator i = getSoldierCommendations()->begin() ; i != getSoldierCommendations()->end() ; ++i)
 		{
 			if ( (*i)->getCommendationName() == _commendationName)
 			{
@@ -734,19 +743,41 @@ std::string SoldierCommendations::getDecorationLevelName()
 {
 	switch (_decorationLevel)
 	{
-    case 0:		return "STR_NO_AWARD";
-    case 1:		return "STR_1ST_AWARD";
-    case 2:		return "STR_2ND_AWARD";
-    case 3:		return "STR_3RD_AWARD";
-    case 4:		return "STR_4TH_AWARD";
-    case 5:		return "STR_5TH_AWARD";
-    case 6:		return "STR_6TH_AWARD";
-    case 7:		return "STR_7TH_AWARD";
-    case 8:		return "STR_8TH_AWARD";
-    case 9:		return "STR_9TH_AWARD";
-    case 10:    return "STR_10TH_AWARD";
+    case 0:		return "STR_1ST_AWARD";
+    case 1:		return "STR_2ND_AWARD";
+    case 2:		return "STR_3RD_AWARD";
+    case 3:		return "STR_4TH_AWARD";
+    case 4:		return "STR_5TH_AWARD";
+    case 5:		return "STR_6TH_AWARD";
+    case 6:		return "STR_7TH_AWARD";
+    case 7:		return "STR_8TH_AWARD";
+    case 8:		return "STR_9TH_AWARD";
+    case 9:    return "STR_10TH_AWARD";
 
     default:	return "AWARD LEVEL ERROR";
+	}
+}
+
+/**
+ * Get the soldier commendation level's description.
+ * @return string Commendation level description.
+ */
+std::string SoldierCommendations::getDecorationDescription()
+{
+	switch (_decorationLevel)
+	{
+    case 0:		return "STR_1ST_AWARD_DECOR";
+    case 1:		return "STR_2ND_AWARD_DECOR";
+    case 2:		return "STR_3RD_AWARD_DECOR";
+    case 3:		return "STR_4TH_AWARD_DECOR";
+    case 4:		return "STR_5TH_AWARD_DECOR";
+    case 5:		return "STR_6TH_AWARD_DECOR";
+    case 6:		return "STR_7TH_AWARD_DECOR";
+    case 7:		return "STR_8TH_AWARD_DECOR";
+    case 8:		return "STR_9TH_AWARD_DECOR";
+    case 9:		return "STR_10TH_AWARD_DECOR";
+
+    default:	return "AWARD DESCRIPTION ERROR";
 	}
 }
 

@@ -42,7 +42,7 @@ private:
 	size_t _soldier;
 	SoldierInfoState *_soldierInfoState;
 
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions, *_btnCommendations;
 	Window *_window;
 	Text *_txtTitle, *_txtLocation, *_txtStatus, *_txtDate;
 	TextList *_lstDiary;
@@ -66,6 +66,8 @@ public:
 	void btnKillsClick(Action *action);
 	/// Handler for clicking the Missions button.
 	void btnMissionsClick(Action *action);
+	/// Handler for clicking the Commendations button.
+	void btnCommendationsClick(Action *action);
 	/// Handler for clicking on mission list.
 	void lstDiaryInfoClick(Action *action);
 };

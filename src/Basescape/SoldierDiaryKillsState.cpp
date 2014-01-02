@@ -44,18 +44,35 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState, bool displayKills) : State(game), _base(base), _soldier(soldier), _soldierDiaryState(soldierDiaryState), _displayKills(displayKills)
+SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState, int display) : State(game), _base(base), _soldier(soldier), _soldierDiaryState(soldierDiaryState), _display(display)
 {
-	if (_displayKills == true) _displayMissions = false;
-	else _displayMissions = true;
+	if (_display == 0)
+    {
+        _displayKills = true;
+        _displayMissions = false;
+		_displayCommendations = false;
+    }
+	else if (_display == 1)
+    {
+        _displayKills = false;
+        _displayMissions = true;
+		_displayCommendations = false;
+    }
+    else
+    {
+        _displayKills = false;
+        _displayMissions = false;
+		_displayCommendations = true;
+    }
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(96, 16, 216, 176);
 	_btnPrev = new TextButton(28, 14, 8, 8);
 	_btnNext = new TextButton(28, 14, 284, 8);
-	_btnKills = new TextButton(96, 16, 8, 176);
-	_btnMissions = new TextButton(96, 16, 112, 176);
+    _btnKills = new TextButton(70, 16, 8, 176);
+	_btnMissions = new TextButton(70, 16, 86, 176);
+    _btnCommendations = new TextButton(70, 16, 164, 176);
+    _btnOk = new TextButton(70, 16, 242, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
 	// Kill stats
 	_txtRace = new Text(90, 18, 16, 36);
@@ -73,6 +90,10 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstType = new TextList(110, 140, 108, 52);
 	_lstUFO = new TextList(90, 140, 222, 52);
 	_lstMissionTotals = new TextList(296, 9, 8, 167);
+    // Commendation stats
+    _txtMedalName = new Text(90, 18, 16, 36);
+    _txtMedalLevel = new Text(90, 18, 222, 36);
+    _lstCommendations = new TextList(272, 140, 16, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -81,6 +102,7 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	add(_btnOk);
 	add(_btnKills);
 	add(_btnMissions);
+    add(_btnCommendations);
 	add(_btnPrev);
 	add(_btnNext); 
 	add(_txtTitle);
@@ -98,6 +120,9 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	add(_lstType);
 	add(_lstUFO);
 	add(_lstMissionTotals);
+    add(_txtMedalName);
+    add(_txtMedalLevel);
+    add(_lstCommendations);
 
 	centerAllSurfaces();
 
@@ -111,12 +136,16 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryKillsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnKills->setColor(Palette::blockOffset(13)+10);
-	_btnKills->setText(tr("STR_TOTAL_KILLS"));
+	_btnKills->setText(tr("STR_KILLS_UC"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryKillsState::btnKillsToggle);
 	
 	_btnMissions->setColor(Palette::blockOffset(13)+10);
-	_btnMissions->setText(tr("STR_TOTAL_MISSIONS"));
+	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryKillsState::btnMissionsToggle);
+
+    _btnCommendations->setColor(Palette::blockOffset(13)+10);
+	_btnCommendations->setText(tr("STR_AWARDS_UC"));
+	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryKillsState::btnCommendationsToggle);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
@@ -203,7 +232,18 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstMissionTotals->setMargin(8);
 	_lstMissionTotals->setBackground(_window);
 	
+	_txtMedalName->setColor(Palette::blockOffset(15)+1);
+	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
+	_txtMedalName->setWordWrap(true);
 
+	_txtMedalLevel->setColor(Palette::blockOffset(15)+1);
+	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
+	_txtMedalLevel->setWordWrap(true);
+
+	_lstCommendations->setColor(Palette::blockOffset(13)+10);
+	_lstCommendations->setArrowColor(Palette::blockOffset(15)+1);
+	_lstCommendations->setColumns(2, 206, 74);
+	_lstCommendations->setBackground(_window);
 
 	init(); // Populate the list
 }
@@ -222,7 +262,7 @@ SoldierDiaryKillsState::~SoldierDiaryKillsState()
  */
 void SoldierDiaryKillsState::init()
 {
-	// Set visibility
+	// Set visibility for kills
 	_txtRace->setVisible(_displayKills);
 	_txtRank->setVisible(_displayKills);
 	_txtWeapon->setVisible(_displayKills);
@@ -230,8 +270,7 @@ void SoldierDiaryKillsState::init()
 	_lstRank->setVisible(_displayKills);
 	_lstWeapon->setVisible(_displayKills);
 	_lstKillTotals->setVisible(_displayKills);
-	_btnMissions->setVisible(_displayKills);
-
+	// Set visibility for missions
 	_txtLocation->setVisible(_displayMissions);
 	_txtType->setVisible(_displayMissions);
 	_txtUFO->setVisible(_displayMissions);
@@ -239,7 +278,14 @@ void SoldierDiaryKillsState::init()
 	_lstType->setVisible(_displayMissions);
 	_lstUFO->setVisible(_displayMissions);
 	_lstMissionTotals->setVisible(_displayMissions);
-	_btnKills->setVisible(_displayMissions);
+	// Set visibility for commendations
+    _txtMedalName->setVisible(_displayCommendations);
+    _txtMedalLevel->setVisible(_displayCommendations);
+    _lstCommendations->setVisible(_displayCommendations);
+	// Set visibility for buttons
+	_btnKills->setVisible(!_displayKills);
+	_btnMissions->setVisible(!_displayMissions);
+	_btnCommendations->setVisible(!_displayCommendations);
 
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	int _missionTotal = s->getDiary()->getMissionTotal();
@@ -266,6 +312,7 @@ void SoldierDiaryKillsState::init()
 	std::map<std::string, int> _locationTotals = s->getDiary()->getRegionTotal();
 	std::map<std::string, int> _typeTotals = s->getDiary()->getTypeTotal();
 	std::map<std::string, int> _UFOTotals = s->getDiary()->getUFOTotal();
+    _lstCommendations->clearList();
 
 	for (std::map<std::string, int>::const_iterator i = _raceTotals.begin() ; i != _raceTotals.end() ; ++i)
 	{
@@ -321,6 +368,15 @@ void SoldierDiaryKillsState::init()
 		ss2 << (*i).second;
 		_lstUFO->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
+    
+    for (std::vector<SoldierCommendations*>::const_iterator i = s->getDiary()->getSoldierCommendations()->begin() ; i != s->getDiary()->getSoldierCommendations()->end() ; ++i)
+	{
+		std::wstringstream ss1, ss2;
+
+		ss1 << tr((*i)->getCommendationName().c_str());
+		ss2 << tr((*i)->getDecorationDescription().c_str());
+		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
+	}
 }
 
 /**
@@ -365,6 +421,7 @@ void SoldierDiaryKillsState::btnKillsToggle(Action *)
 {
 	_displayKills = true;
 	_displayMissions = false;
+    _displayCommendations = false;
 	init();
 }
 
@@ -375,6 +432,18 @@ void SoldierDiaryKillsState::btnMissionsToggle(Action *)
 {
 	_displayKills = false;
 	_displayMissions = true;
+    _displayCommendations = false;
+	init();
+}
+
+/**
+ * Display Commendations.
+ */
+void SoldierDiaryKillsState::btnCommendationsToggle(Action *)
+{
+	_displayKills = false;
+	_displayMissions = false;
+    _displayCommendations = true;
 	init();
 }
 }

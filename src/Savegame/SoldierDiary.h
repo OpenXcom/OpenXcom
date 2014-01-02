@@ -145,6 +145,8 @@ public:
 	std::string getCommendationName() const;
 	/// Get the commendation's decoration level's name.
 	std::string getDecorationLevelName();
+	/// Get the commendation's decoration description.
+	std::string getDecorationDescription();
 	/// Get the commendation's decoration level's int.
 	int getDecorationLevelInt();
 	/// Get the newness of the commendation.

@@ -49,9 +49,10 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(96, 16, 216, 176);
-	_btnKills = new TextButton(96, 16, 8, 176);
-	_btnMissions = new TextButton(96, 16, 112, 176);
+    _btnKills = new TextButton(70, 16, 8, 176);
+	_btnMissions = new TextButton(70, 16, 86, 176);
+    _btnCommendations = new TextButton(70, 16, 164, 176);
+    _btnOk = new TextButton(70, 16, 242, 176);
 	_btnPrev = new TextButton(28, 14, 8, 8);
 	_btnNext = new TextButton(28, 14, 284, 8);
 	_txtTitle = new Text(310, 16, 5, 8);
@@ -67,6 +68,7 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 	add(_btnOk);
 	add(_btnKills);
 	add(_btnMissions);
+	add(_btnCommendations);
 	add(_btnPrev);
 	add(_btnNext); 
 	add(_txtTitle);
@@ -87,12 +89,16 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnKills->setColor(Palette::blockOffset(13)+10);
-	_btnKills->setText(tr("STR_TOTAL_KILLS"));
+	_btnKills->setText(tr("STR_KILLS_UC"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryState::btnKillsClick);
 	
 	_btnMissions->setColor(Palette::blockOffset(13)+10);
-	_btnMissions->setText(tr("STR_TOTAL_MISSIONS"));
+	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryState::btnMissionsClick);
+
+	_btnCommendations->setColor(Palette::blockOffset(13)+10);
+	_btnCommendations->setText(tr("STR_AWARDS_UC"));
+	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryState::btnCommendationsClick);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
@@ -212,8 +218,8 @@ void SoldierDiaryState::btnOkClick(Action *)
  */
 void SoldierDiaryState::btnKillsClick(Action *)
 {
-	bool _displayKills = true;
-	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _displayKills));
+	int _display = 0;
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _display));
 }
 
 /**
@@ -222,8 +228,18 @@ void SoldierDiaryState::btnKillsClick(Action *)
  */
 void SoldierDiaryState::btnMissionsClick(Action *)
 {
-	bool _displayKills = false;
-	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _displayKills));
+	int _display = 1;
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _display));
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void SoldierDiaryState::btnCommendationsClick(Action *)
+{
+	int _display = 2;
+	_game->pushState(new SoldierDiaryKillsState(_game, _base, _soldier, this, _display));
 }
 
 

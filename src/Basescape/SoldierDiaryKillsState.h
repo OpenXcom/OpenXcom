@@ -41,18 +41,22 @@ private:
 	size_t _soldier;
 	SoldierDiaryState *_soldierDiaryState;
 
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions, *_btnCommendations;
 	Window *_window;
 	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon;
 	Text *_txtLocation, *_txtType, *_txtUFO;
+	Text *_txtMedalName, *_txtMedalLevel;
 	TextList *_lstRank, *_lstRace, *_lstWeapon, *_lstKillTotals;
 	TextList *_lstLocation, *_lstType, *_lstUFO, *_lstMissionTotals;
+	TextList *_lstCommendations;
+	std::vector<int> _commendationsListEntry;
 
-	bool _displayKills, _displayMissions;
+	int _display; // 0 displays kills, 1 displays missions, 2 displays commendations
+	bool _displayKills, _displayMissions, _displayCommendations;
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState, bool displayKills);
+	SoldierDiaryKillsState(Game *game, Base *base, size_t soldier, SoldierDiaryState *soldierDiaryState, int display);
 	/// Cleans up the Soldiers state.
 	~SoldierDiaryKillsState();
 	/// Updates the soldier info.
@@ -67,6 +71,12 @@ public:
 	void btnKillsToggle(Action *action);
 	/// Handler for clicking the Missions button.
 	void btnMissionsToggle(Action *action);
+	/// Handler for clicking the Missions button.
+	void btnCommendationsToggle(Action *action);
+	/// Handler for moving the mouse over a medal.
+    void lstInfoMouseOver(Action *action);
+    /// Handler for moving the mouse outside the medals list.
+    void lstInfoMouseOut(Action *action);
 };
 
 }
