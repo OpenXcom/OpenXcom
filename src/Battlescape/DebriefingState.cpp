@@ -674,13 +674,9 @@ void DebriefingState::prepareDebriefing()
 					{
 						recoverItems((*j)->getInventory(), base);
 
-						if (soldier->getRank() > 0)
+						if (soldier->getDiary()->manageCommendations())
 						{
-							if (soldier->getDiary()->manageCommendations())
-							{
-								_soldiersCommended.push_back(soldier);
-							}
-							
+							_soldiersCommended.push_back(soldier);
 						}
 					}
 					else

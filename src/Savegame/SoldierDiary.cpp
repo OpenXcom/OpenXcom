@@ -350,7 +350,7 @@ void SoldierDiary::awardCommendation(std::string _commendationName)
 	}
 	else
 	{
-		for (std::vector<SoldierCommendations*>::const_iterator i = getSoldierCommendations()->begin() ; i != getSoldierCommendations()->end() ; ++i)
+		for (std::vector<SoldierCommendations*>::iterator i = getSoldierCommendations()->begin() ; i != getSoldierCommendations()->end() ; ++i)
 		{
 			if ( (*i)->getCommendationName() == _commendationName)
 			{
@@ -808,7 +808,7 @@ void SoldierCommendations::makeOld()
 
 /**
  * Add a level of decoration to the commendation.
- * Set isNew to false.
+ * Sets isNew to true.
  */
 void SoldierCommendations::addDecoration()
 {
