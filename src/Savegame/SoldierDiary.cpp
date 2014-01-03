@@ -350,18 +350,22 @@ void SoldierDiary::awardCommendation(std::string _commendationName)
 	}
 	else
 	{
-		for (std::vector<SoldierCommendations*>::iterator i = getSoldierCommendations()->begin() ; i != getSoldierCommendations()->end() ; ++i)
+		bool _newCommendation = true;
+
+		for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
 		{
 			if ( (*i)->getCommendationName() == _commendationName)
 			{
 				(*i)->addDecoration();
-			}
-			else
-			{
-				_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
+				_newCommendation = false;
+				break;
 			}
 		}
-	}
+		if (_newCommendation)
+		{
+			_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
+		}
+
 }
 
 /**
