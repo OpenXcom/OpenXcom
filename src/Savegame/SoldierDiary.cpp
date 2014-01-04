@@ -18,6 +18,8 @@
  */
 #include "SoldierDiary.h"
 #include "GameTime.h"
+#include "../Ruleset/RuleCommendations.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -34,7 +36,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Constructor
  */
-SoldierDiary::SoldierDiary() : _diaryEntries()
+SoldierDiary::SoldierDiary()
 {
 }
 
@@ -311,30 +313,40 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
  * Award new ones, if deserved.
  * @return bool Has a commendation been awarded?
  */
-bool SoldierDiary::manageCommendations()
+bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
-	std::string _commendationName;
+	std::vector<std::string> _commendationsList = rules->getCommendationList();
 	bool awardedCommendation = false;
+	int _decorationLevel = 0;
+	std::string _criteriaType;
+	int _criteriaThreshold;
 
-	/**
-	 * Merit Star - based on kill count.
-	 */
-	_commendationName = "STR_MEDAL_MERIT_STAR_NAME";
-	if (getKillTotal() > 0)
+	for (std::vector<std::string>::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{
-		awardCommendation(_commendationName);
-		awardedCommendation = true;
+		std::vector<std::pair<std::string, int> > *_commendationCriteria = rules->getCommendation(*i)->getCriteria();
+		_criteriaType = _commendationCriteria->at(_decorationLevel).first;
+		_criteriaThreshold = _commendationCriteria->at(_decorationLevel).second;
+
+		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
+		{
+			// Do we already have the commendation?
+			if ( (*i) == (*j)->getCommendationName() )
+			{
+				_decorationLevel = (*j)->getDecorationLevelInt();
+				_criteriaType = _commendationCriteria->at(_decorationLevel).first;
+				_criteriaThreshold = _commendationCriteria->at(_decorationLevel).second;
+			}
+		}
+
+		// Check to see if we can get a new commendation
+		if ( (_criteriaType == "total_kills" && getKillTotal() > _criteriaThreshold) ||
+			 (_criteriaType == "total_missions" && getMissionTotal() > _criteriaThreshold) )
+		{
+			awardCommendation((*i));
+			awardedCommendation = true;
+		}
 	}
 
-	/**
-	 * Military Cross - based on mission count.
-	 */
-	_commendationName = "STR_MEDAL_MILITARY_CROSS_NAME";
-	if (getMissionTotal() > 0)
-	{
-		awardCommendation(_commendationName);
-		awardedCommendation = true;
-	}
 	return awardedCommendation;
 }
 
@@ -365,6 +377,7 @@ void SoldierDiary::awardCommendation(std::string _commendationName)
 		{
 			_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
 		}
+	}
 
 }
 
@@ -697,6 +710,7 @@ SoldierCommendations::SoldierCommendations(const YAML::Node &node)
  */
 SoldierCommendations::SoldierCommendations(std::string commendationName, int decorationLevel, bool isNew) : _commendationName(commendationName), _decorationLevel(decorationLevel), _isNew(isNew)
 {
+	
 }
 
 /**

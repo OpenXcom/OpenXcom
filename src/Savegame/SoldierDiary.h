@@ -23,6 +23,8 @@
 #include <vector>
 #include <string>
 #include "GameTime.h"
+#include "../Ruleset/RuleCommendations.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -30,6 +32,8 @@ namespace OpenXcom
 enum AlienState {KILLED, STUNNED, UNCONCIOUS};
 
 class GameTime;
+class RuleCommendations;
+class Ruleset;
 
 /**
  * Each entry will have a list of kills, detailed by this class.
@@ -124,16 +128,20 @@ public:
 	int getDaysWounded() const;
 };
 
+/**
+ * Each entry will be its own commendation.
+ */
 class SoldierCommendations
 {
 private:
+	RuleCommendations *_rules;
 	std::string  _commendationName;
 	int  _decorationLevel;
 	bool _isNew;
 public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
-	/// Creates a commendation.
+	/// Creates a commendation of the specified type.
 	SoldierCommendations(std::string commendationName, int decorationLevel, bool isNew);
 	/// Cleans up the commendation.
 	~SoldierCommendations();
@@ -163,6 +171,7 @@ class SoldierDiary
 private:
 	std::vector<SoldierDiaryEntries*> _diaryEntries;
 	std::vector<SoldierCommendations*> _commendations;
+	RuleCommendations *_rules;
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
@@ -209,7 +218,7 @@ public:
 	/// Get commendations
 	std::vector<SoldierCommendations*> *getSoldierCommendations();
 	/// Manage commendations, true if a medal is awarded.
-	bool manageCommendations();
+	bool manageCommendations(Ruleset *rules);
 	/// Award commendations
 	void awardCommendation(std::string commendationName);
 };

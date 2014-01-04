@@ -807,6 +807,7 @@
     <ClCompile Include="Savegame\SoldierDiary.cpp" />
     <ClCompile Include="Basescape\SoldierDiaryKillsState.cpp" />
     <ClCompile Include="Battlescape\CommendationState.cpp" />
+    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basescape\ManufactureState.h">
@@ -1636,6 +1637,7 @@
     <ClInclude Include="Basescape\SoldierDiaryKillsState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Battlescape\CommendationState.h" />
+    <ClInclude Include="Ruleset\RuleCommendations.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

@@ -9285,3 +9285,24 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/reserve.png
+# Ruleset for diary and commendations mod
+# List of possible criteria:
+#   total_kills
+#   total_missions
+commendations:
+  - type: STR_MEDAL_MERIT_STAR_NAME
+    description: STR_MEDAL_MERIT_STAR_DESC
+    criteria:
+      total_kills: 1
+      total_kills: 2
+      total_kills: 3
+    bonus:
+      tu: 1
+  - type: STR_MILITARY_CROSS_NAME
+    description: STR_MILITARY_CROSS_DESC
+    criteria:
+      total_missions: 1
+      total_missions: 2
+      total_missions: 3
+    bonus:
+      tu: 1

@@ -423,6 +423,7 @@
     <ClCompile Include="Ruleset\MapData.cpp" />
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
+    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
     <ClCompile Include="Ruleset\Unit.cpp" />
     <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -702,6 +703,7 @@
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
+    <ClInclude Include="Ruleset\RuleCommendations.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />

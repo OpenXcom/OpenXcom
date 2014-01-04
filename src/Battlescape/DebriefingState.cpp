@@ -674,7 +674,7 @@ void DebriefingState::prepareDebriefing()
 					{
 						recoverItems((*j)->getInventory(), base);
 
-						if (soldier->getDiary()->manageCommendations())
+						if (soldier->getDiary()->manageCommendations(_game->getRuleset()))
 						{
 							_soldiersCommended.push_back(soldier);
 						}
