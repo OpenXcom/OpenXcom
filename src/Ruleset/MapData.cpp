@@ -140,8 +140,9 @@ bool MapData::isGravLift() const
  * @param isDoor True if this is a normal door.
  * @param blockFire True if this blocks fire.
  * @param blockSmoke True if this blocks smoke.
+ * @param baseModule True if this is a base module item.
  */
-void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
+void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke, bool baseModule)
 {
 	_isUfoDoor = isUfoDoor;
 	_stopLOS = stopLOS;
@@ -151,6 +152,7 @@ void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall
 	_isDoor = isDoor;
 	_blockFire = blockFire;
 	_blockSmoke = blockSmoke;
+	_baseModule = baseModule;
 }
 
 /**
@@ -516,5 +518,14 @@ void MapData::setTUFly(const int TUFly)
 void MapData::setTUSlide(const int TUSlide)
 {
 	_TUSlide = TUSlide;
+}
+
+/**
+ * check if this is an xcom base object.
+ * @return if it is a base object.
+ */
+bool MapData::isBaseModule()
+{
+	return _baseModule;
 }
 }

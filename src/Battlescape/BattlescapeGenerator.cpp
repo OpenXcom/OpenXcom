@@ -1852,7 +1852,7 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 		tile->setMapData(data, 0, 0, MapData::O_FLOOR);
 		tile->getMapData(MapData::O_FLOOR)->setSpecialType(START_POINT, 0);
 		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);
-		tile->getMapData(MapData::O_FLOOR)->setFlags(false, false, false, 0, false, false, false, false);
+		tile->getMapData(MapData::O_FLOOR)->setFlags(false, false, false, 0, false, false, false, false, false);
 	}
 
 	// ok now generate the battleitems for inventory
