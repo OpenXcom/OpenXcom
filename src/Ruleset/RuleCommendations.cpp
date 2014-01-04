@@ -40,12 +40,12 @@ RuleCommendations::~RuleCommendations()
  * Loads the commendations from YAML.
  * @param node YAML node.
  */
-void RuleCommendations::load(YAML::Node &node, int listOrder)
+void RuleCommendations::load(const YAML::Node &node, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_description = node["description"].as<std::string>(_description);
-	_criteria = node["critera"].as<std::vector<std::pair<std::string, int>*> >(_criteria);
-	_bonus = node["bonus"].as<std::vector<std::pair<std::string, int>*> >(_bonus);
+	_criteria = node["critera"].as<std::map<std::string, std::vector<int> > >(_criteria);
+	_bonus = node["bonus"].as<std::map<std::string, std::vector<int> > >(_bonus);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
@@ -84,18 +84,10 @@ std::string RuleCommendations::getDescription() const
  * Get commendation award criteria
  * @return map<string, int> Commendation criteria
  */
-std::vector<std::pair<std::string, int>*> *RuleCommendations::getCriteria()
+std::map<std::string, std::vector<int> > RuleCommendations::getCriteria() const
 {
 	return _criteria;
 }
 
-/**
- * Get commendation award bonuses
- * @return map<string, int> Commendation bonuses
- */
-std::vector<std::pair<std::string, int>*> *RuleCommendations::getBonus()
-{
-	return _bonus;
-}
 
 }

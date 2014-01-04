@@ -316,34 +316,43 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::vector<std::string> _commendationsList = rules->getCommendationList();
-	bool awardedCommendation = false;
+	bool awardedCommendation = true;
 	int _decorationLevel = 0;
 	std::string _criteriaType;
 	int _criteriaThreshold;
 
+	// Loop over all commendations
 	for (std::vector<std::string>::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
-	{
-		std::vector<std::pair<std::string, int> > *_commendationCriteria = rules->getCommendation(*i)->getCriteria();
-		_criteriaType = _commendationCriteria->at(_decorationLevel).first;
-		_criteriaThreshold = _commendationCriteria->at(_decorationLevel).second;
+	{	
+		// Each commendation has its own list of criteria
+		std::map<std::string, std::vector<int> > _commendationCriteria = rules->getCommendation(*i)->getCriteria();
 
+		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
 		{
 			// Do we already have the commendation?
 			if ( (*i) == (*j)->getCommendationName() )
 			{
 				_decorationLevel = (*j)->getDecorationLevelInt();
-				_criteriaType = _commendationCriteria->at(_decorationLevel).first;
-				_criteriaThreshold = _commendationCriteria->at(_decorationLevel).second;
+				break;
+			}
+		}
+		
+		// Loop over criteria
+		for(std::map<std::string, std::vector<int> >::const_iterator j = _commendationCriteria.begin(); j != _commendationCriteria.end(); ++j)
+		{
+			// If we don't have ANY of the following, that means we won't be awarded the commendation
+			if ( !((*j).first == "total_kills" && getKillTotal() >= (*j).second[_decorationLevel] ||
+				   (*j).first == "total_missions" && getMissionTotal() >= (*j).second[_decorationLevel]) )
+			{
+				awardedCommendation = false;
+				break;
 			}
 		}
 
-		// Check to see if we can get a new commendation
-		if ( (_criteriaType == "total_kills" && getKillTotal() > _criteriaThreshold) ||
-			 (_criteriaType == "total_missions" && getMissionTotal() > _criteriaThreshold) )
+		if (awardedCommendation)
 		{
-			awardCommendation((*i));
-			awardedCommendation = true;
+			awardCommendation(*i);
 		}
 	}
 
