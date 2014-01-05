@@ -188,7 +188,7 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleCommendations*>::iterator i = _commendations.begin(); i != _commendations.end(); ++i)
+	for (std::vector<std::pair<std::string, RuleCommendations *> >::iterator i = _commendations.begin(); i != _commendations.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -454,12 +454,11 @@ void Ruleset::loadFile(const std::string &filename)
 	}
 	for (YAML::const_iterator i = doc["commendations"].begin(); i != doc["commendations"].end(); ++i)
 	{
-		RuleCommendations *rule = loadRule(*i, &_commendations, &_commendationsIndex);
-		if (rule != 0)
-		{
-			_commendationsListOrder += 100;
-			rule->load(*i, _commendationsListOrder);
-		}
+		std::string type = (*i)["type"].as<std::string>();
+		std::auto_ptr<RuleCommendations> commendations(new RuleCommendations());
+		commendations->load(*i, _modIndex);
+		_commendations.push_back(std::make_pair(type, commendations.release()));
+		_commendationsIndex.push_back(type);
 	}
 
   // refresh _psiRequirements for psiStrengthEval
@@ -806,16 +805,12 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
 }
 
 /**
- * Returns the info about a specific commendation.
- * @param name Commendation name.
- * @return Rules for the commendation.
+ * Gets the list of commendations
+ * @return The list of commendations.
  */
-RuleCommendations *Ruleset::getCommendation(const std::string &name) const
+std::vector<std::pair<std::string, RuleCommendations *> > Ruleset::getCommendation() const
 {
-	if (_commendations.find(name) != _commendations.end())
-		return _commendations.find(name)->second;
-	else
-		return 0;
+	return _commendations;
 }
 
 /**

@@ -30,12 +30,12 @@ namespace OpenXcom
 class RuleCommendations
 {
 private:
-	std::string _type, _description;
-	std::vector<int> _total_kills, _total_missions;
+	std::map<std::string, std::vector<int> > _criteria;
+	std::string _description;
 	int _listOrder;
 public:
 	/// Creates a blank commendation ruleset.
-	RuleCommendations(const std::string &type);
+	RuleCommendations();
 	/// Cleans up the commendation ruleset.
 	~RuleCommendations();
 	/// Loads the unit data from YAML.
@@ -46,9 +46,9 @@ public:
 	std::string getName() const;
 	/// Get commendation description
 	std::string getDescription() const;
-	/// Get commendation award criteria for kills
-	std::vector<int> getTotalKills() const;
-	std::vector<int> getTotalMissions() const;
+	/// Get commendation award criteria
+	std::map<std::string, std::vector<int> > *getCriteria();
+
 };
 
 }

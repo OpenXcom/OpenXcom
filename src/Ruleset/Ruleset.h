@@ -90,7 +90,7 @@ protected:
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, MCDPatch *> _MCDPatches;
-	std::map<std::string, RuleCommendations*> _commendations;
+	std::vector<std::pair<std::string, RuleCommendations *> > _commendations;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
@@ -157,7 +157,7 @@ public:
 	/// Gets soldier unit rules.
 	RuleSoldier *getSoldier(const std::string &name) const;
 	/// Gets commendation rules.
-	RuleCommendations *getCommendation(const std::string &name) const;
+	std::vector<std::pair<std::string, RuleCommendations *> > getCommendation() const;
     /// Gets the available commendations.
 	const std::vector<std::string> &getCommendationList() const;
 	/// Gets generated unit rules.
