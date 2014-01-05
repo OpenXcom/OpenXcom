@@ -236,6 +236,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 		{
 			(*j)->getGeoscapeSoldier()->getDiary()->addSoldierDiaryEntry(_missionTime, _missionRegion, _missionCountry, _missionType, _missionUFO, (*j)->getGeoscapeSoldier()->getTempKills(), _missionSuccess, _missionScore, _missionRating, _missionRace, _missionDaylight, (*j)->getGeoscapeSoldier()->getWoundRecovery());
 			(*j)->getGeoscapeSoldier()->clearTempKills();
+			if ((*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+			{
+				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
+			}
 		}
 	}
 
@@ -673,11 +677,6 @@ void DebriefingState::prepareDebriefing()
 					if (soldier != 0)
 					{
 						recoverItems((*j)->getInventory(), base);
-
-						if (soldier->getDiary()->manageCommendations(_game->getRuleset()))
-						{
-							_soldiersCommended.push_back(soldier);
-						}
 					}
 					else
 					{ // non soldier player = tank

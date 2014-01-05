@@ -316,16 +316,21 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::vector<std::string> _commendationsList = rules->getCommendationList();
-	bool awardedCommendation = true;
+	bool awardedCommendation = false;
 	int _decorationLevel = 0;
-	std::string _criteriaType;
-	int _criteriaThreshold;
+	std::vector<int> _total_kills, _total_missions;
 
 	// Loop over all commendations
 	for (std::vector<std::string>::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
+		_total_kills.clear();
+		_total_missions.clear();
+
 		// Each commendation has its own list of criteria
-		std::map<std::string, std::vector<int> > _commendationCriteria = rules->getCommendation(*i)->getCriteria();
+		if (!rules->getCommendation(*i)->getTotalKills().empty())
+			_total_kills = rules->getCommendation(*i)->getTotalKills();
+		if (!rules->getCommendation(*i)->getTotalMissions().empty())
+			_total_missions = rules->getCommendation(*i)->getTotalMissions();
 
 		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
@@ -333,27 +338,25 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			// Do we already have the commendation?
 			if ( (*i) == (*j)->getCommendationName() )
 			{
-				_decorationLevel = (*j)->getDecorationLevelInt();
-				break;
-			}
-		}
-		
-		// Loop over criteria
-		for(std::map<std::string, std::vector<int> >::const_iterator j = _commendationCriteria.begin(); j != _commendationCriteria.end(); ++j)
-		{
-			// If we don't have ANY of the following, that means we won't be awarded the commendation
-			if ( !((*j).first == "total_kills" && getKillTotal() >= (*j).second[_decorationLevel] ||
-				   (*j).first == "total_missions" && getMissionTotal() >= (*j).second[_decorationLevel]) )
-			{
-				awardedCommendation = false;
+				_decorationLevel = (*j)->getDecorationLevelInt() + 1;
 				break;
 			}
 		}
 
-		if (awardedCommendation)
+		// Go through each possible criteria
+		// If there is a criteria (not empty) AND the soldier does not match it, then he does not get the medal, full stop.
+		if ( !_total_kills.empty() && _total_kills.size() != _decorationLevel && getKillTotal() < _total_kills[_decorationLevel] )
 		{
-			awardCommendation(*i);
+			continue;
+		} 
+		else if ( !_total_missions.empty() && _total_missions.size() != _decorationLevel && getMissionTotal() < _total_missions[_decorationLevel] )
+		{
+			continue;
 		}
+
+		// If the code has made it this far, this soldier deserves a medal!
+		awardCommendation(*i);
+		awardedCommendation = true;
 	}
 
 	return awardedCommendation;

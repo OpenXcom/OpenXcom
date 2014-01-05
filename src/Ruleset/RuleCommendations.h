@@ -31,8 +31,7 @@ class RuleCommendations
 {
 private:
 	std::string _type, _description;
-	std::map<std::string, std::vector<int> > _criteria;
-	std::map<std::string, std::vector<int> > _bonus;
+	std::vector<int> _total_kills, _total_missions;
 	int _listOrder;
 public:
 	/// Creates a blank commendation ruleset.
@@ -47,8 +46,9 @@ public:
 	std::string getName() const;
 	/// Get commendation description
 	std::string getDescription() const;
-	/// Get commendation award criteria
-	std::map<std::string, std::vector<int> > getCriteria() const;
+	/// Get commendation award criteria for kills
+	std::vector<int> getTotalKills() const;
+	std::vector<int> getTotalMissions() const;
 };
 
 }

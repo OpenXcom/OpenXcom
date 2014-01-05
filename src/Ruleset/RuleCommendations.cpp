@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of extra sprite data.
  */
-RuleCommendations::RuleCommendations(const std::string &type) : _type(type), _description(""), _criteria(), _bonus(), _listOrder(0)
+RuleCommendations::RuleCommendations(const std::string &type) : _type(type), _description(""), _total_kills(), _listOrder(0)
 {
 }
 
@@ -44,8 +44,8 @@ void RuleCommendations::load(const YAML::Node &node, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_description = node["description"].as<std::string>(_description);
-	_criteria = node["critera"].as<std::map<std::string, std::vector<int> > >(_criteria);
-	_bonus = node["bonus"].as<std::map<std::string, std::vector<int> > >(_bonus);
+	_total_kills = node["total_kills"].as<std::vector<int> >(_total_kills);
+	_total_missions = node["total_missions"].as<std::vector<int> >(_total_missions);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
@@ -84,10 +84,14 @@ std::string RuleCommendations::getDescription() const
  * Get commendation award criteria
  * @return map<string, int> Commendation criteria
  */
-std::map<std::string, std::vector<int> > RuleCommendations::getCriteria() const
+std::vector<int> RuleCommendations::getTotalKills() const
 {
-	return _criteria;
+	return _total_kills;
 }
 
+std::vector<int> RuleCommendations::getTotalMissions() const
+{
+	return _total_missions;
+}
 
 }
