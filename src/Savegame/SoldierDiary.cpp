@@ -355,7 +355,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 		}
 
 		// If the code has made it this far, this soldier deserves a medal!
-		awardCommendation(*i);
+		awardCommendation((*i), rules->getCommendation(*i)->getDescription());
 		awardedCommendation = true;
 	}
 
@@ -366,11 +366,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
  * Award commendations to the soldier.
  * @param string Commendation Name.
  */
-void SoldierDiary::awardCommendation(std::string _commendationName)
+void SoldierDiary::awardCommendation(std::string _commendationName, std::string _commendationDescription)
 {
 	if (_commendations.empty())
 	{
-		_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
+		_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, 0, true));
 	}
 	else
 	{
@@ -387,7 +387,7 @@ void SoldierDiary::awardCommendation(std::string _commendationName)
 		}
 		if (_newCommendation)
 		{
-			_commendations.push_back(new SoldierCommendations(_commendationName, 0, true));
+			_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, 0, true));
 		}
 	}
 
@@ -720,7 +720,7 @@ SoldierCommendations::SoldierCommendations(const YAML::Node &node)
 /**
  * Initializes a soldier commendation.
  */
-SoldierCommendations::SoldierCommendations(std::string commendationName, int decorationLevel, bool isNew) : _commendationName(commendationName), _decorationLevel(decorationLevel), _isNew(isNew)
+SoldierCommendations::SoldierCommendations(std::string commendationName, std::string commendationDescription, int decorationLevel, bool isNew) : _commendationName(commendationName), _commendationDescription(commendationDescription), _decorationLevel(decorationLevel), _isNew(isNew)
 {
 	
 }
@@ -739,6 +739,7 @@ SoldierCommendations::~SoldierCommendations()
 void SoldierCommendations::load(const YAML::Node &node)
 {
 	_commendationName = node["commendationName"].as<std::string>(_commendationName);
+	_commendationDescription = node["commendationDescription"].as<std::string>(_commendationDescription);
 	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
 	_isNew = node["isNew"].as<bool>(_isNew);
 }
@@ -751,6 +752,7 @@ YAML::Node SoldierCommendations::save() const
 {
 	YAML::Node node;
 	node["commendationName"] = _commendationName;
+	node["commendationDescription"] = _commendationDescription;
 	node["decorationLevel"] = _decorationLevel;
 	node["isNew"] = _isNew;
 	return node;
@@ -763,6 +765,15 @@ YAML::Node SoldierCommendations::save() const
 std::string SoldierCommendations::getCommendationName() const
 {
 	return _commendationName;
+}
+
+/**
+ * Get the soldier's commendation's description.
+ * @return string Commendation description.
+ */
+std::string SoldierCommendations::getCommendationDescription() const
+{
+	return _commendationDescription;
 }
 
 /**

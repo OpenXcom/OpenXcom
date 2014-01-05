@@ -45,11 +45,11 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon;
 	Text *_txtLocation, *_txtType, *_txtUFO;
-	Text *_txtMedalName, *_txtMedalLevel;
+	Text *_txtMedalName, *_txtMedalLevel, *_txtMedalInfo;
 	TextList *_lstRank, *_lstRace, *_lstWeapon, *_lstKillTotals;
 	TextList *_lstLocation, *_lstType, *_lstUFO, *_lstMissionTotals;
 	TextList *_lstCommendations;
-	std::vector<int> _commendationsListEntry;
+	std::vector<std::string> _commendationsListEntry;
 
 	int _display; // 0 displays kills, 1 displays missions, 2 displays commendations
 	bool _displayKills, _displayMissions, _displayCommendations;

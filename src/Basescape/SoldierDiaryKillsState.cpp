@@ -92,8 +92,9 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstMissionTotals = new TextList(296, 9, 8, 167);
     // Commendation stats
     _txtMedalName = new Text(90, 18, 16, 36);
-    _txtMedalLevel = new Text(90, 18, 222, 36);
-    _lstCommendations = new TextList(272, 140, 16, 52);
+    _txtMedalLevel = new Text(90, 18, 216, 36);
+	_txtMedalInfo = new Text(280, 32, 20, 150);
+    _lstCommendations = new TextList(272, 100, 16, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -122,6 +123,7 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	add(_lstMissionTotals);
     add(_txtMedalName);
     add(_txtMedalLevel);
+	add(_txtMedalInfo);
     add(_lstCommendations);
 
 	centerAllSurfaces();
@@ -240,10 +242,16 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
 	_txtMedalLevel->setWordWrap(true);
 
+	_txtMedalInfo->setColor(Palette::blockOffset(13)+10);
+	_txtMedalInfo->setWordWrap(true);
+
 	_lstCommendations->setColor(Palette::blockOffset(13)+10);
 	_lstCommendations->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCommendations->setColumns(2, 206, 74);
+	_lstCommendations->setColumns(2, 200, 80);
+	_lstCommendations->setSelectable(true);
 	_lstCommendations->setBackground(_window);
+	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOver);
+	_lstCommendations->onMouseOut((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOut);
 
 	init(); // Populate the list
 }
@@ -281,6 +289,7 @@ void SoldierDiaryKillsState::init()
 	// Set visibility for commendations
     _txtMedalName->setVisible(_displayCommendations);
     _txtMedalLevel->setVisible(_displayCommendations);
+	_txtMedalInfo->setVisible(_displayCommendations);
     _lstCommendations->setVisible(_displayCommendations);
 	// Set visibility for buttons
 	_btnKills->setVisible(!_displayKills);
@@ -296,6 +305,7 @@ void SoldierDiaryKillsState::init()
 	int _daysWoundedTotal = s->getDiary()->getDaysWoundedTotal();
 	_lstKillTotals->clearList();
 	_lstMissionTotals->clearList();
+	_commendationsListEntry.clear();
 	_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_killTotal).c_str(), tr("STR_STUNS").arg(_stunTotal).c_str());
 	_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_missionTotal).c_str(), tr("STR_WINS").arg(_winTotal).c_str(), tr("STR_SCORE_VALUE").arg(_scoreTotal).c_str(), tr("STR_DAYS_WOUNDED").arg(_daysWoundedTotal).c_str());
 
@@ -376,6 +386,8 @@ void SoldierDiaryKillsState::init()
 		ss1 << tr((*i)->getCommendationName().c_str());
 		ss2 << tr((*i)->getDecorationDescription().c_str());
 		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
+
+		_commendationsListEntry.push_back((*i)->getCommendationDescription());
 	}
 }
 
@@ -446,4 +458,31 @@ void SoldierDiaryKillsState::btnCommendationsToggle(Action *)
     _displayCommendations = true;
 	init();
 }
+
+/*
+ *
+ */
+void SoldierDiaryKillsState::lstInfoMouseOver(Action *)
+{
+	size_t _sel;
+	_sel = _lstCommendations->getSelectedRow();
+
+	if ( _commendationsListEntry.empty() || _sel > _commendationsListEntry.size() - 1)
+	{
+		_txtMedalInfo->setText(L"");
+	}
+	else 
+	{
+		_txtMedalInfo->setText(tr(_commendationsListEntry[_sel]));
+	}
+}
+
+/*
+ *  Clears the Medal information
+ */
+void SoldierDiaryKillsState::lstInfoMouseOut(Action *)
+{
+	_txtMedalInfo->setText(L"");
+}
+
 }

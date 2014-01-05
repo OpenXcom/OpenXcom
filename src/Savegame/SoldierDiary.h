@@ -135,14 +135,14 @@ class SoldierCommendations
 {
 private:
 	RuleCommendations *_rules;
-	std::string  _commendationName;
+	std::string  _commendationName, _commendationDescription;
 	int  _decorationLevel;
 	bool _isNew;
 public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
 	/// Creates a commendation of the specified type.
-	SoldierCommendations(std::string commendationName, int decorationLevel, bool isNew);
+	SoldierCommendations(std::string commendationName, std::string commendationDescription, int decorationLevel, bool isNew);
 	/// Cleans up the commendation.
 	~SoldierCommendations();
 	/// Loads the commendation information from YAML.
@@ -151,6 +151,8 @@ public:
 	YAML::Node save() const;
 	/// Get commendation name.
 	std::string getCommendationName() const;
+	/// Get commendation description.
+	std::string getCommendationDescription() const;
 	/// Get the commendation's decoration level's name.
 	std::string getDecorationLevelName();
 	/// Get the commendation's decoration description.
@@ -220,7 +222,7 @@ public:
 	/// Manage commendations, true if a medal is awarded.
 	bool manageCommendations(Ruleset *rules);
 	/// Award commendations
-	void awardCommendation(std::string commendationName);
+	void awardCommendation(std::string commendationName, std::string commendationDescription);
 };
 
 }
