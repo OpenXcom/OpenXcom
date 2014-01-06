@@ -316,35 +316,35 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::vector<std::pair<std::string, RuleCommendations *> > _commendationsList = rules->getCommendation();
-	std::vector<std::string> _commendationsList_2 = rules->getCommendationList();
-	bool awardedCommendation = true;
-	int _decorationLevel = 0;
-	std::vector<int> _total_kills, _total_missions;
+	bool awardedCommendation;
+	int _nextCommendationLevel;
 
 	// Loop over all commendations
 	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
-		
+		_nextCommendationLevel = 0;
+		awardedCommendation = true;
+
 		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
 		{
 			// Do we already have the commendation?
 			if ( (*i).first == (*j)->getCommendationName() )
 			{
-				_decorationLevel = (*j)->getDecorationLevelInt() + 1;
+				_nextCommendationLevel = (*j)->getDecorationLevelInt() + 1;
 				break;
 			}
 		}
 
 		// Go through each possible criteria
-		std::map<std::string, std::vector<int> > *_criteria = (*i).second->getCriteria();
-		
-		for (std::map<std::string, std::vector<int> >::const_iterator j = _criteria->begin(); j != _criteria->end(); ++j)
+		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
-			if ( !((*j).first == "total_kills" && getKillTotal() >= (*j).second.at(_decorationLevel)) && 
-				 !((*j).first == "total_missions" && getMissionTotal() >= (*j).second.at(_decorationLevel)) )
+			// if I am dealing with ___ and I DON'T make the requirements... then no
+			if ( ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel)) ||
+				 ((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel)))
 			{
 				awardedCommendation = false;
+				break;
 			}
 		}
 
