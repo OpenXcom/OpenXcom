@@ -193,6 +193,8 @@ public:
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.
 	std::vector<Vehicle*> *getVehicles();
+	/// destroy a facility and deal with the side effects.
+	void destroyFacility(std::vector<BaseFacility*>::iterator &facility);
 };
 
 }

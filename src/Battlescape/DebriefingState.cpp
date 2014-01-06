@@ -52,6 +52,7 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
+#include "../Savegame/BaseFacility.h"
 #include <sstream>
 #include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
@@ -411,7 +412,7 @@ void DebriefingState::prepareDebriefing()
 			base->setInBattlescape(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
 				{
 					_region = (*k);
 					break;
@@ -419,7 +420,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*k)->getRules()->insideCountry(base->getLongitude(), base->getLatitude()))
 				{
 					_country = (*k);
 					break;
@@ -428,6 +429,18 @@ void DebriefingState::prepareDebriefing()
 			if (aborted)
 			{
 				_destroyBase = true;
+			}
+			for (std::vector<BaseFacility*>::iterator k = base->getFacilities()->begin(); k != base->getFacilities()->end();)
+			{
+				// this facility was demolished
+				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
+				{
+					base->destroyFacility(k);
+				}
+				else
+				{
+					++k;
+				}
 			}
 		}
 	}
