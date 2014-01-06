@@ -323,6 +323,8 @@ void BattlescapeGenerator::run()
 		{
 			_save->getTiles()[i]->setDiscovered(true, 2);
 		}
+
+		_save->calculateModuleMap();
 	}
 
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")

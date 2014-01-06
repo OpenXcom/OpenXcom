@@ -170,7 +170,19 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			r += serKey.totalBytes-serKey.index; // r is now incremented strictly by totalBytes in case there are obsolete fields present in the data
 		}
 	}
-
+	if (_missionType == "STR_BASE_DEFENSE")
+	{
+		if (node["moduleMap"])
+		{
+			_baseModules = node["moduleMap"].as<std::vector< std::vector<std::pair<int, int> > > >();
+		}
+		else
+		{
+			// backwards compatibility: imperfect solution, modules that were completely destroyed
+			// prior to saving and updating builds will be counted as indestructible.
+			calculateModuleMap();
+		}
+	}
 	for (YAML::const_iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
 	{
 		Node *n = new Node();
@@ -394,6 +406,10 @@ YAML::Node SavedBattleGame::save() const
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		node["nodes"].push_back((*i)->save());
+	}
+	if (_missionType == "STR_BASE_DEFENSE")
+	{
+		node["moduleMap"] = _baseModules;
 	}
 	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
 	{
@@ -1756,4 +1772,37 @@ void SavedBattleGame::setKneelReserved(bool reserved)
 	_kneelReserved = reserved;
 }
 
+/**
+ * Return a reference to the base module destruction map
+ * this map contains information on how many destructible base modules
+ * remain at any given grid reference in the basescape, using [x][y] format.
+ * -1 for "no items" 0 for "destroyed" and any actual number represents how many left.
+ * @Return the base module damage map.
+ */
+std::vector< std::vector<std::pair<int, int> > > &SavedBattleGame::getModuleMap()
+{
+	return _baseModules;
+}
+/**
+ * calculate the number of map modules remaining by counting the map objects
+ * on the top floor who have the baseModule flag set. we store this data in the grid
+ * as outlined in the comments above, in pairs representing intial and current values.
+ */
+void SavedBattleGame::calculateModuleMap()
+{
+	_baseModules.resize((_mapsize_x / 10), std::vector<std::pair<int, int> >((_mapsize_y / 10), std::make_pair(-1, -1)));
+
+	for (int x = 0; x != _mapsize_x; ++x)
+	{
+		for (int y = 0; y != _mapsize_y; ++y)
+		{
+			Tile *tile = getTile(Position(x,y,_mapsize_z-1));
+			if (tile && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->isBaseModule())
+			{
+				_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
+				_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;
+			}
+		}
+	}
+}
 }

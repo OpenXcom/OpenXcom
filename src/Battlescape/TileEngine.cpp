@@ -1008,6 +1008,13 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 25% to 75%
 		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+		if (part == V_OBJECT && _save->getMissionType() == "STR_BASE_DEFENSE")
+		{
+			if (rndPower >= tile->getMapData(MapData::O_OBJECT)->getArmor() && tile->getMapData(V_OBJECT)->isBaseModule())
+			{
+				_save->getModuleMap()[(center.x/16)/10][(center.y/16)/10].second--;
+			}
+		}
 		if (tile->damage(part, rndPower))
 			_save->setObjectiveDestroyed(true);
 	}
@@ -1347,6 +1354,11 @@ bool TileEngine::detonate(Tile* tile)
 							{
 								tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
 							}
+						}
+
+						if (_save->getMissionType() == "STR_BASE_DEFENSE" && i == 6 && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(V_OBJECT)->isBaseModule())
+						{
+							_save->getModuleMap()[tile->getPosition().x/10][tile->getPosition().y/10].second--;
 						}
 						if (tiles[i]->destroy(parts[i]))
 						{

@@ -78,6 +78,7 @@ private:
 	std::vector<Position> _tileSearch, _storageSpace;
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
+	std::vector< std::vector<std::pair<int, int> > > _baseModules;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -258,6 +259,11 @@ public:
 	std::vector<Position> &getStorageSpace();
 	/// move all the leftover items to random locations in the storage tiles vector.
 	void randomizeItemLocations(Tile *t);
+	/// get a reference to the baseModules map.
+	std::vector< std::vector<std::pair<int, int> > > &getModuleMap();
+	/// calculate the number of map modules remaining
+	void calculateModuleMap();
+
 };
 
 }

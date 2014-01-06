@@ -453,7 +453,10 @@ void AlienBAIState::setupPatrol()
 		else if (_unit->getArmor()->getSize() == 1)
 		{
 			// can i shoot an object?
-			if (_fromNode->isTarget() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
+			if (_fromNode->isTarget() &&
+				_unit->getMainHandWeapon() &&
+				_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
+				_save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
 				// scan this room for objects to destroy
 				int x = (_unit->getPosition().x/10)*10;
@@ -462,7 +465,7 @@ void AlienBAIState::setupPatrol()
 				for (int j = y; j < y+9; j++)
 				{
 					MapData *md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
-					if (md && md->getDieMCD() && md->getArmor() < 60 )
+					if (md && md->isBaseModule())
 					{
 						_patrolAction->actor = _unit;
 						_patrolAction->target = Position(i, j, 1);
