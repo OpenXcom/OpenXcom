@@ -1232,6 +1232,123 @@ std::vector<Vehicle*> *Base::getVehicles()
 {
 	return &_vehicles;
 }
+/**
+ * check that all the base modules are connected in some way to the elevator.
+ * if they are disconnected somehow, destroy them.
+ */
+void Base::checkModuleConnections()
+{
+	BaseFacility *connectionMap[BASE_SIZE][BASE_SIZE];
+	for (int x = 0; x != BASE_SIZE; ++x)
+	{
+		for (int y = 0; y != BASE_SIZE; ++y)
+		{
+			connectionMap[x][y] = 0;
+		}
+	}
+
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		for (int x = 0; x != (*i)->getRules()->getSize(); ++x)
+		{
+			for (int y = 0; y != (*i)->getRules()->getSize(); ++y)
+			{
+				connectionMap[(*i)->getX() + x][(*i)->getY() + y] = *i;
+			}
+		}
+	}
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end();)
+	{
+		if (!checkConnected((*i)->getX(), (*i)->getY(), 0, connectionMap))
+		{
+			for (int x = 0; x != (*i)->getRules()->getSize(); ++x)
+			{
+				for (int y = 0; y != (*i)->getRules()->getSize(); ++y)
+				{
+					connectionMap[(*i)->getX() + x][(*i)->getY() + y] = 0;
+				}
+			}
+			destroyFacility(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+/**
+ * checks individual modules for connectivity to the elevator, essentially by pathfinding
+ * thank god the base is only 6x6, or this could get out of hand.
+ * @param x, y coordinates on the grid.
+ * @param grid this is defined within the function to keep track of which modules have been checked.
+ * @param facilities similar to the grid, but instead it contains a grid full of pointers.
+ * @return if this facility is connected.
+ */
+bool Base::checkConnected(int x, int y, int **grid, BaseFacility *(&facilities)[BASE_SIZE][BASE_SIZE]) const
+{
+
+	bool newgrid = (grid == 0);
+
+	// Create connection grid
+	if (newgrid)
+	{
+		grid = new int*[BASE_SIZE];
+
+		for (int xx = 0; xx < BASE_SIZE; ++xx)
+		{
+			grid[xx] = new int[BASE_SIZE];
+			for (int yy = 0; yy < BASE_SIZE; ++yy)
+			{
+				if (facilities[xx][yy] == 0)
+				{
+					grid[xx][yy] = -1;
+				}
+				else
+				{
+					grid[xx][yy] = 0;
+				}
+			}
+		}
+	}
+
+	// outside map, or already checked.
+	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE || grid[x][y] != 0)
+	{
+		return false;
+	}
+
+	// Add connected (neighbor) facilities to grid
+	int total = 1;
+	grid[x][y]++;
+	bool retVal = facilities[x][y]->getRules()->isLift();
+
+	// check neighbouring slots for a facility
+	for (int i = -1; i < 2 && !retVal; i += 2)
+	{
+		if (!retVal && x + i >= 0 && facilities[x+i][y] != 0)
+		{
+			retVal = checkConnected(x + i, y, grid, facilities);
+		}
+		if (!retVal && y + i >= 0 && facilities[x][y + i] != 0)
+		{
+			retVal = checkConnected(x, y + i, grid, facilities);
+		}
+	}
+
+	// Delete connection grid
+	if (newgrid)
+	{
+		for (int xx = 0; xx < BASE_SIZE; ++xx)
+		{
+			delete[] grid[xx];
+		}
+		delete[] grid;
+	}
+
+	return retVal;
+}
+
 
 /**
  * removes a base module, and deals with the ramifications thereof
