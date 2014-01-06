@@ -914,7 +914,6 @@ facilities:
     monthlyCost: 30000
     labs: 50
     mapName: XBASE_02
-    destructible: true
   - type: STR_WORKSHOP
     spriteShape: 1
     spriteFacility: 20
@@ -923,7 +922,6 @@ facilities:
     monthlyCost: 35000
     workshops: 50
     mapName: XBASE_03
-    destructible: true
   - type: STR_SMALL_RADAR_SYSTEM
     spriteShape: 2
     spriteFacility: 21
@@ -933,7 +931,6 @@ facilities:
     radarRange: 1500
     radarChance: 10
     mapName: XBASE_04
-    destructible: true
   - type: STR_LARGE_RADAR_SYSTEM
     spriteShape: 1
     spriteFacility: 22
@@ -943,7 +940,6 @@ facilities:
     radarRange: 2250
     radarChance: 20
     mapName: XBASE_05
-    destructible: true
   - type: STR_MISSILE_DEFENSES
     spriteShape: 2
     spriteFacility: 23
@@ -955,7 +951,6 @@ facilities:
     fireSound: 5
     hitSound: 10
     mapName: XBASE_06
-    destructible: true
   - type: STR_GENERAL_STORES
     spriteShape: 1
     spriteFacility: 24
@@ -985,7 +980,6 @@ facilities:
     fireSound: 8
     hitSound: 10
     mapName: XBASE_09
-    destructible: true
   - type: STR_PLASMA_DEFENSES
     requires:
       - STR_PLASMA_DEFENSE
@@ -999,7 +993,6 @@ facilities:
     fireSound: 9
     hitSound: 10
     mapName: XBASE_10
-    destructible: true
   - type: STR_FUSION_BALL_DEFENSES
     requires:
       - STR_FUSION_DEFENSE
@@ -1013,7 +1006,6 @@ facilities:
     fireSound: 7
     hitSound: 10
     mapName: XBASE_11
-    destructible: true
   - type: STR_GRAV_SHIELD
     requires:
       - STR_GRAV_SHIELD
@@ -1024,7 +1016,6 @@ facilities:
     buildTime: 38
     monthlyCost: 15000
     mapName: XBASE_12
-    destructible: true
   - type: STR_MIND_SHIELD
     requires:
       - STR_MIND_SHIELD
@@ -1035,7 +1026,6 @@ facilities:
     buildTime: 33
     monthlyCost: 5000
     mapName: XBASE_13
-    destructible: true
   - type: STR_PSIONIC_LABORATORY
     requires:
       - STR_PSI_LAB
@@ -1046,7 +1036,6 @@ facilities:
     monthlyCost: 16000
     psiLabs: 10
     mapName: XBASE_14
-    destructible: true
   - type: STR_HYPER_WAVE_DECODER
     requires:
       - STR_HYPER_WAVE_DECODER
@@ -1059,7 +1048,6 @@ facilities:
     radarRange: 2400
     radarChance: 100
     mapName: XBASE_15
-    destructible: true
   - type: STR_HANGAR
     spriteShape: 9
     spriteFacility: 9
