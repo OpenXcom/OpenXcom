@@ -313,29 +313,21 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
  */
 void SoldierDiary::awardCommendation(std::string _commendationName, std::string _commendationDescription)
 {
-	if (_commendations.empty())
+	bool _newCommendation = true;
+
+	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
+	{
+		if ( (*i)->getCommendationName() == _commendationName)
+		{
+			(*i)->addDecoration();
+			_newCommendation = false;
+			break;
+		}
+	}
+	if (_newCommendation)
 	{
 		_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, 0, true));
 	}
-	else
-	{
-		bool _newCommendation = true;
-
-		for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
-		{
-			if ( (*i)->getCommendationName() == _commendationName)
-			{
-				(*i)->addDecoration();
-				_newCommendation = false;
-				break;
-			}
-		}
-		if (_newCommendation)
-		{
-			_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, 0, true));
-		}
-	}
-
 }
 
 /**
