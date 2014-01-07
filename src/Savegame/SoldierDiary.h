@@ -174,6 +174,8 @@ private:
 	std::vector<SoldierDiaryEntries*> _diaryEntries;
 	std::vector<SoldierCommendations*> _commendations;
 	RuleCommendations *_rules;
+	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
+	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal;
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
@@ -189,6 +191,8 @@ public:
 	std::vector<SoldierDiaryEntries*> getSoldierDiaryEntries();
 	/// Add an entry to the diary
 	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded);
+	/// Update the diary statistics
+	void updateDiary();
 	/// Get
 	std::map<std::string, int> getAlienRankTotal() const;
 	/// Get

@@ -103,20 +103,41 @@ void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missio
 }
 
 /**
+ * Updated soldier diary statistics
+ */
+void SoldierDiary::updateDiary()
+{
+	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
+	{
+		for (std::vector<SoldierDiaryKills*>::const_iterator j = (*i)->getMissionKills().begin() ; j != (*i)->getMissionKills().end() ; ++j)
+		{
+			_alienRankTotal[(*j)->getAlienRank().c_str()]++;
+			_alienRaceTotal[(*j)->getAlienRace().c_str()]++;
+			_weaponTotal[(*j)->getWeapon().c_str()]++;
+			_weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
+		}
+        _regionTotal[(*i)->getMissionRegion().c_str()]++;
+        _countryTotal[(*i)->getMissionCountry().c_str()]++;
+        _typeTotal[(*i)->getMissionType().c_str()]++;
+        _UFOTotal[(*i)->getMissionUFO().c_str()]++;
+        _scoreTotal += (*i)->getMissionScore();
+        _killTotal += (*i)->getMissionKillTotal();
+        _missionTotal = _diaryEntries.size();
+        if ((*i)->getMissionSuccess())
+        {
+            _winTotal++;
+        }
+        _stunTotal += (*i)->getMissionStunTotal();
+        _daysWoundedTotal += (*i)->getDaysWounded();
+	}
+}
+
+/**
  *
  */
 std::map<std::string, int> SoldierDiary::getAlienRankTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		std::vector<SoldierDiaryKills*> _killList = (*i)->getMissionKills();
-		for (std::vector<SoldierDiaryKills*>::const_iterator j = _killList.begin() ; j != _killList.end() ; ++j)
-		{
-			_list[(*j)->getAlienRank().c_str()]++;
-		}
-	}
-	return _list;
+	return _alienRankTotal;
 }
 
 /**
@@ -124,16 +145,7 @@ std::map<std::string, int> SoldierDiary::getAlienRankTotal() const
  */
 std::map<std::string, int> SoldierDiary::getAlienRaceTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		std::vector<SoldierDiaryKills*> _killList = (*i)->getMissionKills();
-		for (std::vector<SoldierDiaryKills*>::iterator j = _killList.begin() ; j != _killList.end() ; ++j)
-		{
-			_list[(*j)->getAlienRace().c_str()]++;
-		}
-	}
-	return _list;
+	return _alienRaceTotal;
 }
 
 /**
@@ -141,16 +153,7 @@ std::map<std::string, int> SoldierDiary::getAlienRaceTotal() const
  */
 std::map<std::string, int> SoldierDiary::getWeaponTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		std::vector<SoldierDiaryKills*> _killList = (*i)->getMissionKills();
-		for (std::vector<SoldierDiaryKills*>::const_iterator j = _killList.begin() ; j != _killList.end() ; ++j)
-		{
-			_list[(*j)->getWeapon().c_str()]++;
-		}
-	}
-	return _list;
+	return _weaponTotal;
 }
 
 /**
@@ -158,16 +161,7 @@ std::map<std::string, int> SoldierDiary::getWeaponTotal() const
  */
 std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		std::vector<SoldierDiaryKills*> _killList = (*i)->getMissionKills();
-		for (std::vector<SoldierDiaryKills*>::const_iterator j = _killList.begin() ; j != _killList.end() ; ++j)
-		{
-			_list[(*j)->getWeaponAmmo().c_str()]++;
-		}
-	}
-	return _list;
+	return _weaponAmmoTotal;
 }
 
 
@@ -176,12 +170,7 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal() const
  */
 std::map<std::string, int> SoldierDiary::getRegionTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_list[(*i)->getMissionRegion().c_str()]++;
-	}
-	return _list;
+	return _regionTotal;
 }
 
 /**
@@ -189,12 +178,7 @@ std::map<std::string, int> SoldierDiary::getRegionTotal() const
  */
 std::map<std::string, int> SoldierDiary::getCountryTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_list[(*i)->getMissionCountry().c_str()]++;
-	}
-	return _list;
+	return _countryTotal;
 }
 
 /**
@@ -202,12 +186,7 @@ std::map<std::string, int> SoldierDiary::getCountryTotal() const
  */
 std::map<std::string, int> SoldierDiary::getTypeTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_list[(*i)->getMissionType().c_str()]++;
-	}
-	return _list;
+	return _typeTotal;
 }
 
 /**
@@ -215,12 +194,7 @@ std::map<std::string, int> SoldierDiary::getTypeTotal() const
  */
 std::map<std::string, int> SoldierDiary::getUFOTotal() const
 {
-	std::map<std::string, int> _list;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_list[(*i)->getMissionUFO().c_str()]++;
-	}
-	return _list;
+	return _UFOTotal;
 }
 
 /**
@@ -228,11 +202,6 @@ std::map<std::string, int> SoldierDiary::getUFOTotal() const
  */
 int SoldierDiary::getScoreTotal() const
 {
-	int _scoreTotal = 0;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_scoreTotal += (*i)->getMissionScore();
-	}
 	return _scoreTotal;
 }
 
@@ -241,11 +210,6 @@ int SoldierDiary::getScoreTotal() const
  */
 int SoldierDiary::getKillTotal() const
 {
-	int _killTotal = 0;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_killTotal += (*i)->getMissionKillTotal();
-	}
 	return _killTotal;
 }
 
@@ -254,7 +218,7 @@ int SoldierDiary::getKillTotal() const
  */
 int SoldierDiary::getMissionTotal() const
 {
-	return _diaryEntries.size();
+	return _missionTotal;
 }
 
 /**
@@ -262,14 +226,6 @@ int SoldierDiary::getMissionTotal() const
  */
 int SoldierDiary::getWinTotal() const
 {
-	int _winTotal = 0;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		if ((*i)->getMissionSuccess())
-		{
-			_winTotal++;
-		}
-	}
 	return _winTotal;
 }
 
@@ -278,11 +234,6 @@ int SoldierDiary::getWinTotal() const
  */
 int SoldierDiary::getStunTotal() const
 {
-	int _stunTotal = 0;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_stunTotal += (*i)->getMissionStunTotal();
-	}
 	return _stunTotal;
 }
 
@@ -291,12 +242,7 @@ int SoldierDiary::getStunTotal() const
  */
 int SoldierDiary::getDaysWoundedTotal() const
 {
-	int _daysWounded = 0;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
-	{
-		_daysWounded += (*i)->getDaysWounded();
-	}
-	return _daysWounded;
+	return _daysWoundedTotal;
 }
 
 /**
@@ -341,7 +287,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 		{
 			// if I am dealing with ___ and I DON'T make the requirements... then no
 			if ( ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel)) ||
-				 ((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel)))
+					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel)) )
 			{
 				awardedCommendation = false;
 				break;

@@ -851,6 +851,8 @@ en-US:
   STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Given to all units upon arrival as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
   STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Campaign Medal"
   STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully defended a certain number of regions."
+  STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Specialist Medal"
+  STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Given to a soldier who as succesfully used non-lethal force to take down an alien."
   STR_1ST_AWARD: "First award"
   STR_2ND_AWARD: "Second award"
   STR_3RD_AWARD: "Third award"

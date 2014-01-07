@@ -240,6 +240,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
+			(*j)->getGeoscapeSoldier()->getDiary()->updateDiary();
 		}
 	}
 
