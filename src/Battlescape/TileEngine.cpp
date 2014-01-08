@@ -2395,11 +2395,11 @@ bool TileEngine::psiAttack(BattleAction *action)
  */
 Tile *TileEngine::applyGravity(Tile *t)
 {
-	if (t->getInventory()->empty() && !t->getUnit()) return t; // skip this if there are no items
 	if (!t)
 	{
 		return 0;
 	}
+	if (t->getInventory()->empty() && !t->getUnit()) return t; // skip this if there are no items
 
 	Position p = t->getPosition();
 	Tile *rt = t;
