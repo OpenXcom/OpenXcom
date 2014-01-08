@@ -2406,7 +2406,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 	Tile *rtb;
 	BattleUnit *occupant = t->getUnit();
 
-	if (occupant && (occupant->getArmor()->getMovementType() != MT_FLY || occupant->isOut()))
+	if (occupant)
 	{
 		Position unitpos = occupant->getPosition();
 		while (unitpos.z >= 0)
@@ -2432,9 +2432,18 @@ Tile *TileEngine::applyGravity(Tile *t)
 		{
 			if (occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 			{
-				occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
-					_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
-				_save->addFallingUnit(occupant);
+				if (occupant->getArmor()->getMovementType() == MT_FLY)
+				{
+					// move to the position you're already in. this will unset the kneeling flag, set teh floating flag, etc.
+					occupant->startWalking(occupant->getDirection(), occupant->getPosition(), _save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
+					// and set our status to standing (rather than walking or flying) to avoid weirdness.
+					occupant->abortTurn();
+				}
+				else
+				{
+					occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1), _save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
+					_save->addFallingUnit(occupant);
+				}
 			}
 			else
 			{
