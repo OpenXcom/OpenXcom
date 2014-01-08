@@ -36,7 +36,9 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Constructor
  */
-SoldierDiary::SoldierDiary()
+SoldierDiary::SoldierDiary() : _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(),
+    _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
+    _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0)
 {
 }
 
@@ -129,6 +131,18 @@ void SoldierDiary::updateDiary()
         }
         _stunTotal += (*i)->getMissionStunTotal();
         _daysWoundedTotal += (*i)->getDaysWounded();
+		if ((*i)->getMissionType() == "STR_BASE_DEFENSE")
+		{
+			_baseDefenseTotal++;
+		}
+		else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
+		{
+			_terrorMissionTotal++;
+		}
+		if ((*i)->getMissionDaylight() != 0)
+		{
+			_nightMissionTotal++;
+		}
 	}
 }
 

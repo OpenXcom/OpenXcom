@@ -175,7 +175,7 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	RuleCommendations *_rules;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
-	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal;
+	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseTotal, _terrorMissionTotal, _nightMissionTotal;
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
