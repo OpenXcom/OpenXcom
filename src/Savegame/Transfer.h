@@ -60,6 +60,8 @@ public:
 	void setSoldier(Soldier *soldier);
 	/// Sets the craft of the transfer.
 	void setCraft(Craft *craft);
+	/// Gets the craft of the transfer.
+	Craft *getCraft();
 	/// Gets the items of the transfer.
 	std::string getItems() const;
 	/// Sets the items of the transfer.

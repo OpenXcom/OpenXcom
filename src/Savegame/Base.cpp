@@ -712,6 +712,15 @@ int Base::getFreeWorkshops () const
 }
 
 /**
+ * Return psilab space not in use
+ * @return psilab space not in use
+*/
+int Base::getFreePsiLabs () const
+{
+	return getAvailablePsiLabs() - getUsedPsiLabs();
+}
+
+/**
  * Returns the amount of scientists currently in use.
  * @return Amount of scientists.
 */
@@ -1287,7 +1296,6 @@ void Base::checkModuleConnections()
  */
 bool Base::checkConnected(int x, int y, int **grid, BaseFacility *(&facilities)[BASE_SIZE][BASE_SIZE]) const
 {
-
 	bool newgrid = (grid == 0);
 
 	// Create connection grid
@@ -1415,6 +1423,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator &facility)
 				{
 					if ((*i)->getType() == TRANSFER_CRAFT)
 					{
+						delete (*i)->getCraft();
 						delete *i;
 						_transfers.erase(i);
 						break;
@@ -1426,7 +1435,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator &facility)
 	else if ((*facility)->getRules()->getPsiLaboratories() > 0)
 	{
 		// psi lab destruction: remove any soldiers over the maximum allowable from psi training.
-		int toRemove = getUsedPsiLabs() - (getAvailablePsiLabs() - (*facility)->getRules()->getPsiLaboratories());
+		int toRemove = (*facility)->getRules()->getPsiLaboratories() - getFreePsiLabs();
 		for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end() && toRemove > 0; ++i)
 		{
 			if ((*i)->isInPsiTraining())
@@ -1439,39 +1448,42 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator &facility)
 	else if ((*facility)->getRules()->getLaboratories())
 	{
 		// lab destruction: enforce lab space limits. take scientists off projects until
-		// it all evens out.
-		int toRemove = getUsedLaboratories() - (getAvailableLaboratories() - (*facility)->getRules()->getLaboratories());
+		// it all evens out. research is not cancelled.
+		int toRemove = (*facility)->getRules()->getLaboratories() - getFreeLaboratories();
 		for (std::vector<ResearchProject*>::iterator i = _research.begin(); i != _research.end() && toRemove > 0;)
 		{
-			if ((*i)->getAssigned() > toRemove)
+			if ((*i)->getAssigned() >= toRemove)
 			{
 				(*i)->setAssigned((*i)->getAssigned() - toRemove);
+				_scientists += toRemove;
 				break;
 			}
 			else
 			{
 				toRemove -= (*i)->getAssigned();
 				_scientists += (*i)->getAssigned();
-				delete *i;
-				i = _research.erase(i);
+				(*i)->setAssigned(0);
+				++i;
 			}
 		}
 	}
 	else if ((*facility)->getRules()->getWorkshops())
 	{
 		// workshop destruction: similar to lab destruction, but we'll lay off engineers instead
-		int toRemove = getUsedWorkshops() - (getAvailableWorkshops() - (*facility)->getRules()->getWorkshops());
+		// in this case, however, production IS cancelled, as it takes up space in the workshop.
+		int toRemove = (*facility)->getRules()->getWorkshops() - getFreeWorkshops();
 		for (std::vector<Production*>::iterator i = _productions.begin(); i != _productions.end() && toRemove > 0;)
 		{
 			if ((*i)->getAssignedEngineers() > toRemove)
 			{
 				(*i)->setAssignedEngineers((*i)->getAssignedEngineers() - toRemove);
+				_engineers += toRemove;
 				break;
 			}
 			else
 			{
 				toRemove -= (*i)->getAssignedEngineers();
-				_scientists += (*i)->getAssignedEngineers();
+				_engineers += (*i)->getAssignedEngineers();
 				delete *i;
 				i = _productions.erase(i);
 			}
@@ -1481,7 +1493,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator &facility)
 	{
 		// we won't destroy the items physically AT the base, 
 		// but any items in transit will end up at the dead letter office.
-		if (getUsedStores() - (getAvailableStores() - (*facility)->getRules()->getStorage()) < 0 && !_transfers.empty())
+		if ((getAvailableStores() - getUsedStores()) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
 		{
 			for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); )
 			{
@@ -1490,32 +1502,22 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator &facility)
 					delete *i;
 					i = _transfers.erase(i);
 				}
+				else
+				{
+					++i;
+				}
 			}
 		}
 	}
 	else if ((*facility)->getRules()->getPersonnel())
 	{
 		// as above, we won't actually fire people, but we'll block any new ones coming in.
-		if (getUsedQuarters() - (getAvailableQuarters() - (*facility)->getRules()->getPersonnel()) < 0 && !_transfers.empty())
+		if ((getAvailableQuarters() - getUsedQuarters()) - (*facility)->getRules()->getPersonnel() < 0 && !_transfers.empty())
 		{
 			for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); )
 			{
-				bool del = false;
-				if ((*i)->getType() == TRANSFER_ENGINEER)
-				{
-					_engineers -= (*i)->getQuantity();
-					del = true;
-				}
-				else if ((*i)->getType() == TRANSFER_SCIENTIST)
-				{
-					_scientists -= (*i)->getQuantity();
-					del = true;
-				}
-				else if ((*i)->getType() == TRANSFER_SOLDIER)
-				{
-					del = true;
-				}
-				if (del)
+				// let soldiers arrive, but block workers.
+				if ((*i)->getType() == TRANSFER_ENGINEER || (*i)->getType() == TRANSFER_SCIENTIST)
 				{
 					delete *i;
 					i = _transfers.erase(i);
