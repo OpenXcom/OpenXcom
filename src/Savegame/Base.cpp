@@ -1390,7 +1390,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator &facility)
 			}
 			for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 			{
-				if (*i = (*facility)->getCraft())
+				if (*i == (*facility)->getCraft())
 				{
 					delete (*i);
 					_crafts.erase(i);
