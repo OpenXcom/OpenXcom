@@ -189,6 +189,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 		if (_save->getSelectedUnit())
 		{
+			_parentState->updateSoldierInfo();
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
 			{
@@ -336,6 +337,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 		if (_save->getSelectedUnit())
 		{
+			_parentState->updateSoldierInfo();
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
 			{
