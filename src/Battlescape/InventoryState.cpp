@@ -359,9 +359,6 @@ void InventoryState::btnOkClick(Action *)
 		saveEquipmentLayout();
 		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
-			if ((*i)->getFaction() == _battleGame->getSide())
-				(*i)->prepareNewTurn();
 	}
 	if (_battleGame->getTileEngine())
 	{
