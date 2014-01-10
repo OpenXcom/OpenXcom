@@ -855,6 +855,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 			showLaunchButton(false);
 		}
 
+		_battleGame->getPathfinding()->removePreview();
 		_battleGame->cancelCurrentAction(true);
 
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));

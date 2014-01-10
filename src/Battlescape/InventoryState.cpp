@@ -61,12 +61,6 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
-	// remove any path preview if in the middle of a battlegame
-	if (tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
-	{
-		_battleGame->getPathfinding()->removePreview();
-	}
-
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
