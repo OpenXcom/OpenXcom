@@ -9295,6 +9295,9 @@ extraSprites:
 #   total_score
 #   total_stuns
 #   total_days_wounded
+#   total_base_defense_missions
+#   total_terror_missions
+#   total_night_missions
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION

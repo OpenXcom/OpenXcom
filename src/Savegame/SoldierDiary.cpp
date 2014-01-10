@@ -38,7 +38,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
  */
 SoldierDiary::SoldierDiary() : _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(),
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
-    _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0)
+    _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0)
 {
 }
 
@@ -133,7 +133,7 @@ void SoldierDiary::updateDiary()
         _daysWoundedTotal += (*i)->getDaysWounded();
 		if ((*i)->getMissionType() == "STR_BASE_DEFENSE")
 		{
-			_baseDefenseTotal++;
+			_baseDefenseMissionTotal++;
 		}
 		else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
 		{
@@ -260,6 +260,33 @@ int SoldierDiary::getDaysWoundedTotal() const
 }
 
 /**
+ * Get total base defense missions
+ * @return int Total base defense missions
+ */
+int SoldierDiary::getBaseDefenseMissionTotal() const
+{
+	return _baseDefenseMissionTotal;
+}
+
+/**
+ * Get total terror missions
+ * @return int Total terror missions
+ */
+int SoldierDiary::getTerrorMissionTotal() const
+{
+	return _terrorMissionTotal;
+}
+
+/**
+ * Get total night missions
+ * @return int Total night missions
+ */
+int SoldierDiary::getNightMissionTotal() const
+{
+	return _nightMissionTotal;
+}
+
+/**
  * Get soldier commendations.
  * @return SoldierCommendations soldier commendations.
  */
@@ -305,7 +332,10 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel)) )
+					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel)) )
 			{
 				awardedCommendation = false;
 				break;
