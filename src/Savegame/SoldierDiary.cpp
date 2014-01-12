@@ -349,7 +349,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) )
+					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel)) )
 			{
 				awardedCommendation = false;
 				break;
