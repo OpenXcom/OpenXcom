@@ -9298,6 +9298,8 @@ extraSprites:
 #   total_base_defense_missions
 #   total_terror_missions
 #   total_night_missions
+#   total_night_terror_missions
+#   total_monthly_service
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
@@ -9307,8 +9309,24 @@ commendations:
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     criteria:
       total_missions: [1, 3, 5, 9, 13, 18, 25, 30, 40, 50]
-  - type: STR_MEDAL_SPECIALISTS_MEDAL_NAME
-    description: STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION
+  - type: STR_MEDAL_STAR_OF_GALLANTRY_NAME
+    description: STR_MEDAL_STAR_OF_GALLANTRY_DESCRIPTION
     criteria:
       total_stuns: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+  - type: STR_MEDAL_DEFENDER_MEDAL_NAME
+    description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION
+    criteria:
+      total_base_defense_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_LONGEST_NIGHT_NAME
+    description: STR_MEDAL_LONGEST_NIGHT_DESCRIPTION
+    criteria:
+      total_night_terror_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_HONOR_CROSS_NAME
+    description: STR_MEDAL_HONOR_CROSS_DESCRIPTION
+    criteria:
+      total_monthly_service: [1]
+  - type: STR_MEDAL_SERVICE_MEDAL_NAME
+    description: STR_MEDAL_SERVICE_MEDAL_DESCRIPTION
+    criteria:
+      total_monthly_service: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
 

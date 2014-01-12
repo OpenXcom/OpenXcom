@@ -38,6 +38,7 @@
 #include "Globe.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/Options.h"
+#include "../Battlescape/CommendationState.h"
 
 namespace OpenXcom
 {
@@ -239,6 +240,26 @@ void MonthlyReportState::btnOkClick(Action *)
 	if (!_gameOver)
 	{
 		_game->popState();
+		// Award medals for service time
+		// Iterate through all your bases
+		for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+		{
+			// Iterate through all your soldiers
+			for (std::vector<Soldier*>::iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
+			{
+				Soldier *soldier = _game->getSavedGame()->getSoldier((*s)->getId());
+				// Award medals to eligible soldiers
+				soldier->getDiary()->addMonthlyService();
+				if (soldier->getDiary()->manageCommendations(_game->getRuleset()))
+				{
+					_soldiersMedalled.push_back(soldier);
+				}
+			}
+		}
+		if (!_soldiersMedalled.empty())
+		{
+			_game->pushState(new CommendationState(_game, _soldiersMedalled));
+		}
 		if (_psi)
 			_game->pushState (new PsiTrainingState(_game));
 	}

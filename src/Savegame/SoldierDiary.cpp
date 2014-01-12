@@ -38,7 +38,8 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
  */
 SoldierDiary::SoldierDiary() : _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(),
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
-    _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0)
+    _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
+	_nightTerrorMissionTotal(0), _monthsService(0)
 {
 }
 
@@ -138,6 +139,10 @@ void SoldierDiary::updateDiary()
 		else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
 		{
 			_terrorMissionTotal++;
+            if ((*i)->getMissionDaylight() != 0)
+            {
+                _nightTerrorMissionTotal++;
+            }
 		}
 		if ((*i)->getMissionDaylight() != 0)
 		{
@@ -287,6 +292,14 @@ int SoldierDiary::getNightMissionTotal() const
 }
 
 /**
+ * Get total night terror missions
+ * @return int Total night terror missions
+ */
+int SoldierDiary::getNightTerrorMissionTotal() const
+{
+	return _nightTerrorMissionTotal;
+}
+/**
  * Get soldier commendations.
  * @return SoldierCommendations soldier commendations.
  */
@@ -335,7 +348,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel)) )
+					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
+					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) )
 			{
 				awardedCommendation = false;
 				break;
@@ -372,6 +386,14 @@ void SoldierDiary::awardCommendation(std::string _commendationName, std::string 
 	{
 		_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, 0, true));
 	}
+}
+
+/**
+ * Increment soldier's service time one month
+ */
+int SoldierDiary::addMonthlyService() const
+{
+	_monthsService++;
 }
 
 /**

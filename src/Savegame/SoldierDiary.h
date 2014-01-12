@@ -175,7 +175,8 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	RuleCommendations *_rules;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
-	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _terrorMissionTotal, _nightMissionTotal;
+	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
+		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService;
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
@@ -223,16 +224,20 @@ public:
 	int getDaysWoundedTotal() const;
 	/// Get total base defense missions.
 	int getBaseDefenseMissionTotal() const;
-	/// Get total terrror missions.
+	/// Get total terror missions.
 	int getTerrorMissionTotal() const;
 	/// Get total night missions.
 	int getNightMissionTotal() const;
+	/// Get total night terror missions.
+	int getNightTerrorMissionTotal() const;
 	/// Get commendations
 	std::vector<SoldierCommendations*> *getSoldierCommendations();
-	/// Manage commendations, true if a medal is awarded.
+	/// Manage commendations, return true if a medal is awarded.
 	bool manageCommendations(Ruleset *rules);
 	/// Award commendations
 	void awardCommendation(std::string commendationName, std::string commendationDescription);
+	/// Increment soldier's service time.
+	void addMonthlyService() const;
 };
 
 }
