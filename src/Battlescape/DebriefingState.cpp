@@ -573,7 +573,7 @@ void DebriefingState::prepareDebriefing()
 						{
 							pos = (*k)->getOwner()->getPosition();
 						}
-						else
+						else if ((*k)->getTile())
 						{
 							pos = (*k)->getTile()->getPosition();
 						}
