@@ -38,6 +38,7 @@
 #include "Globe.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/Options.h"
+#include "../Savegame/Base.h"
 #include "../Battlescape/CommendationState.h"
 
 namespace OpenXcom

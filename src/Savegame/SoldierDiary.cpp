@@ -392,7 +392,7 @@ void SoldierDiary::awardCommendation(std::string _commendationName, std::string 
 /**
  * Increment soldier's service time one month
  */
-int SoldierDiary::addMonthlyService() const
+void SoldierDiary::addMonthlyService()
 {
 	_monthsService++;
 }

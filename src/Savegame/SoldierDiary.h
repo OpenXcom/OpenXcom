@@ -237,7 +237,7 @@ public:
 	/// Award commendations
 	void awardCommendation(std::string commendationName, std::string commendationDescription);
 	/// Increment soldier's service time.
-	void addMonthlyService() const;
+	void addMonthlyService();
 };
 
 }
