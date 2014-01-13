@@ -97,7 +97,10 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 		{
 			if ((*j)->isNew())
 			{
-				_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*j)->getCommendationName()).c_str(), tr((*j)->getDecorationLevelName()).c_str());
+				if ((*j)->getNoun() == "")
+					_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*j)->getCommendationName()).c_str(), tr((*j)->getDecorationLevelName()).c_str());
+				else
+					_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*j)->getCommendationName()).arg(tr((*j)->getNoun())).c_str(), tr((*j)->getDecorationLevelName()).c_str());
 				(*j)->makeOld();
 			}
 		}

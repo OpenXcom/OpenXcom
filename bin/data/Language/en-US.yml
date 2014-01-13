@@ -853,6 +853,8 @@ en-US:
   STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully defended a certain number of regions."
   STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Specialist Medal"
   STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Given to a soldier who as succesfully used non-lethal force to take down an alien."
+  STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
+  STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Given to a soldier who as shown distinction using a {0}."
   STR_1ST_AWARD: "First award"
   STR_2ND_AWARD: "Second award"
   STR_3RD_AWARD: "Third award"

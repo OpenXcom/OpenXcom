@@ -135,14 +135,14 @@ class SoldierCommendations
 {
 private:
 	RuleCommendations *_rules;
-	std::string  _commendationName, _commendationDescription;
+	std::string  _commendationName, _commendationDescription, _noun;
 	int  _decorationLevel;
 	bool _isNew;
 public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
 	/// Creates a commendation of the specified type.
-	SoldierCommendations(std::string commendationName, std::string commendationDescription, int decorationLevel, bool isNew);
+	SoldierCommendations(std::string commendationName, std::string commendationDescription, std::string noun, int decorationLevel, bool isNew);
 	/// Cleans up the commendation.
 	~SoldierCommendations();
 	/// Loads the commendation information from YAML.
@@ -153,6 +153,8 @@ public:
 	std::string getCommendationName() const;
 	/// Get commendation description.
 	std::string getCommendationDescription() const;
+	/// Get commendation noun.
+	std::string getNoun() const;
 	/// Get the commendation's decoration level's name.
 	std::string getDecorationLevelName();
 	/// Get the commendation's decoration description.
@@ -235,7 +237,7 @@ public:
 	/// Manage commendations, return true if a medal is awarded.
 	bool manageCommendations(Ruleset *rules);
 	/// Award commendations
-	void awardCommendation(std::string commendationName, std::string commendationDescription);
+	void awardCommendation(std::string commendationName, std::string commendationDescription, std::string noun = "");
 	/// Increment soldier's service time.
 	void addMonthlyService();
 };

@@ -9300,6 +9300,8 @@ extraSprites:
 #   total_night_missions
 #   total_night_terror_missions
 #   total_monthly_service
+#   total_kills_with_a_weapon
+#   total_missions_in_a_region
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
@@ -9329,4 +9331,8 @@ commendations:
     description: STR_MEDAL_SERVICE_MEDAL_DESCRIPTION
     criteria:
       total_monthly_service: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_WEAPON_PROFICIENCY_NAME
+    description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
+    criteria:
+      total_kills_with_a_weapon: [1, 2, 15, 20, 25, 30, 35, 40, 45, 50]
 

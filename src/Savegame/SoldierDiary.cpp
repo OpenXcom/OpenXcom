@@ -112,7 +112,8 @@ void SoldierDiary::updateDiary()
 {
 	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
 	{
-		for (std::vector<SoldierDiaryKills*>::const_iterator j = (*i)->getMissionKills().begin() ; j != (*i)->getMissionKills().end() ; ++j)
+		std::vector<SoldierDiaryKills*> _missionKills = (*i)->getMissionKills();
+		for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
 		{
 			_alienRankTotal[(*j)->getAlienRank().c_str()]++;
 			_alienRaceTotal[(*j)->getAlienRace().c_str()]++;
@@ -324,6 +325,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 	{	
 		_nextCommendationLevel = 0;
 		awardedCommendation = true;
+		std::string _noun = "";
 
 		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
@@ -332,6 +334,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			if ( (*i).first == (*j)->getCommendationName() )
 			{
 				_nextCommendationLevel = (*j)->getDecorationLevelInt() + 1;
+				if ((*j)->getNoun() != "") 
+					_noun = (*j)->getNoun();
 				break;
 			}
 		}
@@ -339,8 +343,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 		// Go through each possible criteria
 		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
-			// if I am dealing with ___ and I DON'T make the requirements... then no
-			if ( ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel)) ||
+			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel)) ||
@@ -355,11 +358,48 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				awardedCommendation = false;
 				break;
 			}
+			// Proficiency medals are unique
+			else if ((*j).first == "total_kills_with_a_weapon")
+			{
+				std::map<std::string, int> _weaponTotal = getWeaponTotal();
+				for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
+				{
+					// Case 1: New medal
+					if (_noun == "")
+					{
+						if ((*k).second >= (*j).second.at(_nextCommendationLevel))
+						{
+							_noun = (*k).first;
+							awardedCommendation = true;
+							break;
+						}
+						else
+						{
+							awardedCommendation = false;
+							break;
+						}
+					}
+					// Case 2: Medal reaward
+					else
+					{
+						if ( (*k).first == _noun && (*k).second >= (*j).second.at(_nextCommendationLevel) )
+						{
+							awardedCommendation = true;
+							break;
+						}
+						else
+						{
+							awardedCommendation = false;
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		if (awardedCommendation)
 		{
-			awardCommendation((*i).first, (*i).second->getDescription());
+			awardCommendation((*i).first, (*i).second->getDescription(), _noun);
 		}
 	}
 
@@ -370,13 +410,13 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
  * Award commendations to the soldier.
  * @param string Commendation Name.
  */
-void SoldierDiary::awardCommendation(std::string _commendationName, std::string _commendationDescription)
+void SoldierDiary::awardCommendation(std::string _commendationName, std::string _commendationDescription, std::string _noun)
 {
 	bool _newCommendation = true;
 
 	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
 	{
-		if ( (*i)->getCommendationName() == _commendationName)
+		if ( (*i)->getCommendationName() == _commendationName && (*i)->getNoun() == _noun)
 		{
 			(*i)->addDecoration();
 			_newCommendation = false;
@@ -385,7 +425,7 @@ void SoldierDiary::awardCommendation(std::string _commendationName, std::string 
 	}
 	if (_newCommendation)
 	{
-		_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, 0, true));
+		_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, _noun, 0, true));
 	}
 }
 
@@ -724,7 +764,7 @@ SoldierCommendations::SoldierCommendations(const YAML::Node &node)
 /**
  * Initializes a soldier commendation.
  */
-SoldierCommendations::SoldierCommendations(std::string commendationName, std::string commendationDescription, int decorationLevel, bool isNew) : _commendationName(commendationName), _commendationDescription(commendationDescription), _decorationLevel(decorationLevel), _isNew(isNew)
+SoldierCommendations::SoldierCommendations(std::string commendationName, std::string commendationDescription, std::string noun, int decorationLevel, bool isNew) : _commendationName(commendationName), _commendationDescription(commendationDescription), _noun(noun), _decorationLevel(decorationLevel), _isNew(isNew)
 {
 	
 }
@@ -744,6 +784,7 @@ void SoldierCommendations::load(const YAML::Node &node)
 {
 	_commendationName = node["commendationName"].as<std::string>(_commendationName);
 	_commendationDescription = node["commendationDescription"].as<std::string>(_commendationDescription);
+	_noun = node["noun"].as<std::string>(_noun);
 	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
 	_isNew = node["isNew"].as<bool>(_isNew);
 }
@@ -757,6 +798,7 @@ YAML::Node SoldierCommendations::save() const
 	YAML::Node node;
 	node["commendationName"] = _commendationName;
 	node["commendationDescription"] = _commendationDescription;
+	node["noun"] = _noun;
 	node["decorationLevel"] = _decorationLevel;
 	node["isNew"] = _isNew;
 	return node;
@@ -778,6 +820,15 @@ std::string SoldierCommendations::getCommendationName() const
 std::string SoldierCommendations::getCommendationDescription() const
 {
 	return _commendationDescription;
+}
+
+/**
+ * Get the soldier's commendation's noun.
+ * @return string Commendation noun
+ */
+std::string SoldierCommendations::getNoun() const
+{
+	return _noun;
 }
 
 /**
