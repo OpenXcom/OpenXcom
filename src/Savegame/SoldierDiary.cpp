@@ -317,15 +317,18 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::vector<std::pair<std::string, RuleCommendations *> > _commendationsList = rules->getCommendation();
-	bool awardedCommendation;
 	int _nextCommendationLevel;
+	bool awardedCommendation;
+	bool awardedModularMedal;
+	std::string _noun;
 
 	// Loop over all commendations
 	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
 		_nextCommendationLevel = 0;
 		awardedCommendation = true;
-		std::string _noun = "";
+		awardedModularMedal = false;
+		_noun = "";
 
 		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
@@ -358,10 +361,15 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				awardedCommendation = false;
 				break;
 			}
-			// Proficiency medals are unique
+			// Proficiency medals are unique because they need a noun
 			else if ((*j).first == "total_kills_with_a_weapon")
 			{
-				std::map<std::string, int> _weaponTotal = getWeaponTotal();
+				if (_weaponTotal.empty())
+				{
+					awardedCommendation = false;
+					awardedModularMedal = false;
+					break;
+				}
 				for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
 				{
 					// Case 1: New medal
@@ -371,12 +379,13 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 						{
 							_noun = (*k).first;
 							awardedCommendation = true;
+							awardedModularMedal = true;
 							break;
 						}
 						else
 						{
 							awardedCommendation = false;
-							break;
+							awardedModularMedal = false;
 						}
 					}
 					// Case 2: Medal reaward
@@ -385,18 +394,18 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 						if ( (*k).first == _noun && (*k).second >= (*j).second.at(_nextCommendationLevel) )
 						{
 							awardedCommendation = true;
+							awardedModularMedal = true;
 							break;
 						}
 						else
 						{
 							awardedCommendation = false;
-							break;
+							awardedModularMedal = false;
 						}
 					}
 				}
 			}
 		}
-
 		if (awardedCommendation)
 		{
 			awardCommendation((*i).first, (*i).second->getDescription(), _noun);

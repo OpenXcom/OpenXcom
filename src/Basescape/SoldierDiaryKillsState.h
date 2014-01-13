@@ -49,7 +49,7 @@ private:
 	TextList *_lstRank, *_lstRace, *_lstWeapon, *_lstKillTotals;
 	TextList *_lstLocation, *_lstType, *_lstUFO, *_lstMissionTotals;
 	TextList *_lstCommendations;
-	std::vector<std::string> _commendationsListEntry;
+	std::vector<std::wstring> _commendationsListEntry;
 
 	int _display; // 0 displays kills, 1 displays missions, 2 displays commendations
 	bool _displayKills, _displayMissions, _displayCommendations;

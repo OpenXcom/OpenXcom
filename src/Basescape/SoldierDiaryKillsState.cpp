@@ -381,16 +381,22 @@ void SoldierDiaryKillsState::init()
     
     for (std::vector<SoldierCommendations*>::const_iterator i = s->getDiary()->getSoldierCommendations()->begin() ; i != s->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
-		std::wstringstream ss1, ss2;
+		std::wstringstream ss1, ss2, ss3;
 
 		if ((*i)->getNoun() != "")
+		{
 			ss1 << tr((*i)->getCommendationName().c_str()).arg(tr((*i)->getNoun()).c_str());
+			ss3 << tr((*i)->getCommendationDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+		}
 		else
+		{
 			ss1 << tr((*i)->getCommendationName().c_str());
+			ss3 << tr((*i)->getCommendationDescription().c_str());
+		}
 		ss2 << tr((*i)->getDecorationDescription().c_str());
 		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 
-		_commendationsListEntry.push_back((*i)->getCommendationDescription());
+		_commendationsListEntry.push_back(ss3.str().c_str());
 	}
 }
 
@@ -476,7 +482,7 @@ void SoldierDiaryKillsState::lstInfoMouseOver(Action *)
 	}
 	else 
 	{
-		_txtMedalInfo->setText(tr(_commendationsListEntry[_sel]));
+		_txtMedalInfo->setText(_commendationsListEntry[_sel]);
 	}
 }
 
