@@ -263,6 +263,8 @@ public:
 	std::vector< std::vector<std::pair<int, int> > > &getModuleMap();
 	/// calculate the number of map modules remaining
 	void calculateModuleMap();
+	/// a shortcut to the geoscape save.
+	SavedGame *getGeoscapeSave();
 
 };
 

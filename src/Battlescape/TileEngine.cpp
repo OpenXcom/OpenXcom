@@ -29,6 +29,7 @@
 #include "UnitTurnBState.h"
 #include "Map.h"
 #include "Camera.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "ExplosionBState.h"
 #include "../Savegame/Tile.h"
@@ -917,7 +918,9 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
 		weapon->getAmmoItem() &&
-		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
+		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))) &&
+		(unit->getOriginalFaction() != FACTION_PLAYER ||
+		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())))
 	{
 		return true;
 	}

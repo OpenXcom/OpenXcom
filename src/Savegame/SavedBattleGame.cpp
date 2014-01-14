@@ -1805,4 +1805,13 @@ void SavedBattleGame::calculateModuleMap()
 		}
 	}
 }
+
+/**
+ * get a pointer to the geoscape save
+ * @return a pointer to the geoscape save.
+ */
+SavedGame *SavedBattleGame::getGeoscapeSave()
+{
+	return _battleState->getGame()->getSavedGame();
+}
 }
