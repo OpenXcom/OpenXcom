@@ -1817,6 +1817,10 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
+	while (!_game->isState(this))
+	{
+		_game->popState();
+	}
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
