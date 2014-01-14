@@ -319,7 +319,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 	std::vector<std::pair<std::string, RuleCommendations *> > _commendationsList = rules->getCommendation();
 	int _nextCommendationLevel;
 	bool awardedCommendation;
-	bool awardedModularMedal;
 	std::string _noun;
 
 	// Loop over all commendations
@@ -327,7 +326,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 	{	
 		_nextCommendationLevel = 0;
 		awardedCommendation = true;
-		awardedModularMedal = false;
 		_noun = "";
 
 		// See if we already have the commendation, and if so what level it is
@@ -343,9 +341,10 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			}
 		}
 
-		// Go through each possible criteria
+		// Go through each possible criteria. Assume the medal is awarded, set to false if not.
 		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
+            // If we do not success, false and break
 			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
 					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel)) ||
@@ -362,45 +361,46 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				break;
 			}
 			// Proficiency medals are unique because they need a noun
+            // And because they loop over a map<>
 			else if ((*j).first == "total_kills_with_a_weapon")
 			{
 				if (_weaponTotal.empty())
 				{
 					awardedCommendation = false;
-					awardedModularMedal = false;
 					break;
 				}
 				for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
 				{
+                    awardedCommendation = false; // Set true if we find a medal (different than previous loop)
 					// Case 1: New medal
 					if (_noun == "")
 					{
-						if ((*k).second >= (*j).second.at(_nextCommendationLevel))
-						{
-							_noun = (*k).first;
-							awardedCommendation = true;
-							awardedModularMedal = true;
-							break;
-						}
-						else
-						{
-							awardedCommendation = false;
-							awardedModularMedal = false;
-						}
+                        // If it doesn't work, then continue 
+                        // Else, assign noun, then break
+                        if ((*k).second < (*j).second.at(_nextCommendationLevel))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            _noun = (*k).first;
+                            awardedCommendation = true;
+                            break;
+                        }
 					}
 					// Case 2: Medal reaward
 					else
 					{
-						if ( (*k).first == _noun && (*k).second >= (*j).second.at(_nextCommendationLevel) )
+                        // If it doesn't work, goto (we have founed our commednation, and it is not ready
+                        // Else, break
+						if ( (*k).first == _noun && (*k).second < (*j).second.at(_nextCommendationLevel) )
 						{
-							awardedCommendation = true;
-							awardedModularMedal = true;
-							break;
+							// double break / goto
 						}
 						else
 						{
-							awardedCommendation = false;
-							awardedModularMedal = false;
+							awardedCommendation = true;
+                            break;
 						}
 					}
 				}
