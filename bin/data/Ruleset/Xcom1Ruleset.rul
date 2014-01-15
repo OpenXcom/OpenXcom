@@ -9300,6 +9300,9 @@ extraSprites:
 #   total_night_missions
 #   total_night_terror_missions
 #   total_monthly_service
+# The next criteria require a noun for the name/description.
+# They are INCOMPATIBLE with eachother. If used together, 
+# the last criteria's noun will be chosen.
 #   total_kills_with_a_weapon
 #   total_missions_in_a_region
 commendations:

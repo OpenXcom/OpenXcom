@@ -110,45 +110,44 @@ void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missio
  */
 void SoldierDiary::updateDiary()
 {
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin() ; i != _diaryEntries.end() ; ++i)
+	SoldierDiaryEntries *i = _diaryEntries.back();
+
+	std::vector<SoldierDiaryKills*> _missionKills = (*i).getMissionKills();
+	for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
 	{
-		std::vector<SoldierDiaryKills*> _missionKills = (*i)->getMissionKills();
-		for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
-		{
-			_alienRankTotal[(*j)->getAlienRank().c_str()]++;
-			_alienRaceTotal[(*j)->getAlienRace().c_str()]++;
-			_weaponTotal[(*j)->getWeapon().c_str()]++;
-			_weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
-		}
-        _regionTotal[(*i)->getMissionRegion().c_str()]++;
-        _countryTotal[(*i)->getMissionCountry().c_str()]++;
-        _typeTotal[(*i)->getMissionType().c_str()]++;
-        _UFOTotal[(*i)->getMissionUFO().c_str()]++;
-        _scoreTotal += (*i)->getMissionScore();
-        _killTotal += (*i)->getMissionKillTotal();
-        _missionTotal = _diaryEntries.size();
-        if ((*i)->getMissionSuccess())
+		_alienRankTotal[(*j)->getAlienRank().c_str()]++;
+		_alienRaceTotal[(*j)->getAlienRace().c_str()]++;
+		_weaponTotal[(*j)->getWeapon().c_str()]++;
+		_weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
+	}
+    _regionTotal[(*i).getMissionRegion().c_str()]++;
+    _countryTotal[(*i).getMissionCountry().c_str()]++;
+    _typeTotal[(*i).getMissionType().c_str()]++;
+    _UFOTotal[(*i).getMissionUFO().c_str()]++;
+    _scoreTotal += (*i).getMissionScore();
+    _killTotal += (*i).getMissionKillTotal();
+    _missionTotal = _diaryEntries.size();
+    if ((*i).getMissionSuccess())
+    {
+        _winTotal++;
+    }
+    _stunTotal += (*i).getMissionStunTotal();
+    _daysWoundedTotal += (*i).getDaysWounded();
+	if ((*i).getMissionType() == "STR_BASE_DEFENSE")
+	{
+		_baseDefenseMissionTotal++;
+	}
+	else if ((*i).getMissionType() == "STR_TERROR_MISSION")
+	{
+		_terrorMissionTotal++;
+        if ((*i).getMissionDaylight() != 0)
         {
-            _winTotal++;
+            _nightTerrorMissionTotal++;
         }
-        _stunTotal += (*i)->getMissionStunTotal();
-        _daysWoundedTotal += (*i)->getDaysWounded();
-		if ((*i)->getMissionType() == "STR_BASE_DEFENSE")
-		{
-			_baseDefenseMissionTotal++;
-		}
-		else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
-		{
-			_terrorMissionTotal++;
-            if ((*i)->getMissionDaylight() != 0)
-            {
-                _nightTerrorMissionTotal++;
-            }
-		}
-		if ((*i)->getMissionDaylight() != 0)
-		{
-			_nightMissionTotal++;
-		}
+	}
+	if ((*i).getMissionDaylight() != 0)
+	{
+		_nightMissionTotal++;
 	}
 }
 
@@ -321,17 +320,17 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
     std::map<std::string, int> _nextCommendationLevel;
     std::map<std::string, int> _modularCommendations;
 
-	// Loop over all commendations
-	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
+	// Loop over all possible commendations
+	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); )
 	{	
 		awardedCommendation = true;
         _nextCommendationLevel.clear();
         _modularCommendations.clear();
 
-		// See if we already have the commendation, and if so what level it is
+		// See if we already have the commendation
+		// If so, get the level and noun
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
 		{
-			// Do we already have the commendation?
 			if ( (*i).first == (*j)->getCommendationName() )
 			{
                 // A map is used for modular medals
@@ -344,7 +343,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             _nextCommendationLevel[""] = 0;
 
 		// Go through each possible criteria. Assume the medal is awarded, set to false if not.
-		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
+		// As soon as we find a medal criteria that we do NOT achieve, then we are not awarded a medal
+		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end() && !_breakLoop; ++j)
 		{
             // These criteria have no nouns, so only the _nextCommendationLevel[""] will ever be used
 			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
@@ -359,7 +359,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) )
 			{
-				awardedCommendation = false;
+				_awardCommendation = false;
 				break;
 			}
 			// Medals with the following criteria are unique because they need a noun
@@ -394,8 +394,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                 }
             }
 		}
-		if (awardedCommendation)
+		if (_awardCommendation)
 		{
+<<<<<<< HEAD
             // If we do not have modular medals, but are awarded a different medal
             // Its noun will be ""
             if (_modularCommendations.empty())
@@ -406,10 +407,19 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             {
                 awardCommendation((*i).first, (*i).second->getDescription(), (*j).first);
             }
+=======
+			_awardedCommendation = true;
+			awardCommendation((*i).first, (*i).second->getDescription(), _noun);
+>>>>>>> wip
+		}
+		// Do not increment if I am dealing with modular medals that have been awarded!
+		if (_increment)
+		{
+			++i;
 		}
 	}
 
-	return awardedCommendation;
+	return _awardedCommendation;
 }
 
 /**
