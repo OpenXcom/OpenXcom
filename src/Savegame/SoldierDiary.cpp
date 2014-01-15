@@ -317,16 +317,16 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::vector<std::pair<std::string, RuleCommendations *> > _commendationsList = rules->getCommendation();
-	int _nextCommendationLevel;
-	bool awardedCommendation;
-	std::string _noun;
+    bool awardedCommendation;
+    std::map<std::string, int> _nextCommendationLevel;
+    std::map<std::string, int> _modularCommendations;
 
 	// Loop over all commendations
 	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
-		_nextCommendationLevel = 0;
 		awardedCommendation = true;
-		_noun = "";
+        _nextCommendationLevel.clear();
+        _modularCommendations.clear()
 
 		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
@@ -334,81 +334,73 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			// Do we already have the commendation?
 			if ( (*i).first == (*j)->getCommendationName() )
 			{
-				_nextCommendationLevel = (*j)->getDecorationLevelInt() + 1;
-				if ((*j)->getNoun() != "") 
-					_noun = (*j)->getNoun();
-				break;
+                // A map is used for modular medals
+                // A commendation that has no noun is always given the noun ""
+				_nextCommendationLevel[(*j)->getNoun()] = (*j)->getDecorationInt() + 1;
 			}
 		}
+        // If we don't have this commendation, add one element to the vector
+        if (_nextCommendationLevel.empty())
+            _nextCommendationLevel[""] = 0;
 
 		// Go through each possible criteria. Assume the medal is awarded, set to false if not.
 		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
-            // If we do not success, false and break
-			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel)) ||
-					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel)) )
+            // These criteria have no nouns, so only the _nextCommendationLevel[""] will ever be used
+			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
+					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel.[""])) )
 			{
 				awardedCommendation = false;
 				break;
 			}
-			// Proficiency medals are unique because they need a noun
-            // And because they loop over a map<>
+			// Medals with the following criteria are unique because they need a noun
+            // And because they loop over a map<> (this allows for maximum moddability)
 			else if ((*j).first == "total_kills_with_a_weapon")
 			{
-				if (_weaponTotal.empty())
-				{
-					awardedCommendation = false;
-					break;
-				}
-				for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
-				{
-                    awardedCommendation = false; // Set true if we find a medal (different than previous loop)
-					// Case 1: New medal
-					if (_noun == "")
-					{
-                        // If it doesn't work, then continue 
-                        // Else, assign noun, then break
-                        if ((*k).second < (*j).second.at(_nextCommendationLevel))
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            _noun = (*k).first;
-                            awardedCommendation = true;
-                            break;
-                        }
-					}
-					// Case 2: Medal reaward
-					else
-					{
-                        // If it doesn't work, goto (we have founed our commednation, and it is not ready
-                        // Else, break
-						if ( (*k).first == _noun && (*k).second < (*j).second.at(_nextCommendationLevel) )
-						{
-							// double break / goto
-						}
-						else
-						{
-							awardedCommendation = true;
-                            break;
-						}
-					}
-				}
-			}
+                // Loop over the map of kills
+                // match nouns and decoration levels
+                for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
+                {
+                    // Set criteria to 0 if we don't have an entry for this noun
+                    int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
+                    // If we meet the criteria, remember the noun for award purposes
+                    if (_nextCommendationLevel.at((*k).first) >= _criteria)
+                    {
+                        _modularCommendations[(*k).first]++;
+                    }
+                }
+                
+                /// Add more maps here (ex: ranks, regions, ammunition)
+
+                // If it is still empty, we did not get a commendation
+                if (_modularCommendations.empty())
+                {
+                    awardedCommendation = false;
+                    break;
+                }
+            }
 		}
 		if (awardedCommendation)
 		{
-			awardCommendation((*i).first, (*i).second->getDescription(), _noun);
+            // If we do not have modular medals, but are awarded a different medal
+            // Its noun will be ""
+            if (_modularCommendations.empty())
+            {
+                _modularCommendations[""] = 0;
+            }
+            for (std::map<std::string, int>::const_iterator j = _modularCommendations.begin(); j != _modularCommendations.end(); ++j)
+            {
+                awardCommendation((*i).first, (*i).second->getDescription(), _modularCommendations.first);
+            }
 		}
 	}
 
