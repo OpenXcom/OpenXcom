@@ -326,7 +326,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 	{	
 		awardedCommendation = true;
         _nextCommendationLevel.clear();
-        _modularCommendations.clear()
+        _modularCommendations.clear();
 
 		// See if we already have the commendation, and if so what level it is
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
@@ -336,7 +336,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			{
                 // A map is used for modular medals
                 // A commendation that has no noun is always given the noun ""
-				_nextCommendationLevel[(*j)->getNoun()] = (*j)->getDecorationInt() + 1;
+				_nextCommendationLevel[(*j)->getNoun()] = (*j)->getDecorationLevelInt() + 1;
 			}
 		}
         // If we don't have this commendation, add one element to the vector
@@ -349,15 +349,15 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             // These criteria have no nouns, so only the _nextCommendationLevel[""] will ever be used
 			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel.[""])) ||
-					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel.[""])) )
+					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) )
 			{
 				awardedCommendation = false;
 				break;
@@ -372,8 +372,13 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                 {
                     // Set criteria to 0 if we don't have an entry for this noun
                     int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
-                    // If we meet the criteria, remember the noun for award purposes
-                    if (_nextCommendationLevel.at((*k).first) >= _criteria)
+					// If criteria is 0, we don't have this noun
+					if (_criteria == 0 && (*k).second >= _criteria)
+					{
+						_modularCommendations[(*k).first]++;
+					}
+					// If we meet the criteria, remember the noun for award purposes
+                    else if (_criteria != 0 && _nextCommendationLevel.at((*k).first) >= _criteria)
                     {
                         _modularCommendations[(*k).first]++;
                     }
@@ -399,7 +404,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             }
             for (std::map<std::string, int>::const_iterator j = _modularCommendations.begin(); j != _modularCommendations.end(); ++j)
             {
-                awardCommendation((*i).first, (*i).second->getDescription(), _modularCommendations.first);
+                awardCommendation((*i).first, (*i).second->getDescription(), (*j).first);
             }
 		}
 	}
