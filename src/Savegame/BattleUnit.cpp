@@ -222,6 +222,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_charging = 0;
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
+	_motionPoints = node["motionPoints"].as<int>(0);
 
 }
 
@@ -278,6 +279,7 @@ YAML::Node BattleUnit::save() const
 	node["specab"] = (int)_specab;
 	if (!_spawnUnit.empty())
 		node["spawnUnit"] = _spawnUnit;
+	node["motionPoints"] = _motionPoints;
 
 	return node;
 }
