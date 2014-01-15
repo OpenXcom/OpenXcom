@@ -396,7 +396,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 		}
 		if (_awardCommendation)
 		{
-<<<<<<< HEAD
             // If we do not have modular medals, but are awarded a different medal
             // Its noun will be ""
             if (_modularCommendations.empty())
@@ -407,10 +406,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             {
                 awardCommendation((*i).first, (*i).second->getDescription(), (*j).first);
             }
-=======
-			_awardedCommendation = true;
-			awardCommendation((*i).first, (*i).second->getDescription(), _noun);
->>>>>>> wip
 		}
 		// Do not increment if I am dealing with modular medals that have been awarded!
 		if (_increment)
