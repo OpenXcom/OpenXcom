@@ -63,7 +63,7 @@ private:
 	std::wstring _name;
 	GameDifficulty _difficulty;
 	GameTime *_time;
-	std::vector<int> _funds, _maintenance, _researchScores;
+	std::vector<int> _funds, _maintenance, _researchScores, _incomes, _expenditures;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -190,6 +190,10 @@ public:
 	void addResearchScore(int score);
 	/// gets the list of research scores
 	std::vector<int> getResearchScores();
+	/// gets the list of incomes.
+	std::vector<int> getIncomes();
+	/// gets the list of expenditures.
+	std::vector<int> getExpenditures();
 	/// gets whether or not the player has been warned
 	bool getWarned() const;
 	/// sets whether or not the player has been warned

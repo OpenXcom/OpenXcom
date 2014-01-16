@@ -960,27 +960,11 @@ void GraphsState::drawFinanceLines()
 		balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(invertedEntry) / 1000;
 		scoreTotals[entry] = _game->getSavedGame()->getResearchScores().at(invertedEntry);
 
-		for (std::vector<Country*>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
-		{
-			incomeTotals[entry] += (*iter)->getFunding().at(invertedEntry) / 1000;
-		}
 		for (std::vector<Region*>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 		{
 			scoreTotals[entry] += (*iter)->getActivityXcom().at(invertedEntry) - (*iter)->getActivityAlien().at(invertedEntry);
 		}
 
-		if (_financeToggles.at(0))
-		{
-			if (incomeTotals[entry] > upperLimit)
-			{
-				upperLimit = incomeTotals[entry];
-			}
-			if (incomeTotals[entry] < lowerLimit)
-			{
-				lowerLimit = incomeTotals[entry];
-			}
-		}
-		
 		if (_financeToggles.at(2))
 		{
 			if (maintTotals[entry] > upperLimit)
@@ -1015,22 +999,15 @@ void GraphsState::drawFinanceLines()
 			}
 		}
 	}
-	expendTotals[0] = balanceTotals[1] - balanceTotals[0];
-	if (expendTotals[0] < 0)
-	{
-		expendTotals[0] = 0;
-	}
-	if (_financeToggles.at(1) && expendTotals[0] > upperLimit)
-	{
-		upperLimit = expendTotals[0];
-	}
 
-	for (size_t entry = 1; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
+	for (size_t entry = 0; entry !=  _game->getSavedGame()->getExpenditures().size(); ++entry)
 	{
-		expendTotals[entry] = ((balanceTotals[entry+1] + incomeTotals[entry]) - maintTotals[entry])-balanceTotals[entry];
-		if (expendTotals[entry] < 0)
+		expendTotals[entry] = _game->getSavedGame()->getExpenditures().at(_game->getSavedGame()->getExpenditures().size() - (entry + 1)) / 1000;
+		incomeTotals[entry] = _game->getSavedGame()->getIncomes().at(_game->getSavedGame()->getIncomes().size() - (entry + 1)) / 1000;
+		
+		if (_financeToggles.at(0) && incomeTotals[entry] > upperLimit)
 		{
-			expendTotals[entry] = 0;
+			upperLimit = incomeTotals[entry];
 		}
 		if (_financeToggles.at(1) && expendTotals[entry] > upperLimit)
 		{
