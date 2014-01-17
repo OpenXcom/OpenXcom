@@ -316,14 +316,15 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::vector<std::pair<std::string, RuleCommendations *> > _commendationsList = rules->getCommendation();
-    bool awardedCommendation;
+    bool _awardCommendation;
+	bool _awardedCommendation = false;
     std::map<std::string, int> _nextCommendationLevel;
     std::map<std::string, int> _modularCommendations;
 
 	// Loop over all possible commendations
-	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); )
+	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
-		awardedCommendation = true;
+		bool _awardCommendation = true;
         _nextCommendationLevel.clear();
         _modularCommendations.clear();
 
@@ -344,7 +345,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 
 		// Go through each possible criteria. Assume the medal is awarded, set to false if not.
 		// As soon as we find a medal criteria that we do NOT achieve, then we are not awarded a medal
-		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end() && !_breakLoop; ++j)
+		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
             // These criteria have no nouns, so only the _nextCommendationLevel[""] will ever be used
 			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
@@ -370,29 +371,51 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                 // match nouns and decoration levels
                 for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
                 {
-                    // Set criteria to 0 if we don't have an entry for this noun
-                    int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
-					// If criteria is 0, we don't have this noun
-					if (_criteria == 0 && (*k).second >= _criteria)
-					{
-						_modularCommendations[(*k).first]++;
-					}
-					// If we meet the criteria, remember the noun for award purposes
-                    else if (_criteria != 0 && _nextCommendationLevel.at((*k).first) >= _criteria)
-                    {
-                        _modularCommendations[(*k).first]++;
-                    }
+					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), (*j).second.at(_nextCommendationLevel.at((*k).first)));
                 }
-                
-                /// Add more maps here (ex: ranks, regions, ammunition)
-
-                // If it is still empty, we did not get a commendation
-                if (_modularCommendations.empty())
-                {
-                    awardedCommendation = false;
-                    break;
-                }
+				// If it is still empty, we did not get a commendation
+				if (_modularCommendations.empty())
+				{
+					_awardCommendation = false;
+					break;
+				}
             }
+			else if ((*j).first == "total_missions_in_a_region")
+			{
+				for(std::map<std::string, int>::const_iterator k = _regionTotal.begin(); k != _regionTotal.end(); ++k)
+				{
+					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), (*j).second.at(_nextCommendationLevel.at((*k).first)));
+				}
+				if (_modularCommendations.empty())
+				{
+					_awardCommendation = false;
+					break;
+				}
+			}
+			else if ((*j).first == "total_kills_by_race")
+			{
+				for(std::map<std::string, int>::const_iterator k = _alienRaceTotal.begin(); k != _alienRaceTotal.end(); ++k)
+				{
+					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), (*j).second.at(_nextCommendationLevel.at((*k).first)));
+				}
+				if (_modularCommendations.empty())
+				{
+					_awardCommendation = false;
+					break;
+				}
+			}
+			else if ((*j).first == "total_kills_by_rank")
+			{
+				for(std::map<std::string, int>::const_iterator k = _alienRankTotal.begin(); k != _alienRankTotal.end(); ++k)
+				{
+					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), (*j).second.at(_nextCommendationLevel.at((*k).first)));
+				}
+				if (_modularCommendations.empty())
+				{
+					_awardCommendation = false;
+					break;
+				}
+			}
 		}
 		if (_awardCommendation)
 		{
@@ -405,16 +428,30 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             for (std::map<std::string, int>::const_iterator j = _modularCommendations.begin(); j != _modularCommendations.end(); ++j)
             {
                 awardCommendation((*i).first, (*i).second->getDescription(), (*j).first);
+				_awardedCommendation = true;
             }
-		}
-		// Do not increment if I am dealing with modular medals that have been awarded!
-		if (_increment)
-		{
-			++i;
 		}
 	}
 
 	return _awardedCommendation;
+}
+
+/**
+ * Manage modular commendations (private)
+ */
+void SoldierDiary::manageModularCommendations(std::map<std::string, int> progress, std::map<std::string, int> modularCommendations, std::pair<std::string, int> weaponTotal, int currentLevel)
+{
+	int _criteria = progress[""] == 0 ? 0 : currentLevel;
+	// If criteria is 0, we don't have this noun
+	if (_criteria == 0 && weaponTotal.second >= _criteria)
+	{
+		modularCommendations[weaponTotal.first]++;
+	}
+	// If we meet the criteria, remember the noun for award purposes
+    else if (_criteria != 0 && progress.at(weaponTotal.first) >= _criteria)
+    {
+        modularCommendations[weaponTotal.first]++;
+    }
 }
 
 /**

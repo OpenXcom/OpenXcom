@@ -44,8 +44,7 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 10, 8);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtMedal = new Text(90, 9, 130, 32);
+	_txtMedal = new Text(114, 9, 16, 32);
 	_txtDecoration = new Text(80, 9, 220, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
@@ -54,7 +53,6 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	add(_txtName);
 	add(_txtMedal);
 	add(_txtDecoration);
 	add(_lstSoldiers);
@@ -76,9 +74,6 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_txtName->setColor(Palette::blockOffset(15)-1);
-	_txtName->setText(tr("STR_NAME"));
-
 	_txtMedal->setColor(Palette::blockOffset(15)-1);
 	_txtMedal->setText(tr("STR_NEW_MEDAL"));
 
@@ -86,21 +81,38 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_txtDecoration->setText(tr("STR_MEDAL_AWARD_LEVEL"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
-	_lstSoldiers->setColumns(3, 114, 90, 84);
+	_lstSoldiers->setColumns(2, 204, 84);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
 
+	int row = 0;
 	for (std::vector<Soldier*>::iterator i = soldiersMedalled.begin() ; i != soldiersMedalled.end(); ++i)
 	{
+		// Soldier name
+		_lstSoldiers->addRow(2, (*i)->getName().c_str(), L"");
+		_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
+		row++;
+
+
 		for (std::vector<SoldierCommendations*>::iterator j = (*i)->getDiary()->getSoldierCommendations()->begin() ; j != (*i)->getDiary()->getSoldierCommendations()->end() ; ++j)
 		{
 			if ((*j)->isNew())
 			{
+				std::wstringstream ss;
+				ss << "   ";
 				if ((*j)->getNoun() == "")
-					_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*j)->getCommendationName()).c_str(), tr((*j)->getDecorationLevelName()).c_str());
+				{
+					ss << tr((*j)->getCommendationName()).c_str();
+				}
 				else
-					_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*j)->getCommendationName()).arg(tr((*j)->getNoun())).c_str(), tr((*j)->getDecorationLevelName()).c_str());
+				{
+					ss << tr((*j)->getCommendationName()).arg(tr((*j)->getNoun())).c_str();					
+				}
+				// Medal name (change color)
+				_lstSoldiers->addRow(2, ss.str().c_str(), tr((*j)->getDecorationLevelName()).c_str());
+				_lstSoldiers->setRowColor(row, Palette::blockOffset(5)+10);
+				row++;
 				(*j)->makeOld();
 			}
 		}
