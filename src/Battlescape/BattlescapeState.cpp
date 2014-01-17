@@ -143,9 +143,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	}
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
-	_btnLaunch = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 0);
+	_btnLaunch = new InteractiveSurface(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnLaunch->setVisible(false);
-	_btnPsi = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 25);
+	_btnPsi = new InteractiveSurface(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
@@ -251,14 +251,20 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
 	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
 
+	// Add in custom reserve buttons
+	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
+	Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+	tftdIcons->setX(48);
+	tftdIcons->setY(176);
+	tftdIcons->blit(icons);
+
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
-	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
-	SDL_Rect *r = s->getCrop();
+	SDL_Rect *r = icons->getCrop();
 	r->x = 0;
 	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
-	s->blit(_icons);
+	icons->blit(_icons);
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
@@ -1811,6 +1817,10 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
+	while (!_game->isState(this))
+	{
+		_game->popState();
+	}
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")

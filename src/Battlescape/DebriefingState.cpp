@@ -52,6 +52,7 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
+#include "../Savegame/BaseFacility.h"
 #include <sstream>
 #include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
@@ -411,7 +412,7 @@ void DebriefingState::prepareDebriefing()
 			base->setInBattlescape(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
 				{
 					_region = (*k);
 					break;
@@ -419,7 +420,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*k)->getRules()->insideCountry(base->getLongitude(), base->getLatitude()))
 				{
 					_country = (*k);
 					break;
@@ -429,6 +430,20 @@ void DebriefingState::prepareDebriefing()
 			{
 				_destroyBase = true;
 			}
+			for (std::vector<BaseFacility*>::iterator k = base->getFacilities()->begin(); k != base->getFacilities()->end();)
+			{
+				// this facility was demolished
+				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
+				{
+					base->destroyFacility(k);
+				}
+				else
+				{
+					++k;
+				}
+			}
+			// this may cause the base to become disjointed, check the connections.
+			base->checkModuleConnections();
 		}
 	}
 
@@ -544,9 +559,28 @@ void DebriefingState::prepareDebriefing()
 		{
 			type = (*j)->getSpawnUnit();
 		}
+
 		if (!(*j)->getTile())
 		{
-			(*j)->setTile(battle->getTile((*j)->getPosition()));
+			Position pos = (*j)->getPosition();
+			if (pos == Position(-1, -1, -1))
+			{
+				for (std::vector<BattleItem*>::iterator k = battle->getItems()->begin(); k != battle->getItems()->end(); ++k)
+				{
+					if ((*k)->getUnit() && (*k)->getUnit() == *j)
+					{
+						if ((*k)->getOwner())
+						{
+							pos = (*k)->getOwner()->getPosition();
+						}
+						else if ((*k)->getTile())
+						{
+							pos = (*k)->getTile()->getPosition();
+						}
+					}
+				}
+			}
+			(*j)->setTile(battle->getTile(pos));
 		}
 
 		if (status == STATUS_DEAD)
@@ -629,7 +663,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea())
 				// mind controlled units may as well count as unconscious
-				&& faction == FACTION_PLAYER)
+				&& faction == FACTION_PLAYER && !(*j)->isOut())
 			{
 				for (std::vector<BattleItem*>::iterator k = (*j)->getInventory()->begin(); k != (*j)->getInventory()->end(); ++k)
 				{
@@ -944,6 +978,12 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	{
 		int qty = base->getItems()->getItem(i->first);
 		RuleItem *tankRule = _game->getRuleset()->getItem(i->first);
+		int size = 4;
+		if (_game->getRuleset()->getUnit(tankRule->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
+			size *= size;
+		}
 		int canBeAdded = std::min(qty, i->second);
 		if (qty < i->second)
 		{ // missing tanks
@@ -954,7 +994,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		if (tankRule->getCompatibleAmmo()->empty())
 		{ // so this tank does NOT require ammo
 			for (int j = 0; j < canBeAdded; ++j)
-				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize()));
+				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize(), size));
 			base->getItems()->removeItem(i->first, canBeAdded);
 		}
 		else
@@ -970,7 +1010,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 			canBeAdded = std::min(canBeAdded, baqty);
 			if (canBeAdded > 0)
 			{
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
 				int remainder = 0;
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 				int newAmmo;
@@ -978,7 +1018,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 				{
 					newAmmo = newAmmoPerVehicle;
 					if (j < remainder) ++newAmmo;
-					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo));
+					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo, size));
 					base->getItems()->removeItem(ammo->getType(), newAmmo);
 				}
 				base->getItems()->removeItem(i->first, canBeAdded);

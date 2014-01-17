@@ -194,4 +194,4 @@ void Production::load(const YAML::Node &node)
 	setTimeSpent(node["spent"].as<int>());
 	setAmountTotal(node["amount"].as<int>());
 }
-};
+}

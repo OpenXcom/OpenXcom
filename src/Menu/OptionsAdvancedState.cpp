@@ -100,6 +100,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showFundsOnGeoscape", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("disableAutoEquip", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));
@@ -294,7 +295,7 @@ std::wstring OptionsAdvancedState::updatePathString(int sel)
 	case 1:
 		return tr("STR_ARROWS");
 	case 2:
-		return tr("STR_TU_COST");
+		return tr("STR_TIME_UNIT_COST");
 	case 3:
 		return tr("STR_FULL");
 	default:

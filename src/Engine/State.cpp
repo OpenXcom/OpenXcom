@@ -73,9 +73,9 @@ void State::add(Surface *surface)
 	// Set palette
 	surface->setPalette(_game->getScreen()->getPalette());
 
-	// Set default fonts
-	if (_game->getResourcePack())
-		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	// Set default text resources
+	if (_game->getLanguage() && _game->getResourcePack())
+		surface->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 
 	_surfaces.push_back(surface);
 }
@@ -208,6 +208,9 @@ LocalizedText State::tr(const std::string &id, unsigned n) const
 	return _game->getLanguage()->getString(id, n);
 }
 
+/**
+ * centers all the surfaces on the screen.
+ */
 void State::centerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
@@ -217,6 +220,9 @@ void State::centerAllSurfaces()
 	}
 }
 
+/**
+ * drop all the surfaces by half the screen height
+ */
 void State::lowerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
@@ -225,6 +231,9 @@ void State::lowerAllSurfaces()
 	}
 }
 
+/**
+ * switch all the colours to something a little more battlescape appropriate.
+ */
 void State::applyBattlescapeTheme()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
@@ -264,7 +273,7 @@ void State::applyBattlescapeTheme()
 		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
 		if (arrow)
 		{
-			arrow->setColor(Palette::blockOffset(0)-1);
+			arrow->setColor(Palette::blockOffset(0));
 		}
 		Slider *slider = dynamic_cast<Slider*>(*i);
 		if (slider)
@@ -275,4 +284,21 @@ void State::applyBattlescapeTheme()
 	}
 }
 
+/**
+ * redraw all the text-type surfaces.
+ */
+void State::redrawText()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		Text* text = dynamic_cast<Text*>(*i);
+		TextButton* button = dynamic_cast<TextButton*>(*i);
+		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
+		TextList* list = dynamic_cast<TextList*>(*i);
+		if (text || button || edit || list)
+		{
+			(*i)->draw();
+		}
+	}
+}
 }

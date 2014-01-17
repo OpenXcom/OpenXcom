@@ -656,6 +656,11 @@ std::string sanitizeFilename(const std::string &filename)
  */
 std::string noExt(const std::string &filename)
 {
+	size_t dot = filename.find_last_of('.');
+	if (dot == std::string::npos)
+	{
+		return filename;
+	}
 	return filename.substr(0, filename.find_last_of('.'));
 }
 
@@ -683,9 +688,17 @@ std::string getLocale()
 #else
 	std::locale l("");
 	std::string name = l.name();
-	std::string language = name.substr(0, name.find_first_of('_')-1);
-	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
-	
+	size_t dash = name.find_first_of('_'), dot = name.find_first_of('.');
+	if (dash == std::string::npos)
+	{
+		return "";
+	}
+	std::string language = name.substr(0, dash - 1);
+	if (dot == std::string::npos)
+	{
+		return language;
+	}
+	std::string country = name.substr(dash - 1, dot - 1);
 	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
@@ -707,6 +720,7 @@ bool isQuitShortcut(const SDL_Event &ev)
 	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
 #else
 	//TODO add other OSs shortcuts.
+    (void)ev;
 	return false;
 #endif
 }

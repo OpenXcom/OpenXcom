@@ -7,9 +7,10 @@
   version: 0.08 (2011-11-25)
   license: public domain
 */
-
 #ifndef OXC_OPENGL_H
 #define OXC_OPENGL_H
+
+#ifndef __NO_OPENGL
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -18,9 +19,7 @@
 
 namespace OpenXcom 
 {
-#ifndef __NO_SHADERS
 
-#define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 #ifndef __APPLE__
 extern PFNGLCREATEPROGRAMPROC glCreateProgram;
 extern PFNGLUSEPROGRAMPROC glUseProgram;
@@ -35,9 +34,8 @@ extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
 extern PFNGLUNIFORM1IPROC glUniform1i;
 extern PFNGLUNIFORM2FVPROC glUniform2fv;
 extern PFNGLUNIFORM4FVPROC glUniform4fv;
+#endif
 
-#endif
-#endif
 std::string strGLError(GLenum glErr);
 
 #define glErrorCheck() {\
@@ -96,5 +94,11 @@ public:
 };
 
 }
+
+#else
+
+namespace OpenXcom { class OpenGL {}; }
+
+#endif
 
 #endif

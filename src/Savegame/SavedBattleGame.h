@@ -75,9 +75,10 @@ private:
 	std::vector<BattleUnit*> _exposedUnits;
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
-	std::vector<Position> _tileSearch;
+	std::vector<Position> _tileSearch, _storageSpace;
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
+	std::vector< std::vector<std::pair<int, int> > > _baseModules;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -246,14 +247,25 @@ public:
 	const std::vector<Position> getTileSearch();
 	/// check if the AI has engaged cheat mode.
 	bool isCheating();
-
+	/// get the reserved fire mode.
 	BattleActionType getTUReserved() const;
-
+	/// set the reserved fire mode.
 	void setTUReserved(BattleActionType reserved);
-
+	/// get whether we are reserving TUs to kneel.
 	bool getKneelReserved() const;
-
+	/// set whether we are reserving TUs to kneel.
 	void setKneelReserved(bool reserved);
+	/// give me access to the storage tiles vector.
+	std::vector<Position> &getStorageSpace();
+	/// move all the leftover items to random locations in the storage tiles vector.
+	void randomizeItemLocations(Tile *t);
+	/// get a reference to the baseModules map.
+	std::vector< std::vector<std::pair<int, int> > > &getModuleMap();
+	/// calculate the number of map modules remaining
+	void calculateModuleMap();
+	/// a shortcut to the geoscape save.
+	SavedGame *getGeoscapeSave();
+
 };
 
 }

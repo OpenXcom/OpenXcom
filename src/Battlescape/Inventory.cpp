@@ -59,7 +59,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y) : Interact
 	_warning = new WarningMessage(224, 24, 48, 176);
 	_stackNumber = new NumberText(15, 15, 0, 0);
 
-	_warning->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
@@ -131,7 +131,7 @@ void Inventory::drawGrid()
 	_grid->clear();
 	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
-	text.setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 	text.setColor(Palette::blockOffset(4)-1);
 	text.setHighContrast(true);
 
@@ -913,7 +913,11 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		// and neither is set to explode
 		itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1 &&
 		// and neither is a corpse or unconscious unit
-		itemA->getUnit() == 0 && itemB->getUnit() == 0);
+		itemA->getUnit() == 0 && itemB->getUnit() == 0 &&
+		// and if it's a medkit, it has the same number of charges
+		itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity() &&
+		itemA->getHealQuantity() == itemB->getHealQuantity() &&
+		itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
 
 }
 }

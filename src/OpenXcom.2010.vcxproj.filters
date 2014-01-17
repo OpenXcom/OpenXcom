@@ -804,6 +804,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Basescape\ManufactureState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
@@ -1558,12 +1559,6 @@
     <ClInclude Include="Engine\ShaderRepeat.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ShaderRotate.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\FixedFloat.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GraphSubset.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -1663,5 +1658,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

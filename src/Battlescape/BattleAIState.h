@@ -43,7 +43,7 @@ public:
 	/// Cleans up the BattleAIState.
 	virtual ~BattleAIState();
 	/// Loads the AI state from YAML.
-	virtual void load(const YAML::Node& node);
+	void load(const YAML::Node& node);
 	/// Saves the AI state to YAML.
 	virtual YAML::Node save() const;
 	/// Enters the state.

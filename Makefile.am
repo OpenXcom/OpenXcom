@@ -308,7 +308,6 @@ openxcom_SOURCES = \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \
-	src/Engine/FixedFloat.h \
 	src/Engine/Flc.cpp \
 	src/Engine/Flc.h \
 	src/Engine/Font.cpp \
@@ -355,7 +354,6 @@ openxcom_SOURCES = \
 	src/Engine/ShaderDrawHelper.h \
 	src/Engine/ShaderMove.h \
 	src/Engine/ShaderRepeat.h \
-	src/Engine/ShaderRotate.h \
 	src/Engine/Sound.cpp \
 	src/Engine/Sound.h \
 	src/Engine/SoundSet.cpp \

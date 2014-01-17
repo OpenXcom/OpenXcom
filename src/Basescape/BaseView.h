@@ -29,6 +29,7 @@ class SurfaceSet;
 class BaseFacility;
 class RuleBaseFacility;
 class Font;
+class Language;
 class Timer;
 
 /**
@@ -46,6 +47,7 @@ private:
 	SurfaceSet *_texture;
 	BaseFacility *_facilities[BASE_SIZE][BASE_SIZE], *_selFacility;
 	Font *_big, *_small;
+	Language *_lang;
 	int _gridX, _gridY, _selSize;
 	Surface *_selector;
 	bool _blink;
@@ -57,8 +59,8 @@ public:
 	BaseView(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the base view.
 	~BaseView();
-	/// Sets the base view's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the base view's various resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the base to display.
 	void setBase(Base *base);
 	/// Sets the texture for this base view.

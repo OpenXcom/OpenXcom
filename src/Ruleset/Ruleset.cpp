@@ -66,7 +66,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -272,10 +272,11 @@ void Ruleset::loadFile(const std::string &filename)
 	}
  	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
 	{
-		RuleInventory *rule = loadRule(*i, &_invs, 0, "id");
+		RuleInventory *rule = loadRule(*i, &_invs, &_invsIndex, "id");
 		if (rule != 0)
 		{
-			rule->load(*i);
+			_invListOrder += 10;
+			rule->load(*i, _invListOrder);
 		}
 	}
  	for (YAML::const_iterator i = doc["terrains"].begin(); i != doc["terrains"].end(); ++i)
@@ -946,6 +947,15 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
 }
 
 /**
+ * Returns the list of inventories.
+ * @return The list of inventories.
+ */
+const std::vector<std::string> &Ruleset::getInvsList () const
+{
+	return _invsIndex;
+}
+
+/**
  * Returns the rules for the specified research project.
  * @param id Research project type.
  * @return Rules for the research project.
@@ -984,6 +994,7 @@ const std::vector<std::string> &Ruleset::getManufactureList () const
 {
 	return _manufactureIndex;
 }
+
 
 /**
  * Generates and returns a list of facilities for custom bases.
@@ -1273,6 +1284,22 @@ void Ruleset::sortLists()
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_manufactureIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _invsIndex.begin(); i != _invsIndex.end(); ++i)
+	{
+		while (list.find(getInventory(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getInventory(*i)->getListOrder() + offset] = *i;
+	}
+	_invsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_invsIndex.push_back(i->second);
 	}
 	list.clear();
 	offset = 0;

@@ -47,6 +47,7 @@ class Vehicle;
 class Base : public Target
 {
 private:
+	static const int BASE_SIZE = 6;
 	const Ruleset *_rule;
 	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
@@ -172,6 +173,8 @@ public:
 	int getUsedPsiLabs() const;
 	/// Gets the base's total available psi lab space.
 	int getAvailablePsiLabs() const;
+	/// Gets the base's total free psi lab space.
+	int getFreePsiLabs() const;
 	/// Gets the total amount of Containment Space
 	int getAvailableContainment() const;
 	/// Gets the total amount of used Containment Space
@@ -193,6 +196,12 @@ public:
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.
 	std::vector<Vehicle*> *getVehicles();
+	/// check all the module connections.
+	void checkModuleConnections();
+	/// check a single coordinate for module connection.
+	bool checkConnected(int x, int y, int **grid, BaseFacility *(&facilities)[BASE_SIZE][BASE_SIZE]) const;
+	/// destroy a facility and deal with the side effects.
+	void destroyFacility(std::vector<BaseFacility*>::iterator &facility);
 };
 
 }

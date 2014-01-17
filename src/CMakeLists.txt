@@ -237,6 +237,10 @@ set ( engine_src
   Engine/Flc.h
   Engine/Zoom.cpp
   Engine/Zoom.h
+  Engine/ShaderDraw.h
+  Engine/ShaderDrawHelper.h
+  Engine/ShaderMove.h
+  Engine/ShaderRepeat.h
   Engine/Scalers/scale2x.cpp
   Engine/Scalers/scale2x.h
   Engine/Scalers/scale3x.cpp

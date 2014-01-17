@@ -385,9 +385,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			SoundSet *s = _sounds["INTRO.CAT"] = new SoundSet();
 			s->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
-		} else
-		{
-			Log(LOG_WARNING) << "INTRO.CAT is missing! :(";
 		}
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
@@ -395,9 +392,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			SoundSet *s = _sounds["SAMPLE3.CAT"] = new SoundSet();
 			wav = true;
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
-		} else
-		{
-			Log(LOG_WARNING) << "SAMPLE3.CAT is missing! :(";
 		}
 		
 	}
@@ -800,15 +794,6 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
-
-	// Add in custom reserve buttons
-	Surface *icons = new Surface(50, 24);
-	icons->loadImage(CrossPlatform::getDataFile("Resources/UI/reserve.png"));
-	icons->setX(48);
-	icons->setY(176);
-	_surfaces["ICONS.PCK"]->setPalette(icons->getPalette());
-	icons->blit(_surfaces["ICONS.PCK"]);
-	delete icons;
 
 	// Load Battlescape inventory
 	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");

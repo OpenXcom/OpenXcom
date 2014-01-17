@@ -40,7 +40,6 @@ private:
 	ArrowShape _shape;
 	TextList *_list;
 	Timer *_timer;
-	bool _listButton;
 protected:
 	bool isButtonHandled(Uint8 button = 0);
 public:

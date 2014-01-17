@@ -27,6 +27,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -51,6 +52,40 @@ namespace OpenXcom
 	 */
 	ArticleState::~ArticleState()
 	{}
+
+	std::string ArticleState::getDamageTypeText(ItemDamageType dt) const
+	{
+		std::string type;
+		switch (dt)
+		{
+		case DT_AP:
+		case DT_MELEE:
+			type = "STR_DAMAGE_ARMOR_PIERCING";
+			break;
+		case DT_HE:
+			type = "STR_DAMAGE_HIGH_EXPLOSIVE";
+			break;
+		case DT_SMOKE:
+			type = "STR_DAMAGE_SMOKE";
+			break;
+		case DT_IN:
+			type = "STR_DAMAGE_INCENDIARY";
+			break;
+		case DT_LASER:
+			type = "STR_DAMAGE_LASER_BEAM";
+			break;
+		case DT_PLASMA:
+			type = "STR_DAMAGE_PLASMA_BEAM";
+			break;
+		case DT_STUN:
+			type = "STR_DAMAGE_STUN";
+			break;
+		default:
+			type = "STR_UNKNOWN";
+			break;
+		}
+		return type;
+	}
 
 	/**
 	 * Set captions and click handlers for the common control elements.

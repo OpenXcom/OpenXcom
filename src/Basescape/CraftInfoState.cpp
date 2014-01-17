@@ -61,12 +61,12 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_edtCraft = new TextEdit(160, 16, 80, 8);
 	_txtDamage = new Text(82, 17, 14, 24);
 	_txtFuel = new Text(82, 17, 228, 24);
-	_txtW1Name = new Text(90, 9, 46, 48);
-	_txtW1Ammo = new Text(60, 9, 46, 64);
-	_txtW1Max = new Text(60, 9, 46, 72);
-	_txtW2Name = new Text(90, 9, 204, 48);
-	_txtW2Ammo = new Text(60, 9, 204, 64);
-	_txtW2Max = new Text(60, 9, 204, 72);
+	_txtW1Name = new Text(75, 16, 46, 48);
+	_txtW1Ammo = new Text(75, 9, 46, 64);
+	_txtW1Max = new Text(75, 9, 46, 72);
+	_txtW2Name = new Text(75, 16, 204, 48);
+	_txtW2Ammo = new Text(75, 9, 204, 64);
+	_txtW2Max = new Text(75, 9, 204, 72);
 	_sprite = new Surface(32, 40, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);
@@ -142,6 +142,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtW1Name->setColor(Palette::blockOffset(13)+5);
+	_txtW1Name->setWordWrap(true);
 
 	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
@@ -150,6 +151,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_txtW1Max->setSecondaryColor(Palette::blockOffset(13)+5);
 
 	_txtW2Name->setColor(Palette::blockOffset(13)+5);
+	_txtW2Name->setWordWrap(true);
 
 	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);

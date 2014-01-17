@@ -73,10 +73,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base,
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtAvailable =  new Text(190, 9, 10, 24);
 	_txtUsed = new Text(110, 9, 136, 24);
-	_txtItem = new Text(130, 9, 10, 32);
-	_txtLiveAliens = new Text(54, 9, 136, 32);
-	_txtDeadAliens = new Text(96, 9, 220, 32);
-	_lstAliens = new TextList(280, 120, 8, 44);
+	_txtItem = new Text(120, 9, 10, 41);
+	_txtLiveAliens = new Text(54, 18, 136, 32);
+	_txtDeadAliens = new Text(54, 18, 220, 32);
+	_lstAliens = new TextList(280, 112, 8, 53);
 
 	// Set palette
 	if (origin == OPT_BATTLESCAPE)
@@ -135,9 +135,13 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base,
 
 	_txtLiveAliens->setColor(_color);
 	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
+	_txtLiveAliens->setWordWrap(true);
+	_txtLiveAliens->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtDeadAliens->setColor(_color);
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
+	_txtDeadAliens->setWordWrap(true);
+	_txtDeadAliens->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtAvailable->setColor(_color);
 	_txtAvailable->setSecondaryColor(_color2);

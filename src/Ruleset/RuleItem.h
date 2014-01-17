@@ -23,11 +23,11 @@
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
-enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE };
-
 namespace OpenXcom
 {
+
+enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
+enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE };
 
 class SurfaceSet;
 class Surface;
@@ -182,6 +182,10 @@ public:
 	int getBulletSpeed() const;
 	/// How many auto shots does this weapon fire.
 	int getAutoShots() const;
+	/// is this item a 2 handed weapon?
+	bool isRifle() const;
+	/// is this item a single handed weapon?
+	bool isPistol() const;
 };
 
 }

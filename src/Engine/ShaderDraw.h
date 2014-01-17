@@ -107,7 +107,7 @@ static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_f
 		}
 	}
 
-};
+}
 	
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type>
 static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame)

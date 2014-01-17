@@ -96,15 +96,21 @@ void ExplosionBState::init()
 	{
 		if (_power)
 		{
+			int frame = 0;
+			int counter = (_power/5) / 5;
 			for (int i = 0; i < _power/5; i++)
 			{
 				int X = RNG::generate(-_power/2,_power/2);
 				int Y = RNG::generate(-_power/2,_power/2);
 				Position p = _center;
 				p.x += X; p.y += Y;
-				Explosion *explosion = new Explosion(p, RNG::generate(-3,6), true);
+				Explosion *explosion = new Explosion(p, frame, true);
 				// add the explosion on the map
 				_parent->getMap()->getExplosions()->insert(explosion);
+				if (i > 0 && i % counter == 0)
+				{
+					--frame;
+				}
 			}
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 			// explosion sound
@@ -188,7 +194,7 @@ void ExplosionBState::explode()
 				&& victim
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty()
-				&& victim->getSpecialAbility() == SPECAB_NONE)
+				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);

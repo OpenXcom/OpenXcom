@@ -134,7 +134,7 @@ inline void DeleteAligned(void* buffer)
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
-Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _alignedBuffer(0)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
@@ -170,9 +170,8 @@ Surface::Surface(const Surface& other)
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
 		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
-		//cant call `SetPalette` because its vitual function and it dont work correctly in constructor
-		//additionally it use original colors, not temporarily ones.
-		SDL_SetColors(_surface, other._originalColors ? other._originalColors : other.getPalette(), 0, 255);
+		//cant call `setPalette` because its vitual function and it dont work correctly in constructor
+		SDL_SetColors(_surface, other.getPalette(), 0, 255);
 		memcpy(_alignedBuffer, other._alignedBuffer, height*pitch);
 	}
 	else
@@ -194,7 +193,6 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
-	_originalColors = 0;
 	_dx = other._dx;
 	_dy = other._dy;
 }
@@ -292,12 +290,12 @@ void Surface::loadSpk(const std::string &filename)
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
 		flag = SDL_SwapLE16(flag);
-	
+
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			flag = SDL_SwapLE16(flag);
-			
+
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				setPixelIterative(&x, &y, 0);
@@ -307,7 +305,7 @@ void Surface::loadSpk(const std::string &filename)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			flag = SDL_SwapLE16(flag);
-			
+
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				imgFile.read((char*)&value, 1);
@@ -735,65 +733,10 @@ void Surface::unlock()
 }
 
 /**
- * Shifts all the colors in the surface's palette by a set amount.
- * Optionally inverts the colors according to a middle point as well.
- * This is a common method in 8bpp games to simulate color
- * effects for cheap.
- * @param off Amount to shift.
- * @param mul Shift multiplier.
- * @param mid Optional middle point used to invert palette. If 0, palette is not inverted
- */
-void Surface::paletteShift(int off, int mul, int mid)
-{
-	int ncolors = _surface->format->palette->ncolors;
-
-	// store the original palette
-	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
-
-	// create a temporary new palette
-	SDL_Color *newColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
-
-	// do the color shift - while storing the original colors too
-	for (int i = 0; i < ncolors; i++)
-	{
-		int inverseOffset = mid ? 2 * (mid - i) : 0;
-		int j = (i * mul + off + inverseOffset + ncolors) % ncolors;
-
-		_originalColors[i].r = getPalette()[i].r;
-		_originalColors[i].g = getPalette()[i].g;
-		_originalColors[i].b = getPalette()[i].b;
-		newColors[i].r = getPalette()[j].r;
-		newColors[i].g = getPalette()[j].g;
-		newColors[i].b = getPalette()[j].b;
-	}
-
-	// assign it and free it
-	SDL_SetColors(_surface, newColors, 0, ncolors);
-	free(newColors);
-
-	return;
-}
-
-/**
- * Restores the previously shifted palette.
- * You have to call it after you've done blitting.
- */
-void Surface::paletteRestore()
-{
-	if (_originalColors)
-	{
-		SDL_SetColors(_surface, _originalColors, 0, 256);
-		free(_originalColors);
-		_originalColors = 0;
-	}
-}
-
-/**
  * help class used for Surface::blitNShade
  */
 struct ColorReplace
 {
-	
 	/**
 	* Function used by ShaderDraw in Surface::blitNShade
 	* set shade and replace color in that surface
@@ -814,7 +757,7 @@ struct ColorReplace
 				dest = newColor | newShade;
 		}
 	}
-	
+
 };
 
 /**
@@ -843,7 +786,7 @@ struct StandartShade
 				dest = (src&(15<<4)) | newShade;
 		}
 	}
-	
+
 };
 
 
@@ -876,7 +819,7 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 	}
 	else
 		ShaderDraw<StandartShade>(ShaderSurface(surface), src, ShaderScalar(off));
-		
+
 }
 
 /**

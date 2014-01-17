@@ -670,4 +670,22 @@ int RuleItem::getAutoShots() const
 	return _autoShots;
 }
 
+/**
+* is this item a rifle?
+* @return whether or not it is a rifle.
+*/
+bool RuleItem::isRifle() const
+{
+	return (_battleType == BT_FIREARM || _battleType == BT_MELEE) && _twoHanded;
+}
+
+/**
+* is this item a pistol?
+* @return whether or not it is a pistol.
+*/
+bool RuleItem::isPistol() const
+{
+	return (_battleType == BT_FIREARM || _battleType == BT_MELEE) && !_twoHanded;
+}
+
 }

@@ -76,8 +76,13 @@ public:
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
+	/// redraw all the text-type surfaces.
+	void redrawText();
+	/// center all surfaces relative to the screen.
 	void centerAllSurfaces();
+	/// lower all surfaces by half the screen height.
 	void lowerAllSurfaces();
+	/// switch the colours to use the battlescape palette.
 	void applyBattlescapeTheme();
 	friend class Timer;
 };

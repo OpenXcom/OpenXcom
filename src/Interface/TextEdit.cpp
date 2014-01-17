@@ -109,11 +109,12 @@ void TextEdit::setSmall()
  * text size can change mid-text.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void TextEdit::setFonts(Font *big, Font *small)
+void TextEdit::initText(Font *big, Font *small, Language *lang)
 {
-	_text->setFonts(big, small);
-	_caret->setFonts(big, small);
+	_text->initText(big, small, lang);
+	_caret->initText(big, small, lang);
 }
 
 /**

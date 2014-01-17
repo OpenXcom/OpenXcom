@@ -222,6 +222,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_charging = 0;
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
+	_motionPoints = node["motionPoints"].as<int>(0);
 
 }
 
@@ -278,6 +279,7 @@ YAML::Node BattleUnit::save() const
 	node["specab"] = (int)_specab;
 	if (!_spawnUnit.empty())
 		node["spawnUnit"] = _spawnUnit;
+	node["motionPoints"] = _motionPoints;
 
 	return node;
 }
@@ -1583,7 +1585,10 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 {
 	_tile = tile;
 	if (!_tile)
+	{
+		_floating = false;
 		return;
+	}
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _armor->getMovementType() == MT_FLY)
 	{
@@ -1594,6 +1599,10 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
+	}
+	else if (_status == STATUS_UNCONSCIOUS)
+	{
+		_floating = _armor->getMovementType() == MT_FLY && _tile->hasNoFloor(tileBelow);
 	}
 }
 

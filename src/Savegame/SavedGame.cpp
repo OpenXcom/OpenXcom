@@ -98,6 +98,8 @@ SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 	_researchScores.push_back(0);
+	_incomes.push_back(0);
+	_expenditures.push_back(0);
 }
 
 /**
@@ -260,6 +262,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_funds = doc["funds"].as< std::vector<int> >(_funds);
 	_maintenance = doc["maintenance"].as< std::vector<int> >(_maintenance);
 	_researchScores = doc["researchScores"].as< std::vector<int> >(_researchScores);
+	_incomes = doc["incomes"].as< std::vector<int> >(_incomes);
+	_expenditures = doc["expenditures"].as< std::vector<int> >(_expenditures);
 	_warned = doc["warned"].as<bool>(_warned);
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
@@ -399,6 +403,8 @@ void SavedGame::save(const std::string &filename) const
 	node["funds"] = _funds;
 	node["maintenance"] = _maintenance;
 	node["researchScores"] = _researchScores;
+	node["incomes"] = _incomes;
+	node["expenditures"] = _expenditures;
 	node["warned"] = _warned;
 	node["globeLon"] = _globeLon;
 	node["globeLat"] = _globeLat;
@@ -521,6 +527,14 @@ const std::vector<int> &SavedGame::getFundsList() const
  */
 void SavedGame::setFunds(int funds)
 {
+	if (_funds.back() > funds)
+	{
+		_expenditures.back() += _funds.back() - funds;
+	}
+	else
+	{
+		_incomes.back() += funds - _funds.back();
+	}
 	_funds.back() = funds;
 }
 
@@ -588,11 +602,16 @@ void SavedGame::monthlyFunding()
 	_funds.push_back(_funds.back());
 	_maintenance.back() = getBaseMaintenance();
 	_maintenance.push_back(0);
-
+	_incomes.push_back(getCountryFunding());
+	_expenditures.push_back(getBaseMaintenance());
 	_researchScores.push_back(0);
+
+	if (_incomes.size() > 12)
+		_incomes.erase(_incomes.begin());
+	if (_expenditures.size() > 12)
+		_expenditures.erase(_expenditures.begin());
 	if (_researchScores.size() > 12)
 		_researchScores.erase(_researchScores.begin());
-
 	if(_funds.size() > 12)
 		_funds.erase(_funds.begin());
 	if(_maintenance.size() > 12)
@@ -1293,6 +1312,23 @@ std::vector<int> SavedGame::getResearchScores()
 	return _researchScores;
 }
 
+/**
+ * return the list of income scores
+ * @return list of income scores.
+ */
+std::vector<int> SavedGame::getIncomes()
+{
+	return _incomes;
+}
+
+/**
+ * return the list of expenditures scores
+ * @return list of expenditures scores.
+ */
+std::vector<int> SavedGame::getExpenditures()
+{
+	return _expenditures;
+}
 /**
  * return if the player has been 
  * warned about poor performance.

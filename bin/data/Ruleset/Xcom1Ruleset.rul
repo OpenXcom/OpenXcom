@@ -2530,7 +2530,7 @@ items:
     handSprite: 104
     hitSound: 48
     power: 70
-    damageType: 2
+    damageType: 7
     accuracyMelee: 92
     tuMelee: 15
     clipSize: -1
@@ -2913,6 +2913,124 @@ ufos:
           width: 30
           length: 30
 invs:
+  - id: STR_GROUND
+    x: 0
+    y: 152
+    type: 2
+    costs:
+      STR_BACK_PACK: 20
+      STR_BELT: 12
+      STR_LEFT_HAND: 8
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 12
+      STR_RIGHT_HAND: 8
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 12
+  - id: STR_RIGHT_HAND
+    x: 0
+    y: 63
+    type: 1
+    costs:
+      STR_BACK_PACK: 14
+      STR_BELT: 8
+      STR_GROUND: 2
+      STR_LEFT_HAND: 4
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_LEG: 8
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_LEFT_HAND
+    x: 128
+    y: 63
+    type: 1
+    costs:
+      STR_BACK_PACK: 14
+      STR_BELT: 8
+      STR_GROUND: 2
+      STR_LEFT_LEG: 8
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_BELT
+    x: 192
+    y: 104
+    slots:
+      - [0, 0]
+      - [1, 0]
+      - [2, 0]
+      - [3, 0]
+      - [0, 1]
+      - [3, 1]
+    costs:
+      STR_BACK_PACK: 16
+      STR_GROUND: 6
+      STR_LEFT_HAND: 4
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 12
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 12
+  - id: STR_RIGHT_LEG
+    x: 0
+    y: 120
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 18
+      STR_BELT: 10
+      STR_GROUND: 6
+      STR_LEFT_HAND: 6
+      STR_LEFT_LEG: 10
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 4
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_LEFT_LEG
+    x: 128
+    y: 120
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 18
+      STR_BELT: 10
+      STR_GROUND: 6
+      STR_LEFT_HAND: 4
+      STR_LEFT_SHOULDER: 10
+      STR_RIGHT_HAND: 6
+      STR_RIGHT_LEG: 10
+      STR_RIGHT_SHOULDER: 10
+  - id: STR_RIGHT_SHOULDER
+    x: 16
+    y: 37
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 16
+      STR_BELT: 10
+      STR_GROUND: 4
+      STR_LEFT_HAND: 3
+      STR_LEFT_LEG: 12
+      STR_LEFT_SHOULDER: 8
+      STR_RIGHT_HAND: 3
+      STR_RIGHT_LEG: 12
+  - id: STR_LEFT_SHOULDER
+    x: 112
+    y: 37
+    slots:
+      - [0, 0]
+      - [1, 0]
+    costs:
+      STR_BACK_PACK: 16
+      STR_BELT: 10
+      STR_GROUND: 4
+      STR_LEFT_HAND: 3
+      STR_LEFT_LEG: 12
+      STR_RIGHT_HAND: 3
+      STR_RIGHT_LEG: 12
+      STR_RIGHT_SHOULDER: 8
   - id: STR_BACK_PACK
     x: 192
     y: 37
@@ -2935,124 +3053,6 @@ invs:
       STR_RIGHT_HAND: 8
       STR_RIGHT_LEG: 16
       STR_RIGHT_SHOULDER: 14
-  - id: STR_BELT
-    x: 192
-    y: 104
-    slots:
-      - [0, 0]
-      - [1, 0]
-      - [2, 0]
-      - [3, 0]
-      - [0, 1]
-      - [3, 1]
-    costs:
-      STR_BACK_PACK: 16
-      STR_GROUND: 6
-      STR_LEFT_HAND: 4
-      STR_LEFT_LEG: 10
-      STR_LEFT_SHOULDER: 12
-      STR_RIGHT_HAND: 4
-      STR_RIGHT_LEG: 10
-      STR_RIGHT_SHOULDER: 12
-  - id: STR_GROUND
-    x: 0
-    y: 152
-    type: 2
-    costs:
-      STR_BACK_PACK: 20
-      STR_BELT: 12
-      STR_LEFT_HAND: 8
-      STR_LEFT_LEG: 10
-      STR_LEFT_SHOULDER: 12
-      STR_RIGHT_HAND: 8
-      STR_RIGHT_LEG: 10
-      STR_RIGHT_SHOULDER: 12
-  - id: STR_LEFT_HAND
-    x: 128
-    y: 63
-    type: 1
-    costs:
-      STR_BACK_PACK: 14
-      STR_BELT: 8
-      STR_GROUND: 2
-      STR_LEFT_LEG: 8
-      STR_LEFT_SHOULDER: 10
-      STR_RIGHT_HAND: 4
-      STR_RIGHT_LEG: 10
-      STR_RIGHT_SHOULDER: 10
-  - id: STR_LEFT_LEG
-    x: 128
-    y: 120
-    slots:
-      - [0, 0]
-      - [1, 0]
-    costs:
-      STR_BACK_PACK: 18
-      STR_BELT: 10
-      STR_GROUND: 6
-      STR_LEFT_HAND: 4
-      STR_LEFT_SHOULDER: 10
-      STR_RIGHT_HAND: 6
-      STR_RIGHT_LEG: 10
-      STR_RIGHT_SHOULDER: 10
-  - id: STR_LEFT_SHOULDER
-    x: 112
-    y: 37
-    slots:
-      - [0, 0]
-      - [1, 0]
-    costs:
-      STR_BACK_PACK: 16
-      STR_BELT: 10
-      STR_GROUND: 4
-      STR_LEFT_HAND: 3
-      STR_LEFT_LEG: 12
-      STR_RIGHT_HAND: 3
-      STR_RIGHT_LEG: 12
-      STR_RIGHT_SHOULDER: 8
-  - id: STR_RIGHT_HAND
-    x: 0
-    y: 63
-    type: 1
-    costs:
-      STR_BACK_PACK: 14
-      STR_BELT: 8
-      STR_GROUND: 2
-      STR_LEFT_HAND: 4
-      STR_LEFT_LEG: 10
-      STR_LEFT_SHOULDER: 10
-      STR_RIGHT_LEG: 8
-      STR_RIGHT_SHOULDER: 10
-  - id: STR_RIGHT_LEG
-    x: 0
-    y: 120
-    slots:
-      - [0, 0]
-      - [1, 0]
-    costs:
-      STR_BACK_PACK: 18
-      STR_BELT: 10
-      STR_GROUND: 6
-      STR_LEFT_HAND: 6
-      STR_LEFT_LEG: 10
-      STR_LEFT_SHOULDER: 10
-      STR_RIGHT_HAND: 4
-      STR_RIGHT_SHOULDER: 10
-  - id: STR_RIGHT_SHOULDER
-    x: 16
-    y: 37
-    slots:
-      - [0, 0]
-      - [1, 0]
-    costs:
-      STR_BACK_PACK: 16
-      STR_BELT: 10
-      STR_GROUND: 4
-      STR_LEFT_HAND: 3
-      STR_LEFT_LEG: 12
-      STR_LEFT_SHOULDER: 8
-      STR_RIGHT_HAND: 3
-      STR_RIGHT_LEG: 12
 terrains:
   - name: CULTA
     mapDataSets:
@@ -6040,6 +6040,30 @@ alienDeployments:
     terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 0
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
       - alienRank: 5
         lowQty: 5
         highQty: 7
@@ -6159,30 +6183,6 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
-      - alienRank: 6
-        lowQty: 1
-        highQty: 3
-        dQty: 1
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
-      - alienRank: 7
-        lowQty: 0
-        highQty: 2
-        dQty: 1
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
     width: 50
     length: 50
     height: 2
@@ -7764,7 +7764,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7781,7 +7781,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 132
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7798,7 +7798,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7813,7 +7813,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 110
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7830,7 +7830,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -8447,7 +8447,7 @@ ufopaedia:
       - STR_UFO_POWER_SOURCE
     image_id: UP032.SPK
     text: STR_UFO_POWER_SOURCE_UFOPEDIA
-    text_width: 160
+    text_width: 163
   - id: STR_UFO_NAVIGATION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8455,7 +8455,7 @@ ufopaedia:
       - STR_UFO_NAVIGATION
     image_id: UP033.SPK
     text: STR_UFO_NAVIGATION_UFOPEDIA
-    text_width: 145
+    text_width: 147
   - id: STR_UFO_CONSTRUCTION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8471,7 +8471,7 @@ ufopaedia:
       - STR_ALIEN_FOOD
     image_id: UP035.SPK
     text: STR_ALIEN_FOOD_UFOPEDIA
-    text_width: 170
+    text_width: 173
   - id: STR_ALIEN_REPRODUCTION
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8479,7 +8479,7 @@ ufopaedia:
       - STR_ALIEN_REPRODUCTION
     image_id: UP036.SPK
     text: STR_ALIEN_REPRODUCTION_UFOPEDIA
-    text_width: 165
+    text_width: 167
   - id: STR_ALIEN_ENTERTAINMENT
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8487,7 +8487,7 @@ ufopaedia:
       - STR_ALIEN_ENTERTAINMENT
     image_id: UP037.SPK
     text: STR_ALIEN_ENTERTAINMENT_UFOPEDIA
-    text_width: 145
+    text_width: 146
   - id: STR_ALIEN_SURGERY
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -8495,7 +8495,7 @@ ufopaedia:
       - STR_ALIEN_SURGERY
     image_id: UP038.SPK
     text: STR_ALIEN_SURGERY_UFOPEDIA
-    text_width: 105
+    text_width: 108
   - id: STR_EXAMINATION_ROOM
     type_id: 7
     section: STR_UFO_COMPONENTS
@@ -9130,6 +9130,8 @@ MCDPatches:
         bigWall: 6
       - MCDIndex: 48
         bigWall: 2
+      - MCDIndex: 54
+        TUFly: 2
       - MCDIndex: 56
         terrainHeight: -7
   - type: LIGHTNIN
@@ -9162,6 +9164,13 @@ MCDPatches:
         bigWall: 2
       - MCDIndex: 13
         bigWall: 7
+        LOFTS: [44,44,44,44,44,44,44,44,44,44,44,44]
+  - type: PLANE
+    data:
+      - MCDIndex: 49
+        LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
+      - MCDIndex: 51
+        LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
   - type: U_EXT02
     data:
       - MCDIndex: 2
@@ -9241,6 +9250,22 @@ MCDPatches:
         deathTile: 75
       - MCDIndex: 73
         deathTile: 76
+  - type: U_PODS
+    data:
+      - MCDIndex: 6
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+  - type: U_OPER2
+    data:
+      - MCDIndex: 6
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 7
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
 extraSprites:
   - type: Pathfinding
     width: 64
@@ -9254,3 +9279,9 @@ extraSprites:
     subY: 3
     files:
       0: Resources/BulletSprites/BulletSprites.png
+  - type: TFTDReserve
+    width: 59
+    height: 24
+    singleImage: true
+    files:
+      0: Resources/UI/reserve.png

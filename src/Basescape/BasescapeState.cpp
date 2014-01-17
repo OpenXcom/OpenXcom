@@ -366,6 +366,7 @@ void BasescapeState::btnTransferClick(Action *)
 void BasescapeState::btnGeoscapeClick(Action *)
 {
 	_game->popState();
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
 /**

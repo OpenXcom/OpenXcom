@@ -55,7 +55,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	for (int i = 0; i < 6; ++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(i, _game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), x, y);
+		_actionMenu[i] = new ActionMenuItem(i, _game, x, y);
 		add(_actionMenu[i]);
 		_actionMenu[i]->setVisible(false);
 		_actionMenu[i]->onMouseClick((ActionHandler)&ActionMenuState::btnActionMenuItemClick);
@@ -157,8 +157,8 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
 	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH || ba == BA_HIT)
-		s1 = tr("STR_ACC").arg(Text::formatPercentage(acc));
-	s2 = tr("STR_TUS").arg(tu);
+		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
+	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 	_actionMenu[*id]->setAction(ba, tr(name), s1, s2, tu);
 	_actionMenu[*id]->setVisible(true);
 	(*id)++;
@@ -234,11 +234,18 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			if (!targetUnit)
 			{
-				Position p;
-				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
-				Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->actor->getPosition() + p));
-				if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
-					targetUnit = tile->getUnit();
+				if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+					_action->actor->getPosition(),
+					_action->actor->getDirection(),
+					_action->actor,
+					0, &_action->target))
+				{
+					Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->target));
+					if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
+					{
+						targetUnit = tile->getUnit();
+					}
+				}
 			}
 			if (targetUnit)
 			{
@@ -284,12 +291,11 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
-
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),
 				_action->actor,
-				0))
+				0, &_action->target))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}
