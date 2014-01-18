@@ -101,6 +101,7 @@ protected:
 	std::vector<std::vector<int> > _alienItemLevels;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
+	int _largestFacilitySize; // it's a cache for infiniteBaseSizes
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
@@ -219,6 +220,8 @@ public:
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 	std::vector<std::string> getPsiRequirements();
+	/// Gets the largest buildable facility size (it's a cache for infiniteBaseSizes)
+	int getLargestFacilitySize() const;
 	/// Returns the sorted list of inventories.
 	const std::vector<std::string> &getInvsList () const;
 

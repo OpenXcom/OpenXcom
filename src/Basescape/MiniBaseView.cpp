@@ -25,6 +25,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Craft.h"
 #include "../Engine/Palette.h"
+#include "BaseView.h"
 
 namespace OpenXcom
 {
@@ -117,33 +118,38 @@ void MiniBaseView::draw()
 			lock();
 			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
 			{
-				int pal;
-				if ((*f)->getBuildTime() == 0)
-					pal = 3;
-				else
-					pal = 2;
+				int fx = (*f)->getX(), fy = (*f)->getY();
+				if (0 <= fx && fx+(*f)->getRules()->getSize()-1 < BaseView::MIN_BASE_SIZE
+				&&  0 <= fy && fy+(*f)->getRules()->getSize()-1 < BaseView::MIN_BASE_SIZE)
+				{
+					int pal;
+					if ((*f)->getBuildTime() == 0)
+						pal = 3;
+					else
+						pal = 2;
 
-				r.x = i * (MINI_SIZE + 2) + 2 + (*f)->getX() * 2;
-				r.y = 2 + (*f)->getY() * 2;
-				r.w = (*f)->getRules()->getSize() * 2;
-				r.h = (*f)->getRules()->getSize() * 2;
-				drawRect(&r, Palette::blockOffset(pal)+3);
-				r.x++;
-				r.y++;
-				r.w--;
-				r.h--;
-				drawRect(&r, Palette::blockOffset(pal)+5);
-				r.x--;
-				r.y--;
-				drawRect(&r, Palette::blockOffset(pal)+2);
-				r.x++;
-				r.y++;
-				r.w--;
-				r.h--;
-				drawRect(&r, Palette::blockOffset(pal)+3);
-				r.x--;
-				r.y--;
-				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
+					r.x = i * (MINI_SIZE + 2) + 2 + fx * 2;
+					r.y = 2 + fy * 2;
+					r.w = (*f)->getRules()->getSize() * 2;
+					r.h = (*f)->getRules()->getSize() * 2;
+					drawRect(&r, Palette::blockOffset(pal)+3);
+					r.x++;
+					r.y++;
+					r.w--;
+					r.h--;
+					drawRect(&r, Palette::blockOffset(pal)+5);
+					r.x--;
+					r.y--;
+					drawRect(&r, Palette::blockOffset(pal)+2);
+					r.x++;
+					r.y++;
+					r.w--;
+					r.h--;
+					drawRect(&r, Palette::blockOffset(pal)+3);
+					r.x--;
+					r.y--;
+					setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
+				}
 			}
 			unlock();
 		}

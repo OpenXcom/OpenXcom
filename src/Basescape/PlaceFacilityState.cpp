@@ -26,6 +26,8 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "BaseView.h"
+#include "BasescapeState.h"
+#include "BuildFacilitiesState.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -43,13 +45,14 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule) : State(game), _base(base), _rule(rule)
+PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule, State *state, int viewCameraPosX, int viewCameraPosY) : State(game), _base(base), _rule(rule), _state(state)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40);
-	_view = new BaseView(192, 192, 0, 8);
+	_cursorTxtFacility = new Text(192, 9, 0, 0);
+	_view = new BaseView(game, (BaseViewClickHandler)&PlaceFacilityState::viewLeftClick, 0, Options::infiniteBaseSizes, 192, 192, 0, 8);
 	_btnCancel = new TextButton(112, 16, 200, 176);
 	_txtFacility = new Text(110, 9, 202, 50);
 	_txtCost = new Text(110, 9, 202, 62);
@@ -64,6 +67,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	add(_window);
 	add(_view);
+	add(_cursorTxtFacility);
 	add(_btnCancel);
 	add(_txtFacility);
 	add(_txtCost);
@@ -81,8 +85,12 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
+	_view->onMouseOver((ActionHandler)&PlaceFacilityState::viewMouseOver);
+	_view->onMouseOut((ActionHandler)&PlaceFacilityState::viewMouseOut);
+	_view->setCameraPos(viewCameraPosX, viewCameraPosY);
 	_view->setSelectable(rule->getSize());
-	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
+
+	_cursorTxtFacility->setColor(Palette::blockOffset(13)+10);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -123,11 +131,22 @@ PlaceFacilityState::~PlaceFacilityState()
 }
 
 /**
+ * Updates the base stats.
+ */
+void PlaceFacilityState::init()
+{
+	_view->setBase(_base); // to refresh the view
+	_state->init();
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void PlaceFacilityState::btnCancelClick(Action *)
 {
+	BuildFacilitiesState* buildFacilitiesState = dynamic_cast<BuildFacilitiesState*>(_state);
+	if (0 != buildFacilitiesState) buildFacilitiesState->setViewCameraPos(_view->getCameraPosX(), _view->getCameraPosY());
 	_game->popState();
 }
 
@@ -135,16 +154,16 @@ void PlaceFacilityState::btnCancelClick(Action *)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceFacilityState::viewClick(Action *)
+void PlaceFacilityState::viewLeftClick(Action *action)
 {
 	if (!_view->isPlaceable(_rule))
 	{
-		_game->popState();
+		btnCancelClick(action);
 		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
-		_game->popState();
+		btnCancelClick(action);
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else
@@ -160,8 +179,26 @@ void PlaceFacilityState::viewClick(Action *)
 			_view->reCalcQueuedBuildings();
 		}
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _rule->getBuildCost());
-		_game->popState();
+		btnCancelClick(action);
 	}
+}
+
+/**
+ * Displays the name of the facility the mouse is over.
+ * @param action Pointer to an action.
+ */
+void PlaceFacilityState::viewMouseOver(Action *action)
+{
+	_cursorTxtFacility->setText(_view->getSelectedFacilityName());
+}
+
+/**
+ * Clears the facility name.
+ * @param action Pointer to an action.
+ */
+void PlaceFacilityState::viewMouseOut(Action *action)
+{
+	_cursorTxtFacility->setText(L"");
 }
 
 }

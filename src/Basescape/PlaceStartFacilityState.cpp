@@ -39,9 +39,8 @@ namespace OpenXcom
  * @param select Pointer to the selection state.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(game, base, rule), _select(select)
+PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule, int viewCameraPosX, int viewCameraPosY) : PlaceFacilityState(game, base, rule, select, viewCameraPosX, viewCameraPosY), _select(select)
 {
-	_view->onMouseClick((ActionHandler)&PlaceStartFacilityState::viewClick);
 	_numCost->setText(tr("STR_NONE"));
 	_numTime->setText(tr("STR_NONE"));
 }
@@ -58,8 +57,9 @@ PlaceStartFacilityState::~PlaceStartFacilityState()
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceStartFacilityState::viewClick(Action *)
+void PlaceStartFacilityState::viewLeftClick(Action *)
 {
+	_select->setViewCameraPos(_view->getCameraPosX(), _view->getCameraPosY());
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();

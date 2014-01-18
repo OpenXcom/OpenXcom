@@ -47,7 +47,7 @@ namespace OpenXcom
 PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
 	// Create objects
-	_view = new BaseView(192, 192, 0, 8);
+	_view = new BaseView(game, (BaseViewClickHandler)&PlaceLiftState::viewLeftClick, 0, false, 192, 192, 0, 8);
 	_txtTitle = new Text(320, 9, 0, 0);
 
 	// Set palette
@@ -62,7 +62,6 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
-	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
@@ -80,7 +79,7 @@ PlaceLiftState::~PlaceLiftState()
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceLiftState::viewClick(Action *)
+void PlaceLiftState::viewLeftClick(Action *)
 {
 	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
 	fac->setX(_view->getGridX());

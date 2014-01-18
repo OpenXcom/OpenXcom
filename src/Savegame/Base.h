@@ -47,7 +47,6 @@ class Vehicle;
 class Base : public Target
 {
 private:
-	static const int BASE_SIZE = 6;
 	const Ruleset *_rule;
 	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
@@ -202,6 +201,8 @@ public:
 	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
 	/// destroy a facility and deal with the side effects.
 	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
+	/// Gets the (real) sides of the base facilities. (sides of the BaseView)
+	void getSides(int &sideLeft, int &sideTop, int &sideRight, int &sideBottom, bool countIncompleteFacilities);
 };
 
 }

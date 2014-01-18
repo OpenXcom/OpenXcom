@@ -47,7 +47,7 @@ public:
 	/// Cleans up the Place Lift state.
 	~PlaceLiftState();
 	/// Handler for clicking the base view.
-	void viewClick(Action *action);
+	void viewLeftClick(Action *action);
 };
 
 }

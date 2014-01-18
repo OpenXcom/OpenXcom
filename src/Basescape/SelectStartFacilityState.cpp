@@ -33,6 +33,7 @@
 #include "../Engine/Options.h"
 #include "PlaceStartFacilityState.h"
 #include "PlaceLiftState.h"
+#include "BaseView.h"
 
 namespace OpenXcom
 {
@@ -44,8 +45,10 @@ namespace OpenXcom
  * @param state Pointer to the base state to refresh.
  * @param globe Pointer to the globe to refresh.
  */
-SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe) : BuildFacilitiesState(game, base, state), _globe(globe)
+SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe) : BuildFacilitiesState(game, base, state, 0, 0), _globe(globe)
 {
+	_view->setLeftClickHandler(0); // We don't want dismantle capability here
+
 	_facilities = _game->getRuleset()->getCustomBaseFacilities();
 
 	_btnOk->setText(tr("STR_RESET"));
@@ -99,7 +102,7 @@ void SelectStartFacilityState::btnOkClick(Action *)
  */
 void SelectStartFacilityState::lstFacilitiesClick(Action *)
 {
-	_game->pushState(new PlaceStartFacilityState(_game, _base, this, _facilities[_lstFacilities->getSelectedRow()]));
+	_game->pushState(new PlaceStartFacilityState(_game, _base, this, _facilities[_lstFacilities->getSelectedRow()], _view->getCameraPosX(), _view->getCameraPosY()));
 }
 
 /**

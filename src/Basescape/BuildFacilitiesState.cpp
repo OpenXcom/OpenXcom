@@ -30,6 +30,8 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "PlaceFacilityState.h"
+#include "BaseView.h"
+#include "BasescapeState.h"
 
 namespace OpenXcom
 {
@@ -40,12 +42,14 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state), _facilities()
+BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state, int viewCameraPosX, int viewCameraPosY) : State(game), _base(base), _state(state), _facilities()
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
+	_txtFacility = new Text(192, 9, 0, 0);
+	_view = new BaseView(game, (BaseViewClickHandler)&BuildFacilitiesState::viewLeftClick, 0, Options::infiniteBaseSizes, 192, 192, 0, 8);
 	_btnOk = new TextButton(112, 16, 200, 176);
 	_lstFacilities = new TextList(112, 104, 200, 64);
 	_txtTitle = new Text(118, 17, 197, 48);
@@ -54,6 +58,8 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
+	add(_view);
+	add(_txtFacility);
 	add(_btnOk);
 	add(_txtTitle);
 	add(_lstFacilities);
@@ -61,6 +67,14 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	centerAllSurfaces();
 
 	// Set up objects
+	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setBase(_base);
+	_view->onMouseOver((ActionHandler)&BuildFacilitiesState::viewMouseOver);
+	_view->onMouseOut((ActionHandler)&BuildFacilitiesState::viewMouseOut);
+	_view->setCameraPos(viewCameraPosX, viewCameraPosY);
+
+	_txtFacility->setColor(Palette::blockOffset(13)+10);
+
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
@@ -96,6 +110,16 @@ BuildFacilitiesState::~BuildFacilitiesState()
 }
 
 /**
+ * Sets camera position of the view.
+ * @param x x-position of the camera.
+ * @param y y-position of the camera.
+ */
+void BuildFacilitiesState::setViewCameraPos(int x, int y)
+{
+	_view->setCameraPos(x,y);
+}
+
+/**
  * Populates the build list from the current "available" facilities.
  */
 void BuildFacilitiesState::PopulateBuildList()
@@ -120,6 +144,7 @@ void BuildFacilitiesState::PopulateBuildList()
  */
 void BuildFacilitiesState::init()
 {
+	_view->setBase(_base); // to refresh the view
 	State::init();
 	_state->init();
 }
@@ -130,6 +155,8 @@ void BuildFacilitiesState::init()
  */
 void BuildFacilitiesState::btnOkClick(Action *)
 {
+	BasescapeState* basescapeState = dynamic_cast<BasescapeState*>(_state);
+	if (0 != basescapeState) basescapeState->setViewCameraPos(_view->getCameraPosX(), _view->getCameraPosY());
 	_game->popState();
 }
 
@@ -139,7 +166,34 @@ void BuildFacilitiesState::btnOkClick(Action *)
  */
 void BuildFacilitiesState::lstFacilitiesClick(Action *)
 {
-	_game->pushState(new PlaceFacilityState(_game, _base, _facilities[_lstFacilities->getSelectedRow()]));
+	_game->pushState(new PlaceFacilityState(_game, _base, _facilities[_lstFacilities->getSelectedRow()], this, _view->getCameraPosX(), _view->getCameraPosY()));
+}
+
+/**
+ * Processes clicking on facilities.
+ * @param action Pointer to an action.
+ */
+void BuildFacilitiesState::viewLeftClick(Action *action)
+{
+	_view->tryDismantle();
+}
+
+/**
+ * Displays the name of the facility the mouse is over.
+ * @param action Pointer to an action.
+ */
+void BuildFacilitiesState::viewMouseOver(Action *action)
+{
+	_txtFacility->setText(_view->getSelectedFacilityName());
+}
+
+/**
+ * Clears the facility name.
+ * @param action Pointer to an action.
+ */
+void BuildFacilitiesState::viewMouseOut(Action *action)
+{
+	_txtFacility->setText(L"");
 }
 
 }
