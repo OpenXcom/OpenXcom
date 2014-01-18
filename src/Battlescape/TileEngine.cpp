@@ -1093,7 +1093,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	double centerZ = (int)(center.z / 24) + 0.5;
 	double centerX = (int)(center.x / 16) + 0.5;
 	double centerY = (int)(center.y / 16) + 0.5;
-	int power_;
+	int power_, penetration;
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator,bool> ret;
 
@@ -1134,7 +1134,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
 			power_ = power + 1;
-
+			penetration = power_;
 			while (power_ > 0 && l <= maxRadius)
 			{
 				vx = centerX + l * sin_te * cos_fi;
@@ -1152,7 +1152,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				// blockage by terrain is deducted from the explosion power
 				if (std::abs(l) > 0) // no need to block epicentrum
 				{
-					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
 					if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
 					if (type == DT_IN)
@@ -1161,9 +1160,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						Pathfinding::vectorToDirection(origin->getPosition() - dest->getPosition(), dir);
 						if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
 					}
+					penetration = power_ - (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 				}
 
-				if (power_ > 0)
+				if (penetration > 0)
 				{
 					if (type == DT_HE)
 					{
@@ -1280,6 +1280,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 					}
 				}
+				power_ = penetration;
 				origin = dest;
 				l++;
 			}
@@ -1513,10 +1514,14 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		{
 			block = (blockage(startTile,MapData::O_NORTHWALL, type) + blockage(endTile,MapData::O_WESTWALL, type))/2
 				+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type, direction)
-				+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type, 4)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type, 2))/2;
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
+			
+			if (!endTile->getMapData(MapData::O_OBJECT))
+			{
+				block += (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type, direction)
+					+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type, 4)
+					+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type, 2))/2;
+			}
 		}
 		break;
 	case 2: // east
@@ -1537,9 +1542,13 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		{
 			block = (blockage(endTile,MapData::O_WESTWALL, type) + blockage(endTile,MapData::O_NORTHWALL, type))/2
 				+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2
-				+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type, 2)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type, 4))/2;
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+				
+			if (!endTile->getMapData(MapData::O_OBJECT))
+			{
+				block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type, 2)
+					+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type, 4))/2;
+			}
 		}
 		break;
 	case 4: // south
@@ -1559,10 +1568,13 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		{
 			block = (blockage(endTile,MapData::O_NORTHWALL, type) + blockage(startTile,MapData::O_WESTWALL, type))/2
 				+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type, direction)
-				+ (blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type, 2)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type, 4))/2;
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+			if (!endTile->getMapData(MapData::O_OBJECT))
+			{
+				block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type, direction)
+					+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type, 2)
+					+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type, 4))/2;
+			}
 		}
 		break;
 	case 6: // west
@@ -1584,9 +1596,13 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		{
 			block = (blockage(startTile,MapData::O_WESTWALL, type) + blockage(startTile,MapData::O_NORTHWALL, type))/2
 				+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2
-				+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type, 4)
-				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type, 2))/2;
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
+			
+			if (!endTile->getMapData(MapData::O_OBJECT))
+			{
+				block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type, 4)
+					+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type, 2))/2;
+			}
 		}
 		break;
 	}
