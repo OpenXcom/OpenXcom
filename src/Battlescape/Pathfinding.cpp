@@ -844,7 +844,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
-	bool running = _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
+	bool running = _save->getStrafeSetting() && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
