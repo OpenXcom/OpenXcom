@@ -1941,6 +1941,14 @@ void GeoscapeState::handleDogfights()
 	}
 	// Handle dogfights logic.
 	_minimizedDogfights = 0;
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	{
+		// Animate UFO hits.
+		if((*i)->getHitFrame() > 0)
+		{
+			(*i)->setHitFrame((*i)->getHitFrame() - 1);
+		}
+	}
 	std::vector<DogfightState*>::iterator d = _dogfights.begin();
 	while(d != _dogfights.end())
 	{
