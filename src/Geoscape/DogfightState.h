@@ -63,7 +63,6 @@ private:
 	static const int _timeScale;
 	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
 	int _x, _y, _minimizedIconX, _minimizedIconY;
-	bool _lastHitAnimFrame;
 
 	// Ends the dogfight.
 	void endDogfight();
