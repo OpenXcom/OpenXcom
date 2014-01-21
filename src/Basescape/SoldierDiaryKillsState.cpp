@@ -255,10 +255,6 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOver);
 	_lstCommendations->onMouseOut((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOut);
 
-
-	
-	
-
 	init(); // Populate the list
 }
 
