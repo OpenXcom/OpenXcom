@@ -33,6 +33,7 @@ private:
 	std::map<std::string, std::vector<int> > _criteria;
 	std::string _description;
 	int _listOrder;
+	int _sprite;
 public:
 	/// Creates a blank commendation ruleset.
 	RuleCommendations();
@@ -48,6 +49,8 @@ public:
 	std::string getDescription() const;
 	/// Get commendation award criteria
 	std::map<std::string, std::vector<int> > *getCriteria();
+	/// Get sprite
+	int getSprite() const;
 
 };
 

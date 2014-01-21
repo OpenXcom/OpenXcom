@@ -9285,6 +9285,20 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/reserve.png
+  - type: BIGOBS.PCK
+    width: 30
+    heigth: 8
+    files:
+      100: Resources/Commendations/medal_100.png
+      101: Resources/Commendations/medal_101.png
+      102: Resources/Commendations/medal_102.png
+      103: Resources/Commendations/medal_103.png
+      104: Resources/Commendations/medal_104.png
+      105: Resources/Commendations/medal_105.png
+      106: Resources/Commendations/medal_106.png
+      107: Resources/Commendations/medal_107.png
+      
+      
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
 # Any vector greater than 10 will require more strings to be written for them.
@@ -9311,41 +9325,51 @@ extraSprites:
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
+    sprite: 100
     criteria: 
-      total_kills: [3, 6, 10, 15, 20, 25, 30, 35, 40, 50]
+      total_kills: [0, 6, 10, 15, 20, 25, 30, 35, 40, 50]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
+    sprite: 101
     criteria:
-      total_missions: [3, 6, 10, 15, 20, 25, 30, 35, 40, 50]
+      total_missions: [0, 6, 10, 15, 20, 25, 30, 35, 40, 50]
   - type: STR_MEDAL_STAR_OF_GALLANTRY_NAME
     description: STR_MEDAL_STAR_OF_GALLANTRY_DESCRIPTION
+    sprite: 102
     criteria:
       total_stuns: [1, 3, 5, 7, 9, 11, 13, 15, 17, 20]
   - type: STR_MEDAL_DEFENDER_MEDAL_NAME
     description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION
+    sprite: 103
     criteria:
       total_base_defense_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
   - type: STR_MEDAL_LONGEST_NIGHT_NAME
     description: STR_MEDAL_LONGEST_NIGHT_DESCRIPTION
+    sprite: 104
     criteria:
       total_night_terror_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
   - type: STR_MEDAL_HONOR_CROSS_NAME
     description: STR_MEDAL_HONOR_CROSS_DESCRIPTION
+    sprite: 105
     criteria:
       total_monthly_service: [1]
   - type: STR_MEDAL_SERVICE_MEDAL_NAME
     description: STR_MEDAL_SERVICE_MEDAL_DESCRIPTION
+    sprite: 106
     criteria:
       total_monthly_service: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_WEAPON_PROFICIENCY_NAME
     description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
+    sprite: 107
     criteria:
       total_kills_with_a_weapon: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME
     description: STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION
+    sprite: 108
     criteria:
       total_missions_in_a_region: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_XENOCIDE_MEDAL_NAME
     description: STR_MEDAL_XENOCIDE_MEDAL_DESCIRPTION
+    sprite: 109
     criteria:
       total_kills_by_race: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]

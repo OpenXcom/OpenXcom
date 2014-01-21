@@ -25,6 +25,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/SurfaceSet.h"
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -35,6 +36,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Ruleset/RuleCraft.h"
+
 
 namespace OpenXcom
 {
@@ -94,7 +96,7 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
     _txtMedalName = new Text(90, 18, 16, 36);
     _txtMedalLevel = new Text(90, 18, 216, 36);
 	_txtMedalInfo = new Text(280, 32, 20, 150);
-    _lstCommendations = new TextList(272, 100, 16, 52);
+    _lstCommendations = new TextList(272, 100, 48, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -247,11 +249,15 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 
 	_lstCommendations->setColor(Palette::blockOffset(13)+10);
 	_lstCommendations->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCommendations->setColumns(2, 200, 80);
+	_lstCommendations->setColumns(2, 168, 80);
 	_lstCommendations->setSelectable(true);
 	_lstCommendations->setBackground(_window);
 	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOver);
 	_lstCommendations->onMouseOut((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOut);
+
+
+	
+	
 
 	init(); // Populate the list
 }
@@ -323,6 +329,7 @@ void SoldierDiaryKillsState::init()
 	std::map<std::string, int> _typeTotals = s->getDiary()->getTypeTotal();
 	std::map<std::string, int> _UFOTotals = s->getDiary()->getUFOTotal();
     _lstCommendations->clearList();
+	int row;
 
 	for (std::map<std::string, int>::const_iterator i = _raceTotals.begin() ; i != _raceTotals.end() ; ++i)
 	{
@@ -379,9 +386,12 @@ void SoldierDiaryKillsState::init()
 		_lstUFO->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
     
+	row = 0;
     for (std::vector<SoldierCommendations*>::const_iterator i = s->getDiary()->getSoldierCommendations()->begin() ; i != s->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
 		std::wstringstream ss1, ss2, ss3;
+		int _sprite = (*i)->getSprite();
+		Surface *_image = new Surface(30, 8, 16, 52 + 8*row);
 
 		if ((*i)->getNoun() != "")
 		{
@@ -397,6 +407,14 @@ void SoldierDiaryKillsState::init()
 		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 
 		_commendationsListEntry.push_back(ss3.str().c_str());
+
+		// Handle commendation sprites
+		add(_image);
+		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		texture->getFrame(_sprite)->setX(0);
+		texture->getFrame(_sprite)->setY(0);
+		texture->getFrame(_sprite)->blit(_image);
+		row++;
 	}
 }
 

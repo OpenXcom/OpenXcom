@@ -136,13 +136,13 @@ class SoldierCommendations
 private:
 	RuleCommendations *_rules;
 	std::string  _commendationName, _commendationDescription, _noun;
-	int  _decorationLevel;
+	int  _decorationLevel, _sprite;
 	bool _isNew;
 public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
 	/// Creates a commendation of the specified type.
-	SoldierCommendations(std::string commendationName, std::string commendationDescription, std::string noun, int decorationLevel, bool isNew);
+	SoldierCommendations(std::string commendationName, std::string commendationDescription, std::string noun, int decorationLevel, bool isNew, int sprite);
 	/// Cleans up the commendation.
 	~SoldierCommendations();
 	/// Loads the commendation information from YAML.
@@ -168,6 +168,8 @@ public:
 	/// Increment decoration level.
 	// Sets _isNew to true.
 	void addDecoration();
+	/// Get sprite
+	int getSprite() const;
 };
 
 class SoldierDiary
@@ -180,7 +182,7 @@ private:
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService;
 
-	void manageModularCommendations(std::map<std::string, int> progress, std::map<std::string, int> modularCommendations, std::pair<std::string, int> weaponTotal, int currentLevel);
+	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
@@ -239,7 +241,7 @@ public:
 	/// Manage commendations, return true if a medal is awarded.
 	bool manageCommendations(Ruleset *rules);
 	/// Award commendations
-	void awardCommendation(std::string commendationName, std::string commendationDescription, std::string noun = "");
+	void awardCommendation(std::string commendationName, std::string commendationDescription, std::string noun = "", int sprite = 100);
 	/// Increment soldier's service time.
 	void addMonthlyService();
 };

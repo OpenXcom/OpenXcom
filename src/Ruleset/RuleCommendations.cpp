@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of extra sprite data.
  */
-RuleCommendations::RuleCommendations() : _description(""), _criteria()
+RuleCommendations::RuleCommendations() : _description(""), _criteria(), _sprite()
 {
 }
 
@@ -44,6 +44,7 @@ void RuleCommendations::load(const YAML::Node &node, int listOrder)
 {
 	_description = node["description"].as<std::string>(_description);
 	_criteria = node["criteria"].as< std::map< std::string, std::vector<int> > >(_criteria);
+    _sprite = node["sprite"].as<int>(_sprite);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
@@ -76,6 +77,15 @@ std::string RuleCommendations::getDescription() const
 std::map<std::string, std::vector<int> > *RuleCommendations::getCriteria()
 {
 	return &_criteria;
+}
+
+/**
+ * Get the commendation's sprite
+ * @return int Sprite number
+ */
+int RuleCommendations::getSprite() const
+{
+	return _sprite;
 }
 
 }
