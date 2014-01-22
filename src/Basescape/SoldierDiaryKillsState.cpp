@@ -94,9 +94,9 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstMissionTotals = new TextList(296, 9, 8, 167);
     // Commendation stats
     _txtMedalName = new Text(90, 18, 16, 36);
-    _txtMedalLevel = new Text(90, 18, 216, 36);
+    _txtMedalLevel = new Text(90, 18, 206, 36);
 	_txtMedalInfo = new Text(280, 32, 20, 150);
-    _lstCommendations = new TextList(272, 100, 48, 52);
+    _lstCommendations = new TextList(240, 100, 48, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -249,7 +249,7 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 
 	_lstCommendations->setColor(Palette::blockOffset(13)+10);
 	_lstCommendations->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCommendations->setColumns(2, 168, 80);
+	_lstCommendations->setColumns(2, 158, 80);
 	_lstCommendations->setSelectable(true);
 	_lstCommendations->setBackground(_window);
 	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOver);
@@ -387,7 +387,9 @@ void SoldierDiaryKillsState::init()
 	{
 		std::wstringstream ss1, ss2, ss3;
 		int _sprite = (*i)->getSprite();
-		Surface *_image = new Surface(30, 8, 16, 52 + 8*row);
+		int _decorationSprite = (*i)->getDecorationSprite();
+		Surface *_image = new Surface(31, 8, 16, 52 + 8*row);
+		Surface *_image2 = new Surface(31, 8, 16, 52 + 8*row);
 
 		if ((*i)->getNoun() != "")
 		{
@@ -410,6 +412,16 @@ void SoldierDiaryKillsState::init()
 		texture->getFrame(_sprite)->setX(0);
 		texture->getFrame(_sprite)->setY(0);
 		texture->getFrame(_sprite)->blit(_image);
+
+		// Handle commendation decoration sprites
+		if (_decorationSprite != 200)
+		{
+			add(_image2);
+			SurfaceSet *texture2 = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+			texture2->getFrame(_decorationSprite)->setX(0);
+			texture2->getFrame(_decorationSprite)->setY(0);
+			texture2->getFrame(_decorationSprite)->blit(_image2);
+		}
 		row++;
 	}
 }

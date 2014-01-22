@@ -9286,7 +9286,7 @@ extraSprites:
     files:
       0: Resources/UI/reserve.png
   - type: BIGOBS.PCK
-    width: 30
+    width: 31
     heigth: 8
     files:
       100: Resources/Commendations/medal_100.png
@@ -9297,11 +9297,20 @@ extraSprites:
       105: Resources/Commendations/medal_105.png
       106: Resources/Commendations/medal_106.png
       107: Resources/Commendations/medal_107.png
+      201: Resources/Commendations/award_1.png
+      202: Resources/Commendations/award_2.png
+      203: Resources/Commendations/award_3.png
+      204: Resources/Commendations/award_4.png
+      205: Resources/Commendations/award_5.png
+      206: Resources/Commendations/award_6.png
+      207: Resources/Commendations/award_7.png
+      208: Resources/Commendations/award_8.png
+      209: Resources/Commendations/award_9.png
       
       
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
-# Any vector greater than 10 will require more strings to be written for them.
+# Any vector greater than 10 will require more strings and more sprites.
 # Commendations may have multiple criteria.
 # List of possible criteria:
 #   total_kills
@@ -9327,7 +9336,7 @@ commendations:
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
     sprite: 100
     criteria: 
-      total_kills: [3, 6, 10, 15, 20, 25, 30, 35, 40, 50]
+      total_kills: [0, 0, 0, 0, 20, 25, 30, 35, 40, 50]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 101

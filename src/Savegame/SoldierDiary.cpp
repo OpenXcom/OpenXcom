@@ -890,21 +890,10 @@ std::string SoldierCommendations::getNoun() const
  */
 std::string SoldierCommendations::getDecorationLevelName()
 {
-	switch (_decorationLevel)
-	{
-    case 0:		return "STR_1ST_AWARD";
-    case 1:		return "STR_2ND_AWARD";
-    case 2:		return "STR_3RD_AWARD";
-    case 3:		return "STR_4TH_AWARD";
-    case 4:		return "STR_5TH_AWARD";
-    case 5:		return "STR_6TH_AWARD";
-    case 6:		return "STR_7TH_AWARD";
-    case 7:		return "STR_8TH_AWARD";
-    case 8:		return "STR_9TH_AWARD";
-    case 9:    return "STR_10TH_AWARD";
+	std::stringstream ss;
 
-    default:	return "AWARD LEVEL ERROR";
-	}
+	ss << "STR_AWARD_" << _decorationLevel;
+	return ss.str();
 }
 
 /**
@@ -913,21 +902,20 @@ std::string SoldierCommendations::getDecorationLevelName()
  */
 std::string SoldierCommendations::getDecorationDescription()
 {
-	switch (_decorationLevel)
-	{
-    case 0:		return "STR_1ST_AWARD_DECOR";
-    case 1:		return "STR_2ND_AWARD_DECOR";
-    case 2:		return "STR_3RD_AWARD_DECOR";
-    case 3:		return "STR_4TH_AWARD_DECOR";
-    case 4:		return "STR_5TH_AWARD_DECOR";
-    case 5:		return "STR_6TH_AWARD_DECOR";
-    case 6:		return "STR_7TH_AWARD_DECOR";
-    case 7:		return "STR_8TH_AWARD_DECOR";
-    case 8:		return "STR_9TH_AWARD_DECOR";
-    case 9:		return "STR_10TH_AWARD_DECOR";
+	std::stringstream ss;
 
-    default:	return "AWARD DESCRIPTION ERROR";
-	}
+	ss << "STR_AWARD_DECOR_" << _decorationLevel;
+	return ss.str();
+}
+
+/**
+ * Get the soldier commendation decoration sprite number.
+ * @return int sprite number.
+ */
+int SoldierCommendations::getDecorationSprite() const
+{
+	// Assuming the ruleset still lists the sprites starting at 200
+	return 200 + _decorationLevel;
 }
 
 /**
