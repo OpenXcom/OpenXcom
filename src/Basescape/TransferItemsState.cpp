@@ -601,7 +601,6 @@ void TransferItemsState::increaseByValue(int change)
 		change = std::min(std::min(freeQuarters, getQuantity() - _transferQty[_sel]), change);
 		_pQty += change;
 		_baseQty[_sel] -= change;
-		_destQty[_sel] += change;
 		_transferQty[_sel] += change;
 		_total += getCost() * change;
 	}
@@ -612,7 +611,6 @@ void TransferItemsState::increaseByValue(int change)
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
 		_baseQty[_sel]--;
-		_destQty[_sel]++;
 		_transferQty[_sel]++;
 		if (!_canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
 	}
@@ -632,7 +630,6 @@ void TransferItemsState::increaseByValue(int change)
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
 		_iQty += ((float)(change)) * storesNeededPerItem;
 		_baseQty[_sel] -= change;
-		_destQty[_sel] += change;
 		_transferQty[_sel] += change;
 		_total += getCost() * change;
 	}
@@ -643,7 +640,6 @@ void TransferItemsState::increaseByValue(int change)
 		change = std::min(std::min(freeContainment, getQuantity() - _transferQty[_sel]), change);
 		_aQty += change;
 		_baseQty[_sel] -= change;
-		_destQty[_sel] += change;
 		_transferQty[_sel] += change;
 		_total += getCost() * change;
 	}
@@ -696,7 +692,6 @@ void TransferItemsState::decreaseByValue(int change)
 		}
 	}
 	_baseQty[_sel] += change;
-	_destQty[_sel] -= change;
 	_transferQty[_sel] -= change;
 	if (!_canTransferCraftsWhileAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
 		_total -= getCost() * change;
@@ -711,10 +706,8 @@ void TransferItemsState::updateItemStrings()
 	std::wstringstream ss1, ss2, ss3;
 	ss1 << _baseQty[_sel];
 	ss2 << _transferQty[_sel];
-	ss3 << _destQty[_sel];
 	_lstItems->setCellText(_sel, 1, ss1.str());
 	_lstItems->setCellText(_sel, 2, ss2.str());
-	_lstItems->setCellText(_sel, 3, ss3.str());
 }
 
 /**
