@@ -1028,6 +1028,15 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
 {
 	if (playableUnitSelected())
 	{
+		// concession for touch devices: 
+		// click on the item to cancel action, and don't pop up a menu to select a new one
+		// TODO: wrap this in an IFDEF ?
+		if (_battleGame->getCurrentAction()->targeting)
+		{
+			_battleGame->cancelCurrentAction();
+			return;
+		}
+
 		_battleGame->cancelCurrentAction();
 
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
@@ -1046,6 +1055,15 @@ void BattlescapeState::btnRightHandItemClick(Action *)
 {
 	if (playableUnitSelected())
 	{
+		// concession for touch devices: 
+		// click on the item to cancel action, and don't pop up a menu to select a new one
+		// TODO: wrap this in an IFDEF ?
+		if (_battleGame->getCurrentAction()->targeting)
+		{
+			_battleGame->cancelCurrentAction();
+			return;
+		}
+
 		_battleGame->cancelCurrentAction();
 
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
