@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _destQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
@@ -143,7 +143,6 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		{
 			_baseQty.push_back(1);
 			_transferQty.push_back(0);
-			_destQty.push_back(0);
 			_soldiers.push_back(*i);
 			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", L"0");
 		}
@@ -154,7 +153,6 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		{
 			_baseQty.push_back(1);
 			_transferQty.push_back(0);
-			_destQty.push_back(0);
 			_crafts.push_back(*i);
 			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", L"0");
 		}
@@ -163,22 +161,20 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	{
 		_baseQty.push_back(_baseFrom->getAvailableScientists());
 		_transferQty.push_back(0);
-		_destQty.push_back(_baseTo->getAvailableScientists());
 		_hasSci = 1;
 		std::wstringstream ss, ss2;
 		ss << _baseQty.back();
-		ss2 << _destQty.back();
+		ss2 << _baseTo->getAvailableScientists();
 		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 	if (_baseFrom->getAvailableEngineers() > 0)
 	{
 		_baseQty.push_back(_baseFrom->getAvailableEngineers());
 		_transferQty.push_back(0);
-		_destQty.push_back(_baseTo->getAvailableEngineers());
 		_hasEng = 1;
 		std::wstringstream ss, ss2;
 		ss << _baseQty.back();
-		ss2 << _destQty.back();
+		ss2 << _baseTo->getAvailableEngineers();
 		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
@@ -189,11 +185,10 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		{
 			_baseQty.push_back(qty);
 			_transferQty.push_back(0);
-			_destQty.push_back(_baseTo->getItems()->getItem(*i));
 			_items.push_back(*i);
 			std::wstringstream ss, ss2;
 			ss << qty;
-			ss2 << _destQty.back();
+			ss2 << _baseTo->getItems()->getItem(*i);
 			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 		}
 	}

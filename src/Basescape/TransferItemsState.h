@@ -48,7 +48,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtAmountTransfer, *_txtAmountDestination;
 	TextList *_lstItems;
-	std::vector<int> _baseQty, _transferQty, _destQty;
+	std::vector<int> _baseQty, _transferQty;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
