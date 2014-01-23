@@ -1239,7 +1239,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 						case DT_SMOKE:
 							// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
-							if (dest->getSmoke() < 10)
+							if (dest->getSmoke() < 10 && dest->getTerrainLevel() > -24)
 							{
 								dest->setFire(0);
 								dest->setSmoke(RNG::generate(7, 15));
