@@ -62,6 +62,7 @@ private:
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
 	int _alienItemLevel;
+	bool _allowAutoLoadout;
 
 	/// Generates a new battlescape map.
 	void generateMap();

@@ -73,6 +73,7 @@ namespace OpenXcom
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _terrain(0),
 														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0)
 {
+	_allowAutoLoadout = !Options::getBool("disableAutoEquip");
 }
 
 /**
@@ -461,67 +462,64 @@ void BattlescapeGenerator::deployXCOM()
 	}
 	
 	// auto-equip soldiers (only soldiers without layout)
-	if (!Options::getBool("disableAutoEquip"))
+	for (int pass = 0; pass != 4; ++pass)
 	{
-		for (int pass = 0; pass != 4; ++pass)
+		for (std::vector<BattleItem*>::iterator j = _craftInventoryTile->getInventory()->begin(); j != _craftInventoryTile->getInventory()->end();)
 		{
-			for (std::vector<BattleItem*>::iterator j = _craftInventoryTile->getInventory()->begin(); j != _craftInventoryTile->getInventory()->end();)
+			if ((*j)->getSlot() == ground)
 			{
-				if ((*j)->getSlot() == ground)
+				bool add = false;
+
+				switch (pass)
 				{
-					bool add = false;
-
-					switch (pass)
-					{
-					// priority 1: rifles.
-					case 0:
-						add = (*j)->getRules()->isRifle();
-						break;
-					// priority 2: pistols (assuming no rifles were found).
-					case 1:
-						add = (*j)->getRules()->isPistol();
-						break;
-					// priority 3: ammunition.
-					case 2:
-						add = (*j)->getRules()->getBattleType() == BT_AMMO;
-						break;
-					// priority 4: leftovers.
-					case 3:
-						add = !(*j)->getRules()->isPistol() &&
-								!(*j)->getRules()->isRifle() &&
-								((*j)->getRules()->getBattleType() != BT_FLARE || _worldShade >= 9);
-						break;
-					default:
-						break;
-					}
+				// priority 1: rifles.
+				case 0:
+					add = (*j)->getRules()->isRifle();
+					break;
+				// priority 2: pistols (assuming no rifles were found).
+				case 1:
+					add = (*j)->getRules()->isPistol();
+					break;
+				// priority 3: ammunition.
+				case 2:
+					add = (*j)->getRules()->getBattleType() == BT_AMMO;
+					break;
+				// priority 4: leftovers.
+				case 3:
+					add = !(*j)->getRules()->isPistol() &&
+							!(*j)->getRules()->isRifle() &&
+							((*j)->getRules()->getBattleType() != BT_FLARE || _worldShade >= 9);
+					break;
+				default:
+					break;
+				}
 				
-					if (add)
+				if (add)
+				{
+					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 					{
-						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-						{
-							if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
-							{
-								continue;
-							}
-							// let's not be greedy, we'll only take a second extra clip
-							// if everyone else has had a chance to take a first.
-							bool allowSecondClip = (pass == 3);
-
-							if (addItem(*j, *i, allowSecondClip))
-							{
-								j = _craftInventoryTile->getInventory()->erase(j);
-								add = false;
-								break;
-							}
-						}
-						if (!add)
+						if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
 						{
 							continue;
 						}
+						// let's not be greedy, we'll only take a second extra clip
+						// if everyone else has had a chance to take a first.
+						bool allowSecondClip = (pass == 3);
+
+						if (addItem(*j, *i, allowSecondClip))
+						{
+							j = _craftInventoryTile->getInventory()->erase(j);
+							add = false;
+							break;
+						}
+					}
+					if (!add)
+					{
+						continue;
 					}
 				}
-				++j;
 			}
+			++j;
 		}
 	}
 	// clean up moved items
@@ -946,7 +944,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			}
 		}
 
-		if (loaded)
+		if (loaded && (unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
 			if (!unit->getItem("STR_RIGHT_HAND") && unit->getStats()->strength * 0.66 >= weight)
 			{
@@ -977,23 +975,26 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			break;
 		}
 	default:
-		if (unit->getStats()->strength >= weight)
+		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
-			for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getInvsList().begin(); i != _game->getRuleset()->getInvsList().end() && !placed; ++i)
+			if (unit->getStats()->strength >= weight)
 			{
-				RuleInventory *slot = _game->getRuleset()->getInventory(*i);
-				if (slot->getType() == INV_SLOT)
+				for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getInvsList().begin(); i != _game->getRuleset()->getInvsList().end() && !placed; ++i)
 				{
-					for (std::vector<RuleSlot>::iterator j = slot->getSlots()->begin(); j != slot->getSlots()->end() && !placed; ++j)
+					RuleInventory *slot = _game->getRuleset()->getInventory(*i);
+					if (slot->getType() == INV_SLOT)
 					{
-						if (!Inventory::overlapItems(unit, item, slot, j->x, j->y) && slot->fitItemInSlot(item->getRules(), j->x, j->y))
+						for (std::vector<RuleSlot>::iterator j = slot->getSlots()->begin(); j != slot->getSlots()->end() && !placed; ++j)
 						{
-							item->moveToOwner(unit);
-							item->setSlot(slot);
-							item->setSlotX(j->x);
-							item->setSlotY(j->y);
-							placed = true;
-							break;
+							if (!Inventory::overlapItems(unit, item, slot, j->x, j->y) && slot->fitItemInSlot(item->getRules(), j->x, j->y))
+							{
+								item->moveToOwner(unit);
+								item->setSlot(slot);
+								item->setSlotX(j->x);
+								item->setSlotY(j->y);
+								placed = true;
+								break;
+							}
 						}
 					}
 				}
