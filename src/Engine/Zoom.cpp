@@ -735,6 +735,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 
 			if (!complained)
 			{
+				complained = true;
 				Log(LOG_ERROR) << "Misaligned surface buffers.";
 			}
 		}
