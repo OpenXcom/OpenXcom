@@ -108,9 +108,11 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
 	_txtSales->setColor(Palette::blockOffset(13)+10);
+	_txtSales->setSecondaryColor(Palette::blockOffset(13));
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
+	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
