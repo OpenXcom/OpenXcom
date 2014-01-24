@@ -1294,11 +1294,14 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else if (playableUnitSelected())
 		{
-
-			if (_currentAction.target != pos && bPreviewed)
+			bool modifierPressed = (SDL_GetModState() & KMOD_CTRL) != 0;
+			if (bPreviewed &&
+				(_currentAction.target != pos || (_save->getPathfinding()->isModifierUsed() != modifierPressed)))
+			{
 				_save->getPathfinding()->removePreview();
+			}
 			_currentAction.run = false;
-			_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = _save->getStrafeSetting() && modifierPressed && _save->getSelectedUnit()->getTurretType() == -1;
 			if (_currentAction.strafe && _save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)
 			{
 				_currentAction.run = true;

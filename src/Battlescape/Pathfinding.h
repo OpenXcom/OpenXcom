@@ -57,6 +57,7 @@ private:
 	bool _pathPreviewed;
 	bool _strafeMove;
 	int _totalTUCost;
+	bool _modifierUsed;
 public:
 	std::vector<int> _path;
 	/// Determines whether the unit is going up a stairs.
@@ -101,6 +102,8 @@ public:
 	int getTotalTUCost() const { return _totalTUCost; }
 	/// Gets the path preview setting.
 	bool isPathPreviewed() const;
+	/// Gets the modifier setting.
+	bool isModifierUsed() const;
 };
 
 }

@@ -39,7 +39,7 @@ namespace OpenXcom
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false), _modifierUsed(false)
 {
 	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile
@@ -843,7 +843,8 @@ bool Pathfinding::previewPath(bool bRemove)
 		switchBack = true;
 		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
-	bool running = (SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
+	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
+	bool running = _save->getStrafeSetting() && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
@@ -1131,5 +1132,14 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	{
 		_movementType = MT_WALK;
 	}
+}
+
+/**
+ * Checks whether a modifier key was used to enable strafing or running.
+ * @return True, if a modifier was used.
+ */
+bool Pathfinding::isModifierUsed() const
+{
+	return _modifierUsed;
 }
 }
