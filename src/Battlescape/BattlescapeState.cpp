@@ -838,10 +838,18 @@ void BattlescapeState::btnKneelClick(Action *)
 
 /**
  * Goes to the soldier info screen.
+ * Additionally resets TUs for current side in debug mode.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnInventoryClick(Action *)
 {
+	if (_save->getDebugMode())
+	{
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			if ((*i)->getFaction() == _save->getSide())
+				(*i)->prepareNewTurn();
+		updateSoldierInfo();
+	}
 	if (playableUnitSelected()
 		&& (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode())
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
@@ -855,6 +863,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 			showLaunchButton(false);
 		}
 
+		_battleGame->getPathfinding()->removePreview();
 		_battleGame->cancelCurrentAction(true);
 
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
