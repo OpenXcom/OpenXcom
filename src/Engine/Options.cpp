@@ -101,6 +101,7 @@ void createDefault()
 	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
 	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 	setBool("battleRangeBasedAccuracy", false);
+	setBool("battleShowChanceToHit", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);

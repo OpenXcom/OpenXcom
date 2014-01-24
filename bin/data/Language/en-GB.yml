@@ -1153,7 +1153,7 @@ en-GB:
   STR_BATTLENEWPREVIEWPATH: "Pathfinding preview"
   STR_BATTLENEWPREVIEWPATH_DESC: "Left-click highlights the path your unit will take to the destination, double-click moves the unit."
   STR_BATTLERANGEBASEDACCURACY: "Range-based accuracy"
-  STR_BATTLERANGEBASEDACCURACY_DESC: "Accuracy of shots takes visibility, distance, and other factors into account."
+  STR_BATTLERANGEBASEDACCURACY_DESC: "Accuracy of shots takes into account visibility, distance, size of target, smoke density on the line of fire."
   STR_CANMANUFACTUREMOREITEMSPERHOUR: "Sub-hour manufacture"
   STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC: "Allows manufacturing projects to produce more than one item per hour, like in Terror From The Deep."
   STR_CANTRANSFERCRAFTSWHILEAIRBORNE: "Airborne transfers"

@@ -94,6 +94,8 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
+	_showChanceToHit = Options::getBool("battleShowChanceToHit");
+	_numChanceToHit = new NumberText(15, 15, 20, 30);
 }
 
 /**
@@ -106,6 +108,7 @@ Map::~Map()
 	delete _arrow;
 	delete _message;
 	delete _camera;
+	delete _numChanceToHit;
 }
 
 /**
@@ -135,6 +138,8 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
+	_numChanceToHit->setPalette(getPalette());
+	_numChanceToHit->setColor(Palette::blockOffset(1));
 }
 
 /**
@@ -648,7 +653,35 @@ void Map::drawTerrain(Surface *surface)
 							}else
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
+								{
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+
+									if (_showChanceToHit)
+									{
+										static int animFrameOld = -1, chance = -1;
+										static Position mapPositionOld(0,0,0);
+										if (animFrameOld != _animFrame || mapPositionOld != mapPosition)
+										{
+											animFrameOld = _animFrame;
+											mapPositionOld = mapPosition;
+
+											BattleAction *action = _save->getBattleState()->getBattleGame()->getCurrentAction();
+											action->target = mapPosition;
+											Projectile p(_res, _save, *action, action->actor->getPosition());
+											chance = p.calculateTrajectory(action->actor->getFiringAccuracy(action->type, action->weapon), true);
+
+											if (chance >= 0)
+											{
+												_numChanceToHit->setValue(chance);
+												_numChanceToHit->draw();
+											}
+										}
+										if (chance >= 0)
+										{
+											_numChanceToHit->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+										}
+									}
+								}
 								else
 									frameNumber = 6; // red static crosshairs
 							}

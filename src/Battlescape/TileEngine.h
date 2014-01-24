@@ -80,7 +80,7 @@ public:
 	/// Closes ufo doors.
 	int closeUfoDoors();
 	/// Calculates a line trajectory.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0, int *smokeRawData = 0);
 	/// Calculates a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta);
 	/// Gets the origin voxel of a unit's eyesight.

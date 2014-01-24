@@ -1951,9 +1951,10 @@ int TileEngine::closeUfoDoors()
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
  * @param onlyVisible Skip invisible units? used in FPS view.
  * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
+ * @param smokeRawData [Optional] If you need doing calculation of smoke density between positions.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut, int *smokeRawData)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -1963,6 +1964,9 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 	int cx, cy, cz;
 	Position lastPoint(origin);
 	int result;
+
+	if (smokeRawData)
+		*smokeRawData = 0;
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -2051,6 +2055,10 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			}
 
 			lastPoint = Position(cx, cy, cz);
+		}
+		if (smokeRawData)
+		{
+			*smokeRawData += _save->getTile(Position(cx/16, cy/16, cz/24))->getSmoke();
 		}
 		//update progress in other planes
 		drift_xy = drift_xy - delta_y;

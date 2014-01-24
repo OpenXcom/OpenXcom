@@ -79,16 +79,20 @@ Projectile::~Projectile()
 /**
  * Calculates the trajectory for a straight path.
  * @param accuracy The unit's accuracy.
- * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire).
+ * @param doCalcChance Do only clculating probability of hitting to unit. Default = false.
+ * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire)
+ *			or chance to hit (-1 none; 0-100 percent)
  */
-int Projectile::calculateTrajectory(double accuracy)
+int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
+	int smokeDensity;
 	BattleUnit *bu = _action.actor;
 	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
 	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_save->getBattleGame()->getPanicHandled())
 	{
+		if (doCalcChance) return -1;
 		// target nothing, targets the middle of the tile
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		if (_action.type == BA_LAUNCH)
@@ -159,7 +163,9 @@ int Projectile::calculateTrajectory(double accuracy)
 			// target nothing, targets the middle of the tile
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
-		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, false, 0, &smokeDensity);
+		smokeDensity /= 16;	// normalization (16 voxels per tile)
+
 		if (test != V_EMPTY && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
 		{
 			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
@@ -203,6 +209,14 @@ int Projectile::calculateTrajectory(double accuracy)
 				}
 			}
 		}
+
+		if (doCalcChance)
+		{
+			if (test != 4 || _trajectory.empty() ||
+				_trajectory.at(0).x/16 != _action.target.x || _trajectory.at(0).y/16 != _action.target.y) // Don't need check z axis.
+				return -1;
+			return applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, true, smokeDensity, true);
+		}
 	}
 	_trajectory.clear();
 
@@ -224,7 +238,7 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, extendLine);
+	applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, extendLine, smokeDensity);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -290,14 +304,17 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin Startposition of the trajectory.
+ * @param origin Start position of the trajectory.
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
  * @param extendLine should this line get extended to maximum distance?
+ * @param densitySmoke Density of smoke between positions. Default = 0.
+ * @param doCalcChance Do only calculation the probability of hitting. Default = false.
+ * @return Chance to hit 0-100% (-1 if cannot to calculate).
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine)
+int Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine, int smokeDensity, bool doCalcChance)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -308,42 +325,95 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 	if (Options::getBool("battleRangeBasedAccuracy") && _action.type != BA_THROW)
 	{
-		double baseDeviation, accuracyPenalty;
+		double baseDeviation, effectiveAccuracy = accuracy;
 
-		if (targetTile)
+		BattleUnit* shooterUnit = _save->getTile(Position(origin.x/16, origin.y/16, origin.z/24))->getUnit();
+		BattleUnit* targetUnit = targetTile? targetTile->getUnit() : 0;
+		// Taken into account shades on the target. Enemy units can see in the dark.
+		if (shooterUnit && shooterUnit->getFaction() == FACTION_PLAYER)
 		{
-			BattleUnit* targetUnit = targetTile->getUnit();
-			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
-				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+			if (targetTile)
+				effectiveAccuracy -= 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
 			else
-				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
-			// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-			if (targetUnit && targetUnit->isKneeled())
-				accuracyPenalty += 0.05;
+				effectiveAccuracy -= 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 		}
-		else
-			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
+		// If targetUnit not visible by shooter, then chance to hit them reduced on 5%.
+		if (shooterUnit && targetUnit)
+		{
+			std::vector<BattleUnit*>::const_iterator noUnit = shooterUnit->getVisibleUnits()->end();
+			std::vector<BattleUnit*>::const_iterator u = shooterUnit->getVisibleUnits()->begin();
+			for ( ; u != noUnit && *u != targetUnit; ++u);	// by design
 
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+			if (u == noUnit)
+				effectiveAccuracy -= 0.05;
+		}
+		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
+		if (targetUnit && targetUnit->isKneeled())
+			effectiveAccuracy -= 0.05;
+		// Taken into account smoke between shooter and target. 5% per tile with max density of smoke 15.
+		// Anyway, we cannot to see more 4 tiles in dense smoke. Therefore maximum decrease is 20%.
+		if (smokeDensity >= 60)
+			effectiveAccuracy -= 0.20;
+		else if (smokeDensity > 0)
+			effectiveAccuracy -= 0.05 * smokeDensity / 15.0;
+		// Each next shot of autoshot reduces accuracy.
+		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter > 1)
+			effectiveAccuracy -= 0.05;
+
+		if (effectiveAccuracy > -0.15)
+			baseDeviation = -0.15 + 0.26 / (effectiveAccuracy + 0.25);
+		else
+			baseDeviation = 2.45;	// 2.45 radian - max deviation for worst case.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
 			baseDeviation = 0.02;
-		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
-		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
-		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
-		double cos_fi = cos(fi);
-		if (extendLine)
-		{
-			// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
-			target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
-			target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
-			target->z = (int)(origin.z + maxRange * sin(fi));
-		}
 
-		return;
+		if (!doCalcChance)
+		{
+			// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
+			double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
+			double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+			double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
+			double fi = atan2(double(target->z - origin.z), realDistance) + dV;
+			double cos_fi = cos(fi);
+
+			if (extendLine)
+			{
+				// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
+				target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
+				target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
+				target->z = (int)(origin.z + maxRange * sin(fi));
+			}
+
+			return -1;
+		}
+		else	// Calculation of a chance for range based accuracy.
+		{
+			if (targetUnit)
+			{
+				int loftemps = targetUnit->getLoftemps();
+				if (loftemps > 5) loftemps = 8;
+				return (int) (0.5 + 100.0 * approxF(baseDeviation / 6.0, (0.5 + loftemps) / realDistance)
+					* approxF(baseDeviation / 12.0, 0.5 * targetUnit->getHeight() / realDistance));
+			}
+			else
+				return -1;
+		}
+	}
+
+	// Calculation of a chance for vanilla accuracy.
+	if (doCalcChance)
+	{
+		BattleUnit* targetUnit = targetTile? targetTile->getUnit() : 0;
+		if (targetUnit)
+		{
+			int loftemps = targetUnit->getLoftemps();
+			if (loftemps > 5) loftemps = 8;
+			return vanillaHit(origin, target, accuracy, 1 + 2 * loftemps, targetUnit->getHeight());
+		}
+		else
+			return -1;
 	}
 
 	int xDist = abs(origin.x - target->x);
@@ -390,7 +460,86 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
 		target->z = (int)(origin.z + maxRange * sin_fi);
 	}
+
+	return -1;
 }
+
+/**
+ * Approximation of the F-function (cumulative distribution function).
+ * @param sigm Standart deviation (in radians).
+ * @param delta Half of the angle of view of the profile of the enemy (in radians).
+ * @return Chance to hit (from 0 to 1).
+ */
+double Projectile::approxF(double sigm, double delta)
+{
+	double a = 0.7071067812 * delta / sigm;	// 1/sqrt(2) =  0.7071067812
+	// Max error of the calculation is 1-2%
+	double r = 0.2820947918 * a * (exp(-a * a) + 2*exp(-0.25 * a * a) + 1.0);	// 1/(2*sqrt(pi)) = 0.2820947918
+
+	return (r > 1.0)? 1.0 : r;
+}
+
+/**
+ * Calculation of the probability of hitting (vanilla version).
+ * @param origin Start position of the trajectory.
+ * @param target Endpoint of the trajectory.
+ * @param accuracy Accuracy modifier.
+ * @param d Diameter of target.
+ * @param h Height of target.
+ * @return Chance to hit (from 0 to 100).
+ */
+int Projectile::vanillaHit(const Position& origin, Position *target, double accuracy, int d, int h)
+{
+	if (accuracy > 1.09) return 100;	// We have hit. I guarantee it!
+
+	double mayMiss, mayHit, guarantHit;
+	if (accuracy > 1.01)
+	{
+		mayMiss = 0.00;
+		mayHit = 1.09 - accuracy;
+		guarantHit = 1.01 - mayMiss - mayHit;
+	}
+	else if (accuracy > 0.09)
+	{
+		mayMiss = 1.01 - accuracy;
+		mayHit = 0.09;
+		guarantHit = 1.01 - mayMiss - mayHit;
+	}
+	else
+	{
+		mayMiss = 1.01 - accuracy;
+		mayHit = accuracy;
+		guarantHit = 0.00;
+	}
+
+	double dx = origin.x - target->x;
+	double dy = origin.y - target->y;
+	double dz = origin.z - target->z;
+	double range = sqrt(dx*dx + dy*dy + dz*dz);
+
+	return (int) (0.5 + 100.0 * (mayMiss * approxHit(range * (mayMiss + 0.5) / 2.0, d, h)
+		+ mayHit * approxHit(range * 0.09 / 2.0, d, h) + guarantHit) / 1.01);
+}
+
+/**
+ * Approximation of vanillas chance to hit.
+ * @param dev Deviation (vanilla meaning).
+ * @param d Diameter of target.
+ * @param h Height of target.
+ * @return Chance to hit (from 0 to 1).
+ */
+double Projectile::approxHit(double dev, int d, int h)
+{
+	// x-y square
+	if (dev <= d) return 1.0;
+	double r = d/dev + (1 - d/dev) * (2 * d)/(dev + d);
+
+	// z axis
+	dev /= 4.0;
+	if (dev <= h) return r;
+	return r * (h/dev + (1 - h/dev) * (2 * h)/(dev + h));
+}
+
 /**
  * Moves further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.

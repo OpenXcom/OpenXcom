@@ -47,14 +47,20 @@ private:
 	unsigned int _position;
 	Surface *_sprite;
 	int _speed;
-	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine);
+	int applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine, int smokeDensity = 0, bool doCalcChance = false);
+	/// Approximation of the F-function (cumulative distribution function).
+	static double approxF(double sigm, double delta);
+	/// Approximation of vanillas chance to hit.
+	static double approxHit(double dev, int d, int h);
+	/// Calculation of the probability of hitting (vanilla version).
+	static int vanillaHit(const Position& origin, Position *target, double accuracy, int d, int h);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.
-	int calculateTrajectory(double accuracy);
+	int calculateTrajectory(double accuracy, bool doCalcCance = false);
 	/// Calculates the trajectory for a curved path.
 	int calculateThrow(double accuracy);
 	/// Moves the projectile one step in its trajectory.
