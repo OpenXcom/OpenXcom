@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0), _itemOffset(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
@@ -145,6 +145,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 			_transferQty.push_back(0);
 			_soldiers.push_back(*i);
 			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", L"0");
+			++_itemOffset;
 		}
 	}
 	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
@@ -155,6 +156,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 			_transferQty.push_back(0);
 			_crafts.push_back(*i);
 			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", L"0");
+			++_itemOffset;
 		}
 	}
 	if (_baseFrom->getAvailableScientists() > 0)
@@ -166,6 +168,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		ss << _baseQty.back();
 		ss2 << _baseTo->getAvailableScientists();
 		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+		++_itemOffset;
 	}
 	if (_baseFrom->getAvailableEngineers() > 0)
 	{
@@ -176,6 +179,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		ss << _baseQty.back();
 		ss2 << _baseTo->getAvailableEngineers();
 		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+		++_itemOffset;
 	}
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
@@ -186,10 +190,21 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 			_baseQty.push_back(qty);
 			_transferQty.push_back(0);
 			_items.push_back(*i);
+			RuleItem *rule = _game->getRuleset()->getItem(*i);
 			std::wstringstream ss, ss2;
 			ss << qty;
 			ss2 << _baseTo->getItems()->getItem(*i);
-			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+			std::wstring item = tr(*i);
+			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+			{
+				item.insert(0, L"  ");
+				_lstItems->addRow(4, item.c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
+			}
+			else
+			{
+				_lstItems->addRow(4, item.c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+			}
 		}
 	}
 	_distance = getDistance();
@@ -698,11 +713,27 @@ void TransferItemsState::decreaseByValue(int change)
  */
 void TransferItemsState::updateItemStrings()
 {
-	std::wstringstream ss1, ss2, ss3;
+	std::wstringstream ss1, ss2;
 	ss1 << _baseQty[_sel];
 	ss2 << _transferQty[_sel];
 	_lstItems->setCellText(_sel, 1, ss1.str());
 	_lstItems->setCellText(_sel, 2, ss2.str());
+	if (_transferQty[_sel] > 0)
+	{
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+	}
+	else
+	{
+		_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 1);
+		if (_sel > _itemOffset)
+		{
+			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+			{
+				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+			}
+		}
+	}
 }
 
 /**

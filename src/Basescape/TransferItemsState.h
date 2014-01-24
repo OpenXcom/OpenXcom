@@ -58,7 +58,7 @@ private:
     int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
-	int _changeValueByMouseWheel;
+	int _changeValueByMouseWheel, _itemOffset;
 	bool _canTransferCraftsWhileAirborne, _containmentLimit, _allowChangeListValuesByMouseWheel;
 	/// Gets selected cost.
 	int getCost() const;
