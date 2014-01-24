@@ -67,11 +67,11 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtItem = new Text(130, 9, 10, 22);
-	_txtQuantity = new Text(50, 9, 150, 22);
-	_txtAmountTransfer = new Text(60, 17, 200, 22);
-	_txtAmountDestination = new Text(60, 17, 260, 22);
-	_lstItems = new TextList(287, 128, 8, 40);
+	_txtItem = new Text(130, 9, 10, 24);
+	_txtQuantity = new Text(50, 9, 150, 24);
+	_txtAmountTransfer = new Text(60, 17, 200, 24);
+	_txtAmountDestination = new Text(60, 17, 260, 24);
+	_lstItems = new TextList(287, 128, 8, 42);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -121,7 +121,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_txtAmountDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
 	_txtAmountDestination->setWordWrap(true);
 
-	_lstItems->setColor(Palette::blockOffset(15)+1);
+	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 162, 58, 40, 20);
