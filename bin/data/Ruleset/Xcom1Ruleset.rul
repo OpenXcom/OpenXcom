@@ -1240,20 +1240,43 @@ items:
     costBuy: 16000
     costSell: 12000
     transferTime: 48
+  - type: STR_STINGRAY_MISSILES
+    size: 0.4
+    costBuy: 3000
+    costSell: 2400
+    transferTime: 48
+    clipSize: 1
   - type: STR_AVALANCHE_LAUNCHER
     size: 1
     costBuy: 17000
     costSell: 12750
     transferTime: 48
+  - type: STR_AVALANCHE_MISSILES
+    size: 1.5
+    costBuy: 9000
+    costSell: 7200
+    transferTime: 48
+    clipSize: 1
   - type: STR_CANNON
     size: 1.5
     costBuy: 30000
     costSell: 22500
     transferTime: 48
+  - type: STR_CANNON_ROUNDS_X50
+    size: 0.1
+    costBuy: 1240
+    costSell: 1012
+    transferTime: 96
+    clipSize: 50
   - type: STR_FUSION_BALL_LAUNCHER
     size: 2.0
     costSell: 281000
     transferTime: 48
+  - type: STR_FUSION_BALL
+    size: 0.6
+    costSell: 53300
+    transferTime: 48
+    clipSize: 1
   - type: STR_LASER_CANNON
     size: 2.0
     costSell: 211000
@@ -1262,29 +1285,6 @@ items:
     size: 1.2
     costSell: 267300
     transferTime: 48
-  - type: STR_STINGRAY_MISSILES
-    size: 0.4
-    costBuy: 3000
-    costSell: 2400
-    transferTime: 48
-    clipSize: 1
-  - type: STR_AVALANCHE_MISSILES
-    size: 1.5
-    costBuy: 9000
-    costSell: 7200
-    transferTime: 48
-    clipSize: 1
-  - type: STR_CANNON_ROUNDS_X50
-    size: 0
-    costBuy: 1240
-    costSell: 1012
-    transferTime: 96
-    clipSize: 50
-  - type: STR_FUSION_BALL
-    size: 0.6
-    costSell: 53300
-    transferTime: 48
-    clipSize: 1
   - type: STR_TANK_CANNON
     size: 6
     costBuy: 420000
