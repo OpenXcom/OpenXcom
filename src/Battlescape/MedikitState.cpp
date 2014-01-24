@@ -219,6 +219,7 @@ void MedikitState::onHealClick(Action *)
 	{
 		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getWoundRecovery(), rule->getHealthRecovery());
 		_item->setHealQuantity(--heal);
+		_medikitView->updateSelectedPart();
 		_medikitView->invalidate();
 		update();
 
