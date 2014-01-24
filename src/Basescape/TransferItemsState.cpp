@@ -724,7 +724,7 @@ void TransferItemsState::updateItemStrings()
 	}
 	else
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 1);
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
 		if (_sel > _itemOffset)
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
