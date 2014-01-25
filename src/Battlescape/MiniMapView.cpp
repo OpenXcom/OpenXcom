@@ -306,12 +306,12 @@ void MiniMapView::mouseOver(Action *action, State *state)
 			newY = posBeforeMouseScrolling.y + mouseScrollY / 4;
 
 			// Keep the limits...
-			if (newX < -1 || _camera->getMapSizeY() < newX)
+			if (newX < -1 || _camera->getMapSizeX() < newX)
 			{
 				mouseScrollX -= action->getDetails()->motion.xrel;
 				newX = posBeforeMouseScrolling.x + mouseScrollX / 4;
 			}
-			if (newY < -1 || _camera->getMapSizeX() < newY)
+			if (newY < -1 || _camera->getMapSizeY() < newY)
 			{
 				mouseScrollY -= action->getDetails()->motion.yrel;
 				newY = posBeforeMouseScrolling.y + mouseScrollY / 4;
@@ -324,9 +324,9 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 			// Keep the limits...
 			if (newX < -1) newX = -1;
-			else if (_camera->getMapSizeY() < newX) newX = _camera->getMapSizeY();
+			else if (_camera->getMapSizeX() < newX) newX = _camera->getMapSizeX();
 			if (newY < -1) newY = -1;
-			else if (_camera->getMapSizeX() < newY) newY = _camera->getMapSizeX();
+			else if (_camera->getMapSizeY() < newY) newY = _camera->getMapSizeY();
 		}
 
 		// Scrolling
