@@ -65,10 +65,10 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtSales = new Text(190, 9, 10, 24);
 	_txtFunds = new Text(114, 9, 200, 24);
-	_txtItem = new Text(130, 9, 10, 32);
-	_txtQuantity = new Text(54, 9, 126, 32);
-	_txtSell = new Text(96, 9, 180, 32);
-	_txtValue = new Text(40, 9, 260, 32);
+	_txtItem = new Text(130, 9, 10, 33);
+	_txtQuantity = new Text(54, 9, 126, 33);
+	_txtSell = new Text(96, 9, 180, 33);
+	_txtValue = new Text(40, 9, 260, 33);
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette

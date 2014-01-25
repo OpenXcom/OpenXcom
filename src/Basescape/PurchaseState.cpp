@@ -64,10 +64,10 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtFunds = new Text(150, 9, 10, 24);
 	_txtPurchases = new Text(150, 9, 160, 24);
-	_txtItem = new Text(140, 9, 10, 32);
-	_txtCost = new Text(102, 9, 152, 32);
-	_txtQuantity = new Text(60, 9, 256, 32);
-	_lstItems = new TextList(287, 128, 8, 40);
+	_txtItem = new Text(140, 9, 10, 33);
+	_txtCost = new Text(102, 9, 152, 33);
+	_txtQuantity = new Text(60, 9, 256, 33);
+	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
