@@ -92,7 +92,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleAutoEnd", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleInstantGrenade", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleNotifyDeath", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleRangeBasedAccuracy", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleUFOExtenderAccuracy", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));

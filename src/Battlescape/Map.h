@@ -36,6 +36,7 @@ class Explosion;
 class BattlescapeMessage;
 class Camera;
 class Timer;
+class Text;
 
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 
@@ -71,6 +72,7 @@ private:
 	std::vector<Position> _waypoints;
 	bool _unitDying;
 	int _previewSetting;
+	Text *_txtAccuracy;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
