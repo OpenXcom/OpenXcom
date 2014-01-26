@@ -1304,7 +1304,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	}
 
 	// Now make the recursion manually using a stack
-	std::stack<std::pair<int, int>> stack;
+	std::stack<std::pair<int, int> > stack;
 	stack.push(std::make_pair(lift->getX(),lift->getY()));
 	while (!stack.empty())
 	{
