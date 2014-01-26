@@ -1242,15 +1242,17 @@ std::vector<Vehicle*> *Base::getVehicles()
 {
 	return &_vehicles;
 }
+
 /**
- * check that all the base modules are connected in some way to the elevator.
- * if they are disconnected somehow, destroy them.
+ * Destroys all disconnected facilities in the base.
  */
-void Base::checkModuleConnections()
+void Base::destroyDisconnectedFacilities()
 {
-	std::list<BaseFacilityIterator> disFacs = getDisconnectedFacilities(0);
-	for (std::list<BaseFacilityIterator>::reverse_iterator i = disFacs.rbegin(); i != disFacs.rend(); ++i)
+	std::list<std::vector<BaseFacility*>::iterator> disFacs = getDisconnectedFacilities(0);
+	for (std::list<std::vector<BaseFacility*>::iterator>::reverse_iterator i = disFacs.rbegin(); i != disFacs.rend(); ++i)
+	{
 		destroyFacility(*i);
+	}
 }
 
 /**
@@ -1258,57 +1260,68 @@ void Base::checkModuleConnections()
  * @param remove Facility to ignore (in case of facility dismantling).
  * @return a sorted list of iterators pointing to elements in _facilities.
  */
-std::list<BaseFacilityIterator> Base::getDisconnectedFacilities(BaseFacility *remove)
+std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(BaseFacility *remove)
 {
-	std::list<BaseFacilityIterator> result;
+	std::list<std::vector<BaseFacility*>::iterator> result;
 
-	if (0 != remove && remove->getRules()->isLift())
+	if (remove != 0 && remove->getRules()->isLift())
 	{ // Theoretically this is impossible, but sanity check is good :)
-		for (BaseFacilityIterator i = _facilities.begin(); i != _facilities.end(); ++i)
+		for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+		{
 			if ((*i) != remove) result.push_back(i);
+		}
 		return result;
 	}
 
-	std::vector<std::pair<BaseFacilityIterator,bool>*> facilitiesConnStates;
-	std::pair<BaseFacilityIterator,bool> *grid[BASE_SIZE][BASE_SIZE];
+	std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*> facilitiesConnStates;
+	std::pair<std::vector<BaseFacility*>::iterator, bool> *grid[BASE_SIZE][BASE_SIZE];
 	BaseFacility *lift;
 
 	for (int x = 0; x < BASE_SIZE; ++x)
-		for (int y = 0; y < BASE_SIZE; ++y) grid[x][y] = 0;
+	{
+		for (int y = 0; y < BASE_SIZE; ++y)
+		{
+			grid[x][y] = 0;
+		}
+	}
 
 	// Ok, fill up the grid(+facilitiesConnStates), and search the lift
-	for (BaseFacilityIterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
 		if ((*i) != remove)
 		{
 			if ((*i)->getRules()->isLift()) lift = (*i);
 			for (int x = 0; x != (*i)->getRules()->getSize(); ++x)
+			{
 				for (int y = 0; y != (*i)->getRules()->getSize(); ++y)
 				{
-					std::pair<BaseFacilityIterator,bool> *p = new std::pair<BaseFacilityIterator,bool>(i,false);
+					std::pair<std::vector<BaseFacility*>::iterator, bool> *p = new std::pair<std::vector<BaseFacility*>::iterator, bool>(i,false);
 					facilitiesConnStates.push_back(p);
 					grid[(*i)->getX() + x][(*i)->getY() + y] = p;
 				}
+			}
 		}
+	}
 
 	// Now make the recursion manually using a stack
-	std::stack<std::pair<int,int>> stack;
+	std::stack<std::pair<int, int>> stack;
 	stack.push(std::make_pair(lift->getX(),lift->getY()));
 	while (!stack.empty())
 	{
 		int x = stack.top().first, y = stack.top().second;
 		stack.pop();
-		if (0 != grid[x][y])
+		if (grid[x][y] != 0)
 		{
 			grid[x][y]->second = true;
-			if (x-1>=0 && 0!=grid[x-1][y] && !grid[x-1][y]->second) stack.push(std::make_pair(x-1,y));
-			if (x+1<BASE_SIZE && 0!=grid[x+1][y] && !grid[x+1][y]->second) stack.push(std::make_pair(x+1,y));
-			if (y-1>=0 && 0!=grid[x][y-1] && !grid[x][y-1]->second) stack.push(std::make_pair(x,y-1));
-			if (y+1<BASE_SIZE && 0!=grid[x][y+1] && !grid[x][y+1]->second) stack.push(std::make_pair(x,y+1));
+			if (x-1 >= 0 && grid[x-1][y] != 0 && !grid[x-1][y]->second) stack.push(std::make_pair(x-1,y));
+			if (x+1 < BASE_SIZE && grid[x+1][y] != 0 && !grid[x+1][y]->second) stack.push(std::make_pair(x+1,y));
+			if (y-1 >= 0 && grid[x][y-1] != 0 && !grid[x][y-1]->second) stack.push(std::make_pair(x,y-1));
+			if (y+1 < BASE_SIZE && grid[x][y+1] != 0 && !grid[x][y+1]->second) stack.push(std::make_pair(x,y+1));
 		}
 	}
 
 	BaseFacility *lastFacility = 0;
-	for (std::vector<std::pair<BaseFacilityIterator,bool>*>::iterator i = facilitiesConnStates.begin(); i != facilitiesConnStates.end(); ++i)
+	for (std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*>::iterator i = facilitiesConnStates.begin(); i != facilitiesConnStates.end(); ++i)
 	{
 		// Not a connected fac.? -> push its iterator into the list!
 		// Oh, and we don't want duplicates (facilities with bigger sizes like hangar)
@@ -1324,7 +1337,7 @@ std::list<BaseFacilityIterator> Base::getDisconnectedFacilities(BaseFacility *re
  * removes a base module, and deals with the ramifications thereof
  * @param facility an iterator reference to the facility to destroy and remove.
  */
-void Base::destroyFacility(BaseFacilityIterator facility)
+void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 {
 	if ((*facility)->getRules()->getCrafts() > 0)
 	{

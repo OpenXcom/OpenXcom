@@ -40,8 +40,6 @@ class ResearchProject;
 class Production;
 class Vehicle;
 
-typedef std::vector<BaseFacility*>::iterator BaseFacilityIterator;
-
 /**
  * Represents a player base on the globe.
  * Bases can contain facilities, personnel, crafts and equipment.
@@ -198,12 +196,12 @@ public:
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.
 	std::vector<Vehicle*> *getVehicles();
-	/// check all the module connections.
-	void checkModuleConnections();
+	/// Destroys all disconnected facilities in the base.
+	void destroyDisconnectedFacilities();
 	/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
-	std::list<BaseFacilityIterator> getDisconnectedFacilities(BaseFacility *remove);
+	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
 	/// destroy a facility and deal with the side effects.
-	void destroyFacility(BaseFacilityIterator facility);
+	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 };
 
 }
