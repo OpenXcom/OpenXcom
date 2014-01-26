@@ -290,8 +290,8 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin Startposition of the trajectory.
- * @param target Endpoint of the trajectory.
+ * @param origin Startposition of the trajectory in voxels.
+ * @param target Endpoint of the trajectory in voxels.
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
@@ -323,15 +323,15 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 				upperLimit = weapon->getSnapRange();
 			}
 		}
-		if (realDistance < lowerLimit)
+		if (realDistance / 16 < lowerLimit)
 		{
 			modifier = (weapon->getDropoff() * (lowerLimit - realDistance)) / 100;
 		}
-		else if (upperLimit < realDistance)
+		else if (upperLimit < realDistance / 16)
 		{
 			modifier = (weapon->getDropoff() * (realDistance - upperLimit)) / 100;
 		}
-		accuracy = std::min(0.0, accuracy - modifier);
+		accuracy = std::max(0.0, accuracy - modifier);
 	}
 
 	int xDist = abs(origin.x - target->x);
