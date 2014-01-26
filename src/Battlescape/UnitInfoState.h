@@ -41,10 +41,10 @@ class UnitInfoState : public State
 private:
 	SavedBattleGame *_battleGame;
 
-	bool _fromInventory, _mindProbe;
-
 	BattleUnit *_unit;
 	BattlescapeState *_parent;
+
+	bool _fromInventory, _mindProbe;
 
 	Surface *_bg;
 	Text *_txtName;

@@ -1275,7 +1275,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 
 	std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*> facilitiesConnStates;
 	std::pair<std::vector<BaseFacility*>::iterator, bool> *grid[BASE_SIZE][BASE_SIZE];
-	BaseFacility *lift;
+	BaseFacility *lift = 0;
 
 	for (int x = 0; x < BASE_SIZE; ++x)
 	{
@@ -1301,6 +1301,13 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 				}
 			}
 		}
+	}
+
+	// we're in real trouble if this happens...
+	if (lift == 0)
+	{
+		//TODO: something clever.
+		return result;
 	}
 
 	// Now make the recursion manually using a stack

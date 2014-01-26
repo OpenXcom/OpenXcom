@@ -428,14 +428,13 @@ void Text::processText()
  */
 int Text::getLineX(int line) const
 {
-	int x;
+	int x = 0;
 	switch (_lang->getTextDirection())
 	{
 	case DIRECTION_LTR:
 		switch (_align)
 		{
 		case ALIGN_LEFT:
-			x = 0;
 			break;
 		case ALIGN_CENTER:
 			x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
