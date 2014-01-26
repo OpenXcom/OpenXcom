@@ -1310,13 +1310,18 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	{
 		int x = stack.top().first, y = stack.top().second;
 		stack.pop();
-		if (grid[x][y] != 0)
+		if (x >= 0 && x < BASE_SIZE && y >= 0 && y < BASE_SIZE && grid[x][y] != 0 && !grid[x][y]->second)
 		{
 			grid[x][y]->second = true;
-			if (x-1 >= 0 && grid[x-1][y] != 0 && !grid[x-1][y]->second) stack.push(std::make_pair(x-1,y));
-			if (x+1 < BASE_SIZE && grid[x+1][y] != 0 && !grid[x+1][y]->second) stack.push(std::make_pair(x+1,y));
-			if (y-1 >= 0 && grid[x][y-1] != 0 && !grid[x][y-1]->second) stack.push(std::make_pair(x,y-1));
-			if (y+1 < BASE_SIZE && grid[x][y+1] != 0 && !grid[x][y+1]->second) stack.push(std::make_pair(x,y+1));
+			BaseFacility *fac = *(grid[x][y]->first);
+			BaseFacility *neighborLeft = (x-1 >= 0 && grid[x-1][y] != 0) ? *(grid[x-1][y]->first) : 0;
+			BaseFacility *neighborRight = (x+1 < BASE_SIZE && grid[x+1][y] != 0) ? *(grid[x+1][y]->first) : 0;
+			BaseFacility *neighborTop = (y-1 >= 0 && grid[x][y-1] != 0) ? *(grid[x][y-1]->first) : 0;
+			BaseFacility *neighborBottom= (y+1 < BASE_SIZE && grid[x][y+1] != 0) ? *(grid[x][y+1]->first) : 0;
+			if ((fac->getBuildTime() == 0) || (neighborLeft != 0 && (neighborLeft == fac || neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime()))) stack.push(std::make_pair(x-1,y));
+			if ((fac->getBuildTime() == 0) || (neighborRight != 0 && (neighborRight == fac || neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime()))) stack.push(std::make_pair(x+1,y));
+			if ((fac->getBuildTime() == 0) || (neighborTop != 0 && (neighborTop == fac || neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y-1));
+			if ((fac->getBuildTime() == 0) || (neighborBottom != 0 && (neighborBottom == fac || neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y+1));
 		}
 	}
 
