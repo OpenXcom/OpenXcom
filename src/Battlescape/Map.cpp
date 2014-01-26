@@ -707,9 +707,9 @@ void Map::drawTerrain(Surface *surface)
 									_txtAccuracy->setColor(Palette::blockOffset(4)-1);
 								}
 
-								if (accuracy <= 0)
+								// zero accuracy or out of range: set it red.
+								if (accuracy <= 0 || distance > weapon->getMaxRange())
 								{
-									// set it red here
 									accuracy = 0;
 									_txtAccuracy->setColor(Palette::blockOffset(2)-1);
 								}

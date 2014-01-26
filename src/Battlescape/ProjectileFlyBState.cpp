@@ -146,7 +146,7 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-		if (weapon->getRules()->getMaxRange() != 0 && _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getMaxRange())
+		if (_parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getMaxRange())
 		{
 			// out of range
 			_action.result = "STR_OUT_OF_RANGE";
