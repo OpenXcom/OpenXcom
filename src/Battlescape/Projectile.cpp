@@ -325,11 +325,11 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		}
 		if (realDistance / 16 < lowerLimit)
 		{
-			modifier = (weapon->getDropoff() * (lowerLimit - realDistance)) / 100;
+			modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
 		}
 		else if (upperLimit < realDistance / 16)
 		{
-			modifier = (weapon->getDropoff() * (realDistance - upperLimit)) / 100;
+			modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
 		}
 		accuracy = std::max(0.0, accuracy - modifier);
 	}
