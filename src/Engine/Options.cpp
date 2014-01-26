@@ -139,12 +139,7 @@ void createDefault()
 	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
 	setBool("disableAutoEquip", false);
-	
 	setBool("battleUFOExtenderAccuracy", false);
-	setInt("extenderAccuracyAimedDistance", 200);
-	setInt("extenderAccuracySnapDistance", 15);
-	setInt("extenderAccuracyAutoDistance", 7);
-	setInt("extenderAccuracyDropoff", 2);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

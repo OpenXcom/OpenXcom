@@ -33,7 +33,8 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0), _bulletSpeed(0), _autoShots(3)
+											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
+											_maxRange(0), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _autoShots(3)
 {
 }
 
@@ -127,7 +128,12 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_flatRate = node["flatRate"].as<bool>(_flatRate);
 	_arcingShot = node["arcingShot"].as<bool>(_arcingShot);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
-	_range = node["maxRange"].as<int>(_range);
+	_maxRange = node["maxRange"].as<int>(_maxRange);
+	_aimRange = node["aimRange"].as<int>(_aimRange);
+	_snapRange = node["snapRange"].as<int>(_snapRange);
+	_autoRange = node["autoRange"].as<int>(_autoRange);
+	_minRange = node["minRange"].as<int>(_minRange);
+	_dropoff = node["dropoff"].as<int>(_dropoff);
 	_bulletSpeed = node["bulletSpeed"].as<int>(_bulletSpeed);
 	_autoShots = node["autoShots"].as<int>(_autoShots);
 	if (!_listOrder)
@@ -644,12 +650,57 @@ int RuleItem::getListOrder() const
 }
 
 /**
- * Gets the maximim range of this weapon (0 = unlimited)
+ * Gets the maximum range of this weapon (0 = unlimited)
  * @return The maximum range.
  */
-int RuleItem::getRange() const
+int RuleItem::getMaxRange() const
 {
-	return _range;
+	return _maxRange;
+}
+
+/**
+ * Gets the maximum effective range of this weapon when using Aimed Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getAimRange() const
+{
+	return _aimRange;
+}
+
+/**
+ * Gets the maximim effective range of this weapon for Snap Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getSnapRange() const
+{
+	return _snapRange;
+}
+
+/**
+ * Gets the maximim effective range of this weapon for Auto Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getAutoRange() const
+{
+	return _autoRange;
+}
+
+/**
+ * Gets the minimum effective range of this weapon.
+ * @return The minimum effective range.
+ */
+int RuleItem::getMinRange() const
+{
+	return _minRange;
+}
+
+/**
+ * Gets the accuracy dropoff value of this weapon.
+ * @return The per-tile dropoff.
+ */
+int RuleItem::getDropoff() const
+{
+	return _dropoff;
 }
 
 /**

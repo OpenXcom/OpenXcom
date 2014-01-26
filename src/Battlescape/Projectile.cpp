@@ -305,22 +305,33 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
+	RuleItem *weapon = _action.weapon->getRules();
 
-	if (Options::getBool("battleUFOExtenderAccuracy") && _action.type != BA_THROW && _action.type != BA_HIT)
+	if (_action.type != BA_THROW && _action.type != BA_HIT)
 	{
-		int penaltyDistance = Options::getInt("extenderAccuracyAimedDistance");
-		if (_action.type == BA_AUTOSHOT)
+		double modifier = 0.0;
+		int upperLimit = weapon->getAimRange();
+		int lowerLimit = weapon->getMinRange();
+		if (Options::getBool("battleUFOExtenderAccuracy"))
 		{
-			penaltyDistance = Options::getInt("extenderAccuracyAutoDistance");
+			if (_action.type == BA_AUTOSHOT)
+			{
+				upperLimit = weapon->getAutoRange();
+			}
+			else if (_action.type == BA_SNAPSHOT)
+			{
+				upperLimit = weapon->getSnapRange();
+			}
 		}
-		else if (_action.type == BA_SNAPSHOT)
+		if (realDistance < lowerLimit)
 		{
-			penaltyDistance = Options::getInt("extenderAccuracySnapDistance");
+			modifier = (weapon->getDropoff() * (lowerLimit - realDistance)) / 100;
 		}
-		if (penaltyDistance < realDistance)
+		else if (upperLimit < realDistance)
 		{
-			accuracy -= (Options::getInt("extenderAccuracyDropoff") * (realDistance - penaltyDistance)) / 100;
+			modifier = (weapon->getDropoff() * (realDistance - upperLimit)) / 100;
 		}
+		accuracy = std::min(0.0, accuracy - modifier);
 	}
 
 	int xDist = abs(origin.x - target->x);

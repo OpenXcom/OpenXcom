@@ -40,6 +40,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
@@ -663,35 +665,53 @@ void Map::drawTerrain(Surface *surface)
 							}
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+
+							// UFO extender accuracy: display adjusted accuracy value on crosshair in real-time.
 							if (_cursorType == CT_AIM && Options::getBool("battleUFOExtenderAccuracy"))
 							{
 								BattleAction *action = _save->getBattleGame()->getCurrentAction();
+								RuleItem *weapon = action->weapon->getRules();
 								std::stringstream ss;
 								int accuracy = (int)(_save->getSelectedUnit()->getFiringAccuracy(action->type, action->weapon) * 100);
 								int distance = _save->getTileEngine()->distance(Position (itX, itY,itZ), action->actor->getPosition());
-								int penaltyDistance = 0;
+								int upperLimit = 200;
+								int lowerLimit = weapon->getMinRange();
 								switch (action->type)
 								{
 								case BA_AIMEDSHOT:
-									penaltyDistance = Options::getInt("extenderAccuracyAimedDistance");
+									upperLimit = weapon->getAimRange();
 									break;
 								case BA_SNAPSHOT:
-									penaltyDistance = Options::getInt("extenderAccuracySnapDistance");
+									upperLimit = weapon->getSnapRange();
 									break;
 								case BA_AUTOSHOT:
-									penaltyDistance = Options::getInt("extenderAccuracyAutoDistance");
+									upperLimit = weapon->getAutoRange();
 									break;
 								default:
 									break;
 								}
-								if (distance > penaltyDistance)
+								// at this point, let's assume the shot is adjusted and set the text amber.
+								_txtAccuracy->setColor(Palette::blockOffset(1)-1);
+
+								if (distance > upperLimit)
 								{
-									accuracy -= (distance - penaltyDistance) * Options::getInt("extenderAccuracyDropoff");
-									_txtAccuracy->setColor(Palette::blockOffset(1)-1);
+									accuracy -= (distance - upperLimit) * weapon->getDropoff();
+								}
+								else if (distance < lowerLimit)
+								{
+									accuracy -= (lowerLimit - distance) * weapon->getDropoff();
 								}
 								else
 								{
+									// no adjustment made? set it to green.
 									_txtAccuracy->setColor(Palette::blockOffset(4)-1);
+								}
+
+								if (accuracy <= 0)
+								{
+									// set it red here
+									accuracy = 0;
+									_txtAccuracy->setColor(Palette::blockOffset(2)-1);
 								}
 								ss << accuracy;
 								ss << "%";
