@@ -71,14 +71,8 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
-		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
-		// all the rest hits one point:
-		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
-						(_item->getRules()->getDamageType() == DT_HE 
-						|| _item->getRules()->getDamageType() == DT_IN 
-						|| _item->getRules()->getDamageType() == DT_SMOKE
-						|| _item->getRules()->getDamageType() == DT_STUN);
+						_item->getRules()->getExplosionRadius() != 0;
 	}
 	else if (_tile)
 	{
