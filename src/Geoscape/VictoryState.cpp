@@ -39,17 +39,17 @@ namespace OpenXcom
 VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 {
 	// Create objects
-	_screen = new InteractiveSurface(320, 200, 0, 0);
+	_window = new InteractiveSurface(320, 200, 0, 0);
 	_txtText.push_back(new Text(195, 56, 5, 0));
 	_txtText.push_back(new Text(232, 64, 88, 136));
 	_txtText.push_back(new Text(254, 48, 66, 152));
 	_txtText.push_back(new Text(300, 200, 5, 0));
 	_txtText.push_back(new Text(310, 42, 5, 158));
-	_timer = new Timer(20000);
+	_timer = new Timer(40000);
 
-	add(_screen);
+	add(_window);
 	// Set up objects
-	_screen->onMouseClick((ActionHandler)&VictoryState::windowClick);
+	_window->onMouseClick((ActionHandler)&VictoryState::windowClick);
 	
 	_game->getResourcePack()->getMusic("GMWIN")->play();
 
@@ -112,8 +112,8 @@ void VictoryState::nextScreen()
 	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+offset << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_screen->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_game->getResourcePack()->getSurface(ss.str())->blit(_screen);
+	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_game->getResourcePack()->getSurface(ss.str())->blit(_window);
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
 	_txtText[_screenNumber-1]->setVisible(true);

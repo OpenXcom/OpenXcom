@@ -39,7 +39,7 @@ namespace OpenXcom
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false), _modifierUsed(false)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
 {
 	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile

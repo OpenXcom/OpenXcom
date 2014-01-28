@@ -40,7 +40,7 @@ class AllocatePsiTrainingState : public State
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtTraining, *_txtName, *_txtCraft, *_txtRemaining;
+	Text *_txtTitle, *_txtTraining, *_txtName, *_txtRemaining;
 	Text *_txtPsiStrength, *_txtPsiSkill;
 	TextList *_lstSoldiers;
 	std::vector<Soldier*> _soldiers;
