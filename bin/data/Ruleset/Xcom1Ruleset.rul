@@ -2450,7 +2450,7 @@ items:
     costSell: 115000
   - type: CYBERDISC_WEAPON
     weight: 3
-    bigSprite: 40
+    bigSprite: -2
     floorSprite: 31
     handSprite: 104
     bulletSprite: 8
@@ -2471,7 +2471,7 @@ items:
     recover: false
   - type: REAPER_WEAPON
     weight: 3
-    bigSprite: 26
+    bigSprite: -3
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2482,12 +2482,12 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     recover: false
   - type: CHRYSSALID_WEAPON
     weight: 3
-    bigSprite: 26
+    bigSprite: -1
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2498,12 +2498,12 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     recover: false
   - type: CELATID_WEAPON
     weight: 3
-    bigSprite: 40
+    bigSprite: -2
     floorSprite: 31
     handSprite: 104
     bulletSprite: 8
@@ -2525,7 +2525,7 @@ items:
     arcingShot: true
   - type: SILACOID_WEAPON
     weight: 3
-    bigSprite: 40
+    bigSprite: -4
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2541,7 +2541,7 @@ items:
     recover: false
   - type: SECTOPOD_WEAPON
     weight: 3
-    bigSprite: 40
+    bigSprite: -2
     floorSprite: 31
     handSprite: 104
     fireSound: 18
@@ -9285,3 +9285,10 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/reserve.png
+  - type: BIGOBS.PCK
+    width: 64
+    height: 96
+    subX: 32
+    subY: 48
+    files:
+      -4: Resources/Weapons/Terror.png
