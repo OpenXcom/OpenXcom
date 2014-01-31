@@ -37,6 +37,7 @@
 #include "../Engine/Options.h"
 #include "AlienBAIState.h"
 #include "Camera.h"
+#include "Explosion.h"
 
 namespace OpenXcom
 {
@@ -191,8 +192,9 @@ void ProjectileFlyBState::init()
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
-	// create a new projectile
 	++_action.autoShotCounter;
+
+	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
 
 	// add the projectile on the map
@@ -266,7 +268,9 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
+			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+			}
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
@@ -329,6 +333,11 @@ void ProjectileFlyBState::think()
 	}
 	else
 	{
+		if (_action.type != BA_THROW && _ammo && _ammo->getRules()->getShotgunPellets() != 0)
+		{
+			// shotgun pellets move to their terminal location instantly as fast as possible
+			_parent->getMap()->getProjectile()->skipTrajectory();
+		}
 		if(!_parent->getMap()->getProjectile()->move())
 		{
 			// impact !
@@ -391,6 +400,32 @@ void ProjectileFlyBState::think()
 					}
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
 
+					// special shotgun behaviour: trace extra projectile paths, and add bullet hits at their termination points.
+					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
+					{
+						int i = 1;
+						while (i != _ammo->getRules()->getShotgunPellets())
+						{
+							// create a projectile
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
+							// let it trace to the point where it hits
+							_projectileImpact = proj->calculateTrajectory(std::max(0.0, _unit->getFiringAccuracy(_action.type, _action.weapon) - i * 0.05));
+							if (_projectileImpact != V_EMPTY)
+							{
+								// as above: skip the shot to the end of it's path
+								proj->skipTrajectory();
+								// insert an explosion and hit 
+								if (_projectileImpact != V_OUTOFBOUNDS)
+								{
+									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation(), false, false);
+									_parent->getMap()->getExplosions()->insert(explosion);
+									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), _unit);
+								}
+								++i;
+							}
+							delete proj;
+						}
+					}
 					// if the unit burns floortiles, burn floortiles
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 					{

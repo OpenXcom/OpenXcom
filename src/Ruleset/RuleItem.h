@@ -64,7 +64,7 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
-	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _autoShots;
+	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _autoShots, _shotgunPellets;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -196,6 +196,7 @@ public:
 	int getMinRange() const;
 	/// Get the accuracy dropoff of this weapon.
 	int getDropoff() const;
+	int getShotgunPellets() const;
 };
 
 }
