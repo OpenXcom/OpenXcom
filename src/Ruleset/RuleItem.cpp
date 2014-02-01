@@ -61,18 +61,27 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_costSell = node["costSell"].as<int>(_costSell);
 	_transferTime = node["transferTime"].as<int>(_transferTime);
 	_weight = node["weight"].as<int>(_weight);
-	_bigSprite = node["bigSprite"].as<int>(_bigSprite);
-	// BIGOBS.PCK: 57 entries
-	if (_bigSprite > 56)
-		_bigSprite += modIndex;
-	_floorSprite = node["floorSprite"].as<int>(_floorSprite);
-	// FLOOROB.PCK: 73 entries
-	if (_floorSprite > 72)
-		_floorSprite += modIndex;
-	_handSprite = node["handSprite"].as<int>(_handSprite);
-	// HANDOBS.PCK: 128 entries
-	if (_handSprite > 127)
-		_handSprite += modIndex;
+	if (node["bigSprite"])
+	{
+		_bigSprite = node["bigSprite"].as<int>(_bigSprite);
+		// BIGOBS.PCK: 57 entries
+		if (_bigSprite > 56)
+			_bigSprite += modIndex;
+	}
+	if (node["floorSprite"])
+	{
+		_floorSprite = node["floorSprite"].as<int>(_floorSprite);
+		// FLOOROB.PCK: 73 entries
+		if (_floorSprite > 72)
+			_floorSprite += modIndex;
+	}
+	if (node["handSprite"])
+	{
+		_handSprite = node["handSprite"].as<int>(_handSprite);
+		// HANDOBS.PCK: 128 entries
+		if (_handSprite > 127)
+			_handSprite += modIndex;
+	}
 	if (node["bulletSprite"])
 	{
 		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
@@ -80,18 +89,27 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		if (_bulletSprite >= 385)
 			_bulletSprite += modIndex;
 	}
-	_fireSound = node["fireSound"].as<int>(_fireSound);
-	// BATTLE.CAT: 55 entries
-	if (_fireSound > 54)
-		_fireSound += modIndex;
-	_hitSound = node["hitSound"].as<int>(_hitSound);
-	// BATTLE.CAT: 55 entries
-	if (_hitSound > 54)
-		_hitSound += modIndex;
-	_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
-	// SMOKE.PCK: 56 entries
-	if (_hitAnimation > 55)
-		_hitAnimation += modIndex;
+	if (node["fireSound"])
+	{
+		_fireSound = node["fireSound"].as<int>(_fireSound);
+		// BATTLE.CAT: 55 entries
+		if (_fireSound > 54)
+			_fireSound += modIndex;
+	}
+	if (node["hitSound"])
+	{		
+		_hitSound = node["hitSound"].as<int>(_hitSound);
+		// BATTLE.CAT: 55 entries
+		if (_hitSound > 54)
+			_hitSound += modIndex;
+	}
+	if (node["hitAnimation"])
+	{		
+		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
+		// SMOKE.PCK: 56 entries
+		if (_hitAnimation > 55)
+			_hitAnimation += modIndex;
+	}
 	_power = node["power"].as<int>(_power);
 	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
 	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
