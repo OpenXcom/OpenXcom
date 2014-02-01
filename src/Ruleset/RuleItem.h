@@ -65,6 +65,7 @@ private:
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _autoShots, _shotgunPellets;
+	std::string _zombieUnit;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -196,7 +197,10 @@ public:
 	int getMinRange() const;
 	/// Get the accuracy dropoff of this weapon.
 	int getDropoff() const;
+	/// Get the number of projectiles to trace.
 	int getShotgunPellets() const;
+	/// Gets the unit's zombie unit.
+	std::string getZombieUnit() const;
 };
 
 }

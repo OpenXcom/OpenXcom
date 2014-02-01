@@ -55,7 +55,7 @@ private:
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
-	std::string _zombieUnit, _spawnUnit;
+	std::string _spawnUnit;
 	bool _livingWeapon;
 public:
 	/// Creates a blank unit ruleset.
@@ -92,8 +92,6 @@ public:
 	int getAggression() const;
 	/// Gets the alien's special ability.
 	int getSpecialAbility() const;
-	/// Gets the unit's zombie unit.
-	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Gets the unit's war cry.

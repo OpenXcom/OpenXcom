@@ -92,7 +92,7 @@ private:
 	int _coverReserve;
 	BattleUnit *_charging;
 	int _turnsExposed;
-	std::string _zombieUnit, _spawnUnit;
+	std::string _spawnUnit;
 	std::string _activeHand;
 
 	// static data
@@ -363,8 +363,6 @@ public:
 	void convertToFaction(UnitFaction f);
 	/// Set health to 0 and set status dead
 	void instaKill();
-	/// Gets the unit's zombie unit.
-	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Sets the unit's spawn unit.

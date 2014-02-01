@@ -137,7 +137,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_intelligence = unit->getIntelligence();
 	_aggression = unit->getAggression();
 	_specab = (SpecialAbility) unit->getSpecialAbility();
-	_zombieUnit = unit->getZombieUnit();
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
@@ -2208,15 +2207,6 @@ int BattleUnit::getSpecialAbility() const
 void BattleUnit::setSpecialAbility(SpecialAbility specab)
 {
 	_specab = specab;
-}
-
-/**
- * Get the unit that the victim is morphed into when attacked.
- * @return unit.
- */
-std::string BattleUnit::getZombieUnit() const
-{
-	return _zombieUnit;
 }
 
 /**
