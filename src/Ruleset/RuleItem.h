@@ -64,7 +64,7 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
-	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _autoShots, _shotgunPellets;
+	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
 public:
 	/// Creates a blank item ruleset.
@@ -179,6 +179,8 @@ public:
 	int getListOrder() const;
 	/// How fast does a projectile fired from this weapon travel?
 	int getBulletSpeed() const;
+	/// How fast does the explosion animation play?
+	int getExplosionSpeed() const;
 	/// How many auto shots does this weapon fire.
 	int getAutoShots() const;
 	/// is this item a 2 handed weapon?
@@ -199,7 +201,7 @@ public:
 	int getDropoff() const;
 	/// Get the number of projectiles to trace.
 	int getShotgunPellets() const;
-	/// Gets the unit's zombie unit.
+	/// Gets the weapon's zombie unit.
 	std::string getZombieUnit() const;
 };
 

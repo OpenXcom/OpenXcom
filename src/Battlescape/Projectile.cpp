@@ -63,7 +63,14 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
 		}
 		else
 		{
-			_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+			if (_action.weapon->getRules()->getBulletSpeed() != 0)
+			{
+				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+			}
+			else if (_action.weapon->getAmmoItem() && _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
+			{
+				_speed = std::max(1, _speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
+			}
 		}
 	}
 }
