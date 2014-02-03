@@ -131,9 +131,20 @@ void init(unsigned int seed)
 }
 
 /**
+ * Generates a random positive integer up to a number.
+ * @param max Maximum number, exclusive.
+ * @return Generated number.
+ */
+int generate(int max)
+{
+	unsigned int num = random();
+	return (int)(num % max);
+}
+
+/**
  * Generates a random integer number within a certain range.
- * @param min Minimum number.
- * @param max Maximum number.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
  * @return Generated number.
  */
 int generate(int min, int max)
