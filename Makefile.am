@@ -191,6 +191,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Inventory.h \
 	src/Battlescape/InventoryState.cpp \
 	src/Battlescape/InventoryState.h \
+	src/Battlescape/LayoutManagerState.cpp \
+	src/Battlescape/LayoutManagerState.h \
 	src/Battlescape/Map.cpp \
 	src/Battlescape/Map.h \
 	src/Battlescape/MedikitState.cpp \

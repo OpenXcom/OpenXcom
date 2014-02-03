@@ -148,6 +148,7 @@
 #include "./Battlescape/ExplosionBState.h"
 #include "./Battlescape/MedikitView.h"
 #include "./Battlescape/InventoryState.h"
+#include "./Battlescape/LayoutManagerState.h"
 #include "./Battlescape/PromotionsState.h"
 #include "./Battlescape/InfoboxOKState.h"
 #include "./Battlescape/Explosion.h"

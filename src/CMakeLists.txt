@@ -123,6 +123,8 @@ set ( battlescape_src
   Battlescape/Explosion.h
   Battlescape/InventoryState.cpp
   Battlescape/InventoryState.h
+  Battlescape/LayoutManagerState.cpp
+  Battlescape/LayoutManagerState.h
   Battlescape/UnitSprite.h
   Battlescape/UnitSprite.cpp
   Battlescape/BattleState.h
