@@ -57,7 +57,7 @@ namespace RNG
 	template <typename T>
 	void shuffle(T &list)
 	{
-		std::random_shuffle(list.begin(), list.end(), (int (*)(int))generate);
+		std::random_shuffle(list.begin(), list.end(), (int (&)(int))generate);
 	}
 }
 
