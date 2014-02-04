@@ -40,7 +40,7 @@ if ( IS_DIRECTORY ${DEPS_DIR} )
    set ( YAMLCPP_LIBRARY yaml-cpp )
 else ( )
   find_package ( SDL2 COMPONENTS mixer gfx image)
-  find_package ( Yaml_cpp )
+  find_package ( Yaml_cpp 0.5.0)
   find_package ( OpenGL )
 
   if ( NOT OPENGL_FOUND )
