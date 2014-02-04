@@ -39,9 +39,7 @@ namespace RNG
 	void init(unsigned int seed);
 	/// Gets the seed in use.
 	unsigned int getSeed();
-	/// Generates a random integer number.
-	int generate(int max);
-	/// Generates a random integer number.
+	/// Generates a random integer number, inclusive.
 	int generate(int min, int max);
 	/// Generates a random floating-point number.
 	double generate(double min, double max);
@@ -49,6 +47,8 @@ namespace RNG
 	double boxMuller(double m = 0, double s = 1);
 	/// Generates a percentage chance.
 	bool percent(int value);
+	/// Generates a random integer number, exclusive.
+	int generateEx(int max);
 	/// Shuffles a list randomly.
 	/**
 	 * Randomly changes the orders of the elements in a list.
@@ -57,7 +57,7 @@ namespace RNG
 	template <typename T>
 	void shuffle(T &list)
 	{
-		std::random_shuffle(list.begin(), list.end(), (int (&)(int))generate);
+		std::random_shuffle(list.begin(), list.end(), generateEx);
 	}
 }
 
