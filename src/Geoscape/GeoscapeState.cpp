@@ -1642,11 +1642,11 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi, _globe));
 
 	// Handle Xcom Operatives discovering bases
-	if(!_game->getSavedGame()->getAlienBases()->empty())
+	if(!_game->getSavedGame()->getAlienBases()->empty() && RNG::percent(20))
 	{
 		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			if(!(*b)->isDiscovered() && RNG::percent(20))
+			if(!(*b)->isDiscovered())
 			{
 				(*b)->setDiscovered(true);
 				popup(new AlienBaseState(_game, *b, this));
