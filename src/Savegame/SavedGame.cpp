@@ -365,8 +365,10 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 /**
  * Saves a saved game's contents to a YAML file.
  * @param filename YAML filename.
+ * @param emGeo YAML emitter with GeoScape save.
+ * @param emBattle YAML emitter with BattleScape save.
  */
-void SavedGame::save(const std::string &filename) const
+void SavedGame::save(const std::string &filename, const YAML::Emitter &emGeo, const YAML::Emitter &emBattle) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::ofstream sav(s.c_str());
@@ -376,9 +378,25 @@ void SavedGame::save(const std::string &filename) const
 	}
 
 	YAML::Emitter out;
-
-	// Saves the brief game info used in the saves list
 	YAML::Node brief;
+
+	saveBrief(brief);
+	out << brief << YAML::BeginDoc;
+
+	sav << out.c_str() << emGeo.c_str();
+	if (emBattle.size() > 0)
+	{
+		sav << "\n" << emBattle.c_str();
+	}
+	sav.close();
+}
+
+/**
+ * Saves the brief game info into YAML node.
+ * @param brief a YAML node.
+ */
+void SavedGame::saveBrief(YAML::Node &brief) const
+{
 	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	brief["build"] = OPENXCOM_VERSION_GIT;
@@ -388,10 +406,14 @@ void SavedGame::save(const std::string &filename) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
-	out << brief;
-	// Saves the full game data to the save
-	out << YAML::BeginDoc;
-	YAML::Node node;
+}
+
+/**
+ * Saves the GeoScape game info into YAML node.
+ * @param node a YAML node.
+ */
+void SavedGame::saveGeo(YAML::Node &node) const
+{
 	node["difficulty"] = (int)_difficulty;
 	node["monthsPassed"] = _monthsPassed;
 	node["radarLines"] = _radarLines;
@@ -458,13 +480,16 @@ void SavedGame::save(const std::string &filename) const
 	{
 		node["deadSoldiers"].push_back((*i)->save());
 	}
-	if (_battleGame != 0)
-	{
-		node["battleGame"] = _battleGame->save();
-	}
-	out << node;
-	sav << out.c_str();
-	sav.close();
+}
+
+/**
+ * Saves the BattleScape game info into YAML node.
+ * @param node a YAML node.
+ */
+void SavedGame::saveBattle(YAML::Node &node) const
+{
+//	if (_battleGame == 0) return;
+	node["battleGame"] = _battleGame->save();
 }
 
 /**

@@ -52,7 +52,7 @@ public:
 	/// Creates the Saved Game state.
 	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow);
 	/// Creates the Saved Game state (autosave option).
-	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg);
+	SavedGameState(Game *game, OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();
 	/// Updates the palette.
