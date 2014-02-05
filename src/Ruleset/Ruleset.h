@@ -107,6 +107,12 @@ protected:
 	void loadFiles(const std::string &dirname);
 	/// Loads a ruleset element.
 	template <typename T> T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
+	/// Saves a ruleset element as a sequence.
+	template <typename T> YAML::Node saveSeq(const std::map<std::string, T*>& map, const std::vector<std::string>& index) const;
+	/// Saves a ruleset element as a sequence.
+	template <typename T> YAML::Node saveSeq(const std::map<std::string, T*> &map) const;
+	/// Saves a ruleset element as a sequence.
+	template <typename T> YAML::Node saveSeq(const std::vector<std::pair<std::string, T*> > &map) const;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -114,6 +120,10 @@ public:
 	virtual ~Ruleset();
 	/// Loads a ruleset from the given source.
 	void load(const std::string &source);
+	/// Saves ruleset to YAML.
+	YAML::Node dumpYaml() const;
+	/// Saves ruleset to YAML file.
+	void dumpYamlToFile(const std::string &filename, const std::string &baseFilename) const;
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.

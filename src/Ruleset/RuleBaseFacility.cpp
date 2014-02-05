@@ -97,6 +97,43 @@ void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 }
 
 /**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleBaseFacility::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["requires"] = _requires;
+	node["spriteShape"] = _spriteShape;
+	node["spriteFacility"] = _spriteFacility;
+	node["lift"] = _lift;
+	node["hyper"] = _hyper;
+	node["mind"] = _mind;
+	node["grav"] = _grav;
+	node["size"] = _size;
+	node["buildCost"] = _buildCost;
+	node["buildTime"] = _buildTime;
+	node["monthlyCost"] = _monthlyCost;
+	node["storage"] = _storage;
+	node["personnel"] = _personnel;
+	node["aliens"] = _aliens;
+	node["crafts"] = _crafts;
+	node["labs"] = _labs;
+	node["workshops"] = _workshops;
+	node["psiLabs"] = _psiLabs;
+	node["radarRange"] = _radarRange;
+	node["radarChance"] = _radarChance;
+	node["defense"] = _defense;
+	node["hitRatio"] = _hitRatio;
+	node["fireSound"] = _fireSound;
+	node["hitSound"] = _hitSound;
+	node["mapName"] = _mapName;
+	node["listOrder"] = _listOrder;
+	return node;
+}
+
+/**
  * Gets the language string that names
  * this base facility. Each base facility type
  * has a unique name.

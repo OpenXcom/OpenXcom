@@ -39,6 +39,13 @@ public:
 	virtual ~ExtraSounds();
 	/// Loads the data from yaml
 	void load(const YAML::Node &node, int modIndex);
+	/// Saves the data to YAML.
+	YAML::Node save() const;
+	/**
+	 * Saves the data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save(const std::string& type) const { return save(); }
 	/// Gets the list of sounds defined by this mod
 	std::map<int, std::string> *getSounds();
 	/// get the mod index for this external sound set.

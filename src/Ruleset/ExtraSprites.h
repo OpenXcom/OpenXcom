@@ -41,6 +41,10 @@ public:
 	virtual ~ExtraSprites();
 	/// Loads the data from YAML.
 	void load(const YAML::Node &node, int modIndex);
+	/// Saves the data to YAML.
+	YAML::Node save() const;
+	/// Saves the data to YAML.
+	YAML::Node save(const std::string& type) const;
 	/// Gets the list of sprites defined by this mod.
 	std::map<int, std::string> *getSprites();
 	/// Gets the width of the surfaces (used for single images and new spritesets).

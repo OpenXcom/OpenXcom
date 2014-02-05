@@ -67,6 +67,34 @@ void Unit::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the unit to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node Unit::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["race"] = _race;
+	node["rank"] = _rank;
+	node["stats"] = _stats;
+	node["armor"] = _armor;
+	node["standHeight"] = _standHeight;
+	node["kneelHeight"] = _kneelHeight;
+	node["floatHeight"] = _floatHeight;
+	node["value"] = _value;
+	node["deathSound"] = _deathSound;
+	node["aggroSound"] = _aggroSound;
+	node["moveSound"] = _moveSound;
+	node["intelligence"] = _intelligence;
+	node["aggression"] = _aggression;
+	node["specab"] = (int)_specab;
+	node["zombieUnit"] = _zombieUnit;
+	node["spawnUnit"] = _spawnUnit;
+	node["livingWeapon"] = _livingWeapon;
+	return node;
+}
+
+/**
  * Returns the language string that names
  * this unit. Each unit type has a unique name.
  * @return The unit's name.

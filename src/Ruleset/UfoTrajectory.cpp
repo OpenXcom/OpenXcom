@@ -75,6 +75,19 @@ void UfoTrajectory::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the trajectory data to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node UfoTrajectory::save(const std::string &id) const
+{
+	YAML::Node node;
+	node["id"] = id;
+	node["groundTimer"] = _groundTimer;
+	node["waypoints"] = _waypoints;
+	return node;
+}
+
+/**
  * Gets the altitude at a waypoint.
  * @param wp The waypoint.
  * @return The altitude.

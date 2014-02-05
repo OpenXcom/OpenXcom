@@ -59,6 +59,24 @@ void RuleManufacture::load(const YAML::Node &node, int listOrder)
 }
 
 /**
+ * Saves manufacture project to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleManufacture::save(const std::string &name) const
+{
+	YAML::Node node;
+	node["name"] = name;
+	node["category"] = _category;
+	node["requires"] = _requires;
+	node["space"] = _space;
+	node["time"] = _time;
+	node["cost"] = _cost;
+	node["requiredItems"] = _requiredItems;
+	node["producedItems"] = _producedItems;
+	return node;
+}
+
+/**
  * Gets the unique name of the manufacture.
  * @return The name.
  */

@@ -93,6 +93,22 @@ namespace OpenXcom
 	}
 
 	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinition::save(const std::string& id) const
+	{
+		YAML::Node node;
+		node["id"] = id;
+		node["section"] = section;
+		node["requires"] = requires;
+		node["title"] = title;
+		node["type_id"] = (int)_type_id;
+		node["listOrder"] = _listOrder;
+		return node;
+	}
+
+	/**
 	 * Gets the list weight of the article.
 	 * @return The list weight of the article.
 	 */
@@ -142,6 +158,20 @@ namespace OpenXcom
 	}
 
 	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionCraft::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["image_id"] = image_id;
+		node["rect_stats"] = rect_stats;
+		node["rect_text"] = rect_text;
+		node["text"] = text;
+		return node;
+	}
+
+	/**
 	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON)
@@ -160,6 +190,18 @@ namespace OpenXcom
 	}
 
 	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionCraftWeapon::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["image_id"] = image_id;
+		node["text"] = text;
+		return node;
+	}
+
+	/**
 	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionText::ArticleDefinitionText() : ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
@@ -174,6 +216,17 @@ namespace OpenXcom
 	{
 		ArticleDefinition::load(node, listOrder);
 		text = node["text"].as<std::string>(text);
+	}
+
+	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionText::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["text"] = text;
+		return node;
 	}
 
 	/**
@@ -196,6 +249,19 @@ namespace OpenXcom
 	}
 
 	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionTextImage::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["image_id"] = image_id;
+		node["text"] = text;
+		node["text_width"] = text_width;
+		return node;
+	}
+
+	/**
 	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY)
@@ -210,6 +276,17 @@ namespace OpenXcom
 	{
 		ArticleDefinition::load(node, listOrder);
 		text = node["text"].as<std::string>(text);
+	}
+
+	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionBaseFacility::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["text"] = text;
+		return node;
 	}
 
 	/**
@@ -230,6 +307,17 @@ namespace OpenXcom
 	}
 
 	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionItem::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["text"] = text;
+		return node;
+	}
+
+	/**
 	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO)
@@ -244,6 +332,17 @@ namespace OpenXcom
 	{
 		ArticleDefinition::load(node, listOrder);
 		text = node["text"].as<std::string>(text);
+	}
+
+	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionUfo::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["text"] = text;
+		return node;
 	}
 
 	/**
@@ -264,6 +363,17 @@ namespace OpenXcom
 	}
 
 	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionArmor::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["text"] = text;
+		return node;
+	}
+
+	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionVehicle::ArticleDefinitionVehicle() : ArticleDefinition(UFOPAEDIA_TYPE_VEHICLE)
@@ -279,6 +389,18 @@ namespace OpenXcom
 		ArticleDefinition::load(node, listOrder);
 		weapon = node["weapon"].as<std::string>(weapon);
 		text = node["text"].as<std::string>(text);
+	}
+
+	/**
+	* Saves the article definition to a YAML file.
+	* @return YAML node.
+	*/
+	YAML::Node ArticleDefinitionVehicle::save(const std::string& id) const
+	{
+		YAML::Node node = ArticleDefinition::save(id);
+		node["weapon"] = weapon;
+		node["text"] = text;
+		return node;
 	}
 
 }

@@ -40,6 +40,10 @@ public:
 	virtual ~ExtraStrings();
 	/// Loads the data from YAML.
 	void load(const YAML::Node &node);
+	/// Saves the data to YAML.
+	YAML::Node save() const;
+	/// Saves the data to YAML.
+	YAML::Node save(const std::string& type) const;
 	/// Gets the list of strings defined by this mod.
 	std::map<std::string, std::string> *getStrings();
 };

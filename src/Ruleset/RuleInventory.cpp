@@ -77,6 +77,23 @@ void RuleInventory::load(const YAML::Node &node, int listOrder)
 }
 
 /**
+ * Saves the inventory to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleInventory::save(const std::string &id) const
+{
+	YAML::Node node;
+	node["id"] = id;
+	node["x"] = _x;
+	node["y"] = _y;
+	node["type"] = (int)_type;
+	node["slots"] = _slots;
+	node["costs"] = _costs;
+	node["listOrder"] = _listOrder;
+	return node;
+}
+
+/**
  * Gets the language string that names
  * this inventory section. Each section has a unique name.
  * @return The section name.

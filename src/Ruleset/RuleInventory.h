@@ -61,6 +61,13 @@ public:
 	~RuleInventory();
 	/// Loads inventory data from YAML.
 	void load(const YAML::Node& node, int listOrder);
+	/// Saves inventory data to YAML.
+	YAML::Node save(const std::string &id) const;
+	/**
+	 * Saves inventory data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_id); }
 	/// Gets the inventory's id.
 	std::string getId() const;
 	/// Gets the X position of the inventory.

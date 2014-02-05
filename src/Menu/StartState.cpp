@@ -480,6 +480,7 @@ void StartState::think()
 			}
 			Log(LOG_INFO) << "Language loaded successfully.";
 			_load = LOADING_SUCCESSFUL;
+			_game->getRuleset()->dumpYamlToFile(Options::getDumpRulesetFile(), Options::getDumpRulesetBaseFile());
 
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");

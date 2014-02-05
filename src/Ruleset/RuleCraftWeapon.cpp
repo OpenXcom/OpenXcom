@@ -73,6 +73,31 @@ void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 }
 
 /**
+ * Saves the craft weapon to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleCraftWeapon::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["sprite"] = _sprite;
+	node["sound"] = _sound;
+	node["damage"] = _damage;
+	node["range"] = _range;
+	node["accuracy"] = _accuracy;
+	node["reloadCautious"] = _reloadCautious;
+	node["reloadStandard"] = _reloadStandard;
+	node["reloadAggressive"] = _reloadAggressive;
+	node["ammoMax"] = _ammoMax;
+	node["rearmRate"] = _rearmRate;
+	node["projectileType"] = (int)_projectileType;
+	node["projectileSpeed"] = _projectileSpeed;
+	node["launcher"] = _launcher;
+	node["clip"] = _clip;
+	return node;
+}
+
+/**
  * Gets the language string that names this craft weapon.
  * Each craft weapon type has a unique name.
  * @return The craft weapon's name.

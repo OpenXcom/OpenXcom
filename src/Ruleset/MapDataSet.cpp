@@ -59,6 +59,15 @@ void MapDataSet::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the map data set to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node MapDataSet::save(const std::string &name) const
+{
+	return YAML::Node(name);
+}
+
+/**
  * Gets the MapDataSet name (string).
  * @return The MapDataSet name.
  */

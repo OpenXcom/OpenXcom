@@ -41,6 +41,13 @@ public:
 	~City();
 	/// Loads the city from YAML.
 	void load(const YAML::Node& node);
+	/// Saves the city to YAML.
+	YAML::Node save(const std::string &name) const;
+	/**
+	 * Saves the city YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_name); }
 	/// Gets the city's name.
 	std::string getName() const;
 	/// Gets the city's latitude.

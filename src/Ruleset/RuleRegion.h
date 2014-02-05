@@ -78,6 +78,13 @@ public:
 	~RuleRegion();
 	/// Loads the region from YAML.
 	void load(const YAML::Node& node);
+	/// Saves the region to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the region YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the region's type.
 	std::string getType() const;
 	/// Gets the region's base cost.

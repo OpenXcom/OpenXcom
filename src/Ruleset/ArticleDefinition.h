@@ -59,6 +59,13 @@ namespace OpenXcom
 		UfopaediaTypeId getType() const;
 		/// Loads the article from YAML.
 		virtual void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		virtual YAML::Node save(const std::string &id) const;
+		/**
+		* Saves the article YAML file.
+		* @return YAML node.
+		*/
+		YAML::Node save() const { return save(id); }
 		/// Gets the article's list weight.
 		int getListOrder() const;
 
@@ -98,6 +105,8 @@ namespace OpenXcom
 		ArticleDefinitionCraft();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string image_id;
 		ArticleDefinitionRect rect_stats;
@@ -117,6 +126,8 @@ namespace OpenXcom
 		ArticleDefinitionCraftWeapon();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string image_id;
 		std::string text;
@@ -133,6 +144,8 @@ namespace OpenXcom
 		ArticleDefinitionText();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string text;
 	};
@@ -149,6 +162,8 @@ namespace OpenXcom
 		ArticleDefinitionTextImage();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string image_id;
 		std::string text;
@@ -167,6 +182,8 @@ namespace OpenXcom
 		ArticleDefinitionBaseFacility();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string text;
 	};
@@ -183,6 +200,8 @@ namespace OpenXcom
 		ArticleDefinitionItem();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string text;
 	};
@@ -199,6 +218,8 @@ namespace OpenXcom
 		ArticleDefinitionUfo();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string text;
 	};
@@ -215,6 +236,8 @@ namespace OpenXcom
 		ArticleDefinitionArmor();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string text;
 	};
@@ -231,6 +254,8 @@ namespace OpenXcom
 		ArticleDefinitionVehicle();
 		/// Loads the article from YAML.
 		void load(const YAML::Node& node, int listOrder);
+		/// Saves the article to YAML.
+		YAML::Node save(const std::string &id) const;
 
 		std::string text;
 		std::string weapon;

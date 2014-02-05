@@ -63,6 +63,32 @@ void RuleCountry::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleCountry::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["fundingBase"] = _fundingBase;
+	node["fundingCap"] = _fundingCap;
+	node["labelLon"] = _labelLon * 180 / M_PI;
+	node["labelLat"] = _labelLat * 180 / M_PI;
+	YAML::Node areas;
+	for (size_t i = 0; i != _lonMin.size(); ++i)
+	{
+		YAML::Node area;
+		area.push_back(_lonMin[i] * 180 / M_PI);
+		area.push_back(_lonMax[i] * 180 / M_PI);
+		area.push_back(_latMin[i] * 180 / M_PI);
+		area.push_back(_latMax[i] * 180 / M_PI);
+		areas.push_back(area);
+	}
+	node["areas"] = areas;
+	return node;
+}
+
+/**
  * Gets the language string that names
  * this country. Each country type
  * has a unique name.

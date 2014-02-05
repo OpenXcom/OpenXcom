@@ -116,6 +116,25 @@ void RuleAlienMission::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleAlienMission::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["points"] = _points;
+	node["waves"] = _waves;
+	YAML::Node races(YAML::NodeType::Map);
+	for (std::vector<std::pair<unsigned int, WeightedOptions* > >::const_iterator it = _raceDistribution.begin(), end = _raceDistribution.end(); it != end; ++it)
+	{
+		races[it->first] = it->second->save();
+	}
+	node["raceWeights"] = races;
+	return node;
+}
+
+/**
  * Chooses one of the available races for this mission.
  * The racial distribution may vary based on the current game date.
  * @param monthsPassed The number of months that have passed in the game world.

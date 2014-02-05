@@ -64,6 +64,13 @@ public:
 	~Unit();
 	/// Loads the unit data from YAML.
 	void load(const YAML::Node& node);
+	/// Saves the unit data to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the unit data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the unit's type.
 	std::string getType() const;
 	/// Gets the unit's stats.

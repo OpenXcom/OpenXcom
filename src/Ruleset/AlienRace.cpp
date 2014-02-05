@@ -44,6 +44,18 @@ void AlienRace::load(const YAML::Node &node)
 }
 
 /**
+ * Saves the alien race to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node AlienRace::save(const std::string &id) const
+{
+	YAML::Node node;
+	node["id"] = id;
+	node["members"] = _members;
+	return node;
+}
+
+/**
  * Returns the language string that names
  * this alien race. Each race has a unique name.
  * @return Race name.

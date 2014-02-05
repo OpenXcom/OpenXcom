@@ -44,6 +44,13 @@ public:
 	~RuleCountry();
 	/// Loads the country from YAML.
 	void load(const YAML::Node& node);
+	/// Saves the country to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the country YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the country's type.
 	std::string getType() const;
 	/// Generates the country's starting funding.

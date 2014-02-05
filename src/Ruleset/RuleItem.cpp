@@ -164,6 +164,71 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 }
 
 /**
+ * Saves the item to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node RuleItem::save(const std::string &type) const
+{
+	YAML::Node node;
+	node["type"] = type;
+	node["name"] = _name;
+	node["requires"] = _requires;
+	node["size"] = _size;
+	node["costBuy"] = _costBuy;
+	node["costSell"] = _costSell;
+	node["transferTime"] = _transferTime;
+	node["weight"] = _weight;
+	node["bigSprite"] = _bigSprite;
+	node["floorSprite"] = _floorSprite;
+	node["handSprite"] = _handSprite;
+	// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
+	node["bulletSprite"] = _bulletSprite / 35;
+	node["fireSound"] = _fireSound;
+	node["hitSound"] = _hitSound;
+	node["hitAnimation"] = _hitAnimation;
+	node["power"] = _power;
+	node["compatibleAmmo"] = _compatibleAmmo;
+	node["damageType"] = (int)_damageType;
+	node["accuracyAuto"] = _accuracyAuto;
+	node["accuracySnap"] = _accuracySnap;
+	node["accuracyAimed"] = _accuracyAimed;
+	node["tuAuto"] = _tuAuto;
+	node["tuSnap"] = _tuSnap;
+	node["tuAimed"] = _tuAimed;
+	node["clipSize"] = _clipSize;
+	node["accuracyMelee"] = _accuracyMelee;
+	node["tuMelee"] = _tuMelee;
+	node["battleType"] = (int)_battleType;
+	node["twoHanded"] = _twoHanded;
+	node["waypoint"] = _waypoint;
+	node["fixedWeapon"] = _fixedWeapon;
+	node["invWidth"] = _invWidth;
+	node["invHeight"] = _invHeight;
+	node["painKiller"] = _painKiller;
+	node["heal"] = _heal;
+	node["stimulant"] = _stimulant;
+	node["woundRecovery"] = _woundRecovery;
+	node["healthRecovery"] = _healthRecovery;
+	node["stunRecovery"] = _stunRecovery;
+	node["energyRecovery"] = _energyRecovery;
+	node["tuUse"] = _tuUse;
+	node["recoveryPoints"] = _recoveryPoints;
+	node["armor"] = _armor;
+	node["turretType"] = _turretType;
+	node["recover"] = _recover;
+	node["liveAlien"] = _liveAlien;
+	node["blastRadius"] = _blastRadius;
+	node["attraction"] = _attraction;
+	node["flatRate"] = _flatRate;
+	node["arcingShot"] = _arcingShot;
+	node["listOrder"] = _listOrder;
+	node["maxRange"] = _range;
+	node["bulletSpeed"] = _bulletSpeed;
+	node["autoShots"] = _autoShots;
+	return node;
+}
+
+/**
  * Gets the item type. Each item has a unique type.
  * @return The item's type.
  */

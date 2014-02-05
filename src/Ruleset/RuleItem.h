@@ -73,6 +73,13 @@ public:
 	~RuleItem();
 	/// Loads item data from YAML.
 	void load(const YAML::Node& node, int modIndex, int listIndex);
+	/// Saves the item data to YAML.
+	YAML::Node save(const std::string &type) const;
+	/**
+	 * Saves the item data YAML file.
+	 * @return YAML node.
+	 */
+	YAML::Node save() const { return save(_type); }
 	/// Gets the item's type.
 	std::string getType() const;
 	/// Gets the item's name.

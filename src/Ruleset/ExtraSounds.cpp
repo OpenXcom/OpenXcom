@@ -48,6 +48,18 @@ void ExtraSounds::load(const YAML::Node &node, int modIndex)
 }
 
 /**
+ * Saves the region type to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node ExtraSounds::save() const
+{
+	YAML::Node node;
+	node["files"] = _sounds;
+	node["modIndex"] = _modIndex; // for dumping
+	return node;
+}
+
+/**
  * Gets the list of sounds defined by this mod.
  * @return The list of sounds defined my this mod.
  */
