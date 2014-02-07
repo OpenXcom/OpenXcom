@@ -1140,11 +1140,11 @@ bool isCompleted::operator()(const BaseFacility *facility) const
  * Big bases without mindshields are easier to detect.
  * @return The detection chance.
  */
-unsigned Base::getDetectionChance() const
+unsigned Base::getDetectionChance(int difficulty) const
 {
 	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
-	return (completedFacilities / 6 + 15) / (mindShields + 1);
+	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + difficulty / 2);
 }
 
 int Base::getGravShields() const

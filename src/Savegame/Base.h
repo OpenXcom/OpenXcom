@@ -188,7 +188,7 @@ public:
 	/// Gets the retaliation status of this base.
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
-	unsigned getDetectionChance() const;
+	unsigned getDetectionChance(int difficulty) const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
 	void setupDefenses();
