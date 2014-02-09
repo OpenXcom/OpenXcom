@@ -110,7 +110,7 @@
       <MapExports>false</MapExports>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
+      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\Debug\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -140,7 +140,7 @@
       <MapExports>false</MapExports>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
+      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\Debug\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -173,7 +173,7 @@
       <Profile>false</Profile>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
+      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\Release\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -205,7 +205,7 @@
       <Profile>false</Profile>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
+      <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\Release\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
