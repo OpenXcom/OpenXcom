@@ -241,6 +241,7 @@ en-GB:
   STR_SELL_SACK: "Sell/Sack"
   STR_VALUE: "Value"
   STR_CRAFT_: "CRAFT> {ALT}{0}"
+  STR_CRAFTNAME: "{0}-{1}"
   STR_UFO_CRASH_RECOVERY: "UFO CRASH RECOVERY"
   STR_UFO_CRASH_RECOVERY_BRIEFING: "Exercise caution - There may be operatives in the UFO or around the crash site. Mission will be successful when all enemy units have been eliminated or neutralised. Recovery of UFO remains, artefacts and alien corpses can then be initiated. To abort the mission return XCom operatives to transport vehicle and click on the 'Abort Mission' icon."
   STR_UFO_GROUND_ASSAULT: "UFO GROUND ASSAULT"
