@@ -532,6 +532,8 @@ void InventoryState::invClick(Action *)
  */
 void InventoryState::btnLayManClick(Action *)
 {
+	if (_inv->getSelectedItem() != 0) return;
+	_game->pushState(new LayoutManagerState(_game, (_parent != 0)));
 }
 
 /**
