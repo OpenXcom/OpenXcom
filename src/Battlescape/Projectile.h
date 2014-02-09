@@ -42,7 +42,7 @@ private:
 	ResourcePack *_res;
 	SavedBattleGame *_save;
 	BattleAction _action;
-	Position _origin;
+	Position _origin, _targetVoxel;
 	std::vector<Position> _trajectory;
 	unsigned int _position;
 	Surface *_sprite;
@@ -50,7 +50,7 @@ private:
 	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine);
 public:
 	/// Creates a new Projectile.
-	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
+	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position target);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.

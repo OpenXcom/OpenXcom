@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param action An action.
  * @param origin Position the projectile originates from.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0)
 {
 	// this is the number of pixels the sprite will move between frames
 	_speed = Options::getInt("battleFireSpeed");
@@ -90,127 +90,61 @@ Projectile::~Projectile()
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
-	Position originVoxel, targetVoxel;
-	Tile *targetTile = 0;
+	Position originVoxel;
+	Tile *targetTile = _save->getTile(_action.target);
 	BattleUnit *bu = _action.actor;
 	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
-	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_save->getBattleGame()->getPanicHandled())
+	
+	int test = _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, false, &_trajectory, bu);
+	if (test != V_EMPTY &&
+		!_trajectory.empty() &&
+		_action.actor->getFaction() == FACTION_PLAYER &&
+		_action.autoShotCounter == 1 &&
+		(SDL_GetModState() & KMOD_CTRL) == 0 &&
+		_save->getBattleGame()->getPanicHandled())
 	{
-		// target nothing, targets the middle of the tile
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
-		if (_action.type == BA_LAUNCH)
+		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+		if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
 		{
-			if (_action.target != _origin)
-			{
-				// launched missiles go slightly higher than the middle.
-				targetVoxel.z += 4;
-			}
-			else
-			{
-				// unless two waypoints are placed on the same tile, in which case target the floor.
-				targetVoxel.z -= 10;
-			}
+			hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 		}
-	}
-	else
-	{
-		// determine the target voxel.
-		// aim at the center of the unit, the object, the walls or the floor (in that priority)
-		// if there is no LOF to the center, try elsewhere (more outward).
-		// Store this target voxel.
-		targetTile = _save->getTile(_action.target);
-		Position hitPos;
-		int test = V_EMPTY;
-		if (targetTile->getUnit() != 0)
-		{
-			if (_origin == _action.target || targetTile->getUnit() == _action.actor)
-			{
-				// don't shoot at yourself but shoot at the floor
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
-			}
-			else
-			{
-				_save->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &targetVoxel, bu);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
-			}
-		}
-		else
-		{
-			// target nothing, targets the middle of the tile
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
-		}
-		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-		if (test != V_EMPTY && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
-		{
-			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
-			{
-				hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
-			}
 
-			if (hitPos != _action.target && _action.result == "")
+		if (hitPos != _action.target && _action.result == "")
+		{
+			if (test == V_NORTHWALL)
 			{
-				if (test == V_NORTHWALL)
-				{
-					if (hitPos.y - 1 != _action.target.y)
-					{
-						_trajectory.clear();
-						return V_EMPTY;
-					}
-				}
-				else if (test == V_WESTWALL)
-				{
-					if (hitPos.x - 1 != _action.target.x)
-					{
-						_trajectory.clear();
-						return V_EMPTY;
-					}
-				}
-				else if (test == V_UNIT)
-				{
-					BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
-					BattleUnit *targetUnit = targetTile->getUnit();
-					if (hitUnit != targetUnit)
-					{
-						_trajectory.clear();
-						return V_EMPTY;
-					}
-				}
-				else
+				if (hitPos.y - 1 != _action.target.y)
 				{
 					_trajectory.clear();
 					return V_EMPTY;
 				}
 			}
+			else if (test == V_WESTWALL)
+			{
+				if (hitPos.x - 1 != _action.target.x)
+				{
+					_trajectory.clear();
+					return V_EMPTY;
+				}
+			}
+			else if (test == V_UNIT)
+			{
+				BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
+				BattleUnit *targetUnit = targetTile->getUnit();
+				if (hitUnit != targetUnit)
+				{
+					_trajectory.clear();
+					return V_EMPTY;
+				}
+			}
+			else
+			{
+				_trajectory.clear();
+				return V_EMPTY;
+			}
 		}
 	}
+
 	_trajectory.clear();
 
 	bool extendLine = true;
@@ -231,10 +165,10 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, extendLine);
+	applyAccuracy(originVoxel, &_targetVoxel, accuracy, false, targetTile, extendLine);
 
 	// finally do a line calculation and store this trajectory.
-	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+	return _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, true, &_trajectory, bu);
 }
 
 /**

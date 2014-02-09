@@ -181,7 +181,81 @@ void ProjectileFlyBState::init()
 		_parent->popState();
 		return;
 	}
-
+	
+	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_parent->getPanicHandled())
+	{
+		// target nothing, targets the middle of the tile
+		_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
+		if (_action.type == BA_LAUNCH)
+		{
+			if (_action.target == _origin)
+			{
+				// launched missiles with two waypoints placed on the same tile: target the floor.
+				_targetVoxel.z -= 10;
+			}
+			else
+			{
+				// launched missiles go slightly higher than the middle.
+				_targetVoxel.z += 4;
+			}
+		}
+	}
+	else
+	{
+		// determine the target voxel.
+		// aim at the center of the unit, the object, the walls or the floor (in that priority)
+		// if there is no LOF to the center, try elsewhere (more outward).
+		// Store this target voxel.
+		Tile *targetTile = _parent->getSave()->getTile(_action.target);
+		Position hitPos;
+		int test = V_EMPTY;
+		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, _parent->getSave()->getTile(_origin));
+		if (targetTile->getUnit() != 0)
+		{
+			if (_origin == _action.target || targetTile->getUnit() == _unit)
+			{
+				// don't shoot at yourself but shoot at the floor
+				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+			}
+			else
+			{
+				_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit);
+			}
+		}
+		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
+		{
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &_targetVoxel, _unit))
+			{
+				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			}
+		}
+		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
+		{
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &_targetVoxel, _unit))
+			{
+				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
+			}
+		}
+		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
+		{
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &_targetVoxel, _unit))
+			{
+				_targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
+			}
+		}
+		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
+		{
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &_targetVoxel, _unit))
+			{
+				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
+			}
+		}
+		else
+		{
+			// target nothing, targets the middle of the tile
+			_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
+		}
+	}
 	createNewProjectile();
 }
 
@@ -195,7 +269,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	++_action.autoShotCounter;
 
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -407,7 +481,7 @@ void ProjectileFlyBState::think()
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
 							// create a projectile
-							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel);
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(std::max(0.0, _unit->getFiringAccuracy(_action.type, _action.weapon) - i * 0.05));
 							if (_projectileImpact != V_EMPTY)
