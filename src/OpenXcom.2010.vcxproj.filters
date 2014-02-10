@@ -627,6 +627,9 @@
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\EquipmentLayout.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
     <ClCompile Include="Savegame\EquipmentLayoutItem.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -1484,6 +1487,9 @@
     </ClInclude>
     <ClInclude Include="Geoscape\AlienBaseState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\EquipmentLayout.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\EquipmentLayoutItem.h">
       <Filter>Savegame</Filter>

@@ -553,6 +553,8 @@ set ( savegame_src
   Savegame/TerrorSite.cpp
   Savegame/Vehicle.h
   Savegame/Vehicle.cpp
+  Savegame/EquipmentLayout.h
+  Savegame/EquipmentLayout.cpp
   Savegame/EquipmentLayoutItem.h
   Savegame/EquipmentLayoutItem.cpp
   Savegame/WeightedOptions.cpp

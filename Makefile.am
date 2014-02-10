@@ -571,6 +571,8 @@ openxcom_SOURCES = \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/CraftWeaponProjectile.cpp \
 	src/Savegame/CraftWeaponProjectile.h \
+	src/Savegame/EquipmentLayout.cpp \
+	src/Savegame/EquipmentLayout.h \
 	src/Savegame/EquipmentLayoutItem.cpp \
 	src/Savegame/EquipmentLayoutItem.h \
 	src/Savegame/GameTime.cpp \
