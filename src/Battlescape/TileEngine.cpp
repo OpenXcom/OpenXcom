@@ -996,7 +996,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
  * @param unit The unit that caused the explosion.
  * @return The Unit that got hit.
  */
-BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
+BattleUnit *TileEngine::hit(const Position &center, int power, double varPower, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 	if(!tile)
@@ -1007,10 +1007,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	BattleUnit *bu = tile->getUnit();
 	int adjustedDamage = 0;
 	const int part = voxelCheck(center, unit);
+	int rndPower;
+
 	if (part >= V_FLOOR && part <= V_OBJECT)
 	{
 		// power 25% to 75%
-		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+		rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
 		if (part == V_OBJECT && _save->getMissionType() == "STR_BASE_DEFENSE")
 		{
 			if (rndPower >= tile->getMapData(MapData::O_OBJECT)->getArmor() && tile->getMapData(V_OBJECT)->isBaseModule())
@@ -1023,9 +1025,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	}
 	else if (part == V_UNIT)
 	{
-		// power 0 - 200%
-		const int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
 		int verticaloffset = 0;
+
+		//Calculate damage according to item / action power
+
+		rndPower = (int)power * varPower;
+
 		if (!bu)
 		{
 			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
@@ -1088,7 +1093,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
  * @param maxRadius The maximum radius othe explosion.
  * @param unit The unit that caused the explosion.
  */
-void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
+void TileEngine::explode(const Position &center, int power, double varPower, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
 	double centerZ = (int)(center.z / 24) + 0.5;
 	double centerX = (int)(center.x / 16) + 0.5;
@@ -1177,41 +1182,44 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						switch (type)
 						{
 						case DT_STUN:
-							// power 0 - 200%
 							if (dest->getUnit())
 							{
+								int hitPower = (int)power_ * varPower;
+
 								if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 								{
-									dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
+									dest->getUnit()->damage(Position(0, 0, 0), hitPower, type);
 								}
 								else
 								{
-									dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(0, power_*2), type);
+									dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), hitPower, type);
 								}
 							}
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
 								{
-									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ *2), type);
+									int hitPower = (int)power_ * varPower;
+									(*it)->getUnit()->damage(Position(0, 0, 0), hitPower, type);
 								}
 							}
 							break;
 						case DT_HE:
 							{
-								// power 50 - 150%
 								if (dest->getUnit())
 								{
+									int hitPower = (int)power_ * varPower;
+
 									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 									{
 										// ground zero effect is in effect
-										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+										dest->getUnit()->damage(Position(0, 0, 0), hitPower, type);
 									}
 									else
 									{
 										// directional damage relative to explosion position.
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
-										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), hitPower, type);
 									}
 								}
 								bool done = false;

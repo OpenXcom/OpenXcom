@@ -70,9 +70,9 @@ public:
 	/// Recalculates lighting of the battlescape for units.
 	void calculateUnitLighting();
 	/// Handles bullet/weapon hits.
-	BattleUnit *hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
+	BattleUnit *hit(const Position &center, int power, double varPower, ItemDamageType type, BattleUnit *unit);
 	/// Handles explosions.
-	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
+	void explode(const Position &center, int power, double varPower, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
 	/// Checks if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?

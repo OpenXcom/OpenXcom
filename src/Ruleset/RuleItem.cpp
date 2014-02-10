@@ -30,7 +30,10 @@ namespace OpenXcom
  */
 RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(999), _bigSprite(0), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(DT_NONE),
-											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
+											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0),
+											_rndDmgLowStandard(0), _rndDmgHighStandard(2),
+											_rndDmgLowAuto(0), _rndDmgHighAuto(2), _rndDmgLowSnap(0), _rndDmgHighSnap(2), _rndDmgLowAimed(0), _rndDmgHighAimed(2),
+											_clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
 											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
@@ -119,6 +122,14 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_tuAuto = node["tuAuto"].as<int>(_tuAuto);
 	_tuSnap = node["tuSnap"].as<int>(_tuSnap);
 	_tuAimed = node["tuAimed"].as<int>(_tuAimed);
+	_rndDmgLowStandard = node["damageRangeLowStandard"].as<double>(_rndDmgLowStandard);
+	_rndDmgHighStandard = node["damageRangeHighStandard"].as<double>(_rndDmgHighStandard);
+	_rndDmgLowAuto = node["damageRangeLowAuto"].as<double>(_rndDmgLowAuto);
+	_rndDmgHighAuto = node["damageRangeHighAuto"].as<double>(_rndDmgHighAuto);
+	_rndDmgLowSnap = node["damageRangeLowSnap"].as<double>(_rndDmgLowSnap);
+	_rndDmgHighSnap = node["damageRangeHighSnap"].as<double>(_rndDmgHighSnap);
+	_rndDmgLowAimed = node["damageRangeLowAimed"].as<double>(_rndDmgLowAimed);
+	_rndDmgHighAimed = node["damageRangeHighAimed"].as<double>(_rndDmgHighAimed);
 	_clipSize = node["clipSize"].as<int>(_clipSize);
 	_accuracyMelee = node["accuracyMelee"].as<int>(_accuracyMelee);
 	_tuMelee = node["tuMelee"].as<int>(_tuMelee);
@@ -411,6 +422,78 @@ int RuleItem::getTUAimed() const
 int RuleItem::getTUMelee() const
 {
 	return _tuMelee;
+}
+
+/**
+ * Gets the item's standard random damage modifier lower bound
+ * @return The standard random damage modifier lower bound.
+ */
+double RuleItem::getRndDmgLowStandard() const
+{
+	return _rndDmgLowStandard;
+}
+
+/**
+ * Gets the item's standard random damage modifier higher bound
+ * @return The standard random damage modifier higher bound.
+ */
+double RuleItem::getRndDmgHighStandard() const
+{
+	return _rndDmgHighStandard;
+}
+
+/**
+ * Gets the item's auto shot random damage modifier lower bound
+ * @return The auto shot random damage modifier lower bound.
+ */
+double RuleItem::getRndDmgLowAuto() const
+{
+	return _rndDmgLowAuto;
+}
+
+/**
+ * Gets the item's auto shot random damage modifier higher bound
+ * @return The auto shot random damage modifier higher bound.
+ */
+double RuleItem::getRndDmgHighAuto() const
+{
+	return _rndDmgHighAuto;
+}
+
+/**
+ * Gets the item's snap shot random damage modifier lower bound
+ * @return The snap shot random damage modifier lower bound.
+ */
+double RuleItem::getRndDmgLowSnap() const
+{
+	return _rndDmgLowSnap;
+}
+
+/**
+ * Gets the snap shot standard random damage modifier higher bound
+ * @return snap shot standard random damage modifier higher bound.
+ */
+double RuleItem::getRndDmgHighSnap() const
+{
+	return _rndDmgHighSnap;
+}
+
+/**
+ * Gets the item's aimed shot random damage modifier lower bound
+ * @return The aimed shot random damage modifier lower bound.
+ */
+double RuleItem::getRndDmgLowAimed() const
+{
+	return _rndDmgLowAimed;
+}
+
+/**
+ * Gets the item's aimed shot random damage modifier higher bound
+ * @return The aimed shot random damage modifier higher bound.
+ */
+double RuleItem::getRndDmgHighAimed() const
+{
+	return _rndDmgHighAimed;
 }
 
 /**

@@ -271,7 +271,7 @@ void UnitFallBState::think()
 				{
 					(*unit)->getTile()->ignite(1);
 					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
-					_parent->getTileEngine()->hit(here, (*unit)->getStats()->strength, DT_IN, (*unit));
+					_parent->getTileEngine()->hit(here, (*unit)->getStats()->strength, 0, DT_IN, (*unit));
 				}
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();
