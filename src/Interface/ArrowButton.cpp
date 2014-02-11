@@ -69,6 +69,16 @@ void ArrowButton::setColor(Uint8 color)
 }
 
 /**
+ * Changes the shape for the arrow button.
+ * @param shape Shape of the arrow.
+ */
+void ArrowButton::setShape(ArrowShape shape)
+{
+	_shape = shape;
+	_redraw = true;
+}
+
+/**
  * Changes the text associated with the arrow button.
  * This makes the button scroll that list.
  * @param list Pointer to text list.

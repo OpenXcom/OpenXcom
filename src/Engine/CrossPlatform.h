@@ -22,6 +22,7 @@
 #include <SDL.h>
 #include <string>
 #include <vector>
+#include <utility>
 
 namespace OpenXcom
 {
@@ -66,6 +67,12 @@ namespace CrossPlatform
 	std::string getLocale();
 	/// Checks if an event is a quit shortcut.
 	bool isQuitShortcut(const SDL_Event &ev);
+	/// Gets the modified date of a file.
+	time_t getDateModified(const std::string &path);
+	/// Converts a timestamp to a string.
+	std::pair<std::wstring, std::wstring> timeToString(time_t time);
+	/// Compares two strings by natural order.
+	bool naturalCompare(const std::wstring &a, const std::wstring &b);
 }
 
 }

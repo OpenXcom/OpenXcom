@@ -78,14 +78,13 @@ SaveState::~SaveState()
 }
 
 /**
- * Updates the save game list with a current list
+ * Updates the save game list with the current list
  * of available savegames.
  */
 void SaveState::updateList()
 {
-	_lstSaves->clearList();
 	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
-	_saves = SavedGame::getList(_lstSaves, _game->getLanguage(), &_details);
+	SavedGameState::updateList();
 }
 
 /**
@@ -129,7 +128,7 @@ void SaveState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)));
 	}
 }
 
@@ -152,7 +151,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 #endif
 		if (_selectedRow > 0)
 		{
-			oldFilename = CrossPlatform::noExt(_saves[_selectedRow-1]);
+			oldFilename = _saves[_selectedRow-1].fileName;
 		}
 		else
 		{

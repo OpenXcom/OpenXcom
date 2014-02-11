@@ -140,6 +140,7 @@ void createDefault()
 	setBool("skipNextTurnScreen", false);
 	setBool("disableAutoEquip", false);
 	setBool("battleUFOExtenderAccuracy", false);
+	setInt("saveOrder", SORT_DATE_DESC);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
