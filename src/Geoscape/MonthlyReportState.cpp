@@ -20,7 +20,6 @@
 #include "MonthlyReportState.h"
 #include <sstream>
 #include <cmath>
-#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
