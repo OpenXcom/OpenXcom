@@ -803,8 +803,8 @@ bool naturalCompare(const std::wstring &a, const std::wstring &b)
 #else
 	// sorry unix users you get ASCII sort
 	std::wstring::const_iterator i, j;
-	for (i = a.cbegin(), j = b.cbegin(); i != a.cend() && j != b.cend() && tolower(*i) == tolower(*j); i++, j++);
-	return (i != a.cend() && j != b.cend() && tolower(*i) < tolower(*j));
+	for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
+	return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
 #endif
 }
 
