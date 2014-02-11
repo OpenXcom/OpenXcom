@@ -23,6 +23,7 @@
 #include <string>
 #include <locale>
 #include <stdint.h>
+#include <sys/stat.h>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -45,7 +46,6 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif
 #else
-#include <sys/stat.h>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
