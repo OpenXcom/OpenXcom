@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 class TextEdit;
+class TextButton;
 
 /**
  * Save Game screen for listing info on available
@@ -35,6 +36,7 @@ class SaveState : public SavedGameState
 {
 private:
 	TextEdit *_edtSave;
+	TextButton *_btnSaveGame;
 	std::wstring _selected;
 	int _previousSelectedRow, _selectedRow;
 public:
@@ -48,8 +50,12 @@ public:
 	void updateList();
 	/// Handler for pressing a key on the Save edit.
 	void edtSaveKeyPress(Action *action);
+	/// Handler for clicking on the Save Game button.
+	void btnSaveGameClick(Action *action);
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
+	/// Save game.
+	void saveGame();
 	/// Quick save game.
 	void quickSave(const std::string &filename);
 };
