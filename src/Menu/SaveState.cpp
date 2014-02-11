@@ -29,6 +29,7 @@
 #include "../Engine/Options.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
+#include "../Interface/TextButton.h"
 #include "ErrorMessageState.h"
 #include "DeleteGameState.h"
 
