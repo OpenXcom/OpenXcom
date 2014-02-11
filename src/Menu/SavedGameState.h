@@ -23,6 +23,7 @@
 #include "OptionsBaseState.h"
 #include <vector>
 #include <string>
+#include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom
