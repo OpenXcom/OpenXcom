@@ -23,7 +23,7 @@
 #include "OptionsBaseState.h"
 #include <vector>
 #include <string>
-#include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -32,6 +32,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class ArrowButton;
 
 /**
  * Base class for saved game screens which
