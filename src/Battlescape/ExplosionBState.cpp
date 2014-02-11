@@ -203,8 +203,17 @@ void ExplosionBState::explode()
 	else
 	{
 		//Not from a weapon
-		_varPower = RNG::generate(_item->getRules()->getRndDmgLowStandard(),
-				_item->getRules()->getRndDmgHighStandard());
+		if (_item)
+		{
+			_varPower = RNG::generate(_item->getRules()->getRndDmgLowStandard(),
+							_item->getRules()->getRndDmgHighStandard());
+		}
+		else
+		{
+			//Exploding scenery
+
+			_varPower = (double)RNG::generate(0, 2);
+		}
 	}
 
 	if (_item)
