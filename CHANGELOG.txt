@@ -65,7 +65,6 @@ New features:
 - Map draw functions hugely optimized, game is now playable on Android.
 - Buttons for Reserve for Kneel and Zero Time Units added.
 - Debug feature to kill all aliens added. (Ctrl+K)
-- All weapons now do a small amount of stun damage, as per vanilla.
 - Auto-Equipment function rewritten to mimic vanilla, and an option added to completely disable auto-assignment.
 - Accuracy model completely rewritten to replicate vanilla as closely as possible.
 - Range based accuracy removed - UFO Extender accuracy added.
