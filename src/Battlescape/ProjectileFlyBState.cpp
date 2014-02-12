@@ -484,7 +484,7 @@ void ProjectileFlyBState::think()
 					{
 						offset = -2;
 					}
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), &_action, _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
 
 					// special shotgun behaviour: trace extra projectile paths, and add bullet hits at their termination points.
 					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
@@ -505,7 +505,7 @@ void ProjectileFlyBState::think()
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation(), false, false);
 									_parent->getMap()->getExplosions()->insert(explosion);
-									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), _unit);
+									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), 0,  _ammo->getRules()->getDamageType(), _unit);
 								}
 								++i;
 							}

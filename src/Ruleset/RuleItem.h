@@ -51,6 +51,8 @@ private:
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
+	double _rndDmgLowStandard, _rndDmgHighStandard;
+	double _rndDmgLowAuto, _rndDmgHighAuto, _rndDmgLowSnap, _rndDmgHighSnap, _rndDmgLowAimed, _rndDmgHighAimed;
 	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
 	bool _twoHanded, _waypoint, _fixedWeapon;
@@ -127,6 +129,22 @@ public:
 	int getTUAimed() const;
 	/// Gets the item's melee TU cost.
 	int getTUMelee() const;
+	/// Gets the item's standard random damage modifier lower bound
+	double getRndDmgLowStandard() const;
+	/// Gets the item's standard random damage modifier higher bound
+	double getRndDmgHighStandard() const;
+	/// Gets the item's auto shot random damage modifier lower bound
+	double getRndDmgLowAuto() const;
+	/// Gets the item's auto shot random damage modifier higher bound
+	double getRndDmgHighAuto() const;
+	/// Gets the item's snap shot random damage modifier lower bound
+	double getRndDmgLowSnap() const;
+	/// Gets the item's snap shot random damage modifier higher bound
+	double getRndDmgHighSnap() const;
+	/// Gets the item's aimed shot random damage modifier lower bound
+	double getRndDmgLowAimed() const;
+	/// Gets the item's aimed shot random damage modifier higher bound
+	double getRndDmgHighAimed() const;
 	/// Gets list of compatible ammo.
 	std::vector<std::string> *getCompatibleAmmo();
 	/// Gets the item's damage type.

@@ -1302,6 +1302,12 @@ items:
     accuracyAimed: 90
     tuSnap: 33
     tuAimed: 80
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2
     battleType: 1
     fixedWeapon: true
     invWidth: 2
@@ -1340,6 +1346,12 @@ items:
     accuracyAimed: 115
     tuSnap: 45
     tuAimed: 75
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     fixedWeapon: true
     invWidth: 2
@@ -1379,6 +1391,12 @@ items:
     accuracyAimed: 85
     tuSnap: 33
     tuAimed: 75
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     fixedWeapon: true
     clipSize: -1
@@ -1403,6 +1421,12 @@ items:
     accuracyAimed: 100
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     fixedWeapon: true
     clipSize: -1
@@ -1423,6 +1447,10 @@ items:
       - STR_HWP_FUSION_BOMB
     accuracyAimed: 100
     tuAimed: 66
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     fixedWeapon: true
     waypoint: true
@@ -1461,6 +1489,12 @@ items:
     accuracyAimed: 78
     tuSnap: 18
     tuAimed: 30
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     invWidth: 1
     invHeight: 2
@@ -1498,6 +1532,14 @@ items:
     tuAuto: 35
     tuSnap: 25
     tuAimed: 80
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     invWidth: 1
@@ -1533,6 +1575,12 @@ items:
     accuracyAimed: 90
     tuSnap: 33
     tuAimed: 80
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -1605,6 +1653,14 @@ items:
     tuAuto: 40
     tuSnap: 33
     tuAimed: 80
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -1673,6 +1729,12 @@ items:
     accuracyAimed: 115
     tuSnap: 45
     tuAimed: 75
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -1741,6 +1803,14 @@ items:
     tuAuto: 25
     tuSnap: 20
     tuAimed: 55
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     clipSize: -1
     battleType: 1
     invWidth: 1
@@ -1764,6 +1834,14 @@ items:
     tuAuto: 34
     tuSnap: 25
     tuAimed: 50
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     clipSize: -1
     battleType: 1
     twoHanded: true
@@ -1786,6 +1864,12 @@ items:
     accuracyAimed: 84
     tuSnap: 33
     tuAimed: 75
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     clipSize: -1
     battleType: 1
     twoHanded: true
@@ -1799,6 +1883,8 @@ items:
     bigSprite: 19
     floorSprite: 19
     power: 50
+    damageRangeLowStandard: 0.5
+    damageRangeHighStandard: 1.5
     damageType: 3
     battleType: 4
     blastRadius: 5
@@ -1821,6 +1907,8 @@ items:
     bigSprite: 21
     floorSprite: 21
     power: 70
+    damageRangeLowStandard: 0.5
+    damageRangeHighStandard: 1.5   
     damageType: 3
     battleType: 5
     blastRadius: 5
@@ -1832,6 +1920,8 @@ items:
     bigSprite: 22
     floorSprite: 22
     power: 110
+    damageRangeLowStandard: 0.5
+    damageRangeHighStandard: 1.5    
     damageType: 3
     battleType: 4
     invWidth: 2
@@ -1950,6 +2040,14 @@ items:
     tuAuto: 35
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -1992,6 +2090,14 @@ items:
     tuAuto: 36
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     invWidth: 1
@@ -2034,6 +2140,14 @@ items:
     tuAuto: 30
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAuto: 0
+    damageRangeHighAuto: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     invWidth: 1
     invHeight: 2
@@ -2071,6 +2185,10 @@ items:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
     tuAimed: 80
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     waypoint: true
@@ -2115,6 +2233,12 @@ items:
     accuracyAimed: 110
     tuSnap: 40
     tuAimed: 75
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -2132,6 +2256,8 @@ items:
     hitSound: 0
     hitAnimation: 0
     power: 90
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2    
     damageType: 6
     clipSize: 1
     battleType: 2
@@ -2146,6 +2272,8 @@ items:
     bigSprite: 39
     floorSprite: 38
     power: 90
+    damageRangeLowStandard: 0.5
+    damageRangeHighStandard: 1.5   
     damageType: 3
     battleType: 4
     recoveryPoints: 1
@@ -2463,6 +2591,12 @@ items:
     accuracyAimed: 110
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     clipSize: -1
     battleType: 1
     fixedWeapon: true
@@ -2480,6 +2614,8 @@ items:
     damageType: 7
     accuracyMelee: 80
     tuMelee: 15
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2    
     battleType: 3
     fixedWeapon: true
     invWidth: 2
@@ -2496,6 +2632,8 @@ items:
     damageType: 7
     accuracyMelee: 80
     tuMelee: 15
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2    
     battleType: 3
     fixedWeapon: true
     invWidth: 2
@@ -2517,6 +2655,12 @@ items:
     accuracyAimed: 110
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     fixedWeapon: true
     invWidth: 2
@@ -2534,6 +2678,8 @@ items:
     damageType: 7
     accuracyMelee: 92
     tuMelee: 15
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2    
     clipSize: -1
     battleType: 3
     fixedWeapon: true
@@ -2556,6 +2702,12 @@ items:
     tuAuto: 35
     tuSnap: 30
     tuAimed: 60
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2
+    damageRangeLowSnap: 0
+    damageRangeHighSnap: 2
+    damageRangeLowAimed: 0
+    damageRangeHighAimed: 2    
     battleType: 1
     fixedWeapon: true
     invWidth: 2
@@ -2573,6 +2725,8 @@ items:
     damageType: 7
     accuracyMelee: 80
     tuMelee: 15
+    damageRangeLowStandard: 0
+    damageRangeHighStandard: 2    
     battleType: 3
     fixedWeapon: true
     invWidth: 1

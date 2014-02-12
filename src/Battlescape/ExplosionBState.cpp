@@ -32,6 +32,7 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
+#include "../Engine/RNG.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/RNG.h"
@@ -48,7 +49,11 @@ namespace OpenXcom
  * @param tile Tile the explosion is on.
  * @param lowerWeapon Whether the unit causing this explosion should now lower their weapon.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _varPower(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _action(new BattleAction)
+{
+}
+
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleAction *action, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _varPower(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _action(action)
 {
 
 }
@@ -68,11 +73,13 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
+
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
 						_item->getRules()->getExplosionRadius() != 0;
+
 	}
 	else if (_tile)
 	{
@@ -169,6 +176,46 @@ void ExplosionBState::explode()
 	bool terrainExplosion = false;
 	SavedBattleGame *save = _parent->getSave();
 	// after the animation is done, the real explosion/hit takes place
+
+	//Generate randomized power according to damage range for weapons
+	if (_action->type != BA_NONE)
+	{
+		switch (_action->type)
+		{
+		case BA_AIMEDSHOT:
+			_varPower = RNG::generate(_action->weapon->getRules()->getRndDmgLowAimed(),
+							_action->weapon->getRules()->getRndDmgHighAimed());
+			break;
+		case BA_SNAPSHOT:
+			_varPower = RNG::generate(_action->weapon->getRules()->getRndDmgLowSnap(),
+							_action->weapon->getRules()->getRndDmgHighSnap());
+			break;
+		case BA_AUTOSHOT:
+			_varPower = RNG::generate(_action->weapon->getRules()->getRndDmgLowAuto(),
+							_action->weapon->getRules()->getRndDmgHighAuto());
+			break;
+		default:
+			_varPower = RNG::generate(_action->weapon->getRules()->getRndDmgLowStandard(),
+							_action->weapon->getRules()->getRndDmgHighStandard());
+			break;
+		}
+	}
+	else
+	{
+		//Not from a weapon
+		if (_item)
+		{
+			_varPower = RNG::generate(_item->getRules()->getRndDmgLowStandard(),
+							_item->getRules()->getRndDmgHighStandard());
+		}
+		else
+		{
+			//Exploding scenery
+
+			_varPower = (double)RNG::generate(0, 2);
+		}
+	}
+
 	if (_item)
 	{
 		if (!_unit && _item->getPreviousOwner())
@@ -178,11 +225,11 @@ void ExplosionBState::explode()
 
 		if (_areaOfEffect)
 		{
-			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
+			save->getTileEngine()->explode(_center, _power, _varPower, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
 		}
 		else
 		{
-			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
+			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _varPower, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
 			if (!_item->getRules()->getZombieUnit().empty()
 				&& victim
@@ -198,13 +245,13 @@ void ExplosionBState::explode()
 	}
 	if (_tile)
 	{
-		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
+		save->getTileEngine()->explode(_center, _power, _varPower, DT_HE, _power/10);
 		terrainExplosion = true;
 	}
 	if (!_tile && !_item)
 	{
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-		save->getTileEngine()->explode(_center, _power, DT_HE, 6);
+		save->getTileEngine()->explode(_center, _power, _varPower, DT_HE, 6);
 		terrainExplosion = true;
 	}
 

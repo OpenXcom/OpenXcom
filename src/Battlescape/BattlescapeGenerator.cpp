@@ -1736,7 +1736,12 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
 			pos.y = _save->getTiles()[i]->getPosition().y*16;
 			pos.z = (_save->getTiles()[i]->getPosition().z*24) +12;
-			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
+
+			//Random damage for exploding power source
+			int power = 180+RNG::generate(0,70);
+			double varPower = (double)RNG::generate(0, 2);
+
+			_save->getTileEngine()->explode(pos,power,varPower, DT_HE, 10);
 		}
 	}
 }
