@@ -88,12 +88,17 @@ Projectile::~Projectile()
  * @param accuracy The unit's accuracy.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire).
  */
+
 int Projectile::calculateTrajectory(double accuracy)
 {
-	Position originVoxel;
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
+	return calculateTrajectory(accuracy, originVoxel);
+}
+
+int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
+{
 	Tile *targetTile = _save->getTile(_action.target);
 	BattleUnit *bu = _action.actor;
-	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
 	
 	int test = _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, false, &_trajectory, bu);
 	if (test != V_EMPTY &&

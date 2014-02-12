@@ -45,13 +45,12 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _projectileImpact(0), _initialized(false), _originVoxel(-1,-1,-1), _targetFloor(false)
 {
 }
 
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _projectileImpact(0), _initialized(false), _originVoxel(-1,-1,-1), _targetFloor(false)
 {
-	;
 }
 
 /**
@@ -188,7 +187,7 @@ void ProjectileFlyBState::init()
 		_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		if (_action.type == BA_LAUNCH)
 		{
-			if (_action.target == _origin)
+			if (_targetFloor)
 			{
 				// launched missiles with two waypoints placed on the same tile: target the floor.
 				_targetVoxel.z -= 10;
@@ -333,7 +332,14 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else
 	{
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		if (_originVoxel != Position(-1,-1,-1))
+		{
+			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon), _originVoxel);
+		}
+		else
+		{
+			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		}
 		if (_projectileImpact != V_EMPTY || _action.type == BA_LAUNCH)
 		{
 			// set the soldier in an aiming position
@@ -451,7 +457,14 @@ void ProjectileFlyBState::think()
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
 				// launch the next projectile in the waypoint cascade
-				_parent->statePushNext(new ProjectileFlyBState(_parent, _action, _origin));
+				ProjectileFlyBState *nextWaypoint = new ProjectileFlyBState(_parent, _action, _origin);
+				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition(-1));
+				if (_origin == _action.target)
+				{
+					nextWaypoint->targetFloor();
+				}
+				_parent->statePushNext(nextWaypoint);
+
 			}
 			else
 			{
@@ -573,6 +586,13 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	return realDistance <= maxDistance;
 }
 
+/**
+ * Validates the throwing range.
+ * @param weight the weight of the object.
+ * @param strength the strength of the thrower.
+ * @param level the difference in height between the thrower and the target.
+ * @return the maximum throwing range.
+ */
 int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level)
 {
     double curZ = level + 0.5;
@@ -599,4 +619,22 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
     }
     return dist;
 }
+
+/**
+ * Set the origin voxel, used for the blaster launcher.
+ * @param pos the origin voxel.
+ */
+void ProjectileFlyBState::setOriginVoxel(Position pos)
+{
+	_originVoxel = pos;
+}
+
+/**
+ * Set the boolean flag to angle a blaster bomb towards the floor.
+ */
+void ProjectileFlyBState::targetFloor()
+{
+	_targetFloor = true;
+}
+
 }
