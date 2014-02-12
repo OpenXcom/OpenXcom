@@ -1739,7 +1739,7 @@ void BattlescapeGenerator::explodePowerSources()
 
 			//Random damage for exploding power source
 			int power = 180+RNG::generate(0,70);
-			double varPower = (double)RNG::generate(0, power * 2);
+			double varPower = (double)RNG::generate(0, 2);
 
 			_save->getTileEngine()->explode(pos,power,varPower, DT_HE, 10);
 		}
