@@ -151,9 +151,9 @@ ActionMenuState::~ActionMenuState()
 void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int *id)
 {
 	std::wstring s1, s2;
-	int acc = (int)floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100);
+	int acc = _action->actor->getFiringAccuracy(ba, _action->weapon);
 	if (ba == BA_THROW)
-		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
+		acc = (int)(_action->actor->getThrowingAccuracy());
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
 	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH || ba == BA_HIT)

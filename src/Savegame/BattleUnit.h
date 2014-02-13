@@ -228,9 +228,9 @@ public:
 	/// Clear visible tiles.
 	void clearVisibleTiles();
 	/// Calculate firing accuracy.
-	double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
+	int getFiringAccuracy(BattleActionType actionType, BattleItem *item);
 	/// Calculate accuracy modifier.
-	double getAccuracyModifier();
+	int getAccuracyModifier(BattleItem *item = 0);
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy();
 	/// Set armor value.

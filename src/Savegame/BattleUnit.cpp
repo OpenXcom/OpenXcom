@@ -1263,51 +1263,65 @@ void BattleUnit::clearVisibleTiles()
  * @param item
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
+int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 {
-	double result = (double)(getStats()->firing / 100.0);
 
-	double weaponAcc = item->getRules()->getAccuracySnap();
+	int weaponAcc = item->getRules()->getAccuracySnap();
 	if (actionType == BA_AIMEDSHOT || actionType == BA_LAUNCH)
 		weaponAcc = item->getRules()->getAccuracyAimed();
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return (double)(item->getRules()->getAccuracyMelee()/100.0);
+		return item->getRules()->getAccuracyMelee();
 
-	result *= (double)(weaponAcc/100.0);
+	int result = getStats()->firing * weaponAcc / 100;
 
 	if (_kneeled)
-		result *= 1.15;
+	{
+		result = result * 115 / 100;
+	}
 
 	if (item->getRules()->isTwoHanded())
 	{
 		// two handed weapon, means one hand should be empty
 		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)
 		{
-			result *= 0.80;
+			result = result * 80 / 100;
 		}
 	}
 
-	return result * getAccuracyModifier();
+	return result * getAccuracyModifier(item) / 100;
 }
 
 /**
  * To calculate firing accuracy. Takes health and fatal wounds into account.
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
+ * @param item the item we are shooting right now.
  * @return modifier
  */
-double BattleUnit::getAccuracyModifier()
+int BattleUnit::getAccuracyModifier(BattleItem *item)
 {
-	double result = ((double)_health/(double)getStats()->health);
+	int wounds = _fatalWounds[BODYPART_HEAD];
 
-	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
-	if (wounds > 9)
-		wounds = 9;
-
-	result *= 1 + (-0.1*wounds);
-
-	return result;
+	if (item)
+	{
+		if (item->getRules()->isTwoHanded())
+		{
+			wounds += _fatalWounds[BODYPART_RIGHTARM] + _fatalWounds[BODYPART_LEFTARM];
+		}
+		else
+		{
+			if (getItem("STR_RIGHT_HAND") == item)
+			{
+				wounds += _fatalWounds[BODYPART_RIGHTARM];
+			}
+			else
+			{
+				wounds += _fatalWounds[BODYPART_LEFTARM];
+			}
+		}
+	}
+	return std::max(10, 25 * _health / getStats()->health + 75 + -10 * wounds);
 }
 
 /**
@@ -1316,7 +1330,7 @@ double BattleUnit::getAccuracyModifier()
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	return (double)(getStats()->throwing/100.0) * getAccuracyModifier();
+	return (double)(getStats()->throwing * getAccuracyModifier()) / 100.0;
 }
 
 /**

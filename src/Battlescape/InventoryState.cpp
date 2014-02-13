@@ -282,7 +282,7 @@ void InventoryState::updateStats()
 		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	}
 
-	_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
+	_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg((int)(unit->getStats()->firing * unit->getHealth()) / unit->getStats()->health));
 
 	_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 

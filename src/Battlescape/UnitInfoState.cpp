@@ -470,16 +470,16 @@ void UnitInfoState::init()
 	_barReactions->setValue(_unit->getStats()->reactions);
 
 	ss.str(L"");
-	ss << (int)(_unit->getStats()->firing * _unit->getAccuracyModifier());
+	ss << (int)((_unit->getStats()->firing * _unit->getHealth()) / _unit->getStats()->health);
 	_numFiring->setText(ss.str());
 	_barFiring->setMax(_unit->getStats()->firing);
-	_barFiring->setValue(_unit->getStats()->firing * _unit->getAccuracyModifier());
+	_barFiring->setValue((_unit->getStats()->firing * _unit->getHealth()) / _unit->getStats()->health);
 
 	ss.str(L"");
-	ss << (int)(_unit->getStats()->throwing * _unit->getAccuracyModifier());
+	ss << (int)((_unit->getStats()->throwing * _unit->getHealth()) / _unit->getStats()->health);
 	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(_unit->getStats()->throwing);
-	_barThrowing->setValue(_unit->getStats()->throwing * _unit->getAccuracyModifier());
+	_barThrowing->setValue((_unit->getStats()->throwing * _unit->getHealth()) / _unit->getStats()->health);
 
 	ss.str(L"");
 	ss << _unit->getStats()->strength;
