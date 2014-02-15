@@ -37,10 +37,15 @@
 #include "../Interface/ArrowButton.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleInventory.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Tile.h"
+#include "../Savegame/EquipmentLayout.h"
+#include "../Savegame/EquipmentLayoutItem.h"
+#include "WarningMessage.h"
 
 namespace OpenXcom
 {
@@ -49,9 +54,10 @@ namespace OpenXcom
  * Initializes all the elements in the Layout Manager screen.
  * @param game Pointer to the core game.
  */
-LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : State(game), _selectedLayout(0), _timerLayoutsUp(0), _timerLayoutsDown(0), _btnLayoutsStartIndex(0)
+LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : State(game), _selectedLayout(0), _btnLayoutsStartIndex(0)
 {
-	_battleGame = _game->getSavedGame()->getSavedBattle();
+	_save = _game->getSavedGame();
+	_battleGame = _save->getSavedBattle();
 
 	int tileWidth = 0, tileHeight = 0;
 	if (isBattlescapeGame)
@@ -66,9 +72,11 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	_btnOk = new TextButton(36, 12, 276, 8);
 	_txtTitle = new Text(310, 17, 5, 5);
 	_txtMode = new Text(310, 9, 5, 24);
-	_btnToSoldier = new ToggleTextButton(310, 14, 5, 32, false);
-	_btnFromSoldier = new ToggleTextButton(310, 14, 5, 46, false);
+	_btnToSoldier = new ToggleTextButton(310, 14, 5, 32);
+	_btnFromSoldier = new ToggleTextButton(310, 14, 5, 46);
 	_txtSelectedLayout = new Text(99, 9, 5, 64);
+	_btnLayoutsUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 86, 72);
+	_btnLayoutsDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 86, 72 + 6*14 - 14);
 	_txtSoldiers = new Text(114, 9, 108, 64);
 	_txtName = new Text(114, 9, 108, 72);
 	_txtLayout = new Text(75, 9, 222, 72);
@@ -83,6 +91,7 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 		_txtOutsideBrightness = new Text(60, 18, 191, 158);
 		_outsideBrightness = new Surface(tileWidth * 2, tileHeight * 1, 0, 0);
 	}
+	_warning = new WarningMessage(224, 24, 48, 176);
 
 	add(_window);
 	add(_txtTitle);
@@ -91,6 +100,8 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	add(_btnToSoldier);
 	add(_btnFromSoldier);
 	add(_txtSelectedLayout);
+	add(_btnLayoutsUp);
+	add(_btnLayoutsDown);
 	add(_txtSoldiers);
 	add(_txtName);
 	add(_txtLayout);
@@ -105,6 +116,7 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 		add(_txtOutsideBrightness);
 		add(_outsideBrightness);
 	}
+	add(_warning);
 
 	centerAllSurfaces();
 
@@ -184,47 +196,36 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(4);
 	_lstSoldiers->setHighContrast(true);
-	_lstSoldiers->onMouseClick((ActionHandler)&LayoutManagerState::lstSoldiersClick);
+	_lstSoldiers->onMousePress((ActionHandler)&LayoutManagerState::lstSoldiersPress);
 
-	int buttons = 0;
-	addLayoutButton(tr("STR_CUSTOM"), buttons);
-	_btnLayouts.at(0)->setPressed(true);
-	for (int i = 0; i < 10; ++i) // TODO: Read the layouts
-	{
-		//_layouts.push_back(0);
-		//if (buttons < 6) addLayoutButton(tr("STR_CUSTOM"), buttons);
-	}
-	if (_layouts.size() > 6)
-	{
-		_btnLayoutsUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 86, 72);
-		_btnLayoutsDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 86, 72 + (buttons)*14 - 14);
-		add(_btnLayoutsUp);
-		add(_btnLayoutsDown);
-		_btnLayoutsUp->setColor(Palette::blockOffset(0)+4);
-		_btnLayoutsUp->onMousePress((ActionHandler)&LayoutManagerState::btnLayoutsUpPress);
-		_btnLayoutsUp->onMouseRelease((ActionHandler)&LayoutManagerState::btnLayoutsUpRelease);
-		_btnLayoutsUp->onMouseClick((ActionHandler)&LayoutManagerState::btnLayoutsUpClick, 0);
-		_btnLayoutsUp->setVisible(false);
-		_btnLayoutsDown->setColor(Palette::blockOffset(0)+4);
-		_btnLayoutsDown->onMousePress((ActionHandler)&LayoutManagerState::btnLayoutsDownPress);
-		_btnLayoutsDown->onMouseRelease((ActionHandler)&LayoutManagerState::btnLayoutsDownRelease);
-		_btnLayoutsDown->onMouseClick((ActionHandler)&LayoutManagerState::btnLayoutsDownClick, 0);
-		_btnLayoutsDown->setVisible(true);
-		_timerLayoutsUp = new Timer(250);
-		_timerLayoutsDown = new Timer(250);
-		_timerLayoutsUp->onTimer((StateHandler)&LayoutManagerState::onTimerLayoutsUp);
-		_timerLayoutsDown->onTimer((StateHandler)&LayoutManagerState::onTimerLayoutsDown);
-	}
+	for (int buttons = 0; buttons <= _save->getLayouts()->size(); ) addLayoutButton(L"", buttons);
+	_btnLayoutsUp->setColor(Palette::blockOffset(0)+4);
+	_btnLayoutsUp->onMousePress((ActionHandler)&LayoutManagerState::btnLayoutsUpPress);
+	_btnLayoutsUp->onMouseRelease((ActionHandler)&LayoutManagerState::btnLayoutsUpRelease);
+	_btnLayoutsUp->onMouseClick((ActionHandler)&LayoutManagerState::btnLayoutsUpClick, 0);
+	_btnLayoutsUp->setVisible(false);
+	_btnLayoutsDown->setColor(Palette::blockOffset(0)+4);
+	_btnLayoutsDown->onMousePress((ActionHandler)&LayoutManagerState::btnLayoutsDownPress);
+	_btnLayoutsDown->onMouseRelease((ActionHandler)&LayoutManagerState::btnLayoutsDownRelease);
+	_btnLayoutsDown->onMouseClick((ActionHandler)&LayoutManagerState::btnLayoutsDownClick, 0);
+	_btnLayoutsDown->setVisible(true);
+	_timerLayoutsUp = new Timer(250);
+	_timerLayoutsDown = new Timer(250);
+	_timerLayoutsUp->onTimer((StateHandler)&LayoutManagerState::onTimerLayoutsUp);
+	_timerLayoutsDown->onTimer((StateHandler)&LayoutManagerState::onTimerLayoutsDown);
+	updateLayoutsButtons();
 
-	_lstSoldiers->addRow(2, tr("STR_NEWLY_RECRUITED_SOLDIERS").c_str(), tr("STR_CUSTOM").c_str());
+	EquipmentLayout *layout = (_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId());
+	_lstSoldiers->addRow(2, tr("STR_NEWLY_RECRUITED_SOLDIERS").c_str(), (layout == 0 || layout->getId() == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str());
 	_lstSoldiers->setRowColor(0, Palette::blockOffset(16)-2);
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
-		if ((*i)->getType() == "SOLDIER")
-		{
-			_soldiers.push_back(*i);
-			_lstSoldiers->addRow(2, (*i)->getName(0).c_str(), tr("STR_CUSTOM").c_str());
-		}
+		// we need X-Com soldiers only
+		if ((*i)->getGeoscapeSoldier() == 0) continue;
+
+		_soldiers.push_back(*i);
+		layout = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+		_lstSoldiers->addRow(2, (*i)->getName(0).c_str(), (layout == 0 || layout->getId() == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str());
 	}
 
 	_edtLayout->setColor(Palette::blockOffset(1)-2);
@@ -271,6 +272,10 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 		_outsideBrightness->setX(251);
 		_outsideBrightness->setY(157);
 	}
+
+	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	_warning->setColor(Palette::blockOffset(2));
+	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
 
 /**
@@ -278,8 +283,8 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
  */
 LayoutManagerState::~LayoutManagerState()
 {
-	if (0 != _timerLayoutsUp) delete _timerLayoutsUp;
-	if (0 != _timerLayoutsDown) delete _timerLayoutsDown;
+	delete _timerLayoutsUp;
+	delete _timerLayoutsDown;
 }
 
 /**
@@ -290,7 +295,7 @@ LayoutManagerState::~LayoutManagerState()
 void LayoutManagerState::addLayoutButton(const std::wstring &text, int &buttons)
 {
 	ToggleTextButton *btnLayout;
-	btnLayout = new ToggleTextButton(80, 14, 5, 72 + buttons*14, false);
+	btnLayout = new ToggleTextButton(80, 14, 5, 72 + buttons*14);
 	btnLayout->setColor(Palette::blockOffset(0)+4);
 	btnLayout->setInvertColor(Palette::blockOffset(1)-3);
 	btnLayout->onMousePress((ActionHandler)&LayoutManagerState::btnLayoutXPress, 0);
@@ -336,13 +341,11 @@ void LayoutManagerState::btnLayoutXPress(Action *action)
 		_btnLayouts.at(i)->setPressed(i == buttonIndex);
 	}
 	_edtLayout->setText(_btnLayouts.at(buttonIndex)->getText());
-	_btnCreate->setVisible(!_edtLayout->getText().empty());
-	_btnRename->setVisible(_selectedLayout != 0 && !_edtLayout->getText().empty());
-	_btnDelete->setVisible(_selectedLayout != 0);
+	updateEditButtons();
 }
 
 /**
- Handler for pressing the up arrowbutton.
+ * Handler for pressing the up arrowbutton.
  * @param action Pointer to an action.
  */
 void LayoutManagerState::btnLayoutsUpPress(Action * action)
@@ -351,7 +354,7 @@ void LayoutManagerState::btnLayoutsUpPress(Action * action)
 }
 
 /**
- Handler for releasing the up arrowbutton.
+ * Handler for releasing the up arrowbutton.
  * @param action Pointer to an action.
  */
 void LayoutManagerState::btnLayoutsUpRelease(Action * action)
@@ -364,7 +367,7 @@ void LayoutManagerState::btnLayoutsUpRelease(Action * action)
 }
 
 /**
- Handler for clicking the up arrowbutton.
+ * Handler for clicking the up arrowbutton.
  * @param action Pointer to an action.
  */
 void LayoutManagerState::btnLayoutsUpClick(Action * action)
@@ -374,7 +377,7 @@ void LayoutManagerState::btnLayoutsUpClick(Action * action)
 }
 
 /**
- Handler for pressing the down arrowbutton.
+ * Handler for pressing the down arrowbutton.
  * @param action Pointer to an action.
  */
 void LayoutManagerState::btnLayoutsDownPress(Action * action)
@@ -383,7 +386,7 @@ void LayoutManagerState::btnLayoutsDownPress(Action * action)
 }
 
 /**
- Handler for releasing the down arrowbutton.
+ * Handler for releasing the down arrowbutton.
  * @param action Pointer to an action.
  */
 void LayoutManagerState::btnLayoutsDownRelease(Action * action)
@@ -396,7 +399,7 @@ void LayoutManagerState::btnLayoutsDownRelease(Action * action)
 }
 
 /**
- Handler for clicking the down arrowbutton.
+ * Handler for clicking the down arrowbutton.
  * @param action Pointer to an action.
  */
 void LayoutManagerState::btnLayoutsDownClick(Action * action)
@@ -406,7 +409,7 @@ void LayoutManagerState::btnLayoutsDownClick(Action * action)
 }
 
 /**
- Event handler for _timerLayoutsUp.
+ * Event handler for _timerLayoutsUp.
  */
 void LayoutManagerState::onTimerLayoutsUp()
 {
@@ -415,7 +418,7 @@ void LayoutManagerState::onTimerLayoutsUp()
 }
 
 /**
- Event handler for _timerLayoutsDown.
+ * Event handler for _timerLayoutsDown.
  */
 void LayoutManagerState::onTimerLayoutsDown()
 {
@@ -424,7 +427,7 @@ void LayoutManagerState::onTimerLayoutsDown()
 }
 
 /**
- Scrolls up by the number of change.
+ * Scrolls up by the number of change.
  * @param change The number of lines to scroll up.
  */
 void LayoutManagerState::scrollLayoutsUp(int change)
@@ -435,12 +438,12 @@ void LayoutManagerState::scrollLayoutsUp(int change)
 }
 
 /**
- Scrolls down by the number of change.
+ * Scrolls down by the number of change.
  * @param change The number of lines to scroll down.
  */
 void LayoutManagerState::scrollLayoutsDown(int change)
 {
-	int max = _layouts.size() - 6;
+	int max = ((int) _save->getLayouts()->size()) - 5;
 	if (change <= 0 || _btnLayoutsStartIndex == max) return;
 	// we need to check 'change' alone first, because _btnLayoutsStartIndex+change can overflow
 	if (change > max || _btnLayoutsStartIndex+change > max) _btnLayoutsStartIndex = max; else _btnLayoutsStartIndex += change;
@@ -448,27 +451,38 @@ void LayoutManagerState::scrollLayoutsDown(int change)
 }
 
 /**
- Updates the layout buttons, and arrowButtons.
+ * Updates the layout buttons, and arrowButtons.
  */
 void LayoutManagerState::updateLayoutsButtons()
 {
 	int buttonIndex = _selectedLayout - _btnLayoutsStartIndex;
 	for (int i = 0; i < _btnLayouts.size(); ++i)
 	{
-		//_btnLayouts.at(i)->setText(_layouts.at(_btnLayoutsStartIndex+i)->getName()); // TODO
+		_btnLayouts.at(i)->setText((_btnLayoutsStartIndex+i == 0) ? tr("STR_CUSTOM") : _save->getLayouts()->at(_btnLayoutsStartIndex+i-1)->getName());
 		_btnLayouts.at(i)->setPressed(i == buttonIndex);
 	}
+	int max = ((int) _save->getLayouts()->size()) - 5;
 	bool b;
 	b = (_btnLayoutsStartIndex > 0);
 	if (_btnLayoutsUp->getVisible() && !b) _btnLayoutsUp->unpress(this); // This is a workaround to avoid a crash!
 	_btnLayoutsUp->setVisible(b);
-	b = _btnLayoutsStartIndex < _layouts.size() - 6;
+	b = (_btnLayoutsStartIndex < max);
 	if (_btnLayoutsDown->getVisible() && !b) _btnLayoutsDown->unpress(this); // This is a workaround to avoid a crash!
 	_btnLayoutsDown->setVisible(b);
 }
 
 /**
- Runs state functionality every cycle.
+ * Updates the visibility of Create, Rename, and Delete layout buttons.
+ */
+void LayoutManagerState::updateEditButtons()
+{
+	_btnCreate->setVisible(!_edtLayout->getText().empty());
+	_btnRename->setVisible(_selectedLayout != 0 && !_edtLayout->getText().empty());
+	_btnDelete->setVisible(_selectedLayout != 0);
+}
+
+/**
+ * Runs state functionality every cycle.
  */
 void LayoutManagerState::think()
 {
@@ -478,11 +492,91 @@ void LayoutManagerState::think()
 }
 
 /**
- * Occurs when the player clicks on a soldier.
+ * Occurs when the player presses on a soldier.
  * @param action Pointer to an action.
  */
-void LayoutManagerState::lstSoldiersClick(Action *action)
+void LayoutManagerState::lstSoldiersPress(Action *action)
 {
+	if (action->getDetails()->button.button != SDL_BUTTON_LEFT
+	&&  action->getDetails()->button.button != SDL_BUTTON_RIGHT) return;
+
+	int selRow = _lstSoldiers->getSelectedRow();
+	if (_btnToSoldier->getPressed())
+	{ // So we are setting a layout to a soldier
+		EquipmentLayout *layout = (_selectedLayout == 0) ? 0 : _save->getLayouts()->at(_selectedLayout-1);
+		if (selRow == 0)
+		{ // Newly recruited soldiers is clicked
+			_save->setNewSoldierLayoutId((layout == 0) ? 0 : layout->getId());
+			_lstSoldiers->setCellText(0, 1, (layout == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str()); // Refresh the soldier-table
+		}
+		else
+		{ // A soldier is clicked
+			BattleUnit *soldierBU = _soldiers.at(selRow-1);
+			soldierBU->getGeoscapeSoldier()->setEquipmentLayout(layout);
+			if (layout == 0 || soldierBU->equipByLayout(_game, false))
+			{ // Success
+				_lstSoldiers->setCellText(selRow, 1, (layout == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str()); // Refresh the soldier-table
+			}
+			else
+			{ // So there were not enough equipment for the layout
+				_lstSoldiers->setCellText(selRow, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_EQUIPMENT_FOR_LAYOUT"));
+			}
+		}
+	}
+	else
+	{ // So we are saving the current layout of a soldier to a named layout
+		if (_selectedLayout == 0)
+		{ // Save to custom layout ?!?
+			_warning->showMessage(_game->getLanguage()->getString("STR_CANNOT_SAVE_TO_CUSTOM_LAYOUT"));
+		}
+		else
+		{ // Save to a named layout
+			EquipmentLayout *layout = _save->getLayouts()->at(_selectedLayout-1);
+			EquipmentLayout *soldierLayout;
+			if (selRow == 0) layout->copyLayoutItems((_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId()));
+			else
+			{ // So an actual soldier is clicked
+				layout->eraseItems();
+				std::vector<EquipmentLayoutItem*> *items = layout->getItems();
+				BattleUnit *soldier = _soldiers.at(selRow-1);
+				for (std::vector<BattleItem*>::iterator j = soldier->getInventory()->begin(); j != soldier->getInventory()->end(); ++j)
+				{
+					std::string ammo;
+					if ((*j)->needsAmmo() && (*j)->getAmmoItem() != 0) ammo = (*j)->getAmmoItem()->getRules()->getType();
+					else ammo = "NONE";
+					items->push_back(new EquipmentLayoutItem(
+						(*j)->getRules()->getType(),
+						(*j)->getSlot()->getId(),
+						(*j)->getSlotX(),
+						(*j)->getSlotY(),
+						ammo,
+						(*j)->getFuseTimer()
+					));
+				}
+			}
+
+			// Show a message of the success
+			std::wstring soldierName;
+			if (selRow == 0) soldierName = tr("STR_NEWLY_RECRUITED_SOLDIERS");
+			else soldierName = _soldiers.at(selRow-1)->getGeoscapeSoldier()->getName();
+			_warning->showMessage(_game->getLanguage()->getString("STR_LAYOUT_SAVED").arg(soldierName).arg(layout->getName()));
+			
+			// Ok, now refresh every soldier who has this layout
+			for (int i = 0; i < _soldiers.size(); ++i)
+			{
+				BattleUnit *soldierBU = _soldiers.at(i);
+				if (layout == soldierBU->getGeoscapeSoldier()->getEquipmentLayout())
+				{
+					if (!soldierBU->equipByLayout(_game, false))
+					{ // So there were not enough equipment for the changed layout
+						_lstSoldiers->setCellText(i+1, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+						_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_EQUIPMENT_FOR_LAYOUT"));
+					}
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -491,8 +585,7 @@ void LayoutManagerState::lstSoldiersClick(Action *action)
  */
 void LayoutManagerState::edtLayoutKeyPress(Action *action)
 {
-	_btnCreate->setVisible(!_edtLayout->getText().empty());
-	_btnRename->setVisible(_selectedLayout != 0 && !_edtLayout->getText().empty());
+	updateEditButtons();
 }
 
 /**
@@ -501,6 +594,15 @@ void LayoutManagerState::edtLayoutKeyPress(Action *action)
  */
 void LayoutManagerState::btnCreateClick(Action *action)
 {
+	int NextButton = _save->getLayouts()->size()+1;
+	EquipmentLayout *layout = new EquipmentLayout(_edtLayout->getText(), _save->getId("LAYOUTS"));
+	_save->getLayouts()->insert(_save->getLayouts()->begin()+_selectedLayout, layout); // Insert after the currently selected
+	if (_save->getLayouts()->size()-1 < 5) addLayoutButton(L"", NextButton); // So we need a new button for it
+	++_selectedLayout; // Select the newly created layout
+	if (_selectedLayout - _btnLayoutsStartIndex > 5) _btnLayoutsStartIndex = _selectedLayout-5; // And scroll down if it's out of the window
+	if (_selectedLayout - _btnLayoutsStartIndex < 0) _btnLayoutsStartIndex = _selectedLayout; // ...or up
+	updateLayoutsButtons();
+	updateEditButtons();
 }
 
 /**
@@ -509,6 +611,26 @@ void LayoutManagerState::btnCreateClick(Action *action)
  */
 void LayoutManagerState::btnRenameClick(Action *action)
 {
+	EquipmentLayout *layout = _save->getLayouts()->at(_selectedLayout-1);
+	int buttonIndex = _selectedLayout - _btnLayoutsStartIndex;
+	layout->setName(_edtLayout->getText());
+	if (buttonIndex >= 0 && buttonIndex < 6) _btnLayouts.at(buttonIndex)->setText(_edtLayout->getText());
+
+	// Refresh the soldier-table
+	for (int i = 0; i < _soldiers.size(); ++i)
+	{
+		Soldier *soldier = _soldiers.at(i)->getGeoscapeSoldier();
+		if (layout == soldier->getEquipmentLayout())
+		{
+			_lstSoldiers->setCellText(i+1, 1, _edtLayout->getText().c_str()); // Refresh the soldier-table
+		}
+	}
+	// And don't forget the newly recruited soldier
+	EquipmentLayout *newSoldierLayout = (_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId());
+	if (layout == newSoldierLayout)
+	{
+		_lstSoldiers->setCellText(0, 1, _edtLayout->getText().c_str()); // Refresh the soldier-table
+	}
 }
 
 /**
@@ -517,6 +639,51 @@ void LayoutManagerState::btnRenameClick(Action *action)
  */
 void LayoutManagerState::btnDeleteClick(Action *action)
 {
+	EquipmentLayout *layout = _save->getLayouts()->at(_selectedLayout-1);
+	if (layout->getId() == 0) return; // Theoretically this should never happen
+
+	// Ok, first of all, copy this layout to custom owned layouts for every soldier who has this layout
+	for (int i = 0; i < _soldiers.size(); ++i)
+	{
+		Soldier *soldier = _soldiers.at(i)->getGeoscapeSoldier();
+		if (layout == soldier->getEquipmentLayout())
+		{
+			soldier->setEquipmentLayout(new EquipmentLayout(layout));
+			_lstSoldiers->setCellText(i+1, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+		}
+	}
+	// And don't forget the newly recruited soldier
+	EquipmentLayout *newSoldierLayout = (_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId());
+	if (layout == newSoldierLayout)
+	{
+		_save->setNewSoldierLayoutId(0);
+		_lstSoldiers->setCellText(0, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+	}
+
+	// Now erase the layout
+	delete layout;
+	_save->getLayouts()->erase(_save->getLayouts()->begin()+(_selectedLayout-1));
+	if (_selectedLayout > _save->getLayouts()->size()) --_selectedLayout; // If we erased the last layout
+	if (_btnLayoutsStartIndex+5 > _save->getLayouts()->size()) --_btnLayoutsStartIndex; // If the window is out of limits
+	if (_btnLayoutsStartIndex < 0) _btnLayoutsStartIndex = 0; // If we overshot with the previous
+	if (_selectedLayout - _btnLayoutsStartIndex > 5) _btnLayoutsStartIndex = _selectedLayout-5; // And scroll down if the newly selected is out of the window
+	if (_selectedLayout - _btnLayoutsStartIndex < 0) _btnLayoutsStartIndex = _selectedLayout; // ...or up
+	if (_save->getLayouts()->size() < 5)
+	{ // So we need one button less
+		std::vector<ToggleTextButton*>::iterator button = _btnLayouts.begin() + (_btnLayouts.size()-1);
+		for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
+		{
+			if (*i == *button)
+			{
+				delete *i;
+				_surfaces.erase(i);
+				break;
+			}
+		}
+		_btnLayouts.erase(button);
+	}
+	updateLayoutsButtons();
+	updateEditButtons();
 }
 
 }

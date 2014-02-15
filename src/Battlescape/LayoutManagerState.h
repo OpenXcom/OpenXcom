@@ -24,6 +24,7 @@
 namespace OpenXcom
 {
 
+class SavedGame;
 class SavedBattleGame;
 class Surface;
 class InteractiveSurface;
@@ -35,6 +36,8 @@ class ToggleTextButton;
 class TextList;
 class ArrowButton;
 class BattleUnit;
+class EquipmentLayout;
+class WarningMessage;
 
 /**
  * Screen which displays the Layout Manager.
@@ -42,13 +45,13 @@ class BattleUnit;
 class LayoutManagerState : public State
 {
 private:
+	SavedGame *_save;
 	SavedBattleGame *_battleGame;
 	Window *_window;
 	TextButton *_btnOk;
 	Text *_txtTitle, *_txtMode, *_txtSelectedLayout, *_txtSoldiers, *_txtName, *_txtLayout, *_txtLayoutName, *_txtOutsideBrightness;
 	ToggleTextButton *_btnToSoldier, *_btnFromSoldier;
 	std::vector<ToggleTextButton*> _btnLayouts;
-	std::vector<void*> _layouts;
 	int _selectedLayout;
 	ArrowButton *_btnLayoutsUp, *_btnLayoutsDown;
 	int _btnLayoutsStartIndex;
@@ -58,6 +61,7 @@ private:
 	TextEdit *_edtLayout;
 	TextButton *_btnCreate, *_btnRename, *_btnDelete;
 	Surface *_outsideBrightness;
+	WarningMessage *_warning;
 	void addLayoutButton(const std::wstring &text, int &buttons);
 public:
 	/// Creates the Layout Manager State.
@@ -92,10 +96,12 @@ public:
 	void scrollLayoutsDown(int change);
 	/// Updates the layout buttons, and arrowButtons.
 	void updateLayoutsButtons();
+	/// Updates the visibility of Create, Rename, and Delete layout buttons.
+	void updateEditButtons();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Handler for clicking the Soldiers list.
-	void lstSoldiersClick(Action *action);
+	/// Handler for pressing the Soldiers list.
+	void lstSoldiersPress(Action *action);
 	/// Handler for pressing a key on the Layout name edit.
 	void edtLayoutKeyPress(Action *action);
 	/// Handler for clicking the Create button.

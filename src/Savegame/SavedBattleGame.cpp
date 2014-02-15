@@ -59,7 +59,8 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _cheating(false),
-									 _tuReserved(BA_NONE), _kneelReserved(false)
+                                     _tuReserved(BA_NONE), _kneelReserved(false),
+                                     _equipByLayoutFailed(false), _craftInventoryTile(0)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -971,31 +972,35 @@ void SavedBattleGame::randomizeItemLocations(Tile *t)
 /**
  * Removes an item from the game. Eg. when ammo item is depleted.
  * @param item The Item to remove.
+ * @param completeCheck Indicates whether to check and fix the tile and owner of the item.
  */
-void SavedBattleGame::removeItem(BattleItem *item)
+void SavedBattleGame::removeItem(BattleItem *item, bool completeCheck)
 {
-	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
-	Tile *t = item->getTile();
-	BattleUnit *b = item->getOwner();
-	if (t)
+	if (completeCheck)
 	{
-		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+		// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
+		Tile *t = item->getTile();
+		BattleUnit *b = item->getOwner();
+		if (t)
 		{
-			if ((*it) == item)
+			for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 			{
-				t->getInventory()->erase(it);
-				break;
+				if ((*it) == item)
+				{
+					t->getInventory()->erase(it);
+					break;
+				}
 			}
 		}
-	}
-	else if (b)
-	{
-		for (std::vector<BattleItem*>::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
+		else if (b)
 		{
-			if ((*it) == item)
+			for (std::vector<BattleItem*>::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
 			{
-				b->getInventory()->erase(it);
-				break;
+				if ((*it) == item)
+				{
+					b->getInventory()->erase(it);
+					break;
+				}
 			}
 		}
 	}
@@ -1745,4 +1750,41 @@ SavedGame *SavedBattleGame::getGeoscapeSave()
 {
 	return _battleState->getGame()->getSavedGame();
 }
+
+/**
+ * Returns the value of _equipByLayoutFailed.
+ * @return the value of _equipByLayoutFailed.
+ */
+bool SavedBattleGame::getEquipByLayoutFailed()
+{
+	return _equipByLayoutFailed;
+}
+
+/**
+ * Sets the value of _equipByLayoutFailed.
+ * @param value new value of _equipByLayoutFailed.
+ */
+void SavedBattleGame::setEquipByLayoutFailed(bool value)
+{
+	_equipByLayoutFailed = value;
+}
+
+/**
+ * Returns the value of _craftInventoryTile.
+ * @return the value of _craftInventoryTile.
+ */
+Tile *SavedBattleGame::getCraftInventoryTile()
+{
+	return _craftInventoryTile;
+}
+
+/**
+ * Sets the value of _craftInventoryTile.
+ * @param value new value of _craftInventoryTile.
+ */
+void SavedBattleGame::setCraftInventoryTile(Tile *value)
+{
+	_craftInventoryTile = value;
+}
+
 }

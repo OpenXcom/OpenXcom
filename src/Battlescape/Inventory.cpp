@@ -282,9 +282,20 @@ void Inventory::drawItems()
  * @param slot Inventory slot, or NULL if none.
  * @param x X position in slot.
  * @param y Y position in slot.
+ * @param containerItem Item which will contain the item-to-move. In the case of slot == 0
  */
-void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
+void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y, BattleItem *containerItem)
 {
+	if (!_tu)
+	{
+		std::string slotId = (containerItem != 0) ? containerItem->getSlot()->getId() : ((slot == 0) ? "" : slot->getId());
+		if ( (item->getSlot()->getId() != "STR_GROUND" || slotId != "STR_GROUND")
+		&& !(item->getSlot()->getId() == slotId && item->getSlotX() == x && item->getSlotY() == y) )
+		{ // So the user altered the soldier -> this can only be a custom layout now
+			_selUnit->getGeoscapeSoldier()->setEquipmentLayout(0);
+		}
+	}
+
 	// Make items vanish (eg. ammo in weapons)
 	if (slot == 0)
 	{
@@ -632,7 +643,7 @@ void Inventory::mouseClick(Action *action, State *state)
 						}
 						else if (!_tu || _selUnit->spendTimeUnits(15))
 						{
-							moveItem(_selItem, 0, 0, 0);
+							moveItem(_selItem, 0, 0, 0, item);
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
@@ -708,6 +719,8 @@ void Inventory::mouseClick(Action *action, State *state)
 									{
 										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 										item->setFuseTimer(0);
+										// If the user altered the soldier -> this can only be a custom layout now
+										if (item->getSlot()->getId() != "STR_GROUND") _selUnit->getGeoscapeSoldier()->setEquipmentLayout(0);
 									}
 									else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 								}
@@ -715,6 +728,8 @@ void Inventory::mouseClick(Action *action, State *state)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1);  // Unprime the grenade
+									// If the user altered the soldier -> this can only be a custom layout now
+									if (item->getSlot()->getId() != "STR_GROUND") _selUnit->getGeoscapeSoldier()->setEquipmentLayout(0);
 								}
 							}
 						}
@@ -925,6 +940,15 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity() &&
 		itemA->getHealQuantity() == itemB->getHealQuantity() &&
 		itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
-
 }
+
+/**
+ * Shows a warning message.
+ * @param msg The message to show.
+ */
+void Inventory::showWarning(const std::wstring &msg)
+{
+	_warning->showMessage(msg);
+}
+
 }

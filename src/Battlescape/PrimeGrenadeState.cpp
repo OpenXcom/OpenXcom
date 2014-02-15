@@ -30,6 +30,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Ruleset/RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -38,6 +39,8 @@ namespace OpenXcom
  * Initializes all the elements in the Prime Grenade window.
  * @param game Pointer to the core game.
  * @param action Pointer to  the action.
+ * @param inInventoryView Indicates whether we are in an inventory view now.
+ * @param grenadeInInventory the grenade to prime when we are in an inventory view.
  */
 PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
@@ -160,7 +163,15 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (btnID != -1)
 	{
-		if (_inInventoryView) _grenadeInInventory->setFuseTimer(0 + btnID);
+		if (_inInventoryView)
+		{
+			_grenadeInInventory->setFuseTimer(0 + btnID);
+			// If the user altered the soldier -> this can only be a custom layout now
+			if (_grenadeInInventory->getSlot()->getId() != "STR_GROUND" && _grenadeInInventory->getOwner() != 0)
+			{
+				_grenadeInInventory->getOwner()->getGeoscapeSoldier()->setEquipmentLayout(0);
+			}
+		}
 		else _action->value = btnID;
 		_game->popState();
 		if (!_inInventoryView) _game->popState();

@@ -40,7 +40,9 @@ class Surface;
 class RuleInventory;
 class Soldier;
 class Armor;
+class Game;
 class SavedGame;
+class SavedBattleGame;
 class Language;
 class AlienBAIState;
 class CivilianBAIState;
@@ -419,6 +421,8 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Tries to equip by the soldier's layout. If it can't, set to custom layout and equip with fragments of the layout.
+	bool equipByLayout(Game *game, bool initialEquip);
 };
 
 }
