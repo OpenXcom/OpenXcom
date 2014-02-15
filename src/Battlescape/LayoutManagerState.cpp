@@ -198,7 +198,7 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	_lstSoldiers->setHighContrast(true);
 	_lstSoldiers->onMousePress((ActionHandler)&LayoutManagerState::lstSoldiersPress);
 
-	for (int buttons = 0; buttons <= _save->getLayouts()->size(); ) addLayoutButton(L"", buttons);
+	for (int buttons = 0; buttons <= _save->getLayouts()->size() && buttons < 6; ) addLayoutButton(L"", buttons);
 	_btnLayoutsUp->setColor(Palette::blockOffset(0)+4);
 	_btnLayoutsUp->onMousePress((ActionHandler)&LayoutManagerState::btnLayoutsUpPress);
 	_btnLayoutsUp->onMouseRelease((ActionHandler)&LayoutManagerState::btnLayoutsUpRelease);
