@@ -83,7 +83,7 @@ private:
 	std::vector<int> _funds, _maintenance, _researchScores, _incomes, _expenditures;
 	double _globeLon, _globeLat;
 	int _globeZoom;
-	int _newSoldierLayoutId;
+	EquipmentLayout *_newSoldierLayout;
 	std::map<std::string, int> _ids;
 	std::vector<Country*> _countries;
 	std::vector<Region*> _regions;
@@ -151,10 +151,10 @@ public:
 	int getGlobeZoom() const;
 	/// Sets the new globe zoom.
 	void setGlobeZoom(int zoom);
-	/// Gets the layout Id of the layout which is automatically assigned to a new soldier.
-	int getNewSoldierLayoutId() const;
-	/// Sets the layout Id of the layout which is automatically assigned to a new soldier.
-	void setNewSoldierLayoutId(int id);
+	/// Gets the layout which is automatically assigned to a new soldier.
+	EquipmentLayout *getNewSoldierLayout() const;
+	/// Sets the layout which is automatically assigned to a new soldier.
+	void setNewSoldierLayout(EquipmentLayout *layout);
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.

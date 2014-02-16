@@ -215,7 +215,7 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	_timerLayoutsDown->onTimer((StateHandler)&LayoutManagerState::onTimerLayoutsDown);
 	updateLayoutsButtons();
 
-	EquipmentLayout *layout = (_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId());
+	EquipmentLayout *layout = _save->getNewSoldierLayout();
 	_lstSoldiers->addRow(2, tr("STR_NEWLY_RECRUITED_SOLDIERS").c_str(), (layout == 0 || layout->getId() == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str());
 	_lstSoldiers->setRowColor(0, Palette::blockOffset(16)-2);
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
@@ -506,7 +506,7 @@ void LayoutManagerState::lstSoldiersPress(Action *action)
 		EquipmentLayout *layout = (_selectedLayout == 0) ? 0 : _save->getLayouts()->at(_selectedLayout-1);
 		if (selRow == 0)
 		{ // Newly recruited soldiers is clicked
-			_save->setNewSoldierLayoutId((layout == 0) ? 0 : layout->getId());
+			_save->setNewSoldierLayout(layout);
 			_lstSoldiers->setCellText(0, 1, (layout == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str()); // Refresh the soldier-table
 		}
 		else
@@ -534,7 +534,7 @@ void LayoutManagerState::lstSoldiersPress(Action *action)
 		{ // Save to a named layout
 			EquipmentLayout *layout = _save->getLayouts()->at(_selectedLayout-1);
 			EquipmentLayout *soldierLayout;
-			if (selRow == 0) layout->copyLayoutItems((_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId()));
+			if (selRow == 0) layout->copyLayoutItems(_save->getNewSoldierLayout());
 			else
 			{ // So an actual soldier is clicked
 				layout->eraseItems();
@@ -625,9 +625,8 @@ void LayoutManagerState::btnRenameClick(Action *action)
 			_lstSoldiers->setCellText(i+1, 1, _edtLayout->getText().c_str()); // Refresh the soldier-table
 		}
 	}
-	// And don't forget the newly recruited soldier
-	EquipmentLayout *newSoldierLayout = (_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId());
-	if (layout == newSoldierLayout)
+	// And don't forget the newly recruited soldiers
+	if (layout == _save->getNewSoldierLayout())
 	{
 		_lstSoldiers->setCellText(0, 1, _edtLayout->getText().c_str()); // Refresh the soldier-table
 	}
@@ -652,11 +651,10 @@ void LayoutManagerState::btnDeleteClick(Action *action)
 			_lstSoldiers->setCellText(i+1, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
 		}
 	}
-	// And don't forget the newly recruited soldier
-	EquipmentLayout *newSoldierLayout = (_save->getNewSoldierLayoutId() == 0) ? 0 : _save->getLayout(_save->getNewSoldierLayoutId());
-	if (layout == newSoldierLayout)
+	// And don't forget the newly recruited soldiers
+	if (layout == _save->getNewSoldierLayout())
 	{
-		_save->setNewSoldierLayoutId(0);
+		_save->setNewSoldierLayout(0);
 		_lstSoldiers->setCellText(0, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
 	}
 

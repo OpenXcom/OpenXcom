@@ -461,13 +461,18 @@ void BattlescapeGenerator::deployXCOM()
 	// Save the _craftInventoryTile into the SavedBattleGame, we need that in equipByLayout() !!
 	_save->setCraftInventoryTile(_craftInventoryTile);
 
-	// equip soldiers based on equipment-layout
+	// Equip soldiers based on equipment-layout
 	bool equipByLayoutFailed = false;
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		// We need only X-Com soldiers
 		if ((*i)->getGeoscapeSoldier() == 0) continue;
 		
+		// Set soldiers with empty layout to the layout of "Newly recruited soldiers"
+		EquipmentLayout *layout = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+		if (layout == 0 || layout->getItems()->empty()) (*i)->getGeoscapeSoldier()->setEquipmentLayout(_game->getSavedGame()->getNewSoldierLayout());
+
+		// Equip!
 		if (!(*i)->equipByLayout(_game, true)) equipByLayoutFailed = true;
 	}
 	_save->setEquipByLayoutFailed(equipByLayoutFailed);

@@ -96,7 +96,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _newSoldierLayoutId(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _newSoldierLayout(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
@@ -413,9 +413,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		}
 	}
 
-	if (const YAML::Node &layoutId = doc["newSoldierLayoutId"]) _newSoldierLayoutId = layoutId.as<int>(_newSoldierLayoutId); else _newSoldierLayoutId = 0;
-	// Check if the LayoutId is valid, and set it to custom if not.
-	if (_newSoldierLayoutId != 0 && getLayout(_newSoldierLayoutId) == 0) _newSoldierLayoutId = 0;
+	if (const YAML::Node &layoutId = doc["newSoldierLayoutId"])
+	{
+		int id = layoutId.as<int>(0);
+		_newSoldierLayout = (id == 0) ? 0 : getLayout(id);
+	}
+	else _newSoldierLayout = 0;
 
 	for (YAML::const_iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
@@ -506,7 +509,7 @@ void SavedGame::save(const std::string &filename) const
 	node["globeLon"] = _globeLon;
 	node["globeLat"] = _globeLat;
 	node["globeZoom"] = _globeZoom;
-	node["newSoldierLayoutId"] = _newSoldierLayoutId;
+	node["newSoldierLayoutId"] = _newSoldierLayout->getId();
 	node["ids"] = _ids;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
@@ -715,21 +718,21 @@ void SavedGame::setGlobeZoom(int zoom)
 }
 
 /**
- * Returns the layout Id of the layout which is automatically assigned to a new soldier.
- * @return layout Id. (0 is custom layout)
+ * Returns the layout which is automatically assigned to a new soldier.
+ * @return New soldier layout. (0 is custom(in this case empty) layout)
  */
-int SavedGame::getNewSoldierLayoutId() const
+EquipmentLayout *SavedGame::getNewSoldierLayout() const
 {
-	return _newSoldierLayoutId;
+	return _newSoldierLayout;
 }
 
 /**
- * Changes the layout Id of the layout which is automatically assigned to a new soldier.
- * @param id layout Id. (0 is custom layout)
+ * Changes the layout which is automatically assigned to a new soldier.
+ * @param layout New soldier layout. (0 is custom(in this case empty) layout)
  */
-void SavedGame::setNewSoldierLayoutId(int id)
+void SavedGame::setNewSoldierLayout(EquipmentLayout *layout)
 {
-	_newSoldierLayoutId = id;
+	_newSoldierLayout = layout;
 }
 
 /**
