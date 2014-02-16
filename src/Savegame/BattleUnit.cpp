@@ -2610,7 +2610,7 @@ bool BattleUnit::equipByLayout(Game *game, bool initialEquip)
 		for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
 			craftInventoryTile->addItem((*i), ground);
-			(*i)->moveToOwner(0);
+			(*i)->setOwner(0);
 			(*i)->setSlotX(0);
 			(*i)->setSlotY(0);
 			(*i)->setFuseTimer(-1);
