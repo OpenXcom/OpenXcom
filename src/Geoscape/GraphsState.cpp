@@ -679,7 +679,7 @@ void GraphsState::drawCountryLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			upperLimit -= check;
+			// upperLimit -= check;
 		}
 	}
 
@@ -849,7 +849,7 @@ void GraphsState::drawRegionLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			upperLimit -= check;
+			// upperLimit -= check;
 		}
 	}
 	range = upperLimit - lowerLimit;
@@ -1031,7 +1031,7 @@ void GraphsState::drawFinanceLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			upperLimit -= check;
+			// upperLimit -= check;
 		}
 	}
 	//toggle screens
