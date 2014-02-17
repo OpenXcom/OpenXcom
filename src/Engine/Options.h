@@ -36,6 +36,11 @@ enum ScrollType { SCROLL_TRIGGER, SCROLL_AUTO, SCROLL_DRAG };
 enum KeyboardType { KEYBOARD_ON, KEYBOARD_VIRTUAL, KEYBOARD_OFF };
 
 /**
+ * Enumeration for the savegame sorting modes.
+ */
+enum SaveSort { SORT_NAME_ASC, SORT_NAME_DESC, SORT_DATE_ASC, SORT_DATE_DESC };
+
+/**
  * Container for all the various global game options
  * and customizable settings.
  */

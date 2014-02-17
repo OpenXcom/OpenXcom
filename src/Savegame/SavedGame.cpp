@@ -27,7 +27,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
-#include "../Interface/TextList.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
@@ -149,15 +148,12 @@ SavedGame::~SavedGame()
 }
 
 /**
- * Gets all the saves found in the user folder
- * and adds them to a text list.
- * @param list Text list.
+ * Gets all the info of the saves found in the user folder.
  * @param lang Loaded language.
- * @param details List of savegame details.
  */
-std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std::vector<std::wstring> *details)
+std::vector<SaveInfo> SavedGame::getList(Language *lang)
 {
-	details->clear();
+	std::vector<SaveInfo> info;
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
 	for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
@@ -167,37 +163,41 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std:
 		try
 		{
 			YAML::Node doc = YAML::LoadFile(fullname);
-			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-			time.load(doc["time"]);
-			std::wstringstream saveTime, saveDay, saveMonth, saveYear;
-			saveTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
-			saveDay << time.getDayString(lang);
-			saveMonth << lang->getString(time.getMonthString());
-			saveYear << time.getYear();
+			SaveInfo save;
 
-			std::wstringstream info;
-			if (doc["turn"])
-			{
-				info << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
-				info << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
-			}
-			else
-			{
-				info << lang->getString("STR_GEOSCAPE");
-			}
-			details->push_back(info.str());
+			save.fileName = CrossPlatform::noExt(file);
 
-			std::wstring wstr;
 			if (doc["name"])
 			{
-				wstr = Language::utf8ToWstr(doc["name"].as<std::string>());
+				save.displayName = Language::utf8ToWstr(doc["name"].as<std::string>());
 			}
 			else
 			{
-				std::string s = CrossPlatform::noExt(file);
-				wstr = Language::fsToWstr(s);
+				save.displayName = Language::fsToWstr(save.fileName);
 			}
-			list->addRow(5, wstr.c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+
+			save.timestamp = CrossPlatform::getDateModified(fullname);
+			std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
+			save.isoDate = str.first;
+			save.isoTime = str.second;
+
+			std::wostringstream details;
+			if (doc["turn"])
+			{
+				details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+				details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+			}
+			else
+			{
+				GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+				time.load(doc["time"]);
+				details << lang->getString("STR_GEOSCAPE") << L": ";
+				details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L", ";
+				details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+			}
+			save.details = details.str();
+
+			info.push_back(save);
 		}
 		catch (Exception &e)
 		{
@@ -211,7 +211,7 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std:
 		}
 	}
 
-	return saves;
+	return info;
 }
 
 /**

@@ -51,7 +51,7 @@ namespace YAML
 namespace OpenXcom
 {
 
-RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type)
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0)
 {
 }
 

@@ -254,6 +254,7 @@ struct CreateShadow
 Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y):
 	InteractiveSurface(width, height, x, y),
 	_rotLon(0.0), _rotLat(0.0),
+	_hoverLon(0.0), _hoverLat(0.0),
 	_cenX(cenX), _cenY(cenY), _game(game),
 	_blink(true), _hover(false), _cacheLand()
 {

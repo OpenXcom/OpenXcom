@@ -32,7 +32,7 @@ class ToggleTextButton :
     public TextButton
 {
 private:
-    bool _isPressed, _filterSound;
+    bool _isPressed;
     int _invertMid;
     TextButton *_fakeGroup;
 
@@ -43,7 +43,7 @@ public:
     void setPressed(bool pressed);
     bool getPressed() const { return _isPressed; }
     void setInvertColor(Uint8 mid);
-    ToggleTextButton(int width, int height, int x, int y, bool filterSound=false);
+    ToggleTextButton(int width, int height, int x, int y);
     ~ToggleTextButton(void);
 };
 

@@ -183,7 +183,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 				_base->getSoldiers()->at(row-1) = s;
 				if (row != _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
 				}
 				else
 				{
@@ -220,7 +220,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 				_base->getSoldiers()->at(row+1) = s;
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
 				}
 				else
 				{

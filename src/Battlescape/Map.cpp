@@ -40,6 +40,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
@@ -48,6 +50,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
+#include "../Interface/Text.h"
 
 
 /*
@@ -75,7 +78,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 	if (Options::getBool("traceAI"))
@@ -94,6 +97,12 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
+	
+	_txtAccuracy = new Text(24, 9, 0, 0);
+	_txtAccuracy->setSmall();
+	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
+	_txtAccuracy->setHighContrast(true);
+	_txtAccuracy->initText(_res->getFont("FONT_BIG"), _res->getFont("FONT_SMALL"), _game->getLanguage());
 }
 
 /**
@@ -106,6 +115,7 @@ Map::~Map()
 	delete _arrow;
 	delete _message;
 	delete _camera;
+	delete _txtAccuracy;
 }
 
 /**
@@ -158,16 +168,16 @@ void Map::draw()
 	Surface::draw();
 	Tile *t;
 
-	projectileInFOV = _save->getDebugMode();
+	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
 		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
 		{
-			projectileInFOV = true;
+			_projectileInFOV = true;
 		}
 	}
-	explosionInFOV = _save->getDebugMode();
+	_explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
 		for (std::set<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
@@ -175,13 +185,13 @@ void Map::draw()
 			t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
 			if (t && ((*i)->isBig() || t->getVisible()))
 			{
-				explosionInFOV = true;
+				_explosionInFOV = true;
 				break;
 			}
 		}
 	}
 
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _unitDying || _save->getSelectedUnit() == 0 || _save->getDebugMode() || projectileInFOV || explosionInFOV)
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _unitDying || _save->getSelectedUnit() == 0 || _save->getDebugMode() || _projectileInFOV || _explosionInFOV)
 	{
 		drawTerrain(this);
 	}
@@ -262,14 +272,14 @@ void Map::drawTerrain(Surface *surface)
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
 
-		if (projectileInFOV)
+		if (_projectileInFOV)
 		{
 			if (_launch)
 			{
 				_launch = false;
 				if ((bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
 					bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
-					&& projectileInFOV)
+					&& _projectileInFOV)
 				{
 					_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
 				}
@@ -280,7 +290,7 @@ void Map::drawTerrain(Surface *surface)
 				if (newCam.z != bulletHighZ) //switch level
 				{
 					newCam.z = bulletHighZ;
-					if (projectileInFOV)
+					if (_projectileInFOV)
 					{
 						_camera->setMapOffset(newCam);
 						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
@@ -455,7 +465,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// check if we got bullet && it is in Field Of View
-					if (_projectile && projectileInFOV)
+					if (_projectile && _projectileInFOV)
 					{
 						tmpSurface = 0;
 						if (_projectile->getItem())
@@ -645,7 +655,8 @@ void Map::drawTerrain(Surface *surface)
 									frameNumber = 3 + (_animFrame % 2); // yellow box
 								else
 									frameNumber = 3; // red box
-							}else
+							}
+							else
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
@@ -654,6 +665,60 @@ void Map::drawTerrain(Surface *surface)
 							}
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+
+							// UFO extender accuracy: display adjusted accuracy value on crosshair in real-time.
+							if (_cursorType == CT_AIM && Options::getBool("battleUFOExtenderAccuracy"))
+							{
+								BattleAction *action = _save->getBattleGame()->getCurrentAction();
+								RuleItem *weapon = action->weapon->getRules();
+								std::stringstream ss;
+								int accuracy = _save->getSelectedUnit()->getFiringAccuracy(action->type, action->weapon);
+								int distance = _save->getTileEngine()->distance(Position (itX, itY,itZ), action->actor->getPosition());
+								int upperLimit = 200;
+								int lowerLimit = weapon->getMinRange();
+								switch (action->type)
+								{
+								case BA_AIMEDSHOT:
+									upperLimit = weapon->getAimRange();
+									break;
+								case BA_SNAPSHOT:
+									upperLimit = weapon->getSnapRange();
+									break;
+								case BA_AUTOSHOT:
+									upperLimit = weapon->getAutoRange();
+									break;
+								default:
+									break;
+								}
+								// at this point, let's assume the shot is adjusted and set the text amber.
+								_txtAccuracy->setColor(Palette::blockOffset(1)-1);
+
+								if (distance > upperLimit)
+								{
+									accuracy -= (distance - upperLimit) * weapon->getDropoff();
+								}
+								else if (distance < lowerLimit)
+								{
+									accuracy -= (lowerLimit - distance) * weapon->getDropoff();
+								}
+								else
+								{
+									// no adjustment made? set it to green.
+									_txtAccuracy->setColor(Palette::blockOffset(4)-1);
+								}
+
+								// zero accuracy or out of range: set it red.
+								if (accuracy <= 0 || distance > weapon->getMaxRange())
+								{
+									accuracy = 0;
+									_txtAccuracy->setColor(Palette::blockOffset(2)-1);
+								}
+								ss << accuracy;
+								ss << "%";
+								_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
+								_txtAccuracy->draw();
+								_txtAccuracy->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+							}
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
@@ -771,7 +836,7 @@ void Map::drawTerrain(Surface *surface)
 	delete _numWaypid;
 
 	// check if we got big explosions
-	if (explosionInFOV)
+	if (_explosionInFOV)
 	{
 		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{

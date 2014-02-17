@@ -74,7 +74,7 @@ std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenX
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _uniqueID(0), _base(0)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _base(0)
 {
 	// Empty by design.
 }

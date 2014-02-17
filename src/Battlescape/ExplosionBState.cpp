@@ -71,14 +71,8 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
-		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
-		// all the rest hits one point:
-		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
-						(_item->getRules()->getDamageType() == DT_HE 
-						|| _item->getRules()->getDamageType() == DT_IN 
-						|| _item->getRules()->getDamageType() == DT_SMOKE
-						|| _item->getRules()->getDamageType() == DT_STUN);
+						_item->getRules()->getExplosionRadius() != 0;
 	}
 	else if (_tile)
 	{
@@ -129,7 +123,7 @@ void ExplosionBState::init()
 	else
 	// create a bullet hit
 	{
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
+		_parent->setStateInterval(std::max(1, ((BattlescapeState::DEFAULT_ANIM_SPEED/2) - (10 * _item->getRules()->getExplosionSpeed()))));
 		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
@@ -190,7 +184,7 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty()
+			if (!_item->getRules()->getZombieUnit().empty()
 				&& victim
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty()
@@ -198,7 +192,7 @@ void ExplosionBState::explode()
 			{
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);
-				victim->setSpawnUnit(_unit->getZombieUnit());
+				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
 			}
 		}
 	}

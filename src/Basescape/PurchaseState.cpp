@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f), _itemOffset(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
@@ -64,10 +64,10 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtFunds = new Text(150, 9, 10, 24);
 	_txtPurchases = new Text(150, 9, 160, 24);
-	_txtItem = new Text(140, 9, 10, 32);
-	_txtCost = new Text(102, 9, 152, 32);
-	_txtQuantity = new Text(60, 9, 256, 32);
-	_lstItems = new TextList(287, 128, 8, 40);
+	_txtItem = new Text(140, 9, 10, 33);
+	_txtCost = new Text(102, 9, 152, 33);
+	_txtQuantity = new Text(60, 9, 256, 33);
+	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -149,6 +149,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
+	_itemOffset = 3;
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
@@ -158,6 +159,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			_crafts.push_back(*i);
 			_qtys.push_back(0);
 			int crafts = 0;
+			++_itemOffset;
 			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 			{
 				if ((*c)->getRules()->getType() == *i)
@@ -169,49 +171,6 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		}
 	}
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-	const std::vector<std::string> &cweapons = _game->getRuleset()->getCraftWeaponsList();
-	for (std::vector<std::string>::const_iterator i = cweapons.begin(); i != cweapons.end(); ++i)
-	{
-		// Special handling for treating craft weapons as items
-		RuleCraftWeapon *rule = _game->getRuleset()->getCraftWeapon(*i);
-		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());
-		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());
-		if (launcher != 0 && launcher->getBuyCost() > 0 && !isExcluded(launcher->getType()))
-		{
-			_items.push_back(launcher->getType());
-			_qtys.push_back(0);
-			std::wstringstream ss5;
-			ss5 << _base->getItems()->getItem(launcher->getType());
-			std::wstring item = tr(launcher->getType());
-			_lstItems->addRow(4, item.c_str(), Text::formatFunding(launcher->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
-			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
-			{
-				if (*j == launcher->getType())
-				{
-					items.erase(j);
-					break;
-				}
-			}
-		}
-		if (clip != 0 && clip->getBuyCost() > 0 && !isExcluded(clip->getType()))
-		{
-			_items.push_back(clip->getType());
-			_qtys.push_back(0);
-			std::wstringstream ss5;
-			ss5 << _base->getItems()->getItem(clip->getType());
-			std::wstring item = tr(clip->getType());
-			item.insert(0, L"  ");
-			_lstItems->addRow(4, item.c_str(), Text::formatFunding(clip->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
-			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
-			{
-				if (*j == clip->getType())
-				{
-					items.erase(j);
-					break;
-				}
-			}
-		}
-	}
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
@@ -222,11 +181,16 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			std::wstringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);
 			std::wstring item = tr(*i);
-			if (rule->getBattleType() == BT_AMMO)
+			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
 				item.insert(0, L"  ");
+				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
 			}
-			_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			else
+			{
+				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			}
 		}
 	}
 
@@ -599,6 +563,22 @@ void PurchaseState::updateItemStrings()
 	std::wstringstream ss;
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
+	if (_qtys[_sel] > 0)
+	{
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+	}
+	else
+	{
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+		if (_sel > _itemOffset)
+		{
+			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+			{
+				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+			}
+		}
+	}
 }
 
 }

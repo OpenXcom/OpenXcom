@@ -34,7 +34,7 @@ class Timer;
 class DefeatState : public State
 {
 private:
-	InteractiveSurface *_screen;
+	InteractiveSurface *_window;
 	std::vector<Text*> _txtText;
 	int _screenNumber;
 	Timer *_timer;

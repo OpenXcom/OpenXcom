@@ -23,6 +23,8 @@
 #include "OptionsBaseState.h"
 #include <vector>
 #include <string>
+#include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -31,6 +33,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class ArrowButton;
 
 /**
  * Base class for saved game screens which
@@ -41,13 +44,15 @@ class SavedGameState : public State
 protected:
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete, *_txtDetails;
+	Text *_txtTitle, *_txtName, *_txtDate, *_txtStatus, *_txtDelete, *_txtDetails;
 	TextList *_lstSaves;
+	ArrowButton *_sortName, *_sortDate;
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
-	std::vector<std::string> _saves;
-	std::vector<std::wstring> _details;
+	std::vector<SaveInfo> _saves;
 	int _firstValidRow;
+
+	void updateArrows();
 public:
 	/// Creates the Saved Game state.
 	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow);
@@ -57,6 +62,8 @@ public:
 	virtual ~SavedGameState();
 	/// Updates the palette.
 	void init();
+	/// Sorts the savegame list.
+	void sortList(SaveSort sort);
 	/// Updates the savegame list.
 	virtual void updateList();
 	/// Updates the status message.
@@ -67,6 +74,10 @@ public:
 	void lstSavesMouseOver(Action *action);
 	/// Handler for moving the mouse outside the list borders.
 	void lstSavesMouseOut(Action *action);
+	/// Handler for clicking the Name arrow.
+	void sortNameClick(Action *action);
+	/// Handler for clicking the Date arrow.
+	void sortDateClick(Action *action);
 };
 
 }

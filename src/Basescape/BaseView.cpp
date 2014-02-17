@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
+BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _lang(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
 {
 	for (int x = 0; x < BASE_SIZE; ++x)
 		for (int y = 0; y < BASE_SIZE; ++y)
@@ -295,78 +295,6 @@ void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacil
 	&& neighbor->getBuildTime() > neighbor->getRules()->getBuildTime()
 	&& facility->getBuildTime() + neighbor->getRules()->getBuildTime() < neighbor->getBuildTime())
 		neighbor->setBuildTime(facility->getBuildTime() + neighbor->getRules()->getBuildTime());
-}
-
-/**
- * Counts all the occupied squares connected to a certain position in the
- * grid inclusive, INCLUDING facilities under construction.
- * Mostly used to ensure a base stays connected to the Access Lift.
- * -1 = Unoccupied, 0 = Occupied, 1 = Connected.
- * @param x X position in grid.
- * @param y Y position in grid.
- * @param grid Pointer to connection grid (Null to create one from scratch).
- * @param remove Facility to ignore (in case of facility dismantling).
- * @return Number of squares connected to the starting position.
- */
-int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove) const
-{
-	bool newgrid = (grid == 0);
-
-	// Create connection grid
-	if (newgrid)
-	{
-		grid = new int*[BASE_SIZE];
-
-		for (int xx = 0; xx < BASE_SIZE; ++xx)
-		{
-			grid[xx] = new int[BASE_SIZE];
-			for (int yy = 0; yy < BASE_SIZE; ++yy)
-			{
-				if (_facilities[xx][yy] == 0 || _facilities[xx][yy] == remove)
-				{
-					grid[xx][yy] = -1;
-				}
-				else
-				{
-					grid[xx][yy] = 0;
-				}
-			}
-		}
-	}
-
-	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE || grid[x][y] != 0)
-	{
-		return 0;
-	}
-
-	// Add connected (neighbor) facilities to grid
-	int total = 1;
-	grid[x][y]++;
-
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (x-1>=0 && 0!=_facilities[x-1][y] && (_facilities[x-1][y] == _facilities[x][y] || _facilities[x-1][y]->getBuildTime() > _facilities[x-1][y]->getRules()->getBuildTime())))
-		total += countConnected(x - 1, y, grid, remove);
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (y-1>=0 && 0!=_facilities[x][y-1] && (_facilities[x][y-1] == _facilities[x][y] || _facilities[x][y-1]->getBuildTime() > _facilities[x][y-1]->getRules()->getBuildTime())))
-		total += countConnected(x, y - 1, grid, remove);
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (x+1<BASE_SIZE && 0!=_facilities[x+1][y] && (_facilities[x+1][y] == _facilities[x][y] || _facilities[x+1][y]->getBuildTime() > _facilities[x+1][y]->getRules()->getBuildTime())))
-		total += countConnected(x + 1, y, grid, remove);
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (y+1<BASE_SIZE && 0!=_facilities[x][y+1] && (_facilities[x][y+1] == _facilities[x][y] || _facilities[x][y+1]->getBuildTime() > _facilities[x][y+1]->getRules()->getBuildTime())))
-		total += countConnected(x, y + 1, grid, remove);
-
-	// Delete connection grid
-	if (newgrid)
-	{
-		for (int xx = 0; xx < BASE_SIZE; ++xx)
-		{
-			delete[] grid[xx];
-		}
-		delete[] grid;
-	}
-
-	return total;
 }
 
 /**

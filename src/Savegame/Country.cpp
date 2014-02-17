@@ -168,7 +168,8 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	int funding = getFunding().back();
 	int good = (xcomTotal / 10) + _activityXcom.back();
 	int bad = (alienTotal / 20) + _activityAlien.back();
-	int newFunding = (_funding.back()/100) * RNG::generate(5, 20);
+	int oldFunding = _funding.back() / 1000;
+	int newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
 
 	if (bad <= good + 30)
 	{

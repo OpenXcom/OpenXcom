@@ -300,7 +300,7 @@ void CivilianBAIState::setupEscape()
 
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
-	std::random_shuffle(randomTileSearch.begin(), randomTileSearch.end());
+	RNG::shuffle(randomTileSearch);
 	
 	while (tries < 150 && !coverFound)
 	{

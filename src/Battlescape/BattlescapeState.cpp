@@ -91,8 +91,9 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
+BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
 {
+	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 	//game->getScreen()->setScale(1.0);
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -491,9 +492,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_battleGame = new BattlescapeGame(_save, this);
 
-	firstInit = true;
-	isMouseScrolling = false;
-	isMouseScrolled = false;
+	_firstInit = true;
+	_isMouseScrolling = false;
+	_isMouseScrolled = false;
 	_currentTooltip = "";
 }
 
@@ -537,11 +538,11 @@ void BattlescapeState::init()
 		_reserve = _btnReserveNone;
 		break;
 	}
-	if (firstInit && playableUnitSelected())
+	if (_firstInit && playableUnitSelected())
 	{
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-		firstInit = false;
+		_firstInit = false;
 		_btnReserveNone->setGroup(&_reserve);
 		_btnReserveSnap->setGroup(&_reserve);
 		_btnReserveAimed->setGroup(&_reserve);
@@ -593,7 +594,7 @@ void BattlescapeState::think()
  */
 void BattlescapeState::mapOver(Action *action)
 {
-	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
+	if (_isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		// The following is the workaround for a rare problem where sometimes
 		// the mouse-release event is missed for any reason.
@@ -601,26 +602,26 @@ void BattlescapeState::mapOver(Action *action)
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) { // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
-				_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
-			isMouseScrolled = isMouseScrolling = false;
+			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
+				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			_isMouseScrolled = _isMouseScrolling = false;
 			return;
 		}
 
-		isMouseScrolled = true;
+		_isMouseScrolled = true;
 
 		if (_save->isDragInverted())
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+			SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
 		// Check the threshold
-		totalMouseMoveX += action->getDetails()->motion.xrel;
-		totalMouseMoveY += action->getDetails()->motion.yrel;
-		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _save->getDragPixelTolerance()) || (std::abs(totalMouseMoveY) > _save->getDragPixelTolerance()));
+		_totalMouseMoveX += action->getDetails()->motion.xrel;
+		_totalMouseMoveY += action->getDetails()->motion.yrel;
+		if (!_mouseMovedOverThreshold)
+			_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > _save->getDragPixelTolerance()) || (std::abs(_totalMouseMoveY) > _save->getDragPixelTolerance()));
 
 		// Scrolling
 		if (_save->isDragInverted())
@@ -630,15 +631,15 @@ void BattlescapeState::mapOver(Action *action)
 				-action->getDetails()->motion.yrel, false);
 
 			// We don't want to look the mouse-cursor jumping :)
-			action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+			action->getDetails()->motion.x=_xBeforeMouseScrolling; action->getDetails()->motion.y=_yBeforeMouseScrolling;
 			_game->getCursor()->handle(action);
 		}
 		else
 		{
-			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_map->getCamera()->scrollXY(
-				(int)((double)totalMouseMoveX / action->getXScale()),
-				(int)((double)totalMouseMoveY / action->getYScale()), false);
+				(int)((double)_totalMouseMoveX / action->getXScale()),
+				(int)((double)_totalMouseMoveY / action->getYScale()), false);
 		}
 	}
 }
@@ -658,13 +659,13 @@ void BattlescapeState::mapPress(Action *action)
 	{
 		if (action->getDetails()->button.button == _save->getDragButton())
 		{
-			isMouseScrolling = true;
-			isMouseScrolled = false;
-			SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
-			mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
-			totalMouseMoveX = 0; totalMouseMoveY = 0;
-			mouseMovedOverThreshold = false;
-			mouseScrollingStartTime = SDL_GetTicks();
+			_isMouseScrolling = true;
+			_isMouseScrolled = false;
+			SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
+			_mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
+			_totalMouseMoveX = 0; _totalMouseMoveY = 0;
+			_mouseMovedOverThreshold = false;
+			_mouseScrollingStartTime = SDL_GetTicks();
 		}
 	}
 }
@@ -680,28 +681,28 @@ void BattlescapeState::mapClick(Action *action)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now an other button is used)
-	if (isMouseScrolling) {
+	if (_isMouseScrolling) {
 		if (action->getDetails()->button.button != _save->getDragButton()
 		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) { // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
-				_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
-			isMouseScrolled = isMouseScrolling = false;
+			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
+				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			_isMouseScrolled = _isMouseScrolling = false;
 		}
 	}
 
 	// DragScroll-Button release: release mouse-scroll-mode
-	if (isMouseScrolling)
+	if (_isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _save->getDragButton()) isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == _save->getDragButton()) _isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
+		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
 		{
-			isMouseScrolled = false;
-			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+			_isMouseScrolled = false;
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 		}
-		if (isMouseScrolled) return;
+		if (_isMouseScrolled) return;
 	}
 
 	// right-click aborts walking state
@@ -751,7 +752,7 @@ void BattlescapeState::mapClick(Action *action)
  */
 void BattlescapeState::mapIn(Action *)
 {
-	isMouseScrolling = false;
+	_isMouseScrolling = false;
 	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
 }
 
@@ -838,10 +839,18 @@ void BattlescapeState::btnKneelClick(Action *)
 
 /**
  * Goes to the soldier info screen.
+ * Additionally resets TUs for current side in debug mode.
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnInventoryClick(Action *)
 {
+	if (_save->getDebugMode())
+	{
+		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			if ((*i)->getFaction() == _save->getSide())
+				(*i)->prepareNewTurn();
+		updateSoldierInfo();
+	}
 	if (playableUnitSelected()
 		&& (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode())
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
@@ -855,6 +864,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 			showLaunchButton(false);
 		}
 
+		_battleGame->getPathfinding()->removePreview();
 		_battleGame->cancelCurrentAction(true);
 
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
@@ -1016,7 +1026,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 
 		_battleGame->cancelCurrentAction(true);
 
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
+		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this, false, false));
 	}
 }
 
@@ -1028,6 +1038,15 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
 {
 	if (playableUnitSelected())
 	{
+		// concession for touch devices: 
+		// click on the item to cancel action, and don't pop up a menu to select a new one
+		// TODO: wrap this in an IFDEF ?
+		if (_battleGame->getCurrentAction()->targeting)
+		{
+			_battleGame->cancelCurrentAction();
+			return;
+		}
+
 		_battleGame->cancelCurrentAction();
 
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
@@ -1046,6 +1065,15 @@ void BattlescapeState::btnRightHandItemClick(Action *)
 {
 	if (playableUnitSelected())
 	{
+		// concession for touch devices: 
+		// click on the item to cancel action, and don't pop up a menu to select a new one
+		// TODO: wrap this in an IFDEF ?
+		if (_battleGame->getCurrentAction()->targeting)
+		{
+			_battleGame->cancelCurrentAction();
+			return;
+		}
+
 		_battleGame->cancelCurrentAction();
 
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
@@ -1898,7 +1926,7 @@ void BattlescapeState::showPsiButton(bool show)
  */
 void BattlescapeState::clearMouseScrollingState()
 {
-	isMouseScrolling = false;
+	_isMouseScrolling = false;
 }
 
 /**
@@ -1945,7 +1973,7 @@ bool BattlescapeState::getMouseOverIcons() const
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
 	return ((allowSaving || _save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		&& (_battleGame->getPanicHandled() || firstInit )
+		&& (_battleGame->getPanicHandled() || _firstInit )
 		&& (_map->getProjectile() == 0));
 }
 
