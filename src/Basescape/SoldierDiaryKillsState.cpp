@@ -408,19 +408,19 @@ void SoldierDiaryKillsState::init()
 
 		// Handle commendation sprites
 		add(_image);
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
-		texture->getFrame(_sprite)->setX(0);
-		texture->getFrame(_sprite)->setY(0);
-		texture->getFrame(_sprite)->blit(_image);
+		SurfaceSet *commendationSprite = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		commendationSprite->getFrame(_sprite)->setX(0);
+		commendationSprite->getFrame(_sprite)->setY(0);
+		commendationSprite->getFrame(_sprite)->blit(_image);
 
 		// Handle commendation decoration sprites
 		if (_decorationSprite != 200)
 		{
 			add(_image2);
-			SurfaceSet *texture2 = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
-			texture2->getFrame(_decorationSprite)->setX(0);
-			texture2->getFrame(_decorationSprite)->setY(0);
-			texture2->getFrame(_decorationSprite)->blit(_image2);
+			SurfaceSet *commendationDecoration = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+			commendationDecoration->getFrame(_decorationSprite)->setX(0);
+			commendationDecoration->getFrame(_decorationSprite)->setY(0);
+			commendationDecoration->getFrame(_decorationSprite)->blit(_image2);
 		}
 		row++;
 	}
