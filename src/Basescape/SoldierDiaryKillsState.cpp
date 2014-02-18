@@ -390,6 +390,7 @@ void SoldierDiaryKillsState::init()
 		int _decorationSprite = (*i)->getDecorationSprite();
 		Surface *_image = new Surface(31, 8, 16, 52 + 8*row);
 		Surface *_image2 = new Surface(31, 8, 16, 52 + 8*row);
+		
 
 		if ((*i)->getNoun() != "")
 		{
