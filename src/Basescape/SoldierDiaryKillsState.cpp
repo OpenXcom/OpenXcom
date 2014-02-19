@@ -388,8 +388,8 @@ void SoldierDiaryKillsState::init()
 		std::wstringstream ss1, ss2, ss3;
 		int _sprite = (*i)->getSprite();
 		int _decorationSprite = (*i)->getDecorationSprite();
-		Surface *_image = new Surface(31, 8, 16, 52 + 8*row);
-		Surface *_image2 = new Surface(31, 8, 16, 52 + 8*row);
+		Surface *_commendation = new Surface(31, 8, 16, 52 + 8*row);
+		Surface *_commendationDecoration = new Surface(31, 8, 16, 52 + 8*row);
 		
 
 		if ((*i)->getNoun() != "")
@@ -408,20 +408,20 @@ void SoldierDiaryKillsState::init()
 		_commendationsListEntry.push_back(ss3.str().c_str());
 
 		// Handle commendation sprites
-		add(_image);
-		SurfaceSet *commendationSprite = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		add(_commendation);
+		SurfaceSet *commendationSprite = _game->getResourcePack()->getSurfaceSet("Commendations");
 		commendationSprite->getFrame(_sprite)->setX(0);
 		commendationSprite->getFrame(_sprite)->setY(0);
-		commendationSprite->getFrame(_sprite)->blit(_image);
+		commendationSprite->getFrame(_sprite)->blit(_commendation);
 
 		// Handle commendation decoration sprites
-		if (_decorationSprite != 200)
+		if (_decorationSprite != 0)
 		{
-			add(_image2);
-			SurfaceSet *commendationDecoration = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+			add(_commendationDecoration);
+			SurfaceSet *commendationDecoration = _game->getResourcePack()->getSurfaceSet("CommendationDecorations");
 			commendationDecoration->getFrame(_decorationSprite)->setX(0);
 			commendationDecoration->getFrame(_decorationSprite)->setY(0);
-			commendationDecoration->getFrame(_decorationSprite)->blit(_image2);
+			commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecoration);
 		}
 		row++;
 	}
@@ -481,6 +481,7 @@ void SoldierDiaryKillsState::btnMissionsToggle(Action *)
 	_displayKills = false;
 	_displayMissions = true;
     _displayCommendations = false;
+	
 	init();
 }
 

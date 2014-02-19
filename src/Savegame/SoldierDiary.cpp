@@ -915,7 +915,7 @@ std::string SoldierCommendations::getDecorationDescription()
 int SoldierCommendations::getDecorationSprite() const
 {
 	// Assuming the ruleset still lists the sprites starting at 200
-	return 200 + _decorationLevel;
+	return _decorationLevel;
 }
 
 /**
