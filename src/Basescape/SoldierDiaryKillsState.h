@@ -66,6 +66,8 @@ public:
 	~SoldierDiaryKillsState();
 	/// Updates the soldier info.
 	void init();
+	/// Draw sprites.
+	void drawSprites();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Previous button.

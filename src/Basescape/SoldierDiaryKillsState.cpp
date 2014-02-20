@@ -354,7 +354,6 @@ void SoldierDiaryKillsState::init()
 	std::map<std::string, int> _typeTotals = s->getDiary()->getTypeTotal();
 	std::map<std::string, int> _UFOTotals = s->getDiary()->getUFOTotal();
     _lstCommendations->clearList();
-	int row;
 
 	for (std::map<std::string, int>::const_iterator i = _raceTotals.begin() ; i != _raceTotals.end() ; ++i)
 	{
@@ -411,13 +410,9 @@ void SoldierDiaryKillsState::init()
 		_lstUFO->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
     
-	int adjustForScroll = _lstCommendations->getScroll();
-	row = adjustForScroll || 0;
     for (std::vector<SoldierCommendations*>::const_iterator i = s->getDiary()->getSoldierCommendations()->begin() ; i != s->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
 		std::wstringstream ss1, ss2, ss3;
-		int _sprite = (*i)->getSprite();
-		int _decorationSprite = (*i)->getDecorationSprite();
 
 		if ((*i)->getNoun() != "")
 		{
@@ -431,25 +426,44 @@ void SoldierDiaryKillsState::init()
 		}
 		ss2 << tr((*i)->getDecorationDescription().c_str());
 		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
+		
 
 		_commendationsListEntry.push_back(ss3.str().c_str());
 
-		if (row - adjustForScroll >= 0 && row < _commendations.size() + adjustForScroll && _displayCommendations == true)
+		drawSprites();
+	}
+}
+
+/**
+ * Draws sprites
+ * 
+ */
+void SoldierDiaryKillsState::drawSprites()
+{
+	int offset = 0;
+	for (std::vector<SoldierCommendations*>::const_iterator i = _base->getSoldiers()->at(_soldier)->getDiary()->getSoldierCommendations()->begin() ; i != _base->getSoldiers()->at(_soldier)->getDiary()->getSoldierCommendations()->end() ; ++i)
+	{
+		int _sprite = (*i)->getSprite();
+		int _decorationSprite = (*i)->getDecorationSprite();
+		int scrollDepth = _lstCommendations->getScroll();
+
+		if (offset < _commendations.size() && _displayCommendations == true)
 		{
 			// Handle commendation sprites
 			_commendationSprite->getFrame(_sprite)->setX(0);
 			_commendationSprite->getFrame(_sprite)->setY(0);
-			_commendationSprite->getFrame(_sprite)->blit(_commendations[row - adjustForScroll]);
+			_commendationSprite->getFrame(_sprite)->blit(_commendations[offset - scrollDepth]);
 
 			// Handle commendation decoration sprites
 			if (_decorationSprite != 0)
 			{
 				_commendationDecoration->getFrame(_decorationSprite)->setX(0);
 				_commendationDecoration->getFrame(_decorationSprite)->setY(0);
-				_commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecorations[row - adjustForScroll]);
+				_commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecorations[offset - scrollDepth]);
 			}
 		}
-		row++;
+
+		offset++;
 	}
 }
 
