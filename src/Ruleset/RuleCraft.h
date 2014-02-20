@@ -47,6 +47,7 @@ private:
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
 	int _listOrder;
+	std::vector<std::vector <int> > _deployment;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(const std::string &type);
@@ -98,6 +99,8 @@ public:
 	bool getSpacecraft() const;
 	/// Gets the list weight for this craft.
 	int getListOrder() const;
+	/// Gets the deployment priority for the craft.
+	std::vector<std::vector<int> > &getDeployment();
 };
 
 }

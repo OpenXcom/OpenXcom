@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0)
+														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _craftX(0), _craftY(0)
 {
 	_allowAutoLoadout = !Options::getBool("disableAutoEquip");
 }
@@ -601,39 +601,64 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			}
 		}
 	}
+	else if (_craft && !_craft->getRules()->getDeployment().empty())
+	{
+		for (std::vector<std::vector<int> >::const_iterator i = _craft->getRules()->getDeployment().begin(); i != _craft->getRules()->getDeployment().end(); ++i)
+		{
+			Position pos = Position((*i)[0] + (_craftX * 10), (*i)[1] + (_craftY * 10), (*i)[2]);
+			int dir = (*i)[3];
+
+			if (canPlaceXCOMUnit(_save->getTile(pos)))
+			{
+				if (_save->setUnitPosition(unit, pos))
+				{
+					_save->getUnits()->push_back(unit);
+					unit->setDirection(dir);
+					unit->deriveRank();
+					return unit;
+				}
+			}
+		}
+	}
 	else
 	{
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
 		{
-			// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-			if (_save->getTiles()[i] && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && 
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
-				!_save->getTiles()[i]->getMapData(MapData::O_OBJECT) &&
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
+			if (canPlaceXCOMUnit(_save->getTiles()[i]))
 			{
-				if (_craftInventoryTile == 0)
-					_craftInventoryTile = _save->getTiles()[i];
-
-				// for bigger units, line them up with the first tile of the craft
-				if (unit->getArmor()->getSize() == 1 || _craftInventoryTile == 0 || _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
+				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 				{
-					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
-					{
-						_save->getUnits()->push_back(unit);
-						if (_save->getTileEngine())
-						{
-							_save->getTileEngine()->calculateFOV(unit);
-						}
-						unit->deriveRank();
-						return unit;
-					}
+					_save->getUnits()->push_back(unit);
+					unit->deriveRank();
+					return unit;
 				}
 			}
 		}
 	}
 	delete unit;
 	return 0;
+}
+
+/**
+ * Checks if a soldier/tank can be placed on a given tile.
+ * @param tile the given tile.
+ * @return whether the unit can be placed here.
+ */
+bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
+{
+	// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
+	if (tile && 
+		tile->getMapData(MapData::O_FLOOR) && 
+		tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
+		!tile->getMapData(MapData::O_OBJECT) &&
+		tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
+	{
+		if (_craftInventoryTile == 0)
+			_craftInventoryTile = tile;
+
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -1023,7 +1048,6 @@ void BattlescapeGenerator::generateMap()
 	std::vector< std::vector<bool> > storageBlocks;
 	std::vector< std::vector<bool> > landingzone;
 	std::vector< std::vector<int> > segments;
-	int craftX = 0, craftY = 0;
 	int ufoX = 0, ufoY = 0;
 	bool placed = false;
 
@@ -1069,15 +1093,15 @@ void BattlescapeGenerator::generateMap()
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 		while (!placed)
 		{
-			craftX = RNG::generate(0, (_mapsize_x/10)- craftMap->getSizeX() / 10);
-			craftY = RNG::generate(0, (_mapsize_y/10)- craftMap->getSizeY() / 10);
+			_craftX = RNG::generate(0, (_mapsize_x/10)- craftMap->getSizeX() / 10);
+			_craftY = RNG::generate(0, (_mapsize_y/10)- craftMap->getSizeY() / 10);
 			placed = true;
 			// check if this place is ok
 			for (int i = 0; i < craftMap->getSizeX() / 10; ++i)
 			{
 				for (int j = 0; j < craftMap->getSizeY() / 10; ++j)
 				{
-					if (landingzone[craftX + i][craftY + j])
+					if (landingzone[_craftX + i][_craftY + j])
 					{
 						placed = false; // whoops the ufo is already here, try again
 					}
@@ -1090,8 +1114,8 @@ void BattlescapeGenerator::generateMap()
 				{
 					for (int j = 0; j < craftMap->getSizeY() / 10; ++j)
 					{
-						landingzone[craftX + i][craftY + j] = true;
-						blocks[craftX + i][craftY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
+						landingzone[_craftX + i][_craftY + j] = true;
+						blocks[_craftX + i][_craftY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
 						blocksToDo--;
 					}
 				}
@@ -1107,10 +1131,10 @@ void BattlescapeGenerator::generateMap()
 		bool EWRoad = roadStyle < roadChances.at(0);
 		bool NSRoad = !EWRoad && roadStyle < roadChances.at(0) + roadChances.at(1);
 		bool TwoRoads = !EWRoad && !NSRoad;
-		int roadX = craftX;
-		int roadY = craftY;
+		int roadX = _craftX;
+		int roadY = _craftY;
 		// make sure the road(s) are not crossing the craft landing site
-		while ((roadX >= craftX && roadX < craftX + (craftMap->getSizeX() / 10)) || (roadY >= craftY && roadY < craftY + (craftMap->getSizeY() / 10)))
+		while ((roadX >= _craftX && roadX < _craftX + (craftMap->getSizeX() / 10)) || (roadY >= _craftY && roadY < _craftY + (craftMap->getSizeY() / 10)))
 		{
 			roadX = RNG::generate(0, (_mapsize_x/10)- 1);
 			roadY = RNG::generate(0, (_mapsize_y/10)- 1);
@@ -1483,13 +1507,13 @@ void BattlescapeGenerator::generateMap()
 			}
 			_save->getMapDataSets()->push_back(*i);
 		}
-		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);
-		loadRMP(craftMap, craftX * 10, craftY * 10, Node::CRAFTSEGMENT);
+		loadMAP(craftMap, _craftX * 10, _craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);
+		loadRMP(craftMap, _craftX * 10, _craftY * 10, Node::CRAFTSEGMENT);
 		for (int i = 0; i < craftMap->getSizeX() / 10; ++i)
 		{
 			for (int j = 0; j < craftMap->getSizeY() / 10; j++)
 			{
-				segments[craftX + i][craftY + j] = Node::CRAFTSEGMENT;
+				segments[_craftX + i][_craftY + j] = Node::CRAFTSEGMENT;
 			}
 		}
 	}

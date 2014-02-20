@@ -63,6 +63,7 @@ private:
 	std::string _alienRace;
 	int _alienItemLevel;
 	bool _allowAutoLoadout;
+	int _craftX, _craftY;
 
 	/// Generates a new battlescape map.
 	void generateMap();
@@ -88,6 +89,8 @@ private:
 	void explodePowerSources();
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
+	/// Runs necessary checks before physically setting the position.
+	bool canPlaceXCOMUnit(Tile *tile);
 	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
