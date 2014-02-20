@@ -151,6 +151,7 @@ void SoldierDiaryState::init()
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_txtTitle->setText(s->getName());
 	_lstDiary->clearList();
+	_lstDiary->setScroll(0);
 	std::vector<SoldierDiaryEntries*> _diaryEntries = s->getDiary()->getSoldierDiaryEntries();
 
 	for (std::vector<SoldierDiaryEntries*>::iterator j = _diaryEntries.begin() ; j != _diaryEntries.end() ; ++j)

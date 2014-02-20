@@ -30,6 +30,9 @@ class Text;
 class TextList;
 class Base;
 class SoldierDiaryState;
+class Surface;
+class SurfaceSet;
+
 
 /**
  * Diary screen that lists totals.
@@ -50,6 +53,8 @@ private:
 	TextList *_lstLocation, *_lstType, *_lstUFO, *_lstMissionTotals;
 	TextList *_lstCommendations;
 	std::vector<std::wstring> _commendationsListEntry;
+	std::vector<Surface*> _commendations, _commendationDecorations;
+	SurfaceSet *_commendationSprite, *_commendationDecoration;
 
 	int _display; // 0 displays kills, 1 displays missions, 2 displays commendations
 	bool _displayKills, _displayMissions, _displayCommendations;

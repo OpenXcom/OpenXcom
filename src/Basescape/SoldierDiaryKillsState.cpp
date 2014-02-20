@@ -96,7 +96,15 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
     _txtMedalName = new Text(90, 18, 16, 36);
     _txtMedalLevel = new Text(90, 18, 206, 36);
 	_txtMedalInfo = new Text(280, 32, 20, 150);
-    _lstCommendations = new TextList(240, 100, 48, 52);
+    _lstCommendations = new TextList(240, 80, 48, 52);
+	// Commendation sprites
+	_commendationSprite = _game->getResourcePack()->getSurfaceSet("Commendations");
+	_commendationDecoration = _game->getResourcePack()->getSurfaceSet("CommendationDecorations");
+	for (int i = 0; i != 10; ++i)
+	{
+		_commendations.push_back(new Surface(31, 8, 16, 52 + 8*i));
+		_commendationDecorations.push_back(new Surface(31, 8, 16, 52 + 8*i));
+	}
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -127,6 +135,11 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
     add(_txtMedalLevel);
 	add(_txtMedalInfo);
     add(_lstCommendations);
+	for (int i = 0; i != 10; ++i)
+	{
+		add(_commendations[i]);
+		add(_commendationDecorations[i]);
+	}
 
 	centerAllSurfaces();
 
@@ -272,6 +285,22 @@ SoldierDiaryKillsState::~SoldierDiaryKillsState()
  */
 void SoldierDiaryKillsState::init()
 {
+	// Clear sprites
+	for (int i = 0; i != 10; ++i)
+	{
+		_commendations[i]->clear();
+		_commendationDecorations[i]->clear();
+	}
+	// Reset scroll depth for lists
+	_lstRank->setScroll(0);
+	_lstRace->setScroll(0);
+	_lstWeapon->setScroll(0);
+	_lstKillTotals->setScroll(0);
+	_lstLocation->setScroll(0);
+	_lstType->setScroll(0);
+	_lstUFO->setScroll(0);
+	_lstMissionTotals->setScroll(0);
+	_lstCommendations->setScroll(0);
 	// Set visibility for kills
 	_txtRace->setVisible(_displayKills);
 	_txtRank->setVisible(_displayKills);
@@ -382,15 +411,13 @@ void SoldierDiaryKillsState::init()
 		_lstUFO->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
     
-	row = 0;
+	int adjustForScroll = _lstCommendations->getScroll();
+	row = adjustForScroll || 0;
     for (std::vector<SoldierCommendations*>::const_iterator i = s->getDiary()->getSoldierCommendations()->begin() ; i != s->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
 		std::wstringstream ss1, ss2, ss3;
 		int _sprite = (*i)->getSprite();
 		int _decorationSprite = (*i)->getDecorationSprite();
-		Surface *_commendation = new Surface(31, 8, 16, 52 + 8*row);
-		Surface *_commendationDecoration = new Surface(31, 8, 16, 52 + 8*row);
-		
 
 		if ((*i)->getNoun() != "")
 		{
@@ -407,21 +434,20 @@ void SoldierDiaryKillsState::init()
 
 		_commendationsListEntry.push_back(ss3.str().c_str());
 
-		// Handle commendation sprites
-		add(_commendation);
-		SurfaceSet *commendationSprite = _game->getResourcePack()->getSurfaceSet("Commendations");
-		commendationSprite->getFrame(_sprite)->setX(0);
-		commendationSprite->getFrame(_sprite)->setY(0);
-		commendationSprite->getFrame(_sprite)->blit(_commendation);
-
-		// Handle commendation decoration sprites
-		if (_decorationSprite != 0)
+		if (row - adjustForScroll >= 0 && row < _commendations.size() + adjustForScroll && _displayCommendations == true)
 		{
-			add(_commendationDecoration);
-			SurfaceSet *commendationDecoration = _game->getResourcePack()->getSurfaceSet("CommendationDecorations");
-			commendationDecoration->getFrame(_decorationSprite)->setX(0);
-			commendationDecoration->getFrame(_decorationSprite)->setY(0);
-			commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecoration);
+			// Handle commendation sprites
+			_commendationSprite->getFrame(_sprite)->setX(0);
+			_commendationSprite->getFrame(_sprite)->setY(0);
+			_commendationSprite->getFrame(_sprite)->blit(_commendations[row - adjustForScroll]);
+
+			// Handle commendation decoration sprites
+			if (_decorationSprite != 0)
+			{
+				_commendationDecoration->getFrame(_decorationSprite)->setX(0);
+				_commendationDecoration->getFrame(_decorationSprite)->setY(0);
+				_commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecorations[row - adjustForScroll]);
+			}
 		}
 		row++;
 	}
