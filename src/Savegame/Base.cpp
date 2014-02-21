@@ -550,11 +550,22 @@ int Base::getAvailableQuarters() const
 }
 
 /**
- * Returns the amount of stores used up
- * by equipment in the base.
+ * Returns the amount of stores used up by equipment in the base,
+ * rounded down to the nearest whole number.
  * @return Storage space.
  */
 int Base::getUsedStores() const
+{
+	return (int)floor(getExactUsedStores() + 0.05);
+}
+
+/**
+ * Returns the amount of stores used up
+ * by equipment in the base,
+ * to the nearest tenth of an XCom storage unit.
+ * @return Storage space.
+ */
+double Base::getExactUsedStores() const
 {
 	double total = _items->getTotalSize(_rule);
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
@@ -572,7 +583,23 @@ int Base::getUsedStores() const
 			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
 		}
 	}
-	return (int)floor(total);
+
+	return total;
+}
+
+/**
+ * Checks if the base's stores are overfull.
+ *
+ * Supplying an offset will add/subtract to the used capacity before performing the check.
+ * A positive offset simulates adding items to the stores, whereas a negative offset
+ * can be used to check whether sufficient items have been removed to stop the stores overflowing.
+ * @param offset Adjusts the used capacity, expressed in tenths of an XCom storage unit.
+ */
+bool Base::storesOverfull(int offset) const
+{
+	int capacity = getAvailableStores() * 10;
+	int used = (int)(getExactUsedStores() * 10 + 0.5);
+	return used + offset > capacity;
 }
 
 /**

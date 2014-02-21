@@ -117,6 +117,10 @@ public:
 	int getAvailableQuarters() const;
 	/// Gets the base's used storage space.
 	int getUsedStores() const;
+	/// Gets the base's used storage to the nearest tenth of an XCom storage unit.
+	double getExactUsedStores() const;
+	/// Checks if the base's stores are overfull.
+	bool storesOverfull(int offset = 0) const;
 	/// Gets the base's available storage space.
 	int getAvailableStores() const;
 	/// Gets the base's used laboratory space.
