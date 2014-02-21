@@ -54,7 +54,7 @@ private:
 	std::vector<std::string> _items;
 	unsigned int _sel;
 	int _total, _pQty, _cQty, _aQty;
-	float _iQty;
+	int _iQty;
     int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;

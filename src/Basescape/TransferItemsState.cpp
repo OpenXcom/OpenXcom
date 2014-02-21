@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0), _itemOffset(0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0), _hasSci(0), _hasEng(0), _distance(0.0), _itemOffset(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -582,7 +582,7 @@ void TransferItemsState::increaseByValue(int change)
 		}
 	}
 	if (TRANSFER_ITEM == selType && !selItem->getAlien()
-		&& (_iQty + selItem->getSize()) > (_baseTo->getAvailableStores() - _baseTo->getUsedStores()))
+		&& _baseTo->storesOverfull((int)(selItem->getSize() * 10 + 0.5) + _iQty))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -619,10 +619,12 @@ void TransferItemsState::increaseByValue(int change)
 	// Item count
 	else if (TRANSFER_ITEM == selType && !selItem->getAlien() )
 	{
-		float storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
-		float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
+		int storesNeededPerItem = (int)(10 * _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize());
+		int freeStores = 10 * _baseTo->getAvailableStores() - (int)(10 * _baseTo->getExactUsedStores()) - _iQty;
 		int freeStoresForItem;
-		if ( AreSame(storesNeededPerItem, 0.f) ) {
+
+		if (storesNeededPerItem == 0)
+		{
 			freeStoresForItem = INT_MAX;
 		}
 		else
@@ -630,7 +632,7 @@ void TransferItemsState::increaseByValue(int change)
 			freeStoresForItem = floor(freeStores / storesNeededPerItem);
 		}
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
-		_iQty += ((float)(change)) * storesNeededPerItem;
+		_iQty += change * storesNeededPerItem;
 		_baseQty[_sel] -= change;
 		_transferQty[_sel] += change;
 		_total += getCost() * change;
@@ -684,9 +686,9 @@ void TransferItemsState::decreaseByValue(int change)
 	else if (TRANSFER_ITEM == selType)
 	{
 		const RuleItem * selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		if (!selItem->getAlien() )
+		if (!selItem->getAlien())
 		{
-			_iQty -= selItem->getSize() * ((float)(change));
+			_iQty -= (int)(selItem->getSize() * 10) * change;
 		}
 		else
 		{
