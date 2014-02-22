@@ -41,7 +41,7 @@ class Surface;
 class RuleItem
 {
 private:
-	std::string _type, _name; // two types of objects can have the same name
+	std::string _type, _name, _subCategory; // two types of objects can have the same name
 	std::vector<std::string> _requires;
 	float _size;
 	int _costBuy, _costSell, _transferTime, _weight;
@@ -78,6 +78,8 @@ public:
 	std::string getType() const;
 	/// Gets the item's name.
 	std::string getName() const;
+	/// Gets the item's sub-category.
+	std::string getSubCategory() const;
 	/// Gets the item's requirements.
 	const std::vector<std::string> &getRequirements() const;
 	/// Gets the item's size.
