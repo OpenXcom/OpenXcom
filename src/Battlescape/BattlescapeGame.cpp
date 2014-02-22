@@ -565,10 +565,15 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				_alienRace = victim->getUnitRules()->getRace();
 			}
 		}
-		else if (victim->getFaction() == FACTION_PLAYER)
+		else if (victim->getFaction() == FACTION_PLAYER && victim->getGeoscapeSoldier())
 		{
 			_alienRank = victim->getGeoscapeSoldier()->getRankString();
 			_alienRace = "STR_HUMAN";
+		}
+		else if ((victim->getFaction() == FACTION_PLAYER)
+		{
+			_alienRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
+			_alienRace = "STR_TANK";
 		}
 		else
 		{

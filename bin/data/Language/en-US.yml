@@ -636,6 +636,7 @@ en-US:
   STR_CANADA: "CANADA"
   STR_TANK: "Tank"
   STR_CIVILIAN: "Civilian"
+  STR_HEAVY_WEAPONS_PLATFORM_LC: "Heavy Weapons Platform"
   STR_JAN: "Jan"
   STR_FEB: "Feb"
   STR_MAR: "Mar"
