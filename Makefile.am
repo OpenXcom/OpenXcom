@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = docs
@@ -24,6 +25,10 @@ desktopdir = $(datadir)/applications
 desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
+
+weaponsdir = $(pkgdatadir)/data/Resources/Weapons/
+weapons_DATA = \
+	bin/data/Resources/Weapons/Terror.png
 
 pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
 pathfinding_DATA = \
@@ -694,6 +699,7 @@ EXTRA_DIST = \
 	$(pkgdata_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
+	$(weapons_DATA) \
 	$(pathfinding_DATA) \
 	$(bulletsprite_DATA) \
 	$(uisprite_DATA) \
