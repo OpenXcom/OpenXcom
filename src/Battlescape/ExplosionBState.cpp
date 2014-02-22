@@ -129,7 +129,6 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 	}
 }
 
