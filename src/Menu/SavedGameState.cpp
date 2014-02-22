@@ -17,11 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SavedGameState.h"
+#include <utility>
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -30,9 +32,20 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/ArrowButton.h"
 
 namespace OpenXcom
 {
+
+struct compareSaveName : public std::binary_function<SaveInfo&, SaveInfo&, bool>
+{
+	bool operator()(const SaveInfo &a, const SaveInfo &b) const { return CrossPlatform::naturalCompare(a.displayName, b.displayName); }
+};
+
+struct compareSaveTimestamp : public std::binary_function<SaveInfo&, SaveInfo&, bool>
+{
+	bool operator()(const SaveInfo &a, const SaveInfo &b) const { return a.timestamp < b.timestamp; }
+};
 
 /**
  * Initializes all the elements in the Saved Game screen.
@@ -49,11 +62,12 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtDelete = new Text(310, 9, 5, 24);
 	_txtName = new Text(150, 9, 16, 32);
-	_txtTime = new Text(30, 9, 184, 32);
-	_txtDate = new Text(38, 9, 214, 32);
+	_txtDate = new Text(110, 9, 204, 32);
 	_txtStatus = new Text(320, 17, 0, 92);
 	_lstSaves = new TextList(288, 112, 8, 40);
 	_txtDetails = new Text(288, 9, 16, 160);
+	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
+	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
 
 	// Set palette
 	if (_origin != OPT_BATTLESCAPE)
@@ -66,11 +80,12 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	add(_txtTitle);
 	add(_txtDelete);
 	add(_txtName);
-	add(_txtTime);
 	add(_txtDate);
 	add(_lstSaves);
 	add(_txtStatus);
 	add(_txtDetails);
+	add(_sortName);
+	add(_sortDate);
 
 	centerAllSurfaces();
 
@@ -78,11 +93,10 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8) + 5);
-
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler) &SavedGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler) &SavedGameState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&SavedGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -95,19 +109,16 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(tr("STR_NAME"));
 
-	_txtTime->setColor(Palette::blockOffset(15)-1);
-	_txtTime->setText(tr("STR_TIME"));
-
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
-
+	
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
-	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
+	_lstSaves->setColumns(3, 188, 60, 40);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
@@ -117,6 +128,16 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+
+	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);
+	_sortName->setColor(Palette::blockOffset(15)-1);
+	_sortName->onMouseClick((ActionHandler)&SavedGameState::sortNameClick);
+
+	_sortDate->setX(_sortDate->getX() + _txtDate->getTextWidth() + 5);
+	_sortDate->setColor(Palette::blockOffset(15)-1);
+	_sortDate->onMouseClick((ActionHandler)&SavedGameState::sortDateClick);
+
+	updateArrows();
 }
 
 /**
@@ -129,7 +150,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 {
 	if (_showMsg)
 	{
-		_txtStatus = new Text(320, 16, Screen::getDX(), 92 + Screen::getDY());
+		_txtStatus = new Text(320, 16, _game->getScreen()->getDX(), 92 + _game->getScreen()->getDY());
 		add(_txtStatus);
 
 		_txtStatus->setBig();
@@ -176,7 +197,9 @@ void SavedGameState::init()
 
 	try
 	{
-		updateList();
+		_saves = SavedGame::getList(_game->getLanguage());
+		_lstSaves->clearList();
+		sortList((SaveSort)Options::getInt("saveOrder"));
 	}
 	catch (Exception &e)
 	{
@@ -185,13 +208,64 @@ void SavedGameState::init()
 }
 
 /**
- * Updates the save game list with a current list
+ * Updates the sorting arrows based
+ * on the current setting.
+ */
+void SavedGameState::updateArrows()
+{
+	_sortName->setShape(ARROW_NONE);
+	_sortDate->setShape(ARROW_NONE);
+	switch (Options::getInt("saveOrder"))
+	{
+	case SORT_NAME_ASC:
+		_sortName->setShape(ARROW_SMALL_UP);
+		break;
+	case SORT_NAME_DESC:
+		_sortName->setShape(ARROW_SMALL_DOWN);
+		break;
+	case SORT_DATE_ASC:
+		_sortDate->setShape(ARROW_SMALL_UP);
+		break;
+	case SORT_DATE_DESC:
+		_sortDate->setShape(ARROW_SMALL_DOWN);
+		break;
+	}
+}
+
+/**
+ * Updates the save game list with the current list
+ * of available savegames.
+ */
+void SavedGameState::sortList(SaveSort sort)
+{
+	switch (sort)
+	{
+	case SORT_NAME_ASC:
+		std::sort(_saves.begin(), _saves.end(), compareSaveName());
+		break;
+	case SORT_NAME_DESC:
+		std::sort(_saves.rbegin(), _saves.rend(), compareSaveName());
+		break;
+	case SORT_DATE_ASC:
+		std::sort(_saves.begin(), _saves.end(), compareSaveTimestamp());
+		break;
+	case SORT_DATE_DESC:
+		std::sort(_saves.rbegin(), _saves.rend(), compareSaveTimestamp());
+		break;
+	}
+	updateList();
+}
+
+/**
+ * Updates the save game list with the current list
  * of available savegames.
  */
 void SavedGameState::updateList()
 {
-	_lstSaves->clearList();
-	_saves = SavedGame::getList(_lstSaves, _game->getLanguage(), &_details);
+	for (std::vector<SaveInfo>::const_iterator i = _saves.begin(); i != _saves.end(); ++i)
+	{
+		_lstSaves->addRow(3, i->displayName.c_str(), i->isoDate.c_str(), i->isoTime.c_str());
+	}
 }
 
 /**
@@ -214,20 +288,66 @@ void SavedGameState::btnCancelClick(Action *)
 	_game->popState();
 }
 
+/**
+ * Shows the details of the currently hovered save.
+ * @param action Pointer to an action.
+ */
 void SavedGameState::lstSavesMouseOver(Action *)
 {
 	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 	std::wstring wstr;
 	if (sel >= 0 && sel < (int)_saves.size())
 	{
-		wstr = _details[sel];
+		wstr = _saves[sel].details;
 	}
 	_txtDetails->setText(tr("STR_DETAILS").arg(wstr));
 }
 
+/**
+ * Clears the details.
+ * @param action Pointer to an action.
+ */
 void SavedGameState::lstSavesMouseOut(Action *)
 {
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+}
+
+/**
+ * Sorts the saves by name.
+ * @param action Pointer to an action.
+ */
+void SavedGameState::sortNameClick(Action *)
+{
+	if (Options::getInt("saveOrder") == SORT_NAME_ASC)
+	{
+		Options::setInt("saveOrder", SORT_NAME_DESC);
+	}
+	else
+	{
+		Options::setInt("saveOrder", SORT_NAME_ASC);
+	}
+	updateArrows();
+	_lstSaves->clearList();
+	sortList((SaveSort)Options::getInt("saveOrder"));
+}
+
+/**
+ * Sorts the saves by date.
+ * @param action Pointer to an action.
+ */
+void SavedGameState::sortDateClick(Action *)
+{
+	if (Options::getInt("saveOrder") == SORT_DATE_ASC)
+	{
+		Options::setInt("saveOrder", SORT_DATE_DESC);
+	}
+	else
+	{
+		Options::setInt("saveOrder", SORT_DATE_ASC);
+	}
+	updateArrows();
+	_lstSaves->clearList();
+	sortList((SaveSort)Options::getInt("saveOrder"));
 }
 
 }

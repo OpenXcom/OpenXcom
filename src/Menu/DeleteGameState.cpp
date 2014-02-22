@@ -38,15 +38,10 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param save Name of the save file to delete.
- * @param parent Pointer to SavedGameState.
  */
-DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent) : State(game), _parent(parent), _origin(origin)
+DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save) : State(game), _origin(origin)
 {
-#ifdef _WIN32
-	std::string file = Language::wstrToCp(save);
-#else
-	std::string file = Language::wstrToUtf8(save);
-#endif
+	std::string file = Language::wstrToFs(save);
 	_filename = Options::getUserFolder() + file + ".sav";
 	_screen = false;
 
@@ -119,7 +114,6 @@ void DeleteGameState::btnYesClick(Action *)
 		else
 			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
-	_parent->updateList();
 }
 
 }

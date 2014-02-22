@@ -350,7 +350,7 @@ static struct AudioSequence
 	Sound *s;
 	int trackPosition;
 
-	AudioSequence(ResourcePack *resources) : rp(resources), trackPosition(0)
+	AudioSequence(ResourcePack *resources) : rp(resources), m(0), s(0), trackPosition(0)
 	{
 	}
 

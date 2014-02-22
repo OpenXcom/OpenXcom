@@ -101,7 +101,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 		// initially add the GRAPH_MAX_BUTTONS having the first regions information
 		if(offset < GRAPH_MAX_BUTTONS)
 		{
-			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11, true));
+			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 			_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
 			_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType()));
@@ -119,9 +119,9 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	}
 
 	if(_regionToggles.size() < GRAPH_MAX_BUTTONS)
-		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size()*11, true);
+		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size()*11);
 	else
-		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11, true);
+		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
 	_regionToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), 22));
 	_btnRegionTotal->onMousePress((ActionHandler)&GraphsState::btnRegionListClick);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
@@ -141,7 +141,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 		// initially add the GRAPH_MAX_BUTTONS having the first countries information
 		if(offset < GRAPH_MAX_BUTTONS)
 		{
-			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11, true));
+			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnCountries.at(offset)->setInvertColor(-42 + (4*offset));
 			_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
@@ -161,9 +161,9 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	}
 	
 	if(_countryToggles.size() < GRAPH_MAX_BUTTONS)
-		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size()*11, true);
+		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size()*11);
 	else
-		_btnCountryTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11, true);
+		_btnCountryTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
 	_countryToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), 22));
 	_btnCountryTotal->onMousePress((ActionHandler)&GraphsState::btnCountryListClick);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
@@ -467,7 +467,7 @@ void GraphsState::btnFinanceClick(Action *)
  */
 void GraphsState::btnRegionListClick(Action * action)
 {
-	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
+	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	ToggleTextButton *button = 0;
 
 	if ((_regionToggles.size() <= GRAPH_MAX_BUTTONS + 1 && number == _regionToggles.size()-1)||(_regionToggles.size() > GRAPH_MAX_BUTTONS + 1 && number == GRAPH_MAX_BUTTONS))
@@ -489,7 +489,7 @@ void GraphsState::btnRegionListClick(Action * action)
  */
 void GraphsState::btnCountryListClick(Action * action)
 {
-	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
+	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	ToggleTextButton *button = 0;
 
 	if ((_countryToggles.size() <= GRAPH_MAX_BUTTONS + 1 && number == _countryToggles.size()-1)||(_countryToggles.size() > GRAPH_MAX_BUTTONS + 1 && number == GRAPH_MAX_BUTTONS))
@@ -511,7 +511,7 @@ void GraphsState::btnCountryListClick(Action * action)
  */
 void GraphsState::btnFinanceListClick(Action *action)
 {
-	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
+	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	ToggleTextButton *button = _btnFinances.at(number);
 	
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));
@@ -679,7 +679,7 @@ void GraphsState::drawCountryLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			upperLimit -= check;
+			// upperLimit -= check;
 		}
 	}
 
@@ -849,7 +849,7 @@ void GraphsState::drawRegionLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			upperLimit -= check;
+			// upperLimit -= check;
 		}
 	}
 	range = upperLimit - lowerLimit;
@@ -1031,7 +1031,7 @@ void GraphsState::drawFinanceLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			upperLimit -= check;
+			// upperLimit -= check;
 		}
 	}
 	//toggle screens

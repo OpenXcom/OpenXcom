@@ -132,8 +132,8 @@ void init(unsigned int seed)
 
 /**
  * Generates a random integer number within a certain range.
- * @param min Minimum number.
- * @param max Maximum number.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
  * @return Generated number.
  */
 int generate(int min, int max)
@@ -198,6 +198,17 @@ double boxMuller(double m, double s)
 bool percent(int value)
 {
 	return (generate(0, 99) < value);
+}
+
+/**
+ * Generates a random positive integer up to a number.
+ * @param max Maximum number, exclusive.
+ * @return Generated number.
+ */
+int generateEx(int max)
+{
+	unsigned int num = random();
+	return (int)(num % max);
 }
 
 }

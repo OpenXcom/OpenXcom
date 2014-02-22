@@ -108,7 +108,8 @@ protected:
 	/// Loads all ruleset files from a directory.
 	void loadFiles(const std::string &dirname);
 	/// Loads a ruleset element.
-	template <typename T> T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
+	template <typename T>
+	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
 public:
 	/// Creates a blank ruleset.
 	Ruleset();

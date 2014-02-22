@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-enum ArrowShape { ARROW_BIG_UP, ARROW_BIG_DOWN, ARROW_SMALL_UP, ARROW_SMALL_DOWN, ARROW_SMALL_LEFT, ARROW_SMALL_RIGHT };
+enum ArrowShape { ARROW_NONE, ARROW_BIG_UP, ARROW_BIG_DOWN, ARROW_SMALL_UP, ARROW_SMALL_DOWN, ARROW_SMALL_LEFT, ARROW_SMALL_RIGHT };
 
 class TextList;
 class Timer;
@@ -49,6 +49,8 @@ public:
 	~ArrowButton();
 	/// Sets the arrow button's color.
 	void setColor(Uint8 color);
+	/// Sets the arrow button's shape.
+	void setShape(ArrowShape shape);
 	/// Sets the arrow button's list.
 	void setTextList(TextList *list);
 	/// Handles the timers.

@@ -36,6 +36,7 @@ class Explosion;
 class BattlescapeMessage;
 class Camera;
 class Timer;
+class Text;
 
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 
@@ -59,18 +60,20 @@ private:
 	int _cursorSize;
 	int _animFrame;
 	Projectile *_projectile;
-	bool projectileInFOV;
+	bool _projectileInFOV;
 	std::set<Explosion *> _explosions;
-	bool explosionInFOV;
+	bool _explosionInFOV;
 	bool _launch;
 	BattlescapeMessage *_message;
 	Camera *_camera;
 	int _visibleMapHeight;
-	void drawTerrain(Surface *surface);
-	int getTerrainLevel(Position pos, int size);
 	std::vector<Position> _waypoints;
 	bool _unitDying;
 	int _previewSetting;
+	Text *_txtAccuracy;
+
+	void drawTerrain(Surface *surface);
+	int getTerrainLevel(Position pos, int size);
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);

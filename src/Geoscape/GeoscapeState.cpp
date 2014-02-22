@@ -934,11 +934,12 @@ class DetectXCOMBase: public std::unary_function<Ufo *, bool>
 {
 public:
 	/// Create a detector for the given base.
-	DetectXCOMBase(const Base &base) : _base(base) { /* Empty by design.  */ }
+	DetectXCOMBase(const Base &base, int difficulty) : _base(base), _difficulty(difficulty) { /* Empty by design.  */ }
 	/// Attempt detection
 	bool operator()(const Ufo *ufo) const;
 private:
 	const Base &_base;	//!< The target base.
+	const int _difficulty;
 };
 
 /**
@@ -955,7 +956,7 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 	{
 		return false;
 	}
-	return RNG::percent(_base.getDetectionChance());
+	return RNG::percent(_base.getDetectionChance(_difficulty));
 }
 
 /**
@@ -1007,13 +1008,14 @@ void GeoscapeState::time10Minutes()
 			}
 		}
 	}
+	int diff = (int)(_game->getSavedGame()->getDifficulty());
 	if (Options::getBool("aggressiveRetaliation"))
 	{
 		// Detect as many bases as possible.
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				// Base found
@@ -1028,7 +1030,7 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
@@ -1499,11 +1501,14 @@ void GeoscapeState::time1Day()
 				if (item && item->getBattleType() == BT_FIREARM && !item->getCompatibleAmmo()->empty())
 				{
 					RuleManufacture *man = _game->getRuleset()->getManufacture(item->getType());
-					std::vector<std::string> req = man->getRequirements();
-					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-					if (man && ammo && std::find(req.begin(), req.end(), ammo->getType()) != req.end() && !_game->getSavedGame()->isResearched(man->getRequirements()))
+					if (man && !man->getRequirements().empty())
 					{
-						popup(new ResearchRequiredState(_game, item));
+						const std::vector<std::string> &req = man->getRequirements();
+						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+						if (ammo && std::find(req.begin(), req.end(), ammo->getType()) != req.end() && !_game->getSavedGame()->isResearched(req))
+						{
+							popup(new ResearchRequiredState(_game, item));
+						}
 					}
 				}
 			}
@@ -1639,11 +1644,11 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi, _globe));
 
 	// Handle Xcom Operatives discovering bases
-	if(!_game->getSavedGame()->getAlienBases()->empty())
+	if(!_game->getSavedGame()->getAlienBases()->empty() && RNG::percent(20))
 	{
 		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			if(!(*b)->isDiscovered() && RNG::percent(5))
+			if(!(*b)->isDiscovered())
 			{
 				(*b)->setDiscovered(true);
 				popup(new AlienBaseState(_game, *b, this));

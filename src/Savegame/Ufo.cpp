@@ -44,7 +44,7 @@ Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
-  , _detected(false), _hyperDetected(false), _shootingAt(0)
+  , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
 {
 }
 
@@ -660,5 +660,15 @@ int Ufo::getCrashId() const
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
+}
+/// Sets the UFO's hit frame.
+void Ufo::setHitFrame(int frame)
+{
+	_hitFrame = frame;
+}
+/// Gets the UFO's hit frame.
+int Ufo::getHitFrame()
+{
+	return _hitFrame;
 }
 }

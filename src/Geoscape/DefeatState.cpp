@@ -39,15 +39,15 @@ namespace OpenXcom
 DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 {
 	// Create objects
-	_screen = new InteractiveSurface(320, 200, 0, 0);
+	_window = new InteractiveSurface(320, 200, 0, 0);
 	_txtText.push_back(new Text(190, 104, 0, 0));
 	_txtText.push_back(new Text(200, 34, 32, 0));
-	_timer = new Timer(20000);
+	_timer = new Timer(40000);
 
-	add(_screen);
+	add(_window);
 
 	// Set up objects
-	_screen->onMouseClick((ActionHandler)&DefeatState::windowClick);
+	_window->onMouseClick((ActionHandler)&DefeatState::windowClick);
 	
 	_game->getResourcePack()->getMusic("GMLOSE")->play();
 
@@ -107,8 +107,8 @@ void DefeatState::nextScreen()
 	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+3 << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_screen->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_game->getResourcePack()->getSurface(ss.str())->blit(_screen);
+	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_game->getResourcePack()->getSurface(ss.str())->blit(_window);
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
 	_txtText[_screenNumber-1]->setVisible(true);

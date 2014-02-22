@@ -45,7 +45,6 @@ public:
 
 private:
 	SDL_Surface *_screen;
-	void *_misalignedPixelBuffer;
 	int _bpp;
 	double _scaleX, _scaleY;
 	int _topBlackBand, _bottomBlackBand, _leftBlackBand, _rightBlackBand, _cursorTopBlackBand, _cursorLeftBlackBand;

@@ -61,12 +61,6 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
-	// remove any path preview if in the middle of a battlegame
-	if (tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
-	{
-		_battleGame->getPathfinding()->removePreview();
-	}
-
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
@@ -288,7 +282,7 @@ void InventoryState::updateStats()
 		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	}
 
-	_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
+	_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg((int)(unit->getStats()->firing * unit->getHealth()) / unit->getStats()->health));
 
 	_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 
@@ -365,9 +359,6 @@ void InventoryState::btnOkClick(Action *)
 		saveEquipmentLayout();
 		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
-			if ((*i)->getFaction() == _battleGame->getSide())
-				(*i)->prepareNewTurn();
 	}
 	if (_battleGame->getTileEngine())
 	{
@@ -450,7 +441,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent));
+	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent, true, false));
 }
 
 /**

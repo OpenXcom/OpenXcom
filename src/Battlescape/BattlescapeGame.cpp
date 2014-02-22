@@ -190,6 +190,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 		if (_save->getSelectedUnit())
 		{
+			_parentState->updateSoldierInfo();
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
 			{
@@ -337,6 +338,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 		if (_save->getSelectedUnit())
 		{
+			_parentState->updateSoldierInfo();
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
 			{
@@ -1302,7 +1304,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
+					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState, false, true));
 					cancelCurrentAction();
 				}
 				else
@@ -1375,11 +1377,14 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else if (playableUnitSelected())
 		{
-
-			if (_currentAction.target != pos && bPreviewed)
+			bool modifierPressed = (SDL_GetModState() & KMOD_CTRL) != 0;
+			if (bPreviewed &&
+				(_currentAction.target != pos || (_save->getPathfinding()->isModifierUsed() != modifierPressed)))
+			{
 				_save->getPathfinding()->removePreview();
+			}
 			_currentAction.run = false;
-			_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = _save->getStrafeSetting() && modifierPressed && _save->getSelectedUnit()->getTurretType() == -1;
 			if (_currentAction.strafe && _save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)
 			{
 				_currentAction.run = true;

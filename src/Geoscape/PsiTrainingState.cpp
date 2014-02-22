@@ -19,6 +19,7 @@
 #include <sstream>
 #include "PsiTrainingState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -38,7 +39,7 @@ namespace OpenXcom
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
  */
-PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(0), _base3(0), _base4(0), _base5(0), _base6(0), _base7(0), _base8(0)
+PsiTrainingState::PsiTrainingState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -67,78 +68,20 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 	int buttons = 0;
+	TextButton *_btnBase;
 	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
 		if((*b)->getAvailablePsiLabs())
 		{
-			buttons++;
-			switch (buttons)
+			_bases.push_back(*b);
+			if (buttons < 8)
 			{
-			case 1:
-				_btnBase1 = new TextButton(160, 14, 80, 40);
-				_btnBase1->setColor(Palette::blockOffset(15)+6);
-				_btnBase1->onMouseClick((ActionHandler)&PsiTrainingState::btnBase1Click);
-				_btnBase1->setText((*b)->getName());
-				_base1 = (*b);
-				add(_btnBase1);
-				break;
-			case 2:
-				_btnBase2 = new TextButton(160, 14, 80, 56);
-				_btnBase2->setColor(Palette::blockOffset(15)+6);
-				_btnBase2->setText((*b)->getName());
-				_btnBase2->onMouseClick((ActionHandler)&PsiTrainingState::btnBase2Click);
-				_base2 = (*b);
-				add(_btnBase2);
-				break;
-			case 3:
-				_btnBase3 = new TextButton(160, 14, 80, 72);
-				_btnBase3->setColor(Palette::blockOffset(15)+6);
-				_btnBase3->setText((*b)->getName());
-				_btnBase3->onMouseClick((ActionHandler)&PsiTrainingState::btnBase3Click);
-				_base3 = (*b);
-				add(_btnBase3);
-				break;
-			case 4:
-				_btnBase4 = new TextButton(160, 14, 80, 88);
-				_btnBase4->setColor(Palette::blockOffset(15)+6);
-				_btnBase4->setText((*b)->getName());
-				_btnBase4->onMouseClick((ActionHandler)&PsiTrainingState::btnBase4Click);
-				_base4 = (*b);
-				add(_btnBase4);
-				break;
-			case 5:
-				_btnBase5 = new TextButton(160, 14, 80, 104);
-				_btnBase5->setColor(Palette::blockOffset(15)+6);
-				_btnBase5->setText((*b)->getName());
-				_btnBase5->onMouseClick((ActionHandler)&PsiTrainingState::btnBase5Click);
-				_base5 = (*b);
-				add(_btnBase5);
-				break;
-			case 6:
-				_btnBase6 = new TextButton(160, 14, 80, 120);
-				_btnBase6->setColor(Palette::blockOffset(15)+6);
-				_btnBase6->setText((*b)->getName());
-				_btnBase6->onMouseClick((ActionHandler)&PsiTrainingState::btnBase6Click);
-				_base6 = (*b);
-				add(_btnBase6);
-				break;
-			case 7:
-				_btnBase7 = new TextButton(160, 14, 80, 136);
-				_btnBase7->setColor(Palette::blockOffset(15)+6);
-				_btnBase7->setText((*b)->getName());
-				_btnBase7->onMouseClick((ActionHandler)&PsiTrainingState::btnBase7Click);
-				_base7 = (*b);
-				add(_btnBase7);
-				break;
-			case 8:
-				_btnBase8 = new TextButton(160, 14, 80, 152);
-				_btnBase8->setColor(Palette::blockOffset(15)+6);
-				_btnBase8->setText((*b)->getName());
-				_btnBase8->onMouseClick((ActionHandler)&PsiTrainingState::btnBase8Click);
-				_base8 = (*b);
-				add(_btnBase8);
-				break;
-			default: break;
+				_btnBase = new TextButton(160, 14, 80, 40 + 16*buttons);
+				_btnBase->setColor(Palette::blockOffset(15)+6);
+				_btnBase->onMouseClick((ActionHandler)&PsiTrainingState::btnBaseXClick);
+				_btnBase->setText((*b)->getName());
+				add(_btnBase);
+				++buttons;
 			}
 		}
 	}
@@ -171,36 +114,10 @@ void PsiTrainingState::btnOkClick(Action *)
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
-void PsiTrainingState::btnBase1Click(Action *)
+void PsiTrainingState::btnBaseXClick(Action *action)
 {
-	_game->pushState (new AllocatePsiTrainingState(_game, _base1));
+	int buttonIndex = (action->getSender()->getY() - 40) / 16;
+	_game->pushState (new AllocatePsiTrainingState(_game, _bases.at(buttonIndex)));
 }
-void PsiTrainingState::btnBase2Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base2));
-}
-void PsiTrainingState::btnBase3Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base3));
-}
-void PsiTrainingState::btnBase4Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base4));
-}
-void PsiTrainingState::btnBase5Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base5));
-}
-void PsiTrainingState::btnBase6Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base6));
-}
-void PsiTrainingState::btnBase7Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base7));
-}
-void PsiTrainingState::btnBase8Click(Action *)
-{
-	_game->pushState (new AllocatePsiTrainingState(_game, _base8));
-}
+
 }

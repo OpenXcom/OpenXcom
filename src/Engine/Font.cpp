@@ -36,7 +36,7 @@ SDL_Color Font::_palette[] = {{0, 0, 0, 0},
 /**
  * Initializes the font with a blank surface.
  */
-Font::Font() : _width(0), _height(0), _chars(), _spacing(0)
+Font::Font() : _surface(0), _width(0), _height(0), _chars(), _spacing(0)
 {
 }
 

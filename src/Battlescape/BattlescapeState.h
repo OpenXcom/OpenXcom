@@ -70,14 +70,14 @@ private:
 	Text *_txtDebug, *_txtTooltip;
 	std::vector<State*> _popups;
 	BattlescapeGame *_battleGame;
-	bool firstInit;
-	bool isMouseScrolling;
-	bool isMouseScrolled;
-	int xBeforeMouseScrolling, yBeforeMouseScrolling;
-	Position mapOffsetBeforeMouseScrolling;
-	Uint32 mouseScrollingStartTime;
-	int totalMouseMoveX, totalMouseMoveY;
-	bool mouseMovedOverThreshold;
+	bool _firstInit;
+	bool _isMouseScrolling;
+	bool _isMouseScrolled;
+	int _xBeforeMouseScrolling, _yBeforeMouseScrolling;
+	Position _mapOffsetBeforeMouseScrolling;
+	Uint32 _mouseScrollingStartTime;
+	int _totalMouseMoveX, _totalMouseMoveY;
+	bool _mouseMovedOverThreshold;
 	bool _mouseOverIcons;
 	std::string _currentTooltip;
 	/// Popups a context sensitive list of actions the user can choose from.

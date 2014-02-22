@@ -38,7 +38,7 @@ private:
 	BattleUnit *_unit;
 	BattleItem *_itemA, *_itemB;
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
-	int _part, _animationFrame;
+	int _part, _animationFrame, _drawingRoutine;
 	bool _hairBleach;
 	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
 	void drawRoutine0();
@@ -60,7 +60,6 @@ private:
 	void drawRoutine8();
 	/// Drawing routine for celatids.
 	void drawRoutine9();
-	int _drawingRoutine;
 	/// sort two handed sprites out.
 	void sortRifles();
 public:

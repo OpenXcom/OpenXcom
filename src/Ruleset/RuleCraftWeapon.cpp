@@ -44,14 +44,20 @@ RuleCraftWeapon::~RuleCraftWeapon()
 void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 {
 	_type = node["type"].as<std::string>(_type);
-	_sprite = node["sprite"].as<int>(_sprite);
-	// this one is an offset within INTICONS.PCK
-	if (_sprite > 5)
-		_sprite += modIndex;
-	_sound = node["sound"].as<int>(_sound);
-	// 14 entries in GEO.CAT
-	if (_sound > 13)
-		_sound += modIndex;
+	if (node["sprite"])
+	{
+		_sprite = node["sprite"].as<int>(_sprite);
+		// this one is an offset within INTICONS.PCK
+		if (_sprite > 5)
+			_sprite += modIndex;
+	}
+	if (node["sound"])
+	{	
+		_sound = node["sound"].as<int>(_sound);
+		// 14 entries in GEO.CAT
+		if (_sound > 13)
+			_sound += modIndex;
+	}
 	_damage = node["damage"].as<int>(_damage);
 	_range = node["range"].as<int>(_range);
 	_accuracy = node["accuracy"].as<int>(_accuracy);

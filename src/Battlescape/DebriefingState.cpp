@@ -482,8 +482,8 @@ void DebriefingState::prepareDebriefing()
 					++k;
 				}
 			}
-			// this may cause the base to become disjointed, check the connections.
-			base->checkModuleConnections();
+			// this may cause the base to become disjointed, destroy the disconnected parts.
+			base->destroyDisconnectedFacilities();
 		}
 	}
 

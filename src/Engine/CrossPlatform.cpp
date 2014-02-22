@@ -22,6 +22,8 @@
 #include <sstream>
 #include <string>
 #include <locale>
+#include <stdint.h>
+#include <sys/stat.h>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -44,7 +46,6 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif
 #else
-#include <sys/stat.h>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -722,6 +723,88 @@ bool isQuitShortcut(const SDL_Event &ev)
 	//TODO add other OSs shortcuts.
     (void)ev;
 	return false;
+#endif
+}
+
+/**
+ * Gets the last modified date of a file.
+ * @param path Full path to file.
+ * @return The timestamp in integral format.
+ */
+time_t getDateModified(const std::string &path)
+{
+/*#ifdef _WIN32
+	WIN32_FILE_ATTRIBUTE_DATA info;
+	if (GetFileAttributesExA(path.c_str(), GetFileExInfoStandard, &info))
+	{
+		FILETIME ft = info.ftLastWriteTime;
+		LARGE_INTEGER li;
+		li.HighPart = ft.dwHighDateTime;
+		li.LowPart = ft.dwLowDateTime;
+		return li.QuadPart;
+	}
+	else
+	{
+		return 0;
+	}
+#endif*/
+	struct stat info;
+	if (stat(path.c_str(), &info) == 0)
+	{
+		return info.st_mtime;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Converts a date/time into a human-readable string
+ * using the ISO 8601 standard.
+ * @param time Value in timestamp format.
+ * @return String pair with date and time.
+ */
+std::pair<std::wstring, std::wstring> timeToString(time_t time)
+{
+	wchar_t localDate[25], localTime[25];
+
+/*#ifdef _WIN32
+	LARGE_INTEGER li;
+	li.QuadPart = time;
+	FILETIME ft;
+	ft.dwHighDateTime = li.HighPart;
+	ft.dwLowDateTime = li.LowPart;
+	SYSTEMTIME st;
+	FileTimeToLocalFileTime(&ft, &ft);
+	FileTimeToSystemTime(&ft, &st);
+
+	GetDateFormatW(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, localDate, 25);
+	GetTimeFormatW(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, localTime, 25);
+#endif*/
+
+	struct tm *timeinfo = localtime(&(time));
+	wcsftime(localDate, 25, L"%Y-%m-%d", timeinfo);
+	wcsftime(localTime, 25, L"%H:%M", timeinfo);
+
+	return std::make_pair(localDate, localTime);
+}
+
+/**
+ * Compares two Unicode strings using natural human ordering.
+ * @param a String A.
+ * @param b String B.
+ * @return String A comes before String B.
+ */
+bool naturalCompare(const std::wstring &a, const std::wstring &b)
+{
+#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
+	return (StrCmpLogicalW(a.c_str(), b.c_str()) < 0);
+#else
+	// sorry unix users you get ASCII sort
+	std::wstring::const_iterator i, j;
+	for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
+	return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
 #endif
 }
 

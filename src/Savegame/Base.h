@@ -188,7 +188,7 @@ public:
 	/// Gets the retaliation status of this base.
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
-	unsigned getDetectionChance() const;
+	unsigned getDetectionChance(int difficulty) const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
 	void setupDefenses();
@@ -196,12 +196,12 @@ public:
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.
 	std::vector<Vehicle*> *getVehicles();
-	/// check all the module connections.
-	void checkModuleConnections();
-	/// check a single coordinate for module connection.
-	bool checkConnected(int x, int y, int **grid, BaseFacility *(&facilities)[BASE_SIZE][BASE_SIZE]) const;
+	/// Destroys all disconnected facilities in the base.
+	void destroyDisconnectedFacilities();
+	/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
+	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
 	/// destroy a facility and deal with the side effects.
-	void destroyFacility(std::vector<BaseFacility*>::iterator &facility);
+	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 };
 
 }

@@ -40,6 +40,11 @@ private:
 	SavedBattleGame *_save;
 	std::vector<PathfindingNode> _nodes;
 	int _size;
+	BattleUnit *_unit;
+	bool _pathPreviewed;
+	bool _strafeMove;
+	int _totalTUCost;
+	bool _modifierUsed;
 	MovementType _movementType;
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
@@ -53,10 +58,6 @@ private:
 	bool canFallDown(Tile *destinationTile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile *destinationTile, int size);
-	BattleUnit *_unit;
-	bool _pathPreviewed;
-	bool _strafeMove;
-	int _totalTUCost;
 public:
 	std::vector<int> _path;
 	/// Determines whether the unit is going up a stairs.
@@ -101,6 +102,8 @@ public:
 	int getTotalTUCost() const { return _totalTUCost; }
 	/// Gets the path preview setting.
 	bool isPathPreviewed() const;
+	/// Gets the modifier setting.
+	bool isModifierUsed() const;
 };
 
 }
