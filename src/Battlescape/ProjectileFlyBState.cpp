@@ -312,8 +312,14 @@ bool ProjectileFlyBState::createNewProjectile()
 			_unit->aim(true);
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
-			if (_action.weapon->getRules()->getFireSound() != -1)
+			if (_ammo->getRules()->getFireSound() != -1)
+			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getFireSound())->play();
+			}
+			else if (_action.weapon->getRules()->getFireSound() != -1)
+			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+			}
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
@@ -346,7 +352,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			_unit->aim(true);
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
-			if (_action.weapon->getRules()->getFireSound() != -1)
+			if (_ammo->getRules()->getFireSound() != -1)
+			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getFireSound())->play();
+			}
+			else if (_action.weapon->getRules()->getFireSound() != -1)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 			}
