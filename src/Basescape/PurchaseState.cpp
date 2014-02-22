@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f), _itemOffset(0)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _qtysPersonnel(), _qtysCraft(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -61,10 +61,16 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtFunds = new Text(150, 9, 10, 24);
 	_txtPurchases = new Text(150, 9, 160, 24);
-	_txtItem = new Text(140, 9, 10, 33);
-	_txtCost = new Text(102, 9, 152, 33);
-	_txtQuantity = new Text(60, 9, 256, 33);
-	_lstItems = new TextList(287, 120, 8, 44);
+	_btnPrev = new TextButton(28, 14, 8, 34);
+	_btnTab = new TextButton(56, 14, 38, 34);
+	_btnNext = new TextButton(28, 14, 96, 34);
+	_txtItem = new Text(130, 9, 30, 50);
+	_txtCost = new Text(65, 18, 139, 42);
+	_txtInStorage = new Text(45, 18, 205, 42);
+	_txtQuantity = new Text(60, 9, 255, 52);
+	_lstPersonnel = new TextList(288, 104, 8, 62);
+	_lstCraft = new TextList(288, 104, 8, 62);
+	_lstItems = new TextList(288, 104, 8, 62);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -75,9 +81,15 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	add(_txtTitle);
 	add(_txtFunds);
 	add(_txtPurchases);
+	add(_btnPrev);
+	add(_btnTab);
+	add(_btnNext);;
 	add(_txtItem);
 	add(_txtCost);
+	add(_txtInStorage);
 	add(_txtQuantity);
+	add(_lstPersonnel);
+	add(_lstCraft);
 	add(_lstItems);
 
 	centerAllSurfaces();
@@ -96,6 +108,17 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PurchaseState::btnCancelClick, Options::keyCancel);
 
+	_btnPrev->setColor(Palette::blockOffset(13)+10);
+	_btnPrev->setText(L"<<");
+	_btnPrev->onMouseClick((ActionHandler)&PurchaseState::btnPrevClick);
+
+	_btnTab->setColor(Palette::blockOffset(13)+10);
+	_btnTab->onMouseClick((ActionHandler)&PurchaseState::btnTabClick, 0);
+
+	_btnNext->setColor(Palette::blockOffset(13)+10);
+	_btnNext->setText(L">>");
+	_btnNext->onMouseClick((ActionHandler)&PurchaseState::btnNextClick);
+
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -109,18 +132,45 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(tr("STR_ITEM"));
+	_txtItem->setColor(Palette::blockOffset(13)+5);
+	_txtItem->setText(tr("STR_ITEM_LC"));
 
-	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
+	_txtCost->setColor(Palette::blockOffset(13)+5);
+	_txtCost->setText(tr("STR_COST_PER_UNIT"));
+	_txtCost->setWordWrap(true);
+	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
+	_txtQuantity->setColor(Palette::blockOffset(13)+5);
+	_txtQuantity->setText(tr("STR_QUANTITY"));
+
+	_txtInStorage->setColor(Palette::blockOffset(13)+5);
+	_txtInStorage->setText(tr("STR_ON_BASE"));
+	_txtInStorage->setWordWrap(true);
+	_txtInStorage->setVerticalAlign(ALIGN_BOTTOM);
+
+	_lstPersonnel->setColor(Palette::blockOffset(13)+10);
+	_lstPersonnel->setArrowColumn(230, ARROW_VERTICAL);
+	_lstPersonnel->setColumns(4, 150, 60, 50, 32);
+	_lstPersonnel->setSelectable(true);
+	_lstPersonnel->setBackground(_window);
+	_lstPersonnel->setMargin(2);
+	_lstPersonnel->setVisible(false);
+
+	_lstCraft->setColor(Palette::blockOffset(13)+10);
+	_lstCraft->setArrowColumn(230, ARROW_VERTICAL);
+	_lstCraft->setColumns(4, 150, 60, 50, 32);
+	_lstCraft->setSelectable(true);
+	_lstCraft->setBackground(_window);
+	_lstCraft->setMargin(2);
+	_lstCraft->setVisible(false);
+	_lstCraft->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
+	_lstCraft->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
+	_lstCraft->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
+	_lstCraft->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 55, 46, 32);
+	_lstItems->setArrowColumn(230, ARROW_VERTICAL);
+	_lstItems->setColumns(4, 150, 60, 50, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
@@ -132,20 +182,34 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
-	_qtys.push_back(0);
+	_lists.push_back(_lstPersonnel);
+	_lists.push_back(_lstCraft);
+	_lists.push_back(_lstItems);
+
+	_tabs.push_back("STR_PERSONNEL");
+	_tabs.push_back("STR_CRAFT");
+	_tabs.push_back("STR_ITEMS");
+
+	// start on items tab
+	_selTab = TAB_ITEMS;
+	_btnTab->setText(tr("STR_ITEMS"));
+	_selList = _lstItems;
+
+	_qtysPersonnel.push_back(0);
 	std::wostringstream ss;
 	ss << _base->getTotalSoldiers();
-	_lstItems->addRow(4, tr("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
-	_qtys.push_back(0);
+	_lstPersonnel->addRow(4, tr("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
+
+	_qtysPersonnel.push_back(0);
 	std::wostringstream ss2;
 	ss2 << _base->getTotalScientists();
-	_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
-	_qtys.push_back(0);
+	_lstPersonnel->addRow(4, tr("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
+
+	_qtysPersonnel.push_back(0);
 	std::wostringstream ss3;
 	ss3 << _base->getTotalEngineers();
-	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
+	_lstPersonnel->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
-	_itemOffset = 3;
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
@@ -153,9 +217,8 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		if (rule->getBuyCost() > 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
 			_crafts.push_back(*i);
-			_qtys.push_back(0);
+			_qtysCraft.push_back(0);
 			int crafts = 0;
-			++_itemOffset;
 			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 			{
 				if ((*c)->getRules()->getType() == *i)
@@ -163,7 +226,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			}
 			std::wostringstream ss4;
 			ss4 << crafts;
-			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
+			_lstCraft->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
@@ -172,20 +235,38 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		if (rule->getBuyCost() > 0 && !isExcluded(*i))
 		{
-			_items.push_back(*i);
-			_qtys.push_back(0);
 			std::wostringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);
 			std::wstring item = tr(*i);
-			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+			if (rule->getSubCategory() == "CRAFT_WEAPON")
 			{
-				item.insert(0, L"  ");
-				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
-				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
+				_craftItems.push_back(*i);
+				_qtysCraft.push_back(0);
+				if (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0)
+				{
+					item.insert(0, L"  ");
+					_lstCraft->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+					_lstCraft->setRowColor(_qtysCraft.size() - 1, Palette::blockOffset(15) + 6);
+				}
+				else
+				{
+					_lstCraft->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+				}
 			}
 			else
 			{
-				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+				_items.push_back(*i);
+				_qtys.push_back(0);
+				if (rule->getBattleType() == BT_AMMO)
+				{
+					item.insert(0, L"  ");
+					_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+					_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
+				}
+				else
+				{
+					_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+				}
 			}
 		}
 	}
@@ -240,14 +321,15 @@ bool PurchaseState::isExcluded(std::string item)
 void PurchaseState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	// Hire the personnel
+	for (unsigned int i = 0; i < _qtysPersonnel.size(); ++i)
 	{
-		if (_qtys[i] > 0)
+		if (_qtysPersonnel[i] > 0)
 		{
 			// Buy soldiers
 			if (i == 0)
 			{
-				for (int s = 0; s < _qtys[i]; s++)
+				for (int s = 0; s < _qtysPersonnel[i]; s++)
 				{
 					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), &_game->getRuleset()->getPools(), _game->getSavedGame()->getId("STR_SOLDIER")));
@@ -258,39 +340,59 @@ void PurchaseState::btnOkClick(Action *)
 			else if (i == 1)
 			{
 				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
-				t->setScientists(_qtys[i]);
+				t->setScientists(_qtysPersonnel[i]);
 				_base->getTransfers()->push_back(t);
 			}
 			// Buy engineers
-			else if (i == 2)
+			else
 			{
 				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
-				t->setEngineers(_qtys[i]);
+				t->setEngineers(_qtysPersonnel[i]);
 				_base->getTransfers()->push_back(t);
 			}
+		}
+	}
+	// Buy crafts and craft items
+	for (unsigned int i = 0; i < _qtysCraft.size(); ++i)
+	{
+		if (_qtysCraft[i] > 0)
+		{
 			// Buy crafts
-			else if (i >= 3 && i < 3 + _crafts.size())
+			if (i < _crafts.size())
 			{
-				for (int c = 0; c < _qtys[i]; c++)
+				for (int c = 0; c < _qtysCraft[i]; c++)
 				{
-					RuleCraft *rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
+					RuleCraft *rc = _game->getRuleset()->getCraft(_crafts[i]);
 					Transfer *t = new Transfer(rc->getTransferTime());
-					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
+					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i]));
 					craft->setStatus("STR_REFUELLING");
 					t->setCraft(craft);
 					_base->getTransfers()->push_back(t);
 				}
 			}
-			// Buy items
+			// Buy craft items
 			else
 			{
-				RuleItem *ri = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
+				RuleItem *ri = _game->getRuleset()->getItem(_craftItems[i - _crafts.size()]);
 				Transfer *t = new Transfer(ri->getTransferTime());
-				t->setItems(_items[i - 3 - _crafts.size()], _qtys[i]);
+				t->setItems(_craftItems[i - _crafts.size()], _qtysCraft[i]);
 				_base->getTransfers()->push_back(t);
 			}
 		}
 	}
+
+	// Buy items
+	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	{
+		if (_qtys[i] > 0)
+		{
+			RuleItem *ri = _game->getRuleset()->getItem(_items[i]);
+			Transfer *t = new Transfer(ri->getTransferTime());
+			t->setItems(_items[i], _qtys[i]);
+			_base->getTransfers()->push_back(t);
+		}
+	}
+
 	_game->popState();
 }
 
@@ -304,12 +406,102 @@ void PurchaseState::btnCancelClick(Action *)
 }
 
 /**
+ * Updates the list index.
+ * @param index Index value.
+ * @param list List the index belongs to.
+ * @param change Amount to change the index.
+ */
+void PurchaseState::updateIndex(size_t &index, std::vector<std::string> &list, int change)
+{
+	int i = index;
+	if (i + change >= (int)list.size())
+	{
+		index = 0;
+	}
+	else if (i + change < 0)
+	{
+		index = list.size() - 1;
+	}
+	else
+	{
+		index += change;
+	}
+}
+
+/**
+ * Makes the the next list visible.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::btnTabClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		updateIndex(_selTab, _tabs, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selTab, _tabs, -1);
+	}
+	_btnTab->setText(tr(_tabs[_selTab]));
+	_selList = _lists[_selTab];
+
+	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
+	{
+		(*it)->setVisible(false);
+	}
+	_selList->setVisible(true);
+}
+
+/**
+ * Goes to the previous list.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::btnPrevClick(Action *)
+{
+	updateIndex(_selTab, _tabs, -1);
+	_btnTab->setText(tr(_tabs[_selTab]));
+	_selList = _lists[_selTab];
+	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
+	{
+		(*it)->setVisible(false);
+	}
+	_selList->setVisible(true);
+}
+
+/**
+ * Goes to the next list.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::btnNextClick(Action *)
+{
+	updateIndex(_selTab, _tabs, 1);
+	_btnTab->setText(tr(_tabs[_selTab]));
+	_selList = _lists[_selTab];
+	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
+	{
+		(*it)->setVisible(false);
+	}
+	_selList->setVisible(true);
+}
+
+/**
  * Starts increasing the item.
  * @param action Pointer to an action.
  */
 void PurchaseState::lstItemsLeftArrowPress(Action *action)
 {
-	_sel = _lstItems->getSelectedRow();
+	if (_selTab == TAB_ITEMS)
+	{
+		_sel = _lstItems->getSelectedRow();
+	}
+	else if (_selTab == TAB_CRAFT)
+	{
+		_sel = _lstCraft->getSelectedRow();
+	}
+	else
+	{
+		_sel = _lstPersonnel->getSelectedRow();
+	}
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
 }
 
@@ -347,7 +539,18 @@ void PurchaseState::lstItemsLeftArrowClick(Action *action)
  */
 void PurchaseState::lstItemsRightArrowPress(Action *action)
 {
-	_sel = _lstItems->getSelectedRow();
+	if (_selTab == TAB_ITEMS)
+	{
+		_sel = _lstItems->getSelectedRow();
+	}
+	else if (_selTab == TAB_CRAFT)
+	{
+		_sel = _lstCraft->getSelectedRow();
+	}
+	else
+	{
+		_sel = _lstPersonnel->getSelectedRow();
+	}
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
 }
 
@@ -385,7 +588,6 @@ void PurchaseState::lstItemsRightArrowClick(Action *action)
  */
 void PurchaseState::lstItemsMousePress(Action *action)
 {
-	_sel = _lstItems->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		_timerInc->stop();
@@ -414,30 +616,42 @@ void PurchaseState::lstItemsMousePress(Action *action)
  */
 int PurchaseState::getPrice()
 {
-	// Soldier cost
-	if (_sel == 0)
+	if (_selTab == TAB_PERSONNEL)
 	{
-		return _game->getRuleset()->getSoldierCost() * 2;
-	}
-	// Scientist cost
-	else if (_sel == 1)
-	{
-		return _game->getRuleset()->getScientistCost() * 2;
-	}
-	// Engineer cost
-	else if (_sel == 2)
-	{
-		return _game->getRuleset()->getEngineerCost() * 2;
+		// Soldier cost
+		if (_sel == 0)
+		{
+			return _game->getRuleset()->getSoldierCost() * 2;
+		}
+		// Scientist cost
+		else if (_sel == 1)
+		{
+			return _game->getRuleset()->getScientistCost() * 2;
+		}
+		// Engineer cost
+		else
+		{
+			return _game->getRuleset()->getEngineerCost() * 2;
+		}
 	}
 	// Craft cost
-	else if (_sel >= 3 && _sel < 3 + _crafts.size())
+	else if (_selTab == TAB_CRAFT)
 	{
-		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getBuyCost();
+		// Is it a craft?
+		if (_sel < 2)
+		{
+			return _game->getRuleset()->getCraft(_crafts[_sel])->getBuyCost();
+		}
+		// Or a craft related item
+		else
+		{
+			return _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getBuyCost();
+		}
 	}
 	// Item cost
 	else
 	{
-		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost();
+		return _game->getRuleset()->getItem(_items[_sel])->getBuyCost();
 	}
 }
 
@@ -463,17 +677,26 @@ void PurchaseState::increaseByValue(int change)
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
-	else if (_sel <= 2 && _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
+	else if ((_selTab == TAB_PERSONNEL) && (_pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters()))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_LIVING_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
-	else if (_sel >= 3 && _sel < 3 + _crafts.size() && _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
+	// Is it a craft
+	else if ((_selTab == TAB_CRAFT) && (_sel < _crafts.size()) && (_cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars()))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
-	else if (_sel >= 3 + _crafts.size() && _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
+	// Or a craft item
+	else if ((_selTab == TAB_CRAFT) && (_sel >= _crafts.size())
+		&& _iQty + (int)(10 * _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 *_base->getExactUsedStores() + 0.5))))
+	{
+		_timerInc->stop();
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+	}
+	else if ((_selTab == TAB_ITEMS)
+		&& _iQty + (int)(10 * _game->getRuleset()->getItem(_items[_sel])->getSize()) > (10 * _base->getAvailableStores() - (int)(10 *_base->getExactUsedStores() + 0.5)))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -482,35 +705,49 @@ void PurchaseState::increaseByValue(int change)
 	{
 		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
 		change = std::min(maxByMoney, change);
-		if (_sel <= 2)
+		if (_selTab == TAB_PERSONNEL)
 		{
 			// Personnel count
 			int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
 			change = std::min(maxByQuarters, change);
 			_pQty += change;
+			_qtysPersonnel[_sel] += change;
 		}
-		else if (_sel >= 3 && _sel < 3 + _crafts.size())
+		else if (_selTab == TAB_CRAFT && _sel < _crafts.size())
 		{
 			// Craft count
 			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
 			change = std::min(maxByHangars, change);
 			_cQty += change;
+			_qtysCraft[_sel] += change;
 		}
-		else if (_sel >= 3 + _crafts.size())
+		else
 		{
 			// Item count
-			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
-			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
+			int storesNeededPerItem;
+			if (_selTab == TAB_CRAFT)
+				storesNeededPerItem = (int)(10 *_game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize());
+			else
+				storesNeededPerItem = (int)(10 *_game->getRuleset()->getItem(_items[_sel])->getSize());
+			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getUsedStores()) - _iQty;
 			int maxByStores;
-			if ( AreSame(storesNeededPerItem, 0.f) ) {
-        maxByStores = INT_MAX;
-      } else {
-        maxByStores = floor(freeStores / storesNeededPerItem);
-      }
+
+			if (storesNeededPerItem == 0)
+			{
+				maxByStores = INT_MAX;
+			}
+			else
+			{
+				maxByStores = floor(freeStores / storesNeededPerItem);
+			}
 			change = std::min(maxByStores, change);
-			_iQty += ((float)(change)) * storesNeededPerItem;
+			_iQty += change * storesNeededPerItem;
+			if (_selTab == TAB_CRAFT)
+				_qtysCraft[_sel] += change;
+			else
+				_qtys[_sel] += change;
 		}
-		_qtys[_sel] += change;
+
 		_total += getPrice() * change;
 		updateItemStrings();
 	}
@@ -532,15 +769,43 @@ void PurchaseState::decrease()
  */
 void PurchaseState::decreaseByValue(int change)
 {
-	if (0 >= change || 0 >= _qtys[_sel]) return;
-	change = std::min(_qtys[_sel], change);
-	// Personnel count
-	if (_sel <= 2) _pQty -= change;
-	// Craft count
-	else if (_sel >= 3 && _sel < 3 + _crafts.size()) _cQty -= change;
-	// Item count
-	else _iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(change));
-	_qtys[_sel] -= change;
+	if (0 >= change) return;
+
+	if (_selTab == TAB_PERSONNEL)
+ 	{
+		// Personnel count
+		if (0 >= _qtysPersonnel[_sel]) return;
+		change = std::min(_qtysPersonnel[_sel], change);
+		_pQty -= change;
+		_qtysPersonnel[_sel] -= change;
+	}
+	else if (_selTab == TAB_CRAFT && _sel < _crafts.size())
+	{
+		// Craft count
+		if (0 >= _qtysCraft[_sel]) return;
+		change = std::min(_qtysCraft[_sel], change);
+		_cQty -= change;
+		_qtysCraft[_sel] -= change;
+	}
+	else
+	{
+		// Item count
+		if (0 >= _qtys[_sel]) return;
+
+		if (_selTab == TAB_CRAFT)
+		{
+			change = std::min(_qtysCraft[_sel - _crafts.size()], change);
+			_iQty -= (int)(10 *_game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize()) * change;
+			_qtysCraft[_sel] -= change;
+		}
+		else
+		{
+			change = std::min(_qtys[_sel], change);
+			_iQty -= (int)(10 *_game->getRuleset()->getItem(_items[_sel])->getSize()) * change;
+			_qtys[_sel] -= change;
+		}
+	}
+
 	_total -= getPrice() * change;
 	updateItemStrings();
 }
@@ -552,22 +817,66 @@ void PurchaseState::updateItemStrings()
 {
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 	std::wostringstream ss;
-	ss << _qtys[_sel];
-	_lstItems->setCellText(_sel, 3, ss.str());
-	if (_qtys[_sel] > 0)
+	if (_selTab == TAB_PERSONNEL)
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+		ss << _qtysPersonnel[_sel];
+		_lstPersonnel->setCellText(_sel, 3, ss.str());
+		if (_qtysPersonnel[_sel] > 0)
+		{
+			_lstPersonnel->setRowColor(_sel, Palette::blockOffset(13));
+		}
+		else
+		{
+			_lstPersonnel->setRowColor(_sel, Palette::blockOffset(13) + 10);
+		}
+	}
+	else if (_selTab == TAB_CRAFT)
+	{
+		ss << _qtysCraft[_sel];
+		_lstCraft->setCellText(_sel, 3, ss.str());
+
+		if (_qtysCraft[_sel] == 0)
+		{
+			if (_sel < _crafts.size())
+			{
+				_lstCraft->setRowColor(_sel, Palette::blockOffset(13) + 10);
+			}
+			else
+			{
+				RuleItem *rule = _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()]);
+				if (rule->getClipSize() > 0)
+				{
+					_lstCraft->setRowColor(_sel, Palette::blockOffset(15) + 6);
+				}
+				else
+				{
+					_lstCraft->setRowColor(_sel, Palette::blockOffset(13) + 10);
+				}
+			}
+		}
+		else
+		{
+			_lstCraft->setRowColor(_sel, Palette::blockOffset(13));
+		}
 	}
 	else
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
-		if (_sel > _itemOffset)
+		ss << _qtys[_sel];
+		_lstItems->setCellText(_sel, 3, ss.str());
+
+		RuleItem *rule = _game->getRuleset()->getItem(_items[_sel]);
+
+		if (rule->getBattleType() == BT_AMMO && _qtys[_sel] == 0)
 		{
-			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
-			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
-			{
-				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
-			}
+			_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+		}
+		else if (_qtys[_sel] > 0)
+		{
+			_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+		}
+		else
+		{
+			_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
 		}
 	}
 }
