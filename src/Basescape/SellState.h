@@ -20,12 +20,12 @@
 #define OPENXCOM_SELLSTATE_H
 
 #include "../Engine/State.h"
+#include "PurchaseState.h"
 #include <vector>
 #include <string>
 
 namespace OpenXcom
 {
-enum SellType { SELL_SOLDIER, SELL_CRAFT, SELL_ITEM, SELL_SCIENTIST, SELL_ENGINEER };
 
 class TextButton;
 class Window;
@@ -44,28 +44,30 @@ class SellState : public State
 {
 private:
 	Base *_base;
-	TextButton *_btnOk, *_btnCancel;
+	TextButton *_btnOk, *_btnCancel, *_btnTab, *_btnPrev, *_btnNext;
 	Window *_window;
-	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue;
-	TextList *_lstItems;
-	std::vector<int> _qtys;
+	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue, *_txtSpace, *_txtSpaceUsed;
+	TextList *_lstPersonnel, *_lstCraft, *_lstItems;
+	TextList *_selList;
+	std::vector< std::vector<int> > _quantities;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
-	std::vector<std::string> _items;
+	std::vector< std::vector<std::string> > _items;
+	std::vector<std::string> _tabs;
+	std::vector<TextList*> _lists;
 	unsigned int _sel;
-	int _total, _hasSci, _hasEng;
+	size_t _selTab;
+	int _total;
+	float _spaceChange;
 	Timer *_timerInc, *_timerDec;
-	size_t _itemOffset;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
 	int getQuantity();
-	/// Gets the Type of the selected item.
-	enum SellType getType(unsigned selected) const;
 	/// Gets the index of selected item.
 	int getItemIndex(unsigned selected) const;
-	/// Gets the index of the selected craft.
-	int getCraftIndex(unsigned selected) const;
+
+	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base);
@@ -77,6 +79,12 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Tab button.
+	void btnTabClick(Action *action);
+	/// Handler for clicking the Previous button.
+	void btnPrevClick(Action *action);
+	/// Handler for clicking the Next button.
+	void btnNextClick(Action *action);
 	/// Handler for pressing an Increase arrow in the list.
 	void lstItemsLeftArrowPress(Action *action);
 	/// Handler for releasing an Increase arrow in the list.
