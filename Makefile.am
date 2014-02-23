@@ -28,97 +28,34 @@ pkgdata_DATA = bin/data/README.txt
 
 weaponsdir = $(pkgdatadir)/data/Resources/Weapons/
 weapons_DATA = \
-	bin/data/Resources/Weapons/Terror.png
+	bin/data/Resources/Weapons/*
 
 pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
 pathfinding_DATA = \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_02.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_03.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_04.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_05.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_06.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_07.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_08.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_09.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_10.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_11.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_12.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_13.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_14.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_15.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_16.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_17.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_18.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_19.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
+	bin/data/Resources/Pathfinding/*
 
 bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
 bulletsprite_DATA = \
-	bin/data/Resources/BulletSprites/BulletSprites.png
+	bin/data/Resources/BulletSprites/*
 
 uispritedir =  $(pkgdatadir)/data/Resources/UI/
 uisprite_DATA = \
-	bin/data/Resources/UI/reserve.png
+	bin/data/Resources/UI/*
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
-ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
+ruleset_DATA = bin/data/Ruleset/*
 
 languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
-	bin/data/Language/Font.dat \
-	bin/data/Language/FontBig.png \
-	bin/data/Language/FontSmall.png \
-	bin/data/Language/FontGeoBig.png \
-	bin/data/Language/FontGeoSmall.png \
-	bin/data/Language/en-GB.yml \
-	bin/data/Language/en-US.yml
+	bin/data/Language/*
 
 namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
-	bin/data/SoldierName/American.nam \
-	bin/data/SoldierName/Arabic.nam \
-	bin/data/SoldierName/British.nam \
-	bin/data/SoldierName/Czech.nam \
-	bin/data/SoldierName/Danish.nam \
-	bin/data/SoldierName/Finnish.nam \
-	bin/data/SoldierName/French.nam \
-	bin/data/SoldierName/German.nam \
-	bin/data/SoldierName/Hungarian.nam \
-	bin/data/SoldierName/Chinese.nam \
-	bin/data/SoldierName/Irish.nam \
-	bin/data/SoldierName/Italian.nam \
-	bin/data/SoldierName/Japanese.nam \
-	bin/data/SoldierName/Nigerian.nam \
-	bin/data/SoldierName/Polish.nam \
-	bin/data/SoldierName/Portuguese.nam \
-	bin/data/SoldierName/Romanian.nam \
-	bin/data/SoldierName/Russian.nam \
-	bin/data/SoldierName/Spanish.nam \
-	bin/data/SoldierName/Swedish.nam \
-	bin/data/SoldierName/Turkish.nam
+	bin/data/SoldierName/*
 	
 shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
-	bin/data/Shaders/Raw.OpenGL.shader \
-	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
-	bin/data/Shaders/CRT.OpenGL.shader \
-	bin/data/Shaders/CRT-simple.OpenGL.shader \
-	bin/data/Shaders/Curvature.OpenGL.shader \
-	bin/data/Shaders/dot_n_bloom.OpenGL.shader \
-	bin/data/Shaders/heavybloom.OpenGL.shader \
-	bin/data/Shaders/HQ2x.OpenGL.shader \
-	bin/data/Shaders/Openxcom.OpenGL.shader \
-	bin/data/Shaders/Phosphor-simple.OpenGL.shader \
-	bin/data/Shaders/Pixellate.OpenGL.shader \
-	bin/data/Shaders/Quilez.OpenGL.shader \
-	bin/data/Shaders/SABR.OpenGL.shader \
-	bin/data/Shaders/Scale4xHQ.OpenGL.shader \
-	bin/data/Shaders/simplebloom.OpenGL.shader
+	bin/data/Shaders/*
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
