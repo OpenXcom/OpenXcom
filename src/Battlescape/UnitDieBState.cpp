@@ -65,8 +65,13 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	else
 	{
 		if (_unit->getFaction() == FACTION_PLAYER)
+		{
 			_parent->getMap()->setUnitDying(true);
-		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+			if (Options::getBool("battleNotifyDeath"))
+			{
+				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+			}
+		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
 		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
