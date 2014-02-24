@@ -440,30 +440,37 @@ void SoldierDiaryKillsState::init()
  */
 void SoldierDiaryKillsState::drawSprites()
 {
-	int offset = 0;
+	if (!_displayCommendations) return;
+
+	int vectorIterator = 0; // Where we are currently located in the vector
+	int scrollDepth = _lstCommendations->getScroll(); // So we know where to start
+
 	for (std::vector<SoldierCommendations*>::const_iterator i = _base->getSoldiers()->at(_soldier)->getDiary()->getSoldierCommendations()->begin() ; i != _base->getSoldiers()->at(_soldier)->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
-		int _sprite = (*i)->getSprite();
-		int _decorationSprite = (*i)->getDecorationSprite();
-		int scrollDepth = _lstCommendations->getScroll();
-
-		if (offset < _commendations.size() && _displayCommendations == true)
+		// Skip commendations that are not visible in the textlist
+		if ( vectorIterator < scrollDepth || vectorIterator - scrollDepth >= _commendations.size())
 		{
-			// Handle commendation sprites
-			_commendationSprite->getFrame(_sprite)->setX(0);
-			_commendationSprite->getFrame(_sprite)->setY(0);
-			_commendationSprite->getFrame(_sprite)->blit(_commendations[offset - scrollDepth]);
-
-			// Handle commendation decoration sprites
-			if (_decorationSprite != 0)
-			{
-				_commendationDecoration->getFrame(_decorationSprite)->setX(0);
-				_commendationDecoration->getFrame(_decorationSprite)->setY(0);
-				_commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecorations[offset - scrollDepth]);
-			}
+			vectorIterator++;
+			continue;
 		}
 
-		offset++;
+		int _sprite = (*i)->getSprite();
+		int _decorationSprite = (*i)->getDecorationSprite();
+
+		// Handle commendation sprites
+		_commendationSprite->getFrame(_sprite)->setX(0);
+		_commendationSprite->getFrame(_sprite)->setY(0);
+		_commendationSprite->getFrame(_sprite)->blit(_commendations[vectorIterator - scrollDepth]);
+
+		// Handle commendation decoration sprites
+		if (_decorationSprite != 0)
+		{
+			_commendationDecoration->getFrame(_decorationSprite)->setX(0);
+			_commendationDecoration->getFrame(_decorationSprite)->setY(0);
+			_commendationDecoration->getFrame(_decorationSprite)->blit(_commendationDecorations[vectorIterator - scrollDepth]);
+		}
+
+		vectorIterator++;
 	}
 }
 
@@ -560,6 +567,16 @@ void SoldierDiaryKillsState::lstInfoMouseOver(Action *)
 void SoldierDiaryKillsState::lstInfoMouseOut(Action *)
 {
 	_txtMedalInfo->setText(L"");
+}
+
+/**
+ * Runs state functionality every cycle.
+ * Used to update sprite vector
+ */
+void SoldierDiaryKillsState::think()
+{
+	State::think();
+	drawSprites();
 }
 
 }

@@ -84,6 +84,8 @@ public:
     void lstInfoMouseOver(Action *action);
     /// Handler for moving the mouse outside the medals list.
     void lstInfoMouseOut(Action *action);
+	/// Runs state functionality every cycle.
+	void think();
 };
 
 }

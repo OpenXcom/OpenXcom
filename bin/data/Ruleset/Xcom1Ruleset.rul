@@ -9370,7 +9370,7 @@ commendations:
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
     sprite: 0
     criteria: 
-      total_kills: [0, 0, 0, 0, 20, 25, 30, 35, 40, 50]
+      total_kills: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
