@@ -36,6 +36,7 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/AlienMission.h"
@@ -494,9 +495,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			std::stringstream wss;
-			wss << (*i)->getName(_game->getLanguage()).c_str();
-			_missionUFO = wss.str();
+			_missionUFO = (*i)->getRules()->getType();
             _missionRace = (*i)->getAlienRace();
 			if (!aborted)
 			{
