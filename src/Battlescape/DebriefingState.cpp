@@ -61,6 +61,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Basescape/ManageAlienContainmentState.h"
+#include "../Basescape/SellState.h"
 
 namespace OpenXcom
 {
@@ -275,6 +276,7 @@ void DebriefingState::btnOkClick(Action *)
 		}
 		if (!_manageContainment && Options::storageLimitEnforced && _base->storesOverfull())
 		{
+			_game->pushState(new SellState(_game, _base, OPT_BATTLESCAPE));
 			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
