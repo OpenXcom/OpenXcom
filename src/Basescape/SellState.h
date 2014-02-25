@@ -60,6 +60,7 @@ private:
 	int _total;
 	float _spaceChange;
 	Timer *_timerInc, *_timerDec;
+	bool _overfull;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.

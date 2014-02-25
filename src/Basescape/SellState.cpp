@@ -56,9 +56,12 @@ namespace OpenXcom
  */
 SellState::SellState(Game *game, Base *base) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0)
 {
+	_overfull = Options::storageLimitEnforced && _base->storesOverfull();
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(148, 16, 8, 176);
+
+	_btnOk = new TextButton(_overfull? 288:148, 16, _overfull? 16:8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtSales = new Text(150, 9, 10, 24);
@@ -113,6 +116,12 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _soldie
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SellState::btnCancelClick, Options::keyCancel);
+
+	if (_overfull)
+	{
+		_btnCancel->setVisible(false);
+		_btnOk->setVisible(false);
+	}
 
 	_btnPrev->setColor(Palette::blockOffset(13)+10);
 	_btnPrev->setText(L"<<");
@@ -790,6 +799,11 @@ void SellState::updateItemStrings()
 		{
 			_selList->setRowColor(_sel, Palette::blockOffset(13) + 10);
 		}
+	}
+
+	if (_overfull)
+	{
+		_btnOk->setVisible(_base->storesOverfull(-_spaceChange));
 	}
 }
 
