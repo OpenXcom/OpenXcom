@@ -59,7 +59,7 @@ private:
 	unsigned int _sel;
 	size_t _selTab;
 	int _total;
-	float _spaceChange;
+	int _spaceChange;
 	Timer *_timerInc, *_timerDec;
 	bool _overfull;
 	Uint8 _color, _color2, _color3, _colorAmmo;

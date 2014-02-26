@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
+#include <iomanip>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -43,7 +44,6 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include "../aresame.h"
 #include "PurchaseState.h"
 
 namespace OpenXcom
@@ -54,7 +54,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0)
+SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0)
 {
 	_overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
@@ -75,7 +75,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtSell = new Text(96, 9, 172, 50);
 	_txtValue = new Text(40, 9, 225, 50);
 	_txtSpace = new Text(40, 9, 268, 50);
-	_lstPersonnel = new TextList(288, 120, 8, 62);
+	_lstPersonnel = new TextList(288, 104, 8, 62);
 	_lstCraft = new TextList(288, 104, 8, 62);
 	_lstItems = new TextList(288, 104, 8, 62);
 
@@ -182,32 +182,15 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtSpaceUsed->setSecondaryColor(_color2);
 
 	std::wostringstream ss5;
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	ss5 << _base->getExactUsedStores() << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss5.str());
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
-	_lstPersonnel->setColor(_color);
-	_lstPersonnel->setArrowColumn(145, ARROW_VERTICAL);
 	_lstPersonnel->setColumns(4, 120, 60, 28, 56);
-	_lstPersonnel->setSelectable(true);
-	_lstPersonnel->setBackground(_window);
-	_lstPersonnel->setMargin(2);
-	_lstPersonnel->setVisible(false);
 
-	_lstCraft->setColor(_color);
-	_lstCraft->setArrowColumn(145, ARROW_VERTICAL);
 	_lstCraft->setColumns(5, 120, 60, 28, 56, 22);
-	_lstCraft->setSelectable(true);
-	_lstCraft->setBackground(_window);
-	_lstCraft->setMargin(2);
-	_lstCraft->setVisible(false);
 
-	_lstItems->setColor(_color);
-	_lstItems->setArrowColumn(145, ARROW_VERTICAL);
 	_lstItems->setColumns(5, 120, 60, 28, 56, 22);
-	_lstItems->setSelectable(true);
-	_lstItems->setBackground(_window);
-	_lstItems->setMargin(2);
 	_lstItems->onLeftArrowPress((ActionHandler)&SellState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&SellState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&SellState::lstItemsLeftArrowClick);
@@ -230,10 +213,21 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		_items.push_back(std::vector<std::string>());
 	}
 
+	for (std::vector<TextList*>::iterator i = _lists.begin(); i != _lists.end(); ++i)
+	{
+		(*i)->setColor(_color);
+		(*i)->setArrowColumn(145, ARROW_VERTICAL);
+		(*i)->setSelectable(true);
+		(*i)->setBackground(_window);
+		(*i)->setMargin(2);
+		(*i)->setVisible(false);
+	}
+
 	// start on items tab
 	_selTab = TAB_ITEMS;
 	_btnTab->setText(tr("STR_ITEMS"));
 	_selList = _lstItems;
+	_selList->setVisible(true);
 
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
@@ -742,7 +736,7 @@ void SellState::increaseByValue(int change)
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
 		// Calculate the change in storage space
-		_spaceChange +=  change * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize();
+		_spaceChange +=  change * (int)(10 * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize());
 	}
 	_total += getPrice() * change;
 	updateItemStrings();
@@ -772,7 +766,7 @@ void SellState::decreaseByValue(int change)
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
 		// Calculate the change in storage space
-		_spaceChange -=  change * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize();
+		_spaceChange -=  change * (int)(10 * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize());
 	}
 	_total -= getPrice() * change;
 	updateItemStrings();
@@ -790,9 +784,9 @@ void SellState::updateItemStrings()
 	_selList->setCellText(_sel, 2, ss.str());
 	ss2 << getQuantity() - _quantities[_selTab][_sel];
 	_selList->setCellText(_sel, 1, ss2.str());
-	ss5 << _base->getUsedStores();
-	if (!AreSame(_spaceChange, 0.0f))
-		ss5 << "(-" << _spaceChange << ")";
+	ss5 << _base->getExactUsedStores();
+	if (_spaceChange != 0)
+		ss5 << "(-" << std::fixed << std::setprecision(1) << ((float)_spaceChange/10) << ")";
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
@@ -819,7 +813,7 @@ void SellState::updateItemStrings()
 
 	if (_overfull)
 	{
-		_btnOk->setVisible(_base->storesOverfull(-_spaceChange));
+		_btnOk->setVisible(!_base->storesOverfull(-_spaceChange));
 	}
 }
 
