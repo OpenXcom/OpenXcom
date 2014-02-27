@@ -33,7 +33,7 @@ class TextList;
 class Timer;
 class Base;
 
-enum eSelectedTab {TAB_PERSONNEL, TAB_CRAFT, TAB_ITEMS};
+enum eSelectedTab {TAB_PERSONNEL, TAB_CRAFT, TAB_ITEMS, TAB_TRANSFERS};
 
 /**
  * Purchase/Hire screen that lets the player buy
