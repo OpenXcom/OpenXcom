@@ -74,7 +74,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
-		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
+		if (_originalDir != 3)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
+		}
 	}
 
 	_unit->clearVisibleTiles();
@@ -113,9 +116,19 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	if (_unit->getStatus() == STATUS_TURNING)
+	if (_unit->getDirection() != 3)
 	{
+		int dir = _unit->getDirection() + 1;
+		if (dir == 8)
+		{
+			dir = 0;
+		}
+		_unit->lookAt(dir);
 		_unit->turn();
+		if (dir == 3)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		}
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
