@@ -583,6 +583,11 @@ double Base::getExactUsedStores()
 		{
 			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
 		}
+		else if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			Craft *craft = (*i)->getCraft();
+			total += craft->getItems()->getTotalSize(_rule);
+		}
 	}
 	total -= getIgnoredStores();
 	return total;
