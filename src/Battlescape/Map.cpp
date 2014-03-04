@@ -78,7 +78,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 	if (Options::getBool("traceAI"))
@@ -274,57 +274,44 @@ void Map::drawTerrain(Surface *surface)
 
 		if (_projectileInFOV)
 		{
-			if (_launch)
+			Position newCam = _camera->getMapOffset();
+			if (newCam.z != bulletHighZ) //switch level
 			{
-				_launch = false;
-				if ((bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
-					bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
-					&& _projectileInFOV)
+				newCam.z = bulletHighZ;
+				if (_projectileInFOV)
 				{
-					_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
-				}
-			}
-			else
-			{
-				Position newCam = _camera->getMapOffset();
-				if (newCam.z != bulletHighZ) //switch level
-				{
-					newCam.z = bulletHighZ;
-					if (_projectileInFOV)
-					{
-						_camera->setMapOffset(newCam);
-						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-					}
-				}
-
-				bool enough;
-				do
-				{
-					enough = true;
-					if (bulletPositionScreen.x < 8)
-					{
-						_camera->jumpXY(+surface->getWidth()-16, _visibleMapHeight/2 - bulletPositionScreen.y);
-						enough = false;
-					}
-					else if (bulletPositionScreen.x > surface->getWidth()-8)
-					{
-						_camera->jumpXY(-surface->getWidth()+16, _visibleMapHeight/2 - bulletPositionScreen.y);
-						enough = false;
-					}
-					else if (bulletPositionScreen.y < 8)
-					{
-						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-20);
-						enough = false;
-					}
-					else if (bulletPositionScreen.y > _visibleMapHeight-8)
-					{
-						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+20);
-						enough = false;
-					}
+					_camera->setMapOffset(newCam);
 					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-				} while (!enough);
-
+				}
 			}
+
+			bool enough;
+			do
+			{
+				enough = true;
+				if (bulletPositionScreen.x < 8)
+				{
+					_camera->jumpXY(+surface->getWidth()-16, 0);
+					enough = false;
+				}
+				else if (bulletPositionScreen.x > surface->getWidth()-8)
+				{
+					_camera->jumpXY(-surface->getWidth()+16, 0);
+					enough = false;
+				}
+				else if (bulletPositionScreen.y < 8)
+				{
+					_camera->jumpXY(0, +_visibleMapHeight-20);
+					enough = false;
+				}
+				else if (bulletPositionScreen.y > _visibleMapHeight-8)
+				{
+					_camera->jumpXY(0, -_visibleMapHeight+20);
+					enough = false;
+				}
+				_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+			} while (!enough);
+
 		}
 	}
 
@@ -1185,7 +1172,6 @@ void Map::cacheUnit(BattleUnit *unit)
 void Map::setProjectile(Projectile *projectile)
 {
 	_projectile = projectile;
-	_launch = true;
 }
 
 /**
