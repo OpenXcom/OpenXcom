@@ -205,38 +205,50 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 
 	if (_overfull)
 	{
-		if (!_base->getTransfers()->empty())
+
+		ItemContainer *tItems = new ItemContainer();
+		for (std::vector<Transfer*>::iterator t = _base->getTransfers()->begin(); t != _base->getTransfers()->end(); ++t)
 		{
-			ItemContainer *tItems = new ItemContainer();
-			for (std::vector<Transfer*>::iterator t = _base->getTransfers()->begin(); t != _base->getTransfers()->end(); ++t)
+			if ((*t)->getType() == TRANSFER_ITEM)
 			{
-				if ((*t)->getType() == TRANSFER_ITEM)
-				{
-					tItems->addItem((*t)->getItems(), (*t)->getQuantity());
-				}
-			}
-			if (tItems->getTotalQuantity() > 0)
-			{
-				_haveTransferItems = true;
-				TextList *lstTransfers = new TextList(288, 104, 8, 62);
-				add(lstTransfers);
-				_lists.push_back(lstTransfers);
-				_tabs.push_back("STR_TRANSFERS_UC");
-				_containers.push_back(tItems);
+				tItems->addItem((*t)->getItems(), (*t)->getQuantity());
 			}
 		}
-
+		if (tItems->getTotalQuantity() > 0)
+		{
+			_haveTransferItems = true;
+			TextList *lstTransfers = new TextList(288, 104, 8, 65);
+			add(lstTransfers);
+			_lists.push_back(lstTransfers);
+			_tabs.push_back("STR_TRANSFERS_UC");
+			_containers.push_back(tItems);
+		}
 		if (!_base->getCrafts()->empty())
 		{
 			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 			{
 				if ((*c)->getItems()->getTotalQuantity() > 0)
 				{
-					TextList *lstCraftInventory = new TextList(288, 104, 8, 62);
+					TextList *lstCraftInventory = new TextList(288, 104, 8, 65);
 					add(lstCraftInventory);
 					_lists.push_back(lstCraftInventory);
 					_tabs.push_back(Language::wstrToUtf8((*c)->getName(_game->getLanguage())));
 					_containers.push_back((*c)->getItems());
+				}
+			}
+		}
+		for (std::vector<Transfer*>::iterator t = _base->getTransfers()->begin(); t != _base->getTransfers()->end(); ++t)
+		{
+			if ((*t)->getType() == TRANSFER_CRAFT)
+			{
+				Craft *craft = (*t)->getCraft();
+				if (craft->getItems()->getTotalQuantity() > 0)
+				{
+					TextList *lstCraftInventory = new TextList(288, 104, 8, 65);
+					add(lstCraftInventory);
+					_lists.push_back(lstCraftInventory);
+					_tabs.push_back(Language::wstrToUtf8(craft->getName(_game->getLanguage())));
+					_containers.push_back((craft)->getItems());
 				}
 			}
 		}
