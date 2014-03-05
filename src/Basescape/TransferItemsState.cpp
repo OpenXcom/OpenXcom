@@ -580,6 +580,12 @@ void TransferItemsState::increaseByValue(int change)
 			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
+		if (Options::storageLimitsEnforced && _baseTo->storesOverfull(_iQty + (int)(craft->getItems()->getTotalSize(_game->getRuleset()) * 10 + 0.5)))
+		{
+			_timerInc->stop();
+			_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+			return;
+		}
 	}
 	if (TRANSFER_ITEM == selType && !selItem->getAlien()
 		&& _baseTo->storesOverfull((int)(selItem->getSize() * 10 + 0.5) + _iQty))

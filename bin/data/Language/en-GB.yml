@@ -839,6 +839,7 @@ en-GB:
   STR_AMOUNT_AT_DESTINATION: "AMOUNT AT{NEWLINE}DESTINATION"
   STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY: "Alien dies as there is no alien containment facility"
   STR_NO_FREE_ACCOMODATION_CREW: "NO FREE ACCOMMODATION!{SMALLLINE}The destination base does not have enough space in the living quarters for the crew assigned to the craft."
+  STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT: "NOT ENOUGH STORE SPACE!{SMALLLINE}The destination base does not have enough store space for the equipment assigned to the craft."
   STR_ITEMS_ARRIVING: "Items Arriving"
   STR_DESTINATION_UC: "DESTINATION"
   STR_PISTOL: "Pistol"
