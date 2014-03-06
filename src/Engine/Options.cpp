@@ -121,6 +121,7 @@ void createDefault()
 	setBool("allowBuildingQueue", false);
 	setBool("allowAutoSellProduction", false);
 	setBool("showFundsOnGeoscape", false);
+	setBool("TFTDDamage", false);
 	setBool("showMoreStatsInInventoryView", false);
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
