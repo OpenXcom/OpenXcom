@@ -552,7 +552,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 							if (victim->getFaction() == FACTION_HOSTILE && murderer)
 							{
-								murderer->setTurnsExposed(0);
+								murderer->setTurnsSinceSpotted(0);
 							}
 						}
 						// the winning squad all get a morale increase

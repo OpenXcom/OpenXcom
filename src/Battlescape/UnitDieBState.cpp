@@ -155,9 +155,9 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 		_parent->getMap()->setUnitDying(false);
-		if (_unit->getTurnsExposed() < 255)
+		if (_unit->getTurnsSinceSpotted() < 255)
 		{
-			_unit->setTurnsExposed(255);
+			_unit->setTurnsSinceSpotted(255);
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{

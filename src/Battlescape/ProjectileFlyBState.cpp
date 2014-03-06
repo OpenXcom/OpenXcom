@@ -535,7 +535,7 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-								_unit->setTurnsExposed(0);
+								_unit->setTurnsSinceSpotted(0);
 							}
 						}
 					}
