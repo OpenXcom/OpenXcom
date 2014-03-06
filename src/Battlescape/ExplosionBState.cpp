@@ -91,7 +91,7 @@ void ExplosionBState::init()
 		if (_power)
 		{
 			int frame = 0;
-			int counter = (_power/5) / 5;
+			int counter = std::max(1, (_power/5) / 5);
 			for (int i = 0; i < _power/5; i++)
 			{
 				int X = RNG::generate(-_power/2,_power/2);
