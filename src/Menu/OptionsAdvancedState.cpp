@@ -106,7 +106,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("weaponSelfDestruction", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("researchedItemsWillSpent", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("spendResearchedItems", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));

@@ -72,7 +72,6 @@ void createDefault()
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setBool("weaponSelfDestruction", false);
-	setBool("researchedItemsWillSpent", false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
@@ -110,6 +109,7 @@ void createDefault()
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
+	setBool("spendResearchedItems", false);
 	setBool("alienContainmentLimitEnforced", false);
 	setBool("canSellLiveAliens", false);
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
