@@ -347,8 +347,14 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 		// As soon as we find a medal criteria that we do NOT achieve, then we are not awarded a medal
 		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
+			// Skip this medal if we have reached its max award level
+			if (_nextCommendationLevel[""] >= (*j).second.size())
+			{
+				_awardCommendation = false;
+				break;
+			}
             // These criteria have no nouns, so only the _nextCommendationLevel[""] will ever be used
-			if(     ((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+			else if(((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
