@@ -71,6 +71,11 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+		// since melee aliens don't use a conventional weapon type, we use their strength instead.
+		if (_item->getRules()->getBattleType() == BT_MELEE && _item->getRules()->isStrengthApplied())
+		{
+			_power += _unit->getStats()->strength;
+		}
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
 						_item->getRules()->getExplosionRadius() != 0;
 	}

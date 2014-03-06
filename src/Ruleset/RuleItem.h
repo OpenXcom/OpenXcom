@@ -66,6 +66,7 @@ private:
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
+	bool _strengthApplied;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -203,6 +204,7 @@ public:
 	int getShotgunPellets() const;
 	/// Gets the weapon's zombie unit.
 	std::string getZombieUnit() const;
+	bool isStrengthApplied() const;
 };
 
 }
