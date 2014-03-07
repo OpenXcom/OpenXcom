@@ -31,6 +31,7 @@
 #include "RuleItem.h"
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
+#include "RuleMusic.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
 #include "Unit.h"
@@ -120,6 +121,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleTerrain*>::iterator i = _terrains.begin(); i != _terrains.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::vector< std::pair<std::string, RuleMusic *> >::const_iterator i = _music.begin (); i != _music.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -286,6 +291,14 @@ void Ruleset::loadFile(const std::string &filename)
 		{
 			rule->load(*i, this);
 		}
+	}
+ 	for (YAML::const_iterator i = doc["music"].begin(); i != doc["music"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		std::auto_ptr<RuleMusic> ruleMusic(new RuleMusic());
+		ruleMusic->load(*i);
+		_music.push_back(std::make_pair(type, ruleMusic.release()));
+		_musicIndex.push_back(type);
 	}
  	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{

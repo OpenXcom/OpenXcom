@@ -38,6 +38,7 @@ class RuleCraftWeapon;
 class RuleItem;
 class RuleUfo;
 class RuleTerrain;
+class RuleMusic;
 class MapDataSet;
 class ResourcePack;
 class RuleSoldier;
@@ -76,6 +77,7 @@ protected:
 	std::map<std::string, RuleItem*> _items;
 	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, RuleTerrain*> _terrains;
+	std::vector<std::pair<std::string, RuleMusic *> > _music;
 	std::map<std::string, MapDataSet*> _mapDataSets;
 	std::map<std::string, RuleSoldier*> _soldiers;
 	std::map<std::string, Unit*> _units;
@@ -97,7 +99,7 @@ protected:
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _musicIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval

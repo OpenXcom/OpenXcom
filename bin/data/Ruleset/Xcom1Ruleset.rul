@@ -9334,3 +9334,34 @@ extraSprites:
     subY: 48
     files:
       -4: Resources/Weapons/Terror.png
+music:
+  - type: GMDEFEND
+    midipack: 3
+  - type: GMENBASE
+    midipack: 6
+  - type: GMGEO
+    files: [ GMGEO1, GMGEO2, GMGEO3, GMGEO4 ]
+    indexes: [ 0, 18, -1, -1 ]
+  - type: GMINTER
+    midipack: 2
+  - type: GMINTRO1
+    midipack: 19
+  - type: GMINTRO2
+    midipack: 20
+  - type: GMINTRO3
+    midipack: 21
+  - type: GMLOSE
+    midipack: 10
+  - type: GMMARS
+    midipack: 9
+  - type: GMNEWMAR
+    midipack: 8
+  - type: GMSTORY
+    midipack: 12
+  - type: GMTACTIC
+    terrain: [CULTA, DESERT, FOREST, JUNGLE, MOUNT, POLAR]
+    files: [ GMTACTIC, GMTACTIC2 ]
+    indexes: [ 17, -1 ]
+  - type: GMWIN
+    midipack: 11
+
