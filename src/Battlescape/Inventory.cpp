@@ -709,7 +709,11 @@ void Inventory::mouseClick(Action *action, State *state)
 								}
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
-							else item->setExplodeTurn(-1);  // Unprime the grenade
+							else
+							{
+								_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
+								item->setExplodeTurn(-1);  // Unprime the grenade
+							}
 						}
 					}
 				}

@@ -990,6 +990,7 @@ en-US:
   STR_WEAPON_IS_ALREADY_LOADED: "Weapon is already loaded!"
   STR_NO_LINE_OF_FIRE: "No Line of Fire!"
   STR_GRENADE_IS_ACTIVATED: "Grenade is Activated!"
+  STR_GRENADE_IS_DEACTIVATED: "Grenade De-activated!"
   STR_THERE_IS_NO_ONE_THERE: "There is no one there!"
   STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED: "Unable to use alien artifact until researched!"
   STR_OUT_OF_RANGE: "Out of Range!"
