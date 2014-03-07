@@ -48,6 +48,20 @@
 
 namespace OpenXcom
 {
+	static const std::string XCOM_RESOURCE_MUSIC_GMDEFEND = "GMDEFEND";
+	static const std::string XCOM_RESOURCE_MUSIC_GMENBASE = "GMENBASE";
+	static const std::string XCOM_RESOURCE_MUSIC_GMGEO1 = "GMGEO1";
+	static const std::string XCOM_RESOURCE_MUSIC_GMGEO = "GMGEO";
+	static const std::string XCOM_RESOURCE_MUSIC_GMINTER = "GMINTER";
+	static const std::string XCOM_RESOURCE_MUSIC_GMINTRO1 = "GMINTRO1";
+	static const std::string XCOM_RESOURCE_MUSIC_GMINTRO2 = "GMINTRO2";
+	static const std::string XCOM_RESOURCE_MUSIC_GMINTRO3 = "GMINTRO3";
+	static const std::string XCOM_RESOURCE_MUSIC_GMLOSE = "GMLOSE";
+	static const std::string XCOM_RESOURCE_MUSIC_GMMARS = "GMMARS";
+	static const std::string XCOM_RESOURCE_MUSIC_GMNEWMAR = "GMNEWMAR";
+	static const std::string XCOM_RESOURCE_MUSIC_GMSTORY = "GMSTORY";
+	static const std::string XCOM_RESOURCE_MUSIC_GMTACTIC = "GMTACTIC";
+	static const std::string XCOM_RESOURCE_MUSIC_GMWIN = "GMWIN";
 
 namespace
 {

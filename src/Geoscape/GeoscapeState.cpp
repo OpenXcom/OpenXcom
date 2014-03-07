@@ -476,7 +476,7 @@ void GeoscapeState::init()
 		}
 		else
 		{
-			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+			_game->getResourcePack()->getMusic("GMGEO")->play();
 		}
 		_music = true;
 	}

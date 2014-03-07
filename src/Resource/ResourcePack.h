@@ -60,7 +60,8 @@ protected:
 	std::map<std::string, SoundSet*> _sounds;
 	std::list<Polygon*> _polygons;
 	std::list<Polyline*> _polylines;
-	std::map<std::string, Music*> _musics;
+	std::map<std::string, Music*> _musicFile;
+	std::map<std::string, std::map<std::string, std::vector<std::string> > > _musicAssignment;
 	std::vector<Uint16> _voxelData;
 public:
 	/// Create a new resource pack with a folder's contents.
@@ -80,7 +81,7 @@ public:
 	/// Gets a particular music.
 	Music *getMusic(const std::string &name) const;
 	/// Gets a random music.
-	Music *getRandomMusic(const std::string &name) const;
+	Music *getRandomMusic(const std::string &name, const std::string &terrain) const;
 	/// Gets a particular sound.
 	Sound *getSound(const std::string &set, unsigned int sound) const;
 	/// Gets a particular palette.
