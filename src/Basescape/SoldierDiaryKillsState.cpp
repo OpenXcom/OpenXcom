@@ -268,6 +268,8 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOver);
 	_lstCommendations->onMouseOut((ActionHandler)&SoldierDiaryKillsState::lstInfoMouseOut);
 
+	_base->getSoldiers()->at(_soldier)->getDiary()->updateDiary(); // Don't do this in the init(), only now and when switching soldiers
+
 	init(); // Populate the list
 }
 
@@ -494,6 +496,7 @@ void SoldierDiaryKillsState::btnPrevClick(Action *)
 		_soldier = _base->getSoldiers()->size() - 1;
 	else
 		_soldier--;
+	_base->getSoldiers()->at(_soldier)->getDiary()->updateDiary();
 	init();
 }
 
@@ -506,6 +509,7 @@ void SoldierDiaryKillsState::btnNextClick(Action *)
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;
+	_base->getSoldiers()->at(_soldier)->getDiary()->updateDiary();
 	init();
 }
 
@@ -528,7 +532,6 @@ void SoldierDiaryKillsState::btnMissionsToggle(Action *)
 	_displayKills = false;
 	_displayMissions = true;
     _displayCommendations = false;
-	
 	init();
 }
 
