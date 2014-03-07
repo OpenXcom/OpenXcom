@@ -49,17 +49,17 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 232, 120, 44, 40, POPUP_BOTH);
-	_btnOk = new TextButton(180, 16, 70, 136);
-	_txtTitle = new Text(222, 9, 49, 48);
-	_txtScore = new Text(222, 9, 49, 66);
-	_txtMissionType= new Text(222, 9, 49, 75);
-	_txtUFO = new Text(222, 9, 49, 84);
-	_txtKills = new Text(130, 9, 187, 66);
-	_txtRace = new Text(130, 9, 187, 75);
-	_txtDaylight = new Text(130, 9, 187, 84);
-	_txtDaysWounded = new Text(130, 9, 187, 93);
-	_lstKills = new TextList(222, 27, 49, 106);
+	_window = new Window(this, 232, 128, 44, 36, POPUP_BOTH);
+	_btnOk = new TextButton(180, 16, 70, 140);
+	_txtTitle = new Text(222, 9, 49, 44);
+	_txtScore = new Text(222, 9, 49, 62);
+	_txtMissionType= new Text(222, 9, 49, 71);
+	_txtUFO = new Text(222, 9, 49, 80);
+	_txtKills = new Text(130, 9, 187, 62);
+	_txtRace = new Text(130, 9, 187, 71);
+	_txtDaylight = new Text(130, 9, 187, 80);
+	_txtDaysWounded = new Text(130, 9, 187, 89);
+	_lstKills = new TextList(200, 32, 49, 102);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
