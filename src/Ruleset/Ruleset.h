@@ -211,6 +211,8 @@ public:
 	const YAML::Node &getStartingBase();
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
+	/// Gets the music rules
+	std::vector<std::pair<std::string, RuleMusic *> > getMusic() const;
 	/// Gets the list of external Sprites.
 	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
 	/// Gets the list of external Sounds.

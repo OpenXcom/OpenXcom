@@ -158,14 +158,40 @@ Music *ResourcePack::getRandomMusic(const std::string &name, const std::string &
 	{
 	    if (_musicAssignment.find(name) == _musicAssignment.end())
 		  return _muteMusic;
-		std::map<std::string,std::vector<std::string> > assignment = _musicAssignment.at(name);
+		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
 		if (assignment.find(terrain) == assignment.end())
 		  return _muteMusic;
 		
-		std::vector<std::string> musicCodes = assignment.at(terrain);
-		std::string randomCode = musicCodes[RNG::generate(0, musicCodes.size()-1)];
-		Music* music = _musicFile.at(randomCode);
+		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
+		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(0, musicCodes.size()-1)];
+		Music* music = _musicFile.at(randomCode.first);
 		return music;
+	}
+}
+
+/// Clear a music assignment
+void ResourcePack::ClearMusicAssignment(const std::string &name, const std::string &terrain)
+{
+	if (_musicAssignment.find(name) == _musicAssignment.end())
+		return;
+	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+		return;
+	
+	_musicAssignment.at(name).at(terrain).clear();
+}
+
+/// Make a music assignment
+void ResourcePack::MakeMusicAssignment(const std::string &name, const std::string &terrain, const std::vector<std::string> &filenames, const std::vector<int> &midiIndexes)
+{
+	if (_musicAssignment.find(name) == _musicAssignment.end())
+		_musicAssignment[name] = std::map<std::string, std::vector<std::pair<std::string,int> > > ();
+	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+		_musicAssignment[name][terrain] = std::vector<std::pair<std::string,int> > ();
+	
+	for(int i = 0; i<filenames.size(); i++)
+	{
+		std::pair<std::string,int> toAdd = std::make_pair<std::string,int>(filenames.at(i), midiIndexes.at(i));
+		_musicAssignment[name][terrain].push_back(toAdd);
 	}
 }
 

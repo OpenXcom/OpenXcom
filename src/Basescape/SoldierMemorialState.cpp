@@ -21,6 +21,7 @@
 #include <iomanip>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -59,7 +60,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-	_game->getResourcePack()->getMusic("GMLOSE")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play();
 
 	add(_window);
 	add(_btnOk);
@@ -146,7 +147,7 @@ SoldierMemorialState::~SoldierMemorialState()
 void SoldierMemorialState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play();
 }
 
 /**

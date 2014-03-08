@@ -29,6 +29,7 @@
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
@@ -220,7 +221,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMMARS")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS)->play();
 
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);

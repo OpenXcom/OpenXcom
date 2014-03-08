@@ -20,6 +20,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"
@@ -51,7 +52,7 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 	// Set up objects
 	_window->onMouseClick((ActionHandler)&VictoryState::windowClick);
 	
-	_game->getResourcePack()->getMusic("GMWIN")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMWIN)->play();
 
 	for (int text = 0; text != 5; ++text)
 	{

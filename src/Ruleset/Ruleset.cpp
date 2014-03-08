@@ -1136,6 +1136,12 @@ MCDPatch *Ruleset::getMCDPatch(const std::string id) const
 	if (_MCDPatches.end() != i) return i->second; else return 0;
 }
 
+/// Gets the music rules
+std::vector<std::pair<std::string, RuleMusic *> > Ruleset::getMusic() const
+{
+	return _music;
+}
+
 /**
  * Gets the list of external sprites.
  * @return The list of external sprites.

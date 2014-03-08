@@ -43,25 +43,12 @@
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Logger.h"
+#include "../Ruleset/RuleMusic.h"
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/ExtraSounds.h"
 
 namespace OpenXcom
 {
-	static const std::string XCOM_RESOURCE_MUSIC_GMDEFEND = "GMDEFEND";
-	static const std::string XCOM_RESOURCE_MUSIC_GMENBASE = "GMENBASE";
-	static const std::string XCOM_RESOURCE_MUSIC_GMGEO1 = "GMGEO1";
-	static const std::string XCOM_RESOURCE_MUSIC_GMGEO = "GMGEO";
-	static const std::string XCOM_RESOURCE_MUSIC_GMINTER = "GMINTER";
-	static const std::string XCOM_RESOURCE_MUSIC_GMINTRO1 = "GMINTRO1";
-	static const std::string XCOM_RESOURCE_MUSIC_GMINTRO2 = "GMINTRO2";
-	static const std::string XCOM_RESOURCE_MUSIC_GMINTRO3 = "GMINTRO3";
-	static const std::string XCOM_RESOURCE_MUSIC_GMLOSE = "GMLOSE";
-	static const std::string XCOM_RESOURCE_MUSIC_GMMARS = "GMMARS";
-	static const std::string XCOM_RESOURCE_MUSIC_GMNEWMAR = "GMNEWMAR";
-	static const std::string XCOM_RESOURCE_MUSIC_GMSTORY = "GMSTORY";
-	static const std::string XCOM_RESOURCE_MUSIC_GMTACTIC = "GMTACTIC";
-	static const std::string XCOM_RESOURCE_MUSIC_GMWIN = "GMWIN";
 
 namespace
 {
@@ -88,7 +75,7 @@ struct HairBleach
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
  */
-XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
+XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, RuleMusic *> > musicRules, std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
 {
 	// Load palettes
 	for (int i = 0; i < 5; ++i)
@@ -270,29 +257,32 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	if (!Options::mute)
 	{
-		// Load musics
-		std::string mus[] = {"GMDEFEND",
-							 "GMENBASE",
-							 "GMGEO1",
-							 "GMGEO2",
-							 "GMGEO3",
-							 "GMGEO4",
-							 "GMINTER",
-							 "GMINTRO1",
-							 "GMINTRO2",
-							 "GMINTRO3",
-							 "GMLOSE",
-							 "GMMARS",
-							 "GMNEWMAR",
-							 "GMSTORY",
-							 "GMTACTIC",
-							 "GMTACTIC2",
-							 "GMWIN"};
-		std::string exts[] = {"flac", "ogg", "mp3", "mod"};
-		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
-
 #ifndef __NO_MUSIC
-		// Check which music version is available
+		// Load musics
+		
+		// We gather the assignments first.
+		for (std::vector<std::pair<std::string, RuleMusic *> >::const_iterator i = musicRules.begin(); i != musicRules.end(); ++i)
+        {
+			std::string type = i->first;
+			RuleMusic *musicRule = i->second;
+			
+			std::vector<std::string> terrains = musicRule->getTerrains();
+			std::string mode = musicRule->getMode();
+			if (mode == "replace")
+			{
+				for(std::vector<std::string>::const_iterator terrain=terrains.begin(); terrain != terrains.end(); ++terrain)
+				{
+					ClearMusicAssignment(type, *terrain);
+				}
+			}
+
+			for(std::vector<std::string>::const_iterator terrain=terrains.begin(); terrain != terrains.end(); ++terrain)
+			{
+				MakeMusicAssignment(type, *terrain, musicRule->getFiles(), musicRule->getIndexes());
+			}
+		}
+		
+		// Check if GM.CAT data is available
 		bool cat = true;
 		GMCatFile *gmcat = 0;
 
@@ -306,49 +296,68 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			cat = false;
 		}
-
-		for (int i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
+		
+		// We have the assignments, we only need to load the required files now.
+		for(std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > >::const_iterator  i=_musicAssignment.begin(); i!= _musicAssignment.end();++i)
 		{
-			bool loaded = false;
-			// Try digital tracks
-			for (int j = 0; j < 3; ++j)
+			std::string type = i->first;
+			std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
+			for(std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator j=assignment.begin();j!=assignment.end();++j)
 			{
-				std::ostringstream s;
-				s << "SOUND/" << mus[i] << "." << exts[j];
-				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				std::vector<std::pair<std::string, int> > filenames = j->second;
+				for(std::vector<std::pair<std::string, int> >::const_iterator k=filenames.begin(); k != filenames.end(); ++k)
 				{
-					_musics[mus[i]] = new Music();
-					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
-					loaded = true;
-					break;
-				}
-			}
-			if (!loaded)
-			{
-				// Try Adlib music
-				if (cat && tracks[i] != -1)
-				{
-					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
-					loaded = true;
-				}
-				// Try MIDI music
-				else
-				{
-					std::ostringstream s;
-					s << "SOUND/" << mus[i] << ".mid";
-					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+					std::string filename = k->first;
+					int midiIndex = k->second;
+					
+					//LoadMusic(filename, midiIndex):
+					std::string exts[] = {"flac", "ogg", "mp3", "mod"};
+					
+					bool loaded = false;
+					// Try digital tracks
+					for (int exti = 0; exti < 3; ++exti)
 					{
-						_musics[mus[i]] = new Music();
-						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
-						loaded = true;
+						std::ostringstream s;
+						s << "SOUND/" << filename << "." << exts[exti];
+						if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+						{
+							_musicFile[filename] = new Music();
+							_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+							loaded = true;
+							break;
+						}
+					}
+					
+					if (!loaded)
+					{
+						// Try Adlib music
+						if (cat && midiIndex != -1)
+						{
+							_musicFile[filename] = gmcat->loadMIDI(midiIndex);
+							loaded = true;
+						}
+						// Try MIDI music
+						else
+						{
+							std::ostringstream s;
+							s << "SOUND/" << filename << ".mid";
+							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+							{
+								_musicFile[filename] = new Music();
+								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+								loaded = true;
+							}
+						}
+					}
+					
+					if (!loaded && midiIndex != -1)
+					{
+						throw Exception(filename + " not found");
 					}
 				}
 			}
-			if (!loaded && tracks[i] != -1)
-			{
-				throw Exception(mus[i] + " not found");
-			}
 		}
+		
 		delete gmcat;
 #endif		
 		

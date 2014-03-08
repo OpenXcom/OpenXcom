@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -472,11 +473,11 @@ void GeoscapeState::init()
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-			_game->getResourcePack()->getMusic("GMGEO1")->play();
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1)->play();
 		}
 		else
 		{
-			_game->getResourcePack()->getMusic("GMGEO")->play();
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play();
 		}
 		_music = true;
 	}
@@ -822,7 +823,7 @@ void GeoscapeState::time5Seconds()
 							if(!_battleMusic)
 							{
 								// Set music
-								_game->getResourcePack()->getMusic("GMINTER")->play();
+								_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER)->play();
 								_battleMusic = true;
 							}
 						}

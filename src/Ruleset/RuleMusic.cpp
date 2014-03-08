@@ -47,6 +47,18 @@ void RuleMusic::load(const YAML::Node &node)
 	_terrains = node["terrain"].as< std::vector<std::string> >(_terrains);
 	_files = node["files"].as< std::vector<std::string> >(_files);
 	_indexes = node["indexes"].as< std::vector<int> >(_indexes);
+	
+	if (_terrains.empty())
+	  _terrains.push_back("");
+	
+	if (_files.empty())
+	  _files.push_back(_type);
+	
+	if (_indexes.empty())
+	  _indexes.push_back(_midiIndex);
+	
+	while(_indexes.size()<_files.size())
+	  _indexes.push_back(-1);
 }
 
 std::string RuleMusic::getMode()

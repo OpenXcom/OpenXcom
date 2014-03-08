@@ -51,6 +51,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
@@ -491,7 +492,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBefor
 	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
 
 	// Set music
-	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
+	std::string terrain = "";//game->getSavedGame()->getSavedBattle()->getTerrain();
+	_game->getResourcePack()->getRandomMusic( OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC, terrain)->play();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
