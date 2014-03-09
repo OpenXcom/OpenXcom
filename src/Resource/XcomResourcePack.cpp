@@ -350,9 +350,9 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, RuleMusic 
 						}
 					}
 					
-					if (!loaded && midiIndex != -1)
+					if (!loaded)
 					{
-						throw Exception(filename + " not found");
+						throw Exception(filename + " music not found");
 					}
 				}
 			}

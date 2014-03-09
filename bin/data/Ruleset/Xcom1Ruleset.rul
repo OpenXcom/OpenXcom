@@ -9342,8 +9342,8 @@ music:
   - type: GMGEO1
     midipack: 0
   - type: GMGEO
-    files: [ GMGEO1, GMGEO2, GMGEO3, GMGEO4 ]
-    indexes: [ 0, 18, -1, -1 ]
+    files: [ GMGEO1, GMGEO2 ]
+    indexes: [ 0, 18 ]
   - type: GMINTER
     midipack: 2
   - type: GMINTRO1
@@ -9361,9 +9361,9 @@ music:
   - type: GMSTORY
     midipack: 12
   - type: GMTACTIC
-    terrain: [CULTA, DESERT, FOREST, JUNGLE, MOUNT, POLAR]
-    files: [ GMTACTIC, GMTACTIC2 ]
-    indexes: [ 17, -1 ]
+    terrain: [CULTA, DESERT, FOREST, JUNGLE, MARS, MOUNT, POLAR, UBASE, URBAN, XBASE]
+    files: [ GMTACTIC ]
+    indexes: [ 17 ]
   - type: GMWIN
     midipack: 11
 

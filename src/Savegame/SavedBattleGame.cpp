@@ -59,7 +59,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _strafeEnabled(false), _sneaky(false),
-									 _traceAI(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false)//, _terrain("")
+									 _traceAI(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -550,12 +550,12 @@ int SavedBattleGame::getMapSizeXYZ() const
 
 void SavedBattleGame::setTerrain(std::string terrain)
 {
-	//_terrain = terrain;
+	_terrain = terrain;
 }
 
 std::string SavedBattleGame::getTerrain() const
 {
-	//return _terrain;
+	return _terrain;
 }
 
 /**

@@ -492,7 +492,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBefor
 	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
 
 	// Set music
-	std::string terrain = "";//game->getSavedGame()->getSavedBattle()->getTerrain();
+	std::string terrain = game->getSavedGame()->getSavedBattle()->getTerrain();
 	_game->getResourcePack()->getRandomMusic( OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC, terrain)->play();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);

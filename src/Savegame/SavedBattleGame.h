@@ -75,7 +75,7 @@ private:
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
-	//std::string _terrain;
+	std::string _terrain;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:

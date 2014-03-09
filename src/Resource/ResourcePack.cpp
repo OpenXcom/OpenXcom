@@ -28,6 +28,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -156,7 +157,8 @@ Music *ResourcePack::getRandomMusic(const std::string &name, const std::string &
 	}
 	else
 	{
-	    if (_musicAssignment.find(name) == _musicAssignment.end())
+		Log(LOG_DEBUG) << "Request to play " << name << " '" << terrain << "'";
+		if (_musicAssignment.find(name) == _musicAssignment.end())
 		  return _muteMusic;
 		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
 		if (assignment.find(terrain) == assignment.end())
