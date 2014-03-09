@@ -60,7 +60,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES)->play();
 
 	add(_window);
 	add(_btnOk);

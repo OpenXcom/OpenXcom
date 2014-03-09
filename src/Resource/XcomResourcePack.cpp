@@ -314,18 +314,28 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, RuleMusic 
 					std::string exts[] = {"flac", "ogg", "mp3", "mod"};
 					
 					bool loaded = false;
-					// Try digital tracks
-					for (int exti = 0; exti < 3; ++exti)
+					
+					// The file may have already been loaded because of an other assignment
+					if (_musicFile.find(filename) != _musicFile.end())
 					{
-						std::ostringstream s;
-						s << "SOUND/" << filename << "." << exts[exti];
-						if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
-						{
-							_musicFile[filename] = new Music();
-							_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
-							loaded = true;
-							break;
-						}
+						loaded =true;
+					}
+					
+					// Try digital tracks
+					if (!loaded)
+					{
+					  for (int exti = 0; exti < 3; ++exti)
+					  {
+						  std::ostringstream s;
+						  s << "SOUND/" << filename << "." << exts[exti];
+						  if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+						  {
+							  _musicFile[filename] = new Music();
+							  _musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+							  loaded = true;
+							  break;
+						  }
+					  }
 					}
 					
 					if (!loaded)

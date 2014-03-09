@@ -157,7 +157,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name, const std::string &
 	}
 	else
 	{
-		Log(LOG_DEBUG) << "Request to play " << name << " '" << terrain << "'";
+		Log(LOG_DEBUG) << "MUSIC - Request to play " << name << " '" << terrain << "'";
 		if (_musicAssignment.find(name) == _musicAssignment.end())
 		  return _muteMusic;
 		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
@@ -166,6 +166,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name, const std::string &
 		
 		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
 		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(0, musicCodes.size()-1)];
+		Log(LOG_DEBUG) << "MUSIC - Chose " << randomCode.first;
 		Music* music = _musicFile.at(randomCode.first);
 		return music;
 	}

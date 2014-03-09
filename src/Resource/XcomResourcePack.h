@@ -41,6 +41,7 @@ static const std::string XCOM_RESOURCE_MUSIC_GMNEWMAR = "GMNEWMAR";
 static const std::string XCOM_RESOURCE_MUSIC_GMSTORY = "GMSTORY";
 static const std::string XCOM_RESOURCE_MUSIC_GMTACTIC = "GMTACTIC";
 static const std::string XCOM_RESOURCE_MUSIC_GMWIN = "GMWIN";
+static const std::string XCOM_RESOURCE_MUSIC_GMGRAVES = "GMGRAVES";
 
 /**
  * Resource pack for the X-Com: UFO Defense game.

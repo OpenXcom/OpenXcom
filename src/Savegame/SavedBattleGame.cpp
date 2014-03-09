@@ -113,7 +113,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_missionType = node["missionType"].as<std::string>(_missionType);
 	_globalShade = node["globalshade"].as<int>(_globalShade);
 	_turn = node["turn"].as<int>(_turn);
-	//_terrain = node["terrain"].as<std::string>(_terrain);
+	_terrain = node["terrain"].as<std::string>(_terrain);
 	int selectedUnit = node["selectedUnit"].as<int>();
 
 	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
@@ -353,7 +353,7 @@ YAML::Node SavedBattleGame::save() const
 	node["missionType"] = _missionType;
 	node["globalshade"] = _globalShade;
 	node["turn"] = _turn;
-	//node["terrain"] = _terrain;
+	node["terrain"] = _terrain;
 	node["selectedUnit"] = (_selectedUnit?_selectedUnit->getId():-1);
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{

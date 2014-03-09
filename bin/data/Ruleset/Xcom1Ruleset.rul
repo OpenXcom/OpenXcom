@@ -9366,4 +9366,7 @@ music:
     indexes: [ 17 ]
   - type: GMWIN
     midipack: 11
+  - type: GMGRAVES
+    files: [ GMLOSE ]
+    midipack: 10
 
