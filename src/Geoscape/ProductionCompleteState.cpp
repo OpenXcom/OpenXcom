@@ -102,6 +102,9 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 	case PROGRESS_NOT_ENOUGH_MATERIALS:
 		s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base->getName());
 		break;
+	case PROGRESS_NOT_ENOUGH_STORAGE:
+		s = tr("STR_NOT_ENOUGH_STORAGE_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base->getName());
+		break;
 	default:
 		assert(false);
 	}

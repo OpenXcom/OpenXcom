@@ -1197,6 +1197,7 @@ en-US:
   STR_CONTAINMENT_EXCEEDED: "ALIEN CONTAINMENT LIMITS EXCEEDED!{SMALLLINE}Insufficient containment space at {0}. You must remove excess aliens from containment (who will then die)."
   STR_MANAGE_CONTAINMENT: "Manage Alien Containment"
   STR_STORAGE_EXCEEDED: "STORAGE SPACE EXCEEDED!{SMALLLINE}Insufficient storage space at {0}. You must sell off excess items."
+  STR_NOT_ENOUGH_STORAGE_TO_PRODUCE_ITEM_AT_BASE: "Not enough space to produce{NEWLINE}{0}{NEWLINE}at{NEWLINE}{1}"
   STR_DETAILS: "DETAILS> {ALT}{0}"
   STR_GO_TO_BASE: "Go to Base"
   STR_DISABLEAUTOEQUIP: "Disable auto-equip"

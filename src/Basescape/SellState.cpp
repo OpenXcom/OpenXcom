@@ -81,7 +81,6 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_lstItems = new TextList(288, 104, 8, 65);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	if (origin == OPT_BATTLESCAPE)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -92,6 +91,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	}
 	else
 	{
+		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 		_color  = Palette::blockOffset(13)+10;
 		_color2 = Palette::blockOffset(13);

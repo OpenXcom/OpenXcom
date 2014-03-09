@@ -150,7 +150,7 @@ void CraftsState::btnOkClick(Action *)
 	if (Options::storageLimitsEnforced && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_game, _base, OPT_GEOSCAPE));
-		_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+		_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(15)+1, "BACK01.SCR", 0));
 	}
 }
 

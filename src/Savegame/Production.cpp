@@ -141,6 +141,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 				// We need to ensure that player has enough cash/item to produce a new unit
 				if (!haveEnoughMoneyForOneMoreUnit(g)) return PROGRESS_NOT_ENOUGH_MONEY;
 				if (!haveEnoughMaterialsForOneMoreUnit(b)) return PROGRESS_NOT_ENOUGH_MATERIALS;
+				if (Options::storageLimitsEnforced && b->storesOverfull()) return PROGRESS_NOT_ENOUGH_STORAGE;
 				startItem(b,g);
 			}
 		}
@@ -152,6 +153,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		// We need to ensure that player has enough cash/item to produce a new unit
 		if (!haveEnoughMoneyForOneMoreUnit(g)) return PROGRESS_NOT_ENOUGH_MONEY;
 		if (!haveEnoughMaterialsForOneMoreUnit(b)) return PROGRESS_NOT_ENOUGH_MATERIALS;
+		if (Options::storageLimitsEnforced && b->storesOverfull()) return PROGRESS_NOT_ENOUGH_STORAGE;
 		startItem(b,g);
 	}
 	return PROGRESS_NOT_COMPLETE;
