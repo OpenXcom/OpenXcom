@@ -159,10 +159,10 @@ Music *ResourcePack::getRandomMusic(const std::string &name, const std::string &
 	{
 		Log(LOG_DEBUG) << "MUSIC - Request to play " << name << " '" << terrain << "'";
 		if (_musicAssignment.find(name) == _musicAssignment.end())
-		  return _muteMusic;
+			return _muteMusic;
 		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
 		if (assignment.find(terrain) == assignment.end())
-		  return _muteMusic;
+			return _muteMusic;
 		
 		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
 		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(0, musicCodes.size()-1)];

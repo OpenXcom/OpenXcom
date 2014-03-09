@@ -35,35 +35,35 @@ void RuleMusic::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	
 	if (node["mode"])
-	  _mode = node["mode"].as<std::string>(_mode);
+		_mode = node["mode"].as<std::string>(_mode);
 	else
-	  _mode = "replace";
+		_mode = "replace";
 	
 	if (node["midiPack"])
-	  _midiIndex = node["midiPack"].as<int>(_midiIndex);
+		_midiIndex = node["midiPack"].as<int>(_midiIndex);
 	else
-	  _midiIndex = -1;
+		_midiIndex = -1;
 	
 	_terrains = node["terrain"].as< std::vector<std::string> >(_terrains);
 	_files = node["files"].as< std::vector<std::string> >(_files);
 	_indexes = node["indexes"].as< std::vector<int> >(_indexes);
 	
 	if (_terrains.empty())
-	  _terrains.push_back("");
+		_terrains.push_back("");
 	
 	if (_files.empty())
-	  _files.push_back(_type);
+		_files.push_back(_type);
 	
 	if (_indexes.empty())
-	  _indexes.push_back(_midiIndex);
+		_indexes.push_back(_midiIndex);
 	
 	while(_indexes.size()<_files.size())
-	  _indexes.push_back(-1);
+		_indexes.push_back(-1);
 }
 
 std::string RuleMusic::getMode()
 {
-  return _mode;
+	return _mode;
 }
 int RuleMusic::getMidiIndex()
 {
@@ -71,19 +71,14 @@ int RuleMusic::getMidiIndex()
 }
 std::vector<std::string> RuleMusic::getTerrains()
 {
-  return _terrains;
+	return _terrains;
 }
 std::vector<std::string> RuleMusic::getFiles()
 {
-  return _files;
+	return _files;
 }
 std::vector<int> RuleMusic::getIndexes()
 {
-  return _indexes;
+	return _indexes;
 }
-/*
-bool RuleMusic::hasTerrainSpecification()
-{
-  return !_terrains.empty();
-}*/	
 }
