@@ -569,6 +569,9 @@
     <ClCompile Include="Ruleset\RuleManufacture.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleMusic.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\RuleResearch.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -1398,6 +1401,9 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleManufacture.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleMusic.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleResearch.h">

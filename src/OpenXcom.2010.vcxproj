@@ -171,6 +171,8 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <Profile>false</Profile>
+      <ForceFileOutput>
+      </ForceFileOutput>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
@@ -426,6 +428,7 @@
     <ClCompile Include="Ruleset\MapData.cpp" />
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
+    <ClCompile Include="Ruleset\RuleMusic.cpp" />
     <ClCompile Include="Ruleset\Unit.cpp" />
     <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -717,6 +720,7 @@
     <ClInclude Include="Ruleset\RuleInventory.h" />
     <ClInclude Include="Ruleset\RuleItem.h" />
     <ClInclude Include="Ruleset\RuleManufacture.h" />
+    <ClInclude Include="Ruleset\RuleMusic.h" />
     <ClInclude Include="Ruleset\RuleRegion.h" />
     <ClInclude Include="Ruleset\RuleResearch.h" />
     <ClInclude Include="Ruleset\Ruleset.h" />
