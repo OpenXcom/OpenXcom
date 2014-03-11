@@ -1221,7 +1221,7 @@ en-GB:
   STR_GO_TO_BASE: "Go to Base"
   STR_DISABLEAUTOEQUIP: "Disable auto-equip"
   STR_DISABLEAUTOEQUIP_DESC: "Disable auto-equipping of new soldiers before battle"
-  STR_TFTDDAMAGE: "TFTD Damage formula"
+  STR_TFTDDAMAGE: "TFTD Damage Formula"
   STR_TFTDDAMAGE_DESC: "Weapons will do between 50% and 150% of their rated damage as opposed to UFO: Enemy Unknown's 0% to 200%"
   STR_BATTLESMOOTHCAMERA: "Smooth Bullet Camera"
   STR_BATTLESMOOTHCAMERA_DESC: "The battlescape camera will remain centered on projectiles while in flight."
