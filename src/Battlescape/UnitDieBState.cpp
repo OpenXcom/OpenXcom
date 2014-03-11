@@ -67,10 +67,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		if (_unit->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->setUnitDying(true);
-			if (Options::getBool("battleNotifyDeath"))
-			{
-				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
-			}
 		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
