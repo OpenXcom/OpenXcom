@@ -143,6 +143,7 @@ void createDefault()
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
 	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
+	setBool("battleSmoothCamera", false);
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
 	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
 	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
