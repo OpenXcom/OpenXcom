@@ -28,7 +28,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of item.
  * @param type String defining the type.
  */
-RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _subCategory(), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(999), _bigSprite(0), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
+RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(999), _bigSprite(0), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(DT_NONE),
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
@@ -56,7 +56,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
-	_subCategory = node["subCategory"].as<std::string>(_subCategory);
+	_subCategory = node["subCategory"].as< std::vector<std::string> >(_subCategory);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_size = node["size"].as<float>(_size);
 	_costBuy = node["costBuy"].as<int>(_costBuy);
@@ -99,14 +99,14 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 			_fireSound += modIndex;
 	}
 	if (node["hitSound"])
-	{		
+	{
 		_hitSound = node["hitSound"].as<int>(_hitSound);
 		// BATTLE.CAT: 55 entries
 		if (_hitSound > 54)
 			_hitSound += modIndex;
 	}
 	if (node["hitAnimation"])
-	{		
+	{
 		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
 		// SMOKE.PCK: 56 entries
 		if (_hitAnimation > 55)
@@ -196,13 +196,31 @@ const std::vector<std::string> &RuleItem::getRequirements() const
 }
 
 /**
- * Returns the language string that names
- * this item's sub-category.
- * @return Item sub-category.
+ * Returns this item's sub-categories.
+ * @return Item sub-categories.
  */
-std::string RuleItem::getSubCategory() const
+const std::vector<std::string> &RuleItem::getSubCategories() const
 {
 	return _subCategory;
+}
+
+/**
+ * Returns whether this item is a craft item.
+ * @return True if this item is a craft item.
+ */
+bool RuleItem::isCraftItem() const
+{
+	return std::find(getSubCategories().begin(), getSubCategories().end(), "CRAFT_ITEM") != getSubCategories().end();
+}
+
+/**
+ * Returns whether this item is a battlescape item.
+ * @return True if this item is a battlescape item.
+ */
+bool RuleItem::isBattlescapeItem() const
+{
+	if (getSubCategories().empty())	return true;
+	return std::find(getSubCategories().begin(), getSubCategories().end(), "BATTLESCAPE_ITEM") != getSubCategories().end();
 }
 
 /**

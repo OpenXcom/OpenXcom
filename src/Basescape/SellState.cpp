@@ -70,7 +70,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_btnPrev = new TextButton(25, 14, 8, 35);
 	_btnTab = new TextButton(72, 14, 35, 35);
 	_btnNext = new TextButton(25, 14, 109, 35);
- 	_txtSpaceUsed = new Text(150, 8, 160, 34);
+	_txtSpaceUsed = new Text(150, 8, 160, 34);
 	_txtItem = new Text(80, 9, 30, 53);
 	_txtQuantity = new Text(54, 9, 120, 53);
 	_txtSell = new Text(54, 19, 178, 42);
@@ -318,12 +318,11 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
-
-			if (rule->getSubCategory() == "CRAFT_WEAPON")
+			if (rule->isCraftItem())
 			{
 				craftItems->addItem(*i,qty);
 			}
-			else
+			if (rule->isBattlescapeItem())
 			{
 				nonCraftItems->addItem(*i, qty);
 			}
@@ -561,6 +560,13 @@ void SellState::btnOkClick(Action *)
 				}
 				else
 				{
+					// Do not sell craft weapons twice.
+					if (tab == TAB_ITEMS)
+					{
+						RuleItem *rule = _game->getRuleset()->getItem(_items[TAB_ITEMS][i]);
+						if (rule->isCraftItem() && rule->isBattlescapeItem())
+							continue;
+					}
 					_containers[tab]->removeItem(_items[tab][i], _quantities[tab][i]);
 				}
 			}
@@ -600,7 +606,6 @@ void SellState::updateIndex(size_t &index, std::vector<std::string> &list, int c
 	{
 		index += change;
 	}
-
 	// Soldiers might have armor; do not sack right now.
 	if (_overfull && index == TAB_PERSONNEL)
 	{
@@ -857,10 +862,28 @@ void SellState::increaseByValue(int change)
 	change = std::min(getQuantity() - _quantities[_selTab][_sel], change);
 	_quantities[_selTab][_sel] += change;
 
+	// cross referencing - update other tab if necessary
+	RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
+	if (rule->isCraftItem() && rule->isBattlescapeItem())
+	{
+		if (_selTab == TAB_CRAFT)
+		{
+			std::vector<std::string>::const_iterator it (std::find(_items[TAB_ITEMS].begin(), _items[TAB_ITEMS].end(), rule->getName()));
+			size_t indx = it - _items[TAB_ITEMS].begin();
+			_quantities[TAB_ITEMS][indx] += change;
+		}
+		else
+		{
+			std::vector<std::string>::const_iterator it (std::find(_items[TAB_CRAFT].begin(), _items[TAB_CRAFT].end(), rule->getName()));
+			size_t indx = it - _items[TAB_CRAFT].begin() + _crafts.size();
+			_quantities[TAB_CRAFT][indx] += change;
+		}
+	}
+
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
 		// Calculate the change in storage space in tenths of an XCom storage unit.
-		_spaceChange +=  change * (int)(10 * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize());
+		_spaceChange +=  change * (int)(10 * rule->getSize());
 	}
 	_total += getPrice() * change;
 	updateItemStrings();
@@ -887,10 +910,27 @@ void SellState::decreaseByValue(int change)
 	change = std::min(_quantities[_selTab][_sel], change);
 	_quantities[_selTab][_sel] -= change;
 
+	// cross referencing - update other tab if necessary
+	RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
+	if (rule->isCraftItem() && rule->isBattlescapeItem())
+	{
+		if (_selTab == TAB_CRAFT)
+		{
+			std::vector<std::string>::const_iterator it (std::find(_items[TAB_ITEMS].begin(), _items[TAB_ITEMS].end(), rule->getName()));
+			size_t indx = it - _items[TAB_ITEMS].begin();
+			_quantities[TAB_ITEMS][indx] -= change;
+		}
+		else
+		{
+			std::vector<std::string>::const_iterator it (std::find(_items[TAB_CRAFT].begin(), _items[TAB_CRAFT].end(), rule->getName()));
+			size_t indx = it - _items[TAB_CRAFT].begin() + _crafts.size();
+			_quantities[TAB_CRAFT][indx] -= change;
+		}
+	}
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
 		// Calculate the change in storage space in tenths of an XCom storage unit.
-		_spaceChange -=  change * (int)(10 * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize());
+		_spaceChange -=  change * (int)(10 * rule->getSize());
 	}
 	_total -= getPrice() * change;
 	updateItemStrings();
@@ -914,6 +954,8 @@ void SellState::updateItemStrings()
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
+	RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
+
 	if (_quantities[_selTab][_sel] > 0)
 	{
 		_selList->setRowColor(_sel, _color2);
@@ -924,7 +966,6 @@ void SellState::updateItemStrings()
 	}
 	else
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
 		if (rule->getClipSize() > 0 || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 		{
 			_selList->setRowColor(_sel, _colorAmmo);
@@ -932,6 +973,40 @@ void SellState::updateItemStrings()
 		else
 		{
 			_selList->setRowColor(_sel, _color);
+		}
+	}
+
+	// cross referencing - update other tab if necessary
+	if (rule->isCraftItem() && rule->isBattlescapeItem())
+	{
+		TextList *lst;
+		size_t indx;
+		if (_selTab == TAB_CRAFT)
+		{
+			lst = _lstItems;
+			std::vector<std::string>::const_iterator it (std::find(_items[TAB_ITEMS].begin(), _items[TAB_ITEMS].end(), rule->getName()));
+			indx = it - _items[TAB_ITEMS].begin();
+
+		}
+		else
+		{
+			lst = _lstCraft;
+			std::vector<std::string>::const_iterator it (std::find(_items[TAB_CRAFT].begin(), _items[TAB_CRAFT].end(), rule->getName()));
+			indx = it - _items[TAB_CRAFT].begin() + _crafts.size();
+		}
+		lst->setCellText(indx, 2, ss.str());
+		lst->setCellText(indx, 1, ss2.str());
+		if (_quantities[_selTab][_sel] > 0)
+		{
+			lst->setRowColor(indx, _color2);
+		}
+		else if (rule->getClipSize() > 0 || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+		{
+			lst->setRowColor(indx, _colorAmmo);
+		}
+		else
+		{
+			lst->setRowColor(indx, _color);
 		}
 	}
 

@@ -41,8 +41,8 @@ class Surface;
 class RuleItem
 {
 private:
-	std::string _type, _name, _subCategory; // two types of objects can have the same name
-	std::vector<std::string> _requires;
+	std::string _type, _name; // two types of objects can have the same name
+	std::vector<std::string> _requires, _subCategory;
 	float _size;
 	int _costBuy, _costSell, _transferTime, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
@@ -78,8 +78,8 @@ public:
 	std::string getType() const;
 	/// Gets the item's name.
 	std::string getName() const;
-	/// Gets the item's sub-category.
-	std::string getSubCategory() const;
+	/// Gets the item's sub-categories.
+	const std::vector<std::string> &getSubCategories() const;
 	/// Gets the item's requirements.
 	const std::vector<std::string> &getRequirements() const;
 	/// Gets the item's size.
@@ -190,6 +190,10 @@ public:
 	bool isRifle() const;
 	/// is this item a single handed weapon?
 	bool isPistol() const;
+	/// Is this item a craft weapon?
+	bool isCraftItem() const;
+	/// Is this item a battlescape item?
+	bool isBattlescapeItem() const;
 	/// Get the max range of this weapon.
 	int getMaxRange() const;
 	/// Get the max range of aimed shots with this weapon.
