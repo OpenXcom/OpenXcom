@@ -266,6 +266,14 @@ void createDefault()
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
 	setInt("keyBattleVoxelView", SDLK_F10);
+	setInt("keyBaseSelect1", SDLK_1);
+	setInt("keyBaseSelect2", SDLK_2);
+	setInt("keyBaseSelect3", SDLK_3);
+	setInt("keyBaseSelect4", SDLK_4);
+	setInt("keyBaseSelect5", SDLK_5);
+	setInt("keyBaseSelect6", SDLK_6);
+	setInt("keyBaseSelect7", SDLK_7);
+	setInt("keyBaseSelect8", SDLK_8);
 
 	setInt("keyBattleZeroTUs", SDLK_DELETE);
 
