@@ -1754,7 +1754,7 @@ void GeoscapeState::btnBasesClick(Action *)
 	timerReset();
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getSelectedBase(), _globe));
 	}
 	else
 	{

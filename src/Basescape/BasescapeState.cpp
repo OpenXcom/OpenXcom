@@ -488,6 +488,7 @@ void BasescapeState::miniClick(Action *)
 	{
 		_mini->setSelectedBase(base);
 		_base = _game->getSavedGame()->getBases()->at(base);
+		_game->getSavedGame()->setSelectedBase(base);
 		init();
 	}
 }
@@ -538,6 +539,7 @@ void BasescapeState::handleKeyPress(Action *action)
 		{
 			_mini->setSelectedBase(base);
 			_base = _game->getSavedGame()->getBases()->at(base);
+			_game->getSavedGame()->setSelectedBase(base);
 			init();
 		}
 	}

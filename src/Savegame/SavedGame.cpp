@@ -89,7 +89,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles("")
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -695,6 +695,32 @@ std::vector<Region*> *SavedGame::getRegions()
 std::vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;
+}
+
+/**
+ * Returns the last selected player base.
+ * @return Pointer to base.
+ */
+Base *SavedGame::getSelectedBase()
+{
+	// in case a base was destroyed or something...
+	if (_selectedBase < _bases.size())
+	{
+		return _bases.at(_selectedBase);
+	}
+	else
+	{
+		return _bases.front();
+	}
+}
+
+/**
+ * Sets the last selected player base.
+ * @param number of the base.
+ */
+void SavedGame::setSelectedBase(int base)
+{
+	_selectedBase = base;
 }
 
 /**
