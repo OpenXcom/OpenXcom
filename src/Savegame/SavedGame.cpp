@@ -509,7 +509,10 @@ void SavedGame::save(const std::string &filename) const
 	node["globeLon"] = _globeLon;
 	node["globeLat"] = _globeLat;
 	node["globeZoom"] = _globeZoom;
-	node["newSoldierLayoutId"] = _newSoldierLayout->getId();
+	if (_newSoldierLayout)
+	{
+		node["newSoldierLayoutId"] = _newSoldierLayout->getId();
+	}
 	node["ids"] = _ids;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
