@@ -635,7 +635,7 @@ void TransferItemsState::increaseByValue(int change)
 		}
 		else
 		{
-			freeStoresForItem = floor(freeStores / storesNeededPerItem);
+			freeStoresForItem = freeStores / storesNeededPerItem;
 		}
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
 		_iQty += change * storesNeededPerItem;

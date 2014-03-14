@@ -55,7 +55,7 @@ private:
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
 	std::vector< std::vector<std::string> > _items;
-	std::vector<std::string> _tabs;
+	std::vector<std::wstring> _tabs;
 	std::vector<TextList*> _lists;
 	std::vector<ItemContainer*> _containers;
 	unsigned int _sel;
@@ -71,11 +71,11 @@ private:
 	/// Gets the index of selected item.
 	int getItemIndex(unsigned selected) const;
 	/// Updates the tab index.
-	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
+	void updateIndex(size_t &index, std::vector<std::wstring> &list, int change);
 	/// Adds an item row to a tab.
 	void addRow(ItemContainer *container, std::string item, int tab);
-	/// Updates the currently displayed tab.
-	void updateTab(int change);
+	/// Updates the displayed tab.
+	void updateTab(int direction = 0);
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base, OptionsOrigin origin = OPT_GEOSCAPE);

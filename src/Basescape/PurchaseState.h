@@ -48,7 +48,7 @@ private:
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity, *_txtInStorage;;
 	TextList *_lstPersonnel, *_lstCraft, *_lstItems, *_selList;
 	std::vector<std::string> _crafts, _items, _craftItems;
-	std::vector<std::string> _tabs;
+	std::vector<std::wstring> _tabs;
 	std::vector<TextList*> _lists;
 	std::vector<int> _qtys, _qtysPersonnel, _qtysCraft;
 	unsigned int _sel;
@@ -61,9 +61,19 @@ private:
 	/// Is it excluded in the options file?
 	bool isExcluded(std::string item);
 	/// Updates the tab index.
-	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
+	void updateIndex(size_t &index, std::vector<std::wstring> &list, int change);
 	/// Updates the currently displayed tab.
-	void updateTab(int change);
+	void updateTab(int direction = 0);
+	/// Increases the quantity of an item by one.
+	void increase();
+	/// Increases the quantity of an item by the given value.
+	void increaseByValue(int change);
+	/// Decreases the quantity of an item by one.
+	void decrease();
+	/// Decreases the quantity of an item by the given value.
+	void decreaseByValue(int change);
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game, Base *base);
@@ -95,16 +105,6 @@ public:
 	void lstItemsRightArrowClick(Action *action);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstItemsMousePress(Action *action);
-	/// Increases the quantity of an item by one.
-	void increase();
-	/// Increases the quantity of an item by the given value.
-	void increaseByValue(int change);
-	/// Decreases the quantity of an item by one.
-	void decrease();
-	/// Decreases the quantity of an item by the given value.
-	void decreaseByValue(int change);
-	/// Updates the quantity-strings of the selected item.
-	void updateItemStrings();
 };
 
 }

@@ -54,6 +54,7 @@ namespace OpenXcom
  * Initializes all the elements in the Sell/Sack screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param origin Game section that originated this state.
  */
 SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0), _haveTransferItems(false)
 {
@@ -72,9 +73,9 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_btnNext = new TextButton(25, 14, 109, 35);
 	_txtSpaceUsed = new Text(150, 8, 160, 34);
 	_txtItem = new Text(80, 9, 30, 53);
-	_txtQuantity = new Text(54, 9, 120, 53);
-	_txtSell = new Text(54, 19, 178, 42);
-	_txtValue = new Text(40, 9, 234, 53);
+	_txtQuantity = new Text(54, 9, 112, 53);
+	_txtSell = new Text(54, 9, 168, 53);
+	_txtValue = new Text(40, 9, 231, 53);
 	_txtSpace = new Text(40, 9, 273, 53);
 	_lstPersonnel = new TextList(288, 104, 8, 65);
 	_lstCraft = new TextList(288, 104, 8, 65);
@@ -172,10 +173,8 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtQuantity->setText(tr("STR_QUANTITY"));
 
 	_txtSell->setColor(_color3);
-	_txtSell->setAlign(ALIGN_CENTER);
-	_txtSell->setVerticalAlign(ALIGN_BOTTOM);
-	_txtSell->setText(_overfull ? tr("STR_SELL") : tr("STR_SELL_SACK"));
-	_txtSell->setWordWrap(true);
+	_txtSell->setAlign(ALIGN_RIGHT);
+	_txtSell->setText(tr("STR_SELL"));
 
 	_txtValue->setColor(_color3);
 	_txtValue->setText(tr("STR_VALUE"));
@@ -192,20 +191,19 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
 	_lists.push_back(_lstPersonnel);
-	_tabs.push_back("STR_PERSONNEL");
+	_tabs.push_back(tr("STR_PERSONNEL"));
 	_containers.push_back(0);
 
 	_lists.push_back(_lstCraft);
-	_tabs.push_back("STR_CRAFT");
+	_tabs.push_back(tr("STR_CRAFT"));
 	_containers.push_back(_base->getItems());
 
 	_lists.push_back(_lstItems);
-	_tabs.push_back("STR_ITEMS");
+	_tabs.push_back(tr("STR_ITEMS"));
 	_containers.push_back(_base->getItems());
 
 	if (_overfull)
 	{
-
 		ItemContainer *tItems = new ItemContainer();
 		for (std::vector<Transfer*>::iterator t = _base->getTransfers()->begin(); t != _base->getTransfers()->end(); ++t)
 		{
@@ -220,7 +218,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 			TextList *lstTransfers = new TextList(288, 104, 8, 65);
 			add(lstTransfers);
 			_lists.push_back(lstTransfers);
-			_tabs.push_back("STR_TRANSFERS_UC");
+			_tabs.push_back(tr("STR_TRANSFERS_UC"));
 			_containers.push_back(tItems);
 		}
 		if (!_base->getCrafts()->empty())
@@ -232,7 +230,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 					TextList *lstCraftInventory = new TextList(288, 104, 8, 65);
 					add(lstCraftInventory);
 					_lists.push_back(lstCraftInventory);
-					_tabs.push_back(Language::wstrToUtf8((*c)->getName(_game->getLanguage())));
+					_tabs.push_back((*c)->getName(_game->getLanguage()));
 					_containers.push_back((*c)->getItems());
 				}
 			}
@@ -247,7 +245,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 					TextList *lstCraftInventory = new TextList(288, 104, 8, 65);
 					add(lstCraftInventory);
 					_lists.push_back(lstCraftInventory);
-					_tabs.push_back(Language::wstrToUtf8(craft->getName(_game->getLanguage())));
+					_tabs.push_back(craft->getName(_game->getLanguage()));
 					_containers.push_back((craft)->getItems());
 				}
 			}
@@ -270,12 +268,11 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		(*i)->setMargin(2);
 		(*i)->setVisible(false);
 	}
-	_lstPersonnel->setColumns(4, 124, 60, 28, 52);
 
 	// start on items tab
 	_selTab = TAB_ITEMS;
 	_selList = _lstItems;
-	updateTab(0);
+	updateTab();
 
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
@@ -283,7 +280,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		{
 			_quantities[TAB_PERSONNEL].push_back(0);
 			_soldiers.push_back(*i);
-			_lstPersonnel->addRow(4, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+			_lstPersonnel->addRow(5, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str(), L"-");
 		}
 	}
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
@@ -300,14 +297,14 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		_quantities[TAB_PERSONNEL].push_back(0);
 		std::wostringstream ss;
 		ss << _base->getAvailableScientists();
-		_lstPersonnel->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		_lstPersonnel->addRow(5, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str(), L"-");
 	}
 	if (_base->getAvailableEngineers() > 0)
 	{
 		_quantities[TAB_PERSONNEL].push_back(0);
 		std::wostringstream ss;
 		ss << _base->getAvailableEngineers();
-		_lstPersonnel->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		_lstPersonnel->addRow(5, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str(), L"-");
 	}
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	ItemContainer *craftItems = new ItemContainer();
@@ -469,11 +466,8 @@ void SellState::btnOkClick(Action *)
 			// Remove weapons from craft
 			for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 			{
-				if ((*w) != 0)
-				{
-					_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
-					_base->getItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(_game->getRuleset()));
-				}
+				_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
+				_base->getItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(_game->getRuleset()));
 			}
 
 			// Remove items from craft
@@ -560,12 +554,15 @@ void SellState::btnOkClick(Action *)
 				}
 				else
 				{
-					// Do not sell craft weapons twice.
+
 					if (tab == TAB_ITEMS)
 					{
 						RuleItem *rule = _game->getRuleset()->getItem(_items[TAB_ITEMS][i]);
-						if (rule->isCraftItem() && rule->isBattlescapeItem())
+						if (rule->isCraftItem())
+						{
+							// Do not sell craft weapons twice.
 							continue;
+						}
 					}
 					_containers[tab]->removeItem(_items[tab][i], _quantities[tab][i]);
 				}
@@ -591,7 +588,7 @@ void SellState::btnCancelClick(Action *)
  * @param list List the index belongs to.
  * @param change Amount to change the index.
  */
-void SellState::updateIndex(size_t &index, std::vector<std::string> &list, int change)
+void SellState::updateIndex(size_t &index, std::vector<std::wstring> &list, int change)
 {
 	int i = index;
 	if (i + change >= (int)list.size())
@@ -630,7 +627,7 @@ void SellState::updateTab(int direction)
 
 	updateIndex(_selTab, _tabs, direction);
 
-	_btnTab->setText(tr(_tabs[_selTab]));
+	_btnTab->setText(_tabs[_selTab]);
 
 	_selList = _lists[_selTab];
 	_selList->onLeftArrowPress((ActionHandler)&SellState::lstItemsLeftArrowPress);
@@ -641,6 +638,8 @@ void SellState::updateTab(int direction)
 	_selList->onRightArrowClick((ActionHandler)&SellState::lstItemsRightArrowClick);
 	_selList->onMousePress((ActionHandler)&SellState::lstItemsMousePress);
 	_selList->setVisible(true);
+
+	_txtSell->setText(_selTab == TAB_PERSONNEL ? tr("STR_SACK_LC") : tr("STR_SELL"));
 }
 
 /**
@@ -862,26 +861,24 @@ void SellState::increaseByValue(int change)
 	change = std::min(getQuantity() - _quantities[_selTab][_sel], change);
 	_quantities[_selTab][_sel] += change;
 
-	// cross referencing - update other tab if necessary
-	RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
-	if (rule->isCraftItem() && rule->isBattlescapeItem())
+	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
-		if (_selTab == TAB_CRAFT)
+		RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
+
+		// cross referencing - update other tab if necessary
+		if (_selTab == TAB_CRAFT && rule->isBattlescapeItem())
 		{
 			std::vector<std::string>::const_iterator it (std::find(_items[TAB_ITEMS].begin(), _items[TAB_ITEMS].end(), rule->getName()));
 			size_t indx = it - _items[TAB_ITEMS].begin();
 			_quantities[TAB_ITEMS][indx] += change;
 		}
-		else
+		else if (_selTab == TAB_ITEMS && rule->isCraftItem())
 		{
 			std::vector<std::string>::const_iterator it (std::find(_items[TAB_CRAFT].begin(), _items[TAB_CRAFT].end(), rule->getName()));
 			size_t indx = it - _items[TAB_CRAFT].begin() + _crafts.size();
 			_quantities[TAB_CRAFT][indx] += change;
 		}
-	}
 
-	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
-	{
 		// Calculate the change in storage space in tenths of an XCom storage unit.
 		_spaceChange +=  change * (int)(10 * rule->getSize());
 	}
@@ -910,25 +907,24 @@ void SellState::decreaseByValue(int change)
 	change = std::min(_quantities[_selTab][_sel], change);
 	_quantities[_selTab][_sel] -= change;
 
-	// cross referencing - update other tab if necessary
-	RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
-	if (rule->isCraftItem() && rule->isBattlescapeItem())
+	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
-		if (_selTab == TAB_CRAFT)
+		RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
+
+		// cross referencing - update other tab if necessary
+		if (_selTab == TAB_CRAFT && rule->isBattlescapeItem())
 		{
 			std::vector<std::string>::const_iterator it (std::find(_items[TAB_ITEMS].begin(), _items[TAB_ITEMS].end(), rule->getName()));
 			size_t indx = it - _items[TAB_ITEMS].begin();
 			_quantities[TAB_ITEMS][indx] -= change;
 		}
-		else
+		else if (_selTab == TAB_ITEMS && rule->isCraftItem())
 		{
 			std::vector<std::string>::const_iterator it (std::find(_items[TAB_CRAFT].begin(), _items[TAB_CRAFT].end(), rule->getName()));
 			size_t indx = it - _items[TAB_CRAFT].begin() + _crafts.size();
 			_quantities[TAB_CRAFT][indx] -= change;
 		}
-	}
-	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
-	{
+
 		// Calculate the change in storage space in tenths of an XCom storage unit.
 		_spaceChange -=  change * (int)(10 * rule->getSize());
 	}
@@ -954,7 +950,10 @@ void SellState::updateItemStrings()
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
-	RuleItem *rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
+
+	RuleItem *rule;
+	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
+		rule = _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)]);
 
 	if (_quantities[_selTab][_sel] > 0)
 	{
@@ -977,7 +976,8 @@ void SellState::updateItemStrings()
 	}
 
 	// cross referencing - update other tab if necessary
-	if (rule->isCraftItem() && rule->isBattlescapeItem())
+	if ((_selTab == TAB_ITEMS && rule->isCraftItem()) ||
+		(_selTab == TAB_CRAFT && _sel >= _crafts.size() && rule->isBattlescapeItem()))
 	{
 		TextList *lst;
 		size_t indx;
@@ -986,7 +986,6 @@ void SellState::updateItemStrings()
 			lst = _lstItems;
 			std::vector<std::string>::const_iterator it (std::find(_items[TAB_ITEMS].begin(), _items[TAB_ITEMS].end(), rule->getName()));
 			indx = it - _items[TAB_ITEMS].begin();
-
 		}
 		else
 		{

@@ -20,7 +20,6 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
-#include "../aresame.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -64,13 +63,13 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_btnPrev = new TextButton(25, 14, 8, 35);
 	_btnTab = new TextButton(72, 14, 35, 35);
 	_btnNext = new TextButton(25, 14, 109, 35);
-	_txtItem = new Text(130, 9, 30, 50);
-	_txtCost = new Text(65, 18, 139, 42);
-	_txtInStorage = new Text(45, 18, 205, 42);
-	_txtQuantity = new Text(60, 9, 255, 52);
-	_lstPersonnel = new TextList(288, 104, 8, 62);
-	_lstCraft = new TextList(288, 104, 8, 62);
-	_lstItems = new TextList(288, 104, 8, 62);
+	_txtItem = new Text(80, 9, 30, 53);
+	_txtCost = new Text(60, 18, 141, 43);
+	_txtInStorage = new Text(45, 18, 205, 43);
+	_txtQuantity = new Text(60, 9, 255, 53);
+	_lstPersonnel = new TextList(288, 104, 8, 65);
+	_lstCraft = new TextList(288, 104, 8, 65);
+	_lstItems = new TextList(288, 104, 8, 65);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -140,20 +139,20 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtCost->setWordWrap(true);
 	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+5);
-	_txtQuantity->setText(tr("STR_QUANTITY"));
-
 	_txtInStorage->setColor(Palette::blockOffset(13)+5);
 	_txtInStorage->setText(tr("STR_ON_BASE"));
 	_txtInStorage->setWordWrap(true);
 	_txtInStorage->setVerticalAlign(ALIGN_BOTTOM);
 
+	_txtQuantity->setColor(Palette::blockOffset(13)+5);
+	_txtQuantity->setText(tr("STR_QUANTITY"));
+
 	_lists.push_back(_lstPersonnel);
-	_tabs.push_back("STR_PERSONNEL");
+	_tabs.push_back(tr("STR_PERSONNEL"));
 	_lists.push_back(_lstCraft);
-	_tabs.push_back("STR_CRAFT");
+	_tabs.push_back(tr("STR_CRAFT"));
 	_lists.push_back(_lstItems);
-	_tabs.push_back("STR_ITEMS");
+	_tabs.push_back(tr("STR_ITEMS"));
 	for (std::vector<TextList*>::iterator i = _lists.begin(); i != _lists.end(); ++i)
 	{
 		(*i)->setColor(Palette::blockOffset(13)+10);
@@ -167,9 +166,8 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	// start on items tab
 	_selTab = TAB_ITEMS;
-	_btnTab->setText(tr("STR_ITEMS"));
 	_selList = _lstItems;
-	updateTab(0);
+	updateTab();
 
 	_qtysPersonnel.push_back(0);
 	std::wostringstream ss;
@@ -363,7 +361,7 @@ void PurchaseState::btnOkClick(Action *)
 		if (_qtys[i] > 0)
 		{
 			RuleItem *ri = _game->getRuleset()->getItem(_items[i]);
-			if (ri->isCraftItem() && ri->isBattlescapeItem())
+			if (ri->isCraftItem())
 			{
 				// Do not buy craft items twice.
 				continue;
@@ -392,7 +390,7 @@ void PurchaseState::btnCancelClick(Action *)
  * @param list List the index belongs to.
  * @param change Amount to change the index.
  */
-void PurchaseState::updateIndex(size_t &index, std::vector<std::string> &list, int change)
+void PurchaseState::updateIndex(size_t &index, std::vector<std::wstring> &list, int change)
 {
 	int i = index;
 	if (i + change >= (int)list.size())
@@ -426,7 +424,7 @@ void PurchaseState::updateTab(int direction)
 
 	updateIndex(_selTab, _tabs, direction);
 
-	_btnTab->setText(tr(_tabs[_selTab]));
+	_btnTab->setText(_tabs[_selTab]);
 
 	_selList = _lists[_selTab];
 	_selList->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
@@ -440,7 +438,7 @@ void PurchaseState::updateTab(int direction)
 }
 
 /**
- * Makes the the next list visible.
+ * Makes the the next tab visible.
  * @param action Pointer to an action.
  */
 void PurchaseState::btnTabClick(Action *action)
@@ -479,18 +477,7 @@ void PurchaseState::btnNextClick(Action *)
  */
 void PurchaseState::lstItemsLeftArrowPress(Action *action)
 {
-	if (_selTab == TAB_ITEMS)
-	{
-		_sel = _lstItems->getSelectedRow();
-	}
-	else if (_selTab == TAB_CRAFT)
-	{
-		_sel = _lstCraft->getSelectedRow();
-	}
-	else
-	{
-		_sel = _lstPersonnel->getSelectedRow();
-	}
+	_sel = _selList->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
 }
 
@@ -528,18 +515,7 @@ void PurchaseState::lstItemsLeftArrowClick(Action *action)
  */
 void PurchaseState::lstItemsRightArrowPress(Action *action)
 {
-	if (_selTab == TAB_ITEMS)
-	{
-		_sel = _lstItems->getSelectedRow();
-	}
-	else if (_selTab == TAB_CRAFT)
-	{
-		_sel = _lstCraft->getSelectedRow();
-	}
-	else
-	{
-		_sel = _lstPersonnel->getSelectedRow();
-	}
+	_sel = _selList->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
 }
 
@@ -727,16 +703,16 @@ void PurchaseState::increaseByValue(int change)
 				rule = _game->getRuleset()->getItem(_items[_sel]);
 				storesNeededPerItem = (int)(10 * rule->getSize());
 			}
-			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getExactUsedStores()) - _iQty;
+			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getExactUsedStores() + 0.5) - _iQty;
 			int maxByStores;
-
 			if (storesNeededPerItem == 0)
 			{
 				maxByStores = INT_MAX;
 			}
 			else
 			{
-				maxByStores = floor(freeStores / storesNeededPerItem);
+				maxByStores = freeStores / storesNeededPerItem;
+
 			}
 			change = std::min(maxByStores, change);
 			_iQty += change * storesNeededPerItem;
@@ -890,7 +866,6 @@ void PurchaseState::updateItemStrings()
 			}
 			else
 			{
-
 				if (rule->getClipSize() > 0)
 				{
 					_lstCraft->setRowColor(_sel, Palette::blockOffset(15) + 6);
@@ -927,7 +902,8 @@ void PurchaseState::updateItemStrings()
 	}
 
 	// cross referencing - update other tab if necessary
-	if (rule && rule->isCraftItem() && rule->isBattlescapeItem())
+	if ((_selTab == TAB_ITEMS && rule->isCraftItem()) ||
+		(_selTab == TAB_CRAFT && _sel >= _crafts.size() && rule->isBattlescapeItem()))
 	{
 		TextList *lst;
 		size_t indx;
