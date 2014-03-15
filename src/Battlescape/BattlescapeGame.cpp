@@ -1166,6 +1166,12 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 			else
 			{
+				if (Options::getBool("battleConfirmFireMode") && !_currentAction.waypoints.empty())
+				{
+					_currentAction.waypoints.pop_back();
+					getMap()->getWaypoints()->pop_back();
+					return true;
+				}
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
 				setupCursor();
@@ -1268,10 +1274,24 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				}
 			}
 		}
+		else if (Options::getBool("battleConfirmFireMode") && (_currentAction.waypoints.empty() || pos != _currentAction.waypoints.front()))
+		{
+			_currentAction.waypoints.clear();
+			_currentAction.waypoints.push_back(pos);
+			getMap()->getWaypoints()->clear();
+			getMap()->getWaypoints()->push_back(pos);
+		}
 		else
 		{
 			_currentAction.target = pos;
 			getMap()->setCursorType(CT_NONE);
+			
+			if (Options::getBool("battleConfirmFireMode"))
+			{
+				_currentAction.waypoints.clear();
+				getMap()->getWaypoints()->clear();
+			}
+
 			_parentState->getGame()->getCursor()->setVisible(false);
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 			_states.push_back(new ProjectileFlyBState(this, _currentAction));
