@@ -62,6 +62,14 @@ KeyOption OptionsControlsState::_controlsGeo[] =
 	{"keyGeoFunding", "STR_FUNDING_UC", SDLK_UNKNOWN},
 	{"keyGeoToggleDetail", "STR_TOGGLE_COUNTRY_DETAIL", SDLK_UNKNOWN},
 	{"keyGeoToggleRadar", "STR_TOGGLE_RADAR_RANGES", SDLK_UNKNOWN},
+	{"keySelectBase1", "STR_SELECT_BASE_1", SDLK_UNKNOWN},
+	{"keySelectBase2", "STR_SELECT_BASE_2", SDLK_UNKNOWN},
+	{"keySelectBase3", "STR_SELECT_BASE_3", SDLK_UNKNOWN},
+	{"keySelectBase4", "STR_SELECT_BASE_4", SDLK_UNKNOWN},
+	{"keySelectBase5", "STR_SELECT_BASE_5", SDLK_UNKNOWN},
+	{"keySelectBase6", "STR_SELECT_BASE_6", SDLK_UNKNOWN},
+	{"keySelectBase7", "STR_SELECT_BASE_7", SDLK_UNKNOWN},
+	{"keySelectBase8", "STR_SELECT_BASE_8", SDLK_UNKNOWN},
 	{"keyQuickSave", "STR_QUICK_SAVE", SDLK_UNKNOWN},
 	{"keyQuickLoad", "STR_QUICK_LOAD", SDLK_UNKNOWN}};
 
@@ -113,8 +121,8 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin), _selected(-1), _selKey(0)
 {
 	_countGeneral = 4;
-	_countGeo = 20;
-	_countBattle = 36;
+	_countGeo = 28;
+	_countBattle = 38;
 	if (Options::getInt("autosave") == 1)
 		_countGeo += 2;	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
 

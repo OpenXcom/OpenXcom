@@ -52,7 +52,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsExposed(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -119,7 +119,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
 																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
-																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsExposed(255),
+																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
 																						_turretType(-1), _hidingForTurn(false)
 {
@@ -211,7 +211,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_expMelee = node["expMelee"].as<int>(_expMelee);
 	_turretType = node["turretType"].as<int>(_turretType);
 	_visible = node["visible"].as<bool>(_visible);
-	_turnsExposed = node["turnsExposed"].as<int>(_turnsExposed);
+	_turnsSinceSpotted = node["turnsSinceSpotted"].as<int>(_turnsSinceSpotted);
 	_killedBy = (UnitFaction)node["killedBy"].as<int>(_killedBy);
 	_moraleRestored = node["moraleRestored"].as<int>(_moraleRestored);
 	_rankInt = node["rankInt"].as<int>(_rankInt);
@@ -261,7 +261,7 @@ YAML::Node BattleUnit::save() const
 	node["expMelee"] = _expMelee;
 	node["turretType"] = _turretType;
 	node["visible"] = _visible;
-	node["turnsExposed"] = _turnsExposed;
+	node["turnsSinceSpotted"] = _turnsSinceSpotted;
 	node["rankInt"] = _rankInt;
 	node["moraleRestored"] = _moraleRestored;
 	if (getCurrentAIState())
@@ -2392,18 +2392,18 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
  * Set how long since this unit was last exposed.
  * @param turns
  */
-void BattleUnit::setTurnsExposed (int turns)
+void BattleUnit::setTurnsSinceSpotted (int turns)
 {
-	_turnsExposed = turns;
+	_turnsSinceSpotted = turns;
 }
 
 /**
  * Get how long since this unit was exposed.
  * @return turns
  */
-int BattleUnit::getTurnsExposed () const
+int BattleUnit::getTurnsSinceSpotted () const
 {
-	return _turnsExposed;
+	return _turnsSinceSpotted;
 }
 
 /**

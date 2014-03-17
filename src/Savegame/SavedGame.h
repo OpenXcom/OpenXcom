@@ -97,6 +97,7 @@ private:
 	std::string _graphFinanceToggles;
 	std::vector<const RuleResearch *> _poppedResearch;
 	std::vector<Soldier*> _deadSoldiers;
+	int _selectedBase;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
@@ -256,6 +257,10 @@ public:
 	void removePoppedResearch(const RuleResearch* research);
 	/// Gets the list of dead soldiers.
 	std::vector<Soldier*> *getDeadSoldiers();
+	/// Gets the last selected player base.
+	Base *getSelectedBase();
+	/// Set the last selected player base.
+	void setSelectedBase(int base);
 
 };
 

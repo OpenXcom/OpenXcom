@@ -488,9 +488,7 @@ void ProjectileFlyBState::think()
 				{
 					int offset = 0;
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
-					if (_ammo && (
-						_ammo->getRules()->getDamageType() == DT_HE ||
-						_ammo->getRules()->getDamageType() == DT_IN))
+					if (_ammo && _ammo->getRules()->getExplosionRadius() != 0)
 					{
 						offset = -2;
 					}
@@ -537,7 +535,7 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-								_unit->setTurnsExposed(0);
+								_unit->setTurnsSinceSpotted(0);
 							}
 						}
 					}

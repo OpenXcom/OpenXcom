@@ -32,6 +32,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -87,6 +88,7 @@ void PlaceLiftState::viewClick(Action *)
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
 	BasescapeState *bState = new BasescapeState(_game, _base, _globe);
+	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
 	_game->pushState(bState);
 	if (_first)
 	{

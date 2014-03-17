@@ -66,13 +66,10 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
-	setBool("anytimePsiTraining", false);
+	// game/meta options
 	setBool("playIntro", true);
 	setInt("maxFrameSkip", 0);
 	setBool("traceAI", false);
-	setBool("sneakyAI", false);
-	setBool("weaponSelfDestruction", false);
-	setBool("researchedItemsWillSpent", false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
@@ -88,59 +85,72 @@ void createDefault()
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
 	setString("language", "");
-	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
-	setInt("battleScrollType", SCROLL_AUTO);
-	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
-	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
-	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
-	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
-	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
-	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
-	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 	setBool("fpsCounter", false);
-	setBool("craftLaunchAlways", false);
-	setBool("globeSeasons", false);
-	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
 	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
+	setBool("allowResize", false);
+	setInt("windowedModePositionX", -1);
+	setInt("windowedModePositionY", -1);
+	setBool("borderless", false);
+	setBool("captureMouse", false);
+    setBool("keepAspectRatio", false);
+    setBool("cursorInBlackBandsInFullscreen", false);
+    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInBorderlessWindow", false);
+	setBool("newSeedOnLoad", false);
+	setInt("saveOrder", SORT_DATE_DESC);
+
+	// geoescape options
+	setBool("spendResearchedItems", false);
+	setBool("anytimePsiTraining", false);
 	setBool("alienContainmentLimitEnforced", false);
 	setBool("canSellLiveAliens", false);
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
-	setBool("strafe", false);
-	setBool("battleNotifyDeath", false);
 	setBool("allowBuildingQueue", false);
 	setBool("allowAutoSellProduction", false);
 	setBool("showFundsOnGeoscape", false);
+	setBool("psiStrengthEval", false);
+	setBool("craftLaunchAlways", false);
+	setBool("globeSeasons", false);
+	setBool("globeAllRadarsOnBaseBuild", true);
+
+	// battlescape options
+	setBool("sneakyAI", false);
+	setBool("TFTDDamage", false);
+	setBool("weaponSelfDestruction", false);
+	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
+	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
+	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
+	setBool("strafe", false);
+	setBool("battleConfirmFireMode", false);
+	setBool("battleNotifyDeath", false);
 	setBool("showMoreStatsInInventoryView", false);
-	setBool("allowResize", false);
-	setInt("windowedModePositionX", -1);
-	setInt("windowedModePositionY", -1);
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
-	setBool("psiStrengthEval", false);
-	setBool("borderless", false);
-	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
 	setBool("battleHairBleach", true);
-    setBool("keepAspectRatio", false);
-    setBool("cursorInBlackBandsInFullscreen", false);
-    setBool("cursorInBlackBandsInWindow", true);
-    setBool("cursorInBlackBandsInBorderlessWindow", false);
-	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
 	setBool("disableAutoEquip", false);
 	setBool("battleUFOExtenderAccuracy", false);
-	setInt("saveOrder", SORT_DATE_DESC);
+	
+	// battlescape control options
+	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
+	setInt("battleScrollType", SCROLL_AUTO);
+	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
+	setBool("battleSmoothCamera", false);
+	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
+	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
+	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
+	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
+	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -257,6 +267,14 @@ void createDefault()
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
 	setInt("keyBattleVoxelView", SDLK_F10);
+	setInt("keyBaseSelect1", SDLK_1);
+	setInt("keyBaseSelect2", SDLK_2);
+	setInt("keyBaseSelect3", SDLK_3);
+	setInt("keyBaseSelect4", SDLK_4);
+	setInt("keyBaseSelect5", SDLK_5);
+	setInt("keyBaseSelect6", SDLK_6);
+	setInt("keyBaseSelect7", SDLK_7);
+	setInt("keyBaseSelect8", SDLK_8);
 
 	setInt("keyBattleZeroTUs", SDLK_DELETE);
 

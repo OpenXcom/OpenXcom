@@ -308,7 +308,7 @@ void Ruleset::loadFile(const std::string &filename)
 		Unit *rule = loadRule(*i, &_units);
 		if (rule != 0)
 		{
-			rule->load(*i);
+			rule->load(*i, _modIndex);
 		}
 	}
  	for (YAML::const_iterator i = doc["alienRaces"].begin(); i != doc["alienRaces"].end(); ++i)

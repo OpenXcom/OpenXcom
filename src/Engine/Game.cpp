@@ -119,6 +119,11 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create cursor
 	_cursor = new Cursor(9, 13);
 	_cursor->setColor(Palette::blockOffset(15)+12);
+	
+	// Create invisible hardware cursor to workaround bug with absolute positioning pointing devices
+	SDL_ShowCursor(SDL_ENABLE);
+	Uint8 cursor = 0;
+	SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
 
 	// Create fps counter
 	_fpsCounter = new FpsCounter(15, 5, 0, 0);
@@ -143,6 +148,8 @@ Game::~Game()
 	{
 		delete *i;
 	}
+
+	SDL_FreeCursor(SDL_GetCursor());
 
 	delete _cursor;
 	delete _lang;

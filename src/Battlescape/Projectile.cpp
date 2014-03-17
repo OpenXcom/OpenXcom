@@ -399,4 +399,25 @@ void Projectile::skipTrajectory()
 	_position = _trajectory.size() - 2;
 }
 
+/**
+ * Gets the Position of origin for the projectile
+ * @return origin as a tile position.
+ */
+Position Projectile::getOrigin()
+{
+	// instead of using the actor's position, we'll use the voxel origin translated to a tile position
+	// this is a workaround for large units.
+	return _trajectory.front() / Position(16,16,24);
+}
+
+/**
+ * Gets the INTENDED target for this projectile
+ * it is important to note that we do not use the final position of the projectile here,
+ * but rather the targetted tile
+ * @return target as a tile position.
+ */
+Position Projectile::getTarget()
+{
+	return _action.target;
+}
 }

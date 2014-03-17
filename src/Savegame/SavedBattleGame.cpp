@@ -826,13 +826,13 @@ void SavedBattleGame::endTurn()
 		// update the "number of turns since last spotted"
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
-			if ((*i)->getTurnsExposed() < 255)
+			if ((*i)->getTurnsSinceSpotted() < 255)
 			{
-				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
+				(*i)->setTurnsSinceSpotted((*i)->getTurnsSinceSpotted() +	1);
 			}
 			if (_cheating && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 			{
-				(*i)->setTurnsExposed(0);
+				(*i)->setTurnsSinceSpotted(0);
 			}
 		}
 	}

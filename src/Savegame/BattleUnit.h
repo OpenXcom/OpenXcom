@@ -91,7 +91,7 @@ private:
 	int _moraleRestored;
 	int _coverReserve;
 	BattleUnit *_charging;
-	int _turnsExposed;
+	int _turnsSinceSpotted;
 	std::string _spawnUnit;
 	std::string _activeHand;
 
@@ -384,9 +384,9 @@ public:
 	/// Get the carried weight in strength units.
 	int getCarriedWeight(BattleItem *draggingItem = 0) const;
 	/// Set how many turns this unit will be exposed for.
-	void setTurnsExposed (int turns);
+	void setTurnsSinceSpotted (int turns);
 	/// Set how many turns this unit will be exposed for.
-	int getTurnsExposed () const;
+	int getTurnsSinceSpotted () const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
 	/// call this after the default copy constructor deletes the cache?
