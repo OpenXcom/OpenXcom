@@ -356,7 +356,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 bool BattlescapeGame::kneel(BattleUnit *bu)
 {
 	int tu = bu->isKneeled()?8:4;
-	if (bu->getType() == "SOLDIER" && !bu->isFloating() && checkReservedTU(bu, tu))
+	if (bu->getType() == "SOLDIER" && !bu->isFloating() && ((!bu->isKneeled() && _kneelReserved) || checkReservedTU(bu, tu)))
 	{
 		if (bu->spendTimeUnits(tu))
 		{
@@ -635,7 +635,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 							if (victim->getFaction() == FACTION_HOSTILE && murderer)
 							{
-								murderer->setTurnsExposed(0);
+								murderer->setTurnsSinceSpotted(0);
 							}
 						}
 						// the winning squad all get a morale increase
@@ -1252,6 +1252,12 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 			else
 			{
+				if (Options::getBool("battleConfirmFireMode") && !_currentAction.waypoints.empty())
+				{
+					_currentAction.waypoints.pop_back();
+					getMap()->getWaypoints()->pop_back();
+					return true;
+				}
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
 				setupCursor();
@@ -1354,10 +1360,24 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				}
 			}
 		}
+		else if (Options::getBool("battleConfirmFireMode") && (_currentAction.waypoints.empty() || pos != _currentAction.waypoints.front()))
+		{
+			_currentAction.waypoints.clear();
+			_currentAction.waypoints.push_back(pos);
+			getMap()->getWaypoints()->clear();
+			getMap()->getWaypoints()->push_back(pos);
+		}
 		else
 		{
 			_currentAction.target = pos;
 			getMap()->setCursorType(CT_NONE);
+			
+			if (Options::getBool("battleConfirmFireMode"))
+			{
+				_currentAction.waypoints.clear();
+				getMap()->getWaypoints()->clear();
+			}
+
 			_parentState->getGame()->getCursor()->setVisible(false);
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 			_states.push_back(new ProjectileFlyBState(this, _currentAction));

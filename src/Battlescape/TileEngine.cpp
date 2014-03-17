@@ -295,7 +295,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() != FACTION_HOSTILE)
 								{
-									visibleUnit->setTurnsExposed(0);
+									visibleUnit->setTurnsSinceSpotted(0);
 								}
 							}
 						}
@@ -1023,8 +1023,10 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	}
 	else if (part == V_UNIT)
 	{
-		// power 0 - 200%
-		const int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+		int dmgRng = (type == DT_HE || Options::getBool("TFTDDamage")) ? 50 : 100;
+		int min = power * (100 - dmgRng) / 100;
+		int max = power * (100 + dmgRng) / 100;
+		const int rndPower = RNG::generate(min, max);
 		int verticaloffset = 0;
 		if (!bu)
 		{
@@ -1174,6 +1176,9 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
+						int dmgRng = (type == DT_HE || Options::getBool("TFTDDamage")) ? 50 : 100;
+						int min = power_ * (100 - dmgRng) / 100;
+						int max = power_ * (100 + dmgRng) / 100;
 						switch (type)
 						{
 						case DT_STUN:
@@ -1182,18 +1187,18 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							{
 								if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 								{
-									dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
+									dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(min, max), type);
 								}
 								else
 								{
-									dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(0, power_*2), type);
+									dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(min, max), type);
 								}
 							}
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
 								{
-									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ *2), type);
+									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(min, max), type);
 								}
 							}
 							break;
@@ -1205,13 +1210,13 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 									{
 										// ground zero effect is in effect
-										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(min, max)), type);
 									}
 									else
 									{
 										// directional damage relative to explosion position.
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
-										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(min, max)), type);
 									}
 								}
 								bool done = false;

@@ -2516,7 +2516,7 @@ items:
     handSprite: 104
     hitSound: 48
     clipSize: -1
-    power: 90
+    strengthApplied: true
     damageType: 7
     accuracyMelee: 80
     tuMelee: 15
@@ -2532,7 +2532,7 @@ items:
     handSprite: 104
     hitSound: 48
     clipSize: -1
-    power: 114
+    strengthApplied: true
     damageType: 7
     accuracyMelee: 80
     tuMelee: 15
@@ -2570,7 +2570,7 @@ items:
     floorSprite: 31
     handSprite: 104
     hitSound: 48
-    power: 70
+    strengthApplied: true
     damageType: 7
     accuracyMelee: 92
     tuMelee: 15
@@ -2609,7 +2609,7 @@ items:
     floorSprite: 31
     handSprite: 104
     hitSound: 48
-    power: 84
+    strengthApplied: true
     damageType: 7
     accuracyMelee: 80
     tuMelee: 15

@@ -585,7 +585,7 @@ bool Zoom::haveSSE2()
 	int CPUInfo[4];
 	__cpuid(CPUInfo, 1);
 #else
-	return false;
+	unsigned int CPUInfo[4] = {0, 0, 0, 0};
 #endif
 
 	return (CPUInfo[3] & 0x04000000) ? true : false;

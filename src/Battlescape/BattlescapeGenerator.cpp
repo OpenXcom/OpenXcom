@@ -211,7 +211,7 @@ void BattlescapeGenerator::nextStage()
 			if (!(*j)->isOut())
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
-				(*j)->setTurnsExposed(255);
+				(*j)->setTurnsSinceSpotted(255);
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
 				{
 					_save->setSelectedUnit(*j);
@@ -601,7 +601,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			}
 		}
 	}
-	else if (_craft && !_craft->getRules()->getDeployment().empty())
+	else if (_craft && !_craft->getRules()->getDeployment().empty() && _mapsize_y != 1) // _mapsize_y 1 means we're in the faked out base inventory
 	{
 		for (std::vector<std::vector<int> >::const_iterator i = _craft->getRules()->getDeployment().begin(); i != _craft->getRules()->getDeployment().end(); ++i)
 		{

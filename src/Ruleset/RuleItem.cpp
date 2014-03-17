@@ -34,7 +34,8 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
 											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
-											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit("")
+											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit(""),
+											_strengthApplied(false)
 {
 }
 
@@ -790,5 +791,9 @@ int RuleItem::getShotgunPellets() const
 std::string RuleItem::getZombieUnit() const
 {
 	return _zombieUnit;
+}
+bool RuleItem::isStrengthApplied() const
+{
+	return _strengthApplied;
 }
 }

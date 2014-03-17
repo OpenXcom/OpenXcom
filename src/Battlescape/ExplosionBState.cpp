@@ -71,6 +71,11 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+		// since melee aliens don't use a conventional weapon type, we use their strength instead.
+		if (_item->getRules()->getBattleType() == BT_MELEE && _item->getRules()->isStrengthApplied())
+		{
+			_power += _unit->getStats()->strength;
+		}
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
 						_item->getRules()->getExplosionRadius() != 0;
 	}
@@ -91,7 +96,7 @@ void ExplosionBState::init()
 		if (_power)
 		{
 			int frame = 0;
-			int counter = (_power/5) / 5;
+			int counter = std::max(1, (_power/5) / 5);
 			for (int i = 0; i < _power/5; i++)
 			{
 				int X = RNG::generate(-_power/2,_power/2);
@@ -129,7 +134,10 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE)
+		{
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+		}
 	}
 }
 

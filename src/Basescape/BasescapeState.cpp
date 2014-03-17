@@ -111,6 +111,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
+	_view->onKeyboardPress((ActionHandler)&BasescapeState::handleKeyPress);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
@@ -487,7 +488,60 @@ void BasescapeState::miniClick(Action *)
 	{
 		_mini->setSelectedBase(base);
 		_base = _game->getSavedGame()->getBases()->at(base);
+		_game->getSavedGame()->setSelectedBase(base);
 		init();
+	}
+}
+
+/**
+ * Selects a new base to display.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::handleKeyPress(Action *action)
+{
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		int base = -1;
+		int key = action->getDetails()->key.keysym.sym;
+		if (key == Options::getInt("keyBaseSelect1"))
+		{
+			base = 0;
+		}
+		else if (key == Options::getInt("keyBaseSelect2"))
+		{
+			base = 1;
+		}
+		else if (key == Options::getInt("keyBaseSelect3"))
+		{
+			base = 2;
+		}
+		else if (key == Options::getInt("keyBaseSelect4"))
+		{
+			base = 3;
+		}
+		else if (key == Options::getInt("keyBaseSelect5"))
+		{
+			base = 4;
+		}
+		else if (key == Options::getInt("keyBaseSelect6"))
+		{
+			base = 5;
+		}
+		else if (key == Options::getInt("keyBaseSelect7"))
+		{
+			base = 6;
+		}
+		else if (key == Options::getInt("keyBaseSelect8"))
+		{
+			base = 7;
+		}
+		if (base > -1 && base < _game->getSavedGame()->getBases()->size())
+		{
+			_mini->setSelectedBase(base);
+			_base = _game->getSavedGame()->getBases()->at(base);
+			_game->getSavedGame()->setSelectedBase(base);
+			init();
+		}
 	}
 }
 

@@ -252,7 +252,7 @@ void AlienBAIState::think(BattleAction *action)
 	}
 	if (_spottingEnemies > 2
 		|| _unit->getHealth() < 2 * _unit->getStats()->health / 3
-		|| (_aggroTarget && _aggroTarget->getTurnsExposed() > _intelligence))
+		|| (_aggroTarget && _aggroTarget->getTurnsSinceSpotted() > _intelligence))
 	{
 		evaluate = true;
 	}
@@ -1455,7 +1455,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	{
 		if (!(*i)->isOut() && (*i) != attackingUnit && (*i)->getPosition().z == targetPos.z && _save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsExposed() > _intelligence)
+			if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsSinceSpotted() > _intelligence)
 				continue;
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
@@ -1841,9 +1841,9 @@ bool AlienBAIState::validTarget(BattleUnit *unit, bool assessDanger, bool includ
 		// ignore units that are dead/unconscious
 	if (unit->isOut() ||
 		// they must be units that we "know" about
-		_intelligence < unit->getTurnsExposed() ||
+		_intelligence < unit->getTurnsSinceSpotted() ||
 		// they haven't been grenaded
-		(assessDanger && unit->getTile()->getDangerous())||
+		(assessDanger && unit->getTile()->getDangerous()) ||
 		// and they mustn't be on our side
 		unit->getFaction() == FACTION_HOSTILE)
 	{

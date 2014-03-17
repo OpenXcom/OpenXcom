@@ -65,11 +65,15 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	else
 	{
 		if (_unit->getFaction() == FACTION_PLAYER)
+		{
 			_parent->getMap()->setUnitDying(true);
-		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
-		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
+		if (_originalDir != 3)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
+		}
 	}
 
 	_unit->clearVisibleTiles();
@@ -108,9 +112,19 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	if (_unit->getStatus() == STATUS_TURNING)
+	if (_unit->getDirection() != 3)
 	{
+		int dir = _unit->getDirection() + 1;
+		if (dir == 8)
+		{
+			dir = 0;
+		}
+		_unit->lookAt(dir);
 		_unit->turn();
+		if (dir == 3)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		}
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -137,9 +151,9 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 		_parent->getMap()->setUnitDying(false);
-		if (_unit->getTurnsExposed() < 255)
+		if (_unit->getTurnsSinceSpotted() < 255)
 		{
-			_unit->setTurnsExposed(255);
+			_unit->setTurnsSinceSpotted(255);
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{

@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <algorithm>
+#include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
@@ -638,14 +639,14 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 	Craft *craft = _base->getCrafts()->at(_craft);
 	if (craft->getNumSoldiers() != 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.runInventory(craft);
 
+		_game->getScreen()->clear();
+		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 		_game->pushState(new InventoryState(_game, false, 0));
 	}
 }
