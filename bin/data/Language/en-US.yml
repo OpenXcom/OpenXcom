@@ -1226,7 +1226,7 @@ en-US:
   STR_BATTLESMOOTHCAMERA: "Smooth Bullet Camera"
   STR_BATTLESMOOTHCAMERA_DESC: "The battlescape camera will remain centered on projectiles while in flight."
   STR_BATTLECONFIRMFIREMODE: "Confirm Fire mode"
-  STR_BATTLECONFIRMFIREMODE_DESC: "Require a second click on the same tile to confirm fire orders.
+  STR_BATTLECONFIRMFIREMODE_DESC: "Require a second click on the same tile to confirm fire orders."
   STR_SELECT_BASE_1: "Select Base 1"
   STR_SELECT_BASE_2: "Select Base 2"
   STR_SELECT_BASE_3: "Select Base 3"
