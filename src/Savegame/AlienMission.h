@@ -31,6 +31,7 @@ class Globe;
 class Game;
 class SavedGame;
 class Ruleset;
+class RuleRegion;
 class RuleUfo;
 class UfoTrajectory;
 class AlienBase;
@@ -111,6 +112,8 @@ private:
 	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
 	/// Spawn an alien base
 	void spawnAlienBase(const Globe &globe, Game &engine);
+	/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
+	std::pair<double, double> getWaypoint(const UfoTrajectory &trajectory, const unsigned int nextWaypoint, const Globe &globe, const RuleRegion &region);
 };
 
 }
