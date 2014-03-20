@@ -384,7 +384,8 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 {
 	const Ruleset &rules = *engine.getRuleset();
 	SavedGame &game = *engine.getSavedGame();
-	unsigned int curWaypoint = ufo.getTrajectoryPoint();
+	const unsigned int curWaypoint = ufo.getTrajectoryPoint();
+	const unsigned int nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory &trajectory = ufo.getTrajectory();
 	const unsigned int waypointCount = trajectory.getWaypointCount();
 	if (curWaypoint == waypointCount)
@@ -393,8 +394,8 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		ufo.setStatus(Ufo::DESTROYED);
 		return;
 	}
-	ufo.setAltitude(trajectory.getAltitude(++curWaypoint));
-	ufo.setTrajectoryPoint(curWaypoint);
+	ufo.setAltitude(trajectory.getAltitude(nextWaypoint));
+	ufo.setTrajectoryPoint(nextWaypoint);
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
 		if (ufo.getLandId() != 0)
@@ -402,8 +403,8 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			ufo.setLandId(0);
 		}
 		// Set next waypoint.
-		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * trajectory.getSpeedPercentage(curWaypoint)));
-		std::pair<double, double> pos = getWaypoint(trajectory, curWaypoint, globe, *rules.getRegion(_region));
+		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * trajectory.getSpeedPercentage(nextWaypoint)));
+		std::pair<double, double> pos = getWaypoint(trajectory, nextWaypoint, globe, *rules.getRegion(_region));
 		Waypoint *wp = new Waypoint();
 		wp->setLongitude(pos.first);
 		wp->setLatitude(pos.second);
