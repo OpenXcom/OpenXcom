@@ -53,18 +53,20 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(50, 12, 135, 180);
+	_btnBigOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(300, 17, 16, 8);
 	_txtMonth = new Text(110, 9, 16, 24);
 	_txtRating = new Text(180, 9, 125, 24);
 	_txtChange = new Text(300, 9, 16, 32);
 	_txtDesc = new Text(280, 140, 16, 40);
-	_txtFailure = new Text(290, 128, 15, 34);
+	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
+	add(_btnBigOk);
 	add(_txtTitle);
 	add(_txtMonth);
 	add(_txtRating);
@@ -83,6 +85,13 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	
+	_btnBigOk->setColor(Palette::blockOffset(8)+10);
+	_btnBigOk->setText(tr("STR_OK"));
+	_btnBigOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
+	_btnBigOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnBigOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnBigOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -278,6 +287,8 @@ void MonthlyReportState::btnOkClick(Action *)
 			_txtRating->setVisible(false);
 			_txtChange->setVisible(false);
 			_txtDesc->setVisible(false);
+			_btnOk->setVisible(false);
+			_btnBigOk->setVisible(true);
 			_txtFailure->setVisible(true);
 		}
 	}
