@@ -37,7 +37,7 @@ class Globe;
 class MonthlyReportState : public State
 {
 private:
-	TextButton *_btnOk;
+	TextButton *_btnOk, *_btnBigOk;
 	Window *_window;
 	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtFailure;
 	bool _psi, _gameOver;
