@@ -2060,7 +2060,8 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 		bgen.setAlienRace(ufo->getAlienRace());
 		bgen.run();
 		musicStop();
-		popup(new BriefingState(_game, 0, base));
+		_pause = true;
+		_game->pushState(new BriefingState(_game, 0, base));
 	}
 	else
 	{
