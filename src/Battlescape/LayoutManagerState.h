@@ -32,6 +32,7 @@ class Window;
 class Text;
 class TextEdit;
 class TextButton;
+class Timer;
 class ToggleTextButton;
 class TextList;
 class ArrowButton;
