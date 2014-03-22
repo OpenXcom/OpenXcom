@@ -458,7 +458,7 @@ void LayoutManagerState::updateLayoutsButtons()
 	int buttonIndex = _selectedLayout - _btnLayoutsStartIndex;
 	for (int i = 0; i < _btnLayouts.size(); ++i)
 	{
-		_btnLayouts.at(i)->setText((_btnLayoutsStartIndex+i == 0) ? tr("STR_CUSTOM").c_str() : _save->getLayouts()->at(_btnLayoutsStartIndex+i-1)->getName().c_str());
+		_btnLayouts.at(i)->setText((_btnLayoutsStartIndex+i == 0) ? tr("STR_CUSTOM").c_str() : _save->getLayouts()->at(_btnLayoutsStartIndex+i-1)->getName());
 		_btnLayouts.at(i)->setPressed(i == buttonIndex);
 	}
 	int max = ((int) _save->getLayouts()->size()) - 5;
