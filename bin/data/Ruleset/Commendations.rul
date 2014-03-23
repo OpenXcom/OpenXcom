@@ -104,6 +104,8 @@ extraStrings:
      STR_AWARD_DECOR_9: "Third gold pin"
      STR_MISSION_DETAILS: "MISSION DETAILS FOR{NEWLINE}{0}"
      STR_DETAILS_UC: "DETAILS"
+     STR_TANK: "Tank"
+     STR_HEAVY_WEAPONS_PLATFORM_LC: "Heavy Weapons Platform"
   - type: en-GB
     strings:
      STR_DIARY: "RECORD"
@@ -198,6 +200,8 @@ extraStrings:
      STR_AWARD_DECOR_9: "Third gold pin"
      STR_MISSION_DETAILS: "MISSION DETAILS FOR{NEWLINE}{0}"
      STR_DETAILS_UC: "DETAILS"
+     STR_TANK: "Tank"
+     STR_HEAVY_WEAPONS_PLATFORM_LC: "Heavy Weapons Platform"
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
 # Any vector greater than 10 will require more strings and more sprites.
