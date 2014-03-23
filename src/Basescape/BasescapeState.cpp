@@ -261,6 +261,7 @@ void BasescapeState::setBaseAndMini(Base *base)
 {
 	_base = base;
 	_mini->setSelectedBase(base);
+	_game->getSavedGame()->setSelectedBase(base);
 	init();
 }
 
@@ -511,8 +512,8 @@ void BasescapeState::handleKeyPress(Action *action)
 		}
 		if (base > -1 && base < _game->getSavedGame()->getBases()->size())
 		{
-			_mini->setSelectedBase(base);
 			_base = _game->getSavedGame()->getBases()->at(base);
+			_mini->setSelectedBase(_base);
 			_game->getSavedGame()->setSelectedBase(base);
 			init();
 		}
