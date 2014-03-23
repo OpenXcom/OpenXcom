@@ -63,7 +63,7 @@ public:
 	 * Gets the number of waypoints in this trajectory.
 	 * @return The number of waypoints.
 	 */
-	unsigned getWaypointCount() const { return _waypoints.size(); }
+	unsigned getWaypointCount() const { return _waypoints.size() - 1; }
 
 	/**
 	 * Gets the zone index at a waypoint.

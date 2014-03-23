@@ -49,6 +49,8 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 
 	add(_edtSave);
 	add(_btnSaveGame);
+	
+	centerAllSurfaces();
 
 	// Set up objects
 
