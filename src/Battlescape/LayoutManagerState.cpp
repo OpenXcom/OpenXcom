@@ -458,7 +458,7 @@ void LayoutManagerState::updateLayoutsButtons()
 	int buttonIndex = _selectedLayout - _btnLayoutsStartIndex;
 	for (int i = 0; i < _btnLayouts.size(); ++i)
 	{
-		_btnLayouts.at(i)->setText((_btnLayoutsStartIndex+i == 0) ? tr("STR_CUSTOM").c_str() : _save->getLayouts()->at(_btnLayoutsStartIndex+i-1)->getName());
+		_btnLayouts.at(i)->setText((_btnLayoutsStartIndex+i == 0) ? (std::wstring) tr("STR_CUSTOM") : _save->getLayouts()->at(_btnLayoutsStartIndex+i-1)->getName());
 		_btnLayouts.at(i)->setPressed(i == buttonIndex);
 	}
 	int max = ((int) _save->getLayouts()->size()) - 5;
@@ -507,7 +507,7 @@ void LayoutManagerState::lstSoldiersPress(Action *action)
 		if (selRow == 0)
 		{ // Newly recruited soldiers is clicked
 			_save->setNewSoldierLayout(layout);
-			_lstSoldiers->setCellText(0, 1, (layout == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str()); // Refresh the soldier-table
+			_lstSoldiers->setCellText(0, 1, (layout == 0) ? (std::wstring) tr("STR_CUSTOM") : layout->getName()); // Refresh the soldier-table
 		}
 		else
 		{ // A soldier is clicked
@@ -515,11 +515,11 @@ void LayoutManagerState::lstSoldiersPress(Action *action)
 			soldierBU->getGeoscapeSoldier()->setEquipmentLayout(layout);
 			if (layout == 0 || soldierBU->equipByLayout(_game, false))
 			{ // Success
-				_lstSoldiers->setCellText(selRow, 1, (layout == 0) ? tr("STR_CUSTOM").c_str() : layout->getName().c_str()); // Refresh the soldier-table
+				_lstSoldiers->setCellText(selRow, 1, (layout == 0) ? (std::wstring) tr("STR_CUSTOM") : layout->getName()); // Refresh the soldier-table
 			}
 			else
 			{ // So there were not enough equipment for the layout
-				_lstSoldiers->setCellText(selRow, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+				_lstSoldiers->setCellText(selRow, 1, (std::wstring) tr("STR_CUSTOM")); // Refresh the soldier-table
 				_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_EQUIPMENT_FOR_LAYOUT"));
 			}
 		}
@@ -570,7 +570,7 @@ void LayoutManagerState::lstSoldiersPress(Action *action)
 				{
 					if (!soldierBU->equipByLayout(_game, false))
 					{ // So there were not enough equipment for the changed layout
-						_lstSoldiers->setCellText(i+1, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+						_lstSoldiers->setCellText(i+1, 1, (std::wstring) tr("STR_CUSTOM")); // Refresh the soldier-table
 						_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_EQUIPMENT_FOR_LAYOUT"));
 					}
 				}
@@ -622,13 +622,13 @@ void LayoutManagerState::btnRenameClick(Action *action)
 		Soldier *soldier = _soldiers.at(i)->getGeoscapeSoldier();
 		if (layout == soldier->getEquipmentLayout())
 		{
-			_lstSoldiers->setCellText(i+1, 1, _edtLayout->getText().c_str()); // Refresh the soldier-table
+			_lstSoldiers->setCellText(i+1, 1, _edtLayout->getText()); // Refresh the soldier-table
 		}
 	}
 	// And don't forget the newly recruited soldiers
 	if (layout == _save->getNewSoldierLayout())
 	{
-		_lstSoldiers->setCellText(0, 1, _edtLayout->getText().c_str()); // Refresh the soldier-table
+		_lstSoldiers->setCellText(0, 1, _edtLayout->getText()); // Refresh the soldier-table
 	}
 }
 
@@ -648,14 +648,14 @@ void LayoutManagerState::btnDeleteClick(Action *action)
 		if (layout == soldier->getEquipmentLayout())
 		{
 			soldier->setEquipmentLayout(new EquipmentLayout(layout));
-			_lstSoldiers->setCellText(i+1, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+			_lstSoldiers->setCellText(i+1, 1, (std::wstring) tr("STR_CUSTOM")); // Refresh the soldier-table
 		}
 	}
 	// And don't forget the newly recruited soldiers
 	if (layout == _save->getNewSoldierLayout())
 	{
 		_save->setNewSoldierLayout(0);
-		_lstSoldiers->setCellText(0, 1, tr("STR_CUSTOM").c_str()); // Refresh the soldier-table
+		_lstSoldiers->setCellText(0, 1, (std::wstring) tr("STR_CUSTOM")); // Refresh the soldier-table
 	}
 
 	// Now erase the layout
