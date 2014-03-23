@@ -1,1 +1,274 @@
-extraSprites:  - type: Commendations    width: 31    heigth: 8    files:      0: Resources/Commendations/  - type: CommendationDecorations    width: 31    heigth: 8    files:      0: Resources/CommendationDecorations/extraStrings:  - type: en-US    strings:      STR_DIARY: RECORD      STR_KILLED: KILLED      STR_STUNNED: STUNNED      STR_COUNTRY_UNKNOWN: Unknown      STR_REGION_UNKNOWN: Undisclosed location      STR_WEAPON_UNKNOWN: Improvisation      STR_MISSION_WIN: Victory      STR_MISSION_LOSS: Defeat      STR_NO_KILLS: No kills      STR_MISSION_DETAILS: MISSION DETAILS      STR_LOCATION: LOCATION      STR_HUMAN: Human      STR_MISSION_TYPE: MISSION> {ALT}{0}      STR_UFO_TYPE: UFO> {ALT}{0}      STR_RACE_TYPE: RACE> {ALT}{0}      STR_DAYLIGHT_TYPE: TIME> {ALT}{0}      STR_DAY: Day      STR_NIGHT: Night      STR_DAYS_WOUNDED: DAYS WOUNDED> {ALT}{0}      STR_KILLS_UC: KILLS      STR_MISSIONS_UC: MISSIONS      STR_AWARDS_UC: AWARDS      STR_KILLS_BY_RACE: KILLS/STUNS BY RACE      STR_KILLS_BY_RANK: KILLS/STUNS BY RANK      STR_KILLS_BY_WEAPON: KILLS/STUNS BY WEAPON      STR_MISSIONS_BY_LOCATION: MISSIONS BY LOCATION      STR_MISSIONS_BY_TYPE: MISSIONS BY TYPE      STR_MISSIONS_BY_UFO: MISSIONS BY UFO      STR_MISSIONS_TYPE: MISSIONS      STR_UFO_CRASH_RECOVERY_LC: UFO Crash Recovery      STR_UFO_GROUND_ASSAULT_LC: UFO Ground Assault      STR_BASE_DEFENSE_LC: Base Defense      STR_ALIEN_BASE_ASSAULT_LC: Alien Base Assault      STR_TERROR_MISSION_LC: Terror Mission      STR_HEAVY_WEAPONS_PLATFORM_LC: Heavy Weapons Platform      STR_SCORE_VALUE: SCORE> {ALT}{0}      STR_WINS: WINS> {ALT}{0}      STR_STUNS: STUNS> {ALT}{0}      STR_COMMENDATIONS_UC: COMMENDATIONS      STR_COMMENDATIONS: Commendations      STR_MEDALS: MEDALS      STR_NEW_MEDAL: New Medal      STR_MEDAL_NAME: Medal Name      STR_MEDAL_AWARD_LEVEL: Award Level      STR_MEDAL_DECOR_LEVEL: Decoration Level      STR_MEDAL_DESCRIPTION: DESCRIPTION      STR_MEDAL_MERIT_STAR_NAME: Merit Star      STR_MEDAL_MERIT_STAR_DESCRIPTION: Given to a soldier who has killed many aliens.      STR_MEDAL_XENOCIDE_MEDAL_NAME:  {0} Xenocide Medal      STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: Given to a soldier who has been successful in combating {0} soldiers.      STR_MEDAL_DEFENDER_MEDAL_NAME: Defender Medal      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: Given to a soldier who has been part of a successful base defense mission.      STR_MEDAL_MILITARY_CROSS_NAME: Military Cross      STR_MEDAL_MILITARY_CROSS_DESCRIPTION: Given to a soldier who has participated in many missions.      STR_MEDAL_SERVICE_MEDAL_NAME: Service Medal      STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: Given to a soldier who has served for many months.      STR_MEDAL_HONOR_CROSS_NAME: Honor Cross      STR_MEDAL_HONOR_CROSS_DESCRIPTION: Given to all soldiers upon arrival as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations.      STR_MEDAL_CAMPAIGN_MEDAL_NAME: Campaign Medal      STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: Given to a soldier who has succesfully defended many regions.      STR_MEDAL_SPECIALISTS_MEDAL_NAME: Specialist Medal      STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: Given to a soldier who has succesfully used non-lethal force to crowd-control many aliens.      STR_MEDAL_WEAPON_PROFICIENCY_NAME: {0} Proficiency Medal      STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: Given to a soldier who has shown distinction using a {0}.      STR_MEDAL_CAMPAIGN_RIBBON_NAME: {0} Campaign Ribbon      STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: Given to a soldier who has been instrumental in protecting {0}.      STR_MEDAL_ORDER_OF_RESTRAINT_NAME: Order of Restraint      STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: Given to a soldier who has used non-lethal force to take down many aliens.      STR_MEDAL_LONGEST_NIGHT_NAME: Longest Night Ribbon      STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: Given to a soldier who has witnessed the horros of alien terror missions at night.      STR_AWARD_0: First award      STR_AWARD_1: Second award      STR_AWARD_2: Third award      STR_AWARD_3: Fourth award      STR_AWARD_4: Fifth award      STR_AWARD_5: Sixth award      STR_AWARD_6: Seventh award      STR_AWARD_7: Eighth award      STR_AWARD_8: Ninth award      STR_AWARD_9: Tenth award      STR_AWARD_DECOR_0: None      STR_AWARD_DECOR_1: First bronze pin      STR_AWARD_DECOR_2: Second bronze pin      STR_AWARD_DECOR_3: Third bronze pin      STR_AWARD_DECOR_4: First silver pin      STR_AWARD_DECOR_5: Second silver pin      STR_AWARD_DECOR_6: Third silver pin      STR_AWARD_DECOR_7: First gold pin      STR_AWARD_DECOR_8: Second gold pin      STR_AWARD_DECOR_9: Third gold pin      STR_MISSION_DETAILS: MISSION DETAILS FOR{NEWLINE}{0}      STR_DETAILS_UC: DETAILS# Ruleset for diary and commendations mod# When stats reach the criteria threshold, the commendation is awarded# Any vector greater than 10 will require more strings and more sprites.# Commendations may have multiple criteria.# List of possible criteria:#   total_kills#   total_missions#   total_wins#   total_score#   total_stuns#   total_days_wounded#   total_base_defense_missions#   total_terror_missions#   total_night_missions#   total_night_terror_missions#   total_monthly_service# The following criteria use a hardcoded noun for the name/description.# They are INCOMPATIBLE with eachother. If used together, # the commendation will be given out repeatedly.#   total_kills_with_a_weapon#   total_missions_in_a_region#   total_kills_by_race#   total_kills_by_rankcommendations:  - type: STR_MEDAL_MERIT_STAR_NAME    description: STR_MEDAL_MERIT_STAR_DESCRIPTION    sprite: 0    criteria:       total_kills: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]  - type: STR_MEDAL_MILITARY_CROSS_NAME    description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION    sprite: 1    criteria:      total_missions: [3, 6, 10, 15, 20, 25, 30, 35, 40, 50]  - type: STR_MEDAL_ORDER_OF_RESTRAINT_NAME    description: STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION    sprite: 2    criteria:      total_stuns: [1, 3, 5, 7, 9, 11, 13, 15, 17, 20]  - type: STR_MEDAL_DEFENDER_MEDAL_NAME    description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION    sprite: 3    criteria:      total_base_defense_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]  - type: STR_MEDAL_LONGEST_NIGHT_NAME    description: STR_MEDAL_LONGEST_NIGHT_DESCRIPTION    sprite: 4    criteria:      total_night_terror_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]  - type: STR_MEDAL_HONOR_CROSS_NAME    description: STR_MEDAL_HONOR_CROSS_DESCRIPTION    sprite: 5    criteria:      total_monthly_service: [1]  - type: STR_MEDAL_SERVICE_MEDAL_NAME    description: STR_MEDAL_SERVICE_MEDAL_DESCRIPTION    sprite: 6    criteria:      total_monthly_service: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]  - type: STR_MEDAL_WEAPON_PROFICIENCY_NAME    description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION    sprite: 7    criteria:      total_kills_with_a_weapon: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]  - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME    description: STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION    sprite: 8    criteria:      total_missions_in_a_region: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]  - type: STR_MEDAL_XENOCIDE_MEDAL_NAME    description: STR_MEDAL_XENOCIDE_MEDAL_DESCIRPTION    sprite: 9    criteria:      total_kills_by_race: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+extraSprites:
+  - type: Commendations
+    width: 31
+    height: 8
+    files:
+      0: Resources/Commendations/
+  - type: CommendationDecorations
+    width: 31
+    height: 8
+    files:
+      0: Resources/CommendationDecorations/
+extraStrings:
+  - type: en-US
+    strings:
+      STR_DIARY: RECORD
+      STR_KILLED: KILLED
+      STR_STUNNED: STUNNED
+      STR_COUNTRY_UNKNOWN: Unknown
+      STR_REGION_UNKNOWN: Undisclosed location
+      STR_WEAPON_UNKNOWN: Improvisation
+      STR_MISSION_WIN: Victory
+      STR_MISSION_LOSS: Defeat
+      STR_NO_KILLS: No kills
+      STR_MISSION_DETAILS: MISSION DETAILS
+      STR_LOCATION: LOCATION
+      STR_HUMAN: Human
+      STR_MISSION_TYPE: MISSION> {ALT}{0}
+      STR_UFO_TYPE: UFO> {ALT}{0}
+      STR_RACE_TYPE: RACE> {ALT}{0}
+      STR_DAYLIGHT_TYPE: TIME> {ALT}{0}
+      STR_DAY: Day
+      STR_NIGHT: Night
+      STR_DAYS_WOUNDED: DAYS WOUNDED> {ALT}{0}
+      STR_KILLS_UC: KILLS
+      STR_MISSIONS_UC: MISSIONS
+      STR_AWARDS_UC: AWARDS
+      STR_KILLS_BY_RACE: KILLS/STUNS BY RACE
+      STR_KILLS_BY_RANK: KILLS/STUNS BY RANK
+      STR_KILLS_BY_WEAPON: KILLS/STUNS BY WEAPON
+      STR_MISSIONS_BY_LOCATION: MISSIONS BY LOCATION
+      STR_MISSIONS_BY_TYPE: MISSIONS BY TYPE
+      STR_MISSIONS_BY_UFO: MISSIONS BY UFO
+      STR_MISSIONS_TYPE: MISSIONS
+      STR_UFO_CRASH_RECOVERY_LC: UFO Crash Recovery
+      STR_UFO_GROUND_ASSAULT_LC: UFO Ground Assault
+      STR_BASE_DEFENSE_LC: Base Defense
+      STR_ALIEN_BASE_ASSAULT_LC: Alien Base Assault
+      STR_TERROR_MISSION_LC: Terror Mission
+      STR_HEAVY_WEAPONS_PLATFORM_LC: Heavy Weapons Platform
+      STR_SCORE_VALUE: SCORE> {ALT}{0}
+      STR_WINS: WINS> {ALT}{0}
+      STR_STUNS: STUNS> {ALT}{0}
+      STR_COMMENDATIONS_UC: COMMENDATIONS
+      STR_COMMENDATIONS: Commendations
+      STR_MEDALS: MEDALS
+      STR_NEW_MEDAL: New Medal
+      STR_MEDAL_NAME: Medal Name
+      STR_MEDAL_AWARD_LEVEL: Award Level
+      STR_MEDAL_DECOR_LEVEL: Decoration Level
+      STR_MEDAL_DESCRIPTION: DESCRIPTION
+      STR_MEDAL_MERIT_STAR_NAME: Merit Star
+      STR_MEDAL_MERIT_STAR_DESCRIPTION: Given to a soldier who has killed many aliens.
+      STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
+      STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: Given to a soldier who has been successful in combating {0} soldiers.
+      STR_MEDAL_DEFENDER_MEDAL_NAME: Defender Medal
+      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: Given to a soldier who has been part of a successful base defense mission.
+      STR_MEDAL_MILITARY_CROSS_NAME: Military Cross
+      STR_MEDAL_MILITARY_CROSS_DESCRIPTION: Given to a soldier who has participated in many missions.
+      STR_MEDAL_SERVICE_MEDAL_NAME: Service Medal
+      STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: Given to a soldier who has served for many months.
+      STR_MEDAL_HONOR_CROSS_NAME: Honor Cross
+      STR_MEDAL_HONOR_CROSS_DESCRIPTION: Given to all soldiers upon arrival as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations.
+      STR_MEDAL_CAMPAIGN_MEDAL_NAME: Campaign Medal
+      STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: Given to a soldier who has succesfully defended many regions.
+      STR_MEDAL_SPECIALISTS_MEDAL_NAME: Specialist Medal
+      STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: Given to a soldier who has succesfully used non-lethal force to crowd-control many aliens.
+      STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
+      STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: Given to a soldier who has shown distinction using a {0}.
+      STR_MEDAL_CAMPAIGN_RIBBON_NAME: "{0} Campaign Ribbon"
+      STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: Given to a soldier who has been instrumental in protecting {0}.
+      STR_MEDAL_ORDER_OF_RESTRAINT_NAME: Order of Restraint
+      STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: Given to a soldier who has used non-lethal force to take down many aliens.
+      STR_MEDAL_LONGEST_NIGHT_NAME: Longest Night Ribbon
+      STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: Given to a soldier who has witnessed the horros of alien terror missions at night.
+      STR_AWARD_0: First award
+      STR_AWARD_1: Second award
+      STR_AWARD_2: Third award
+      STR_AWARD_3: Fourth award
+      STR_AWARD_4: Fifth award
+      STR_AWARD_5: Sixth award
+      STR_AWARD_6: Seventh award
+      STR_AWARD_7: Eighth award
+      STR_AWARD_8: Ninth award
+      STR_AWARD_9: Tenth award
+      STR_AWARD_DECOR_0: None
+      STR_AWARD_DECOR_1: First bronze pin
+      STR_AWARD_DECOR_2: Second bronze pin
+      STR_AWARD_DECOR_3: Third bronze pin
+      STR_AWARD_DECOR_4: First silver pin
+      STR_AWARD_DECOR_5: Second silver pin
+      STR_AWARD_DECOR_6: Third silver pin
+      STR_AWARD_DECOR_7: First gold pin
+      STR_AWARD_DECOR_8: Second gold pin
+      STR_AWARD_DECOR_9: Third gold pin
+      STR_MISSION_DETAILS: MISSION DETAILS FOR{NEWLINE}{0}
+      STR_DETAILS_UC: DETAILS
+  - type: en-GB
+    strings:
+      STR_DIARY: RECORD
+      STR_KILLED: KILLED
+      STR_STUNNED: STUNNED
+      STR_COUNTRY_UNKNOWN: Unknown
+      STR_REGION_UNKNOWN: Undisclosed location
+      STR_WEAPON_UNKNOWN: Improvisation
+      STR_MISSION_WIN: Victory
+      STR_MISSION_LOSS: Defeat
+      STR_NO_KILLS: No kills
+      STR_MISSION_DETAILS: MISSION DETAILS
+      STR_LOCATION: LOCATION
+      STR_HUMAN: Human
+      STR_MISSION_TYPE: MISSION> {ALT}{0}
+      STR_UFO_TYPE: UFO> {ALT}{0}
+      STR_RACE_TYPE: RACE> {ALT}{0}
+      STR_DAYLIGHT_TYPE: TIME> {ALT}{0}
+      STR_DAY: Day
+      STR_NIGHT: Night
+      STR_DAYS_WOUNDED: DAYS WOUNDED> {ALT}{0}
+      STR_KILLS_UC: KILLS
+      STR_MISSIONS_UC: MISSIONS
+      STR_AWARDS_UC: AWARDS
+      STR_KILLS_BY_RACE: KILLS/STUNS BY RACE
+      STR_KILLS_BY_RANK: KILLS/STUNS BY RANK
+      STR_KILLS_BY_WEAPON: KILLS/STUNS BY WEAPON
+      STR_MISSIONS_BY_LOCATION: MISSIONS BY LOCATION
+      STR_MISSIONS_BY_TYPE: MISSIONS BY TYPE
+      STR_MISSIONS_BY_UFO: MISSIONS BY UFO
+      STR_MISSIONS_TYPE: MISSIONS
+      STR_UFO_CRASH_RECOVERY_LC: UFO Crash Recovery
+      STR_UFO_GROUND_ASSAULT_LC: UFO Ground Assault
+      STR_BASE_DEFENSE_LC: Base Defense
+      STR_ALIEN_BASE_ASSAULT_LC: Alien Base Assault
+      STR_TERROR_MISSION_LC: Terror Mission
+      STR_HEAVY_WEAPONS_PLATFORM_LC: Heavy Weapons Platform
+      STR_SCORE_VALUE: SCORE> {ALT}{0}
+      STR_WINS: WINS> {ALT}{0}
+      STR_STUNS: STUNS> {ALT}{0}
+      STR_COMMENDATIONS_UC: COMMENDATIONS
+      STR_COMMENDATIONS: Commendations
+      STR_MEDALS: MEDALS
+      STR_NEW_MEDAL: New Medal
+      STR_MEDAL_NAME: Medal Name
+      STR_MEDAL_AWARD_LEVEL: Award Level
+      STR_MEDAL_DECOR_LEVEL: Decoration Level
+      STR_MEDAL_DESCRIPTION: DESCRIPTION
+      STR_MEDAL_MERIT_STAR_NAME: Merit Star
+      STR_MEDAL_MERIT_STAR_DESCRIPTION: Given to a soldier who has killed many aliens.
+      STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
+      STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: Given to a soldier who has been successful in combating {0} soldiers.
+      STR_MEDAL_DEFENDER_MEDAL_NAME: Defender Medal
+      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: Given to a soldier who has been part of a successful base defense mission.
+      STR_MEDAL_MILITARY_CROSS_NAME: Military Cross
+      STR_MEDAL_MILITARY_CROSS_DESCRIPTION: Given to a soldier who has participated in many missions.
+      STR_MEDAL_SERVICE_MEDAL_NAME: Service Medal
+      STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: Given to a soldier who has served for many months.
+      STR_MEDAL_HONOR_CROSS_NAME: Honor Cross
+      STR_MEDAL_HONOR_CROSS_DESCRIPTION: Given to all soldiers upon arrival as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations.
+      STR_MEDAL_CAMPAIGN_MEDAL_NAME: Campaign Medal
+      STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: Given to a soldier who has succesfully defended many regions.
+      STR_MEDAL_SPECIALISTS_MEDAL_NAME: Specialist Medal
+      STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: Given to a soldier who has succesfully used non-lethal force to crowd-control many aliens.
+      STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
+      STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: Given to a soldier who has shown distinction using a {0}.
+      STR_MEDAL_CAMPAIGN_RIBBON_NAME: "{0} Campaign Ribbon"
+      STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: Given to a soldier who has been instrumental in protecting {0}.
+      STR_MEDAL_ORDER_OF_RESTRAINT_NAME: Order of Restraint
+      STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: Given to a soldier who has used non-lethal force to take down many aliens.
+      STR_MEDAL_LONGEST_NIGHT_NAME: Longest Night Ribbon
+      STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: Given to a soldier who has witnessed the horros of alien terror missions at night.
+      STR_AWARD_0: First award
+      STR_AWARD_1: Second award
+      STR_AWARD_2: Third award
+      STR_AWARD_3: Fourth award
+      STR_AWARD_4: Fifth award
+      STR_AWARD_5: Sixth award
+      STR_AWARD_6: Seventh award
+      STR_AWARD_7: Eighth award
+      STR_AWARD_8: Ninth award
+      STR_AWARD_9: Tenth award
+      STR_AWARD_DECOR_0: None
+      STR_AWARD_DECOR_1: First bronze pin
+      STR_AWARD_DECOR_2: Second bronze pin
+      STR_AWARD_DECOR_3: Third bronze pin
+      STR_AWARD_DECOR_4: First silver pin
+      STR_AWARD_DECOR_5: Second silver pin
+      STR_AWARD_DECOR_6: Third silver pin
+      STR_AWARD_DECOR_7: First gold pin
+      STR_AWARD_DECOR_8: Second gold pin
+      STR_AWARD_DECOR_9: Third gold pin
+      STR_MISSION_DETAILS: MISSION DETAILS FOR{NEWLINE}{0}
+      STR_DETAILS_UC: DETAILS
+      # Ruleset for diary and commendations mod
+# When stats reach the criteria threshold, the commendation is awarded
+# Any vector greater than 10 will require more strings and more sprites.
+# Commendations may have multiple criteria.
+# List of possible criteria:
+#   total_kills
+#   total_missions
+#   total_wins
+#   total_score
+#   total_stuns
+#   total_days_wounded
+#   total_base_defense_missions
+#   total_terror_missions
+#   total_night_missions
+#   total_night_terror_missions
+#   total_monthly_service
+# The following criteria use a hardcoded noun for the name/description.
+# They are INCOMPATIBLE with eachother. If used together,
+# the commendation will be given out repeatedly.
+#   total_kills_with_a_weapon
+#   total_missions_in_a_region
+#   total_kills_by_race
+#   total_kills_by_rank
+commendations:
+  - type: STR_MEDAL_MERIT_STAR_NAME
+    description: STR_MEDAL_MERIT_STAR_DESCRIPTION
+    sprite: 0
+    criteria:
+      total_kills: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
+  - type: STR_MEDAL_MILITARY_CROSS_NAME
+    description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
+    sprite: 1
+    criteria:
+      total_missions: [3, 6, 10, 15, 20, 25, 30, 35, 40, 50]
+  - type: STR_MEDAL_ORDER_OF_RESTRAINT_NAME
+    description: STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION
+    sprite: 2
+    criteria:
+      total_stuns: [1, 3, 5, 7, 9, 11, 13, 15, 17, 20]
+  - type: STR_MEDAL_DEFENDER_MEDAL_NAME
+    description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION
+    sprite: 3
+    criteria:
+      total_base_defense_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_LONGEST_NIGHT_NAME
+    description: STR_MEDAL_LONGEST_NIGHT_DESCRIPTION
+    sprite: 4
+    criteria:
+      total_night_terror_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_HONOR_CROSS_NAME
+    description: STR_MEDAL_HONOR_CROSS_DESCRIPTION
+    sprite: 5
+    criteria:
+      total_monthly_service: [1]
+  - type: STR_MEDAL_SERVICE_MEDAL_NAME
+    description: STR_MEDAL_SERVICE_MEDAL_DESCRIPTION
+    sprite: 6
+    criteria:
+      total_monthly_service: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_WEAPON_PROFICIENCY_NAME
+    description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
+    sprite: 7
+    criteria:
+      total_kills_with_a_weapon: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME
+    description: STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION
+    sprite: 8
+    criteria:
+      total_missions_in_a_region: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_XENOCIDE_MEDAL_NAME
+    description: STR_MEDAL_XENOCIDE_MEDAL_DESCIRPTION
+    sprite: 9
+    criteria:
+      total_kills_by_race: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
