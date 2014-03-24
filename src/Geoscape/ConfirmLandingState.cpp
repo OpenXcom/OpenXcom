@@ -61,7 +61,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
-	_txtMessage = new Text(206, 64, 25, 40);
+	_txtMessage = new Text(206, 80, 25, 40);
 	_txtBegin = new Text(206, 17, 25, 130);
 
 	// Set palette
