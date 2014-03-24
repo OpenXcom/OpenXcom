@@ -4482,6 +4482,7 @@ units:
     aggression: 0
   - type: STR_CYBERDISC_TERRORIST
     race: STR_CYBERDISC
+    rank: STR_LIVE_TERRORIST
     stats:
       tu: 62
       stamina: 90
@@ -4651,6 +4652,7 @@ units:
     aggression: 0
   - type: STR_REAPER_TERRORIST
     race: STR_REAPER
+    rank: STR_LIVE_TERRORIST
     stats:
       tu: 62
       stamina: 90

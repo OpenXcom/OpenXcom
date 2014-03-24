@@ -1699,7 +1699,7 @@ const Ruleset *BattlescapeGame::getRuleset() const
 void BattlescapeGame::findItem(BattleAction *action)
 {
 	// terrorists don't have hands.
-	if (action->actor->getRankString() != "STR_TERRORIST")
+	if (action->actor->getRankString() != "STR_LIVE_TERRORIST")
 	{
 		// pick the best available item
 		BattleItem *targetItem = surveyItems(action);
