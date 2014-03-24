@@ -181,7 +181,7 @@ void SoldierDiaryState::init()
 
 		std::wstringstream Status, Location;
 
-		if ((*j)->getMissionCountry() == "STR_COUNTRY_UNKNOWN")
+		if ((*j)->getMissionCountry() == "STR_UNKNOWN")
 		{
 			Location << Region.str().c_str();
 		}

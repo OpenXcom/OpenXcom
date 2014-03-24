@@ -395,7 +395,7 @@ void DebriefingState::prepareDebriefing()
 	_missionType = battle->getMissionType();
 	// Defined later
 	_missionRegion = "STR_REGION_UNKNOWN"; 
-	_missionCountry = "STR_COUNTRY_UNKNOWN";
+	_missionCountry = "STR_UNKNOWN";
 	_missionUFO = "NO_UFO";
 	_missionSuccess = success;
 	_missionRace = "STR_UNKNOWN";
