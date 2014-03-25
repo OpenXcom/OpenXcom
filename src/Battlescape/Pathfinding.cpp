@@ -853,10 +853,9 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			tu *= 0.75;
 		}
-		energy -= tu / 2;
-		if (dir >= Pathfinding::DIR_UP)
+		if (dir < Pathfinding::DIR_UP)
 		{
-			energy = 0;
+			energy -= tu / 2;
 		}
 
 		tus -= tu;
