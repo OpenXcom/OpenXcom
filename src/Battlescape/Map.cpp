@@ -78,7 +78,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)/*, _smoothingEngaged(false)*/
 {
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 	_smoothCamera = Options::getBool("battleSmoothCamera");
@@ -287,23 +287,43 @@ void Map::drawTerrain(Surface *surface)
 			}
 			if (_smoothCamera)
 			{
-				if (!_smoothingEngaged)
-				{
-					Position origin = _projectile->getOrigin();
-					Position target = _projectile->getTarget();
-					if (std::abs(origin.x - target.x) > 1 ||
-						std::abs(origin.y - target.y) > 1 || 
-						std::abs(origin.z - target.z) > 1 ||
-						bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
-						bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight)
+				bool snap = false;
+					Position bulletPos = _projectile->getPosition();
+					Position targetPos = _projectile->getTarget() * Position(16,16,24);
+					Position camOffsetToBullet = (targetPos - bulletPos)/2;
+					Position smoothCamWantedPos = bulletPos + camOffsetToBullet;
+					Position smoothCamWantedPosScreen;
+					Position distanceTraveled = bulletPos - _projectile->getOrigin() * Position(16,16,24);
+					if (
+						std::abs(distanceTraveled.x) > surface->getWidth() /2.5f ||
+						std::abs(distanceTraveled.y) > _visibleMapHeight / 2.5f)
 					{
-						_smoothingEngaged = true;
+						_camera->convertVoxelToScreen(smoothCamWantedPos, &smoothCamWantedPosScreen);
+						Position camOffsetToBulletScreen = smoothCamWantedPosScreen - bulletPositionScreen;
+						if(camOffsetToBulletScreen.x > surface->getWidth() / 4)
+							smoothCamWantedPosScreen.x = bulletPositionScreen.x + surface->getWidth() / 4;
+						if(camOffsetToBulletScreen.x < -surface->getWidth() / 4)
+							smoothCamWantedPosScreen.x = bulletPositionScreen.x - surface->getWidth() / 4;
+						if(camOffsetToBulletScreen.y > _visibleMapHeight / 4)
+							smoothCamWantedPosScreen.y = bulletPositionScreen.y + _visibleMapHeight / 4;
+						if(camOffsetToBulletScreen.y < -_visibleMapHeight / 4)
+							smoothCamWantedPosScreen.y = bulletPositionScreen.y - _visibleMapHeight / 4;
 					}
-				}
-				else
-				{
-					_camera->jumpXY(surface->getWidth() / 2 - bulletPositionScreen.x, _visibleMapHeight / 2 - bulletPositionScreen.y);
-				}
+					else
+					{
+						smoothCamWantedPos = _projectile->getOrigin() * Position(16,16,24);
+						_camera->convertVoxelToScreen(smoothCamWantedPos, &smoothCamWantedPosScreen);
+						snap = true;
+					}
+					float xJump = surface->getWidth() / 2 - smoothCamWantedPosScreen.x;
+					float yJump = _visibleMapHeight / 2 - smoothCamWantedPosScreen.y;
+					if(!snap)
+					{
+						xJump /= 30.0f / Options::getInt("battleFireSpeed");
+						yJump /= 30.0f / Options::getInt("battleFireSpeed");
+					}
+					if(xJump != 0 || yJump != 0)
+						_camera->jumpXY(xJump, yJump);
 			}
 			else
 			{
@@ -339,7 +359,7 @@ void Map::drawTerrain(Surface *surface)
 	}
 	else
 	{
-		_smoothingEngaged = false;
+//		_smoothingEngaged = false;
 	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
