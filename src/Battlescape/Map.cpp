@@ -287,34 +287,41 @@ void Map::drawTerrain(Surface *surface)
 			}
 			if (_smoothCamera)
 			{
+				bool snap = false;
 					Position bulletPos = _projectile->getPosition();
 					Position targetPos = _projectile->getTarget() * Position(16,16,24);
 					Position camOffsetToBullet = (targetPos - bulletPos)/2;
-					Position smoothCamPos = bulletPos + camOffsetToBullet;
-					Position smoothCamPosScreen;
+					Position smoothCamWantedPos = bulletPos + camOffsetToBullet;
+					Position smoothCamWantedPosScreen;
 					Position distanceTraveled = bulletPos - _projectile->getOrigin() * Position(16,16,24);
 					if (
 						std::abs(distanceTraveled.x) > surface->getWidth() /2.5f ||
 						std::abs(distanceTraveled.y) > _visibleMapHeight / 2.5f)
 					{
-						_camera->convertVoxelToScreen(smoothCamPos, &smoothCamPosScreen);
-						Position camOffsetToBulletScreen = smoothCamPosScreen - bulletPositionScreen;
+						_camera->convertVoxelToScreen(smoothCamWantedPos, &smoothCamWantedPosScreen);
+						Position camOffsetToBulletScreen = smoothCamWantedPosScreen - bulletPositionScreen;
 						if(camOffsetToBulletScreen.x > surface->getWidth() / 4)
-							smoothCamPosScreen.x = bulletPositionScreen.x + surface->getWidth() / 4;
+							smoothCamWantedPosScreen.x = bulletPositionScreen.x + surface->getWidth() / 4;
 						if(camOffsetToBulletScreen.x < -surface->getWidth() / 4)
-							smoothCamPosScreen.x = bulletPositionScreen.x - surface->getWidth() / 4;
+							smoothCamWantedPosScreen.x = bulletPositionScreen.x - surface->getWidth() / 4;
 						if(camOffsetToBulletScreen.y > _visibleMapHeight / 4)
-							smoothCamPosScreen.y = bulletPositionScreen.y + _visibleMapHeight / 4;
+							smoothCamWantedPosScreen.y = bulletPositionScreen.y + _visibleMapHeight / 4;
 						if(camOffsetToBulletScreen.y < -_visibleMapHeight / 4)
-							smoothCamPosScreen.y = bulletPositionScreen.y - _visibleMapHeight / 4;
+							smoothCamWantedPosScreen.y = bulletPositionScreen.y - _visibleMapHeight / 4;
 					}
 					else
 					{
-						smoothCamPos = _projectile->getOrigin() * Position(16,16,24);
-						_camera->convertVoxelToScreen(smoothCamPos, &smoothCamPosScreen);
+						smoothCamWantedPos = _projectile->getOrigin() * Position(16,16,24);
+						_camera->convertVoxelToScreen(smoothCamWantedPos, &smoothCamWantedPosScreen);
+						snap = true;
 					}
-					int xJump = surface->getWidth() / 2 - smoothCamPosScreen.x;
-					int yJump = _visibleMapHeight / 2 - smoothCamPosScreen.y;
+					float xJump = surface->getWidth() / 2 - smoothCamWantedPosScreen.x;
+					float yJump = _visibleMapHeight / 2 - smoothCamWantedPosScreen.y;
+					if(!snap)
+					{
+						xJump /= 30.0f / Options::getInt("battleFireSpeed");
+						yJump /= 30.0f / Options::getInt("battleFireSpeed");
+					}
 					if(xJump != 0 || yJump != 0)
 						_camera->jumpXY(xJump, yJump);
 			}
