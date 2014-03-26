@@ -35,6 +35,16 @@ class GameTime;
 class RuleCommendations;
 class Ruleset;
 
+struct Statistics
+{
+	bool wasUnconcious;
+	void load(const YAML::Node& node);
+	YAML::Node save() const;
+	void clear(Statistics *missionStatistics);
+	Statistics(const YAML::Node& node) { load(node); }
+	Statistics() : wasUnconcious(false) { }
+};
+
 /**
  * Each entry will have a list of kills, detailed by this class.
  */
@@ -83,13 +93,14 @@ private:
 	std::string _alienRace;
 	int _missionDaylight;
 	int _daysWounded;
+	Statistics *_missionStatistics;
 
 	std::vector<SoldierDiaryKills*> _missionKills;
 public:
 	/// Creates a new diary and loads its contents from YAML.
 	SoldierDiaryEntries(const YAML::Node& node);
 	/// Creates a diary.
-	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded);
+	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
 	/// Cleans up the diary.
 	~SoldierDiaryEntries();
 	/// Loads the diary information from YAML.
@@ -126,6 +137,8 @@ public:
 	int getMissionStunTotal() const;
 	/// Get
 	int getDaysWounded() const;
+	/// Get
+	Statistics *getMissionStatistics() const;
 };
 
 /**
@@ -182,7 +195,7 @@ private:
 	RuleCommendations *_rules;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
-		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService;
+		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:
@@ -199,7 +212,7 @@ public:
 	/// Get the diary entries
 	std::vector<SoldierDiaryEntries*> getSoldierDiaryEntries();
 	/// Add an entry to the diary
-	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded);
+	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
 	/// Update the diary statistics
 	void updateDiary();
 	/// Get

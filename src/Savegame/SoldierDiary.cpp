@@ -24,6 +24,25 @@
 namespace OpenXcom
 {
 
+void Statistics::load(const YAML::Node& node)
+{
+
+	wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
+}
+
+YAML::Node Statistics::save() const
+{
+	YAML::Node node;
+	node["wasUnconcious"] = wasUnconcious;
+	return node;
+}
+
+void Statistics::clear(Statistics *missionStatistics)
+{
+	static struct Statistics *emptyStruct;
+	missionStatistics = emptyStruct;
+}
+
 /**
  * Initializes a new diary entry from YAML.
  * @param node YAML node.
@@ -39,7 +58,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 SoldierDiary::SoldierDiary() : _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(),
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
-	_nightTerrorMissionTotal(0), _monthsService(0)
+	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0)
 {
 }
 
@@ -100,9 +119,9 @@ std::vector<SoldierDiaryEntries*> SoldierDiary::getSoldierDiaryEntries()
 /**
  *  Add soldier diary entry.
  */
-void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int rating, std::string score, std::string alienRace, int missionDaylight, int daysWounded)
+void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int rating, std::string score, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics)
 {
-	_diaryEntries.push_back(new SoldierDiaryEntries(missionTime, missionRegion, missionCountry, missionType, missionUFO, missionKills, success, rating, score, alienRace, missionDaylight, daysWounded));
+	_diaryEntries.push_back(new SoldierDiaryEntries(missionTime, missionRegion, missionCountry, missionType, missionUFO, missionKills, success, rating, score, alienRace, missionDaylight, daysWounded, missionStatistics));
 }
 
 /**
@@ -127,8 +146,10 @@ void SoldierDiary::updateDiary()
 	_daysWoundedTotal = 0;
 	_baseDefenseMissionTotal = 0;
 	_terrorMissionTotal = 0;
-	_nightTerrorMissionTotal = 0;
 	_nightMissionTotal = 0;
+	_nightTerrorMissionTotal = 0;
+	_monthsService = 0;
+	_unconciousTotal = 0;
 
 	for (std::vector<SoldierDiaryEntries*>::iterator i = _diaryEntries.begin(); i != _diaryEntries.end(); ++i)
 	{
@@ -168,6 +189,10 @@ void SoldierDiary::updateDiary()
 		if ((*i)->getMissionDaylight() != 0)
 		{
 			_nightMissionTotal++;
+		}
+		if ((*i)->getMissionStatistics()->wasUnconcious)
+		{
+			_unconciousTotal++;
 		}
 	}
 }
@@ -385,7 +410,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) )
+					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) )
 			{
 				_awardCommendation = false;
 				break;
@@ -532,7 +558,7 @@ SoldierDiaryEntries::SoldierDiaryEntries(const YAML::Node &node) : _missionTime(
  * @param missionType Mission's type.
  * @param missionUFO Mission's UFO.
  */
-SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded) : _missionTime(missionTime), _missionRegion(missionRegion), _missionCountry(missionCountry), _missionType(missionType), _missionUFO(missionUFO), _missionKills(missionKills), _success(success), _score(score), _rating(rating), _alienRace(alienRace), _missionDaylight(missionDaylight), _daysWounded(daysWounded)
+SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics) : _missionTime(missionTime), _missionRegion(missionRegion), _missionCountry(missionCountry), _missionType(missionType), _missionUFO(missionUFO), _missionKills(missionKills), _success(success), _score(score), _rating(rating), _alienRace(alienRace), _missionDaylight(missionDaylight), _daysWounded(daysWounded), _missionStatistics(missionStatistics)
 {
 }
 
@@ -565,6 +591,11 @@ void SoldierDiaryEntries::load(const YAML::Node &node)
 	_alienRace = node["alienRace"].as<std::string>(_alienRace);
 	_missionDaylight = node["missionDaylight"].as<int>(_missionDaylight);
 	_daysWounded = node["daysWounded"].as<int>(_daysWounded);
+	if (node["missionStatistics"])
+	{
+		_missionStatistics = new Statistics();
+		_missionStatistics->load(node["missionStatistics"]);
+	}
 }
 
 /**
@@ -592,6 +623,7 @@ YAML::Node SoldierDiaryEntries::save() const
 	node["alienRace"] = _alienRace;
 	node["missionDaylight"] = _missionDaylight;
 	node["daysWounded"] = _daysWounded;
+	node["missionStatistics"] = _missionStatistics->save();
 	return node;
 }
 
@@ -736,6 +768,14 @@ int SoldierDiaryEntries::getMissionStunTotal() const
 int SoldierDiaryEntries::getDaysWounded() const
 {
 	return _daysWounded;
+}
+
+/**
+ *
+ */
+Statistics *SoldierDiaryEntries::getMissionStatistics() const
+{
+	return _missionStatistics;
 }
 
 /**

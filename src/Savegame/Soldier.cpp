@@ -38,9 +38,10 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0), _diary(), _tempKills()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0), _diary(), _tempKills(), _tempMissionStatistics()
 {
 	_diary = new SoldierDiary();
+	_tempMissionStatistics = new Statistics();
 
 	if (names != 0)
 	{
@@ -132,6 +133,10 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		for (YAML::const_iterator i = tempKills.begin(); i != tempKills.end(); ++i)
 			_tempKills.push_back(new SoldierDiaryKills(*i));
 	}
+	if (node["tempMissionStatistics"])
+	{
+		_tempMissionStatistics->load(node["tempMissionStatistics"]);
+	}
 }
 
 /**
@@ -177,6 +182,10 @@ YAML::Node Soldier::save() const
 	{
 		for (std::vector<SoldierDiaryKills*>::const_iterator i = _tempKills.begin() ; i != _tempKills.end() ; ++i)
 			node["tempKills"].push_back((*i)->save());
+	}
+	if (_tempMissionStatistics)
+	{
+		node["tempMissionStatistics"] = _tempMissionStatistics->save();
 	}
 
 	return node;
@@ -596,11 +605,19 @@ void Soldier::addTempKills(std::string alienRank, std::string alienRace, std::st
 }
 
 /**
- * Clears the soldier's tenoirary kills.
+ * Clears the soldier's temporary kills.
  */
 void Soldier::clearTempKills()
 {
 	_tempKills.clear();
+}
+
+/**
+ * Get the soldier's temporary mission statistics
+ */
+Statistics *Soldier::getMissionStatistics()
+{
+	return _tempMissionStatistics;
 }
 
 }

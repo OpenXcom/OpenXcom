@@ -216,6 +216,7 @@ extraStrings:
 #   total_night_missions
 #   total_night_terror_missions
 #   total_monthly_service
+#   total_fell_unconcious
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -274,3 +275,8 @@ commendations:
     sprite: 9
     criteria:
       total_kills_by_race: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_FELL_UNCONCIOUS
+    description: STR_FELL_UNCONCIOUS_DESCRIPTION
+    sprite: 0
+    criteria:
+      total_fell_unconcious: [0, 1, 3, 4, 5, 7, 9, 11, 15, 20]

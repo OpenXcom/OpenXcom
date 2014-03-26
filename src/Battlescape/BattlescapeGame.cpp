@@ -672,6 +672,10 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
 			}
+			if (victim && victim->getGeoscapeSoldier())
+			{
+				victim->getGeoscapeSoldier()->getMissionStatistics()->wasUnconcious = true;
+			}
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 		}
 	}
