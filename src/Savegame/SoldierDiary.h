@@ -40,9 +40,9 @@ struct Statistics
 	bool wasUnconcious;
 	void load(const YAML::Node& node);
 	YAML::Node save() const;
-	void clear(Statistics *missionStatistics);
 	Statistics(const YAML::Node& node) { load(node); }
 	Statistics() : wasUnconcious(false) { }
+	~Statistics() { }
 };
 
 /**

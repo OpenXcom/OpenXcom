@@ -65,7 +65,6 @@ private:
 	SoldierDeath *_death;
 	SoldierDiary *_diary;
 	std::vector<SoldierDiaryKills*> _tempKills;
-	Statistics *_tempMissionStatistics;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
@@ -149,8 +148,6 @@ public:
 	void addTempKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState);
 	/// Clear soldier's temp kills.
 	void clearTempKills();
-	/// Get soldier's temp mission statistics.
-	Statistics *getMissionStatistics();
 
 };
 

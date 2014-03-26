@@ -27,6 +27,7 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
 #include "Soldier.h"
+#include "SoldierDiary.h"
 
 namespace OpenXcom
 {
@@ -94,6 +95,7 @@ private:
 	int _turnsSinceSpotted;
 	std::string _spawnUnit;
 	std::string _activeHand;
+	Statistics *_missionStatistics;
 
 	// static data
 	std::string _type;
@@ -419,6 +421,8 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Get the unit's mission statistics
+	Statistics *getMissionStatistics();
 };
 
 }

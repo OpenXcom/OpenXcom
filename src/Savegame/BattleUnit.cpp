@@ -52,7 +52,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false),
+																_missionStatistics()
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -105,6 +106,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	_missionStatistics = new Statistics();
 }
 
 /**
@@ -121,7 +124,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																						_turretType(-1), _hidingForTurn(false)
+																						_turretType(-1), _hidingForTurn(false), _missionStatistics()
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -165,6 +168,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_activeHand = "STR_RIGHT_HAND";
 	
 	lastCover = Position(-1, -1, -1);
+
+	_missionStatistics = new Statistics();
 	
 }
 
@@ -177,6 +182,7 @@ BattleUnit::~BattleUnit()
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
 	//delete _currentAIState;
+	delete _missionStatistics;
 }
 
 /**
@@ -222,7 +228,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints = node["motionPoints"].as<int>(0);
-
+	_missionStatistics->load(node["tempMissionStatistics"]);
 }
 
 /**
@@ -279,6 +285,7 @@ YAML::Node BattleUnit::save() const
 	if (!_spawnUnit.empty())
 		node["spawnUnit"] = _spawnUnit;
 	node["motionPoints"] = _motionPoints;
+	node["tempMissionStatistics"] = _missionStatistics->save();
 
 	return node;
 }
@@ -2569,6 +2576,15 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
 bool BattleUnit::hasInventory() const
 {
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
+
+/**
+ * Get the unit's mission statistics.
+ * @return Statistics missionStatistics.
+ */
+Statistics *BattleUnit::getMissionStatistics()
+{
+	return _missionStatistics;
 }
 
 }

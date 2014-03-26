@@ -37,12 +37,6 @@ YAML::Node Statistics::save() const
 	return node;
 }
 
-void Statistics::clear(Statistics *missionStatistics)
-{
-	static struct Statistics *emptyStruct;
-	missionStatistics = emptyStruct;
-}
-
 /**
  * Initializes a new diary entry from YAML.
  * @param node YAML node.
