@@ -67,7 +67,7 @@ private:
 	Camera *_camera;
 	int _visibleMapHeight;
 	std::vector<Position> _waypoints;
-	bool _unitDying, _smoothCamera, _smoothingEngaged;
+	bool _unitDying, _smoothCamera;
 	int _previewSetting;
 	Text *_txtAccuracy;
 
