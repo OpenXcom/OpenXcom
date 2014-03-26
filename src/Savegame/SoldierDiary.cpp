@@ -567,6 +567,7 @@ SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missi
  */
 SoldierDiaryEntries::~SoldierDiaryEntries()
 {
+	delete _missionStatistics;
 }
 
 /**

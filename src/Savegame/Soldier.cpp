@@ -91,6 +91,7 @@ Soldier::~Soldier()
 		delete *i;
 	}
 	delete _death;
+	delete _diary;
 }
 
 /**
