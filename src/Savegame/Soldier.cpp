@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0), _diary(), _tempKills()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0), _diary()
 {
 	_diary = new SoldierDiary();
 
@@ -128,11 +128,6 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
 	}
-	if (const YAML::Node &tempKills = node["tempKills"])
-	{
-		for (YAML::const_iterator i = tempKills.begin(); i != tempKills.end(); ++i)
-			_tempKills.push_back(new SoldierDiaryKills(*i));
-	}
 }
 
 /**
@@ -173,11 +168,6 @@ YAML::Node Soldier::save() const
 	if (!_diary->getSoldierDiaryEntries().empty())
 	{
 		node["diary"] = _diary->save();
-	}
-	if (!_tempKills.empty())
-	{
-		for (std::vector<SoldierDiaryKills*>::const_iterator i = _tempKills.begin() ; i != _tempKills.end() ; ++i)
-			node["tempKills"].push_back((*i)->save());
 	}
 
 	return node;
@@ -577,31 +567,6 @@ void Soldier::die(SoldierDeath *death)
 SoldierDiary *Soldier::getDiary()
 {
 	return _diary;
-}
-
-/**
- * Returns the soldier's temporary kills for the current mission.
- * @return SoldierDiaryKills _tempKills.
- */
-std::vector<SoldierDiaryKills*> Soldier::getTempKills() const
-{
-	return _tempKills;
-}
-
-/**
- * Adds the soldier's temporary kills for the current mission.
- */
-void Soldier::addTempKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState)
-{
-	_tempKills.push_back(new SoldierDiaryKills(alienRank, alienRace, weapon, weaponAmmo, alienState));
-}
-
-/**
- * Clears the soldier's temporary kills.
- */
-void Soldier::clearTempKills()
-{
-	_tempKills.clear();
 }
 
 }

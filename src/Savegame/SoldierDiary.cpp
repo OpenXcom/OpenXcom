@@ -28,13 +28,34 @@ void Statistics::load(const YAML::Node& node)
 {
 
 	wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
+    if (const YAML::Node &tempKills = node["tempKills"])
+	{
+		for (YAML::const_iterator i = tempKills.begin(); i != tempKills.end(); ++i)
+			_tempKills.push_back(new SoldierDiaryKills(*i));
+	}
 }
 
 YAML::Node Statistics::save() const
 {
 	YAML::Node node;
 	node["wasUnconcious"] = wasUnconcious;
+    if (!_tempKills.empty())
+	{
+		for (std::vector<SoldierDiaryKills*>::const_iterator i = _tempKills.begin() ; i != _tempKills.end() ; ++i)
+			node["tempKills"].push_back((*i)->save());
+	}
 	return node;
+}
+
+/**
+ * Deconstructor
+ */
+Statistics::~Statistics()
+{
+    for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**

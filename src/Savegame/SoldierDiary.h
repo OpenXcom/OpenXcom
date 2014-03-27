@@ -38,11 +38,12 @@ class Ruleset;
 struct Statistics
 {
 	bool wasUnconcious;
+    std::vector<SoldierDiaryKills*> kills;
 	void load(const YAML::Node& node);
 	YAML::Node save() const;
 	Statistics(const YAML::Node& node) { load(node); }
-	Statistics() : wasUnconcious(false) { }
-	~Statistics() { }
+	Statistics() : wasUnconcious(false), kills() { }
+	~Statistics();
 };
 
 /**
