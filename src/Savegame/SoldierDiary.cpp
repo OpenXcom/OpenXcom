@@ -116,6 +116,7 @@ std::vector<SoldierDiaryEntries*> SoldierDiary::getSoldierDiaryEntries()
 void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int rating, std::string score, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics)
 {
 	_diaryEntries.push_back(new SoldierDiaryEntries(missionTime, missionRegion, missionCountry, missionType, missionUFO, missionKills, success, rating, score, alienRace, missionDaylight, daysWounded, missionStatistics));
+    updateDiary();
 }
 
 /**
@@ -123,72 +124,47 @@ void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missio
  */
 void SoldierDiary::updateDiary()
 {
-	// Gotta be a better way...
-	_alienRankTotal.clear();
-	_alienRaceTotal.clear();
-	_weaponTotal.clear();
-	_weaponAmmoTotal.clear();
-	_regionTotal.clear();
-	_countryTotal.clear();
-	_typeTotal.clear();
-	_UFOTotal.clear();
-	_scoreTotal = 0;
-	_killTotal = 0;
-	_missionTotal = 0;
-	_winTotal = 0;
-	_stunTotal = 0;
-	_daysWoundedTotal = 0;
-	_baseDefenseMissionTotal = 0;
-	_terrorMissionTotal = 0;
-	_nightMissionTotal = 0;
-	_nightTerrorMissionTotal = 0;
-	_monthsService = 0;
-	_unconciousTotal = 0;
-
-	for (std::vector<SoldierDiaryEntries*>::iterator i = _diaryEntries.begin(); i != _diaryEntries.end(); ++i)
-	{
-		std::vector<SoldierDiaryKills*> _missionKills = (*i)->getMissionKills();
-		for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
-		{
-			_alienRankTotal[(*j)->getAlienRank().c_str()]++;
-			_alienRaceTotal[(*j)->getAlienRace().c_str()]++;
-			_weaponTotal[(*j)->getWeapon().c_str()]++;
-			_weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
-		}
-		_regionTotal[(*i)->getMissionRegion().c_str()]++;
-		_countryTotal[(*i)->getMissionCountry().c_str()]++;
-		_typeTotal[(*i)->getMissionType().c_str()]++;
-		_UFOTotal[(*i)->getMissionUFO().c_str()]++;
-		_scoreTotal += (*i)->getMissionScore();
-		_killTotal += (*i)->getMissionKillTotal();
-		_missionTotal = _diaryEntries.size();
-		if ((*i)->getMissionSuccess())
-		{
-			_winTotal++;
-		}
-		_stunTotal += (*i)->getMissionStunTotal();
-		_daysWoundedTotal += (*i)->getDaysWounded();
-		if ((*i)->getMissionType() == "STR_BASE_DEFENSE")
-		{
-			_baseDefenseMissionTotal++;
-		}
-		else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
-		{
-			_terrorMissionTotal++;
-			if ((*i)->getMissionDaylight() != 0)
-			{
-				_nightTerrorMissionTotal++;
-			}
-		}
-		if ((*i)->getMissionDaylight() != 0)
-		{
-			_nightMissionTotal++;
-		}
-		if ((*i)->getMissionStatistics()->wasUnconcious)
-		{
-			_unconciousTotal++;
-		}
-	}
+    std::vector<SoldierDiaryKills*> _missionKills = (*i)->getMissionKills();
+    for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
+    {
+        _alienRankTotal[(*j)->getAlienRank().c_str()]++;
+        _alienRaceTotal[(*j)->getAlienRace().c_str()]++;
+        _weaponTotal[(*j)->getWeapon().c_str()]++;
+        _weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
+    }
+    _regionTotal[(*i)->getMissionRegion().c_str()]++;
+    _countryTotal[(*i)->getMissionCountry().c_str()]++;
+    _typeTotal[(*i)->getMissionType().c_str()]++;
+    _UFOTotal[(*i)->getMissionUFO().c_str()]++;
+    _scoreTotal += (*i)->getMissionScore();
+    _killTotal += (*i)->getMissionKillTotal();
+    _missionTotal = _diaryEntries.size();
+    if ((*i)->getMissionSuccess())
+    {
+        _winTotal++;
+    }
+    _stunTotal += (*i)->getMissionStunTotal();
+    _daysWoundedTotal += (*i)->getDaysWounded();
+    if ((*i)->getMissionType() == "STR_BASE_DEFENSE")
+    {
+        _baseDefenseMissionTotal++;
+    }
+    else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
+    {
+        _terrorMissionTotal++;
+        if ((*i)->getMissionDaylight() != 0)
+        {
+            _nightTerrorMissionTotal++;
+        }
+    }
+    if ((*i)->getMissionDaylight() != 0)
+    {
+        _nightMissionTotal++;
+    }
+    if ((*i)->getMissionStatistics()->wasUnconcious)
+    {
+        _unconciousTotal++;
+    }	
 }
 
 /**
