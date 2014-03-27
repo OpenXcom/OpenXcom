@@ -702,14 +702,6 @@ int SoldierDiaryEntries::getMissionScore() const
 /**
  *
  */
-void SoldierDiaryEntries::addMissionKill(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState)
-{
-	_missionKills.push_back(new SoldierDiaryKills(alienRank, alienRace, weapon, weaponAmmo, alienState));
-}
-
-/**
- *
- */
 int SoldierDiaryEntries::getMissionKillTotal() const
 {
 	int _total = 0;

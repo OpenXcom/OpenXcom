@@ -71,13 +71,14 @@ public:
 
 struct Statistics
 {
-	bool wasUnconcious;
-    std::vector<SoldierDiaryKills*> kills;
-	void load(const YAML::Node& node);
-	YAML::Node save() const;
-	Statistics(const YAML::Node& node) { load(node); }
-	Statistics() : wasUnconcious(false), kills() { }
-	~Statistics();
+	bool wasUnconcious;									// Tracks if the soldier fell unconcious
+    std::vector<SoldierDiaryKills*> kills;				// Tracks kills
+
+	void load(const YAML::Node& node);					// Load function
+	YAML::Node save() const;							// Save function
+	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
+	Statistics() : wasUnconcious(false), kills() { }	// Default constructor
+	~Statistics();										// Deconstructor
 };
 
 /**
@@ -126,8 +127,6 @@ public:
 	std::string getMissionRating() const;
 	/// Get
 	int getMissionScore() const;
-	/// Add kill
-	void addMissionKill(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState);
 	/// Get
 	int getMissionKillTotal() const;
 	/// Get
