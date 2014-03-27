@@ -499,7 +499,7 @@ void BasescapeState::miniClick(Action *)
  */
 void BasescapeState::handleKeyPress(Action *action)
 {
-	if (action->getDetails()->type == SDL_KEYDOWN)
+	if (!_edtBase->isFocused() && action->getDetails()->type == SDL_KEYDOWN)
 	{
 		int base = -1;
 		int key = action->getDetails()->key.keysym.sym;

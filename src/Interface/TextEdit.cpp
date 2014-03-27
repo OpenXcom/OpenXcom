@@ -476,4 +476,12 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	InteractiveSurface::keyboardPress(action, state);
 }
 
+/**
+ * Check if the player is currently typing in this box.
+ * @return if the player is typing in this box or not.
+ */
+bool TextEdit::isFocused()
+{
+	return _isFocused;
+}
 }
