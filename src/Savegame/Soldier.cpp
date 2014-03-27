@@ -91,7 +91,6 @@ Soldier::~Soldier()
 	}
 	delete _death;
 	delete _diary;
-	delete _tempMissionStatistics;
 }
 
 /**

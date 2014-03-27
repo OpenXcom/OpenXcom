@@ -674,7 +674,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 			if (victim && victim->getGeoscapeSoldier())
 			{
-				victim->getGeoscapeSoldier()->getMissionStatistics()->wasUnconcious = true;
+				victim->getMissionStatistics()->wasUnconcious = true;
 			}
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 		}
