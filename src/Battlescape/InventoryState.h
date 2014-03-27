@@ -20,6 +20,9 @@
 #define OPENXCOM_INVENTORYSTATE_H
 
 #include "../Engine/State.h"
+#include "../Interface/TextButton.h"
+#include "../Savegame/BattleItem.h"
+
 
 namespace OpenXcom
 {
@@ -41,10 +44,12 @@ private:
 	Surface *_bg, *_soldier;
 	Text *_txtName, *_txtItem, *_txtAmmo, *_txtWeight, *_txtTus, *_txtFAcc, *_txtReact, *_txtPSkill, *_txtPStr;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
+	TextButton *_btnCopy, *_btnPaste;
 	Surface *_selAmmo;
 	Inventory *_inv;
+	std::vector<BattleItem*> *_curInventoryTemplate;
 	SavedBattleGame *_battleGame;
-	bool _tu, _showMoreStatsInInventoryView;
+	const bool _tu, _showMoreStatsInInventoryView;
 	BattlescapeState *_parent;
 public:
 	/// Creates the Inventory state.
@@ -63,13 +68,17 @@ public:
 	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
-	/// Handler for clicking the Rank button.
+	/// Handler for clicking the Unload button.
 	void btnUnloadClick(Action *action);
 	/// Handler for clicking on the Ground -> button.
 	void btnGroundClick(Action *action);
-	/// Handler for clicking on the inventory.
+	/// Handler for clicking the Rank button.
 	void btnRankClick(Action *action);
-	/// Handler for clicking the Unload button.
+	/// Handler for clicking on the Copy button.
+	void btnCopyClick(Action *action);
+	/// Handler for clicking the Paste button.
+	void btnPasteClick(Action *action);
+	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 	/// Handles keypresses.
 	void handle(Action *action);

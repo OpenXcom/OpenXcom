@@ -30,10 +30,10 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/EquipmentLayoutItem.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/Tile.h"
 #include "Inventory.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
@@ -56,10 +56,9 @@ namespace OpenXcom
  * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
-InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
+InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _showMoreStatsInInventoryView(Options::getBool("showMoreStatsInInventoryView")), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
-	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -79,6 +78,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnUnload = new InteractiveSurface(32, 25, 288, 32);
 	_btnGround = new InteractiveSurface(32, 15, 289, 137);
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
+	_btnCopy = new TextButton(30, 9, 253, 70);
+	_btnPaste = new TextButton(30, 9, 284, 70);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0);
 
@@ -99,6 +100,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	add(_btnUnload);
 	add(_btnGround);
 	add(_btnRank);
+	add(_btnCopy);
+	add(_btnPaste);
 	add(_selAmmo);
 	add(_inv);
 
@@ -153,6 +156,24 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
 	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
+
+	// TODO: localize: _btnCopy->setText(tr("STR_COPY"));
+	_btnCopy->setText(L"Copy");
+	_btnCopy->onMouseClick((ActionHandler)&InventoryState::btnCopyClick);
+	// TODO: shortcut: _btnCopy->onKeyboardPress((ActionHandler)&InventoryState::btnCopyClick, (SDLKey)Options::getInt("keyInvCopyTemplate"));
+	// TODO: localize: _btnPaste->setText(tr("STR_PASTE"));
+	_btnPaste->setText(L"Paste");
+	_btnPaste->onMouseClick((ActionHandler)&InventoryState::btnPasteClick);
+	// TODO: shortcut: _btnPaste->onKeyboardPress((ActionHandler)&InventoryState::btnPasteClick, (SDLKey)Options::getInt("keyInvPasteTemplate"));
+
+	// only use copy/paste buttons in setup (i.e. non-tu) mode
+	if (_tu)
+	{
+		_btnCopy->setVisible(false);
+	}
+
+	// paste button always starts out invisible (enabled after first copy)
+	_btnPaste->setVisible(false);
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -342,7 +363,6 @@ void InventoryState::saveEquipmentLayout()
 			));
 		}
 	}
-
 }
 
 /**
@@ -442,6 +462,65 @@ void InventoryState::btnGroundClick(Action *)
 void InventoryState::btnRankClick(Action *)
 {
 	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent, true, false));
+}
+
+void InventoryState::btnCopyClick(Action *action)
+{
+	// TODO: copy inventory instead of just keeping a pointer to it.  that way
+	// TODO: copy/paste can be used as an undo button for a single unit and
+	// TODO: will also work as expected if inventory is modified after 'copy'
+	// TODO: is clicked
+	_curInventoryTemplate = _battleGame->getSelectedUnit()->getInventory();
+	_btnPaste->setVisible(true);
+}
+
+void InventoryState::btnPasteClick(Action *action)
+{
+	BattleUnit               *unit          = _battleGame->getSelectedUnit();
+	std::vector<BattleItem*> *unitInv       = unit->getInventory();
+	Tile                     *groundTile    = unit->getTile();
+	std::vector<BattleItem*> *groundInv     = groundTile->getInventory();
+	RuleInventory            *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
+
+	if (_curInventoryTemplate == unitInv)
+	{
+		// avoid self-paste
+		return;
+	}
+
+	// clear unit's inventory (i.e. move everything to the ground)
+	for (std::vector<BattleItem*>::iterator i = unitInv->begin(); i != unitInv->end(); )
+	{
+		(*i)->setOwner(NULL);
+		groundTile->addItem(*i, groundRuleInv);
+		i = unitInv->erase(i);
+	}
+
+	// attempt to replicate inventory template by grabbing corresponding items
+	// from the ground.  if any item is not found on the ground, display warning
+	// message, but continue attempting to fulfill the template as best we can
+	for (std::vector<BattleItem*>::iterator templateItem = _curInventoryTemplate->begin(); templateItem != _curInventoryTemplate->end(); ++templateItem)
+	{
+		// search for template item in ground inventory
+		for (std::vector<BattleItem*>::iterator groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
+		{
+			if ((*templateItem)->getRules()->getType() == (*groundItem)->getRules()->getType())
+			{
+				(*groundItem)->setOwner(unit);
+				(*groundItem)->setSlot((*templateItem)->getSlot());
+				(*groundItem)->setSlotX((*templateItem)->getSlotX());
+				(*groundItem)->setSlotY((*templateItem)->getSlotY());
+				(*groundItem)->setExplodeTurn((*templateItem)->getExplodeTurn());
+				unitInv->push_back(*groundItem);
+				groundInv->erase(groundItem);
+				break;
+			}
+		}
+	}
+
+	// update ui
+	_inv->arrangeGround(false);
+	updateStats();
 }
 
 /**

@@ -739,7 +739,7 @@ void Inventory::mouseClick(Action *action, State *state)
 /**
  * Unloads the selected weapon, placing the gun
  * on the right hand and the ammo on the left hand.
- * @return The success of the weapon being unlaoded.
+ * @return The success of the weapon being unloaded.
  */
 bool Inventory::unload()
 {
