@@ -35,17 +35,6 @@ class GameTime;
 class RuleCommendations;
 class Ruleset;
 
-struct Statistics
-{
-	bool wasUnconcious;
-    std::vector<SoldierDiaryKills*> kills;
-	void load(const YAML::Node& node);
-	YAML::Node save() const;
-	Statistics(const YAML::Node& node) { load(node); }
-	Statistics() : wasUnconcious(false), kills() { }
-	~Statistics();
-};
-
 /**
  * Each entry will have a list of kills, detailed by this class.
  */
@@ -78,6 +67,17 @@ public:
 	/// Get
 	AlienState getAlienState() const;
 
+};
+
+struct Statistics
+{
+	bool wasUnconcious;
+    std::vector<SoldierDiaryKills*> kills;
+	void load(const YAML::Node& node);
+	YAML::Node save() const;
+	Statistics(const YAML::Node& node) { load(node); }
+	Statistics() : wasUnconcious(false), kills() { }
+	~Statistics();
 };
 
 /**

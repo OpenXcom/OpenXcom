@@ -581,7 +581,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
 				{
-					murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
+					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState));
 				}
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
@@ -670,7 +670,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			_alienState = STUNNED;
 			if (murderer && murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER) 
 			{
-				murderer->getGeoscapeSoldier()->addTempKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState);
+				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState));
 			}
 			if (victim && victim->getGeoscapeSoldier())
 			{

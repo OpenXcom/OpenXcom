@@ -281,6 +281,6 @@ commendations:
       total_kills_by_race: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_MEDAL_OF_HEROISM_NAME
     description: STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION
-    sprite: 0
+    sprite: 10
     criteria:
       total_fell_unconcious: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]

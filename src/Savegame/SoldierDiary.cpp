@@ -28,10 +28,10 @@ void Statistics::load(const YAML::Node& node)
 {
 
 	wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
-    if (const YAML::Node &tempKills = node["tempKills"])
+    if (const YAML::Node &YAMLkills = node["kills"])
 	{
-		for (YAML::const_iterator i = tempKills.begin(); i != tempKills.end(); ++i)
-			_tempKills.push_back(new SoldierDiaryKills(*i));
+		for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
+			kills.push_back(new SoldierDiaryKills(*i));
 	}
 }
 
@@ -39,10 +39,10 @@ YAML::Node Statistics::save() const
 {
 	YAML::Node node;
 	node["wasUnconcious"] = wasUnconcious;
-    if (!_tempKills.empty())
+    if (!kills.empty())
 	{
-		for (std::vector<SoldierDiaryKills*>::const_iterator i = _tempKills.begin() ; i != _tempKills.end() ; ++i)
-			node["tempKills"].push_back((*i)->save());
+		for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
+			node["kills"].push_back((*i)->save());
 	}
 	return node;
 }
@@ -145,7 +145,8 @@ void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missio
  */
 void SoldierDiary::updateDiary()
 {
-    std::vector<SoldierDiaryKills*> _missionKills = (*i)->getMissionKills();
+	SoldierDiaryEntries *latestEntry = _diaryEntries.back();
+	std::vector<SoldierDiaryKills*> _missionKills = latestEntry->getMissionKills();
     for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
     {
         _alienRankTotal[(*j)->getAlienRank().c_str()]++;
@@ -153,36 +154,36 @@ void SoldierDiary::updateDiary()
         _weaponTotal[(*j)->getWeapon().c_str()]++;
         _weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
     }
-    _regionTotal[(*i)->getMissionRegion().c_str()]++;
-    _countryTotal[(*i)->getMissionCountry().c_str()]++;
-    _typeTotal[(*i)->getMissionType().c_str()]++;
-    _UFOTotal[(*i)->getMissionUFO().c_str()]++;
-    _scoreTotal += (*i)->getMissionScore();
-    _killTotal += (*i)->getMissionKillTotal();
+    _regionTotal[latestEntry->getMissionRegion().c_str()]++;
+    _countryTotal[latestEntry->getMissionCountry().c_str()]++;
+    _typeTotal[latestEntry->getMissionType().c_str()]++;
+    _UFOTotal[latestEntry->getMissionUFO().c_str()]++;
+    _scoreTotal += latestEntry->getMissionScore();
+    _killTotal += latestEntry->getMissionKillTotal();
     _missionTotal = _diaryEntries.size();
-    if ((*i)->getMissionSuccess())
+    if (latestEntry->getMissionSuccess())
     {
         _winTotal++;
     }
-    _stunTotal += (*i)->getMissionStunTotal();
-    _daysWoundedTotal += (*i)->getDaysWounded();
-    if ((*i)->getMissionType() == "STR_BASE_DEFENSE")
+    _stunTotal += latestEntry->getMissionStunTotal();
+    _daysWoundedTotal += latestEntry->getDaysWounded();
+    if (latestEntry->getMissionType() == "STR_BASE_DEFENSE")
     {
         _baseDefenseMissionTotal++;
     }
-    else if ((*i)->getMissionType() == "STR_TERROR_MISSION")
+    else if (latestEntry->getMissionType() == "STR_TERROR_MISSION")
     {
         _terrorMissionTotal++;
-        if ((*i)->getMissionDaylight() != 0)
+        if (latestEntry->getMissionDaylight() != 0)
         {
             _nightTerrorMissionTotal++;
         }
     }
-    if ((*i)->getMissionDaylight() != 0)
+    if (latestEntry->getMissionDaylight() != 0)
     {
         _nightMissionTotal++;
     }
-    if ((*i)->getMissionStatistics()->wasUnconcious)
+    if (latestEntry->getMissionStatistics()->wasUnconcious)
     {
         _unconciousTotal++;
     }	
