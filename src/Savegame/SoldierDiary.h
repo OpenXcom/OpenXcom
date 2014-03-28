@@ -73,11 +73,12 @@ struct Statistics
 {
 	bool wasUnconcious;									// Tracks if the soldier fell unconcious
     std::vector<SoldierDiaryKills*> kills;				// Tracks kills
+	int killsWithFire;									// Tracks kills with fire (currently only Incendiary Rockets)
 
 	void load(const YAML::Node& node);					// Load function
 	YAML::Node save() const;							// Save function
 	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
-	Statistics() : wasUnconcious(false), kills() { }	// Default constructor
+	Statistics() : wasUnconcious(false), kills(), killsWithFire(0) { }	// Default constructor
 	~Statistics();										// Deconstructor
 };
 
@@ -193,7 +194,7 @@ private:
 	RuleCommendations *_rules;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
-		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal;
+		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _killsWithFireTotal;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:

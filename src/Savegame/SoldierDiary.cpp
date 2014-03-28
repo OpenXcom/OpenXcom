@@ -33,6 +33,7 @@ void Statistics::load(const YAML::Node& node)
 		for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
 			kills.push_back(new SoldierDiaryKills(*i));
 	}
+	killsWithFire = node["killsWithFire"].as<int>(killsWithFire);
 }
 
 YAML::Node Statistics::save() const
@@ -44,6 +45,7 @@ YAML::Node Statistics::save() const
 		for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
 			node["kills"].push_back((*i)->save());
 	}
+	node["killsWithFire"] = killsWithFire;
 	return node;
 }
 
@@ -185,7 +187,8 @@ void SoldierDiary::updateDiary()
     if (latestEntry->getMissionStatistics()->wasUnconcious)
     {
         _unconciousTotal++;
-    }	
+    }
+	_killsWithFireTotal += latestEntry->getMissionStatistics()->killsWithFire;
 }
 
 /**
@@ -402,7 +405,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) )
+					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_kills_with_fire" && _killsWithFireTotal < (*j).second.at(_nextCommendationLevel[""])) )
 			{
 				_awardCommendation = false;
 				break;

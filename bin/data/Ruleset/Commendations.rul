@@ -83,6 +83,8 @@ extraStrings:
      STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: "Given to a soldier who has witnessed the horrors of alien terror missions at night."
      STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Medal of Heroism"
      STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Given to a soldier who has fought to the last ounce of strength."
+     STR_MEDAL_HELLRAISER_MEDAL_NAME: "Hellraiser Medal"
+     STR_MEDAL_HELLRAISER_MEDAL_DESCRIPITON: "Given to a soldier who has used incendiary weapons to kill aliens."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -180,6 +182,8 @@ extraStrings:
      STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: "Given to a soldier who has witnessed the horrors of alien terror missions at night."
      STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Medal of Heroism"
      STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Given to a soldier who has fought to the last ounce of strength."
+     STR_MEDAL_HELLRAISER_MEDAL_NAME: "Hellraiser Medal"
+     STR_MEDAL_HELLRAISER_MEDAL_DESCRIPITON: "Given to a soldier who has used incendiary weapons to kill aliens."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -221,6 +225,7 @@ extraStrings:
 #   total_night_terror_missions
 #   total_monthly_service
 #   total_fell_unconcious
+#   total_kills_with_fire (only Incendiary Rockets...)
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -282,5 +287,10 @@ commendations:
   - type: STR_MEDAL_MEDAL_OF_HEROISM_NAME
     description: STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION
     sprite: 10
+    criteria:
+      total_fell_unconcious: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_HELLRAISER_MEDAL_NAME
+    description: STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION
+    sprite: 11
     criteria:
       total_fell_unconcious: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]

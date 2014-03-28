@@ -582,6 +582,10 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
 				{
 					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState));
+					if (_weaponAmmo == "STR_INCENDIARY_ROCKET")
+					{
+						murderer->getMissionStatistics()->killsWithFire++;
+					}
 				}
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
