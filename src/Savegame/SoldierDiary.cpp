@@ -134,9 +134,9 @@ std::vector<SoldierDiaryEntries*> SoldierDiary::getSoldierDiaryEntries()
 /**
  *  Add soldier diary entry.
  */
-void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int rating, std::string score, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics)
+void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int rating, std::string score, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics)
 {
-	_diaryEntries.push_back(new SoldierDiaryEntries(missionTime, missionRegion, missionCountry, missionType, missionUFO, missionKills, success, rating, score, alienRace, missionDaylight, daysWounded, missionStatistics));
+	_diaryEntries.push_back(new SoldierDiaryEntries(missionTime, missionRegion, missionCountry, missionType, missionUFO, success, rating, score, alienRace, missionDaylight, daysWounded, missionStatistics));
     updateDiary();
 }
 
@@ -146,8 +146,7 @@ void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missio
 void SoldierDiary::updateDiary()
 {
 	SoldierDiaryEntries *latestEntry = _diaryEntries.back();
-	std::vector<SoldierDiaryKills*> _missionKills = latestEntry->getMissionKills();
-    for (std::vector<SoldierDiaryKills*>::const_iterator j = _missionKills.begin() ; j != _missionKills.end() ; ++j)
+	for (std::vector<SoldierDiaryKills*>::const_iterator j = latestEntry->getMissionStatistics()->kills.begin() ; j != latestEntry->getMissionStatistics()->kills.end() ; ++j)
     {
         _alienRankTotal[(*j)->getAlienRank().c_str()]++;
         _alienRaceTotal[(*j)->getAlienRace().c_str()]++;
@@ -550,7 +549,7 @@ SoldierDiaryEntries::SoldierDiaryEntries(const YAML::Node &node) : _missionTime(
  * @param missionType Mission's type.
  * @param missionUFO Mission's UFO.
  */
-SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics) : _missionTime(missionTime), _missionRegion(missionRegion), _missionCountry(missionCountry), _missionType(missionType), _missionUFO(missionUFO), _missionKills(missionKills), _success(success), _score(score), _rating(rating), _alienRace(alienRace), _missionDaylight(missionDaylight), _daysWounded(daysWounded), _missionStatistics(missionStatistics)
+SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics) : _missionTime(missionTime), _missionRegion(missionRegion), _missionCountry(missionCountry), _missionType(missionType), _missionUFO(missionUFO), _success(success), _score(score), _rating(rating), _alienRace(alienRace), _missionDaylight(missionDaylight), _daysWounded(daysWounded), _missionStatistics(missionStatistics)
 {
 }
 
@@ -573,11 +572,6 @@ void SoldierDiaryEntries::load(const YAML::Node &node)
 	_missionCountry = node["missionCountry"].as<std::string>(_missionCountry);
 	_missionType = node["missionType"].as<std::string>(_missionType);
 	_missionUFO = node["missionUFO"].as<std::string>(_missionUFO);
-	if (const YAML::Node &missionKills = node["missionKills"])
-	{
-		for (YAML::const_iterator i = missionKills.begin() ; i != missionKills.end() ; ++i)
-			_missionKills.push_back(new SoldierDiaryKills(*i));
-	}
 	_success = node["success"].as<bool>(_success);
 	_score = node["score"].as<int>(_score);
 	_rating = node["rating"].as<std::string>(_rating);
@@ -603,13 +597,6 @@ YAML::Node SoldierDiaryEntries::save() const
 	node["missionCountry"] = _missionCountry;
 	node["missionType"] = _missionType;
 	node["missionUFO"] = _missionUFO;
-	if (!_missionKills.empty())
-	{
-		for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionKills.begin() ; i != _missionKills.end() ; ++i)
-		{
-			node["missionKills"].push_back((*i)->save());
-		}
-	}
 	node["success"] = _success;
 	node["score"] = _score;
 	node["rating"] = _rating;
@@ -672,7 +659,7 @@ std::string SoldierDiaryEntries::getMissionUFO() const
  */
 std::vector<SoldierDiaryKills*> SoldierDiaryEntries::getMissionKills() const
 {
-	return _missionKills;
+	return _missionStatistics->kills;
 }
 
 /**
@@ -705,7 +692,7 @@ int SoldierDiaryEntries::getMissionScore() const
 int SoldierDiaryEntries::getMissionKillTotal() const
 {
 	int _total = 0;
-	for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionKills.begin() ; i != _missionKills.end() ; ++i)
+	for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionStatistics->kills.begin() ; i != _missionStatistics->kills.end() ; ++i)
 	{
 		if ((*i)->getAlienState() == KILLED)
 		{
@@ -737,7 +724,7 @@ int SoldierDiaryEntries::getMissionDaylight() const
 int SoldierDiaryEntries::getMissionStunTotal() const
 {
 	int _total = 0;
-	for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionKills.begin() ; i != _missionKills.end() ; ++i)
+	for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionStatistics->kills.begin() ; i != _missionStatistics->kills.end() ; ++i)
 	{
 		if ((*i)->getAlienState() == STUNNED)
 		{

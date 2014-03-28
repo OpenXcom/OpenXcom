@@ -96,13 +96,11 @@ private:
 	int _missionDaylight;
 	int _daysWounded;
 	Statistics *_missionStatistics;
-
-	std::vector<SoldierDiaryKills*> _missionKills;
 public:
 	/// Creates a new diary and loads its contents from YAML.
 	SoldierDiaryEntries(const YAML::Node& node);
 	/// Creates a diary.
-	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
+	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
 	/// Cleans up the diary.
 	~SoldierDiaryEntries();
 	/// Loads the diary information from YAML.
@@ -212,7 +210,7 @@ public:
 	/// Get the diary entries
 	std::vector<SoldierDiaryEntries*> getSoldierDiaryEntries();
 	/// Add an entry to the diary
-	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, std::vector<SoldierDiaryKills*> missionKills, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
+	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
 	/// Update the diary statistics
 	void updateDiary();
 	/// Get

@@ -235,7 +235,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
-			(*j)->getGeoscapeSoldier()->getDiary()->addSoldierDiaryEntry(_missionTime, _missionRegion, _missionCountry, _missionType, _missionUFO, (*j)->getMissionStatistics()->kills, _missionSuccess, _missionScore, _missionRating, _missionRace, _missionDaylight, (*j)->getGeoscapeSoldier()->getWoundRecovery(), (*j)->getMissionStatistics());
+			(*j)->getGeoscapeSoldier()->getDiary()->addSoldierDiaryEntry(_missionTime, _missionRegion, _missionCountry, _missionType, _missionUFO, _missionSuccess, _missionScore, _missionRating, _missionRace, _missionDaylight, (*j)->getGeoscapeSoldier()->getWoundRecovery(), (*j)->getMissionStatistics());
 			if ((*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
