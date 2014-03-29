@@ -80,7 +80,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierMemorialState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldierMemorialState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&SoldierMemorialState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -123,7 +123,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	{
 		SoldierDeath *death = (*i)->getDeath();
 
-		std::wstringstream saveDay, saveMonth, saveYear;
+		std::wostringstream saveDay, saveMonth, saveYear;
 		saveDay << death->getTime()->getDayString(_game->getLanguage());
 		saveMonth << tr(death->getTime()->getMonthString());
 		saveYear << death->getTime()->getYear();

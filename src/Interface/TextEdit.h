@@ -42,7 +42,7 @@ private:
 	wchar_t _ascii;
 	size_t _caretPos;
 	bool _numerical;
-
+	ActionHandler _change;
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);
 public:
@@ -51,9 +51,7 @@ public:
 	/// Cleans up the text edit.
 	~TextEdit();
 	/// Sets focus on this text edit.
-	void focus();
-	/// Removes focus from this text box.
-	void deFocus();
+	void setFocus(bool focus);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -96,8 +94,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state);
-	/// Check if the player is currently typing in this box.
-	bool isFocused();
+	/// Hooks an action handler to when the slider changes.
+	void onChange(ActionHandler handler);
 };
 
 }

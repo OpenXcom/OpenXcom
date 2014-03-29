@@ -89,7 +89,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 
 	_state->clearMouseScrollingState();
 
-	if (Options::getBool("skipNextTurnScreen"))
+	if (Options::skipNextTurnScreen)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
 		_timer->onTimer((StateHandler)&NextTurnState::close);

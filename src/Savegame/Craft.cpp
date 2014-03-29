@@ -270,7 +270,7 @@ std::wstring Craft::getName(Language *lang) const
 {
 	if (_name.empty())
 	{
-		std::wstringstream name;
+		std::wostringstream name;
 		name << lang->getString(_rules->getType()) << "-" << _id;
 		return name.str();
 	}

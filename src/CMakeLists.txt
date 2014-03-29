@@ -220,6 +220,8 @@ set ( engine_src
   Engine/OpenGL.h
   Engine/Options.cpp
   Engine/Options.h
+  Engine/OptionInfo.cpp
+  Engine/OptionInfo.h
   Engine/CrossPlatform.cpp
   Engine/CrossPlatform.h
   Engine/Sound.h
@@ -363,11 +365,15 @@ set ( interface_src
   Interface/Frame.cpp
   Interface/Slider.h
   Interface/Slider.cpp
+  Interface/ComboBox.h
+  Interface/ComboBox.cpp
 )
 
 set ( menu_src
   Menu/StartState.cpp
   Menu/StartState.h
+  Menu/IntroState.cpp
+  Menu/IntroState.h
   Menu/MainMenuState.cpp
   Menu/MainMenuState.h
   Menu/TestState.h
@@ -388,16 +394,24 @@ set ( menu_src
   Menu/SavedGameState.h
   Menu/OptionsBaseState.cpp
   Menu/OptionsBaseState.h
-  Menu/OptionsState.cpp
-  Menu/OptionsState.h
   Menu/OptionsControlsState.cpp
   Menu/OptionsControlsState.h
-  Menu/OptionsLanguageState.cpp
-  Menu/OptionsLanguageState.h
   Menu/OptionsAdvancedState.cpp
   Menu/OptionsAdvancedState.h
   Menu/OptionsBattlescapeState.cpp
   Menu/OptionsBattlescapeState.h
+  Menu/OptionsVideoState.cpp
+  Menu/OptionsVideoState.h
+  Menu/OptionsAudioState.cpp
+  Menu/OptionsAudioState.h
+  Menu/OptionsGeoscapeState.cpp
+  Menu/OptionsGeoscapeState.h
+  Menu/OptionsModsState.cpp
+  Menu/OptionsModsState.h
+  Menu/OptionsConfirmState.cpp
+  Menu/OptionsConfirmState.h
+  Menu/OptionsDefaultsState.cpp
+  Menu/OptionsDefaultsState.h
   Menu/AbandonGameState.cpp
   Menu/AbandonGameState.h
   Menu/PauseState.cpp

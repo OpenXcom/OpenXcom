@@ -396,7 +396,7 @@ std::string getDataFile(const std::string &filename)
 	}
 
 	// Check every other path
-	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		std::string path = caseInsensitive(*i, name);
 		if (path != "")
@@ -432,7 +432,7 @@ std::string getDataFolder(const std::string &foldername)
 	}
 
 	// Check every other path
-	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		std::string path = caseInsensitiveFolder(*i, name);
 		if (path != "")

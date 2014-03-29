@@ -74,7 +74,7 @@ namespace OpenXcom
 		_txtStats->setColor(Palette::blockOffset(14)+15);
 		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(craft->getMaxSpeed())) << L'\n';
 		ss << tr("STR_ACCELERATION").arg(craft->getAcceleration()) << L'\n';
 		ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(craft->getMaxFuel())) << L'\n';

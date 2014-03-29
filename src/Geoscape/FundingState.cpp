@@ -71,9 +71,9 @@ FundingState::FundingState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyGeoFunding"));
+	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, Options::keyGeoFunding);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -95,7 +95,7 @@ FundingState::FundingState(Game *game) : State(game)
 	_lstCountries->setDot(true);
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
-		std::wstringstream ss, ss2;
+		std::wostringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
 		if((*i)->getFunding().size() > 1)
 		{

@@ -60,12 +60,12 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, Options::keyCancel);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();

@@ -22,7 +22,9 @@
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "ArrowButton.h"
+#include "ComboBox.h"
 
 namespace OpenXcom
 {
@@ -35,9 +37,9 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false),
-																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
+																								   _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0), _arrowsLeftEdge(0), _arrowsRightEdge(0), _comboBox(0)
 {
-	_allowScrollOnArrowButtons = true;
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
 	_up->setVisible(false);
 	_up->setTextList(this);
@@ -95,15 +97,6 @@ void TextList::setY(int y)
 	_down->setY(getY() + getHeight() - 12);
 	if (_selector != 0)
 		_selector->setY(getY());
-}
-
-/**
- * Sets the allowScrollOnArrowButtons.
- * @param value new value.
- */
-void TextList::setAllowScrollOnArrowButtons(bool value)
-{
-	_allowScrollOnArrowButtons = value;
 }
 
 /**
@@ -208,6 +201,15 @@ int TextList::getColumnX(int column) const
 int TextList::getRowY(int row) const
 {
 	return getY() + _texts[row][0]->getY();
+}
+
+/**
+ * Returns the amount of text rows stored in the list.
+ * @return Number of rows.
+ */
+int TextList::getRows() const
+{
+	return _texts.size();
 }
 
 /**
@@ -839,7 +841,7 @@ void TextList::think()
  */
 void TextList::mousePress(Action *action, State *state)
 {
-	bool allowScroll = _allowScrollOnArrowButtons;
+	bool allowScroll = Options::changeValueByMouseWheel != 0;
 	if (!allowScroll)
 	{
 		allowScroll = (action->getAbsoluteXMouse() < _arrowsLeftEdge || action->getAbsoluteXMouse() > _arrowsRightEdge);
@@ -894,6 +896,11 @@ void TextList::mouseClick(Action *action, State *state)
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
+			if (_comboBox && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+			{
+				_comboBox->setSelected(_selRow);
+				_comboBox->toggle();
+			}
 		}
 	}
 	else
@@ -965,4 +972,14 @@ void TextList::setScroll(int scroll)
 {
 	_scroll = scroll;
 }
+
+/**
+ * Hooks up the button to work as part of an existing combobox,
+ * updating the selection when it's pressed.
+ */
+void TextList::setComboBox(ComboBox *comboBox)
+{
+	_comboBox = comboBox;
+}
+
 }

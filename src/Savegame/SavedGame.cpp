@@ -90,9 +90,8 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
 {
-	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
 	_funds.push_back(0);
@@ -252,11 +251,9 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	// Get full save data
 	YAML::Node doc = file[1];
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
-	if (doc["rng"] && !Options::getBool("newSeedOnLoad"))
-		RNG::init(doc["rng"].as<int>());
+	if (doc["rng"] && !Options::newSeedOnLoad)
+		RNG::setSeed(doc["rng"].as<int>());
 	_monthsPassed = doc["monthsPassed"].as<int>(_monthsPassed);
-	_radarLines = doc["radarLines"].as<bool>(_radarLines);
-	_detail = doc["detail"].as<bool>(_detail);
 	_graphRegionToggles = doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles = doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles = doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
@@ -395,8 +392,6 @@ void SavedGame::save(const std::string &filename) const
 	YAML::Node node;
 	node["difficulty"] = (int)_difficulty;
 	node["monthsPassed"] = _monthsPassed;
-	node["radarLines"] = _radarLines;
-	node["detail"] = _detail;
 	node["graphRegionToggles"] = _graphRegionToggles;
 	node["graphCountryToggles"] = _graphCountryToggles;
 	node["graphFinanceToggles"] = _graphFinanceToggles;
@@ -1503,38 +1498,6 @@ void SavedGame::setGraphFinanceToggles(const std::string &value)
 void SavedGame::addMonth()
 {
 	++_monthsPassed;
-}
-
-/*
- * Toggles the state of the radar line drawing.
- */
-void SavedGame::toggleRadarLines()
-{
-	_radarLines = !_radarLines;
-}
-
-/*
- * @return the state of the radar line drawing.
- */
-bool SavedGame::getRadarLines()
-{
-	return _radarLines;
-}
-
-/*
- * Toggles the state of the detail drawing.
- */
-void SavedGame::toggleDetail()
-{
-	_detail = !_detail;
-}
-
-/*
- * @return the state of the detail drawing.
- */
-bool SavedGame::getDetail()
-{
-	return _detail;
 }
 
 /*

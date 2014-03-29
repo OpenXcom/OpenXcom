@@ -45,7 +45,7 @@ namespace OpenXcom
  */
 SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 {
-	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
+	bool isPsiBtnVisible = Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -89,7 +89,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, Options::keyCancel);
 
 	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));

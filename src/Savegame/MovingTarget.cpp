@@ -153,8 +153,8 @@ void MovingTarget::calculateSpeed()
 		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
 		dLat = cos(_lat) * sin(_dest->getLatitude()) - sin(_lat) * cos(_dest->getLatitude()) * cos(_dest->getLongitude() - _lon);
 		length = sqrt(dLon * dLon + dLat * dLat);
-		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
 		_speedLat = dLat / length * _speedRadian;
+		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
 		// Check for invalid speeds when a division by zero occurs due to near-zero values
 		if (!(_speedLon == _speedLon) || !(_speedLat == _speedLat))
 		{

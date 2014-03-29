@@ -29,7 +29,7 @@
 #include "NewGameState.h"
 #include "NewBattleState.h"
 #include "LoadState.h"
-#include "OptionsState.h"
+#include "OptionsVideoState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 
@@ -92,7 +92,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wstringstream title;
+	std::wostringstream title;
 	title << tr("STR_OPENXCOM") << L"\x02";
 	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
 	_txtTitle->setText(title.str());
@@ -155,7 +155,7 @@ void MainMenuState::btnLoadClick(Action *)
  */
 void MainMenuState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game, OPT_MENU));
+	_game->pushState(new OptionsVideoState(_game, OPT_MENU));
 }
 
 /**

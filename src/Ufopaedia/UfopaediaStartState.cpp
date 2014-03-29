@@ -94,8 +94,8 @@ namespace OpenXcom
 		_btnOk->setColor(Palette::blockOffset(8)+5);
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyCancel);
+		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyGeoUfopedia);
 	}
 
 	UfopaediaStartState::~UfopaediaStartState()

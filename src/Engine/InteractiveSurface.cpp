@@ -200,20 +200,23 @@ void InteractiveSurface::handle(Action *action, State *state)
 }
 
 /**
- * Marks ths surface as focused. Surfaces will only receive
+ * Changes the surface's focus. Surfaces will only receive
  * keyboard events if focused.
+ * @param focus Is it focused?
  */
-void InteractiveSurface::focus()
+void InteractiveSurface::setFocus(bool focus)
 {
-	_isFocused = true;
+	_isFocused = focus;
 }
 
 /**
- * Marks ths surface as unfocused.
+ * Returns the surface's focus. Surfaces will only receive
+ * keyboard events if focused.
+ * @return Is it focused?
  */
-void InteractiveSurface::deFocus()
+bool InteractiveSurface::isFocused() const
 {
-	_isFocused = false;
+	return _isFocused;
 }
 
 /**

@@ -162,7 +162,7 @@ namespace OpenXcom
 
 
 		// AMMO column
-		std::wstringstream ss;
+		std::wostringstream ss;
 
 		for (int i = 0; i<3; ++i)
 		{

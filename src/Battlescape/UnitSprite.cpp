@@ -47,7 +47,6 @@ namespace OpenXcom
  */
 UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0), _unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0), _drawingRoutine(0)
 {
-	_hairBleach = Options::getBool("battleHairBleach");
 }
 
 /**
@@ -143,43 +142,20 @@ void UnitSprite::draw()
 {
 	Surface::draw();
 	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
-	switch (_drawingRoutine)
-	{
-	case 0:
-		drawRoutine0();
-		break;
-	case 1:
-		drawRoutine1();
-		break;
-	case 2:
-		drawRoutine2();
-		break;
-	case 3:
-		drawRoutine3();
-		break;
-	case 4:
-		drawRoutine4();
-		break;
-	case 5:
-		drawRoutine5();
-		break;
-	case 6:
-		drawRoutine6();
-		break;
-	case 7:
-		drawRoutine7();
-		break;
-	case 8:
-		drawRoutine8();
-		break;
-	case 9:
-		drawRoutine9();
-		break;
-	case 10: // muton
-		drawRoutine0();
-		break;
-	}
-
+	// Array of drawing routines
+	void (UnitSprite::*routines[])() = {&UnitSprite::drawRoutine0,
+		                                &UnitSprite::drawRoutine1,
+										&UnitSprite::drawRoutine2,
+										&UnitSprite::drawRoutine3,
+										&UnitSprite::drawRoutine4,
+										&UnitSprite::drawRoutine5,
+										&UnitSprite::drawRoutine6,
+										&UnitSprite::drawRoutine7,
+										&UnitSprite::drawRoutine8,
+										&UnitSprite::drawRoutine9,
+										&UnitSprite::drawRoutine0};
+	// Call the matching routine
+	(this->*(routines[_drawingRoutine]))();
 }
 
 /**
@@ -222,7 +198,7 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
-		if (_unit->getGeoscapeSoldier() && _hairBleach)
+		if (_unit->getGeoscapeSoldier() && Options::battleHairBleach)
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
@@ -466,7 +442,7 @@ void UnitSprite::drawRoutine0()
 	Surface *newLegs = new Surface(*legs);
 	Surface *newLeftArm = new Surface(*leftArm);
 	Surface *newRightArm = new Surface(*rightArm);
-	if (_unit->getGeoscapeSoldier() && _hairBleach)
+	if (_unit->getGeoscapeSoldier() && Options::battleHairBleach)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 

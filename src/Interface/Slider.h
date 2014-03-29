@@ -28,6 +28,7 @@ class Font;
 class Language;
 class Frame;
 class TextButton;
+class Text;
 
 /**
  * Horizontal slider control to select from a range of values.
@@ -36,12 +37,16 @@ class Slider : public InteractiveSurface
 {
 private:
 	Frame *_frame;
+	Text *_txtMinus, *_txtPlus;
 	TextButton *_button;
-	double _value;
-	int _min, _max;
+	double _pos;
+	int _min, _max, _value;
 	bool _pressed;
-
-	int _thickness, _minX, _maxX;
+	ActionHandler _change;
+	int _thickness, _textness, _minX, _maxX;
+	
+	/// Sets the slider's position.
+	void setPosition(double pos);
 public:
 	/// Creates a new slider with the specified size and position.
 	Slider(int width, int height, int x = 0, int y = 0);
@@ -61,10 +66,12 @@ public:
 	Uint8 getColor() const;
 	/// Sets the slider's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	/// Sets the slider's range.
+	void setRange(int min, int max);
 	/// Sets the slider's value.
-	void setValue(double value);
-	/// Sets the slider's value.
-	double getValue() const;
+	void setValue(int value);
+	/// Gets the slider's value.
+	int getValue() const;
 	/// Blits the slider onto another surface.
 	void blit(Surface *surface);
 	/// Moves the slider.
@@ -73,6 +80,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
+	/// Hooks an action handler to when the slider changes.
+	void onChange(ActionHandler handler);
 };
 
 }

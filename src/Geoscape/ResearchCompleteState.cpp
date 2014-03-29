@@ -68,12 +68,12 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, Options::keyCancel);
 
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
-	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, (SDLKey)Options::getInt("keyOk"));
+	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();

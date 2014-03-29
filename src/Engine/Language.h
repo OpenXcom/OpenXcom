@@ -75,7 +75,7 @@ public:
 	/// Replaces a substring.
 	static void replace(std::wstring &str, const std::wstring &find, const std::wstring &replace);
 	/// Gets list of languages in the data directory.
-	static std::vector<std::string> getList(TextList *list);
+	static void getList(std::vector<std::string> &files, std::vector<std::wstring> &names);
 	/// Loads the language from a YAML file.
 	void load(const std::string &filename, ExtraStrings *extras);
 	/// Gets the language's ID.

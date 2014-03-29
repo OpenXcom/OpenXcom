@@ -28,7 +28,9 @@
 #include "LoadState.h"
 #include "SaveState.h"
 #include "../Engine/Options.h"
-#include "OptionsState.h"
+#include "OptionsVideoState.h"
+#include "OptionsGeoscapeState.h"
+#include "OptionsBattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -100,18 +102,18 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyCancel);
 	if (origin == OPT_GEOSCAPE)
-		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyGeoOptions"));
+		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyGeoOptions);
 	else if (origin == OPT_BATTLESCAPE)
-		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyBattleOptions"));
+		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyBattleOptions);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
-	if (Options::getInt("autosave") >= 2)
+	if (Options::autosave >= 2)
 	{
 		_btnSave->setVisible(false);
 		_btnLoad->setVisible(false);
@@ -168,7 +170,18 @@ void PauseState::btnSaveClick(Action *)
 */
 void PauseState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game, _origin));
+	if (_origin == OPT_GEOSCAPE)
+	{
+		_game->pushState(new OptionsGeoscapeState(_game, _origin));
+	}
+	else if (_origin == OPT_BATTLESCAPE)
+	{
+		_game->pushState(new OptionsBattlescapeState(_game, _origin));
+	}
+	else
+	{
+		_game->pushState(new OptionsVideoState(_game, _origin));
+	}
 }
 
 /**

@@ -86,7 +86,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&NewGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&NewGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&NewGameState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

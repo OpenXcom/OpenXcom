@@ -85,7 +85,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	// i'm DONE with these out of bounds errors.
 	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize() || endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize() || endPosition.x < 0 || endPosition.y < 0) return;
 
-	bool sneak = _save->getSneakySetting() && unit->getFaction() == FACTION_HOSTILE;
+	bool sneak = Options::sneakyAI && unit->getFaction() == FACTION_HOSTILE;
 
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
@@ -144,7 +144,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		}
 	}
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
+	_strafeMove = Options::strafe && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	// look for a possible fast and accurate bresenham path and skip A*
@@ -416,7 +416,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
-			if (_save->getStrafeSetting() && _strafeMove) {
+			if (Options::strafe && _strafeMove) {
 				if (size) {
 					// 4-tile units not supported.
 					// Turn off strafe move and continue
@@ -844,7 +844,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
-	bool running = _save->getStrafeSetting() && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
+	bool running = Options::strafe && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;

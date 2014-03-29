@@ -57,11 +57,6 @@ namespace OpenXcom
  */
 TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0), _itemOffset(0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
-	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
-
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(148, 16, 8, 176);
@@ -95,12 +90,12 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TransferItemsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&TransferItemsState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferItemsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&TransferItemsState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -128,7 +123,6 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)&TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&TransferItemsState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&TransferItemsState::lstItemsLeftArrowClick);
@@ -150,7 +144,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	}
 	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
 	{
-		if ((*i)->getStatus() != "STR_OUT" || (_canTransferCraftsWhileAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
+		if ((*i)->getStatus() != "STR_OUT" || (Options::canTransferCraftsWhileAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
 		{
 			_baseQty.push_back(1);
 			_transferQty.push_back(0);
@@ -164,7 +158,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		_baseQty.push_back(_baseFrom->getAvailableScientists());
 		_transferQty.push_back(0);
 		_hasSci = 1;
-		std::wstringstream ss, ss2;
+		std::wostringstream ss, ss2;
 		ss << _baseQty.back();
 		ss2 << _baseTo->getAvailableScientists();
 		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
@@ -175,7 +169,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		_baseQty.push_back(_baseFrom->getAvailableEngineers());
 		_transferQty.push_back(0);
 		_hasEng = 1;
-		std::wstringstream ss, ss2;
+		std::wostringstream ss, ss2;
 		ss << _baseQty.back();
 		ss2 << _baseTo->getAvailableEngineers();
 		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
@@ -191,7 +185,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 			_transferQty.push_back(0);
 			_items.push_back(*i);
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			ss << qty;
 			ss2 << _baseTo->getItems()->getItem(*i);
 			std::wstring item = tr(*i);
@@ -475,22 +469,20 @@ void TransferItemsState::lstItemsMousePress(Action *action)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			increaseByValue(_changeValueByMouseWheel);
+			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			decreaseByValue(_changeValueByMouseWheel);
+			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -597,7 +589,7 @@ void TransferItemsState::increaseByValue(int change)
 		return;
 	}
 	if (TRANSFER_ITEM == selType && selItem->getAlien()
-		&& _containmentLimit * _aQty + 1 > _baseTo->getAvailableContainment() - _containmentLimit * _baseTo->getUsedContainment())
+		&& Options::alienContainmentLimitEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::alienContainmentLimitEnforced * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -622,7 +614,7 @@ void TransferItemsState::increaseByValue(int change)
 		_pQty += craft->getNumSoldiers();
 		_baseQty[_sel]--;
 		_transferQty[_sel]++;
-		if (!_canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
+		if (!Options::canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
 	}
 	// Item count
 	else if (TRANSFER_ITEM == selType && !selItem->getAlien() )
@@ -646,7 +638,7 @@ void TransferItemsState::increaseByValue(int change)
 	// Live Aliens count
 	else if (TRANSFER_ITEM == selType && selItem->getAlien() )
 	{
-		int freeContainment = _containmentLimit ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
+		int freeContainment = Options::alienContainmentLimitEnforced ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
 		change = std::min(std::min(freeContainment, getQuantity() - _transferQty[_sel]), change);
 		_aQty += change;
 		_baseQty[_sel] -= change;
@@ -703,7 +695,7 @@ void TransferItemsState::decreaseByValue(int change)
 	}
 	_baseQty[_sel] += change;
 	_transferQty[_sel] -= change;
-	if (!_canTransferCraftsWhileAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
+	if (!Options::canTransferCraftsWhileAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
 		_total -= getCost() * change;
 	updateItemStrings();
 }
@@ -713,7 +705,7 @@ void TransferItemsState::decreaseByValue(int change)
  */
 void TransferItemsState::updateItemStrings()
 {
-	std::wstringstream ss1, ss2;
+	std::wostringstream ss1, ss2;
 	ss1 << _baseQty[_sel];
 	ss2 << _transferQty[_sel];
 	_lstItems->setCellText(_sel, 1, ss1.str());

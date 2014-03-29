@@ -59,26 +59,26 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
-	Options::setBool("mute", false);
+	Options::mute = false;
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
 		Log(LOG_ERROR) << SDL_GetError();
 		Log(LOG_WARNING) << "No sound device detected, audio disabled.";
-		Options::setBool("mute", true);
+		Options::mute = true;
 	}
 	else
 	{
 		Uint16 format;
-		if (Options::getInt("audioBitDepth") == 8)
+		if (Options::audioBitDepth == 8)
 			format = AUDIO_S8;
 		else
 			format = AUDIO_S16SYS;
-		if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
+		if (Mix_OpenAudio(Options::audioSampleRate, format, 2, 1024) != 0)
 		{
 			Log(LOG_ERROR) << Mix_GetError();
 			Log(LOG_WARNING) << "No sound device detected, audio disabled.";
-			Options::setBool("mute", true);
+			Options::mute = true;
 		}
 		else
 		{
@@ -88,10 +88,8 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 
 	// trap the mouse inside the window
-	if (Options::getBool("captureMouse"))
-	{
-		SDL_WM_GrabInput( SDL_GRAB_ON );
-	}
+	SDL_WM_GrabInput(Options::captureMouse);
+
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
 
@@ -112,9 +110,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	SDL_EnableUNICODE(1);
 
 	// Create display
-	Screen::BASE_WIDTH = Options::getInt("baseXResolution");
-	Screen::BASE_HEIGHT = Options::getInt("baseYResolution");
-	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 0, Options::getBool("fullscreen"), Options::getInt("windowedModePositionX"), Options::getInt("windowedModePositionY"));
+	_screen = new Screen();
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
@@ -132,7 +128,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	_lang = new Language();
 
 #ifdef __MORPHOS__	
-	waittime = 1000.0f / Options::getInt("FPS");	//20 - FPS
+	waittime = 1000.0f / Options::FPS;	//20 - FPS
 	framestarttime = 0;
 #endif
 }
@@ -143,6 +139,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 Game::~Game()
 {
 	Mix_HaltChannel(-1);
+	Mix_HaltMusic();
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
@@ -174,9 +171,6 @@ void Game::run()
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
-	int pauseMode = Options::getInt("pauseMode");
-	if (pauseMode > 3)
-		pauseMode = 3;
 	while (!_quit)
 	{
 		// Clean up states
@@ -220,22 +214,22 @@ void Game::run()
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
 						case SDL_APPACTIVE:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[pauseMode];
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[Options::pauseMode];
 							break;
 						case SDL_APPMOUSEFOCUS:
 							// We consciously ignore it.
 							break;
 						case SDL_APPINPUTFOCUS:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[pauseMode];
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[Options::pauseMode];
 							break;
 					}
 					break;
 				case SDL_VIDEORESIZE:
-					if (Options::getBool("allowResize"))
+					if (Options::allowResize)
 					{
-						Options::setInt("displayWidth", _event.resize.w);
-						Options::setInt("displayHeight", _event.resize.h);
-						_screen->setResolution(_event.resize.w, _event.resize.h);
+						Options::displayWidth = _event.resize.w;
+						Options::displayHeight = _event.resize.h;
+						_screen->resetDisplay();
 					}
 					break;
 				case SDL_MOUSEMOTION:
@@ -252,7 +246,7 @@ void Game::run()
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
-					if (action.getDetails()->type == SDL_KEYDOWN && Options::getBool("debug"))
+					if (action.getDetails()->type == SDL_KEYDOWN && Options::debug)
 					{
 						if (action.getDetails()->key.keysym.sym == SDLK_t && (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
@@ -261,7 +255,7 @@ void Game::run()
 						// "ctrl-u" debug UI
 						else if (action.getDetails()->key.keysym.sym == SDLK_u && (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							Options::setBool("debugUi", !Options::getBool("debugUi"));
+							Options::debugUi = !Options::debugUi;
 							_states.back()->redrawText();
 						}
 					}
@@ -294,6 +288,26 @@ void Game::run()
 				_cursor->blit(_screen->getSurface());
 			}
 			_screen->flip();
+		}		
+
+		// Initialize active state
+		if (!_init)
+		{
+			_init = true;
+			_states.back()->init();
+
+			// Unpress buttons
+			_states.back()->resetAll();
+
+			// Refresh mouse position
+			SDL_Event ev;
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			ev.type = SDL_MOUSEMOTION;
+			ev.motion.x = x;
+			ev.motion.y = y;
+			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
+			_states.back()->handle(&action);
 		}
 
 		// Save on CPU
@@ -316,7 +330,7 @@ void Game::run()
 	}
 	
 	// Auto-save
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
 	{
 		SaveState ss = SaveState(this, OPT_MENU, false);
 	}
@@ -340,7 +354,7 @@ void Game::quit()
  */
 void Game::setVolume(int sound, int music)
 {
-	if (!Options::getBool("mute"))
+	if (!Options::mute)
 	{
 		if (sound >= 0)
 			Mix_Volume(-1, sound);
@@ -480,7 +494,7 @@ void Game::loadLanguage(const std::string &filename)
 
 	_lang->load(CrossPlatform::getDataFile(ss.str()), strings);
 
-	Options::setString("language", filename);
+	Options::language = filename;
 }
 
 /**
@@ -536,8 +550,7 @@ Ruleset *Game::getRuleset() const
 void Game::loadRuleset()
 {
 	_rules = new Ruleset();
-	std::vector<std::string> rulesets = Options::getRulesets();
-	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
+	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end(); ++i)
 	{
 		_rules->load(*i);
 	}
@@ -571,6 +584,52 @@ bool Game::isState(State *state) const
 bool Game::isQuitting() const
 {
 	return _quit;
+}
+
+/**
+ * Loads the most appropriate language
+ * given current system and game options.
+ */
+void Game::defaultLanguage()
+{
+	std::string defaultLang = "en-US";
+	// No language set, detect based on system
+	if (Options::language.empty())
+	{
+		std::string locale = CrossPlatform::getLocale();
+		std::string lang = locale.substr(0, locale.find_first_of('-'));
+		// Try to load full locale
+		try
+		{
+			loadLanguage(locale);
+		}
+		catch (std::exception)
+		{
+			// Try to load language locale
+			try
+			{
+				loadLanguage(lang);
+			}
+			// Give up, use default
+			catch (std::exception)
+			{
+				loadLanguage(defaultLang);
+			}
+		}
+	}
+	else
+	{
+		// Use options language
+		try
+		{
+			loadLanguage(Options::language);
+		}
+		// Language not found, use default
+		catch (std::exception)
+		{
+			loadLanguage(defaultLang);
+		}
+	}
 }
 
 }

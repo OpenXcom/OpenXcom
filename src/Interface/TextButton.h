@@ -28,6 +28,7 @@ class Text;
 class Font;
 class Language;
 class Sound;
+class ComboBox;
 
 /**
  * Coloured button with a text label.
@@ -43,6 +44,9 @@ private:
 	Text *_text;
 	TextButton **_group;
 	bool _contrast;
+	ComboBox *_comboBox;
+protected:
+	bool isButtonHandled(Uint8 button = 0);
 public:
 	static Sound *soundPress;
 	/// Creates a new text button with the specified size and position.
@@ -79,6 +83,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
+	/// Attaches this button to a combobox.
+	void setComboBox(ComboBox *comboBox);
 };
 
 }

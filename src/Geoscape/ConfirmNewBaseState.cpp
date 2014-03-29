@@ -71,12 +71,12 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, Options::keyCancel);
 
 	std::wstring area;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)

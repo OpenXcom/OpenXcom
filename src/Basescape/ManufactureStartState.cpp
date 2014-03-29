@@ -112,7 +112,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&ManufactureStartState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&ManufactureStartState::btnCancelClick, Options::keyCancel);
 
 	const std::map<std::string, int> & requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
@@ -142,7 +142,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 		iter != requiredItems.end ();
 		++iter)
 	{
-		std::wstringstream s1, s2;
+		std::wostringstream s1, s2;
 		s1 << iter->second;
 		s2 << itemContainer->getItem(iter->first);
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
@@ -160,7 +160,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(tr("STR_START_PRODUCTION"));
 	_btnStart->onMouseClick((ActionHandler)&ManufactureStartState::btnStartClick);
-	_btnStart->onKeyboardPress((ActionHandler)&ManufactureStartState::btnStartClick, (SDLKey)Options::getInt("keyOk"));
+	_btnStart->onKeyboardPress((ActionHandler)&ManufactureStartState::btnStartClick, Options::keyOk);
 	_btnStart->setVisible(productionPossible);
 }
 
