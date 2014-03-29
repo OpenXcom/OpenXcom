@@ -39,28 +39,31 @@ class Action;
  */
 class Screen
 {
-public:
-	static int BASE_WIDTH;
-	static int BASE_HEIGHT;
-
 private:
 	SDL_Surface *_screen;
 	int _bpp;
+	int _baseWidth, _baseHeight;
 	double _scaleX, _scaleY;
 	int _topBlackBand, _bottomBlackBand, _leftBlackBand, _rightBlackBand, _cursorTopBlackBand, _cursorLeftBlackBand;
 	Uint32 _flags;
-	bool _fullscreen;
 	int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
 	SDL_Color deferredPalette[256];
 	int _numColors, _firstColor;
 	bool _pushPalette;
 	OpenGL glOutput;
 	Surface *_surface;
+	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
+	void makeVideoFlags();
 public:
-	/// Creates a new display screen with the specified resolution.
-	Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY);
+	static const int ORIGINAL_WIDTH = 320;
+	static const int ORIGINAL_HEIGHT = 200;
+
+	/// Creates a new display screen.
+	Screen();
 	/// Cleans up the display screen.
 	~Screen();
+	int getDX();
+	int getDY();
 	/// Gets the internal buffer.
 	Surface *getSurface();
 	/// Handles keyboard events.
@@ -77,10 +80,8 @@ public:
 	int getWidth() const;
 	/// Gets the screen's height.
 	int getHeight() const;
-	/// Sets the screen's display resolution.
-	void setResolution(int width, int height);
-	/// Sets whether the screen is full-screen or windowed.
-	void setFullscreen(bool full);
+	/// Resets the screen display.
+	void resetDisplay();
 	/// Gets the screen's X scale.
 	double getXScale() const;
 	/// Gets the screen's Y scale.
@@ -95,10 +96,6 @@ public:
 	static bool isHQXEnabled();
 	/// Checks whether OpenGL output is requested
 	static bool isOpenGLEnabled();
-	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
-	void makeVideoFlags();
-	static int getDX();
-	static int getDY();
 };
 
 }

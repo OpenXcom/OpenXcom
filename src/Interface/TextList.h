@@ -30,6 +30,7 @@ namespace OpenXcom
 enum ArrowOrientation { ARROW_VERTICAL, ARROW_HORIZONTAL };
 
 class ArrowButton;
+class ComboBox;
 
 /**
  * List of Text's split into columns.
@@ -57,8 +58,8 @@ private:
 	int _arrowPos, _scrollPos;
 	ArrowOrientation _arrowType;
 	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
-	bool _allowScrollOnArrowButtons;
 	int _arrowsLeftEdge, _arrowsRightEdge;
+	ComboBox *_comboBox;
 
 	/// Updates the arrow buttons.
 	void updateArrows();
@@ -71,8 +72,6 @@ public:
 	void setX(int x);
 	/// Sets the Y position of the surface.
 	void setY(int y);
-	/// Sets the allowScrollOnArrowButtons.
-	void setAllowScrollOnArrowButtons(bool value);
 	/// Gets the arrowsLeftEdge.
 	int getArrowsLeftEdge();
 	/// Gets the arrowsRightEdge.
@@ -91,6 +90,8 @@ public:
 	int getColumnX(int column) const;
 	/// Gets the Y position of a certain row.
 	int getRowY(int row) const;
+	/// Gets the amount of rows in the list.
+	int getRows() const;
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
@@ -175,6 +176,8 @@ public:
 	int getScroll();
 	/// set the scroll depth
 	void setScroll(int scroll);
+	/// Attaches this button to a combobox.
+	void setComboBox(ComboBox *comboBox);
 };
 
 }

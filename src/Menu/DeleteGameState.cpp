@@ -46,9 +46,9 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::ws
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 256, 120, 32, 40, POPUP_BOTH);
-	_btnYes = new TextButton(60, 18, 90, 112);
-	_btnNo = new TextButton(60, 18, 170, 112);
+	_window = new Window(this, 256, 100, 32, 50, POPUP_BOTH);
+	_btnYes = new TextButton(60, 18, 60, 122);
+	_btnNo = new TextButton(60, 18, 200, 122);
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
@@ -71,12 +71,12 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::ws
 	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, Options::keyCancel);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);

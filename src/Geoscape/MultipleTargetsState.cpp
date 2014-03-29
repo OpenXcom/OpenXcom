@@ -80,7 +80,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
-		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, Options::keyCancel);
 
 		_lstTargets->setColor(Palette::blockOffset(8)+5);
 		_lstTargets->setColumns(1, 116);

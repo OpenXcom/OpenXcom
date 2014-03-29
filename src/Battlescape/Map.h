@@ -20,6 +20,7 @@
 #define OPENXCOM_MAP_H
 
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/Options.h"
 #include <set>
 #include <vector>
 
@@ -68,7 +69,7 @@ private:
 	int _visibleMapHeight;
 	std::vector<Position> _waypoints;
 	bool _unitDying, _smoothCamera, _smoothingEngaged;
-	int _previewSetting;
+	PathPreview _previewSetting;
 	Text *_txtAccuracy;
 
 	void drawTerrain(Surface *surface);

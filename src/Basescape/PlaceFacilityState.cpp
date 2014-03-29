@@ -87,7 +87,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, Options::keyCancel);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(tr(_rule->getType()));
@@ -154,7 +154,7 @@ void PlaceFacilityState::viewClick(Action *)
 		fac->setY(_view->getGridY());
 		fac->setBuildTime(_rule->getBuildTime());
 		_base->getFacilities()->push_back(fac);
-		if (Options::getBool("allowBuildingQueue"))
+		if (Options::allowBuildingQueue)
 		{
 			if (_view->isQueuedBuilding(_rule)) fac->setBuildTime(std::numeric_limits<int>::max());
 			_view->reCalcQueuedBuildings();

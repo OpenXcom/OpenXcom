@@ -49,8 +49,6 @@ private:
 	Base *_base;
 	size_t _craft;
 	std::vector<std::string> _items;
-	int _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:

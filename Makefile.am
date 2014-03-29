@@ -274,6 +274,8 @@ openxcom_SOURCES = \
 	src/Engine/OpenGL.h \
 	src/Engine/Options.cpp \
 	src/Engine/Options.h \
+	src/Engine/OptionInfo.cpp \
+	src/Engine/OptionInfo.h \
 	src/Engine/Palette.cpp \
 	src/Engine/Palette.h \
 	src/Engine/RNG.cpp \
@@ -415,6 +417,8 @@ openxcom_SOURCES = \
 	src/Interface/ToggleTextButton.h \
 	src/Interface/Window.cpp \
 	src/Interface/Window.h \
+	src/Interface/ComboBox.cpp \
+	src/Interface/ComboBox.h \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
@@ -432,16 +436,24 @@ openxcom_SOURCES = \
 	src/Menu/NewGameState.h \
 	src/Menu/OptionsBaseState.cpp \
 	src/Menu/OptionsBaseState.h \
-	src/Menu/OptionsState.cpp \
-	src/Menu/OptionsState.h \
 	src/Menu/OptionsControlsState.cpp \
 	src/Menu/OptionsControlsState.h \
-	src/Menu/OptionsLanguageState.cpp \
-	src/Menu/OptionsLanguageState.h \
 	src/Menu/OptionsAdvancedState.cpp \
 	src/Menu/OptionsAdvancedState.h \
 	src/Menu/OptionsBattlescapeState.cpp \
 	src/Menu/OptionsBattlescapeState.h \
+	src/Menu/OptionsVideoState.cpp \
+	src/Menu/OptionsVideoState.h \
+	src/Menu/OptionsAudioState.cpp \
+	src/Menu/OptionsAudioState.h \
+	src/Menu/OptionsGeoscapeState.cpp \
+	src/Menu/OptionsGeoscapeState.h \
+	src/Menu/OptionsModsState.cpp \
+	src/Menu/OptionsModsState.h \
+	src/Menu/OptionsConfirmState.cpp \
+	src/Menu/OptionsConfirmState.h \
+	src/Menu/OptionsDefaultsState.cpp \
+	src/Menu/OptionsDefaultsState.h \
 	src/Menu/AbandonGameState.cpp \
 	src/Menu/AbandonGameState.h \
 	src/Menu/PauseState.cpp \
@@ -450,6 +462,8 @@ openxcom_SOURCES = \
 	src/Menu/SavedGameState.h \
 	src/Menu/SaveState.cpp \
 	src/Menu/SaveState.h \
+	src/Menu/IntroState.cpp \
+	src/Menu/IntroState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \

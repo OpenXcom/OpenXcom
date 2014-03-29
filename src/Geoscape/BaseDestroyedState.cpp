@@ -59,8 +59,8 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyCancel);
 		
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();

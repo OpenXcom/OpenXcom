@@ -309,6 +309,7 @@
     <ClCompile Include="Engine\LocalizedText.cpp" />
     <ClCompile Include="Engine\Music.cpp" />
     <ClCompile Include="Engine\OpenGL.cpp" />
+    <ClCompile Include="Engine\OptionInfo.cpp" />
     <ClCompile Include="Engine\Options.cpp" />
     <ClCompile Include="Engine\Palette.cpp" />
     <ClCompile Include="Engine\RNG.cpp" />
@@ -367,6 +368,7 @@
     <ClCompile Include="Geoscape\UfoLostState.cpp" />
     <ClCompile Include="Interface\ArrowButton.cpp" />
     <ClCompile Include="Interface\Bar.cpp" />
+    <ClCompile Include="Interface\ComboBox.cpp" />
     <ClCompile Include="Interface\Cursor.cpp" />
     <ClCompile Include="Interface\FpsCounter.cpp" />
     <ClCompile Include="Interface\Frame.cpp" />
@@ -382,10 +384,14 @@
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\AbandonGameState.cpp" />
+    <ClCompile Include="Menu\IntroState.cpp" />
     <ClCompile Include="Menu\OptionsAdvancedState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
-    <ClCompile Include="Menu\OptionsLanguageState.cpp" />
+    <ClCompile Include="Menu\OptionsAudioState.cpp" />
+    <ClCompile Include="Menu\OptionsConfirmState.cpp" />
+    <ClCompile Include="Menu\OptionsDefaultsState.cpp" />
+    <ClCompile Include="Menu\OptionsGeoscapeState.cpp" />
     <ClCompile Include="Menu\LoadState.cpp" />
     <ClCompile Include="Menu\MainMenuState.cpp" />
     <ClCompile Include="Menu\NewBattleState.cpp" />
@@ -393,7 +399,8 @@
     <ClCompile Include="Menu\OptionsBaseState.cpp" />
     <ClCompile Include="Menu\OptionsBattlescapeState.cpp" />
     <ClCompile Include="Menu\OptionsControlsState.cpp" />
-    <ClCompile Include="Menu\OptionsState.cpp" />
+    <ClCompile Include="Menu\OptionsModsState.cpp" />
+    <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
     <ClCompile Include="Menu\SavedGameState.cpp" />
     <ClCompile Include="Menu\SaveState.cpp" />
@@ -587,6 +594,7 @@
     <ClInclude Include="Engine\Logger.h" />
     <ClInclude Include="Engine\Music.h" />
     <ClInclude Include="Engine\OpenGL.h" />
+    <ClInclude Include="Engine\OptionInfo.h" />
     <ClInclude Include="Engine\Options.h" />
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
@@ -647,6 +655,7 @@
     <ClInclude Include="Geoscape\UfoLostState.h" />
     <ClInclude Include="Interface\ArrowButton.h" />
     <ClInclude Include="Interface\Bar.h" />
+    <ClInclude Include="Interface\ComboBox.h" />
     <ClInclude Include="Interface\Cursor.h" />
     <ClInclude Include="Interface\FpsCounter.h" />
     <ClInclude Include="Interface\Frame.h" />
@@ -661,10 +670,14 @@
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Menu\AbandonGameState.h" />
+    <ClInclude Include="Menu\IntroState.h" />
     <ClInclude Include="Menu\OptionsAdvancedState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
-    <ClInclude Include="Menu\OptionsLanguageState.h" />
+    <ClInclude Include="Menu\OptionsAudioState.h" />
+    <ClInclude Include="Menu\OptionsConfirmState.h" />
+    <ClInclude Include="Menu\OptionsDefaultsState.h" />
+    <ClInclude Include="Menu\OptionsGeoscapeState.h" />
     <ClInclude Include="Menu\LoadState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />
     <ClInclude Include="Menu\NewBattleState.h" />
@@ -672,7 +685,8 @@
     <ClInclude Include="Menu\OptionsBaseState.h" />
     <ClInclude Include="Menu\OptionsBattlescapeState.h" />
     <ClInclude Include="Menu\OptionsControlsState.h" />
-    <ClInclude Include="Menu\OptionsState.h" />
+    <ClInclude Include="Menu\OptionsModsState.h" />
+    <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
     <ClInclude Include="Menu\SavedGameState.h" />
     <ClInclude Include="Menu\SaveState.h" />

@@ -72,7 +72,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target, Globe *globe) : Sta
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();

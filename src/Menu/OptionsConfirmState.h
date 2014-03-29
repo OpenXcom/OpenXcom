@@ -16,42 +16,46 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_OPTIONSLANGUAGESTATE_H
-#define OPENXCOM_OPTIONSLANGUAGESTATE_H
+#ifndef OPENXCOM_OPTIONSCONFIRMSTATE_H
+#define OPENXCOM_OPTIONSCONFIRMSTATE_H
 
-#include <vector>
-#include <string>
+#include "../Engine/State.h"
 #include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
 
+class TextButton;
 class Window;
 class Text;
-class TextList;
-class TextButton;
+class Timer;
 
 /**
- * Language window that lets the player pick the language
- * used for all in-game text.
+ * Confirmation window when Display Options
+ * are changed.
  */
-class OptionsLanguageState : public OptionsBaseState
+class OptionsConfirmState : public State
 {
 private:
-	Text *_txtTitle;
+	OptionsOrigin _origin;
+	TextButton *_btnYes, *_btnNo;
 	Window *_window;
-	TextList *_lstLanguages;
-	TextButton *_btnCancel;
-	std::vector<std::string> _langs;
+	Text *_txtTitle, *_txtTimer;
+	Timer *_timer;
+	int _countdown;
 public:
-	/// Creates the Start state.
-	OptionsLanguageState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Start state.
-	~OptionsLanguageState();
-	/// Handler for clicking the Language list.
-	void lstLanguagesClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	/// Creates the Confirm Display Options state.
+	OptionsConfirmState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Confirm Display Options state.
+	~OptionsConfirmState();
+	/// Handle timers.
+	void think();
+	/// Countdown for reverting options.
+	void countdown();
+	/// Handler for clicking the Yes button.
+	void btnYesClick(Action *action);
+	/// Handler for clicking the No button.
+	void btnNoClick(Action *action);
 };
 
 }

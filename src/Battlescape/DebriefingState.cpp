@@ -73,7 +73,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
+	_containmentLimit = Options::alienContainmentLimitEnforced ? 1 : 0;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
@@ -112,8 +112,8 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -154,7 +154,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 		if ((*i)->qty == 0)
 			continue;
 
-		std::wstringstream ss, ss2;
+		std::wostringstream ss, ss2;
 		ss << L'\x01' << (*i)->qty << L'\x01';
 		ss2 << L'\x01' << (*i)->score;
 		total += (*i)->score;
@@ -169,7 +169,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 			statsY += 8;
 		}
 	}
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
 

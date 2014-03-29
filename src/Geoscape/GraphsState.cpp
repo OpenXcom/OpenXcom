@@ -271,12 +271,12 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 		if (month > 11)
 		{
 			month = 0;
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << _game->getSavedGame()->getTime()->getYear();
 			_txtYears->setCellText(0, iter/2, ss.str());
 			if (iter > 2)
 			{
-				std::wstringstream ss2;
+				std::wostringstream ss2;
 				ss2 << (_game->getSavedGame()->getTime()->getYear()-1);
 				_txtYears->setCellText(0, 0, ss2.str());
 			}
@@ -309,8 +309,8 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	_btnIncome->onMousePress((ActionHandler)&GraphsState::btnIncomeClick);
 	_btnFinance->onMousePress((ActionHandler)&GraphsState::btnFinanceClick);
 	_btnGeoscape->onMousePress((ActionHandler)&GraphsState::btnGeoscapeClick);
-	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyGeoGraphs"));
+	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, Options::keyCancel);
+	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, Options::keyGeoGraphs);
 
 	centerAllSurfaces();
 }

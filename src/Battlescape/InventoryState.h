@@ -49,7 +49,7 @@ private:
 	Inventory *_inv;
 	std::vector<BattleItem*> *_curInventoryTemplate;
 	SavedBattleGame *_battleGame;
-	const bool _tu, _showMoreStatsInInventoryView;
+	const bool _tu;
 	BattlescapeState *_parent;
 public:
 	/// Creates the Inventory state.

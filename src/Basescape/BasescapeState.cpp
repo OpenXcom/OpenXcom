@@ -129,7 +129,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)&BasescapeState::edtBaseKeyPress);
+	_edtBase->onChange((ActionHandler)&BasescapeState::edtBaseChange);
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 
@@ -178,7 +178,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
-	_btnGeoscape->onKeyboardPress((ActionHandler)&BasescapeState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnGeoscape->onKeyboardPress((ActionHandler)&BasescapeState::btnGeoscapeClick, Options::keyCancel);
 }
 
 /**
@@ -385,7 +385,7 @@ void BasescapeState::viewLeftClick(Action *)
 			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected?
-		else if (_base->getDisconnectedFacilities(fac).size() > 0)
+		else if (!_base->getDisconnectedFacilities(fac).empty())
 		{
 			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
@@ -404,12 +404,15 @@ void BasescapeState::viewRightClick(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
+	{
 		_game->pushState(new BaseInfoState(_game, _base, this));
-
+	}
 	else if (f->getRules()->getCrafts() > 0)
 	{
 		if (f->getCraft() == 0)
+		{
 			_game->pushState(new CraftsState(_game, _base));
+		}
 		else
 			for (size_t craft = 0; craft < _base->getCrafts()->size(); ++craft)
 			{
@@ -421,25 +424,33 @@ void BasescapeState::viewRightClick(Action *)
 			}
 	}
 	else if (f->getRules()->getStorage() > 0)
+	{
 		_game->pushState(new SellState(_game, _base));
-
+	}
 	else if (f->getRules()->getPersonnel() > 0)
+	{
 		_game->pushState(new SoldiersState(_game, _base));
-
-	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+	}
+	else if (f->getRules()->getPsiLaboratories() > 0 && Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0)
+	{
 		_game->pushState(new AllocatePsiTrainingState(_game, _base));
-
+	}
 	else if (f->getRules()->getLaboratories() > 0)
+	{
 		_game->pushState(new ResearchState(_game, _base));
-
+	}
 	else if (f->getRules()->getWorkshops() > 0)
+	{
 		_game->pushState(new ManufactureState(_game, _base));
-
+	}
 	else if (f->getRules()->getAliens() > 0)
+	{
 		_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_GEOSCAPE));
-
+	}
 	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
+	{
 		_game->popState();
+	}
 }
 
 /**
@@ -449,7 +460,7 @@ void BasescapeState::viewRightClick(Action *)
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
-	std::wstringstream ss;
+	std::wostringstream ss;
 	if (f != 0)
 	{
 		if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
@@ -499,39 +510,39 @@ void BasescapeState::miniClick(Action *)
  */
 void BasescapeState::handleKeyPress(Action *action)
 {
-	if (action->getDetails()->type == SDL_KEYDOWN)
+	if (!_edtBase->isFocused() && action->getDetails()->type == SDL_KEYDOWN)
 	{
 		int base = -1;
 		int key = action->getDetails()->key.keysym.sym;
-		if (key == Options::getInt("keyBaseSelect1"))
+		if (key == Options::keyBaseSelect1)
 		{
 			base = 0;
 		}
-		else if (key == Options::getInt("keyBaseSelect2"))
+		else if (key == Options::keyBaseSelect2)
 		{
 			base = 1;
 		}
-		else if (key == Options::getInt("keyBaseSelect3"))
+		else if (key == Options::keyBaseSelect3)
 		{
 			base = 2;
 		}
-		else if (key == Options::getInt("keyBaseSelect4"))
+		else if (key == Options::keyBaseSelect4)
 		{
 			base = 3;
 		}
-		else if (key == Options::getInt("keyBaseSelect5"))
+		else if (key == Options::keyBaseSelect5)
 		{
 			base = 4;
 		}
-		else if (key == Options::getInt("keyBaseSelect6"))
+		else if (key == Options::keyBaseSelect6)
 		{
 			base = 5;
 		}
-		else if (key == Options::getInt("keyBaseSelect7"))
+		else if (key == Options::keyBaseSelect7)
 		{
 			base = 6;
 		}
-		else if (key == Options::getInt("keyBaseSelect8"))
+		else if (key == Options::keyBaseSelect8)
 		{
 			base = 7;
 		}
@@ -549,12 +560,9 @@ void BasescapeState::handleKeyPress(Action *action)
  * Changes the Base name.
  * @param action Pointer to an action.
  */
-void BasescapeState::edtBaseKeyPress(Action *action)
+void BasescapeState::edtBaseChange(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
-		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		_base->setName(_edtBase->getText());
-	}
+	_base->setName(_edtBase->getText());
 }
+
 }

@@ -69,7 +69,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, Options::keyCancel);
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	if (_endType != PROGRESS_CONSTRUCTION)

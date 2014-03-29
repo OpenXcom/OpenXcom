@@ -74,7 +74,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_btnOK->setColor(Palette::blockOffset(15)+6);
 	_btnOK->setText(tr("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
-	_btnOK->onKeyboardPress((ActionHandler)&NewResearchListState::btnOKClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOK->onKeyboardPress((ActionHandler)&NewResearchListState::btnOKClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

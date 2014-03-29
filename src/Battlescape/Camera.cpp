@@ -96,7 +96,7 @@ void Camera::mousePress(Action *action, State *)
 	{
 		down();
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::getInt("battleScrollType") == SCROLL_TRIGGER)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{
 		_scrollTrigger = true;
 		mouseOver(action, 0);
@@ -110,7 +110,7 @@ void Camera::mousePress(Action *action, State *)
  */
 void Camera::mouseRelease(Action *action, State *)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::getInt("battleScrollType") == SCROLL_TRIGGER)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{
 		_scrollMouseX = 0;
 		_scrollMouseY = 0;
@@ -140,11 +140,11 @@ void Camera::mouseOver(Action *action, State *)
 		return;
 	}
 
-	if (Options::getInt("battleScrollType") == SCROLL_AUTO || _scrollTrigger)
+	if (Options::battleEdgeScroll == SCROLL_AUTO || _scrollTrigger)
 	{
 		int posX = action->getXMouse();
 		int posY = action->getYMouse();
-		int scrollSpeed = Options::getInt("battleScrollSpeed");
+		int scrollSpeed = Options::battleScrollSpeed;
 
 		//left scroll
 		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0)
@@ -250,20 +250,20 @@ void Camera::keyboardPress(Action *action, State *)
 	}
 
 	int key = action->getDetails()->key.keysym.sym;
-	int scrollSpeed = Options::getInt("battleScrollSpeed");
-	if (key == Options::getInt("keyBattleLeft"))
+	int scrollSpeed = Options::battleScrollSpeed;
+	if (key == Options::keyBattleLeft)
 	{
 		_scrollKeyX = scrollSpeed;
 	}
-	else if (key == Options::getInt("keyBattleRight"))
+	else if (key == Options::keyBattleRight)
 	{
 		_scrollKeyX = -scrollSpeed;
 	}
-	else if (key == Options::getInt("keyBattleUp"))
+	else if (key == Options::keyBattleUp)
 	{
 		_scrollKeyY = scrollSpeed;
 	}
-	else if (key == Options::getInt("keyBattleDown"))
+	else if (key == Options::keyBattleDown)
 	{
 		_scrollKeyY = -scrollSpeed;
 	}
@@ -291,19 +291,19 @@ void Camera::keyboardRelease(Action *action, State *)
 	}
 
 	int key = action->getDetails()->key.keysym.sym;
-	if (key == Options::getInt("keyBattleLeft"))
+	if (key == Options::keyBattleLeft)
 	{
 		_scrollKeyX = 0;
 	}
-	else if (key == Options::getInt("keyBattleRight"))
+	else if (key == Options::keyBattleRight)
 	{
 		_scrollKeyX = 0;
 	}
-	else if (key == Options::getInt("keyBattleUp"))
+	else if (key == Options::keyBattleUp)
 	{
 		_scrollKeyY = 0;
 	}
-	else if (key == Options::getInt("keyBattleDown"))
+	else if (key == Options::keyBattleDown)
 	{
 		_scrollKeyY = 0;
 	}

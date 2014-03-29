@@ -64,7 +64,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(200, 17, 36, 6);
-	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
+	_txtTus = new Text(40, 9, 245, Options::showMoreStatsInInventoryView ? 32 : 24);
 	_txtWeight = new Text(70, 9, 245, 24);
 	_txtFAcc = new Text(40, 9, 245, 32);
 	_txtReact = new Text(40, 9, 245, 40);
@@ -147,12 +147,12 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyBattleInventory"));
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, Options::keyBattleInventory);
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
-	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, Options::keyBattlePrevUnit);
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
-	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, Options::keyBattleNextUnit);
 	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
 	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
@@ -181,11 +181,11 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
 
 	_txtTus->setVisible(_tu);
-	_txtWeight->setVisible(_showMoreStatsInInventoryView);
-	_txtFAcc->setVisible(_showMoreStatsInInventoryView && !_tu);
-	_txtReact->setVisible(_showMoreStatsInInventoryView && !_tu);
-	_txtPSkill->setVisible(_showMoreStatsInInventoryView && !_tu);
-	_txtPStr->setVisible(_showMoreStatsInInventoryView && !_tu);
+	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
+	_txtFAcc->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 }
 
 /**
@@ -316,7 +316,7 @@ void InventoryState::updateStats()
 		_txtPSkill->setText(L"");
 	}
 
-	if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (unit->getStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
 	}

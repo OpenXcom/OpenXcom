@@ -41,110 +41,70 @@ namespace OpenXcom
  */
 OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 17, 0, 8);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
-	_lstOptions = new TextList(268, 104, 20, 30);
-	_txtDescription = new Text(280, 32, 20, 142);
+	setCategory(_btnAdvanced);
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnOk);
-	add(_btnCancel);
+	// Create objects
+	_lstOptions = new TextList(200, 136, 94, 8);
+	
 	add(_lstOptions);
-	add(_txtDescription);
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_ADVANCED_OPTIONS"));
-	
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&OptionsAdvancedState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&OptionsAdvancedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&OptionsAdvancedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&OptionsAdvancedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-	
-	_txtDescription->setColor(Palette::blockOffset(8)+10);
-	_txtDescription->setWordWrap(true);
-
 	_lstOptions->setAlign(ALIGN_RIGHT, 1);
-	_lstOptions->setColumns(2, 220, 48);
-	_lstOptions->setColor(Palette::blockOffset(8)+5);
+	_lstOptions->setColumns(2, 180, 20);
+	_lstOptions->setColor(Palette::blockOffset(8)+10);
+	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
 
-	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentLimitEnforced", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("canSellLiveAliens", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("allowAutoSellProduction", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("allowBuildingQueue", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleAutoEnd", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleInstantGrenade", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleNotifyDeath", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleUFOExtenderAccuracy", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("TFTDDamage", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("customInitialBase", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("showFundsOnGeoscape", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("disableAutoEquip", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("weaponSelfDestruction", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("spendResearchedItems", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleSmoothCamera", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("skipNextTurnScreen", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battleConfirmFireMode", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("aggressiveRetaliation", &Options::aggressiveRetaliation));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("alienContainmentLimitEnforced", &Options::alienContainmentLimitEnforced));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("canSellLiveAliens", &Options::canSellLiveAliens));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowAutoSellProduction", &Options::allowAutoSellProduction));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowBuildingQueue", &Options::allowBuildingQueue));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleAutoEnd", &Options::battleAutoEnd));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleInstantGrenade", &Options::battleInstantGrenade));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleUFOExtenderAccuracy", &Options::battleUFOExtenderAccuracy));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("canManufactureMoreItemsPerHour", &Options::canManufactureMoreItemsPerHour));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("canTransferCraftsWhileAirborne", &Options::canTransferCraftsWhileAirborne));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("craftLaunchAlways", &Options::craftLaunchAlways));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("customInitialBase", &Options::customInitialBase));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("globeSeasons", &Options::globeSeasons));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("playIntro", &Options::playIntro));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("disableAutoEquip", &Options::disableAutoEquip));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("showMoreStatsInInventoryView", &Options::showMoreStatsInInventoryView));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("sneakyAI", &Options::sneakyAI));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("strafe", &Options::strafe));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("weaponSelfDestruction", &Options::weaponSelfDestruction));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("spendResearchedItems", &Options::spendResearchedItems));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleScrollDragInvert", &Options::battleScrollDragInvert));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowPsionicCapture", &Options::allowPsionicCapture));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("psiStrengthEval", &Options::psiStrengthEval));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("anytimePsiTraining", &Options::anytimePsiTraining));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("skipNextTurnScreen", &Options::skipNextTurnScreen));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("TFTDDamage", &Options::TFTDDamage));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleSmoothCamera", &Options::battleSmoothCamera));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleConfirmFireMode", &Options::battleConfirmFireMode));
 
 	_boolQuantity = _settingBoolSet.size();
 	int sel = 0;
-	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
+	for (std::vector< std::pair<std::string, bool*> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
 	{
-		std::string settingName = (*i).first;
-		(*i).second = Options::getBool(settingName);
-		std::wstring setting =  (*i).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
+		std::string settingName = i->first;
+		std::wstring setting =  *i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), setting.c_str());
 		++sel;
 	}
 	
-	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
-	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
-	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
-	_settingIntSet.push_back(std::pair<std::string, int>("maxFrameSkip", 0));
+	_settingIntSet.push_back(std::pair<std::string, int*>("battleExplosionHeight", &Options::battleExplosionHeight));
+	_settingIntSet.push_back(std::pair<std::string, int*>("autosave", &Options::autosave));
+	_settingIntSet.push_back(std::pair<std::string, int*>("maxFrameSkip", &Options::maxFrameSkip));
 
-	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	for (std::vector<std::pair<std::string, int*> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
-		std::string settingName = (*i).first;
-		(*i).second = Options::getInt(settingName);
-		std::wstringstream ss;
-		if (i->first == "battleNewPreviewPath")
-		{
-			ss << updatePathString(sel - _settingBoolSet.size()).c_str();
-		}
-		else
-		{
-			ss << i->second;
-		}
+		std::string settingName = i->first;
+		std::wostringstream ss;
+		ss << *i->second;
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
 		++sel;
@@ -165,32 +125,6 @@ OptionsAdvancedState::~OptionsAdvancedState()
 	
 }
 
-/**
- * Saves the options.
- * @param action Pointer to an action.
- */
-void OptionsAdvancedState::btnOkClick(Action *)
-{
-	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
-	{
-		Options::setBool((*i).first, (*i).second);
-	}
-	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
-	{
-		Options::setInt((*i).first, (*i).second);
-	}
-	_game->popState();
-}
-
-/**
- * Returns to the previous screen.
- * @param action Pointer to an action.
- */
-void OptionsAdvancedState::btnCancelClick(Action *)
-{
-	_game->popState();
-}
-
 void OptionsAdvancedState::lstOptionsPress(Action *action)
 {
 	if (action->getDetails()->button.button != SDL_BUTTON_LEFT && action->getDetails()->button.button != SDL_BUTTON_RIGHT)
@@ -201,8 +135,8 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 	std::wstring settingText = L"";
 	if (sel < _boolQuantity)
 	{
-		_settingBoolSet.at(sel).second = !_settingBoolSet.at(sel).second;
-		settingText = _settingBoolSet.at(sel).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
+		*_settingBoolSet.at(sel).second = !*_settingBoolSet.at(sel).second;
+		settingText = *_settingBoolSet.at(sel).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
 	}
 	else // integer variables will need special handling
 	{
@@ -212,52 +146,40 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 		{
 			increment = -1;
 		}
-		std::wstringstream ss;
+		std::wostringstream ss;
 		switch (intSel)
 		{
-		case 0: // pathfinding setting
-			_settingIntSet.at(intSel).second += increment;
-			if (_settingIntSet.at(intSel).second == 4)
+		case 0: // explosion height
+			*_settingIntSet.at(intSel).second += increment;
+			if (*_settingIntSet.at(intSel).second == 4)
 			{
-				_settingIntSet.at(intSel).second = 0;
+				*_settingIntSet.at(intSel).second = 0;
 			}
-			if (_settingIntSet.at(intSel).second == -1)
+			if (*_settingIntSet.at(intSel).second == -1)
 			{
-				_settingIntSet.at(intSel).second = 3;
+				*_settingIntSet.at(intSel).second = 3;
 			}
-			ss << updatePathString(intSel).c_str();
+			ss << *_settingIntSet.at(intSel).second;
 			break;
-		case 1: // explosion height
-			_settingIntSet.at(intSel).second += increment;
-			if (_settingIntSet.at(intSel).second == 4)
-			{
-				_settingIntSet.at(intSel).second = 0;
-			}
-			if (_settingIntSet.at(intSel).second == -1)
-			{
-				_settingIntSet.at(intSel).second = 3;
-			}
-			ss << _settingIntSet.at(intSel).second;
+		case 1: // autosave
+			*_settingIntSet.at(intSel).second = ++*_settingIntSet.at(intSel).second % 4;
+			ss << *_settingIntSet.at(intSel).second;
 			break;
-		case 2: // autosave
-			_settingIntSet.at(intSel).second = ++_settingIntSet.at(intSel).second % 4;
-			ss << _settingIntSet.at(intSel).second;
-			break;
-		case 3: // frame skip
-			_settingIntSet.at(intSel).second += increment;
-			if (_settingIntSet.at(intSel).second > 10)
+		case 2: // frame skip
+			*_settingIntSet.at(intSel).second += increment;
+			if (*_settingIntSet.at(intSel).second > 10)
 			{
-				_settingIntSet.at(intSel).second = 0;
+				*_settingIntSet.at(intSel).second = 0;
 			}
-			if (_settingIntSet.at(intSel).second < 0)
+			if (*_settingIntSet.at(intSel).second < 0)
 			{
-				_settingIntSet.at(intSel).second = 10;
+				*_settingIntSet.at(intSel).second = 10;
 			}
-			ss << _settingIntSet.at(intSel).second;
+			ss << *_settingIntSet.at(intSel).second;
 			break;
 		default:
-			_settingIntSet.at(intSel).second += increment;
-			ss << _settingIntSet.at(intSel).second;
+			*_settingIntSet.at(intSel).second += increment;
+			ss << *_settingIntSet.at(intSel).second;
 			break;
 		}
 		settingText = ss.str();
@@ -281,29 +203,11 @@ void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 
 	transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 	ss << "STR_" << settingName.c_str() << "_DESC";
-	_txtDescription->setText(tr(ss.str()).c_str());
+	_txtTooltip->setText(tr(ss.str()).c_str());
 }
 
 void OptionsAdvancedState::lstOptionsMouseOut(Action *)
 {
-	_txtDescription->setText(L"");
-}
-
-std::wstring OptionsAdvancedState::updatePathString(int sel)
-{
-	switch (_settingIntSet.at(sel).second)
-	{
-	case 0:
-		return tr("STR_NONE_UC");
-	case 1:
-		return tr("STR_ARROWS");
-	case 2:
-		return tr("STR_TIME_UNIT_COST");
-	case 3:
-		return tr("STR_FULL");
-	default:
-		break;
-	}
-	return L"";
+	_txtTooltip->setText(L"");
 }
 }

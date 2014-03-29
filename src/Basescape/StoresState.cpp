@@ -72,8 +72,8 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -102,7 +102,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 		if (qty > 0)
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();
 			_lstStores->addRow(3, tr(*i).c_str(), ss.str().c_str(), ss2.str().c_str());

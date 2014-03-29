@@ -20,7 +20,6 @@
 #define OPENXCOM_STARTSTATE_H
 
 #include "../Engine/State.h"
-#include "../Resource/XcomResourcePack.h"
 
 namespace OpenXcom
 {

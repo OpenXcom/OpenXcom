@@ -118,7 +118,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeCraftState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeCraftState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeCraftState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -237,13 +237,13 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtSoldier->setColor(Palette::blockOffset(15)-1);
 	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss11;
+	std::wostringstream ss11;
 	ss11 << tr("STR_SOLDIERS_UC") << ">" << L'\x01' << _craft->getNumSoldiers();
 	_txtSoldier->setText(ss11.str());
 
 	_txtHWP->setColor(Palette::blockOffset(15)-1);
 	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss12;
+	std::wostringstream ss12;
 	ss12 << tr("STR_HWPS") << ">" << L'\x01' << _craft->getNumVehicles();
 	_txtHWP->setText(ss12.str());
 

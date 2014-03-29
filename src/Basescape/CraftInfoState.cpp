@@ -46,9 +46,9 @@ namespace OpenXcom
  * Initializes all the elements in the Craft Info screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param craft ID of the selected craft.
+ * @param craftId ID of the selected craft.
  */
-CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(game), _base(base), _craft(craft)
+CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(game), _base(base), _craftId(craftId)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -108,7 +108,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, Options::keyCancel);
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
@@ -133,7 +133,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_edtCraft->setColor(Palette::blockOffset(13)+10);
 	_edtCraft->setBig();
 	_edtCraft->setAlign(ALIGN_CENTER);
-	_edtCraft->onKeyboardPress((ActionHandler)&CraftInfoState::edtCraftKeyPress);
+	_edtCraft->onChange((ActionHandler)&CraftInfoState::edtCraftChange);
 
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
@@ -177,41 +177,41 @@ void CraftInfoState::init()
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
-	Craft *c = _base->getCrafts()->at(_craft);
+	_craft = _base->getCrafts()->at(_craftId);
 
-	_edtCraft->setText(c->getName(_game->getLanguage()));
+	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(c->getRules()->getSprite() + 33)->setX(0);
-	texture->getFrame(c->getRules()->getSprite() + 33)->setY(0);
-	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
 
-	std::wstringstream ss;
-	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(c->getDamagePercentage()));
-	if (c->getStatus() == "STR_REPAIRS")
+	std::wostringstream ss;
+	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
+	if (_craft->getStatus() == "STR_REPAIRS")
 	{
-		int damageDays = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate() / 24.0f);
-		ss << L"\n(" << tr("STR_DAY", damageDays) << ")";
+		int damageHours = (int)ceil((float)_craft->getDamage() / _craft->getRules()->getRepairRate());
+		ss << L"\n(" << tr("STR_HOUR", damageHours) << ")";
 	}
 	_txtDamage->setText(ss.str());
 
-	std::wstringstream ss2;
-	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(c->getFuelPercentage()));
-	if (c->getStatus() == "STR_REFUELLING")
+	std::wostringstream ss2;
+	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
+	if (_craft->getStatus() == "STR_REFUELLING")
 	{
-		int fuelDays = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 48.0f);
-		ss2 << L"\n(" << tr("STR_DAY", fuelDays) << ")";
+		int fuelHours = (int)ceil((float)(_craft->getRules()->getMaxFuel() - _craft->getFuel()) / _craft->getRules()->getRefuelRate() / 2.0f);
+		ss2 << L"\n(" << tr("STR_HOUR", fuelHours) << ")";
 	}
 	_txtFuel->setText(ss2.str());
 
-	if (c->getRules()->getSoldiers() > 0)
+	if (_craft->getRules()->getSoldiers() > 0)
 	{
 		_crew->clear();
 		_equip->clear();
 
 		Surface *frame1 = texture->getFrame(38);
 		frame1->setY(0);
-		for (int i = 0, x = 0; i < c->getNumSoldiers(); ++i, x += 10)
+		for (int i = 0, x = 0; i < _craft->getNumSoldiers(); ++i, x += 10)
 		{
 			frame1->setX(x);
 			frame1->blit(_crew);
@@ -220,13 +220,13 @@ void CraftInfoState::init()
 		Surface *frame2 = texture->getFrame(40);
 		frame2->setY(0);
 		int x = 0;
-		for (int i = 0; i < c->getNumVehicles(); ++i, x += 10)
+		for (int i = 0; i < _craft->getNumVehicles(); ++i, x += 10)
 		{
 			frame2->setX(x);
 			frame2->blit(_equip);
 		}
 		Surface *frame3 = texture->getFrame(39);
-		for (int i = 0; i < c->getNumEquipment(); i += 4, x += 10)
+		for (int i = 0; i < _craft->getNumEquipment(); i += 4, x += 10)
 		{
 			frame3->setX(x);
 			frame3->blit(_equip);
@@ -241,9 +241,9 @@ void CraftInfoState::init()
 		_btnArmor->setVisible(false);
 	}
 
-	if (c->getRules()->getWeapons() > 0)
+	if (_craft->getRules()->getWeapons() > 0)
 	{
-		CraftWeapon *w1 = c->getWeapons()->at(0);
+		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 
 		if (w1 != 0)
 		{
@@ -273,9 +273,9 @@ void CraftInfoState::init()
 		_txtW1Max->setVisible(false);
 	}
 
-	if (c->getRules()->getWeapons() > 1)
+	if (_craft->getRules()->getWeapons() > 1)
 	{
-		CraftWeapon *w2 = c->getWeapons()->at(1);
+		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 
 		if (w2 != 0)
 		{
@@ -312,11 +312,6 @@ void CraftInfoState::init()
  */
 void CraftInfoState::btnOkClick(Action *)
 {
-	Craft *c = _base->getCrafts()->at(_craft);
-	if (c->getName(_game->getLanguage()) != _edtCraft->getText())
-	{
-		c->setName(_edtCraft->getText());
-	}
 	_game->popState();
 }
 
@@ -327,7 +322,7 @@ void CraftInfoState::btnOkClick(Action *)
  */
 void CraftInfoState::btnW1Click(Action *)
 {
-	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 0));
+	_game->pushState(new CraftWeaponsState(_game, _base, _craftId, 0));
 }
 
 /**
@@ -337,7 +332,7 @@ void CraftInfoState::btnW1Click(Action *)
  */
 void CraftInfoState::btnW2Click(Action *)
 {
-	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 1));
+	_game->pushState(new CraftWeaponsState(_game, _base, _craftId, 1));
 }
 
 /**
@@ -346,7 +341,7 @@ void CraftInfoState::btnW2Click(Action *)
  */
 void CraftInfoState::btnCrewClick(Action *)
 {
-	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
+	_game->pushState(new CraftSoldiersState(_game, _base, _craftId));
 }
 
 /**
@@ -355,7 +350,7 @@ void CraftInfoState::btnCrewClick(Action *)
  */
 void CraftInfoState::btnEquipClick(Action *)
 {
-	_game->pushState(new CraftEquipmentState(_game, _base, _craft));
+	_game->pushState(new CraftEquipmentState(_game, _base, _craftId));
 }
 
 /**
@@ -364,24 +359,28 @@ void CraftInfoState::btnEquipClick(Action *)
  */
 void CraftInfoState::btnArmorClick(Action *)
 {
-	_game->pushState(new CraftArmorState(_game, _base, _craft));
+	_game->pushState(new CraftArmorState(_game, _base, _craftId));
 }
 
 /**
  * Changes the Craft name.
  * @param action Pointer to an action.
  */
-void CraftInfoState::edtCraftKeyPress(Action *action)
+void CraftInfoState::edtCraftChange(Action *action)
 {
+	if (_craft->getName(_game->getLanguage()) != _edtCraft->getText())
+	{
+		_craft->setName(_edtCraft->getText());
+	}
+	else
+	{
+		_craft->setName(L"");
+	}
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		Craft *c = _base->getCrafts()->at(_craft);
-		if (c->getName(_game->getLanguage()) != _edtCraft->getText())
-		{
-			c->setName(_edtCraft->getText());
-			_edtCraft->setText(c->getName(_game->getLanguage()));
-		}
+		_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	}
 }
+
 }

@@ -30,6 +30,7 @@ class Window;
 class Text;
 class TextEdit;
 class Surface;
+class Craft;
 
 /**
  * Craft Info screen that shows all the
@@ -39,7 +40,8 @@ class CraftInfoState : public State
 {
 private:
 	Base *_base;
-	size_t _craft;
+	size_t _craftId;
+	Craft *_craft;
 
 	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmor;
 	Window *_window;
@@ -49,7 +51,7 @@ private:
 	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
 public:
 	/// Creates the Craft Info state.
-	CraftInfoState(Game *game, Base *base, size_t craft);
+	CraftInfoState(Game *game, Base *base, size_t craftId);
 	/// Cleans up the Craft Info state.
 	~CraftInfoState();
 	/// Updates the craft info.
@@ -66,8 +68,8 @@ public:
 	void btnEquipClick(Action *action);
 	/// Handler for clicking the Armor button.
 	void btnArmorClick(Action *action);
-	/// Handler for pressing a key on the Name edit.
-	void edtCraftKeyPress(Action *action);
+	/// Handler for changing the text on the Name edit.
+	void edtCraftChange(Action *action);
 };
 
 }

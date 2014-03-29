@@ -77,31 +77,31 @@ namespace OpenXcom
 		_lstStats->setColumns(2, 175, 145);
 		_lstStats->setDot(true);
 		
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << unit->getStats()->tu;
 		_lstStats->addRow(2, tr("STR_TIME_UNITS").c_str(), ss.str().c_str());
 		
-		std::wstringstream ss2;
+		std::wostringstream ss2;
 		ss2 << unit->getStats()->health;
 		_lstStats->addRow(2, tr("STR_HEALTH").c_str(), ss2.str().c_str());
 		
-		std::wstringstream ss3;
+		std::wostringstream ss3;
 		ss3 << armor->getFrontArmor();
 		_lstStats->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss3.str().c_str());
 		
-		std::wstringstream ss4;
+		std::wostringstream ss4;
 		ss4 << armor->getSideArmor();
 		_lstStats->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss4.str().c_str());
 		
-		std::wstringstream ss5;
+		std::wostringstream ss5;
 		ss5 << armor->getSideArmor();
 		_lstStats->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss5.str().c_str());
 		
-		std::wstringstream ss6;
+		std::wostringstream ss6;
 		ss6 << armor->getRearArmor();
 		_lstStats->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss6.str().c_str());
 		
-		std::wstringstream ss7;
+		std::wostringstream ss7;
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
@@ -111,13 +111,13 @@ namespace OpenXcom
 		{
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
-			std::wstringstream ss8;
+			std::wostringstream ss8;
 			ss8 << ammo->getPower();
 			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
 			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
 			
-			std::wstringstream ss9;
+			std::wostringstream ss9;
 			ss9 << ammo->getClipSize();
 			_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
 			
@@ -125,7 +125,7 @@ namespace OpenXcom
 		}
 		else
 		{
-			std::wstringstream ss8;
+			std::wostringstream ss8;
 			ss8 << item->getPower();
 			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 		}

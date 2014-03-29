@@ -80,18 +80,20 @@ namespace OpenXcom
  */
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
 {
-	_previewSetting = Options::getInt("battleNewPreviewPath");
-	_smoothCamera = Options::getBool("battleSmoothCamera");
-	if (Options::getBool("traceAI"))
+	_previewSetting = Options::battleNewPreviewPath;
+	_smoothCamera = Options::battleSmoothCamera;
+	if (Options::traceAI)
 	{
 		// turn everything on because we want to see the markers.
-		_previewSetting = 3;
+		_previewSetting = PATH_FULL;
 	}
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 	_save = _game->getSavedGame()->getSavedBattle();
-	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
+	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, 0, 0);
+	_message->setX(_game->getScreen()->getDX());
+	_message->setY(_game->getScreen()->getDY());
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
@@ -356,7 +358,7 @@ void Map::drawTerrain(Surface *surface)
 
 	bool pathfinderTurnedOn = _save->getPathfinding()->isPathPreviewed();
 
-	if (!_waypoints.empty() || (pathfinderTurnedOn && _previewSetting >= 2))
+	if (!_waypoints.empty() || (pathfinderTurnedOn && (_previewSetting & PATH_TU_COST)))
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
@@ -642,7 +644,7 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 					// Draw Path Preview
-					if (tile->getPreview() != -1 && tile->isDiscovered(0) && _previewSetting % 2)
+					if (tile->getPreview() != -1 && tile->isDiscovered(0) && (_previewSetting & PATH_ARROWS))
 					{
 						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
@@ -681,11 +683,11 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 
 							// UFO extender accuracy: display adjusted accuracy value on crosshair in real-time.
-							if (_cursorType == CT_AIM && Options::getBool("battleUFOExtenderAccuracy"))
+							if (_cursorType == CT_AIM && Options::battleUFOExtenderAccuracy)
 							{
 								BattleAction *action = _save->getBattleGame()->getCurrentAction();
 								RuleItem *weapon = action->weapon->getRules();
-								std::stringstream ss;
+								std::ostringstream ss;
 								int accuracy = _save->getSelectedUnit()->getFiringAccuracy(action->type, action->weapon);
 								int distance = _save->getTileEngine()->distance(Position (itX, itY,itZ), action->actor->getPosition());
 								int upperLimit = 200;
@@ -803,7 +805,7 @@ void Map::drawTerrain(Surface *surface)
 						if (!tile || !tile->isDiscovered(0) || tile->getPreview() == -1)
 							continue;
 						int adjustment = 20 - tile->getTerrainLevel();
-						if (_previewSetting % 2)
+						if (_previewSetting & PATH_ARROWS)
 						{
 							if (itZ > 0 && tile->hasNoFloor(tileBelow))
 							{
@@ -821,7 +823,7 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 
-						if (_previewSetting >= 2)
+						if (_previewSetting & PATH_TU_COST)
 						{
 							int tuMarker = std::max(0, tile->getTUMarker());
 

@@ -114,10 +114,8 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
-	int screenWidth = Options::getInt("baseXResolution");
-	int screenHeight = Options::getInt("baseYResolution");
-
-	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
+	int screenWidth = Options::baseXResolution;
+	int screenHeight = Options::baseYResolution;
 
 	// Create objects
 	_bg = new Surface(320, 200, screenWidth-320, screenHeight/2-100);
@@ -153,23 +151,14 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtDay = new Text(29, 8, screenWidth-61, screenHeight/2-6);
 	_txtMonth = new Text(29, 8, screenWidth-32, screenHeight/2-6);
 	_txtYear = new Text(59, 8, screenWidth-61, screenHeight/2+1);
-	if (_showFundsOnGeoscape)
-	{
-		_txtFunds = new Text(59, 8, screenWidth-61, screenHeight/2-27);
-		_txtHour->setY(_txtHour->getY()+6);
-		_txtHourSep->setY(_txtHourSep->getY()+6);
-		_txtMin->setY(_txtMin->getY()+6);
-		_txtMinSep->setY(_txtMinSep->getY()+6);
-		_txtMinSep->setX(_txtMinSep->getX()-10);
-		_txtSec->setX(_txtSec->getX()-10);
-	}
+	_txtFunds = new Text(59, 8, screenWidth-61, screenHeight/2-27);
 
 	_timeSpeed = _btn5Secs;
-	_timer = new Timer(100);
+	_timer = new Timer(Options::geoClockSpeed);
 
 	_zoomInEffectTimer = new Timer(50);
 	_zoomOutEffectTimer = new Timer(50);
-	_dogfightStartTimer = new Timer(250);
+	_dogfightStartTimer = new Timer(50);
 
 	_txtDebug = new Text(200, 18, 0, 0);
 
@@ -204,7 +193,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
-	if (_showFundsOnGeoscape) add(_txtFunds);
+	add(_txtFunds);
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
@@ -225,42 +214,42 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnIntercept->setTextColor(Palette::blockOffset(15)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&GeoscapeState::btnInterceptClick);
-	_btnIntercept->onKeyboardPress((ActionHandler)&GeoscapeState::btnInterceptClick, (SDLKey)Options::getInt("keyGeoIntercept"));
+	_btnIntercept->onKeyboardPress((ActionHandler)&GeoscapeState::btnInterceptClick, Options::keyGeoIntercept);
 
 	_btnBases->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnBases->setColor(Palette::blockOffset(15)+6);
 	_btnBases->setTextColor(Palette::blockOffset(15)+5);
 	_btnBases->setText(tr("STR_BASES"));
 	_btnBases->onMouseClick((ActionHandler)&GeoscapeState::btnBasesClick);
-	_btnBases->onKeyboardPress((ActionHandler)&GeoscapeState::btnBasesClick, (SDLKey)Options::getInt("keyGeoBases"));
+	_btnBases->onKeyboardPress((ActionHandler)&GeoscapeState::btnBasesClick, Options::keyGeoBases);
 
 	_btnGraphs->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnGraphs->setColor(Palette::blockOffset(15)+6);
 	_btnGraphs->setTextColor(Palette::blockOffset(15)+5);
 	_btnGraphs->setText(tr("STR_GRAPHS"));
 	_btnGraphs->onMouseClick((ActionHandler)&GeoscapeState::btnGraphsClick);
-	_btnGraphs->onKeyboardPress((ActionHandler)&GeoscapeState::btnGraphsClick, (SDLKey)Options::getInt("keyGeoGraphs"));
+	_btnGraphs->onKeyboardPress((ActionHandler)&GeoscapeState::btnGraphsClick, Options::keyGeoGraphs);
 
 	_btnUfopaedia->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnUfopaedia->setColor(Palette::blockOffset(15)+6);
 	_btnUfopaedia->setTextColor(Palette::blockOffset(15)+5);
 	_btnUfopaedia->setText(tr("STR_UFOPAEDIA_UC"));
 	_btnUfopaedia->onMouseClick((ActionHandler)&GeoscapeState::btnUfopaediaClick);
-	_btnUfopaedia->onKeyboardPress((ActionHandler)&GeoscapeState::btnUfopaediaClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+	_btnUfopaedia->onKeyboardPress((ActionHandler)&GeoscapeState::btnUfopaediaClick, Options::keyGeoUfopedia);
 
 	_btnOptions->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnOptions->setColor(Palette::blockOffset(15)+6);
 	_btnOptions->setTextColor(Palette::blockOffset(15)+5);
 	_btnOptions->setText(tr("STR_OPTIONS_UC"));
 	_btnOptions->onMouseClick((ActionHandler)&GeoscapeState::btnOptionsClick);
-	_btnOptions->onKeyboardPress((ActionHandler)&GeoscapeState::btnOptionsClick, (SDLKey)Options::getInt("keyGeoOptions"));
+	_btnOptions->onKeyboardPress((ActionHandler)&GeoscapeState::btnOptionsClick, Options::keyGeoOptions);
 
 	_btnFunding->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnFunding->setColor(Palette::blockOffset(15)+6);
 	_btnFunding->setTextColor(Palette::blockOffset(15)+5);
 	_btnFunding->setText(tr("STR_FUNDING_UC"));
 	_btnFunding->onMouseClick((ActionHandler)&GeoscapeState::btnFundingClick);
-	_btnFunding->onKeyboardPress((ActionHandler)&GeoscapeState::btnFundingClick, (SDLKey)Options::getInt("keyGeoFunding"));
+	_btnFunding->onKeyboardPress((ActionHandler)&GeoscapeState::btnFundingClick, Options::keyGeoFunding);
 
 	_btn5Secs->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn5Secs->setBig();
@@ -268,7 +257,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btn5Secs->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setText(tr("STR_5_SECONDS"));
 	_btn5Secs->setGroup(&_timeSpeed);
-	_btn5Secs->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
+	_btn5Secs->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed1);
 
 	_btn1Min->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn1Min->setBig();
@@ -276,7 +265,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btn1Min->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Min->setText(tr("STR_1_MINUTE"));
 	_btn1Min->setGroup(&_timeSpeed);
-	_btn1Min->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed2"));
+	_btn1Min->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed2);
 
 	_btn5Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn5Mins->setBig();
@@ -284,7 +273,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btn5Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setText(tr("STR_5_MINUTES"));
 	_btn5Mins->setGroup(&_timeSpeed);
-	_btn5Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed3"));
+	_btn5Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed3);
 
 	_btn30Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn30Mins->setBig();
@@ -292,7 +281,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btn30Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setText(tr("STR_30_MINUTES"));
 	_btn30Mins->setGroup(&_timeSpeed);
-	_btn30Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed4"));
+	_btn30Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed4);
 
 	_btn1Hour->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn1Hour->setBig();
@@ -300,7 +289,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btn1Hour->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setText(tr("STR_1_HOUR"));
 	_btn1Hour->setGroup(&_timeSpeed);
-	_btn1Hour->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed5"));
+	_btn1Hour->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed5);
 
 	_btn1Day->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn1Day->setBig();
@@ -308,84 +297,84 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btn1Day->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeSpeed);
-	_btn1Day->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6"));
+	_btn1Day->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed6);
 
 	_btnRotateLeft->onMousePress((ActionHandler)&GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease);
-	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
-	_btnRotateLeft->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
+	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
+	_btnRotateLeft->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease, Options::keyGeoLeft);
 
 	_btnRotateRight->onMousePress((ActionHandler)&GeoscapeState::btnRotateRightPress);
 	_btnRotateRight->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateRightRelease);
-	_btnRotateRight->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateRightPress, (SDLKey)Options::getInt("keyGeoRight"));
-	_btnRotateRight->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateRightRelease, (SDLKey)Options::getInt("keyGeoRight"));
+	_btnRotateRight->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateRightPress, Options::keyGeoRight);
+	_btnRotateRight->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateRightRelease, Options::keyGeoRight);
 
 	_btnRotateUp->onMousePress((ActionHandler)&GeoscapeState::btnRotateUpPress);
 	_btnRotateUp->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateUpRelease);
-	_btnRotateUp->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateUpPress, (SDLKey)Options::getInt("keyGeoUp"));
-	_btnRotateUp->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateUpRelease, (SDLKey)Options::getInt("keyGeoUp"));
+	_btnRotateUp->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateUpPress, Options::keyGeoUp);
+	_btnRotateUp->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateUpRelease, Options::keyGeoUp);
 
 	_btnRotateDown->onMousePress((ActionHandler)&GeoscapeState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease);
-	_btnRotateDown->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateDownPress, (SDLKey)Options::getInt("keyGeoDown"));
-	_btnRotateDown->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease, (SDLKey)Options::getInt("keyGeoDown"));
+	_btnRotateDown->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateDownPress, Options::keyGeoDown);
+	_btnRotateDown->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease, Options::keyGeoDown);
 
 	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomIn->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomInLeftClick, (SDLKey)Options::getInt("keyGeoZoomIn"));
+	_btnZoomIn->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomInLeftClick, Options::keyGeoZoomIn);
 
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
+	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
 	
-	// dirty hacks to get the rotate buttons to work in "classic" style
-	_btnRotateLeft->setListButton();
-	_btnRotateRight->setListButton();
-	_btnRotateUp->setListButton();
-	_btnRotateDown->setListButton();
+	_txtFunds->setColor(Palette::blockOffset(15)+4);
+	_txtFunds->setAlign(ALIGN_CENTER);
+	_txtFunds->setVisible(Options::showFundsOnGeoscape);
 
-	if (_showFundsOnGeoscape)
-	{
-		_txtFunds->setSmall();
-		_txtFunds->setColor(Palette::blockOffset(15)+4);
-		_txtFunds->setAlign(ALIGN_CENTER);
-	}
-
-	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
+	_txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
 	_txtHour->setAlign(ALIGN_RIGHT);
 
-	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
+	_txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+4);
 	_txtHourSep->setText(L":");
 
-	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
+	_txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+4);
 
-	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
+	_txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+4);
 	_txtMinSep->setText(L":");
 
-	_txtSec->setSmall();
 	_txtSec->setColor(Palette::blockOffset(15)+4);
 
-	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+4);
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
-	_txtDay->setSmall();
 	_txtDay->setColor(Palette::blockOffset(15)+4);
 	_txtDay->setAlign(ALIGN_CENTER);
 
-	_txtMonth->setSmall();
 	_txtMonth->setColor(Palette::blockOffset(15)+4);
 	_txtMonth->setAlign(ALIGN_CENTER);
 
-	_txtYear->setSmall();
 	_txtYear->setColor(Palette::blockOffset(15)+4);
 	_txtYear->setAlign(ALIGN_CENTER);
 
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
+	
+	if (Options::showFundsOnGeoscape)
+	{
+		_txtHour->setY(_txtHour->getY()+6);
+		_txtHour->setSmall();
+		_txtHourSep->setY(_txtHourSep->getY()+6);
+		_txtHourSep->setSmall();
+		_txtMin->setY(_txtMin->getY()+6);
+		_txtMin->setSmall();
+		_txtMinSep->setX(_txtMinSep->getX()-10);
+		_txtMinSep->setY(_txtMinSep->getY()+6);
+		_txtMinSep->setSmall();
+		_txtSec->setX(_txtSec->getX()-10);
+	}
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_timer->start();
@@ -433,7 +422,7 @@ void GeoscapeState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		// "ctrl-d" - enable debug mode
-		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
+		if (Options::debug && action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
@@ -446,9 +435,9 @@ void GeoscapeState::handle(Action *action)
 			}
 		}
 		// quick save and quick load
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
 			_game->pushState(new SaveState(_game, OPT_GEOSCAPE, true));
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
 			_game->pushState(new LoadState(_game, OPT_GEOSCAPE, true));
 	}
 	if(!_dogfights.empty())
@@ -475,7 +464,7 @@ void GeoscapeState::init()
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->onMouseOver(0);
 	_globe->rotateStop();
-	_globe->focus();
+	_globe->setFocus(true);
 	_globe->draw();
 
 	// Set music if it's not already playing
@@ -543,24 +532,24 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	if (_showFundsOnGeoscape)
+	if (Options::showFundsOnGeoscape)
 	{
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 	_txtSec->setText(ss.str());
 
-	std::wstringstream ss2;
+	std::wostringstream ss2;
 	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
 
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	std::wstringstream ss4;
+	std::wostringstream ss4;
 	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
@@ -568,7 +557,7 @@ void GeoscapeState::timeDisplay()
 
 	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
-	std::wstringstream ss5;
+	std::wostringstream ss5;
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
 }
@@ -968,7 +957,7 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation")) || // only UFOs on retaliation missions actively scan for bases
+	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::aggressiveRetaliation) || // only UFOs on retaliation missions actively scan for bases
 		ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" || 	                                    // UFOs attacking a base don't detect!
 		ufo->isCrashed() ||                                                                                 // Crashed UFOs don't detect!
 		_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))                                         // UFOs have a detection range of 80 XCOM units.
@@ -1028,7 +1017,7 @@ void GeoscapeState::time10Minutes()
 		}
 	}
 	int diff = (int)(_game->getSavedGame()->getDifficulty());
-	if (Options::getBool("aggressiveRetaliation"))
+	if (Options::aggressiveRetaliation)
 	{
 		// Detect as many bases as possible.
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
@@ -1456,7 +1445,7 @@ void GeoscapeState::time1Day()
 			RuleResearch * bonus = 0;
 			const RuleResearch * research = (*iter)->getRules ();
 			// If "researched" the live alien, his body sent to the stores.
-			if (Options::getBool("spendResearchedItems") && research->needItem() && _game->getRuleset()->getUnit(research->getName()))
+			if (Options::spendResearchedItems && research->needItem() && _game->getRuleset()->getUnit(research->getName()))
 			{
 				(*i)->getItems()->addItem(
 					_game->getRuleset()->getArmor(
@@ -1561,7 +1550,7 @@ void GeoscapeState::time1Day()
 			}
 		}
 		// Handle psionic training
-		if ((*i)->getAvailablePsiLabs() > 0 && Options::getBool("anytimePsiTraining"))
+		if ((*i)->getAvailablePsiLabs() > 0 && Options::anytimePsiTraining)
 		{
 			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
 				(*s)->trainPsi1Day();
@@ -1593,7 +1582,7 @@ void GeoscapeState::time1Day()
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
 	// Autosave
-	if (Options::getInt("autosave") >= 2)
+	if (Options::autosave >= 2)
 		_game->pushState(new SaveState(_game, OPT_GEOSCAPE, false));
 }
 
@@ -1644,7 +1633,7 @@ void GeoscapeState::time1Month()
 				}
 			}
 		}
-		if ((*b)->getAvailablePsiLabs() > 0 && !Options::getBool("anytimePsiTraining"))
+		if ((*b)->getAvailablePsiLabs() > 0 && !Options::anytimePsiTraining)
 		{
 			psi = true;
 			for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
@@ -1748,7 +1737,7 @@ void GeoscapeState::globeClick(Action *action)
 		double lon, lat;
 		_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 		double lonDeg = lon / M_PI * 180, latDeg = lat / M_PI * 180;
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << "rad: " << lon << " , " << lat << std::endl;
 		ss << "deg: " << lonDeg << " , " << latDeg << std::endl;
 		_txtDebug->setText(ss.str());

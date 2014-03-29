@@ -22,6 +22,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <time.h>
 
 namespace OpenXcom
 {
@@ -90,7 +91,7 @@ private:
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	std::vector<AlienMission*> _activeMissions;
-	bool _debug, _warned, _detail, _radarLines;
+	bool _debug, _warned;
 	int _monthsPassed;
 	std::string _graphRegionToggles;
 	std::string _graphCountryToggles;
@@ -241,14 +242,6 @@ public:
 	void setGraphFinanceToggles(const std::string &value);
 	/// Increment the month counter.
 	void addMonth();
-	/// toggle the current state of the radar line drawing
-	void toggleRadarLines();
-	/// check the current state of the radar line drawing
-	bool getRadarLines();
-	/// toggle the current state of the detail drawing
-	void toggleDetail();
-	/// check the current state of the detail drawing
-	bool getDetail();
 	/// add a research to the "popped up" array
 	void addPoppedResearch(const RuleResearch* research);
 	/// check if a research is on the "popped up" array
@@ -261,6 +254,8 @@ public:
 	Base *getSelectedBase();
 	/// Set the last selected player base.
 	void setSelectedBase(int base);
+	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
+	int getSoldierScore(Soldier *soldier);
 
 };
 

@@ -63,8 +63,8 @@ ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchRequiredState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
