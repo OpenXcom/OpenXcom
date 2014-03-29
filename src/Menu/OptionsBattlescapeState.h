@@ -27,6 +27,7 @@ namespace OpenXcom
 class Window;
 class Text;
 class TextButton;
+class ToggleTextButton;
 class Slider;
 class ComboBox;
 

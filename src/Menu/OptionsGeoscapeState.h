@@ -28,6 +28,7 @@ class Text;
 class TextButton;
 class ToggleTextButton;
 class Slider;
+class ComboBox;
 
 /**
  * Screen that lets the user configure various
