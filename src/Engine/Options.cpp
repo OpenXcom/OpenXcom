@@ -493,14 +493,15 @@ void save(const std::string &filename)
 	}
 	YAML::Emitter out;
 
-	YAML::Node node;
+	YAML::Node doc, node;
 	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 	{
-		i->save(node["options"]);
+		i->save(node);
 	}
-	node["purchaseexclusions"] = purchaseExclusions;
-	node["rulesets"] = rulesets;
-	out << node;
+	doc["options"] = node;
+	doc["purchaseexclusions"] = purchaseExclusions;
+	doc["rulesets"] = rulesets;
+	out << doc;
 
 	sav << out.c_str();
 	sav.close();

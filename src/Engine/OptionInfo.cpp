@@ -22,25 +22,25 @@
 namespace OpenXcom
 {
 
-OptionInfo::OptionInfo(const std::string &id, bool *option, bool def, const std::string &desc, const std::string &cat) : _id(id), _type(OPTION_BOOL), _desc(desc), _cat(cat)
+OptionInfo::OptionInfo(const std::string &id, bool *option, bool def, const std::string &desc, const std::string &cat) : _id(id), _desc(desc), _cat(cat), _type(OPTION_BOOL)
 {
 	_ref.b = option;
 	_def.b = def;
 }
 
-OptionInfo::OptionInfo(const std::string &id, int *option, int def, const std::string &desc, const std::string &cat) : _id(id), _type(OPTION_INT), _desc(desc), _cat(cat)
+OptionInfo::OptionInfo(const std::string &id, int *option, int def, const std::string &desc, const std::string &cat) : _id(id), _desc(desc), _cat(cat), _type(OPTION_INT)
 {
 	_ref.i = option;
 	_def.i = def;
 }
 
-OptionInfo::OptionInfo(const std::string &id, SDLKey *option, SDLKey def, const std::string &desc, const std::string &cat) : _id(id), _type(OPTION_KEY), _desc(desc), _cat(cat)
+OptionInfo::OptionInfo(const std::string &id, SDLKey *option, SDLKey def, const std::string &desc, const std::string &cat) : _id(id), _desc(desc), _cat(cat), _type(OPTION_KEY)
 {
 	_ref.k = option;
 	_def.k = def;
 }
 
-OptionInfo::OptionInfo(const std::string &id, std::string *option, const char *def, const std::string &desc, const std::string &cat) : _id(id), _type(OPTION_STRING), _desc(desc), _cat(cat)
+OptionInfo::OptionInfo(const std::string &id, std::string *option, const char *def, const std::string &desc, const std::string &cat) : _id(id), _desc(desc), _cat(cat), _type(OPTION_STRING)
 {
 	_ref.s = option;
 	_def.s = def;
