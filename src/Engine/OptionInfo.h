@@ -48,7 +48,7 @@ public:
 	void load(const YAML::Node &node) const;
 	void load(const std::map<std::string, std::string> &map) const;
 	void save(YAML::Node &node) const;
-	void default() const;
+	void reset() const;
 	OptionType type() const;
 	std::string description() const;
 	std::string category() const;

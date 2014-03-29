@@ -239,7 +239,7 @@ void resetDefault()
 {
 	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 	{
-		i->default();
+		i->reset();
 	}
 
 	rulesets.clear();

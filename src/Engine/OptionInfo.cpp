@@ -119,7 +119,7 @@ void OptionInfo::save(YAML::Node &node) const
 	}
 }
 
-void OptionInfo::default() const
+void OptionInfo::reset() const
 {
 	switch (_type)
 	{
