@@ -25,7 +25,6 @@
 #include "GameTime.h"
 #include "../Ruleset/RuleCommendations.h"
 #include "../Ruleset/Ruleset.h"
-#include "BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -33,6 +32,11 @@ namespace OpenXcom
 class GameTime;
 class RuleCommendations;
 class Ruleset;
+
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
+enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
+enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
+enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
 
 /**
  * Each entry will have a list of kills, detailed by this class.
@@ -76,11 +80,31 @@ struct Statistics
     std::vector<SoldierDiaryKills*> kills;				// Tracks kills
 	int killsWithFire;									// Tracks kills with fire (currently only Incendiary Rockets)
 
-	void load(const YAML::Node& node);					// Load function
-	YAML::Node save() const;							// Save function
+	void load(const YAML::Node& node)					// Load function
+	{
+		wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
+		if (const YAML::Node &YAMLkills = node["kills"])
+		{
+			for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
+				kills.push_back(new SoldierDiaryKills(*i));
+		}
+		killsWithFire = node["killsWithFire"].as<int>(killsWithFire);
+	}
+	YAML::Node save() const							// Save function
+	{
+		YAML::Node node;
+		node["wasUnconcious"] = wasUnconcious;
+		if (!kills.empty())
+		{
+			for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
+				node["kills"].push_back((*i)->save());
+		}
+		node["killsWithFire"] = killsWithFire;
+		return node;
+	}
 	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
 	Statistics() : wasUnconcious(false), kills(), killsWithFire(0) { }	// Default constructor
-	~Statistics();										// Deconstructor
+	~Statistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
 };
 
 /**

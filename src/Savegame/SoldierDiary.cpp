@@ -24,43 +24,7 @@
 namespace OpenXcom
 {
 
-void Statistics::load(const YAML::Node& node)
-{
-
-	wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
-    if (const YAML::Node &YAMLkills = node["kills"])
-	{
-		for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
-			kills.push_back(new SoldierDiaryKills(*i));
-	}
-	killsWithFire = node["killsWithFire"].as<int>(killsWithFire);
-}
-
-YAML::Node Statistics::save() const
-{
-	YAML::Node node;
-	node["wasUnconcious"] = wasUnconcious;
-    if (!kills.empty())
-	{
-		for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
-			node["kills"].push_back((*i)->save());
-	}
-	node["killsWithFire"] = killsWithFire;
-	return node;
-}
-
-/**
- * Deconstructor
- */
-Statistics::~Statistics()
-{
-    for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i)
-	{
-		delete *i;
-	}
-}
-
-/**
+	/**
  * Initializes a new diary entry from YAML.
  * @param node YAML node.
  */
