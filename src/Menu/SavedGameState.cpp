@@ -87,8 +87,6 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	add(_sortName);
 	add(_sortDate);
 
-	centerAllSurfaces();
-
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));

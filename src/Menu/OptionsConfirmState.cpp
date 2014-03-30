@@ -65,12 +65,12 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&OptionsConfirmState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnYesClick, Options::keyOk);
+	//_btnYes->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&OptionsConfirmState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnNoClick, Options::keyCancel);
+	//_btnNo->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnNoClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
