@@ -595,17 +595,17 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       -Wunknown-pragmas
       -Wmissing-format-attribute
       -Wredundant-decls
-      -Winline
       -Wformat-security
       -Wtype-limits
       -Wclobbered
       -Wempty-body
       -Wlogical-op
       -Wuninitialized
-      -Wshadow
-# These two warning options actually generate way too many warnings. Should be enabled later.
+# These warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
+#      -Winline
+#      -Wshadow
       )
     if ( FATAL_WARNING )
       add_definitions ( -Werror )
