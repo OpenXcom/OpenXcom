@@ -330,3 +330,19 @@ commendations:
     killCriteria:
       - ["Sectoid", "Incendiary Rocket"]
     # Awarded when a soldier kills one Sectoid using Incendiary Rockets
+  - type: STR_MEDAL_NAME_HUMAN
+    description: STR_MEDAL_DESCRIPTION
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["STR_HUMAN"]
+    # Awarded when a soldier kills another human
+  - type: STR_MEDAL_NAME_SOLDIER
+    description: STR_MEDAL_DESCRIPTION
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["STR_HUMAN", "FACTION_PLAYER"]
+      # Awarded when a soldier kills another soldier

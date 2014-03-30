@@ -25,11 +25,10 @@
 #include "GameTime.h"
 #include "../Ruleset/RuleCommendations.h"
 #include "../Ruleset/Ruleset.h"
+#include "BattleUnit.h"
 
 namespace OpenXcom
 {
-
-enum AlienState {KILLED, STUNNED, UNCONCIOUS};
 
 class GameTime;
 class RuleCommendations;
@@ -41,15 +40,15 @@ class Ruleset;
 class SoldierDiaryKills
 {
 private:
-	std::string _alienRank, _alienRace;
-	std::string _weapon, _weaponAmmo;
-	AlienState _alienState;
+	std::string _alienRank, _alienRace, _weapon, _weaponAmmo;
+	UnitFaction _alienFaction;
+	UnitStatus _alienState;
 	
 public:
 	/// Creates a new diary and loads its contents from YAML.
 	SoldierDiaryKills(const YAML::Node& node);
 	/// Creates a diary.
-	SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState);
+	SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction);
 	/// Cleans up the diary.
 	~SoldierDiaryKills();
 	/// Loads the diary information from YAML.
@@ -65,7 +64,9 @@ public:
 	/// Get
 	std::string getWeaponAmmo() const;
 	/// Get
-	AlienState getAlienState() const;
+	std::string getAlienState() const;
+	/// Get
+	std::string getAlienFaction() const;
 
 };
 

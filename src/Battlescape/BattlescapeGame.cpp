@@ -503,7 +503,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	std::string _alienRank, _alienRace;
 	std::string _weapon = "STR_WEAPON_UNKNOWN";
 	std::string _weaponAmmo = "STR_WEAPON_UNKNOWN";
-	AlienState _alienState;
+	UnitStatus _alienState;
 
 	// Fetch the murder weapon
 	if (murderer && murderer->getGeoscapeSoldier())
@@ -576,12 +576,12 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
-			_alienState = KILLED;
+			_alienState = STATUS_DEAD;
 			if (murderer)
 			{
 				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
 				{
-					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState));
+					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getOriginalFaction()));
 					if (_weaponAmmo == "STR_INCENDIARY_ROCKET")
 					{
 						murderer->getMissionStatistics()->killsWithFire++;
@@ -671,10 +671,10 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
-			_alienState = STUNNED;
+			_alienState = STATUS_UNCONSCIOUS;
 			if (murderer && murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER) 
 			{
-				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState));
+				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getOriginalFaction()));
 			}
 			if (victim && victim->getGeoscapeSoldier())
 			{

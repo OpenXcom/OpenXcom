@@ -489,7 +489,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                         for (std::vector<std::string>::const_iterator item = listItem->begin(); item != listItem->end(); ++item)
                         {
                             // See if we find no matches with any criteria. If so, break and try the next kill.
-                            if ((*singleKill)->getAlienRank() != (*item) && (*singleKill)->getAlienRace() != (*item) && (*singleKill)->getWeapon() != (*item) && (*singleKill)->getWeaponAmmo() != (*item))
+                            if ( (*singleKill)->getAlienRank() != (*item) && (*singleKill)->getAlienRace() != (*item) &&
+								 (*singleKill)->getWeapon() != (*item) && (*singleKill)->getWeaponAmmo() != (*item) &&
+								 (*singleKill)->getAlienState() != (*item) && (*singleKill)->getAlienFaction() != (*item) )
                             {
                                 // Remove entries that have no matches.
                                 _tmpKillList.erase(singleKill); // I assume this deletes the current kill from the vector... hopefully.
@@ -808,7 +810,7 @@ SoldierDiaryKills::SoldierDiaryKills(const YAML::Node &node)
 /**
  * Initializes a soldier diary.
  */
-SoldierDiaryKills::SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, AlienState alienState) : _alienRank(alienRank), _alienRace(alienRace), _weapon(weapon), _weaponAmmo(weaponAmmo), _alienState(alienState)
+SoldierDiaryKills::SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction) : _alienRank(alienRank), _alienRace(alienRace), _weapon(weapon), _weaponAmmo(weaponAmmo), _alienState(alienState), _alienFaction(alienFaction)
 {
 }
 
@@ -829,7 +831,8 @@ void SoldierDiaryKills::load(const YAML::Node &node)
 	_alienRace = node["alienRace"].as<std::string>(_alienRace);
 	_weapon = node["weapon"].as<std::string>(_weapon);
 	_weaponAmmo = node["weaponAmmo"].as<std::string>(_weaponAmmo);
-	_alienState = (AlienState)node["alienState"].as<int>();
+	_alienState = (UnitStatus)node["alienState"].as<int>();
+	_alienFaction = (UnitFaction)node["alienFaction"].as<int>();
 
 }
 
@@ -845,6 +848,7 @@ YAML::Node SoldierDiaryKills::save() const
 	node["weapon"] = _weapon;
 	node["weaponAmmo"] = _weaponAmmo;
 	node["alienState"] = (int)_alienState;
+	node["alienFaction"] = (int)_alienFaction;
 	return node;
 }
 
@@ -883,9 +887,35 @@ std::string SoldierDiaryKills::getWeaponAmmo() const
 /**
  *
  */
-AlienState SoldierDiaryKills::getAlienState() const
+std::string SoldierDiaryKills::getAlienState() const
 {
-	return _alienState;
+	switch (_alienState)
+	{
+	case STATUS_DEAD:
+		return "STATUS_DEAD";
+	case STATUS_UNCONSCIOUS:
+		return "STATUS_UNCONSCIOUS";
+	default:
+		return "";
+	}
+}
+
+/**
+ *
+ */
+std::string SoldierDiaryKills::getAlienFaction() const
+{
+	switch (_alienFaction)
+	{
+	case FACTION_PLAYER:
+		return "FACTION_PLAYER";
+	case FACTION_HOSTILE:
+		return "FACTION_HOSTILE";
+	case FACTION_NEUTRAL:
+		return "FACTION_NEUTRAL";
+	default:
+		return "";
+	}
 }
 
 /**
