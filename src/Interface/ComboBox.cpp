@@ -28,6 +28,9 @@
 namespace OpenXcom
 {
 
+const int ComboBox::LIST_MARGIN = 5;
+const int ComboBox::MAX_ITEMS = 7;
+
 /**
  * Sets up a combobox with the specified size and position.
  * @param state Pointer to state the window belongs to.
@@ -36,7 +39,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ComboBox::ComboBox(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _change(0), _state(state), _lang(0), _sel(0), _toggled(false)
+ComboBox::ComboBox(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _change(0), _sel(0), _state(state), _lang(0), _toggled(false)
 {
 	_button = new TextButton(width, height, x, y);
 	_button->setComboBox(this);
