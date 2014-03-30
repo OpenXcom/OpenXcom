@@ -67,17 +67,17 @@ void Screen::makeVideoFlags()
 		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
-		SDL_putenv("SDL_VIDEO_CENTERED=");
+		SDL_putenv((char*) "SDL_VIDEO_CENTERED=");
 	}
 	else if (Options::borderless)
 	{
-		SDL_putenv("SDL_VIDEO_WINDOW_POS=");
-		SDL_putenv("SDL_VIDEO_CENTERED=center");
+		SDL_putenv((char*) "SDL_VIDEO_WINDOW_POS=");
+		SDL_putenv((char*) "SDL_VIDEO_CENTERED=center");
 	}
 	else
 	{
-		SDL_putenv("SDL_VIDEO_WINDOW_POS=");
-		SDL_putenv("SDL_VIDEO_CENTERED=");
+		SDL_putenv((char*) "SDL_VIDEO_WINDOW_POS=");
+		SDL_putenv((char*) "SDL_VIDEO_CENTERED=");
 	}
 
 	// Handle display mode
@@ -88,11 +88,11 @@ void Screen::makeVideoFlags()
 	if (Options::borderless)
 	{
 		_flags |= SDL_NOFRAME;
-		SDL_putenv("SDL_VIDEO_CENTERED=center");
+		SDL_putenv((char*) "SDL_VIDEO_CENTERED=center");
 	}
 	else
 	{
-		SDL_putenv("SDL_VIDEO_CENTERED=");
+		SDL_putenv((char*) "SDL_VIDEO_CENTERED=");
 	}
 
 	_bpp = (isHQXEnabled() || isOpenGLEnabled()) ? 32 : 8;
