@@ -589,7 +589,6 @@ endif ()
 if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
     # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
-      -Wsign-compare
       -Winit-self
       -Wmissing-include-dirs
       -Wunknown-pragmas
@@ -604,6 +603,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
 # These warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
+      -Wno-sign-compare
 #      -Winline
 #      -Wshadow
       )
