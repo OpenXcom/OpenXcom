@@ -173,7 +173,7 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 			std::wstringstream Unit, Status;
 			Unit << Race.str().c_str() << " " << Rank.str().c_str();
 
-			if (_kills->getAlienState() == KILLED)
+			if (_kills->getAlienState() == "STATUS_DEAD")
 			{
 				Status << tr("STR_KILLED").c_str();
 			}

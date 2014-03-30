@@ -742,7 +742,7 @@ int SoldierDiaryEntries::getMissionKillTotal() const
 	int _total = 0;
 	for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionStatistics->kills.begin() ; i != _missionStatistics->kills.end() ; ++i)
 	{
-		if ((*i)->getAlienState() == KILLED)
+		if ((*i)->getAlienState() == "STATUS_DEAD")
 		{
 			_total++;
 		}
@@ -774,7 +774,7 @@ int SoldierDiaryEntries::getMissionStunTotal() const
 	int _total = 0;
 	for (std::vector<SoldierDiaryKills*>::const_iterator i = _missionStatistics->kills.begin() ; i != _missionStatistics->kills.end() ; ++i)
 	{
-		if ((*i)->getAlienState() == STUNNED)
+		if ((*i)->getAlienState() == "STATUS_UNCONSCIOUS")
 		{
 			_total++;
 		}
