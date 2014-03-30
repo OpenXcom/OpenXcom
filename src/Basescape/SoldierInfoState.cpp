@@ -501,7 +501,7 @@ void SoldierInfoState::init()
  */
 void SoldierInfoState::setSoldierId(size_t soldier)
 {
-	_soldier = soldier;
+	_soldierId = soldier;
 }
 
 /**
@@ -576,7 +576,7 @@ void SoldierInfoState::btnSackClick(Action *)
  */
 void SoldierInfoState::btnDiaryClick(Action *)
 {
-	_game->pushState(new SoldierDiaryState(_game, _base, _soldier, this));
+	_game->pushState(new SoldierDiaryState(_game, _base, _soldierId, this));
 }
 
 }

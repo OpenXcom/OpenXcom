@@ -444,9 +444,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                 for (std::vector<std::vector<std::string> >::const_iterator listItem = _killCriteriaList->begin(); listItem != _killCriteriaList->end(); ++listItem)
                 {
                     int count = 0; // Reset count
-                    std::vector<SoldierDiaryKills*> _tmpKillList = _killList; // Reset kills
                     // Loop over the vector of kills
-                    for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _tmpKillList.begin(); singleKill != _tmpKillList.end(); ++singleKill)
+                    for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                     {
                         bool foundMatch = true; // Reset bool
                         // Loop over the vector of items
@@ -457,8 +456,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 								 (*singleKill)->getWeapon() != (*item) && (*singleKill)->getWeaponAmmo() != (*item) &&
 								 (*singleKill)->getAlienState() != (*item) && (*singleKill)->getAlienFaction() != (*item) )
                             {
-                                // Remove entries that have no matches.
-                                _tmpKillList.erase(singleKill); // I assume this deletes the current kill from the vector... hopefully.
                                 foundMatch = false;
                                 break;
                             }

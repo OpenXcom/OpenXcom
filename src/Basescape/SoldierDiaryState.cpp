@@ -86,7 +86,7 @@ SoldierDiaryState::SoldierDiaryState(Game *game, Base *base, size_t soldier, Sol
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryState::btnOkClick, Options::keyCancel);
 
 	_btnKills->setColor(Palette::blockOffset(13)+10);
 	_btnKills->setText(tr("STR_KILLS_UC"));

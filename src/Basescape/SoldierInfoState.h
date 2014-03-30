@@ -58,6 +58,8 @@ public:
 	~SoldierInfoState();
 	/// Updates the soldier info.
 	void init();
+	/// Set the soldier Id.
+	void setSoldierId(size_t soldier);
 	/// Handler for changing text on the Name edit.
 	void edtSoldierChange(Action *action);
 	/// Handler for clicking the OK button.
