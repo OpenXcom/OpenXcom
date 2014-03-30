@@ -43,6 +43,8 @@ namespace OpenXcom
  */
 LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 0)
 {
+	centerAllSurfaces();
+	
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);

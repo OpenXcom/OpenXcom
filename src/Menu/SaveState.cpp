@@ -49,10 +49,6 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 
 	add(_edtSave);
 	add(_btnSaveGame);
-	
-	centerAllSurfaces();
-
-	centerAllSurfaces();
 
 	// Set up objects
 
@@ -69,6 +65,8 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
+
+	centerAllSurfaces();
 }
 
 /**
