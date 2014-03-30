@@ -76,11 +76,13 @@ public:
 
 struct Statistics
 {
+	// Variables
 	bool wasUnconcious;									// Tracks if the soldier fell unconcious
     std::vector<SoldierDiaryKills*> kills;				// Tracks kills
-	int killsWithFire;									// Tracks kills with fire (currently only Incendiary Rockets)
 
-	void load(const YAML::Node& node)					// Load function
+	/// Functions
+	// Load function
+	void load(const YAML::Node& node)
 	{
 		wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
 		if (const YAML::Node &YAMLkills = node["kills"])
@@ -88,9 +90,9 @@ struct Statistics
 			for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
 				kills.push_back(new SoldierDiaryKills(*i));
 		}
-		killsWithFire = node["killsWithFire"].as<int>(killsWithFire);
 	}
-	YAML::Node save() const							// Save function
+	// Save function
+	YAML::Node save() const
 	{
 		YAML::Node node;
 		node["wasUnconcious"] = wasUnconcious;
@@ -99,11 +101,10 @@ struct Statistics
 			for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
 				node["kills"].push_back((*i)->save());
 		}
-		node["killsWithFire"] = killsWithFire;
 		return node;
 	}
 	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
-	Statistics() : wasUnconcious(false), kills(), killsWithFire(0) { }	// Default constructor
+	Statistics() : wasUnconcious(false), kills() { }	// Default constructor
 	~Statistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
 };
 

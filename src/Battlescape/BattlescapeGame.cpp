@@ -581,11 +581,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
 				{
-					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getOriginalFaction()));
-					if (_weaponAmmo == "STR_INCENDIARY_ROCKET")
-					{
-						murderer->getMissionStatistics()->killsWithFire++;
-					}
+					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getFaction()));
 				}
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
@@ -674,7 +670,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			_alienState = STATUS_UNCONSCIOUS;
 			if (murderer && murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER) 
 			{
-				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getOriginalFaction()));
+				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getFaction()));
 			}
 			if (victim && victim->getGeoscapeSoldier())
 			{

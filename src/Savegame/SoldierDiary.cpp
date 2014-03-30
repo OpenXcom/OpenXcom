@@ -115,6 +115,7 @@ void SoldierDiary::updateDiary()
 	for (std::vector<SoldierDiaryKills*>::const_iterator j = latestEntry->getMissionStatistics()->kills.begin() ; j != latestEntry->getMissionStatistics()->kills.end() ; ++j)
     {
 		_killList.push_back(*j);
+		if ((*j)->getAlienFaction() != "FACTION_HOSTILE") continue;
         _alienRankTotal[(*j)->getAlienRank().c_str()]++;
         _alienRaceTotal[(*j)->getAlienRace().c_str()]++;
         _weaponTotal[(*j)->getWeapon().c_str()]++;
@@ -153,7 +154,6 @@ void SoldierDiary::updateDiary()
     {
         _unconciousTotal++;
     }
-	_killsWithFireTotal += latestEntry->getMissionStatistics()->killsWithFire;
 }
 
 /**
