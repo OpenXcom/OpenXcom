@@ -158,6 +158,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_autoShots = node["autoShots"].as<int>(_autoShots);
 	_shotgunPellets = node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
+	_strengthApplied = node["strengthApplied"].as<bool>(_strengthApplied);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
