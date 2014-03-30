@@ -87,6 +87,8 @@ extraStrings:
      STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Given to a soldier who has used incendiary weapons to kill aliens."
      STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Distinguished Service"
      STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed alien soldirs of all kinds."
+     STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
+     STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -317,3 +319,10 @@ commendations:
       - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
       - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
       - ["STR_LIVE_LEADER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+  - type: STR_MEDAL_BOLTS_CROSS_NAME
+    description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
+    sprite: 13
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
