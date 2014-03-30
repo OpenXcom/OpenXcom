@@ -426,8 +426,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			terrorSite->setId(game.getId("STR_TERROR_SITE"));
 			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);
 			terrorSite->setAlienRace(_race);
-			const City *city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
-			assert(city);
+			assert(rules.locateCity(ufo.getLongitude(), ufo.getLatitude()));
 			game.getTerrorSites()->push_back(terrorSite);
 			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 			{
@@ -507,7 +506,6 @@ void AlienMission::ufoShotDown(Ufo &ufo, Game &, const Globe &)
  */
 void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 {
-	const Ruleset &rules = *engine.getRuleset();
 	switch (ufo.getStatus())
 	{
 	case Ufo::FLYING:
