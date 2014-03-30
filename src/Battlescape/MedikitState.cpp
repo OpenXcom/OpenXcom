@@ -45,7 +45,7 @@ namespace OpenXcom
 template<typename type>
 std::wstring toString (type t)
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << t;
 	return ss.str();
 }
@@ -125,7 +125,7 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_item = action->weapon;
 	_surface = new InteractiveSurface(320, 200);
 
-	if (Screen::getDY() > 50)
+	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
 		SDL_Rect current;
@@ -174,7 +174,7 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_woundTxt->setColor(Palette::blockOffset(2));
 	_woundTxt->setHighContrast(true);
 	endButton->onMouseClick((ActionHandler)&MedikitState::onEndClick);
-	endButton->onKeyboardPress((ActionHandler)&MedikitState::onEndClick, (SDLKey)Options::getInt("keyCancel"));
+	endButton->onKeyboardPress((ActionHandler)&MedikitState::onEndClick, Options::keyCancel);
 	healButton->onMouseClick((ActionHandler)&MedikitState::onHealClick);
 	stimulantButton->onMouseClick((ActionHandler)&MedikitState::onStimulantClick);
 	pkButton->onMouseClick((ActionHandler)&MedikitState::onPainKillerClick);

@@ -21,6 +21,7 @@
 #include "Text.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
+#include "ComboBox.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ Sound *TextButton::soundPress = 0;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false)
+TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false), _comboBox(0)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
@@ -50,6 +51,18 @@ TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface
 TextButton::~TextButton()
 {
 	delete _text;
+}
+
+bool TextButton::isButtonHandled(Uint8 button)
+{
+	if (_comboBox != 0)
+	{
+		return (button == SDL_BUTTON_LEFT);
+	}
+	else
+	{
+		return InteractiveSurface::isButtonHandled(button);
+	}
 }
 
 /**
@@ -270,6 +283,11 @@ void TextButton::mousePress(Action *action, State *state)
 			soundPress->play();
 		}
 
+		if (_comboBox)
+		{
+			_comboBox->toggle();
+		}
+
 		draw();
 		//_redraw = true;
 	}
@@ -289,6 +307,23 @@ void TextButton::mouseRelease(Action *action, State *state)
 		//_redraw = true;
 	}
 	InteractiveSurface::mouseRelease(action, state);
+}
+
+/**
+ * Hooks up the button to work as part of an existing combobox,
+ * toggling its state when it's pressed.
+ */
+void TextButton::setComboBox(ComboBox *comboBox)
+{
+	_comboBox = comboBox;
+	if (_comboBox)
+	{
+		_text->setX(-8);
+	}
+	else
+	{
+		_text->setX(0);
+	}
 }
 
 }

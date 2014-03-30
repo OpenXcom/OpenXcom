@@ -178,7 +178,7 @@ void UnitDieBState::think()
 					{
 						game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 					}
-					else if (Options::getBool("battleNotifyDeath"))
+					else if (Options::battleNotifyDeath)
 					{
 						game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 					}
@@ -190,7 +190,7 @@ void UnitDieBState::think()
 			}
 		}
 		// if all units from either faction are killed - auto-end the mission.
-		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd"))
+		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::battleAutoEnd)
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
@@ -224,7 +224,7 @@ void UnitDieBState::convertUnitToCorpse()
 	Position lastPosition = _unit->getPosition();
 	int size = _unit->getArmor()->getSize();
 	BattleItem *itemToKeep = 0;
-	bool dropItems = !Options::getBool("weaponSelfDestruction") || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
+	bool dropItems = !Options::weaponSelfDestruction || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
 	// move inventory from unit to the ground for non-large units
 	if (size == 1 && dropItems)
 	{

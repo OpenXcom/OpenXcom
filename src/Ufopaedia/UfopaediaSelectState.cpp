@@ -69,7 +69,7 @@ namespace OpenXcom
 		_btnOk->setColor(Palette::blockOffset(15)-1);
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaSelectState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaSelectState::btnOkClick,(SDLKey)Options::getInt("keyCancel"));
+		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaSelectState::btnOkClick,Options::keyCancel);
 
 		_lstSelection->setColor(Palette::blockOffset(8)+5);
 		_lstSelection->setArrowColor(Palette::blockOffset(15)-1);

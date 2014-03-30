@@ -53,7 +53,7 @@ namespace OpenXcom
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0)
 {
 	// this is the number of pixels the sprite will move between frames
-	_speed = Options::getInt("battleFireSpeed");
+	_speed = Options::battleFireSpeed;
 
 	if (_action.weapon)
 	{
@@ -257,7 +257,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		double modifier = 0.0;
 		int upperLimit = weapon->getAimRange();
 		int lowerLimit = weapon->getMinRange();
-		if (Options::getBool("battleUFOExtenderAccuracy"))
+		if (Options::battleUFOExtenderAccuracy)
 		{
 			if (_action.type == BA_AUTOSHOT)
 			{

@@ -392,11 +392,11 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 		_btnPrev->setText(L"<<");
 		_btnPrev->setColor(Palette::blockOffset(4));
 		_btnPrev->onMouseClick((ActionHandler)&UnitInfoState::btnPrevClick);
-		_btnPrev->onKeyboardPress((ActionHandler)&UnitInfoState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+		_btnPrev->onKeyboardPress((ActionHandler)&UnitInfoState::btnPrevClick, Options::keyBattlePrevUnit);
 		_btnNext->setText(L">>");
 		_btnNext->setColor(Palette::blockOffset(4));
 		_btnNext->onMouseClick((ActionHandler)&UnitInfoState::btnNextClick);
-		_btnNext->onKeyboardPress((ActionHandler)&UnitInfoState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+		_btnNext->onKeyboardPress((ActionHandler)&UnitInfoState::btnNextClick, Options::keyBattleNextUnit);
 	}
 
 }
@@ -415,7 +415,7 @@ UnitInfoState::~UnitInfoState()
  */
 void UnitInfoState::init()
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
 	_barTimeUnits->setMax(_unit->getStats()->tu);
@@ -487,7 +487,7 @@ void UnitInfoState::init()
 	_barStrength->setMax(_unit->getStats()->strength);
 	_barStrength->setValue(_unit->getStats()->strength);
 
-	if (_unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (_unit->getStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		ss.str(L"");
 		ss << _unit->getStats()->psiStrength;
@@ -581,16 +581,16 @@ void UnitInfoState::handle(Action *action)
 	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
+		if (action->getDetails()->key.keysym.sym == Options::keyBattleNextUnit)
 		{
 			if (!_mindProbe) btnNextClick(action);
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
+		else if (action->getDetails()->key.keysym.sym == Options::keyBattlePrevUnit)
 		{
 			if (!_mindProbe) btnPrevClick(action);
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel") ||
-				 action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
+		else if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
+				 action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
 			_game->popState();
 		}

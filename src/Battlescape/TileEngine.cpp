@@ -232,7 +232,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	int direction;
 	bool swap;
 	std::vector<Position> _trajectory;
-	if (_save->getStrafeSetting() && (unit->getTurretType() > -1)) {
+	if (Options::strafe && (unit->getTurretType() > -1)) {
 		direction = unit->getTurretDirection();
 	}
 	else
@@ -1023,7 +1023,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	}
 	else if (part == V_UNIT)
 	{
-		int dmgRng = (type == DT_HE || Options::getBool("TFTDDamage")) ? 50 : 100;
+		int dmgRng = (type == DT_HE || Options::TFTDDamage) ? 50 : 100;
 		int min = power * (100 - dmgRng) / 100;
 		int max = power * (100 + dmgRng) / 100;
 		const int rndPower = RNG::generate(min, max);
@@ -1104,7 +1104,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		power /= 2;
 	}
 
-	int exHeight = std::max(0, std::min(3, Options::getInt("battleExplosionHeight")));
+	int exHeight = std::max(0, std::min(3, Options::battleExplosionHeight));
 	int vertdec = 1000; //default flat explosion
 
 	switch (exHeight)
@@ -1176,7 +1176,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						int dmgRng = (type == DT_HE || Options::getBool("TFTDDamage")) ? 50 : 100;
+						int dmgRng = (type == DT_HE || Options::TFTDDamage) ? 50 : 100;
 						int min = power_ * (100 - dmgRng) / 100;
 						int max = power_ * (100 + dmgRng) / 100;
 						switch (type)
@@ -2395,7 +2395,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			victim->allowReselect();
 			victim->abortTurn(); // resets unit status to STANDING
 			// if all units from either faction are mind controlled - auto-end the mission.
-			if (_save->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd") && Options::getBool("allowPsionicCapture"))
+			if (_save->getSide() == FACTION_PLAYER && Options::battleAutoEnd && Options::allowPsionicCapture)
 			{
 				int liveAliens = 0;
 				int liveSoldiers = 0;

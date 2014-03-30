@@ -23,6 +23,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/Text.h"
 #include "../Interface/Frame.h"
 
 namespace OpenXcom
@@ -35,18 +36,29 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(0.0), _min(0), _max(100), _pressed(false)
+Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _pos(0.0), _min(0), _max(100), _pressed(false), _change(0)
 {
 	_thickness = 5;
-	_frame = new Frame(width, _thickness, x, y + (height - _thickness) / 2);
-	_button = new TextButton(19, height, x, y);
+	_textness = 8;
+	_txtMinus = new Text(_textness, height - 2, x - 1, y);
+	_txtPlus = new Text(_textness, height - 2, x + width - _textness, y);
+	_frame = new Frame(width - _textness*2, _thickness, x + _textness, y + (height - _thickness) / 2);
+	_button = new TextButton(10, height, x, y);
 
 	_frame->setThickness(_thickness);
 
-	_minX = getX();
-	_maxX = getX() + getWidth() - _button->getWidth();
+	_txtMinus->setAlign(ALIGN_CENTER);
+	_txtMinus->setVerticalAlign(ALIGN_MIDDLE);
+	_txtMinus->setText(L"-");
 
-	setValue(_value);
+	_txtPlus->setAlign(ALIGN_CENTER);
+	_txtPlus->setVerticalAlign(ALIGN_MIDDLE);
+	_txtPlus->setText(L"+");
+
+	_minX = _frame->getX();
+	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();
+
+	setValue(_pos);
 }
 
 /**
@@ -54,31 +66,37 @@ Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, 
  */
 Slider::~Slider()
 {
+	delete _txtMinus;
+	delete _txtPlus;
 	delete _frame;
 	delete _button;
 }
 
 /**
-* Changes the position of the surface in the X axis.
-* @param x X position in pixels.
-*/
+ * Changes the position of the surface in the X axis.
+ * @param x X position in pixels.
+ */
 void Slider::setX(int x)
 {
 	Surface::setX(x);
-	_frame->setX(getX());
+	_txtMinus->setX(x - 1);
+	_txtPlus->setX(x + getWidth() - _textness);
+	_frame->setX(getX() + _textness);
 
-	_minX = getX();
-	_maxX = getX() + getWidth() - _button->getWidth();
-	setValue(_value);
+	_minX = _frame->getX();
+	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();
+	setValue(_pos);
 }
 
 /**
-* Changes the position of the surface in the Y axis.
-* @param y Y position in pixels.
-*/
+ * Changes the position of the surface in the Y axis.
+ * @param y Y position in pixels.
+ */
 void Slider::setY(int y)
 {
 	Surface::setY(y);
+	_txtMinus->setY(y);
+	_txtPlus->setY(y);
 	_frame->setY(getY() + (getHeight() - _thickness) / 2);
 	_button->setY(getY());
 }
@@ -94,6 +112,8 @@ void Slider::setY(int y)
  */
 void Slider::initText(Font *big, Font *small, Language *lang)
 {
+	_txtMinus->initText(big, small, lang);
+	_txtPlus->initText(big, small, lang);
 	_button->initText(big, small, lang);
 }
 
@@ -104,6 +124,8 @@ void Slider::initText(Font *big, Font *small, Language *lang)
  */
 void Slider::setHighContrast(bool contrast)
 {
+	_txtMinus->setHighContrast(contrast);
+	_txtPlus->setHighContrast(contrast);
 	_frame->setHighContrast(contrast);
 	_button->setHighContrast(contrast);
 }
@@ -114,6 +136,8 @@ void Slider::setHighContrast(bool contrast)
  */
 void Slider::setColor(Uint8 color)
 {
+	_txtMinus->setColor(color);
+	_txtPlus->setColor(color);
 	_frame->setColor(color);
 	_button->setColor(color);
 }
@@ -136,49 +160,83 @@ Uint8 Slider::getColor() const
 void Slider::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
+	_txtMinus->setPalette(colors, firstcolor, ncolors);
+	_txtPlus->setPalette(colors, firstcolor, ncolors);
 	_frame->setPalette(colors, firstcolor, ncolors);
 	_button->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
-* Automatically updates the slider
-* when the mouse moves.
-* @param action Pointer to an action.
-* @param state State that the action handlers belong to.
-*/
+ * Automatically updates the slider
+ * when the mouse moves.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
 void Slider::handle(Action *action, State *state)
 {
 	InteractiveSurface::handle(action, state);
 	//_button->handle(action, state);
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorX = (int) floor(action->getDetails()->motion.x / action->getXScale());
+		int cursorX = (int)floor(action->getDetails()->motion.x / action->getXScale());
 		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
-		double val = (buttonX - getX()) / (_maxX - _minX);
-		setValue(val);
+		double pos = (buttonX - _minX) / (_maxX - _minX);
+		int value = _min + (_max - _min) * pos;
+		setValue(value);
+		if (_change)
+		{
+			(state->*_change)(action);
+		}
 	}
 }
 
 /**
-* Moves the slider to the new value position.
-* @param value New value.
-*/
-void Slider::setValue(double value)
+ * Moves the slider to the new position.
+ * @param value New value.
+ */
+void Slider::setPosition(double pos)
 {
-	_value = std::min(std::max(0.0, value), 1.0);
-	_button->setX((int) floor(getX() + (_maxX - _minX) * _value));
-
-	std::wstringstream ss;
-	int val = _min + _value * (_max - _min);
-	ss << val;
-	_button->setText(ss.str());
+	_pos = pos;
+	_button->setX((int)floor(_minX + (_maxX - _minX) * _pos));
 }
 
 /**
-* Returns the current value of the slider.
-* @return Value.
-*/
-double Slider::getValue() const
+ * Changes the range of values the slider
+ * can contain.
+ * @param min Minimum value.
+ * @param max Maximum value.
+ */
+void Slider::setRange(int min, int max)
+{
+	_min = min;
+	_max = max;
+	setValue(_value);
+}
+
+/**
+ * Changes the current value of the slider and
+ * positions it appropriately.
+ * @param value New value.
+ */
+void Slider::setValue(int value)
+{
+	if (_min < _max)
+	{
+		_value = std::min(std::max(_min, value), _max);
+	}
+	else
+	{
+		_value = std::min(std::max(_max, value), _min);
+	}
+	double pos = (double)(_value - _min) / (double)(_max - _min);
+	setPosition(pos);
+}
+
+/**
+ * Returns the current value of the slider.
+ * @return Value.
+ */
+int Slider::getValue() const
 {
 	return _value;
 }
@@ -192,6 +250,8 @@ void Slider::blit(Surface *surface)
 	Surface::blit(surface);
 	if (_visible && !_hidden)
 	{
+		_txtMinus->blit(surface);
+		_txtPlus->blit(surface);
 		_frame->blit(surface);
 		_button->blit(surface);
 	}
@@ -209,15 +269,23 @@ void Slider::mousePress(Action *action, State *state)
 }
 
 /**
-* The slider stops moving when the button is released.
-* @param action Pointer to an action.
-* @param state State that the action handlers belong to.
-*/
+ * The slider stops moving when the button is released.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
 void Slider::mouseRelease(Action *action, State *state)
 {
 	InteractiveSurface::mouseRelease(action, state);
 	_pressed = false;
 }
 
+/**
+ * Sets a function to be called every time the slider's value changes.
+ * @param handler Action handler.
+ */
+void Slider::onChange(ActionHandler handler)
+{
+	_change = handler;
+}
 
 }

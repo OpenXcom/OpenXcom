@@ -52,7 +52,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node
 																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
 																				_wasHit(false), _didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
-	_traceAI = _save->getTraceSetting();
+	_traceAI = Options::traceAI;
 
 	_intelligence = _unit->getIntelligence();
 	_escapeAction = new BattleAction();

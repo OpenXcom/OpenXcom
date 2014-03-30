@@ -51,8 +51,7 @@ private:
 	RuleResearch * _rule;
 	void buildUi ();
 	Timer *_timerMore, *_timerLess;
-	InteractiveSurface *_surface;
-	int _changeValueByMouseWheel;
+	InteractiveSurface *_surfaceScientists;
 public:
 	/// Creates the ResearchProject state.
 	ResearchInfoState(Game *game, Base *base, RuleResearch * rule);

@@ -30,6 +30,7 @@ class TextButton;
 class Text;
 class TextEdit;
 class Bar;
+class Soldier;
 
 /**
  * Soldier Info screen that shows all the
@@ -39,7 +40,8 @@ class SoldierInfoState : public State
 {
 private:
 	Base *_base;
-	size_t _soldier;
+	size_t _soldierId;
+	Soldier *_soldier;
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;
@@ -51,15 +53,13 @@ private:
 	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength, *_barPsiStrength, *_barPsiSkill;
 public:
 	/// Creates the Soldier Info state.
-	SoldierInfoState(Game *game, Base *base, size_t soldier);
+	SoldierInfoState(Game *game, Base *base, size_t soldierId);
 	/// Cleans up the Soldier Info state.
 	~SoldierInfoState();
 	/// Updates the soldier info.
 	void init();
-	/// Set the soldier Id.
-	void setSoldierId(size_t soldier);
-	/// Handler for pressing a key on the Name edit.
-	void edtSoldierKeyPress(Action *action);
+	/// Handler for changing text on the Name edit.
+	void edtSoldierChange(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Previous button.

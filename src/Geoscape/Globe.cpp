@@ -269,7 +269,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_blinkTimer = new Timer(100);
 	_blinkTimer->onTimer((SurfaceHandler)&Globe::blink);
 	_blinkTimer->start();
-	_rotTimer = new Timer(20);
+	_rotTimer = new Timer(Options::globeScrollSpeed);
 	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
 
 	// Globe markers
@@ -760,7 +760,7 @@ bool Globe::insideLand(double lon, double lat) const
  */
 void Globe::toggleDetail()
 {
-	_game->getSavedGame()->toggleDetail();
+	Options::globeDetail = !Options::globeDetail;
 	drawDetail();
 }
 
@@ -995,6 +995,7 @@ void Globe::draw()
 	drawShadow();
 	drawMarkers();
 	drawDetail();
+	drawFlights();
 }
 
 
@@ -1047,7 +1048,7 @@ Cord Globe::getSunDirection(double lon, double lat) const
 	const double rot = curTime * 2*M_PI;
 	double sun;
 
-	if (Options::getBool("globeSeasons"))
+	if (Options::globeSeasons)
 	{
 		const int MonthDays1[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 		const int MonthDays2[] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366};
@@ -1105,7 +1106,7 @@ void Globe::drawShadow()
 }
 
 
-void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16)
+void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, int shade)
 {
 	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
 
@@ -1155,11 +1156,11 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
 				//this pixel is ocean
-				tcol = Palette::blockOffset(12) + 12;
+				tcol = Palette::blockOffset(12) + shade + 8;
 			}
 			else
 			{
-				const int e = tcol+4;
+				const int e = tcol + shade;
 				if(e > d + helper::ColorShade)
 					tcol = d + helper::ColorShade;
 				else tcol = e;
@@ -1172,26 +1173,21 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 	}
 }
 
-
+/**
+ * Draws the radar ranges of player bases on the globe.
+ */
 void Globe::drawRadars()
 {
 	_radars->clear();
-	if (!_game->getSavedGame()->getRadarLines())
+	if (!Options::globeRadarLines)
 		return;
-/*	Text *label = new Text(80, 9, 0, 0);
-	label->setPalette(getPalette());
-	label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(15)-1);
-*/
+
 	double x, y;
 	double tr, range;
 	double lat, lon;
 	std::vector<double> ranges;
 
-//	lock();
 	_radars->lock();
-
 
 	if (_hover)
 	{
@@ -1201,7 +1197,7 @@ void Globe::drawRadars()
 			range=_game->getRuleset()->getBaseFacility(*i)->getRadarRange();
 			range = range * (1 / 60.0) * (M_PI / 180);
 			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
-			if (Options::getBool("globeAllRadarsOnBaseBuild")) ranges.push_back(range);
+			if (Options::globeAllRadarsOnBaseBuild) ranges.push_back(range);
 		}
 	}
 
@@ -1216,7 +1212,7 @@ void Globe::drawRadars()
 		{
 			polarToCart(lon, lat, &x, &y);
 
-			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
+			if (_hover && Options::globeAllRadarsOnBaseBuild)
 			{
 				for (size_t j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
 			}
@@ -1253,8 +1249,6 @@ void Globe::drawRadars()
 	}
 
 	_radars->unlock();
-//	unlock();
-//	delete label;
 }
 
 /**
@@ -1278,7 +1272,7 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 			continue;
 		}
 		if (!pointBack(lon1,lat1))
-			XuLine(_radars, this, x, y, x2, y2, 249);
+			XuLine(_radars, this, x, y, x2, y2, 4);
 		x2=x; y2=y;
 	}
 }
@@ -1301,13 +1295,9 @@ void Globe::setNewBaseHoverPos(double lon, double lat)
 	_hoverLon=lon;
 	_hoverLat=lat;
 }
-bool Globe::getShowRadar(void)
-{
-	return _game->getSavedGame()->getRadarLines();
-}
 
 
-void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour)
+void Globe::drawVHLine(Surface *surface, double lon1, double lat1, double lon2, double lat2, Uint8 color)
 {
 	double sx = lon2 - lon1;
 	double sy = lat2 - lat1;
@@ -1342,7 +1332,7 @@ void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int c
 		{
 			polarToCart(ln1,lt1,&x1,&y1);
 			polarToCart(ln2,lt2,&x2,&y2);
-			_countries->drawLine(x1, y1, x2, y2, colour);
+			surface->drawLine(x1, y1, x2, y2, color);
 		}
 	}
 }
@@ -1356,7 +1346,7 @@ void Globe::drawDetail()
 {
 	_countries->clear();
 
-	if (!_game->getSavedGame()->getDetail())
+	if (!Options::globeDetail)
 		return;
 
 	// Draw the country borders
@@ -1469,10 +1459,10 @@ void Globe::drawDetail()
 					double lat2 = (*i)->getRules()->getLatMax().at(k);
 					double lat1 = (*i)->getRules()->getLatMin().at(k);
 
-					drawVHLine(lon1, lat1, lon2, lat1, color);
-					drawVHLine(lon1, lat2, lon2, lat2, color);
-					drawVHLine(lon1, lat1, lon1, lat2, color);
-					drawVHLine(lon2, lat1, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
+					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
+					drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
 				}
 			}
 		}
@@ -1489,10 +1479,10 @@ void Globe::drawDetail()
 					double lat2 = (*i)->getRules()->getLatMax().at(k);
 					double lat1 = (*i)->getRules()->getLatMin().at(k);
 
-					drawVHLine(lon1, lat1, lon2, lat1, color);
-					drawVHLine(lon1, lat2, lon2, lat2, color);
-					drawVHLine(lon1, lat1, lon1, lat2, color);
-					drawVHLine(lon2, lat1, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
+					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
+					drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
 				}
 			}
 		}
@@ -1507,18 +1497,14 @@ void Globe::drawDetail()
 					for(std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
 					{
 						double lon2 = (*k).lonMax * M_PI / 180;
-							//(*i)->getRules()->getLonMax().at(k);
 						double lon1 = (*k).lonMin * M_PI / 180;
-							//(*i)->getRules()->getLonMin().at(k);
 						double lat2 = (*k).latMax * M_PI / 180;
-							//(*i)->getRules()->getLatMax().at(k);
 						double lat1 = (*k).latMin * M_PI / 180;
-							//(*i)->getRules()->getLatMin().at(k);
 
-						drawVHLine(lon1, lat1, lon2, lat1, color);
-						drawVHLine(lon1, lat2, lon2, lat2, color);
-						drawVHLine(lon1, lat1, lon1, lat2, color);
-						drawVHLine(lon2, lat1, lon2, lat2, color);
+						drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
+						drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
+						drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
+						drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
 					}
 				}
 			}
@@ -1533,6 +1519,97 @@ void Globe::drawDetail()
 			canSwitchDebugType = false;
 		}
 	}
+}
+
+void Globe::drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2)
+{
+	double sx = lon2 - lon1;
+	double sy = lat2 - lat1;
+	double ln1, lt1, ln2, lt2, dln, dlt;
+	double slen, dlen;
+	int seg;
+	Sint16 x1, y1, x2, y2;
+
+	if (sx<0) sx += 2*M_PI;
+
+	if (fabs(sx)<0.01)
+	{
+		seg = abs( sy/(2*M_PI)*48 );
+		if (seg == 0) ++seg;
+	}
+	else
+	{
+		seg = abs( sx/(2*M_PI)*96 );
+		if (seg == 0) ++seg;
+	}
+	sx /= seg;
+	sy /= seg;
+	slen = sqrt(sx * sx + sy * sy);
+
+	ln2 = lon1;
+	lt2 = lat1;
+
+	for (int i = 0; i < seg; ++i)
+	{
+		ln1 = ln2;
+		lt1 = lt2;
+		dln = sin(lon2 - ln1) * cos(lat2);
+		dlt = cos(lt1) * sin(lat2) - sin(lt1) * cos(lat2) * cos(lon2 - ln1);
+		dlen = sqrt(dln * dln + dlt * dlt);
+		dlt = dlt / dlen * slen;
+		dln = dln / dlen * slen / cos(lt1 + dlt);
+		ln2 = ln1 + dln;
+		lt2 = lt2 + dlt;
+
+		if (M_PI - fabs(fabs(lon2 - ln2) - M_PI) < 0.05 && M_PI - fabs(fabs(lat2 - lt2) - M_PI) < 0.05)
+		{
+			ln2 = lon2;
+			lt2 = lat2;
+			i = seg;
+		}
+
+		if (!pointBack(ln2, lt2) && !pointBack(ln1, lt1))
+		{
+			polarToCart(ln1,lt1,&x1,&y1);
+			polarToCart(ln2,lt2,&x2,&y2);
+			XuLine(surface, this, x1, y1, x2, y2, 8);
+		}
+	}
+}
+
+/**
+ * Draws the flight paths of player craft flying on the globe.
+ */
+void Globe::drawFlights()
+{
+	//_radars->clear();
+
+	if (!Options::globeFlightPaths)
+		return;
+
+	// Lock the surface
+	_radars->lock();
+
+	// Draw the craft flight paths
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		{
+			// Hide crafts docked at base
+			if ((*j)->getStatus() != "STR_OUT" || (*j)->getDestination() == 0 /*|| pointBack((*j)->getLongitude(), (*j)->getLatitude())*/)
+				continue;
+			
+			double lon1 = (*j)->getLongitude();
+			double lon2 = (*j)->getDestination()->getLongitude();
+			double lat1 = (*j)->getLatitude();
+			double lat2 = (*j)->getDestination()->getLatitude();
+
+			drawPath(_radars, lon1, lat1, lon2, lat2);
+		}
+	}
+
+	// Unlock the surface
+	_radars->unlock();
 }
 
 /**
@@ -1728,11 +1805,11 @@ void Globe::mouseClick(Action *action, State *state)
 void Globe::keyboardPress(Action *action, State *state)
 {
 	InteractiveSurface::keyboardPress(action, state);
-	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleDetail"))
+	if (action->getDetails()->key.keysym.sym == Options::keyGeoToggleDetail)
 	{
 		toggleDetail();
 	}
-	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleRadar"))
+	if (action->getDetails()->key.keysym.sym == Options::keyGeoToggleRadar)
 	{
 		toggleRadarLines();
 	}
@@ -1779,14 +1856,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
  */
 bool Globe::isZoomedInToMax() const
 {
-	if(_zoom == _radius.size() - 1)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (_zoom == _radius.size() - 1);
 }
 
 /**
@@ -1795,19 +1865,12 @@ bool Globe::isZoomedInToMax() const
  */
 bool Globe::isZoomedOutToMax() const
 {
-	if(_zoom == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (_zoom == 0);
 }
 
 void Globe::toggleRadarLines()
 {
-	_game->getSavedGame()->toggleRadarLines();
+	Options::globeRadarLines = !Options::globeRadarLines;
 	drawRadars();
 }
 

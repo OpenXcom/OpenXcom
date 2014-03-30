@@ -103,7 +103,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	Target::load(node);
 	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 
-	if (!newGame || !Options::getBool("customInitialBase") || newBattleGame)
+	if (!newGame || !Options::customInitialBase || newBattleGame)
 	{
 		for (YAML::const_iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 		{
@@ -1025,7 +1025,7 @@ int Base::getUsedContainment() const
 			}
 		}
 	}
-	if (Options::getBool("alienContainmentLimitEnforced"))
+	if (Options::alienContainmentLimitEnforced)
 	{
 		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 		{
@@ -1372,8 +1372,8 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			while (!(*facility)->getCraft()->getItems()->getContents()->empty())
 			{
 				std::map<std::string, int>::iterator i = (*facility)->getCraft()->getItems()->getContents()->begin();
-				_items->addItem((*i).first, (*i).second);
-				(*facility)->getCraft()->getItems()->removeItem((*i).first, (*i).second);
+				_items->addItem(i->first, i->second);
+				(*facility)->getCraft()->getItems()->removeItem(i->first, i->second);
 			}
 			for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 			{

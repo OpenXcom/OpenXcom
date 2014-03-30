@@ -134,7 +134,7 @@ namespace OpenXcom
 	{
 		if (stat != 0)
 		{
-			std::wstringstream ss;
+			std::wostringstream ss;
 			if (plus && stat > 0)
 				ss << L"+";
 			ss << stat;

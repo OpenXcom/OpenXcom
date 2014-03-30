@@ -54,9 +54,6 @@ namespace OpenXcom
  */
 PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f), _itemOffset(0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
-
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(148, 16, 8, 176);
@@ -92,12 +89,12 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&PurchaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&PurchaseState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PurchaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&PurchaseState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -127,7 +124,6 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
@@ -137,15 +133,15 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
 	_qtys.push_back(0);
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << _base->getTotalSoldiers();
 	_lstItems->addRow(4, tr("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
 	_qtys.push_back(0);
-	std::wstringstream ss2;
+	std::wostringstream ss2;
 	ss2 << _base->getTotalScientists();
 	_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
 	_qtys.push_back(0);
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
@@ -165,7 +161,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 				if ((*c)->getRules()->getType() == *i)
 					crafts++;
 			}
-			std::wstringstream ss4;
+			std::wostringstream ss4;
 			ss4 << crafts;
 			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
@@ -178,7 +174,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
-			std::wstringstream ss5;
+			std::wostringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);
 			std::wstring item = tr(*i);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
@@ -227,17 +223,14 @@ void PurchaseState::think()
  */
 bool PurchaseState::isExcluded(std::string item)
 {
-	std::vector<std::string> excludes = Options::getPurchaseExclusions();
-	bool exclude = false;
-	for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); ++s)
+	for (std::vector<std::string>::const_iterator s = Options::purchaseExclusions.begin(); s != Options::purchaseExclusions.end(); ++s)
 	{
 		if (item == *s)
 		{
-			exclude = true;
-			break;
+			return true;
 		}
 	}
-	return exclude;
+	return false;
 }
 
 /**
@@ -397,22 +390,20 @@ void PurchaseState::lstItemsMousePress(Action *action)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			increaseByValue(_changeValueByMouseWheel);
+			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			decreaseByValue(_changeValueByMouseWheel);
+			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -560,7 +551,7 @@ void PurchaseState::decreaseByValue(int change)
 void PurchaseState::updateItemStrings()
 {
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
 	if (_qtys[_sel] > 0)

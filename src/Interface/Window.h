@@ -43,6 +43,7 @@ class Window : public Surface
 {
 private:
 	static const double POPUP_SPEED;
+	int _dx, _dy;
 	Surface *_bg;
 	Uint8 _color;
 	WindowPopup _popup;
@@ -70,6 +71,8 @@ public:
 	void popup();
 	/// Draws the window.
 	void draw();
+	void setDX(int dx);
+	void setDY(int dy);
 };
 
 }
