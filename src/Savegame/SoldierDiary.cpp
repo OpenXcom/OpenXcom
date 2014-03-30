@@ -150,6 +150,7 @@ void SoldierDiary::updateDiary()
 	SoldierDiaryEntries *latestEntry = _diaryEntries.back();
 	for (std::vector<SoldierDiaryKills*>::const_iterator j = latestEntry->getMissionStatistics()->kills.begin() ; j != latestEntry->getMissionStatistics()->kills.end() ; ++j)
     {
+		_killList.push_back(*j);
         _alienRankTotal[(*j)->getAlienRank().c_str()]++;
         _alienRaceTotal[(*j)->getAlienRace().c_str()]++;
         _weaponTotal[(*j)->getWeapon().c_str()]++;
@@ -467,6 +468,47 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					_awardCommendation = false;
 					break;
 				}
+			}
+			else if ((*j).first == "kills_with_criteria")
+			{
+				std::vector<std::vector<std::string> > *_killCriteriaList = (*i).second->getKillCriteria();
+                
+                /// Add "original faction" to the SoldierDiaryKills class so we can track enemy kills
+                /// Look to see if it's possible to convert the enum AlienState to a string when comparing OR convert the string from the ruleset to an enum AlienState
+                
+                // Loop over the vector of vectors of items
+                for (std::vector<std::vector<std::string> >::const_iterator listItem = _killCriteriaList->begin(); listItem != _killCriteriaList->end(); ++listItem)
+                {
+                    int count = 0; // Reset count
+                    std::vector<SoldierDiaryKills*> _tmpKillList = _killList; // Reset kills
+                    // Loop over the vector of kills
+                    for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _tmpKillList.begin(); singleKill != _tmpKillList.end(); ++singleKill)
+                    {
+                        bool foundMatch = true; // Reset bool
+                        // Loop over the vector of items
+                        for (std::vector<std::string>::const_iterator item = listItem->begin(); item != listItem->end(); ++item)
+                        {
+                            // See if we find no matches with any criteria. If so, break and try the next kill.
+                            if ((*singleKill)->getAlienRank() != (*item) && (*singleKill)->getAlienRace() != (*item) && (*singleKill)->getWeapon() != (*item) && (*singleKill)->getWeaponAmmo() != (*item))
+                            {
+                                // Remove entries that have no matches.
+                                _tmpKillList.erase(singleKill); // I assume this deletes the current kill from the vector... hopefully.
+                                foundMatch = false;
+                                break;
+                            }
+                        }
+                        if (foundMatch) count++;
+                    }
+                    // If this single vector of items doesn't make the cut, do not award commendation
+                    if (count < (*j).second.at(_nextCommendationLevel[""])) 
+                    {
+                        _awardCommendation = false;
+                        break;
+                    }
+                }
+                // Break out of this for loop as well
+                if (!_awardCommendation) break;
+				
 			}
 		}
 		if (_awardCommendation)

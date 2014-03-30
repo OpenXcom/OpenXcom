@@ -192,6 +192,7 @@ private:
 	std::vector<SoldierDiaryEntries*> _diaryEntries;
 	std::vector<SoldierCommendations*> _commendations;
 	RuleCommendations *_rules;
+	std::vector<SoldierDiaryKills*> _killList;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _killsWithFireTotal;

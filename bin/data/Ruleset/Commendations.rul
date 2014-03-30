@@ -294,3 +294,39 @@ commendations:
     sprite: 11
     criteria:
       total_fell_unconcious: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_NAME
+    description: STR_MEDAL_DESCRIPTION
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["Sectoid", "Commander"]
+    # Awarded when soldier kills one Sectoid + Commander
+  - type: STR_MEDAL_NAME
+    description: STR_MEDAL_DESCRIPTION
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["Sectoid"]
+      - ["Floater"]
+      - ["Snakeman"]
+    # Awarded when soldier kills one Sectoid, one Floater, one Snakeman
+  - type: STR_MEDAL_NAME
+    description: STR_MEDAL_DESCRIPTION
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["Sectoid", "Soldier"]
+      - ["Floater", "Soldier"]
+      - ["Snakeman", "Soldier"]
+    # Awarded when soldier kills one Sectoid + Soldier, one Floater + Soldier, one Snakeman + Soldier
+  - type: STR_MEDAL_NAME
+    description: STR_MEDAL_DESCRIPTION
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["Sectoid", "Incendiary Rocket"]
+    # Awarded when a soldier kills one Sectoid using Incendiary Rockets
