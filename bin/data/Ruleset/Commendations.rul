@@ -85,6 +85,8 @@ extraStrings:
      STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Given to a soldier who has fought to the last ounce of strength."
      STR_MEDAL_HELLRAISER_MEDAL_NAME: "Hellraiser Medal"
      STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Given to a soldier who has used incendiary weapons to kill aliens."
+     STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Distinguished Service"
+     STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed alien soldirs of all kinds."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -225,7 +227,6 @@ extraStrings:
 #   total_night_terror_missions
 #   total_monthly_service
 #   total_fell_unconcious
-#   total_kills_with_fire (only Incendiary Rockets...)
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -233,6 +234,11 @@ extraStrings:
 #   total_missions_in_a_region
 #   total_kills_by_race
 #   total_kills_by_rank
+# For more control over commendation awards, use kills_with_criteria.
+# The killCriteria can list any race, rank, weapon, ammo, STATUS_DEAD, STATUS_UNCONSCIOUS,
+# FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER. For example, 
+# ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"] looks for a kill with Incendiary Rockets AND hostile faction.
+# There is no way to do <something> OR <something>, only AND.
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
@@ -300,3 +306,14 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       - ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
+  - type: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
+    description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
+    sprite: 12
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      - ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+      - ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+      - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+      - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+      - ["STR_LIVE_LEADER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
