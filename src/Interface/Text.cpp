@@ -163,7 +163,7 @@ void Text::setText(const std::wstring &text)
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && !_wrap && getTextWidth() > getWidth() && _text[_text.size()-1] != L'.')
+	if (_font == _big && /*!_wrap &&*/ getTextWidth() > getWidth() && _text[_text.size()-1] != L'.')
 	{
 		setSmall();
 	}

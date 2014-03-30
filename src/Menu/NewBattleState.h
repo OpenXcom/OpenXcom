@@ -76,6 +76,8 @@ public:
 	void btnEquipClick(Action *action);
 	/// Handler for changing the Mission combobox.
 	void cbxMissionChange(Action *action);
+	/// Handler for changing the Craft combobox.
+	void cbxCraftChange(Action *action);
 };
 
 }

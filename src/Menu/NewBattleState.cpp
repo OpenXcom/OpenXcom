@@ -208,6 +208,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 
 	_cbxCraft->setColor(Palette::blockOffset(15)-1);
 	_cbxCraft->setOptions(_crafts);
+	_cbxCraft->onChange((ActionHandler)&NewBattleState::cbxCraftChange);
 
 	_slrDarkness->setColor(Palette::blockOffset(15)-1);
 	_slrDarkness->setRange(0, 15);
@@ -413,7 +414,7 @@ void NewBattleState::initSave()
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
-		if ((rule->isFixed() || rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE) && rule->isRecoverable())
+		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
 		{
 			base->getItems()->addItem(*i, 1);
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
@@ -565,6 +566,15 @@ void NewBattleState::cbxMissionChange(Action *)
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_txtTerrain->setVisible(ruleDeploy->getTerrain().empty());
 	_cbxTerrain->setVisible(ruleDeploy->getTerrain().empty());
+}
+
+/**
+ * Updates craft accordingly.
+ * @param action Pointer to an action.
+ */
+void NewBattleState::cbxCraftChange(Action *)
+{
+	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
 }
 
 }

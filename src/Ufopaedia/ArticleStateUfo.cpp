@@ -102,13 +102,13 @@ namespace OpenXcom
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
-		_lstInfo = new TextList(300, 64, 10, 68);
+		_lstInfo = new TextList(310, 64, 10, 68);
 		add(_lstInfo);
 
 		centerAllSurfaces();
 
 		_lstInfo->setColor(Palette::blockOffset(8)+5);
-		_lstInfo->setColumns(2, 200, 100);
+		_lstInfo->setColumns(2, 200, 110);
 //		_lstInfo->setCondensed(true);
 		_lstInfo->setBig();
 		_lstInfo->setDot(true);
