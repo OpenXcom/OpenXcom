@@ -38,8 +38,8 @@ class Language;
 class ComboBox : public InteractiveSurface
 {
 private:
-	static const int LIST_MARGIN;
-	static const int MAX_ITEMS;
+	static const int LIST_MARGIN = 5;
+	static const int MAX_ITEMS = 7;
 
 	TextButton *_button;
 	Surface *_arrow;
