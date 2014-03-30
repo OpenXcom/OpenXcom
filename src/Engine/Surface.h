@@ -44,8 +44,9 @@ protected:
 	SDL_Rect _crop;
 	bool _visible, _hidden, _redraw;
 	void *_alignedBuffer;
-	int _dx, _dy;
 	std::string _tooltip;
+
+	void resize(int width, int height);
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
@@ -101,12 +102,24 @@ public:
 	}
 	/// Sets the X position of the surface.
 	virtual void setX(int x);
-	/// Gets the X position of the surface.
-	int getX() const;
+	/**
+	 * Returns the position of the surface in the X axis.
+	 * @return X position in pixels.
+	 */
+	int getX() const
+	{
+		return _x;
+	}
 	/// Sets the Y position of the surface.
 	virtual void setY(int y);
-	/// Gets the Y position of the surface.
-	int getY() const;
+	/**
+	 * Returns the position of the surface in the Y axis.
+	 * @return Y position in pixels.
+	 */
+	int getY() const
+	{
+		return _y;
+	}
 	/// Sets the surface's visibility.
 	void setVisible(bool visible);
 	/// Gets the surface's visibility.
@@ -178,6 +191,8 @@ public:
 	{
 		return _surface->w;
 	}
+	/// Sets the width of the surface.
+	void setWidth(int width);
 	/**
 	 * Returns the height of the surface.
 	 * @return Height in pixels
@@ -186,6 +201,8 @@ public:
 	{
 		return _surface->h;
 	}
+	/// Sets the height of the surface.
+	void setHeight(int height);
 	/// Sets the surface's special hidden flag.
 	void setHidden(bool hidden);
 	/// Locks the surface.
@@ -196,8 +213,6 @@ public:
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
 	/// Invalidate the surface: force it to be redrawn
 	void invalidate();
-	void setDX(int dx);
-	void setDY(int dy);
 	/// Gets the tooltip of the surface.
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.

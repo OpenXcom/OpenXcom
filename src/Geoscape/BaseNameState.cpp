@@ -69,8 +69,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
-	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, Options::keyCancel);
 
 	//something must be in the name before it is acceptable
 	_btnOk->setVisible(false);
@@ -82,8 +82,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
-	_edtName->focus();
-	_edtName->onKeyboardPress((ActionHandler)&BaseNameState::edtNameKeyPress);
+	_edtName->setFocus(true);
+	_edtName->onChange((ActionHandler)&BaseNameState::edtNameChange);
 }
 
 /**
@@ -95,35 +95,19 @@ BaseNameState::~BaseNameState()
 }
 
 /**
- *
- */
-void BaseNameState::nameBase()
-{
-	_base->setName(_edtName->getText());
-	_game->popState();
-	_game->popState();
-	if (!_first)
-	{
-		_game->popState();
-	}
-	if (!_first || Options::getBool("customInitialBase"))
-	{
-		_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
-	}
-}
-
-/**
- * Returns to the previous screen.
+ * Updates the base name and disables the OK button
+ * if no name is entered.
  * @param action Pointer to an action.
  */
-void BaseNameState::edtNameKeyPress(Action *action)
+void BaseNameState::edtNameChange(Action *action)
 {
+	_base->setName(_edtName->getText());
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		if(!_edtName->getText().empty())
+		if (!_edtName->getText().empty())
 		{
-			nameBase();
+			btnOkClick(action);
 		}
 	}
 	else
@@ -138,7 +122,19 @@ void BaseNameState::edtNameKeyPress(Action *action)
  */
 void BaseNameState::btnOkClick(Action *)
 {
-	nameBase();
+	if (!_edtName->getText().empty())
+	{
+		_game->popState();
+		_game->popState();
+		if (!_first || Options::customInitialBase)
+		{
+			if (!_first)
+			{
+				_game->popState();
+			}
+			_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
+		}
+	}
 }
 
 }

@@ -87,8 +87,8 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, Options::keyCancel);
 	_btnOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);

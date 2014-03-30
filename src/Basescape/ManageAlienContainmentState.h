@@ -50,8 +50,8 @@ private:
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
 	unsigned int _sel;
-	int _aliensSold, _researchedAliens, _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel, _containmentLimit, _overCrowded;
+	int _aliensSold, _researchedAliens;
+	bool _overCrowded;
 	Uint8 _color, _color2;
 	/// Gets selected quantity.
 	int getQuantity();

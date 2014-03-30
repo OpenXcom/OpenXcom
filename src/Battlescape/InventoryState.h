@@ -44,7 +44,7 @@ private:
 	Surface *_selAmmo;
 	Inventory *_inv;
 	SavedBattleGame *_battleGame;
-	bool _tu, _showMoreStatsInInventoryView;
+	bool _tu;
 	BattlescapeState *_parent;
 public:
 	/// Creates the Inventory state.

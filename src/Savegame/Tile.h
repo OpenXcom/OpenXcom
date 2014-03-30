@@ -99,6 +99,10 @@ public:
 	 */
 	MapData *getMapData(int part) const
 	{
+		if (0 > part || 3 < part)
+		{
+			return NULL;
+		}
 		return _objects[part];
 	}
 

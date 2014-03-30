@@ -130,7 +130,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, Options::keyCancel);
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)

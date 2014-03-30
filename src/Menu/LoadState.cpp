@@ -43,6 +43,8 @@ namespace OpenXcom
  */
 LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 0)
 {
+	centerAllSurfaces();
+	
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);
@@ -108,7 +110,7 @@ void LoadState::quickLoad(const std::string &filename)
 	catch (Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
@@ -123,7 +125,7 @@ void LoadState::quickLoad(const std::string &filename)
 	catch (YAML::Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));

@@ -49,8 +49,6 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 
 	add(_edtSave);
 	add(_btnSaveGame);
-	
-	centerAllSurfaces();
 
 	// Set up objects
 
@@ -67,6 +65,8 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
+
+	centerAllSurfaces();
 }
 
 /**
@@ -135,7 +135,7 @@ void SaveState::lstSavesPress(Action *action)
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible(true);
-		_edtSave->focus();
+		_edtSave->setFocus(true);
 		_lstSaves->setScrolling(false);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
@@ -233,7 +233,7 @@ void SaveState::quickSave(const std::string &filename)
 	catch (Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
@@ -243,7 +243,7 @@ void SaveState::quickSave(const std::string &filename)
 	catch (YAML::Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));

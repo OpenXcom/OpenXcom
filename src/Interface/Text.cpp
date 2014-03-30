@@ -65,7 +65,7 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = (value < 0);
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << (negative? -value : value);
 	std::wstring s = ss.str();
 	size_t spacer = s.size() - 3;
@@ -104,7 +104,7 @@ std::wstring Text::formatFunding(int funds)
  */
 std::wstring Text::formatPercentage(int value)
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << value << "%";
 	return ss.str();
 }
@@ -163,7 +163,7 @@ void Text::setText(const std::wstring &text)
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && !_wrap && getTextWidth() > getWidth() && _text[_text.size()-1] != L'.')
+	if (_font == _big && /*!_wrap &&*/ getTextWidth() > getWidth() && _text[_text.size()-1] != L'.')
 	{
 		setSmall();
 	}
@@ -492,7 +492,7 @@ void Text::draw()
 	}
 
 	// Show text borders for debugging
-	if (Options::getBool("debugUi"))
+	if (Options::debugUi)
 	{
 		SDL_Rect r;
 		r.w = getWidth();

@@ -337,33 +337,30 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
 
 /**
  * Gets all the languages found in the
- * data folder and adds them to a text list.
- * @param list Text list.
- * @return List of language filenames.
+ * Data folder and returns their properties.
+ * @param files List of language filenames.
+ * @param names List of language human-readable names.
  */
-std::vector<std::string> Language::getList(TextList *list)
+void Language::getList(std::vector<std::string> &files, std::vector<std::wstring> &names)
 {
-	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
+	files = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
+	names.clear();
 
-	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
+	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
-		(*i) = CrossPlatform::noExt(*i);
-		if (list != 0)
+		*i = CrossPlatform::noExt(*i);
+		std::wstring name;
+		std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+		if (lang != _names.end())
 		{
-			std::wstring name;
-			std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
-			if (lang != _names.end())
-			{
-				name = lang->second;
-			}
-			else
-			{
-				name = Language::fsToWstr(*i);
-			}
-			list->addRow(1, name.c_str());
+			name = lang->second;
 		}
+		else
+		{
+			name = Language::fsToWstr(*i);
+		}
+		names.push_back(name);
 	}
-	return langs;
 }
 
 /**
@@ -471,7 +468,7 @@ const LocalizedText &Language::getString(const std::string &id) const
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
+		Log(LOG_WARNING) << id << " not found in " << Options::language;
 		hack = LocalizedText(utf8ToWstr(id));
 		return hack;
 	}
@@ -505,10 +502,10 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	}
 	if (s == _strings.end())
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
+		Log(LOG_WARNING) << id << " not found in " << Options::language;
 		return LocalizedText(utf8ToWstr(id));
 	}
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << n;
 	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
 	replace(txt, marker, val);

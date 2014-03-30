@@ -140,7 +140,7 @@ std::list<Polyline*> *ResourcePack::getPolylines()
  */
 Music *ResourcePack::getMusic(const std::string &name) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteMusic;
 	}
@@ -158,7 +158,7 @@ Music *ResourcePack::getMusic(const std::string &name) const
  */
 Music *ResourcePack::getRandomMusic(const std::string &name) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteMusic;
 	}
@@ -187,7 +187,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
  */
 Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteSound;
 	}

@@ -98,7 +98,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ManufactureState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ManufactureState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -200,20 +200,20 @@ void ManufactureState::fillProductionList()
 	_lstManufacture->clearList();
 	for(std::vector<Production *>::const_iterator iter = productions.begin (); iter != productions.end (); ++iter)
 	{
-		std::wstringstream s1;
+		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
-		std::wstringstream s2;
+		std::wostringstream s2;
 		s2 << (*iter)->getAmountProduced() << "/";
-		if (Options::getBool("allowAutoSellProduction") && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+		if (Options::allowAutoSellProduction && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
 			s2 << "$$$";
 		else s2 << (*iter)->getAmountTotal();
-		std::wstringstream s3;
+		std::wostringstream s3;
 		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
-		std::wstringstream s4;
+		std::wostringstream s4;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
-			if (Options::getBool("allowAutoSellProduction") && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+			if (Options::allowAutoSellProduction && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
 				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
 			else timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
 			timeLeft /= (*iter)->getAssignedEngineers();

@@ -85,8 +85,6 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 	_timeSpent += _engineers;
 	if (done < getAmountProduced ())
 	{
-		bool allowAutoSellProduction = Options::getBool("allowAutoSellProduction");
-		bool canManufactureMoreItemsPerHour = Options::getBool("canManufactureMoreItemsPerHour");
 		int produced = std::min(getAmountProduced(), _amount) - done; // std::min is required because we don't want to overproduce
 		int count = 0;
 		do
@@ -130,13 +128,13 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 								(*c)->setStatus("STR_REFUELLING");
 						}
 					}
-					if (allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
+					if (Options::allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
 					else
 						b->getItems()->addItem(i->first, i->second);
 				}
 			}
-			if (!canManufactureMoreItemsPerHour) break;
+			if (!Options::canManufactureMoreItemsPerHour) break;
 			count++;
 			if (count < produced)
 			{

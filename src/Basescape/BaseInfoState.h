@@ -59,7 +59,6 @@ private:
 	Text *_txtDefense, *_txtShortRange, *_txtLongRange;
 	Text *_numDefense, *_numShortRange, *_numLongRange;
 	Bar *_barDefense, *_barShortRange, *_barLongRange;
-	bool _containmentLimit;
 public:
 	/// Creates the Base Info state.
 	BaseInfoState(Game *game, Base *base, BasescapeState *state);
@@ -67,8 +66,8 @@ public:
 	~BaseInfoState();
 	/// Updates the base stats.
 	void init();
-	/// Handler for pressing a key on the Name edit.
-	void edtBaseKeyPress(Action *action);
+	/// Handler for changing the text on the Name edit.
+	void edtBaseChange(Action *action);
 	/// Handler for clicking the mini base view.
 	void miniClick(Action *action);
 	/// Handler for clicking the OK button.

@@ -87,8 +87,6 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	add(_sortName);
 	add(_sortDate);
 
-	centerAllSurfaces();
-
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -96,7 +94,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SavedGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&SavedGameState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -199,7 +197,7 @@ void SavedGameState::init()
 	{
 		_saves = SavedGame::getList(_game->getLanguage());
 		_lstSaves->clearList();
-		sortList((SaveSort)Options::getInt("saveOrder"));
+		sortList(Options::saveOrder);
 	}
 	catch (Exception &e)
 	{
@@ -215,7 +213,7 @@ void SavedGameState::updateArrows()
 {
 	_sortName->setShape(ARROW_NONE);
 	_sortDate->setShape(ARROW_NONE);
-	switch (Options::getInt("saveOrder"))
+	switch (Options::saveOrder)
 	{
 	case SORT_NAME_ASC:
 		_sortName->setShape(ARROW_SMALL_UP);
@@ -318,17 +316,17 @@ void SavedGameState::lstSavesMouseOut(Action *)
  */
 void SavedGameState::sortNameClick(Action *)
 {
-	if (Options::getInt("saveOrder") == SORT_NAME_ASC)
+	if (Options::saveOrder == SORT_NAME_ASC)
 	{
-		Options::setInt("saveOrder", SORT_NAME_DESC);
+		Options::saveOrder = SORT_NAME_DESC;
 	}
 	else
 	{
-		Options::setInt("saveOrder", SORT_NAME_ASC);
+		Options::saveOrder = SORT_NAME_ASC;
 	}
 	updateArrows();
 	_lstSaves->clearList();
-	sortList((SaveSort)Options::getInt("saveOrder"));
+	sortList(Options::saveOrder);
 }
 
 /**
@@ -337,17 +335,17 @@ void SavedGameState::sortNameClick(Action *)
  */
 void SavedGameState::sortDateClick(Action *)
 {
-	if (Options::getInt("saveOrder") == SORT_DATE_ASC)
+	if (Options::saveOrder == SORT_DATE_ASC)
 	{
-		Options::setInt("saveOrder", SORT_DATE_DESC);
+		Options::saveOrder = SORT_DATE_DESC;
 	}
 	else
 	{
-		Options::setInt("saveOrder", SORT_DATE_ASC);
+		Options::saveOrder = SORT_DATE_ASC;
 	}
 	updateArrows();
 	_lstSaves->clearList();
-	sortList((SaveSort)Options::getInt("saveOrder"));
+	sortList(Options::saveOrder);
 }
 
 }

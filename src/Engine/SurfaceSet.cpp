@@ -57,7 +57,7 @@ SurfaceSet::~SurfaceSet()
 {
 	for (std::map<int, Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
 	{
-		delete (*i).second;
+		delete i->second;
 	}
 }
 

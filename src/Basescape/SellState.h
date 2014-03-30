@@ -55,9 +55,7 @@ private:
 	unsigned int _sel;
 	int _total, _hasSci, _hasEng;
 	Timer *_timerInc, *_timerDec;
-	int _changeValueByMouseWheel;
 	size_t _itemOffset;
-	bool _allowChangeListValuesByMouseWheel;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.

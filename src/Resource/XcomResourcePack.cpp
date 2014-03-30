@@ -159,7 +159,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 						  "INTICON.PCK",
 						  "TEXTURE.DAT"};
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < sizeof(sets)/sizeof(sets[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "GEOGRAPH/" << sets[i];
@@ -254,7 +254,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	}
 	_polylines.push_back(l);
 
-	if (!Options::getBool("mute"))
+	if (!Options::mute)
 	{
 		// Load musics
 		std::string mus[] = {"GMDEFEND",
@@ -293,7 +293,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			cat = false;
 		}
 
-		for (int i = 0; i < 17; ++i)
+		for (int i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
 		{
 			bool loaded = false;
 			// Try digital tracks
@@ -364,7 +364,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			wav = false;
 		}
 
-		for (int i = 0; i < 2; ++i)
+		for (int i = 0; i < sizeof(catsId)/sizeof(catsId[0]); ++i)
 		{
 			if (cats == 0)
 			{
@@ -404,9 +404,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 	
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
-	bool debugOutput = Options::getBool("debug");
 	
-	for (std::vector<std::pair<std::string, ExtraSprites *> >::const_iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
+	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
 	{
 		std::string sheetName = i->first;
 		ExtraSprites *spritePack = i->second;
@@ -415,18 +414,12 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			if (_surfaces.find(sheetName) == _surfaces.end())
 			{
-				if (debugOutput)
-				{
-					Log(LOG_INFO) << "Creating new single image: " << sheetName;
-				}
+				Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
 				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
 			}
 			else
 			{
-				if (debugOutput)
-				{
-					Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
-				}
+				Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
 				delete _surfaces[sheetName];
 				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
 			}
@@ -439,10 +432,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			bool adding = false;
 			if (_sets.find(sheetName) == _sets.end())
 			{
-				if (debugOutput)
-				{
-					Log(LOG_INFO) << "Creating new surface set: " << sheetName;
-				}
+				Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
 				adding = true;
 				 if (subdivision)
 				 {
@@ -453,15 +443,15 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					_sets[sheetName] = new SurfaceSet(spritePack->getWidth(), spritePack->getHeight());
 				 }
 			}
-			else if (debugOutput)
+			else
 			{
-				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
+				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
 			}
 			
-			if (subdivision && debugOutput)
+			if (subdivision)
 			{
 				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
-				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
+				Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
 			}
 
 			for (std::map<int, std::string>::iterator j = spritePack->getSprites()->begin(); j != spritePack->getSprites()->end(); ++j)
@@ -471,10 +461,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				s.str("");
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
-					if (debugOutput)
-					{
-						Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
-					}
+					Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 					int offset = startFrame;
 					std::ostringstream folder;
 					folder << CrossPlatform::getDataFolder(fileName);
@@ -490,10 +477,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							s << folder.str() << CrossPlatform::getDataFile(*k);
 							if (_sets[sheetName]->getFrame(offset))
 							{
-								if (debugOutput)
-								{
-									Log(LOG_INFO) << "Replacing frame: " << offset;
-								}
+								Log(LOG_DEBUG) << "Replacing frame: " << offset;
 								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
 							}
 							else
@@ -504,10 +488,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 								}
 								else
 								{
-									if (debugOutput)
-									{
-										Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
-									}
+									Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
 									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
 								}
 							}
@@ -526,18 +507,12 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 						s << CrossPlatform::getDataFile(fileName);
 						if (_sets[sheetName]->getFrame(startFrame))
 						{
-							if (debugOutput)
-							{
-								Log(LOG_INFO) << "Replacing frame: " << startFrame;
-							}
+							Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
 							_sets[sheetName]->getFrame(startFrame)->loadImage(s.str());
 						}
 						else
 						{
-							if (debugOutput)
-							{
-								Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
-							}
+							Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(s.str());
 						}
 					}
@@ -557,10 +532,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							{
 								if (_sets[sheetName]->getFrame(offset))
 								{
-									if (debugOutput)
-									{
-										Log(LOG_INFO) << "Replacing frame: " << offset;
-									}
+									Log(LOG_DEBUG) << "Replacing frame: " << offset;
 									_sets[sheetName]->getFrame(offset)->clear();
 									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 									temp->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
@@ -574,10 +546,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 									}
 									else
 									{
-										if (debugOutput)
-										{
-											Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
-										}
+										Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 										temp->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 									}
@@ -604,22 +573,16 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		surface2->blit(surface1);
 	}
 
-	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
+	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
 		std::string setName = i->first;
 		ExtraSounds *soundPack = i->second;
 		if (_sounds.find(setName) == _sounds.end())
 		{
-			if (debugOutput)
-			{
-				Log(LOG_INFO) << "Creating new sound set: " << setName << ", this will likely have no in-game use.";
-			}
+			Log(LOG_DEBUG) << "Creating new sound set: " << setName << ", this will likely have no in-game use.";
 			_sounds[setName] = new SoundSet();
 		}
-		else if (debugOutput)
-		{
-			Log(LOG_INFO) << "Adding/Replacing items in sound set: " << setName;
-		}
+		else Log(LOG_DEBUG) << "Adding/Replacing items in sound set: " << setName;
 		for (std::map<int, std::string>::iterator j = soundPack->getSounds()->begin(); j != soundPack->getSounds()->end(); ++j)
 		{
 			int startSound = j->first;
@@ -627,10 +590,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			s.str("");
 			if (fileName.substr(fileName.length() - 1, 1) == "/")
 			{
-				if (debugOutput)
-				{
-					Log(LOG_INFO) << "Loading sound set from folder: " << fileName << " starting at index: " << startSound;
-				}
+				Log(LOG_DEBUG) << "Loading sound set from folder: " << fileName << " starting at index: " << startSound;
 				int offset = startSound;
 				std::ostringstream folder;
 				folder << CrossPlatform::getDataFolder(fileName);
@@ -663,18 +623,12 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				s << CrossPlatform::getDataFile(fileName);
 				if (_sounds[setName]->getSound(startSound))
 				{
-					if (debugOutput)
-					{
-						Log(LOG_INFO) << "Replacing index: " << startSound;
-					}
+					Log(LOG_DEBUG) << "Replacing index: " << startSound;
 					_sounds[setName]->getSound(startSound)->load(s.str());
 				}
 				else
 				{
-					if (debugOutput)
-					{
-						Log(LOG_INFO) << "Adding index: " << startSound;
-					}
+					Log(LOG_DEBUG) << "Adding index: " << startSound;
 					_sounds[setName]->addSound(startSound + soundPack->getModIndex())->load(s.str());
 				}
 			}
@@ -807,7 +761,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 
 	//"fix" of hair color of male personal armor
-	if (Options::getBool("battleHairBleach"))
+	if (Options::battleHairBleach)
 	{
 		SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
 

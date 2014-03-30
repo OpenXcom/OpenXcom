@@ -76,7 +76,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SoldierArmorState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SoldierArmorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&SoldierArmorState::btnCancelClick, Options::keyCancel);
 
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
@@ -107,7 +107,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 		if (_base->getItems()->getItem(a->getStoreItem()) > 0)
 		{
 			_armors.push_back(a);
-			std::wstringstream ss;
+			std::wostringstream ss;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				ss << _base->getItems()->getItem(a->getStoreItem());

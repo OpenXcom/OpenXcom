@@ -80,9 +80,9 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyOk"));
-	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyGeoIntercept"));
+	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyOk);
+	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyCancel);
+	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyGeoIntercept);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -117,7 +117,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			std::wstringstream ss;
+			std::wostringstream ss;
 			if ((*j)->getNumWeapons() > 0)
 			{
 				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
@@ -179,7 +179,7 @@ void InterceptState::btnCancelClick(Action *)
 void InterceptState::lstCraftsLeftClick(Action *)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == "STR_READY" || ((c->getStatus() == "STR_OUT" || Options::getBool("craftLaunchAlways")) && !c->getLowFuel()))
+	if (c->getStatus() == "STR_READY" || ((c->getStatus() == "STR_OUT" || Options::craftLaunchAlways) && !c->getLowFuel()))
 	{
 		_game->popState();
 		if (_target == 0)

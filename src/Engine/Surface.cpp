@@ -150,8 +150,6 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 	_crop.h = 0;
 	_crop.x = 0;
 	_crop.y = 0;
-	_dx = Screen::getDX();
-	_dy = Screen::getDY();
 }
 
 /**
@@ -193,8 +191,6 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
-	_dx = other._dx;
-	_dy = other._dy;
 }
 
 /**
@@ -622,30 +618,12 @@ void Surface::setX(int x)
 }
 
 /**
- * Returns the position of the surface in the X axis.
- * @return X position in pixels.
- */
-int Surface::getX() const
-{
-	return _x;
-}
-
-/**
  * Changes the position of the surface in the Y axis.
  * @param y Y position in pixels.
  */
 void Surface::setY(int y)
 {
 	_y = y;
-}
-
-/**
- * Returns the position of the surface in the Y axis.
- * @return Y position in pixels.
- */
-int Surface::getY() const
-{
-	return _y;
 }
 
 /**
@@ -830,16 +808,6 @@ void Surface::invalidate()
 	_redraw = true;
 }
 
-void Surface::setDX(int dx)
-{
-	_dx = dx;
-}
-
-void Surface::setDY(int dy)
-{
-	_dy = dy;
-}
-
 /**
  * Returns the help description of this surface,
  * for example for showing in tooltips.
@@ -858,6 +826,62 @@ std::string Surface::getTooltip() const
 void Surface::setTooltip(const std::string &tooltip)
 {
 	_tooltip = tooltip;
+}
+
+/**
+ * Recreates the surface with a new size.
+ * Old contents will not be altered, and may be
+ * cropped to fit the new size.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ */
+void Surface::resize(int width, int height)
+{
+	// Set up new surface
+	Uint8 bpp = _surface->format->BitsPerPixel;
+	int pitch = GetPitch(bpp, width);
+	void *alignedBuffer = NewAligned(bpp, width, height);
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
+	
+	if (surface == 0)
+	{
+		throw Exception(SDL_GetError());
+	}
+
+	// Copy old contents
+	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
+	SDL_SetColors(surface, getPalette(), 0, 255);
+	SDL_BlitSurface(_surface, 0, surface, 0);
+
+	// Delete old surface
+	DeleteAligned(_alignedBuffer);
+	SDL_FreeSurface(_surface);
+	_alignedBuffer = alignedBuffer;
+	_surface = surface;
+}
+
+/**
+ * Changes the width of the surface.
+ * @warning This is not a trivial setter!
+ * It will force the surface to be recreated for the new size.
+ * @param width New width in pixels.
+ */
+void Surface::setWidth(int width)
+{
+	resize(width, getHeight());
+	_redraw = true;
+}
+
+/**
+ * Changes the height of the surface.
+ * @warning This is not a trivial setter!
+ * It will force the surface to be recreated for the new size.
+ * @param height New height in pixels.
+ */
+void Surface::setHeight(int height)
+{
+	resize(getWidth(), height);
+	_redraw = true;
 }
 
 }

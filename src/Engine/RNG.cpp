@@ -87,8 +87,8 @@ unsigned int random()
     if (mti >= CMATH_N) { /* generate N words at one time */
         int kk;
 
-        if (mti == CMATH_N+1)   /* if sgenrand() has not been called, */
-            setSeed(4357);      /* a default initial seed is used   */
+        if (mti == CMATH_N+1)                   /* if sgenrand() has not been called, */
+            setSeed((unsigned int)time(NULL));  /* a default initial seed is used   */
 
         for (kk=0;kk<CMATH_N-CMATH_M;kk++) {
             y = (mt[kk]&CMATH_UPPER_MASK)|(mt[kk+1]&CMATH_LOWER_MASK);
@@ -111,23 +111,6 @@ unsigned int random()
     y ^= CMATH_TEMPERING_SHIFT_L(y);
 
 	return y;
-}
-
-/**
-* Seeds the random generator with the current time.
-*/
-void init()
-{
-	setSeed((unsigned int)time(NULL));
-}
-
-/**
-* Seeds the random generator with a new number.
-* @param seed New seed.
-*/
-void init(unsigned int seed)
-{
-	setSeed(seed);
 }
 
 /**

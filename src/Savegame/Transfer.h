@@ -80,6 +80,9 @@ public:
 	TransferType getType() const;
 	/// Advances the transfer.
 	void advance(Base *base);
+	/// Get a pointer to the soldier being transferred.
+	Soldier *getSoldier();
+
 };
 
 }

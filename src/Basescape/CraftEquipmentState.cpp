@@ -59,8 +59,6 @@ namespace OpenXcom
  */
 CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _base(base), _craft(craft)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	Craft *c = _base->getCrafts()->at(_craft);
 	bool craftHasACrew = c->getNumSoldiers() > 0;
 	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
@@ -103,7 +101,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, Options::keyCancel);
 
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(tr("STR_UNLOAD"));
@@ -135,7 +133,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << tr("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
 	_txtCrew->setText(ss3.str());
 
@@ -146,7 +144,6 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
-	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstEquipment->onLeftArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowPress);
 	_lstEquipment->onLeftArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowRelease);
 	_lstEquipment->onLeftArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowClick);
@@ -160,7 +157,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		// CHEAP HACK TO HIDE HWP AMMO
-		if ((*i).substr(0, 8) == "STR_HWP_")
+		if (i->substr(0, 8) == "STR_HWP_")
 			continue;
 
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
@@ -178,7 +175,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 			(_base->getItems()->getItem(*i) > 0 || cQty > 0))
 		{
 			_items.push_back(*i);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				ss << _base->getItems()->getItem(*i);
@@ -354,22 +351,20 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 		{
-			moveRightByValue(_changeValueByMouseWheel);
+			moveRightByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 		{
-			moveLeftByValue(_changeValueByMouseWheel);
+			moveLeftByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -391,7 +386,7 @@ void CraftEquipmentState::updateQuantity()
 	{
 		cQty = c->getItems()->getItem(_items[_sel]);
 	}
-	std::wstringstream ss, ss2;
+	std::wostringstream ss, ss2;
 	if (_game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		ss << _base->getItems()->getItem(_items[_sel]);
@@ -497,7 +492,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		c->getItems()->removeItem(_items[_sel], change);
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
+			//Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
 		}
 		else
 		{
@@ -608,7 +603,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		c->getItems()->addItem(_items[_sel],change);
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-				Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
+			//Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
 		}
 		else
 		{

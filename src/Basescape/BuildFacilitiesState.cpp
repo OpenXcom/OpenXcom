@@ -67,7 +67,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BuildFacilitiesState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BuildFacilitiesState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();

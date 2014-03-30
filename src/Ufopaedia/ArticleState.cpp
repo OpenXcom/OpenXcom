@@ -99,8 +99,8 @@ namespace OpenXcom
 
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&ArticleState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyOk"));
-		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyCancel"));
+		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,Options::keyOk);
+		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,Options::keyCancel);
 		_btnPrev->setText(L"<<");
 		_btnPrev->onMouseClick((ActionHandler)&ArticleState::btnPrevClick);
 		_btnNext->setText(L">>");

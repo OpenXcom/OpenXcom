@@ -659,7 +659,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	int dgap;
 	static bool proclaimed = false;
 
-	if (Options::getBool("useHQXFilter"))
+	if (Options::useHQXFilter)
 	{
 		static bool initDone = false;
 
@@ -691,7 +691,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 
 	}
 
-	if (Options::getBool("useScaleFilter"))
+	if (Options::useScaleFilter)
 	{
 		// check the resolution to see which of scale2x, scale3x, etc. we need
 

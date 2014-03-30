@@ -47,8 +47,7 @@ private:
 	TextButton * _btnStop, * _btnOk;
 	Text * _txtTitle, * _txtAvailableEngineer, * _txtAvailableSpace, * _txtAllocatedEngineer, * _txtUnitToProduce, * _txtUnitUp, * _txtUnitDown, * _txtEngineerUp, * _txtEngineerDown, * _txtAllocated, * _txtTodo;
 	Timer * _timerMoreEngineer, * _timerMoreUnit, * _timerLessEngineer, * _timerLessUnit;
-	InteractiveSurface *_surface1, *_surface2;
-	int _changeValueByMouseWheel;
+	InteractiveSurface *_surfaceEngineers, *_surfaceUnits;
 	/// Handler for the Stop button.
 	void btnStopClick (Action * action);
 	/// Handler for the OK button.

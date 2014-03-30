@@ -81,7 +81,7 @@ AlienTerrorState::AlienTerrorState(Game *game, TerrorSite *terror, const std::st
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&AlienTerrorState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

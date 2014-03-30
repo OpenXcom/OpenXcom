@@ -57,8 +57,8 @@ AliensCrashState::AliensCrashState(Game *game) : State(game)
 	_btnOk->setHighContrast(true);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AliensCrashState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(0)-1);
 	_txtTitle->setHighContrast(true);

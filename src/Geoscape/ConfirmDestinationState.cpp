@@ -77,12 +77,12 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmDestinationState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnCancelClick, Options::keyCancel);
 
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();

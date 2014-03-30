@@ -48,12 +48,11 @@
 #include "../Savegame/AlienMission.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/AlienStrategy.h"
+#include "../Engine/Options.h"
 #include <cstdlib>
 
 namespace OpenXcom
 {
-
-const int DogfightState::_timeScale = 75;
 
 // UFO blobs graphics ...
 const int DogfightState::_ufoBlobs[8][13][13] = 
@@ -240,8 +239,9 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_screen = false;
 
 	_craft->setInDogfight(true);
+	_timeScale = 50 + Options::dogfightSpeed;
+
 	// Create objects
-	
 	_window = new Surface(160, 96, _x, _y);
 	_battle = new Surface(77, 74, _x + 3, _y + 3);
 	_weapon1 = new InteractiveSurface(15, 17, _x + 4, _y + 52);
@@ -265,8 +265,8 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_btnMinimizedIcon = new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterceptionNumber = new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
-	_animTimer = new Timer(30);
-	_moveTimer = new Timer(20);
+	_animTimer = new Timer(20);
+	_moveTimer = new Timer(Options::dogfightSpeed);
 	_w1Timer = new Timer(0);
 	_w2Timer = new Timer(0);
 	_mode = _btnStandoff;
@@ -384,7 +384,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_btnMinimizedIcon->setVisible(false);
 
 	// Draw correct number on the minimized dogfight icon.
-	std::wstringstream ss1;
+	std::wostringstream ss1;
 	ss1 << _craft->getInterceptionOrder();
 	_txtInterceptionNumber->setColor(Palette::blockOffset(5));
 	_txtInterceptionNumber->setText(ss1.str());
@@ -424,7 +424,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 		frame->blit(weapon);
 
 		// Draw ammo
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << w->getAmmo();
 		ammo->setText(ss.str());
 
@@ -804,7 +804,7 @@ void DogfightState::move()
 
 		_currentDist += distanceChange; 
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << _currentDist;
 		_txtDistance->setText(ss.str());
 
@@ -1138,7 +1138,7 @@ void DogfightState::fireWeapon1()
 		if (w1->setAmmo(w1->getAmmo() - 1))
 		{
 
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << w1->getAmmo();
 			_txtAmmo1->setText(ss.str());
 
@@ -1164,7 +1164,7 @@ void DogfightState::fireWeapon2()
 		if (w2->setAmmo(w2->getAmmo() - 1))
 		{
 
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << w2->getAmmo();
 			_txtAmmo2->setText(ss.str());
 
@@ -1752,8 +1752,8 @@ void DogfightState::calculateWindowPosition()
 			_y = 200 - _window->getHeight();//96;
 		}
 	}
-	_x += Screen::getDX();
-	_y += Screen::getDY();
+	_x += _game->getScreen()->getDX();
+	_y += _game->getScreen()->getDY();
 }
 
 /**

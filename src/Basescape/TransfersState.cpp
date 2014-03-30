@@ -72,8 +72,8 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransfersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -98,7 +98,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 
 	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{
-		std::wstringstream ss, ss2;
+		std::wostringstream ss, ss2;
 		ss << (*i)->getQuantity();
 		ss2 << (*i)->getHours();
 		_lstTransfers->addRow(3, (*i)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), ss2.str().c_str());

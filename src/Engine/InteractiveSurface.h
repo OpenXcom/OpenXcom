@@ -62,10 +62,10 @@ public:
 	void setVisible(bool visible);
 	/// Processes any pending events.
 	virtual void handle(Action *action, State *state);
-	/// Sets focus on this surface.
-	virtual void focus();
-	/// Removes focus from this surface.
-	virtual void deFocus();
+	/// Sets the focus of this surface.
+	virtual void setFocus(bool focus);
+	/// Gets the focus of this surface.
+	bool isFocused() const;
 	/// Unpresses the surface.
 	virtual void unpress(State *state);
 	/// Hooks an action handler to a mouse click on the surface.

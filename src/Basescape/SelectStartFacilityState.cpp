@@ -50,7 +50,7 @@ SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State
 
 	_btnOk->setText(tr("STR_RESET"));
 	_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress(0, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(0, Options::keyCancel);
 
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
 

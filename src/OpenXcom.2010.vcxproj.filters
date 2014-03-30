@@ -602,9 +602,6 @@
     <ClCompile Include="Battlescape\BriefingState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\OptionsState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\ErrorMessageState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -787,9 +784,6 @@
     <ClCompile Include="Menu\OptionsBaseState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\OptionsLanguageState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\AliensCrashState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -801,6 +795,33 @@
     </ClCompile>
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsVideoState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsModsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsAudioState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsGeoscapeState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OptionInfo.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\ComboBox.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsDefaultsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsConfirmState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\IntroState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1406,9 +1427,6 @@
     <ClInclude Include="Battlescape\BriefingState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\OptionsState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\ErrorMessageState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1605,9 +1623,6 @@
     <ClInclude Include="Menu\OptionsBattlescapeState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\OptionsLanguageState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\AliensCrashState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1619,6 +1634,36 @@
     </ClInclude>
     <ClInclude Include="Basescape\SoldierMemorialState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsVideoState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsModsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsAudioState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsGeoscapeState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OptionInfo.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Options.inc.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ComboBox.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsDefaultsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsConfirmState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\IntroState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

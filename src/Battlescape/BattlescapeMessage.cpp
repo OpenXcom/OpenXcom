@@ -54,6 +54,28 @@ BattlescapeMessage::~BattlescapeMessage()
 }
 
 /**
+* Changes the position of the surface in the X axis.
+* @param x X position in pixels.
+*/
+void BattlescapeMessage::setX(int x)
+{
+	Surface::setX(x);
+	_window->setX(x);
+	_text->setX(x);
+}
+
+/**
+* Changes the position of the surface in the Y axis.
+* @param y Y position in pixels.
+*/
+void BattlescapeMessage::setY(int y)
+{
+	Surface::setY(y);
+	_window->setY(y);
+	_text->setY(y);
+}
+
+/**
  * Changes the message background.
  * @param background Pointer to background surface.
  */
