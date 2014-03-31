@@ -305,14 +305,37 @@ void NewBattleState::load(const std::string &filename)
 			base->load(doc["base"], save, false);
 			save->getBases()->push_back(base);
 
+			// Add research
 			const std::vector<std::string> &research = rule->getResearchList();
 			for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
 			{
 				save->addFinishedResearch(rule->getResearch(*i));
 			}
 
-			_game->setSavedGame(save);
+			// Generate items
+			base->getItems()->getContents()->clear();
+			const std::vector<std::string> &items = rule->getItemsList();
+			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+			{
+				RuleItem *rule = _game->getRuleset()->getItem(*i);
+				if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+				{
+					base->getItems()->addItem(*i, 1);
+				}
+			}
+
+			// Clear invalid contents
 			_craft = base->getCrafts()->front();
+			for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
+			{
+				RuleItem *rule = _game->getRuleset()->getItem(i->first);
+				if (!rule)
+				{
+					i->second = 0;
+				}
+			}
+
+			_game->setSavedGame(save);
 		}
 		else
 		{
@@ -417,7 +440,7 @@ void NewBattleState::initSave()
 		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
 		{
 			base->getItems()->addItem(*i, 1);
-			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
+			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && rule->getBigSprite() > -1)
 			{
 				_craft->getItems()->addItem(*i, 1);
 			}

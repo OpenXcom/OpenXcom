@@ -841,8 +841,8 @@ void TextList::think()
  */
 void TextList::mousePress(Action *action, State *state)
 {
-	bool allowScroll = Options::changeValueByMouseWheel != 0;
-	if (!allowScroll)
+	bool allowScroll = true;
+	if (Options::changeValueByMouseWheel != 0)
 	{
 		allowScroll = (action->getAbsoluteXMouse() < _arrowsLeftEdge || action->getAbsoluteXMouse() > _arrowsRightEdge);
 	}

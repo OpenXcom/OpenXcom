@@ -156,10 +156,6 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		// CHEAP HACK TO HIDE HWP AMMO
-		if (i->substr(0, 8) == "STR_HWP_")
-			continue;
-
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		int cQty = 0;
 		if (rule->isFixed())

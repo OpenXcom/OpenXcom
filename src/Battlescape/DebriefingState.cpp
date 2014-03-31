@@ -600,7 +600,7 @@ void DebriefingState::prepareDebriefing()
 						{
 							(*j)->updateGeoscapeStats(*i);
 							SoldierDeath *death = new SoldierDeath();
-							death->setTime(new GameTime(*save->getTime()));
+							death->setTime(*save->getTime());
 							(*i)->die(death);
 							save->getDeadSoldiers()->push_back(*i);
 							base->getSoldiers()->erase(i);
@@ -651,7 +651,7 @@ void DebriefingState::prepareDebriefing()
 							{
 								(*j)->updateGeoscapeStats(*i);
 								SoldierDeath *death = new SoldierDeath();
-								death->setTime(new GameTime(*save->getTime()));
+								death->setTime(*save->getTime());
 								(*i)->die(death);
 								save->getDeadSoldiers()->push_back(*i);
 								base->getSoldiers()->erase(i);
