@@ -227,6 +227,11 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 		}
 	}
 	_game->popState();
+
+	if (Options::storageLimitEnforced && _base->storesOverfull())
+	{
+		_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+	}
 }
 
 /**

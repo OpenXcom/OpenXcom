@@ -119,6 +119,7 @@ void create()
 	_info.push_back(OptionInfo("audioBitDepth", &audioBitDepth, 16));
 	_info.push_back(OptionInfo("pauseMode", &pauseMode, 0));
 	_info.push_back(OptionInfo("alienContainmentLimitEnforced", &alienContainmentLimitEnforced, false));
+	_info.push_back(OptionInfo("storageLimitEnforced", &storageLimitEnforced, false));
 	_info.push_back(OptionInfo("canSellLiveAliens", &canSellLiveAliens, false));
 	_info.push_back(OptionInfo("canTransferCraftsWhileAirborne", &canTransferCraftsWhileAirborne, false)); // When the craft can reach the destination base with its fuel
 	_info.push_back(OptionInfo("canManufactureMoreItemsPerHour", &canManufactureMoreItemsPerHour, false));
@@ -156,7 +157,7 @@ void create()
 	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false));
 	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false));
 	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false));
-	
+
 	// controls
 	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyCancel", &keyCancel, SDLK_ESCAPE, "STR_CANCEL", "STR_GENERAL"));
@@ -589,7 +590,7 @@ void backupDisplay()
  * testing a new display setup.
  */
 void switchDisplay()
-{	
+{
 	std::swap(displayWidth, newDisplayWidth);
 	std::swap(displayHeight, newDisplayHeight);
 	std::swap(useOpenGL, newOpenGL);
