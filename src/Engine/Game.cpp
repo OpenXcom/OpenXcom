@@ -90,16 +90,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// trap the mouse inside the window
 	SDL_WM_GrabInput(Options::captureMouse);
-
-	SDL_Surface *icon;
-	icon = IMG_Load(CrossPlatform::getDataFile("Resources/Icons/openxcom_48x48.png").c_str());
-	// Set the window caption
-	SDL_WM_SetCaption(title.c_str(), 0);
-	SDL_WM_SetIcon(icon, NULL);
-	SDL_FreeSurface(icon);
-
-#ifdef _WIN32
+	
 	// Set the window icon
+#ifdef _WIN32
 	HINSTANCE handle = GetModuleHandle(NULL);
 	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(103));
 
@@ -110,7 +103,17 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		HWND hwnd = wminfo.window;
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
+#else
+	SDL_Surface *icon = IMG_Load(CrossPlatform::getDataFile("openxcom.png").c_str());
+	if (icon != 0)
+	{
+		SDL_WM_SetIcon(icon, NULL);
+		SDL_FreeSurface(icon);
+	}
 #endif
+
+	// Set the window caption
+	SDL_WM_SetCaption(title.c_str(), 0);
 
 	SDL_EnableUNICODE(1);
 
