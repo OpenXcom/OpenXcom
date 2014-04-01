@@ -53,7 +53,7 @@ namespace OpenXcom
  */
 ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _origin(origin), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
 {
-	_overCrowded = Options::alienContainmentLimitEnforced && _base->getAvailableContainment() < _base->getUsedContainment();
+	_overCrowded = Options::storageLimitsEnforced && _base->getAvailableContainment() < _base->getUsedContainment();
 
 	for(std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin (); iter != _base->getResearch().end (); ++iter)
 	{
@@ -229,7 +229,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 	}
 	_game->popState();
 
-	if (Options::storageLimitEnforced && _base->storesOverfull())
+	if (Options::storageLimitsEnforced && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_game, _base, _origin));
 		if (_origin == OPT_BATTLESCAPE)
@@ -426,9 +426,9 @@ void ManageAlienContainmentState::updateStrings()
 
 	int aliens = _base->getUsedContainment() - _aliensSold - _researchedAliens;
 	int spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
-	bool enoughSpace = Options::alienContainmentLimitEnforced? spaces >= 0 : true;
+	bool enoughSpace = Options::storageLimitsEnforced ? spaces >= 0 : true;
 
-	_btnCancel->setVisible(enoughSpace && !_overCrowded);
+	_btnCancel->setVisible(!_overCrowded);
 	_btnOk->setVisible(enoughSpace);
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));

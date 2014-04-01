@@ -118,8 +118,7 @@ void create()
 	_info.push_back(OptionInfo("audioSampleRate", &audioSampleRate, 22050));
 	_info.push_back(OptionInfo("audioBitDepth", &audioBitDepth, 16));
 	_info.push_back(OptionInfo("pauseMode", &pauseMode, 0));
-	_info.push_back(OptionInfo("alienContainmentLimitEnforced", &alienContainmentLimitEnforced, false));
-	_info.push_back(OptionInfo("storageLimitEnforced", &storageLimitEnforced, false));
+	_info.push_back(OptionInfo("storageLimitsEnforced", &storageLimitsEnforced, false));
 	_info.push_back(OptionInfo("canSellLiveAliens", &canSellLiveAliens, false));
 	_info.push_back(OptionInfo("canTransferCraftsWhileAirborne", &canTransferCraftsWhileAirborne, false)); // When the craft can reach the destination base with its fuel
 	_info.push_back(OptionInfo("canManufactureMoreItemsPerHour", &canManufactureMoreItemsPerHour, false));

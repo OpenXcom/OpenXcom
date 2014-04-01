@@ -56,7 +56,7 @@ namespace OpenXcom
  */
 SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0)
 {
-	_overfull = Options::storageLimitEnforced && _base->storesOverfull();
+	_overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

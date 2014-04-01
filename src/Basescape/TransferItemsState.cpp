@@ -589,7 +589,7 @@ void TransferItemsState::increaseByValue(int change)
 		return;
 	}
 	if (TRANSFER_ITEM == selType && selItem->getAlien()
-		&& Options::alienContainmentLimitEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::alienContainmentLimitEnforced * _baseTo->getUsedContainment())
+		&& Options::storageLimitsEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::storageLimitsEnforced * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -622,7 +622,7 @@ void TransferItemsState::increaseByValue(int change)
 		float storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
 		float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
 		int freeStoresForItem;
-		if ( AreSame(storesNeededPerItem, 0.f) ) { 
+		if ( AreSame(storesNeededPerItem, 0.f) ) {
 			freeStoresForItem = INT_MAX;
 		}
 		else
@@ -638,7 +638,7 @@ void TransferItemsState::increaseByValue(int change)
 	// Live Aliens count
 	else if (TRANSFER_ITEM == selType && selItem->getAlien() )
 	{
-		int freeContainment = Options::alienContainmentLimitEnforced ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
+		int freeContainment = Options::storageLimitsEnforced ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
 		change = std::min(std::min(freeContainment, getQuantity() - _transferQty[_sel]), change);
 		_aQty += change;
 		_baseQty[_sel] -= change;

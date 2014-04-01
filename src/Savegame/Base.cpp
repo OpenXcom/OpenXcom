@@ -427,7 +427,7 @@ int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 		{
 			total++;
 		}
-		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
+		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") ||
 			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
@@ -997,7 +997,7 @@ bool Base::getHyperDetection() const
 		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
 		{
 			return true;
-		}		
+		}
 	}
 	return false;
 }
@@ -1039,7 +1039,7 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
- * Returns the total amount of used 
+ * Returns the total amount of used
  * Containment Space in the base.
  * @return Containment Lab space.
  */
@@ -1063,7 +1063,7 @@ int Base::getUsedContainment() const
 			}
 		}
 	}
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 		{
@@ -1516,7 +1516,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	}
 	else if ((*facility)->getRules()->getStorage())
 	{
-		// we won't destroy the items physically AT the base, 
+		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
 		if ((getAvailableStores() - getUsedStores()) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
 		{
