@@ -51,8 +51,8 @@ public:
 	~CraftSoldiersState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Shows Soldiers in a list.
-	void populateList();
+	/// Updates the soldiers list.
+	void init();
 	/// Handler for clicking the Soldiers reordering button.
 	void lstItemsLeftArrowClick(Action *action);
 	/// Handler for clicking the Soldiers reordering button.

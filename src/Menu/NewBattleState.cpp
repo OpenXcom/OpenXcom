@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NewBattleState.h"
+#include <cmath>
 #include <fstream>
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Game.h"
@@ -414,18 +415,20 @@ void NewBattleState::initSave()
             soldier->promoteRank();
             
             UnitStats* stats = soldier->getCurrentStats();
-            stats->tu        += RNG::generate(0, 5);
-            stats->stamina   += RNG::generate(0, 5);
-            stats->health    += RNG::generate(0, 5);
-            stats->bravery   += 0; /// Later
-            stats->reactions += RNG::generate(0, 5);
-            stats->firing    += RNG::generate(0, 5);
-            stats->throwing  += RNG::generate(0, 5);
-            stats->strength  += RNG::generate(0, 5);
+            stats->tu          += RNG::generate(0, 5);
+            stats->stamina     += RNG::generate(0, 5);
+            stats->health      += RNG::generate(0, 5);
+			stats->bravery     += RNG::generate(0, 5);
+            stats->reactions   += RNG::generate(0, 5);
+            stats->firing      += RNG::generate(0, 5);
+            stats->throwing    += RNG::generate(0, 5);
+            stats->strength    += RNG::generate(0, 5);
             stats->psiStrength += RNG::generate(0, 5);
-            stats->melee     += RNG::generate(0, 5);
-            stats->psiSkill  += RNG::generate(0, 20);
+            stats->melee       += RNG::generate(0, 5);
+            stats->psiSkill    += RNG::generate(0, 20);
         }
+		UnitStats* stats = soldier->getCurrentStats();
+		stats->bravery = round(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())
