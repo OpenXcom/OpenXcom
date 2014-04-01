@@ -428,7 +428,7 @@ void NewBattleState::initSave()
             stats->psiSkill    += RNG::generate(0, 20);
         }
 		UnitStats* stats = soldier->getCurrentStats();
-		stats->bravery = round(stats->bravery / 10.0) * 10; // keep it a multiple of 10
+		stats->bravery = ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())
