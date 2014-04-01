@@ -401,7 +401,7 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() == 0)  // it's a grenade to explode now
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getFuseTimer() == 0)  // it's a grenade to explode now
 			{
 				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
@@ -429,9 +429,9 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
 		{
-				if (((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE) && (*it)->getExplodeTurn() > 0)
+				if (((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE) && (*it)->getFuseTimer() > 0)
 				{
-					(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
+					(*it)->setFuseTimer((*it)->getFuseTimer() - 1);
 				}
 		}
 	}
@@ -626,7 +626,7 @@ void BattlescapeGame::handleNonTargetAction()
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				_currentAction.weapon->setExplodeTurn(_currentAction.value);
+				_currentAction.weapon->setFuseTimer(_currentAction.value);
 			}
 			else
 			{
@@ -1119,9 +1119,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				}
 				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 				{
-					if (ba.weapon->getExplodeTurn() == -1)
+					if (ba.weapon->getFuseTimer() == -1)
 					{
-						ba.weapon->setExplodeTurn(0);
+						ba.weapon->setFuseTimer(0);
 					}
 					ba.type = BA_THROW;
 					statePushBack(new ProjectileFlyBState(this, ba));
@@ -2027,7 +2027,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
 					{
 						for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 						{
-							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
+							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getFuseTimer() == 0)
 							{
 								Position p;
 								p.x = t->getPosition().x*16 + 8;
