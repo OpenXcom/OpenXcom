@@ -57,9 +57,9 @@ shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
 	bin/data/Shaders/*
 
-iconprogramdir = $(pkgdatadir)/data/Resources/Icons
+iconprogramdir = $(pkgdatadir)/data/
 iconprogram_DATA = \
-	bin/data/Resources/Icons/*
+	bin/data/openxcom.png
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99

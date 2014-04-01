@@ -60,8 +60,8 @@ public:
 	~SoldierInfoState();
 	/// Updates the soldier info.
 	void init();
-	/// Handler for clicking on the Name edit.
-	void edtSoldierClick(Action *action);
+	/// Handler for pressing on the Name edit.
+	void edtSoldierPress(Action *action);
 	/// Handler for changing text on the Name edit.
 	void edtSoldierChange(Action *action);
 	/// Handler for clicking the OK button.

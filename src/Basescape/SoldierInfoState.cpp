@@ -197,7 +197,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onChange((ActionHandler)&SoldierInfoState::edtSoldierChange);
-	_edtSoldier->onMouseClick((ActionHandler)&SoldierInfoState::edtSoldierClick);
+	_edtSoldier->onMousePress((ActionHandler)&SoldierInfoState::edtSoldierPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
@@ -509,7 +509,7 @@ void SoldierInfoState::init()
  * Disables the soldier input.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::edtSoldierClick(Action *action)
+void SoldierInfoState::edtSoldierPress(Action *action)
 {
 	if (_base == 0)
 	{
