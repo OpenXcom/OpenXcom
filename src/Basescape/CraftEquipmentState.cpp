@@ -156,10 +156,6 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		// CHEAP HACK TO HIDE HWP AMMO
-		if (i->substr(0, 8) == "STR_HWP_")
-			continue;
-
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		int cQty = 0;
 		if (rule->isFixed())
@@ -490,11 +486,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	else
 	{
 		c->getItems()->removeItem(_items[_sel], change);
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
-		{
-			//Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
-		}
-		else
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
 		{
 			_base->getItems()->addItem(_items[_sel], change);
 		}
@@ -601,11 +593,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 	else
 	{
 		c->getItems()->addItem(_items[_sel],change);
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
-		{
-			//Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
-		}
-		else
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
 		{
 			_base->getItems()->removeItem(_items[_sel],change);
 		}

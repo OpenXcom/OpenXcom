@@ -57,6 +57,10 @@ shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
 	bin/data/Shaders/*
 
+iconprogramdir = $(pkgdatadir)/data/
+iconprogram_DATA = \
+	bin/data/openxcom.png
+
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) $(GL_LIBS)
@@ -657,7 +661,8 @@ EXTRA_DIST = \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \
-	$(icon_DATA)
+	$(icon_DATA) \
+	$(iconprogram_DATA)
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \
