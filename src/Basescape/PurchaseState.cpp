@@ -61,9 +61,9 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtFunds = new Text(150, 9, 10, 24);
 	_txtPurchases = new Text(150, 9, 160, 24);
-	_btnPrev = new TextButton(28, 14, 8, 34);
-	_btnTab = new TextButton(56, 14, 38, 34);
-	_btnNext = new TextButton(28, 14, 96, 34);
+	_btnPrev = new TextButton(25, 14, 8, 35);
+	_btnTab = new TextButton(72, 14, 35, 35);
+	_btnNext = new TextButton(25, 14, 109, 35);
 	_txtItem = new Text(130, 9, 30, 50);
 	_txtCost = new Text(65, 18, 139, 42);
 	_txtInStorage = new Text(45, 18, 205, 42);
@@ -148,52 +148,28 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtInStorage->setWordWrap(true);
 	_txtInStorage->setVerticalAlign(ALIGN_BOTTOM);
 
-	_lstPersonnel->setColor(Palette::blockOffset(13)+10);
-	_lstPersonnel->setArrowColumn(230, ARROW_VERTICAL);
-	_lstPersonnel->setColumns(4, 150, 60, 50, 32);
-	_lstPersonnel->setSelectable(true);
-	_lstPersonnel->setBackground(_window);
-	_lstPersonnel->setMargin(2);
-	_lstPersonnel->setVisible(false);
-
-	_lstCraft->setColor(Palette::blockOffset(13)+10);
-	_lstCraft->setArrowColumn(230, ARROW_VERTICAL);
-	_lstCraft->setColumns(4, 150, 60, 50, 32);
-	_lstCraft->setSelectable(true);
-	_lstCraft->setBackground(_window);
-	_lstCraft->setMargin(2);
-	_lstCraft->setVisible(false);
-	_lstCraft->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
-	_lstCraft->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
-	_lstCraft->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
-	_lstCraft->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
-
-	_lstItems->setColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColumn(230, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 60, 50, 32);
-	_lstItems->setSelectable(true);
-	_lstItems->setBackground(_window);
-	_lstItems->setMargin(2);
-	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
-	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
-	_lstItems->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
-	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
-	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
-	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
-
 	_lists.push_back(_lstPersonnel);
-	_lists.push_back(_lstCraft);
-	_lists.push_back(_lstItems);
-
 	_tabs.push_back("STR_PERSONNEL");
+	_lists.push_back(_lstCraft);
 	_tabs.push_back("STR_CRAFT");
+	_lists.push_back(_lstItems);
 	_tabs.push_back("STR_ITEMS");
+	for (std::vector<TextList*>::iterator i = _lists.begin(); i != _lists.end(); ++i)
+	{
+		(*i)->setColor(Palette::blockOffset(13)+10);
+		(*i)->setArrowColumn(230, ARROW_VERTICAL);
+		(*i)->setColumns(4, 150, 60, 50, 32);
+		(*i)->setSelectable(true);
+		(*i)->setBackground(_window);
+		(*i)->setMargin(2);
+		(*i)->setVisible(false);
+	}
 
 	// start on items tab
 	_selTab = TAB_ITEMS;
 	_btnTab->setText(tr("STR_ITEMS"));
 	_selList = _lstItems;
+	updateTab(0);
 
 	_qtysPersonnel.push_back(0);
 	std::wostringstream ss;
@@ -429,6 +405,36 @@ void PurchaseState::updateIndex(size_t &index, std::vector<std::string> &list, i
 }
 
 /**
+ * Updates the displayed tab.  First switches tabs if requested.
+ * @param direction Direction to move through tabs, 1 (forward), -1 (back), or 0 (setup current tab).
+ */
+void PurchaseState::updateTab(int direction)
+{
+	_selList->onLeftArrowPress(0);
+	_selList->onLeftArrowRelease(0);
+	_selList->onLeftArrowClick(0);
+	_selList->onRightArrowPress(0);
+	_selList->onRightArrowRelease(0);
+	_selList->onRightArrowClick(0);
+	_selList->onMousePress(0);
+	_selList->setVisible(false);
+
+	updateIndex(_selTab, _tabs, direction);
+
+	_btnTab->setText(tr(_tabs[_selTab]));
+
+	_selList = _lists[_selTab];
+	_selList->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
+	_selList->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
+	_selList->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
+	_selList->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
+	_selList->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
+	_selList->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
+	_selList->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
+	_selList->setVisible(true);
+}
+
+/**
  * Makes the the next list visible.
  * @param action Pointer to an action.
  */
@@ -436,52 +442,30 @@ void PurchaseState::btnTabClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		updateIndex(_selTab, _tabs, 1);
+		updateTab(1);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		updateIndex(_selTab, _tabs, -1);
+		updateTab(-1);
 	}
-	_btnTab->setText(tr(_tabs[_selTab]));
-	_selList = _lists[_selTab];
-
-	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
-	{
-		(*it)->setVisible(false);
-	}
-	_selList->setVisible(true);
 }
 
 /**
- * Goes to the previous list.
+ * Goes to the previous tab.
  * @param action Pointer to an action.
  */
 void PurchaseState::btnPrevClick(Action *)
 {
-	updateIndex(_selTab, _tabs, -1);
-	_btnTab->setText(tr(_tabs[_selTab]));
-	_selList = _lists[_selTab];
-	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
-	{
-		(*it)->setVisible(false);
-	}
-	_selList->setVisible(true);
+	updateTab(-1);
 }
 
 /**
- * Goes to the next list.
+ * Goes to the next tab.
  * @param action Pointer to an action.
  */
 void PurchaseState::btnNextClick(Action *)
 {
-	updateIndex(_selTab, _tabs, 1);
-	_btnTab->setText(tr(_tabs[_selTab]));
-	_selList = _lists[_selTab];
-	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
-	{
-		(*it)->setVisible(false);
-	}
-	_selList->setVisible(true);
+	updateTab(1);
 }
 
 /**
@@ -638,7 +622,7 @@ int PurchaseState::getPrice()
 	else if (_selTab == TAB_CRAFT)
 	{
 		// Is it a craft?
-		if (_sel < 2)
+		if (_sel < _crafts.size())
 		{
 			return _game->getRuleset()->getCraft(_crafts[_sel])->getBuyCost();
 		}
@@ -672,6 +656,7 @@ void PurchaseState::increase()
 void PurchaseState::increaseByValue(int change)
 {
 	if (0 >= change) return;
+
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
 		_timerInc->stop();
@@ -690,7 +675,7 @@ void PurchaseState::increaseByValue(int change)
 	}
 	// Or a craft item
 	else if ((_selTab == TAB_CRAFT) && (_sel >= _crafts.size())
-		&& _iQty + (int)(10 * _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 *_base->getExactUsedStores() + 0.5))))
+		&& _iQty + (int)(10 * _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize()) > (10 * _base->getAvailableStores() - (int)(10 *_base->getExactUsedStores() + 0.5)))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -729,7 +714,7 @@ void PurchaseState::increaseByValue(int change)
 				storesNeededPerItem = (int)(10 *_game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize());
 			else
 				storesNeededPerItem = (int)(10 *_game->getRuleset()->getItem(_items[_sel])->getSize());
-			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getUsedStores()) - _iQty;
+			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getExactUsedStores()) - _iQty;
 			int maxByStores;
 
 			if (storesNeededPerItem == 0)
@@ -742,6 +727,7 @@ void PurchaseState::increaseByValue(int change)
 			}
 			change = std::min(maxByStores, change);
 			_iQty += change * storesNeededPerItem;
+
 			if (_selTab == TAB_CRAFT)
 				_qtysCraft[_sel] += change;
 			else
@@ -775,6 +761,7 @@ void PurchaseState::decreaseByValue(int change)
  	{
 		// Personnel count
 		if (0 >= _qtysPersonnel[_sel]) return;
+
 		change = std::min(_qtysPersonnel[_sel], change);
 		_pQty -= change;
 		_qtysPersonnel[_sel] -= change;
@@ -783,6 +770,7 @@ void PurchaseState::decreaseByValue(int change)
 	{
 		// Craft count
 		if (0 >= _qtysCraft[_sel]) return;
+
 		change = std::min(_qtysCraft[_sel], change);
 		_cQty -= change;
 		_qtysCraft[_sel] -= change;
@@ -790,16 +778,18 @@ void PurchaseState::decreaseByValue(int change)
 	else
 	{
 		// Item count
-		if (0 >= _qtys[_sel]) return;
-
 		if (_selTab == TAB_CRAFT)
 		{
-			change = std::min(_qtysCraft[_sel - _crafts.size()], change);
+			if (0 >= _qtysCraft[_sel]) return;
+
+			change = std::min(_qtysCraft[_sel], change);
 			_iQty -= (int)(10 *_game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()])->getSize()) * change;
 			_qtysCraft[_sel] -= change;
 		}
 		else
 		{
+			if (0 >= _qtys[_sel]) return;
+
 			change = std::min(_qtys[_sel], change);
 			_iQty -= (int)(10 *_game->getRuleset()->getItem(_items[_sel])->getSize()) * change;
 			_qtys[_sel] -= change;

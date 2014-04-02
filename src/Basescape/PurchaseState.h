@@ -43,7 +43,6 @@ class PurchaseState : public State
 {
 private:
 	Base *_base;
-
 	TextButton *_btnOk, *_btnCancel, *_btnTab, *_btnPrev, *_btnNext;
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity, *_txtInStorage;;
@@ -61,8 +60,10 @@ private:
 	int getPrice();
 	/// Is it excluded in the options file?
 	bool isExcluded(std::string item);
-
+	/// Updates the tab index.
 	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
+	/// Updates the currently displayed tab.
+	void updateTab(int change);
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game, Base *base);

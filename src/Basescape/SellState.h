@@ -60,10 +60,9 @@ private:
 	std::vector<ItemContainer*> _containers;
 	unsigned int _sel;
 	size_t _selTab;
-	int _total;
-	int _spaceChange;
+	int _total, _spaceChange;
 	Timer *_timerInc, *_timerDec;
-	bool _overfull, _haveTransfers;
+	bool _overfull, _haveTransferItems;
 	Uint8 _color, _color2, _color3, _colorAmmo;
 	/// Gets selected price.
 	int getPrice();
@@ -71,8 +70,12 @@ private:
 	int getQuantity();
 	/// Gets the index of selected item.
 	int getItemIndex(unsigned selected) const;
-
+	/// Updates the tab index.
 	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
+	/// Adds an item row to a tab.
+	void addRow(ItemContainer *container, std::string item, int tab);
+	/// Updates the currently displayed tab.
+	void updateTab(int change);
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base, OptionsOrigin origin = OPT_GEOSCAPE);

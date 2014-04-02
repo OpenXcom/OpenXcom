@@ -55,10 +55,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0)
+SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0), _haveTransferItems(false)
 {
 	_overfull = Options::storageLimitsEnforced && _base->storesOverfull();
-	_haveTransfers = false;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -68,18 +67,18 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtSales = new Text(150, 9, 10, 24);
 	_txtFunds = new Text(150, 9, 160, 24);
-	_btnPrev = new TextButton(28, 14, 8, 34);
-	_btnTab = new TextButton(56, 14, 38, 34);
-	_btnNext = new TextButton(28, 14, 96, 34);
-	_txtSpaceUsed = new Text(150, 8, 160, 34);
-	_txtItem = new Text(130, 9, 30, 50);
-	_txtQuantity = new Text(54, 9, 112, 50);
-	_txtSell = new Text(96, 9, 172, 50);
-	_txtValue = new Text(40, 9, 225, 50);
-	_txtSpace = new Text(40, 9, 268, 50);
-	_lstPersonnel = new TextList(288, 104, 8, 62);
-	_lstCraft = new TextList(288, 104, 8, 62);
-	_lstItems = new TextList(288, 104, 8, 62);
+	_btnPrev = new TextButton(25, 14, 8, 35);
+	_btnTab = new TextButton(72, 14, 35, 35);
+	_btnNext = new TextButton(25, 14, 109, 35);
+ 	_txtSpaceUsed = new Text(150, 8, 160, 34);
+	_txtItem = new Text(80, 9, 30, 53);
+	_txtQuantity = new Text(54, 9, 120, 53);
+	_txtSell = new Text(54, 19, 178, 42);
+	_txtValue = new Text(40, 9, 234, 53);
+	_txtSpace = new Text(40, 9, 273, 53);
+	_lstPersonnel = new TextList(288, 104, 8, 65);
+	_lstCraft = new TextList(288, 104, 8, 65);
+	_lstItems = new TextList(288, 104, 8, 65);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -126,7 +125,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(_color);
-	_btnOk->setText(tr("STR_SELL_SACK"));
+	_btnOk->setText(_overfull ? tr("STR_SELL_UC") : tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SellState::btnOkClick, Options::keyOk);
 
@@ -155,7 +154,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
+	_txtTitle->setText(_overfull ? tr("STR_SELL_ITEMS") : tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
 	_txtSales->setColor(_color);
 	_txtSales->setSecondaryColor(_color2);
@@ -169,10 +168,14 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtItem->setText(tr("STR_ITEM_LC"));
 
 	_txtQuantity->setColor(_color3);
+	_txtQuantity->setAlign(ALIGN_RIGHT);
 	_txtQuantity->setText(tr("STR_QUANTITY"));
 
 	_txtSell->setColor(_color3);
-	_txtSell->setText(tr("STR_SELL_SACK"));
+	_txtSell->setAlign(ALIGN_CENTER);
+	_txtSell->setVerticalAlign(ALIGN_BOTTOM);
+	_txtSell->setText(_overfull ? tr("STR_SELL") : tr("STR_SELL_SACK"));
+	_txtSell->setWordWrap(true);
 
 	_txtValue->setColor(_color3);
 	_txtValue->setText(tr("STR_VALUE"));
@@ -187,14 +190,6 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	ss5 << _base->getExactUsedStores() << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss5.str());
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
-
-	_lstItems->onLeftArrowPress((ActionHandler)&SellState::lstItemsLeftArrowPress);
-	_lstItems->onLeftArrowRelease((ActionHandler)&SellState::lstItemsLeftArrowRelease);
-	_lstItems->onLeftArrowClick((ActionHandler)&SellState::lstItemsLeftArrowClick);
-	_lstItems->onRightArrowPress((ActionHandler)&SellState::lstItemsRightArrowPress);
-	_lstItems->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
-	_lstItems->onRightArrowClick((ActionHandler)&SellState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&SellState::lstItemsMousePress);
 
 	_lists.push_back(_lstPersonnel);
 	_tabs.push_back("STR_PERSONNEL");
@@ -222,7 +217,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 			}
 			if (tItems->getTotalQuantity() > 0)
 			{
-				_haveTransfers = true;
+				_haveTransferItems = true;
 				TextList *lstTransfers = new TextList(288, 104, 8, 62);
 				add(lstTransfers);
 				_lists.push_back(lstTransfers);
@@ -241,8 +236,8 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 					add(lstCraftInventory);
 					_lists.push_back(lstCraftInventory);
 					_tabs.push_back(Language::wstrToUtf8((*c)->getName(_game->getLanguage())));
+					_containers.push_back((*c)->getItems());
 				}
-				_containers.push_back((*c)->getItems());
 			}
 		}
 	}
@@ -256,21 +251,19 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	for (std::vector<TextList*>::iterator i = _lists.begin(); i != _lists.end(); ++i)
 	{
 		(*i)->setColor(_color);
-		(*i)->setArrowColumn(145, ARROW_VERTICAL);
-		(*i)->setColumns(5, 120, 60, 28, 56, 22);
+		(*i)->setArrowColumn(176, ARROW_VERTICAL);
+		(*i)->setColumns(5, 152, 49, 24, 42, 22);
 		(*i)->setSelectable(true);
 		(*i)->setBackground(_window);
 		(*i)->setMargin(2);
 		(*i)->setVisible(false);
 	}
-
-	_lstPersonnel->setColumns(4, 120, 60, 28, 56);
+	_lstPersonnel->setColumns(4, 124, 60, 28, 52);
 
 	// start on items tab
 	_selTab = TAB_ITEMS;
-	_btnTab->setText(tr("STR_ITEMS"));
 	_selList = _lstItems;
-	_selList->setVisible(true);
+	updateTab(0);
 
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
@@ -305,118 +298,47 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		_lstPersonnel->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	ItemContainer *craftItems = new ItemContainer();
+	ItemContainer *nonCraftItems = new ItemContainer();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
-			std::wostringstream ss, ss2;
-			ss << qty;
-			ss2 << qty * rule->getSize();
-
-			std::wstring item = tr(*i);
 
 			if (rule->getSubCategory() == "CRAFT_WEAPON")
 			{
-				_quantities[TAB_CRAFT].push_back(0);
-				_items[TAB_CRAFT].push_back(*i);
-
-				if (rule->getClipSize() > 0)
-				{
-					item.insert(0, L"  ");
-					_lstCraft->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-					_lstCraft->setRowColor(_quantities[TAB_CRAFT].size() - 1, _colorAmmo);
-				}
-				else
-				{
-					_lstCraft->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-				}
+				craftItems->addItem(*i,qty);
 			}
 			else
 			{
-				_quantities[TAB_ITEMS].push_back(0);
-				_items[TAB_ITEMS].push_back(*i);
-
-				if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
-				{
-					item.insert(0, L"  ");
-					_lstItems->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-					_lstItems->setRowColor(_quantities[TAB_ITEMS].size() - 1, _colorAmmo);
-				}
-				else
-				{
-					_lstItems->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-				}
+				nonCraftItems->addItem(*i, qty);
 			}
 		}
+	}
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	{
+		addRow(craftItems, *i, TAB_CRAFT);
+		addRow(nonCraftItems, *i, TAB_ITEMS);
 	}
 
 	if (_overfull)
 	{
-		if (_haveTransfers)
+		if (_haveTransferItems)
 		{
 			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 			{
-				int qty = _containers[TAB_TRANSFERS]->getItem(*i);
-
-				if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
-				{
-					RuleItem *rule = _game->getRuleset()->getItem(*i);
-					std::wstringstream ss, ss2;
-					ss << qty;
-					ss2 << qty * rule->getSize();
-
-					std::wstring item = tr(*i);
-
-					_quantities[TAB_TRANSFERS].push_back(0);
-					_items[TAB_TRANSFERS].push_back(*i);
-
-					if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
-					{
-						item.insert(0, L"  ");
-						_lists[TAB_TRANSFERS]->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-						_lists[TAB_TRANSFERS]->setRowColor(_quantities[TAB_TRANSFERS].size() - 1, _colorAmmo);
-					}
-					else
-					{
-						_lists[TAB_TRANSFERS]->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-					}
-				}
+				addRow(_containers[TAB_TRANSFERS], *i, TAB_TRANSFERS);
 			}
 		}
 
-		int craftIndex = _haveTransfers ? 4 : 3;
-
+		int craftIndex = _haveTransferItems ? 4 : 3;
 		for (size_t tab = craftIndex; tab < _lists.size(); tab++)
 		{
 			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 			{
-				int qty = _containers[tab]->getItem(*i);
-
-				if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
-				{
-					RuleItem *rule = _game->getRuleset()->getItem(*i);
-					std::wstringstream ss, ss2;
-					ss << qty;
-					ss2 << qty * rule->getSize();
-
-					std::wstring item = tr(*i);
-
-					_quantities[tab].push_back(0);
-					_items[tab].push_back(*i);
-
-					if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
-					{
-						item.insert(0, L"  ");
-						_lists[tab]->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-						_lists[tab]->setRowColor(_quantities[tab].size() - 1, _colorAmmo);
-					}
-					else
-					{
-						_lists[tab]->addRow(5, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-					}
-				}
+				addRow(_containers[tab], *i, tab);
 			}
 		}
 	}
@@ -445,6 +367,40 @@ void SellState::think()
 
 	_timerInc->think(this, 0);
 	_timerDec->think(this, 0);
+}
+
+/**
+ * Adds an item row to a tab if the item is in the container.
+ * @param container Item container.
+ * @param item Item to look up in the container.
+ * @param tab Tab to add rows to.
+ */
+void SellState::addRow(ItemContainer *container, std::string item, int tab)
+{
+	int quantity = container->getItem(item);
+	if (quantity > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(item)->getAlien()))
+	{
+		RuleItem *rule = _game->getRuleset()->getItem(item);
+		std::wstringstream ss, ss2;
+		ss << quantity;
+		ss2 << quantity * rule->getSize();
+
+		std::wstring name = tr(item);
+
+		_quantities[tab].push_back(0);
+		_items[tab].push_back(item);
+
+		if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+		{
+			name.insert(0, L"  ");
+			_lists[tab]->addRow(5, name.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
+			_lists[tab]->setRowColor(_quantities[tab].size() - 1, _colorAmmo);
+		}
+		else
+		{
+			_lists[tab]->addRow(5, name.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
+		}
+	}
 }
 
 /**
@@ -553,18 +509,13 @@ void SellState::btnOkClick(Action *)
 	}
 
 	// Sell the items
-	for (size_t tab = 0; tab < _lists.size(); tab++)
+	for (size_t tab = TAB_ITEMS; tab < _lists.size(); tab++)
 	{
-		if (tab == TAB_CRAFT || tab == TAB_PERSONNEL)
-		{
-			continue;
-		}
-
 		for (unsigned int i = 0; i < _quantities[tab].size(); ++i)
 		{
 			if (_quantities[tab][i] > 0)
 			{
-				if (_haveTransfers && tab == TAB_TRANSFERS)
+				if (_haveTransferItems && tab == TAB_TRANSFERS)
 				{
 					for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end() && _quantities[tab][i] != 0 ;)
 					{
@@ -637,70 +588,76 @@ void SellState::updateIndex(size_t &index, std::vector<std::string> &list, int c
 	{
 		index += change;
 	}
-	if (_overfull)
+
+	// Soldiers might have armor; do not sack right now.
+	if (_overfull && index == TAB_PERSONNEL)
 	{
-		// Soldiers might have armor; do not sack right now.
-		if (index == TAB_PERSONNEL)
-		{
-			updateIndex(index, list, change);
-		}
+		updateIndex(index, list, change);
 	}
 }
 
 /**
- * Makes the the next list visible.
+ * Updates the displayed tab.  First switches tabs if requested.
+ * @param direction Direction to move through tabs, 1 (forward), -1 (back), or 0 (setup current tab).
+ */
+void SellState::updateTab(int direction)
+{
+	_selList->onLeftArrowPress(0);
+	_selList->onLeftArrowRelease(0);
+	_selList->onLeftArrowClick(0);
+	_selList->onRightArrowPress(0);
+	_selList->onRightArrowRelease(0);
+	_selList->onRightArrowClick(0);
+	_selList->onMousePress(0);
+	_selList->setVisible(false);
+
+	updateIndex(_selTab, _tabs, direction);
+
+	_btnTab->setText(tr(_tabs[_selTab]));
+
+	_selList = _lists[_selTab];
+	_selList->onLeftArrowPress((ActionHandler)&SellState::lstItemsLeftArrowPress);
+	_selList->onLeftArrowRelease((ActionHandler)&SellState::lstItemsLeftArrowRelease);
+	_selList->onLeftArrowClick((ActionHandler)&SellState::lstItemsLeftArrowClick);
+	_selList->onRightArrowPress((ActionHandler)&SellState::lstItemsRightArrowPress);
+	_selList->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
+	_selList->onRightArrowClick((ActionHandler)&SellState::lstItemsRightArrowClick);
+	_selList->onMousePress((ActionHandler)&SellState::lstItemsMousePress);
+	_selList->setVisible(true);
+}
+
+/**
+ * Makes the the next tab visible.
  * @param action Pointer to an action.
  */
 void SellState::btnTabClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		updateIndex(_selTab, _tabs, 1);
+		updateTab(1);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		updateIndex(_selTab, _tabs, -1);
+		updateTab(-1);
 	}
-	_btnTab->setText(tr(_tabs[_selTab]));
-	_selList = _lists[_selTab];
-
-	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
-	{
-		(*it)->setVisible(false);
-	}
-	_selList->setVisible(true);
 }
 
 /**
- * Goes to the previous list.
+ * Goes to the previous tab.
  * @param action Pointer to an action.
  */
 void SellState::btnPrevClick(Action *)
 {
-	updateIndex(_selTab, _tabs, -1);
-	_btnTab->setText(tr(_tabs[_selTab]));
-	_selList = _lists[_selTab];
-	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
-	{
-		(*it)->setVisible(false);
-	}
-	_selList->setVisible(true);
+	updateTab(-1);
 }
 
 /**
- * Goes to the next list.
+ * Goes to the next tab.
  * @param action Pointer to an action.
  */
 void SellState::btnNextClick(Action *)
 {
-	updateIndex(_selTab, _tabs, 1);
-	_btnTab->setText(tr(_tabs[_selTab]));
-	_selList = _lists[_selTab];
-	for(std::vector<TextList*>::iterator it = _lists.begin(); it != _lists.end(); ++it)
-	{
-		(*it)->setVisible(false);
-	}
-	_selList->setVisible(true);
+	updateTab(1);
 }
 
 /**
@@ -890,7 +847,7 @@ void SellState::increaseByValue(int change)
 
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
-		// Calculate the change in storage space
+		// Calculate the change in storage space in tenths of an XCom storage unit.
 		_spaceChange +=  change * (int)(10 * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize());
 	}
 	_total += getPrice() * change;
@@ -920,7 +877,7 @@ void SellState::decreaseByValue(int change)
 
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))
 	{
-		// Calculate the change in storage space
+		// Calculate the change in storage space in tenths of an XCom storage unit.
 		_spaceChange -=  change * (int)(10 * _game->getRuleset()->getItem(_items[_selTab][getItemIndex(_sel)])->getSize());
 	}
 	_total -= getPrice() * change;
