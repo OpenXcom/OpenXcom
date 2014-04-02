@@ -58,8 +58,8 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _missionType(""), _globalShade(0), _side(FACTION_PLAYER),
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
-                                     _unitsFalling(false), _strafeEnabled(false), _sneaky(false),
-									 _traceAI(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false)
+                                     _unitsFalling(false), 
+									 _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
