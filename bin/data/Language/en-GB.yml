@@ -1275,7 +1275,7 @@ en-GB:
   STR_PATH_PREVIEW: "Path Preview"
   STR_PATH_ARROWS: "Arrows"
   STR_PATH_ARROWS_DESC: "Clicking shows the path your unit will take to the destination. Color indicates available actions: Green - can move and fire; Yellow - can move; Red - can't move."
-  STR_PATH_TIME_UNIT_COST: "TU Cost"
+  STR_PATH_TIME_UNIT_COST: "Time Units"
   STR_PATH_TIME_UNIT_COST_DESC: "Clicking shows the TUs your unit will have remaining after moving to the destination."
   STR_USER_INTERFACE_OPTIONS: "UI Options"
   STR_TOOLTIPS: "Tooltips"
