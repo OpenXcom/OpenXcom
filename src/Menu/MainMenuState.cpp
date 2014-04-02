@@ -20,6 +20,7 @@
 #include "../version.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -98,7 +99,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setText(title.str());
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMSTORY")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play();
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

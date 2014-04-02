@@ -29,6 +29,7 @@
 #include "InventoryState.h"
 #include "NextTurnState.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -65,17 +66,17 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMENBASE")->play();
+		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE)->play();
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR)->play();
 	}
 	else
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMDEFEND")->play();
+		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND)->play();
 	}
 
 	add(_window);

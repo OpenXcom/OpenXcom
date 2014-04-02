@@ -28,6 +28,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musicFile(), _musicAssignment()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -72,7 +73,7 @@ ResourcePack::~ResourcePack()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, Music*>::iterator i = _musics.begin(); i != _musics.end(); ++i)
+	for (std::map<std::string, Music*>::iterator i = _musicFile.begin(); i != _musicFile.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -140,15 +141,7 @@ std::list<Polyline*> *ResourcePack::getPolylines()
  */
 Music *ResourcePack::getMusic(const std::string &name) const
 {
-	if (Options::mute)
-	{
-		return _muteMusic;
-	}
-	else
-	{
-		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
-		if (_musics.end() != i) return i->second; else return 0;
-	}
+    return getRandomMusic(name, "");
 }
 
 /**
@@ -156,7 +149,7 @@ Music *ResourcePack::getMusic(const std::string &name) const
  * @param name Name of the music to pick from.
  * @return Pointer to the music.
  */
-Music *ResourcePack::getRandomMusic(const std::string &name) const
+Music *ResourcePack::getRandomMusic(const std::string &name, const std::string &terrain) const
 {
 	if (Options::mute)
 	{
@@ -164,18 +157,44 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 	}
 	else
 	{
-		std::vector<Music*> music;
-		for (std::map<std::string, Music*>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
-		{
-			if (i->first.find(name) != std::string::npos)
-			{
-				music.push_back(i->second);
-			}
-		}
-		if (_musics.empty())
+		Log(LOG_DEBUG) << "MUSIC - Request to play " << name << " '" << terrain << "'";
+		if (_musicAssignment.find(name) == _musicAssignment.end())
 			return _muteMusic;
-		else
-			return music[RNG::generate(0, music.size()-1)];
+		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
+		if (assignment.find(terrain) == assignment.end())
+			return _muteMusic;
+		
+		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
+		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(0, musicCodes.size()-1)];
+		Log(LOG_DEBUG) << "MUSIC - Chose " << randomCode.first;
+		Music* music = _musicFile.at(randomCode.first);
+		return music;
+	}
+}
+
+/// Clear a music assignment
+void ResourcePack::ClearMusicAssignment(const std::string &name, const std::string &terrain)
+{
+	if (_musicAssignment.find(name) == _musicAssignment.end())
+		return;
+	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+		return;
+	
+	_musicAssignment.at(name).at(terrain).clear();
+}
+
+/// Make a music assignment
+void ResourcePack::MakeMusicAssignment(const std::string &name, const std::string &terrain, const std::vector<std::string> &filenames, const std::vector<int> &midiIndexes)
+{
+	if (_musicAssignment.find(name) == _musicAssignment.end())
+		_musicAssignment[name] = std::map<std::string, std::vector<std::pair<std::string,int> > > ();
+	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+		_musicAssignment[name][terrain] = std::vector<std::pair<std::string,int> > ();
+	
+	for(int i = 0; i<filenames.size(); i++)
+	{
+		std::pair<std::string,int> toAdd = std::make_pair<std::string,int>(filenames.at(i), midiIndexes.at(i));
+		_musicAssignment[name][terrain].push_back(toAdd);
 	}
 }
 
