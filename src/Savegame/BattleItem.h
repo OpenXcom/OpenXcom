@@ -47,7 +47,7 @@ private:
 	RuleInventory *_inventorySlot;
 	int _inventoryX, _inventoryY;
 	BattleItem *_ammoItem;
-	int _explodeTurn, _ammoQuantity;
+	int _fuseTimer, _ammoQuantity;
 	int _painKiller, _heal, _stimulant;
 	bool _XCOMProperty, _droppedOnAlienTurn;
 public:
@@ -65,10 +65,10 @@ public:
 	int getAmmoQuantity() const;
 	/// Sets the item's ammo quantity.
 	void setAmmoQuantity(int qty);
-	/// Gets the turn to explode on
-	int getExplodeTurn() const;
-	/// Sets the turn to explode on.
-	void setExplodeTurn(int turn);
+	/// Gets the turn until explosion
+	int getFuseTimer() const;
+	/// Sets the turns until explosion.
+	void setFuseTimer(int turns);
 	/// Spend one bullet.
 	bool spendBullet();
 	/// Gets the item's owner.

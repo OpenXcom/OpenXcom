@@ -20,6 +20,7 @@
 #define OPENXCOM_SOLDIERINFOSTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -42,6 +43,7 @@ private:
 	Base *_base;
 	size_t _soldierId;
 	Soldier *_soldier;
+	std::vector<Soldier*> *_list;
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;
@@ -60,6 +62,8 @@ public:
 	void init();
 	/// Set the soldier Id.
 	void setSoldierId(size_t soldier);
+	/// Handler for pressing on the Name edit.
+	void edtSoldierPress(Action *action);
 	/// Handler for changing text on the Name edit.
 	void edtSoldierChange(Action *action);
 	/// Handler for clicking the OK button.

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NewBattleState.h"
+#include <cmath>
 #include <fstream>
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Game.h"
@@ -305,14 +306,37 @@ void NewBattleState::load(const std::string &filename)
 			base->load(doc["base"], save, false);
 			save->getBases()->push_back(base);
 
+			// Add research
 			const std::vector<std::string> &research = rule->getResearchList();
 			for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
 			{
 				save->addFinishedResearch(rule->getResearch(*i));
 			}
 
-			_game->setSavedGame(save);
+			// Generate items
+			base->getItems()->getContents()->clear();
+			const std::vector<std::string> &items = rule->getItemsList();
+			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+			{
+				RuleItem *rule = _game->getRuleset()->getItem(*i);
+				if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+				{
+					base->getItems()->addItem(*i, 1);
+				}
+			}
+
+			// Clear invalid contents
 			_craft = base->getCrafts()->front();
+			for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
+			{
+				RuleItem *rule = _game->getRuleset()->getItem(i->first);
+				if (!rule)
+				{
+					i->second = 0;
+				}
+			}
+
+			_game->setSavedGame(save);
 		}
 		else
 		{
@@ -391,18 +415,20 @@ void NewBattleState::initSave()
             soldier->promoteRank();
             
             UnitStats* stats = soldier->getCurrentStats();
-            stats->tu        += RNG::generate(0, 5);
-            stats->stamina   += RNG::generate(0, 5);
-            stats->health    += RNG::generate(0, 5);
-            stats->bravery   += 0; /// Later
-            stats->reactions += RNG::generate(0, 5);
-            stats->firing    += RNG::generate(0, 5);
-            stats->throwing  += RNG::generate(0, 5);
-            stats->strength  += RNG::generate(0, 5);
+            stats->tu          += RNG::generate(0, 5);
+            stats->stamina     += RNG::generate(0, 5);
+            stats->health      += RNG::generate(0, 5);
+			stats->bravery     += RNG::generate(0, 5);
+            stats->reactions   += RNG::generate(0, 5);
+            stats->firing      += RNG::generate(0, 5);
+            stats->throwing    += RNG::generate(0, 5);
+            stats->strength    += RNG::generate(0, 5);
             stats->psiStrength += RNG::generate(0, 5);
-            stats->melee     += RNG::generate(0, 5);
-            stats->psiSkill  += RNG::generate(0, 20);
+            stats->melee       += RNG::generate(0, 5);
+            stats->psiSkill    += RNG::generate(0, 20);
         }
+		UnitStats* stats = soldier->getCurrentStats();
+		stats->bravery = ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())
@@ -417,7 +443,7 @@ void NewBattleState::initSave()
 		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
 		{
 			base->getItems()->addItem(*i, 1);
-			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
+			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && rule->getBigSprite() > -1)
 			{
 				_craft->getItems()->addItem(*i, 1);
 			}

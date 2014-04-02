@@ -747,7 +747,7 @@ void GeoscapeState::time5Seconds()
 						if ((*k)->getCraft() == (*j))
 						{
 							SoldierDeath *death = new SoldierDeath();
-							death->setTime(_game->getSavedGame()->getTime());
+							death->setTime(*_game->getSavedGame()->getTime());
 							(*k)->die(death);
 							_game->getSavedGame()->getDeadSoldiers()->push_back((*k));
 							k = (*i)->getSoldiers()->erase(k);

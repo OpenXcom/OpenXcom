@@ -549,7 +549,7 @@ void Inventory::mouseClick(Action *action, State *state)
 					else
 					{
 						setSelectedItem(item);
-						if (item->getExplodeTurn() >= 0)
+						if (item->getFuseTimer() >= 0)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 						}
@@ -699,20 +699,20 @@ void Inventory::mouseClick(Action *action, State *state)
 						BattleType itemType = item->getRules()->getBattleType();
 						if (BT_GRENADE == itemType || BT_PROXIMITYGRENADE == itemType)
 						{
-							if (item->getExplodeTurn() == -1)
+							if (item->getFuseTimer() == -1)
 							{
 								// Prime that grenade!
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
-									item->setExplodeTurn(0);
+									item->setFuseTimer(0);
 								}
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
 							else
 							{
 								_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
-								item->setExplodeTurn(-1);  // Unprime the grenade
+								item->setFuseTimer(-1);  // Unprime the grenade
 							}
 						}
 					}
@@ -915,7 +915,7 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		// and the same ammo quantity
 		itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity())) &&
 		// and neither is set to explode
-		itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1 &&
+		itemA->getFuseTimer() == -1 && itemB->getFuseTimer() == -1 &&
 		// and neither is a corpse or unconscious unit
 		itemA->getUnit() == 0 && itemB->getUnit() == 0 &&
 		// and if it's a medkit, it has the same number of charges
