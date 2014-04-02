@@ -648,16 +648,16 @@ void Map::drawTerrain(Surface *surface)
 					{
 						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
-							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(22);
+							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(11);
 							if (tmpSurface)
 							{
-								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y+2, 0, false, tile->getMarkerColor());
 							}
 						}
 						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
 						if (tmpSurface)
 						{
-							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - (20 - tile->getTerrainLevel()), 0, false, tileColor);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), 0, false, tileColor);
 						}
 					}
 					// Draw cursor front
@@ -804,7 +804,7 @@ void Map::drawTerrain(Surface *surface)
 						Tile *tileBelow = _save->getTile(mapPosition - Position(0,0,1));
 						if (!tile || !tile->isDiscovered(0) || tile->getPreview() == -1)
 							continue;
-						int adjustment = 20 - tile->getTerrainLevel();
+						int adjustment = -tile->getTerrainLevel();
 						if (_previewSetting & PATH_ARROWS)
 						{
 							if (itZ > 0 && tile->hasNoFloor(tileBelow))
@@ -812,14 +812,14 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
 								if (tmpSurface)
 								{
-									tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+									tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y+2, 0, false, tile->getMarkerColor());
 								}
 							}
-							int overlay = tile->getPreview() + 11;
+							int overlay = tile->getPreview() + 12;
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 							if (tmpSurface)
 							{
-								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
 							}
 						}
 
@@ -830,7 +830,7 @@ void Map::drawTerrain(Surface *surface)
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
 							int off = tile->getTUMarker() > 9 ? 4 : 2;
-							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (50-adjustment), 0);
+							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (30-adjustment), 0);
 						}
 					}
 				}
