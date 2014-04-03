@@ -47,11 +47,20 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Soldier Info screen.
  * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param base Pointer to the base to get info from. NULL to use the dead soldiers list.
  * @param soldierId ID of the selected soldier.
  */
 SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : State(game), _base(base), _soldierId(soldierId)
 {
+	if (_base == 0)
+	{
+		_list = _game->getSavedGame()->getDeadSoldiers();
+	}
+	else
+	{
+		_list = _base->getSoldiers();
+	}
+
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_rank = new Surface(26, 23, 4, 4);
@@ -116,7 +125,6 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	add(_btnArmor);
 	add(_edtSoldier);
 	add(_btnSack);
-//	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
@@ -177,10 +185,12 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
 	_btnPrev->onMouseClick((ActionHandler)&SoldierInfoState::btnPrevClick);
+	_btnPrev->onKeyboardPress((ActionHandler)&SoldierInfoState::btnPrevClick, Options::keyBattlePrevUnit);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
+	_btnNext->onKeyboardPress((ActionHandler)&SoldierInfoState::btnNextClick, Options::keyBattleNextUnit);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
 	_btnArmor->setText(tr("STR_ARMOR"));
@@ -189,6 +199,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onChange((ActionHandler)&SoldierInfoState::edtSoldierChange);
+	_edtSoldier->onMousePress((ActionHandler)&SoldierInfoState::edtSoldierPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
@@ -328,16 +339,16 @@ SoldierInfoState::~SoldierInfoState()
  */
 void SoldierInfoState::init()
 {
-	if(_base->getSoldiers()->empty())
+	if(_list->empty())
 	{
 		_game->popState();
 		return;
 	}
-	if(_soldierId >= _base->getSoldiers()->size())
+	if(_soldierId >= _list->size())
 	{
 		_soldierId = 0;
 	}
-	_soldier = _base->getSoldiers()->at(_soldierId);
+	_soldier = _list->at(_soldierId);
 	_edtSoldier->setBig();
 	_edtSoldier->setText(_soldier->getName());
 	UnitStats *initial = _soldier->getInitStats();
@@ -485,6 +496,26 @@ void SoldierInfoState::init()
 		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
+	}	
+
+	// Dead can't talk
+	if (_base == 0)
+	{
+		_btnArmor->setVisible(false);
+		_btnSack->setVisible(false);
+		_txtCraft->setVisible(false);
+	}
+}
+
+/**
+ * Disables the soldier input.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::edtSoldierPress(Action *action)
+{
+	if (_base == 0)
+	{
+		_edtSoldier->setFocus(false);
 	}
 }
 
@@ -513,7 +544,7 @@ void SoldierInfoState::btnOkClick(Action *)
 void SoldierInfoState::btnPrevClick(Action *)
 {
 	if (_soldierId == 0)
-		_soldierId = _base->getSoldiers()->size() - 1;
+		_soldierId = _list->size() - 1;
 	else
 		_soldierId--;
 	init();
@@ -526,7 +557,7 @@ void SoldierInfoState::btnPrevClick(Action *)
 void SoldierInfoState::btnNextClick(Action *)
 {
 	_soldierId++;
-	if (_soldierId >= _base->getSoldiers()->size())
+	if (_soldierId >= _list->size())
 		_soldierId = 0;
 	init();
 }

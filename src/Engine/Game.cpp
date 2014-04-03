@@ -24,6 +24,7 @@
 #endif
 #include <sstream>
 #include <SDL_mixer.h>
+#include <SDL_image.h>
 #include "State.h"
 #include "Screen.h"
 #include "Language.h"
@@ -89,12 +90,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// trap the mouse inside the window
 	SDL_WM_GrabInput(Options::captureMouse);
-
-	// Set the window caption
-	SDL_WM_SetCaption(title.c_str(), 0);
-
-#ifdef _WIN32
+	
 	// Set the window icon
+#ifdef _WIN32
 	HINSTANCE handle = GetModuleHandle(NULL);
 	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(103));
 
@@ -105,7 +103,17 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		HWND hwnd = wminfo.window;
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
+#else
+	SDL_Surface *icon = IMG_Load(CrossPlatform::getDataFile("openxcom.png").c_str());
+	if (icon != 0)
+	{
+		SDL_WM_SetIcon(icon, NULL);
+		SDL_FreeSurface(icon);
+	}
 #endif
+
+	// Set the window caption
+	SDL_WM_SetCaption(title.c_str(), 0);
 
 	SDL_EnableUNICODE(1);
 

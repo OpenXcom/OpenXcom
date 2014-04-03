@@ -1365,7 +1365,7 @@ bool TileEngine::detonate(Tile* tile)
 							}
 						}
 
-						if (_save->getMissionType() == "STR_BASE_DEFENSE" && i == 6 && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(V_OBJECT)->isBaseModule())
+						if (_save->getMissionType() == "STR_BASE_DEFENSE" && i == 6 && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->isBaseModule())
 						{
 							_save->getModuleMap()[tile->getPosition().x/10][tile->getPosition().y/10].second--;
 						}
@@ -1380,7 +1380,7 @@ bool TileEngine::detonate(Tile* tile)
 						}
 					}
 				}
-				if (2 * flam < remainingPower)
+				if (2 * flam < remainingPower && (tiles[i]->getMapData(MapData::O_FLOOR) || tiles[i]->getMapData(MapData::O_OBJECT)))
 				{
 					tile->setFire(fuel);
 					tile->setSmoke(std::max(1, std::min(15 - (flam / 10), 12)));

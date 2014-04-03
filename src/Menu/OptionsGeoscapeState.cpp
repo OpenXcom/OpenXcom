@@ -101,7 +101,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 
 	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
-	_cbxDragScroll->setSelected(Options::battleScrollDragButton);
+	_cbxDragScroll->setSelected(Options::globeScrollDragButton);
 	_cbxDragScroll->onChange((ActionHandler)&OptionsGeoscapeState::cbxDragScrollChange);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
 	_cbxDragScroll->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);

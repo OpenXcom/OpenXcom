@@ -18,6 +18,7 @@
  */
 #include "ItemsArrivingState.h"
 #include <sstream>
+#include <algorithm>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -28,9 +29,11 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
+#include "../Savegame/Vehicle.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -117,20 +120,34 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 			{
 				_base = (*i);
 
-				// Check if it's ammo to reload a craft
-				if ((*j)->getType() == TRANSFER_ITEM && _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
+				// Check if we have an automated use for an item
+				if ((*j)->getType() == TRANSFER_ITEM)
 				{
+					RuleItem *item = _game->getRuleset()->getItem((*j)->getItems());
 					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 					{
-						if ((*c)->getStatus() != "STR_READY")
-							continue;
-						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						// Check if it's ammo to reload a craft
+						if ((*c)->getStatus() == "STR_READY")
 						{
-						
-							if ((*w) != 0 && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 							{
-								(*w)->setRearming(true);
-								(*c)->setStatus("STR_REARMING");
+								if ((*w) != 0 && (*w)->getRules()->getClipItem() == item->getType() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+								{
+									(*w)->setRearming(true);
+									(*c)->setStatus("STR_REARMING");
+								}
+							}
+						}
+						// Check if it's ammo to reload a vehicle
+						for (std::vector<Vehicle*>::iterator v = (*c)->getVehicles()->begin(); v != (*c)->getVehicles()->end(); ++v)
+						{
+							std::vector<std::string>::iterator ammo = std::find((*v)->getRules()->getCompatibleAmmo()->begin(), (*v)->getRules()->getCompatibleAmmo()->end(), item->getType());
+							if (ammo != (*v)->getRules()->getCompatibleAmmo()->end() && (*v)->getAmmo() < item->getClipSize())
+							{
+								int used = std::min((*j)->getQuantity(), item->getClipSize() - (*v)->getAmmo());
+								(*v)->setAmmo((*v)->getAmmo() + used);
+								// Note that the items have already been delivered, so we remove them from the base, not the transfer
+								_base->getItems()->removeItem(item->getType(), used);
 							}
 						}
 					}

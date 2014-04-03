@@ -882,7 +882,6 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 					item->setSlot(_game->getRuleset()->getInventory((*j)->getSlot()));
 					item->setSlotX((*j)->getSlotX());
 					item->setSlotY((*j)->getSlotY());
-					item->setExplodeTurn((*j)->getExplodeTurn());
 					_save->getItems()->push_back(item);
 					return true;
 				}

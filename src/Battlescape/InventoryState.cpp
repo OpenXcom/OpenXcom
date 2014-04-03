@@ -86,7 +86,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnCreateTemplate = new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
 	_btnApplyTemplate = new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
-	_inv = new Inventory(_game, 320, 200, 0, 0);
+	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
 
 	add(_bg);
 	add(_soldier);
@@ -369,8 +369,7 @@ void InventoryState::saveEquipmentLayout()
 				(*j)->getSlot()->getId(),
 				(*j)->getSlotX(),
 				(*j)->getSlotY(),
-				ammo,
-				(*j)->getExplodeTurn()
+				ammo
 			));
 		}
 	}
