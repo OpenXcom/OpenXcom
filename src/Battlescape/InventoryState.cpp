@@ -659,7 +659,7 @@ void InventoryState::invClick(Action *)
 			r.y++;
 			r.w -= 2;
 			r.h -= 2;
-			_selAmmo->drawRect(&r, 0);
+			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
