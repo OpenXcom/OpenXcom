@@ -51,8 +51,8 @@ namespace OpenXcom
 {
 
 static const int _templateBtnX = 288;
-static const int _createTemplateBtnY = 59;
-static const int _applyTemplateBtnY = 82;
+static const int _createTemplateBtnY = 90;
+static const int _applyTemplateBtnY = 113;
 
 /**
  * Initializes all the elements in the Inventory screen.
