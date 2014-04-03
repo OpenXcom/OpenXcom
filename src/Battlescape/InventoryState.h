@@ -22,6 +22,7 @@
 #include "../Engine/State.h"
 #include "../Interface/TextButton.h"
 #include "../Savegame/BattleItem.h"
+#include "../Savegame/EquipmentLayoutItem.h"
 
 
 namespace OpenXcom
@@ -47,7 +48,7 @@ private:
 	InteractiveSurface *_btnCreateTemplate, *_btnApplyTemplate;
 	Surface *_selAmmo;
 	Inventory *_inv;
-	std::vector<BattleItem*> *_curInventoryTemplate;
+	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
 	SavedBattleGame *_battleGame;
 	const bool _tu;
 	BattlescapeState *_parent;
