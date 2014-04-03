@@ -93,6 +93,8 @@ public:
 	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
 	/// Checks for item overlap.
 	static bool overlapItems(BattleUnit *unit, BattleItem *item, RuleInventory *slot, int x = 0, int y = 0);
+	/// Shows a warning message.
+	void showWarning(const std::wstring &msg);
 };
 
 }

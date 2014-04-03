@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InventoryState.h"
+#include "Inventory.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/CrossPlatform.h"
@@ -27,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/Sound.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -34,7 +36,6 @@
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
-#include "Inventory.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
@@ -49,6 +50,10 @@
 
 namespace OpenXcom
 {
+
+static const int _templateBtnX = 288;
+static const int _createTemplateBtnY = 59;
+static const int _applyTemplateBtnY = 82;
 
 /**
  * Initializes all the elements in the Inventory screen.
@@ -78,8 +83,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnUnload = new InteractiveSurface(32, 25, 288, 32);
 	_btnGround = new InteractiveSurface(32, 15, 289, 137);
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
-	_btnCopy = new TextButton(30, 9, 253, 70);
-	_btnPaste = new TextButton(30, 9, 284, 70);
+	_btnCreateTemplate = new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
+	_btnApplyTemplate = new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0);
 
@@ -100,8 +105,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	add(_btnUnload);
 	add(_btnGround);
 	add(_btnRank);
-	add(_btnCopy);
-	add(_btnPaste);
+	add(_btnCreateTemplate);
+	add(_btnApplyTemplate);
 	add(_selAmmo);
 	add(_inv);
 
@@ -157,23 +162,29 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
 
-	// TODO: localize: _btnCopy->setText(tr("STR_COPY"));
-	_btnCopy->setText(L"Copy");
-	_btnCopy->onMouseClick((ActionHandler)&InventoryState::btnCopyClick);
-	// TODO: shortcut: _btnCopy->onKeyboardPress((ActionHandler)&InventoryState::btnCopyClick, (SDLKey)Options::getInt("keyInvCopyTemplate"));
-	// TODO: localize: _btnPaste->setText(tr("STR_PASTE"));
-	_btnPaste->setText(L"Paste");
-	_btnPaste->onMouseClick((ActionHandler)&InventoryState::btnPasteClick);
-	// TODO: shortcut: _btnPaste->onKeyboardPress((ActionHandler)&InventoryState::btnPasteClick, (SDLKey)Options::getInt("keyInvPasteTemplate"));
+	Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
+	createTemplateIcon->setX(_templateBtnX);
+	createTemplateIcon->setY(_createTemplateBtnY);
+	createTemplateIcon->blit(_bg);
+	_btnCreateTemplate->onMouseClick((ActionHandler)&InventoryState::btnCreateTemplateClick);
+	// TODO: _btnCopy->onKeyboardPress((ActionHandler)&InventoryState::btnCreateTemplateClick, (SDLKey)Options::getInt("keyInvCopyTemplate"));
+	_btnCreateTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnCreateTemplateClick, SDLK_c);
+
+	Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
+	applyTemplateIcon->setX(_templateBtnX);
+	applyTemplateIcon->setY(_applyTemplateBtnY);
+	applyTemplateIcon->blit(_bg);
+	_btnApplyTemplate->onMouseClick((ActionHandler)&InventoryState::btnApplyTemplateClick);
+	// TODO: _btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, (SDLKey)Options::getInt("keyInvPasteTemplate"));
+	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, SDLK_v);
+
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
 	if (_tu)
 	{
-		_btnCopy->setVisible(false);
+		_btnCreateTemplate->setVisible(false);
+		_btnApplyTemplate->setVisible(false);
 	}
-
-	// paste button always starts out invisible (enabled after first copy)
-	_btnPaste->setVisible(false);
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -464,18 +475,40 @@ void InventoryState::btnRankClick(Action *)
 	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent, true, false));
 }
 
-void InventoryState::btnCopyClick(Action *action)
+void InventoryState::btnCreateTemplateClick(Action *action)
 {
+	// don't accept clicks when moving items
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
 	// TODO: copy inventory instead of just keeping a pointer to it.  that way
-	// TODO: copy/paste can be used as an undo button for a single unit and
-	// TODO: will also work as expected if inventory is modified after 'copy'
+	// TODO: create/apply can be used as an undo button for a single unit and
+	// TODO: will also work as expected if inventory is modified after 'create'
 	// TODO: is clicked
 	_curInventoryTemplate = _battleGame->getSelectedUnit()->getInventory();
-	_btnPaste->setVisible(true);
+
+	// change to "active" icons
+	Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopyActive");
+	createTemplateIcon->setX(_templateBtnX);
+	createTemplateIcon->setY(_createTemplateBtnY);
+	createTemplateIcon->blit(_bg);
+
+	Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPaste");
+	applyTemplateIcon->setX(_templateBtnX);
+	applyTemplateIcon->setY(_applyTemplateBtnY);
+	applyTemplateIcon->blit(_bg);
 }
 
-void InventoryState::btnPasteClick(Action *action)
+void InventoryState::btnApplyTemplateClick(Action *action)
 {
+	// don't accept clicks when moving items
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
 	BattleUnit               *unit          = _battleGame->getSelectedUnit();
 	std::vector<BattleItem*> *unitInv       = unit->getInventory();
 	Tile                     *groundTile    = unit->getTile();
@@ -499,13 +532,20 @@ void InventoryState::btnPasteClick(Action *action)
 	// attempt to replicate inventory template by grabbing corresponding items
 	// from the ground.  if any item is not found on the ground, display warning
 	// message, but continue attempting to fulfill the template as best we can
+	bool itemMissing = false;
 	for (std::vector<BattleItem*>::iterator templateItem = _curInventoryTemplate->begin(); templateItem != _curInventoryTemplate->end(); ++templateItem)
 	{
 		// search for template item in ground inventory
-		for (std::vector<BattleItem*>::iterator groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
+		std::vector<BattleItem*>::iterator groundItem;
+		for (groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
 		{
 			if ((*templateItem)->getRules()->getType() == (*groundItem)->getRules()->getType())
 			{
+				// move matched item from ground to the appropriate inv slot
+				// note that this doesn't attempt to match the isLoaded status
+				// of ammo-bearing weapons.  presumably as many weapons as
+				// possible were already loaded when the battlescape was
+				// generated
 				(*groundItem)->setOwner(unit);
 				(*groundItem)->setSlot((*templateItem)->getSlot());
 				(*groundItem)->setSlotX((*templateItem)->getSlotX());
@@ -516,11 +556,25 @@ void InventoryState::btnPasteClick(Action *action)
 				break;
 			}
 		}
+
+		if (groundInv->end() == groundItem)
+		{
+			itemMissing = true;
+		}
 	}
 
-	// update ui
+	if (itemMissing)
+	{
+		// TODO: _inv.showWarning(_game->getLanguage()->getString("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
+		_inv->showWarning(L"Equipment on ground insufficient to fulfill requested template");
+	}
+
+	// refresh ui
 	_inv->arrangeGround(false);
 	updateStats();
+
+	// give audio feedback
+	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 }
 
 /**

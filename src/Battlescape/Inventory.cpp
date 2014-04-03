@@ -924,4 +924,14 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
 
 }
+
+/**
+ * Shows a warning message.
+ * @param msg The message to show.
+ */
+void Inventory::showWarning(const std::wstring &msg)
+{
+	_warning->showMessage(msg);
+}
+
 }

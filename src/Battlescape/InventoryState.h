@@ -44,7 +44,7 @@ private:
 	Surface *_bg, *_soldier;
 	Text *_txtName, *_txtItem, *_txtAmmo, *_txtWeight, *_txtTus, *_txtFAcc, *_txtReact, *_txtPSkill, *_txtPStr;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
-	TextButton *_btnCopy, *_btnPaste;
+	InteractiveSurface *_btnCreateTemplate, *_btnApplyTemplate;
 	Surface *_selAmmo;
 	Inventory *_inv;
 	std::vector<BattleItem*> *_curInventoryTemplate;
@@ -74,10 +74,10 @@ public:
 	void btnGroundClick(Action *action);
 	/// Handler for clicking the Rank button.
 	void btnRankClick(Action *action);
-	/// Handler for clicking on the Copy button.
-	void btnCopyClick(Action *action);
-	/// Handler for clicking the Paste button.
-	void btnPasteClick(Action *action);
+	/// Handler for clicking on the Create Template button.
+	void btnCreateTemplateClick(Action *action);
+	/// Handler for clicking the Apply Template button.
+	void btnApplyTemplateClick(Action *action);
 	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 	/// Handles keypresses.
