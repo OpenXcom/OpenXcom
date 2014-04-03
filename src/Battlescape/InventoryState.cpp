@@ -167,16 +167,14 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	createTemplateIcon->setY(_createTemplateBtnY);
 	createTemplateIcon->blit(_bg);
 	_btnCreateTemplate->onMouseClick((ActionHandler)&InventoryState::btnCreateTemplateClick);
-	// TODO: _btnCopy->onKeyboardPress((ActionHandler)&InventoryState::btnCreateTemplateClick, (SDLKey)Options::getInt("keyInvCopyTemplate"));
-	_btnCreateTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnCreateTemplateClick, SDLK_c);
+	_btnCreateTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnCreateTemplateClick, Options::keyInvCreateTemplate);
 
 	Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
 	applyTemplateIcon->setX(_templateBtnX);
 	applyTemplateIcon->setY(_applyTemplateBtnY);
 	applyTemplateIcon->blit(_bg);
 	_btnApplyTemplate->onMouseClick((ActionHandler)&InventoryState::btnApplyTemplateClick);
-	// TODO: _btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, (SDLKey)Options::getInt("keyInvPasteTemplate"));
-	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, SDLK_v);
+	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, Options::keyInvApplyTemplate);
 
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
@@ -514,6 +512,7 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 	std::vector<BattleItem*> *groundInv     = groundTile->getInventory();
 	RuleInventory            *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
 
+	// TODO: remove this block when template copying is implemented in btnCreateTemplateClick
 	if (_curInventoryTemplate == unitInv)
 	{
 		// avoid self-paste
@@ -528,43 +527,46 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 		i = unitInv->erase(i);
 	}
 
-	// attempt to replicate inventory template by grabbing corresponding items
-	// from the ground.  if any item is not found on the ground, display warning
-	// message, but continue attempting to fulfill the template as best we can
-	bool itemMissing = false;
-	for (std::vector<BattleItem*>::iterator templateItem = _curInventoryTemplate->begin(); templateItem != _curInventoryTemplate->end(); ++templateItem)
+	if (_curInventoryTemplate)
 	{
-		// search for template item in ground inventory
-		std::vector<BattleItem*>::iterator groundItem;
-		for (groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
+		// attempt to replicate inventory template by grabbing corresponding items
+		// from the ground.  if any item is not found on the ground, display warning
+		// message, but continue attempting to fulfill the template as best we can
+		bool itemMissing = false;
+		for (std::vector<BattleItem*>::iterator templateItem = _curInventoryTemplate->begin(); templateItem != _curInventoryTemplate->end(); ++templateItem)
 		{
-			if ((*templateItem)->getRules()->getType() == (*groundItem)->getRules()->getType())
+			// search for template item in ground inventory
+			std::vector<BattleItem*>::iterator groundItem;
+			for (groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
 			{
-				// move matched item from ground to the appropriate inv slot
-				// note that this doesn't attempt to match the isLoaded status
-				// of ammo-bearing weapons.  presumably as many weapons as
-				// possible were already loaded when the battlescape was
-				// generated
-				(*groundItem)->setOwner(unit);
-				(*groundItem)->setSlot((*templateItem)->getSlot());
-				(*groundItem)->setSlotX((*templateItem)->getSlotX());
-				(*groundItem)->setSlotY((*templateItem)->getSlotY());
-				unitInv->push_back(*groundItem);
-				groundInv->erase(groundItem);
-				break;
+				if ((*templateItem)->getRules()->getType() == (*groundItem)->getRules()->getType())
+				{
+					// move matched item from ground to the appropriate inv slot
+					// note that this doesn't attempt to match the isLoaded status
+					// of ammo-bearing weapons.  presumably as many weapons as
+					// possible were already loaded when the battlescape was
+					// generated
+					(*groundItem)->setOwner(unit);
+					(*groundItem)->setSlot((*templateItem)->getSlot());
+					(*groundItem)->setSlotX((*templateItem)->getSlotX());
+					(*groundItem)->setSlotY((*templateItem)->getSlotY());
+					unitInv->push_back(*groundItem);
+					groundInv->erase(groundItem);
+					break;
+				}
+			}
+
+			if (groundInv->end() == groundItem)
+			{
+				itemMissing = true;
 			}
 		}
 
-		if (groundInv->end() == groundItem)
+		if (itemMissing)
 		{
-			itemMissing = true;
+			// TODO: _inv.showWarning(_game->getLanguage()->getString("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
+			_inv->showWarning(L"Equipment on ground insufficient to fulfill requested template");
 		}
-	}
-
-	if (itemMissing)
-	{
-		// TODO: _inv.showWarning(_game->getLanguage()->getString("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
-		_inv->showWarning(L"Equipment on ground insufficient to fulfill requested template");
 	}
 
 	// refresh ui
