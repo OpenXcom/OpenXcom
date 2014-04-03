@@ -549,7 +549,6 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 				(*groundItem)->setSlot((*templateItem)->getSlot());
 				(*groundItem)->setSlotX((*templateItem)->getSlotX());
 				(*groundItem)->setSlotY((*templateItem)->getSlotY());
-				(*groundItem)->setExplodeTurn((*templateItem)->getExplodeTurn());
 				unitInv->push_back(*groundItem);
 				groundInv->erase(groundItem);
 				break;
