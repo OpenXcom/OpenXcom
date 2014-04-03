@@ -518,16 +518,32 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 				ammo));
 	}
 
-	// change to "active" icons
-	Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopyActive");
-	createTemplateIcon->setX(_templateBtnX);
-	createTemplateIcon->setY(_createTemplateBtnY);
-	createTemplateIcon->blit(_bg);
+	if (_curInventoryTemplate.empty())
+	{
+		// use "empty template" icons
+		Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
+		createTemplateIcon->setX(_templateBtnX);
+		createTemplateIcon->setY(_createTemplateBtnY);
+		createTemplateIcon->blit(_bg);
 
-	Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPaste");
-	applyTemplateIcon->setX(_templateBtnX);
-	applyTemplateIcon->setY(_applyTemplateBtnY);
-	applyTemplateIcon->blit(_bg);
+		Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
+		applyTemplateIcon->setX(_templateBtnX);
+		applyTemplateIcon->setY(_applyTemplateBtnY);
+		applyTemplateIcon->blit(_bg);
+	}
+	else
+	{
+		// use "active template" icons
+		Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopyActive");
+		createTemplateIcon->setX(_templateBtnX);
+		createTemplateIcon->setY(_createTemplateBtnY);
+		createTemplateIcon->blit(_bg);
+
+		Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPaste");
+		applyTemplateIcon->setX(_templateBtnX);
+		applyTemplateIcon->setY(_applyTemplateBtnY);
+		applyTemplateIcon->blit(_bg);
+	}
 }
 
 void InventoryState::btnApplyTemplateClick(Action *action)
