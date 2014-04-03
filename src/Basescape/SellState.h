@@ -76,6 +76,14 @@ private:
 	void addRow(ItemContainer *container, std::string item, int tab);
 	/// Updates the displayed tab.
 	void updateTab(int direction = 0);
+	/// Changes the quantity of an item by the given value.
+	void changeByValue(int change, int dir);
+	/// Increases the quantity of an item by one.
+	void increase();
+	/// Decreases the quantity of an item by one.
+	void decrease();
+	/// Updates the quantity-strings, row colors and storage change.
+	void updateUI();
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base, OptionsOrigin origin = OPT_GEOSCAPE);
@@ -107,16 +115,6 @@ public:
 	void lstItemsRightArrowClick(Action *action);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstItemsMousePress(Action *action);
-	/// Increases the quantity of an item by one.
-	void increase();
-	/// Increases the quantity of an item by the given value.
-	void increaseByValue(int change);
-	/// Decreases the quantity of an item by one.
-	void decrease();
-	/// Decreases the quantity of an item by the given value.
-	void decreaseByValue(int change);
-	/// Updates the quantity-strings of the selected item.
-	void updateItemStrings();
 };
 
 }
