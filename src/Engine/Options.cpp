@@ -90,17 +90,17 @@ void create()
 	_info.push_back(OptionInfo("soundVolume", &soundVolume, MIX_MAX_VOLUME));
 	_info.push_back(OptionInfo("musicVolume", &musicVolume, MIX_MAX_VOLUME));
 	_info.push_back(OptionInfo("language", &language, ""));
-	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 12)); // 4, 8, 12, 16, 24
+	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 8));
 	_info.push_back(OptionInfo("battleEdgeScroll", (int*)&battleEdgeScroll, SCROLL_AUTO));
 	_info.push_back(OptionInfo("battleScrollDragButton", &battleScrollDragButton, SDL_BUTTON_MIDDLE));
 	_info.push_back(OptionInfo("battleScrollDragInvert", &battleScrollDragInvert, false)); // true drags away from the cursor, false drags towards (like a grab)
 	_info.push_back(OptionInfo("battleScrollDragTimeTolerance", &battleScrollDragTimeTolerance, 300)); // miliSecond
 	_info.push_back(OptionInfo("battleScrollDragPixelTolerance", &battleScrollDragPixelTolerance, 10)); // count of pixels
-	_info.push_back(OptionInfo("battleFireSpeed", &battleFireSpeed, 6)); // 2, 4, 6, 8, 10, 12
-	_info.push_back(OptionInfo("battleXcomSpeed", &battleXcomSpeed, 30)); // 40, 30, 20, 10, 5, 1
-	_info.push_back(OptionInfo("battleAlienSpeed", &battleAlienSpeed, 30)); // 40, 30, 20, 10, 5, 1
-	_info.push_back(OptionInfo("battleInstantGrenade", &battleInstantGrenade, false)); // set to true if you want to play with the alternative grenade handling
-	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0)); //0, 1, 2, 3
+	_info.push_back(OptionInfo("battleFireSpeed", &battleFireSpeed, 6));
+	_info.push_back(OptionInfo("battleXcomSpeed", &battleXcomSpeed, 30));
+	_info.push_back(OptionInfo("battleAlienSpeed", &battleAlienSpeed, 30));
+	_info.push_back(OptionInfo("battleInstantGrenade", &battleInstantGrenade, false));
+	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0));
 	_info.push_back(OptionInfo("battleNewPreviewPath", (int*)&battleNewPreviewPath, PATH_NONE)); // requires double-click to confirm moves
 	_info.push_back(OptionInfo("fpsCounter", &fpsCounter, false));
 	_info.push_back(OptionInfo("craftLaunchAlways", &craftLaunchAlways, false));
