@@ -9310,10 +9310,12 @@ MCDPatches:
         TUSlide: 4
 extraSprites:
   - type: Pathfinding
-    width: 64
-    height: 80
     files:
-      0: Resources/Pathfinding/
+      0: Resources/Pathfinding/Pathfinding.png
+    width: 384
+    height: 80
+    subX: 32
+    subY: 40
   - type: Projectiles
     width: 105
     height: 33
