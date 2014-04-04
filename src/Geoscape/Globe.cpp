@@ -1149,9 +1149,9 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 
 	while(len>0)
 	{
-		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
+		tcol=src->getPixel((int)x0,(int)y0);
+		if (tcol)
 		{
-			tcol=src->getPixel((int)x0,(int)y0);
 			const int d = tcol & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
@@ -1523,57 +1523,39 @@ void Globe::drawDetail()
 
 void Globe::drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2)
 {
-	double sx = lon2 - lon1;
-	double sy = lat2 - lat1;
-	double ln1, lt1, ln2, lt2, dln, dlt;
-	double slen, dlen;
-	int seg;
+	double length;
+	Sint16 count;
 	Sint16 x1, y1, x2, y2;
+	CordPolar p1, p2;
+	Cord a(CordPolar(lon1, lat1));
+	Cord b(CordPolar(lon2, lat2));
 
-	if (sx<0) sx += 2*M_PI;
+	if(-b == a)
+		return;
 
-	if (fabs(sx)<0.01)
+	b -= a;
+
+	//longer path have more parts
+	length = b.norm();
+	length *= length*15;
+	count = length + 1;
+	b /= count;
+	p1 = CordPolar(a);
+	polarToCart(p1.lon, p1.lat, &x1, &y1);
+	for(int i = 0; i < count; ++i)
 	{
-		seg = abs( sy/(2*M_PI)*48 );
-		if (seg == 0) ++seg;
-	}
-	else
-	{
-		seg = abs( sx/(2*M_PI)*96 );
-		if (seg == 0) ++seg;
-	}
-	sx /= seg;
-	sy /= seg;
-	slen = sqrt(sx * sx + sy * sy);
+		a += b;
+		p2 = CordPolar(a);
+		polarToCart(p2.lon, p2.lat, &x2, &y2);
 
-	ln2 = lon1;
-	lt2 = lat1;
-
-	for (int i = 0; i < seg; ++i)
-	{
-		ln1 = ln2;
-		lt1 = lt2;
-		dln = sin(lon2 - ln1) * cos(lat2);
-		dlt = cos(lt1) * sin(lat2) - sin(lt1) * cos(lat2) * cos(lon2 - ln1);
-		dlen = sqrt(dln * dln + dlt * dlt);
-		dlt = dlt / dlen * slen;
-		dln = dln / dlen * slen / cos(lt1 + dlt);
-		ln2 = ln1 + dln;
-		lt2 = lt2 + dlt;
-
-		if (M_PI - fabs(fabs(lon2 - ln2) - M_PI) < 0.05 && M_PI - fabs(fabs(lat2 - lt2) - M_PI) < 0.05)
+		if (!pointBack(p1.lon, p1.lat) && !pointBack(p2.lon, p2.lat))
 		{
-			ln2 = lon2;
-			lt2 = lat2;
-			i = seg;
-		}
-
-		if (!pointBack(ln2, lt2) && !pointBack(ln1, lt1))
-		{
-			polarToCart(ln1,lt1,&x1,&y1);
-			polarToCart(ln2,lt2,&x2,&y2);
 			XuLine(surface, this, x1, y1, x2, y2, 8);
 		}
+
+		p1 = p2;
+		x1 = x2;
+		y1 = y2;
 	}
 }
 
