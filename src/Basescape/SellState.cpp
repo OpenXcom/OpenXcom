@@ -56,7 +56,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0), _haveTransferItems(false)
+SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0), _tItems(new ItemContainer()), _haveTransferItems(false)
 {
 	_overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
@@ -144,6 +144,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_btnPrev->setColor(_color);
 	_btnPrev->setText(L"<<");
 	_btnPrev->onMouseClick((ActionHandler)&SellState::btnPrevClick);
+	_btnPrev->onKeyboardPress((ActionHandler)&SellState::btnPrevClick, Options::keyBattlePrevUnit);
 
 	_btnTab->setColor(_color);
 	_btnTab->onMouseClick((ActionHandler)&SellState::btnTabClick, 0);
@@ -151,11 +152,12 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_btnNext->setColor(_color);
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SellState::btnNextClick);
+	_btnPrev->onKeyboardPress((ActionHandler)&SellState::btnNextClick, Options::keyBattleNextUnit);
 
 	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_overfull ? tr("STR_SELL_ITEMS") : tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
+	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
 	_txtSales->setColor(_color);
 	_txtSales->setSecondaryColor(_color2);
@@ -204,22 +206,21 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 
 	if (_overfull)
 	{
-		ItemContainer *tItems = new ItemContainer();
 		for (std::vector<Transfer*>::iterator t = _base->getTransfers()->begin(); t != _base->getTransfers()->end(); ++t)
 		{
 			if ((*t)->getType() == TRANSFER_ITEM)
 			{
-				tItems->addItem((*t)->getItems(), (*t)->getQuantity());
+				_tItems->addItem((*t)->getItems(), (*t)->getQuantity());
 			}
 		}
-		if (tItems->getTotalQuantity() > 0)
+		if (_tItems->getTotalQuantity() > 0)
 		{
 			_haveTransferItems = true;
 			TextList *lstTransfers = new TextList(288, 104, 8, 65);
 			add(lstTransfers);
 			_lists.push_back(lstTransfers);
 			_tabs.push_back(tr("STR_TRANSFERS_UC"));
-			_containers.push_back(tItems);
+			_containers.push_back(_tItems);
 		}
 		if (!_base->getCrafts()->empty())
 		{
@@ -285,7 +286,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	}
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
-		if (!_overfull && (*i)->getStatus() != "STR_OUT")
+		if ((*i)->getStatus() != "STR_OUT")
 		{
 			_quantities[TAB_CRAFT].push_back(0);
 			_crafts.push_back(*i);
@@ -306,48 +307,33 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 		ss << _base->getAvailableEngineers();
 		_lstPersonnel->addRow(5, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str(), L"-");
 	}
+
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	ItemContainer *craftItems = new ItemContainer();
 	ItemContainer *nonCraftItems = new ItemContainer();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
-		if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
+		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		if (rule->isCraftItem())
 		{
-			RuleItem *rule = _game->getRuleset()->getItem(*i);
-			if (rule->isCraftItem())
-			{
-				craftItems->addItem(*i,qty);
-			}
-			if (rule->isBattlescapeItem())
-			{
-				nonCraftItems->addItem(*i, qty);
-			}
+			craftItems->addItem(*i,qty);
+		}
+		if (rule->isBattlescapeItem())
+		{
+			nonCraftItems->addItem(*i, qty);
 		}
 	}
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-	{
-		addRow(craftItems, *i, TAB_CRAFT);
-		addRow(nonCraftItems, *i, TAB_ITEMS);
-	}
+	addRows(craftItems, TAB_CRAFT);
+	addRows(nonCraftItems, TAB_ITEMS);
+	delete craftItems;
+	delete nonCraftItems;
 
 	if (_overfull)
 	{
-		if (_haveTransferItems)
+		for (size_t tab = 3; tab < _lists.size(); tab++)
 		{
-			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-			{
-				addRow(_containers[TAB_TRANSFERS], *i, TAB_TRANSFERS);
-			}
-		}
-
-		int craftIndex = _haveTransferItems ? 4 : 3;
-		for (size_t tab = craftIndex; tab < _lists.size(); tab++)
-		{
-			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-			{
-				addRow(_containers[tab], *i, tab);
-			}
+			addRows(_containers[tab], tab);
 		}
 	}
 
@@ -364,6 +350,7 @@ SellState::~SellState()
 {
 	delete _timerInc;
 	delete _timerDec;
+	delete _tItems;
 }
 
 /**
@@ -378,35 +365,39 @@ void SellState::think()
 }
 
 /**
- * Adds an item row to a tab if the item is in the container.
+ * Adds item rows to the tab for the items in the container.
  * @param container Item container.
- * @param item Item to look up in the container.
  * @param tab Tab to add rows to.
  */
-void SellState::addRow(ItemContainer *container, std::string item, int tab)
+void SellState::addRows(ItemContainer *container, int tab)
 {
-	int quantity = container->getItem(item);
-	if (quantity > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(item)->getAlien()))
+	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(item);
-		std::wstringstream ss, ss2;
-		ss << quantity;
-		ss2 << quantity * rule->getSize();
-
-		std::wstring name = tr(item);
-
-		_quantities[tab].push_back(0);
-		_items[tab].push_back(item);
-
-		if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+		std::string item = (*i);
+		int quantity = container->getItem(item);
+		if (quantity > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(item)->getAlien()))
 		{
-			name.insert(0, L"  ");
-			_lists[tab]->addRow(5, name.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
-			_lists[tab]->setRowColor(_quantities[tab].size() - 1, _colorAmmo);
-		}
-		else
-		{
-			_lists[tab]->addRow(5, name.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
+			RuleItem *rule = _game->getRuleset()->getItem(item);
+			std::wstringstream ss, ss2;
+			ss << quantity;
+			ss2 << quantity * rule->getSize();
+
+			std::wstring name = tr(item);
+
+			_quantities[tab].push_back(0);
+			_items[tab].push_back(item);
+
+			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
+			{
+				name.insert(0, L"  ");
+				_lists[tab]->addRow(5, name.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
+				_lists[tab]->setRowColor(_quantities[tab].size() - 1, _colorAmmo);
+			}
+			else
+			{
+				_lists[tab]->addRow(5, name.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str(), ss2.str().c_str());
+			}
 		}
 	}
 }
@@ -447,7 +438,7 @@ void SellState::btnOkClick(Action *)
 				// Sell scientists
 				_base->setScientists(_base->getScientists() - _quantities[TAB_PERSONNEL][i]);
 			}
-			else if (_base->getAvailableEngineers() > 0)
+			else
 			{
 				// Sell engineers
 				_base->setEngineers(_base->getEngineers() - _quantities[TAB_PERSONNEL][i]);

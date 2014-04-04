@@ -692,17 +692,15 @@ void PurchaseState::increaseByValue(int change)
 			RuleItem *rule;
 
 			// Item count
-			int storesNeededPerItem;
 			if (_selTab == TAB_CRAFT)
 			{
 				rule = _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()]);
-				storesNeededPerItem = (int)(10 * rule->getSize());
 			}
 			else
 			{
 				rule = _game->getRuleset()->getItem(_items[_sel]);
-				storesNeededPerItem = (int)(10 * rule->getSize());
 			}
+			int storesNeededPerItem = (int)(10 * rule->getSize());
 			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getExactUsedStores() + 0.5) - _iQty;
 			int maxByStores;
 			if (storesNeededPerItem == 0)
@@ -712,7 +710,6 @@ void PurchaseState::increaseByValue(int change)
 			else
 			{
 				maxByStores = freeStores / storesNeededPerItem;
-
 			}
 			change = std::min(maxByStores, change);
 			_iQty += change * storesNeededPerItem;
@@ -792,7 +789,6 @@ void PurchaseState::decreaseByValue(int change)
 
 			rule = _game->getRuleset()->getItem(_craftItems[_sel - _crafts.size()]);
 			change = std::min(_qtysCraft[_sel], change);
-			_iQty -= (int)(10 * rule->getSize()) * change;
 			_qtysCraft[_sel] -= change;
 		}
 		else
@@ -801,9 +797,9 @@ void PurchaseState::decreaseByValue(int change)
 
 			rule = _game->getRuleset()->getItem(_items[_sel]);
 			change = std::min(_qtys[_sel], change);
-			_iQty -= (int)(10 * rule->getSize()) * change;
 			_qtys[_sel] -= change;
 		}
+		_iQty -= (int)(10 * rule->getSize()) * change;
 
 		// cross referencing - update other tab if necessary
 		if (rule->isCraftItem() && rule->isBattlescapeItem())

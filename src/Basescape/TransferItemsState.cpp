@@ -20,7 +20,6 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
-#include "../aresame.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"

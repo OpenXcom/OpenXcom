@@ -62,6 +62,7 @@ private:
 	size_t _selTab;
 	int _total, _spaceChange;
 	Timer *_timerInc, *_timerDec;
+	ItemContainer *_tItems;
 	bool _overfull, _haveTransferItems;
 	Uint8 _color, _color2, _color3, _colorAmmo;
 	/// Gets selected price.
@@ -72,8 +73,8 @@ private:
 	int getItemIndex(unsigned selected) const;
 	/// Updates the tab index.
 	void updateIndex(size_t &index, std::vector<std::wstring> &list, int change);
-	/// Adds an item row to a tab.
-	void addRow(ItemContainer *container, std::string item, int tab);
+	/// Adds item rows to the tab for the items in the container.
+	void addRows(ItemContainer *container, int tab);
 	/// Updates the displayed tab.
 	void updateTab(int direction = 0);
 	/// Changes the quantity of an item by the given value.
