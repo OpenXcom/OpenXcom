@@ -196,8 +196,8 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 		{
 			if (_game->getSavedGame()->getWarned())
 			{
-				ss4.str();
-				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+				ss4.str(L"");
+				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
 				_sadList.erase(_sadList.begin(), _sadList.end());
