@@ -136,7 +136,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
 	_slrScrollSpeed->setColor(Palette::blockOffset(15)-1);
-	_slrScrollSpeed->setRange(5, 25);
+	_slrScrollSpeed->setRange(1, 20);
 	_slrScrollSpeed->setValue(Options::battleScrollSpeed);
 	_slrScrollSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrScrollSpeedChange);
 	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_BATTLE_DESC");
@@ -181,7 +181,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	_btnArrows->setColor(Palette::blockOffset(15)-1);
 	_btnArrows->setText(tr("STR_PATH_ARROWS"));
-	_btnArrows->setPressed(Options::battleNewPreviewPath & PATH_ARROWS);
+	_btnArrows->setPressed((Options::battleNewPreviewPath & PATH_ARROWS) != 0);
 	_btnArrows->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnPathPreviewClick);
 	_btnArrows->setTooltip("STR_PATH_ARROWS_DESC");
 	_btnArrows->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
@@ -189,7 +189,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	_btnTuCost->setColor(Palette::blockOffset(15)-1);
 	_btnTuCost->setText(tr("STR_PATH_TIME_UNIT_COST"));
-	_btnTuCost->setPressed(Options::battleNewPreviewPath & PATH_TU_COST);
+	_btnTuCost->setPressed((Options::battleNewPreviewPath & PATH_TU_COST) != 0);
 	_btnTuCost->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnPathPreviewClick);
 	_btnTuCost->setTooltip("STR_PATH_TIME_UNIT_COST_DESC");
 	_btnTuCost->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);

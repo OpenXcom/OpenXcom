@@ -133,7 +133,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 	_txtClockSpeed->setText(tr("STR_CLOCK_SPEED"));
 
 	_slrClockSpeed->setColor(Palette::blockOffset(15)-1);
-	_slrClockSpeed->setRange(250, 50);
+	_slrClockSpeed->setRange(250, 10);
 	_slrClockSpeed->setValue(Options::geoClockSpeed);
 	_slrClockSpeed->setTooltip("STR_CLOCK_SPEED_DESC");
 	_slrClockSpeed->onChange((ActionHandler)&OptionsGeoscapeState::slrClockSpeedChange);
