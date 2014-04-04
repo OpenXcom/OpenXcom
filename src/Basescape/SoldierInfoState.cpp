@@ -528,6 +528,14 @@ void SoldierInfoState::edtSoldierPress(Action *action)
 }
 
 /**
+ * Set the soldier Id.
+ */
+void SoldierInfoState::setSoldierId(size_t soldier)
+{
+	_soldierId = soldier;
+}
+
+/**
  * Changes the soldier's name.
  * @param action Pointer to an action.
  */
@@ -542,6 +550,7 @@ void SoldierInfoState::edtSoldierChange(Action *action)
  */
 void SoldierInfoState::btnOkClick(Action *)
 {
+    
 	_game->popState();
 }
 
