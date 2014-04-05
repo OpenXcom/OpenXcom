@@ -47,12 +47,13 @@ private:
 	std::string _alienRank, _alienRace, _weapon, _weaponAmmo;
 	UnitFaction _alienFaction;
 	UnitStatus _alienState;
+	int _turn;
 	
 public:
 	/// Creates a new diary and loads its contents from YAML.
 	SoldierDiaryKills(const YAML::Node& node);
 	/// Creates a diary.
-	SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction);
+	SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction, int turn);
 	/// Cleans up the diary.
 	~SoldierDiaryKills();
 	/// Loads the diary information from YAML.
@@ -71,14 +72,20 @@ public:
 	std::string getAlienState() const;
 	/// Get
 	std::string getAlienFaction() const;
+    /// Get
+    UnitStatus getAlienStateEnum() const;
+    /// Get 
+    UnitFaction getAlienFactionEnum() const;
+	/// Get
+	int getTurn() const;
 
 };
 
 struct Statistics
 {
 	// Variables
-	bool wasUnconcious;									// Tracks if the soldier fell unconcious
-    std::vector<SoldierDiaryKills*> kills;				// Tracks kills
+	bool wasUnconcious;						// Tracks if the soldier fell unconcious
+    std::vector<SoldierDiaryKills*> kills;	// Tracks kills
 
 	/// Functions
 	// Load function
@@ -221,7 +228,7 @@ private:
 	std::vector<SoldierDiaryKills*> _killList;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
-		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _killsWithFireTotal;
+		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:

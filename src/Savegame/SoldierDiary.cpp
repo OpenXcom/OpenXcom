@@ -36,7 +36,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Constructor
  */
-SoldierDiary::SoldierDiary() : _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(),
+SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(), 
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0)
@@ -370,8 +370,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_kills_with_fire" && _killsWithFireTotal < (*j).second.at(_nextCommendationLevel[""])) )
+					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) )
 			{
 				_awardCommendation = false;
 				break;
@@ -558,8 +557,14 @@ SoldierDiaryEntries::SoldierDiaryEntries(const YAML::Node &node) : _missionTime(
  * @param missionType Mission's type.
  * @param missionUFO Mission's UFO.
  */
-SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics) : _missionTime(missionTime), _missionRegion(missionRegion), _missionCountry(missionCountry), _missionType(missionType), _missionUFO(missionUFO), _success(success), _score(score), _rating(rating), _alienRace(alienRace), _missionDaylight(missionDaylight), _daysWounded(daysWounded), _missionStatistics(missionStatistics)
+SoldierDiaryEntries::SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics) : _missionTime(missionTime), _missionRegion(missionRegion), _missionCountry(missionCountry), _missionType(missionType), _missionUFO(missionUFO), _success(success), _score(score), _rating(rating), _alienRace(alienRace), _missionDaylight(missionDaylight), _daysWounded(daysWounded), _missionStatistics()
 {
+	_missionStatistics = new Statistics();
+	_missionStatistics->wasUnconcious = missionStatistics->wasUnconcious;
+	for (std::vector<SoldierDiaryKills*>::const_iterator i = missionStatistics->kills.begin() ; i != missionStatistics->kills.end(); ++i)
+	{
+		_missionStatistics->kills.push_back(new SoldierDiaryKills((*i)->getAlienRank(), (*i)->getAlienRace(), (*i)->getWeapon(), (*i)->getWeaponAmmo(), (*i)->getAlienStateEnum(), (*i)->getAlienFactionEnum(), (*i)->getTurn()));
+	}
 }
 
 /**
@@ -771,7 +776,7 @@ SoldierDiaryKills::SoldierDiaryKills(const YAML::Node &node)
 /**
  * Initializes a soldier diary.
  */
-SoldierDiaryKills::SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction) : _alienRank(alienRank), _alienRace(alienRace), _weapon(weapon), _weaponAmmo(weaponAmmo), _alienState(alienState), _alienFaction(alienFaction)
+SoldierDiaryKills::SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction, int turn) : _alienRank(alienRank), _alienRace(alienRace), _weapon(weapon), _weaponAmmo(weaponAmmo), _alienState(alienState), _alienFaction(alienFaction), _turn(turn)
 {
 }
 
@@ -794,6 +799,7 @@ void SoldierDiaryKills::load(const YAML::Node &node)
 	_weaponAmmo = node["weaponAmmo"].as<std::string>(_weaponAmmo);
 	_alienState = (UnitStatus)node["alienState"].as<int>();
 	_alienFaction = (UnitFaction)node["alienFaction"].as<int>();
+	_turn = node["turn"].as<int>(_turn);
 
 }
 
@@ -810,6 +816,7 @@ YAML::Node SoldierDiaryKills::save() const
 	node["weaponAmmo"] = _weaponAmmo;
 	node["alienState"] = (int)_alienState;
 	node["alienFaction"] = (int)_alienFaction;
+	node["turn"] = (int)_turn;
 	return node;
 }
 
@@ -877,6 +884,30 @@ std::string SoldierDiaryKills::getAlienFaction() const
 	default:
 		return "";
 	}
+}
+
+/**
+ *
+ */
+UnitStatus SoldierDiaryKills::getAlienStateEnum() const
+{
+    return _alienState;
+}
+
+/**
+ *
+ */
+UnitFaction SoldierDiaryKills::getAlienFactionEnum() const
+{
+    return _alienFaction;
+}
+
+/**
+ *
+ */
+int SoldierDiaryKills::getTurn() const
+{
+	return _turn;
 }
 
 /**

@@ -504,6 +504,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	std::string _weapon = "STR_WEAPON_UNKNOWN";
 	std::string _weaponAmmo = "STR_WEAPON_UNKNOWN";
 	UnitStatus _alienState;
+	int detailedTurn = _save->getTurn()*3;
+	if (_save->getSide() == FACTION_PLAYER)
+	{
+		detailedTurn += 0;
+	}
+	else if (_save->getSide() == FACTION_HOSTILE)
+	{
+		detailedTurn += 1;
+	}
+	else if (_save->getSide() == FACTION_NEUTRAL)
+	{
+		detailedTurn += 2;
+	}
 
 	// Fetch the murder weapon
 	if (murderer && murderer->getGeoscapeSoldier())
@@ -581,7 +594,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
 				{
-					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getFaction()));
+					murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getFaction(), detailedTurn));
 				}
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
@@ -670,7 +683,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			_alienState = STATUS_UNCONSCIOUS;
 			if (murderer && murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER) 
 			{
-				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getFaction()));
+				murderer->getMissionStatistics()->kills.push_back(new SoldierDiaryKills(_alienRank, _alienRace, _weapon, _weaponAmmo, _alienState, victim->getFaction(), detailedTurn));
 			}
 			if (victim && victim->getGeoscapeSoldier())
 			{
