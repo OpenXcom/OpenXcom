@@ -252,7 +252,8 @@ commendations:
     criteria:
       kills_with_criteria: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
     killCriteria:
-      - ["FACTION_HOSTILE"]
+      -
+        - ["FACTION_HOSTILE"]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
@@ -264,7 +265,8 @@ commendations:
     criteria:
       kills_with_criteria: [1, 3, 5, 7, 9, 11, 13, 15, 17, 20]
     killCriteria:
-      - ["FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+      -
+        - ["FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
   - type: STR_MEDAL_DEFENDER_MEDAL_NAME
     description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION
     sprite: 3
@@ -311,22 +313,26 @@ commendations:
     criteria:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
-      - ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
+      -
+        - ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
   - type: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
     description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
     sprite: 12
     criteria:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
-      - ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-      - ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-      - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-      - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-      - ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+      -
+        - ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+        - ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+        - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+        - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+        - ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
   - type: STR_MEDAL_BOLTS_CROSS_NAME
     description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
     sprite: 13
     criteria:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
-      - ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+      -
+        - ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+        - ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]

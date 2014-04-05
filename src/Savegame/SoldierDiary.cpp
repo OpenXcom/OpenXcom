@@ -434,49 +434,53 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			}
 			else if ((*j).first == "kills_with_criteria")
 			{
-				std::vector<std::vector<std::string> > *_killCriteriaList = (*i).second->getKillCriteria();
+                // Vector of ORs, vector of ANDs, vector of DETAILs
+				std::vector<std::vector<std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
                 
-                /// Add "original faction" to the SoldierDiaryKills class so we can track enemy kills
-                /// Look to see if it's possible to convert the enum AlienState to a string when comparing OR convert the string from the ruleset to an enum AlienState
-                
-                // Loop over the vector of vectors of items
-                for (std::vector<std::vector<std::string> >::const_iterator listItem = _killCriteriaList->begin(); listItem != _killCriteriaList->end(); ++listItem)
+                // Loop over the vector of ORs
+                for (std::vector<std::vector<std::vector<std::string> > >::const_iterator iterOR = _killCriteriaList->begin(); iterOR != _killCriteriaList->end(); ++iterOR)
                 {
-                    int count = 0; // Reset count
-                    // Loop over the vector of kills
-                    for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
+                    // Loop over the vector of ANDs
+                    for (std::vector<std::vector<std::string> >::const_iterator listItem = iterOR->begin(); listItem != iterOR->end(); ++listItem)
                     {
-                        bool foundMatch = true; // Reset bool
-                        // Loop over the vector of items
-                        for (std::vector<std::string>::const_iterator item = listItem->begin(); item != listItem->end(); ++item)
+                        int count = 0; // Reset count
+                        // Loop over through kills
+                        for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                         {
-                            // See if we find no matches with any criteria. If so, break and try the next kill.
-                            if ( (*singleKill)->getAlienRank() != (*item) && (*singleKill)->getAlienRace() != (*item) &&
-								 (*singleKill)->getWeapon() != (*item) && (*singleKill)->getWeaponAmmo() != (*item) &&
-								 (*singleKill)->getAlienState() != (*item) && (*singleKill)->getAlienFaction() != (*item) )
+                            bool foundMatch = true; // Reset bool
+                            // Loop over the vector of DETAILs
+                            for (std::vector<std::string>::const_iterator detail = listItem->begin(); detail != listItem->end(); ++detail)
                             {
-                                foundMatch = false;
-                                break;
+                                // See if we find no matches with any criteria. If so, break and try the next kill.
+                                if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
+                                     (*singleKill)->getWeapon() != (*detail) && (*singleKill)->getWeaponAmmo() != (*detail) &&
+                                     (*singleKill)->getAlienState() != (*detail) && (*singleKill)->getAlienFaction() != (*detail) )
+                                {
+                                    foundMatch = false;
+                                    break;
+                                }
                             }
+							// If all the DETAILs were matched in a singleKill, then increment count
+                            if (foundMatch) count++;
                         }
-                        if (foundMatch) count++;
+                        // If this single vector of DETAILS did not have a high enough kill count, do not award commendation for this AND vector but try the next OR vector
+                        if (count < (*j).second.at(_nextCommendationLevel[""])) 
+                        {
+                            _awardCommendation = false;
+                            break;
+                        }
+						// Break out of this AND vector for loop because a DETAIL vector failed
+						if (!_awardCommendation) break;
                     }
-                    // If this single vector of items doesn't make the cut, do not award commendation
-                    if (count < (*j).second.at(_nextCommendationLevel[""])) 
-                    {
-                        _awardCommendation = false;
-                        break;
-                    }
-                }
-                // Break out of this for loop as well
-                if (!_awardCommendation) break;
-				
+					// If one of the AND vectors worked, no need to check any other OR vectors
+					if (_awardCommendation) break;
+				}
 			}
 		}
 		if (_awardCommendation)
 		{
-            // If we do not have modular medals, but are awarded a different medal
-            // Its noun will be ""
+            // If we do not have modular medals, but are awarded a different medal,
+            // its noun will be ""
             if (_modularCommendations.empty())
             {
                 _modularCommendations[""] = 0;

@@ -44,7 +44,7 @@ void RuleCommendations::load(const YAML::Node &node, int listOrder)
 {
 	_description = node["description"].as<std::string>(_description);
 	_criteria = node["criteria"].as< std::map< std::string, std::vector<int> > >(_criteria);
-	_killCriteria = node["killCriteria"].as< std::vector< std::vector<std::string> > >(_killCriteria);
+	_killCriteria = node["killCriteria"].as< std::vector<std::vector< std::vector<std::string> > > >(_killCriteria);
     _sprite = node["sprite"].as<int>(_sprite);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
@@ -84,7 +84,7 @@ std::map<std::string, std::vector<int> > *RuleCommendations::getCriteria()
  * Get commendation award kill criteria
  * @return vecotr<string> Commendation kill criteria
  */
-std::vector< std::vector<std::string> > *RuleCommendations::getKillCriteria()
+std::vector<std::vector<std::vector<std::string> > > *RuleCommendations::getKillCriteria()
 {
 	return &_killCriteria;
 }
