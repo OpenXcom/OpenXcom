@@ -6,7 +6,8 @@ OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolut
 	audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS, changeValueByMouseWheel;
 OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpenGL, checkOpenGLErrors, vSyncForOpenGL, useOpenGLSmoothing,
 	allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio,
-	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow;
+	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow,
+	baseResGeoscape, baseResBasescape, baseResBattlescape;
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
 OPT SaveSort saveOrder;

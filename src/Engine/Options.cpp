@@ -78,6 +78,9 @@ void create()
 	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
 	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("baseResGeoscape", &baseResGeoscape, true));
+	_info.push_back(OptionInfo("baseResBasescape", &baseResBasescape, true));
+	_info.push_back(OptionInfo("baseResBattlescape", &baseResBattlescape, true));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
 	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));

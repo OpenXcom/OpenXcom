@@ -1380,7 +1380,7 @@ bool TileEngine::detonate(Tile* tile)
 						}
 					}
 				}
-				if (2 * flam < remainingPower && (tiles[i]->getMapData(MapData::O_FLOOR) || tiles[i]->getMapData(MapData::O_OBJECT)))
+				if (i > 3 && 2 * flam < remainingPower && (tile->getMapData(MapData::O_FLOOR) || tile->getMapData(MapData::O_OBJECT)))
 				{
 					tile->setFire(fuel);
 					tile->setSmoke(std::max(1, std::min(15 - (flam / 10), 12)));

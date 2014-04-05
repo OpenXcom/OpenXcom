@@ -60,6 +60,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
+	Options::reload = false;
 	Options::mute = false;
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
