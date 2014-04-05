@@ -265,7 +265,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_btnMinimizedIcon = new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterceptionNumber = new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
-	_animTimer = new Timer(20);
+	_animTimer = new Timer(Options::dogfightSpeed + 10);
 	_moveTimer = new Timer(Options::dogfightSpeed);
 	_w1Timer = new Timer(0);
 	_w2Timer = new Timer(0);

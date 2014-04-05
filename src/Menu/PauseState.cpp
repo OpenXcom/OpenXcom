@@ -170,6 +170,7 @@ void PauseState::btnSaveClick(Action *)
 */
 void PauseState::btnOptionsClick(Action *)
 {
+	Options::backupDisplay();
 	if (_origin == OPT_GEOSCAPE)
 	{
 		_game->pushState(new OptionsGeoscapeState(_game, _origin));

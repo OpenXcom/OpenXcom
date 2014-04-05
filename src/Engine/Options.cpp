@@ -78,9 +78,10 @@ void create()
 	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
 	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
-	_info.push_back(OptionInfo("baseResGeoscape", &baseResGeoscape, true));
-	_info.push_back(OptionInfo("baseResBasescape", &baseResBasescape, true));
-	_info.push_back(OptionInfo("baseResBattlescape", &baseResBattlescape, true));
+	_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
 	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
@@ -148,8 +149,8 @@ void create()
 	_info.push_back(OptionInfo("disableAutoEquip", &disableAutoEquip, false));
 	_info.push_back(OptionInfo("battleUFOExtenderAccuracy", &battleUFOExtenderAccuracy, false));
 	_info.push_back(OptionInfo("saveOrder", (int*)&saveOrder, SORT_DATE_DESC));
-	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 50));
-	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 10));
+	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 80));
+	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 20));
 	_info.push_back(OptionInfo("globeScrollSpeed", &globeScrollSpeed, 20));
 	_info.push_back(OptionInfo("globeScrollDragButton", &globeScrollDragButton, SDL_BUTTON_MIDDLE));
 	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false));
@@ -567,6 +568,20 @@ std::string getConfigFolder()
 const std::vector<OptionInfo> &getOptionInfo()
 {
 	return _info;
+}
+
+/**
+ * Saves display settings temporarily to be able
+ * to revert to old ones.
+ */
+void backupDisplay()
+{
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+	Options::newOpenGL = Options::useOpenGL;
+	Options::newScaleFilter = Options::useScaleFilter;
+	Options::newHQXFilter = Options::useHQXFilter;
+	Options::newOpenGLShader = Options::useOpenGLShader;
 }
 
 /**

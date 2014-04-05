@@ -596,6 +596,7 @@
     <ClInclude Include="Engine\OpenGL.h" />
     <ClInclude Include="Engine\OptionInfo.h" />
     <ClInclude Include="Engine\Options.h" />
+    <ClInclude Include="Engine\Options.inc.h" />
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
     <ClInclude Include="Engine\Scalers\common.h" />
