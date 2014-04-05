@@ -94,7 +94,7 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
-	//game->getScreen()->setScale(1.0);
+
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;
 	int iconsWidth = 320;
