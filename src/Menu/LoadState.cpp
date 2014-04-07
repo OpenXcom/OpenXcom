@@ -98,7 +98,7 @@ void LoadState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)));
+		_game->pushState(new DeleteGameState(_game, _origin, _saves[_lstSaves->getSelectedRow()].fileName));
 	}
 }
 
