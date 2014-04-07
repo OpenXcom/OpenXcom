@@ -58,12 +58,11 @@ namespace OpenXcom
  */
 SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _soldiers(), _crafts(), _sel(0), _total(0), _spaceChange(0), _tItems(new ItemContainer()), _haveTransferItems(false)
 {
-	_overfull = Options::storageLimitsEnforced && _base->storesOverfull();
+	bool overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-
-	_btnOk = new TextButton(_overfull? 288:148, 16, _overfull? 16:8, 176);
+	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtSales = new Text(150, 9, 10, 24);
@@ -126,7 +125,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(_color);
-	_btnOk->setText(_overfull ? tr("STR_SELL_UC") : tr("STR_SELL_SACK"));
+	_btnOk->setText(overfull ? tr("STR_SELL_UC") : tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SellState::btnOkClick, Options::keyOk);
 
@@ -135,7 +134,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SellState::btnCancelClick, Options::keyCancel);
 
-	if (_overfull)
+	if (overfull)
 	{
 		_btnCancel->setVisible(false);
 		_btnOk->setVisible(false);
@@ -152,7 +151,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_btnNext->setColor(_color);
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SellState::btnNextClick);
-	_btnPrev->onKeyboardPress((ActionHandler)&SellState::btnNextClick, Options::keyBattleNextUnit);
+	_btnNext->onKeyboardPress((ActionHandler)&SellState::btnNextClick, Options::keyBattleNextUnit);
 
 	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
@@ -204,7 +203,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_tabs.push_back(tr("STR_ITEMS"));
 	_containers.push_back(_base->getItems());
 
-	if (_overfull)
+	if (overfull)
 	{
 		for (std::vector<Transfer*>::iterator t = _base->getTransfers()->begin(); t != _base->getTransfers()->end(); ++t)
 		{
@@ -329,12 +328,9 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	delete craftItems;
 	delete nonCraftItems;
 
-	if (_overfull)
+	for (size_t tab = 3; tab < _lists.size(); tab++)
 	{
-		for (size_t tab = 3; tab < _lists.size(); tab++)
-		{
-			addRows(_containers[tab], tab);
-		}
+		addRows(_containers[tab], tab);
 	}
 
 	_timerInc = new Timer(250);
@@ -430,7 +426,6 @@ void SellState::btnOkClick(Action *)
 						break;
 					}
 				}
-
 				delete _soldiers[i];
 			}
 			else if (_base->getAvailableScientists() > 0 && i == _soldiers.size())
@@ -938,7 +933,6 @@ void SellState::updateUI()
 	}
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
-
 
 	RuleItem *rule;
 	if (_selTab != TAB_PERSONNEL && !(_selTab == TAB_CRAFT && _sel < _crafts.size()))

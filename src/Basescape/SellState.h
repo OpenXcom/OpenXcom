@@ -63,7 +63,7 @@ private:
 	int _total, _spaceChange;
 	Timer *_timerInc, *_timerDec;
 	ItemContainer *_tItems;
-	bool _overfull, _haveTransferItems;
+	bool _haveTransferItems;
 	Uint8 _color, _color2, _color3, _colorAmmo;
 	/// Gets selected price.
 	int getPrice();
