@@ -389,6 +389,7 @@ void SavedGame::save(const std::string &filename) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
+	brief["rulesets"] = Options::rulesets;
 	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
