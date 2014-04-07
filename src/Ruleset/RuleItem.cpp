@@ -56,6 +56,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
+	_subCategory = node["subCategory"].as< std::vector<std::string> >(_subCategory);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_size = node["size"].as<float>(_size);
 	_costBuy = node["costBuy"].as<int>(_costBuy);
@@ -98,14 +99,14 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 			_fireSound += modIndex;
 	}
 	if (node["hitSound"])
-	{		
+	{
 		_hitSound = node["hitSound"].as<int>(_hitSound);
 		// BATTLE.CAT: 55 entries
 		if (_hitSound > 54)
 			_hitSound += modIndex;
 	}
 	if (node["hitAnimation"])
-	{		
+	{
 		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
 		// SMOKE.PCK: 56 entries
 		if (_hitAnimation > 55)
@@ -192,6 +193,34 @@ std::string RuleItem::getName() const
 const std::vector<std::string> &RuleItem::getRequirements() const
 {
 	return _requires;
+}
+
+/**
+ * Returns this item's sub-categories.
+ * @return Item sub-categories.
+ */
+const std::vector<std::string> &RuleItem::getSubCategories() const
+{
+	return _subCategory;
+}
+
+/**
+ * Returns whether this item is a craft item.
+ * @return True if this item is a craft item.
+ */
+bool RuleItem::isCraftItem() const
+{
+	return std::find(getSubCategories().begin(), getSubCategories().end(), "CRAFT_ITEM") != getSubCategories().end();
+}
+
+/**
+ * Returns whether this item is a battlescape item.
+ * @return True if this item is a battlescape item.
+ */
+bool RuleItem::isBattlescapeItem() const
+{
+	if (getSubCategories().empty())	return true;
+	return std::find(getSubCategories().begin(), getSubCategories().end(), "BATTLESCAPE_ITEM") != getSubCategories().end();
 }
 
 /**

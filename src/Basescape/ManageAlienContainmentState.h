@@ -42,6 +42,7 @@ class ManageAlienContainmentState : public State
 {
 private:
 	Base *_base;
+	OptionsOrigin _origin;
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtUsed, *_txtAvailable, *_txtItem, *_txtLiveAliens, *_txtDeadAliens;

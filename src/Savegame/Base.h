@@ -62,6 +62,8 @@ private:
 	bool _retaliationTarget;
 	std::vector<Vehicle*> _vehicles;
 	std::vector<BaseFacility*> _defenses;
+	/// Determines space taken up by ammo clips about to rearm craft.
+	double getIgnoredStores();
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -116,7 +118,11 @@ public:
 	/// Gets the base's available living quarters.
 	int getAvailableQuarters() const;
 	/// Gets the base's used storage space.
-	int getUsedStores() const;
+	int getUsedStores();
+	/// Gets the base's used storage to the nearest tenth of an XCom storage unit.
+	double getExactUsedStores();
+	/// Checks if the base's stores are overfull.
+	bool storesOverfull(int offset = 0);
 	/// Gets the base's available storage space.
 	int getAvailableStores() const;
 	/// Gets the base's used laboratory space.

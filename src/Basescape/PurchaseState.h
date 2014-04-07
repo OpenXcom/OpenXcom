@@ -33,6 +33,8 @@ class TextList;
 class Timer;
 class Base;
 
+enum eSelectedTab {TAB_PERSONNEL, TAB_CRAFT, TAB_ITEMS, TAB_TRANSFERS};
+
 /**
  * Purchase/Hire screen that lets the player buy
  * new items for a base.
@@ -41,22 +43,37 @@ class PurchaseState : public State
 {
 private:
 	Base *_base;
-
-	TextButton *_btnOk, *_btnCancel;
+	TextButton *_btnOk, *_btnCancel, *_btnTab, *_btnPrev, *_btnNext;
 	Window *_window;
-	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
-	TextList *_lstItems;
-	std::vector<std::string> _crafts, _items;
-	std::vector<int> _qtys;
+	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity, *_txtInStorage;;
+	TextList *_lstPersonnel, *_lstCraft, *_lstItems, *_selList;
+	std::vector<std::string> _crafts, _items, _craftItems;
+	std::vector<std::wstring> _tabs;
+	std::vector<TextList*> _lists;
+	std::vector<int> _qtys, _qtysPersonnel, _qtysCraft;
 	unsigned int _sel;
+	size_t _selTab;
 	int _total, _pQty, _cQty;
-	float _iQty;
+	int _iQty;
 	Timer *_timerInc, *_timerDec;
-	size_t _itemOffset;
 	/// Gets selected price.
 	int getPrice();
 	/// Is it excluded in the options file?
 	bool isExcluded(std::string item);
+	/// Updates the tab index.
+	void updateIndex(size_t &index, std::vector<std::wstring> &list, int change);
+	/// Updates the currently displayed tab.
+	void updateTab(int direction = 0);
+	/// Increases the quantity of an item by one.
+	void increase();
+	/// Increases the quantity of an item by the given value.
+	void increaseByValue(int change);
+	/// Decreases the quantity of an item by one.
+	void decrease();
+	/// Decreases the quantity of an item by the given value.
+	void decreaseByValue(int change);
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game, Base *base);
@@ -68,6 +85,12 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Tab button.
+	void btnTabClick(Action *action);
+	/// Handler for clicking the Previous button.
+	void btnPrevClick(Action *action);
+	/// Handler for clicking the Next button.
+	void btnNextClick(Action *action);
 	/// Handler for pressing an Increase arrow in the list.
 	void lstItemsLeftArrowPress(Action *action);
 	/// Handler for releasing an Increase arrow in the list.
@@ -82,16 +105,6 @@ public:
 	void lstItemsRightArrowClick(Action *action);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstItemsMousePress(Action *action);
-	/// Increases the quantity of an item by one.
-	void increase();
-	/// Increases the quantity of an item by the given value.
-	void increaseByValue(int change);
-	/// Decreases the quantity of an item by one.
-	void decrease();
-	/// Decreases the quantity of an item by the given value.
-	void decreaseByValue(int change);
-	/// Updates the quantity-strings of the selected item.
-	void updateItemStrings();
 };
 
 }

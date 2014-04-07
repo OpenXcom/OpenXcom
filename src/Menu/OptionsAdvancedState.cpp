@@ -45,7 +45,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 
 	// Create objects
 	_lstOptions = new TextList(200, 136, 94, 8);
-	
+
 	add(_lstOptions);
 
 	centerAllSurfaces();
@@ -57,7 +57,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
 
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("aggressiveRetaliation", &Options::aggressiveRetaliation));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("alienContainmentLimitEnforced", &Options::alienContainmentLimitEnforced));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("storageLimitsEnforced", &Options::storageLimitsEnforced));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("canSellLiveAliens", &Options::canSellLiveAliens));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowAutoSellProduction", &Options::allowAutoSellProduction));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowBuildingQueue", &Options::allowBuildingQueue));
@@ -95,7 +95,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), setting.c_str());
 		++sel;
 	}
-	
+
 	_settingIntSet.push_back(std::pair<std::string, int*>("battleExplosionHeight", &Options::battleExplosionHeight));
 	_settingIntSet.push_back(std::pair<std::string, int*>("autosave", &Options::autosave));
 	_settingIntSet.push_back(std::pair<std::string, int*>("maxFrameSkip", &Options::maxFrameSkip));
@@ -122,7 +122,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
  */
 OptionsAdvancedState::~OptionsAdvancedState()
 {
-	
+
 }
 
 void OptionsAdvancedState::lstOptionsPress(Action *action)

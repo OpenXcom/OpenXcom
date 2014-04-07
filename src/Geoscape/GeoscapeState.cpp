@@ -54,6 +54,8 @@
 #include "../Menu/PauseState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
+#include "../Basescape/SellState.h"
+#include "../Menu/ErrorMessageState.h"
 #include "GraphsState.h"
 #include "FundingState.h"
 #include "MonthlyReportState.h"
@@ -1367,6 +1369,13 @@ void GeoscapeState::time1Hour()
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
+
+				if ((*i)->storesOverfull())
+				{
+					_game->pushState(new SellState(_game, (*i)));
+					_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+				}
+				_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 				popup(new ProductionCompleteState(_game, (*i),  tr(j->first->getRules()->getName()), this, j->second));
 			}
 		}
@@ -1531,7 +1540,7 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
+					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);

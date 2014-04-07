@@ -20,12 +20,13 @@
 #define OPENXCOM_SELLSTATE_H
 
 #include "../Engine/State.h"
+#include "../Menu/OptionsBaseState.h"
+#include "PurchaseState.h"
 #include <vector>
 #include <string>
 
 namespace OpenXcom
 {
-enum SellType { SELL_SOLDIER, SELL_CRAFT, SELL_ITEM, SELL_SCIENTIST, SELL_ENGINEER };
 
 class TextButton;
 class Window;
@@ -35,6 +36,7 @@ class Timer;
 class Base;
 class Soldier;
 class Craft;
+class ItemContainer;
 
 /**
  * Sell/Sack screen that lets the player sell
@@ -44,31 +46,48 @@ class SellState : public State
 {
 private:
 	Base *_base;
-	TextButton *_btnOk, *_btnCancel;
+	TextButton *_btnOk, *_btnCancel, *_btnTab, *_btnPrev, *_btnNext;
 	Window *_window;
-	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue;
-	TextList *_lstItems;
-	std::vector<int> _qtys;
+	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue, *_txtSpace, *_txtSpaceUsed;
+	TextList *_lstPersonnel, *_lstCraft, *_lstItems;
+	TextList *_selList;
+	std::vector< std::vector<int> > _quantities;
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
-	std::vector<std::string> _items;
+	std::vector< std::vector<std::string> > _items;
+	std::vector<std::wstring> _tabs;
+	std::vector<TextList*> _lists;
+	std::vector<ItemContainer*> _containers;
 	unsigned int _sel;
-	int _total, _hasSci, _hasEng;
+	size_t _selTab;
+	int _total, _spaceChange;
 	Timer *_timerInc, *_timerDec;
-	size_t _itemOffset;
+	ItemContainer *_tItems;
+	bool _haveTransferItems;
+	Uint8 _color, _color2, _color3, _colorAmmo;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
 	int getQuantity();
-	/// Gets the Type of the selected item.
-	enum SellType getType(unsigned selected) const;
 	/// Gets the index of selected item.
 	int getItemIndex(unsigned selected) const;
-	/// Gets the index of the selected craft.
-	int getCraftIndex(unsigned selected) const;
+	/// Updates the tab index.
+	void updateIndex(size_t &index, std::vector<std::wstring> &list, int change);
+	/// Adds item rows to the tab for the items in the container.
+	void addRows(ItemContainer *container, int tab);
+	/// Updates the displayed tab.
+	void updateTab(int direction = 0);
+	/// Changes the quantity of an item by the given value.
+	void changeByValue(int change, int dir);
+	/// Increases the quantity of an item by one.
+	void increase();
+	/// Decreases the quantity of an item by one.
+	void decrease();
+	/// Updates the quantity-strings, row colors and storage change.
+	void updateUI();
 public:
 	/// Creates the Sell state.
-	SellState(Game *game, Base *base);
+	SellState(Game *game, Base *base, OptionsOrigin origin = OPT_GEOSCAPE);
 	/// Cleans up the Sell state.
 	~SellState();
 	/// Runs the timers.
@@ -77,6 +96,12 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Tab button.
+	void btnTabClick(Action *action);
+	/// Handler for clicking the Previous button.
+	void btnPrevClick(Action *action);
+	/// Handler for clicking the Next button.
+	void btnNextClick(Action *action);
 	/// Handler for pressing an Increase arrow in the list.
 	void lstItemsLeftArrowPress(Action *action);
 	/// Handler for releasing an Increase arrow in the list.
@@ -91,16 +116,6 @@ public:
 	void lstItemsRightArrowClick(Action *action);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstItemsMousePress(Action *action);
-	/// Increases the quantity of an item by one.
-	void increase();
-	/// Increases the quantity of an item by the given value.
-	void increaseByValue(int change);
-	/// Decreases the quantity of an item by one.
-	void decrease();
-	/// Decreases the quantity of an item by the given value.
-	void decreaseByValue(int change);
-	/// Updates the quantity-strings of the selected item.
-	void updateItemStrings();
 };
 
 }
