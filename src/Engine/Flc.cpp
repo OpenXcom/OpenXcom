@@ -507,22 +507,15 @@ void FlcMain(void (*frameCallBack)())
 { flc.quit=false;
   SDL_Event event;
   
-//#ifndef __NO_FLC
   FlcInitFirstFrame();
-#ifdef _WIN32
   flc.offset = flc.dy * flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel * flc.dx;
-#else
-  SDL_Rect dstRect = {(Sint16)flc.dx, (Sint16)flc.dy, (Uint16)flc.screen_w, (Uint16)flc.screen_h};
-  flc.offset = 0;
-#endif
   while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
     if(FlcCheckFrame()) {
       if (flc.FrameCount<=flc.HeaderFrames) {
-        //printf("Frame failure -- corrupt file?\n");
         Log(LOG_ERROR) << "Frame failure -- corrupt file?";
-				return;
+	return;
       } else {
         if(flc.loop)
           FlcInitFirstFrame();
@@ -542,13 +535,7 @@ void FlcMain(void (*frameCallBack)())
       /* TODO: Track which rectangles have really changed */
       //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
       if (flc.mainscreen != flc.realscreen->getSurface()->getSurface())
-        SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(),
-#ifdef _WIN32
-                        0
-#else
-                        &dstRect
-#endif
-                       );
+        SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
       flc.realscreen->flip();
     }
 
