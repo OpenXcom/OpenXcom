@@ -671,7 +671,7 @@ std::string noExt(const std::string &filename)
  */
 std::string getLocale()
 {
-#ifndef _WIN32
+#ifdef _WIN32
 	char language[9], country[9];
 
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
