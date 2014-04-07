@@ -1650,9 +1650,6 @@
     <ClInclude Include="Engine\OptionInfo.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Options.inc.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Interface\ComboBox.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -1664,6 +1661,9 @@
     </ClInclude>
     <ClInclude Include="Menu\IntroState.h">
       <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Options.inc.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

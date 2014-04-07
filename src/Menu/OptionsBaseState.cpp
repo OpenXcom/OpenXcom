@@ -204,7 +204,7 @@ void OptionsBaseState::btnOkClick(Action *)
 	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();
 	_game->setVolume(Options::soundVolume, Options::musicVolume);
-	if (Options::reload)
+	if (Options::reload && _origin == OPT_MENU)
 	{
 		_game->setState(new StartState(_game));
 	}

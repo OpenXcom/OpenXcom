@@ -91,7 +91,11 @@ OptionsDefaultsState::~OptionsDefaultsState()
  * @param action Pointer to an action.
  */
 void OptionsDefaultsState::btnYesClick(Action *action)
-{	
+{
+	if (_origin == OPT_MENU && Options::rulesets.size() > 1)
+	{
+		Options::reload = true;
+	}
 	Options::resetDefault();
 	_game->defaultLanguage();
 	_game->popState();

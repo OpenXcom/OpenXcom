@@ -2,12 +2,11 @@
 // To add a new option, add a new variable entry and a corresponding OptionInfo in Options.cpp
 
 // General options
-OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolution, autosave, soundVolume, musicVolume,
-	audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS, changeValueByMouseWheel;
+OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolution, baseXGeoscape, baseYGeoscape, baseXBattlescape, baseYBattlescape,
+    autosave, soundVolume, musicVolume, audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS, changeValueByMouseWheel;
 OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpenGL, checkOpenGLErrors, vSyncForOpenGL, useOpenGLSmoothing,
 	allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio,
-	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow,
-	baseResGeoscape, baseResBasescape, baseResBattlescape;
+	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow;
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
 OPT SaveSort saveOrder;

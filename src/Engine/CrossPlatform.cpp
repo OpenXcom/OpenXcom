@@ -671,7 +671,7 @@ std::string noExt(const std::string &filename)
  */
 std::string getLocale()
 {
-#ifdef _WIN32
+#ifndef _WIN32
 	char language[9], country[9];
 
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
@@ -690,19 +690,22 @@ std::string getLocale()
 	std::locale l("");
 	std::string name = l.name();
 	size_t dash = name.find_first_of('_'), dot = name.find_first_of('.');
-	if (dash == std::string::npos)
+	if (dot != std::string::npos)
 	{
-		return "";
+		name = name.substr(0, dot - 1);
 	}
-	std::string language = name.substr(0, dash - 1);
-	if (dot == std::string::npos)
+	if (dash != std::string::npos)
 	{
-		return language;
+		std::string language = name.substr(0, dash - 1);
+		std::string country = name.substr(dash - 1);
+		std::ostringstream locale;
+		locale << language << "-" << country;
+		return locale.str();
 	}
-	std::string country = name.substr(dash - 1, dot - 1);
-	std::ostringstream locale;
-	locale << language << "-" << country;
-	return locale.str();
+	else
+	{
+		return name + "-";
+	}
 #endif
 }
 
