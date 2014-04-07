@@ -78,6 +78,8 @@ public:
     UnitFaction getAlienFactionEnum() const;
 	/// Get
 	int getTurn() const;
+	/// Add unique mission id to turn
+	void makeTurnUnique(GameTime missionTime);
 
 };
 

@@ -115,11 +115,12 @@ void SoldierDiary::updateDiary()
 	for (std::vector<SoldierDiaryKills*>::const_iterator j = latestEntry->getMissionStatistics()->kills.begin() ; j != latestEntry->getMissionStatistics()->kills.end() ; ++j)
     {
 		_killList.push_back(*j);
+		(*j)->makeTurnUnique(*latestEntry->getMissionTime());
 		if ((*j)->getAlienFaction() != "FACTION_HOSTILE") continue;
         _alienRankTotal[(*j)->getAlienRank().c_str()]++;
         _alienRaceTotal[(*j)->getAlienRace().c_str()]++;
         _weaponTotal[(*j)->getWeapon().c_str()]++;
-        _weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
+        _weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;		
     }
     _regionTotal[latestEntry->getMissionRegion().c_str()]++;
     _countryTotal[latestEntry->getMissionCountry().c_str()]++;
@@ -327,7 +328,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
     std::map<std::string, int> _modularCommendations;
 
 	// Loop over all possible commendations
-	for (std::vector<std::pair<std::string, RuleCommendations *> >::const_iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
+	for (std::vector<std::pair<std::string, RuleCommendations *> >::iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
 		bool _awardCommendation = true;
         _nextCommendationLevel.clear();
@@ -440,13 +441,42 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                 // Loop over the vector of ORs
                 for (std::vector<std::vector<std::vector<std::string> > >::const_iterator iterOR = _killCriteriaList->begin(); iterOR != _killCriteriaList->end(); ++iterOR)
                 {
+					int multiKills = 0;
+					int sameDetailsCount = 1; // How many identical DETAIL vectors --> how many kills in one turn we want
+					std::vector<std::vector<std::string> >::const_iterator otherListItem;
+
+					// Check to see if entire DETAIL vectors are the same
+					for (std::vector<std::vector<std::string> >::const_iterator listItem = iterOR->begin(); listItem != iterOR->end(); ++listItem)
+					{
+						if (listItem == iterOR->begin()) continue;
+						listItem--;
+						otherListItem = listItem;
+						listItem++;
+						if (*otherListItem == *listItem)
+                        {
+                            sameDetailsCount++;
+                        }
+						else sameDetailsCount = 1;
+					}
+
                     // Loop over the vector of ANDs
                     for (std::vector<std::vector<std::string> >::const_iterator listItem = iterOR->begin(); listItem != iterOR->end(); ++listItem)
                     {
                         int count = 0; // Reset count
+						int killsPerTurn = 1; // If we want a double kill, triple kill, etc...
+						int killsTurn = 0;
+					    int previousKillsTurn = 0;
                         // Loop over through kills
                         for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                         {
+                            // Check to see if the turn this kill was on is the same as the turn the next kill was on
+                            killsTurn = (*singleKill)->getTurn();
+							if (singleKill != _killList.begin())
+							{
+								*singleKill--;
+								previousKillsTurn = (*singleKill)->getTurn();
+								*singleKill++;
+							}
                             bool foundMatch = true; // Reset bool
                             // Loop over the vector of DETAILs
                             for (std::vector<std::string>::const_iterator detail = listItem->begin(); detail != listItem->end(); ++detail)
@@ -461,10 +491,17 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                 }
                             }
 							// If all the DETAILs were matched in a singleKill, then increment count
-                            if (foundMatch) count++;
+                            if (foundMatch)
+                            {
+                                if (killsTurn == previousKillsTurn) killsPerTurn++;
+                                count++;
+                            }
+							// Only check when kills are no longer on the same turn, that is when we've reached the end of the list of same turn kills
+							if ( (killsTurn != previousKillsTurn || *singleKill == _killList.back()) && sameDetailsCount != 1 && killsPerTurn == sameDetailsCount ) multiKills++;
                         }
                         // If this single vector of DETAILS did not have a high enough kill count, do not award commendation for this AND vector but try the next OR vector
-                        if (count < (*j).second.at(_nextCommendationLevel[""])) 
+						// Check for multi kills too
+                        if ((sameDetailsCount == 1 && count < (*j).second.at(_nextCommendationLevel[""])) || multiKills < (*j).second.at(_nextCommendationLevel[""]) ) 
                         {
                             _awardCommendation = false;
                             break;
@@ -473,7 +510,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 						if (!_awardCommendation) break;
                     }
 					// If one of the AND vectors worked, no need to check any other OR vectors
-					if (_awardCommendation) break;
+                    if (_awardCommendation) break;
+                    
+                    
+                    
+                    
 				}
 			}
 		}
@@ -912,6 +953,14 @@ UnitFaction SoldierDiaryKills::getAlienFactionEnum() const
 int SoldierDiaryKills::getTurn() const
 {
 	return _turn;
+}
+
+/**
+ *
+ */
+void SoldierDiaryKills::makeTurnUnique(GameTime missionTime)
+{
+	_turn += (missionTime.getYear() + missionTime.getMonth() + missionTime.getDay() + missionTime.getHour() + missionTime.getMinute())*10;
 }
 
 /**

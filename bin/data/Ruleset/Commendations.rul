@@ -218,7 +218,7 @@ extraStrings:
      STR_HEAVY_WEAPONS_PLATFORM_LC: "Heavy Weapons Platform"
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
-# Any vector greater than 10 will require more strings and more sprites.
+# Any vector greater than 10 will require more strings and more sprites decorations.
 # Commendations may have multiple criteria.
 # List of possible criteria:
 #   total_kills
@@ -244,7 +244,6 @@ extraStrings:
 # The killCriteria can list any race, rank, weapon, ammo, STATUS_DEAD, STATUS_UNCONSCIOUS,
 # FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER. For example, 
 # ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"] looks for a kill with Incendiary Rockets AND hostile faction.
-# There is no way to do <something> OR <something>, only AND.
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
@@ -253,7 +252,7 @@ commendations:
       kills_with_criteria: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
     killCriteria:
       -
-        - ["FACTION_HOSTILE"]
+        - ["FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
@@ -322,11 +321,11 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        - ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-        - ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-        - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-        - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
-        - ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE"]
+        - ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_BOLTS_CROSS_NAME
     description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
     sprite: 13
@@ -336,3 +335,22 @@ commendations:
       -
         - ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
         - ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+  - type: STR_DOUBLE_KILL
+    description: STR_DOUBLE_KILL
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      -
+        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+  - type: STR_TRIPLE_KILL
+    description: STR_TRIPLE_KILL
+    sprite: 0
+    criteria:
+      kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      -
+        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+        - ["FACTION_HOSTILE", "STATUS_DEAD"]
