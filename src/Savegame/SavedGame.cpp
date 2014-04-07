@@ -306,9 +306,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(*i, *rule, *this);
-		_ufos.push_back(u);
+		if (rule->getUfo(type))
+		{
+			Ufo *u = new Ufo(rule->getUfo(type));
+			u->load(*i, *rule, *this);
+			_ufos.push_back(u);
+		}
 	}
 
 	for (YAML::const_iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
