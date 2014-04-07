@@ -308,6 +308,7 @@
 #include "./Menu/StartState.h"
 #include "./Menu/IntroState.h"
 #include "./Menu/TestState.h"
+#include "./Menu/ConfirmLoadState.h"
 #include "./Menu/LoadState.h"
 #include "./Menu/SavedGameState.h"
 #include "./Menu/NewGameState.h"

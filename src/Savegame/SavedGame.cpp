@@ -197,6 +197,10 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang)
 			}
 			save.details = details.str();
 
+			if (doc["rulesets"])
+			{
+				save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
+			}
 			info.push_back(save);
 		}
 		catch (Exception &e)
