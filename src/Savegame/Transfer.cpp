@@ -78,7 +78,7 @@ bool Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 	}
 	if (const YAML::Node &item = node["itemId"])
 	{
-		_itemId = node["itemId"].as<std::string>(_itemId);
+		_itemId = item.as<std::string>(_itemId);
 		if (rule->getItem(_itemId) == 0)
 		{
 			delete this;
