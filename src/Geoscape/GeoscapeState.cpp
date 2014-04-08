@@ -395,6 +395,18 @@ GeoscapeState::~GeoscapeState()
 	delete _zoomInEffectTimer;
 	delete _zoomOutEffectTimer;
 	delete _dogfightStartTimer;
+	
+	std::vector<DogfightState*>::iterator it = _dogfights.begin();
+	for(; it != _dogfights.end();)
+	{
+		delete *it;
+		it = _dogfights.erase(it);
+	}
+	for(it = _dogfightsToBeStarted.begin(); it != _dogfightsToBeStarted.end();)
+	{
+		delete *it;
+		it = _dogfightsToBeStarted.erase(it);
+	}
 }
 
 /**
