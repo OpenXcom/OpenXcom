@@ -1044,7 +1044,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
 {
 	if (playableUnitSelected())
 	{
-		// concession for touch devices: 
+		// concession for touch devices:
 		// click on the item to cancel action, and don't pop up a menu to select a new one
 		// TODO: wrap this in an IFDEF ?
 		if (_battleGame->getCurrentAction()->targeting)
@@ -1071,7 +1071,7 @@ void BattlescapeState::btnRightHandItemClick(Action *)
 {
 	if (playableUnitSelected())
 	{
-		// concession for touch devices: 
+		// concession for touch devices:
 		// click on the item to cancel action, and don't pop up a menu to select a new one
 		// TODO: wrap this in an IFDEF ?
 		if (_battleGame->getCurrentAction()->targeting)
@@ -1157,6 +1157,13 @@ void BattlescapeState::btnReserveClick(Action *action)
 			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
 		else if (_reserve == _btnReserveAuto)
 			_battleGame->setTUReserved(BA_AUTOSHOT, true);
+
+		// update any path preview
+		if (_battleGame->getPathfinding()->isPathPreviewed())
+		{
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 }
 
@@ -1998,6 +2005,13 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
+
+		// update any path preview
+		if (_battleGame->getPathfinding()->isPathPreviewed())
+		{
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 }
 
