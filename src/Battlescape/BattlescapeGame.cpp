@@ -991,7 +991,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 	const int tuKneel = _kneelReserved ? 4 : 0;
 	if ((effectiveTuReserved != BA_NONE || _kneelReserved) &&
 		tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
-		tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
+		(tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits() || justChecking))
 	{
 		if (!justChecking)
 		{
