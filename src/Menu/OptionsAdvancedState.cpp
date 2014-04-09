@@ -55,6 +55,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_lstOptions->setColumns(2, 180, 20);
 	_lstOptions->setColor(Palette::blockOffset(8)+10);
 	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
+	_lstOptions->setWordWrap(true);
 
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("aggressiveRetaliation", &Options::aggressiveRetaliation));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("alienContainmentLimitEnforced", &Options::alienContainmentLimitEnforced));
