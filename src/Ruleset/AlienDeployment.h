@@ -59,7 +59,7 @@ private:
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
 	std::vector<int> _roadTypeOdds;
-	std::string _terrain;
+	std::vector<std::string> _terrains;
 	int _shade;
 	std::string _nextStage;
 public:

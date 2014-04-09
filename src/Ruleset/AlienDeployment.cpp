@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AlienDeployment.h"
+#include "../Engine/RNG.h"
 
 namespace YAML
 {
@@ -59,7 +60,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _terrain(""), _shade(-1), _nextStage("")
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _nextStage("")
 {
 }
 
@@ -83,7 +84,7 @@ void AlienDeployment::load(const YAML::Node &node)
 	_height = node["height"].as<int>(_height);
 	_civilians = node["civilians"].as<int>(_civilians);
 	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
-	_terrain = node["terrain"].as<std::string>(_terrain);
+	_terrains = node["terrains"].as<std::vector<std::string> >(_terrains);
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
 }
@@ -144,7 +145,12 @@ std::vector<int> AlienDeployment::getRoadTypeOdds() const
  */
 std::string AlienDeployment::getTerrain() const
 {
-	return _terrain;
+	if (!_terrains.empty())
+	{
+		unsigned int pick = RNG::generate(0, _terrains.size() -1);
+		return _terrains.at(pick);
+	}
+	return "";
 }
 
 /**
