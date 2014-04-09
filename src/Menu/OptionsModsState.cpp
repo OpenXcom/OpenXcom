@@ -26,6 +26,7 @@
 #include "../Engine/Language.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Text.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
 
@@ -48,9 +49,20 @@ OptionsModsState::OptionsModsState(Game *game, OptionsOrigin origin) : OptionsBa
 
 	centerAllSurfaces();
 
+	// how much room do we need for YES/NO
+	Text text = Text(100, 9, 0, 0);
+	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	text.setText(tr("STR_YES"));
+	int yes = text.getTextWidth();
+	text.setText(tr("STR_NO"));
+	int no = text.getTextWidth();
+
+	int rightcol = std::max(yes, no) + 2;
+	int leftcol = _lstMods->getWidth() - rightcol;
+
 	// Set up objects
 	_lstMods->setAlign(ALIGN_RIGHT, 1);
-	_lstMods->setColumns(2, 172, 28);
+	_lstMods->setColumns(2, leftcol, rightcol);
 	_lstMods->setColor(Palette::blockOffset(8)+10);
 	_lstMods->setArrowColor(Palette::blockOffset(8)+5);
 	_lstMods->setSelectable(true);
