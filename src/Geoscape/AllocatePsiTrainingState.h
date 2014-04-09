@@ -44,7 +44,7 @@ private:
 	Text *_txtPsiStrength, *_txtPsiSkill;
 	TextList *_lstSoldiers;
 	std::vector<Soldier*> _soldiers;
-	unsigned int _sel;
+	size_t _sel;
 	int _labSpace;
 	Base *_base;
 public:

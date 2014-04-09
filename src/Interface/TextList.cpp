@@ -36,8 +36,8 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false), _wrap(false),
-																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _selRow(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false), _wrap(false),
+																								   _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
 																								   _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0), _arrowsLeftEdge(0), _arrowsRightEdge(0), _comboBox(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
@@ -786,7 +786,7 @@ void TextList::draw()
 {
 	Surface::draw();
 	int y = _scroll * -(_font->getHeight() + _font->getSpacing());
-	for (unsigned int i = 0; i < _texts.size() && i < _scroll + _visibleRows; ++i)
+	for (size_t i = 0; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 	{
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
 		{
@@ -812,7 +812,7 @@ void TextList::blit(Surface *surface)
 	{
 		if (_arrowPos != -1)
 		{
-			for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
+			for (size_t i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 			{
 				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowLeft[i]->blit(surface);
@@ -837,7 +837,7 @@ void TextList::handle(Action *action, State *state)
 	_down->handle(action, state);
 	if (_arrowPos != -1)
 	{
-		for (unsigned int i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
+		for (size_t i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
 		{
 			_arrowLeft[i]->handle(action, state);
 			_arrowRight[i]->handle(action, state);

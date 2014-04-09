@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _hasSci(0), _hasEng(0), _itemOffset(0)
+SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _hasSci(0), _hasEng(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -243,7 +243,7 @@ int SellState::getCraftIndex(unsigned selected) const
 void SellState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (size_t i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{

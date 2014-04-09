@@ -71,7 +71,7 @@ void MiniBaseView::setTexture(SurfaceSet *texture)
  * Returns the base the mouse cursor is currently over.
  * @return ID of the base.
  */
-unsigned int MiniBaseView::getHoveredBase() const
+size_t MiniBaseView::getHoveredBase() const
 {
 	return _hoverBase;
 }
@@ -94,7 +94,7 @@ void MiniBaseView::setSelectedBase(unsigned int base)
 void MiniBaseView::draw()
 {
 	Surface::draw();
-	for (unsigned int i = 0; i < MAX_BASES; ++i)
+	for (size_t i = 0; i < MAX_BASES; ++i)
 	{
 		// Draw base squares
 		if (i == _base)

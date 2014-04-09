@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0), _itemOffset(0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -253,7 +253,7 @@ void TransferItemsState::completeTransfer()
 {
 	int time = (int)floor(6 + _distance / 10.0);
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	for (unsigned int i = 0; i < _transferQty.size(); ++i)
+	for (size_t i = 0; i < _transferQty.size(); ++i)
 	{
 		if (_transferQty[i] > 0)
 		{

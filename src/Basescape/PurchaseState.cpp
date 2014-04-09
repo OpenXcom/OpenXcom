@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f), _itemOffset(0)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -240,7 +240,7 @@ bool PurchaseState::isExcluded(std::string item)
 void PurchaseState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (size_t i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{

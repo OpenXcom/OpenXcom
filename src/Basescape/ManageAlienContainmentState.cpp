@@ -209,7 +209,7 @@ void ManageAlienContainmentState::think()
  */
 void ManageAlienContainmentState::btnOkClick(Action *)
 {
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (size_t i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{

@@ -108,7 +108,7 @@ int RuleRegion::getBaseCost() const
  */
 bool RuleRegion::insideRegion(double lon, double lat) const
 {
-	for (unsigned int i = 0; i < _lonMin.size(); ++i)
+	for (size_t i = 0; i < _lonMin.size(); ++i)
 	{
 		bool inLon, inLat;
 

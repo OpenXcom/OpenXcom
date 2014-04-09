@@ -52,13 +52,12 @@ private:
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
-	unsigned int _sel;
+	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty, _aQty;
 	float _iQty;
     int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
-	size_t _itemOffset;
 	/// Gets selected cost.
 	int getCost() const;
 	/// Gets selected quantity.

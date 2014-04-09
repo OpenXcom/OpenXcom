@@ -45,11 +45,10 @@ private:
 	std::vector<int> _columns, _rows;
 	Font *_big, *_small, *_font;
 	Language *_lang;
-	unsigned int _scroll, _visibleRows;
+	size_t _scroll, _visibleRows, _selRow;
 	Uint8 _color, _color2;
 	std::map<int, TextHAlign> _align;
 	bool _dot, _selectable, _condensed, _contrast, _wrap;
-	unsigned int _selRow;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
 	int _margin;

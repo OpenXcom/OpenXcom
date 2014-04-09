@@ -142,7 +142,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		}
 	}
 
-	unsigned int j = 0;
+	size_t j = 0;
 	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
