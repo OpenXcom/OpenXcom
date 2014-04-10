@@ -81,6 +81,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setScrolling(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
+	_lstFacilities->setWordWrap(true);
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();

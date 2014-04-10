@@ -115,7 +115,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -257,7 +257,7 @@ void BasescapeState::init()
 void BasescapeState::setBase(Base *base)
 {
 	_base = base;
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -494,7 +494,7 @@ void BasescapeState::viewMouseOut(Action *)
  */
 void BasescapeState::miniClick(Action *)
 {
-	unsigned int base = _mini->getHoveredBase();
+	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_mini->setSelectedBase(base);

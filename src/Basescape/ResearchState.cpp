@@ -122,6 +122,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
+	_lstResearch->setWordWrap(true);
 	_lstResearch->onMouseClick((ActionHandler)&ResearchState::onSelectProject);
 	fillProjectList();
 }

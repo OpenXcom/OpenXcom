@@ -590,8 +590,8 @@ void NewBattleState::cbxMissionChange(Action *)
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 	_txtDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
-	_txtTerrain->setVisible(ruleDeploy->getTerrain().empty());
-	_cbxTerrain->setVisible(ruleDeploy->getTerrain().empty());
+	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
+	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
 }
 
 /**

@@ -39,10 +39,9 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param save Name of the save file to delete.
  */
-DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save) : State(game), _origin(origin)
+DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::string &save) : State(game), _origin(origin)
 {
-	std::string file = Language::wstrToFs(save);
-	_filename = Options::getUserFolder() + file + ".sav";
+	_filename = Options::getUserFolder() + save + ".sav";
 	_screen = false;
 
 	// Create objects

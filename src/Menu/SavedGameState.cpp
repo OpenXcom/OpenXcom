@@ -59,13 +59,13 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnCancel = new TextButton(80, 16, 120, 172);
-	_txtTitle = new Text(310, 17, 5, 8);
-	_txtDelete = new Text(310, 9, 5, 24);
+	_txtTitle = new Text(310, 17, 5, 7);
+	_txtDelete = new Text(310, 9, 5, 23);
 	_txtName = new Text(150, 9, 16, 32);
 	_txtDate = new Text(110, 9, 204, 32);
 	_txtStatus = new Text(320, 17, 0, 92);
 	_lstSaves = new TextList(288, 112, 8, 40);
-	_txtDetails = new Text(288, 9, 16, 160);
+	_txtDetails = new Text(288, 16, 16, 156);
 	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
 	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
 
@@ -125,6 +125,7 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
+	_txtDetails->setWordWrap(true);
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);

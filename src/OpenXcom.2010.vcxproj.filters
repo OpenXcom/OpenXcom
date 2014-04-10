@@ -823,6 +823,9 @@
     <ClCompile Include="Menu\IntroState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\ConfirmLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1664,6 +1667,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Options.inc.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ConfirmLoadState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

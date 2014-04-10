@@ -23,7 +23,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
@@ -50,11 +49,23 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 
 	centerAllSurfaces();
 
+	// how much room do we need for YES/NO
+	Text text = Text(100, 9, 0, 0);
+	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	text.setText(tr("STR_YES"));
+	int yes = text.getTextWidth();
+	text.setText(tr("STR_NO"));
+	int no = text.getTextWidth();
+
+	int rightcol = std::max(yes, no) + 2;
+	int leftcol = _lstOptions->getWidth() - rightcol;
+
 	// Set up objects
 	_lstOptions->setAlign(ALIGN_RIGHT, 1);
-	_lstOptions->setColumns(2, 180, 20);
+	_lstOptions->setColumns(2, leftcol, rightcol);
 	_lstOptions->setColor(Palette::blockOffset(8)+10);
 	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
+	_lstOptions->setWordWrap(true);
 
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("aggressiveRetaliation", &Options::aggressiveRetaliation));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("alienContainmentLimitEnforced", &Options::alienContainmentLimitEnforced));

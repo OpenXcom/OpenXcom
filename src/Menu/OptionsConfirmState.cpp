@@ -96,7 +96,7 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
  */
 OptionsConfirmState::~OptionsConfirmState()
 {
-
+	delete _timer;
 }
 
 /**

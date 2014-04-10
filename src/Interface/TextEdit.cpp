@@ -302,7 +302,7 @@ void TextEdit::draw()
 				x = _text->getWidth() - _text->getTextWidth();
 				break;
 			}
-			for (unsigned int i = 0; i < _caretPos; ++i)
+			for (size_t i = 0; i < _caretPos; ++i)
 			{
 				x += _text->getFont()->getCharSize(_value[i]).w;
 			}

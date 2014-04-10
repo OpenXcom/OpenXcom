@@ -71,7 +71,7 @@ public:
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
 	/// Gets the number of waves.
-	unsigned getWaveCount() const { return _waves.size(); }
+	size_t getWaveCount() const { return _waves.size(); }
 	/// Gets the full wave information.
 	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
 	/// Gets the score for this mission.
