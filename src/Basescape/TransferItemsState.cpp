@@ -762,9 +762,9 @@ double TransferItemsState::getDistance() const
  * @param selected The selected item.
  * @return The type of the selected item.
  */
-enum TransferType TransferItemsState::getType(unsigned selected) const
+enum TransferType TransferItemsState::getType(size_t selected) const
 {
-	unsigned max = _soldiers.size();
+	size_t max = _soldiers.size();
 
 	if (selected < max)
 		return TRANSFER_SOLDIER;
@@ -783,7 +783,7 @@ enum TransferType TransferItemsState::getType(unsigned selected) const
  * @param selected Currently selected item.
  * @return Index of the selected item.
  */
-int TransferItemsState::getItemIndex(unsigned selected) const
+int TransferItemsState::getItemIndex(size_t selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }

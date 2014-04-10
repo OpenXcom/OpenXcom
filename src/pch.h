@@ -57,16 +57,7 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-//#include <shlobj.h>
-//#include <shlwapi.h>
-#include <direct.h>
-#else
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/param.h>
 #include <pwd.h>

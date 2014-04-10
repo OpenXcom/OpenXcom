@@ -231,7 +231,7 @@ void SellState::think()
  * @param selected Selected craft.
  * @return Index of the selected craft.
  */
-int SellState::getCraftIndex(unsigned selected) const
+int SellState::getCraftIndex(size_t selected) const
 {
 	return selected - _soldiers.size();
 }
@@ -573,9 +573,9 @@ void SellState::updateItemStrings()
  * @param selected Currently selected item.
  * @return The type of the selected item.
  */
-enum SellType SellState::getType(unsigned selected) const
+enum SellType SellState::getType(size_t selected) const
 {
-	unsigned max = _soldiers.size();
+	size_t max = _soldiers.size();
 
 	if (selected < max)
 		return SELL_SOLDIER;
@@ -594,7 +594,7 @@ enum SellType SellState::getType(unsigned selected) const
  * @param selected Currently selected item.
  * @return Index of the selected item.
  */
-int SellState::getItemIndex(unsigned selected) const
+int SellState::getItemIndex(size_t selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }

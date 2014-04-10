@@ -663,7 +663,7 @@ void GeoscapeState::time5Seconds()
 				(*i)->think();
 				if ((*i)->reachedDestination())
 				{
-					unsigned terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
+					size_t terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
 					AlienMission *mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
