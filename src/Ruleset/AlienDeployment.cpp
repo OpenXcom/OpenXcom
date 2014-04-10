@@ -83,7 +83,6 @@ void AlienDeployment::load(const YAML::Node &node)
 	_length = node["length"].as<int>(_length);
 	_height = node["height"].as<int>(_height);
 	_civilians = node["civilians"].as<int>(_civilians);
-	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
 	_terrains = node["terrains"].as<std::vector<std::string> >(_terrains);
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
@@ -131,26 +130,12 @@ int AlienDeployment::getCivilians() const
 }
 
 /**
- * Gets the road type odds.
- * @return The road type odds.
- */
-std::vector<int> AlienDeployment::getRoadTypeOdds() const
-{
-	return _roadTypeOdds;
-}
-
-/**
  * Gets the terrain for battlescape generation.
  * @return The terrain.
  */
-std::string AlienDeployment::getTerrain() const
+std::vector<std::string> AlienDeployment::getTerrains() const
 {
-	if (!_terrains.empty())
-	{
-		unsigned int pick = RNG::generate(0, _terrains.size() -1);
-		return _terrains.at(pick);
-	}
-	return "";
+	return _terrains;
 }
 
 /**

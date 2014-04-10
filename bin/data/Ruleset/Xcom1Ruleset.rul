@@ -3552,6 +3552,11 @@ terrains:
       - URBAN
       - FRNITURE
     largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    # roadTypeOdds: [EWRoad, NSRoad] (Crossroad is remainder)
+    roadTypeOdds: [50, 25]
     mapBlocks:
       - name: URBAN00
         width: 10
@@ -6077,8 +6082,6 @@ alienDeployments:
     length: 50
     height: 4
     civilians: 16
-    # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
-    roadTypeOdds: [50, 25]
     terrains:
       - URBAN
   - type: STR_ALIEN_BASE_ASSAULT
