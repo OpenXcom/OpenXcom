@@ -134,7 +134,8 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE)
+		BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
+		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
