@@ -81,7 +81,7 @@ size_t MiniBaseView::getHoveredBase() const
  * the mini base view.
  * @param base ID of base.
  */
-void MiniBaseView::setSelectedBase(unsigned int base)
+void MiniBaseView::setSelectedBase(size_t base)
 {
 	_base = base;
 	_redraw = true;
