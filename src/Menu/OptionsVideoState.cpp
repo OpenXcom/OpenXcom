@@ -427,7 +427,7 @@ void OptionsVideoState::btnGameResolutionUpClick(Action *)
  */
 void OptionsVideoState::btnGameResolutionDownClick(Action *)
 {
-	if (_gameCurrent == 0)
+	if (_gameCurrent <= 0)
 		_gameCurrent = _gameRes.size() - 1;
 	else
 		_gameCurrent--;
