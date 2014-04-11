@@ -43,7 +43,7 @@ class NewPossibleResearchState : public State
 	Base * _base;
 public:
 	/// Creates the NewPossibleResearch state.
-	NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities);
+	NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities, bool showResearchButton);
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.

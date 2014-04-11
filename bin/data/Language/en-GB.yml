@@ -93,6 +93,7 @@ en-GB:
     other: "{N} hours"
   STR_MAINTENANCE_UC: "MAINTENANCE>"
   STR_OK: "OK"
+  STR_MORE: "MORE"
   STR_INSTALLATION: "Installation"
   STR_CURRENT_RESEARCH: "CURRENT RESEARCH"
   STR_SCIENTISTS_AVAILABLE: "Scientists Available>{ALT}{0}"

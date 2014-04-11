@@ -43,7 +43,7 @@ class NewPossibleManufactureState : public State
 	Base * _base;
 public:
 	/// Creates the NewPossibleManufacture state.
-	NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities);
+	NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities, bool showManufactureButton);
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.

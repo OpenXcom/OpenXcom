@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
  */
-NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities) : State (game), _base(base)
+NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities, bool showResearchButton) : State (game), _base(base)
 {
 	_screen = false;
 
@@ -67,13 +67,14 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr(showResearchButton ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnOkClick, Options::keyCancel);
 	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
 	_btnResearch->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnResearchClick, Options::keyOk);
+	_btnResearch->setVisible(showResearchButton);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
