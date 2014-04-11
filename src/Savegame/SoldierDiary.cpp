@@ -436,32 +436,17 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			else if ((*j).first == "kills_with_criteria")
 			{
                 // Vector of ORs, vector of ANDs, vector of DETAILs
-				std::vector<std::vector<std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
+				std::vector<std::map<int, std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
                 
                 // Loop over the vector of ORs
-                for (std::vector<std::vector<std::vector<std::string> > >::const_iterator iterOR = _killCriteriaList->begin(); iterOR != _killCriteriaList->end(); ++iterOR)
+                for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator iterOR = _killCriteriaList->begin(); iterOR != _killCriteriaList->end(); ++iterOR)
                 {
 					int multiKills = 0;
-					int sameDetailsCount = 1; // How many identical DETAIL vectors --> how many kills in one turn we want
-					std::vector<std::vector<std::string> >::const_iterator otherListItem;
-
-					// Check to see if entire DETAIL vectors are the same
-					for (std::vector<std::vector<std::string> >::const_iterator listItem = iterOR->begin(); listItem != iterOR->end(); ++listItem)
-					{
-						if (listItem == iterOR->begin()) continue;
-						listItem--;
-						otherListItem = listItem;
-						listItem++;
-						if (*otherListItem == *listItem)
-                        {
-                            sameDetailsCount++;
-                        }
-						else sameDetailsCount = 1;
-					}
 
                     // Loop over the vector of ANDs
-                    for (std::vector<std::vector<std::string> >::const_iterator listItem = iterOR->begin(); listItem != iterOR->end(); ++listItem)
+                    for (std::map<int, std::vector<std::string> >::const_iterator listItem = iterOR->begin(); listItem != iterOR->end(); ++listItem)
                     {
+                        int sameDetailsCount = (*listItem).first;
                         int count = 0; // Reset count
 						int killsPerTurn = 1; // If we want a double kill, triple kill, etc...
 						int killsTurn = 0;
@@ -479,7 +464,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 							}
                             bool foundMatch = true; // Reset bool
                             // Loop over the vector of DETAILs
-                            for (std::vector<std::string>::const_iterator detail = listItem->begin(); detail != listItem->end(); ++detail)
+                            for (std::vector<std::string>::const_iterator detail = (*listItem).second->begin(); detail != (*listItem).second->end(); ++detail)
                             {
                                 // See if we find no matches with any criteria. If so, break and try the next kill.
                                 if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
