@@ -252,7 +252,7 @@ commendations:
       kills_with_criteria: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
     killCriteria:
       -
-        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
@@ -265,7 +265,7 @@ commendations:
       kills_with_criteria: [1, 3, 5, 7, 9, 11, 13, 15, 17, 20]
     killCriteria:
       -
-        - ["FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+        1: ["FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
   - type: STR_MEDAL_DEFENDER_MEDAL_NAME
     description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION
     sprite: 3
@@ -313,7 +313,7 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        - ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
+        1: ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
   - type: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
     description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
     sprite: 12
@@ -321,11 +321,11 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        - ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_FLOATER", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_BOLTS_CROSS_NAME
     description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
     sprite: 13
@@ -333,8 +333,8 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        - ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
-        - ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+        1: ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+        1: ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
   - type: STR_DOUBLE_KILL
     description: STR_DOUBLE_KILL
     sprite: 0
@@ -342,8 +342,7 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        - ["FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+        2: ["FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_TRIPLE_KILL
     description: STR_TRIPLE_KILL
     sprite: 0
@@ -351,6 +350,6 @@ commendations:
       kills_with_criteria: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        - ["FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["FACTION_HOSTILE", "STATUS_DEAD"]
-        - ["FACTION_HOSTILE", "STATUS_DEAD"]
+        3: ["FACTION_HOSTILE", "STATUS_DEAD"]
+#
+# killCriteria can be specified for a single turn, a single mission, or career wide
