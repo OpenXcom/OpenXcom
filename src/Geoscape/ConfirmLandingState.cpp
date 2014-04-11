@@ -51,9 +51,8 @@ namespace OpenXcom
  * @param craft Pointer to the craft to confirm.
  * @param texture Texture of the landing site.
  * @param shade Shade of the landing site.
- * @param state Pointer to Geoscape.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state)
+ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade) : State(game), _craft(craft), _texture(texture), _shade(shade)
 {
 	_screen = false;
 
@@ -129,7 +128,6 @@ void ConfirmLandingState::init()
 void ConfirmLandingState::btnYesClick(Action *)
 {
 	_game->popState();
-	_state->musicStop();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());

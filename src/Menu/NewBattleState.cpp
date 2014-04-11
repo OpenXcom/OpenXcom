@@ -244,8 +244,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);
 
-	_music = true;
-
 	load();
 }
 
@@ -267,11 +265,7 @@ void NewBattleState::init()
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	// Set music
-	if (!_music)
-	{
-		_music = true;
-		_game->getResourcePack()->getMusic("GMSTORY")->play();
-	}
+	_game->getResourcePack()->playMusic("GMSTORY");
 
 	if (_craft == 0)
 	{
@@ -471,7 +465,6 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		return;
 	}
-	_music = false;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);

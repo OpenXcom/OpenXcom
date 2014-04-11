@@ -28,7 +28,6 @@ class Window;
 class Text;
 class TextButton;
 class Craft;
-class GeoscapeState;
 
 /**
  * Window that allows the player
@@ -42,10 +41,9 @@ private:
 	int _texture, _shade;
 	Text *_txtMessage, *_txtBegin;
 	TextButton *_btnYes, *_btnNo;
-	GeoscapeState *_state;
 public:
 	/// Creates the Confirm Landing state.
-	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state);
+	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
 	/// initialize the state, make a sanity check.

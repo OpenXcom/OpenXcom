@@ -220,7 +220,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMMARS")->play();
+	_game->getResourcePack()->playMusic("GMMARS");
 
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);

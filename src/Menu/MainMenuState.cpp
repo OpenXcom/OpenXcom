@@ -98,7 +98,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setText(title.str());
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMSTORY")->play();
+	_game->getResourcePack()->playMusic("GMSTORY");
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

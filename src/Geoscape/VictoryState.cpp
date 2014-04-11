@@ -51,7 +51,7 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 	// Set up objects
 	_window->onMouseClick((ActionHandler)&VictoryState::windowClick);
 	
-	_game->getResourcePack()->getMusic("GMWIN")->play();
+	_game->getResourcePack()->playMusic("GMWIN");
 
 	for (int text = 0; text != 5; ++text)
 	{
