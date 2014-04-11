@@ -19,6 +19,7 @@
 #include <sstream>
 #include "PsiTrainingState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -116,7 +117,7 @@ void PsiTrainingState::btnOkClick(Action *)
 
 void PsiTrainingState::btnBaseXClick(Action *action)
 {
-	int buttonIndex = (action->getSender()->getY() - 40) / 16;
+	int buttonIndex = (action->getSender()->getY() - (40 + _game->getScreen()->getDY())) / 16;
 	_game->pushState (new AllocatePsiTrainingState(_game, _bases.at(buttonIndex)));
 }
 
