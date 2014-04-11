@@ -269,6 +269,7 @@ void MonthlyReportState::btnOkClick(Action *)
 			_btnOk->setVisible(false);
 			_btnBigOk->setVisible(true);
 			_txtFailure->setVisible(true);
+			_game->getResourcePack()->playMusic("GMLOSE");
 		}
 	}
 }

@@ -112,7 +112,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;
@@ -480,17 +480,16 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	// Set music if it's not already playing
-	if (!_music && !_battleMusic)
+	if (_dogfights.empty() && !_dogfightStartTimer->isRunning())
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-			_game->getResourcePack()->getMusic("GMGEO1")->play();
+			_game->getResourcePack()->playMusic("GMGEO1");
 		}
 		else
 		{
-			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+			_game->getResourcePack()->playMusic("GMGEO", true);
 		}
-		_music = true;
 	}
 	_globe->unsetNewBaseHover();
 }
@@ -531,10 +530,9 @@ void GeoscapeState::think()
 			_popups.erase(_popups.begin());
 		}
 	}
-	if (_battleMusic && _dogfights.empty() && !_dogfightStartTimer->isRunning())
+	if (_dogfights.empty() && !_dogfightStartTimer->isRunning())
 	{
-		_battleMusic = false;
-		musicStop();
+		_game->getResourcePack()->playMusic("GMGEO", true);
 	}
 }
 
@@ -831,12 +829,7 @@ void GeoscapeState::time5Seconds()
 								startDogfight();
 								_dogfightStartTimer->start();
 							}
-							if(!_battleMusic)
-							{
-								// Set music
-								_game->getResourcePack()->getMusic("GMINTER")->play();
-								_battleMusic = true;
-							}
+							_game->getResourcePack()->playMusic("GMINTER");
 						}
 						break;
 					case Ufo::LANDED:
@@ -850,7 +843,7 @@ void GeoscapeState::time5Seconds()
 								int texture, shade;
 								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 								timerReset();
-								popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
 						}
 						else if (u->getStatus() != Ufo::LANDED)
@@ -873,7 +866,7 @@ void GeoscapeState::time5Seconds()
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
 						timerReset();
-						popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+						popup(new ConfirmLandingState(_game, *j, texture, shade));
 					}
 					else
 					{
@@ -889,7 +882,7 @@ void GeoscapeState::time5Seconds()
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+							popup(new ConfirmLandingState(_game, *j, texture, shade));
 						}
 						else
 						{
@@ -1691,18 +1684,6 @@ void GeoscapeState::timerReset()
 }
 
 /**
- * Stops the Geoscape music for when another
- * music is gonna take place, so it resumes
- * when we go back to the Geoscape.
- * @param pause True if we want to resume
- * from the same spot we left off.
- */
-void GeoscapeState::musicStop(bool)
-{
-	_music = false;
-}
-
-/**
  * Adds a new popup window to the queue
  * (this prevents popups from overlapping)
  * and pauses the game timer respectively.
@@ -2028,7 +2009,6 @@ void GeoscapeState::startDogfight()
 		_dogfightStartTimer->stop();
 		_zoomInEffectTimer->stop();
 		timerReset();
-		musicStop();
 		while(!_dogfightsToBeStarted.empty())
 		{
 			_dogfights.push_back(_dogfightsToBeStarted.back());
@@ -2079,7 +2059,6 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 		bgen.setBase(base);
 		bgen.setAlienRace(ufo->getAlienRace());
 		bgen.run();
-		musicStop();
 		_pause = true;
 		_game->pushState(new BriefingState(_game, 0, base));
 	}

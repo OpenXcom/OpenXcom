@@ -59,7 +59,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-	_game->getResourcePack()->getMusic("GMLOSE")->play();
+	_game->getResourcePack()->playMusic("GMLOSE");
 
 	add(_window);
 	add(_btnOk);
@@ -146,7 +146,7 @@ SoldierMemorialState::~SoldierMemorialState()
 void SoldierMemorialState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+	_game->getResourcePack()->playMusic("GMGEO", true);
 }
 
 /**

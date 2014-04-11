@@ -49,7 +49,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 	// Set up objects
 	_window->onMouseClick((ActionHandler)&DefeatState::windowClick);
 	
-	_game->getResourcePack()->getMusic("GMLOSE")->play();
+	_game->getResourcePack()->playMusic("GMLOSE");
 
 	for (int text = 0; text != 2; ++text)
 	{

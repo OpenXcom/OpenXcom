@@ -491,7 +491,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBefor
 	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
 
 	// Set music
-	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
+	_game->getResourcePack()->playMusic("GMTACTIC");
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
