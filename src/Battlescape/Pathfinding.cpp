@@ -1051,7 +1051,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 {
 	const Position &start = unit->getPosition();
-
+	int energyMax = unit->getEnergy();
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 	{
 		it->reset();
@@ -1073,7 +1073,8 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
-			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs
+			if (currentNode->getTUCost(false) + tuCost > tuMax || 
+				(currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
