@@ -1160,7 +1160,7 @@ en-GB:
   STR_NOT_ENOUGH_SPACE: "Not Enough Space!"
   STR_WEAPONSELFDESTRUCTION: "Alien weapon self destruction"
   STR_WEAPONSELFDESTRUCTION_DESC: "Weapons carried by aliens will self destruct if their owner is killed, like in XCOM 2012."
-  STR_SPENDRESEARCHEDITEMS: "Researched items will be spent"
+  STR_SPENDRESEARCHEDITEMS: "Spend Researched items"
   STR_SPENDRESEARCHEDITEMS_DESC: "Researched items are removed from your stores and will be disassembled, like in XCOM 2012. After \"researching\" living aliens, the body will be returned to the base stores."
   STR_SAVE_VOXEL_VIEW: "Save First-Person Screenshot"
   STR_TIME_UNITS_RESERVED_FOR_KNEELING: "Time Units reserved for Kneeling"
