@@ -570,7 +570,7 @@ void TextList::setCondensed(bool condensed)
  */
 int TextList::getSelectedRow() const
 {
-	size_t selRow = std::min(_selRow, _rows.size());
+	size_t selRow = std::min(_selRow, _rows.size()-1);
 	return _rows[selRow];
 }
 
