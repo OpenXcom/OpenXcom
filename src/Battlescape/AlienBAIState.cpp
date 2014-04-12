@@ -154,6 +154,7 @@ void AlienBAIState::think(BattleAction *action)
 	_melee = false;
 	_rifle = false;
 	_blaster = false;
+	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
 
 	if (_traceAI)
 	{
@@ -183,13 +184,20 @@ void AlienBAIState::think(BattleAction *action)
 		if (rule->getBattleType() == BT_FIREARM)
 		{
 			if (!rule->isWaypoint())
+			{
 				_rifle = true;
+				_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
+			}
 			else
+			{
 				_blaster = true;
+				_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_AIMEDSHOT, action->weapon));
+			}
 		}
 		else if (rule->getBattleType() == BT_MELEE)
 		{
 			_melee = true;
+			_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, action->weapon));
 		}
 	}
 
@@ -507,12 +515,10 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode != 0)
 		{
-			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
-			if (_save->getPathfinding()->getStartDirection() == -1)
+			if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_toNode->getPosition()))  == _reachable.end())
 			{
 				_toNode = 0;
 			}
-			_save->getPathfinding()->abortPath();
 		}
 	}
 
@@ -556,8 +562,9 @@ void AlienBAIState::setupAmbush()
 		{
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
-			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous())
-				continue;
+			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous() ||
+				std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
+				continue; // just ignore unreachable tiles
 
 			if (_traceAI)
 			{
@@ -572,9 +579,7 @@ void AlienBAIState::setupAmbush()
 				_save->getPathfinding()->calculate(_unit, pos);
 				int ambushTUs = _save->getPathfinding()->getTotalTUCost();
 				// make sure we can move here
-				if (_save->getPathfinding()->getStartDirection() != -1 &&
-				// make sure we can still shoot
-				ambushTUs <= _unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+				if (_save->getPathfinding()->getStartDirection() != -1)
 				{
 					int score = BASE_SYSTEMATIC_SUCCESS;
 					score -= ambushTUs;
@@ -750,9 +755,6 @@ void AlienBAIState::setupEscape()
 	const int BASE_DESPERATE_SUCCESS = 110;
 	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
 
-	int tu = _unit->getTimeUnits() / 2;
-
-	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	RNG::shuffle(randomTileSearch);
 	
@@ -843,7 +845,8 @@ void AlienBAIState::setupEscape()
 		else
 		{
 			spotters = getSpottingUnits(_escapeAction->target);
-			if (std::find(reachable.begin(), reachable.end(), _save->getTileIndex(tile->getPosition()))  == reachable.end()) continue; // just ignore unreachable tiles
+			if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_escapeAction->target))  == _reachable.end())
+				continue; // just ignore unreachable tiles
 					
 			if (_spottingEnemies || spotters)
 			{
@@ -877,8 +880,9 @@ void AlienBAIState::setupEscape()
 		if (tile && score > bestTileScore)
 		{
 			// calculate TUs to tile; we could be getting this from findReachable() somehow but that would break something for sure...
-			_save->getPathfinding()->calculate(_unit, _escapeAction->target, 0, tu);
-			if (_escapeAction->target == _unit->getPosition() || _save->getPathfinding()->getStartDirection() != -1)
+			_save->getPathfinding()->calculate(_unit, _escapeAction->target);
+			if (_escapeAction->target == _unit->getPosition() || _save->getPathfinding()->getStartDirection() != -1 &&
+				_save->getPathfinding()->getTotalTUCost() / 2 <= _unit->getEnergy())
 			{
 				bestTileScore = score;
 				bestTile = _escapeAction->target;
@@ -1096,6 +1100,8 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 			if (x || y) // skip the unit itself
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
+				if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
+					continue;
 				int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
 				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
 				bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
@@ -1361,7 +1367,8 @@ bool AlienBAIState::findFirePoint()
 	{
 		Position pos = _unit->getPosition() + *i;
 		Tile *tile = _save->getTile(pos);
-		if (tile == 0)
+		if (tile == 0  ||
+			std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
 			continue;
 		int score = 0;
 		// i should really make a function for this
@@ -1373,9 +1380,7 @@ bool AlienBAIState::findFirePoint()
 		{
 			_save->getPathfinding()->calculate(_unit, pos);
 			// can move here
-			if (_save->getPathfinding()->getStartDirection() != -1 &&
-			// can still shoot
-			_save->getPathfinding()->getTotalTUCost() <= _unit->getTimeUnits())
+			if (_save->getPathfinding()->getStartDirection() != -1)
 			{
 				score = BASE_SYSTEMATIC_SUCCESS - getSpottingUnits(pos) * 10;
 				score += _unit->getTimeUnits() - _save->getPathfinding()->getTotalTUCost();
@@ -1443,7 +1448,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 
 	if (attackingUnit->getPosition().z == targetPos.z && distance <= radius)
 	{
-		efficacy -= 4;
+		efficacy -= 6;
 	}
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
