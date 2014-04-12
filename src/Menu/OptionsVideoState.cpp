@@ -460,6 +460,8 @@ void OptionsVideoState::updateGameResolution()
 
 	// scaler methods seem to require base res be a factor of 4
 	Options::baseXResolution -= Options::baseXResolution %4;
+	Options::baseXResolution = std::max(Options::baseXResolution, Screen::ORIGINAL_WIDTH);
+	Options::baseYResolution = std::max(Options::baseYResolution, Screen::ORIGINAL_HEIGHT);
 
 	if (_gameCurrent >= 0 && _gameCurrent < _gameRes.size())
 	{
