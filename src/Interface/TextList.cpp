@@ -732,7 +732,7 @@ void TextList::scrollUp(bool toMax)
 	if (_rows.size() > _visibleRows && _scroll > 0)
 	{
 		if (toMax) _scroll=0; else _scroll--;
-		_redraw = true;
+		draw();
 	}
 	updateArrows();
 }
@@ -748,7 +748,7 @@ void TextList::scrollDown(bool toMax)
 	if (_rows.size() > _visibleRows && _scroll < _rows.size() - _visibleRows)
 	{
 		if (toMax) _scroll=_rows.size()-_visibleRows; else _scroll++;
-		_redraw = true;
+		draw();
 	}
 	updateArrows();
 }

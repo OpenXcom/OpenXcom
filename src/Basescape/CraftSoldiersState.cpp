@@ -162,6 +162,7 @@ void CraftSoldiersState::init()
 		_lstSoldiers->setRowColor(row, color);
 		row++;
 	}
+	_lstSoldiers->draw();
 }
 
 /**
