@@ -77,12 +77,14 @@ OptionsModsState::OptionsModsState(Game *game, OptionsOrigin origin) : OptionsBa
 	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
 	{
 		std::string mod = CrossPlatform::noExt(*i);
+		std::wstring modName = Language::fsToWstr(mod);
+		Language::replace(modName, L"_", L" ");
 		// ignore default ruleset
 		if (mod != "Xcom1Ruleset")
 		{
 			bool modEnabled = (std::find(Options::rulesets.begin(), Options::rulesets.end(), mod) != Options::rulesets.end());
-			_lstMods->addRow(2, Language::fsToWstr(mod).c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
-			_mods[mod] = modEnabled;
+			_lstMods->addRow(2, modName.c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+			_mods.push_back(mod);
 		}
 	}
 }
@@ -97,17 +99,16 @@ OptionsModsState::~OptionsModsState()
 
 void OptionsModsState::lstModsClick(Action *action)
 {
-	std::string selectedMod = Language::wstrToFs(_lstMods->getCellText(_lstMods->getSelectedRow(), 0));
-	bool modEnabled = _mods[selectedMod];
+	std::string selectedMod = _mods[_lstMods->getSelectedRow()];
+	std::vector<std::string>::iterator i = std::find(Options::rulesets.begin(), Options::rulesets.end(), selectedMod);
+	bool modEnabled = (i != Options::rulesets.end());
 	if (modEnabled)
 	{
-		_mods[selectedMod] = false;
 		_lstMods->setCellText(_lstMods->getSelectedRow(), 1, tr("STR_NO").c_str());
-		Options::rulesets.erase(std::find(Options::rulesets.begin(), Options::rulesets.end(), selectedMod));
+		Options::rulesets.erase(i);
 	}
 	else
 	{
-		_mods[selectedMod] = true;
 		_lstMods->setCellText(_lstMods->getSelectedRow(), 1, tr("STR_YES").c_str());
 		Options::rulesets.push_back(selectedMod);
 	}
