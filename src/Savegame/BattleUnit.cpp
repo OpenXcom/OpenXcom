@@ -2393,7 +2393,7 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 		weight += (*i)->getRules()->getWeight();
 		if ((*i)->getAmmoItem() != (*i) && (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}
-	return weight;
+	return std::max(0,weight);
 }
 
 /**
