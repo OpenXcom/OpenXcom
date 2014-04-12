@@ -747,7 +747,7 @@ void TextList::scrollDown(bool toMax)
 		return;
 	if (_rows.size() > _visibleRows && _scroll < _rows.size() - _visibleRows)
 	{
-		if (toMax) _scroll=_texts.size()-_visibleRows; else _scroll++;
+		if (toMax) _scroll=_rows.size()-_visibleRows; else _scroll++;
 		_redraw = true;
 	}
 	updateArrows();
@@ -889,7 +889,7 @@ void TextList::mousePress(Action *action, State *state)
 	}
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mousePress(action, state);
 		}
@@ -909,7 +909,7 @@ void TextList::mouseRelease(Action *action, State *state)
 {
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mouseRelease(action, state);
 		}
@@ -929,7 +929,7 @@ void TextList::mouseClick(Action *action, State *state)
 {
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
 			if (_comboBox && action->getDetails()->button.button == SDL_BUTTON_LEFT)
