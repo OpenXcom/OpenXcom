@@ -457,6 +457,10 @@ void OptionsVideoState::updateGameResolution()
 		_txtGameSize->setText(L"-");
 		break;
 	}
+
+	// scaler methods seem to require base res be a factor of 4
+	Options::baseXResolution -= Options::baseXResolution %4;
+
 	if (_gameCurrent >= 0 && _gameCurrent < _gameRes.size())
 	{
 		_txtGameSize->setText(_gameRes[_gameCurrent]);
