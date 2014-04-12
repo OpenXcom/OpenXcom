@@ -4373,6 +4373,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 14
+    energyRecovery: 50
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -4393,6 +4394,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 14
+    energyRecovery: 50
   - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
@@ -4413,6 +4415,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 14
+    energyRecovery: 50
   - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
@@ -4434,6 +4437,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 40
+    energyRecovery: 50
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -4455,6 +4459,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 40
+    energyRecovery: 50
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -4474,6 +4479,7 @@ units:
     kneelHeight: 14
     value: 30
     intelligence: 4
+    energyRecovery: 20
   - type: FEMALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -4493,6 +4499,7 @@ units:
     kneelHeight: 14
     value: 30
     intelligence: 4
+    energyRecovery: 20
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
