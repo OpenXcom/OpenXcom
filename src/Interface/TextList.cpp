@@ -566,12 +566,18 @@ void TextList::setCondensed(bool condensed)
 /**
  * Returns the currently selected row if the text
  * list is selectable.
- * @return Selected row.
+ * @return Selected row, -1 if none.
  */
 int TextList::getSelectedRow() const
 {
-	size_t selRow = std::min(_selRow, _rows.size()-1);
-	return _rows[selRow];
+	if (_rows.empty() || _selRow >= _rows.size())
+	{
+		return -1;
+	}
+	else
+	{
+		return _rows[_selRow];
+	}
 }
 
 /**
