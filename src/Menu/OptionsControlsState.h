@@ -43,6 +43,7 @@ private:
 	Uint8 _colorGroup, _colorSel, _colorNormal;
 
 	void addControls(const std::vector<OptionInfo> &keys);
+	OptionInfo *getControl(size_t sel);
 	std::string ucWords(std::string str);
 public:
 	/// Creates the Controls state.

@@ -36,13 +36,13 @@ class SurfaceSet;
 class MiniBaseView : public InteractiveSurface
 {
 private:
-	static const size_t MAX_BASES = 8;
 	static const int MINI_SIZE = 14;
 
 	std::vector<Base*> *_bases;
 	SurfaceSet *_texture;
 	size_t _base, _hoverBase;
 public:
+	static const size_t MAX_BASES = 8;
 	/// Creates a new mini base view at the specified position and size.
 	MiniBaseView(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the mini base view.

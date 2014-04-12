@@ -136,7 +136,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
 	_slrScrollSpeed->setColor(Palette::blockOffset(15)-1);
-	_slrScrollSpeed->setRange(1, 20);
+	_slrScrollSpeed->setRange(2, 20);
 	_slrScrollSpeed->setValue(Options::battleScrollSpeed);
 	_slrScrollSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrScrollSpeedChange);
 	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_BATTLE_DESC");

@@ -20,14 +20,13 @@
 #define OPENXCOM_OPTIONSADVANCEDSTATE_H
 
 #include "OptionsBaseState.h"
+#include "../Engine/OptionInfo.h"
 #include <vector>
 #include <string>
-#include <utility>
 
 namespace OpenXcom
 {
 
-class TextButton;
 class TextList;
 
 /**
@@ -39,19 +38,23 @@ class OptionsAdvancedState : public OptionsBaseState
 private:
 	TextList *_lstOptions;
 	size_t _boolQuantity;
-	// intentionally avoiding using a map here, to avoid auto-sorting.
-	std::vector< std::pair<std::string, bool*> > _settingBoolSet;
-	std::vector< std::pair<std::string, int*> > _settingIntSet;
+	Uint8 _colorGroup;
+	std::vector<OptionInfo> _settingsGeneral, _settingsGeo, _settingsBattle;
+
+	void addSettings(const std::vector<OptionInfo> &settings);
+	OptionInfo *getSetting(size_t sel);
 public:
 	/// Creates the Advanced state.
 	OptionsAdvancedState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Advanced state.
 	~OptionsAdvancedState();
-	/// Handler for clicking an item on the menu.
-	void lstOptionsPress(Action *action);
-	/// Handler for moving the mouse over a menu item.
+	/// Fills settings list.
+	void init();
+	/// Handler for clicking a setting on the list.
+	void lstOptionsClick(Action *action);
+	/// Handler for moving the mouse over a setting.
 	void lstOptionsMouseOver(Action *action);
-	/// Handler for moving the mouse outside the menu borders.
+	/// Handler for moving the mouse outside the settings.
 	void lstOptionsMouseOut(Action *action);
 
 };
