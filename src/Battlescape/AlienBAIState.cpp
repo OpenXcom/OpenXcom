@@ -1093,29 +1093,32 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 	int targetsize = target->getArmor()->getSize();
 	bool returnValue = false;
 	int distance = 1000;
-	for (int x = -size; x <= targetsize; ++x)
+	for (int z = -1; z <= 1; ++z)
 	{
-		for (int y = -size; y <= targetsize; ++y)
+		for (int x = -size; x <= targetsize; ++x)
 		{
-			if (x || y) // skip the unit itself
+			for (int y = -size; y <= targetsize; ++y)
 			{
-				Position checkPath = target->getPosition() + Position (x, y, 0);
-				if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
-					continue;
-				int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
-				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
-				bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
-
-				if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
+				if (x || y) // skip the unit itself
 				{
-					_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
-					if (_save->getPathfinding()->getStartDirection() != -1 && _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
+					Position checkPath = target->getPosition() + Position (x, y, z);
+					if (_save->getTile(checkPath) == 0 || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
+						continue;
+					int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
+					bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
+					bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
+
+					if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
 					{
-						_attackAction->target = checkPath;
-						returnValue = true;
-						distance = _save->getTileEngine()->distance(checkPath, _unit->getPosition());
+						_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
+						if (_save->getPathfinding()->getStartDirection() != -1 && _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
+						{
+							_attackAction->target = checkPath;
+							returnValue = true;
+							distance = _save->getTileEngine()->distance(checkPath, _unit->getPosition());
+						}
+						_save->getPathfinding()->abortPath();
 					}
-					_save->getPathfinding()->abortPath();
 				}
 			}
 		}
