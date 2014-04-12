@@ -36,6 +36,9 @@
 namespace OpenXcom
 {
 
+const int Screen::ORIGINAL_WIDTH;
+const int Screen::ORIGINAL_HEIGHT;
+
 /**
  * Sets up all the internal display flags depending on
  * the current video settings.
