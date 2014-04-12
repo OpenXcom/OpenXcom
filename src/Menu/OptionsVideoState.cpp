@@ -112,9 +112,9 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 
 	if (Options::baseXResolution == Screen::ORIGINAL_WIDTH && Options::baseYResolution == Screen::ORIGINAL_HEIGHT)
 		_gameCurrent = 0;
-	else if (Options::baseXResolution == Options::displayWidth && Options::baseYResolution == Options::displayHeight)
+	else if (Options::baseXResolution == Options::displayWidth - Options::displayWidth %4 && Options::baseYResolution == Options::displayHeight)
 		_gameCurrent = 1;
-	else if (Options::baseXResolution == Options::displayWidth/2 && Options::baseYResolution == Options::displayHeight/2)
+	else if (Options::baseXResolution == Options::displayWidth/2 - (Options::displayWidth/2) %4 && Options::baseYResolution == Options::displayHeight/2)
 		_gameCurrent = 2;
 	else
 		_gameCurrent = -1;
