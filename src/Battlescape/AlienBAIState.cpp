@@ -1004,20 +1004,20 @@ int AlienBAIState::selectNearestTarget()
 			int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 			if (dist < _closestDist)
 			{
-				bool validTarget = false;
+				bool valid = false;
 				if (_rifle || !_melee)
 				{
-					validTarget = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
 				}
 				else
 				{
 					if (selectPointNearTarget(*i, _unit->getTimeUnits()))
 					{
 						int dir = _save->getTileEngine()->getDirectionTo(_attackAction->target, (*i)->getPosition());
-						validTarget = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i, 0);
+						valid = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i, 0);
 					}
 				}
-				if (validTarget)
+				if (valid)
 				{
 					_closestDist = dist;
 					_aggroTarget = *i;
