@@ -881,8 +881,7 @@ void AlienBAIState::setupEscape()
 		{
 			// calculate TUs to tile; we could be getting this from findReachable() somehow but that would break something for sure...
 			_save->getPathfinding()->calculate(_unit, _escapeAction->target);
-			if (_escapeAction->target == _unit->getPosition() || _save->getPathfinding()->getStartDirection() != -1 &&
-				_save->getPathfinding()->getTotalTUCost() / 2 <= _unit->getEnergy())
+			if (_escapeAction->target == _unit->getPosition() || _save->getPathfinding()->getStartDirection() != -1)
 			{
 				bestTileScore = score;
 				bestTile = _escapeAction->target;
