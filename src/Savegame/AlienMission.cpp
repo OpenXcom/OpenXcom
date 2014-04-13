@@ -46,10 +46,6 @@ namespace {
 /**
  * Get a random point inside the given region zone.
  * The point will be used to land a UFO, so it HAS to be on land.
- * @note This is only until we fix our zone data.
- * @additional note: atlantic region gets stuck in an infinite loop
- * because it can't find land. limiting the tries to 1000 will result in
- * ships landing in the sea, but this is better than causing the game to hang.
  */
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
 {
@@ -387,8 +383,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	const unsigned int curWaypoint = ufo.getTrajectoryPoint();
 	const unsigned int nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory &trajectory = ufo.getTrajectory();
-	const unsigned int waypointCount = trajectory.getWaypointCount();
-	if (curWaypoint == waypointCount)
+	if (nextWaypoint == trajectory.getWaypointCount())
 	{
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
@@ -396,6 +391,11 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	}
 	ufo.setAltitude(trajectory.getAltitude(nextWaypoint));
 	ufo.setTrajectoryPoint(nextWaypoint);
+	std::pair<double, double> pos = getWaypoint(trajectory, nextWaypoint, globe, *rules.getRegion(_region));
+	Waypoint *wp = new Waypoint();
+	wp->setLongitude(pos.first);
+	wp->setLatitude(pos.second);
+	ufo.setDestination(wp);
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
 		if (ufo.getLandId() != 0)
@@ -404,11 +404,6 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		}
 		// Set next waypoint.
 		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * trajectory.getSpeedPercentage(nextWaypoint)));
-		std::pair<double, double> pos = getWaypoint(trajectory, nextWaypoint, globe, *rules.getRegion(_region));
-		Waypoint *wp = new Waypoint();
-		wp->setLongitude(pos.first);
-		wp->setLatitude(pos.second);
-		ufo.setDestination(wp);
 	}
 	else
 	{
@@ -513,12 +508,12 @@ void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 		break;
 	case Ufo::LANDED:
 		{
-			if ((ufo.getRules()->getType() == "STR_HARVESTER" && _rule.getType() == "STR_ALIEN_HARVEST") || 
-				(ufo.getRules()->getType() == "STR_ABDUCTOR" && _rule.getType() == "STR_ALIEN_ABDUCTION"))
+			if (_rule.getType() == "STR_ALIEN_HARVEST" || _rule.getType() == "STR_ALIEN_ABDUCTION" || _rule.getType() == "STR_ALIEN_TERROR")
 			{
 				addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			}
-			ufoReachedWaypoint(ufo, engine, globe);
+			ufo.setAltitude("STR_VERY_LOW");
+			ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
 		}
 		break;
 	case Ufo::CRASHED:
