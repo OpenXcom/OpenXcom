@@ -128,6 +128,7 @@ void create()
 	_info.push_back(OptionInfo("globeScrollDragButton", &globeScrollDragButton, SDL_BUTTON_MIDDLE));
 
 	// advanced options
+	_info.push_back(OptionInfo("includePrimeStateInSavedLayout", &includePrimeStateInSavedLayout, false, "STR_INCLUDE_PRIMESTATE_IN_SAVED_LAYOUT", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("anytimePsiTraining", &anytimePsiTraining, false, "STR_ANYTIMEPSITRAINING", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
