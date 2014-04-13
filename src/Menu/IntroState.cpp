@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "IntroState.h"
+#include <SDL_mixer.h>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
@@ -369,12 +370,13 @@ static struct AudioSequence
 				{
 					soundInFile *sf = (*sounds) + command;
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
+					double ratio = Options::soundVolume / MIX_MAX_VOLUME;
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 					s = rp->getSound(sf->catFile, sf->sound);
 					if (s)
 					{
 						s->play(channel);
-						Mix_Volume(channel, sf->volume);
+						Mix_Volume(channel, sf->volume * ratio);
 						break;
 					}
 					else Log(LOG_DEBUG) << "Couldn't play " << sf->catFile << ":" << sf->sound;
@@ -437,7 +439,7 @@ void IntroState::init()
 		_game->getScreen()->clear();
 		_game->getScreen()->flip();
 
-		_game->setVolume(Options::soundVolume, Options::musicVolume);
+		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 
 #ifndef __NO_MUSIC
 		Mix_HaltChannel(-1);

@@ -203,7 +203,7 @@ void OptionsBaseState::btnOkClick(Action *)
 	_game->loadLanguage(Options::language);
 	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	if (Options::reload && _origin == OPT_MENU)
 	{
 		_game->setState(new StartState(_game));
@@ -234,7 +234,7 @@ void OptionsBaseState::btnOkClick(Action *)
 void OptionsBaseState::btnCancelClick(Action *)
 {
 	Options::load();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	_game->popState();
 }
 

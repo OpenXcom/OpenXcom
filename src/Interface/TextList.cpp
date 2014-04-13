@@ -566,12 +566,18 @@ void TextList::setCondensed(bool condensed)
 /**
  * Returns the currently selected row if the text
  * list is selectable.
- * @return Selected row.
+ * @return Selected row, -1 if none.
  */
 int TextList::getSelectedRow() const
 {
-	size_t selRow = std::min(_selRow, _rows.size());
-	return _rows[selRow];
+	if (_rows.empty() || _selRow >= _rows.size())
+	{
+		return -1;
+	}
+	else
+	{
+		return _rows[_selRow];
+	}
 }
 
 /**
@@ -732,7 +738,7 @@ void TextList::scrollUp(bool toMax)
 	if (_rows.size() > _visibleRows && _scroll > 0)
 	{
 		if (toMax) _scroll=0; else _scroll--;
-		_redraw = true;
+		draw();
 	}
 	updateArrows();
 }
@@ -747,8 +753,8 @@ void TextList::scrollDown(bool toMax)
 		return;
 	if (_rows.size() > _visibleRows && _scroll < _rows.size() - _visibleRows)
 	{
-		if (toMax) _scroll=_texts.size()-_visibleRows; else _scroll++;
-		_redraw = true;
+		if (toMax) _scroll=_rows.size()-_visibleRows; else _scroll++;
+		draw();
 	}
 	updateArrows();
 }
@@ -889,7 +895,7 @@ void TextList::mousePress(Action *action, State *state)
 	}
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mousePress(action, state);
 		}
@@ -909,7 +915,7 @@ void TextList::mouseRelease(Action *action, State *state)
 {
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mouseRelease(action, state);
 		}
@@ -929,7 +935,7 @@ void TextList::mouseClick(Action *action, State *state)
 {
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
 			if (_comboBox && action->getDetails()->button.button == SDL_BUTTON_LEFT)

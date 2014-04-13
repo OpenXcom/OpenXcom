@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 		std::ostringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		game = new Game(title.str());
-		game->setVolume(Options::soundVolume, Options::musicVolume);
+		game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG

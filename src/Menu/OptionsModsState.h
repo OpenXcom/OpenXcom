@@ -20,7 +20,7 @@
 #define OPENXCOM_OPTIONSMODSSTATE_H
 
 #include "OptionsBaseState.h"
-#include <map>
+#include <vector>
 #include <string>
 
 namespace OpenXcom
@@ -36,7 +36,7 @@ class OptionsModsState : public OptionsBaseState
 {
 private:
 	TextList *_lstMods;
-	std::map<std::string, bool> _mods;
+	std::vector<std::string> _mods;
 public:
 	/// Creates the Advanced state.
 	OptionsModsState(Game *game, OptionsOrigin origin);

@@ -1,0 +1,38 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+startingBase:
+  facilities:
+      - type: STR_ACCESS_LIFT
+        x: 3
+        y: 3
+      - type: STR_HANGAR
+        x: 2
+        y: 4
+      - type: STR_LIVING_QUARTERS
+        x: 2
+        y: 3
+      - type: STR_LABORATORY
+        x: 3
+        y: 2
+      - type: STR_WORKSHOP
+        x: 4
+        y: 2
+      - type: STR_HANGAR
+        x: 4
+        y: 0
+      - type: STR_GENERAL_STORES
+        x: 2
+        y: 2
+      - type: STR_LARGE_RADAR_SYSTEM
+        x: 1
+        y: 2
+      - type: STR_HANGAR
+        x: 0
+        y: 0
+      - type: STR_LIVING_QUARTERS
+        x: 1
+        y: 3
+      - type: STR_ALIEN_CONTAINMENT
+        x: 0
+        y: 3
+  scientists: 50
+  engineers: 20

@@ -39,6 +39,7 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
+	std::vector<TextButton*> _btnBases;
 	std::vector<Base*> _bases;
 public:
 	/// Creates the Psi Training state.
