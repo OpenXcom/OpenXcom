@@ -27,6 +27,7 @@ namespace OpenXcom
  */
 EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node &node)
 {
+	_fuseTimer = -1; // for compatibility
 	load(node);
 }
 
@@ -37,9 +38,9 @@ EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node &node)
  * @param slotX Position-X in the occupied slot.
  * @param slotY Position-Y in the occupied slot.
  * @param ammoItem The ammo has to be loaded into the item. (it's type)
- * @param explodeTurn The turn when the item explodes. (if it's an activated grenade-type)
+ * @param fuseTimer The turn until explosion of the item. (if it's an activated grenade-type)
  */
-EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem) : _itemType(itemType), _slot(slot), _slotX(slotX), _slotY(slotY), _ammoItem(ammoItem)
+EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int fuseTimer) : _itemType(itemType), _slot(slot), _slotX(slotX), _slotY(slotY), _ammoItem(ammoItem), _fuseTimer(fuseTimer)
 {
 }
 
@@ -96,6 +97,15 @@ std::string EquipmentLayoutItem::getAmmoItem() const
 }
 
 /**
+ * Returns the turn until explosion of the item. (if it's an activated grenade-type)
+ * @return turn count.
+ */
+int EquipmentLayoutItem::getFuseTimer() const
+{
+	return _fuseTimer;
+}
+
+/**
  * Loads the soldier-equipment layout item from a YAML file.
  * @param node YAML node.
  */
@@ -106,6 +116,7 @@ void EquipmentLayoutItem::load(const YAML::Node &node)
 	_slotX = node["slotX"].as<int>(_slotX);
 	_slotY = node["slotY"].as<int>(_slotY);
 	_ammoItem = node["ammoItem"].as<std::string>(_ammoItem);
+	_fuseTimer = node["fuseTimer"].as<int>(_fuseTimer);
 }
 
 /**
@@ -120,6 +131,7 @@ YAML::Node EquipmentLayoutItem::save() const
 	node["slotX"] = _slotX;
 	node["slotY"] = _slotY;
 	node["ammoItem"] = _ammoItem;
+	node["fuseTimer"] = _fuseTimer;
 	return node;
 }
 

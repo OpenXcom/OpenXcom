@@ -336,7 +336,8 @@ void InventoryState::saveEquipmentLayout()
 				(*j)->getSlot()->getId(),
 				(*j)->getSlotX(),
 				(*j)->getSlotY(),
-				ammo
+				ammo,
+				(*j)->getFuseTimer()
 			));
 		}
 	}
