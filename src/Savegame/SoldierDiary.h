@@ -47,6 +47,7 @@ private:
 	std::string _alienRank, _alienRace, _weapon, _weaponAmmo;
 	UnitFaction _alienFaction;
 	UnitStatus _alienState;
+    int _mission;
 	int _turn;
 	
 public:
