@@ -66,66 +66,40 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_lstOptions->setColor(Palette::blockOffset(8)+10);
 	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
 	_lstOptions->setWordWrap(true);
-
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("aggressiveRetaliation", &Options::aggressiveRetaliation));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("alienContainmentLimitEnforced", &Options::alienContainmentLimitEnforced));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("canSellLiveAliens", &Options::canSellLiveAliens));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowAutoSellProduction", &Options::allowAutoSellProduction));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowBuildingQueue", &Options::allowBuildingQueue));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleAutoEnd", &Options::battleAutoEnd));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleInstantGrenade", &Options::battleInstantGrenade));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleUFOExtenderAccuracy", &Options::battleUFOExtenderAccuracy));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("canManufactureMoreItemsPerHour", &Options::canManufactureMoreItemsPerHour));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("canTransferCraftsWhileAirborne", &Options::canTransferCraftsWhileAirborne));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("craftLaunchAlways", &Options::craftLaunchAlways));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("customInitialBase", &Options::customInitialBase));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("globeSeasons", &Options::globeSeasons));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("playIntro", &Options::playIntro));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("disableAutoEquip", &Options::disableAutoEquip));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("showMoreStatsInInventoryView", &Options::showMoreStatsInInventoryView));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("sneakyAI", &Options::sneakyAI));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("strafe", &Options::strafe));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("weaponSelfDestruction", &Options::weaponSelfDestruction));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("spendResearchedItems", &Options::spendResearchedItems));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleScrollDragInvert", &Options::battleScrollDragInvert));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("allowPsionicCapture", &Options::allowPsionicCapture));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("psiStrengthEval", &Options::psiStrengthEval));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("anytimePsiTraining", &Options::anytimePsiTraining));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("skipNextTurnScreen", &Options::skipNextTurnScreen));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("TFTDDamage", &Options::TFTDDamage));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleSmoothCamera", &Options::battleSmoothCamera));
-	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleConfirmFireMode", &Options::battleConfirmFireMode));
-
-	_boolQuantity = _settingBoolSet.size();
-	int sel = 0;
-	for (std::vector< std::pair<std::string, bool*> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
-	{
-		std::string settingName = i->first;
-		std::wstring setting =  *i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
-		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), setting.c_str());
-		++sel;
-	}
-	
-	_settingIntSet.push_back(std::pair<std::string, int*>("battleExplosionHeight", &Options::battleExplosionHeight));
-	_settingIntSet.push_back(std::pair<std::string, int*>("autosave", &Options::autosave));
-	_settingIntSet.push_back(std::pair<std::string, int*>("maxFrameSkip", &Options::maxFrameSkip));
-
-	for (std::vector<std::pair<std::string, int*> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
-	{
-		std::string settingName = i->first;
-		std::wostringstream ss;
-		ss << *i->second;
-		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
-		++sel;
-	}
-
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
-	_lstOptions->onMousePress((ActionHandler)&OptionsAdvancedState::lstOptionsPress);
+	_lstOptions->onMouseClick((ActionHandler)&OptionsAdvancedState::lstOptionsClick, 0);
 	_lstOptions->onMouseOver((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOver);
 	_lstOptions->onMouseOut((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOut);
+
+	if (origin != OPT_BATTLESCAPE)
+	{
+		_colorGroup = Palette::blockOffset(15) - 1;
+	}
+	else
+	{
+		_colorGroup = Palette::blockOffset(1) - 1;
+	}
+
+	const std::vector<OptionInfo> &options = Options::getOptionInfo();
+	for (std::vector<OptionInfo>::const_iterator i = options.begin(); i != options.end(); ++i)
+	{
+		if (i->type() != OPTION_KEY && !i->description().empty())
+		{
+			if (i->category() == "STR_GENERAL")
+			{
+				_settingsGeneral.push_back(*i);
+			}
+			else if (i->category() == "STR_GEOSCAPE")
+			{
+				_settingsGeo.push_back(*i);
+			}
+			else if (i->category() == "STR_BATTLESCAPE")
+			{
+				_settingsBattle.push_back(*i);
+			}
+		}
+	}
 }
 
 /**
@@ -136,63 +110,132 @@ OptionsAdvancedState::~OptionsAdvancedState()
 	
 }
 
-void OptionsAdvancedState::lstOptionsPress(Action *action)
+/**
+ * Fills the settings list based on category.
+ */
+void OptionsAdvancedState::init()
+{
+	OptionsBaseState::init();
+	_lstOptions->addRow(2, tr("STR_GENERAL").c_str(), L"");
+	_lstOptions->setCellColor(0, 0, _colorGroup);
+	addSettings(_settingsGeneral);
+	_lstOptions->addRow(2, L"", L"");
+	_lstOptions->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
+	_lstOptions->setCellColor(_settingsGeneral.size() + 2, 0, _colorGroup);
+	addSettings(_settingsGeo);
+	_lstOptions->addRow(2, L"", L"");
+	_lstOptions->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
+	_lstOptions->setCellColor(_settingsGeneral.size() + 2 + _settingsGeo.size() + 2, 0, _colorGroup);
+	addSettings(_settingsBattle);
+}
+
+/**
+ * Adds a bunch of settings to the list.
+ * @param settings List of settings.
+ */
+void OptionsAdvancedState::addSettings(const std::vector<OptionInfo> &settings)
+{
+	for (std::vector<OptionInfo>::const_iterator i = settings.begin(); i != settings.end(); ++i)
+	{
+		std::wstring name = tr(i->description());
+		std::wstring value;
+		if (i->type() == OPTION_BOOL)
+		{
+			value = *i->asBool() ? tr("STR_YES") : tr("STR_NO");
+		}
+		else if (i->type() == OPTION_INT)
+		{
+			std::wostringstream ss;
+			ss << *i->asInt();
+			value = ss.str();
+		}
+		_lstOptions->addRow(2, name.c_str(), value.c_str());
+	}
+}
+
+/**
+ * Gets the currently selected setting.
+ * @param sel Selected row.
+ * @return Pointer to option, NULL if none selected.
+ */
+OptionInfo *OptionsAdvancedState::getSetting(size_t sel)
+{
+	if (sel > 0 &&
+		sel <= _settingsGeneral.size())
+	{
+		return &_settingsGeneral[sel - 1];
+	}
+	else if (sel > _settingsGeneral.size() + 2 &&
+			 sel <= _settingsGeneral.size() + 2 + _settingsGeo.size())
+	{
+		return &_settingsGeo[sel - 1 - _settingsGeneral.size() - 2];
+	}
+	else if (sel > _settingsGeneral.size() + 2 + _settingsGeo.size() + 2 &&
+			 sel <= _settingsGeneral.size() + 2 + _settingsGeo.size() + 2 + _settingsBattle.size())
+	{
+		return &_settingsBattle[sel - 1 - _settingsGeneral.size() - 2 - _settingsGeo.size() - 2];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Changes the clicked setting.
+ * @param action Pointer to an action.
+ */
+void OptionsAdvancedState::lstOptionsClick(Action *action)
 {
 	if (action->getDetails()->button.button != SDL_BUTTON_LEFT && action->getDetails()->button.button != SDL_BUTTON_RIGHT)
 	{
 		return;
 	}
 	size_t sel = _lstOptions->getSelectedRow();
+	OptionInfo *setting = getSetting(sel);
+	if (!setting) return;
+
 	std::wstring settingText = L"";
-	if (sel < _boolQuantity)
+	if (setting->type() == OPTION_BOOL)
 	{
-		*_settingBoolSet.at(sel).second = !*_settingBoolSet.at(sel).second;
-		settingText = *_settingBoolSet.at(sel).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
+		bool *b = setting->asBool();
+		*b = !*b;
+		settingText = *b ? tr("STR_YES") : tr("STR_NO");
 	}
-	else // integer variables will need special handling
+	else if (setting->type() == OPTION_INT) // integer variables will need special handling
 	{
-		size_t intSel = sel - _boolQuantity;
+		int *i = setting->asInt();
+
 		int increment = 1;
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
 			increment = -1;
 		}
-		std::wostringstream ss;
-		switch (intSel)
+		*i += increment;
+
+		int min = 0, max = 0;
+		if (i == &Options::battleExplosionHeight ||
+			i == &Options::autosave)
 		{
-		case 0: // explosion height
-			*_settingIntSet.at(intSel).second += increment;
-			if (*_settingIntSet.at(intSel).second == 4)
-			{
-				*_settingIntSet.at(intSel).second = 0;
-			}
-			if (*_settingIntSet.at(intSel).second == -1)
-			{
-				*_settingIntSet.at(intSel).second = 3;
-			}
-			ss << *_settingIntSet.at(intSel).second;
-			break;
-		case 1: // autosave
-			*_settingIntSet.at(intSel).second = ++*_settingIntSet.at(intSel).second % 4;
-			ss << *_settingIntSet.at(intSel).second;
-			break;
-		case 2: // frame skip
-			*_settingIntSet.at(intSel).second += increment;
-			if (*_settingIntSet.at(intSel).second > 10)
-			{
-				*_settingIntSet.at(intSel).second = 0;
-			}
-			if (*_settingIntSet.at(intSel).second < 0)
-			{
-				*_settingIntSet.at(intSel).second = 10;
-			}
-			ss << *_settingIntSet.at(intSel).second;
-			break;
-		default:
-			*_settingIntSet.at(intSel).second += increment;
-			ss << *_settingIntSet.at(intSel).second;
-			break;
+			min = 0;
+			max = 3;
 		}
+		else if (i == &Options::maxFrameSkip)
+		{
+			min = 0;
+			max = 10;
+		}
+		if (*i < min)
+		{
+			*i = max;
+		}
+		else if (*i > max)
+		{
+			*i = min;
+		}
+
+		std::wostringstream ss;
+		ss << *i;
 		settingText = ss.str();
 	}
 	_lstOptions->setCellText(sel, 1, settingText.c_str());
@@ -201,24 +244,18 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 {
 	size_t sel = _lstOptions->getSelectedRow();
-	std::ostringstream ss;
-	std::string settingName;
-	if (sel < _boolQuantity)
+	OptionInfo *setting = getSetting(sel);
+	std::wstring desc;
+	if (setting)
 	{
-		settingName = _settingBoolSet.at(sel).first;
+		desc = tr(setting->description() + "_DESC");
 	}
-	else
-	{
-		settingName = _settingIntSet.at(sel - _boolQuantity).first;
-	}
-
-	transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-	ss << "STR_" << settingName.c_str() << "_DESC";
-	_txtTooltip->setText(tr(ss.str()).c_str());
+	_txtTooltip->setText(desc.c_str());
 }
 
 void OptionsAdvancedState::lstOptionsMouseOut(Action *)
 {
 	_txtTooltip->setText(L"");
 }
+
 }

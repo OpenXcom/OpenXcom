@@ -71,7 +71,7 @@ public:
 	/// Quits the game.
 	void quit();
 	/// Sets the game's audio volume.
-	void setVolume(int sound, int music);
+	void setVolume(int sound, int music, int ui);
 	/// Gets the game's display screen.
 	Screen *getScreen() const;
 	/// Gets the game's cursor.

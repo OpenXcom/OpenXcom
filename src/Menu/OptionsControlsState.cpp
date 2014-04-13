@@ -79,7 +79,7 @@ OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : O
 	const std::vector<OptionInfo> &options = Options::getOptionInfo();
 	for (std::vector<OptionInfo>::const_iterator i = options.begin(); i != options.end(); ++i)
 	{
-		if (!i->description().empty())
+		if (i->type() == OPTION_KEY && !i->description().empty())
 		{
 			if (i->category() == "STR_GENERAL")
 			{
@@ -104,6 +104,9 @@ OptionsControlsState::~OptionsControlsState()
 {
 }
 
+/**
+ * Fills the controls list based on category.
+ */
 void OptionsControlsState::init()
 {
 	OptionsBaseState::init();
@@ -143,8 +146,7 @@ std::string OptionsControlsState::ucWords(std::string str)
 
 /**
  * Adds a bunch of controls to the list.
- * @param keys Array of controls.
- * @param count Number of controls.
+ * @param keys List of controls.
  */
 void OptionsControlsState::addControls(const std::vector<OptionInfo> &keys)
 {
@@ -160,11 +162,43 @@ void OptionsControlsState::addControls(const std::vector<OptionInfo> &keys)
 }
 
 /**
- * Select a control for setting.
+ * Gets the currently selected control.
+ * @param sel Selected row.
+ * @return Pointer to option, NULL if none selected.
+ */
+OptionInfo *OptionsControlsState::getControl(size_t sel)
+{
+	if (sel > 0 &&
+		sel <= _controlsGeneral.size())
+	{
+		return &_controlsGeneral[sel - 1];
+	}
+	else if (sel > _controlsGeneral.size() + 2 &&
+			 sel <= _controlsGeneral.size() + 2 + _controlsGeo.size())
+	{
+		return &_controlsGeo[sel - 1 - _controlsGeneral.size() - 2];
+	}
+	else if (sel > _controlsGeneral.size() + 2 + _controlsGeo.size() + 2 &&
+			 sel <= _controlsGeneral.size() + 2 + _controlsGeo.size() + 2 + _controlsBattle.size())
+	{
+		return &_controlsBattle[sel - 1 - _controlsGeneral.size() - 2 - _controlsGeo.size() - 2];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Select a control for changing.
  * @param action Pointer to an action.
  */
 void OptionsControlsState::lstControlsClick(Action *action)
 {
+	if (action->getDetails()->button.button != SDL_BUTTON_LEFT && action->getDetails()->button.button != SDL_BUTTON_RIGHT)
+	{
+		return;
+	}
 	if (_selected != -1)
 	{
 		int selected = _selected;
@@ -176,25 +210,10 @@ void OptionsControlsState::lstControlsClick(Action *action)
 			return;
 	}
 	_selected = _lstControls->getSelectedRow();
-	if (_selected > 0 &&
-		_selected <= _controlsGeneral.size())
-	{
-		_selKey = &_controlsGeneral[_selected - 1];
-	}
-	else if (_selected > _controlsGeneral.size() + 2 &&
-			 _selected <= _controlsGeneral.size() + 2 + _controlsGeo.size())
-	{
-		_selKey = &_controlsGeo[_selected - 1 - _controlsGeneral.size() - 2];
-	}
-	else if (_selected > _controlsGeneral.size() + 2 + _controlsGeo.size() + 2 &&
-			 _selected <= _controlsGeneral.size() + 2 + _controlsGeo.size() + 2 + _controlsBattle.size())
-	{
-		_selKey = &_controlsBattle[_selected - 1 - _controlsGeneral.size() - 2 - _controlsGeo.size() - 2];
-	}
-	else
+	_selKey = getControl(_selected);
+	if (!_selKey)
 	{
 		_selected = -1;
-		_selKey = 0;
 		return;
 	}
 
