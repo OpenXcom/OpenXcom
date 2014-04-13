@@ -433,6 +433,63 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					break;
 				}
 			}
+            else if ((*j).first == "kills_with_criteria_career" || (*j).first == "kills_with_criteria_mission" || (*j).first == "kills_with_criteria_turn")
+            {
+                /**
+                At the moment, this only covers general, and no doubles...
+                **/
+                // Looks to see how many kills the soldier has received over the course of his career
+                std::vector<std::map<int, std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
+                
+                // Loop over the OR vectors
+                for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator orCriteria = _killCriteriaList->begin(); orCriteria != _killCriteriaList->end(); ++orCriteria)
+                {
+                    // Loop over the AND vectors
+                    for (std::map<int, std::vector<std::string> >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
+                    {
+                        int count = 0; // Each AND vector has to match the award criteria
+                        // Loop over the KILLS
+                        for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
+                        {
+                            bool foundMatch = true;
+                            // Loop over the DETAILs of the AND vector
+                            for (std::vector<std::string>::const_iterator detail = (*andCriteria).second->begin(); detail != (*andCriteria).second->end(); ++detail)
+                            {
+                                // See if we find no matches with any criteria. If so, break and try the next kill.
+                                if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
+                                     (*singleKill)->getWeapon() != (*detail) && (*singleKill)->getWeaponAmmo() != (*detail) &&
+                                     (*singleKill)->getAlienState() != (*detail) && (*singleKill)->getAlienFaction() != (*detail) )
+                                {
+                                    foundMatch = false;
+                                    break;
+                                }
+                            }
+                            if (foundMatch) count++;
+                        }
+                        int multiCriteria = (*andCriteria).first;
+                        // If one of the AND criteria fail, stop looking
+                        if (multiCriteria == 0 || count / multiCriteria < (*j).second.at(_nextCommendationLevel[""]))
+                        {
+                            _awardCommendation = false;
+                            break;
+                        }
+                    }
+                    if (_awardCommendation) break; // Stop looking because we are getting one regardless
+                }
+            }
+            
+            /**
+            
+            The above three criteria kills have few differences in code
+            They look to see if the kills are in a turn, a mission, or they don't look.
+            In order to minimize code duplication... 
+                The difference only happens when comparing kills
+                Perhaps have a big if (gen OR mis OR turn), and inside have unique kill checks
+            
+            
+            **/
+            
+            
 			else if ((*j).first == "kills_with_criteria")
 			{
                 // Vector of ORs, vector of ANDs, vector of DETAILs
