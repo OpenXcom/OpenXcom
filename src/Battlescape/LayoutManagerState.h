@@ -50,7 +50,7 @@ private:
 	SavedBattleGame *_battleGame;
 	Window *_window;
 	TextButton *_btnOk;
-	Text *_txtTitle, *_txtMode, *_txtSelectedLayout, *_txtSoldiers, *_txtName, *_txtLayout, *_txtLayoutName, *_txtOutsideBrightness;
+	Text *_txtTitle, *_txtMode, *_txtSelectedLayout, *_txtSoldiers, *_txtName, *_txtLayout, *_txtLayoutName, *_txtOutsideDarkness;
 	ToggleTextButton *_btnToSoldier, *_btnFromSoldier;
 	std::vector<ToggleTextButton*> _btnLayouts;
 	int _selectedLayout;
@@ -61,7 +61,7 @@ private:
 	TextList *_lstSoldiers;
 	TextEdit *_edtLayout;
 	TextButton *_btnCreate, *_btnRename, *_btnDelete;
-	Surface *_outsideBrightness;
+	Surface *_outsideDarkness;
 	WarningMessage *_warning;
 	void addLayoutButton(const std::wstring &text, int &buttons);
 public:

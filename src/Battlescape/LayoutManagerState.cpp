@@ -88,8 +88,8 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	_btnDelete = new TextButton(60, 12, 129, 183);
 	if (isBattlescapeGame)
 	{
-		_txtOutsideBrightness = new Text(60, 18, 191, 158);
-		_outsideBrightness = new Surface(tileWidth * 2, tileHeight * 1, 0, 0);
+		_txtOutsideDarkness = new Text(60, 18, 191, 158);
+		_outsideDarkness = new Surface(tileWidth * 2, tileHeight * 1, 0, 0);
 	}
 	_warning = new WarningMessage(224, 24, 48, 176);
 
@@ -113,8 +113,8 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	add(_edtLayout);
 	if (isBattlescapeGame)
 	{
-		add(_txtOutsideBrightness);
-		add(_outsideBrightness);
+		add(_txtOutsideDarkness);
+		add(_outsideDarkness);
 	}
 	add(_warning);
 
@@ -236,10 +236,10 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 
 	if (isBattlescapeGame)
 	{
-		_txtOutsideBrightness->setColor(Palette::blockOffset(3));
-		_txtOutsideBrightness->setText(tr("STR_OUTSIDE_BRIGHTNESS_UC"));
-		_txtOutsideBrightness->setWordWrap(true);
-		_txtOutsideBrightness->setHighContrast(true);
+		_txtOutsideDarkness->setColor(Palette::blockOffset(3));
+		_txtOutsideDarkness->setText(tr("STR_OUTSIDE_DARKNESS_UC"));
+		_txtOutsideDarkness->setWordWrap(true);
+		_txtOutsideDarkness->setHighContrast(true);
 
 		Tile *tile = 0;
 		Surface *tmpSurface = 0;
@@ -262,15 +262,15 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 			for (int itY = 0; itY > -2; --itY)
 			{
 				cam->convertMapToScreen(Position(itX, itY, 0), &screenPosition);
-				tmpSurface->blitNShade(_outsideBrightness, screenPosition.x, screenPosition.y - tileHeight/4, tileShade, false);
+				tmpSurface->blitNShade(_outsideDarkness, screenPosition.x, screenPosition.y - tileHeight/4, tileShade, false);
 			}
 		}
 		cam->convertMapToScreen(Position(1, 0, 0), &screenPosition);
 		SurfaceSet *cursorPck = _game->getResourcePack()->getSurfaceSet("CURSOR.PCK");
-		cursorPck->getFrame(0)->blitNShade(_outsideBrightness, screenPosition.x, screenPosition.y - tileHeight/4, 0);
-		cursorPck->getFrame(3)->blitNShade(_outsideBrightness, screenPosition.x, screenPosition.y - tileHeight/4, 0);
-		_outsideBrightness->setX(251);
-		_outsideBrightness->setY(157);
+		cursorPck->getFrame(0)->blitNShade(_outsideDarkness, screenPosition.x, screenPosition.y - tileHeight/4, 0);
+		cursorPck->getFrame(3)->blitNShade(_outsideDarkness, screenPosition.x, screenPosition.y - tileHeight/4, 0);
+		_outsideDarkness->setX(251);
+		_outsideDarkness->setY(157);
 	}
 
 	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
