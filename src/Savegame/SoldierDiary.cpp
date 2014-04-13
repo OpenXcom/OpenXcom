@@ -435,11 +435,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			}
             else if ((*j).first == "kills_with_criteria_career" || (*j).first == "kills_with_criteria_mission" || (*j).first == "kills_with_criteria_turn")
             {
-                /**
-                Career: Look at all
-                Mission: Look only at kills with same mission ID
-                Turn: Look only at kills with same turn ID
-                **/
                 // Looks to see how many kills the soldier has received over the course of his career
                 std::vector<std::map<int, std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
                 
@@ -510,29 +505,26 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                     {
                                         count++;
                                         // Only one count per mission, unless the commendation wants more than one
+                                        // This also stops a "double kill" not getting awarded because we got 5 kills
                                         if ( count == (*andCriteria).first) break;
                                     }
                                 }
-                                int multiCriteria = (*andCriteria).first;
-                                // If one of the AND criteria fail, stop looking
-                                if (multiCriteria == 0 || count / multiCriteria < (*j).second.at(_nextCommendationLevel[""]))
-                                {
-                                    _awardCommendation = false;
-                                    break;
-                                }
+                            }
+                            int multiCriteria = (*andCriteria).first;
+                            // If one of the AND criteria fail, stop looking
+                            if (multiCriteria == 0 || count / multiCriteria < (*j).second.at(_nextCommendationLevel[""]))
+                            {
+                                _awardCommendation = false;
+                                break;
                             }
                         }
                     }
-                        
-                        
-                        
-                        
                     else if ((*j).first == "kills_with_criteria_turn")
                     {
                         // Loop over the AND vectors
                         for (std::map<int, std::vector<std::string> >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
                         {
-                            int count = 0; // Each AND vector has to match the award criteria
+                            int count = 0; // How many AND vectors (list of DETAILs) have been successful
                             int killThisTurn = 0;
                             int killLastTurn = -1;
                             bool goToNextTurn = false;
@@ -582,21 +574,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                 break;
                             }
                         }
-                            
-                            
-                            // Missions: only loops through kills on the same mission
-                            // Turns: only loops through kills on the same turn
                     }
-                        
-                        
-                        
-                        
-                        
-                        
+
                     }
                     if (_awardCommendation) break; // Stop looking because we are getting one regardless
-                }
-            }                   
+            }
         }
 		if (_awardCommendation)
 		{
