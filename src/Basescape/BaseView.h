@@ -69,10 +69,6 @@ private:
 	Uint32 mouseScrollingStartTime;
 	int totalMouseMoveX, totalMouseMoveY;
 	bool mouseMovedOverThreshold;
-	Uint8 _dragButton;  // this is a cache for Options::getString("battleScrollDragButton")
-	bool _dragInvert;  // this is a cache for Options::getString("battleScrollDragInvert")
-	int _dragTimeTolerance;  // this is a cache for Options::getInt("battleScrollDragTimeTolerance")
-	int _dragPixelTolerance;  // this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	BaseViewClickHandler _leftClickHandler;
 	BaseViewClickHandler _rightClickHandler;
 	bool _showExtraSpace;
