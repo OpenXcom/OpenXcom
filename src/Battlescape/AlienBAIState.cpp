@@ -1450,7 +1450,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 
 	if (attackingUnit->getPosition().z == targetPos.z && distance <= radius)
 	{
-		efficacy -= 6;
+		efficacy -= 4;
 	}
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
@@ -1458,16 +1458,26 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 
 
 	BattleUnit *target = _save->getTile(targetPos)->getUnit();
+	if (target)
+	{
+		++enemiesAffected;
+		++efficacy;
+	}
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (!(*i)->isOut() && (*i) != attackingUnit && (*i)->getPosition().z == targetPos.z && _save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
+		if (!(*i)->isOut() &&
+			(*i) != attackingUnit &&
+			(*i) != target &&
+			(*i)->getPosition().z == targetPos.z &&
+			_save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsSinceSpotted() > _intelligence)
 				continue;
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
-			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
-			if (collidesWith == V_UNIT)
+			std::vector<Position> traj;
+			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, &traj, target, true, false, *i);
+			if (collidesWith == V_UNIT && traj.front() / Position(16,16,24) == (*i)->getPosition())
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1485,7 +1495,6 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	{
 		return false;
 	}
-
 	return (efficacy > 0 || enemiesAffected >= 10);
 }
 

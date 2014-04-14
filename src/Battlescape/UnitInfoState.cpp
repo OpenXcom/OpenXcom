@@ -129,6 +129,9 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 		_btnNext = new TextButton(14, 18, 304, 2);
 	}
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_bg);
 	add(_txtName);
 

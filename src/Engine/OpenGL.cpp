@@ -104,8 +104,8 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     if(gltexture == 0) glGenTextures(1, &gltexture);
 	glErrorCheck();
 	
-    iwidth  = SDL_max(width,  iwidth );
-    iheight = SDL_max(height, iheight);
+	iwidth = width;
+	iheight = height;
     if(buffer_surface) delete buffer_surface;
     buffer_surface = new Surface(iwidth, iheight, 0, 0, ibpp); // use OpenXcom's Surface class to get an aligned buffer with bonus SDL_Surface
 	buffer = (uint32_t*) buffer_surface->getSurface()->pixels;
