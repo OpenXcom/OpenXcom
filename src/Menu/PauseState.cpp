@@ -64,9 +64,13 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_txtTitle = new Text(206, 15, x+5, 32);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
 	}
 
 	add(_window);
@@ -131,19 +135,6 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 PauseState::~PauseState()
 {
 
-}
-
-/**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void PauseState::init()
-{
-	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	}
 }
 
 /**

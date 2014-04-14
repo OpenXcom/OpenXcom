@@ -73,8 +73,6 @@ public:
 	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);
 	/// Cleans up the Transfer Items state.
 	~TransferItemsState();
-	/// Updates the palette.
-	void init();
 	/// Runs the timers.
 	void think();
 	/// Handler for clicking the OK button.

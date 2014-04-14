@@ -71,7 +71,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	_txtYears = new TextList(200, 8, 121, 191);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
+	setPalette("PAL_GRAPHS");
 	
 	//add all our elements
 	add(_bg);

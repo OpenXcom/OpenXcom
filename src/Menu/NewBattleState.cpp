@@ -97,6 +97,9 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnRandom = new TextButton(100, 16, 212, 176);
 
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtMapOptions);
@@ -261,11 +264,7 @@ NewBattleState::~NewBattleState()
  */
 void NewBattleState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
-	// Set music
-	_game->getResourcePack()->playMusic("GMSTORY");
+	State::init();
 
 	if (_craft == 0)
 	{

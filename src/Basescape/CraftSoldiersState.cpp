@@ -60,7 +60,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -138,6 +138,7 @@ void CraftSoldiersState::btnOkClick(Action *)
  */
 void CraftSoldiersState::init()
 {
+	State::init();
 	Craft *c = _base->getCrafts()->at(_craft);
 	_lstSoldiers->clearList();
 

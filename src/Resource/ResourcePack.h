@@ -89,7 +89,7 @@ public:
 	/// Gets a particular palette.
 	Palette *getPalette(const std::string &name) const;
 	/// Sets a new palette.
-	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets list of voxel data.
 	std::vector<Uint16> *getVoxelData();
 };

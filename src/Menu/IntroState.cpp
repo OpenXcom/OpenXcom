@@ -399,6 +399,7 @@ static void audioHandler()
  */
 void IntroState::init()
 {
+	State::init();
 	if (CrossPlatform::fileExists(_introFile) && (CrossPlatform::fileExists(_introSoundFileDOS) || CrossPlatform::fileExists(_introSoundFileWin)))
 	{
 		audioSequence = new AudioSequence(_game->getResourcePack());
@@ -421,7 +422,7 @@ void IntroState::init()
 
 		SDL_Color pal[256];
 		SDL_Color pal2[256];
-		memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color)* 256);
+		memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
 		for (int i = 20; i > 0; --i)
 		{
 			SDL_Event event;

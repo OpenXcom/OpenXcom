@@ -60,7 +60,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);

@@ -101,6 +101,9 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_numLongRange = new Text(40, 9, 126, Options::alienContainmentLimitEnforced ? 167 : 163);
 	_barLongRange = new Bar(150, 5, 166, Options::alienContainmentLimitEnforced ? 169 : 165);
 
+	// Set palette
+	setPalette("PAL_BASESCAPE");
+
 	add(_bg);
 	add(_mini);
 	add(_btnOk);
@@ -318,6 +321,7 @@ BaseInfoState::~BaseInfoState()
  */
 void BaseInfoState::init()
 {
+	State::init();
 	_edtBase->setText(_base->getName());
 
 	std::wostringstream ss;

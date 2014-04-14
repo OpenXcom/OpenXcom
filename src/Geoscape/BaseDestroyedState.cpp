@@ -39,12 +39,14 @@ namespace OpenXcom
 BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _base(base)
 {
 	_screen = false;
+
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
 	_btnOk = new TextButton(100, 20, 110, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 7);
 	
 	add(_window);
 	add(_btnOk);
@@ -109,14 +111,6 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
  */
 BaseDestroyedState::~BaseDestroyedState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void BaseDestroyedState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 }
 
 /**

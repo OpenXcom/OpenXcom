@@ -64,7 +64,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_txtBegin = new Text(206, 17, 25, 130);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_btnYes);
@@ -116,6 +116,7 @@ ConfirmLandingState::~ConfirmLandingState()
  */
 void ConfirmLandingState::init()
 {
+	State::init();
 	Base* b = dynamic_cast<Base*>(_craft->getDestination());
 	if (b == _craft->getBase())
 		_game->popState();

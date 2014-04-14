@@ -43,11 +43,13 @@ public:
 	DefeatState(Game *game);
 	/// Cleans up the Defeat state.
 	~DefeatState();
+	/// Initializes the slideshow.
 	void init();
 	/// Handle timers.
 	void think();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
+	/// Moves to the next screen.
 	void nextScreen();
 };
 

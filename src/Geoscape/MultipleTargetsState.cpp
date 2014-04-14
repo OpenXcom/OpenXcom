@@ -61,7 +61,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_window = new Window(this, 136, winHeight, 60, winY, POPUP_VERTICAL);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 7);
 
 		add(_window);
 
@@ -102,11 +102,13 @@ MultipleTargetsState::~MultipleTargetsState()
  */
 void MultipleTargetsState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-
 	if (_targets.size() == 1)
 	{
 		popupTarget(*_targets.begin());
+	}
+	else
+	{
+		State::init();
 	}
 }
 

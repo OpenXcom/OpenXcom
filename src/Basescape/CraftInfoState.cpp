@@ -74,8 +74,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(g
 	_equip = new Surface(220, 18, 85, 121);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 3);
 
 	add(_window);
 	add(_btnOk);
@@ -174,8 +173,7 @@ CraftInfoState::~CraftInfoState()
  */
 void CraftInfoState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	State::init();
 
 	_craft = _base->getCrafts()->at(_craftId);
 

@@ -57,8 +57,6 @@ namespace OpenXcom
 		void lstSelectionClick(Action *action);
 		/// load available articles into the selection list
 		void loadSelectionList();
-		/// Initializes the state.
-		virtual void init();
 	};
 }
 
