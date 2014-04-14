@@ -42,6 +42,8 @@ AliensCrashState::AliensCrashState(Game *game) : State(game)
 	_txtTitle = new Text(246, 80, 37, 50);
 
 	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);

@@ -404,27 +404,6 @@ FpsCounter *Game::getFpsCounter() const
 }
 
 /**
- * Replaces a certain amount of colors in the palettes of the game's
- * screen and resources.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
- */
-void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
-{
-	_screen->setPalette(colors, firstcolor, ncolors);
-	_cursor->setPalette(colors, firstcolor, ncolors);
-	_cursor->draw();
-
-	_fpsCounter->setPalette(colors, firstcolor, ncolors);
-
-	if (_res != 0)
-	{
-		_res->setPalette(colors, firstcolor, ncolors);
-	}
-}
-
-/**
  * Pops all the states currently in stack and pushes in the new state.
  * A shortcut for cleaning up all the old states when they're not necessary
  * like in one-way transitions.

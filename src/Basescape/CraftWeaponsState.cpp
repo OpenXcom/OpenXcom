@@ -59,7 +59,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);

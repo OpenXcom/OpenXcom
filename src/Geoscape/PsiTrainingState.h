@@ -30,8 +30,7 @@ class Text;
 class Base;
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Screen shown monthly when the player has psi labs available.
  */
 class PsiTrainingState : public State
 {
@@ -46,10 +45,9 @@ public:
 	PsiTrainingState(Game *game);
 	/// Cleans up the Psi Training state.
 	~PsiTrainingState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking a Base button.
 	void btnBaseXClick(Action *action);
 };
 

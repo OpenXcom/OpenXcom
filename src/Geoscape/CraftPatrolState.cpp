@@ -51,7 +51,7 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_txtPatrolling = new Text(224, 17, 16, 120);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnOk);
@@ -95,14 +95,6 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 CraftPatrolState::~CraftPatrolState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void CraftPatrolState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

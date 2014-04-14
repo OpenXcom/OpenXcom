@@ -53,6 +53,9 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_btnOk = new TextButton(120, 16, 16, 110);
 	_btnCancel = new TextButton(120, 16, 184, 110);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_window);
 	add(_txtInExit);
 	add(_txtOutsideExit);

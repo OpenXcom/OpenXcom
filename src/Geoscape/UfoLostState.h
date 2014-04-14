@@ -45,8 +45,6 @@ public:
 	UfoLostState(Game *game, std::wstring id);
 	/// Cleans up the Ufo Lost state.
 	~UfoLostState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };

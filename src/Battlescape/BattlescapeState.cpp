@@ -168,26 +168,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBefor
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
-	// Last 16 colors are a greyish gradient
-	SDL_Color color[] = {{140, 152, 148, 0},
-						 {132, 136, 140, 0},
-						 {116, 124, 132, 0},
-						 {108, 116, 124, 0},
-						 {92, 104, 108, 0},
-						 {84, 92, 100, 0},
-						 {76, 80, 92, 0},
-						 {56, 68, 84, 0},
-						 {48, 56, 68, 0},
-						 {40, 48, 56, 0},
-						 {32, 36, 48, 0},
-						 {24, 28, 32, 0},
-						 {16, 20, 24, 0},
-						 {8, 12, 16, 0},
-						 {3, 4, 8, 0},
-						 {3, 3, 6, 0}};
-	_game->setPalette(color, Palette::backPos+16, 16);
+	setPalette("PAL_BATTLESCAPE");
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -523,6 +504,7 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	State::init();
 	_animTimer->start();
 	_gameTimer->start();
 	_map->setFocus(true);

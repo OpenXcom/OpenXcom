@@ -73,7 +73,7 @@ OptionsModsState::OptionsModsState(Game *game, OptionsOrigin origin) : OptionsBa
 	_lstMods->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
 	_lstMods->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
 
-	std::vector<std::string> rulesets = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Ruleset/"), "rul");
+	std::vector<std::string> rulesets = CrossPlatform::getDataContents("Ruleset/", "rul");
 	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
 	{
 		std::string mod = CrossPlatform::noExt(*i);

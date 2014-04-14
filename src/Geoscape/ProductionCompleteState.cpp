@@ -53,7 +53,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 	_txtMessage = new Text(246, 110, 37, 35);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -114,14 +114,6 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 ProductionCompleteState::~ProductionCompleteState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void ProductionCompleteState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 }
 
 /**

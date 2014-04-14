@@ -55,7 +55,7 @@ AlienTerrorState::AlienTerrorState(Game *game, TerrorSite *terror, const std::st
 	_txtCity = new Text(246, 17, 5, 80);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_btnIntercept);
@@ -101,14 +101,6 @@ AlienTerrorState::AlienTerrorState(Game *game, TerrorSite *terror, const std::st
 AlienTerrorState::~AlienTerrorState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void AlienTerrorState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 }
 
 /**

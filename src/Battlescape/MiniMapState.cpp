@@ -46,7 +46,11 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
 	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
 	InteractiveSurface * btnOk = new InteractiveSurface(32, 32, 275, 145);
-	_txtLevel = new Text (20, 25, 281, 75);
+	_txtLevel = new Text(20, 25, 281, 75);
+	
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_surface);
 	add(_miniMapView);
 	add(btnLvlUp);

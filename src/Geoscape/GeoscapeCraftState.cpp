@@ -74,7 +74,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtHWP = new Text(80, 9, 164, 76);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnBase);
@@ -275,14 +275,6 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 GeoscapeCraftState::~GeoscapeCraftState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void GeoscapeCraftState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

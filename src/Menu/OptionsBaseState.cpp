@@ -71,6 +71,16 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
 
 	_txtTooltip = new Text(305, 25, 8, 148);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 
 	add(_btnVideo);
@@ -170,6 +180,7 @@ void OptionsBaseState::restart(Game *game, OptionsOrigin origin)
  */
 void OptionsBaseState::init()
 {
+	State::init();
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();

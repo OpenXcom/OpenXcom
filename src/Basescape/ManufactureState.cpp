@@ -63,12 +63,8 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtTimeLeft = new Text(55, 18, 260, 44);
 	_lstManufacture = new TextList(307, 90, 8, 80);
 
-	// back up palette in case we're being called from Geoscape!
-	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256*sizeof(SDL_Color));
-
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnNew);
@@ -166,8 +162,9 @@ ManufactureState::~ManufactureState()
  * Updates the production list
  * after going to other screens.
  */
-void ManufactureState::init ()
+void ManufactureState::init()
 {
+	State::init();
 	fillProductionList();
 }
 
@@ -177,9 +174,6 @@ void ManufactureState::init ()
  */
 void ManufactureState::btnOkClick(Action *)
 {
-	// restore palette
-	_game->setPalette(_oldPalette);
-	
 	_game->popState();
 }
 
@@ -197,9 +191,9 @@ void ManufactureState::btnNewProductionClick(Action *)
  */
 void ManufactureState::fillProductionList()
 {
-	const std::vector<Production *> productions(_base->getProductions ());
+	const std::vector<Production *> productions(_base->getProductions());
 	_lstManufacture->clearList();
-	for(std::vector<Production *>::const_iterator iter = productions.begin (); iter != productions.end (); ++iter)
+	for(std::vector<Production *>::const_iterator iter = productions.begin(); iter != productions.end(); ++iter)
 	{
 		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
@@ -215,8 +209,8 @@ void ManufactureState::fillProductionList()
 		{
 			int timeLeft;
 			if (Options::allowAutoSellProduction && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
-				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
-			else timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
+				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
+			else timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
@@ -227,7 +221,7 @@ void ManufactureState::fillProductionList()
 
 			s4 << L"-";
 		}
-		_lstManufacture->addRow (5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
+		_lstManufacture->addRow(5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}
 	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE").arg(_base->getAvailableEngineers()));
 	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED").arg(_base->getAllocatedEngineers()));
@@ -240,7 +234,7 @@ void ManufactureState::fillProductionList()
  */
 void ManufactureState::lstManufactureClick(Action *)
 {
-	const std::vector<Production *> productions(_base->getProductions ());
+	const std::vector<Production*> productions(_base->getProductions());
 	_game->pushState(new ManufactureInfoState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
 }
 

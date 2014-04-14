@@ -49,7 +49,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -88,21 +88,12 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 }
 
 /**
- * Resets the palette.
- */
-void NewPossibleManufactureState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-}
-
-/**
  * return to the previous screen
  * @param action Pointer to an action.
  */
 void NewPossibleManufactureState::btnOkClick(Action *)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**
@@ -114,4 +105,5 @@ void NewPossibleManufactureState::btnManufactureClick(Action *)
 	_game->popState();
 	_game->pushState (new ManufactureState(_game, _base));
 }
+
 }

@@ -50,7 +50,7 @@ public:
 	SelectDestinationState(Game *game, Craft *craft, Globe *globe);
 	/// Cleans up the Select Destination state.
 	~SelectDestinationState();
-	/// Updates the palette.
+	/// Resets globe.
 	void init();
 	/// Runs the timer.
 	void think();

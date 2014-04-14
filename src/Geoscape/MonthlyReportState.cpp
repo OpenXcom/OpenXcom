@@ -60,7 +60,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_btnOk);
@@ -229,14 +229,6 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 MonthlyReportState::~MonthlyReportState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void MonthlyReportState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 }
 
 /**
