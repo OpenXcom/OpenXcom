@@ -564,7 +564,7 @@ std::vector<std::string> getDataContents(const std::string &folder, const std::s
 	std::vector<std::string> files;
 
 	// Check current data path
-	std::string current = caseInsensitive(Options::getDataFolder(), folder);
+	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
 	if (current != "")
 	{
 		std::vector<std::string> contents = getFolderContents(current, ext);
@@ -577,7 +577,7 @@ std::vector<std::string> getDataContents(const std::string &folder, const std::s
 	// Check every other path
 	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
-		std::string path = caseInsensitive(*i, folder);
+		std::string path = caseInsensitiveFolder(*i, folder);
 		if (path == current)
 		{
 			continue;
