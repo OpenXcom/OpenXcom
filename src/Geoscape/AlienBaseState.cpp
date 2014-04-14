@@ -57,7 +57,7 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 
 	centerAllSurfaces();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

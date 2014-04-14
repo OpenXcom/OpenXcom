@@ -68,7 +68,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_btnOk);

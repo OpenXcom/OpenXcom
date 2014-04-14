@@ -53,6 +53,9 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 {
 	_screen = false;
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	for (int i = 0; i < 6; ++i)
 	{
 		_actionMenu[i] = new ActionMenuItem(i, _game, x, y);

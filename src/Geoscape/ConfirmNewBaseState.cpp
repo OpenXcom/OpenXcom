@@ -54,7 +54,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_txtArea = new Text(120, 9, 68, 90);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -120,7 +120,7 @@ void ConfirmNewBaseState::btnOkClick(Action *)
 	}
 	else
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(8)+10, "BACK01.SCR", 0));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 0));
 	}
 }
 

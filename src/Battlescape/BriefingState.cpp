@@ -59,22 +59,20 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
 	// Set palette
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 2);
 		_game->getResourcePack()->playMusic("GMENBASE");
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 6);
 		_game->getResourcePack()->playMusic("GMNEWMAR");
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 0);
 		_game->getResourcePack()->playMusic("GMDEFEND");
 	}
 

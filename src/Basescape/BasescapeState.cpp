@@ -83,7 +83,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnGeoscape = new TextButton(128, 12, 192, 188);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_mini);
@@ -208,6 +208,7 @@ BasescapeState::~BasescapeState()
  */
 void BasescapeState::init()
 {
+	State::init();
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false;
@@ -367,7 +368,6 @@ void BasescapeState::btnTransferClick(Action *)
 void BasescapeState::btnGeoscapeClick(Action *)
 {
 	_game->popState();
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
 /**
@@ -382,12 +382,12 @@ void BasescapeState::viewLeftClick(Action *)
 		// Is facility in use?
 		if (fac->inUse())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected?
 		else if (!_base->getDisconnectedFacilities(fac).empty())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{

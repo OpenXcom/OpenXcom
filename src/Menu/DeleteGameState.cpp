@@ -51,9 +51,13 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::st
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 6);
 	}
 
 	add(_window);
@@ -109,9 +113,9 @@ void DeleteGameState::btnYesClick(Action *)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, error, _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error, _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

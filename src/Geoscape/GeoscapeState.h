@@ -20,7 +20,7 @@
 #define OPENXCOM_GEOSCAPESTATE_H
 
 #include "../Engine/State.h"
-#include <vector>
+#include <list>
 
 namespace OpenXcom
 {
@@ -53,8 +53,8 @@ private:
 	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
 	bool _pause, _zoomInEffectDone, _zoomOutEffectDone;
 	Text *_txtDebug;
-	std::vector<State*> _popups;
-	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
+	std::list<State*> _popups;
+	std::list<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 public:
 	/// Creates the Geoscape state.

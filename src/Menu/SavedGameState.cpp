@@ -70,9 +70,13 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, int firstValidR
 	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 6);
 	}
 
 	add(_window);
@@ -182,14 +186,11 @@ void SavedGameState::init()
 		_game->popState();
 		return;
 	}
+	State::init();
 
 	_txtStatus->setText(L"");
 
-	if (_origin != OPT_BATTLESCAPE)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-	}
-	else
+	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();
 	}

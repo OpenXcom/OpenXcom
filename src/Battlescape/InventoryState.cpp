@@ -87,6 +87,9 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_bg);
 	add(_soldier);
 	add(_txtName);
@@ -221,6 +224,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	State::init();
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	// no selected unit, close inventory

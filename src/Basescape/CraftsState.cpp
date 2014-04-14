@@ -55,7 +55,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts = new TextList(288, 118, 8, 58);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 3);
 
 	add(_window);
 	add(_btnOk);
@@ -126,6 +126,7 @@ CraftsState::~CraftsState()
  */
 void CraftsState::init()
 {
+	State::init();
 	_lstCrafts->clearList();
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{

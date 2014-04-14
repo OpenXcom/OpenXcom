@@ -32,6 +32,8 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/Base.h"
@@ -77,8 +79,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -231,14 +232,16 @@ CraftEquipmentState::~CraftEquipmentState()
 */
 void CraftEquipmentState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	State::init();
 
 	_game->getSavedGame()->setBattleGame(0);
 
 	Craft *c = _base->getCrafts()->at(_craft);
 	c->setInBattlescape(false);
+
+	// Restore system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
 
 /**
@@ -576,7 +579,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-					_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_game->pushState(new ErrorMessageState(_game, msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
 			}
 			else
@@ -628,8 +631,11 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.runInventory(craft);
 
+		// Fix system colors
+		_game->getCursor()->setColor(Palette::blockOffset(9));
+		_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+
 		_game->getScreen()->clear();
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 		_game->pushState(new InventoryState(_game, false, 0));
 	}
 }

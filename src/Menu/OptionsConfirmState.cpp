@@ -50,6 +50,16 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
 	_txtTimer = new Text(206, 20, 57, 100);
 	_timer = new Timer(1000);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);

@@ -48,8 +48,7 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game)
 	_btnOk = new TextButton(160, 14, 80, 174);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 7);
 
 	add(_window);
 	add(_btnOk);
@@ -100,23 +99,18 @@ PsiTrainingState::~PsiTrainingState()
 }
 
 /**
- * Resets the palette.
- */
-void PsiTrainingState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void PsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
+/**
+ * Goes to the allocation screen for the corresponding base.
+ * @param action Pointer to an action.
+ */
 void PsiTrainingState::btnBaseXClick(Action *action)
 {
 	for (size_t i = 0; i < _btnBases.size(); ++i)

@@ -52,7 +52,7 @@ SackSoldierState::SackSoldierState(Game *game, Base *base, size_t soldierId) : S
 	_txtSoldier = new Text(142, 9, 89, 85);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);

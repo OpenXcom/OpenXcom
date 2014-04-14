@@ -415,6 +415,7 @@ UnitInfoState::~UnitInfoState()
  */
 void UnitInfoState::init()
 {
+	State::init();
 	std::wostringstream ss;
 	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
