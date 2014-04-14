@@ -77,7 +77,7 @@ struct HairBleach
 XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
 {
 	// Load palettes
-	char *pal[] = {"PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA"};
+	const char *pal[] = {"PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA"};
 	for (int i = 0; i < sizeof(pal) / sizeof(pal[0]); ++i)
 	{
 		std::string s = "GEODATA/PALETTES.DAT";

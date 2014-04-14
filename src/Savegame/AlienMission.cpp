@@ -326,6 +326,10 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, 0, globe, regionRules);
 	ufo->setAltitude(trajectory.getAltitude(0));
+	if (trajectory.getAltitude(0) == "STR_GROUND")
+	{
+		ufo->setSecondsRemaining(trajectory.groundTimer());
+	}
 	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
