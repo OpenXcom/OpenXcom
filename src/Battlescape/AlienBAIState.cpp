@@ -515,7 +515,7 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode != 0)
 		{
-			if (_reachable.empty() || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_toNode->getPosition()))  == _reachable.end())
+			if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_toNode->getPosition()))  == _reachable.end())
 			{
 				_toNode = 0;
 			}
@@ -563,7 +563,7 @@ void AlienBAIState::setupAmbush()
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
 			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous() ||
-				_reachableWithAttack.empty() || std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
+				std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
 				continue; // just ignore unreachable tiles
 
 			if (_traceAI)
@@ -845,7 +845,7 @@ void AlienBAIState::setupEscape()
 		else
 		{
 			spotters = getSpottingUnits(_escapeAction->target);
-			if (_reachable.empty() || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_escapeAction->target))  == _reachable.end())
+			if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_escapeAction->target))  == _reachable.end())
 				continue; // just ignore unreachable tiles
 					
 			if (_spottingEnemies || spotters)
@@ -1101,7 +1101,7 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 				if (x || y) // skip the unit itself
 				{
 					Position checkPath = target->getPosition() + Position (x, y, z);
-					if (_save->getTile(checkPath) == 0 || _reachable.empty() || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
+					if (_save->getTile(checkPath) == 0 || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
 						continue;
 					int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
 					bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
@@ -1370,7 +1370,6 @@ bool AlienBAIState::findFirePoint()
 		Position pos = _unit->getPosition() + *i;
 		Tile *tile = _save->getTile(pos);
 		if (tile == 0  ||
-			_reachableWithAttack.empty() ||
 			std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
 			continue;
 		int score = 0;

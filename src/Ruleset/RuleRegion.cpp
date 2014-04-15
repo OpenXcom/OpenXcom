@@ -72,7 +72,7 @@ void RuleRegion::load(const YAML::Node &node)
 				MissionArea ma;
 				ma.lonMin = ma.lonMax = (*i)["lon"].as<double>(0.0);
 				ma.latMin = ma.latMax = (*i)["lat"].as<double>(0.0);
-				if (_missionZones.at(3).areas.empty() || std::find(_missionZones.at(3).areas.begin(), _missionZones.at(3).areas.end(), ma) == _missionZones.at(3).areas.end())
+				if (std::find(_missionZones.at(3).areas.begin(), _missionZones.at(3).areas.end(), ma) == _missionZones.at(3).areas.end())
 				{
 					_missionZones.at(3).areas.push_back(ma);
 				}

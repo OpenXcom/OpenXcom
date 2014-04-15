@@ -2430,7 +2430,7 @@ void BattleUnit::invalidateCache()
 	_cacheInvalid = true;
 }
 
-std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
+std::vector<BattleUnit *> &BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }

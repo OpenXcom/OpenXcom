@@ -585,7 +585,6 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 			if (_unit && _unit->getFaction() == unit->getFaction()) return true;
 			if (_unit && _unit->getFaction() == FACTION_HOSTILE && 
-				!_unit->getUnitsSpottedThisTurn().empty() &&
 				std::find(_unit->getUnitsSpottedThisTurn().begin(), _unit->getUnitsSpottedThisTurn().end(), unit) != _unit->getUnitsSpottedThisTurn().end()) return true;
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
