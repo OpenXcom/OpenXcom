@@ -588,9 +588,9 @@ void BattlescapeState::mapOver(Action *action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleScrollDragButton))) { // so we missed again the mouse-release :(
+		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton))) { // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::battleScrollDragTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_isMouseScrolled = _isMouseScrolling = false;
 			return;
@@ -598,7 +598,7 @@ void BattlescapeState::mapOver(Action *action)
 
 		_isMouseScrolled = true;
 
-		if (Options::battleScrollDragInvert)
+		if (Options::dragScrollInvert)
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -609,10 +609,10 @@ void BattlescapeState::mapOver(Action *action)
 		_totalMouseMoveX += action->getDetails()->motion.xrel;
 		_totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!_mouseMovedOverThreshold)
-			_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::battleScrollDragPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::battleScrollDragPixelTolerance));
+			_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance));
 
 		// Scrolling
-		if (Options::battleScrollDragInvert)
+		if (Options::dragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
 				-action->getDetails()->motion.xrel,
@@ -643,7 +643,7 @@ void BattlescapeState::mapPress(Action *action)
 	int mx = int(action->getAbsoluteXMouse());
 	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
 
-	if (action->getDetails()->button.button == Options::battleScrollDragButton)
+	if (action->getDetails()->button.button == Options::battleDragScrollButton)
 	{
 		_isMouseScrolling = true;
 		_isMouseScrolled = false;
@@ -667,10 +667,10 @@ void BattlescapeState::mapClick(Action *action)
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now an other button is used)
 	if (_isMouseScrolling) {
-		if (action->getDetails()->button.button != Options::battleScrollDragButton
-		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleScrollDragButton))) { // so we missed again the mouse-release :(
+		if (action->getDetails()->button.button != Options::battleDragScrollButton
+		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton))) { // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::battleScrollDragTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_isMouseScrolled = _isMouseScrolling = false;
 		}
@@ -680,9 +680,9 @@ void BattlescapeState::mapClick(Action *action)
 	if (_isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == Options::battleScrollDragButton) _isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == Options::battleDragScrollButton) _isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::battleScrollDragTimeTolerance)))
+		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 		{
 			_isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);

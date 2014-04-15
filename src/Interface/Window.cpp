@@ -133,7 +133,7 @@ void Window::popup()
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)
 		{
-			soundPopup[sound]->play();
+			soundPopup[sound]->play(0);
 		}
 	}
 	if (_popupStep < 1.0)
