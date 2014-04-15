@@ -49,11 +49,6 @@ namespace {
  */
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
 {
-	// the last set of mission zones are WAY outside the region.
-	if (zone == region.getMissionZones().size())
-	{
-		zone--;
-	}
 	std::pair<double, double> pos;
 	do
 	{
@@ -667,13 +662,13 @@ void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
  */
 std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &trajectory, const unsigned int nextWaypoint, const Globe &globe, const RuleRegion &region)
 {
+	/* LOOK MA! NO HANDS!
 	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
 	{
 		return getLandPoint(globe, region, trajectory.getZone(nextWaypoint));
 	}
 	else
-	{
+	*/
 		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
-	}
 }
 }
