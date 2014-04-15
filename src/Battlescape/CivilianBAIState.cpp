@@ -379,7 +379,7 @@ void CivilianBAIState::setupEscape()
 		else
 		{
 			spotters = getSpottingUnits(_escapeAction->target);
-			if (std::find(reachable.begin(), reachable.end(), _save->getTileIndex(tile->getPosition()))  == reachable.end()) continue; // just ignore unreachable tiles
+			if (reachable.empty() || std::find(reachable.begin(), reachable.end(), _save->getTileIndex(tile->getPosition()))  == reachable.end()) continue; // just ignore unreachable tiles
 					
 			if (_spottingEnemies || spotters)
 			{
