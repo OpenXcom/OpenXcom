@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _craftX(0), _craftY(0)
+														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _craftX(0), _craftY(0), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -607,7 +607,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 	{
 		for (std::vector<std::vector<int> >::const_iterator i = _craft->getRules()->getDeployment().begin(); i != _craft->getRules()->getDeployment().end(); ++i)
 		{
-			Position pos = Position((*i)[0] + (_craftX * 10), (*i)[1] + (_craftY * 10), (*i)[2]);
+			Position pos = Position((*i)[0] + (_craftX * 10), (*i)[1] + (_craftY * 10), (*i)[2] + _craftZ);
 			int dir = (*i)[3];
 
 			if (canPlaceXCOMUnit(_save->getTile(pos)))
@@ -1508,7 +1508,7 @@ void BattlescapeGenerator::generateMap()
 			}
 			_save->getMapDataSets()->push_back(*i);
 		}
-		loadMAP(craftMap, _craftX * 10, _craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);
+		loadMAP(craftMap, _craftX * 10, _craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true, true);
 		loadRMP(craftMap, _craftX * 10, _craftY * 10, Node::CRAFTSEGMENT);
 		for (int i = 0; i < craftMap->getSizeX() / 10; ++i)
 		{
@@ -1587,7 +1587,7 @@ void BattlescapeGenerator::generateMap()
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order.
  */
-int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int mapDataSetOffset, bool discovered)
+int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int mapDataSetOffset, bool discovered, bool craft)
 {
 	int sizex, sizey, sizez;
 	int x = xoff, y = yoff, z = 0;
@@ -1624,6 +1624,10 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 		if (floor != 0)
 		{
 			z += i;
+			if (craft)
+			{
+				_craftZ = i;
+			}
 			break;
 		}
 	}

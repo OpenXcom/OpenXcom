@@ -63,7 +63,7 @@ private:
 	std::string _alienRace;
 	int _alienItemLevel;
 	bool _allowAutoLoadout;
-	int _craftX, _craftY;
+	int _craftX, _craftY, _craftZ;
 
 	/// Generates a new battlescape map.
 	void generateMap();
@@ -80,7 +80,7 @@ private:
 	/// Adds an item to a unit and the game.
 	bool addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip = false);
 	/// Loads an XCom MAP file.
-	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false);
+	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false, bool craft = false);
 	/// Loads an XCom RMP file.
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
 	/// Fills power sources with an elerium-115 object.

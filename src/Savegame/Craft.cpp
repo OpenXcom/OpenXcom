@@ -282,12 +282,7 @@ int Craft::getId() const
  */
 std::wstring Craft::getName(Language *lang) const
 {
-	if (_name.empty())
-	{
-		std::wostringstream name;
-		name << lang->getString(_rules->getType()) << "-" << _id;
-		return name.str();
-	}
+	if (_name.empty()) return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
 	return _name;
 }
 

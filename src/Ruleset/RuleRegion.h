@@ -34,6 +34,11 @@ namespace OpenXcom
 struct MissionArea
 {
 	double lonMin, lonMax, latMin, latMax;
+
+    bool operator== (const MissionArea& ma) const
+	{
+		return lonMax == ma.lonMax && lonMin == ma.lonMin && latMax == ma.latMax && latMin == ma.latMin;
+	}
 };
 
 /**
