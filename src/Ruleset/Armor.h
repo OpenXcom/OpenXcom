@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,9 +24,12 @@
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
 #include "Unit.h"
+#include "../Engine/Script.h"
 
 namespace OpenXcom
 {
+
+class BattleUnit;
 
 /**
  * Represents a specific type of armor.
@@ -46,13 +49,14 @@ private:
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
+	Script<BattleUnit>* _recolorScript;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
 	/// Cleans up the armor ruleset.
 	~Armor();
 	/// Loads the armor data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, const ScriptParser<BattleUnit>& parser);
 	/// Gets the armor's type.
 	std::string getType() const;
 	/// Gets the unit's sprite sheet.
@@ -87,6 +91,8 @@ public:
 	UnitStats *getStats();
 	/// Gets the armor's weight.
 	int getWeight();
+	/// Gets script used to recolor unit.
+	Script<BattleUnit>* getRecolorScript();
 };
 
 }

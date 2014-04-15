@@ -518,4 +518,14 @@ void BattleItem::setTurnFlag(bool flag)
 {
 	_droppedOnAlienTurn = flag;
 }
+
+void BattleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
+{
+	getRules()->drawHandSprite(texture, surface);
+	BattleUnit* itemUnit = getUnit();
+	if(itemUnit)
+	{
+		itemUnit->blitRecolored(surface, surface);
+	}
+}
 }

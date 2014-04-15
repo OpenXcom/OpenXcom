@@ -222,13 +222,17 @@ void Inventory::drawItems()
 			}
 			else if ((*i)->getSlot()->getType() == INV_HAND)
 			{
-				frame->setX((*i)->getSlot()->getX() + (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
-				frame->setY((*i)->getSlot()->getY() + (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
+				frame->setX((*i)->getSlot()->getX() + (*i)->getRules()->getHandSpriteOffX());
+				frame->setY((*i)->getSlot()->getY() + (*i)->getRules()->getHandSpriteOffY());
 			}
-			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+			BattleUnit* corpse = (*i)->getUnit();
+			if (corpse)
+				corpse->blitRecolored(frame, _items);
+			else
+				frame->blit(_items);
 		}
-		Surface *stackLayer = new Surface(getWidth(), getHeight(), 0, 0);
-		stackLayer->setPalette(getPalette());
+		Surface stackLayer(getWidth(), getHeight(), 0, 0);
+		stackLayer.setPalette(getPalette());
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
@@ -238,7 +242,11 @@ void Inventory::drawItems()
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
-			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+			BattleUnit* corpse = (*i)->getUnit();
+			if (corpse)
+				corpse->blitRecolored(frame, _items);
+			else
+				frame->blit(_items);
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
 			{
 				_stackNumber->setX(((*i)->getSlot()->getX() + (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset) * RuleInventory::SLOT_W)-3);
@@ -250,7 +258,7 @@ void Inventory::drawItems()
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
 				_stackNumber->setColor(Palette::blockOffset(4)+2);
-				_stackNumber->blit(stackLayer);
+				_stackNumber->blit(&stackLayer);
 			}
 		}
 
@@ -260,18 +268,17 @@ void Inventory::drawItems()
 		{
 			for (int y = -1; y <= 1; y += 2)
 			{
-				stackLayer->blitNShade(_items, x, y, 11);
+				stackLayer.blitNShade(_items, x, y, 11);
 			}
 		}
 		// this is the "slightly darker" version that goes in four cardinals.
 		for (int z = -1; z <= 1; z += 2)
 		{
-			stackLayer->blitNShade(_items, z, 0, 8);
-			stackLayer->blitNShade(_items, 0, z, 8);
+			stackLayer.blitNShade(_items, z, 0, 8);
+			stackLayer.blitNShade(_items, 0, z, 8);
 		}
 		// and finally the number itself
-		stackLayer->blit(_items);
-		delete stackLayer;
+		stackLayer.blit(_items);
 	}
 }
 
@@ -406,7 +413,15 @@ void Inventory::setSelectedItem(BattleItem *item)
 		{
 			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
 		}
-		_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
+		RuleItem* item = _selItem->getRules();
+		BattleUnit* corpse = _selItem->getUnit();
+		Surface *frame = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK")->getFrame(item->getBigSprite());
+		frame->setX(item->getHandSpriteOffX());
+		frame->setY(item->getHandSpriteOffY());
+		if (corpse)
+			corpse->blitRecolored(frame, _selection);
+		else
+			frame->blit(_selection);
 	}
 	drawItems();
 }

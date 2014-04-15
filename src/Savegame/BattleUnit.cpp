@@ -24,6 +24,7 @@
 #include <typeinfo>
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/ScriptBind.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Battlescape/Pathfinding.h"
@@ -37,9 +38,33 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "Tile.h"
 #include "SavedGame.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
+
+/**
+ * Helper namespace for BattleUnit::recolorSprite
+ */
+namespace
+{
+
+struct ColorCopy
+{
+	static const Uint8 Face = 6;
+	static const Uint8 Hair = 9;
+	static inline void func(Uint8& dest, const Uint8& src, int, int, int)
+	{
+		if(src)
+		{
+			dest = src;
+		}
+	}
+};
+
+} //namespace
 
 /**
  * Initializes a BattleUnit from a Soldier
@@ -52,7 +77,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+																_geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false),
+																_nationalColors(false), _faceColor(0), _hairColor(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -105,6 +131,30 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+	_nationalColors = Options::battleHairBleach;
+	if(_nationalColors)
+	{
+		SoldierLook look = getGeoscapeSoldier()->getLook();
+
+		_faceColor = ColorCopy::Face<<4;
+		_hairColor = ColorCopy::Hair<<4;
+		switch(look)
+		{
+			case LOOK_BLONDE:
+				break;
+			case LOOK_BROWNHAIR:
+				_hairColor = (10<<4) + 4;
+				break;
+			case LOOK_ORIENTAL:
+				_faceColor = (10<<4);
+				_hairColor = (15<<4) + 5;
+				break;
+			case LOOK_AFRICAN:
+				_faceColor = (10<<4) + 3;
+				_hairColor = (10<<4) + 6;
+				break;
+		}
+	}
 }
 
 /**
@@ -121,7 +171,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																						_turretType(-1), _hidingForTurn(false)
+																						_turretType(-1), _hidingForTurn(false),
+																						_nationalColors(false), _faceColor(0), _hairColor(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -163,9 +214,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
-	
+
 	lastCover = Position(-1, -1, -1);
-	
 }
 
 
@@ -2060,15 +2110,24 @@ int BattleUnit::getMotionPoints() const
 	return _motionPoints;
 }
 
+/**
+ * Gets the unit's armor.
+ * @return Pointer to armor.
+ */
+Armor *BattleUnit::getArmor()
+{
+	return _armor;
+}
 
 /**
  * Gets the unit's armor.
  * @return Pointer to armor.
  */
-Armor *BattleUnit::getArmor() const
+const Armor *BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
+
 /**
  * Get unit's name.
  * An aliens name is the translation of it's race and rank.
@@ -2098,11 +2157,21 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 
 	return _name;
 }
+
 /**
   * Gets pointer to the unit's stats.
   * @return stats Pointer to the unit's stats.
   */
 UnitStats *BattleUnit::getStats()
+{
+	return &_stats;
+}
+
+/**
+  * Gets pointer to the unit's stats.
+  * @return stats Pointer to the unit's stats.
+  */
+const UnitStats *BattleUnit::getStats() const
 {
 	return &_stats;
 }
@@ -2571,4 +2640,80 @@ bool BattleUnit::hasInventory() const
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
 
+/**
+ * Function used to recoloring sprite based on nationality of unit
+ * @param surf surface to recolor
+ */
+void BattleUnit::blitRecolored(Surface* src, Surface* dest) const
+{
+	Script<BattleUnit>* scr = _armor->getRecolorScript();
+	if(scr)
+	{
+		ScriptWorkRef ref;
+		scr->update(ref, this);
+		scr->executeBlit(ref, src, dest);
+	}
+	else
+	{
+		ShaderDraw<ColorCopy>(ShaderSurface(dest, 0, 0), ShaderSurface(src));
+	}
 }
+
+void BattleUnit::registScript(ScriptParser<BattleUnit>* parser)
+{
+	using namespace helper;
+	typedef BattleUnit BU;
+	typedef UnitStats US;
+	typedef Soldier S;
+	typedef Armor A;
+
+	typedef Bind<BU> bBU;
+	typedef BindFun<bBU, US, &BU::getStats> bUS;
+	typedef BindFun<bBU, A, &BU::getArmor> bA;
+	typedef BindPtr<bBU, S, &BU::_geoscapeSoldier> bS;
+
+	parser->addFunction("health", &geter<bBU, &BU::_health>);
+	parser->addFunction("health_max", &geter<bUS, &US::health>);
+	parser->addFunction("energy", &geter<bBU, &BU::_energy>);
+	parser->addFunction("energy_max", &geter<bUS, &US::stamina>);
+	parser->addFunction("stun", &geter<bBU, &BU::_stunlevel>);
+	parser->addFunction("stun_max", &geter<bBU, &BU::_health>);
+	parser->addFunction("morale", &geter<bBU, &BU::_morale>);
+	parser->addFunction("morale_max", &geter<bBU, &BU::_morale>);
+
+	parser->addFunction("fatalwounds", &geter<bBU, &BU::getFatalWounds>);
+	parser->addFunction("fatalwounds_head", &geter<bBU, &BU::getFatalWound, BODYPART_HEAD>);
+	parser->addFunction("fatalwounds_torso", &geter<bBU, &BU::getFatalWound, BODYPART_TORSO>);
+	parser->addFunction("fatalwounds_leftarm", &geter<bBU, &BU::getFatalWound, BODYPART_LEFTARM>);
+	parser->addFunction("fatalwounds_rightarm", &geter<bBU, &BU::getFatalWound, BODYPART_RIGHTARM>);
+	parser->addFunction("fatalwounds_leftleg", &geter<bBU, &BU::getFatalWound, BODYPART_LEFTLEG>);
+	parser->addFunction("fatalwounds_rightleg", &geter<bBU, &BU::getFatalWound, BODYPART_RIGHTLEG>);
+
+	parser->addFunction("armor_front", &geter<bBU, UnitSide, &BU::getArmor, SIDE_FRONT>);
+	parser->addFunction("armor_left", &geter<bBU, UnitSide, &BU::getArmor, SIDE_LEFT>);
+	parser->addFunction("armor_right", &geter<bBU, UnitSide, &BU::getArmor, SIDE_RIGHT>);
+	parser->addFunction("armor_rear", &geter<bBU, UnitSide, &BU::getArmor, SIDE_REAR>);
+	parser->addFunction("armor_under", &geter<bBU, UnitSide, &BU::getArmor, SIDE_UNDER>);
+
+	parser->addFunction("unit_id", &geter<bBU, &BU::_id>);
+	parser->addFunction("unit_rank", &geter<bBU, &BU::_rankInt>);
+	parser->addFunction("unit_float", &geter_cast<bBU, bool, &BU::_floating>);
+	parser->addFunction("unit_kneel", &geter_cast<bBU, bool, &BU::_kneeled>);
+
+	parser->addFunction("soldier_hair", &geter_cast<bBU, Uint8, &BU::_hairColor>);
+	parser->addFunction("soldier_face", &geter_cast<bBU, Uint8, &BU::_faceColor>);
+	parser->addFunction("color_hair", &geter_const<bBU, ColorCopy::Hair>);
+	parser->addFunction("color_face", &geter_const<bBU, ColorCopy::Face>);
+
+	parser->addFunction("soldier_look", &geter_cast<bS, SoldierLook, &S::getLook>);
+	parser->addFunction("soldier_look_blonde", &geter_const<bBU, LOOK_BLONDE>);
+	parser->addFunction("soldier_look_brownhair", &geter_const<bBU, LOOK_BROWNHAIR>);
+	parser->addFunction("soldier_look_oriental", &geter_const<bBU, LOOK_ORIENTAL>);
+	parser->addFunction("soldier_look_african", &geter_const<bBU, LOOK_AFRICAN>);
+
+	parser->addFunction("soldier_grender", &geter_cast<bS, SoldierGender, &S::getGender>);
+	parser->addFunction("soldier_grender_male", &geter_const<bBU, GENDER_MALE>);
+	parser->addFunction("soldier_grender_female", &geter_const<bBU, GENDER_FEMALE>);
+}
+
+} //namespace OpenXcom

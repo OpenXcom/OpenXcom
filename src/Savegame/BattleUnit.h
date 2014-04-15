@@ -26,6 +26,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
+#include "../Engine/Script.h"
 #include "Soldier.h"
 
 namespace OpenXcom
@@ -112,8 +113,15 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	bool _nationalColors;
+	Uint8 _faceColor;
+	Uint8 _hairColor;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
+
+	/// Regist all useful function
+	static void registScript(ScriptParser<BattleUnit>* parser);
+
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
@@ -318,11 +326,15 @@ public:
 	/// Get motion points for the motion scanner.
 	int getMotionPoints() const;
 	/// Gets the unit's armor.
-	Armor *getArmor() const;
+	Armor *getArmor();
+	/// Gets the unit's armor.
+	const Armor *getArmor() const;
 	/// Gets the unit's name.
 	std::wstring getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
 	UnitStats *getStats();
+	/// Gets the unit's stats.
+	const UnitStats *getStats() const;
 	/// Get the unit's stand height.
 	int getStandHeight() const;
 	/// Get the unit's kneel height.
@@ -419,6 +431,8 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Recolor sprite
+	void blitRecolored(Surface* src, Surface* dest) const;
 };
 
 }
