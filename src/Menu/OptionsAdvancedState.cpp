@@ -187,7 +187,8 @@ OptionInfo *OptionsAdvancedState::getSetting(size_t sel)
  */
 void OptionsAdvancedState::lstOptionsClick(Action *action)
 {
-	if (action->getDetails()->button.button != SDL_BUTTON_LEFT && action->getDetails()->button.button != SDL_BUTTON_RIGHT)
+	Uint8 button = action->getDetails()->button.button;
+	if (button != SDL_BUTTON_LEFT && button != SDL_BUTTON_RIGHT)
 	{
 		return;
 	}
@@ -206,10 +207,10 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 	{
 		int *i = setting->asInt();
 
-		int increment = 1;
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		int increment = (button == SDL_BUTTON_LEFT) ? 1 : -1; // left-click increases, right-click decreases
+		if (i == &Options::changeValueByMouseWheel)
 		{
-			increment = -1;
+			increment *= 10;
 		}
 		*i += increment;
 
@@ -220,10 +221,10 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 			min = 0;
 			max = 3;
 		}
-		else if (i == &Options::maxFrameSkip)
+		else if (i == &Options::changeValueByMouseWheel)
 		{
 			min = 0;
-			max = 10;
+			max = 50;
 		}
 		if (*i < min)
 		{

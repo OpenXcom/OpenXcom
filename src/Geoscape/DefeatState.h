@@ -34,23 +34,20 @@ class Timer;
 class DefeatState : public State
 {
 private:
-	InteractiveSurface *_window;
-	std::vector<Text*> _txtText;
-	int _screenNumber;
+	static const int SCREENS = 2;
+	InteractiveSurface *_bg[SCREENS];
+	Text *_text[SCREENS];
+	int _screen;
 	Timer *_timer;
 public:
 	/// Creates the Defeat state.
 	DefeatState(Game *game);
 	/// Cleans up the Defeat state.
 	~DefeatState();
-	/// Initializes the slideshow.
-	void init();
 	/// Handle timers.
 	void think();
 	/// Handler for clicking the screen.
-	void windowClick(Action *action);
-	/// Moves to the next screen.
-	void nextScreen();
+	void screenClick(Action *action);
 };
 
 }

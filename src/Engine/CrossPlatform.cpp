@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
+#include <set>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
@@ -389,20 +390,16 @@ std::string getDataFile(const std::string &filename)
 #endif
 
 	// Check current data path
-	std::string current = caseInsensitive(Options::getDataFolder(), name);
-	if (current != "")
+	std::string path = caseInsensitive(Options::getDataFolder(), name);
+	if (path != "")
 	{
-		return current;
+		return path;
 	}
 
 	// Check every other path
 	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		std::string path = caseInsensitive(*i, name);
-		if (path == current)
-		{
-			continue;
-		}
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
@@ -429,20 +426,16 @@ std::string getDataFolder(const std::string &foldername)
 #endif
 
 	// Check current data path
-	std::string current = caseInsensitiveFolder(Options::getDataFolder(), name);
-	if (current != "")
+	std::string path = caseInsensitiveFolder(Options::getDataFolder(), name);
+	if (path != "")
 	{
-		return current;
+		return path;
 	}
 
 	// Check every other path
 	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		std::string path = caseInsensitiveFolder(*i, name);
-		if (path == current)
-		{
-			continue;
-		}
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
@@ -560,7 +553,7 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
  */
 std::vector<std::string> getDataContents(const std::string &folder, const std::string &ext)
 {
-	std::map<std::string, bool> unique;
+	std::set<std::string> unique;
 	std::vector<std::string> files;
 
 	// Check current data path
@@ -570,7 +563,7 @@ std::vector<std::string> getDataContents(const std::string &folder, const std::s
 		std::vector<std::string> contents = getFolderContents(current, ext);
 		for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
 		{
-			unique[*file] = true;
+			unique.insert(*file);
 		}
 	}
 
@@ -587,16 +580,12 @@ std::vector<std::string> getDataContents(const std::string &folder, const std::s
 			std::vector<std::string> contents = getFolderContents(path, ext);
 			for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
 			{
-				unique[*file] = true;
+				unique.insert(*file);
 			}
 		}
 	}
 
-	for (std::map<std::string, bool>::const_iterator i = unique.begin(); i != unique.end(); ++i)
-	{
-		files.push_back(i->first);
-	}
-
+	files = std::vector<std::string>(unique.begin(), unique.end());
 	return files;
 }
 

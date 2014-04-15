@@ -657,7 +657,7 @@ void GraphsState::drawCountryLines()
 
 			}
 		}
-		if (_countryToggles.back() && total > upperLimit)
+		if (_countryToggles.back()->_pushed && total > upperLimit)
 			upperLimit = total;
 	}
 
@@ -828,7 +828,7 @@ void GraphsState::drawRegionLines()
 				}
 			}
 		}
-		if (_regionToggles.back() && total > upperLimit)
+		if (_regionToggles.back()->_pushed && total > upperLimit)
 				upperLimit = total;
 	}
 

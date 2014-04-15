@@ -98,6 +98,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtFailure->setColor(Palette::blockOffset(8)+10);
 	_txtFailure->setBig();
 	_txtFailure->setAlign(ALIGN_CENTER);
+	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
 	_txtFailure->setWordWrap(true);
 	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
 	_txtFailure->setVisible(false);
