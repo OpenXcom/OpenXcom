@@ -520,7 +520,8 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 				(*j)->getSlot()->getId(),
 				(*j)->getSlotX(),
 				(*j)->getSlotY(),
-				ammo));
+				ammo,
+				(*j)->getFuseTimer()));
 	}
 
 	if (_curInventoryTemplate.empty())
