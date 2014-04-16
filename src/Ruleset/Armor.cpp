@@ -41,7 +41,7 @@ Armor::Armor(const std::string &type) :
  */
 Armor::~Armor()
 {
-
+	delete _recolorScript;
 }
 
 /**
