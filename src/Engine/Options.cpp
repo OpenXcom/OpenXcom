@@ -93,8 +93,6 @@ void create()
 	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 8));
 	_info.push_back(OptionInfo("battleEdgeScroll", (int*)&battleEdgeScroll, SCROLL_AUTO));
 	_info.push_back(OptionInfo("battleDragScrollButton", &battleDragScrollButton, SDL_BUTTON_MIDDLE));
-	_info.push_back(OptionInfo("dragScrollTimeTolerance", &dragScrollTimeTolerance, 300)); // miliSecond
-	_info.push_back(OptionInfo("dragScrollPixelTolerance", &dragScrollPixelTolerance, 10)); // count of pixels
 	_info.push_back(OptionInfo("battleFireSpeed", &battleFireSpeed, 6));
 	_info.push_back(OptionInfo("battleXcomSpeed", &battleXcomSpeed, 30));
 	_info.push_back(OptionInfo("battleAlienSpeed", &battleAlienSpeed, 30));
@@ -132,6 +130,8 @@ void create()
 	_info.push_back(OptionInfo("newSeedOnLoad", &newSeedOnLoad, false, "STR_NEWSEEDONLOAD", "STR_GENERAL"));
 	_info.push_back(OptionInfo("changeValueByMouseWheel", &changeValueByMouseWheel, 0, "STR_CHANGEVALUEBYMOUSEWHEEL", "STR_GENERAL"));
 	_info.push_back(OptionInfo("dragScrollInvert", &dragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_GENERAL")); // true drags away from the cursor, false drags towards (like a grab)
+	_info.push_back(OptionInfo("dragScrollTimeTolerance", &dragScrollTimeTolerance, 300, "STR_DRAGSCROLL_TIMETOLERANCE", "STR_GENERAL")); // miliSecond
+	_info.push_back(OptionInfo("dragScrollPixelTolerance", &dragScrollPixelTolerance, 10, "STR_DRAGSCROLL_PIXELTOLERANCE", "STR_GENERAL")); // count of pixels
 
 	_info.push_back(OptionInfo("aggressiveRetaliation", &aggressiveRetaliation, false, "STR_AGGRESSIVERETALIATION", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("customInitialBase", &customInitialBase, false, "STR_CUSTOMINITIALBASE", "STR_GEOSCAPE"));
