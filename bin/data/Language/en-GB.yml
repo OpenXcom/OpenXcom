@@ -1309,3 +1309,7 @@ en-GB:
   STR_DISPLAY_OPTIONS_CONFIRM: "Do you want to keep the current display options?"
   STR_DISPLAY_OPTIONS_REVERT: "Reverting in 0:{0}"
   STR_MISSING_CONTENT_PROMPT: "WARNING:{SMALLLINE}This save relies on mods that are unavailable. Missing content will be removed, and it may fail to load.{NEWLINE}Continue?"
+  STR_DRAGSCROLL_TIMETOLERANCE: "Drag-scrolling time tolerance"
+  STR_DRAGSCROLL_TIMETOLERANCE_DESC: "The time interval (in miliseconds) in which the mouse press&release events are considered as clicks instead of scrolling."
+  STR_DRAGSCROLL_PIXELTOLERANCE: "Drag-scrolling pixel tolerance"
+  STR_DRAGSCROLL_PIXELTOLERANCE_DESC: "The most number of pixels of mouse move (while scrollbutton is pressed) which are not yet considered as scrolling. (The scroll reverts on mouse release)"
