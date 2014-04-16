@@ -15,7 +15,7 @@ OPT SDL_GrabMode captureMouse;
 OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave;
 
 // Geoscape options
-OPT int geoClockSpeed, dogfightSpeed, globeScrollSpeed, globeScrollDragButton;
+OPT int geoClockSpeed, dogfightSpeed, globeScrollSpeed, globeScrollDragButton, geoscapeScale;
 OPT bool includePrimeStateInSavedLayout, anytimePsiTraining, weaponSelfDestruction, spendResearchedItems, craftLaunchAlways, globeSeasons, globeDetail, globeRadarLines, globeFlightPaths, globeAllRadarsOnBaseBuild,
 	alienContainmentLimitEnforced, canSellLiveAliens, canTransferCraftsWhileAirborne, canManufactureMoreItemsPerHour, customInitialBase, aggressiveRetaliation,
 	allowBuildingQueue, allowAutoSellProduction, showFundsOnGeoscape, psiStrengthEval;
@@ -26,7 +26,7 @@ OPT SDLKey keyGeoLeft, keyGeoRight, keyGeoUp, keyGeoDown, keyGeoZoomIn, keyGeoZo
 // Battlescape options
 OPT ScrollType battleEdgeScroll;
 OPT PathPreview battleNewPreviewPath;
-OPT int battleScrollSpeed, battleDragScrollButton, battleFireSpeed, battleXcomSpeed, battleAlienSpeed, battleExplosionHeight;
+OPT int battleScrollSpeed, battleDragScrollButton, battleFireSpeed, battleXcomSpeed, battleAlienSpeed, battleExplosionHeight, battlescapeScale;
 OPT bool traceAI, sneakyAI, battleInstantGrenade, battleNotifyDeath, battleTooltips, battleHairBleach, battleAutoEnd,
 	strafe, showMoreStatsInInventoryView, allowPsionicCapture, skipNextTurnScreen, disableAutoEquip,
 	battleUFOExtenderAccuracy, battleConfirmFireMode, battleSmoothCamera, TFTDDamage;
@@ -38,7 +38,7 @@ OPT SDLKey keyBattleLeft, keyBattleRight, keyBattleUp, keyBattleDown, keyBattleL
 
 // Flags and other stuff that don't need OptionInfo's.
 OPT bool mute, reload, newOpenGL, newScaleFilter, newHQXFilter;
-OPT int newDisplayWidth, newDisplayHeight;
+OPT int newDisplayWidth, newDisplayHeight, newBattlescapeScale, newGeoscapeScale;
 OPT std::string newOpenGLShader;
 OPT std::vector<std::string> rulesets;
 OPT std::vector<std::string> purchaseExclusions;

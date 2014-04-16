@@ -77,6 +77,8 @@ void create()
 	_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
 	_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
 	_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("geoscapeScale", &geoscapeScale, 0));
+	_info.push_back(OptionInfo("battlescapeScale", &battlescapeScale, 0));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
 	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
@@ -585,6 +587,8 @@ void backupDisplay()
 {
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
+	Options::newBattlescapeScale = Options::battlescapeScale;
+	Options::newGeoscapeScale = Options::geoscapeScale;
 	Options::newOpenGL = Options::useOpenGL;
 	Options::newScaleFilter = Options::useScaleFilter;
 	Options::newHQXFilter = Options::useHQXFilter;
@@ -601,6 +605,8 @@ void switchDisplay()
 	std::swap(displayHeight, newDisplayHeight);
 	std::swap(useOpenGL, newOpenGL);
 	std::swap(useScaleFilter, newScaleFilter);
+	std::swap(battlescapeScale, newBattlescapeScale);
+	std::swap(geoscapeScale, newGeoscapeScale);
 	std::swap(useHQXFilter, newHQXFilter);
 	std::swap(useOpenGLShader, newOpenGLShader);
 }

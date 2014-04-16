@@ -59,22 +59,20 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_btnDisplayResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
 	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
-	_gameSurface = new InteractiveSurface(110, 32, 210, 18);
-	_txtGameResolution = new Text(110, 9, 210, 8);
-	_txtGameSize = new Text(80, 17, 210, 26);
-	_btnGameResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 296, 18);
-	_btnGameResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 296, 36);
-
 	_txtLanguage = new Text(110, 9, 94, 52);
 	_cbxLanguage = new ComboBox(this, 100, 16, 94, 62);
 
 	_txtFilter = new Text(110, 9, 210, 52);
 	_cbxFilter = new ComboBox(this, 100, 16, 210, 62);
 
-	_txtMode = new Text(110, 9, 94, 82);
-	_btnWindowed = new TextButton(100, 16, 94, 92);
-	_btnFullscreen = new TextButton(100, 16, 94, 110);
-	_btnBorderless = new TextButton(100, 16, 94, 128);
+	_txtMode = new Text(110, 9, 210, 22);
+	_cbxDisplayMode = new ComboBox(this, 100, 16, 210, 32);
+	
+	_txtGeoScale = new Text(110, 9, 94, 82);
+	_cbxGeoScale = new ComboBox(this, 100, 16, 94, 92);
+	
+	_txtBattleScale = new Text(110, 9, 94, 112);
+	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 122);
 
 	_txtOptions = new Text(110, 9, 210, 82);
 	_btnLetterbox = new ToggleTextButton(100, 16, 210, 92);
@@ -106,26 +104,6 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 		Log(LOG_WARNING) << "Couldn't get display resolutions";
 	}
 
-	_gameRes.push_back(tr("STR_ORIGINAL"));
-	_gameRes.push_back(L"1x");
-	_gameRes.push_back(L"2x");
-
-	if (Options::baseXResolution == Screen::ORIGINAL_WIDTH && Options::baseYResolution == Screen::ORIGINAL_HEIGHT)
-		_gameCurrent = 0;
-	else if (Options::baseXResolution == Options::displayWidth - Options::displayWidth %4 && Options::baseYResolution == Options::displayHeight)
-		_gameCurrent = 1;
-	else if (Options::baseXResolution == Options::displayWidth/2 - (Options::displayWidth/2) %4 && Options::baseYResolution == Options::displayHeight/2)
-		_gameCurrent = 2;
-	else
-		_gameCurrent = -1;
-		
-	if (Options::fullscreen)
-		_displayMode = _btnFullscreen;
-	else if (Options::borderless)
-		_displayMode = _btnBorderless;
-	else
-		_displayMode = _btnWindowed;
-
 	add(_displaySurface);
 	add(_txtDisplayResolution);
 	add(_txtDisplayWidth);
@@ -134,28 +112,27 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	add(_btnDisplayResolutionUp);
 	add(_btnDisplayResolutionDown);
 
-	add(_gameSurface);
-	add(_txtGameResolution);
-	add(_txtGameSize);
-	add(_btnGameResolutionUp);
-	add(_btnGameResolutionDown);
-	
-	add(_txtLanguage);	
+	add(_txtLanguage);
 	add(_txtFilter);
 
 	add(_txtMode);
-	add(_btnWindowed);
-	add(_btnFullscreen);
-	add(_btnBorderless);
 
 	add(_txtOptions);
 	add(_btnLetterbox);
 	add(_btnResize);
 	add(_btnLockMouse);
 
-    add(_cbxLanguage);
-    add(_cbxFilter);
 
+    add(_cbxFilter);
+	add(_cbxDisplayMode);
+	
+	add(_txtBattleScale);
+	add(_cbxBattleScale);
+
+	add(_txtGeoScale);
+	add(_cbxGeoScale);
+
+    add(_cbxLanguage);
 	centerAllSurfaces();
 
 	// Set up objects
@@ -197,49 +174,8 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_btnDisplayResolutionDown->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayResolutionDown->onMouseClick((ActionHandler)&OptionsVideoState::btnDisplayResolutionDownClick);
 
-	_txtGameResolution->setColor(Palette::blockOffset(8)+10);
-	_txtGameResolution->setText(tr("STR_GAME_RESOLUTION"));
-	
-	_gameSurface->setTooltip("STR_GAME_RESOLUTION_DESC");
-	_gameSurface->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_gameSurface->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-	_txtGameSize->setColor(Palette::blockOffset(15)-1);
-	_txtGameSize->setAlign(ALIGN_CENTER);
-	_txtGameSize->setBig();
-
-	_btnGameResolutionUp->setColor(Palette::blockOffset(15)-1);
-	_btnGameResolutionUp->onMouseClick((ActionHandler)&OptionsVideoState::btnGameResolutionUpClick);
-
-	_btnGameResolutionDown->setColor(Palette::blockOffset(15)-1);
-	_btnGameResolutionDown->onMouseClick((ActionHandler)&OptionsVideoState::btnGameResolutionDownClick);
-
 	_txtMode->setColor(Palette::blockOffset(8)+10);
 	_txtMode->setText(tr("STR_DISPLAY_MODE"));
-
-	_btnWindowed->setColor(Palette::blockOffset(15)-1);
-	_btnWindowed->setText(tr("STR_WINDOWED"));
-	_btnWindowed->setGroup(&_displayMode);
-	_btnWindowed->onMouseClick((ActionHandler)&OptionsVideoState::btnModeClick);
-	_btnWindowed->setTooltip("STR_WINDOWED_DESC");
-	_btnWindowed->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnWindowed->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-	_btnFullscreen->setColor(Palette::blockOffset(15)-1);
-	_btnFullscreen->setText(tr("STR_FULLSCREEN"));
-	_btnFullscreen->setGroup(&_displayMode);
-	_btnFullscreen->onMouseClick((ActionHandler)&OptionsVideoState::btnModeClick);
-	_btnFullscreen->setTooltip("STR_FULLSCREEN_DESC");
-	_btnFullscreen->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnFullscreen->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-	_btnBorderless->setColor(Palette::blockOffset(15)-1);
-	_btnBorderless->setText(tr("STR_BORDERLESS"));
-	_btnBorderless->setGroup(&_displayMode);
-	_btnBorderless->onMouseClick((ActionHandler)&OptionsVideoState::btnModeClick);
-	_btnBorderless->setTooltip("STR_BORDERLESS_DESC");
-	_btnBorderless->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnBorderless->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
 	_txtOptions->setColor(Palette::blockOffset(8)+10);
 	_txtOptions->setText(tr("STR_DISPLAY_OPTIONS"));
@@ -341,8 +277,63 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
 	_cbxFilter->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxFilter->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	
+	
+	std::vector<std::string> displayModes;
+	displayModes.push_back("STR_WINDOWED");
+	displayModes.push_back("STR_FULLSCREEN");
+	displayModes.push_back("STR_BORDERLESS");
 
-	updateGameResolution();
+	int displayMode = 0;
+	if (Options::fullscreen)
+		displayMode = 1;
+	else if (Options::borderless)
+		displayMode = 2;
+
+	_cbxDisplayMode->setColor(Palette::blockOffset(15)-1);
+	_cbxDisplayMode->setOptions(displayModes);
+	_cbxDisplayMode->setSelected(displayMode);
+	_cbxDisplayMode->onChange((ActionHandler)&OptionsVideoState::updateDisplayMode);
+	_cbxDisplayMode->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
+	_cbxDisplayMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_cbxDisplayMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	
+	_txtGeoScale->setColor(Palette::blockOffset(8)+10);
+	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
+	
+	std::vector<std::string> geoScales;
+	geoScales.push_back("STR_ORIGINAL");
+	geoScales.push_back("STR_1.5X");
+	geoScales.push_back("STR_2X");
+	geoScales.push_back("STR_3X");
+	geoScales.push_back("STR_SCALE_TO_WINDOW");
+
+	_cbxGeoScale->setColor(Palette::blockOffset(15)-1);
+	_cbxGeoScale->setOptions(geoScales);
+	_cbxGeoScale->setSelected(Options::geoscapeScale);
+	_cbxGeoScale->onChange((ActionHandler)&OptionsVideoState::updateGeoscapeScale);
+	_cbxGeoScale->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
+	_cbxGeoScale->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_cbxGeoScale->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	
+	_txtBattleScale->setColor(Palette::blockOffset(8)+10);
+	_txtBattleScale->setText(tr("STR_BATTLESCAPE_SCALE"));
+
+	std::vector<std::string> battleScales;
+	battleScales.push_back("STR_ORIGINAL");
+	battleScales.push_back("STR_1.5X");
+	battleScales.push_back("STR_2X");
+	battleScales.push_back("STR_3X");
+	battleScales.push_back("STR_SCALE_TO_WINDOW");
+
+	_cbxBattleScale->setColor(Palette::blockOffset(15)-1);
+	_cbxBattleScale->setOptions(battleScales);
+	_cbxBattleScale->setSelected(Options::battlescapeScale);
+	_cbxBattleScale->onChange((ActionHandler)&OptionsVideoState::updateBattlescapeScale);
+	_cbxBattleScale->setTooltip("STR_BATTLESCAPE_SCALE_DESC");
+	_cbxBattleScale->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_cbxBattleScale->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+
 }
 
 /**
@@ -409,64 +400,31 @@ void OptionsVideoState::updateDisplayResolution()
 }
 
 /**
- * Selects a bigger game resolution.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnGameResolutionUpClick(Action *)
-{
-	if (_gameCurrent == _gameRes.size() - 1)
-		_gameCurrent = 0;
-	else
-		_gameCurrent++;
-	updateGameResolution();
-}
-
-/**
- * Selects a smaller game resolution.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnGameResolutionDownClick(Action *)
-{
-	if (_gameCurrent <= 0)
-		_gameCurrent = _gameRes.size() - 1;
-	else
-		_gameCurrent--;
-	updateGameResolution();
-}
-
-/**
  * Updates the game resolution based on the selection.
  */
 void OptionsVideoState::updateGameResolution()
 {
-	switch (_gameCurrent)
+	if (Options::geoscapeScale == SCALE_SCREEN)
 	{
-	case 0:
-		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-		break;
-	case 1:
-		Options::baseXResolution = Options::newDisplayWidth;
-		Options::baseYResolution = Options::newDisplayHeight;
-		break;
-	case 2:
-		Options::baseXResolution = Options::newDisplayWidth / 2;
-		Options::baseYResolution = Options::newDisplayHeight / 2;
-		break;
-	default:
-		_txtGameSize->setText(L"-");
-		break;
+		Options::baseXGeoscape = std::max(Screen::ORIGINAL_WIDTH, (Options::newDisplayWidth - Options::newDisplayWidth) %4);
+		Options::baseYGeoscape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
+		if (_origin != OPT_BATTLESCAPE)
+		{
+			Options::baseXResolution = Options::baseXGeoscape;
+			Options::baseYResolution = Options::baseYGeoscape;
+		}
+	}
+	if (Options::battlescapeScale == SCALE_SCREEN)
+	{
+		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, (Options::newDisplayWidth - Options::newDisplayWidth) %4);
+		Options::baseYBattlescape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
+		if (_origin == OPT_BATTLESCAPE)
+		{
+			Options::baseXResolution = Options::baseXBattlescape;
+			Options::baseYResolution = Options::baseYBattlescape;
+		}
 	}
 
-	// scaler methods seem to require base res be a factor of 4
-	Options::baseXResolution -= Options::baseXResolution %4;
-	Options::baseXResolution = std::max(Options::baseXResolution, Screen::ORIGINAL_WIDTH);
-	Options::baseYResolution = std::max(Options::baseYResolution, Screen::ORIGINAL_HEIGHT);
-
-	if (_gameCurrent >= 0 && _gameCurrent < _gameRes.size())
-	{
-		_txtGameSize->setText(_gameRes[_gameCurrent]);
-	}
 }
 
 /**
@@ -560,22 +518,24 @@ void OptionsVideoState::cbxFilterChange(Action *)
  * Changes the Display Mode options.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnModeClick(Action *)
+void OptionsVideoState::updateDisplayMode(Action *)
 {
-	if (_displayMode == _btnWindowed)
+	switch(_cbxDisplayMode->getSelected())
 	{
+	case 0:
 		Options::fullscreen = false;
 		Options::borderless = false;
-	}
-	else if (_displayMode == _btnFullscreen)
-	{
+		break;
+	case 1:
 		Options::fullscreen = true;
 		Options::borderless = false;
-	}
-	else if (_displayMode == _btnBorderless)
-	{
+		break;
+	case 2:
 		Options::fullscreen = false;
 		Options::borderless = true;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -606,4 +566,21 @@ void OptionsVideoState::btnLockMouseClick(Action *)
 	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
 }
 
+/**
+ * Changes the geoscape scale.
+ * @param action Pointer to an action.
+ */
+void OptionsVideoState::updateGeoscapeScale(Action *)
+{
+	Options::newGeoscapeScale = _cbxGeoScale->getSelected();
+}
+
+/**
+ * Updates the Battlescape scale.
+ * @param action Pointer to an action.
+ */
+void OptionsVideoState::updateBattlescapeScale(Action *)
+{
+	Options::newBattlescapeScale = _cbxBattleScale->getSelected();
+}
 }

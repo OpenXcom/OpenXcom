@@ -57,6 +57,8 @@ int main(int argc, char *argv[])
 			return EXIT_SUCCESS;
 		std::ostringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+		Options::baseXResolution = Options::baseXGeoscape;
+		Options::baseYResolution = Options::baseYGeoscape;
 		game = new Game(title.str());
 		game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 		game->setState(new StartState(game));

@@ -209,6 +209,9 @@ void OptionsBaseState::setCategory(TextButton *button)
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
+	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
+
 	Options::switchDisplay();
 	Options::save();
 	_game->loadLanguage(Options::language);
@@ -317,4 +320,56 @@ void OptionsBaseState::txtTooltipOut(Action *action)
 	}
 }
 
+/**
+* Changes a given scale, and if necessary, switch the current base resolution.
+* @param type reference to which scale option we are using, battlescape or geoscape.
+* @param selection the new scale level.
+* @param width reference to which x scale to adjust.
+* @param height reference to which y scale to adjust.
+* @param change should we change the current scale.
+*/
+void OptionsBaseState::updateScale(int &type, int selection, int &width, int &height, bool change)
+{
+	type = selection;
+	switch (type)
+	{
+	case 1:
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
+		break;
+	case 2:
+		width = Screen::ORIGINAL_WIDTH * 2;
+		height = Screen::ORIGINAL_HEIGHT * 2;
+		break;
+	case 3:
+		width = Screen::ORIGINAL_WIDTH * 2.5;
+		height = Screen::ORIGINAL_HEIGHT * 2.5;
+		break;
+	case 4:
+		width = Screen::ORIGINAL_WIDTH * 3;
+		height = Screen::ORIGINAL_HEIGHT * 3;
+		break;
+	case 5:
+		width = Options::newDisplayWidth;
+		height = Options::newDisplayHeight;
+		break;
+	case 0:
+	default:
+		width = Screen::ORIGINAL_WIDTH;
+		height = Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
+	// don't go under minimum resolution... it's bad, mmkay?
+	width = std::max(width, Screen::ORIGINAL_WIDTH);
+	height = std::max(height, Screen::ORIGINAL_HEIGHT);
+	// scaler methods seem to require base res be a factor of 4
+	width -= width %4;
+
+	if (change && (Options::baseXResolution != width || Options::baseYResolution != height))
+	{
+		Options::baseXResolution = width;
+		Options::baseYResolution = height;
+	}
+}
 }
