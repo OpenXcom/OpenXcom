@@ -2578,7 +2578,7 @@ items:
     clipSize: -1
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2594,7 +2594,7 @@ items:
     clipSize: -1
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2632,7 +2632,7 @@ items:
     hitSound: 48
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 92
+    accuracyMelee: 100
     tuMelee: 15
     clipSize: -1
     battleType: 3
@@ -2671,7 +2671,7 @@ items:
     hitSound: 48
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true

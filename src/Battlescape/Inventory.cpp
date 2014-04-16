@@ -682,7 +682,7 @@ void Inventory::mouseClick(Action *action, State *state)
 	{
 		if (_selItem == 0)
 		{
-			if (!_base)
+			if (!_base || Options::includePrimeStateInSavedLayout)
 			{
 				if (!_tu)
 				{

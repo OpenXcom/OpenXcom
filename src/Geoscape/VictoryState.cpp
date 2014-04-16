@@ -38,7 +38,7 @@ namespace OpenXcom
  */
 VictoryState::VictoryState(Game *game) : State(game), _screen(-1)
 {
-	char *files[] = {"PICT1.LBM", "PICT2.LBM", "PICT3.LBM", "PICT6.LBM", "PICT7.LBM"};
+	const char *files[] = {"PICT1.LBM", "PICT2.LBM", "PICT3.LBM", "PICT6.LBM", "PICT7.LBM"};
 
 	_timer = new Timer(30000);
 
