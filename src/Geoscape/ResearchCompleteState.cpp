@@ -51,7 +51,7 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_txtResearch = new Text(230, 32, 45, 96);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -88,14 +88,6 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	{
 		_txtResearch->setText(tr(research->getName()));
 	}
-}
-
-/**
- * Resets the palette.
- */
-void ResearchCompleteState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
 
 /**

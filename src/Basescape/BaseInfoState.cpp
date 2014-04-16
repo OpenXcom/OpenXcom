@@ -101,6 +101,9 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_numLongRange = new Text(40, 9, 126, Options::alienContainmentLimitEnforced ? 167 : 163);
 	_barLongRange = new Bar(150, 5, 166, Options::alienContainmentLimitEnforced ? 169 : 165);
 
+	// Set palette
+	setPalette("PAL_BASESCAPE");
+
 	add(_bg);
 	add(_mini);
 	add(_btnOk);
@@ -166,7 +169,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -318,6 +321,7 @@ BaseInfoState::~BaseInfoState()
  */
 void BaseInfoState::init()
 {
+	State::init();
 	_edtBase->setText(_base->getName());
 
 	std::wostringstream ss;
@@ -425,7 +429,7 @@ void BaseInfoState::edtBaseChange(Action *action)
  */
 void BaseInfoState::miniClick(Action *)
 {
-	unsigned int base = _mini->getHoveredBase();
+	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_mini->setSelectedBase(base);

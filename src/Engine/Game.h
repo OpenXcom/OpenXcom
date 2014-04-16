@@ -71,15 +71,13 @@ public:
 	/// Quits the game.
 	void quit();
 	/// Sets the game's audio volume.
-	void setVolume(int sound, int music);
+	void setVolume(int sound, int music, int ui);
 	/// Gets the game's display screen.
 	Screen *getScreen() const;
 	/// Gets the game's cursor.
 	Cursor *getCursor() const;
 	/// Gets the FpsCounter.
 	FpsCounter *getFpsCounter() const;
-	/// Sets the game's 8bpp palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.
 	void setState(State *state);
 	/// Pushes a new state into the state stack.

@@ -2,10 +2,11 @@
 // To add a new option, add a new variable entry and a corresponding OptionInfo in Options.cpp
 
 // General options
-OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolution, autosave, soundVolume, musicVolume,
-	audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS, changeValueByMouseWheel;
+OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolution, baseXGeoscape, baseYGeoscape, baseXBattlescape, baseYBattlescape,
+    autosave, soundVolume, musicVolume, uiVolume, audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS,
+	changeValueByMouseWheel, dragScrollTimeTolerance, dragScrollPixelTolerance;
 OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpenGL, checkOpenGLErrors, vSyncForOpenGL, useOpenGLSmoothing,
-	allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio,
+	allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio, dragScrollInvert,
 	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow;
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
@@ -25,9 +26,8 @@ OPT SDLKey keyGeoLeft, keyGeoRight, keyGeoUp, keyGeoDown, keyGeoZoomIn, keyGeoZo
 // Battlescape options
 OPT ScrollType battleEdgeScroll;
 OPT PathPreview battleNewPreviewPath;
-OPT int battleScrollSpeed, battleScrollDragButton, battleScrollDragTimeTolerance, battleScrollDragPixelTolerance,
-	battleFireSpeed, battleXcomSpeed, battleAlienSpeed, battleExplosionHeight;
-OPT bool traceAI, sneakyAI, battleScrollDragInvert, battleInstantGrenade, battleNotifyDeath, battleTooltips, battleHairBleach, battleAutoEnd,
+OPT int battleScrollSpeed, battleDragScrollButton, battleFireSpeed, battleXcomSpeed, battleAlienSpeed, battleExplosionHeight;
+OPT bool traceAI, sneakyAI, battleInstantGrenade, battleNotifyDeath, battleTooltips, battleHairBleach, battleAutoEnd,
 	strafe, showMoreStatsInInventoryView, allowPsionicCapture, skipNextTurnScreen, disableAutoEquip,
 	battleUFOExtenderAccuracy, battleConfirmFireMode, battleSmoothCamera, TFTDDamage;
 OPT SDLKey keyBattleLeft, keyBattleRight, keyBattleUp, keyBattleDown, keyBattleLevelUp, keyBattleLevelDown, keyBattleCenterUnit, keyBattlePrevUnit, keyBattleNextUnit, keyBattleDeselectUnit,

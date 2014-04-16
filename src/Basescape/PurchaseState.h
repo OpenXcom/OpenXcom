@@ -48,11 +48,10 @@ private:
 	TextList *_lstItems;
 	std::vector<std::string> _crafts, _items;
 	std::vector<int> _qtys;
-	unsigned int _sel;
+	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty;
 	float _iQty;
 	Timer *_timerInc, *_timerDec;
-	size_t _itemOffset;
 	/// Gets selected price.
 	int getPrice();
 	/// Is it excluded in the options file?

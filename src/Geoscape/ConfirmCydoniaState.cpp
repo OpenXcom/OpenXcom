@@ -40,11 +40,15 @@ namespace OpenXcom
 ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game), _craft(craft)
 {
 	_screen = false;
+
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
 	_btnYes = new TextButton(80, 20, 70, 142);
 	_btnNo = new TextButton(80, 20, 170, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
+
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 5);
 
 	add(_window);
 	add(_btnYes);
@@ -82,13 +86,6 @@ ConfirmCydoniaState::~ConfirmCydoniaState()
 }
 
 /**
- *
- */
-void ConfirmCydoniaState::init()
-{
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -116,7 +113,6 @@ void ConfirmCydoniaState::btnYesClick(Action *)
  */
 void ConfirmCydoniaState::btnNoClick(Action *)
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	_game->popState();
 }
 

@@ -52,8 +52,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle = new Text(256, 30, 32, 45);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnNewGame);
@@ -98,7 +97,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setText(title.str());
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMSTORY")->play();
+	_game->getResourcePack()->playMusic("GMSTORY");
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
@@ -110,16 +109,6 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 MainMenuState::~MainMenuState()
 {
 
-}
-
-/**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void MainMenuState::init()
-{
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
 
 /**
@@ -155,6 +144,7 @@ void MainMenuState::btnLoadClick(Action *)
  */
 void MainMenuState::btnOptionsClick(Action *)
 {
+	Options::backupDisplay();
 	_game->pushState(new OptionsVideoState(_game, OPT_MENU));
 }
 

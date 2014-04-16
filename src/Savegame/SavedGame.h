@@ -63,6 +63,7 @@ struct SaveInfo
 	time_t timestamp;
 	std::wstring isoDate, isoTime;
 	std::wstring details;
+	std::vector<std::string> rulesets;
 };
 
 /**

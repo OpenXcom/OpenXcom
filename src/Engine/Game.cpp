@@ -60,6 +60,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
+	Options::reload = false;
 	Options::mute = false;
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
@@ -84,6 +85,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		else
 		{
 			Mix_AllocateChannels(16);
+			Mix_ReserveChannels(1);
 			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		}
 	}
@@ -359,8 +361,9 @@ void Game::quit()
  * sound effect channels.
  * @param sound Sound volume, from 0 to MIX_MAX_VOLUME.
  * @param music Music volume, from 0 to MIX_MAX_VOLUME.
+ * @param ui UI volume, from 0 to MIX_MAX_VOLUME.
  */
-void Game::setVolume(int sound, int music)
+void Game::setVolume(int sound, int music, int ui)
 {
 	if (!Options::mute)
 	{
@@ -368,6 +371,8 @@ void Game::setVolume(int sound, int music)
 			Mix_Volume(-1, sound);
 		if (music >= 0)
 			Mix_VolumeMusic(music);
+		if (ui >= 0)
+			Mix_Volume(0, ui);
 	}
 }
 
@@ -396,27 +401,6 @@ Cursor *Game::getCursor() const
 FpsCounter *Game::getFpsCounter() const
 {
 	return _fpsCounter;
-}
-
-/**
- * Replaces a certain amount of colors in the palettes of the game's
- * screen and resources.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
- */
-void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
-{
-	_screen->setPalette(colors, firstcolor, ncolors);
-	_cursor->setPalette(colors, firstcolor, ncolors);
-	_cursor->draw();
-
-	_fpsCounter->setPalette(colors, firstcolor, ncolors);
-
-	if (_res != 0)
-	{
-		_res->setPalette(colors, firstcolor, ncolors);
-	}
 }
 
 /**
@@ -558,9 +542,18 @@ Ruleset *Game::getRuleset() const
 void Game::loadRuleset()
 {
 	_rules = new Ruleset();
-	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end(); ++i)
+	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end();)
 	{
-		_rules->load(*i);
+		try
+		{
+			_rules->load(*i);
+			++i;
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_WARNING) << e.what();
+			i = Options::rulesets.erase(i);
+		}
 	}
 	_rules->sortLists();
 }

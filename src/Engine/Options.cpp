@@ -69,15 +69,14 @@ void create()
 	_info.push_back(OptionInfo("asyncBlit", &asyncBlit, true));
 	_info.push_back(OptionInfo("keyboardMode", (int*)&keyboardMode, KEYBOARD_ON));
 #endif
-	_info.push_back(OptionInfo("anytimePsiTraining", &anytimePsiTraining, false));
-	_info.push_back(OptionInfo("playIntro", &playIntro, true));
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
-	_info.push_back(OptionInfo("sneakyAI", &sneakyAI, false));
-	_info.push_back(OptionInfo("weaponSelfDestruction", &weaponSelfDestruction, false));
-	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
 	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
 	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
@@ -89,69 +88,79 @@ void create()
 	_info.push_back(OptionInfo("debugUi", &debugUi, false));
 	_info.push_back(OptionInfo("soundVolume", &soundVolume, MIX_MAX_VOLUME));
 	_info.push_back(OptionInfo("musicVolume", &musicVolume, MIX_MAX_VOLUME));
+	_info.push_back(OptionInfo("uiVolume", &uiVolume, MIX_MAX_VOLUME/2));
 	_info.push_back(OptionInfo("language", &language, ""));
 	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 8));
 	_info.push_back(OptionInfo("battleEdgeScroll", (int*)&battleEdgeScroll, SCROLL_AUTO));
-	_info.push_back(OptionInfo("battleScrollDragButton", &battleScrollDragButton, SDL_BUTTON_MIDDLE));
-	_info.push_back(OptionInfo("battleScrollDragInvert", &battleScrollDragInvert, false)); // true drags away from the cursor, false drags towards (like a grab)
-	_info.push_back(OptionInfo("battleScrollDragTimeTolerance", &battleScrollDragTimeTolerance, 300)); // miliSecond
-	_info.push_back(OptionInfo("battleScrollDragPixelTolerance", &battleScrollDragPixelTolerance, 10)); // count of pixels
+	_info.push_back(OptionInfo("battleDragScrollButton", &battleDragScrollButton, SDL_BUTTON_MIDDLE));
+	_info.push_back(OptionInfo("dragScrollTimeTolerance", &dragScrollTimeTolerance, 300)); // miliSecond
+	_info.push_back(OptionInfo("dragScrollPixelTolerance", &dragScrollPixelTolerance, 10)); // count of pixels
 	_info.push_back(OptionInfo("battleFireSpeed", &battleFireSpeed, 6));
 	_info.push_back(OptionInfo("battleXcomSpeed", &battleXcomSpeed, 30));
 	_info.push_back(OptionInfo("battleAlienSpeed", &battleAlienSpeed, 30));
-	_info.push_back(OptionInfo("battleInstantGrenade", &battleInstantGrenade, false));
-	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0));
 	_info.push_back(OptionInfo("battleNewPreviewPath", (int*)&battleNewPreviewPath, PATH_NONE)); // requires double-click to confirm moves
 	_info.push_back(OptionInfo("fpsCounter", &fpsCounter, false));
-	_info.push_back(OptionInfo("craftLaunchAlways", &craftLaunchAlways, false));
 	_info.push_back(OptionInfo("globeSeasons", &globeSeasons, false));
 	_info.push_back(OptionInfo("globeDetail", &globeDetail, true));
 	_info.push_back(OptionInfo("globeRadarLines", &globeRadarLines, true));
 	_info.push_back(OptionInfo("globeFlightPaths", &globeFlightPaths, true));
 	_info.push_back(OptionInfo("globeAllRadarsOnBaseBuild", &globeAllRadarsOnBaseBuild, true));
-	_info.push_back(OptionInfo("autosave", &autosave, 0));
-	_info.push_back(OptionInfo("changeValueByMouseWheel", &changeValueByMouseWheel, 0));
 	_info.push_back(OptionInfo("audioSampleRate", &audioSampleRate, 22050));
 	_info.push_back(OptionInfo("audioBitDepth", &audioBitDepth, 16));
 	_info.push_back(OptionInfo("pauseMode", &pauseMode, 0));
-	_info.push_back(OptionInfo("alienContainmentLimitEnforced", &alienContainmentLimitEnforced, false));
-	_info.push_back(OptionInfo("canSellLiveAliens", &canSellLiveAliens, false));
-	_info.push_back(OptionInfo("canTransferCraftsWhileAirborne", &canTransferCraftsWhileAirborne, false)); // When the craft can reach the destination base with its fuel
-	_info.push_back(OptionInfo("canManufactureMoreItemsPerHour", &canManufactureMoreItemsPerHour, false));
-	_info.push_back(OptionInfo("customInitialBase", &customInitialBase, false));
-	_info.push_back(OptionInfo("aggressiveRetaliation", &aggressiveRetaliation, false));
-	_info.push_back(OptionInfo("strafe", &strafe, false));
 	_info.push_back(OptionInfo("battleNotifyDeath", &battleNotifyDeath, false));
-	_info.push_back(OptionInfo("allowBuildingQueue", &allowBuildingQueue, false));
-	_info.push_back(OptionInfo("allowAutoSellProduction", &allowAutoSellProduction, false));
 	_info.push_back(OptionInfo("showFundsOnGeoscape", &showFundsOnGeoscape, false));
-	_info.push_back(OptionInfo("showMoreStatsInInventoryView", &showMoreStatsInInventoryView, false));
 	_info.push_back(OptionInfo("allowResize", &allowResize, false));
 	_info.push_back(OptionInfo("windowedModePositionX", &windowedModePositionX, -1));
 	_info.push_back(OptionInfo("windowedModePositionY", &windowedModePositionY, -1));
-	_info.push_back(OptionInfo("battleAutoEnd", &battleAutoEnd, false));
-	_info.push_back(OptionInfo("allowPsionicCapture", &allowPsionicCapture, false));
-	_info.push_back(OptionInfo("psiStrengthEval", &psiStrengthEval, false));
 	_info.push_back(OptionInfo("borderless", &borderless, false));
 	_info.push_back(OptionInfo("captureMouse", (bool*)&captureMouse, false));
 	_info.push_back(OptionInfo("battleTooltips", &battleTooltips, true));
-	_info.push_back(OptionInfo("battleHairBleach", &battleHairBleach, true));
 	_info.push_back(OptionInfo("keepAspectRatio", &keepAspectRatio, false));
 	_info.push_back(OptionInfo("cursorInBlackBandsInFullscreen", &cursorInBlackBandsInFullscreen, false));
 	_info.push_back(OptionInfo("cursorInBlackBandsInWindow", &cursorInBlackBandsInWindow, true));
 	_info.push_back(OptionInfo("cursorInBlackBandsInBorderlessWindow", &cursorInBlackBandsInBorderlessWindow, false));
-	_info.push_back(OptionInfo("newSeedOnLoad", &newSeedOnLoad, false));
-	_info.push_back(OptionInfo("skipNextTurnScreen", &skipNextTurnScreen, false));
-	_info.push_back(OptionInfo("disableAutoEquip", &disableAutoEquip, false));
-	_info.push_back(OptionInfo("battleUFOExtenderAccuracy", &battleUFOExtenderAccuracy, false));
 	_info.push_back(OptionInfo("saveOrder", (int*)&saveOrder, SORT_DATE_DESC));
-	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 50));
-	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 10));
+	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 80));
+	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 20));
 	_info.push_back(OptionInfo("globeScrollSpeed", &globeScrollSpeed, 20));
 	_info.push_back(OptionInfo("globeScrollDragButton", &globeScrollDragButton, SDL_BUTTON_MIDDLE));
-	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false));
-	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false));
-	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false));
+
+	// advanced options
+	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
+	_info.push_back(OptionInfo("autosave", &autosave, 0, "STR_AUTOSAVE", "STR_GENERAL"));
+	_info.push_back(OptionInfo("newSeedOnLoad", &newSeedOnLoad, false, "STR_NEWSEEDONLOAD", "STR_GENERAL"));
+	_info.push_back(OptionInfo("changeValueByMouseWheel", &changeValueByMouseWheel, 0, "STR_CHANGEVALUEBYMOUSEWHEEL", "STR_GENERAL"));
+	_info.push_back(OptionInfo("dragScrollInvert", &dragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_GENERAL")); // true drags away from the cursor, false drags towards (like a grab)
+
+	_info.push_back(OptionInfo("aggressiveRetaliation", &aggressiveRetaliation, false, "STR_AGGRESSIVERETALIATION", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("customInitialBase", &customInitialBase, false, "STR_CUSTOMINITIALBASE", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("allowBuildingQueue", &allowBuildingQueue, false, "STR_ALLOWBUILDINGQUEUE", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("craftLaunchAlways", &craftLaunchAlways, false, "STR_CRAFTLAUNCHALWAYS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("allowAutoSellProduction", &allowAutoSellProduction, false, "STR_ALLOWAUTOSELLPRODUCTION", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("alienContainmentLimitEnforced", &alienContainmentLimitEnforced, false, "STR_ALIENCONTAINMENTLIMITENFORCED", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("canSellLiveAliens", &canSellLiveAliens, false, "STR_CANSELLLIVEALIENS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("anytimePsiTraining", &anytimePsiTraining, false, "STR_ANYTIMEPSITRAINING", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("psiStrengthEval", &psiStrengthEval, false, "STR_PSISTRENGTHEVAL", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("canTransferCraftsWhileAirborne", &canTransferCraftsWhileAirborne, false, "STR_CANTRANSFERCRAFTSWHILEAIRBORNE", "STR_GEOSCAPE")); // When the craft can reach the destination base with its fuel
+	_info.push_back(OptionInfo("canManufactureMoreItemsPerHour", &canManufactureMoreItemsPerHour, false, "STR_CANMANUFACTUREMOREITEMSPERHOUR", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false, "STR_SPENDRESEARCHEDITEMS", "STR_GEOSCAPE"));
+
+	_info.push_back(OptionInfo("sneakyAI", &sneakyAI, false, "STR_SNEAKYAI", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleUFOExtenderAccuracy", &battleUFOExtenderAccuracy, false, "STR_BATTLEUFOEXTENDERACCURACY", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("showMoreStatsInInventoryView", &showMoreStatsInInventoryView, false, "STR_SHOWMORESTATSININVENTORYVIEW", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleHairBleach", &battleHairBleach, true, "STR_BATTLEHAIRBLEACH", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleInstantGrenade", &battleInstantGrenade, false, "STR_BATTLEINSTANTGRENADE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0, "STR_BATTLEEXPLOSIONHEIGHT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleAutoEnd", &battleAutoEnd, false, "STR_BATTLEAUTOEND", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false, "STR_BATTLESMOOTHCAMERA", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("disableAutoEquip", &disableAutoEquip, false, "STR_DISABLEAUTOEQUIP", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false, "STR_BATTLECONFIRMFIREMODE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("weaponSelfDestruction", &weaponSelfDestruction, false, "STR_WEAPONSELFDESTRUCTION", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("allowPsionicCapture", &allowPsionicCapture, false, "STR_ALLOWPSIONICCAPTURE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("strafe", &strafe, false, "STR_STRAFE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("skipNextTurnScreen", &skipNextTurnScreen, false, "STR_SKIPNEXTTURNSCREEN", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false, "STR_TFTDDAMAGE", "STR_BATTLESCAPE"));
 	
 	// controls
 	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));
@@ -241,6 +250,7 @@ void resetDefault()
 	{
 		i->reset();
 	}
+	backupDisplay();
 
 	rulesets.clear();
 	rulesets.push_back("Xcom1Ruleset");
@@ -564,6 +574,20 @@ std::string getConfigFolder()
 const std::vector<OptionInfo> &getOptionInfo()
 {
 	return _info;
+}
+
+/**
+ * Saves display settings temporarily to be able
+ * to revert to old ones.
+ */
+void backupDisplay()
+{
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+	Options::newOpenGL = Options::useOpenGL;
+	Options::newScaleFilter = Options::useScaleFilter;
+	Options::newHQXFilter = Options::useHQXFilter;
+	Options::newOpenGLShader = Options::useOpenGLShader;
 }
 
 /**

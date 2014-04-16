@@ -32,6 +32,7 @@
 #include "ErrorMessageState.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "DeleteGameState.h"
+#include "ConfirmLoadState.h"
 
 namespace OpenXcom
 {
@@ -77,11 +78,27 @@ void LoadState::lstSavesPress(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		quickLoad(_saves[_lstSaves->getSelectedRow()].fileName);
+		bool confirm = false;
+		for (std::vector<std::string>::const_iterator i = _saves[_lstSaves->getSelectedRow()].rulesets.begin(); i != _saves[_lstSaves->getSelectedRow()].rulesets.end(); ++i)
+		{
+			if (std::find(Options::rulesets.begin(), Options::rulesets.end(), *i) == Options::rulesets.end())
+			{
+				confirm = true;
+				break;
+			}
+		}
+		if (confirm)
+		{
+				_game->pushState(new ConfirmLoadState(_game, _origin, this, _saves[_lstSaves->getSelectedRow()].fileName));
+		}
+		else
+		{
+			quickLoad(_saves[_lstSaves->getSelectedRow()].fileName);
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)));
+		_game->pushState(new DeleteGameState(_game, _origin, _saves[_lstSaves->getSelectedRow()].fileName));
 	}
 }
 
@@ -113,9 +130,9 @@ void LoadState::quickLoad(const std::string &filename)
 		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);
@@ -128,9 +145,9 @@ void LoadState::quickLoad(const std::string &filename)
 		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);

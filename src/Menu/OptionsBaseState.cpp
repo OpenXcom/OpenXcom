@@ -71,6 +71,16 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
 
 	_txtTooltip = new Text(305, 25, 8, 148);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 
 	add(_btnVideo);
@@ -146,11 +156,31 @@ OptionsBaseState::~OptionsBaseState()
 
 }
 
+void OptionsBaseState::restart(Game *game, OptionsOrigin origin)
+{
+	if (origin == OPT_MENU)
+	{
+		game->setState(new MainMenuState(game));
+	}
+	else if (origin == OPT_GEOSCAPE)
+	{
+		game->setState(new GeoscapeState(game));
+	}
+	else if (origin == OPT_BATTLESCAPE)
+	{
+		game->setState(new GeoscapeState(game));
+		BattlescapeState *bs = new BattlescapeState(game);
+		game->pushState(bs);
+		game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+	}
+}
+
 /**
  * Initializes UI colors according to origin.
  */
 void OptionsBaseState::init()
 {
+	State::init();
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();
@@ -184,29 +214,13 @@ void OptionsBaseState::btnOkClick(Action *)
 	_game->loadLanguage(Options::language);
 	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
-	if (Options::reload)
+	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
+	if (Options::reload && _origin == OPT_MENU)
 	{
 		_game->setState(new StartState(_game));
 	}
 	else
 	{
-		if (_origin == OPT_MENU)
-		{
-			_game->setState(new MainMenuState(_game));
-		}
-		else if (_origin == OPT_GEOSCAPE)
-		{
-			_game->setState(new GeoscapeState(_game));
-		}
-		else if (_origin == OPT_BATTLESCAPE)
-		{
-			_game->setState(new GeoscapeState(_game));
-			BattlescapeState *bs = new BattlescapeState(_game);
-			_game->pushState(bs);
-			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-		}
-
 		// Confirm any video options changes
 		if (Options::displayWidth != Options::newDisplayWidth ||
 			Options::displayHeight != Options::newDisplayHeight ||
@@ -216,6 +230,10 @@ void OptionsBaseState::btnOkClick(Action *)
 			Options::useOpenGLShader != Options::newOpenGLShader)
 		{
 			_game->pushState(new OptionsConfirmState(_game, _origin));
+		}
+		else
+		{
+			restart(_game, _origin);
 		}
 	}
 }
@@ -227,7 +245,7 @@ void OptionsBaseState::btnOkClick(Action *)
 void OptionsBaseState::btnCancelClick(Action *)
 {
 	Options::load();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	_game->popState();
 }
 

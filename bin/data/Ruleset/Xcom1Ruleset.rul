@@ -211,6 +211,16 @@ regions:
         - [274.5, 276.25, -44.375, -43.375]
         - [200.625, 216.75, -64.75, -62.25]
       -
+        - [286.125, 286.125, -40.75, -40.75]
+        - [282.875, 282.875, -38.75, -38.75]
+        - [241.75, 241.75, -34.125, -34.125]
+        - [284.25, 284.25, -45.5, -45.5]
+        - [277.625, 277.625, -22.5, -22.5]
+        - [260.875, 260.875, -19.375, -19.375]
+        - [272.375, 272.375, -41.875, -41.875]
+        - [236.75, 236.75, -49.375, -49.375]
+        - [263.375, 263.375, -32.75, -32.75]
+      -
         - [250, 270, -66, -64]
         - [280, 292.5, -51, -46]
         - [267.5, 269.5, -30, -29.5]
@@ -242,9 +252,6 @@ regions:
       STR_ALIEN_BASE: 35
     missionZones:
       -
-        - [302.25, 323.625, -80.75, -78.625]
-        - [62, 66, -76.125, -75.25]
-      -
         - [305.25, 333.125, -79.25, -75.25]
         - [273.25, 282.125, -73.375, -71.625]
         - [159.375, 205.75, -78.625, -75]
@@ -265,6 +272,9 @@ regions:
         - [168.5, 184.625, -83.375, -82.25]
         - [268.625, 280.75, -78.875, -76.75]
         - [0, 359.875, -90, -88.125]
+      -
+        - [302.25, 323.625, -80.75, -78.625]
+        - [62, 66, -76.125, -75.25]
       -
         - [302.25, 323.625, -80.75, -78.625]
         - [62, 66, -76.125, -75.25]
@@ -293,9 +303,6 @@ regions:
       STR_ALIEN_BASE: 35
     missionZones:
       -
-        - [291.125, 296.25, 68.25, 70.5]
-        - [129.625, 152.75, 69.75, 73.625]
-      -
         - [77, 108.125, 62.125, 76.125]
         - [340.75, 408.5, 57.25, 72.75]
         - [104.375, 148.875, 49.625, 66.25]
@@ -313,6 +320,9 @@ regions:
         - [6.625, 35.125, 72.875, 77]
         - [148.125, 154.75, 70, 72.75]
         - [0, 359.875, 87.5, 90]
+      -
+        - [291.125, 296.25, 68.25, 70.5]
+        - [129.625, 152.75, 69.75, 73.625]
       -
         - [291.125, 296.25, 68.25, 70.5]
         - [129.625, 152.75, 69.75, 73.625]
@@ -386,6 +396,14 @@ regions:
         - [287.875, 292.25, 47.25, 49.25]
         - [299.5, 301.125, 51.375, 51.875]
       -
+        - [312.125, 312.125, 15.75, 15.75]
+        - [285.875, 285.875, -4.5, -4.5]
+        - [302.5, 302.5, 34.5, 34.5]
+        - [289.375, 289.375, 33.375, 33.375]
+        - [316.875, 316.875, 22.875, 22.875]
+        - [283, 283, 12, 12]
+        - [293.125, 293.125, -10.5, -10.5]
+      -
         - [290.125, 305.5, 1.5, 7.625]
         - [285.875, 289.5, 13.625, 15.625]
         - [290, 294.125, 41.25, 44.875]
@@ -453,6 +471,14 @@ regions:
         - [17.125, 27.875, -45.75, -43.125]
         - [352.625, 358.875, -39.375, -37.75]
       -
+        - [359.875, 359.875, -51.5, -51.5]
+        - [2.375, 2.375, -48.75, -48.75]
+        - [13.375, 13.375, -52.5, -52.5]
+        - [37.625, 37.625, -55.75, -55.75]
+        - [12.5, 12.5, -41.875, -41.875]
+        - [356.25, 356.25, -40.375, -40.375]
+        - [19.125, 19.125, -47.5, -47.5]
+      -
         - [355.875, 357.25, -57.625, -57]
         - [17.5, 29, -69.375, -67.625]
         - [351.625, 353.25, -40.125, -38]
@@ -507,6 +533,10 @@ regions:
         - [23.375, 40.125, -13.75, -3.875]
         - [348, 357.125, -10.75, -7.5]
         - [2.25, 8.5, -35.875, -34.625]
+      -
+        - [3.125, 3.125, -6.5, -6.5]
+        - [31.25, 31.25, -30, -30]
+        - [352.375, 352.375, -33.5, -33.5]
       -
         - [5.625, 9, -6.125, -5]
         - [15.75, 31.75, -26.125, -18.75]
@@ -563,6 +593,11 @@ regions:
         - [30.5, 38.375, 11.625, 16.75]
         - [17.75, 29.75, 26.25, 29.875]
         - [45, 48.75, 16.25, 18.75]
+      -
+        - [28.125, 28.125, 26.25, 26.25]
+        - [36.75, 36.75, 1.25, 1.25]
+        - [18.5, 18.5, 34, 34]
+        - [15.375, 15.375, 4.375, 4.375]
       -
         - [17.125, 23.25, 22.75, 27.125]
         - [12, 26.875, -2.625, 4]
@@ -631,6 +666,14 @@ regions:
         - [79.875, 81.125, -8.25, -6.875]
         - [66.75, 81.5, -46.125, -43.5]
         - [77.875, 89.375, -27, -23.375]
+      -
+        - [32.75, 32.75, -39.875, -39.875]
+        - [77.25, 77.25, -28.625, -28.625]
+        - [67, 67, -24.875, -24.875]
+        - [44.5, 44.5, -33.25, -33.25]
+        - [51.5, 51.5, -35.625, -35.625]
+        - [73.125, 73.125, -18.875, -18.875]
+        - [88.375, 88.375, -22.625, -22.625]
       -
         - [42.375, 52.125, -23.5, -18.375]
         - [77.75, 84.875, -36, -32.75]
@@ -704,6 +747,16 @@ regions:
         - [127, 137, -48.5, -45]
         - [101.25, 111.875, -43.875, -37.875]
       -
+        - [139.75, 139.75, -35.625, -35.625]
+        - [116.375, 116.375, -39.875, -39.875]
+        - [100.625, 100.625, -13.625, -13.625]
+        - [121, 121, -14.625, -14.625]
+        - [127, 127, -37.5, -37.5]
+        - [103.875, 103.875, -1.375, -1.375]
+        - [106.75, 106.75, 6.25, 6.25]
+        - [121.5, 121.5, -31.25, -31.25]
+        - [114.125, 114.125, -22.25, -22.25]
+      -
         - [100.625, 103.125, -0.375, 0.75]
         - [96.125, 104.75, -42.625, -39]
         - [142.125, 143.875, -51.25, -49.125]
@@ -748,6 +801,8 @@ regions:
         - [86, 97.75, -73.25, -68.875]
         - [125.875, 141.5, -64.25, -59.5]
         - [91.375, 108.875, -61.375, -57.375]
+      -
+        - [82.75, 82.75, -55, -55]
       -
         - [63.125, 78.375, -66.5, -62]
         - [157.75, 162.5, -57.25, -55.625]
@@ -805,6 +860,11 @@ regions:
         - [168.5, 170.375, 44.25, 45.25]
         - [141.375, 150.125, 32.875, 36.375]
       -
+        - [149.125, 149.125, 35.375, 35.375]
+        - [175.125, 175.125, 41.25, 41.25]
+        - [145, 145, 37.875, 37.875]
+        - [115.75, 115.75, 32, 32]
+      -
         - [122.25, 135.375, 21, 27.5]
         - [149.875, 151.25, 4.75, 5.5]
         - [140.875, 143.625, 8.125, 8.875]
@@ -835,9 +895,6 @@ regions:
       STR_ALIEN_BASE: 27
     missionZones:
       -
-        - [209.125, 209.625, -19.875, -19.375]
-        - [207, 207.125, -21.625, -21.5]
-      -
         - [194.5, 225.625, -29.25, -15.25]
         - [172.5, 186.875, 10.875, 26.375]
         - [158.375, 171.375, 12.25, 27.75]
@@ -852,6 +909,9 @@ regions:
         - [207, 207.125, -21.625, -21.5]
         - [177.75, 178.25, 17.5, 17.875]
         - [164.625, 164.75, 20.5, 20.75]
+      -
+        - [209.125, 209.625, -19.875, -19.375]
+        - [207, 207.125, -21.625, -21.5]
       -
         - [209.125, 209.625, -19.875, -19.375]
         - [207, 207.125, -21.625, -21.5]
@@ -2518,7 +2578,7 @@ items:
     clipSize: -1
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2534,7 +2594,7 @@ items:
     clipSize: -1
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2572,7 +2632,7 @@ items:
     hitSound: 48
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 92
+    accuracyMelee: 100
     tuMelee: 15
     clipSize: -1
     battleType: 3
@@ -2611,7 +2671,7 @@ items:
     hitSound: 48
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -3552,6 +3612,11 @@ terrains:
       - URBAN
       - FRNITURE
     largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    # roadTypeOdds: [EWRoad, NSRoad] (Crossroad is remainder)
+    roadTypeOdds: [50, 25]
     mapBlocks:
       - name: URBAN00
         width: 10
@@ -4348,6 +4413,153 @@ soldiers:
     standHeight: 22
     kneelHeight: 14
 units:
+  - type: STR_TANK_CANNON
+    race: STR_TANK_CANNON
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: TANK_ARMOR
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    deathSound: 23
+    moveSound: 14
+    energyRecovery: 50
+  - type: STR_TANK_ROCKET_LAUNCHER
+    race: STR_TANK_ROCKET_LAUNCHER
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: TANK_ARMOR
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    deathSound: 23
+    moveSound: 14
+    energyRecovery: 50
+  - type: STR_TANK_LASER_CANNON
+    race: STR_TANK_LASER_CANNON
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 7
+    armor: TANK_ARMOR
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    deathSound: 23
+    moveSound: 14
+    energyRecovery: 50
+  - type: STR_HOVERTANK_PLASMA
+    race: STR_HOVERTANK_PLASMA
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: HOVERTANK_ARMOR
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
+    value: 20
+    deathSound: 23
+    moveSound: 40
+    energyRecovery: 50
+  - type: STR_HOVERTANK_LAUNCHER
+    race: STR_HOVERTANK_LAUNCHER
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 60
+    armor: HOVERTANK_ARMOR
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
+    value: 20
+    deathSound: 23
+    moveSound: 40
+    energyRecovery: 50
+  - type: MALE_CIVILIAN
+    race: STR_CIVILIAN
+    stats:
+      tu: 35
+      stamina: 65
+      health: 30
+      bravery: 80
+      reactions: 30
+      firing: 30
+      throwing: 50
+      strength: 20
+      psiStrength: 5
+      psiSkill: 0
+      melee: 50
+    armor: CIVM_ARMOR
+    standHeight: 21
+    kneelHeight: 14
+    value: 30
+    intelligence: 4
+    energyRecovery: 20
+  - type: FEMALE_CIVILIAN
+    race: STR_CIVILIAN
+    stats:
+      tu: 35
+      stamina: 65
+      health: 30
+      bravery: 80
+      reactions: 30
+      firing: 30
+      throwing: 50
+      strength: 20
+      psiStrength: 5
+      psiSkill: 0
+      melee: 50
+    armor: CIVF_ARMOR
+    standHeight: 21
+    kneelHeight: 14
+    value: 30
+    intelligence: 4
+    energyRecovery: 20
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
@@ -4504,6 +4716,7 @@ units:
     moveSound: 40
     intelligence: 5
     aggression: 1
+    energyRecovery: 50
     specab: 1
     livingWeapon: true
   - type: STR_FLOATER_SOLDIER
@@ -4672,147 +4885,8 @@ units:
     deathSound: 48
     intelligence: 2
     aggression: 2
+    energyRecovery: 34
     livingWeapon: true
-  - type: STR_TANK_CANNON
-    race: STR_TANK_CANNON
-    stats:
-      tu: 70
-      stamina: 100
-      health: 90
-      bravery: 110
-      reactions: 20
-      firing: 60
-      throwing: 0
-      strength: 60
-      psiStrength: 100
-      psiSkill: 0
-      melee: 70
-    armor: TANK_ARMOR
-    standHeight: 16
-    kneelHeight: 16
-    value: 20
-    deathSound: 23
-    moveSound: 14    
-  - type: STR_TANK_ROCKET_LAUNCHER
-    race: STR_TANK_ROCKET_LAUNCHER
-    stats:
-      tu: 70
-      stamina: 100
-      health: 90
-      bravery: 110
-      reactions: 20
-      firing: 60
-      throwing: 0
-      strength: 60
-      psiStrength: 100
-      psiSkill: 0
-      melee: 70
-    armor: TANK_ARMOR
-    standHeight: 16
-    kneelHeight: 16
-    value: 20
-    deathSound: 23
-    moveSound: 14
-  - type: STR_TANK_LASER_CANNON
-    race: STR_TANK_LASER_CANNON
-    stats:
-      tu: 70
-      stamina: 100
-      health: 90
-      bravery: 110
-      reactions: 20
-      firing: 60
-      throwing: 0
-      strength: 60
-      psiStrength: 100
-      psiSkill: 0
-      melee: 7
-    armor: TANK_ARMOR
-    standHeight: 16
-    kneelHeight: 16
-    value: 20
-    deathSound: 23
-    moveSound: 14
-  - type: STR_HOVERTANK_PLASMA
-    race: STR_HOVERTANK_PLASMA
-    stats:
-      tu: 100
-      stamina: 100
-      health: 90
-      bravery: 110
-      reactions: 30
-      firing: 60
-      throwing: 0
-      strength: 60
-      psiStrength: 100
-      psiSkill: 0
-      melee: 70
-    armor: HOVERTANK_ARMOR
-    standHeight: 12
-    kneelHeight: 12
-    floatHeight: 6
-    value: 20
-    deathSound: 23
-    moveSound: 40
-  - type: STR_HOVERTANK_LAUNCHER
-    race: STR_HOVERTANK_LAUNCHER
-    stats:
-      tu: 100
-      stamina: 100
-      health: 90
-      bravery: 110
-      reactions: 30
-      firing: 60
-      throwing: 0
-      strength: 60
-      psiStrength: 100
-      psiSkill: 0
-      melee: 60
-    armor: HOVERTANK_ARMOR
-    standHeight: 12
-    kneelHeight: 12
-    floatHeight: 6
-    value: 20
-    deathSound: 23
-    moveSound: 40
-  - type: MALE_CIVILIAN
-    race: STR_CIVILIAN
-    stats:
-      tu: 35
-      stamina: 65
-      health: 30
-      bravery: 80
-      reactions: 30
-      firing: 30
-      throwing: 50
-      strength: 20
-      psiStrength: 5
-      psiSkill: 0
-      melee: 50
-    armor: CIVM_ARMOR
-    standHeight: 21
-    kneelHeight: 14
-    value: 30
-    intelligence: 4
-  - type: FEMALE_CIVILIAN
-    race: STR_CIVILIAN
-    stats:
-      tu: 35
-      stamina: 65
-      health: 30
-      bravery: 80
-      reactions: 30
-      firing: 30
-      throwing: 50
-      strength: 20
-      psiStrength: 5
-      psiSkill: 0
-      melee: 50
-    armor: CIVF_ARMOR
-    standHeight: 21
-    kneelHeight: 14
-    value: 30
-    intelligence: 4
   - type: STR_SNAKEMAN_SOLDIER
     race: STR_SNAKEMAN
     rank: STR_LIVE_SOLDIER
@@ -4927,142 +5001,8 @@ units:
     deathSound: 8
     moveSound: 0
     intelligence: 6
-    aggression: 2 
-  - type: STR_MUTON_SOLDIER
-    race: STR_MUTON
-    rank: STR_LIVE_SOLDIER
-    stats:
-      tu: 56
-      stamina: 90
-      health: 125
-      bravery: 80
-      reactions: 60
-      firing: 54
-      throwing: 62
-      strength: 70
-      psiStrength: 25
-      psiSkill: 0
-      melee: 76
-    armor: MUTON_ARMOR0
-    standHeight: 21
-    kneelHeight: 16
-    value: 15
-    deathSound: 6
-    intelligence: 2
     aggression: 2
-  - type: STR_MUTON_NAVIGATOR
-    race: STR_MUTON
-    rank: STR_LIVE_NAVIGATOR
-    stats:
-      tu: 56
-      stamina: 90
-      health: 125
-      bravery: 80
-      reactions: 60
-      firing: 54
-      throwing: 62
-      strength: 70
-      psiStrength: 25
-      psiSkill: 0
-      melee: 76
-    armor: MUTON_ARMOR1
-    standHeight: 21
-    kneelHeight: 16
-    value: 17
-    deathSound: 6
-    intelligence: 3
-    aggression: 2 
-  - type: STR_MUTON_ENGINEER
-    race: STR_MUTON
-    rank: STR_LIVE_ENGINEER
-    stats:
-      tu: 56
-      stamina: 90
-      health: 125
-      bravery: 80
-      reactions: 60
-      firing: 54
-      throwing: 62
-      strength: 70
-      psiStrength: 25
-      psiSkill: 0
-      melee: 76
-    armor: MUTON_ARMOR2
-    standHeight: 21
-    kneelHeight: 16
-    value: 19
-    deathSound: 6
-    intelligence: 4
-    aggression: 2 
-  - type: STR_ETHEREAL_SOLDIER
-    race: STR_ETHEREAL
-    rank: STR_LIVE_SOLDIER
-    stats:
-      tu: 68
-      stamina: 96
-      health: 55
-      bravery: 80
-      reactions: 75
-      firing: 74
-      throwing: 80
-      strength: 48
-      psiStrength: 50
-      psiSkill: 40
-      melee: 85
-    armor: ETHEREAL_ARMOR0
-    standHeight: 20
-    kneelHeight: 15
-    value: 20
-    deathSound: 9
-    moveSound: 15
-    intelligence: 6
-    aggression: 1     
-  - type: STR_ETHEREAL_LEADER
-    race: STR_ETHEREAL
-    rank: STR_LIVE_LEADER
-    stats:
-      tu: 68
-      stamina: 96
-      health: 55
-      bravery: 80
-      reactions: 75
-      firing: 74
-      throwing: 80
-      strength: 48
-      psiStrength: 60
-      psiSkill: 45
-      melee: 85
-    armor: ETHEREAL_ARMOR1
-    standHeight: 20
-    kneelHeight: 15
-    value: 30
-    deathSound: 9
-    moveSound: 15
-    intelligence: 7
-    aggression: 1    
-  - type: STR_ETHEREAL_COMMANDER
-    race: STR_ETHEREAL
-    rank: STR_LIVE_COMMANDER
-    stats:
-      tu: 68
-      stamina: 96
-      health: 55
-      bravery: 80
-      reactions: 75
-      firing: 74
-      throwing: 80
-      strength: 48
-      psiStrength: 65
-      psiSkill: 50
-      melee: 85
-    armor: ETHEREAL_ARMOR2
-    standHeight: 20
-    kneelHeight: 15
-    value: 40
-    deathSound: 9
-    moveSound: 15
-    intelligence: 8
-    aggression: 1 
+    energyRecovery: 40
   - type: STR_CHRYSSALID_TERRORIST
     race: STR_CHRYSSALID
     rank: STR_LIVE_TERRORIST
@@ -5086,7 +5026,77 @@ units:
     aggroSound: 49
     intelligence: 4
     aggression: 1
+    energyRecovery: 40
     livingWeapon: true
+  - type: STR_MUTON_SOLDIER
+    race: STR_MUTON
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 56
+      stamina: 90
+      health: 125
+      bravery: 80
+      reactions: 60
+      firing: 54
+      throwing: 62
+      strength: 70
+      psiStrength: 25
+      psiSkill: 0
+      melee: 76
+    armor: MUTON_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    value: 15
+    deathSound: 6
+    intelligence: 2
+    aggression: 2
+    energyRecovery: 40
+  - type: STR_MUTON_NAVIGATOR
+    race: STR_MUTON
+    rank: STR_LIVE_NAVIGATOR
+    stats:
+      tu: 56
+      stamina: 90
+      health: 125
+      bravery: 80
+      reactions: 60
+      firing: 54
+      throwing: 62
+      strength: 70
+      psiStrength: 25
+      psiSkill: 0
+      melee: 76
+    armor: MUTON_ARMOR1
+    standHeight: 21
+    kneelHeight: 16
+    value: 17
+    deathSound: 6
+    intelligence: 3
+    aggression: 2
+    energyRecovery: 40
+  - type: STR_MUTON_ENGINEER
+    race: STR_MUTON
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 56
+      stamina: 90
+      health: 125
+      bravery: 80
+      reactions: 60
+      firing: 54
+      throwing: 62
+      strength: 70
+      psiStrength: 25
+      psiSkill: 0
+      melee: 76
+    armor: MUTON_ARMOR2
+    standHeight: 21
+    kneelHeight: 16
+    value: 19
+    deathSound: 6
+    intelligence: 4
+    aggression: 2
+    energyRecovery: 40
   - type: STR_SILACOID_TERRORIST
     race: STR_SILACOID
     rank: STR_LIVE_TERRORIST
@@ -5110,6 +5120,7 @@ units:
     moveSound: 47
     intelligence: 3
     aggression: 2
+    energyRecovery: 40
     specab: 2
     livingWeapon: true
   - type: STR_CELATID_TERRORIST
@@ -5136,7 +5147,80 @@ units:
     moveSound: 16
     intelligence: 3
     aggression: 2
+    energyRecovery: 40
     livingWeapon: true
+  - type: STR_ETHEREAL_SOLDIER
+    race: STR_ETHEREAL
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 68
+      stamina: 96
+      health: 55
+      bravery: 80
+      reactions: 75
+      firing: 74
+      throwing: 80
+      strength: 48
+      psiStrength: 50
+      psiSkill: 40
+      melee: 85
+    armor: ETHEREAL_ARMOR0
+    standHeight: 20
+    kneelHeight: 15
+    value: 20
+    deathSound: 9
+    moveSound: 15
+    intelligence: 6
+    aggression: 1
+    energyRecovery: 40
+  - type: STR_ETHEREAL_LEADER
+    race: STR_ETHEREAL
+    rank: STR_LIVE_LEADER
+    stats:
+      tu: 68
+      stamina: 96
+      health: 55
+      bravery: 80
+      reactions: 75
+      firing: 74
+      throwing: 80
+      strength: 48
+      psiStrength: 60
+      psiSkill: 45
+      melee: 85
+    armor: ETHEREAL_ARMOR1
+    standHeight: 20
+    kneelHeight: 15
+    value: 30
+    deathSound: 9
+    moveSound: 15
+    intelligence: 7
+    aggression: 1
+    energyRecovery: 40
+  - type: STR_ETHEREAL_COMMANDER
+    race: STR_ETHEREAL
+    rank: STR_LIVE_COMMANDER
+    stats:
+      tu: 68
+      stamina: 96
+      health: 55
+      bravery: 80
+      reactions: 75
+      firing: 74
+      throwing: 80
+      strength: 48
+      psiStrength: 65
+      psiSkill: 50
+      melee: 85
+    armor: ETHEREAL_ARMOR2
+    standHeight: 20
+    kneelHeight: 15
+    value: 40
+    deathSound: 9
+    moveSound: 15
+    intelligence: 8
+    aggression: 1
+    energyRecovery: 40
   - type: STR_SECTOPOD_TERRORIST
     race: STR_SECTOPOD
     rank: STR_LIVE_TERRORIST
@@ -5159,6 +5243,7 @@ units:
     deathSound: 23
     intelligence: 4
     aggression: 1
+    energyRecovery: 50
     livingWeapon: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
@@ -5182,6 +5267,7 @@ units:
     deathSound: 48
     intelligence: 3
     aggression: 2
+    energyRecovery: 20
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
 alienRaces:
@@ -5195,36 +5281,6 @@ alienRaces:
       - STR_SECTOID_SOLDIER
       - STR_CYBERDISC_TERRORIST
       - STR_CYBERDISC_TERRORIST
-  - id: STR_SNAKEMAN
-    members:
-      - STR_SNAKEMAN_COMMANDER
-      - STR_SNAKEMAN_LEADER
-      - STR_SNAKEMAN_ENGINEER
-      - STR_SNAKEMAN_SOLDIER
-      - STR_SNAKEMAN_NAVIGATOR
-      - STR_SNAKEMAN_SOLDIER
-      - STR_CHRYSSALID_TERRORIST
-      - STR_CHRYSSALID_TERRORIST
-  - id: STR_ETHEREAL
-    members:
-      - STR_ETHEREAL_COMMANDER
-      - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_SOLDIER
-      - STR_SECTOPOD_TERRORIST
-      - STR_SECTOPOD_TERRORIST
-  - id: STR_MUTON
-    members:
-      - STR_MUTON_SOLDIER
-      - STR_MUTON_SOLDIER
-      - STR_MUTON_ENGINEER
-      - STR_MUTON_SOLDIER
-      - STR_MUTON_NAVIGATOR
-      - STR_MUTON_SOLDIER
-      - STR_SILACOID_TERRORIST
-      - STR_CELATID_TERRORIST
   - id: STR_FLOATER
     members:
       - STR_FLOATER_COMMANDER
@@ -5235,6 +5291,36 @@ alienRaces:
       - STR_FLOATER_SOLDIER
       - STR_REAPER_TERRORIST
       - STR_REAPER_TERRORIST
+  - id: STR_SNAKEMAN
+    members:
+      - STR_SNAKEMAN_COMMANDER
+      - STR_SNAKEMAN_LEADER
+      - STR_SNAKEMAN_ENGINEER
+      - STR_SNAKEMAN_SOLDIER
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_SNAKEMAN_SOLDIER
+      - STR_CHRYSSALID_TERRORIST
+      - STR_CHRYSSALID_TERRORIST
+  - id: STR_MUTON
+    members:
+      - STR_MUTON_SOLDIER
+      - STR_MUTON_SOLDIER
+      - STR_MUTON_ENGINEER
+      - STR_MUTON_SOLDIER
+      - STR_MUTON_NAVIGATOR
+      - STR_MUTON_SOLDIER
+      - STR_SILACOID_TERRORIST
+      - STR_CELATID_TERRORIST
+  - id: STR_ETHEREAL
+    members:
+      - STR_ETHEREAL_COMMANDER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_SOLDIER
+      - STR_SECTOPOD_TERRORIST
+      - STR_SECTOPOD_TERRORIST
   - id: STR_MIXED
     members:
       - STR_ETHEREAL_SOLDIER
@@ -6077,9 +6163,8 @@ alienDeployments:
     length: 50
     height: 4
     civilians: 16
-    # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
-    roadTypeOdds: [50, 25]
-    terrain: URBAN
+    terrains:
+      - URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6
@@ -6228,7 +6313,8 @@ alienDeployments:
     width: 50
     length: 50
     height: 2
-    terrain: UBASE
+    terrains:
+      - UBASE
     shade: 15
   - type: STR_BASE_DEFENSE
     data:
@@ -6382,7 +6468,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
-    terrain: XBASE
+    terrains:
+      - XBASE
     shade: 5
   - type: STR_MARS_CYDONIA_LANDING
     data:
@@ -6449,7 +6536,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 4
-    terrain: MARS
+    terrains:
+      - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
   - type: STR_MARS_THE_FINAL_ASSAULT
@@ -6598,7 +6686,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
-    terrain: UBASE
+    terrains:
+      - UBASE
     shade: 5
 research:
   - name: STR_LASER_WEAPONS
@@ -8705,85 +8794,85 @@ ufoTrajectories:
     groundTimer: 3000
     waypoints:
       - [5, 4, 100]
-      - [1, 3, 74]
-      - [1, 1, 28]
-      - [2, 1, 47]
+      - [0, 3, 74]
+      - [0, 1, 28]
+      - [1, 1, 47]
       - [5, 2, 100]
   - id: P1
     groundTimer: 4000
     waypoints:
       - [5, 4, 100]
-      - [1, 2, 76]
-      - [1, 2, 20]
-      - [2, 1, 44]
-      - [1, 0, 20]
-      - [1, 2, 32]
-      - [3, 1, 65]
+      - [0, 2, 76]
+      - [0, 2, 20]
+      - [1, 1, 44]
+      - [0, 0, 20]
+      - [0, 2, 32]
+      - [2, 1, 65]
       - [5, 0, 100]
   - id: P2
     groundTimer: 5000
     waypoints:
       - [5, 4, 100]
-      - [1, 3, 57]
-      - [1, 2, 26]
-      - [2, 1, 50]
+      - [0, 3, 57]
+      - [0, 2, 26]
+      - [1, 1, 50]
       - [5, 0, 100]
   - id: P3
     groundTimer: 6000
     waypoints:
       - [5, 4, 100]
-      - [1, 3, 30]
-      - [1, 2, 25]
-      - [3, 1, 20]
+      - [0, 3, 30]
+      - [0, 2, 25]
+      - [2, 1, 20]
       - [5, 0, 100]
   - id: P4
     groundTimer: 7000
     waypoints:
       - [5, 4, 100]
-      - [1, 2, 67]
-      - [1, 2, 52]
-      - [3, 1, 40]
-      - [1, 0, 30]
-      - [1, 2, 20]
-      - [3, 1, 30]
+      - [0, 2, 67]
+      - [0, 2, 52]
+      - [2, 1, 40]
+      - [0, 0, 30]
+      - [0, 2, 20]
+      - [2, 1, 30]
       - [5, 0, 100]
   - id: P5
     groundTimer: 4000
     waypoints:
       - [5, 4, 100]
-      - [1, 2, 50]
-      - [1, 2, 20]
+      - [0, 2, 50]
+      - [0, 2, 20]
       - [4, 1, 15]
-      - [1, 0, 20]
-      - [1, 2, 29]
+      - [0, 0, 20]
+      - [0, 2, 29]
       - [4, 1, 42]
       - [5, 0, 90]
   - id: P6
     groundTimer: 5000
     waypoints:
       - [5, 4, 100]
-      - [1, 3, 50]
-      - [1, 2, 25]
+      - [0, 3, 50]
+      - [0, 2, 25]
       - [4, 1, 16]
       - [5, 0, 100]
   - id: P7
     groundTimer: 9000
     waypoints:
       - [5, 4, 100]
-      - [1, 3, 60]
-      - [1, 2, 30]
-      - [0, 1, 20]
+      - [0, 3, 60]
+      - [0, 2, 30]
+      - [3, 1, 20]
       - [5, 0, 100]
   - id: P8
     groundTimer: 6000
     waypoints:
       - [5, 4, 100]
-      - [2, 1, 60]
-      - [3, 1, 20]
-      - [0, 1, 30]
+      - [1, 1, 60]
+      - [2, 1, 20]
+      - [3, 1, 30]
       - [4, 1, 20]
-      - [1, 1, 42]
-      - [3, 1, 56]
+      - [0, 1, 42]
+      - [2, 1, 56]
       - [5, 4, 100]
   - id: P9
     groundTimer: 2000

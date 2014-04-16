@@ -332,6 +332,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
+			_unit->abortTurn();
 			_parent->popState();
 			return false;
 		}
@@ -372,6 +373,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
+			_unit->abortTurn();
 			_parent->popState();
 			return false;
 		}

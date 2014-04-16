@@ -382,6 +382,8 @@ set ( menu_src
   Menu/SaveState.h
   Menu/LoadState.cpp
   Menu/LoadState.h
+  Menu/ConfirmLoadState.cpp
+  Menu/ConfirmLoadState.h
   Menu/NewGameState.cpp
   Menu/NewGameState.h
   Menu/NewBattleState.cpp

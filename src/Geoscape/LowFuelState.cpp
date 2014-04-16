@@ -50,7 +50,7 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_txtMessage = new Text(214, 17, 21, 90);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnOk);
@@ -92,14 +92,6 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 LowFuelState::~LowFuelState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void LowFuelState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

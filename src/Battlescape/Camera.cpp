@@ -226,7 +226,7 @@ void Camera::mouseOver(Action *action, State *)
 			_scrollMouseY = 0;
 		}
 
-		if ((_scrollMouseX || _scrollMouseY) && !_scrollMouseTimer->isRunning() && !_scrollKeyTimer->isRunning())
+		if ((_scrollMouseX || _scrollMouseY) && !_scrollMouseTimer->isRunning() && !_scrollKeyTimer->isRunning() && 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)))
 		{
 			_scrollMouseTimer->start();
 		}
@@ -268,7 +268,7 @@ void Camera::keyboardPress(Action *action, State *)
 		_scrollKeyY = -scrollSpeed;
 	}
 
-	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
+	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning() && 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)))
 	{
 		_scrollKeyTimer->start();
 	}
@@ -308,7 +308,7 @@ void Camera::keyboardRelease(Action *action, State *)
 		_scrollKeyY = 0;
 	}
 
-	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
+	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning() && 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)))
 	{
 		_scrollKeyTimer->start();
 	}
@@ -352,10 +352,10 @@ void Camera::scrollXY(int x, int y, bool redraw)
 		// Handling map bounds...
 		// Ok, this is a prototype, it should be optimized.
 		// Actually this should be calculated instead of slow-approximation.
-		if (_center.x < 0)             { _mapOffset.x -= 2; _mapOffset.y -= 1; continue; }
-		if (_center.x > _mapsize_x -1) { _mapOffset.x += 2; _mapOffset.y += 1; continue; }
-		if (_center.y < 0)             { _mapOffset.x += 2; _mapOffset.y -= 1; continue; }
-		if (_center.y > _mapsize_y -1) { _mapOffset.x -= 2; _mapOffset.y += 1; continue; }
+		if (_center.x < 0)             { _mapOffset.x -= 1; _mapOffset.y -= 1; continue; }
+		if (_center.x > _mapsize_x -1) { _mapOffset.x += 1; _mapOffset.y += 1; continue; }
+		if (_center.y < 0)             { _mapOffset.x += 1; _mapOffset.y -= 1; continue; }
+		if (_center.y > _mapsize_y -1) { _mapOffset.x -= 1; _mapOffset.y += 1; continue; }
 		break;
 	}
 	while (true);

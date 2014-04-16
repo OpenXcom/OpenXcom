@@ -36,6 +36,9 @@
 namespace OpenXcom
 {
 
+const int Screen::ORIGINAL_WIDTH = 320;
+const int Screen::ORIGINAL_HEIGHT = 200;
+
 /**
  * Sets up all the internal display flags depending on
  * the current video settings.
@@ -222,6 +225,7 @@ void Screen::clear()
  * @param colors Pointer to the set of colors.
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
+ * @param immediately Apply palette changes immediately, otherwise wait for next blit.
  */
 void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool immediately)
 {
@@ -457,7 +461,7 @@ int Screen::getCursorLeftBlackBand() const
  */
 void Screen::screenshot(const std::string &filename) const
 {
-	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
+	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth() - getWidth()%4, getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
 	
 	if (isOpenGLEnabled())
 	{
@@ -466,7 +470,7 @@ void Screen::screenshot(const std::string &filename) const
 
 		for (int y = 0; y < getHeight(); ++y)
 		{
-			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
+			glReadPixels(0, getHeight()-(y+1), getWidth() - getWidth()%4, 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
 		}
 		glErrorCheck();
 #endif
@@ -476,7 +480,7 @@ void Screen::screenshot(const std::string &filename) const
 		SDL_BlitSurface(_screen, 0, screenshot, 0);
 	}
 
-	unsigned error = lodepng::encode(filename, (const unsigned char *)(screenshot->pixels), getWidth(), getHeight(), LCT_RGB);
+	unsigned error = lodepng::encode(filename, (const unsigned char *)(screenshot->pixels), getWidth() - getWidth()%4, getHeight(), LCT_RGB);
 	if (error)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);

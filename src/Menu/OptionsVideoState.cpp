@@ -112,9 +112,9 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 
 	if (Options::baseXResolution == Screen::ORIGINAL_WIDTH && Options::baseYResolution == Screen::ORIGINAL_HEIGHT)
 		_gameCurrent = 0;
-	else if (Options::baseXResolution == Options::displayWidth && Options::baseYResolution == Options::displayHeight)
+	else if (Options::baseXResolution == Options::displayWidth - Options::displayWidth %4 && Options::baseYResolution == Options::displayHeight)
 		_gameCurrent = 1;
-	else if (Options::baseXResolution == Options::displayWidth/2 && Options::baseYResolution == Options::displayHeight/2)
+	else if (Options::baseXResolution == Options::displayWidth/2 - (Options::displayWidth/2) %4 && Options::baseYResolution == Options::displayHeight/2)
 		_gameCurrent = 2;
 	else
 		_gameCurrent = -1;
@@ -207,7 +207,6 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtGameSize->setColor(Palette::blockOffset(15)-1);
 	_txtGameSize->setAlign(ALIGN_CENTER);
 	_txtGameSize->setBig();
-	updateGameResolution();
 
 	_btnGameResolutionUp->setColor(Palette::blockOffset(15)-1);
 	_btnGameResolutionUp->onMouseClick((ActionHandler)&OptionsVideoState::btnGameResolutionUpClick);
@@ -343,13 +342,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_cbxFilter->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxFilter->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
-	// Save old display options for safekeeping
-	Options::newDisplayWidth = Options::displayWidth;
-	Options::newDisplayHeight = Options::displayHeight;
-	Options::newOpenGL = Options::useOpenGL;
-	Options::newScaleFilter = Options::useScaleFilter;
-	Options::newHQXFilter = Options::useHQXFilter;
-	Options::newOpenGLShader = Options::useOpenGLShader;
+	updateGameResolution();
 }
 
 /**
@@ -377,6 +370,7 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
 		_resCurrent--;
 	}
 	updateDisplayResolution();
+	updateGameResolution();
 }
 
 /**
@@ -396,6 +390,7 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
 		_resCurrent++;
 	}
 	updateDisplayResolution();
+	updateGameResolution();
 }
 
 /**
@@ -432,7 +427,7 @@ void OptionsVideoState::btnGameResolutionUpClick(Action *)
  */
 void OptionsVideoState::btnGameResolutionDownClick(Action *)
 {
-	if (_gameCurrent == 0)
+	if (_gameCurrent <= 0)
 		_gameCurrent = _gameRes.size() - 1;
 	else
 		_gameCurrent--;
@@ -451,17 +446,23 @@ void OptionsVideoState::updateGameResolution()
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		break;
 	case 1:
-		Options::baseXResolution = Options::displayWidth;
-		Options::baseYResolution = Options::displayHeight;
+		Options::baseXResolution = Options::newDisplayWidth;
+		Options::baseYResolution = Options::newDisplayHeight;
 		break;
 	case 2:
-		Options::baseXResolution = Options::displayWidth / 2;
-		Options::baseYResolution = Options::displayHeight / 2;
+		Options::baseXResolution = Options::newDisplayWidth / 2;
+		Options::baseYResolution = Options::newDisplayHeight / 2;
 		break;
 	default:
 		_txtGameSize->setText(L"-");
 		break;
 	}
+
+	// scaler methods seem to require base res be a factor of 4
+	Options::baseXResolution -= Options::baseXResolution %4;
+	Options::baseXResolution = std::max(Options::baseXResolution, Screen::ORIGINAL_WIDTH);
+	Options::baseYResolution = std::max(Options::baseYResolution, Screen::ORIGINAL_HEIGHT);
+
 	if (_gameCurrent >= 0 && _gameCurrent < _gameRes.size())
 	{
 		_txtGameSize->setText(_gameRes[_gameCurrent]);
@@ -488,6 +489,7 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
 	ss << std::dec << _txtDisplayWidth->getText();
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
+	updateGameResolution();
 }
 
 /**
@@ -510,6 +512,7 @@ void OptionsVideoState::txtDisplayHeightChange(Action *)
 	ss << std::dec << _txtDisplayHeight->getText();
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
+	updateGameResolution();
 }
 
 /**

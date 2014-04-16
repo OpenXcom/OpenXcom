@@ -55,8 +55,8 @@ private:
 	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 	void makeVideoFlags();
 public:
-	static const int ORIGINAL_WIDTH = 320;
-	static const int ORIGINAL_HEIGHT = 200;
+	static const int ORIGINAL_WIDTH;
+	static const int ORIGINAL_HEIGHT;
 
 	/// Creates a new display screen.
 	Screen();

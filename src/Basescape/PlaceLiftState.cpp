@@ -51,7 +51,7 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
 	_txtTitle = new Text(320, 9, 0, 0);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_txtTitle);

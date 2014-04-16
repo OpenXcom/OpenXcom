@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
+#include <set>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
@@ -543,6 +544,52 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 }
 
 /**
+ * Gets the name of all the files
+ * contained in a Data subfolder.
+ * Repeated files are ignored.
+ * @param folder Path to the data folder.
+ * @param ext Extension of files ("" if it doesn't matter).
+ * @return Ordered list of all the files.
+ */
+std::vector<std::string> getDataContents(const std::string &folder, const std::string &ext)
+{
+	std::set<std::string> unique;
+	std::vector<std::string> files;
+
+	// Check current data path
+	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
+	if (current != "")
+	{
+		std::vector<std::string> contents = getFolderContents(current, ext);
+		for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+		{
+			unique.insert(*file);
+		}
+	}
+
+	// Check every other path
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
+	{
+		std::string path = caseInsensitiveFolder(*i, folder);
+		if (path == current)
+		{
+			continue;
+		}
+		if (path != "")
+		{
+			std::vector<std::string> contents = getFolderContents(path, ext);
+			for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+			{
+				unique.insert(*file);
+			}
+		}
+	}
+
+	files = std::vector<std::string>(unique.begin(), unique.end());
+	return files;
+}
+
+/**
  * Checks if a certain path exists and is a folder.
  * @param path Full path to folder.
  * @return Does it exist?
@@ -690,19 +737,22 @@ std::string getLocale()
 	std::locale l("");
 	std::string name = l.name();
 	size_t dash = name.find_first_of('_'), dot = name.find_first_of('.');
-	if (dash == std::string::npos)
+	if (dot != std::string::npos)
 	{
-		return "";
+		name = name.substr(0, dot - 1);
 	}
-	std::string language = name.substr(0, dash - 1);
-	if (dot == std::string::npos)
+	if (dash != std::string::npos)
 	{
-		return language;
+		std::string language = name.substr(0, dash - 1);
+		std::string country = name.substr(dash - 1);
+		std::ostringstream locale;
+		locale << language << "-" << country;
+		return locale.str();
 	}
-	std::string country = name.substr(dash - 1, dot - 1);
-	std::ostringstream locale;
-	locale << language << "-" << country;
-	return locale.str();
+	else
+	{
+		return name + "-";
+	}
 #endif
 }
 

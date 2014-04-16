@@ -47,7 +47,7 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	_txtMessage = new Text(226, 80, 47, 50);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnOk);
@@ -84,14 +84,6 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 CraftErrorState::~CraftErrorState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void CraftErrorState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

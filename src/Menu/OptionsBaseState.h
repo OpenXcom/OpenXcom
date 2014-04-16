@@ -55,6 +55,8 @@ public:
 	OptionsBaseState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsBaseState();
+	/// Restarts the game states.
+	static void restart(Game *game, OptionsOrigin origin);
 	/// Initializes palettes.
 	void init();
 	/// Presses a certain category button.

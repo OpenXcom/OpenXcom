@@ -49,8 +49,6 @@ public:
 	ItemsArrivingState(Game *game, GeoscapeState *state);
 	/// Cleans up the ItemsArriving state.
 	~ItemsArrivingState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Go To Base button.

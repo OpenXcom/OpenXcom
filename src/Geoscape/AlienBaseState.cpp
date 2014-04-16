@@ -51,13 +51,14 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(308, 60, 6, 60);
 
+	setPalette("PAL_GEOSCAPE", 3);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
 
 	centerAllSurfaces();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

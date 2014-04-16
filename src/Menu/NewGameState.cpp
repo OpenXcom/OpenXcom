@@ -48,6 +48,9 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_btnCancel = new TextButton(160, 18, 80, 158);
 	_txtTitle = new Text(192, 10, 64, 25);
 
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_btnBeginner);
 	add(_btnExperienced);

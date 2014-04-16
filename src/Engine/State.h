@@ -43,12 +43,14 @@ class LocalizedText;
  */
 class State
 {
+	friend class Timer;
+
 protected:
 	Game *_game;
 	std::vector<Surface*> _surfaces;
 	bool _screen;
 	InteractiveSurface *_modal;
-
+	SDL_Color _palette[256];
 public:
 	/// Creates a new state linked to a game.
 	State(Game* game);
@@ -88,8 +90,12 @@ public:
 	void applyBattlescapeTheme();
 	/// Sets a modal surface.
 	void setModal(InteractiveSurface *surface);
-
-	friend class Timer;
+	/// Changes a set of colors on the state's 8bpp palette.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256, bool immediately = true);
+	/// Changes the state's 8bpp palette with certain resources.
+	void setPalette(const std::string &palette, int backpals = -1);
+	/// Gets the state's 8bpp palette.
+	const SDL_Color *const getPalette() const;
 };
 
 }
