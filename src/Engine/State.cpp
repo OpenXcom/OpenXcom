@@ -47,7 +47,8 @@ namespace OpenXcom
  */
 State::State(Game *game) : _game(game), _surfaces(), _screen(true), _modal(0)
 {
-
+	// initialize palette to all black
+	memset(_palette, 0, sizeof(_palette));
 }
 
 /**
