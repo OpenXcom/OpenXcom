@@ -370,7 +370,7 @@ static struct AudioSequence
 				{
 					soundInFile *sf = (*sounds) + command;
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
-					double ratio = Options::soundVolume / MIX_MAX_VOLUME;
+					double ratio = (double)Options::soundVolume / MIX_MAX_VOLUME;
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 					s = rp->getSound(sf->catFile, sf->sound);
 					if (s)

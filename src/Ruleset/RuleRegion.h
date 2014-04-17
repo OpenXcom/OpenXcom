@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include "../aresame.h"
 #include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
@@ -37,7 +38,7 @@ struct MissionArea
 
     bool operator== (const MissionArea& ma) const
 	{
-		return lonMax == ma.lonMax && lonMin == ma.lonMin && latMax == ma.latMax && latMin == ma.latMin;
+		return AreSame(lonMax, ma.lonMax) && AreSame(lonMin, ma.lonMin) && AreSame(latMax, ma.latMax) && AreSame(latMin, ma.latMin);
 	}
 };
 
