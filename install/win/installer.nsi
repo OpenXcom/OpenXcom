@@ -169,6 +169,8 @@ ${EndIf}
 	SetOutPath "$INSTDIR\data\Ruleset"
 	
 	File "..\..\bin\data\Ruleset\Xcom1Ruleset.rul"
+	File "..\..\bin\data\Ruleset\XcomUtil_*.rul"
+	File "..\..\bin\data\Ruleset\UFOextender_*.rul"
 	
 	SetOutPath "$INSTDIR\data\Resources\BulletSprites"
 	
@@ -177,6 +179,14 @@ ${EndIf}
 	SetOutPath "$INSTDIR\data\Resources\Pathfinding"
 	
 	File "..\..\bin\data\Resources\Pathfinding\*.*"
+	
+	SetOutPath "$INSTDIR\data\Resources\UI"
+	
+	File "..\..\bin\data\Resources\UI\*.*"
+	
+	SetOutPath "$INSTDIR\data\Resources\Weapons"
+	
+	File "..\..\bin\data\Resources\Weapons\*.*"
 	
 	SetOutPath "$INSTDIR\data\SoldierName"
 	
@@ -209,6 +219,7 @@ ${EndIf}
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Data Folder.lnk" "$INSTDIR\data"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk" "$INSTDIR\OpenXcom.exe"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.TXT"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -221,7 +232,7 @@ SectionEnd
 Section "Data Patch" SecPatch
 	
 	;(uses NSISdl.dll)
-	NSISdl::download "http://openxcom.org/download/extras/data-patch.zip" "$TEMP\data-patch.zip"
+	NSISdl::download "http://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip"
 	Pop $0
 	StrCmp $0 success success1
 		SetDetailsView show
@@ -230,7 +241,7 @@ Section "Data Patch" SecPatch
 	success1:
 
 	;(uses ZipDLL.dll)
-	!insertmacro ZIPDLL_EXTRACT "$TEMP\data-patch.zip" "$INSTDIR\data" "<ALL>"
+	!insertmacro ZIPDLL_EXTRACT "$TEMP\universal-patch.zip" "$INSTDIR\data" "<ALL>"
 	Pop $0
 	StrCmp $0 success success2
 		SetDetailsView show
@@ -238,7 +249,31 @@ Section "Data Patch" SecPatch
 		Abort
 	success2:
 
-	Delete "$TEMP\data-patch.zip"
+	Delete "$TEMP\universal-patch.zip"
+
+SectionEnd
+
+Section "DOS Music" SecMusic
+	
+	;(uses NSISdl.dll)
+	NSISdl::download "original-music-ogg-128.zip" "$TEMP\original-music-ogg-128.zip"
+	Pop $0
+	StrCmp $0 success success1
+		SetDetailsView show
+		DetailPrint "download failed: $0"
+		Abort
+	success1:
+
+	;(uses ZipDLL.dll)
+	!insertmacro ZIPDLL_EXTRACT "$TEMP\original-music-ogg-128.zip" "$INSTDIR\data\sound" "<ALL>"
+	Pop $0
+	StrCmp $0 success success2
+		SetDetailsView show
+		DetailPrint "unzipping failed: $0"
+		Abort
+	success2:
+
+	Delete "$TEMP\original-music-ogg-128.zip"
 
 SectionEnd
 
@@ -255,20 +290,22 @@ SectionEnd
 
 	;Language strings
 	LangString DESC_SecMain ${LANG_ENGLISH} "Files required to run ${GAME_NAME}."
-	LangString DESC_SecPatch ${LANG_ENGLISH} "Fixes errors in the original X-Com maps (courtesy of Zombie)."
+	LangString DESC_SecPatch ${LANG_ENGLISH} "Fixes errors in the original X-Com data. Recommended for first installations. (requires an internet connection)"
+	LangString DESC_SecMusic ${LANG_ENGLISH} "Adlib/SoundBlaster music recording. Fixes Windows playback issues. (requires an internet connection)"
 	LangString DESC_SecDesktop ${LANG_ENGLISH} "Creates a shortcut in the desktop to play ${GAME_NAME}."
 
 	;Assign language strings to sections
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(DESC_SecPatch)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecMusic} $(DESC_SecMusic)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Uninstaller Sections
 
-Section "un.Delete X-Com Data" UnData
+Section /o "un.Delete X-Com Data" UnData
 	RMDir /r "$INSTDIR\data"
 SectionEnd
 
@@ -289,8 +326,18 @@ Section "-un.Main"
 	Delete "$INSTDIR\data\README.txt"
 	Delete "$INSTDIR\data\Language\*.*"
 	RMDir "$INSTDIR\data\Language"
-	Delete "$INSTDIR\data\Ruleset\Xcom1Ruleset.rul"
+	Delete "..\..\bin\data\Ruleset\Xcom1Ruleset.rul"
+	Delete "..\..\bin\data\Ruleset\XcomUtil_*.rul"
+	Delete "..\..\bin\data\Ruleset\UFOextender_*.rul"
 	RMDir "$INSTDIR\Ruleset"
+	Delete "..\..\bin\data\Resources\BulletSprites\*.*"
+	RMDir "$INSTDIR\data\Resources\BulletSprites"
+	Delete "..\..\bin\data\Resources\Pathfinding\*.*"
+	RMDir "$INSTDIR\data\Resources\Pathfinding"
+	Delete "..\..\bin\data\Resources\UI\*.*"
+	RMDir "$INSTDIR\data\Resources\UI"
+	Delete "..\..\bin\data\Resources\Weapons\*.*"
+	RMDir "$INSTDIR\data\Resources\Weapons"
 	Delete "$INSTDIR\data\SoldierName\*.*"
 	RMDir "$INSTDIR\data\SoldierName"
 	Delete "$INSTDIR\data\Shaders\*.*"
@@ -302,6 +349,7 @@ Section "-un.Main"
 	
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
     
+	Delete "$SMPROGRAMS\$StartMenuFolder\Data Folder.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Readme.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
@@ -319,8 +367,8 @@ SectionEnd
 ;Uninstaller Descriptions
 
 	;Language strings
-	LangString DESC_UnData ${LANG_ENGLISH} "Deletes the copied X-Com resources."
-	LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all OpenXcom user data, like savegames, screenshots and options."
+	LangString DESC_UnData ${LANG_ENGLISH} "Deletes all OpenXcom data, including mods and X-Com resources. Recommended for a clean reinstall."
+	LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all OpenXcom user data, like savegames, screenshots and options. Recommended for a complete wipe."
 
 	;Assign language strings to sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
@@ -335,6 +383,6 @@ SectionEnd
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${GAME_NAME} Installer"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${GAME_VERSION}.0.0"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${GAME_AUTHOR}"
-	VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2010-2012 ${GAME_AUTHOR}"
+	VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2010-2014 ${GAME_AUTHOR}"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${GAME_NAME} Installer"
 	VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${GAME_VERSION}.0.0"
