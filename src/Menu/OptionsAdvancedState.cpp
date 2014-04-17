@@ -208,7 +208,7 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 		int *i = setting->asInt();
 
 		int increment = (button == SDL_BUTTON_LEFT) ? 1 : -1; // left-click increases, right-click decreases
-		if (i == &Options::changeValueByMouseWheel)
+		if (i == &Options::changeValueByMouseWheel || i == &Options::FPS)
 		{
 			increment *= 10;
 		}
@@ -225,6 +225,11 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 		{
 			min = 0;
 			max = 50;
+		}
+		else if (i == &Options::FPS)
+		{
+			min = 0;
+			max = 120;
 		}
 		if (*i < min)
 		{

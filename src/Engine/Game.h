@@ -56,11 +56,15 @@ private:
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
 
+// not sure if i can remove this ifdef, morphos users please advise.
 #ifdef __MORPHOS__		
-	Uint32 waittime;// = 1000.0f/FPS;
 	Uint32 framestarttime;// = 0;
 	Sint32 delaytime;
+#else
+	unsigned int framestarttime;
+	int delaytime;
 #endif
+
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
