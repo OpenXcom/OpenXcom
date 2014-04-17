@@ -43,7 +43,7 @@ namespace OpenXcom
 		_txtTitle = new Text(155, 32, 5, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+		setPalette("PAL_UFOPAEDIA");
 
 		ArticleState::initLayout();
 

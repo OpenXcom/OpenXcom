@@ -39,12 +39,12 @@ private:
 	Window *_window;
 	Text *_txtMessage;
 
-	void create(const std::string &str, const std::wstring &wstr, Uint8 color, std::string bg, Uint8 bgColor);
+	void create(const std::string &str, const std::wstring &wstr, SDL_Color *palette, Uint8 color, std::string bg, int bgColor);
 public:
 	/// Creates the Error state.
-	ErrorMessageState(Game *game, const std::string &id, Uint8 color, std::string bg, Uint8 bgColor);
+	ErrorMessageState(Game *game, const std::string &id, SDL_Color *palette, Uint8 color, std::string bg, int bgColor);
 	/// Creates the Error state.
-	ErrorMessageState(Game *game, const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor);
+	ErrorMessageState(Game *game, const std::wstring &msg, SDL_Color *palette, Uint8 color, std::string bg, int bgColor);
 	/// Cleans up the Error state.
 	~ErrorMessageState();
 	/// Handler for clicking the OK button.

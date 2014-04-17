@@ -112,7 +112,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;
@@ -163,7 +163,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtDebug = new Text(200, 18, 0, 0);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	setPalette("PAL_GEOSCAPE");
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
@@ -395,6 +395,18 @@ GeoscapeState::~GeoscapeState()
 	delete _zoomInEffectTimer;
 	delete _zoomOutEffectTimer;
 	delete _dogfightStartTimer;
+	
+	std::list<DogfightState*>::iterator it = _dogfights.begin();
+	for(; it != _dogfights.end();)
+	{
+		delete *it;
+		it = _dogfights.erase(it);
+	}
+	for(it = _dogfightsToBeStarted.begin(); it != _dogfightsToBeStarted.end();)
+	{
+		delete *it;
+		it = _dogfightsToBeStarted.erase(it);
+	}
 }
 
 /**
@@ -403,7 +415,7 @@ GeoscapeState::~GeoscapeState()
 void GeoscapeState::blit()
 {
 	State::blit();
-	for(std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
+	for(std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 	{
 		(*it)->blit();
 	}
@@ -442,7 +454,7 @@ void GeoscapeState::handle(Action *action)
 	}
 	if(!_dogfights.empty())
 	{
-		for(std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
+		for(std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 		{
 			(*it)->handle(action);
 		}
@@ -456,9 +468,7 @@ void GeoscapeState::handle(Action *action)
  */
 void GeoscapeState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
+	State::init();
 	timeDisplay();
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
@@ -468,17 +478,16 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	// Set music if it's not already playing
-	if (!_music && !_battleMusic)
+	if (_dogfights.empty() && !_dogfightStartTimer->isRunning())
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-			_game->getResourcePack()->getMusic("GMGEO1")->play();
+			_game->getResourcePack()->playMusic("GMGEO1");
 		}
 		else
 		{
-			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+			_game->getResourcePack()->playMusic("GMGEO", true);
 		}
-		_music = true;
 	}
 	_globe->unsetNewBaseHover();
 }
@@ -500,29 +509,24 @@ void GeoscapeState::think()
 		determineAlienMissions(true);
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
 	}
-	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
+	if (_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
 		_timer->think(this, 0);
 	}
 	else
 	{
-		if(!_dogfights.empty() || _minimizedDogfights != 0)
+		if (!_dogfights.empty() || _minimizedDogfights != 0)
 		{
 			handleDogfights();
 		}
-		if(!_popups.empty())
+		if (!_popups.empty())
 		{
 			// Handle popups
 			_globe->rotateStop();
-			_game->pushState(*_popups.begin());
+			_game->pushState(_popups.front());
 			_popups.erase(_popups.begin());
 		}
-	}
-	if (_battleMusic && _dogfights.empty() && !_dogfightStartTimer->isRunning())
-	{
-		_battleMusic = false;
-		musicStop();
 	}
 }
 
@@ -651,7 +655,7 @@ void GeoscapeState::time5Seconds()
 				(*i)->think();
 				if ((*i)->reachedDestination())
 				{
-					unsigned terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
+					size_t terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
 					AlienMission *mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
@@ -819,12 +823,7 @@ void GeoscapeState::time5Seconds()
 								startDogfight();
 								_dogfightStartTimer->start();
 							}
-							if(!_battleMusic)
-							{
-								// Set music
-								_game->getResourcePack()->getMusic("GMINTER")->play();
-								_battleMusic = true;
-							}
+							_game->getResourcePack()->playMusic("GMINTER");
 						}
 						break;
 					case Ufo::LANDED:
@@ -838,7 +837,7 @@ void GeoscapeState::time5Seconds()
 								int texture, shade;
 								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 								timerReset();
-								popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
 						}
 						else if (u->getStatus() != Ufo::LANDED)
@@ -861,7 +860,7 @@ void GeoscapeState::time5Seconds()
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
 						timerReset();
-						popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+						popup(new ConfirmLandingState(_game, *j, texture, shade));
 					}
 					else
 					{
@@ -877,7 +876,7 @@ void GeoscapeState::time5Seconds()
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade, this));
+							popup(new ConfirmLandingState(_game, *j, texture, shade));
 						}
 						else
 						{
@@ -898,7 +897,7 @@ void GeoscapeState::time5Seconds()
 			if(!(*i)->getFollowers()->empty())
 			{
 				// Remove all dogfights with this UFO.
-				for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
+				for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
 				{
 					if((*d)->getUfo() == (*i))
 					{
@@ -1679,18 +1678,6 @@ void GeoscapeState::timerReset()
 }
 
 /**
- * Stops the Geoscape music for when another
- * music is gonna take place, so it resumes
- * when we go back to the Geoscape.
- * @param pause True if we want to resume
- * from the same spot we left off.
- */
-void GeoscapeState::musicStop(bool)
-{
-	_music = false;
-}
-
-/**
  * Adds a new popup window to the queue
  * (this prevents popups from overlapping)
  * and pauses the game timer respectively.
@@ -1954,7 +1941,7 @@ void GeoscapeState::handleDogfights()
 	}
 	// Handle dogfights logic.
 	_minimizedDogfights = 0;
-	std::vector<DogfightState*>::iterator d = _dogfights.begin();
+	std::list<DogfightState*>::iterator d = _dogfights.begin();
 	while(d != _dogfights.end())
 	{
 		if((*d)->isMinimized())
@@ -1989,7 +1976,7 @@ void GeoscapeState::handleDogfights()
 int GeoscapeState::minimizedDogfightsCount()
 {
 	int minimizedDogfights = 0;
-	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
 		if((*d)->isMinimized())
 		{
@@ -2016,7 +2003,6 @@ void GeoscapeState::startDogfight()
 		_dogfightStartTimer->stop();
 		_zoomInEffectTimer->stop();
 		timerReset();
-		musicStop();
 		while(!_dogfightsToBeStarted.empty())
 		{
 			_dogfights.push_back(_dogfightsToBeStarted.back());
@@ -2025,7 +2011,7 @@ void GeoscapeState::startDogfight()
 			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
 		}
 		// Set correct number of interceptions for every dogfight.
-		for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+		for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 		{
 			(*d)->setInterceptionsCount(_dogfights.size());
 		}
@@ -2038,7 +2024,7 @@ void GeoscapeState::startDogfight()
 int GeoscapeState::getFirstFreeDogfightSlot()
 {
 	int slotNo = 1;
-	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
 		if((*d)->getInterceptionNumber() == slotNo)
 		{
@@ -2067,7 +2053,6 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 		bgen.setBase(base);
 		bgen.setAlienRace(ufo->getAlienRace());
 		bgen.run();
-		musicStop();
 		_pause = true;
 		_game->pushState(new BriefingState(_game, 0, base));
 	}

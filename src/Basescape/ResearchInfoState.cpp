@@ -48,7 +48,7 @@ namespace OpenXcom
  */
 ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule) : State(game), _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
 {
-	buildUi ();
+	buildUi();
 }
 
 /**
@@ -59,13 +59,13 @@ ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule
  */
 ResearchInfoState::ResearchInfoState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
 {
-	buildUi ();
+	buildUi();
 }
 
 /**
  * Builds dialog.
  */
-void ResearchInfoState::buildUi ()
+void ResearchInfoState::buildUi()
 {
 	int width = 230;
 	int height = 140;
@@ -97,6 +97,9 @@ void ResearchInfoState::buildUi ()
 
 	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
+
+	// Set palette
+	setPalette("PAL_BASESCAPE", 1);
 
 	add(_surfaceScientists);
 	add(_window);

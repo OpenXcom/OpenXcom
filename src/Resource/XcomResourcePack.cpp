@@ -77,20 +77,50 @@ struct HairBleach
 XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
 {
 	// Load palettes
-	for (int i = 0; i < 5; ++i)
+	const char *pal[] = {"PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA"};
+	for (int i = 0; i < sizeof(pal) / sizeof(pal[0]); ++i)
 	{
-		std::ostringstream s1, s2;
-		s1 << "GEODATA/PALETTES.DAT";
-		s2 << "PALETTES.DAT_" << i;
-		_palettes[s2.str()] = new Palette();
-		_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 256, Palette::palOffset(i));
+		std::string s = "GEODATA/PALETTES.DAT";
+		_palettes[pal[i]] = new Palette();
+		_palettes[pal[i]]->loadDat(CrossPlatform::getDataFile(s), 256, Palette::palOffset(i));
 	}
+	{
+		std::string s1 = "GEODATA/BACKPALS.DAT";
+		std::string s2 = "BACKPALS.DAT";
+		_palettes[s2] = new Palette();
+		_palettes[s2]->loadDat(CrossPlatform::getDataFile(s1), 128);
+	}
+	
+	// Correct Battlescape palette
+	{
+		std::string s1 = "GEODATA/PALETTES.DAT";
+		std::string s2 = "PAL_BATTLESCAPE";
+		_palettes[s2] = new Palette();
+		_palettes[s2]->loadDat(CrossPlatform::getDataFile(s1), 256, Palette::palOffset(4));
 
-	std::ostringstream s1, s2;
-	s1 << "GEODATA/BACKPALS.DAT";
-	s2 << "BACKPALS.DAT";
-	_palettes[s2.str()] = new Palette();
-	_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 128);
+		// Last 16 colors are a greyish gradient
+		SDL_Color gradient[] = {{140, 152, 148, 0},
+								{132, 136, 140, 0},
+								{116, 124, 132, 0},
+								{108, 116, 124, 0},
+								{92, 104, 108, 0},
+								{84, 92, 100, 0},
+								{76, 80, 92, 0},
+								{56, 68, 84, 0},
+								{48, 56, 68, 0},
+								{40, 48, 56, 0},
+								{32, 36, 48, 0},
+								{24, 28, 32, 0},
+								{16, 20, 24, 0},
+								{8, 12, 16, 0},
+								{3, 4, 8, 0},
+								{3, 3, 6, 0}};
+		for (int i = 0; i < sizeof(gradient)/sizeof(gradient[0]); ++i)
+		{
+			SDL_Color *color = _palettes[s2]->getColors(Palette::backPos + 16 + i);
+			*color = gradient[i];
+		}
+	}
 
 	// Load fonts
 	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/Font.dat"));
@@ -274,7 +304,20 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMTACTIC",
 							 "GMTACTIC2",
 							 "GMWIN"};
-		std::string exts[] = {"flac", "ogg", "mp3", "mod"};
+		std::string musOptional[] = {
+							 "GMGEO5",
+							 "GMGEO6",
+							 "GMGEO7",
+							 "GMGEO8",
+							 "GMGEO9",
+							 "GMTACTIC3",
+							 "GMTACTIC4",
+							 "GMTACTIC5",
+							 "GMTACTIC6",
+							 "GMTACTIC7",
+							 "GMTACTIC8",
+							 "GMTACTIC9"};
+		std::string exts[] = {"flac", "ogg", "mp3", "mod", "wav"};
 		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
 
 #ifndef __NO_MUSIC
@@ -297,7 +340,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			bool loaded = false;
 			// Try digital tracks
-			for (int j = 0; j < 3; ++j)
+			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
 			{
 				std::ostringstream s;
 				s << "SOUND/" << mus[i] << "." << exts[j];
@@ -336,6 +379,37 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			}
 		}
 		delete gmcat;
+
+		// Ok, now try to load the optional musics
+		for (int i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
+		{
+			bool loaded = false;
+			// Try digital tracks
+			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
+			{
+				std::ostringstream s;
+				s << "SOUND/" << musOptional[i] << "." << exts[j];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[musOptional[i]] = new Music();
+					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+					break;
+				}
+			}
+			if (!loaded)
+			{
+				// Try MIDI music
+				std::ostringstream s;
+				s << "SOUND/" << musOptional[i] << ".mid";
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[musOptional[i]] = new Music();
+					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+				}
+			}
+		}
 #endif		
 		
 		// Load sounds
@@ -693,7 +767,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < sizeof(bsets)/sizeof(bsets[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "TERRAIN/" << bsets[i];
@@ -725,7 +799,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	std::string scrs[] = {"TAC00.SCR"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < sizeof(scrs)/sizeof(scrs[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
@@ -741,7 +815,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "SCANBORD.PCK",
 						  "UNIBORD.PCK"};
 
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < sizeof(spks)/sizeof(spks[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];

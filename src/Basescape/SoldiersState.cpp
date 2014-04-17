@@ -68,7 +68,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -137,6 +137,7 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
+	State::init();
 	int row = 0;
 	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
+#include <SDL_mixer.h>
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
@@ -35,7 +36,7 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -176,6 +177,24 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 			return _muteMusic;
 		else
 			return music[RNG::generate(0, music.size()-1)];
+	}
+}
+
+/**
+ * Plays the specified track if it's not already playing.
+ * @param name Name of the music.
+ * @param random Pick a random track?
+ */
+void ResourcePack::playMusic(const std::string &name, bool random)
+{
+	if (!Options::mute && _playingMusic != name)
+	{
+		_playingMusic = name;
+		if (name == "GMGEO1") _playingMusic = "GMGEO"; // hack
+		if (random)
+			getRandomMusic(name)->play();
+		else
+			getMusic(name)->play();
 	}
 }
 

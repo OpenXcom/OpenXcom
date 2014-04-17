@@ -44,7 +44,7 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	_txtTitle = new Text(160, 30, 48, 72);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 7);
 
 	add(_window);
 	add(_btnOk);
@@ -77,14 +77,6 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 UfoLostState::~UfoLostState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void UfoLostState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 }
 
 /**

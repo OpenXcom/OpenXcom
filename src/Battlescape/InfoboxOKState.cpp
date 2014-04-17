@@ -43,6 +43,9 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 	_btnOk = new TextButton(120, 18, 100, 112);
 	_txtTitle = new Text(255, 61, 33, 51);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_frame);
 	add(_btnOk);
 	add(_txtTitle);

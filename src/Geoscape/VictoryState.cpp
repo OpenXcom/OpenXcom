@@ -36,37 +36,48 @@ namespace OpenXcom
  * Initializes all the elements in the Victory screen.
  * @param game Pointer to the core game.
  */
-VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
+VictoryState::VictoryState(Game *game) : State(game), _screen(-1)
 {
-	// Create objects
-	_window = new InteractiveSurface(320, 200, 0, 0);
-	_txtText.push_back(new Text(195, 56, 5, 0));
-	_txtText.push_back(new Text(232, 64, 88, 136));
-	_txtText.push_back(new Text(254, 48, 66, 152));
-	_txtText.push_back(new Text(300, 200, 5, 0));
-	_txtText.push_back(new Text(310, 42, 5, 158));
-	_timer = new Timer(40000);
+	const char *files[] = {"PICT1.LBM", "PICT2.LBM", "PICT3.LBM", "PICT6.LBM", "PICT7.LBM"};
 
-	add(_window);
-	// Set up objects
-	_window->onMouseClick((ActionHandler)&VictoryState::windowClick);
-	
-	_game->getResourcePack()->getMusic("GMWIN")->play();
+	_timer = new Timer(30000);
 
-	for (int text = 0; text != 5; ++text)
+	_text[0] = new Text(195, 56, 5, 0);
+	_text[1] = new Text(232, 64, 88, 136);
+	_text[2] = new Text(254, 48, 66, 152);
+	_text[3] = new Text(300, 200, 5, 0);
+	_text[4] = new Text(310, 42, 5, 158);
+
+	for (int i = 0; i < SCREENS; ++i)
 	{
-		std::ostringstream ss2;
-		ss2 << "STR_VICTORY_" << text+1;
-		_txtText[text]->setText(tr(ss2.str()));
-		_txtText[text]->setWordWrap(true);
-		add(_txtText[text]);
-		_txtText[text]->setVisible(false);
+		Surface *screen = _game->getResourcePack()->getSurface(files[i]);
+		_bg[i] = new InteractiveSurface(320, 200, 0, 0);
+
+		setPalette(screen->getPalette());
+
+		add(_bg[i]);
+		add(_text[i]);
+
+		screen->blit(_bg[i]);
+		_bg[i]->setVisible(false);
+		_bg[i]->onMouseClick((ActionHandler)&VictoryState::screenClick);
+
+		std::ostringstream ss;
+		ss << "STR_VICTORY_" << i + 1;
+		_text[i]->setText(tr(ss.str()));
+		_text[i]->setColor(Palette::blockOffset(15)+9);
+		_text[i]->setWordWrap(true);
+		_text[i]->setVisible(false);
 	}
+	
+	_game->getResourcePack()->playMusic("GMWIN");
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)&VictoryState::windowClick);
+	_timer->onTimer((StateHandler)&VictoryState::screenClick);
 	_timer->start();
+
+	screenClick(0);
 }
 
 /**
@@ -77,48 +88,43 @@ VictoryState::~VictoryState()
 	delete _timer;
 }
 
-void VictoryState::init()
-{
-	nextScreen();
-}
-
+/**
+ * Handle timers.
+ */
 void VictoryState::think()
 {
 	_timer->think(this, 0);
 }
 
 /**
- * Returns to the previous screen.
- * @param action Pointer to an action.
+ * Shows the next screen in the slideshow
+ * or goes back to the Main Menu.
  */
-void VictoryState::windowClick(Action *)
+void VictoryState::screenClick(Action *)
 {
-	if(_screenNumber == 5)
+	if (_screen >= 0)
+	{
+		_bg[_screen]->setVisible(false);
+		_text[_screen]->setVisible(false);
+	}
+
+	++_screen;
+
+	// next screen
+	if (_screen < SCREENS)
+	{
+		setPalette(_bg[_screen]->getPalette());
+		_bg[_screen]->setVisible(true);
+		_text[_screen]->setVisible(true);
+		init();
+	}
+	// quit game
+	else
 	{
 		_game->popState();
 		_game->setState(new MainMenuState(_game));
 		_game->setSavedGame(0);
 	}
-	else
-		nextScreen();
-}
-
-void VictoryState::nextScreen()
-{
-	++_screenNumber;
-	int offset = 0;
-	if(_screenNumber>3)
-		offset = 2;
-	std::ostringstream ss;
-	ss << "PICT" << _screenNumber+offset << ".LBM";
-	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_game->getResourcePack()->getSurface(ss.str())->blit(_window);
-	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
-	_txtText[_screenNumber-1]->setVisible(true);
-	if (_screenNumber > 1)
-		_txtText[_screenNumber-2]->setVisible(false);
 }
 
 }

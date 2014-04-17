@@ -71,7 +71,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	_txtYears = new TextList(200, 8, 121, 191);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
+	setPalette("PAL_GRAPHS");
 	
 	//add all our elements
 	add(_bg);
@@ -93,7 +93,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	}
 
 	//create buttons (sooooo many buttons)
-	unsigned int offset = 0;
+	size_t offset = 0;
 	for (std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
 		// always save in toggles all the regions
@@ -657,7 +657,7 @@ void GraphsState::drawCountryLines()
 
 			}
 		}
-		if (_countryToggles.back() && total > upperLimit)
+		if (_countryToggles.back()->_pushed && total > upperLimit)
 			upperLimit = total;
 	}
 
@@ -828,7 +828,7 @@ void GraphsState::drawRegionLines()
 				}
 			}
 		}
-		if (_regionToggles.back() && total > upperLimit)
+		if (_regionToggles.back()->_pushed && total > upperLimit)
 				upperLimit = total;
 	}
 
@@ -1110,14 +1110,14 @@ void GraphsState::shiftButtons(Action *action)
 			scrollButtons(_regionToggles, _btnRegions, _butRegionsOffset, 1);
 	}
 }
-void GraphsState::scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, unsigned int &offset, int step)
+void GraphsState::scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, size_t &offset, int step)
 {
 	// minus one, 'cause we'll already added the TOTAL button to toggles
 	if( int(step + (int)offset) < 0 || offset + step + GRAPH_MAX_BUTTONS >= toggles.size()-1)
 		return;
 	// set the next offset - cheaper to do it from starters
 	offset+=step;
-	unsigned int i=0;
+	size_t i=0;
 	std::vector<ToggleTextButton *>::iterator iterb=buttons.begin();
 	for(std::vector<GraphButInfo *>::iterator itert=toggles.begin(); itert != toggles.end();++itert,++i)
 		if(i < offset)

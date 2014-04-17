@@ -32,8 +32,8 @@ class TextList;
 class Soldier;
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Screen shown monthly to allow changing
+ * soldiers currently in psi training.
  */
 class AllocatePsiTrainingState : public State
 {
@@ -44,7 +44,7 @@ private:
 	Text *_txtPsiStrength, *_txtPsiSkill;
 	TextList *_lstSoldiers;
 	std::vector<Soldier*> _soldiers;
-	unsigned int _sel;
+	size_t _sel;
 	int _labSpace;
 	Base *_base;
 public:
@@ -52,13 +52,9 @@ public:
 	AllocatePsiTrainingState(Game *game, Base *base);
 	/// Cleans up the Psi Training state.
 	~AllocatePsiTrainingState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	void btnBase1Click();
-	void lstSoldiersPress(Action *action);
-	void lstSoldiersRelease(Action *action);
+	/// Handler for clicking the Soldiers list.
 	void lstSoldiersClick(Action *action);
 };
 

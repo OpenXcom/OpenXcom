@@ -56,6 +56,9 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		_number[i] = new Text(20, 20, x+((i%8)*24), y-1+((i/8)*25));
 	}
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	// Set up objects
 	SDL_Rect square;
 	square.x = 0;

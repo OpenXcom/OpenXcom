@@ -242,7 +242,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		_itemId = (*i)["id"].as<int>(_itemId);
-		if (type != "0")
+		if (rule->getItem(type))
 		{
 			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
 			item->load(*i);
@@ -278,19 +278,23 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 	// tie ammo items to their weapons, running through the items again
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
-	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
+	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
 	{
-		int ammo = (*i)["ammoItem"].as<int>();
-		if (ammo != -1)
+		if (rule->getItem((*i)["type"].as<std::string>()))
 		{
-			for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
+			int ammo = (*i)["ammoItem"].as<int>();
+			if (ammo != -1)
 			{
-				if ((*ammoi)->getId() == ammo)
+				for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
 				{
-					(*weaponi)->setAmmoItem((*ammoi));
-					break;
+					if ((*ammoi)->getId() == ammo)
+					{
+						(*weaponi)->setAmmoItem((*ammoi));
+						break;
+					}
 				}
 			}
+			 ++weaponi;
 		}
 	}
 	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);

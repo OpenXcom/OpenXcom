@@ -60,7 +60,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_btnOk);
@@ -98,6 +98,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtFailure->setColor(Palette::blockOffset(8)+10);
 	_txtFailure->setBig();
 	_txtFailure->setAlign(ALIGN_CENTER);
+	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
 	_txtFailure->setWordWrap(true);
 	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
 	_txtFailure->setVisible(false);
@@ -196,7 +197,8 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 		{
 			if (_game->getSavedGame()->getWarned())
 			{
-				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+				ss4.str(L"");
+				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
 				_sadList.erase(_sadList.begin(), _sadList.end());
@@ -231,14 +233,6 @@ MonthlyReportState::~MonthlyReportState()
 }
 
 /**
- * Resets the palette.
- */
-void MonthlyReportState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -268,6 +262,7 @@ void MonthlyReportState::btnOkClick(Action *)
 			_btnOk->setVisible(false);
 			_btnBigOk->setVisible(true);
 			_txtFailure->setVisible(true);
+			_game->getResourcePack()->playMusic("GMLOSE");
 		}
 	}
 }

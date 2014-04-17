@@ -225,8 +225,8 @@ int CivilianBAIState::selectNearestTarget()
 				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 				if (dist < closest)
 				{
-					bool validTarget = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
-					if (validTarget)
+					bool valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+					if (valid)
 					{
 						closest = dist;
 						_aggroTarget = *i;

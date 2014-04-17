@@ -48,7 +48,7 @@ private:
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
+	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.

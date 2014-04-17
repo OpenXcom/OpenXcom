@@ -823,6 +823,9 @@
     <ClCompile Include="Menu\IntroState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\ConfirmLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1650,9 +1653,6 @@
     <ClInclude Include="Engine\OptionInfo.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Options.inc.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Interface\ComboBox.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -1663,6 +1663,12 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Menu\IntroState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Options.inc.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ConfirmLoadState.h">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>

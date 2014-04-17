@@ -97,6 +97,9 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnRandom = new TextButton(100, 16, 212, 176);
 
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtMapOptions);
@@ -244,8 +247,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);
 
-	_music = true;
-
 	load();
 }
 
@@ -263,15 +264,7 @@ NewBattleState::~NewBattleState()
  */
 void NewBattleState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
-	// Set music
-	if (!_music)
-	{
-		_music = true;
-		_game->getResourcePack()->getMusic("GMSTORY")->play();
-	}
+	State::init();
 
 	if (_craft == 0)
 	{
@@ -471,7 +464,6 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		return;
 	}
-	_music = false;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -590,8 +582,8 @@ void NewBattleState::cbxMissionChange(Action *)
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 	_txtDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
-	_txtTerrain->setVisible(ruleDeploy->getTerrain().empty());
-	_cbxTerrain->setVisible(ruleDeploy->getTerrain().empty());
+	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
+	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
 }
 
 /**

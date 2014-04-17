@@ -52,6 +52,7 @@ class ResourcePack
 private:
 	Music *_muteMusic;
 	Sound *_muteSound;
+	std::string _playingMusic;
 protected:
 	std::map<std::string, Palette*> _palettes;
 	std::map<std::string, Font*> _fonts;
@@ -81,12 +82,14 @@ public:
 	Music *getMusic(const std::string &name) const;
 	/// Gets a random music.
 	Music *getRandomMusic(const std::string &name) const;
+	/// Plays a particular music.
+	void playMusic(const std::string &name, bool random = false);
 	/// Gets a particular sound.
 	Sound *getSound(const std::string &set, unsigned int sound) const;
 	/// Gets a particular palette.
 	Palette *getPalette(const std::string &name) const;
 	/// Sets a new palette.
-	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets list of voxel data.
 	std::vector<Uint16> *getVoxelData();
 };

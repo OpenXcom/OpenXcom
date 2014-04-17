@@ -29,6 +29,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -79,7 +80,10 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnGround = new InteractiveSurface(32, 15, 289, 137);
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
-	_inv = new Inventory(_game, 320, 200, 0, 0);
+	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
+
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
 	add(_soldier);
@@ -179,6 +183,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	State::init();
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	// no selected unit, close inventory
@@ -336,7 +341,8 @@ void InventoryState::saveEquipmentLayout()
 				(*j)->getSlot()->getId(),
 				(*j)->getSlotX(),
 				(*j)->getSlotY(),
-				ammo
+				ammo,
+				(*j)->getFuseTimer()
 			));
 		}
 	}
@@ -352,15 +358,24 @@ void InventoryState::btnOkClick(Action *)
 	if (_inv->getSelectedItem() != 0)
 		return;
 	_game->popState();
+	Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
 	if (!_tu)
 	{
 		saveEquipmentLayout();
-		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
+		if (_battleGame->getTurn() == 1)
+		{
+			_battleGame->randomizeItemLocations(inventoryTile);
+			if (inventoryTile->getUnit())
+			{
+				// make sure we select the unit closest to the ramp.
+				_battleGame->setSelectedUnit(inventoryTile->getUnit());
+			}
+		}
 	}
 	if (_battleGame->getTileEngine())
 	{
-		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
+		_battleGame->getTileEngine()->applyGravity(inventoryTile);
 		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 		_battleGame->getTileEngine()->recalculateFOV();
 	}

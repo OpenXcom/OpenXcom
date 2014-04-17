@@ -18,6 +18,7 @@
  */
 #include "Ruleset.h"
 #include <fstream>
+#include <algorithm>
 #include "../aresame.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
@@ -64,6 +65,25 @@
 
 namespace OpenXcom
 {
+
+template <typename T>
+struct compareRule : public std::binary_function<const std::string&, const std::string&, bool>
+{
+	Ruleset *_ruleset;
+	typedef T*(Ruleset::*RuleLookup)(const std::string &id);
+	RuleLookup _lookup;
+
+	compareRule(Ruleset *ruleset, RuleLookup lookup) : _ruleset(ruleset), _lookup(lookup)
+	{
+	}
+
+	bool operator()(const std::string &r1, const std::string &r2) const
+	{
+		T *rule1 = (_ruleset->*_lookup)(r1);
+		T *rule2 = (_ruleset->*_lookup)(r2);
+		return (rule1->getListOrder() < rule2->getListOrder());
+	}
+};
 
 /**
  * Creates a ruleset with blank sets of rules.
@@ -351,33 +371,50 @@ void Ruleset::loadFile(const std::string &filename)
 	}
  	for (YAML::const_iterator i = doc["ufopaedia"].begin(); i != doc["ufopaedia"].end(); ++i)
 	{
-		std::string id = (*i)["id"].as<std::string>();
-		ArticleDefinition *rule;
-		if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
+		if ((*i)["id"])
 		{
-			rule = _ufopaediaArticles[id];
-		}
-		else
-		{
-			UfopaediaTypeId type = (UfopaediaTypeId)(*i)["type_id"].as<int>();
-			switch (type)
+			std::string id = (*i)["id"].as<std::string>();
+			ArticleDefinition *rule;
+			if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
 			{
-			case UFOPAEDIA_TYPE_CRAFT: rule = new ArticleDefinitionCraft(); break;
-			case UFOPAEDIA_TYPE_CRAFT_WEAPON: rule = new ArticleDefinitionCraftWeapon(); break;
-			case UFOPAEDIA_TYPE_VEHICLE: rule = new ArticleDefinitionVehicle(); break;
-			case UFOPAEDIA_TYPE_ITEM: rule = new ArticleDefinitionItem(); break;
-			case UFOPAEDIA_TYPE_ARMOR: rule = new ArticleDefinitionArmor(); break;
-			case UFOPAEDIA_TYPE_BASE_FACILITY: rule = new ArticleDefinitionBaseFacility(); break;
-			case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
-			case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
-			case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
-			default: rule = 0; break;
+				rule = _ufopaediaArticles[id];
 			}
-			_ufopaediaArticles[id] = rule;
-			_ufopaediaIndex.push_back(id);
+			else
+			{
+				UfopaediaTypeId type = (UfopaediaTypeId)(*i)["type_id"].as<int>();
+				switch (type)
+				{
+				case UFOPAEDIA_TYPE_CRAFT: rule = new ArticleDefinitionCraft(); break;
+				case UFOPAEDIA_TYPE_CRAFT_WEAPON: rule = new ArticleDefinitionCraftWeapon(); break;
+				case UFOPAEDIA_TYPE_VEHICLE: rule = new ArticleDefinitionVehicle(); break;
+				case UFOPAEDIA_TYPE_ITEM: rule = new ArticleDefinitionItem(); break;
+				case UFOPAEDIA_TYPE_ARMOR: rule = new ArticleDefinitionArmor(); break;
+				case UFOPAEDIA_TYPE_BASE_FACILITY: rule = new ArticleDefinitionBaseFacility(); break;
+				case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
+				case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
+				case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
+				default: rule = 0; break;
+				}
+				_ufopaediaArticles[id] = rule;
+				_ufopaediaIndex.push_back(id);
+			}
+			_ufopaediaListOrder += 100;
+			rule->load(*i, _ufopaediaListOrder);
 		}
-		_ufopaediaListOrder += 100;
-		rule->load(*i, _ufopaediaListOrder);
+		else if ((*i)["delete"])
+		{
+			std::string type = (*i)["delete"].as<std::string>();
+			std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.find(type);
+			if (i != _ufopaediaArticles.end())
+			{
+				_ufopaediaArticles.erase(i);
+			}
+			std::vector<std::string>::iterator idx = std::find(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), type);
+			if (idx != _ufopaediaIndex.end())
+			{
+				_ufopaediaIndex.erase(idx);
+			}
+		}
 	}
  	// Bases can't be copied, so for savegame purposes we store the node instead
 	YAML::Node base = doc["startingBase"];
@@ -487,7 +524,10 @@ void Ruleset::loadFiles(const std::string &dirname)
 }
 
 /**
- *
+ * Loads a rule element, adding/removing from vectors as necessary.
+ * @param map Map associated to the rule type.
+ * @param vector Index vector for the rule type.
+ * @param key Rule key name.
  */
 template <typename T>
 T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
@@ -1158,73 +1198,18 @@ std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
  */
 void Ruleset::sortLists()
 {
+	std::sort(_itemsIndex.begin(), _itemsIndex.end(), compareRule<RuleItem>(this, (compareRule<RuleItem>::RuleLookup)&Ruleset::getItem));
+	std::sort(_craftsIndex.begin(), _craftsIndex.end(), compareRule<RuleCraft>(this, (compareRule<RuleCraft>::RuleLookup)&Ruleset::getCraft));
+	std::sort(_facilitiesIndex.begin(), _facilitiesIndex.end(), compareRule<RuleBaseFacility>(this, (compareRule<RuleBaseFacility>::RuleLookup)&Ruleset::getBaseFacility));
+	//std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this, (compareRule<RuleCraftWeapon>::RuleLookup)&Ruleset::getItem));
+	//std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this, (compareRule<Armor>::RuleLookup)&Ruleset::getArmor));
+	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this, (compareRule<ArticleDefinition>::RuleLookup)&Ruleset::getUfopaediaArticle));
+	std::sort(_researchIndex.begin(), _researchIndex.end(), compareRule<RuleResearch>(this, (compareRule<RuleResearch>::RuleLookup)&Ruleset::getResearch));
+	std::sort(_manufactureIndex.begin(), _manufactureIndex.end(), compareRule<RuleManufacture>(this, (compareRule<RuleManufacture>::RuleLookup)&Ruleset::getManufacture));
+	std::sort(_invsIndex.begin(), _invsIndex.end(), compareRule<RuleInventory>(this, (compareRule<RuleInventory>::RuleLookup)&Ruleset::getInventory));
+
 	std::map<int, std::string> list;
 	int offset = 0;
-
-	for (std::vector<std::string>::const_iterator i = _itemsIndex.begin(); i != _itemsIndex.end(); ++i)
-	{
-		while (list.find(getItem(*i)->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getItem(*i)->getListOrder() + offset] = *i;
-	}
-	_itemsIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_itemsIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-
-	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
-	{
-		while (list.find(getCraft(*i)->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getCraft(*i)->getListOrder() + offset] = *i;
-	}
-	_craftsIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_craftsIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	
-	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
-	{
-		while (list.find(getBaseFacility(*i)->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getBaseFacility(*i)->getListOrder() + offset] = *i;
-	}
-	_facilitiesIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_facilitiesIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	
-	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
-	{
-		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset] = *i;
-	}
-	_craftWeaponsIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_craftWeaponsIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	
 	int alternateEntry = 0;
 	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
 	{
@@ -1249,67 +1234,18 @@ void Ruleset::sortLists()
 	}
 	list.clear();
 	offset = 0;
-	
-	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
+	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
 	{
-		while (list.find(getUfopaediaArticle(*i)->getListOrder() + offset) != list.end())
+		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
 		{
 			++offset;
 		}
-		list[getUfopaediaArticle(*i)->getListOrder() + offset] = *i;
+		list[getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset] = *i;
 	}
-	_ufopaediaIndex.clear();
+	_craftWeaponsIndex.clear();
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
-		_ufopaediaIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	
-	for (std::vector<std::string>::const_iterator i = _researchIndex.begin(); i != _researchIndex.end(); ++i)
-	{
-		while (list.find(getResearch(*i)->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getResearch(*i)->getListOrder() + offset] = *i;
-	}
-	_researchIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_researchIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	
-	for (std::vector<std::string>::const_iterator i = _manufactureIndex.begin(); i != _manufactureIndex.end(); ++i)
-	{
-		while (list.find(getManufacture(*i)->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getManufacture(*i)->getListOrder() + offset] = *i;
-	}
-	_manufactureIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_manufactureIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	
-	for (std::vector<std::string>::const_iterator i = _invsIndex.begin(); i != _invsIndex.end(); ++i)
-	{
-		while (list.find(getInventory(*i)->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getInventory(*i)->getListOrder() + offset] = *i;
-	}
-	_invsIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_invsIndex.push_back(i->second);
+		_craftWeaponsIndex.push_back(i->second);
 	}
 	list.clear();
 	offset = 0;

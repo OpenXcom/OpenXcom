@@ -106,7 +106,8 @@ int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
 		_action.actor->getFaction() == FACTION_PLAYER &&
 		_action.autoShotCounter == 1 &&
 		(SDL_GetModState() & KMOD_CTRL) == 0 &&
-		_save->getBattleGame()->getPanicHandled())
+		_save->getBattleGame()->getPanicHandled() &&
+		_action.type != BA_LAUNCH)
 	{
 		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 		if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower

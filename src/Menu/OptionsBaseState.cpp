@@ -71,6 +71,16 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
 
 	_txtTooltip = new Text(305, 25, 8, 148);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 
 	add(_btnVideo);
@@ -146,11 +156,31 @@ OptionsBaseState::~OptionsBaseState()
 
 }
 
+void OptionsBaseState::restart(Game *game, OptionsOrigin origin)
+{
+	if (origin == OPT_MENU)
+	{
+		game->setState(new MainMenuState(game));
+	}
+	else if (origin == OPT_GEOSCAPE)
+	{
+		game->setState(new GeoscapeState(game));
+	}
+	else if (origin == OPT_BATTLESCAPE)
+	{
+		game->setState(new GeoscapeState(game));
+		BattlescapeState *bs = new BattlescapeState(game);
+		game->pushState(bs);
+		game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+	}
+}
+
 /**
  * Initializes UI colors according to origin.
  */
 void OptionsBaseState::init()
 {
+	State::init();
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();
@@ -179,34 +209,21 @@ void OptionsBaseState::setCategory(TextButton *button)
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
+	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
+
 	Options::switchDisplay();
 	Options::save();
 	_game->loadLanguage(Options::language);
 	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
-	if (Options::reload)
+	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
+	if (Options::reload && _origin == OPT_MENU)
 	{
 		_game->setState(new StartState(_game));
 	}
 	else
 	{
-		if (_origin == OPT_MENU)
-		{
-			_game->setState(new MainMenuState(_game));
-		}
-		else if (_origin == OPT_GEOSCAPE)
-		{
-			_game->setState(new GeoscapeState(_game));
-		}
-		else if (_origin == OPT_BATTLESCAPE)
-		{
-			_game->setState(new GeoscapeState(_game));
-			BattlescapeState *bs = new BattlescapeState(_game);
-			_game->pushState(bs);
-			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-		}
-
 		// Confirm any video options changes
 		if (Options::displayWidth != Options::newDisplayWidth ||
 			Options::displayHeight != Options::newDisplayHeight ||
@@ -216,6 +233,10 @@ void OptionsBaseState::btnOkClick(Action *)
 			Options::useOpenGLShader != Options::newOpenGLShader)
 		{
 			_game->pushState(new OptionsConfirmState(_game, _origin));
+		}
+		else
+		{
+			restart(_game, _origin);
 		}
 	}
 }
@@ -227,7 +248,7 @@ void OptionsBaseState::btnOkClick(Action *)
 void OptionsBaseState::btnCancelClick(Action *)
 {
 	Options::load();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	_game->popState();
 }
 
@@ -299,4 +320,52 @@ void OptionsBaseState::txtTooltipOut(Action *action)
 	}
 }
 
+/**
+* Changes a given scale, and if necessary, switch the current base resolution.
+* @param type reference to which scale option we are using, battlescape or geoscape.
+* @param selection the new scale level.
+* @param width reference to which x scale to adjust.
+* @param height reference to which y scale to adjust.
+* @param change should we change the current scale.
+*/
+void OptionsBaseState::updateScale(int &type, int selection, int &width, int &height, bool change)
+{
+	type = selection;
+	switch (type)
+	{
+	case SCALE_15X:
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
+		break;
+	case SCALE_2X:
+		width = Screen::ORIGINAL_WIDTH * 2;
+		height = Screen::ORIGINAL_HEIGHT * 2;
+		break;
+	case SCALE_3X:
+		width = Screen::ORIGINAL_WIDTH * 3;
+		height = Screen::ORIGINAL_HEIGHT * 3;
+		break;
+	case SCALE_SCREEN:
+		width = Options::newDisplayWidth;
+		height = Options::newDisplayHeight;
+		break;
+	case SCALE_ORIGINAL:
+	default:
+		width = Screen::ORIGINAL_WIDTH;
+		height = Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
+	// don't go under minimum resolution... it's bad, mmkay?
+	width = std::max(width, Screen::ORIGINAL_WIDTH);
+	height = std::max(height, Screen::ORIGINAL_HEIGHT);
+	// scaler methods seem to require base res be a factor of 4
+	width -= width %4;
+
+	if (change && (Options::baseXResolution != width || Options::baseYResolution != height))
+	{
+		Options::baseXResolution = width;
+		Options::baseYResolution = height;
+	}
+}
 }

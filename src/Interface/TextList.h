@@ -42,14 +42,13 @@ class TextList : public InteractiveSurface
 {
 private:
 	std::vector< std::vector<Text*> > _texts;
-	std::vector<int> _columns;
+	std::vector<int> _columns, _rows;
 	Font *_big, *_small, *_font;
 	Language *_lang;
-	unsigned int _scroll, _visibleRows;
+	size_t _scroll, _visibleRows, _selRow;
 	Uint8 _color, _color2;
 	std::map<int, TextHAlign> _align;
-	bool _dot, _selectable, _condensed, _contrast;
-	unsigned int _selRow;
+	bool _dot, _selectable, _condensed, _contrast, _wrap;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
 	int _margin;
@@ -108,6 +107,8 @@ public:
 	void setSecondaryColor(Uint8 color);
 	/// Gets the secondary color of the text list.
 	Uint8 getSecondaryColor() const;
+	/// Sets the text list's wordwrap setting.
+	void setWordWrap(bool wrap);
 	/// Sets the text list's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the text horizontal alignment of the text list.

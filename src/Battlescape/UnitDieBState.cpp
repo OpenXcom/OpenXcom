@@ -112,7 +112,7 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	if (_unit->getDirection() != 3)
+	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	{
 		int dir = _unit->getDirection() + 1;
 		if (dir == 8)
