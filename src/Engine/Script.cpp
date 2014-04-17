@@ -80,17 +80,20 @@ enum Arg_Type
 enum RegPos
 {
 	RegIn,
+	RegCond,
 	RegR0,
 	RegR1,
 	RegR2,
 	RegR3,
+	RegCustom0,
+	RegCustom1,
 	RegMax,
 };
 
 ////////////////////////////////////////////////////////////
 //						op definition
 ////////////////////////////////////////////////////////////
-static inline void add_shade_helper(int& reg, const int& var)
+inline void add_shade_helper(int& reg, const int& var)
 {
 	const int newShade = (reg & 0xF) + var;
 	if (newShade > 0xF)
@@ -175,13 +178,14 @@ MACRO_PROC_DEFINITION(MACRO_CREATE_NORMAL_FUNC)
 ////////////////////////////////////////////////////////////
 //					core loop function
 ////////////////////////////////////////////////////////////
-Uint8 script_func(int in, int* reg, const Uint8* proc)
+inline Uint8 script_func(int in, int custom0, int custom1, int* reg, const Uint8* proc)
 {
 	memset(reg, 0, RegMax*sizeof(int));
 	reg[RegIn] = in;
-	int test;
+	reg[RegCustom0] = custom0;
+	reg[RegCustom1] = custom1;
+	int result = 0;
 	int curr = 0;
-	int result;
 	//--------------------------------------------------
 	//			helper macros for this function
 	//--------------------------------------------------
@@ -189,7 +193,7 @@ Uint8 script_func(int in, int* reg, const Uint8* proc)
 
 	#define MACRO_OP_None(i)
 	#define MACRO_OP_Prog(i)	curr ,
-	#define MACRO_OP_Test(i)	test ,
+	#define MACRO_OP_Test(i)	reg[RegCond] ,
 	#define MACRO_OP_Result(i)	result ,
 
 	#define MACRO_OP_Reg(i)		reg[MACRO_REG_CURR(i)] ,
@@ -354,11 +358,14 @@ struct ParserHelper
 				return false;
 			}
 			ScriptData data = pos->second;
-			data.index = ref_index_used;
-			++ref_index_used;
+			if(data.type != Arg_Reg)
+			{
+				data.index = ref_index_used;
+				++ref_index_used;
+			}
 			pos = ref_list_curr.insert(std::make_pair(s, data)).first;
 		}
-		if(pos->second.type != Arg_Data)
+		if(pos->second.type == Arg_Label)
 			return false;
 		index = pos->second.index;
 		return true;
@@ -420,12 +427,25 @@ struct ParserHelper
 
 	bool skip_whitespace(ite& i, const ite& end)
 	{
-		while(i != end)
+		bool coment = false;
+		for(; i != end; ++i)
 		{
 			const char c = *i;
-			if(isspace(c))
+			if(coment)
 			{
-				++i;
+				if(c == '\n')
+				{
+					coment = false;
+				}
+				continue;
+			}
+			else if(isspace(c))
+			{
+				continue;
+			}
+			else if(c == '#')
+			{
+				coment = true;
 				continue;
 			}
 			return false;
@@ -435,102 +455,125 @@ struct ParserHelper
 
 	SelectedToken get_token(ite& i, const ite& end, ParseTokenType excepted = Token_None)
 	{
+		const int none = 1;
+		const int spec = 2;
+		const int digit = 3;
+		const int char_hex = 4;
+		const int char_rest = 5;
+		const int digit_sign = 6;
+		static short char_decoder[256] = { 0 };
+		static bool init = true;
+		if(init)
+		{
+			init = false;
+			for(int i = 0; i < 256; ++i)
+			{
+				if(isspace(i))				char_decoder[i] = none;
+				if(i == ':' || i == ';')	char_decoder[i] = spec;
+
+				if(i == '+' || i == '-')	char_decoder[i] = digit_sign;
+				if(i >= '0' && i <= '9')	char_decoder[i] = digit;
+				if(i >= 'A' && i <= 'F')	char_decoder[i] = char_hex;
+				if(i >= 'a' && i <= 'f')	char_decoder[i] = char_hex;
+
+				if(i >= 'G' && i <= 'Z')	char_decoder[i] = char_rest;
+				if(i >= 'g' && i <= 'z')	char_decoder[i] = char_rest;
+				if(i == '_' || i == '.')	char_decoder[i] = char_rest;
+			}
+		}
+
 		SelectedToken token = { Token_None, end, end };
 		if(skip_whitespace(i, end))
 			return token;
 
 		token.begin = i;
 		bool hex = false;
-		int sign = 0;
-		for(; i != end; ++i)
+		int off = 0;
+
+		for(; i != end; ++i, ++off)
 		{
 			const char c = *i;
+			const short decode = char_decoder[c];
 
-			//special case for hex numbers
-			if(i - token.begin - sign == 0)
+			//end of string
+			if(decode == none)
 			{
-				if(c == '0')
-				{
-					token.type = Token_Number;
-					hex = true;
-					continue;
-				}
-				else if(sign)
-				{
-					token.type = Token_Invaild;
-					break;
-				}
-				else if(c == '-' || c == '+')
-				{
-					token.type = Token_Number;
-					sign = 1;
-					continue;
-				}
+				break;
 			}
-			else if(hex && (i - token.begin - sign == 1))
+			else if(decode == spec)
 			{
-				if(c != 'x' && c != 'X')
+				if(c == ':')
+				{
+					if(token.type != Token_None)
+						break;
+					++i;
+					token.type = excepted == Token_Colon ? Token_Colon : Token_Invaild;
+					break;
+				}
+				else if(c == ';')
+				{
+					if(token.type != Token_None || excepted != Token_Semicolon)
+						break;
+					++i;
+					token.type = Token_Semicolon;
+					break;
+				}
+				else
 				{
 					token.type = Token_Invaild;
 					break;
 				}
-				token.type = Token_Number;
-				continue;
 			}
 
-			if(isspace(c))
+			switch(token.type)
 			{
-				break;
-			}
-			else if(c == ':')
-			{
-				if(token.type != Token_None)
-					break;
-				++i;
-				token.type = excepted == Token_Colon ? Token_Colon : Token_Invaild;
-				break;
-			}
-			else if(c == ';')
-			{
-				if(token.type != Token_None || excepted != Token_Semicolon)
-					break;
-				++i;
-				token.type = Token_Semicolon;
-				break;
-			}
-			else if((c >= '0' && c <= '9') || (hex && (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
-			{
-				if(token.type == Token_None)
+			//begin of string
+			case Token_None:
+				switch(decode)
+				{
+				//start of number
+				case digit_sign:
+					--off;
+				case digit:
+					hex = c == '0';
 					token.type = Token_Number;
-				else if (token.type == Token_Number)
-				{
-					//nothing
-				}
-				else if (token.type != Token_Symbol)
-				{
-					token.type = Token_Invaild;
-					break;
-				}
-			}
-			else if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_'))
-			{
-				if(token.type == Token_None)
+					continue;
+
+				//start of symbol
+				case char_hex:
+				case char_rest:
 					token.type = Token_Symbol;
-				else if (token.type == Token_Symbol)
-				{
-					//nothing
+					continue;
 				}
-				else if (token.type != Token_Symbol)
+				break;
+
+			//middle of number
+			case Token_Number:
+				switch(decode)
 				{
-					token.type = Token_Invaild;
-					break;
+				case char_rest:
+					if(off != 1) break;
+					if(c != 'x' && c != 'X') break;
+				case char_hex:
+					if(!hex) break;
+				case digit:
+					continue;
 				}
-			}
-			else
-			{
-				token.type = Token_Invaild;
+				break;
+
+			//middle of symbol
+			case Token_Symbol:
+				switch(decode)
+				{
+				case char_rest:
+				case char_hex:
+				case digit:
+					continue;
+				}
 				break;
 			}
+			token.type = Token_Invaild;
+			break;
 		}
 		token.end = i;
 		return token;
@@ -571,22 +614,39 @@ namespace
 
 struct ScriptReplace
 {
-	static inline void func(Uint8& dest, const Uint8& src, int* proc_ref, const Uint8* proc, const int&)
+	int* proc_ref;
+	const Uint8* proc;
+	int custom0, custom1;
+
+	static inline void func(Uint8& dest, const Uint8& src, const ScriptReplace& args, int, int)
 	{
 		if(src)
 		{
-			const int s = script_func(src, proc_ref, proc);
+			const int s = script_func(src, args.custom0, args.custom1, args.proc_ref, args.proc);
 			if (s) dest = s;
 		}
 	}
-
+};
+struct ScriptReplaceSelf
+{
+	static inline void func(Uint8& src, const ScriptReplace& args, int, int, int)
+	{
+		if(src)
+		{
+			src = script_func(src, args.custom0, args.custom1, args.proc_ref, args.proc);
+		}
+	}
 };
 
 } //namespace
 
-void ScriptBase::executeBlit(ScriptWorkRef& ref, Surface* src, Surface* dest) const
+void ScriptBase::executeBlit(ScriptWorkRef& stack, Surface* src, Surface* dest, int custom0, int custom1) const
 {
-	ShaderDraw<ScriptReplace>(ShaderSurface(dest, 0, 0), ShaderSurface(src), ShaderScalar(ref.ref), ShaderScalar(&(_proc[0])));
+	ScriptReplace args = { stack.ref, &(_proc[0]), custom0, custom1 };
+	if(src != dest)
+		ShaderDraw<ScriptReplace>(ShaderSurface(dest, 0, 0), ShaderSurface(src), ShaderScalar(args));
+	else
+		ShaderDraw<ScriptReplaceSelf>(ShaderSurface(src), ShaderScalar(args));
 }
 
 ////////////////////////////////////////////////////////////
@@ -633,6 +693,24 @@ void ScriptParserBase::addFunctionBase(const std::string& s, ScriptData::void_fu
 	{
 		pos->second.env_func = f;
 	}
+}
+
+void ScriptParserBase::addCustom0(const std::string& s)
+{
+	ScriptData data = { Arg_Reg, RegCustom0 };
+	_ref_list.insert(std::make_pair(s, data));
+}
+
+void ScriptParserBase::addCustom1(const std::string& s)
+{
+	ScriptData data = { Arg_Reg, RegCustom1 };
+	_ref_list.insert(std::make_pair(s, data));
+}
+
+void ScriptParserBase::addConst(const std::string& s, int i)
+{
+	ScriptData data = { Arg_Const, 0, i };
+	_ref_list.insert(std::make_pair(s, data));
 }
 
 bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) const

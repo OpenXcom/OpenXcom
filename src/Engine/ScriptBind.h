@@ -26,6 +26,9 @@ namespace helper
 namespace
 {
 
+/**
+ * Helper struct used for crating one time geter to private filds
+ */
 template<typename T>
 struct Bind
 {
@@ -34,6 +37,9 @@ struct Bind
 	static const Work* func(const Base* t) { return t; }
 };
 
+/**
+ * Helper struct used for crating one time geter to private filds
+ */
 template<typename B, typename T, T B::Work::* P>
 struct BindMem
 {
@@ -42,6 +48,9 @@ struct BindMem
 	static const Work* func(const Base* t) { if(B::func(t)) return &(B::func(t)->*P); return 0; }
 };
 
+/**
+ * Helper struct used for crating one time geter to private filds
+ */
 template<typename B, typename T, T* B::Work::* P>
 struct BindPtr
 {
@@ -50,6 +59,9 @@ struct BindPtr
 	static const Work* func(const Base* t) { if(B::func(t)) return B::func(t)->*P; return 0; }
 };
 
+/**
+ * Helper struct used for crating one time geter to private filds
+ */
 template<typename B, typename T, const T* (B::Work::* P)() const>
 struct BindFun
 {
@@ -82,11 +94,8 @@ int geter_cast(const typename B::Base* t) { if(B::func(t)) return (B::func(t)->*
 template<typename B, typename Enum, typename Arg, Enum (B::Work::* P)(Arg) const, Arg I>
 int geter_cast(const typename B::Base* t) { if(B::func(t)) return (B::func(t)->*P)(I); return 0;  }
 
-template<typename B, int I>
-int geter_const(const typename B::Base* t) { return I; }
-
 } //namespace
-} //namespace OpenXcom
+} //namespace helper
 } //namespace OpenXcom
 
 #endif	/* OPENXCOM_SCRIPTBIND_H */

@@ -19,6 +19,7 @@
 #include "BattleItem.h"
 #include "BattleUnit.h"
 #include "Tile.h"
+#include "../Engine/Surface.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
 
@@ -523,9 +524,7 @@ void BattleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 {
 	getRules()->drawHandSprite(texture, surface);
 	BattleUnit* itemUnit = getUnit();
-	if(itemUnit)
-	{
-		itemUnit->blitRecolored(surface, surface);
-	}
+	if(itemUnit) itemUnit->blitRecolored(surface, surface, BODYPART_ITEM);
 }
+
 }

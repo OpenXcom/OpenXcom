@@ -227,7 +227,7 @@ void Inventory::drawItems()
 			}
 			BattleUnit* corpse = (*i)->getUnit();
 			if (corpse)
-				corpse->blitRecolored(frame, _items);
+				corpse->blitRecolored(frame, _items, BODYPART_ITEM);
 			else
 				frame->blit(_items);
 		}
@@ -244,7 +244,7 @@ void Inventory::drawItems()
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 			BattleUnit* corpse = (*i)->getUnit();
 			if (corpse)
-				corpse->blitRecolored(frame, _items);
+				corpse->blitRecolored(frame, _items, BODYPART_ITEM);
 			else
 				frame->blit(_items);
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
@@ -419,7 +419,7 @@ void Inventory::setSelectedItem(BattleItem *item)
 		frame->setX(item->getHandSpriteOffX());
 		frame->setY(item->getHandSpriteOffY());
 		if (corpse)
-			corpse->blitRecolored(frame, _selection);
+			corpse->blitRecolored(frame, _selection, BODYPART_ITEM);
 		else
 			frame->blit(_selection);
 	}

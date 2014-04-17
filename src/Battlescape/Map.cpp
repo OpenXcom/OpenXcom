@@ -483,7 +483,7 @@ void Map::drawTerrain(Surface *surface)
 								if(itemUnit)
 								{
 									bufferSurface.clear();
-									itemUnit->blitRecolored(tmpSurface, &bufferSurface);
+									itemUnit->blitRecolored(tmpSurface, &bufferSurface, BODYPART_COLLAPSING);
 									tmpSurface = &bufferSurface;
 								}
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false);
@@ -529,7 +529,7 @@ void Map::drawTerrain(Surface *surface)
 								if(itemUnit)
 								{
 									bufferSurface.clear();
-									itemUnit->blitRecolored(tmpSurface, &bufferSurface);
+									itemUnit->blitRecolored(tmpSurface, &bufferSurface, BODYPART_COLLAPSING);
 									tmpSurface = &bufferSurface;
 								}
 								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 0);

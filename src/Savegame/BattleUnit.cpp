@@ -2644,14 +2644,14 @@ bool BattleUnit::hasInventory() const
  * Function used to recoloring sprite based on nationality of unit
  * @param surf surface to recolor
  */
-void BattleUnit::blitRecolored(Surface* src, Surface* dest) const
+void BattleUnit::blitRecolored(Surface* src, Surface* dest, int blit_part) const
 {
 	Script<BattleUnit>* scr = _armor->getRecolorScript();
 	if(scr)
 	{
 		ScriptWorkRef ref;
 		scr->update(ref, this);
-		scr->executeBlit(ref, src, dest);
+		scr->executeBlit(ref, src, dest, blit_part, 0);
 	}
 	else
 	{
@@ -2671,6 +2671,14 @@ void BattleUnit::registScript(ScriptParser<BattleUnit>* parser)
 	typedef BindFun<bBU, US, &BU::getStats> bUS;
 	typedef BindFun<bBU, A, &BU::getArmor> bA;
 	typedef BindPtr<bBU, S, &BU::_geoscapeSoldier> bS;
+
+	parser->addCustom0("blit_part");
+	parser->addConst("blit_torso", BODYPART_TORSO);
+	parser->addConst("blit_leftarm", BODYPART_LEFTARM);
+	parser->addConst("blit_rightarm", BODYPART_RIGHTARM);
+	parser->addConst("blit_legs", BODYPART_LEGS);
+	parser->addConst("blit_collapse", BODYPART_COLLAPSING);
+	parser->addConst("blit_inventory", BODYPART_ITEM);
 
 	parser->addFunction("health", &geter<bBU, &BU::_health>);
 	parser->addFunction("health_max", &geter<bUS, &US::health>);
@@ -2702,18 +2710,35 @@ void BattleUnit::registScript(ScriptParser<BattleUnit>* parser)
 
 	parser->addFunction("soldier_hair", &geter_cast<bBU, Uint8, &BU::_hairColor>);
 	parser->addFunction("soldier_face", &geter_cast<bBU, Uint8, &BU::_faceColor>);
-	parser->addFunction("color_hair", &geter_const<bBU, ColorCopy::Hair>);
-	parser->addFunction("color_face", &geter_const<bBU, ColorCopy::Face>);
+	parser->addConst("color_hair", ColorCopy::Hair);
+	parser->addConst("color_face", ColorCopy::Face);
+
+	parser->addConst("color_null", 0);
+	parser->addConst("color_yellow", 1);
+	parser->addConst("color_red", 2);
+	parser->addConst("color_green0", 3);
+	parser->addConst("color_green1", 4);
+	parser->addConst("color_gray", 5);
+	parser->addConst("color_brown0", 6);
+	parser->addConst("color_blue0", 7);
+	parser->addConst("color_blue1", 8);
+	parser->addConst("color_brown1", 9);
+	parser->addConst("color_brown2", 10);
+	parser->addConst("color_purple0", 11);
+	parser->addConst("color_purple1", 12);
+	parser->addConst("color_blue2", 13);
+	parser->addConst("color_silver", 14);
+	parser->addConst("color_special", 15);
 
 	parser->addFunction("soldier_look", &geter_cast<bS, SoldierLook, &S::getLook>);
-	parser->addFunction("soldier_look_blonde", &geter_const<bBU, LOOK_BLONDE>);
-	parser->addFunction("soldier_look_brownhair", &geter_const<bBU, LOOK_BROWNHAIR>);
-	parser->addFunction("soldier_look_oriental", &geter_const<bBU, LOOK_ORIENTAL>);
-	parser->addFunction("soldier_look_african", &geter_const<bBU, LOOK_AFRICAN>);
+	parser->addConst("soldier_look_blonde", LOOK_BLONDE);
+	parser->addConst("soldier_look_brownhair", LOOK_BROWNHAIR);
+	parser->addConst("soldier_look_oriental", LOOK_ORIENTAL);
+	parser->addConst("soldier_look_african", LOOK_AFRICAN);
 
 	parser->addFunction("soldier_grender", &geter_cast<bS, SoldierGender, &S::getGender>);
-	parser->addFunction("soldier_grender_male", &geter_const<bBU, GENDER_MALE>);
-	parser->addFunction("soldier_grender_female", &geter_const<bBU, GENDER_FEMALE>);
+	parser->addConst("soldier_grender_male", GENDER_MALE);
+	parser->addConst("soldier_grender_female", GENDER_FEMALE);
 }
 
 } //namespace OpenXcom

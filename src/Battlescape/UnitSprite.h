@@ -64,7 +64,7 @@ private:
 	/// blit weapon sprite
 	void blitItem(Surface* item);
 	/// blit body sprite
-	void blitBody(Surface* body);
+	void blitBody(Surface* body, int part);
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);

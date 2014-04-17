@@ -50,7 +50,7 @@ enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING,
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
-
+enum UnitBodyPartEx {BODYPART_LEGS = BODYPART_LEFTLEG + 1, BODYPART_COLLAPSING, BODYPART_ITEM};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -432,7 +432,7 @@ public:
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
 	/// Recolor sprite
-	void blitRecolored(Surface* src, Surface* dest) const;
+	void blitRecolored(Surface* src, Surface* dest, int blit_part) const;
 };
 
 }

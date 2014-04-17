@@ -62,7 +62,7 @@ protected:
 
 public:
 	///Blit src to dest using current script
-	void executeBlit(ScriptWorkRef& ref, Surface* src, Surface* dest) const;
+	void executeBlit(ScriptWorkRef& ref, Surface* src, Surface* dest, int custom0, int custom1) const;
 
 	friend class ScriptParserBase;
 };
@@ -107,7 +107,15 @@ protected:
 	void addFunctionBase(const std::string& s, ScriptData::void_func f);
 
 public:
+	///Default constructor
 	ScriptParserBase();
+
+	///Add name for first custom parametr
+	void addCustom0(const std::string& s);
+	///Add name for second custom parametr
+	void addCustom1(const std::string& s);
+	///Add const value
+	void addConst(const std::string& s, int i);
 };
 
 template<typename T>
