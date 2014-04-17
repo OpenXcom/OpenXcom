@@ -24,6 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 #include "../Geoscape/Globe.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleRegion.h"
@@ -613,7 +614,7 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 void AlienMission::spawnAlienBase(const Globe &globe, Game &engine)
 {
 	SavedGame &game = *engine.getSavedGame();
-	if (game.getAlienBases()->size() >= 8)
+	if (game.getAlienBases()->size() >= 8 && !Options::unlimitedBases)
 	{
 		return;
 	}

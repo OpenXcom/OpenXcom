@@ -55,6 +55,8 @@ public:
 	void init();
 	/// Sets a new base to display.
 	void setBase(Base *base);
+	/// Sets a new base to display. (and sets the miniBaseView also!)
+	void setBaseAndMini(Base *base);
 	/// Handler for clicking the Build New Base button.
 	void btnNewBaseClick(Action *action);
 	/// Handler for clicking the Base Information button.
@@ -85,8 +87,6 @@ public:
 	void viewMouseOver(Action *action);
 	/// Handler for hovering out of the base view.
 	void viewMouseOut(Action *action);
-	/// Handler for clicking the mini base view.
-	void miniClick(Action *action);
 	/// Handler for changing the text on the Name edit.
 	void edtBaseChange(Action *action);
 	/// Handler for pressing a base selection hotkey.

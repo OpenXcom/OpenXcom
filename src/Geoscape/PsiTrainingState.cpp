@@ -21,10 +21,12 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
+#include "../Engine/Timer.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/ArrowButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
@@ -40,7 +42,7 @@ namespace OpenXcom
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
  */
-PsiTrainingState::PsiTrainingState(Game *game) : State(game)
+PsiTrainingState::PsiTrainingState(Game *game) : State(game), _timerUp(0), _timerDown(0), _startIndex(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -88,6 +90,28 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game)
 		}
 	}
 
+	if (_bases.size() > 8)
+	{
+		_up = new ArrowButton(ARROW_BIG_UP, 13, 14, 242, 40);
+		_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 242, 152);
+		add(_up);
+		add(_down);
+		_up->setColor(Palette::blockOffset(13)+10);
+		_up->onMousePress((ActionHandler)&PsiTrainingState::upPress);
+		_up->onMouseRelease((ActionHandler)&PsiTrainingState::upRelease);
+		_up->onMouseClick((ActionHandler)&PsiTrainingState::upClick, 0);
+		_up->setVisible(false);
+		_down->setColor(Palette::blockOffset(13)+10);
+		_down->onMousePress((ActionHandler)&PsiTrainingState::downPress);
+		_down->onMouseRelease((ActionHandler)&PsiTrainingState::downRelease);
+		_down->onMouseClick((ActionHandler)&PsiTrainingState::downClick, 0);
+		_down->setVisible(true);
+		_timerUp = new Timer(250);
+		_timerDown = new Timer(250);
+		_timerUp->onTimer((StateHandler)&PsiTrainingState::onTimerUp);
+		_timerDown->onTimer((StateHandler)&PsiTrainingState::onTimerDown);
+	}
+
 	centerAllSurfaces();
 }
 /**
@@ -95,7 +119,8 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game)
  */
 PsiTrainingState::~PsiTrainingState()
 {
-
+	if (0 != _timerUp) delete _timerUp;
+	if (0 != _timerDown) delete _timerDown;
 }
 
 /**
@@ -117,10 +142,144 @@ void PsiTrainingState::btnBaseXClick(Action *action)
 	{
 		if (action->getSender() == _btnBases[i])
 		{
-			_game->pushState(new AllocatePsiTrainingState(_game, _bases.at(i)));
+			_game->pushState(new AllocatePsiTrainingState(_game, _bases.at(_startIndex+i)));
 			break;
 		}
 	}
+}
+
+/**
+ Handler for pressing the up arrowbutton.
+ * @param action Pointer to an action.
+ */
+void PsiTrainingState::upPress(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerUp->start();
+}
+
+/**
+ Handler for releasing the up arrowbutton.
+ * @param action Pointer to an action.
+ */
+void PsiTrainingState::upRelease(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerUp->setInterval(250);
+		_timerUp->stop();
+	}
+}
+
+/**
+ Handler for clicking the up arrowbutton.
+ * @param action Pointer to an action.
+ */
+void PsiTrainingState::upClick(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) scrollUp(std::numeric_limits<int>::max());
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) scrollUp(1);
+}
+
+/**
+ Handler for pressing the down arrowbutton.
+ * @param action Pointer to an action.
+ */
+void PsiTrainingState::downPress(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDown->start();
+}
+
+/**
+ Handler for releasing the down arrowbutton.
+ * @param action Pointer to an action.
+ */
+void PsiTrainingState::downRelease(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerDown->setInterval(250);
+		_timerDown->stop();
+	}
+}
+
+/**
+ Handler for clicking the down arrowbutton.
+ * @param action Pointer to an action.
+ */
+void PsiTrainingState::downClick(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) scrollDown(std::numeric_limits<int>::max());
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) scrollDown(1);
+}
+
+/**
+ Event handler for _timerUp.
+ */
+void PsiTrainingState::onTimerUp()
+{
+	_timerUp->setInterval(50);
+	scrollUp(1);
+}
+
+/**
+ Event handler for _timerDown.
+ */
+void PsiTrainingState::onTimerDown()
+{
+	_timerDown->setInterval(50);
+	scrollDown(1);
+}
+
+/**
+ Scrolls up by the number of change.
+ * @param change The number of lines to scroll up.
+ */
+void PsiTrainingState::scrollUp(int change)
+{
+	if (0 >= change || 0 == _startIndex) return;
+	if (change > _startIndex) _startIndex = 0; else _startIndex -= change;
+	updateButtons();
+}
+
+/**
+ Scrolls down by the number of change.
+ * @param change The number of lines to scroll down.
+ */
+void PsiTrainingState::scrollDown(int change)
+{
+	int max = _bases.size() - 8;
+	if (0 >= change || max == _startIndex) return;
+	// we need to check 'change' alone first, because _startIndex+change can overflow
+	if (change > max || _startIndex+change > max) _startIndex = max; else _startIndex += change;
+	updateButtons();
+}
+
+/**
+ Updates the names of the _btnBases, and arrowButtons.
+ */
+void PsiTrainingState::updateButtons()
+{
+	for (int i = 0; i < _btnBases.size(); ++i)
+	{
+		_btnBases.at(i)->setText(_bases.at(_startIndex+i)->getName());
+	}
+	bool b;
+	b = _startIndex > 0;
+	if (_up->getVisible() && !b) _up->unpress(this); // This is a workaround to avoid a crash!
+	_up->setVisible(b);
+	b = _startIndex < _bases.size() - 8;
+	if (_down->getVisible() && !b) _down->unpress(this); // This is a workaround to avoid a crash!
+	_down->setVisible(b);
+}
+
+/**
+ Runs state functionality every cycle.
+ */
+void PsiTrainingState::think()
+{
+	State::think();
+	_timerUp->think(this, 0);
+	_timerDown->think(this, 0);
 }
 
 }
