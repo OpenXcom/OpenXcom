@@ -26,8 +26,6 @@
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
 #include "MainMenuState.h"
-#include "../Engine/Options.h"
-#include "../Engine/Screen.h"
 #include "SaveState.h"
 
 namespace OpenXcom
@@ -119,9 +117,6 @@ void AbandonGameState::btnYesClick(Action *)
 		SaveState *ss = new SaveState(_game, _origin, false);
 		delete ss;
 	}
-	Options::baseXResolution = Options::baseXGeoscape;
-	Options::baseYResolution = Options::baseYGeoscape;
-	_game->getScreen()->resetDisplay();
 
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
