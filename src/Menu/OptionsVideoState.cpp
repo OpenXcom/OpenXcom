@@ -301,15 +301,15 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtGeoScale->setColor(Palette::blockOffset(8)+10);
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
 	
-	std::vector<std::string> geoScales;
-	geoScales.push_back("STR_ORIGINAL");
-	geoScales.push_back("STR_1.5X");
-	geoScales.push_back("STR_2X");
-	geoScales.push_back("STR_3X");
-	geoScales.push_back("STR_SCALE_TO_WINDOW");
+	std::vector<std::string> scales;
+	scales.push_back("STR_ORIGINAL");
+	scales.push_back("STR_1.5X");
+	scales.push_back("STR_2X");
+	scales.push_back("STR_3X");
+	scales.push_back("STR_SCALE_TO_WINDOW");
 
 	_cbxGeoScale->setColor(Palette::blockOffset(15)-1);
-	_cbxGeoScale->setOptions(geoScales);
+	_cbxGeoScale->setOptions(scales);
 	_cbxGeoScale->setSelected(Options::geoscapeScale);
 	_cbxGeoScale->onChange((ActionHandler)&OptionsVideoState::updateGeoscapeScale);
 	_cbxGeoScale->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
@@ -318,16 +318,9 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	
 	_txtBattleScale->setColor(Palette::blockOffset(8)+10);
 	_txtBattleScale->setText(tr("STR_BATTLESCAPE_SCALE"));
-
-	std::vector<std::string> battleScales;
-	battleScales.push_back("STR_ORIGINAL");
-	battleScales.push_back("STR_1.5X");
-	battleScales.push_back("STR_2X");
-	battleScales.push_back("STR_3X");
-	battleScales.push_back("STR_SCALE_TO_WINDOW");
-
+	
 	_cbxBattleScale->setColor(Palette::blockOffset(15)-1);
-	_cbxBattleScale->setOptions(battleScales);
+	_cbxBattleScale->setOptions(scales);
 	_cbxBattleScale->setSelected(Options::battlescapeScale);
 	_cbxBattleScale->onChange((ActionHandler)&OptionsVideoState::updateBattlescapeScale);
 	_cbxBattleScale->setTooltip("STR_BATTLESCAPE_SCALE_DESC");
@@ -416,7 +409,7 @@ void OptionsVideoState::updateGameResolution()
 	}
 	if (Options::battlescapeScale == SCALE_SCREEN)
 	{
-		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, (Options::newDisplayWidth - Options::newDisplayWidth) %4);
+		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth - (Options::newDisplayWidth %4));
 		Options::baseYBattlescape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
 		if (_origin == OPT_BATTLESCAPE)
 		{
