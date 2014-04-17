@@ -1138,7 +1138,7 @@ en-US:
   STR_CRAFTLAUNCHALWAYS_DESC: "Craft can be launched even when they aren't ready, overriding the need for maintenance."
   STR_CUSTOMINITIALBASE: "Custom initial base"
   STR_CUSTOMINITIALBASE_DESC: "When starting a new game, you can manually place your starting facilities instead of using the default layout."
-  STR_GLOBESEASONS: "Globe realistic lighting"
+  STR_GLOBESEASONS: "Realistic globe lighting"
   STR_GLOBESEASONS_DESC: "Uses more realistic projection of sunlight on the Geoscape according to Earth's axial tilt."
   STR_PLAYINTRO: "Play intro"
   STR_PLAYINTRO_DESC: "Show the intro cinematic on startup."
