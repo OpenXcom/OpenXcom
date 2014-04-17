@@ -71,8 +71,8 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtGeoScale = new Text(110, 9, 94, 82);
 	_cbxGeoScale = new ComboBox(this, 100, 16, 94, 92);
 	
-	_txtBattleScale = new Text(110, 9, 94, 112);
-	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 122);
+	_txtBattleScale = new Text(110, 9, 94, 118);
+	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 128);
 
 	_txtOptions = new Text(110, 9, 210, 82);
 	_btnLetterbox = new ToggleTextButton(100, 16, 210, 92);
