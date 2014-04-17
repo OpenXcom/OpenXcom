@@ -665,9 +665,9 @@ void BaseView::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-	if (((Uint8)-1) != Options::battleScrollDragButton)
+	if (((Uint8)-1) != Options::battleDragScrollButton)
 	{
-		if (action->getDetails()->button.button == Options::battleScrollDragButton)
+		if (action->getDetails()->button.button == Options::battleDragScrollButton)
 		{
 			isMouseScrolling = true;
 			isMouseScrolled = false;
@@ -696,11 +696,11 @@ void BaseView::mouseClick (Action *action, State *state)
 	// (this part handles the release if it is missed and now an other button is used)
 	if (isMouseScrolling)
 	{
-		if (action->getDetails()->button.button != Options::battleScrollDragButton
-		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleScrollDragButton)))
+		if (action->getDetails()->button.button != Options::battleDragScrollButton
+		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)))
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)Options::battleScrollDragTimeTolerance)))
+			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)Options::dragScrollTimeTolerance)))
 			{
 				_cameraPosX = posBeforeMouseScrollingX; _cameraPosY = posBeforeMouseScrollingY;
 				_redraw = true;
@@ -713,9 +713,9 @@ void BaseView::mouseClick (Action *action, State *state)
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == Options::battleScrollDragButton) isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == Options::battleDragScrollButton) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)Options::battleScrollDragTimeTolerance)))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)Options::dragScrollTimeTolerance)))
 		{
 			isMouseScrolled = false;
 			_cameraPosX = posBeforeMouseScrollingX; _cameraPosY = posBeforeMouseScrollingY;
@@ -743,10 +743,10 @@ void BaseView::mouseOver(Action *action, State *state)
 		// the mouse-release event is missed for any reason.
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		// (checking: is the dragScroll-mouse-button still pressed?)
-		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleScrollDragButton)))
+		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)))
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)Options::battleScrollDragTimeTolerance)))
+			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)Options::dragScrollTimeTolerance)))
 			{
 				_cameraPosX = posBeforeMouseScrollingX; _cameraPosY = posBeforeMouseScrollingY;
 				_redraw = true;
@@ -757,7 +757,7 @@ void BaseView::mouseOver(Action *action, State *state)
 
 		isMouseScrolled = true;
 
-		if (Options::battleScrollDragInvert)
+		if (Options::dragScrollInvert)
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -769,12 +769,12 @@ void BaseView::mouseOver(Action *action, State *state)
 		totalMouseMoveX += action->getDetails()->motion.xrel;
 		totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > Options::battleScrollDragPixelTolerance) || (std::abs(totalMouseMoveY) > Options::battleScrollDragPixelTolerance));
+			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(totalMouseMoveY) > Options::dragScrollPixelTolerance));
 
 		// Calculate the move
 		int newX;
 		int newY;
-		if (Options::battleScrollDragInvert)
+		if (Options::dragScrollInvert)
 		{
 			mouseScrollX += action->getDetails()->motion.xrel;
 			mouseScrollY += action->getDetails()->motion.yrel;
@@ -819,7 +819,7 @@ void BaseView::mouseOver(Action *action, State *state)
 		_cameraPosX = newX; _cameraPosY = newY;
 		_redraw = true;
 
-		if (Options::battleScrollDragInvert)
+		if (Options::dragScrollInvert)
 		{
 			// We don't want to look the mouse-cursor jumping :)
 			action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
@@ -882,19 +882,19 @@ void BaseView::mouseOut(Action *action, State *state)
 /**
  * Tries to dismantle the selected facility.
  */
-void BaseView::tryDismantle()
+void BaseView::tryDismantle(SDL_Color *palette)
 {
 	if (_selFacility != 0)
 	{
 		// Is facility in use?
 		if (_selFacility->inUse())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected?
 		else if (!_base->getDisconnectedFacilities(_selFacility).empty())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{

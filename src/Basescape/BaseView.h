@@ -137,7 +137,7 @@ public:
 	/// Sets the right-click handler.
 	void setRightClickHandler(BaseViewClickHandler rightClickHandler);
 	/// Tries to dismantle the selected facility.
-	void tryDismantle();
+	void tryDismantle(SDL_Color *palette);
 };
 
 }

@@ -384,7 +384,7 @@ void BasescapeState::btnGeoscapeClick(Action *)
  */
 void BasescapeState::viewLeftClick(Action *)
 {
-	_view->tryDismantle();
+	_view->tryDismantle(_palette);
 }
 
 /**

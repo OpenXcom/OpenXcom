@@ -175,7 +175,7 @@ void BuildFacilitiesState::lstFacilitiesClick(Action *)
  */
 void BuildFacilitiesState::viewLeftClick(Action *action)
 {
-	_view->tryDismantle();
+	_view->tryDismantle(_palette);
 }
 
 /**
