@@ -55,6 +55,8 @@ public:
 	void init();
 	/// Sets a new base to display.
 	void setBase(Base *base);
+	/// Sets camera position of the view.
+	void setViewCameraPos(int x, int y);
 	/// Handler for clicking the Build New Base button.
 	void btnNewBaseClick(Action *action);
 	/// Handler for clicking the Base Information button.

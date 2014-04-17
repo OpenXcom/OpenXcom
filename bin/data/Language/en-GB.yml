@@ -1136,6 +1136,8 @@ en-GB:
   STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC: "Craft currently in-flight can be transferred."
   STR_CRAFTLAUNCHALWAYS: "Force craft launch"
   STR_CRAFTLAUNCHALWAYS_DESC: "Craft can be launched even when they aren't ready, overriding the need for maintenance."
+  STR_INFINITEBASESIZES: "Infinite base sizes"
+  STR_INFINITEBASESIZES_DESC: "You can build bases of any size. (Even bigger than 6x6) You can scroll the Base View with drag scrolling, according to the drag scrolling settings."
   STR_CUSTOMINITIALBASE: "Custom initial base"
   STR_CUSTOMINITIALBASE_DESC: "When starting a new game, you can manually place your starting facilities instead of using the default layout."
   STR_GLOBESEASONS: "Globe realistic lighting"

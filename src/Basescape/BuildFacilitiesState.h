@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 class Base;
+class BaseView;
 class TextButton;
 class Window;
 class Text;
@@ -43,15 +44,19 @@ protected:
 	State *_state;
 	std::vector<RuleBaseFacility*> _facilities;
 
+	BaseView *_view;
+	Text *_txtFacility;
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
 	TextList *_lstFacilities;
 public:
 	/// Creates the Build Facilities state.
-	BuildFacilitiesState(Game *game, Base *base, State *state);
+	BuildFacilitiesState(Game *game, Base *base, State *state, int viewCameraPosX, int viewCameraPosY);
 	/// Cleans up the Build Facilities state.
 	~BuildFacilitiesState();
+	/// Sets camera position of the view.
+	void setViewCameraPos(int x, int y);
 	/// Populates the build option list.
 	virtual void PopulateBuildList();
 	/// Updates the base stats.
@@ -60,6 +65,12 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Facilities list.
 	virtual void lstFacilitiesClick(Action *action);
+	/// Handler for clicking the base view.
+	void viewLeftClick(Action *action);
+	/// Handler for hovering the base view.
+	void viewMouseOver(Action *action);
+	/// Handler for hovering out of the base view.
+	void viewMouseOut(Action *action);
 };
 
 }

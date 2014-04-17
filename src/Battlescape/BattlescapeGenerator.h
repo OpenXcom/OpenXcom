@@ -64,6 +64,7 @@ private:
 	int _alienItemLevel;
 	bool _allowAutoLoadout;
 	int _craftX, _craftY, _craftZ;
+	int _baseSideTop, _baseSideLeft;
 
 	/// Generates a new battlescape map.
 	void generateMap();
@@ -97,6 +98,8 @@ private:
 	void deployCivilians(int max);
 	/// Gets battlescape terrain.
 	RuleTerrain *getTerrain(int tex, double lat);
+	/// Updates _mapsize_x and _mapsize_y determined by the base. (on the case of a base defense mission)
+	void updateMapSizeByBaseSize();
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);

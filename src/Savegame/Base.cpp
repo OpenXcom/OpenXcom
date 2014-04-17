@@ -1255,6 +1255,35 @@ std::vector<Vehicle*> *Base::getVehicles()
 }
 
 /**
+ * Returns the (real) sides of the base facilities.
+ * (sides of the BaseView)
+ * @param sideLeft Gets the Left side of the facilities.
+ * @param sideTop Gets the Top side of the facilities.
+ * @param sideRight Gets the Right side of the facilities.
+ * @param sideBottom Gets the Bottom side of the facilities.
+ * @param countIncompleteFacilities Determines to count the incomplete facilities.
+ */
+void Base::getSides(int &sideLeft, int &sideTop, int &sideRight, int &sideBottom, bool countIncompleteFacilities)
+{
+	if (_facilities.size() > 0)
+	{
+		std::vector<BaseFacility*>::iterator i = _facilities.begin();
+		if (!countIncompleteFacilities) while ((*i)->getBuildTime() > 0) ++i;
+		sideLeft = (*i)->getX(); sideTop = (*i)->getY();
+		sideRight = (*i)->getX(); sideBottom = (*i)->getY();
+		for (; i != _facilities.end(); ++i)
+		{
+			if (!countIncompleteFacilities && (*i)->getBuildTime() > 0) continue;
+			int x = (*i)->getX(), y = (*i)->getY(), size = (*i)->getRules()->getSize()-1;
+			if (x < sideLeft) sideLeft = x;
+			if (x + size > sideRight) sideRight = x + size;
+			if (y < sideTop) sideTop = y;
+			if (y + size > sideBottom) sideBottom = y + size;
+		}
+	}
+}
+
+/**
  * Destroys all disconnected facilities in the base.
  */
 void Base::destroyDisconnectedFacilities()
@@ -1285,16 +1314,8 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	}
 
 	std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*> facilitiesConnStates;
-	std::pair<std::vector<BaseFacility*>::iterator, bool> *grid[BASE_SIZE][BASE_SIZE];
+	std::map<int, std::map<int, std::pair<std::vector<BaseFacility*>::iterator, bool>*> > grid;
 	BaseFacility *lift = 0;
-
-	for (int x = 0; x < BASE_SIZE; ++x)
-	{
-		for (int y = 0; y < BASE_SIZE; ++y)
-		{
-			grid[x][y] = 0;
-		}
-	}
 
 	// Ok, fill up the grid(+facilitiesConnStates), and search the lift
 	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
@@ -1328,18 +1349,20 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	{
 		int x = stack.top().first, y = stack.top().second;
 		stack.pop();
-		if (x >= 0 && x < BASE_SIZE && y >= 0 && y < BASE_SIZE && grid[x][y] != 0 && !grid[x][y]->second)
+		std::pair<std::vector<BaseFacility*>::iterator, bool> *gridXY = 0;
+		try { gridXY = grid.at(x).at(y); } catch (...) {}
+		if (gridXY != 0 && !gridXY->second)
 		{
-			grid[x][y]->second = true;
-			BaseFacility *fac = *(grid[x][y]->first);
-			BaseFacility *neighborLeft = (x-1 >= 0 && grid[x-1][y] != 0) ? *(grid[x-1][y]->first) : 0;
-			BaseFacility *neighborRight = (x+1 < BASE_SIZE && grid[x+1][y] != 0) ? *(grid[x+1][y]->first) : 0;
-			BaseFacility *neighborTop = (y-1 >= 0 && grid[x][y-1] != 0) ? *(grid[x][y-1]->first) : 0;
-			BaseFacility *neighborBottom= (y+1 < BASE_SIZE && grid[x][y+1] != 0) ? *(grid[x][y+1]->first) : 0;
-			if ((fac->getBuildTime() == 0) || (neighborLeft != 0 && (neighborLeft == fac || neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime()))) stack.push(std::make_pair(x-1,y));
-			if ((fac->getBuildTime() == 0) || (neighborRight != 0 && (neighborRight == fac || neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime()))) stack.push(std::make_pair(x+1,y));
-			if ((fac->getBuildTime() == 0) || (neighborTop != 0 && (neighborTop == fac || neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y-1));
-			if ((fac->getBuildTime() == 0) || (neighborBottom != 0 && (neighborBottom == fac || neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y+1));
+			gridXY->second = true;
+			BaseFacility *fac = *(gridXY->first);
+			BaseFacility *neighborLeft = 0; try { neighborLeft = *(grid.at(x-1).at(y)->first); } catch (...) {}
+			BaseFacility *neighborRight = 0; try { neighborRight = *(grid.at(x+1).at(y)->first); } catch (...) {}
+			BaseFacility *neighborTop = 0; try { neighborTop = *(grid.at(x).at(y-1)->first); } catch (...) {}
+			BaseFacility *neighborBottom = 0; try { neighborBottom = *(grid.at(x).at(y+1)->first); } catch (...) {}
+			if (neighborLeft != 0 && (fac->getBuildTime() == 0 || neighborLeft == fac || neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime())) stack.push(std::make_pair(x-1,y));
+			if (neighborRight != 0 && (fac->getBuildTime() == 0 || neighborRight == fac || neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime())) stack.push(std::make_pair(x+1,y));
+			if (neighborTop != 0 && (fac->getBuildTime() == 0 || neighborTop == fac || neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime())) stack.push(std::make_pair(x,y-1));
+			if (neighborBottom != 0 && (fac->getBuildTime() == 0 || neighborBottom == fac || neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime())) stack.push(std::make_pair(x,y+1));
 		}
 	}
 

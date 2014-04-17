@@ -197,6 +197,7 @@ void BattlescapeGenerator::nextStage()
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
+	if (_save->getMissionType() == "STR_BASE_DEFENSE") updateMapSizeByBaseSize();
 	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
 	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 	_worldShade = ruleDeploy->getShade();
@@ -277,6 +278,7 @@ void BattlescapeGenerator::run()
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
 
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
+	if (_save->getMissionType() == "STR_BASE_DEFENSE") updateMapSizeByBaseSize();
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
@@ -1199,8 +1201,8 @@ void BattlescapeGenerator::generateMap()
 						mapnum += num;
 						if (mapnum < 10) newname << 0;
 						newname << mapnum;
-						blocks[x][y] = _terrain->getMapBlock(newname.str());
-						storageBlocks[x][y] = ((*i)->getRules()->getStorage() > 0);
+						blocks[x-_baseSideLeft][y-_baseSideTop] = _terrain->getMapBlock(newname.str());
+						storageBlocks[x-_baseSideLeft][y-_baseSideTop] = ((*i)->getRules()->getStorage() > 0);
 						num++;
 					}
 				}
@@ -1861,6 +1863,20 @@ RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
 
 	assert(0 && "No matching terrain for globe texture");
 	return t;
+}
+
+/**
+ * Updates _mapsize_x and _mapsize_y determined by the base.
+ * (on the case of a base defense mission)
+ */
+void BattlescapeGenerator::updateMapSizeByBaseSize()
+{
+	int sideLeft, sideTop, sideRight, sideBottom;
+	_base->getSides(sideLeft, sideTop, sideRight, sideBottom, false);
+	_mapsize_x = (sideRight - sideLeft + 1) * 10;
+	_mapsize_y = (sideBottom - sideTop + 1) * 10;
+	_baseSideTop = sideTop;
+	_baseSideLeft = sideLeft;
 }
 
 /**

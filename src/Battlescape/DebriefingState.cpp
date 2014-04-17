@@ -416,6 +416,8 @@ void DebriefingState::prepareDebriefing()
 		{
 			base = (*i);
 			base->setInBattlescape(false);
+			int sideLeft, sideTop, sideRight, sideBottom;
+			base->getSides(sideLeft, sideTop, sideRight, sideBottom, false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
@@ -439,7 +441,7 @@ void DebriefingState::prepareDebriefing()
 			for (std::vector<BaseFacility*>::iterator k = base->getFacilities()->begin(); k != base->getFacilities()->end();)
 			{
 				// this facility was demolished
-				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
+				if (battle->getModuleMap()[(*k)->getX() - sideLeft][(*k)->getY() - sideTop].second == 0)
 				{
 					base->destroyFacility(k);
 				}

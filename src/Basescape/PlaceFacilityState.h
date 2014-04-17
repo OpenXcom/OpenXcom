@@ -39,21 +39,29 @@ class PlaceFacilityState : public State
 {
 protected:
 	Base *_base;
+	State *_state;
 	RuleBaseFacility *_rule;
 
 	BaseView *_view;
+	Text *_cursorTxtFacility;
 	TextButton *_btnCancel;
 	Window *_window;
 	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 public:
 	/// Creates the Place Facility state.
-	PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule);
+	PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule, State *state, int viewCameraPosX, int viewCameraPosY);
 	/// Cleans up the Place Facility state.
 	~PlaceFacilityState();
+	/// Updates the base stats.
+	void init();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the base view.
-	void viewClick(Action *action);
+	virtual void viewLeftClick(Action *action);
+	/// Handler for hovering the base view.
+	void viewMouseOver(Action *action);
+	/// Handler for hovering out of the base view.
+	void viewMouseOut(Action *action);
 };
 
 }
