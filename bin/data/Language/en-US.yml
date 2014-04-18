@@ -1324,3 +1324,5 @@ en-US:
   STR_FPS_LIMIT_DESC: "Limits the number of screen updates per second, 0 for no limit. Note: this will only affect software modes, as OpenGL handles this itself."
   STR_NOALIENPANICMESSAGES: "Supress panic messages for aliens"
   STR_NOALIENPANICMESSAGES_DESC: "Don't show panic messages for aliens unless it is visible to the player."
+  STR_ALIENBLEEDING: "Alien bleeding"
+  STR_ALIENBLEEDING_DESC: "Allows fatal wounds to be inflicted on most aliens"
