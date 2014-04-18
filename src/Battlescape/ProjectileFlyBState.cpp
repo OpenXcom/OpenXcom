@@ -478,6 +478,8 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
+				_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->shotAtCounter++;
+
 				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
