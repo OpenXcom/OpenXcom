@@ -1046,19 +1046,21 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 {
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
-	unit->setVisible(true);
-	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	Game *game = _parentState->getGame();
-	if (status == STATUS_PANICKING)
+	if (unit->getVisible() || !Options::noAlienPanicMessages)
 	{
-		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
-	}
-	else
-	{
-		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+		getMap()->getCamera()->centerOnPosition(unit->getPosition());
+		if (status == STATUS_PANICKING)
+		{
+			game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+		}
+		else
+		{
+			game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+		}
 	}
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
