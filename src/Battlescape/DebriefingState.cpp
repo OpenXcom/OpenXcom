@@ -74,7 +74,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
-	_game->getScreen()->resetDisplay();
+	_game->getScreen()->resetDisplay(false);
 
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
