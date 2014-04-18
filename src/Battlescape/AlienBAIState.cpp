@@ -1617,6 +1617,7 @@ void AlienBAIState::projectileAction()
 	if (!_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius() ||
 		explosiveEfficacy(_aggroTarget->getPosition(), _unit, _attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius(), _attackAction->diff))
 	{
+        _aggroTarget->getMissionStatistics()->shotAtCounter++;
 		selectFireMethod();
 	}
 }

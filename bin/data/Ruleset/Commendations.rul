@@ -89,6 +89,8 @@ extraStrings:
      STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed alien soldiers of all kinds."
      STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
      STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
+     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -192,6 +194,8 @@ extraStrings:
      STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed alien soldiers of all kinds."
      STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
      STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
+     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat.
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -233,6 +237,7 @@ extraStrings:
 #   total_night_terror_missions
 #   total_monthly_service
 #   total_fell_unconcious
+#   total_shot_at_10_times
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -354,3 +359,8 @@ commendations:
         - ["FACTION_HOSTILE", "STATUS_DEAD"]
         - ["FACTION_HOSTILE", "STATUS_DEAD"]
         - ["FACTION_HOSTILE", "STATUS_DEAD"]
+  - type: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME
+    description: STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION
+    sprite: 0
+    criteria:
+      total_shot_at_10_times: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
