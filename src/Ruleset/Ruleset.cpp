@@ -60,28 +60,10 @@
 #include "MCDPatch.h"
 #include "../Engine/Logger.h"
 #include <algorithm>
+#include "../Ufopaedia/Ufopaedia.h"
 
 namespace OpenXcom
 {
-
-template <typename T>
-struct compareRule : public std::binary_function<const std::string&, const std::string&, bool>
-{
-	Ruleset *_ruleset;
-	typedef T*(Ruleset::*RuleLookup)(const std::string &id);
-	RuleLookup _lookup;
-
-	compareRule(Ruleset *ruleset, RuleLookup lookup) : _ruleset(ruleset), _lookup(lookup)
-	{
-	}
-
-	bool operator()(const std::string &r1, const std::string &r2) const
-	{
-		T *rule1 = (_ruleset->*_lookup)(r1);
-		T *rule2 = (_ruleset->*_lookup)(r2);
-		return (rule1->getListOrder() < rule2->getListOrder());
-	}
-};
 
 /**
  * Creates a ruleset with blank sets of rules.
@@ -1094,8 +1076,6 @@ const std::vector<std::string> &Ruleset::getAlienMissionList() const
 	return _alienMissionsIndex;
 }
 
-#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
-
 /**
  * @brief Match a city based on coordinates.
  * This function object compares a city's coordinates with the stored coordinates.
@@ -1106,9 +1086,7 @@ public:
 	/// Remembers the coordinates.
 	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
 	/// Compares with stored coordinates.
-	//bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
-	bool operator()(const City *city) const { return (fabs(city->getLongitude() - _lon) < CITY_EPSILON) &&
-	                                                 (fabs(city->getLatitude() - _lat) < CITY_EPSILON); }
+	bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
 private:
 	double _lon, _lat;
 };
@@ -1190,6 +1168,113 @@ std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 }
 
 /**
+ * Compares rules based on their list orders.
+ */
+template <typename T>
+struct compareRule : public std::binary_function<const std::string&, const std::string&, bool>
+{
+	Ruleset *_ruleset;
+	typedef T*(Ruleset::*RuleLookup)(const std::string &id);
+	RuleLookup _lookup;
+
+	compareRule(Ruleset *ruleset, RuleLookup lookup) : _ruleset(ruleset), _lookup(lookup)
+	{
+	}
+
+	bool operator()(const std::string &r1, const std::string &r2) const
+	{
+		T *rule1 = (_ruleset->*_lookup)(r1);
+		T *rule2 = (_ruleset->*_lookup)(r2);
+		return (rule1->getListOrder() < rule2->getListOrder());
+	}
+};
+
+/**
+ * Craft weapons use the list order of their launcher item.
+ */
+template <>
+struct compareRule<RuleCraftWeapon> : public std::binary_function<const std::string&, const std::string&, bool>
+{
+	Ruleset *_ruleset;
+
+	compareRule(Ruleset *ruleset) : _ruleset(ruleset)
+	{
+	}
+
+	bool operator()(const std::string &r1, const std::string &r2) const
+	{
+		RuleItem *rule1 = _ruleset->getItem(_ruleset->getCraftWeapon(r1)->getLauncherItem());
+		RuleItem *rule2 = _ruleset->getItem(_ruleset->getCraftWeapon(r2)->getLauncherItem());
+		return (rule1->getListOrder() < rule2->getListOrder());
+	}
+};
+
+/**
+ * Armor uses the list order of their store item.
+ * Itemless armor comes before all else.
+ */
+template <>
+struct compareRule<Armor> : public std::binary_function<const std::string&, const std::string&, bool>
+{
+	Ruleset *_ruleset;
+
+	compareRule(Ruleset *ruleset) : _ruleset(ruleset)
+	{
+	}
+
+	bool operator()(const std::string &r1, const std::string &r2) const
+	{
+		Armor* armor1 = _ruleset->getArmor(r1);
+		Armor* armor2 = _ruleset->getArmor(r2);
+		RuleItem *rule1 = _ruleset->getItem(armor1->getStoreItem());
+		RuleItem *rule2 = _ruleset->getItem(armor2->getStoreItem());
+		if (!rule1 && !rule2)
+			return (armor1 < armor2); // tiebreaker, don't care about order, pointers are as good as any
+		else if (!rule1)
+			return true;
+		else if (!rule2)
+			return false;
+		else
+			return (rule1->getListOrder() < rule2->getListOrder());
+	}
+};
+
+/**
+ * Ufopaedia articles use section and list order.
+ */
+template <>
+struct compareRule<ArticleDefinition> : public std::binary_function<const std::string&, const std::string&, bool>
+{
+	Ruleset *_ruleset;
+	static std::map<std::string, int> _sections;
+
+	compareRule(Ruleset *ruleset) : _ruleset(ruleset)
+	{
+		_sections[UFOPAEDIA_XCOM_CRAFT_ARMAMENT] = 0;
+		_sections[UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS] = 1;
+		_sections[UFOPAEDIA_WEAPONS_AND_EQUIPMENT] = 2;
+		_sections[UFOPAEDIA_ALIEN_ARTIFACTS] = 3;
+		_sections[UFOPAEDIA_BASE_FACILITIES] = 4;
+		_sections[UFOPAEDIA_ALIEN_LIFE_FORMS] = 5;
+		_sections[UFOPAEDIA_ALIEN_RESEARCH] = 6;
+		_sections[UFOPAEDIA_UFO_COMPONENTS] = 7;
+		_sections[UFOPAEDIA_UFOS] = 8;
+		_sections[UFOPAEDIA_NOT_AVAILABLE] = 9;
+	}
+
+	bool operator()(const std::string &r1, const std::string &r2) const
+	{
+		ArticleDefinition *rule1 = _ruleset->getUfopaediaArticle(r1);
+		ArticleDefinition *rule2 = _ruleset->getUfopaediaArticle(r2);
+		if (_sections[rule1->section] == _sections[rule2->section])
+			return (rule1->getListOrder() < rule2->getListOrder());
+		else
+			return (_sections[rule1->section] < _sections[rule2->section]);
+	}
+};
+std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
+
+/**
  * Sorts all our lists according to their weight.
  */
 void Ruleset::sortLists()
@@ -1197,54 +1282,13 @@ void Ruleset::sortLists()
 	std::sort(_itemsIndex.begin(), _itemsIndex.end(), compareRule<RuleItem>(this, (compareRule<RuleItem>::RuleLookup)&Ruleset::getItem));
 	std::sort(_craftsIndex.begin(), _craftsIndex.end(), compareRule<RuleCraft>(this, (compareRule<RuleCraft>::RuleLookup)&Ruleset::getCraft));
 	std::sort(_facilitiesIndex.begin(), _facilitiesIndex.end(), compareRule<RuleBaseFacility>(this, (compareRule<RuleBaseFacility>::RuleLookup)&Ruleset::getBaseFacility));
-	//std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this, (compareRule<RuleCraftWeapon>::RuleLookup)&Ruleset::getItem));
-	//std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this, (compareRule<Armor>::RuleLookup)&Ruleset::getArmor));
-	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this, (compareRule<ArticleDefinition>::RuleLookup)&Ruleset::getUfopaediaArticle));
 	std::sort(_researchIndex.begin(), _researchIndex.end(), compareRule<RuleResearch>(this, (compareRule<RuleResearch>::RuleLookup)&Ruleset::getResearch));
 	std::sort(_manufactureIndex.begin(), _manufactureIndex.end(), compareRule<RuleManufacture>(this, (compareRule<RuleManufacture>::RuleLookup)&Ruleset::getManufacture));
 	std::sort(_invsIndex.begin(), _invsIndex.end(), compareRule<RuleInventory>(this, (compareRule<RuleInventory>::RuleLookup)&Ruleset::getInventory));
-
-	std::map<int, std::string> list;
-	int offset = 0;
-	int alternateEntry = 0;
-	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
-	{
-		if (getItem(getArmor(*i)->getStoreItem()))
-		{
-			while (list.find(getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset) != list.end())
-			{
-				++offset;
-			}
-			list[getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset] = *i;
-		}
-		else
-		{
-			list[alternateEntry] = *i;
-			alternateEntry += 1;
-		}
-	}
-	_armorsIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_armorsIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
-	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
-	{
-		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
-		{
-			++offset;
-		}
-		list[getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset] = *i;
-	}
-	_craftWeaponsIndex.clear();
-	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-	{
-		_craftWeaponsIndex.push_back(i->second);
-	}
-	list.clear();
-	offset = 0;
+	// special cases
+	std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this));
+	std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this));
+	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this));
 }
 
 /**

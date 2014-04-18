@@ -23,6 +23,7 @@
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Options.h"
+#include "Engine/Screen.h"
 #include "Menu/StartState.h"
 
 /** @mainpage
@@ -57,8 +58,8 @@ int main(int argc, char *argv[])
 			return EXIT_SUCCESS;
 		std::ostringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		Options::baseXResolution = Options::baseXGeoscape;
-		Options::baseYResolution = Options::baseYGeoscape;
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		game = new Game(title.str());
 		game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 		game->setState(new StartState(game));

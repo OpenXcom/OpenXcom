@@ -137,10 +137,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create blank language
 	_lang = new Language();
 
-#ifdef __MORPHOS__	
-	waittime = 1000.0f / Options::FPS;	//20 - FPS
 	framestarttime = 0;
-#endif
 }
 
 /**
@@ -324,13 +321,22 @@ void Game::run()
 		switch (runningState)
 		{
 			case RUNNING: 
+// same here as in the header, not sure what to do with this ifdef, need advisement from morphos people.
 #ifdef __MORPHOS__
-				delaytime = waittime - (SDL_GetTicks() - framestarttime);
+				delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
 				if(delaytime > 0)
 					SDL_Delay((Uint32)delaytime);
 				framestarttime = SDL_GetTicks();
 #else
-				SDL_Delay(1); 
+				if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
+				{
+					delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
+					if(delaytime > 0)
+						SDL_Delay((Uint32)delaytime);
+					framestarttime = SDL_GetTicks();
+				}
+				else
+					SDL_Delay(1);
 #endif
 				
 				break; //Save CPU from going 100%

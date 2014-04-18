@@ -1065,7 +1065,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				}
 			}
 
-			if (bu->getOriginalFaction() == FACTION_HOSTILE && unit->getOriginalFaction() == FACTION_PLAYER && type != DT_NONE)
+			if (bu->getOriginalFaction() == FACTION_HOSTILE && unit && unit->getOriginalFaction() == FACTION_PLAYER && type != DT_NONE)
 			{
 				unit->addFiringExp();
 			}
@@ -1612,7 +1612,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		break;
 	}
 
-    block += blockage(startTile,MapData::O_OBJECT, type, direction);
+    block += blockage(startTile,MapData::O_OBJECT, type, direction, true);
 	if (type != DT_NONE)
 	{
 		direction += 4;
@@ -1644,7 +1644,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
  * @param direction Direction the power travels.
  * @return Amount of blockage.
  */
-int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int direction)
+int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int direction, bool checkingFromOrigin)
 {
 	int blockage = 0;
 
@@ -1656,6 +1656,13 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 		if (direction != -1)
 		{
 			wall = tile->getMapData(MapData::O_OBJECT)->getBigWall();
+
+			if (checkingFromOrigin &&
+				(wall == Pathfinding::BIGWALLNESW ||
+				wall == Pathfinding::BIGWALLNWSE))
+			{
+				check = false;
+			}
 			switch (direction)
 			{
 			case 0: // north

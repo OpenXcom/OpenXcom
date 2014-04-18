@@ -21,6 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -42,6 +43,9 @@ namespace OpenXcom
  */
 MainMenuState::MainMenuState(Game *game) : State(game)
 {
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay();
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnNewGame = new TextButton(92, 20, 64, 90);

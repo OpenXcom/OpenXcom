@@ -40,10 +40,10 @@ TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(wid
 																								   _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
 																								   _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0), _arrowsLeftEdge(0), _arrowsRightEdge(0), _comboBox(0)
 {
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY());
 	_up->setVisible(false);
 	_up->setTextList(this);
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 12);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 13);
 	_down->setVisible(false);
 	_down->setTextList(this);
 }
@@ -93,8 +93,8 @@ void TextList::setX(int x)
 void TextList::setY(int y)
 {
 	Surface::setY(y);
-	_up->setY(getY() + 1);
-	_down->setY(getY() + getHeight() - 12);
+	_up->setY(getY());
+	_down->setY(getY() + getHeight() - 13);
 	if (_selector != 0)
 		_selector->setY(getY());
 }

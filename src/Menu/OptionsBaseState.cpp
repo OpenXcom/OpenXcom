@@ -333,27 +333,23 @@ void OptionsBaseState::updateScale(int &type, int selection, int &width, int &he
 	type = selection;
 	switch (type)
 	{
-	case 1:
+	case SCALE_15X:
 		width = Screen::ORIGINAL_WIDTH * 1.5;
 		height = Screen::ORIGINAL_HEIGHT * 1.5;
 		break;
-	case 2:
+	case SCALE_2X:
 		width = Screen::ORIGINAL_WIDTH * 2;
 		height = Screen::ORIGINAL_HEIGHT * 2;
 		break;
-	case 3:
-		width = Screen::ORIGINAL_WIDTH * 2.5;
-		height = Screen::ORIGINAL_HEIGHT * 2.5;
-		break;
-	case 4:
+	case SCALE_3X:
 		width = Screen::ORIGINAL_WIDTH * 3;
 		height = Screen::ORIGINAL_HEIGHT * 3;
 		break;
-	case 5:
+	case SCALE_SCREEN:
 		width = Options::newDisplayWidth;
 		height = Options::newDisplayHeight;
 		break;
-	case 0:
+	case SCALE_ORIGINAL:
 	default:
 		width = Screen::ORIGINAL_WIDTH;
 		height = Screen::ORIGINAL_HEIGHT;

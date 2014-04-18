@@ -486,11 +486,11 @@ void ProjectileFlyBState::think()
 					_action.weapon->setAmmoItem(0);
 				}
 
-				if (_projectileImpact != 5) // out of map
+				if (_projectileImpact != V_OUTOFBOUNDS)
 				{
 					int offset = 0;
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
-					if (_ammo && _ammo->getRules()->getExplosionRadius() != 0)
+					if (_ammo && _ammo->getRules()->getExplosionRadius() != 0 && _projectileImpact != V_UNIT)
 					{
 						offset = -2;
 					}
@@ -515,7 +515,7 @@ void ProjectileFlyBState::think()
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation(), false, false);
 									_parent->getMap()->getExplosions()->insert(explosion);
-									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), _unit);
+									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), 0);
 								}
 								++i;
 							}
@@ -588,7 +588,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	{
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
-	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16;
+	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16.0;
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
