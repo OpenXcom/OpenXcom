@@ -478,7 +478,7 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->shotAtCounter++;
+				_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->shotAtCounter++; // Only counts for guns, not throws or launches
 
 				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
@@ -530,6 +530,7 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
+						_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->hitCounter++;
 						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
 						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
 						{

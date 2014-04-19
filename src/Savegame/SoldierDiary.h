@@ -89,6 +89,7 @@ struct Statistics
 	bool wasUnconcious;						// Tracks if the soldier fell unconcious
     std::vector<SoldierDiaryKills*> kills;	// Tracks kills
     int shotAtCounter;                      // Tracks how many times the unit was shot at
+	int hitCounter;							// Tracks how many times a unit was hit
 
 	/// Functions
 	// Load function
@@ -101,6 +102,7 @@ struct Statistics
 				kills.push_back(new SoldierDiaryKills(*i));
 		}
         shotAtCounter = node["shotAtCounter"].as<int>(shotAtCounter);
+		hitCounter = node["hitCounter"].as<int>(hitCounter);
 	}
 	// Save function
 	YAML::Node save() const
@@ -113,10 +115,11 @@ struct Statistics
 				node["kills"].push_back((*i)->save());
 		}
         node["shotAtCounter"] = shotAtCounter;
+		node["hitCounter"] = hitCounter;
 		return node;
 	}
 	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
-	Statistics() : wasUnconcious(false), kills(), shotAtCounter(0) { }	// Default constructor
+	Statistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0) { }	// Default constructor
 	~Statistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
 };
 
@@ -233,7 +236,7 @@ private:
 	std::vector<SoldierDiaryKills*> _killList;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal,
-		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal;
+		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:
