@@ -20,7 +20,7 @@
 #define OPENXCOM_CIVILIANBAISTATE_H
 
 #include "BattleAIState.h"
-#include "BattlescapeGame.h"
+#include "Position.h"
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -29,6 +29,7 @@ namespace OpenXcom
 class BattleUnit;
 class SavedBattleGame;
 class Node;
+struct BattleAction;
 
 /**
  * This is the intial AI state of units, walking around and looking for intruders.

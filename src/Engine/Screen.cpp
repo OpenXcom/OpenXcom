@@ -29,7 +29,6 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "Zoom.h"
-#include "OpenGL.h"
 #include "Timer.h"
 #include <SDL.h>
 
@@ -300,7 +299,7 @@ int Screen::getHeight() const
  * Resets the screen surfaces based on the current display options,
  * as they don't automatically take effect.
  */
-void Screen::resetDisplay()
+void Screen::resetDisplay(bool resetVideo)
 {
 	int width = Options::displayWidth;
 	int height = Options::displayHeight;
@@ -317,16 +316,19 @@ void Screen::resetDisplay()
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
-	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
-	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
-	if (_screen == 0)
+	if (resetVideo)
 	{
-		Log(LOG_ERROR) << SDL_GetError();
-		Log(LOG_INFO) << "Attempting to set display to default resolution...";
-		_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
+		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 		if (_screen == 0)
 		{
-			throw Exception(SDL_GetError());
+			Log(LOG_ERROR) << SDL_GetError();
+			Log(LOG_INFO) << "Attempting to set display to default resolution...";
+			_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+			if (_screen == 0)
+			{
+				throw Exception(SDL_GetError());
+			}
 		}
 	}
 	Options::displayWidth = getWidth();
@@ -412,10 +414,13 @@ void Screen::resetDisplay()
 #endif
 	}
 
-	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
-	if (_screen->format->BitsPerPixel == 8)
+	if (resetVideo)
 	{
-		setPalette(getPalette());
+		Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
+		if (_screen->format->BitsPerPixel == 8)
+		{
+			setPalette(getPalette());
+		}
 	}
 }
 

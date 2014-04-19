@@ -20,8 +20,6 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
-#include "Position.h"
-#include "BattlescapeGame.h"
 #include "../aresame.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"

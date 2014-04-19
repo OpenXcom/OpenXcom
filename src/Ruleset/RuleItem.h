@@ -67,6 +67,7 @@ private:
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
 	bool _strengthApplied;
+	int _meleeSound, _meleePower;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -204,7 +205,12 @@ public:
 	int getShotgunPellets() const;
 	/// Gets the weapon's zombie unit.
 	std::string getZombieUnit() const;
+	/// Is strength applied to the damage of this weapon?
 	bool isStrengthApplied() const;
+	/// What sound does this weapon make when you punch someone in the face with it?
+	int getMeleeSound() const;
+	/// Ok, so this isn't a melee type weapon but we're using it for melee... how much damage should it do?
+	int getMeleePower() const;
 };
 
 }

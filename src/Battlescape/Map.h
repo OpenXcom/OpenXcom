@@ -21,6 +21,7 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
+#include "Position.h"
 #include <set>
 #include <vector>
 
@@ -30,7 +31,6 @@ namespace OpenXcom
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class Position;
 class BattleUnit;
 class Projectile;
 class Explosion;

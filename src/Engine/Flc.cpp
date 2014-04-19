@@ -29,13 +29,16 @@ grt,
 #include <math.h>
 /*
 */
-#include "SDL.h"
+#include <SDL.h>
 /*
 */
 #include "Flc.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Zoom.h"
+#include "Screen.h"
+#include "Surface.h"
+#include "Options.h"
 #include "../aresame.h"
 
 namespace OpenXcom
@@ -551,6 +554,15 @@ void FlcMain(void (*frameCallBack)())
 			case SDL_KEYDOWN:
 			  return;
 			break;
+			case SDL_VIDEORESIZE:
+				if (Options::allowResize)
+				{
+					Options::displayWidth = event.resize.w;
+					Options::displayHeight = event.resize.h;
+					flc.realscreen->resetDisplay();
+					flc.mainscreen = flc.realscreen->getSurface()->getSurface();
+				}
+				break;
 			case SDL_QUIT:
 			  exit(0);
 			default:

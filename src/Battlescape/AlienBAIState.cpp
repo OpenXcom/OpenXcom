@@ -739,6 +739,7 @@ void AlienBAIState::setupEscape()
 	int tries = -1;
 	bool coverFound = false;
 	selectNearestTarget();
+	_escapeTUs = 0;
 
 	int dist = _aggroTarget ? _save->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) : 0;
 
@@ -1130,8 +1131,16 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
  */
 void AlienBAIState::evaluateAIMode()
 {
-	// we don't run and hide on our first action.
-	int escapeOdds = _escapeAction->number == 1 ? 0 : 15;
+	// don't try to run away as often if we're a melee type, and really don't try to run away if we have a viable melee target, or we still have 50% or more TUs remaining.
+	int escapeOdds = 15;
+	if (_melee)
+	{
+		escapeOdds = 12;
+	}
+	if (_unit->getTimeUnits() > _unit->getStats()->tu / 2 || _unit->getCharging())
+	{
+		escapeOdds = 5;
+	}
 	int ambushOdds = 12;
 	int combatOdds = 20;
 	// we're less likely to patrol if we see enemies.
@@ -1153,7 +1162,6 @@ void AlienBAIState::evaluateAIMode()
 		ambushOdds = 0;
 		if (_melee)
 		{
-			escapeOdds = 12;
 			combatOdds *= 1.3;
 		}
 	}
@@ -1232,6 +1240,10 @@ void AlienBAIState::evaluateAIMode()
 	case 2:
 		combatOdds *= 1.4;
 		escapeOdds *= 0.7;
+		break;
+	default:
+		combatOdds *= std::max(0.1, std::min(2.0, 1.2 + (_unit->getAggression() / 10)));
+		escapeOdds *= std::min(2.0, std::max(0.1, 0.9 - (_unit->getAggression() / 10)));
 		break;
 	}
 
@@ -1648,7 +1660,7 @@ void AlienBAIState::selectFireMethod()
 	int tuAuto = _attackAction->weapon->getRules()->getTUAuto();
 	int tuSnap = _attackAction->weapon->getRules()->getTUSnap();
 	int tuAimed = _attackAction->weapon->getRules()->getTUAimed();
-	int currentTU = _unit->getTimeUnits() - _escapeTUs;
+	int currentTU = _unit->getTimeUnits();
 
 	if (distance < 4)
 	{

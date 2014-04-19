@@ -718,6 +718,10 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 						{
 							delete item;
 						}
+						else
+						{
+							unit->setTurretType(item->getRules()->getTurretType());
+						}
 					}
 				}
 				else

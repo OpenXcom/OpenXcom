@@ -20,7 +20,6 @@
 #define OPENXCOM_SCANNERSTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -28,6 +27,7 @@ namespace OpenXcom
 class InteractiveSurface;
 class Timer;
 class ScannerView;
+struct BattleAction;
 
 /**
  * The Scanner User Interface.
