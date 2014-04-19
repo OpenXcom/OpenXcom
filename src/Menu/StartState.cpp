@@ -47,8 +47,8 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	int dy = (Options::baseYResolution - 200) / 2;
 	_surface = new Surface(320, 200, dx, dy);
 
-	// Set palette
-	SDL_Color bnw[3];
+	// Set palette (set to {0} here to ensure all fields are initialized)
+	SDL_Color bnw[3] = { {0} };
 
 	bnw[0].r = 0;
 	bnw[0].g = 0;
