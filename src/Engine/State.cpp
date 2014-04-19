@@ -47,7 +47,8 @@ namespace OpenXcom
  */
 State::State(Game *game) : _game(game), _surfaces(), _screen(true), _modal(0)
 {
-
+	// initialize palette to all black
+	memset(_palette, 0, sizeof(_palette));
 }
 
 /**
@@ -348,7 +349,10 @@ void State::setModal(InteractiveSurface *surface)
  */
 void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool immediately)
 {
-	memcpy(_palette + firstcolor, colors, ncolors * sizeof(SDL_Color));
+	if (colors)
+	{
+		memcpy(_palette + firstcolor, colors, ncolors * sizeof(SDL_Color));
+	}
 	if (immediately)
 	{
 		_game->getCursor()->setPalette(_palette);
@@ -372,7 +376,7 @@ void State::setPalette(const std::string &palette, int backpals)
 	setPalette(_game->getResourcePack()->getPalette(palette)->getColors(), 0, 256, false);
 	if (backpals != -1)
 		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
-	setPalette(_palette); // delay actual update to the end
+	setPalette(NULL); // delay actual update to the end
 }
 
 /**
