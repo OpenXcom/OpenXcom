@@ -12,7 +12,6 @@
 
 	!include "MUI2.nsh"
 	!include "ZipDLL.nsh"
-	!include "FileFunc.nsh"
 	!include "x64.nsh"
 	!include "oxlang.nsh" ; Language strings
 
@@ -52,10 +51,35 @@ ${EndIf}
 	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
 	IfErrors ufo_no
 	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
-	${DirState} $R0 $R1
-	IntCmp $R1 -1 ufo_no
+	IfFileExists "$R0\*.*" ufo_yes ufo_no
+	ufo_yes:
 	StrCpy $UFODIR $R0
 	ufo_no:
+FunctionEnd
+
+;--------------------------------
+;Validate UFO folder
+
+Function ValidateUFO
+	StrCmp $UFODIR "" validate_yes
+	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
+	Goto validate_yes
+	confirm_ufo:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
+	confirm_xcu:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
+	validate_no:
+	Abort	
+	validate_yes:
 FunctionEnd
 
 ;--------------------------------
@@ -63,16 +87,12 @@ FunctionEnd
 
 	!define MUI_HEADERIMAGE
 	!define MUI_HEADERIMAGE_BITMAP logo.bmp
-	!define MUI_HEADERIMAGE_UNBITMAP logo.bmp
 	!define MUI_WELCOMEFINISHPAGE_BITMAP side.bmp
-	!define MUI_UNWELCOMEFINISHPAGE_BITMAP side.bmp
-	!define MUI_ABORTWARNING
 
 ;--------------------------------
 ;Pages
 	
 	!insertmacro MUI_PAGE_WELCOME
-	!insertmacro MUI_PAGE_LICENSE "$(MUILicense)"
 	!insertmacro MUI_PAGE_COMPONENTS
 	!insertmacro MUI_PAGE_DIRECTORY
 	
@@ -83,6 +103,8 @@ FunctionEnd
 	!define MUI_DIRECTORYPAGE_TEXT_DESTINATION $(DEST_UfoFolder)
 	!define MUI_DIRECTORYPAGE_VARIABLE $UFODIR
 	!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
+	!define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateUFO
+	
 	!insertmacro MUI_PAGE_DIRECTORY
 	
 	;Start Menu Folder Page Configuration
@@ -100,11 +122,9 @@ FunctionEnd
 	
 	!insertmacro MUI_PAGE_FINISH
 
-	!insertmacro MUI_UNPAGE_WELCOME
 	!insertmacro MUI_UNPAGE_COMPONENTS
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
-	!insertmacro MUI_UNPAGE_FINISH
 
 ;--------------------------------
 ;Languages
@@ -121,8 +141,8 @@ Section "$(NAME_SecMain)" SecMain
 	SetOutPath "$INSTDIR"
 
 ${If} ${RunningX64}
-	File "..\..\bin\x64\Release\OpenXcom.exe"
-	File "..\..\bin\x64\*.dll"
+;	File "..\..\bin\x64\Release\OpenXcom.exe"
+;	File "..\..\bin\x64\*.dll"
 ${Else}
 	File "..\..\bin\Win32\Release\OpenXcom.exe"
 	File "..\..\bin\Win32\*.dll"
@@ -136,8 +156,7 @@ ${EndIf}
 	File "..\..\bin\data\README.txt"
 	
 	;Copy UFO files
-	${DirState} $UFODIR $R1
-	IntCmp $R1 -1 ufo_no
+	IfFileExists "$UFODIR\*.*" 0 ufo_no
 	
 	CreateDirectory "$INSTDIR\data\GEODATA"
 	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\data\GEODATA" 361
