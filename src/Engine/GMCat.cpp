@@ -19,6 +19,7 @@
 
 #include "GMCat.h"
 #include <vector>
+#include "Music.h"
 
 namespace OpenXcom
 {

@@ -29,7 +29,6 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "Zoom.h"
-#include "OpenGL.h"
 #include "Timer.h"
 #include <SDL.h>
 

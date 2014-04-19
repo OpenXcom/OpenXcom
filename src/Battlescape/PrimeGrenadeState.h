@@ -20,7 +20,6 @@
 #define OPENXCOM_PRIMEGRENADESTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -30,6 +29,8 @@ class Text;
 class InteractiveSurface;
 class Frame;
 class Surface;
+class BattleItem;
+struct BattleAction;
 
 /**
  * Window that allows the player

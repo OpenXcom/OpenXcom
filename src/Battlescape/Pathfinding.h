@@ -21,13 +21,13 @@
 
 #include <vector>
 #include "Position.h"
+#include "PathfindingNode.h"
 #include "../Ruleset/MapData.h"
 
 namespace OpenXcom
 {
 
 class SavedBattleGame;
-class PathfindingNode;
 class Tile;
 class BattleUnit;
 

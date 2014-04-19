@@ -29,13 +29,15 @@ grt,
 #include <math.h>
 /*
 */
-#include "SDL.h"
+#include <SDL.h>
 /*
 */
 #include "Flc.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Zoom.h"
+#include "Screen.h"
+#include "Surface.h"
 #include "Options.h"
 #include "../aresame.h"
 

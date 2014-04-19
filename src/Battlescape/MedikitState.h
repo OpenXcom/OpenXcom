@@ -20,7 +20,6 @@
 #define OPENXCOM_MEDIKITSTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -30,6 +29,7 @@ class MedikitView;
 class Text;
 class BattleItem;
 class BattleUnit;
+struct BattleAction;
 
 /**
  * The Medikit User Interface. Medikit is an item for healing a soldier.

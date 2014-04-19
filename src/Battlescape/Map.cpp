@@ -48,7 +48,6 @@
 #include "BattlescapeMessage.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
-#include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 

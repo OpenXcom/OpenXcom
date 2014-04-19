@@ -21,10 +21,11 @@
 #define OPENXCOM_GMCAT_H
 
 #include "CatFile.h"
-#include "Music.h"
 
 namespace OpenXcom
 {
+
+class Music;
 
 /**
  * Subclass of CatFile to handle gm.cat files
