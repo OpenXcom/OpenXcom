@@ -91,6 +91,8 @@ extraStrings:
      STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
      STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
      STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat."
+     STR_MEDAL_MAN_OF_STEEL_NAME: "Man of Steel"
+     STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: "Given to a soldier who has been shot several times during a single mission."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -195,7 +197,9 @@ extraStrings:
      STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
      STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
      STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
-     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat.
+     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat."
+     STR_MEDAL_MAN_OF_STEEL_NAME: "Man of Steel"
+     STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: "Given to a soldier who has been shot several times during a single mission."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -363,4 +367,9 @@ commendations:
     description: STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION
     sprite: 0
     criteria:
-      total_shot_at_10_times: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      total_shot_at_10_times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  - type: STR_MEDAL_MAN_OF_STEEL_NAME
+    description: STR_MEDAL_MAN_OF_STEEL_DESCRIPTION
+    sprite: 0
+    criteria: 
+      total_hit_5_times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
