@@ -531,6 +531,8 @@ void ProjectileFlyBState::think()
 					if (_projectileImpact == 4)
 					{
 						_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->hitCounter++;
+						if (_unit->getOriginalFaction() == FACTION_PLAYER) 
+							_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->friendlyFired = true;
 						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
 						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
 						{
