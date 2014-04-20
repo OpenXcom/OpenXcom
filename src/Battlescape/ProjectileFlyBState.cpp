@@ -38,6 +38,7 @@
 #include "AlienBAIState.h"
 #include "Camera.h"
 #include "Explosion.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -58,7 +59,6 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction a
  */
 ProjectileFlyBState::~ProjectileFlyBState()
 {
-
 }
 
 /**
@@ -254,7 +254,10 @@ void ProjectileFlyBState::init()
 			_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
 	}
-	createNewProjectile();
+	if(createNewProjectile())
+	{
+		_parent->getMap()->setCursorType(CT_NONE);
+	}
 }
 
 /**
@@ -378,7 +381,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -389,6 +391,8 @@ bool ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
+	
+	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
