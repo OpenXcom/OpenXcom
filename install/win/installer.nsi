@@ -1,20 +1,19 @@
 ;NSIS OpenXcom Windows Installer
 
 ;--------------------------------
-;Defines
-
-	!define GAME_NAME "OpenXcom"
-	!define GAME_VERSION "0.9"
-	!define GAME_AUTHOR "OpenXcom Developers"
-
-;--------------------------------
 ;Includes
 
 	!include "MUI2.nsh"
 	!include "ZipDLL.nsh"
 	!include "x64.nsh"
-	!include "oxlang.nsh" ; Language strings
 
+;--------------------------------
+;Defines
+
+	!define GAME_NAME "OpenXcom"
+	!define GAME_VERSION "0.9"
+	!define GAME_AUTHOR "OpenXcom Developers"	
+	
 ;--------------------------------
 ;General
 
@@ -34,53 +33,8 @@
 ;--------------------------------
 ;Variables
 
-  Var StartMenuFolder
-  Var UFODIR
-
-;--------------------------------
-;Get UFO folder from Steam
-
-Function .onInit
-${If} ${RunningX64}
-	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
-${Else}
-	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
-${EndIf}
-	StrCpy $StartMenuFolder "${GAME_NAME}"
-	StrCpy $UFODIR ""
-	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
-	IfErrors ufo_no
-	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
-	IfFileExists "$R0\*.*" ufo_yes ufo_no
-	ufo_yes:
-	StrCpy $UFODIR $R0
-	ufo_no:
-FunctionEnd
-
-;--------------------------------
-;Validate UFO folder
-
-Function ValidateUFO
-	StrCmp $UFODIR "" validate_yes
-	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
-	Goto validate_yes
-	confirm_ufo:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
-	confirm_xcu:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
-	validate_no:
-	Abort	
-	validate_yes:
-FunctionEnd
+	Var StartMenuFolder
+	Var UFODIR
 
 ;--------------------------------
 ;Interface Settings
@@ -88,6 +42,14 @@ FunctionEnd
 	!define MUI_HEADERIMAGE
 	!define MUI_HEADERIMAGE_BITMAP logo.bmp
 	!define MUI_WELCOMEFINISHPAGE_BITMAP side.bmp
+
+;--------------------------------
+;Language Selection Dialog Settings
+
+	;Remember the installer language
+	!define MUI_LANGDLL_REGISTRY_ROOT "HKLM" 
+	!define MUI_LANGDLL_REGISTRY_KEY "Software\${GAME_NAME}" 
+	!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 ;--------------------------------
 ;Pages
@@ -129,7 +91,71 @@ FunctionEnd
 ;--------------------------------
 ;Languages
 
-	!insertmacro MUI_LANGUAGE "English"
+	!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+	!insertmacro MUI_LANGUAGE "German"
+	!insertmacro MUI_LANGUAGE "PortugueseBR"
+	!insertmacro MUI_LANGUAGE "Polish"
+	!insertmacro MUI_LANGUAGE "Romanian"
+
+	!include "installerlang.nsh" ; Language strings
+
+;--------------------------------
+;Reserve Files
+  
+	;If you are using solid compression, files that are required before
+	;the actual installation should be stored first in the data block,
+	;because this will make your installer start faster.
+
+	!insertmacro MUI_RESERVEFILE_LANGDLL
+
+;--------------------------------
+;Installer functions
+
+Function .onInit
+${If} ${RunningX64}
+	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
+${Else}
+	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
+${EndIf}
+	StrCpy $StartMenuFolder "${GAME_NAME}"
+	
+	; Get UFO folder from Steam
+	StrCpy $UFODIR ""
+	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
+	IfErrors ufo_no
+	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
+	IfFileExists "$R0\*.*" ufo_yes ufo_no
+	ufo_yes:
+	StrCpy $UFODIR $R0
+	ufo_no:
+	
+	!insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
+
+;--------------------------------
+;Validate UFO folder
+
+Function ValidateUFO
+	StrCmp $UFODIR "" validate_yes
+	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
+	Goto validate_yes
+	confirm_ufo:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
+	confirm_xcu:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
+	validate_no:
+	Abort	
+	validate_yes:
+FunctionEnd
 
 ;--------------------------------
 ;Installer Sections
@@ -141,8 +167,8 @@ Section "$(NAME_SecMain)" SecMain
 	SetOutPath "$INSTDIR"
 
 ${If} ${RunningX64}
-;	File "..\..\bin\x64\Release\OpenXcom.exe"
-;	File "..\..\bin\x64\*.dll"
+	File "..\..\bin\x64\Release\OpenXcom.exe"
+	File "..\..\bin\x64\*.dll"
 ${Else}
 	File "..\..\bin\Win32\Release\OpenXcom.exe"
 	File "..\..\bin\Win32\*.dll"
@@ -314,6 +340,15 @@ SectionEnd
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMusic} $(DESC_SecMusic)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+;--------------------------------
+;Uninstaller Functions
+
+Function un.onInit
+
+	!insertmacro MUI_UNGETLANGUAGE
+  
+FunctionEnd
 
 ;--------------------------------
 ;Uninstaller Sections
