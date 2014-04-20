@@ -91,8 +91,19 @@ struct Statistics
     int shotAtCounter;                      // Tracks how many times the unit was shot at
 	int hitCounter;							// Tracks how many times a unit was hit
 	bool friendlyFired;						// Tracks if the soldier was hit by friendly fire
+	bool loneSurvivor;						// Tracks if the soldier was the only survivor
 
 	/// Functions
+	// Friendly fire check
+	bool hasFriendlyFired()
+	{
+		for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
+		{
+			if ((*i)->getAlienFactionEnum() == FACTION_PLAYER)
+				return true;
+		}
+		return false;
+	}
 	// Load function
 	void load(const YAML::Node& node)
 	{
@@ -105,6 +116,7 @@ struct Statistics
         shotAtCounter = node["shotAtCounter"].as<int>(shotAtCounter);
 		hitCounter = node["hitCounter"].as<int>(hitCounter);
 		friendlyFired = node["friendlyFired"].as<bool>(friendlyFired);
+		loneSurvivor = node["loneSurvivor"].as<bool>(loneSurvivor);
 	}
 	// Save function
 	YAML::Node save() const
@@ -119,10 +131,11 @@ struct Statistics
         node["shotAtCounter"] = shotAtCounter;
 		node["hitCounter"] = hitCounter;
 		node["friendlyFired"] = friendlyFired;
+		node["loneSurvivor"] = loneSurvivor;
 		return node;
 	}
 	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
-	Statistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), friendlyFired(false) { }	// Default constructor
+	Statistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), friendlyFired(false), loneSurvivor(false) { }	// Default constructor
 	~Statistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
 };
 
@@ -238,7 +251,7 @@ private:
 	RuleCommendations *_rules;
 	std::vector<SoldierDiaryKills*> _killList;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
-	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalFriendlyFired,
+	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalFriendlyFired, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);

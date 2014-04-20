@@ -546,7 +546,15 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-
+	// if only one soldier survived, give him a medal!
+	if (playersSurvived == 1)
+	{
+		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+		{
+			if ((*j)->getFaction() == FACTION_PLAYER && !(*j)->getMissionStatistics()->hasFriendlyFired())
+				(*j)->getMissionStatistics()->loneSurvivor = true;
+		}
+	}
 	// alien base disappears (if you didn't abort)
 	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
