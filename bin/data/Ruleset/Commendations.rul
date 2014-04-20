@@ -97,6 +97,8 @@ extraStrings:
      STR_MEDAL_BLACK_CROSS_DESCRIPTION: "Given to a soldier that survives being hit by friendly fire."
      STR_MEDAL_STAR_OF_VALOR_NAME: "Star of Valor"
      STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Given to a soldier who was the lone survivor of a mission."
+     STR_MEDAL_IRON_MAN_NAME: "Iron Man"
+     STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly an Iron Man or Iron Woman."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -208,6 +210,8 @@ extraStrings:
      STR_MEDAL_BLACK_CROSS_DESCRIPTION: "Given to a soldier that survives being hit by friendly fire."
      STR_MEDAL_STAR_OF_VALOR_NAME: "Star of Valor"
      STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Given to a soldier who was the lone survivor of a mission."
+     STR_MEDAL_IRON_MAN_NAME: "Iron Man"
+     STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly an Iron Man or Iron Woman."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -253,6 +257,7 @@ extraStrings:
 #   total_hit_5_times
 #   total_friendly_fired
 #   total_lone_surivor
+#   total_iron_man
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -394,3 +399,8 @@ commendations:
     sprite: 0
     criteria:
       total_lone_survivor: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  - type: STR_MEDAL_IRON_MAN_NAME
+    description: STR_MEDAL_IRON_MAN_DESCRIPTION
+    sprite: 0
+    criteria:
+      total_iron_man: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

@@ -40,7 +40,7 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0)
-	_totalFriendlyFired(0)
+	_totalFriendlyFired(0), _ironManTotal(0)
 {
 }
 
@@ -162,6 +162,8 @@ void SoldierDiary::updateDiary()
 		_totalFriendlyFired++;
 	if (latestEntry->getMissionStatistics()->loneSurvivor)
 		_loneSurvivorTotal++;
+	if (latestEntry->getMissionStatistics()->ironMan)
+		_ironManTotal++;
 }
 
 /**
@@ -382,7 +384,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     ((*j).first == "total_shot_at_10_times" && _shotAtCounterTotal/10 < (*j).second.at(_nextCommendationLevel[""])) || 
 					((*j).first == "total_hit_5_times" && _hitCounterTotal/5 < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_friendly_fired" && _totalFriendlyFired < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_lone_surivor" && _loneSurvivorTotal < (*j).second.at(_nextCommendationLevel[""])) )
+					((*j).first == "total_lone_surivor" && _loneSurvivorTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_iron_man" && _ironManTotal < (*j).second.at(_nextCommendationLevel[""]))	)
 			{
 				_awardCommendation = false;
 				break;
