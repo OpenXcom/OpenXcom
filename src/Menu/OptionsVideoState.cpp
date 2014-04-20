@@ -400,7 +400,7 @@ void OptionsVideoState::updateGameResolution()
 {
 	if (Options::geoscapeScale == SCALE_SCREEN)
 	{
-		Options::baseXGeoscape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth - (Options::newDisplayWidth %4));
+		Options::baseXGeoscape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth);
 		Options::baseYGeoscape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
 		if (_origin != OPT_BATTLESCAPE)
 		{
@@ -410,7 +410,7 @@ void OptionsVideoState::updateGameResolution()
 	}
 	if (Options::battlescapeScale == SCALE_SCREEN)
 	{
-		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth - (Options::newDisplayWidth %4));
+		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth);
 		Options::baseYBattlescape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
 		if (_origin == OPT_BATTLESCAPE)
 		{

@@ -363,8 +363,6 @@ void OptionsBaseState::updateScale(int &type, int selection, int &width, int &he
 	// don't go under minimum resolution... it's bad, mmkay?
 	width = std::max(width, Screen::ORIGINAL_WIDTH);
 	height = std::max(height, Screen::ORIGINAL_HEIGHT);
-	// scaler methods seem to require base res be a factor of 4
-	width -= width %4;
 
 	if (change && (Options::baseXResolution != width || Options::baseYResolution != height))
 	{
