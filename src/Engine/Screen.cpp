@@ -98,8 +98,8 @@ void Screen::makeVideoFlags()
 	}
 
 	_bpp = (isHQXEnabled() || isOpenGLEnabled()) ? 32 : 8;
-	_baseWidth = Options::baseXResolution - Options::baseXResolution%4;
-	_baseHeight = Options::baseYResolution - Options::baseYResolution%4;
+	_baseWidth = Options::baseXResolution - (Options::baseXResolution % 4);
+	_baseHeight = Options::baseYResolution;
 }
 
 
@@ -331,6 +331,7 @@ void Screen::resetDisplay(bool resetVideo)
 			}
 		}
 	}
+
 	Options::displayWidth = getWidth();
 	Options::displayHeight = getHeight();
 	_scaleX = getWidth() / (double)_baseWidth;
@@ -414,13 +415,11 @@ void Screen::resetDisplay(bool resetVideo)
 #endif
 	}
 
-	if (resetVideo)
+
+	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
+	if (_screen->format->BitsPerPixel == 8)
 	{
-		Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
-		if (_screen->format->BitsPerPixel == 8)
-		{
-			setPalette(getPalette());
-		}
+		setPalette(getPalette());
 	}
 }
 
