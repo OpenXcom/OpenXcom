@@ -45,6 +45,15 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	// Create objects
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
+	_wasLetterBoxed = Options::keepAspectRatio;
+
+
+	if (!Options::useOpenGL)
+	{
+		Options::keepAspectRatio = false;
+		game->getScreen()->resetDisplay(false);
+	}
+
 	_surface = new Surface(320, 200, dx, dy);
 
 	// Set palette (set to {0} here to ensure all fields are initialized)
@@ -141,6 +150,7 @@ void StartState::think()
 	default:
 		break;
 	}
+	Options::keepAspectRatio = _wasLetterBoxed;
 }
 
 /**
