@@ -1894,7 +1894,19 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	// ok now generate the battleitems for inventory
 	setCraft(craft);
 	deployXCOM();
-
+	// ok, now remove any vehicles that may have somehow ended up in our battlescape
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); )
+	{
+		if ((*i)->getGeoscapeSoldier())
+		{
+			++i;
+		}
+		else
+		{
+			delete *i;
+			i = _save->getUnits()->erase(i);
+		}
+	}
 	delete data;
 	delete set;
 }
