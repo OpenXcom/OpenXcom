@@ -576,4 +576,16 @@ void OptionsVideoState::updateBattlescapeScale(Action *)
 {
 	Options::newBattlescapeScale = _cbxBattleScale->getSelected();
 }
+
+void OptionsVideoState::resize()
+{
+	OptionsBaseState::resize();
+	std::wstringstream ss;
+	ss << Options::displayWidth;
+	_txtDisplayWidth->setText(ss.str());
+	ss.str(L"");
+	ss << Options::displayHeight;
+	_txtDisplayHeight->setText(ss.str());
+}
+
 }

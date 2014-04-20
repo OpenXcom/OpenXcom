@@ -388,4 +388,12 @@ const SDL_Color *const State::getPalette() const
 	return _palette;
 }
 
+/**
+ * Each state will probably need its own resize handling,
+ * so this space intentionally left blank
+ */
+void State::resize()
+{
+}
+
 }

@@ -368,4 +368,9 @@ void OptionsBaseState::updateScale(int &type, int selection, int &width, int &he
 		Options::baseYResolution = height;
 	}
 }
+void OptionsBaseState::resize()
+{
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+}
 }

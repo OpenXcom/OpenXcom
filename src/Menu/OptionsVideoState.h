@@ -89,8 +89,12 @@ public:
 	void btnResizeClick(Action *action);
 	/// Handler for clicking the Lock Mouse button.
 	void btnLockMouseClick(Action *action);
+	/// Handler for updating the selected battlescape scale.
 	void updateBattlescapeScale(Action *);
+	/// Handler for updating the selected geoscape scale.
 	void updateGeoscapeScale(Action *);
+	/// Update the resolution settings, we just resized the window.
+	void resize();
 };
 
 }

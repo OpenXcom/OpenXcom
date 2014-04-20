@@ -236,6 +236,10 @@ void Game::run()
 					{
 						Options::displayWidth = _event.resize.w;
 						Options::displayHeight = _event.resize.h;
+						for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+						{
+							(*i)->resize();
+						}
 						_screen->resetDisplay();
 					}
 					break;

@@ -81,7 +81,9 @@ public:
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
+	/// update the game scale as required.
 	void updateScale(int &type, int selection, int &x, int &y, bool change);
+	void resize();
 };
 
 }
