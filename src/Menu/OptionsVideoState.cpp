@@ -305,8 +305,9 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	scales.push_back("STR_ORIGINAL");
 	scales.push_back("STR_1.5X");
 	scales.push_back("STR_2X");
-	scales.push_back("STR_3X");
-	scales.push_back("STR_SCALE_TO_WINDOW");
+	scales.push_back("STR_THIRD_DISPLAY");
+	scales.push_back("STR_HALF_DISPLAY");
+	scales.push_back("STR_FULL_DISPLAY");
 
 	_cbxGeoScale->setColor(Palette::blockOffset(15)-1);
 	_cbxGeoScale->setOptions(scales);
