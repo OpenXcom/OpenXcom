@@ -241,9 +241,8 @@ void Map::drawTerrain(Surface *surface)
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
 	BattleUnit *unit = 0;
-	bool invalid;
 	int tileShade, wallShade, tileColor;
-	
+
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -590,7 +589,7 @@ void Map::drawTerrain(Surface *surface)
 						int part = 0;
 						part += tile->getPosition().x - unit->getPosition().x;
 						part += (tile->getPosition().y - unit->getPosition().y)*2;
-						tmpSurface = unit->getCache(&invalid, part);
+						tmpSurface = unit->getCache(part);
 						if (tmpSurface)
 						{
 							Position offset;
@@ -616,7 +615,7 @@ void Map::drawTerrain(Surface *surface)
 							int part = 0;
 							part += ttile->getPosition().x - tunit->getPosition().x;
 							part += (ttile->getPosition().y - tunit->getPosition().y)*2;
-							tmpSurface = tunit->getCache(&invalid, part);
+							tmpSurface = tunit->getCache(part);
 							if (tmpSurface)
 							{
 								Position offset;
@@ -1179,16 +1178,14 @@ void Map::cacheUnit(BattleUnit *unit)
 {
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, dummy;
 	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
 
-	unit->getCache(&invalid);
-	if (invalid)
+	if (unit->isInvalid())
 	{
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)
 		{
-			Surface *cache = unit->getCache(&dummy, i);
+			Surface *cache = unit->getCache(i);
 			if (!cache) // no cache created yet
 			{
 				cache = new Surface(_spriteWidth, _spriteHeight);

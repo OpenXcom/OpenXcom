@@ -78,7 +78,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
 																_geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false),
-																_nationalColors(false), _faceColor(0), _hairColor(0)
+																_useScripts(false), _faceColor(0), _hairColor(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -131,29 +131,25 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
-	_nationalColors = Options::battleHairBleach;
-	if(_nationalColors)
-	{
-		SoldierLook look = getGeoscapeSoldier()->getLook();
+	_useScripts = _armor->getRecolorScript() != 0;
 
-		_faceColor = ColorCopy::Face<<4;
-		_hairColor = ColorCopy::Hair<<4;
-		switch(look)
-		{
-			case LOOK_BLONDE:
-				break;
-			case LOOK_BROWNHAIR:
-				_hairColor = (10<<4) + 4;
-				break;
-			case LOOK_ORIENTAL:
-				_faceColor = (10<<4);
-				_hairColor = (15<<4) + 5;
-				break;
-			case LOOK_AFRICAN:
-				_faceColor = (10<<4) + 3;
-				_hairColor = (10<<4) + 6;
-				break;
-		}
+	_faceColor = ColorCopy::Face<<4;
+	_hairColor = ColorCopy::Hair<<4;
+	switch(getGeoscapeSoldier()->getLook())
+	{
+		case LOOK_BLONDE:
+			break;
+		case LOOK_BROWNHAIR:
+			_hairColor = (10<<4) + 4;
+			break;
+		case LOOK_ORIENTAL:
+			_faceColor = (10<<4);
+			_hairColor = (15<<4) + 5;
+			break;
+		case LOOK_AFRICAN:
+			_faceColor = (10<<4) + 3;
+			_hairColor = (10<<4) + 6;
+			break;
 	}
 }
 
@@ -172,7 +168,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
 																						_turretType(-1), _hidingForTurn(false),
-																						_nationalColors(false), _faceColor(0), _hairColor(0)
+																						_useScripts(false), _faceColor(0), _hairColor(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -216,6 +212,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+	_useScripts = _armor->getRecolorScript() != 0;
 }
 
 
@@ -225,7 +222,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
-		if (_cache[i]) delete _cache[i];
+		delete _cache[i];
 	//delete _currentAIState;
 }
 
@@ -742,9 +739,11 @@ UnitFaction BattleUnit::getFaction() const
 }
 
 /**
- * Sets the unit's cache flag.
- * Set to true when the unit has to be redrawn from scratch.
- * @param cache
+ * Set cached surface and unit's cache flag.
+ * After this function call unit is consider cached
+ * even if not all parts was updated.
+ * @param cache new cached surface
+ * @param part what cached part to cached
  */
 void BattleUnit::setCache(Surface *cache, int part)
 {
@@ -762,14 +761,21 @@ void BattleUnit::setCache(Surface *cache, int part)
 /**
  * Check if the unit is still cached in the Map cache.
  * When the unit changes it needs to be re-cached.
- * @param invalid
+ * @param part what cached part to return
  * @return cache
  */
-Surface *BattleUnit::getCache(bool *invalid, int part) const
+Surface *BattleUnit::getCache(int part) const
 {
 	if (part < 0) part = 0;
-	*invalid = _cacheInvalid;
 	return _cache[part];
+}
+
+/**
+ * Check if the unit is still cached in the Map cache.
+ */
+bool BattleUnit::isInvalid() const
+{
+	return _cacheInvalid;
 }
 
 /**
@@ -993,6 +999,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 
 	if (power > 0)
 	{
+		if(_useScripts) _cacheInvalid = true;
 		if (type == DT_STUN)
 		{
 			_stunlevel += power;
@@ -1037,6 +1044,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
  */
 void BattleUnit::healStun(int power)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_stunlevel -= power;
 	if (_stunlevel < 0) _stunlevel = 0;
 }
@@ -1054,6 +1062,7 @@ int BattleUnit::getStunlevel() const
  */
 void BattleUnit::knockOut(BattlescapeGame *battle)
 {
+	if(_useScripts) _cacheInvalid = true;
 	if (getArmor()->getSize() > 1) // large units die
 	{
 		_health = 0;
@@ -1187,6 +1196,7 @@ bool BattleUnit::spendTimeUnits(int tu)
 {
 	if (tu <= _tu)
 	{
+		if(_useScripts) _cacheInvalid = true;
 		_tu -= tu;
 		return true;
 	}
@@ -1390,6 +1400,7 @@ double BattleUnit::getThrowingAccuracy()
  */
 void BattleUnit::setArmor(int armor, UnitSide side)
 {
+	if(_useScripts) _cacheInvalid = true;
 	if (armor < 0)
 	{
 		armor = 0;
@@ -1437,6 +1448,7 @@ double BattleUnit::getReactionScore()
  */
 void BattleUnit::prepareNewTurn()
 {
+	if(_useScripts) _cacheInvalid = true;
 	// revert to original faction
 	_faction = _originalFaction;
 
@@ -1527,6 +1539,7 @@ void BattleUnit::moraleChange(int change)
 {
 	if (!isFearable()) return;
 
+	if(_useScripts) _cacheInvalid = true;
 	_morale += change;
 	if (_morale > 100)
 		_morale = 100;
@@ -1605,7 +1618,7 @@ void BattleUnit::think(BattleAction *action)
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
 	if (_currentAIState)
-	{		
+	{
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
@@ -2075,6 +2088,8 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 		return;
 	if(!_fatalWounds[part])
 		return;
+
+	if(_useScripts) _cacheInvalid = true;
 	_fatalWounds[part] -= woundAmount;
 	_health += healthAmount;
 	if (_health > getStats()->health)
@@ -2089,6 +2104,7 @@ void BattleUnit::painKillers ()
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
+		if(_useScripts) _cacheInvalid = true;
         _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
 		_moraleRestored = lostHealth;
 	}
@@ -2101,6 +2117,7 @@ void BattleUnit::painKillers ()
  */
 void BattleUnit::stimulant (int energy, int s)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_energy += energy;
 	if (_energy > getStats()->stamina)
 		_energy = getStats()->stamina;
@@ -2381,6 +2398,7 @@ void BattleUnit::convertToFaction(UnitFaction f)
  */
 void BattleUnit::instaKill()
 {
+	if(_useScripts) _cacheInvalid = true;
 	_health = 0;
 	_status = STATUS_DEAD;
 }
@@ -2398,6 +2416,7 @@ int BattleUnit::getAggroSound() const
  */
 void BattleUnit::setEnergy(int energy)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_energy = energy;
 }
 
@@ -2506,6 +2525,7 @@ std::vector<BattleUnit *> &BattleUnit::getUnitsSpottedThisTurn()
 
 void BattleUnit::setRankInt(int rank)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_rankInt = rank;
 }
 
@@ -2727,10 +2747,10 @@ void BattleUnit::registScript(ScriptParser<BattleUnit>* parser)
 	parser->addConst("color_green0", 3);
 	parser->addConst("color_green1", 4);
 	parser->addConst("color_gray", 5);
-	parser->addConst("color_brown0", 6);
+	parser->addConst("color_brown0", ColorCopy::Face);
 	parser->addConst("color_blue0", 7);
 	parser->addConst("color_blue1", 8);
-	parser->addConst("color_brown1", 9);
+	parser->addConst("color_brown1", ColorCopy::Hair);
 	parser->addConst("color_brown2", 10);
 	parser->addConst("color_purple0", 11);
 	parser->addConst("color_purple1", 12);

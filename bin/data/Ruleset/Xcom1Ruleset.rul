@@ -3770,7 +3770,7 @@ armors:
       - 1.6
       - 1.0
     loftempsSet: [ 3 ]
-    recolorScript: >
+    recolorScript: |
       get_color r0 in;
       get_shade r1 in;
       test r0 color_hair;
@@ -3808,6 +3808,22 @@ armors:
       - 1.1
       - 1.0
     loftempsSet: [ 3 ]
+    recolorScript: |
+      get_color r0 in;
+      get_shade r1 in;
+      test r0 color_hair;
+      skip_eq hair;
+      test r0 color_face;
+      skip_eq face;
+      ret in;
+      
+      hair:
+      add r1 soldier_hair;
+      ret r1;
+      
+      face:
+      add r1 soldier_face;
+      ret r1;
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2

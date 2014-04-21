@@ -113,7 +113,7 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
-	bool _nationalColors;
+	bool _useScripts;
 	Uint8 _faceColor;
 	Uint8 _hairColor;
 public:
@@ -177,10 +177,12 @@ public:
 	SoldierGender getGender() const;
 	/// Gets the unit's faction.
 	UnitFaction getFaction() const;
-	/// Set the cached flag.
+	/// Set cached surface and unit's cache flag.
 	void setCache(Surface *cache, int part = 0);
-	/// If this unit is cached on the battlescape.
-	Surface *getCache(bool *invalid, int part = 0) const;
+	/// Get cached surface.
+	Surface *getCache(int part = 0) const;
+	/// Is this unit require redrawn?
+	bool isInvalid() const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?

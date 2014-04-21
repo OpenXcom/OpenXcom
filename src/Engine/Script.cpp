@@ -468,7 +468,7 @@ struct ParserHelper
 			init = false;
 			for(int i = 0; i < 256; ++i)
 			{
-				if(isspace(i))				char_decoder[i] = none;
+				if(i == '#' || isspace(i))	char_decoder[i] = none;
 				if(i == ':' || i == ';')	char_decoder[i] = spec;
 
 				if(i == '+' || i == '-')	char_decoder[i] = digit_sign;
