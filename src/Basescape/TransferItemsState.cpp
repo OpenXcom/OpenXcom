@@ -41,7 +41,6 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
-#include "../Savegame/Transfer.h"
 #include "../Menu/ErrorMessageState.h"
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"
@@ -55,7 +54,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0), _itemOffset(0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -69,7 +68,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -219,14 +218,6 @@ TransferItemsState::~TransferItemsState()
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
- */
-void TransferItemsState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-}
-
-/**
  * Runs the arrow timers.
  */
 void TransferItemsState::think()
@@ -253,7 +244,7 @@ void TransferItemsState::completeTransfer()
 {
 	int time = (int)floor(6 + _distance / 10.0);
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	for (unsigned int i = 0; i < _transferQty.size(); ++i)
+	for (size_t i = 0; i < _transferQty.size(); ++i)
 	{
 		if (_transferQty[i] > 0)
 		{
@@ -562,7 +553,7 @@ void TransferItemsState::increaseByValue(int change)
 		&& _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
 	if (TRANSFER_CRAFT == selType )
@@ -571,13 +562,13 @@ void TransferItemsState::increaseByValue(int change)
 		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
 		if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
 	}
@@ -585,14 +576,14 @@ void TransferItemsState::increaseByValue(int change)
 		&& (_iQty + selItem->getSize()) > (_baseTo->getAvailableStores() - _baseTo->getUsedStores()))
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
 	if (TRANSFER_ITEM == selType && selItem->getAlien()
 		&& Options::alienContainmentLimitEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::alienContainmentLimitEnforced * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
 
@@ -762,9 +753,9 @@ double TransferItemsState::getDistance() const
  * @param selected The selected item.
  * @return The type of the selected item.
  */
-enum TransferType TransferItemsState::getType(unsigned selected) const
+enum TransferType TransferItemsState::getType(size_t selected) const
 {
-	unsigned max = _soldiers.size();
+	size_t max = _soldiers.size();
 
 	if (selected < max)
 		return TRANSFER_SOLDIER;
@@ -783,7 +774,7 @@ enum TransferType TransferItemsState::getType(unsigned selected) const
  * @param selected Currently selected item.
  * @return Index of the selected item.
  */
-int TransferItemsState::getItemIndex(unsigned selected) const
+int TransferItemsState::getItemIndex(size_t selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }

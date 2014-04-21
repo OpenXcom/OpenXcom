@@ -37,21 +37,24 @@ class TextEdit : public InteractiveSurface
 private:
 	Text *_text, *_caret;
 	std::wstring _value;
-	bool _blink;
+	bool _blink, _modal;
 	Timer *_timer;
 	wchar_t _ascii;
 	size_t _caretPos;
 	bool _numerical;
 	ActionHandler _change;
+	State *_state;
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);
 public:
 	/// Creates a new text edit with the specified size and position.
-	TextEdit(int width, int height, int x = 0, int y = 0);
+	TextEdit(State *state, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text edit.
 	~TextEdit();
+	/// Handle focus.
+	void handle(Action *action, State *state);
 	/// Sets focus on this text edit.
-	void setFocus(bool focus);
+	void setFocus(bool focus, bool modal = true);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.

@@ -36,6 +36,7 @@ class StartState : public State
 private:
 	Surface *_surface;
 	LoadingPhase _load;
+	bool _wasLetterBoxed;
 public:
 	/// Creates the Start state.
 	StartState(Game *game);

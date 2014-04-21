@@ -69,8 +69,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_btnOk = new TextButton(120, 18, 100, 170);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -113,15 +112,6 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 BaseDefenseState::~BaseDefenseState()
 {
 	delete _timer;
-}
-
-/**
- * Resets the palette.
- */
-void BaseDefenseState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
 }
 
 void BaseDefenseState::think()
@@ -217,7 +207,6 @@ void BaseDefenseState::nextStep()
 void BaseDefenseState::btnOkClick(Action *)
 {
 	_timer->stop();
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{

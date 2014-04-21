@@ -50,6 +50,9 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtSide = new Text(320, 17, 0, 108);
 	_txtMessage = new Text(320, 17, 0, 132);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtTurn);

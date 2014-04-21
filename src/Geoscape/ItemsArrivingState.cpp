@@ -64,7 +64,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_lstTransfers = new TextList(271, 112, 14, 50);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -174,14 +174,6 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 ItemsArrivingState::~ItemsArrivingState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void ItemsArrivingState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 }
 
 /**

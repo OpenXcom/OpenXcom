@@ -48,8 +48,6 @@ public:
 	CraftPatrolState(Game *game, Craft *craft, Globe *globe);
 	/// Cleans up the Geoscape Craft state.
 	~CraftPatrolState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Redirect Craft button.

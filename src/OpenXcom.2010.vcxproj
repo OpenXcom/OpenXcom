@@ -388,6 +388,7 @@
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\AbandonGameState.cpp" />
+    <ClCompile Include="Menu\ConfirmLoadState.cpp" />
     <ClCompile Include="Menu\IntroState.cpp" />
     <ClCompile Include="Menu\OptionsAdvancedState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
@@ -606,6 +607,7 @@
     <ClInclude Include="Engine\OpenGL.h" />
     <ClInclude Include="Engine\OptionInfo.h" />
     <ClInclude Include="Engine\Options.h" />
+    <ClInclude Include="Engine\Options.inc.h" />
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
     <ClInclude Include="Engine\Scalers\common.h" />
@@ -680,6 +682,7 @@
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Menu\AbandonGameState.h" />
+    <ClInclude Include="Menu\ConfirmLoadState.h" />
     <ClInclude Include="Menu\IntroState.h" />
     <ClInclude Include="Menu\OptionsAdvancedState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />

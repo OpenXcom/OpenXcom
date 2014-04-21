@@ -52,11 +52,12 @@ private:
 	bool _pushPalette;
 	OpenGL glOutput;
 	Surface *_surface;
+	SDL_Rect _clear;
 	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 	void makeVideoFlags();
 public:
-	static const int ORIGINAL_WIDTH = 320;
-	static const int ORIGINAL_HEIGHT = 200;
+	static const int ORIGINAL_WIDTH;
+	static const int ORIGINAL_HEIGHT;
 
 	/// Creates a new display screen.
 	Screen();
@@ -81,7 +82,7 @@ public:
 	/// Gets the screen's height.
 	int getHeight() const;
 	/// Resets the screen display.
-	void resetDisplay();
+	void resetDisplay(bool resetVideo = true);
 	/// Gets the screen's X scale.
 	double getXScale() const;
 	/// Gets the screen's Y scale.

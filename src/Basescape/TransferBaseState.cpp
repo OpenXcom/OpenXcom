@@ -53,7 +53,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_lstBases = new TextList(248, 64, 28, 80);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);

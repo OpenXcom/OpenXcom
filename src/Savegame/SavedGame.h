@@ -63,6 +63,7 @@ struct SaveInfo
 	time_t timestamp;
 	std::wstring isoDate, isoTime;
 	std::wstring details;
+	std::vector<std::string> rulesets;
 };
 
 /**
@@ -189,7 +190,7 @@ public:
 	/// Gets the soldier matching this ID.
 	Soldier *getSoldier(int id) const;
 	/// Handles the higher promotions.
-	bool handlePromotions();
+	bool handlePromotions(std::vector<Soldier*> &participants);
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
 	///  Returns the list of alien bases.

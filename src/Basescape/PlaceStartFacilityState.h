@@ -20,10 +20,11 @@
 #define OPENXCOM_PLACESTARTFACILITYSTATE_H
 
 #include "PlaceFacilityState.h"
-#include "SelectStartFacilityState.h"
 
 namespace OpenXcom
 {
+
+class SelectStartFacilityState;
 
 /**
  * Window shown when the player tries to

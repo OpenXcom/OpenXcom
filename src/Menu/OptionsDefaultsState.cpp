@@ -45,6 +45,16 @@ OptionsDefaultsState::OptionsDefaultsState(Game *game, OptionsOrigin origin, Opt
 	_btnNo = new TextButton(60, 18, 200, 122);
 	_txtTitle = new Text(246, 32, 37, 70);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
@@ -91,7 +101,11 @@ OptionsDefaultsState::~OptionsDefaultsState()
  * @param action Pointer to an action.
  */
 void OptionsDefaultsState::btnYesClick(Action *action)
-{	
+{
+	if (_origin == OPT_MENU && Options::rulesets.size() > 1)
+	{
+		Options::reload = true;
+	}
 	Options::resetDefault();
 	_game->defaultLanguage();
 	_game->popState();
