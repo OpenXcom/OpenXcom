@@ -34,6 +34,9 @@ class Surface;
 const int ScriptMaxArg = 4;
 const int ScriptMaxRef = 32;
 
+/**
+ * struct used to store definiton of used data by script
+ */
 struct ScriptData
 {
 	typedef void (*void_func)();
@@ -45,11 +48,17 @@ struct ScriptData
 	void_func env_func;
 };
 
+/**
+ * struct that cache state of script data and is place of script wrtie temporaly data
+ */
 struct ScriptWorkRef
 {
 	int ref[ScriptMaxRef];
 };
 
+/**
+ * common base of script execution
+ */
 class ScriptBase
 {
 	std::vector<Uint8> _proc;
@@ -67,6 +76,9 @@ public:
 	friend class ScriptParserBase;
 };
 
+/**
+ * strong typed script
+ */
 template<typename T>
 class Script : public ScriptBase
 {
@@ -88,6 +100,9 @@ public:
 	}
 };
 
+/**
+ * struct storing avaiable operation to scripts
+ */
 struct ScriptParserData
 {
 	Uint8 proc_id;
@@ -95,6 +110,9 @@ struct ScriptParserData
 	Uint8 arg_offset[ScriptMaxArg];
 };
 
+/**
+ * common base of script parser
+ */
 class ScriptParserBase
 {
 	std::map<std::string, ScriptParserData> _op_list;
@@ -118,6 +136,9 @@ public:
 	void addConst(const std::string& s, int i);
 };
 
+/**
+ * strong typed parser
+ */
 template<typename T>
 class ScriptParser : public ScriptParserBase
 {

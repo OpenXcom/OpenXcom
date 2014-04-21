@@ -24,6 +24,7 @@
 #include <typeinfo>
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Script.h"
 #include "../Engine/ScriptBind.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"

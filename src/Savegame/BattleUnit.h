@@ -26,7 +26,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
-#include "../Engine/Script.h"
 #include "Soldier.h"
 
 namespace OpenXcom
@@ -45,6 +44,9 @@ class SavedGame;
 class Language;
 class AlienBAIState;
 class CivilianBAIState;
+template<typename> class Script;
+template<typename> class ScriptParser;
+class ScriptWorkRef;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
