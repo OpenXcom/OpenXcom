@@ -26,6 +26,7 @@
 #include "Logger.h"
 #include "Options.h"
 #include "Screen.h"
+#include "../aresame.h"
 
 #include "OpenGL.h"
 
@@ -716,8 +717,10 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	}
 
 	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
+	double scaleY = Options::displayHeight / Options::baseYResolution;
+	double scaleX = Options::displayWidth / Options::baseXResolution;
 
-	if (src->format->BytesPerPixel == 1 && dst->format->BytesPerPixel == 1)
+	if ((AreSame(2.0, scaleX) && AreSame(2.0, scaleY)) || (AreSame(4.0, scaleX) && AreSame(4.0, scaleY)))
 	{
 
 #ifdef __SSE2__
