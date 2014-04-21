@@ -262,6 +262,7 @@ extraStrings:
 #   total_friendly_fired
 #   total_lone_surivor
 #   total_iron_man
+#   total_important_missions
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.

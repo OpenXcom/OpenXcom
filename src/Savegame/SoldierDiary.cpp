@@ -39,7 +39,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(), 
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
-	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0)
+	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalFriendlyFired(0), _ironManTotal(0), _importantMissionTotal(0)
 {
 }
@@ -75,6 +75,37 @@ void SoldierDiary::load(const YAML::Node& node)
 		for (YAML::const_iterator i = commendations.begin(); i != commendations.end(); ++i)
 			_commendations.push_back(new SoldierCommendations(*i));
 	}
+	if (const YAML::Node &killList = node["killList"])
+	{
+		for (YAML::const_iterator i = killList.begin(); i != killList.end(); ++i)
+			_killList.push_back(new SoldierDiaryKills(*i));
+	}
+	node["alienRankTotal"] = _alienRankTotal;
+    node["alienRaceTotal"] = _alienRaceTotal;
+    node["weaponTotal"] = _weaponTotal;
+    node["weaponAmmoTotal"] = _weaponAmmoTotal;
+    node["regionTotal"] = _regionTotal;
+    node["countryTotal"] = _countryTotal;
+    node["typeTotal"] = _typeTotal;
+    node["UFOTotal"] = _UFOTotal;
+    node["scoreTotal"] = _scoreTotal;
+    node["killTotal"] = _killTotal;
+    node["missionTotal"] = _missionTotal;
+    node["winTotal"] = _winTotal;
+    node["stunTotal"] = _stunTotal;
+    node["daysWoundedTotal"] = _daysWoundedTotal;
+    node["baseDefenseMissionTotal"] = _baseDefenseMissionTotal;
+    node["totalFriendlyFired"] = _totalFriendlyFired;
+    node["loneSurvivorTotal"] = _loneSurvivorTotal;
+    node["terrorMissionTotal"] = _terrorMissionTotal;
+    node["nightMissionTotal"] = _nightMissionTotal;
+    node["nightTerrorMissionTotal"] = _nightTerrorMissionTotal;
+    node["monthsService"] = _monthsService;
+    node["unconciousTotal"] = _unconciousTotal;
+    node["shotAtCounterTotal"] = _shotAtCounterTotal;
+    node["hitCounterTotal"] = _hitCounterTotal;
+    node["ironManTotal"] = _ironManTotal;
+    node["importantMissionTotal"] = _importantMissionTotal;
 }
 
 /**
@@ -87,6 +118,34 @@ YAML::Node SoldierDiary::save() const
 			node["diaryEntries"].push_back((*i)->save());
 	for (std::vector<SoldierCommendations*>::const_iterator i = _commendations.begin(); i != _commendations.end(); ++i)
 			node["commendations"].push_back((*i)->save());
+	for (std::vector<SoldierDiaryKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+			node["killList"].push_back((*i)->save());
+	_alienRankTotal = node["alienRankTotal"].as<std::map<std::string, int> >(_alienRankTotal);
+	_alienRaceTotal = node["alienRaceTotal"].as<std::map<std::string, int> >(_alienRaceTotal);
+	_weaponTotal = node["weaponTotal"].as<std::map<std::string, int> >(_weaponTotal);
+	_weaponAmmoTotal = node["weaponAmmoTotal"].as<std::map<std::string, int> >(_weaponAmmoTotal);
+	_regionTotal = node["regionTotal"].as<std::map<std::string, int> >(_regionTotal);
+	_countryTotal = node["countryTotal"].as<std::map<std::string, int> >(_countryTotal);
+	_typeTotal = node["typeTotal"].as<std::map<std::string, int> >(_typeTotal);
+	_UFOTotal = node["UFOTotal"].as<std::map<std::string, int> >(_UFOTotal);
+	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
+	_killTotal = node["killTotal"].as<int>(_killTotal);
+	_missionTotal = node["missionTotal"].as<int>(_missionTotal);
+	_winTotal = node["winTotal"].as<int>(_winTotal);
+	_stunTotal = node["stunTotal"].as<int>(_stunTotal);
+	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
+	_baseDefenseMissionTotal = node["baseDefenseMissionTotal"].as<int>(_baseDefenseMissionTotal);
+	_totalFriendlyFired = node["totalFriendlyFired"].as<int>(_totalFriendlyFired);
+	_loneSurvivorTotal = node["loneSurvivorTotal"].as<int>(_loneSurvivorTotal);
+	_terrorMissionTotal = node["terrorMissionTotal"].as<int>(_terrorMissionTotal);
+	_nightMissionTotal = node["nightMissionTotal"].as<int>(_nightMissionTotal);
+	_nightTerrorMissionTotal = node["nightTerrorMissionTotal"].as<int>(_nightTerrorMissionTotal);
+	_monthsService = node["monthsService"].as<int>(_monthsService);
+    _unconciousTotal = node["unconciousTotal"].as<int>(_unconciousTotal);
+    _shotAtCounterTotal = node["shotAtCounterTotal"].as<int>(_shotAtCounterTotal);
+    _hitCounterTotal = node["hitCounterTotal"].as<int>(_hitCounterTotal);
+    _ironManTotal = node["ironManTotal"].as<int>(_ironManTotal);
+    _importantMissionTotal = node["importantMissionTotal"].as<int>(_importantMissionTotal);
 	return node;
 }
 
