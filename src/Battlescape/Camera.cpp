@@ -21,7 +21,6 @@
 #include <fstream>
 #include "Camera.h"
 #include "Map.h"
-#include "Position.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"

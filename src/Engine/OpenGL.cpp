@@ -19,6 +19,7 @@
 
 #include "OpenGL.h"
 #include "Logger.h"
+#include "Surface.h"
 
 namespace OpenXcom 
 {

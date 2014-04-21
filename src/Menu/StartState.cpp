@@ -45,10 +45,19 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	// Create objects
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
+	_wasLetterBoxed = Options::keepAspectRatio;
+
+
+	if (!Options::useOpenGL)
+	{
+		Options::keepAspectRatio = false;
+		game->getScreen()->resetDisplay(false);
+	}
+
 	_surface = new Surface(320, 200, dx, dy);
 
-	// Set palette
-	SDL_Color bnw[3];
+	// Set palette (set to {0} here to ensure all fields are initialized)
+	SDL_Color bnw[3] = { {0} };
 
 	bnw[0].r = 0;
 	bnw[0].g = 0;
@@ -128,10 +137,12 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
-			_game->setState(new IntroState(_game));
+			Options::keepAspectRatio = true;
+			_game->setState(new IntroState(_game, _wasLetterBoxed));
 		}
 		else
 		{
+			Options::keepAspectRatio = _wasLetterBoxed;
 			_game->setState(new MainMenuState(_game));
 			Options::reload = false;
 		}

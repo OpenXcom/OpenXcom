@@ -20,8 +20,8 @@
 #define OPENXCOM_ALIENBAISTATE_H
 
 #include "BattleAIState.h"
+#include "Position.h"
 #include <vector>
-
 
 namespace OpenXcom
 {

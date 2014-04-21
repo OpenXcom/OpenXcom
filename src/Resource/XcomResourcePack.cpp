@@ -767,7 +767,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < sizeof(bsets)/sizeof(bsets[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "TERRAIN/" << bsets[i];
@@ -799,7 +799,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	std::string scrs[] = {"TAC00.SCR"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < sizeof(scrs)/sizeof(scrs[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
@@ -815,7 +815,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "SCANBORD.PCK",
 						  "UNIBORD.PCK"};
 
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < sizeof(spks)/sizeof(spks[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];

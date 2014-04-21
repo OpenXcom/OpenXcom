@@ -44,7 +44,7 @@ namespace OpenXcom
 SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
-	_edtSave = new TextEdit(168, 9, 0, 0);
+	_edtSave = new TextEdit(this, 168, 9, 0, 0);
 	_btnSaveGame = new TextButton(80, 16, 60, 172);
 
 	add(_edtSave);
@@ -135,7 +135,7 @@ void SaveState::lstSavesPress(Action *action)
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible(true);
-		_edtSave->setFocus(true);
+		_edtSave->setFocus(true, false);
 		_lstSaves->setScrolling(false);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())

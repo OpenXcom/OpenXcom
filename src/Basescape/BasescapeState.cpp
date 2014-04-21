@@ -67,7 +67,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_txtFacility = new Text(192, 9, 0, 0);
 	_view = new BaseView(192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
-	_edtBase = new TextEdit(127, 17, 193, 0);
+	_edtBase = new TextEdit(this, 127, 17, 193, 0);
 	_txtLocation = new Text(126, 9, 194, 16);
 	_txtFunds = new Text(126, 9, 194, 24);
 	_btnNewBase = new TextButton(128, 12, 192, 58);
@@ -510,7 +510,7 @@ void BasescapeState::miniClick(Action *)
  */
 void BasescapeState::handleKeyPress(Action *action)
 {
-	if (!_edtBase->isFocused() && action->getDetails()->type == SDL_KEYDOWN)
+	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		SDLKey baseKeys[] = {Options::keyBaseSelect1,
 			                 Options::keyBaseSelect2,

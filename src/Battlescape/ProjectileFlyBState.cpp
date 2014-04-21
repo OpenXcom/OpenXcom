@@ -38,6 +38,7 @@
 #include "AlienBAIState.h"
 #include "Camera.h"
 #include "Explosion.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -58,7 +59,6 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction a
  */
 ProjectileFlyBState::~ProjectileFlyBState()
 {
-
 }
 
 /**
@@ -254,7 +254,10 @@ void ProjectileFlyBState::init()
 			_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
 	}
-	createNewProjectile();
+	if(createNewProjectile())
+	{
+		_parent->getMap()->setCursorType(CT_NONE);
+	}
 }
 
 /**
@@ -378,7 +381,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -389,6 +391,8 @@ bool ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
+	
+	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
@@ -418,6 +422,10 @@ void ProjectileFlyBState::think()
 			if (!_action.actor->isOut())
 			{
 				_unit->abortTurn();
+			}
+			if (_parent->getSave()->getSide() == FACTION_PLAYER)
+			{
+				_parent->setupCursor();
 			}
 			_parent->popState();
 		}
@@ -486,11 +494,11 @@ void ProjectileFlyBState::think()
 					_action.weapon->setAmmoItem(0);
 				}
 
-				if (_projectileImpact != 5) // out of map
+				if (_projectileImpact != V_OUTOFBOUNDS)
 				{
 					int offset = 0;
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
-					if (_ammo && _ammo->getRules()->getExplosionRadius() != 0)
+					if (_ammo && _ammo->getRules()->getExplosionRadius() != 0 && _projectileImpact != V_UNIT)
 					{
 						offset = -2;
 					}
@@ -515,7 +523,7 @@ void ProjectileFlyBState::think()
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation(), false, false);
 									_parent->getMap()->getExplosions()->insert(explosion);
-									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), _unit);
+									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), 0);
 								}
 								++i;
 							}
@@ -588,7 +596,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	{
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
-	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16;
+	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16.0;
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));

@@ -58,15 +58,13 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(g
 	_btnCrew = new TextButton(64, 16, 14, 96);
 	_btnEquip = new TextButton(64, 16, 14, 120);
 	_btnArmor = new TextButton(64, 16, 14, 144);
-	_edtCraft = new TextEdit(160, 16, 80, 8);
-	_txtDamage = new Text(82, 17, 14, 24);
+	_edtCraft = new TextEdit(this, 160, 16, 80, 8);
+	_txtDamage = new Text(100, 17, 14, 24);
 	_txtFuel = new Text(82, 17, 228, 24);
 	_txtW1Name = new Text(75, 16, 46, 48);
-	_txtW1Ammo = new Text(75, 9, 46, 64);
-	_txtW1Max = new Text(75, 9, 46, 72);
+	_txtW1Ammo = new Text(75, 24, 46, 64);
 	_txtW2Name = new Text(75, 16, 204, 48);
-	_txtW2Ammo = new Text(75, 9, 204, 64);
-	_txtW2Max = new Text(75, 9, 204, 72);
+	_txtW2Ammo = new Text(75, 24, 204, 64);
 	_sprite = new Surface(32, 40, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);
@@ -88,10 +86,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(g
 	add(_txtFuel);
 	add(_txtW1Name);
 	add(_txtW1Ammo);
-	add(_txtW1Max);
 	add(_txtW2Name);
 	add(_txtW2Ammo);
-	add(_txtW2Max);
 	add(_sprite);
 	add(_weapon1);
 	add(_weapon2);
@@ -146,17 +142,11 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(g
 	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
 
-	_txtW1Max->setColor(Palette::blockOffset(13)+10);
-	_txtW1Max->setSecondaryColor(Palette::blockOffset(13)+5);
-
 	_txtW2Name->setColor(Palette::blockOffset(13)+5);
 	_txtW2Name->setWordWrap(true);
 
 	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-	_txtW2Max->setColor(Palette::blockOffset(13)+10);
-	_txtW2Max->setSecondaryColor(Palette::blockOffset(13)+5);
 }
 
 /**
@@ -188,8 +178,8 @@ void CraftInfoState::init()
 	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
 	if (_craft->getStatus() == "STR_REPAIRS")
 	{
-		int damageHours = (int)ceil((float)_craft->getDamage() / _craft->getRules()->getRepairRate());
-		ss << L"\n(" << tr("STR_HOUR", damageHours) << ")";
+		int damageHours = (int)ceil((double)_craft->getDamage() / _craft->getRules()->getRepairRate());
+		ss << formatTime(damageHours);
 	}
 	_txtDamage->setText(ss.str());
 
@@ -197,8 +187,8 @@ void CraftInfoState::init()
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
 	if (_craft->getStatus() == "STR_REFUELLING")
 	{
-		int fuelHours = (int)ceil((float)(_craft->getRules()->getMaxFuel() - _craft->getFuel()) / _craft->getRules()->getRefuelRate() / 2.0f);
-		ss2 << L"\n(" << tr("STR_HOUR", fuelHours) << ")";
+		int fuelHours = (int)ceil((double)(_craft->getRules()->getMaxFuel() - _craft->getFuel()) / _craft->getRules()->getRefuelRate() / 2.0);
+		ss2 << formatTime(fuelHours);
 	}
 	_txtFuel->setText(ss2.str());
 
@@ -251,15 +241,21 @@ void CraftInfoState::init()
 			frame->blit(_weapon1);
 
 			_txtW1Name->setText(tr(w1->getRules()->getType()));
-			_txtW1Ammo->setText(tr("STR_AMMO_").arg(w1->getAmmo()));
-			_txtW1Max->setText(tr("STR_MAX").arg(w1->getRules()->getAmmoMax()));
+			std::wstringstream ss;
+			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
+			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
+			if (_craft->getStatus() == "STR_REARMING" && w1->getAmmo() < w1->getRules()->getAmmoMax())
+			{
+				int rearmHours = (int)ceil((double)(w1->getRules()->getAmmoMax() - w1->getAmmo()) / w1->getRules()->getRearmRate());
+				ss << formatTime(rearmHours);
+			}
+			_txtW1Ammo->setText(ss.str());
 		}
 		else
 		{
 			_weapon1->clear();
 			_txtW1Name->setText(L"");
 			_txtW1Ammo->setText(L"");
-			_txtW1Max->setText(L"");
 		}
 	}
 	else
@@ -268,7 +264,6 @@ void CraftInfoState::init()
 		_btnW1->setVisible(false);
 		_txtW1Name->setVisible(false);
 		_txtW1Ammo->setVisible(false);
-		_txtW1Max->setVisible(false);
 	}
 
 	if (_craft->getRules()->getWeapons() > 1)
@@ -283,15 +278,21 @@ void CraftInfoState::init()
 			frame->blit(_weapon2);
 
 			_txtW2Name->setText(tr(w2->getRules()->getType()));
-			_txtW2Ammo->setText(tr("STR_AMMO_").arg(w2->getAmmo()));
-			_txtW2Max->setText(tr("STR_MAX").arg(w2->getRules()->getAmmoMax()));
+			std::wstringstream ss;
+			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
+			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
+			if (_craft->getStatus() == "STR_REARMING" && w2->getAmmo() < w2->getRules()->getAmmoMax())
+			{
+				int rearmHours = (int)ceil((double)(w2->getRules()->getAmmoMax() - w2->getAmmo()) / w2->getRules()->getRearmRate());
+				ss << formatTime(rearmHours);
+			}
+			_txtW2Ammo->setText(ss.str());
 		}
 		else
 		{
 			_weapon2->clear();
 			_txtW2Name->setText(L"");
 			_txtW2Ammo->setText(L"");
-			_txtW2Max->setText(L"");
 		}
 	}
 	else
@@ -300,11 +301,31 @@ void CraftInfoState::init()
 		_btnW2->setVisible(false);
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
-		_txtW2Max->setVisible(false);
 	}
-	std::wostringstream name;
-	name << tr(_craft->getRules()->getType()) << "-" << _craft->getId();
-	_defaultName = name.str();
+	_defaultName = tr("STR_CRAFTNAME").arg(tr(_craft->getRules()->getType())).arg(_craft->getId());
+}
+
+/**
+ * Turns an amount of time into a
+ * day/hour string.
+ * @param total 
+ */
+std::wstring CraftInfoState::formatTime(int total)
+{
+	std::wostringstream ss;
+	int days = total / 24;
+	int hours = total % 24;
+	ss << L"\n(";
+	if (days > 0)
+	{
+		ss << tr("STR_DAY", days) << L"/";
+	}
+	if (hours > 0)
+	{
+		ss << tr("STR_HOUR", hours);
+	}
+	ss << L")";
+	return ss.str();
 }
 
 /**

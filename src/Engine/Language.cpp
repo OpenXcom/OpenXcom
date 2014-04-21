@@ -25,7 +25,6 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
-#include "LocalizedText.h"
 #include "LanguagePlurality.h"
 #include "../Ruleset/ExtraStrings.h"
 #include "../Interface/TextList.h"
