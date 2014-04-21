@@ -260,3 +260,47 @@ LangString LINK_Uninstall ${LANG_RUSSIAN} "Удаление"
 
 LangString WARN_UFOMissing ${LANG_RUSSIAN} "В данном каталоге X-COM 1 не найден. Для запуска ${GAME_NAME} требуется установленный X-COM. Продолжить?"
 LangString WARN_XCUDetected ${LANG_RUSSIAN} "Обнаружен XcomUtil. ${GAME_NAME} несовместим с XcomUtil, что может вызвать непредвиденные последствия. Продолжить?"
+
+;================TURKISH================
+
+;--------------------------------
+;Pages
+	
+LangString PAGE_UfoFolder ${LANG_TURKISH} "${GAME_NAME} çalıştırabilmek için bir UFO: Enemy Unknown / X-COM: UFO Defense kopyası gereklidir. Eğer mevcut bir kurulumu güncelliyorsanız bu adımı atlayabilirsiniz.$\n$\nKurulum, gerekli dosyaları bu dizinden kopyalayacaktır. Farklı bir dizinden kopyalamak için Gözat butonuna basın ve doğru dizini seçin. Devam etmek için Sonraki butonuna basın."
+LangString PAGE_UfoFolder_TITLE ${LANG_TURKISH} "X-COM 1 Konumunu Seç"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_TURKISH} "X-COM 1'in kurulu olduğu dizini seçin"
+LangString DEST_UfoFolder ${LANG_TURKISH} "X-COM 1 Dizini"
+
+;--------------------------------
+;Installer Sections
+	
+LangString NAME_SecMain ${LANG_TURKISH} "Oyun Dosyaları"
+LangString DESC_SecMain ${LANG_TURKISH} "${GAME_NAME}'i çalıştırmak için gerekli dosyalar."
+LangString NAME_SecPatch ${LANG_TURKISH} "Veri Yaması"
+LangString DESC_SecPatch ${LANG_TURKISH} "X-COM 1 verilerindeki hataları düzeltir. İlk kurulumda yapılması tavsiye edilir. (Internet bağlantısı gereklidir)"
+LangString NAME_SecMusic ${LANG_TURKISH} "DOS Müzikleri"
+LangString DESC_SecMusic ${LANG_TURKISH} "Adlib/SoundBlaster müzik kayıtları. Windows'taki müzik sorunlarını giderir. (Internet bağlantısı gereklidir)"
+LangString NAME_SecDesktop ${LANG_TURKISH} "Masaüstü Kısayolu"
+LangString DESC_SecDesktop ${LANG_TURKISH} "Masaüstünde, ${GAME_NAME} için bir kısayol oluşturur."
+	
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_TURKISH} "X-COM Verilerini Sil"
+LangString DESC_UnData ${LANG_TURKISH} "Modlar ve X-COM kaynakları da dahil olmak üzere tüm ${GAME_NAME} verileri silinir. Temiz bir kurulum için tavsiye edilir."
+LangString NAME_UnUser ${LANG_TURKISH} "Kullanıcı Verilerini Sil"
+LangString DESC_UnUser ${LANG_TURKISH} "Kayıtlı oyunlar, ekran görüntüleri ve seçenekler dahil olmak üzere tüm ${GAME_NAME} kullanıcı verileri silinir. Tam bir temizlik için tavsiye edilir."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_TURKISH} "Veri Dizini"
+LangString LINK_Readme ${LANG_TURKISH} "Okubeni"
+LangString LINK_UserFolder ${LANG_TURKISH} "Kullanıcı Dizini"
+LangString LINK_Uninstall ${LANG_TURKISH} "Program Kaldır"
+	
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_TURKISH} "X-COM 1 bu dizinde bulunamadı. ${GAME_NAME} için geçerli bir X-COM kurulumu zorunludur. Devam?"
+LangString WARN_XCUDetected ${LANG_TURKISH} "XcomUtil tespit edildi. ${GAME_NAME} XcomUtil ile uyumlu olmadığından tuhaf sorunlarla karşılabilirsiniz. Devam?"

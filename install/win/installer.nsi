@@ -93,9 +93,11 @@
 
 	!insertmacro MUI_LANGUAGE "English" ;first language is the default language
 	!insertmacro MUI_LANGUAGE "German"
+	!insertmacro MUI_LANGUAGE "Russian"
 	!insertmacro MUI_LANGUAGE "PortugueseBR"
 	!insertmacro MUI_LANGUAGE "Polish"
 	!insertmacro MUI_LANGUAGE "Romanian"
+	!insertmacro MUI_LANGUAGE "Turkish"
 
 	!include "installerlang.nsh" ; Language strings
 
