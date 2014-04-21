@@ -178,6 +178,7 @@ void Game::run()
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	bool stupidityFlag = Options::allowResize;
 	while (!_quit)
 	{
 		// Clean up states
@@ -234,13 +235,20 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						Options::displayWidth = _event.resize.w;
-						Options::displayHeight = _event.resize.h;
-						for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+						if (!stupidityFlag)
 						{
-							(*i)->resize();
+							Options::displayWidth = _event.resize.w;
+							Options::displayHeight = _event.resize.h;
+							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+							{
+								(*i)->resize();
+							}
+							_screen->resetDisplay();
 						}
-						_screen->resetDisplay();
+						else
+						{
+							stupidityFlag = false;
+						}
 					}
 					break;
 				case SDL_MOUSEMOTION:
