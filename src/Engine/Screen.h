@@ -52,6 +52,7 @@ private:
 	bool _pushPalette;
 	OpenGL glOutput;
 	Surface *_surface;
+	SDL_Rect _clear;
 	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 	void makeVideoFlags();
 public:
