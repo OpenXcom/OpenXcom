@@ -51,10 +51,9 @@ public:
 	MonthlyReportState(Game *game, bool psi, Globe *globe);
 	/// Cleans up the Monthly Report state.
 	~MonthlyReportState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Calculate monthly scores.
 	void calculateChanges();
 };
 

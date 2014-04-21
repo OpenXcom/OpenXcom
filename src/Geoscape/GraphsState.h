@@ -57,11 +57,11 @@ private:
 	std::vector<Surface *> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface *> _financeLines, _incomeLines;
 	bool _alien, _income, _country, _finance;
-	static const  unsigned int GRAPH_MAX_BUTTONS=16;
+	static const size_t GRAPH_MAX_BUTTONS=16;
 	//will be only between 0 and size()
-	unsigned int _butRegionsOffset, _butCountriesOffset;
+	size_t _butRegionsOffset, _butCountriesOffset;
 	//scroll and repaint buttons functions
-	void scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, unsigned int &offset, int step);
+	void scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, size_t &offset, int step);
 	void updateButton(GraphButInfo *from,ToggleTextButton *to);
 public:
 	/// Creates the Graphs state.

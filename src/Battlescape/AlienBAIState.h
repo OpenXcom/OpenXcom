@@ -20,8 +20,8 @@
 #define OPENXCOM_ALIENBAISTATE_H
 
 #include "BattleAIState.h"
+#include "Position.h"
 #include <vector>
-
 
 namespace OpenXcom
 {
@@ -45,6 +45,7 @@ protected:
 	bool _traceAI, _wasHit, _didPsi;
 	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
+	std::vector<int> _reachable, _reachableWithAttack;
 public:
 	/// Creates a new AlienBAIState linked to the game and a certain unit.
 	AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node);

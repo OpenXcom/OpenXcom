@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rank String defining the rank.
  */
 Unit::Unit(const std::string &type) : _type(type), _race(""), _rank(""), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0),
-																		_value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE),
+																		_value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE),
 																		_spawnUnit(""), _livingWeapon(false)
 {
 }
@@ -58,6 +58,7 @@ void Unit::load(const YAML::Node &node, int modIndex)
 	_value = node["value"].as<int>(_value);
 	_intelligence = node["intelligence"].as<int>(_intelligence);
 	_aggression = node["aggression"].as<int>(_aggression);
+	_energyRecovery = node["energyRecovery"].as<int>(_energyRecovery);
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
@@ -239,4 +240,9 @@ bool Unit::isLivingWeapon() const
 	return _livingWeapon;
 }
 
+
+int Unit::getEnergyRecovery() const
+{
+	return _energyRecovery;
+}
 }

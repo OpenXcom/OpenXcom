@@ -20,7 +20,6 @@
 #define OPENXCOM_NOCONTAINMENTSTATE_H
 
 #include "../Engine/State.h"
-#include "DebriefingState.h"
 
 namespace OpenXcom
 {

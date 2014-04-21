@@ -22,7 +22,6 @@
 #include "PathfindingOpenSet.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/BattleUnit.h"
@@ -584,6 +583,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 			if (_unit && _unit->getFaction() == unit->getFaction()) return true;
+			if (_unit && _unit->getFaction() == FACTION_HOSTILE && 
+				std::find(_unit->getUnitsSpottedThisTurn().begin(), _unit->getUnitsSpottedThisTurn().end(), unit) != _unit->getUnitsSpottedThisTurn().end()) return true;
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
@@ -1051,7 +1052,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 {
 	const Position &start = unit->getPosition();
-
+	int energyMax = unit->getEnergy();
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 	{
 		it->reset();
@@ -1073,7 +1074,8 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
-			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs
+			if (currentNode->getTUCost(false) + tuCost > tuMax || 
+				(currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.

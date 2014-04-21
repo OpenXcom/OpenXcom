@@ -50,10 +50,10 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
 	_btnOk = new TextButton(162, 12, 47, 118);
 	_txtTitle = new Text(182, 17, 37, 70);
-	_edtName = new TextEdit(127, 16, 59, 94);
+	_edtName = new TextEdit(this, 127, 16, 59, 94);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -82,7 +82,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
-	_edtName->setFocus(true);
+	_edtName->setFocus(true, false);
 	_edtName->onChange((ActionHandler)&BaseNameState::edtNameChange);
 }
 

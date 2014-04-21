@@ -61,6 +61,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Basescape/ManageAlienContainmentState.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -71,9 +72,14 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay(false);
+
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 	_containmentLimit = Options::alienContainmentLimitEnforced ? 1 : 0;
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
@@ -88,8 +94,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_lstTotal = new TextList(280, 9, 16, 12);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -220,8 +225,9 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMMARS")->play();
+	_game->getResourcePack()->playMusic("GMMARS");
 
+	// Restore system colors
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
@@ -248,6 +254,13 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
+	std::vector<Soldier*> participants;
+	for (std::vector<BattleUnit*>::const_iterator i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
+		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
+	{
+		if ((*i)->getGeoscapeSoldier())
+			participants.push_back((*i)->getGeoscapeSoldier());
+	}
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -256,7 +269,7 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else if (!_destroyBase)
 	{
-		if (_game->getSavedGame()->handlePromotions())
+		if (_game->getSavedGame()->handlePromotions(participants))
 		{
 			_game->pushState(new PromotionsState(_game));
 		}
@@ -271,7 +284,7 @@ void DebriefingState::btnOkClick(Action *)
 		else if (_manageContainment)
 		{
 			_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_BATTLESCAPE));
-			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
 }

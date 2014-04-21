@@ -21,6 +21,7 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
+#include "Position.h"
 #include <set>
 #include <vector>
 
@@ -30,7 +31,6 @@ namespace OpenXcom
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class Position;
 class BattleUnit;
 class Projectile;
 class Explosion;
@@ -63,7 +63,7 @@ private:
 	Projectile *_projectile;
 	bool _projectileInFOV;
 	std::set<Explosion *> _explosions;
-	bool _explosionInFOV;
+	bool _explosionInFOV, _launch;
 	BattlescapeMessage *_message;
 	Camera *_camera;
 	int _visibleMapHeight;

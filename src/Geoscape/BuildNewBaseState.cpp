@@ -75,7 +75,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_hoverTimer->start();
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	setPalette("PAL_GEOSCAPE");
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -157,11 +157,11 @@ BuildNewBaseState::~BuildNewBaseState()
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
+ * Stops the globe and adds radar hover effect.
  */
 void BuildNewBaseState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	State::init();
 	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
 	_globe->rotateStop();
 	_globe->setNewBaseHover();

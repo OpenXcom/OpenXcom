@@ -48,7 +48,6 @@
 #include "BattlescapeMessage.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
-#include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 
@@ -78,7 +77,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
 {
 	_previewSetting = Options::battleNewPreviewPath;
 	_smoothCamera = Options::battleSmoothCamera;
@@ -289,15 +288,20 @@ void Map::drawTerrain(Surface *surface)
 			}
 			if (_smoothCamera)
 			{
+				if (_launch)
+				{
+					_launch = false;
+					if ((bulletPositionScreen.x < 1 || bulletPositionScreen.x > surface->getWidth() - 1 ||
+						bulletPositionScreen.y < 1 || bulletPositionScreen.y > _visibleMapHeight - 1))
+					{
+						_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
+						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+					}
+				}
 				if (!_smoothingEngaged)
 				{
-					Position origin = _projectile->getOrigin();
-					Position target = _projectile->getTarget();
-					if (std::abs(origin.x - target.x) > 1 ||
-						std::abs(origin.y - target.y) > 1 || 
-						std::abs(origin.z - target.z) > 1 ||
-						bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
-						bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight)
+					if (bulletPositionScreen.x < 1 || bulletPositionScreen.x > surface->getWidth() - 1 ||
+						bulletPositionScreen.y < 1 || bulletPositionScreen.y > _visibleMapHeight - 1)
 					{
 						_smoothingEngaged = true;
 					}
@@ -872,7 +876,7 @@ void Map::drawTerrain(Surface *surface)
 			else if ((*i)->isHit())
 			{
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
+				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 25, 0);
 			}
 			else
 			{
@@ -1205,6 +1209,10 @@ void Map::cacheUnit(BattleUnit *unit)
 void Map::setProjectile(Projectile *projectile)
 {
 	_projectile = projectile;
+	if (projectile && Options::battleSmoothCamera)
+	{
+		_launch = true;
+	}
 }
 
 /**

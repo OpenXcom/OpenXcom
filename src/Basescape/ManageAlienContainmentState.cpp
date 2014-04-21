@@ -78,13 +78,13 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base,
 	// Set palette
 	if (origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 0);
 		_color  = Palette::blockOffset(15)-1;
 		_color2 = Palette::blockOffset(8)+10;
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+		setPalette("PAL_BASESCAPE", 1);
 		_color  = Palette::blockOffset(13)+10;
 		_color2 = Palette::blockOffset(13);
 	}
@@ -209,7 +209,7 @@ void ManageAlienContainmentState::think()
  */
 void ManageAlienContainmentState::btnOkClick(Action *)
 {
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (size_t i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{

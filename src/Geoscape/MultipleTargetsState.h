@@ -20,13 +20,13 @@
 #define OPENXCOM_MULTIPLETARGETSSTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
 
 class TextButton;
 class Window;
-class TextList;
 class Craft;
 class Target;
 class GeoscapeState;
@@ -37,9 +37,8 @@ class GeoscapeState;
 class MultipleTargetsState : public State
 {
 private:
-	static const int OUTER_MARGIN = 3;
-	static const int INNER_MARGIN = 4;
-	static const int BORDER = 5;
+	static const int MARGIN = 10;
+	static const int SPACING = 4;
 	static const int BUTTON_HEIGHT = 16;
 
 	std::vector<Target*> _targets;
@@ -47,8 +46,7 @@ private:
 	GeoscapeState *_state;
 
 	Window *_window;
-	TextButton *_btnCancel;
-	TextList *_lstTargets;
+	std::vector<TextButton*> _btnTargets;
 public:
 	/// Creates the Multiple Targets state.
 	MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state);
@@ -61,7 +59,7 @@ public:
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Targets list.
-	void lstTargetsClick(Action *action);
+	void btnTargetClick(Action *action);
 };
 
 }

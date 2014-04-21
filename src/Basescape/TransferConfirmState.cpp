@@ -50,7 +50,7 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_txtTotal = new Text(100, 17, 170, 95);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnCancel);

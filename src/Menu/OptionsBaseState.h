@@ -32,6 +32,15 @@ enum OptionsOrigin
 	OPT_BATTLESCAPE
 };
 
+enum ScaleType
+{
+	SCALE_ORIGINAL,
+	SCALE_15X,
+	SCALE_2X,
+	SCALE_SCREEN_DIV_3,
+	SCALE_SCREEN_DIV_2,
+	SCALE_SCREEN
+};
 class Window;
 class TextButton;
 class Text;
@@ -55,6 +64,8 @@ public:
 	OptionsBaseState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsBaseState();
+	/// Restarts the game states.
+	static void restart(Game *game, OptionsOrigin origin);
 	/// Initializes palettes.
 	void init();
 	/// Presses a certain category button.
@@ -66,11 +77,14 @@ public:
 	/// Handler for clicking the Restore Defaults button.
 	void btnDefaultClick(Action *action);
 	/// Handler for clicking one of the grouping buttons.
-	void btnGroupClick(Action *action);
+	void btnGroupPress(Action *action);
 	/// Handler for showing tooltip.
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
+	/// update the game scale as required.
+	void updateScale(int &type, int selection, int &x, int &y, bool change);
+	void resize();
 };
 
 }

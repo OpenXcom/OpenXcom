@@ -26,6 +26,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattleAIState.h"
@@ -1272,7 +1273,7 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return item->getRules()->getAccuracyMelee();
+		return getStats()->melee * (item->getRules()->getAccuracyMelee() / 100) * (getAccuracyModifier(item) / 100);
 
 	int result = getStats()->firing * weaponAcc / 100;
 
@@ -1406,7 +1407,15 @@ void BattleUnit::prepareNewTurn()
 	// recover energy
 	if (!isOut())
 	{
-		int ENRecovery = getStats()->tu / 3;
+		int ENRecovery;
+		if (_geoscapeSoldier != 0)
+		{
+			ENRecovery = _geoscapeSoldier->getInitStats()->tu / 3;
+		}
+		else
+		{
+			ENRecovery = _unitRules->getEnergyRecovery();
+		}
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
 		_energy += ENRecovery;
@@ -2178,7 +2187,7 @@ int BattleUnit::getMoveSound() const
   */
 bool BattleUnit::isWoundable() const
 {
-	return (_type=="SOLDIER");
+	return (_type=="SOLDIER" || (Options::alienBleeding && _faction != FACTION_PLAYER && _armor->getSize() == 1));
 }
 /**
   * Get whether the unit is affected by morale loss.
@@ -2385,7 +2394,7 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 		weight += (*i)->getRules()->getWeight();
 		if ((*i)->getAmmoItem() != (*i) && (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}
-	return weight;
+	return std::max(0,weight);
 }
 
 /**
@@ -2422,7 +2431,7 @@ void BattleUnit::invalidateCache()
 	_cacheInvalid = true;
 }
 
-std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
+std::vector<BattleUnit *> &BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }

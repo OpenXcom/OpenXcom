@@ -52,7 +52,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 1);
 
 	add(_window);
 	add(_btnOk);
@@ -105,20 +105,12 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 }
 
 /**
- * Resets the palette.
- */
-void NewPossibleResearchState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
-}
-
-/**
  * return to the previous screen
  * @param action Pointer to an action.
  */
 void NewPossibleResearchState::btnOkClick(Action *)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**
@@ -130,4 +122,5 @@ void NewPossibleResearchState::btnResearchClick(Action *)
 	_game->popState();
 	_game->pushState (new ResearchState(_game, _base));
 }
+
 }

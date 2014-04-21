@@ -49,7 +49,7 @@ private:
 	Timer *_timerInc, *_timerDec;
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
-	unsigned int _sel;
+	size_t _sel;
 	int _aliensSold, _researchedAliens;
 	bool _overCrowded;
 	Uint8 _color, _color2;

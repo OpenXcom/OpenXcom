@@ -50,7 +50,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target, Globe *globe) : Sta
 	_txtFollowers = new Text(182, 40, 37, 88);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnIntercept);

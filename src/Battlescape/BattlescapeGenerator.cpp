@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _craftX(0), _craftY(0)
+														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _craftX(0), _craftY(0), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -197,7 +197,8 @@ void BattlescapeGenerator::nextStage()
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
-	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
+	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
+	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 	_worldShade = ruleDeploy->getShade();
 
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
@@ -279,7 +280,7 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrain().empty())
+	if (ruleDeploy->getTerrains().empty())
 	{
 		double lat = 0;
 		if (_ufo) lat = _ufo->getLatitude();
@@ -287,7 +288,8 @@ void BattlescapeGenerator::run()
 	}
 	else
 	{
-		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
+		size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
+		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 	}
 
 	if (ruleDeploy->getShade() != -1)
@@ -605,7 +607,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 	{
 		for (std::vector<std::vector<int> >::const_iterator i = _craft->getRules()->getDeployment().begin(); i != _craft->getRules()->getDeployment().end(); ++i)
 		{
-			Position pos = Position((*i)[0] + (_craftX * 10), (*i)[1] + (_craftY * 10), (*i)[2]);
+			Position pos = Position((*i)[0] + (_craftX * 10), (*i)[1] + (_craftY * 10), (*i)[2] + _craftZ);
 			int dir = (*i)[3];
 
 			if (canPlaceXCOMUnit(_save->getTile(pos)))
@@ -715,6 +717,10 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 						if (!addItem(item, unit))
 						{
 							delete item;
+						}
+						else
+						{
+							unit->setTurretType(item->getRules()->getTurretType());
 						}
 					}
 				}
@@ -882,6 +888,12 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 					item->setSlot(_game->getRuleset()->getInventory((*j)->getSlot()));
 					item->setSlotX((*j)->getSlotX());
 					item->setSlotY((*j)->getSlotY());
+					if (Options::includePrimeStateInSavedLayout &&
+						(item->getRules()->getBattleType() == BT_GRENADE ||
+						item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+					{
+						item->setFuseTimer((*j)->getFuseTimer());
+					}
 					_save->getItems()->push_back(item);
 					return true;
 				}
@@ -1126,7 +1138,7 @@ void BattlescapeGenerator::generateMap()
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
 		int roadStyle = RNG::generate(0,99);
-		std::vector<int> roadChances = _game->getRuleset()->getDeployment(_save->getMissionType())->getRoadTypeOdds();
+		std::vector<int> roadChances = _terrain->getRoadTypeOdds();
 		bool EWRoad = roadStyle < roadChances.at(0);
 		bool NSRoad = !EWRoad && roadStyle < roadChances.at(0) + roadChances.at(1);
 		bool TwoRoads = !EWRoad && !NSRoad;
@@ -1506,7 +1518,7 @@ void BattlescapeGenerator::generateMap()
 			}
 			_save->getMapDataSets()->push_back(*i);
 		}
-		loadMAP(craftMap, _craftX * 10, _craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);
+		loadMAP(craftMap, _craftX * 10, _craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true, true);
 		loadRMP(craftMap, _craftX * 10, _craftY * 10, Node::CRAFTSEGMENT);
 		for (int i = 0; i < craftMap->getSizeX() / 10; ++i)
 		{
@@ -1585,7 +1597,7 @@ void BattlescapeGenerator::generateMap()
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order.
  */
-int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int mapDataSetOffset, bool discovered)
+int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int mapDataSetOffset, bool discovered, bool craft)
 {
 	int sizex, sizey, sizez;
 	int x = xoff, y = yoff, z = 0;
@@ -1622,6 +1634,10 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 		if (floor != 0)
 		{
 			z += i;
+			if (craft)
+			{
+				_craftZ = i;
+			}
 			break;
 		}
 	}
@@ -1782,14 +1798,8 @@ void BattlescapeGenerator::deployCivilians(int max)
 		{
 			for (int i = 0; i < number; ++i)
 			{
-				if (RNG::percent(50))
-				{
-					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-				}
-				else
-				{
-					addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
-				}
+				size_t pick = RNG::generate(0, _terrain->getCivilianTypes().size() -1);
+				addCivilian(_game->getRuleset()->getUnit(_terrain->getCivilianTypes().at(pick)));
 			}
 		}
 	}
@@ -1884,7 +1894,19 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	// ok now generate the battleitems for inventory
 	setCraft(craft);
 	deployXCOM();
-
+	// ok, now remove any vehicles that may have somehow ended up in our battlescape
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); )
+	{
+		if ((*i)->getGeoscapeSoldier())
+		{
+			++i;
+		}
+		else
+		{
+			delete *i;
+			i = _save->getUnits()->erase(i);
+		}
+	}
 	delete data;
 	delete set;
 }

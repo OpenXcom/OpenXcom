@@ -348,9 +348,9 @@ void BaseView::draw()
 	Surface::draw();
 
 	// Draw grid squares
-	for (int x = 0; x < 8; ++x)
+	for (int x = 0; x < BASE_SIZE; ++x)
 	{
-		for (int y = 0; y < 8; ++y)
+		for (int y = 0; y < BASE_SIZE; ++y)
 		{
 			Surface *frame = _texture->getFrame(0);
 			frame->setX(x * GRID_SIZE);

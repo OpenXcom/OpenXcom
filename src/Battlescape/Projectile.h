@@ -44,7 +44,7 @@ private:
 	BattleAction _action;
 	Position _origin, _targetVoxel;
 	std::vector<Position> _trajectory;
-	unsigned int _position;
+	size_t _position;
 	Surface *_sprite;
 	int _speed;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine);

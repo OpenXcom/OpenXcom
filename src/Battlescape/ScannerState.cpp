@@ -53,6 +53,9 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 		_screen = false;
 	}
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_surface2);
 	add(_scannerView);
 	add(_surface1);

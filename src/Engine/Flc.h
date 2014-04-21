@@ -23,11 +23,12 @@ grt,
 #ifndef __OXC_FLC_H
 #define __OXC_FLC_H
 
-#include "SDL.h"
-#include "Screen.h"
+#include <SDL.h>
 
 namespace OpenXcom
 {
+
+class Screen;
 
 namespace Flc
 

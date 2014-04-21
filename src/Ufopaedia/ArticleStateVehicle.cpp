@@ -49,8 +49,7 @@ namespace OpenXcom
 		_lstStats = new TextList(300, 89, 10, 48);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-//		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		setPalette("PAL_UFOPAEDIA");
 
 		ArticleState::initLayout();
 

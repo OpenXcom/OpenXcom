@@ -60,6 +60,9 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
 	_lstResearch = new TextList(width - 4 * button_x_border, height - 2 * button_height - 2 * button_y_border, start_x + button_x_border, start_y + button_y_border + button_height - 4);
 
+	// Set palette
+	setPalette("PAL_BASESCAPE", 1);
+
 	add(_window);
 	add(_btnOK);
 	add(_txtTitle);
@@ -95,7 +98,8 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
  */
 void NewResearchListState::init()
 {
-	fillProjectList ();
+	State::init();
+	fillProjectList();
 }
 
 /**
@@ -124,10 +128,10 @@ void NewResearchListState::fillProjectList ()
 	_projects.clear();
 	_lstResearch->clearList();
 	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
-	std::vector<RuleResearch *>::iterator it = _projects.begin ();
-	while  ( it != _projects.end ())
+	std::vector<RuleResearch*>::iterator it = _projects.begin();
+	while (it != _projects.end ())
 	{
-		if((*it)->getRequirements().empty())
+		if ((*it)->getRequirements().empty())
 		{
 			_lstResearch->addRow(1, tr((*it)->getName ()).c_str());
 			++it;
@@ -138,4 +142,5 @@ void NewResearchListState::fillProjectList ()
 		}
 	}
 }
+
 }

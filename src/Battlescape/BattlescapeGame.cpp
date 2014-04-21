@@ -653,7 +653,9 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					Position voxel = _currentAction.target * Position(16, 16, 24) + Position(8,8,8 - _save->getTile(_currentAction.target)->getTerrainLevel());
+					BattleUnit *target = _save->getTile(_currentAction.target)->getUnit();
+					int height = target->getFloatHeight() + (target->getHeight() / 2);
+					Position voxel = _currentAction.target * Position(16, 16, 24) + Position(8,8,height - _save->getTile(_currentAction.target)->getTerrainLevel());
 					statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
 				}
 				else
@@ -991,7 +993,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 	const int tuKneel = _kneelReserved ? 4 : 0;
 	if ((effectiveTuReserved != BA_NONE || _kneelReserved) &&
 		tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
-		tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
+		(tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits() || justChecking))
 	{
 		if (!justChecking)
 		{
@@ -1044,19 +1046,21 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 {
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
-	unit->setVisible(true);
-	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	Game *game = _parentState->getGame();
-	if (status == STATUS_PANICKING)
+	if (unit->getVisible() || !Options::noAlienPanicMessages)
 	{
-		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
-	}
-	else
-	{
-		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+		getMap()->getCamera()->centerOnPosition(unit->getPosition());
+		if (status == STATUS_PANICKING)
+		{
+			game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+		}
+		else
+		{
+			game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+		}
 	}
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
