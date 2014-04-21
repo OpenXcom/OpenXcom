@@ -107,7 +107,7 @@ SoldierDiaryKillsState::SoldierDiaryKillsState(Game *game, Base *base, size_t so
 	}
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE");
 
 	add(_window);
 	add(_btnOk);

@@ -62,7 +62,7 @@ SoldierDiaryInfoState::SoldierDiaryInfoState(Game *game, Base *base, size_t sold
 	_lstKills = new TextList(200, 32, 49, 102);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE");
 
 	add(_window);
 	add(_btnOk);

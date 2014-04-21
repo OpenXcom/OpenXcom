@@ -49,7 +49,7 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE");
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
