@@ -449,11 +449,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                         {
                             int count = 0; // Each AND vector has to match the award criteria
                             // Loop over the KILLS
-                            for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList->begin(); singleKill != _killList->end(); ++singleKill)
+                            for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                             {
                                 bool foundMatch = true;
                                 // Loop over the DETAILs of the AND vector
-                                for (std::vector<std::string>::const_iterator detail = (*andCriteria).second->begin(); detail != (*andCriteria).second->end(); ++detail)
+								for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                                 {
                                     // See if we find no matches with any criteria. If so, break and try the next kill.
                                     if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
@@ -482,15 +482,15 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                         {
                             int count = 0; // Each AND vector has to match the award criteria
                             // Loop over MISSIONS
-                            for (std::vector<SoldierDiaryEntries*>::const_iterator singleMission = _diaryEntries->begin(); singleMission != _diaryEntries->end(); ++singleMission)
+                            for (std::vector<SoldierDiaryEntries*>::const_iterator singleMission = _diaryEntries.begin(); singleMission != _diaryEntries.end(); ++singleMission)
                             {
                                 // Loop over KILLS
                                 // These kills are confined to the mission; kills won't be borrowed from other missions for commendation purposes
-                                for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = (*singleMission)->getMissionKills()->begin(); singleKill != (*singleMission)->getMissionKills()->end(); ++singleKill)
+                                for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = (*singleMission)->getMissionKillsReference()->begin(); singleKill != (*singleMission)->getMissionKillsReference()->end(); ++singleKill)
                                 {
                                     bool foundMatch = true;
                                     // Loop over the DETAILs of the AND vector
-                                    for (std::vector<std::string>::const_iterator detail = (*andCriteria).second->begin(); detail != (*andCriteria).second->end(); ++detail)
+                                    for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                                     {
                                         // See if we find no matches with any criteria. If so, break and try the next kill.
                                         if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
@@ -524,16 +524,16 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                         // Loop over the AND vectors
                         for (std::map<int, std::vector<std::string> >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
                         {
-                            int count = 0; // How many AND vectors (list of DETAILs) have been successful
+                            int count = 1; // How many AND vectors (list of DETAILs) have been successful
                             int killThisTurn = 0;
                             int killLastTurn = -1;
                             bool goToNextTurn = false;
                             // Loop over the KILLS
-                            for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList->begin(); singleKill != _killList->end(); ++singleKill)
+                            for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                             {
                                 // Set kill turns
                                 killThisTurn = (*singleKill)->getTurn();
-                                if (singleKill != _killList->begin())
+                                if (singleKill != _killList.begin())
                                 {
                                     --singleKill;
                                     killLastTurn = (*singleKill)->getTurn();
@@ -541,15 +541,16 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                 }
                                 // Skip kill-groups that we already got an award for
                                 // Skip kills that are inbetween turns
-                                if ( killThisTurn == killLastTurn && goToNextKill) continue;
+                                if ( killThisTurn == killLastTurn && goToNextTurn) continue;
                                 else if ( killThisTurn != killLastTurn ) 
                                 {
+									count = 1; // Reset
                                     goToNextTurn = false;
                                     continue;
                                 }
                                 bool foundMatch = true;
                                 // Loop over the DETAILs of the AND vector
-                                for (std::vector<std::string>::const_iterator detail = (*andCriteria).second->begin(); detail != (*andCriteria).second->end(); ++detail)
+                                for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                                 {
                                     // See if we find no matches with any criteria. If so, break and try the next kill.
                                     if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
@@ -781,6 +782,14 @@ std::string SoldierDiaryEntries::getMissionUFO() const
 std::vector<SoldierDiaryKills*> SoldierDiaryEntries::getMissionKills() const
 {
 	return _missionStatistics->kills;
+}
+
+/**
+ *
+ */
+std::vector<SoldierDiaryKills*> *SoldierDiaryEntries::getMissionKillsReference()
+{
+	return &_missionStatistics->kills;
 }
 
 /**

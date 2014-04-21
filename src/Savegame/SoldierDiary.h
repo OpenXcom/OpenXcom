@@ -157,6 +157,8 @@ public:
 	/// Get
 	std::vector<SoldierDiaryKills*> getMissionKills() const;
 	/// Get
+	std::vector<SoldierDiaryKills*> *getMissionKillsReference();
+	/// Get
 	bool getMissionSuccess() const;
 	/// Get
 	std::string getMissionRating() const;

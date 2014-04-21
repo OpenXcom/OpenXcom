@@ -84,7 +84,7 @@ std::map<std::string, std::vector<int> > *RuleCommendations::getCriteria()
  * Get commendation award kill criteria
  * @return vecotr<string> Commendation kill criteria
  */
-std::vector<std::vector<std::vector<std::string> > > *RuleCommendations::getKillCriteria()
+std::vector<std::map< int, std::vector<std::string> > > *RuleCommendations::getKillCriteria()
 {
 	return &_killCriteria;
 }
