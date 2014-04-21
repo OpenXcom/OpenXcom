@@ -364,7 +364,6 @@ void Screen::resetDisplay(bool resetVideo)
 	{
 		cursorInBlackBands = Options::cursorInBlackBandsInBorderlessWindow;
 	}
-	cursorInBlackBands = true;
 
 	if (_scaleX > _scaleY && Options::keepAspectRatio)
 	{
