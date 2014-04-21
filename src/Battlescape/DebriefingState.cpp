@@ -536,6 +536,8 @@ void DebriefingState::prepareDebriefing()
 	// lets see what happens with units
 
 	// first, we evaluate how many surviving XCom units there are, and how many are conscious
+	// and how many have died (to use for commendations)
+	int deadSoldiers = 0;
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
@@ -546,6 +548,8 @@ void DebriefingState::prepareDebriefing()
 			}
 			playersSurvived++;
 		}
+		else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() == STATUS_DEAD)
+			deadSoldiers++;
 	}
 	// if all our men are unconscious, the aliens get to have their way with them.
 	if (playersUnconscious == playersSurvived)
@@ -559,7 +563,24 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-
+	if (playersSurvived == 1)
+	{
+		int deadSoldiers = 0;
+		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+		{
+			// if only one soldier survived, give him a medal! (unless he killed all the others...)
+			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->getMissionStatistics()->hasFriendlyFired() && deadSoldiers != 0)
+			{
+				(*j)->getMissionStatistics()->loneSurvivor = true;
+				break;
+			}
+			// if only one soldier survived AND none have died, means only one soldier went on the mission...
+			else if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && deadSoldiers != 0)
+			{
+				(*j)->getMissionStatistics()->ironMan = true;
+			}
+		}
+	}
 	// alien base disappears (if you didn't abort)
 	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
