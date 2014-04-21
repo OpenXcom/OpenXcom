@@ -58,7 +58,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(g
 	_btnCrew = new TextButton(64, 16, 14, 96);
 	_btnEquip = new TextButton(64, 16, 14, 120);
 	_btnArmor = new TextButton(64, 16, 14, 144);
-	_edtCraft = new TextEdit(160, 16, 80, 8);
+	_edtCraft = new TextEdit(this, 160, 16, 80, 8);
 	_txtDamage = new Text(100, 17, 14, 24);
 	_txtFuel = new Text(82, 17, 228, 24);
 	_txtW1Name = new Text(75, 16, 46, 48);
