@@ -77,7 +77,7 @@ public:
 	/// Handler for clicking the Restore Defaults button.
 	void btnDefaultClick(Action *action);
 	/// Handler for clicking one of the grouping buttons.
-	void btnGroupClick(Action *action);
+	void btnGroupPress(Action *action);
 	/// Handler for showing tooltip.
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
