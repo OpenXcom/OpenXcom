@@ -144,8 +144,8 @@ struct NewPossibleManufactureInfo
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
-	int screenWidth = Options::baseXResolution;
-	int screenHeight = Options::baseYResolution;
+	int screenWidth = Options::baseXGeoscape - Options::baseXGeoscape%4;
+	int screenHeight = Options::baseYGeoscape;
 
 	// Create objects
 	_bg = new Surface(320, 200, screenWidth-320, screenHeight/2-100);

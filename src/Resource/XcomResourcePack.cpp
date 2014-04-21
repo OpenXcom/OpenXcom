@@ -304,7 +304,20 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMTACTIC",
 							 "GMTACTIC2",
 							 "GMWIN"};
-		std::string exts[] = {"flac", "ogg", "mp3", "mod"};
+		std::string musOptional[] = {
+							 "GMGEO5",
+							 "GMGEO6",
+							 "GMGEO7",
+							 "GMGEO8",
+							 "GMGEO9",
+							 "GMTACTIC3",
+							 "GMTACTIC4",
+							 "GMTACTIC5",
+							 "GMTACTIC6",
+							 "GMTACTIC7",
+							 "GMTACTIC8",
+							 "GMTACTIC9"};
+		std::string exts[] = {"flac", "ogg", "mp3", "mod", "wav"};
 		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
 
 #ifndef __NO_MUSIC
@@ -327,7 +340,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			bool loaded = false;
 			// Try digital tracks
-			for (int j = 0; j < 3; ++j)
+			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
 			{
 				std::ostringstream s;
 				s << "SOUND/" << mus[i] << "." << exts[j];
@@ -366,6 +379,37 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			}
 		}
 		delete gmcat;
+
+		// Ok, now try to load the optional musics
+		for (int i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
+		{
+			bool loaded = false;
+			// Try digital tracks
+			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
+			{
+				std::ostringstream s;
+				s << "SOUND/" << musOptional[i] << "." << exts[j];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[musOptional[i]] = new Music();
+					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+					break;
+				}
+			}
+			if (!loaded)
+			{
+				// Try MIDI music
+				std::ostringstream s;
+				s << "SOUND/" << musOptional[i] << ".mid";
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[musOptional[i]] = new Music();
+					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+				}
+			}
+		}
 #endif		
 		
 		// Load sounds
@@ -723,7 +767,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < sizeof(bsets)/sizeof(bsets[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "TERRAIN/" << bsets[i];
@@ -755,7 +799,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	std::string scrs[] = {"TAC00.SCR"};
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < sizeof(scrs)/sizeof(scrs[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
@@ -771,7 +815,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "SCANBORD.PCK",
 						  "UNIBORD.PCK"};
 
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < sizeof(spks)/sizeof(spks[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];

@@ -28,12 +28,13 @@ namespace OpenXcom
 
 /**
  * Sets up a blank text edit with the specified size and position.
+ * @param state Pointer to state the text edit belongs to.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0)
+TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0), _state(state)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
@@ -53,30 +54,55 @@ TextEdit::~TextEdit()
 	delete _timer;
 	// In case it was left focused
 	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+	_state->setModal(0);
+}
+
+/**
+ * Passes events to internal components.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void TextEdit::handle(Action *action, State *state)
+{
+	InteractiveSurface::handle(action, state);
+	if (_isFocused && _modal && action->getDetails()->type == SDL_MOUSEBUTTONDOWN &&
+		(action->getAbsoluteXMouse() < getX() || action->getAbsoluteXMouse() >= getX() + getWidth() ||
+		 action->getAbsoluteYMouse() < getY() || action->getAbsoluteYMouse() >= getY() + getHeight()))
+	{
+		setFocus(false);
+	}
 }
 
 /**
  * Controls the blinking animation when
  * the text edit is focused.
  * @param focus True if focused, false otherwise.
+ * @param modal True to lock input to this control, false otherwise.
  */
-void TextEdit::setFocus(bool focus)
+void TextEdit::setFocus(bool focus, bool modal)
 {
+	_modal = modal;
 	if (focus != _isFocused)
+	{
 		_redraw = true;
-	InteractiveSurface::setFocus(focus);
-	if (_isFocused)
-	{
-		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-		_caretPos = _value.length();
-		_blink = true;
-		_timer->start();
-	}
-	else
-	{
-		_blink = false;
-		_timer->stop();
-		SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+		InteractiveSurface::setFocus(focus);
+		if (_isFocused)
+		{
+			SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+			_caretPos = _value.length();
+			_blink = true;
+			_timer->start();
+			if (_modal)
+				_state->setModal(this);
+		}
+		else
+		{
+			_blink = false;
+			_timer->stop();
+			SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+			if (_modal)
+				_state->setModal(0);
+		}
 	}
 }
 

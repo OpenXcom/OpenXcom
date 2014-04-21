@@ -29,6 +29,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -340,7 +341,8 @@ void InventoryState::saveEquipmentLayout()
 				(*j)->getSlot()->getId(),
 				(*j)->getSlotX(),
 				(*j)->getSlotY(),
-				ammo
+				ammo,
+				(*j)->getFuseTimer()
 			));
 		}
 	}
@@ -356,15 +358,24 @@ void InventoryState::btnOkClick(Action *)
 	if (_inv->getSelectedItem() != 0)
 		return;
 	_game->popState();
+	Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
 	if (!_tu)
 	{
 		saveEquipmentLayout();
-		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
+		if (_battleGame->getTurn() == 1)
+		{
+			_battleGame->randomizeItemLocations(inventoryTile);
+			if (inventoryTile->getUnit())
+			{
+				// make sure we select the unit closest to the ramp.
+				_battleGame->setSelectedUnit(inventoryTile->getUnit());
+			}
+		}
 	}
 	if (_battleGame->getTileEngine())
 	{
-		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
+		_battleGame->getTileEngine()->applyGravity(inventoryTile);
 		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 		_battleGame->getTileEngine()->recalculateFOV();
 	}

@@ -38,7 +38,7 @@ namespace OpenXcom
  */
 DefeatState::DefeatState(Game *game) : State(game), _screen(-1)
 {
-	char *files[] = {"PICT4.LBM", "PICT5.LBM"};
+	const char *files[] = {"PICT4.LBM", "PICT5.LBM"};
 
 	_timer = new Timer(30000);
 

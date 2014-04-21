@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PathfindingNode.h"
-#include "Position.h"
 #include <math.h>
 
 namespace OpenXcom

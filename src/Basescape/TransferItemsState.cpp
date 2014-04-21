@@ -41,7 +41,6 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
-#include "../Savegame/Transfer.h"
 #include "../Menu/ErrorMessageState.h"
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"

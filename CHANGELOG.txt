@@ -26,6 +26,18 @@ New features:
 - Transitioned Translation system to GetLocalization rather than maintaining it manually.
 - Complete overhaul of menu system, now totally consistent between main menu/geoscape/battlescape.
 - Saved Games will now indicate the in-game date and time, and if appropriate, turn number.
+- Combo Box and Slider functionality added.
+- Options menu completely overhauled.
+  -- UI volume now adjustable.
+  -- Internal game resolution may be adjusted for both battlescape and geoscape individually.
+  -- All kinds of in-game timings are now adjustable, so you can make it run like your old 286, or pentium.
+  -- Mods can now be activated from in-game, and don't require a restart.
+  -- Many more advanced options added, most of which were previously omitted for requiring a restart.
+  -- Many UFOextender and XComUtil options added (either as advanced options or individual mods)
+- New Battle menu completely overhauled.
+- Support for old or modded savedgames improved, including warnings about potential incompatibilities.
+- Multiline support added for textlists.
+- Support added for multiple data folders.
 
   Geoscape:
 - Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.
@@ -37,6 +49,12 @@ New features:
 - Added estimates for craft repair/refuel times
 - Alien Containment management screen added.
 - Soldier Memorial screen added to keep track of Xcom casualties.
+- Hotkeys for base selection added.
+- Last selected base now preserved on closing base window.
+- Fixed craft renaming not working.
+- Fixed HWPs not reloading when new ammo arrived.
+- Added Prev/Next key shortcuts to Basescape soldier info.
+- Aircraft flight path line indicators added.
   
   Battlescape:
 - Inventory: Control-click an item to attempt to swap it between the ground and your soldier's inventory.
@@ -75,6 +93,14 @@ New features:
 - When using a medi-kit, any injured body part will be selected by default.
 - Sprites added for mind controlled terror unit weapons.
 - Shotgun behaviour added for modded weapons.
+- Deployment data for crafts added, allows for fine-tuned placement of units.
+- New sprites added for alien weapons, courtesy of Arne.
+- TFTD damage formula added.*
+- Melee Aliens will now hit you with their strength rather than a static value.
+- Notification added for disarming grenades pre-battle.
+- Smooth bullet camera mode, follows the bullet as it moves rather than jumping the camera around.*
+- Confirm fire mode, requires a second click to confirm a fire order.*
+- Melee skill now included in hit calculations.
 
 * These features are disabled by default but can be enabled in the advanced options menu or by editing your configuration file.
 
@@ -85,7 +111,9 @@ Bugfixes:
 - Various Linux and OS X-related fixes.
 - Renamable fields no longer accept blank strings. (ie. no more bases, interceptors, or soldiers named "")
 - Can now set the config folder via command line switch (-user)
-
+- Added sprites fixed for OSX.
+- Game icon now correctly displayed in game window on all operating systems.
+- Palette system overhauled to prevent windows changing colours wrongly.
   
   Geoscape:
 - Fixed various source files to properly #include other relevant files. (This should prevent errors compiling the code in some IDEs)
@@ -100,8 +128,12 @@ Bugfixes:
 - When only one item remains to research and is added to the active projects, properly clear it from the "new projects" menu.
 - Research now consumes items only as appropriate.
 - Landed/Crashed UFOs will no longer try to detect Xcom bases.
+- Graphs screen scale corrected.
 - UFO flight-paths fixed to use correct areas for waypoint selection. Flight paths should now mimic vanilla (as much as something that's random can)
-
+- Crafts teleporting when over poles corrected.
+- Rare music bug in base defences fixed.
+- Fix for soldiers in transfer not being counted when handing out promotions.
+- Fix the council congratulating XCom on a job well done as they cancel the project.
   
   Battlescape:
 - Fixes to various UFOpaedia articles.
@@ -161,6 +193,12 @@ Bugfixes:
 - Explosions now play the full animation instead of starting half way through.
 - Lots of bugs regarding flying in power armor and kneeling fixed.
 - Unconscious units being carried into the exit zone will now be properly accounted for.
+- Accuracy formula corrected.
+- Camera movements now follow vanilla formula.
+- Pathfinding preview altered and fixed in many ways.
+  -- Now updates appropriately according to reserve setting.
+  -- No longer thinks that paths moving vertically wipe out all remaining TUs.
+- Energy recovery now in-line with vanilla formula.
 
 
 Version 0.9 (07-05-2013)

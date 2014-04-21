@@ -137,10 +137,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create blank language
 	_lang = new Language();
 
-#ifdef __MORPHOS__	
-	waittime = 1000.0f / Options::FPS;	//20 - FPS
 	framestarttime = 0;
-#endif
 }
 
 /**
@@ -181,6 +178,8 @@ void Game::run()
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
+	bool stupidityFlag = Options::allowResize;
 	while (!_quit)
 	{
 		// Clean up states
@@ -237,9 +236,20 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						Options::displayWidth = _event.resize.w;
-						Options::displayHeight = _event.resize.h;
-						_screen->resetDisplay();
+						if (!stupidityFlag)
+						{
+							Options::displayWidth = _event.resize.w;
+							Options::displayHeight = _event.resize.h;
+							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+							{
+								(*i)->resize();
+							}
+							_screen->resetDisplay();
+						}
+						else
+						{
+							stupidityFlag = false;
+						}
 					}
 					break;
 				case SDL_MOUSEMOTION:
@@ -324,13 +334,22 @@ void Game::run()
 		switch (runningState)
 		{
 			case RUNNING: 
+// same here as in the header, not sure what to do with this ifdef, need advisement from morphos people.
 #ifdef __MORPHOS__
-				delaytime = waittime - (SDL_GetTicks() - framestarttime);
+				delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
 				if(delaytime > 0)
 					SDL_Delay((Uint32)delaytime);
 				framestarttime = SDL_GetTicks();
 #else
-				SDL_Delay(1); 
+				if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
+				{
+					delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
+					if(delaytime > 0)
+						SDL_Delay((Uint32)delaytime);
+					framestarttime = SDL_GetTicks();
+				}
+				else
+					SDL_Delay(1);
 #endif
 				
 				break; //Save CPU from going 100%

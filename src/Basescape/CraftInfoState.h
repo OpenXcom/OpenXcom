@@ -48,8 +48,10 @@ private:
 	Window *_window;
 	TextEdit *_edtCraft;
 	Text *_txtDamage, *_txtFuel;
-	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;
+	Text *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo;
 	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
+	/// Formats an amount of time.
+	std::wstring formatTime(int time);
 public:
 	/// Creates the Craft Info state.
 	CraftInfoState(Game *game, Base *base, size_t craftId);

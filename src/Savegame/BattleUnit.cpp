@@ -26,6 +26,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattleAIState.h"
@@ -1272,7 +1273,7 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return item->getRules()->getAccuracyMelee();
+		return getStats()->melee * (item->getRules()->getAccuracyMelee() / 100) * (getAccuracyModifier(item) / 100);
 
 	int result = getStats()->firing * weaponAcc / 100;
 
@@ -2186,7 +2187,7 @@ int BattleUnit::getMoveSound() const
   */
 bool BattleUnit::isWoundable() const
 {
-	return (_type=="SOLDIER");
+	return (_type=="SOLDIER" || (Options::alienBleeding && _faction != FACTION_PLAYER && _armor->getSize() == 1));
 }
 /**
   * Get whether the unit is affected by morale loss.

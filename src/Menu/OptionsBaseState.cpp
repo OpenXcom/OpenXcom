@@ -103,42 +103,42 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
 
 	_btnVideo->setColor(Palette::blockOffset(8)+5);
 	_btnVideo->setText(tr("STR_VIDEO"));
-	_btnVideo->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnVideo->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 
 	_btnAudio->setColor(Palette::blockOffset(8)+5);
 	_btnAudio->setText(tr("STR_AUDIO"));
-	_btnAudio->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnAudio->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(tr("STR_CONTROLS"));
-	_btnControls->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnControls->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 
 	_btnGeoscape->setColor(Palette::blockOffset(8)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
-	_btnGeoscape->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnGeoscape->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 
 	_btnBattlescape->setColor(Palette::blockOffset(8)+5);
 	_btnBattlescape->setText(tr("STR_BATTLESCAPE_UC"));
-	_btnBattlescape->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnBattlescape->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 
 	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
 	_btnAdvanced->setText(tr("STR_ADVANCED"));
-	_btnAdvanced->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnAdvanced->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 
 	_btnMods->setColor(Palette::blockOffset(8)+5);
 	_btnMods->setText(tr("STR_MODS"));
-	_btnMods->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnMods->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
 	_btnMods->setVisible(_origin == OPT_MENU);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsBaseState::btnOkClick);
-	//_btnOk->onKeyboardPress((ActionHandler)&OptionsBaseState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&OptionsBaseState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsBaseState::btnCancelClick);
-	//_btnCancel->onKeyboardPress((ActionHandler)&OptionsBaseState::btnCancelClick, Options::keyCancel);
+	_btnCancel->onKeyboardPress((ActionHandler)&OptionsBaseState::btnCancelClick, Options::keyCancel);
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
 	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
@@ -209,6 +209,9 @@ void OptionsBaseState::setCategory(TextButton *button)
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
+	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
+
 	Options::switchDisplay();
 	Options::save();
 	_game->loadLanguage(Options::language);
@@ -258,7 +261,7 @@ void OptionsBaseState::btnDefaultClick(Action *action)
 	_game->pushState(new OptionsDefaultsState(_game, _origin, this));
 }
 
-void OptionsBaseState::btnGroupClick(Action *action)
+void OptionsBaseState::btnGroupPress(Action *action)
 {
 	Surface *sender = action->getSender();
 	//if (sender != _group)
@@ -317,4 +320,59 @@ void OptionsBaseState::txtTooltipOut(Action *action)
 	}
 }
 
+/**
+* Changes a given scale, and if necessary, switch the current base resolution.
+* @param type reference to which scale option we are using, battlescape or geoscape.
+* @param selection the new scale level.
+* @param width reference to which x scale to adjust.
+* @param height reference to which y scale to adjust.
+* @param change should we change the current scale.
+*/
+void OptionsBaseState::updateScale(int &type, int selection, int &width, int &height, bool change)
+{
+	type = selection;
+	switch (type)
+	{
+	case SCALE_15X:
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
+		break;
+	case SCALE_2X:
+		width = Screen::ORIGINAL_WIDTH * 2;
+		height = Screen::ORIGINAL_HEIGHT * 2;
+		break;
+	case SCALE_SCREEN_DIV_3:
+		width = Options::newDisplayWidth / 3;
+		height = Options::newDisplayHeight / 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		width = Options::newDisplayWidth / 2;
+		height = Options::newDisplayHeight / 2;
+		break;
+	case SCALE_SCREEN:
+		width = Options::newDisplayWidth;
+		height = Options::newDisplayHeight;
+		break;
+	case SCALE_ORIGINAL:
+	default:
+		width = Screen::ORIGINAL_WIDTH;
+		height = Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
+	// don't go under minimum resolution... it's bad, mmkay?
+	width = std::max(width, Screen::ORIGINAL_WIDTH);
+	height = std::max(height, Screen::ORIGINAL_HEIGHT);
+
+	if (change && (Options::baseXResolution != width || Options::baseYResolution != height))
+	{
+		Options::baseXResolution = width;
+		Options::baseYResolution = height;
+	}
+}
+void OptionsBaseState::resize()
+{
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+}
 }

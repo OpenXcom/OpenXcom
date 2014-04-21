@@ -48,21 +48,14 @@ private:
 	TextEdit *_txtDisplayWidth, *_txtDisplayHeight;
 	ArrowButton *_btnDisplayResolutionUp, *_btnDisplayResolutionDown;
 
-	InteractiveSurface *_gameSurface;
-	Text *_txtGameResolution, *_txtGameSize;
-	ArrowButton *_btnGameResolutionUp, *_btnGameResolutionDown;
-
-	Text *_txtLanguage, *_txtFilter;
-	ComboBox *_cbxLanguage, *_cbxFilter;
+	Text *_txtLanguage, *_txtFilter, *_txtGeoScale, *_txtBattleScale;
+	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale;
 	Text *_txtMode;
-	TextButton *_displayMode, *_btnWindowed, *_btnFullscreen, *_btnBorderless;
 	Text *_txtOptions;
 	ToggleTextButton *_btnLetterbox, *_btnResize, *_btnLockMouse;
 
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
-	std::vector<std::wstring> _gameRes;
-	int _gameCurrent;
 	std::vector<std::string> _langs, _filters;
 
 	void updateDisplayResolution();
@@ -76,30 +69,28 @@ public:
 	void btnDisplayResolutionUpClick(Action *action);
 	/// Handler for clicking the Previous Resolution button.
 	void btnDisplayResolutionDownClick(Action *action);
-	/// Handler for clicking the Display Width text.
-	void txtDisplayWidthClick(Action *action);
 	/// Handler for changing the Display Width text.
 	void txtDisplayWidthChange(Action *action);
-	/// Handler for clicking the Display Height text.
-	void txtDisplayHeightClick(Action *action);
 	/// Handler for changing the Display Height text.
 	void txtDisplayHeightChange(Action *action);
-	/// Handler for clicking the Next Resolution button.
-	void btnGameResolutionUpClick(Action *action);
-	/// Handler for clicking the Previous Resolution button.
-	void btnGameResolutionDownClick(Action *action);
 	/// Handler for changing the Language combobox.
 	void cbxLanguageChange(Action *action);
     /// Handler for changing the Filter combobox.
     void cbxFilterChange(Action *action);
-	/// Handler for clicking the Display Mode button.
-	void btnModeClick(Action *action);
+	/// Handler for clicking the Display Mode combobox.
+	void updateDisplayMode(Action *action);
 	/// Handler for clicking the Letterboxed button.
 	void btnLetterboxClick(Action *action);
 	/// Handler for clicking the Resizable button.
 	void btnResizeClick(Action *action);
 	/// Handler for clicking the Lock Mouse button.
 	void btnLockMouseClick(Action *action);
+	/// Handler for updating the selected battlescape scale.
+	void updateBattlescapeScale(Action *);
+	/// Handler for updating the selected geoscape scale.
+	void updateGeoscapeScale(Action *);
+	/// Update the resolution settings, we just resized the window.
+	void resize();
 };
 
 }

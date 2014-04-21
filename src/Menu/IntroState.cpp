@@ -36,7 +36,7 @@ namespace OpenXcom
  * Initializes all the elements in the Intro screen.
  * @param game Pointer to the core game.
  */
-IntroState::IntroState(Game *game) : State(game)
+IntroState::IntroState(Game *game, bool wasLetterBoxed) : State(game), _wasLetterBoxed(wasLetterBoxed)
 {	
 	_introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
@@ -370,7 +370,7 @@ static struct AudioSequence
 				{
 					soundInFile *sf = (*sounds) + command;
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
-					double ratio = Options::soundVolume / MIX_MAX_VOLUME;
+					double ratio = (double)Options::soundVolume / MIX_MAX_VOLUME;
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 					s = rp->getSound(sf->catFile, sf->sound);
 					if (s)
@@ -447,6 +447,7 @@ void IntroState::init()
 		Mix_HaltMusic();
 #endif
 	}
+	Options::keepAspectRatio = _wasLetterBoxed;
 	_game->setState(new MainMenuState(_game));
 }
 

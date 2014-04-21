@@ -61,6 +61,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Basescape/ManageAlienContainmentState.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -71,6 +72,10 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay(false);
+
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 	_containmentLimit = Options::alienContainmentLimitEnforced ? 1 : 0;
@@ -249,6 +254,13 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
+	std::vector<Soldier*> participants;
+	for (std::vector<BattleUnit*>::const_iterator i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
+		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
+	{
+		if ((*i)->getGeoscapeSoldier())
+			participants.push_back((*i)->getGeoscapeSoldier());
+	}
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -257,7 +269,7 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else if (!_destroyBase)
 	{
-		if (_game->getSavedGame()->handlePromotions())
+		if (_game->getSavedGame()->handlePromotions(participants))
 		{
 			_game->pushState(new PromotionsState(_game));
 		}

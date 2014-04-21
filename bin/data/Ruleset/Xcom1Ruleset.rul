@@ -1972,7 +1972,7 @@ items:
     bigSprite: 33
     floorSprite: 32
     handSprite: 88
-    hitSound: 36
+    meleeSound: 36
     battleType: 9
     twoHanded: true
     invWidth: 1
@@ -1987,7 +1987,7 @@ items:
     bigSprite: 26
     floorSprite: 26
     handSprite: 80
-    hitSound: 54
+    meleeSound: 54
     power: 65
     damageType: 6
     accuracyMelee: 100
@@ -2574,11 +2574,11 @@ items:
     bigSprite: -3
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     clipSize: -1
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2590,11 +2590,11 @@ items:
     bigSprite: -1
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     clipSize: -1
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2629,10 +2629,10 @@ items:
     bigSprite: -4
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 92
+    accuracyMelee: 100
     tuMelee: 15
     clipSize: -1
     battleType: 3
@@ -2668,10 +2668,10 @@ items:
     bigSprite: 26
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 80
+    accuracyMelee: 100
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
@@ -2828,7 +2828,7 @@ items:
 # Usage of this is hard-coded.
 # DO NOT DELETE!
   - type: ALIEN_PSI_WEAPON
-    hitSound: 36
+    meleeSound: 36
     battleType: 9
     tuUse: 25
     flatRate: true

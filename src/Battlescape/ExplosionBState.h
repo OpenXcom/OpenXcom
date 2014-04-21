@@ -43,7 +43,7 @@ private:
 	BattleItem *_item;
 	Tile *_tile;
 	int _power;
-	bool _areaOfEffect, _lowerWeapon;
+	bool _areaOfEffect, _lowerWeapon, _pistolWhip;
 	/// Calculates the effects of the explosion.
 	void explode();
 public:
