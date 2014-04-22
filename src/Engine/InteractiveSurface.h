@@ -40,6 +40,7 @@ class InteractiveSurface : public Surface
 {
 private:
 	static const int NUM_BUTTONS = 7;
+	static const SDLKey SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
 	Uint8 _buttonsPressed;
 protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
@@ -81,9 +82,9 @@ public:
 	/// Hooks an action handler to moving the mouse out of the surface.
 	void onMouseOut(ActionHandler handler);
 	/// Hooks an action handler to pressing a key when the surface is focused.
-	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_ANY);
 	/// Hooks an action handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_ANY);
 	/// Processes a mouse button press event.
 	virtual void mousePress(Action *action, State *state);
 	/// Processes a mouse button release event.
