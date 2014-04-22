@@ -432,8 +432,8 @@ openxcom_SOURCES = \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/LoadState.cpp \
-	src/Menu/LoadState.h \
+	src/Menu/ListLoadState.cpp \
+	src/Menu/ListLoadState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
 	src/Menu/NewBattleState.cpp \
@@ -464,10 +464,10 @@ openxcom_SOURCES = \
 	src/Menu/AbandonGameState.h \
 	src/Menu/PauseState.cpp \
 	src/Menu/PauseState.h \
-	src/Menu/SavedGameState.cpp \
-	src/Menu/SavedGameState.h \
-	src/Menu/SaveState.cpp \
-	src/Menu/SaveState.h \
+	src/Menu/ListGamesState.cpp \
+	src/Menu/ListGamesState.h \
+	src/Menu/ListSaveState.cpp \
+	src/Menu/ListSaveState.h \
 	src/Menu/IntroState.cpp \
 	src/Menu/IntroState.h \
 	src/Menu/StartState.cpp \

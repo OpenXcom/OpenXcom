@@ -81,8 +81,8 @@
 #include "../lodepng.h"
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Menu/SaveState.h"
-#include "../Menu/LoadState.h"
+#include "../Menu/ListSaveState.h"
+#include "../Menu/ListLoadState.h"
 
 namespace OpenXcom
 {
@@ -1477,11 +1477,11 @@ inline void BattlescapeState::handle(Action *action)
 			// not works in debug mode to prevent conflict in hotkeys by default
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
 			{
-				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, true));
+				_game->pushState(new ListSaveState(_game, OPT_BATTLESCAPE, true));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
 			{
-				_game->pushState(new LoadState(_game, OPT_BATTLESCAPE, true));
+				_game->pushState(new ListLoadState(_game, OPT_BATTLESCAPE, true));
 			}
 
 			// voxel view dump

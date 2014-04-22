@@ -29,7 +29,7 @@
 #include "../Engine/Music.h"
 #include "NewGameState.h"
 #include "NewBattleState.h"
-#include "LoadState.h"
+#include "ListLoadState.h"
 #include "OptionsVideoState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -139,7 +139,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, OPT_MENU));
+	_game->pushState(new ListLoadState(_game, OPT_MENU));
 }
 
 /**
