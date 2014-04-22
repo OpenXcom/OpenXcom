@@ -1625,6 +1625,13 @@ void GeoscapeState::time1Day()
 				(*s)->trainPsi1Day();
 		}
 
+		// if research has been completed but no new research events are triggered, show an empty NewPossibleResearchState so
+		// players have a chance to allocate the now-free scientists
+		if (!researchCompleteEvents.empty() && newPossibleResearchEvents.empty())
+		{
+			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(std::vector<RuleResearch *>(), true));
+		}
+
 		// show events
 		for (std::vector<ProductionCompleteInfo>::iterator pceIt = productionCompleteEvents.begin(); pceIt != productionCompleteEvents.end(); ++pceIt)
 		{
