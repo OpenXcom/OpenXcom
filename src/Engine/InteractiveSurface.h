@@ -40,7 +40,7 @@ class InteractiveSurface : public Surface
 {
 private:
 	static const int NUM_BUTTONS = 7;
-	static const SDLKey SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
+	static const SDLKey SDLK_ANY;
 	Uint8 _buttonsPressed;
 protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
