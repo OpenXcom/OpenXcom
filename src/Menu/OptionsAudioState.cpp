@@ -29,8 +29,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
-#include "../Menu/LoadState.h"
-#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {

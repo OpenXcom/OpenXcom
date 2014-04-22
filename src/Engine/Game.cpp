@@ -40,7 +40,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
-#include "../Menu/SaveState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -361,7 +361,7 @@ void Game::run()
 	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
 	{
-		SaveState ss = SaveState(this, OPT_MENU, false);
+		ListSaveState ss = ListSaveState(this, OPT_MENU, false);
 	}
 
 	Options::save();
