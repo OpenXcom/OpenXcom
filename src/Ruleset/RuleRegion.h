@@ -78,6 +78,7 @@ private:
 	/// Do missions in the region defined by this string instead.
 	std::string _missionRegion;
 public:
+	static const int CITY_MISSION_ZONE = 3;
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
 	/// Cleans up the region ruleset.

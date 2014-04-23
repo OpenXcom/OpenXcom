@@ -641,11 +641,13 @@ void DebriefingState::prepareDebriefing()
 				if (((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted)
 				{ // so game is not aborted or aborted and unit is on exit area
 					(*j)->postMissionProcedures(save);
-					// calculate new statString
-					soldier->calcStatString(_game->getRuleset()->getStatStringsIndex(), _game->getRuleset()->getStatStrings());
 					playerInExitArea++;
 					if (soldier != 0)
+					{
 						recoverItems((*j)->getInventory(), base);
+						// calculate new statString
+						soldier->calcStatString(_game->getRuleset()->getStatStringsIndex(), _game->getRuleset()->getStatStrings());
+					}
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);

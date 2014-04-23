@@ -614,6 +614,13 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
     endif ( FATAL_WARNING )
 endif()
 
+if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+  add_definitions ( -Qunused-arguments -pipe )
+  if ( ENABLE_CLANG_ANALYSIS )
+    add_definitions ( --analyze )
+  endif ()
+endif ()
+
 if ( MSVC )
   if ( ENABLE_WARNING )
     add_definitions ( /W${MSVC_WARNING_LEVEL} )
