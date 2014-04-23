@@ -71,6 +71,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 			_gender = (SoldierGender)RNG::generate(0, 1);
 			_look = (SoldierLook)RNG::generate(0,3);
 		}
+		//calcStatString();
 	}
 	if (id != 0)
 	{
@@ -125,6 +126,7 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		_death = new SoldierDeath();
 		_death->load(node["death"]);
 	}
+	calcStatString(rule->getStatStrings());
 }
 
 /**
@@ -166,21 +168,18 @@ YAML::Node Soldier::save() const
 }
 
 /**
- * Returns the soldier's full name.
+ * Returns the soldier's full name (and, optionally, statString).
  * @return Soldier name.
  */
 std::wstring Soldier::getName(bool statstring) const
 {
 	if (statstring) {
-		// iterate thru the statStrings
-		// this won't work because getStatStrings isn't a member of RuleSoldier
-		//std::map<std::string, StatString *> statStrings = _rules->getStatStrings();
-		//if (!statStrings.empty())
-		//{
-			// do stuff
-			std::wstring statString = L"/sTaTs";
-		//}
-		return _name + statString;
+		if (_name.length() + _statString.length() > 20) {
+			return _name.substr(0, 20 - _statString.length()) + L"/" + _statString;
+		}
+		else {
+			return _name + L"/" + _statString;
+		}
 	}
 	else {
 		return _name;
@@ -563,6 +562,22 @@ void Soldier::die(SoldierDeath *death)
 		delete *i;
 	}
 	_equipmentLayout.clear();
+}
+
+/**
+ * Calculates the soldier's statString
+ */
+void Soldier::calcStatString(const std::map<std::string, StatString *> &statStrings)
+{
+	// iterate thru the statStrings
+
+	for (std::map<std::string, StatString *>::const_iterator i = statStrings.begin(); i != statStrings.end(); ++i)
+	{
+		std::string string = i->first;
+		std::wstring wstring;
+		wstring.assign(string.begin(), string.end());
+		_statString = _statString + wstring;
+	}
 }
 
 }

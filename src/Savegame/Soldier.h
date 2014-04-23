@@ -22,7 +22,8 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Ruleset/Unit.h"
-
+#include "../Ruleset/StatString.h"
+	 
 namespace OpenXcom
 {
 
@@ -60,6 +61,7 @@ private:
 	Armor *_armor;
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 	SoldierDeath *_death;
+	std::wstring _statString;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
@@ -135,6 +137,8 @@ public:
 	SoldierDeath *getDeath() const;
 	/// Kills the soldier.
 	void die(SoldierDeath *death);
+	/// Calculate statString.
+	void calcStatString(const std::map<std::string, StatString *> &statStrings);
 };
 
 }
