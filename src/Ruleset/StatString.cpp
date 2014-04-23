@@ -43,7 +43,7 @@ StatString::~StatString()
 void StatString::load(const YAML::Node &node)
 {
 	// NOTE: conditionNames must be terminated with an empty string
-	std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", ""};
+	std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", ""};
 	_string = node["string"].as<std::string>(_string);
 	int i = 0;
 	while (conditionNames[i] != "")
@@ -58,7 +58,8 @@ void StatString::load(const YAML::Node &node)
 
 StatStringLimits *StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
 {
-	int minValue = -999999999, maxValue = 999999999;
+	// These are the defaults from xcomutil
+	int minValue = 0, maxValue = 255;
 	if (node[conditionName][0]) {
 		minValue = node[conditionName][0].as<int>(minValue);
 	}

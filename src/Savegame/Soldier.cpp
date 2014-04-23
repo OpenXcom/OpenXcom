@@ -571,64 +571,90 @@ void Soldier::die(SoldierDeath *death)
 void Soldier::calcStatString(const std::vector<std::string> &statStringIndex, const std::map<std::string, StatString *> &statStrings)
 {
 	int ii, minVal, maxVal, conditionsMet;
+	long double ruleNum;
 	std::string conditionName;
 	std::wstring wstring;
-	for (ii=0; ii < statStringIndex.size(); ii++)
+	_statString = L"";
+	bool continueCalc = true;
+	for (ii=0; ii < statStringIndex.size() && continueCalc; ii++)
 	{
 		StatString *statString = statStrings.find(statStringIndex[ii])->second;
 		// now, iterate through the conditions found in the StatString
 		const std::map<std::string, StatStringLimits* > conditions = statString->getConditions();
 		conditionsMet = 0;
-		for (std::map<std::string, StatStringLimits* >::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
+		for (std::map<std::string, StatStringLimits* >::const_iterator i = conditions.begin(); i != conditions.end() && continueCalc; ++i)
 		{
 			conditionName = i->first;
 			minVal = i->second->getMinVal();
 			maxVal = i->second->getMaxVal();
 			if (conditionName == "psiStrength")
 			{
-				if (_currentStats.psiStrength > minVal && _currentStats.psiStrength < maxVal) {
+				if (_currentStats.psiStrength >= minVal && _currentStats.psiStrength <= maxVal) {
 					conditionsMet++;
 				}
 			}
 			else if (conditionName == "psiSkill")
 			{
-				if (_currentStats.psiSkill > minVal && _currentStats.psiSkill < maxVal) {
+				if (_currentStats.psiSkill >= minVal && _currentStats.psiSkill <= maxVal) {
 					conditionsMet++;
 				}			
 			}
 			else if (conditionName == "bravery")
 			{
-				if (_currentStats.bravery > minVal && _currentStats.bravery < maxVal) {
+				if (_currentStats.bravery >= minVal && _currentStats.bravery <= maxVal) {
 					conditionsMet++;
 				}			
 			}
 			else if (conditionName == "strength")
 			{
-				if (_currentStats.strength > minVal && _currentStats.strength < maxVal) {
+				if (_currentStats.strength >= minVal && _currentStats.strength <= maxVal) {
 					conditionsMet++;
 				}			
 			}
 			else if (conditionName == "firing")
 			{
-				if (_currentStats.firing > minVal && _currentStats.firing < maxVal) {
+				if (_currentStats.firing >= minVal && _currentStats.firing <= maxVal) {
 					conditionsMet++;
 				}	
 			}
 			else if (conditionName == "reactions")
 			{
-				if (_currentStats.reactions > minVal && _currentStats.reactions < maxVal) {
+				if (_currentStats.reactions >= minVal && _currentStats.reactions <= maxVal) {
 					conditionsMet++;
 				}	
 			}
 			else if (conditionName == "stamina")
 			{
-				if (_currentStats.stamina > minVal && _currentStats.stamina < maxVal) {
+				if (_currentStats.stamina >= minVal && _currentStats.stamina <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "tu")
+			{
+				if (_currentStats.tu >= minVal && _currentStats.tu <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "health")
+			{
+				if (_currentStats.health >= minVal && _currentStats.health <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "throwing")
+			{
+				if (_currentStats.throwing >= minVal && _currentStats.throwing <= maxVal) {
 					conditionsMet++;
 				}	
 			}
 			if (conditionsMet == conditions.size()) {
 				wstring.assign(statStringIndex[ii].begin(), statStringIndex[ii].end());
-				_statString = _statString + wstring;
+				// strip the rule number from the string
+				ruleNum = ii;
+				_statString = _statString + wstring.substr(0, wstring.length() - std::to_string(ruleNum).length());
+				if (wstring.length() - std::to_string(ruleNum).length() > 1) {
+					continueCalc = false;
+				}
 			}
 		}
 	}

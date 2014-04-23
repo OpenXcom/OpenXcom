@@ -1,5 +1,6 @@
 # Based on XcomUtil by Scott Jones and BladeFireLight
 # See http://ufopaedia.org/index.php?title=Statstrings
+# These are the default statStrings from XcomUtil.
   statStrings:
   - string: "x"
     psiStrength: [~, 30]
@@ -26,8 +27,13 @@
     firing: [60, 69]
   - string: "Sct"
     reactions: [50, ~]
-    stamina: [60, ~]
+    tu: [60, ~]
   - string: "R"
     reactions: [60, ~]
   - string: "r"
     reactions: [50, 59]
+# Here are some additional test statStrings.
+  - string: "Wimp"
+    bravery: [~, 10]
+  - string: "Wimp"
+    strength: [~, 20]

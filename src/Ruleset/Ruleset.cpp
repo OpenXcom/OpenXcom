@@ -478,21 +478,14 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
-	int ruleNum = 0;
+	long double ruleNum = 0;
 	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
 	{
-		std::string string = (*i)["string"].as<std::string>();
-		if (_statStrings.find(string) != _statStrings.end())
-		{
-			_statStrings[string]->load(*i);
-		}
-		else
-		{
-			std::auto_ptr<StatString> statString(new StatString());
-			statString->load(*i);
-			_statStrings[string] = statString.release();
-			_statStringsIndex.push_back(string);
-		}
+		std::string string = (*i)["string"].as<std::string>() + std::to_string(ruleNum);
+		std::auto_ptr<StatString> statString(new StatString());
+		statString->load(*i);
+		_statStrings[string] = statString.release();
+		_statStringsIndex.push_back(string);
 		ruleNum++;
 	}
 
