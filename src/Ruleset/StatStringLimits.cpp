@@ -39,13 +39,13 @@ StatStringLimits::~StatStringLimits()
 }
 
 /// Get MinVal.
-const int StatStringLimits::getMinVal()
+int StatStringLimits::getMinVal()
 {
 	return _minVal;
 }
 
 /// Get MaxVal.
-const int StatStringLimits::getMaxVal()
+int StatStringLimits::getMaxVal()
 {
 	return _maxVal;
 }

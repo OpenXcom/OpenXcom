@@ -35,9 +35,9 @@ public:
 	/// Cleans up the StatStringLimits.
 	virtual ~StatStringLimits();
 	/// Get MinVal.
-	const int getMinVal();
+	int getMinVal();
 	/// Get MaxVal.
-	const int getMaxVal();
+	int getMaxVal();
 };
 
 }
