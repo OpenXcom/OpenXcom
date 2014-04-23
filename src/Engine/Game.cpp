@@ -120,7 +120,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	SDL_EnableUNICODE(1);
 
 	// Create display
-	_screen = new Screen()
+	_screen = new Screen();
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
