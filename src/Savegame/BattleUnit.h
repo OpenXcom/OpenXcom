@@ -46,6 +46,88 @@ class Language;
 class AlienBAIState;
 class CivilianBAIState;
 
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
+enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
+enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
+enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
+
+/**
+ * All statistics are tracked here.
+ */
+struct BattleUnitStatistics
+{
+	// Variables
+	bool wasUnconcious;						// Tracks if the soldier fell unconcious
+    std::vector<SoldierDiaryKills*> kills;	// Tracks kills
+    int shotAtCounter;                      // Tracks how many times the unit was shot at
+	int hitCounter;							// Tracks how many times the unit was hit
+	int shotByFriendlyCounter;				// Tracks how many times the unit was hit by a friendly
+	int shotFriendlyCounter;				// Tracks how many times the unit was hit a friendly
+	bool loneSurvivor;						// Tracks if the soldier was the only survivor
+	bool ironMan;							// Tracks if the soldier was the only soldier on the mission
+	int longDistanceHitCounter;				// Tracks how many long distance shots were landed
+	int lowAccuracyHitCounter;				// Tracks how many times the unit landed a low probability shot
+	int shotsFiredCounter;					// Tracks how many times a unit has shot
+	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
+
+	/// Functions
+	// Friendly fire check
+	bool hasFriendlyFired()
+	{
+		for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
+		{
+			if ((*i)->getAlienFactionEnum() == FACTION_PLAYER)
+				return true;
+		}
+		return false;
+	}
+	// Load function
+	void load(const YAML::Node& node)
+	{
+		wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
+		if (const YAML::Node &YAMLkills = node["kills"])
+		{
+			for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
+				kills.push_back(new SoldierDiaryKills(*i));
+		}
+        shotAtCounter = node["shotAtCounter"].as<int>(shotAtCounter);
+		hitCounter = node["hitCounter"].as<int>(hitCounter);
+		shotByFriendlyCounter = node["shotByFriendlyCounter"].as<int>(shotByFriendlyCounter);
+		shotFriendlyCounter = node["shotFriendlyCounter"].as<int>(shotFriendlyCounter);
+		loneSurvivor = node["loneSurvivor"].as<bool>(loneSurvivor);
+		ironMan = node["ironMan"].as<bool>(ironMan);
+		longDistanceHitCounter = node["longDistanceHitCounter"].as<int>(longDistanceHitCounter);
+		lowAccuracyHitCounter = node["lowAccuracyHitCounter"].as<int>(lowAccuracyHitCounter);
+		shotsFiredCounter = node["shotsFiredCounter"].as<int>(shotsFiredCounter);
+		shotsLandedCounter = node["shotsLandedCounter"].as<int>(shotsLandedCounter);
+	}
+	// Save function
+	YAML::Node save() const
+	{
+		YAML::Node node;
+		node["wasUnconcious"] = wasUnconcious;
+		if (!kills.empty())
+		{
+			for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
+				node["kills"].push_back((*i)->save());
+		}
+        node["shotAtCounter"] = shotAtCounter;
+		node["hitCounter"] = hitCounter;
+		node["shotByFriendlyCounter"] = shotByFriendlyCounter;
+		node["shotFriendlyCounter"] = shotFriendlyCounter;
+		node["loneSurvivor"] = loneSurvivor;
+		node["ironMan"] = ironMan;
+		node["longDistanceHitCounter"] = longDistanceHitCounter;
+		node["lowAccuracyHitCounter"] = lowAccuracyHitCounter;
+		node["shotsFiredCounter"] = shotsFiredCounter;
+		node["shotsLandedCounter"] = shotsLandedCounter;
+		return node;
+	}
+	BattleUnitStatistics(const YAML::Node& node) { load(node); }	// Constructor from YAML
+	BattleUnitStatistics() :	wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false),
+					ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }	// Default constructor
+	~BattleUnitStatistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
+};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
