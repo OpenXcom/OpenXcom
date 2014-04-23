@@ -27,6 +27,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/StatString.h"
+#include "../Ruleset/StatStringLimits.h"
 
 namespace OpenXcom
 {
@@ -576,13 +577,13 @@ void Soldier::calcStatString(const std::vector<std::string> &statStringIndex, co
 	{
 		StatString *statString = statStrings.find(statStringIndex[ii])->second;
 		// now, iterate through the conditions found in the StatString
-		const std::map<std::string, limits> conditions = statString->getConditions();
+		const std::map<std::string, StatStringLimits* > conditions = statString->getConditions();
 		conditionsMet = 0;
-		for (std::map<std::string, limits>::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
+		for (std::map<std::string, StatStringLimits* >::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
 		{
 			conditionName = i->first;
-			minVal = i->second.minVal;
-			maxVal = i->second.maxVal;
+			minVal = i->second->getMinVal();
+			maxVal = i->second->getMaxVal();
 			if (conditionName == "psiStrength")
 			{
 				if (_currentStats.psiStrength > minVal && _currentStats.psiStrength < maxVal) {

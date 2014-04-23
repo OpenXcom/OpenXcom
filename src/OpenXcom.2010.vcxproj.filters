@@ -829,6 +829,9 @@
     <ClCompile Include="Ruleset\StatString.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\StatStringLimits.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1675,6 +1678,9 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\StatString.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatStringLimits.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>

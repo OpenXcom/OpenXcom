@@ -16,35 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_STATSTRING_H
-#define OPENXCOM_STATSTRING_H
-
-#include <yaml-cpp/yaml.h>
+#define _USE_MATH_DEFINES
 #include "StatStringLimits.h"
+
 
 namespace OpenXcom
 {
+/**
+ * Creates a blank StatString.
+ */
+StatStringLimits::StatStringLimits(int minVal, int maxVal)
+{
+	_minVal = minVal;
+	_maxVal = maxVal;
+}
 
 /**
- * For adding statStrings to the game.
- * See http://ufopaedia.org/index.php?title=Statstrings
+ * Cleans up the extra StatString.
  */
-class StatString
+StatStringLimits::~StatStringLimits()
 {
-private:
-	std::string _string;	
-	std::map<std::string, StatStringLimits* > _conditions;
-	StatStringLimits *getCondition(const std::string &conditionName, const YAML::Node &node);
-public:
-	/// Creates a blank StatString ruleset.
-	StatString();
-	/// Cleans up the StatString ruleset.
-	virtual ~StatString();
-	/// Loads the StatString from YAML.
-	void load(const YAML::Node& node);
- 	/// Get the conditions for this StatString.
-	const std::map<std::string, StatStringLimits* > getConditions();
-};
+}
+
+/// Get MinVal.
+const int StatStringLimits::getMinVal()
+{
+	return _minVal;
+}
+
+/// Get MaxVal.
+const int StatStringLimits::getMaxVal()
+{
+	return _maxVal;
+}
 
 }
-#endif
