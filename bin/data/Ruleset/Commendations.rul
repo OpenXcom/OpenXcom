@@ -265,6 +265,8 @@ extraStrings:
 #   total_lone_surivor
 #   total_iron_man
 #   total_important_missions
+#   total_long_distance_hits
+#   total_low_accuracy_hits
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -419,3 +421,13 @@ commendations:
     sprite: 0
     criteria:
       total_important_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+  - type: STR_MEDAL_SNIPER_TMPNAME
+    description: STR_MEDAL_SNIPER_TMPDESCRIPTION
+    sprite: 0
+    criteria:
+      total_long_distance_hits: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_LUCKYSHOT_TMPNAME
+    description: STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION
+    sprite: 0
+    criteria:
+      total_low_accuracy_hits: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]

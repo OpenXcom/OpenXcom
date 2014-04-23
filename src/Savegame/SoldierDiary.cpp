@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
-    _lowAccuracyHitCounterTotal(0)
+    _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0)
 {
 }
 
@@ -96,7 +96,8 @@ void SoldierDiary::load(const YAML::Node& node)
 	_stunTotal = node["stunTotal"].as<int>(_stunTotal);
 	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
 	_baseDefenseMissionTotal = node["baseDefenseMissionTotal"].as<int>(_baseDefenseMissionTotal);
-	_totalFriendlyFired = node["totalFriendlyFired"].as<int>(_totalFriendlyFired);
+	_totalShotByFriendlyCounter = node["totalShotByFriendlyCounter"].as<int>(_totalShotByFriendlyCounter);
+	_totalShotFriendlyCounter = node["totalShotFriendlyCounter"].as<int>(_totalShotFriendlyCounter);
 	_loneSurvivorTotal = node["loneSurvivorTotal"].as<int>(_loneSurvivorTotal);
 	_terrorMissionTotal = node["terrorMissionTotal"].as<int>(_terrorMissionTotal);
 	_nightMissionTotal = node["nightMissionTotal"].as<int>(_nightMissionTotal);
@@ -108,6 +109,9 @@ void SoldierDiary::load(const YAML::Node& node)
     _ironManTotal = node["ironManTotal"].as<int>(_ironManTotal);
     _importantMissionTotal = node["importantMissionTotal"].as<int>(_importantMissionTotal);
 	_longDistanceHitCounterTotal = node["longDistanceHitCounterTotal"].as<int>(_longDistanceHitCounterTotal);
+	_lowAccuracyHitCounterTotal = node["lowAccuracyHitCounterTotal"].as<int>(_lowAccuracyHitCounterTotal);
+	_shotsFiredCounterTotal = node["shotsFiredCounterTotal"].as<int>(_shotsFiredCounterTotal);
+	_shotsLandedCounterTotal = node["shotsLandedCounterTotal"].as<int>(_shotsLandedCounterTotal);
 }
 
 /**
@@ -137,7 +141,8 @@ YAML::Node SoldierDiary::save() const
     node["stunTotal"] = _stunTotal;
     node["daysWoundedTotal"] = _daysWoundedTotal;
     node["baseDefenseMissionTotal"] = _baseDefenseMissionTotal;
-    node["totalFriendlyFired"] = _totalFriendlyFired;
+    node["totalShotByFriendlyCounter"] = _totalShotByFriendlyCounter;
+	node["totalShotFriendlyCounter"] = _totalShotFriendlyCounter;
     node["loneSurvivorTotal"] = _loneSurvivorTotal;
     node["terrorMissionTotal"] = _terrorMissionTotal;
     node["nightMissionTotal"] = _nightMissionTotal;
@@ -148,7 +153,10 @@ YAML::Node SoldierDiary::save() const
     node["hitCounterTotal"] = _hitCounterTotal;
     node["ironManTotal"] = _ironManTotal;
     node["importantMissionTotal"] = _importantMissionTotal;
-	node["longDistanceHitCounterTotal"] = _longDistanceHitCounterTotal
+	node["longDistanceHitCounterTotal"] = _longDistanceHitCounterTotal;
+	node["lowAccuracyHitCounterTotal"] = _lowAccuracyHitCounterTotal;
+	node["shotsFiredCounterTotal"] = _shotsFiredCounterTotal;
+	node["shotsLandedCounterTotal"] = _shotsLandedCounterTotal;
 	return node;
 }
 
@@ -439,10 +447,12 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) || 
                     ((*j).first == "total_shot_at_10_times" && _shotAtCounterTotal < (*j).second.at(_nextCommendationLevel[""])) || 
 					((*j).first == "total_hit_5_times" && _hitCounterTotal < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_friendly_fired" && _totalFriendlyFired < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_friendly_fired" && _totalShotByFriendlyCounter < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_lone_survivor" && _loneSurvivorTotal < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_iron_man" && _ironManTotal < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_important_missions" && _importantMissionTotal < (*j).second.at(_nextCommendationLevel[""])) )
+					((*j).first == "total_important_missions" && _importantMissionTotal < (*j).second.at(_nextCommendationLevel[""])) || 
+					((*j).first == "total_long_distance_hits" && _longDistanceHitCounterTotal < (*j).second.at(_nextCommendationLevel[""])) || 
+					((*j).first == "total_low_accuracy_hits" && _lowAccuracyHitCounterTotal < (*j).second.at(_nextCommendationLevel[""])) )
 			{
 				_awardCommendation = false;
 				break;

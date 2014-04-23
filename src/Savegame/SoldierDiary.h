@@ -97,6 +97,8 @@ struct Statistics
 	bool ironMan;							// Tracks if the soldier was the only soldier on the mission
 	int longDistanceHitCounter;				// Tracks how many long distance shots were landed
 	int lowAccuracyHitCounter;				// Tracks how many times the unit landed a low probability shot
+	int shotsFiredCounter;					// Tracks how many times a unit has shot
+	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
 
 	/// Functions
 	// Friendly fire check
@@ -121,11 +123,13 @@ struct Statistics
         shotAtCounter = node["shotAtCounter"].as<int>(shotAtCounter);
 		hitCounter = node["hitCounter"].as<int>(hitCounter);
 		shotByFriendlyCounter = node["shotByFriendlyCounter"].as<int>(shotByFriendlyCounter);
-		shotFriendlyCounterlyCounter = node["shotFriendlyCounter"].as<int>(shotFriendlyCounter);
+		shotFriendlyCounter = node["shotFriendlyCounter"].as<int>(shotFriendlyCounter);
 		loneSurvivor = node["loneSurvivor"].as<bool>(loneSurvivor);
 		ironMan = node["ironMan"].as<bool>(ironMan);
 		longDistanceHitCounter = node["longDistanceHitCounter"].as<int>(longDistanceHitCounter);
 		lowAccuracyHitCounter = node["lowAccuracyHitCounter"].as<int>(lowAccuracyHitCounter);
+		shotsFiredCounter = node["shotsFiredCounter"].as<int>(shotsFiredCounter);
+		shotsLandedCounter = node["shotsLandedCounter"].as<int>(shotsLandedCounter);
 	}
 	// Save function
 	YAML::Node save() const
@@ -145,6 +149,8 @@ struct Statistics
 		node["ironMan"] = ironMan;
 		node["longDistanceHitCounter"] = longDistanceHitCounter;
 		node["lowAccuracyHitCounter"] = lowAccuracyHitCounter;
+		node["shotsFiredCounter"] = shotsFiredCounter;
+		node["shotsLandedCounter"] = shotsLandedCounter;
 		return node;
 	}
 	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
@@ -269,7 +275,7 @@ private:
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
-		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal;
+		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:
