@@ -61,6 +61,7 @@
 #include "../Engine/Logger.h"
 #include <algorithm>
 #include "../Ufopaedia/Ufopaedia.h"
+#include "StatString.h"
 
 namespace OpenXcom
 {
@@ -186,6 +187,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, StatString *>::const_iterator i = _statStrings.begin (); i != _statStrings.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -470,6 +475,21 @@ void Ruleset::loadFile(const std::string &filename)
 			extraStrings->load(*i);
 			_extraStrings[type] = extraStrings.release();
 			_extraStringsIndex.push_back(type);
+		}
+	}
+	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
+	{
+		std::string string = (*i)["string"].as<std::string>();
+		if (_statStrings.find(string) != _statStrings.end())
+		{
+			_statStrings[string]->load(*i);
+		}
+		else
+		{
+			std::auto_ptr<StatString> statString(new StatString());
+			statString->load(*i);
+			_statStrings[string] = statString.release();
+			_statStringsIndex.push_back(string);
 		}
 	}
 
@@ -1165,6 +1185,15 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
 std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
+}
+
+/**
+ * Gets the list of StatStrings.
+ * @return The list of StatStrings.
+ */
+std::map<std::string, StatString *> Ruleset::getStatStrings() const
+{
+	return _statStrings;
 }
 
 /**

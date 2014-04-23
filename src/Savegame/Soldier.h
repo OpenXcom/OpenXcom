@@ -70,7 +70,7 @@ public:
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.
-	std::wstring getName() const;
+	std::wstring getName(bool statstring = false) const;
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.

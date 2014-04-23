@@ -26,6 +26,7 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/StatString.h"
 
 namespace OpenXcom
 {
@@ -168,9 +169,22 @@ YAML::Node Soldier::save() const
  * Returns the soldier's full name.
  * @return Soldier name.
  */
-std::wstring Soldier::getName() const
+std::wstring Soldier::getName(bool statstring) const
 {
-	return _name;
+	if (statstring) {
+		// iterate thru the statStrings
+		// this won't work because getStatStrings isn't a member of RuleSoldier
+		//std::map<std::string, StatString *> statStrings = _rules->getStatStrings();
+		//if (!statStrings.empty())
+		//{
+			// do stuff
+			std::wstring statString = L"/sTaTs";
+		//}
+		return _name + statString;
+	}
+	else {
+		return _name;
+	}
 }
 
 /**
