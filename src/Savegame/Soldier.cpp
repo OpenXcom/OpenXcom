@@ -126,7 +126,7 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		_death = new SoldierDeath();
 		_death->load(node["death"]);
 	}
-	calcStatString(rule->getStatStrings());
+	calcStatString(rule->getStatStringsIndex(), rule->getStatStrings());
 }
 
 /**
@@ -171,11 +171,11 @@ YAML::Node Soldier::save() const
  * Returns the soldier's full name (and, optionally, statString).
  * @return Soldier name.
  */
-std::wstring Soldier::getName(bool statstring) const
+std::wstring Soldier::getName(bool statstring, int maxLength) const
 {
-	if (statstring) {
-		if (_name.length() + _statString.length() > 20) {
-			return _name.substr(0, 20 - _statString.length()) + L"/" + _statString;
+	if (statstring && _statString != L"") {
+		if (_name.length() + _statString.length() > maxLength) {
+			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
 		}
 		else {
 			return _name + L"/" + _statString;
@@ -567,16 +567,69 @@ void Soldier::die(SoldierDeath *death)
 /**
  * Calculates the soldier's statString
  */
-void Soldier::calcStatString(const std::map<std::string, StatString *> &statStrings)
+void Soldier::calcStatString(const std::vector<std::string> &statStringIndex, const std::map<std::string, StatString *> &statStrings)
 {
-	// iterate thru the statStrings
-
-	for (std::map<std::string, StatString *>::const_iterator i = statStrings.begin(); i != statStrings.end(); ++i)
+	int ii, minVal, maxVal, conditionsMet;
+	std::string conditionName;
+	std::wstring wstring;
+	for (ii=0; ii < statStringIndex.size(); ii++)
 	{
-		std::string string = i->first;
-		std::wstring wstring;
-		wstring.assign(string.begin(), string.end());
-		_statString = _statString + wstring;
+		StatString *statString = statStrings.find(statStringIndex[ii])->second;
+		// now, iterate through the conditions found in the StatString
+		const std::map<std::string, limits> conditions = statString->getConditions();
+		conditionsMet = 0;
+		for (std::map<std::string, limits>::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
+		{
+			conditionName = i->first;
+			minVal = i->second.minVal;
+			maxVal = i->second.maxVal;
+			if (conditionName == "psiStrength")
+			{
+				if (_currentStats.psiStrength > minVal && _currentStats.psiStrength < maxVal) {
+					conditionsMet++;
+				}
+			}
+			else if (conditionName == "psiSkill")
+			{
+				if (_currentStats.psiSkill > minVal && _currentStats.psiSkill < maxVal) {
+					conditionsMet++;
+				}			
+			}
+			else if (conditionName == "bravery")
+			{
+				if (_currentStats.bravery > minVal && _currentStats.bravery < maxVal) {
+					conditionsMet++;
+				}			
+			}
+			else if (conditionName == "strength")
+			{
+				if (_currentStats.strength > minVal && _currentStats.strength < maxVal) {
+					conditionsMet++;
+				}			
+			}
+			else if (conditionName == "firing")
+			{
+				if (_currentStats.firing > minVal && _currentStats.firing < maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "reactions")
+			{
+				if (_currentStats.reactions > minVal && _currentStats.reactions < maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "stamina")
+			{
+				if (_currentStats.stamina > minVal && _currentStats.stamina < maxVal) {
+					conditionsMet++;
+				}	
+			}
+			if (conditionsMet == conditions.size()) {
+				wstring.assign(statStringIndex[ii].begin(), statStringIndex[ii].end());
+				_statString = _statString + wstring;
+			}
+		}
 	}
 }
 

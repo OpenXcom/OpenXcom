@@ -217,7 +217,9 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
-	/// Gets the list of StatStrings.
+	/// Gets the statStringsIndex.
+	std::vector<std::string> getStatStringsIndex() const;	
+	/// Gets the map of StatStrings.
 	std::map<std::string, StatString *> getStatStrings() const;	
 	/// Sorts all our lists according to their weight.
 	void sortLists();

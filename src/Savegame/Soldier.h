@@ -72,7 +72,7 @@ public:
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.
-	std::wstring getName(bool statstring = false) const;
+	std::wstring getName(bool statstring = false, int maxLength = 20) const;
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
@@ -138,7 +138,7 @@ public:
 	/// Kills the soldier.
 	void die(SoldierDeath *death);
 	/// Calculate statString.
-	void calcStatString(const std::map<std::string, StatString *> &statStrings);
+	void calcStatString(const std::vector<std::string> &statStringIndex, const std::map<std::string, StatString *> &statStrings);
 };
 
 }

@@ -28,45 +28,18 @@ namespace OpenXcom
  * For adding statStrings to the game.
  * See http://ufopaedia.org/index.php?title=Statstrings
  */
+struct limits 
+{
+	int minVal; 
+	int maxVal;
+};
 
-/*
-  statStrings:
-  - string: "x"
-    psiStrength: [~, 30]
-  - string: "P"
-    psiStrength: [80, ~]
-  - string: "p"
-    psiStrength: [60, 79]
-  - string: "K"
-    psiSkill: [60, ~]
-  - string: "k"
-    psiSkill: [30, 59]
-  - string: "b"
-    bravery: [60, ~]
-  - string: "c"
-    bravery: [~, 10]
-  - string: "w"
-    strength: [~, 25]
-  - string: "Snpr"
-    firing: [60, ~]
-    reactions: [60, ~]
-  - string: "M"
-    firing: [70, ~]
-  - string: "m"
-    firing: [60, 69]
-  - string: "Sct"
-    reactions: [50, ~]
-    stamina: [60, ~]
-  - string: "R"
-    reactions: [60, ~]
-  - string: "r"
-    reactions: [50, 59]
-*/
 class StatString
 {
 private:
-	std::string _string;
-	std::vector<double> _minVal, _maxVal;
+	std::string _string;	
+	std::map<std::string, limits> _conditions;
+	StatString::limits getCondition(const std::string &conditionName, const YAML::Node &node);
 public:
 	/// Creates a blank StatString ruleset.
 	StatString();
@@ -74,6 +47,9 @@ public:
 	virtual ~StatString();
 	/// Loads the StatString from YAML.
 	void load(const YAML::Node& node);
+ 	/// Get the conditions for this StatString.
+	std::map<std::string, limits> getConditions();
 };
+
 }
 #endif

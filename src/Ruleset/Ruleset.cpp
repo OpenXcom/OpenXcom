@@ -477,6 +477,8 @@ void Ruleset::loadFile(const std::string &filename)
 			_extraStringsIndex.push_back(type);
 		}
 	}
+
+	int ruleNum = 0;
 	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
 	{
 		std::string string = (*i)["string"].as<std::string>();
@@ -491,6 +493,7 @@ void Ruleset::loadFile(const std::string &filename)
 			_statStrings[string] = statString.release();
 			_statStringsIndex.push_back(string);
 		}
+		ruleNum++;
 	}
 
   // refresh _psiRequirements for psiStrengthEval
@@ -1185,6 +1188,15 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
 std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
+}
+
+/**
+ * Gets the index of StatStrings.
+ * @return The index of StatStrings.
+ */
+std::vector<std::string> Ruleset::getStatStringsIndex() const
+{
+	return _statStringsIndex;
 }
 
 /**

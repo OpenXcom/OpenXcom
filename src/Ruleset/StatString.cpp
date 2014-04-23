@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include "StatString.h"
 
+
 namespace OpenXcom
 {
 
@@ -42,7 +43,37 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
+	// TODO: conditionNames should be stored elsewhere
+	std::string conditionNames[7] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina"};
 	_string = node["string"].as<std::string>(_string);
+	int ii;
+	// TODO: we need count of conditionNames here
+	for (ii=0; ii < 7; ii++)
+	{
+		if (node[conditionNames[ii]])
+		{
+			_conditions[conditionNames[ii]] = getCondition(conditionNames[ii], node);
+		}
+	}
+}
+
+limits StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
+{
+	// TODO: use an enum or something here
+	int minValue = -999999999, maxValue = 999999999;
+	if (node[conditionName][0]) {
+		minValue = node[conditionName][0].as<int>(minValue);
+	}
+	if (node[conditionName][1]) {
+		maxValue = node[conditionName][1].as<int>(maxValue);
+	}
+	limits thisLimit = {minValue, maxValue};
+	return thisLimit;
+}
+
+std::map<std::string, limits> StatString::getConditions()
+{
+	return _conditions;
 }
 
 }
