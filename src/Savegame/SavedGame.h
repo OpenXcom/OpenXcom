@@ -47,6 +47,7 @@ class AlienStrategy;
 class AlienMission;
 class Target;
 class Soldier;
+class MissionStatistics;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -100,6 +101,7 @@ private:
 	std::vector<const RuleResearch *> _poppedResearch;
 	std::vector<Soldier*> _deadSoldiers;
 	int _selectedBase;
+    std::vector<MissionStatistics*> _missionStatistics
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
@@ -251,6 +253,8 @@ public:
 	void removePoppedResearch(const RuleResearch* research);
 	/// Gets the list of dead soldiers.
 	std::vector<Soldier*> *getDeadSoldiers();
+    /// Gets the list of missions statistics
+	std::vector<MissionStatistics*> *getMissionStatistics();
 	/// Gets the last selected player base.
 	Base *getSelectedBase();
 	/// Set the last selected player base.

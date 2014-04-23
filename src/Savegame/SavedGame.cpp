@@ -144,6 +144,11 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+    for (std::vector<MissionStatistics*>::iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
+	{
+		delete *i;
+	}
+    
 	delete _battleGame;
 }
 
@@ -372,6 +377,13 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_deadSoldiers.push_back(s);
 	}
 
+    for (YAML::const_iterator i = doc["missionStatistics"].begin(); i != doc["missionStatistics"].end(); ++i)
+	{
+		MissionStatistics *ms = new MissionStatistics();
+		ms->load();
+		_missionStatistics.push_back(ms);
+	}
+
 	if (const YAML::Node &battle = doc["battleGame"])
 	{
 		_battleGame = new SavedBattleGame();
@@ -473,6 +485,10 @@ void SavedGame::save(const std::string &filename) const
 	for (std::vector<Soldier*>::const_iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
 	{
 		node["deadSoldiers"].push_back((*i)->save());
+	}
+	for (std::vector<MissionStatistics*>::const_iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
+	{
+		node["missionStatistics"].push_back((*i)->save());
 	}
 	if (_battleGame != 0)
 	{
@@ -1575,6 +1591,15 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 std::vector<Soldier*> *SavedGame::getDeadSoldiers()
 {
 	return &_deadSoldiers;
+}
+
+/**
+ * Returns the list of dead soldiers.
+ * @return Pointer to soldier list.
+ */
+std::vector<MissionStatistics*> *SavedGame::getMissionStatistics();
+{
+	return &_missionStatistics;
 }
 
 }

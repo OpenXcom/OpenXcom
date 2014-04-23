@@ -153,72 +153,67 @@ struct Statistics
 		node["shotsLandedCounter"] = shotsLandedCounter;
 		return node;
 	}
-	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML (needed?)
+	Statistics(const YAML::Node& node) { load(node); }	// Constructor from YAML
 	Statistics() :	wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false),
 					ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }	// Default constructor
 	~Statistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
 };
 
 /**
- * The entry is like the title. Details from each mission.
+ * Mission statistics
  */
-class SoldierDiaryEntries
-{
-private:
-	GameTime _missionTime;
-	std::string _missionRegion, _missionCountry, _missionType, _missionUFO;	
-	bool _success;
-	std::string _rating;
-	int _score;
-	std::string _alienRace;
-	int _missionDaylight;
-	int _daysWounded;
-	Statistics *_missionStatistics;
-public:
-	/// Creates a new diary and loads its contents from YAML.
-	SoldierDiaryEntries(const YAML::Node& node);
-	/// Creates a diary.
-	SoldierDiaryEntries(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
-	/// Cleans up the diary.
-	~SoldierDiaryEntries();
-	/// Loads the diary information from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the diary information to YAML.
-	YAML::Node save() const;
-	/// Get
-	const GameTime *getMissionTime() const;
-	/// Get
-	std::string getMissionRegion() const;
-	/// Get
-	std::string getMissionCountry() const;
-	/// Get
-	std::string getMissionType();
-	/// Get
-	std::string getMissionUFO() const;
-	/// Get
-	std::vector<SoldierDiaryKills*> getMissionKills() const;
-	/// Get
-	std::vector<SoldierDiaryKills*> *getMissionKillsReference();
-	/// Get
-	bool getMissionSuccess() const;
-	/// Get
-	std::string getMissionRating() const;
-	/// Get
-	int getMissionScore() const;
-	/// Get
-	int getMissionKillTotal() const;
-	/// Get
-	std::string getMissionRace() const;
-	/// Get
-	int getMissionDaylight() const;
-	/// Get
-	int getMissionStunTotal() const;
-	/// Get
-	int getDaysWounded() const;
-	/// Get
-	Statistics *getMissionStatistics() const;
-};
 
+struct MissionStatistics
+{
+    /// Variables
+	GameTime missionTime;
+	std::string missionRegion, missionCountry, missionType, missionUFO;	
+	bool success;
+	std::string rating;
+	int score;
+	std::string alienRace;
+	int missionDaylight;
+    std::vector<int> soldierIds;
+    
+    /// Functions
+    // Load
+    load(const YAML::Node &node)
+    {
+        missionTime.load(node["missionTime"]);
+        missionRegion = node["missionRegion"].as<std::string>(missionRegion);
+        missionCountry = node["missionCountry"].as<std::string>(missionCountry);
+        missionType = node["missionType"].as<std::string>(missionType);
+        missionUFO = node["missionUFO"].as<std::string>(missionUFO);
+        success = node["success"].as<bool>(success);
+        score = node["score"].as<int>(score);
+        rating = node["rating"].as<std::string>(rating);
+        alienRace = node["alienRace"].as<std::string>(alienRace);
+        missionDaylight = node["missionDaylight"].as<int>(missionDaylight);
+        soldierIds = node["soldierIds"].as<std::vector<int> >(soldierIds);
+    }
+    // Save
+    save() const
+    {
+        YAML::Node node;
+        node["missionTime"] = _missionTime.save();
+        node["missionRegion"] = _missionRegion;
+        node["missionCountry"] = _missionCountry;
+        node["missionType"] = _missionType;
+        node["missionUFO"] = _missionUFO;
+        node["success"] = _success;
+        node["score"] = _score;
+        node["rating"] = _rating;
+        node["alienRace"] = _alienRace;
+        node["missionDaylight"] = _missionDaylight;
+        node["soldierIds"] = soldierIds;
+        return node;
+    }
+    MissionStatistics(const YAML::Node& node) : missionTime(0,0,0,0,0,0,0) { load(node); }	// Constructor from YAML
+    MissionStatistics() :   missionTime(0,0,0,0,0,0,0), missionRegion(), missionCountry(), missionType(), missionUFO(), success(false), rating(), score(0),
+                            alienRace(), missionDaylight(0), soldierIds() { } // Default constructor
+    ~MissionStatistics() { } // Deconstructor
+};
+ 
 /**
  * Each entry will be its own commendation.
  */
