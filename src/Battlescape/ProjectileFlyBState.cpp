@@ -488,7 +488,11 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->shotAtCounter++; // Only counts for guns, not throws or launches
+
+				if (_parent->getSave()->getTile(_action.target)->getUnit())
+				{
+					_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->shotAtCounter++; // Only counts for guns, not throws or launches
+				}
 
 				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
@@ -540,17 +544,35 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
-						_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->hitCounter++;
-						if (_unit->getOriginalFaction() == FACTION_PLAYER) 
-							_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->friendlyFired = true;
 						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
-						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
+						BattleUnit *targetVictim = _parent->getSave()->getTile(_action.target)->getUnit(); // Who we were aiming at (not necessarily who we hit)
+						if (victim && !victim->isOut())
 						{
-							AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
-							if (aggro != 0)
+							victim->getMissionStatistics()->hitCounter++;
+							if (_unit->getOriginalFaction() == FACTION_PLAYER) // Anyone getting hit by XCOM is getting hit by friendly fire, but who cares
 							{
-								aggro->setWasHit();
-								_unit->setTurnsSinceSpotted(0);
+								victim->getMissionStatistics()->shotByFriendlyCounter++;
+								_unit->getMissionStatistics()->shotFriendlyCounter++;
+							}
+							if (victim == targetVictim) // Hit our target
+							{
+								if (_parent->getTileEngine()->distance(_action.actor->getPosition(), victim->getPosition()) > 30)
+								{
+									_unit->getMissionStatistics()->longDistanceHitCounter++;
+								}
+								if (_unit->getFiringAccuracy(_action.type, _action.weapon) < 30)
+								{
+									_unit->getMissionStatistics()->lowAccuracyHitCounter++;
+								}
+							}
+							if (victim->getFaction() == FACTION_HOSTILE)
+							{
+								AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
+								if (aggro != 0)
+								{
+									aggro->setWasHit();
+									_unit->setTurnsSinceSpotted(0);
+								}
 							}
 						}
 					}

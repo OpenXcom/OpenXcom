@@ -49,7 +49,8 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE");
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);

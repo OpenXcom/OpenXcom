@@ -40,7 +40,8 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
-	_totalFriendlyFired(0), _ironManTotal(0), _importantMissionTotal(0)
+	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
+    _lowAccuracyHitCounterTotal(0)
 {
 }
 
@@ -106,6 +107,7 @@ void SoldierDiary::load(const YAML::Node& node)
     _hitCounterTotal = node["hitCounterTotal"].as<int>(_hitCounterTotal);
     _ironManTotal = node["ironManTotal"].as<int>(_ironManTotal);
     _importantMissionTotal = node["importantMissionTotal"].as<int>(_importantMissionTotal);
+	_longDistanceHitCounterTotal = node["longDistanceHitCounterTotal"].as<int>(_longDistanceHitCounterTotal);
 }
 
 /**
@@ -146,6 +148,7 @@ YAML::Node SoldierDiary::save() const
     node["hitCounterTotal"] = _hitCounterTotal;
     node["ironManTotal"] = _ironManTotal;
     node["importantMissionTotal"] = _importantMissionTotal;
+	node["longDistanceHitCounterTotal"] = _longDistanceHitCounterTotal
 	return node;
 }
 
@@ -190,41 +193,33 @@ void SoldierDiary::updateDiary()
     _killTotal += latestEntry->getMissionKillTotal();
     _missionTotal = _diaryEntries.size();
     if (latestEntry->getMissionSuccess())
-    {
         _winTotal++;
-    }
     _stunTotal += latestEntry->getMissionStunTotal();
     _daysWoundedTotal += latestEntry->getDaysWounded();
     if (latestEntry->getMissionType() == "STR_BASE_DEFENSE")
-    {
         _baseDefenseMissionTotal++;
-    }
     else if (latestEntry->getMissionType() == "STR_TERROR_MISSION")
     {
         _terrorMissionTotal++;
         if (latestEntry->getMissionDaylight() != 0)
-        {
             _nightTerrorMissionTotal++;
-        }
     }
     if (latestEntry->getMissionDaylight() != 0)
-    {
         _nightMissionTotal++;
-    }
     if (latestEntry->getMissionStatistics()->wasUnconcious)
-    {
         _unconciousTotal++;
-    }
-    _shotAtCounterTotal += latestEntry->getMissionStatistics()->shotAtCounter;
-    _hitCounterTotal += latestEntry->getMissionStatistics()->hitCounter;
-	if (latestEntry->getMissionStatistics()->friendlyFired)
-		_totalFriendlyFired++;
-	if (latestEntry->getMissionStatistics()->loneSurvivor)
+    _shotAtCounterTotal += (latestEntry->getMissionStatistics()->shotAtCounter); // Commendation is for getting shot 10 times in one mission
+    _hitCounterTotal += (latestEntry->getMissionStatistics()->hitCounter); // Commendation si for getting hit 5 times in one mission
+	_totalShotByFriendlyCounter += latestEntry->getMissionStatistics()->shotByFriendlyCounter;
+	_totalShotFriendlyCounter += latestEntry->getMissionStatistics()->shotFriendlyCounter;
+	if (latestEntry->getMissionStatistics()->loneSurvivor && latestEntry->getMissionSuccess())
 		_loneSurvivorTotal++;
-	if (latestEntry->getMissionStatistics()->ironMan)
+	if (latestEntry->getMissionStatistics()->ironMan && latestEntry->getMissionSuccess())
 		_ironManTotal++;
-	if (latestEntry->getMissionType() != "STR_SMALL_SCOUT" || latestEntry->getMissionType() != "STR_BASE_DEFENSE" || latestEntry->getMissionType() != "STR_MEDIUM_SCOUT")
+	if (latestEntry->getMissionSuccess() && latestEntry->getMissionType() != "STR_SMALL_SCOUT" && latestEntry->getMissionType() != "STR_BASE_DEFENSE" && latestEntry->getMissionType() != "STR_MEDIUM_SCOUT")
 		_importantMissionTotal++;
+	_longDistanceHitCounterTotal += latestEntry->getMissionStatistics()->longDistanceHitCounter;
+	_lowAccuracyHitCounterTotal += latestEntry->getMissionStatistics()->lowAccuracyHitCounter;
 }
 
 /**
@@ -442,10 +437,10 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) || 
-                    ((*j).first == "total_shot_at_10_times" && _shotAtCounterTotal/10 < (*j).second.at(_nextCommendationLevel[""])) || 
-					((*j).first == "total_hit_5_times" && _hitCounterTotal/5 < (*j).second.at(_nextCommendationLevel[""])) ||
+                    ((*j).first == "total_shot_at_10_times" && _shotAtCounterTotal < (*j).second.at(_nextCommendationLevel[""])) || 
+					((*j).first == "total_hit_5_times" && _hitCounterTotal < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_friendly_fired" && _totalFriendlyFired < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_lone_surivor" && _loneSurvivorTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_lone_survivor" && _loneSurvivorTotal < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_iron_man" && _ironManTotal < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_important_missions" && _importantMissionTotal < (*j).second.at(_nextCommendationLevel[""])) )
 			{
