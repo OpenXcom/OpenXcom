@@ -51,14 +51,104 @@ enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
 
+//
+// TODO fill the structs
+//
+
 /**
- * All statistics are tracked here.
+ * Container for battle unit kills statistics.
+ */
+struct BattleUnitKills
+{
+    /// Variables
+    std::string rank, race, weapon, weaponAmmo;
+	UnitFaction faction;
+	UnitStatus status;
+    int mission, turn;
+
+    /// Functions
+    // Make turn unique across all kills
+    int makeTurnUnique(GameTime time)
+    {
+        turn += (time.getYear() + time.getMonth() + time.getDay() + time.getHour() + time.getMinute())*3; // Maintains divisibility by 3
+    }
+    // Check to see if turn was on PLAYER side
+    bool playerTurn()
+    {
+        if (turn % 3 == 0) return true;
+        return false;
+    }
+    // Check to see if turn was on HOSTILE side
+    bool hostileTurn()
+    {
+        if ((turn - 1) % 3 == 0) return true;
+        return false;
+    }
+    // Check to see if turn was on NEUTRAL side
+    bool netrualTurn()
+    {
+        if ((turn - 2) % 3 == 0) return true;
+        return false;
+    }
+    // Load
+    void load(const YAML::Node &node)
+    {
+        rank = node["rank"].as<std::string>(rank);
+        race = node["race"].as<std::string>(race);
+        weapon = node["weapon"].as<std::string>(weapon);
+        weaponAmmo = node["weaponAmmo"].as<std::string>(weaponAmmo);
+        status = (UnitStatus)node["status"].as<int>();
+        faction = (UnitFaction)node["faction"].as<int>();
+        mission = node["mission"].as<int>(mission);
+        turn = node["turn"].as<int>(turn);
+    }
+    // Save
+    YAML::Node save() const
+    {
+        YAML::Node node;
+        node["rank"] = rank;
+        node["race"] = race;
+        node["weapon"] = weapon;
+        node["weaponAmmo"] = weaponAmmo;
+        node["status"] = (int)status;
+        node["faction"] = (int)faction;
+        node["mission"] = mission;
+        node["turn"] = turn;
+        return node;
+    }
+    // Convert victim State to string
+    std::string getUnitStatusString() const
+    {
+        switch (status)
+        {
+        case STATUS_DEAD:           return "STATUS_DEAD";
+        case STATUS_UNCONSCIOUS:    return "STATUS_UNCONSCIOUS";
+        default:                    return "";
+        }
+    }
+    // Convert victim Faction to string
+    std::string getUnitFactionString() const
+    {
+        switch (faction)
+        {
+        case FACTION_PLAYER:    return "FACTION_PLAYER";
+        case FACTION_HOSTILE:   return "FACTION_HOSTILE";
+        case FACTION_NEUTRAL:   return "FACTION_NEUTRAL";
+        default:                return "";
+        }
+    }
+    BattleUnitKills(const YAML::Node& node) { load(node); }
+    BattleUnitKills() : rank(), race(), weapon(), weaponAmmo(), faction(FACTION_PLAYER), status(STATUS_STANDING), mission(0), turn(0) { }
+    ~BattleUnitKills() { }
+};
+
+/**
+ * Container for battle unit statistics.
  */
 struct BattleUnitStatistics
 {
-	// Variables
+	/// Variables
 	bool wasUnconcious;						// Tracks if the soldier fell unconcious
-    std::vector<SoldierDiaryKills*> kills;	// Tracks kills
     int shotAtCounter;                      // Tracks how many times the unit was shot at
 	int hitCounter;							// Tracks how many times the unit was hit
 	int shotByFriendlyCounter;				// Tracks how many times the unit was hit by a friendly
@@ -69,14 +159,16 @@ struct BattleUnitStatistics
 	int lowAccuracyHitCounter;				// Tracks how many times the unit landed a low probability shot
 	int shotsFiredCounter;					// Tracks how many times a unit has shot
 	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
+    std::vector<BattleUnitKills*> kills;	// Tracks kills
+    int daysWounded;                        // Tracks how many days the unit was wounded for
 
 	/// Functions
 	// Friendly fire check
 	bool hasFriendlyFired()
 	{
-		for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
+		for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
 		{
-			if ((*i)->getAlienFactionEnum() == FACTION_PLAYER)
+			if ((*i)->faction == FACTION_PLAYER)
 				return true;
 		}
 		return false;
@@ -88,7 +180,7 @@ struct BattleUnitStatistics
 		if (const YAML::Node &YAMLkills = node["kills"])
 		{
 			for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
-				kills.push_back(new SoldierDiaryKills(*i));
+				kills.push_back(new BattleUnitKills(*i));
 		}
         shotAtCounter = node["shotAtCounter"].as<int>(shotAtCounter);
 		hitCounter = node["hitCounter"].as<int>(hitCounter);
@@ -108,7 +200,7 @@ struct BattleUnitStatistics
 		node["wasUnconcious"] = wasUnconcious;
 		if (!kills.empty())
 		{
-			for (std::vector<SoldierDiaryKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
+			for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
 				node["kills"].push_back((*i)->save());
 		}
         node["shotAtCounter"] = shotAtCounter;
@@ -123,10 +215,10 @@ struct BattleUnitStatistics
 		node["shotsLandedCounter"] = shotsLandedCounter;
 		return node;
 	}
-	BattleUnitStatistics(const YAML::Node& node) { load(node); }	// Constructor from YAML
+	BattleUnitStatistics(const YAML::Node& node) { load(node); }
 	BattleUnitStatistics() :	wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false),
-					ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }	// Default constructor
-	~BattleUnitStatistics() {for (std::vector<SoldierDiaryKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;} // Deconstructor
+					ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }
+	~BattleUnitStatistics() {for (std::vector<BattleUnitKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;}
 };
 
 /**
@@ -172,7 +264,8 @@ private:
 	int _turnsSinceSpotted;
 	std::string _spawnUnit;
 	std::string _activeHand;
-	Statistics *_missionStatistics;
+	std::vector<BattleUnitKills*> _unitKills;
+    BattleUnitStatistics* _statistics;
 
 	// static data
 	std::string _type;
@@ -498,8 +591,10 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
-	/// Get the unit's mission statistics
-	Statistics *getMissionStatistics();
+	/// Get the unit's mission kills
+    std::vector<BattleUnitKills*> getKills() {return _unitKills;}
+    /// Get the unit's mission statistics
+    BattleUnitStatistics* getStatistics() {return _statistics;}
 };
 
 }

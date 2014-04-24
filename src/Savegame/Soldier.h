@@ -40,7 +40,6 @@ class Language;
 class EquipmentLayoutItem;
 class SoldierDeath;
 class SoldierDiary;
-class SoldierDiaryKills;
 
 /**
  * Represents a soldier hired by the player.

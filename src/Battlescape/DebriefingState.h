@@ -61,11 +61,7 @@ private:
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
-	std::string _missionRegion, _missionCountry, _missionType, _missionUFO, _missionRace;
-	GameTime _missionTime;
-	int _missionScore, _missionDaylight;
-	bool _missionSuccess;
-	std::string _missionRating;
+    MissionStatistics *_missionStatistics;
 	/// Adds to the debriefing stats.
 	void addStat(const std::string &name, int quantity, int score);
 	/// Prepares debriefing.

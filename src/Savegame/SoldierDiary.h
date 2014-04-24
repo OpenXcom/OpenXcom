@@ -25,6 +25,8 @@
 #include "GameTime.h"
 #include "../Ruleset/RuleCommendations.h"
 #include "../Ruleset/Ruleset.h"
+#include "BattleUnit.h"
+#include "SavedGame.h"
 
 namespace OpenXcom
 {
@@ -33,109 +35,6 @@ class GameTime;
 class RuleCommendations;
 class Ruleset;
 
-/**
- * Each entry will have a list of kills, detailed by this class.
- */
-class SoldierDiaryKills
-{
-private:
-	std::string _alienRank, _alienRace, _weapon, _weaponAmmo;
-	UnitFaction _alienFaction;
-	UnitStatus _alienState;
-    int _mission;
-	int _turn;
-	
-public:
-	/// Creates a new diary and loads its contents from YAML.
-	SoldierDiaryKills(const YAML::Node& node);
-	/// Creates a diary.
-	SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction, int turn);
-	/// Cleans up the diary.
-	~SoldierDiaryKills();
-	/// Loads the diary information from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the diary information to YAML.
-	YAML::Node save() const;
-	/// Get
-	std::string getAlienRank() const;
-	/// Get
-	std::string getAlienRace() const;
-	/// Get
-	std::string getWeapon() const;
-	/// Get
-	std::string getWeaponAmmo() const;
-	/// Get
-	std::string getAlienState() const;
-	/// Get
-	std::string getAlienFaction() const;
-    /// Get
-    UnitStatus getAlienStateEnum() const;
-    /// Get 
-    UnitFaction getAlienFactionEnum() const;
-	/// Get
-	int getTurn() const;
-	/// Add unique mission id to turn
-	void makeTurnUnique(GameTime missionTime);
-
-};
-
-
-
-/**
- * Mission statistics
- */
-
-struct MissionStatistics
-{
-    /// Variables
-	GameTime missionTime;
-	std::string missionRegion, missionCountry, missionType, missionUFO;	
-	bool success;
-	std::string rating;
-	int score;
-	std::string alienRace;
-	int missionDaylight;
-    std::vector<int> soldierIds;
-    
-    /// Functions
-    // Load
-    load(const YAML::Node &node)
-    {
-        missionTime.load(node["missionTime"]);
-        missionRegion = node["missionRegion"].as<std::string>(missionRegion);
-        missionCountry = node["missionCountry"].as<std::string>(missionCountry);
-        missionType = node["missionType"].as<std::string>(missionType);
-        missionUFO = node["missionUFO"].as<std::string>(missionUFO);
-        success = node["success"].as<bool>(success);
-        score = node["score"].as<int>(score);
-        rating = node["rating"].as<std::string>(rating);
-        alienRace = node["alienRace"].as<std::string>(alienRace);
-        missionDaylight = node["missionDaylight"].as<int>(missionDaylight);
-        soldierIds = node["soldierIds"].as<std::vector<int> >(soldierIds);
-    }
-    // Save
-    save() const
-    {
-        YAML::Node node;
-        node["missionTime"] = _missionTime.save();
-        node["missionRegion"] = _missionRegion;
-        node["missionCountry"] = _missionCountry;
-        node["missionType"] = _missionType;
-        node["missionUFO"] = _missionUFO;
-        node["success"] = _success;
-        node["score"] = _score;
-        node["rating"] = _rating;
-        node["alienRace"] = _alienRace;
-        node["missionDaylight"] = _missionDaylight;
-        node["soldierIds"] = soldierIds;
-        return node;
-    }
-    MissionStatistics(const YAML::Node& node) : missionTime(0,0,0,0,0,0,0) { load(node); }	// Constructor from YAML
-    MissionStatistics() :   missionTime(0,0,0,0,0,0,0), missionRegion(), missionCountry(), missionType(), missionUFO(), success(false), rating(), score(0),
-                            alienRace(), missionDaylight(0), soldierIds() { } // Default constructor
-    ~MissionStatistics() { } // Deconstructor
-};
- 
 /**
  * Each entry will be its own commendation.
  */
@@ -185,10 +84,11 @@ public:
 class SoldierDiary
 {
 private:
-	std::vector<SoldierDiaryEntries*> _diaryEntries;
 	std::vector<SoldierCommendations*> _commendations;
 	RuleCommendations *_rules;
-	std::vector<SoldierDiaryKills*> _killList;
+	std::vector<BattleUnitKills*> _killList;
+    std::vector<int> _missionIdList;
+    std::vector<std::pair<int ,int> > _daysWounded;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
@@ -206,12 +106,10 @@ public:
 	void load(const YAML::Node& node);
 	/// Save a diary.
 	YAML::Node save() const;
-	/// Get the diary entries
-	std::vector<SoldierDiaryEntries*> getSoldierDiaryEntries();
 	/// Add an entry to the diary
 	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
 	/// Update the diary statistics
-	void updateDiary();
+	void updateDiary(MissionStatistics *missionStatistics, std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics);
 	/// Get
 	std::map<std::string, int> getAlienRankTotal() const;
 	/// Get

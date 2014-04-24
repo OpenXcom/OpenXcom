@@ -120,11 +120,9 @@ void SoldierDiary::load(const YAML::Node& node)
 YAML::Node SoldierDiary::save() const
 {
 	YAML::Node node;
-	for (std::vector<SoldierDiaryEntries*>::const_iterator i = _diaryEntries.begin(); i != _diaryEntries.end(); ++i)
-			node["diaryEntries"].push_back((*i)->save());
 	for (std::vector<SoldierCommendations*>::const_iterator i = _commendations.begin(); i != _commendations.end(); ++i)
 			node["commendations"].push_back((*i)->save());
-	for (std::vector<SoldierDiaryKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
 	node["alienRankTotal"] = _alienRankTotal;
     node["alienRaceTotal"] = _alienRaceTotal;
@@ -161,73 +159,61 @@ YAML::Node SoldierDiary::save() const
 }
 
 /**
- * Get the diary entries
- */
-std::vector<SoldierDiaryEntries*> SoldierDiary::getSoldierDiaryEntries()
-{
-	return _diaryEntries;
-}
-
-/**
- *  Add soldier diary entry.
- */
-void SoldierDiary::addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int rating, std::string score, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics)
-{
-	_diaryEntries.push_back(new SoldierDiaryEntries(missionTime, missionRegion, missionCountry, missionType, missionUFO, success, rating, score, alienRace, missionDaylight, daysWounded, missionStatistics));
-    updateDiary();
-}
-
-/**
  * Updated soldier diary statistics
  */
-void SoldierDiary::updateDiary()
+void SoldierDiary::updateDiary(MissionStatistics *missionStatistics, std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics)
 {
-	SoldierDiaryEntries *latestEntry = _diaryEntries.back();
-	for (std::vector<SoldierDiaryKills*>::const_iterator j = latestEntry->getMissionStatistics()->kills.begin() ; j != latestEntry->getMissionStatistics()->kills.end() ; ++j)
+	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
     {
-		_killList.push_back(*j);
-		(*j)->makeTurnUnique(*latestEntry->getMissionTime());
-		if ((*j)->getAlienFaction() != "FACTION_HOSTILE") continue;
-        _alienRankTotal[(*j)->getAlienRank().c_str()]++;
-        _alienRaceTotal[(*j)->getAlienRace().c_str()]++;
-        _weaponTotal[(*j)->getWeapon().c_str()]++;
-        _weaponAmmoTotal[(*j)->getWeaponAmmo().c_str()]++;
+		_killList.push_back(*kill);
+		(*kill)->makeTurnUnique(*missionStatistics->time);
+		if ((*kill)->getUnitFactionString() != "FACTION_HOSTILE") 
+            continue;
+        _alienRankTotal[(*kill)->rank.c_str()]++;
+        _alienRaceTotal[(*kill)->race.c_str()]++;
+        _weaponTotal[(*kill)->weapon.c_str()]++;
+        _weaponAmmoTotal[(*kill)->weaponAmmo.c_str()]++;
+        if ((*kill)->getUnitStateString() == "STATUS_DEAD")
+            _killTotal++;
+        else if ((*kill)->getUnitStateString() == "STATUS_UNCONSCIOUS")
+            _stunTotal++;
     }
-    _regionTotal[latestEntry->getMissionRegion().c_str()]++;
-    _countryTotal[latestEntry->getMissionCountry().c_str()]++;
-    _typeTotal[latestEntry->getMissionType().c_str()]++;
-    _UFOTotal[latestEntry->getMissionUFO().c_str()]++;
-    _scoreTotal += latestEntry->getMissionScore();
-    _killTotal += latestEntry->getMissionKillTotal();
-    _missionTotal = _diaryEntries.size();
-    if (latestEntry->getMissionSuccess())
+    _regionTotal[missionStatistics->region.c_str()]++;
+    _countryTotal[missionStatistics->country.c_str()]++;
+    _typeTotal[missionStatistics->type.c_str()]++;
+    _UFOTotal[missionStatistics->ufo.c_str()]++;
+    _scoreTotal += missionStatistics->score;
+    if (missionStatistics->success)
         _winTotal++;
-    _stunTotal += latestEntry->getMissionStunTotal();
-    _daysWoundedTotal += latestEntry->getDaysWounded();
-    if (latestEntry->getMissionType() == "STR_BASE_DEFENSE")
+    _daysWoundedTotal += unitStatistics->daysWounded;
+    if (missionStatistics->type == "STR_BASE_DEFENSE")
         _baseDefenseMissionTotal++;
-    else if (latestEntry->getMissionType() == "STR_TERROR_MISSION")
+    else if (missionStatistics->type == "STR_TERROR_MISSION")
     {
         _terrorMissionTotal++;
-        if (latestEntry->getMissionDaylight() != 0)
+        if (missionStatistics->daylight != 0)
             _nightTerrorMissionTotal++;
     }
-    if (latestEntry->getMissionDaylight() != 0)
+    if (missionStatistics->daylight != 0)
         _nightMissionTotal++;
-    if (latestEntry->getMissionStatistics()->wasUnconcious)
+    if (unitStatistics->wasUnconcious)
         _unconciousTotal++;
-    _shotAtCounterTotal += (latestEntry->getMissionStatistics()->shotAtCounter); // Commendation is for getting shot 10 times in one mission
-    _hitCounterTotal += (latestEntry->getMissionStatistics()->hitCounter); // Commendation si for getting hit 5 times in one mission
-	_totalShotByFriendlyCounter += latestEntry->getMissionStatistics()->shotByFriendlyCounter;
-	_totalShotFriendlyCounter += latestEntry->getMissionStatistics()->shotFriendlyCounter;
-	if (latestEntry->getMissionStatistics()->loneSurvivor && latestEntry->getMissionSuccess())
-		_loneSurvivorTotal++;
-	if (latestEntry->getMissionStatistics()->ironMan && latestEntry->getMissionSuccess())
-		_ironManTotal++;
-	if (latestEntry->getMissionSuccess() && latestEntry->getMissionType() != "STR_SMALL_SCOUT" && latestEntry->getMissionType() != "STR_BASE_DEFENSE" && latestEntry->getMissionType() != "STR_MEDIUM_SCOUT")
+    if (_missionStatistics->success && _missionStatistics->type != "STR_SMALL_SCOUT" && _missionStatistics->type != "STR_BASE_DEFENSE" && _missionStatistics->type != "STR_MEDIUM_SCOUT")
 		_importantMissionTotal++;
-	_longDistanceHitCounterTotal += latestEntry->getMissionStatistics()->longDistanceHitCounter;
-	_lowAccuracyHitCounterTotal += latestEntry->getMissionStatistics()->lowAccuracyHitCounter;
+    _shotAtCounterTotal += (unitStatistics->shotAtCounter); // Commendation is for getting shot 10 times in one mission, BUT THIS DOES NOT SEPERATE MISSIONS
+    _hitCounterTotal += (unitStatistics->hitCounter); // Commendation si for getting hit 5 times in one mission
+	_totalShotByFriendlyCounter += unitStatistics->shotByFriendlyCounter;
+	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
+	if (unitStatistics->loneSurvivor && missionStatistics->success)
+		_loneSurvivorTotal++;
+	if (unitStatistics->ironMan && missionStatistics->success)
+		_ironManTotal++;
+	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
+	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
+
+    _daysWounded.push_back(make_pair(_missionStatistics->id, unitStatistics->daysWounded); // Catalogging purposes
+    _missionIdList.push_back(_missionStatistics->id);
+    _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
 
 /**
@@ -727,160 +713,6 @@ void SoldierDiary::awardCommendation(std::string _commendationName, std::string 
 void SoldierDiary::addMonthlyService()
 {
 	_monthsService++;
-}
-
-/**
- * Initializes a new diary entry from YAML.
- * @param node YAML node.
- */
-SoldierDiaryKills::SoldierDiaryKills(const YAML::Node &node)
-{
-	load(node);
-}
-
-/**
- * Initializes a soldier diary.
- */
-SoldierDiaryKills::SoldierDiaryKills(std::string alienRank, std::string alienRace, std::string weapon, std::string weaponAmmo, UnitStatus alienState, UnitFaction alienFaction, int turn) : _alienRank(alienRank), _alienRace(alienRace), _weapon(weapon), _weaponAmmo(weaponAmmo), _alienState(alienState), _alienFaction(alienFaction), _turn(turn)
-{
-}
-
-/**
- *
- */
-SoldierDiaryKills::~SoldierDiaryKills()
-{
-}
-
-/**
- * Loads the soldier-equipment layout item from a YAML file.
- * @param node YAML node.
- */
-void SoldierDiaryKills::load(const YAML::Node &node)
-{
-	_alienRank = node["alienRank"].as<std::string>(_alienRank);
-	_alienRace = node["alienRace"].as<std::string>(_alienRace);
-	_weapon = node["weapon"].as<std::string>(_weapon);
-	_weaponAmmo = node["weaponAmmo"].as<std::string>(_weaponAmmo);
-	_alienState = (UnitStatus)node["alienState"].as<int>();
-	_alienFaction = (UnitFaction)node["alienFaction"].as<int>();
-	_turn = node["turn"].as<int>(_turn);
-
-}
-
-/**
- * Saves the soldier-equipment layout item to a YAML file.
- * @return YAML node.
- */
-YAML::Node SoldierDiaryKills::save() const
-{
-	YAML::Node node;
-	node["alienRank"] = _alienRank;
-	node["alienRace"] = _alienRace;
-	node["weapon"] = _weapon;
-	node["weaponAmmo"] = _weaponAmmo;
-	node["alienState"] = (int)_alienState;
-	node["alienFaction"] = (int)_alienFaction;
-	node["turn"] = (int)_turn;
-	return node;
-}
-
-/**
- *
- */
-std::string SoldierDiaryKills::getAlienRank() const
-{
-	return _alienRank;
-}
-
-/**
- *
- */
-std::string SoldierDiaryKills::getAlienRace() const
-{
-	return _alienRace;
-}
-
-/**
- *
- */
-std::string SoldierDiaryKills::getWeapon() const
-{
-	return _weapon;
-}
-
-/**
- *
- */
-std::string SoldierDiaryKills::getWeaponAmmo() const
-{
-	return _weaponAmmo;
-}
-
-/**
- *
- */
-std::string SoldierDiaryKills::getAlienState() const
-{
-	switch (_alienState)
-	{
-	case STATUS_DEAD:
-		return "STATUS_DEAD";
-	case STATUS_UNCONSCIOUS:
-		return "STATUS_UNCONSCIOUS";
-	default:
-		return "";
-	}
-}
-
-/**
- *
- */
-std::string SoldierDiaryKills::getAlienFaction() const
-{
-	switch (_alienFaction)
-	{
-	case FACTION_PLAYER:
-		return "FACTION_PLAYER";
-	case FACTION_HOSTILE:
-		return "FACTION_HOSTILE";
-	case FACTION_NEUTRAL:
-		return "FACTION_NEUTRAL";
-	default:
-		return "";
-	}
-}
-
-/**
- *
- */
-UnitStatus SoldierDiaryKills::getAlienStateEnum() const
-{
-    return _alienState;
-}
-
-/**
- *
- */
-UnitFaction SoldierDiaryKills::getAlienFactionEnum() const
-{
-    return _alienFaction;
-}
-
-/**
- *
- */
-int SoldierDiaryKills::getTurn() const
-{
-	return _turn;
-}
-
-/**
- *
- */
-void SoldierDiaryKills::makeTurnUnique(GameTime missionTime)
-{
-	_turn += (missionTime.getYear() + missionTime.getMonth() + missionTime.getDay() + missionTime.getHour() + missionTime.getMinute())*12; // Divisible by 1, 2, 3 and greater than 10
 }
 
 /**

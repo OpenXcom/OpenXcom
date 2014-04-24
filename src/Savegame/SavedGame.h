@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <time.h>
+#include "SoldierDiary.h"
 
 namespace OpenXcom
 {
@@ -47,12 +48,65 @@ class AlienStrategy;
 class AlienMission;
 class Target;
 class Soldier;
-class MissionStatistics;
 
 /**
  * Enumerator containing all the possible game difficulties.
  */
 enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
+
+/**
+ * Container for mission statistics.
+ */
+struct MissionStatistics
+{
+    /// Variables
+    int id;
+	GameTime time;
+	std::string region, country, type, ufo;	
+	bool success;
+	std::string rating;
+	int score;
+	std::string alienRace;
+	int daylight;
+    
+    /// Functions
+    // Load
+    void load(const YAML::Node &node)
+    {
+        id = node["missionId"].as<int>(id);
+        time.load(node["missionTime"]);
+        region = node["missionRegion"].as<std::string>(region);
+        country = node["missionCountry"].as<std::string>(country);
+        type = node["missionType"].as<std::string>(type);
+        ufo = node["missionUFO"].as<std::string>(ufo);
+        success = node["success"].as<bool>(success);
+        score = node["score"].as<int>(score);
+        rating = node["rating"].as<std::string>(rating);
+        alienRace = node["alienRace"].as<std::string>(alienRace);
+        daylight = node["missionDaylight"].as<int>(daylight);
+    }
+    // Save
+    YAML::Node save() const
+    {
+        YAML::Node node;
+        node["missionId"] = id;
+        node["missionTime"] = time.save();
+        node["missionRegion"] = region;
+        node["missionCountry"] = country;
+        node["missionType"] = type;
+        node["missionUFO"] = ufo;
+        node["success"] = success;
+        node["score"] = score;
+        node["rating"] = rating;
+        node["alienRace"] = alienRace;
+        node["missionDaylight"] = daylight;
+        return node;
+    }
+    MissionStatistics(const YAML::Node& node) : missionTime(0,0,0,0,0,0,0) { load(node); }
+    MissionStatistics() :   missionTime(0,0,0,0,0,0,0), missionRegion(), missionCountry(), missionType(), missionUFO(), success(false), rating(), score(0),
+                            alienRace(), missionDaylight(0), soldierIds() { }
+    ~MissionStatistics() { }
+};
 
 /**
  * Container for savegame info displayed on listings.
@@ -253,14 +307,14 @@ public:
 	void removePoppedResearch(const RuleResearch* research);
 	/// Gets the list of dead soldiers.
 	std::vector<Soldier*> *getDeadSoldiers();
-    /// Gets the list of missions statistics
-	std::vector<MissionStatistics*> *getMissionStatistics();
-	/// Gets the last selected player base.
+    /// Gets the last selected player base.
 	Base *getSelectedBase();
 	/// Set the last selected player base.
 	void setSelectedBase(int base);
 	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 	int getSoldierScore(Soldier *soldier);
+    /// Gets the list of missions statistics
+	std::vector<MissionStatistics*> *getMissionStatistics();
 
 };
 

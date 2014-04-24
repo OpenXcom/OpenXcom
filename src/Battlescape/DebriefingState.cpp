@@ -73,9 +73,11 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false), _missionTime(0, 0, 0, 0, 0, 0, 0)
+DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
-	Options::baseXResolution = Options::baseXGeoscape;
+    _missionStatistics = new MissionStatistics();
+
+    Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
 	_game->getScreen()->resetDisplay(false);
 
@@ -208,45 +210,49 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	if (total <= -200)
 	{
 		rating = tr("STR_RATING_TERRIBLE");
-		_missionRating = "STR_RATING_TERRIBLE";
+		_missionStatistics->rating = "STR_RATING_TERRIBLE";
 	}
 	else if (total <= 0)
 	{
 		rating = tr("STR_RATING_POOR");
-		_missionRating = "STR_RATING_POOR";
+		_missionStatistics->rating = "STR_RATING_POOR";
 	}
 	else if (total <= 200)
 	{
 		rating = tr("STR_RATING_OK");
-		_missionRating = "STR_RATING_OK";
+		_missionStatistics->rating = "STR_RATING_OK";
 	}
 	else if (total <= 500)
 	{
 		rating = tr("STR_RATING_GOOD");
-		_missionRating = "STR_RATING_GOOD";
+		_missionStatistics->rating = "STR_RATING_GOOD";
 	}
 	else
 	{
 		rating = tr("STR_RATING_EXCELLENT");
-		_missionRating = "STR_RATING_EXCELLENT";
+		_missionStatistics->rating = "STR_RATING_EXCELLENT";
 	}
-	_missionScore = total;
+	_missionStatistics->score = total;
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
-	_missionDaylight = save->getSavedBattle()->getGlobalShade();
+    
+    _missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
-			(*j)->getGeoscapeSoldier()->getDiary()->addSoldierDiaryEntry(_missionTime, _missionRegion, _missionCountry, _missionType, _missionUFO, _missionSuccess, _missionScore, _missionRating, _missionRace, _missionDaylight, (*j)->getGeoscapeSoldier()->getWoundRecovery(), (*j)->getMissionStatistics());
+            (*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundedRecovery;
+            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary(_missionStatistics, (*j)->getKills(), (*j)->getStatistics());
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
 		}
 	}
+    _missionStatistics->id = _game->getSavedGame()->getMissionStatistics().size() + 1;
+    _game->getSavedGame()->getMissionStatistics().push_back(_missionStatistics);
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMMARS");
@@ -402,15 +408,8 @@ void DebriefingState::prepareDebriefing()
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
-	/// Diary stuff
-	_missionTime = *save->getTime();
-	_missionType = battle->getMissionType();
-	// Defined later
-	_missionRegion = "STR_REGION_UNKNOWN"; 
-	_missionCountry = "STR_UNKNOWN";
-	_missionUFO = "NO_UFO";
-	_missionSuccess = success;
-	_missionRace = "STR_UNKNOWN";
+	_missionStatistics->time = *save->getTime();
+	_missionStatistics->type = battle->getMissionType();
 
 	int playerInExitArea = 0; // if this stays 0 the craft is lost...
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
@@ -428,7 +427,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_region = (*k);
-						_missionRegion = _region->getRules()->getType();
+						_missionStatistics->region = _region->getRules()->getType();
 						break;
 					}
 				}
@@ -437,7 +436,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
-						_missionCountry= _country->getRules()->getType();
+						_missionStatistics->country= _country->getRules()->getType();
 						break;
 					}
 				}
@@ -506,8 +505,8 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			_missionUFO = (*i)->getRules()->getType();
-            _missionRace = (*i)->getAlienRace();
+			_missionStatistics->ufo = (*i)->getRules()->getType();
+            _missionStatistics->race = (*i)->getAlienRace();
 			if (!aborted)
 			{
 				delete *i;
@@ -526,7 +525,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			_missionRace = (*i)->getAlienRace();
+			_missionStatistics->race = (*i)->getAlienRace();
 			delete *i;
 			save->getTerrorSites()->erase(i);
 			break;
@@ -603,7 +602,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i)->isInBattlescape())
 			{
-				_missionRace = (*i)->getAlienRace();
+				_missionStatistics->race = (*i)->getAlienRace();
 				if (destroyAlienBase)
 				{
 					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
@@ -1014,6 +1013,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+    _missionStatistics->success = success;
 }
 
 /**
