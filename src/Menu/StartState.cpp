@@ -137,10 +137,12 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
-			_game->setState(new IntroState(_game));
+			Options::keepAspectRatio = true;
+			_game->setState(new IntroState(_game, _wasLetterBoxed));
 		}
 		else
 		{
+			Options::keepAspectRatio = _wasLetterBoxed;
 			_game->setState(new MainMenuState(_game));
 			Options::reload = false;
 		}
@@ -150,7 +152,6 @@ void StartState::think()
 	default:
 		break;
 	}
-	Options::keepAspectRatio = _wasLetterBoxed;
 }
 
 /**

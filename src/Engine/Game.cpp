@@ -40,7 +40,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
-#include "../Menu/SaveState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -178,6 +178,7 @@ void Game::run()
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
 	bool stupidityFlag = Options::allowResize;
 	while (!_quit)
 	{
@@ -360,7 +361,7 @@ void Game::run()
 	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
 	{
-		SaveState ss = SaveState(this, OPT_MENU, false);
+		ListSaveState ss = ListSaveState(this, OPT_MENU, false);
 	}
 
 	Options::save();

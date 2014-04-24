@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVESTATE_H
-#define OPENXCOM__SAVESTATE_H
+#ifndef OPENXCOM__LISTSAVESTATE_H
+#define OPENXCOM__LISTSAVESTATE_H
 
 #include <string>
-#include "SavedGameState.h"
+#include "ListGamesState.h"
 
 namespace OpenXcom
 {
@@ -32,7 +32,7 @@ class TextButton;
  * Save Game screen for listing info on available
  * saved games and saving them.
  */
-class SaveState : public SavedGameState
+class ListSaveState : public ListGamesState
 {
 private:
 	TextEdit *_edtSave;
@@ -41,11 +41,11 @@ private:
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
-	SaveState(Game *game, OptionsOrigin origin);
+	ListSaveState(Game *game, OptionsOrigin origin);
 	/// Creates the Quick Save Game state.
-	SaveState(Game *game, OptionsOrigin origin, bool showMsg);
+	ListSaveState(Game *game, OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Save Game state.
-	~SaveState();
+	~ListSaveState();
 	/// Updates the savegame list.
 	void updateList();
 	/// Handler for pressing a key on the Save edit.

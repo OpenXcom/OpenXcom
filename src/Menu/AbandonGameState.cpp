@@ -26,7 +26,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
 #include "MainMenuState.h"
-#include "SaveState.h"
+#include "ListSaveState.h"
 
 namespace OpenXcom
 {
@@ -114,7 +114,7 @@ void AbandonGameState::btnYesClick(Action *)
 {
 	if (Options::autosave == 3)
 	{
-		SaveState *ss = new SaveState(_game, _origin, false);
+		ListSaveState *ss = new ListSaveState(_game, _origin, false);
 		delete ss;
 	}
 

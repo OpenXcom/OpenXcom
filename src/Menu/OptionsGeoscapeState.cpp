@@ -31,14 +31,12 @@
 #include "../Interface/ComboBox.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Menu/LoadState.h"
-#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Battlescape Options screen.
+ * Initializes all the elements in the Geoscape Options screen.
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */

@@ -8174,7 +8174,7 @@ ufopaedia:
     section: STR_ALIEN_ARTIFACTS
     requires:
       - STR_HEAVY_PLASMA
-    text: STR_PLASMA_RIFLE_UFOPEDIA
+    text: STR_HEAVY_PLASMA_UFOPEDIA
   - id: STR_HEAVY_PLASMA_CLIP
     type_id: 4
     section: STR_ALIEN_ARTIFACTS

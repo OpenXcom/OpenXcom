@@ -29,7 +29,7 @@
 namespace OpenXcom
 {
 /// Creates a new confirmation state.
-ConfirmLoadState::ConfirmLoadState(Game *game, OptionsOrigin origin, LoadState *parent, std::string fileName) : State(game), _origin(origin), _parent(parent), _fileName(fileName)
+ConfirmLoadState::ConfirmLoadState(Game *game, OptionsOrigin origin, ListLoadState *parent, std::string fileName) : State(game), _origin(origin), _parent(parent), _fileName(fileName)
 {
 	_screen = false;
 

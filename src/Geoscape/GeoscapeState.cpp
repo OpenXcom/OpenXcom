@@ -102,8 +102,8 @@
 #include <algorithm>
 #include <functional>
 #include <assert.h>
-#include "../Menu/SaveState.h"
-#include "../Menu/LoadState.h"
+#include "../Menu/ListSaveState.h"
+#include "../Menu/ListLoadState.h"
 
 namespace OpenXcom
 {
@@ -448,9 +448,9 @@ void GeoscapeState::handle(Action *action)
 		}
 		// quick save and quick load
 		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
-			_game->pushState(new SaveState(_game, OPT_GEOSCAPE, true));
+			_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, true));
 		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
-			_game->pushState(new LoadState(_game, OPT_GEOSCAPE, true));
+			_game->pushState(new ListLoadState(_game, OPT_GEOSCAPE, true));
 	}
 	if(!_dogfights.empty())
 	{
@@ -1582,7 +1582,7 @@ void GeoscapeState::time1Day()
 
 	// Autosave
 	if (Options::autosave >= 2)
-		_game->pushState(new SaveState(_game, OPT_GEOSCAPE, false));
+		_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, false));
 }
 
 /**
