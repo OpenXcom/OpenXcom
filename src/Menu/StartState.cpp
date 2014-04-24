@@ -138,6 +138,7 @@ void StartState::think()
 		if (!Options::reload && Options::playIntro)
 		{
 			Options::keepAspectRatio = true;
+			_game->getScreen()->resetDisplay(false);
 			_game->setState(new IntroState(_game, _wasLetterBoxed));
 		}
 		else
