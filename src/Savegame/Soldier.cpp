@@ -571,8 +571,8 @@ void Soldier::die(SoldierDeath *death)
 void Soldier::calcStatString(const std::vector<std::string> &statStringIndex, const std::map<std::string, StatString *> &statStrings)
 {
 	int ii, minVal, maxVal, conditionsMet;
-	long double ruleNum;
-	std::string conditionName;
+	std::stringstream ss;
+	std::string conditionName, ruleNum;
 	std::wstring wstring;
 	_statString = L"";
 	bool continueCalc = true;
@@ -650,11 +650,13 @@ void Soldier::calcStatString(const std::vector<std::string> &statStringIndex, co
 			if (conditionsMet == conditions.size()) {
 				wstring.assign(statStringIndex[ii].begin(), statStringIndex[ii].end());
 				// strip the rule number from the string
-				ruleNum = ii;
-				_statString = _statString + wstring.substr(0, wstring.length() - std::to_string(ruleNum).length());
-				if (wstring.length() - std::to_string(ruleNum).length() > 1) {
+				ss << ii;
+				//ss >> ruleNum;
+				_statString = _statString + wstring.substr(0, wstring.length() - ss.str().length());
+				if (wstring.length() - ss.str().length() > 1) {
 					continueCalc = false;
 				}
+				ss.str("");
 			}
 		}
 	}
