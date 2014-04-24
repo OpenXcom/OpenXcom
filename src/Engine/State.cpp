@@ -391,9 +391,26 @@ const SDL_Color *const State::getPalette() const
 /**
  * Each state will probably need its own resize handling,
  * so this space intentionally left blank
+ * @param dX delta of X;
+ * @param dY delta of Y;
  */
-void State::resize()
+void State::resize(int &dX, int &dY)
 {
+	recenter(dX, dY);
+}
+
+/**
+ * Re-orients all the surfaces in the state.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void State::recenter(int dX, int dY)
+{
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setX((*i)->getX() + dX / 2);
+		(*i)->setY((*i)->getY() + dY / 2);
+	}
 }
 
 }

@@ -209,8 +209,6 @@ void OptionsBaseState::setCategory(TextButton *button)
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
-	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
-	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 
 	Options::switchDisplay();
 	Options::save();
@@ -248,6 +246,8 @@ void OptionsBaseState::btnOkClick(Action *)
 void OptionsBaseState::btnCancelClick(Action *)
 {
 	Options::load();
+	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	_game->popState();
 }
@@ -370,9 +370,17 @@ void OptionsBaseState::updateScale(int &type, int selection, int &width, int &he
 		Options::baseYResolution = height;
 	}
 }
-void OptionsBaseState::resize()
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void OptionsBaseState::resize(int &dX, int &dY)
 {
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
+	State::resize(dX, dY);
+
 }
 }

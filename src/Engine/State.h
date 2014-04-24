@@ -97,7 +97,9 @@ public:
 	/// Gets the state's 8bpp palette.
 	const SDL_Color *const getPalette() const;
 	/// Let the state know the window has been resized.
-	virtual void resize();
+	virtual void resize(int &dX, int &dY);
+	/// Re-orients all the surfaces in the state.
+	virtual void recenter(int dX, int dY);
 };
 
 }
