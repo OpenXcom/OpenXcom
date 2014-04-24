@@ -114,7 +114,7 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
-	int screenWidth = Options::baseXGeoscape - Options::baseXGeoscape%4;
+	int screenWidth = Options::baseXGeoscape;
 	int screenHeight = Options::baseYGeoscape;
 
 	// Create objects
@@ -2133,6 +2133,10 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
+/**
+ * Handler for clicking on a timer button.
+ * @param action pointer to the mouse action.
+ */
 void GeoscapeState::btnTimerClick(Action *action)
 {
 	SDL_Event ev;
@@ -2142,4 +2146,48 @@ void GeoscapeState::btnTimerClick(Action *action)
 	action->getSender()->mousePress(&a, this);
 }
 
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void GeoscapeState::resize(int &dX, int &dY)
+{
+	if (_game->getSavedGame()->getSavedBattle())
+		return;
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+	int divisor = 1;
+	switch (Options::geoscapeScale)
+	{
+	case SCALE_SCREEN_DIV_3:
+		divisor = 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		divisor = 2;
+		break;
+	case SCALE_SCREEN:
+		break;
+	default:
+		return;
+	}
+
+	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+
+	_globe->resize();
+
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		if (*i != _globe)
+		{
+			(*i)->setX((*i)->getX() + dX);
+			(*i)->setY((*i)->getY() + dY/2);
+		}
+	}
+
+}
 }

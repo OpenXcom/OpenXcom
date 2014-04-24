@@ -1294,5 +1294,13 @@ void Map::refreshSelectorPosition()
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
-
+/*
+ * Special handling for setting the height of the map viewport.
+ * @param height the new base screen height.
+ */
+void Map::setHeight(int height)
+{
+	Surface::setHeight(height);
+	_visibleMapHeight = height - ICON_HEIGHT;
+}
 }
