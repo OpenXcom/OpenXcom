@@ -36,11 +36,12 @@ private:
 	std::string _slot;
 	int _slotX, _slotY;
 	std::string _ammoItem;
+	int _fuseTimer;
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	EquipmentLayoutItem(const YAML::Node& node);
 	/// Creates a new soldier-equipment layout item.
-	EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem);
+	EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int fuseTimer);
 	/// Cleans up the soldier-equipment layout item.
 	~EquipmentLayoutItem();
 	/// Gets the item's type which has to be in a slot
@@ -53,6 +54,8 @@ public:
 	int getSlotY() const;
 	/// Gets the ammo item
 	std::string getAmmoItem() const;
+	/// Gets the turn until explosion
+	int getFuseTimer() const;
 	/// Loads the soldier-equipment layout item from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the soldier-equipment layout item to YAML.

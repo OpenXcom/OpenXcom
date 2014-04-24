@@ -40,7 +40,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
-#include "../Menu/SaveState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -60,6 +60,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
+	Options::reload = false;
 	Options::mute = false;
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
@@ -84,6 +85,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		else
 		{
 			Mix_AllocateChannels(16);
+			Mix_ReserveChannels(1);
 			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		}
 	}
@@ -135,10 +137,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create blank language
 	_lang = new Language();
 
-#ifdef __MORPHOS__	
-	waittime = 1000.0f / Options::FPS;	//20 - FPS
 	framestarttime = 0;
-#endif
 }
 
 /**
@@ -179,6 +178,8 @@ void Game::run()
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
+	bool stupidityFlag = Options::allowResize;
 	while (!_quit)
 	{
 		// Clean up states
@@ -235,9 +236,20 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						Options::displayWidth = _event.resize.w;
-						Options::displayHeight = _event.resize.h;
-						_screen->resetDisplay();
+						if (!stupidityFlag)
+						{
+							Options::displayWidth = _event.resize.w;
+							Options::displayHeight = _event.resize.h;
+							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+							{
+								(*i)->resize();
+							}
+							_screen->resetDisplay();
+						}
+						else
+						{
+							stupidityFlag = false;
+						}
 					}
 					break;
 				case SDL_MOUSEMOTION:
@@ -322,13 +334,22 @@ void Game::run()
 		switch (runningState)
 		{
 			case RUNNING: 
+// same here as in the header, not sure what to do with this ifdef, need advisement from morphos people.
 #ifdef __MORPHOS__
-				delaytime = waittime - (SDL_GetTicks() - framestarttime);
+				delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
 				if(delaytime > 0)
 					SDL_Delay((Uint32)delaytime);
 				framestarttime = SDL_GetTicks();
 #else
-				SDL_Delay(1); 
+				if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
+				{
+					delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
+					if(delaytime > 0)
+						SDL_Delay((Uint32)delaytime);
+					framestarttime = SDL_GetTicks();
+				}
+				else
+					SDL_Delay(1);
 #endif
 				
 				break; //Save CPU from going 100%
@@ -340,7 +361,7 @@ void Game::run()
 	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
 	{
-		SaveState ss = SaveState(this, OPT_MENU, false);
+		ListSaveState ss = ListSaveState(this, OPT_MENU, false);
 	}
 
 	Options::save();
@@ -359,8 +380,9 @@ void Game::quit()
  * sound effect channels.
  * @param sound Sound volume, from 0 to MIX_MAX_VOLUME.
  * @param music Music volume, from 0 to MIX_MAX_VOLUME.
+ * @param ui UI volume, from 0 to MIX_MAX_VOLUME.
  */
-void Game::setVolume(int sound, int music)
+void Game::setVolume(int sound, int music, int ui)
 {
 	if (!Options::mute)
 	{
@@ -368,6 +390,8 @@ void Game::setVolume(int sound, int music)
 			Mix_Volume(-1, sound);
 		if (music >= 0)
 			Mix_VolumeMusic(music);
+		if (ui >= 0)
+			Mix_Volume(0, ui);
 	}
 }
 
@@ -396,27 +420,6 @@ Cursor *Game::getCursor() const
 FpsCounter *Game::getFpsCounter() const
 {
 	return _fpsCounter;
-}
-
-/**
- * Replaces a certain amount of colors in the palettes of the game's
- * screen and resources.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
- */
-void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
-{
-	_screen->setPalette(colors, firstcolor, ncolors);
-	_cursor->setPalette(colors, firstcolor, ncolors);
-	_cursor->draw();
-
-	_fpsCounter->setPalette(colors, firstcolor, ncolors);
-
-	if (_res != 0)
-	{
-		_res->setPalette(colors, firstcolor, ncolors);
-	}
 }
 
 /**
@@ -558,9 +561,18 @@ Ruleset *Game::getRuleset() const
 void Game::loadRuleset()
 {
 	_rules = new Ruleset();
-	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end(); ++i)
+	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end();)
 	{
-		_rules->load(*i);
+		try
+		{
+			_rules->load(*i);
+			++i;
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_WARNING) << e.what();
+			i = Options::rulesets.erase(i);
+		}
 	}
 	_rules->sortLists();
 }

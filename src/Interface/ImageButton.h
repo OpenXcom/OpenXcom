@@ -52,6 +52,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
+	/// Invert a button explicitly either ON or OFF.
+	void toggle(bool invert);
 };
 
 }

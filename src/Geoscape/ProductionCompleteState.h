@@ -51,8 +51,6 @@ public:
 	ProductionCompleteState(Game *game, Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType = PROGRESS_COMPLETE);
 	/// Cleans up the Production Complete state.
 	~ProductionCompleteState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Go To Base button.

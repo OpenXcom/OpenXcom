@@ -20,13 +20,13 @@
 #define OPENXCOM_BATTLEAISTATE_H
 
 #include <yaml-cpp/yaml.h>
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
 
 class SavedBattleGame;
 class BattleUnit;
+struct BattleAction;
 
 enum AIMode { AI_PATROL, AI_AMBUSH, AI_COMBAT, AI_ESCAPE };
 /**

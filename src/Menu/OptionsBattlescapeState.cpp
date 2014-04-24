@@ -126,7 +126,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
-	_cbxDragScroll->setSelected(Options::battleScrollDragButton);
+	_cbxDragScroll->setSelected(Options::battleDragScrollButton);
 	_cbxDragScroll->onChange((ActionHandler)&OptionsBattlescapeState::cbxDragScrollChange);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
 	_cbxDragScroll->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
@@ -136,7 +136,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
 	_slrScrollSpeed->setColor(Palette::blockOffset(15)-1);
-	_slrScrollSpeed->setRange(1, 20);
+	_slrScrollSpeed->setRange(2, 20);
 	_slrScrollSpeed->setValue(Options::battleScrollSpeed);
 	_slrScrollSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrScrollSpeedChange);
 	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_BATTLE_DESC");
@@ -238,7 +238,7 @@ void OptionsBattlescapeState::cbxEdgeScrollChange(Action *)
  */
 void OptionsBattlescapeState::cbxDragScrollChange(Action *)
 {
-	Options::battleScrollDragButton = _cbxDragScroll->getSelected();
+	Options::battleDragScrollButton = _cbxDragScroll->getSelected();
 }
 
 /**

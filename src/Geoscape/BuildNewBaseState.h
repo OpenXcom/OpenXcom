@@ -55,7 +55,7 @@ public:
 	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);
 	/// Cleans up the Build New Base state.
 	~BuildNewBaseState();
-	/// Updates the palette.
+	/// Resets globe.
 	void init();
 	/// Runs the timer.
 	void think();

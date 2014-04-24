@@ -34,6 +34,7 @@
 #include "Globe.h"
 #include "SelectDestinationState.h"
 #include "ConfirmDestinationState.h"
+#include "../Basescape/BasescapeState.h"
 
 namespace OpenXcom
 {
@@ -51,7 +52,8 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 
 	// Create objects
 	_window = new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
-	_btnCancel = new TextButton(288, 16, 16, 146);
+	_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 146);
+	_btnGotoBase = new TextButton(142, 16, 162, 146);
 	_txtTitle = new Text(300, 17, 10, 46);
 	_txtCraft = new Text(86, 9, 14, 70);
 	_txtStatus = new Text(70, 9, 100, 70);
@@ -60,10 +62,11 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);
+	add(_btnGotoBase);
 	add(_txtTitle);
 	add(_txtCraft);
 	add(_txtStatus);
@@ -80,9 +83,13 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyOk);
 	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyCancel);
 	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyGeoIntercept);
+
+	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+	_btnGotoBase->onMouseClick((ActionHandler)&InterceptState::btnGotoBaseClick);
+	_btnGotoBase->setVisible(_base != 0);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -170,6 +177,16 @@ InterceptState::~InterceptState()
 void InterceptState::btnCancelClick(Action *)
 {
 	_game->popState();
+}
+
+/**
+ * Goes to the base for the respective craft.
+ * @param action Pointer to an action.
+ */
+void InterceptState::btnGotoBaseClick(Action *)
+{
+	_game->popState();
+	_game->pushState(new BasescapeState(_game, _base, _globe));
 }
 
 /**

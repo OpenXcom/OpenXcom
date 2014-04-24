@@ -51,6 +51,8 @@ namespace CrossPlatform
 	std::string endPath(const std::string &path);
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
+	/// Returns the list of files in a data folder.
+	std::vector<std::string> getDataContents(const std::string &path, const std::string &ext = "");
 	/// Checks if the path is an existing folder.
 	bool folderExists(const std::string &path);
 	/// Checks if the path is an existing file.

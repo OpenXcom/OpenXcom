@@ -14,11 +14,12 @@
 
 #include <SDL.h>
 #include <SDL_opengl.h>
-
-#include "Surface.h"
+#include <string>
 
 namespace OpenXcom 
 {
+
+class Surface;
 
 #ifndef __APPLE__
 extern PFNGLCREATEPROGRAMPROC glCreateProgram;

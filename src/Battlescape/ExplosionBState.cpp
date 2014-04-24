@@ -48,7 +48,7 @@ namespace OpenXcom
  * @param tile Tile the explosion is on.
  * @param lowerWeapon Whether the unit causing this explosion should now lower their weapon.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _pistolWhip(false)
 {
 
 }
@@ -71,13 +71,21 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+		_pistolWhip = (_item->getRules()->getBattleType() != BT_MELEE &&
+			_parent->getCurrentAction()->type == BA_HIT);
+		if (_pistolWhip)
+		{
+			_power = _item->getRules()->getMeleePower();
+		}
 		// since melee aliens don't use a conventional weapon type, we use their strength instead.
-		if (_item->getRules()->getBattleType() == BT_MELEE && _item->getRules()->isStrengthApplied())
+		if (_item->getRules()->isStrengthApplied())
 		{
 			_power += _unit->getStats()->strength;
 		}
-		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
-						_item->getRules()->getExplosionRadius() != 0;
+
+		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE &&
+						_item->getRules()->getExplosionRadius() != 0 &&
+						!_pistolWhip;
 	}
 	else if (_tile)
 	{
@@ -129,12 +137,22 @@ void ExplosionBState::init()
 	// create a bullet hit
 	{
 		_parent->setStateInterval(std::max(1, ((BattlescapeState::DEFAULT_ANIM_SPEED/2) - (10 * _item->getRules()->getExplosionSpeed()))));
-		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
-		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
+		bool hit = _pistolWhip || _item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP;
+		int anim = _item->getRules()->getHitAnimation();
+		int sound = _item->getRules()->getHitSound();
+		if (hit)
+		{
+			anim = 0;
+			sound = _item->getRules()->getMeleeSound();
+		}
+		Explosion *explosion = new Explosion(_center, anim, false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
+		
 		// bullet hit sound
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE)
+		_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
+
+		BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
+		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
@@ -190,7 +208,12 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
+			ItemDamageType type = _item->getRules()->getDamageType();
+			if (_pistolWhip)
+			{
+				type = DT_STUN;
+			}
+			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, type, _unit);
 			// check if this unit turns others into zombies
 			if (!_item->getRules()->getZombieUnit().empty()
 				&& victim

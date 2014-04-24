@@ -27,6 +27,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Interface/FpsCounter.h"
+#include "../Interface/Cursor.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
 #include "IntroState.h"
@@ -43,10 +45,19 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	// Create objects
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
+	_wasLetterBoxed = Options::keepAspectRatio;
+
+
+	if (!Options::useOpenGL)
+	{
+		Options::keepAspectRatio = false;
+		game->getScreen()->resetDisplay(false);
+	}
+
 	_surface = new Surface(320, 200, dx, dy);
 
-	// Set palette
-	SDL_Color bnw[3];
+	// Set palette (set to {0} here to ensure all fields are initialized)
+	SDL_Color bnw[3] = { {0} };
 
 	bnw[0].r = 0;
 	bnw[0].g = 0;
@@ -58,12 +69,15 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	bnw[2].g = 255;
 	bnw[2].b = 0;
 
-	_game->setPalette(bnw, 0, 3);
+	setPalette(bnw, 0, 3);
 
 	add(_surface);
 
 	// Set up objects
 	_surface->drawString(120, 96, "Loading...", 1);
+
+	_game->getCursor()->setVisible(false);
+	_game->getFpsCounter()->setVisible(false);
 }
 
 /**
@@ -123,13 +137,17 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
-			Options::reload = false;
-			_game->setState(new IntroState(_game));
+			Options::keepAspectRatio = true;
+			_game->setState(new IntroState(_game, _wasLetterBoxed));
 		}
 		else
 		{
+			Options::keepAspectRatio = _wasLetterBoxed;
 			_game->setState(new MainMenuState(_game));
+			Options::reload = false;
 		}
+		_game->getCursor()->setVisible(true);
+		_game->getFpsCounter()->setVisible(Options::fpsCounter);
 		break;
 	default:
 		break;

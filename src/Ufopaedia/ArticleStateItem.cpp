@@ -45,7 +45,7 @@ namespace OpenXcom
 		_txtTitle = new Text(148, 32, 5, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+		setPalette("PAL_BATTLEPEDIA");
 
 		ArticleState::initLayout();
 
@@ -212,7 +212,7 @@ namespace OpenXcom
 				}
 				else
 				{
-					for (unsigned int i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
+					for (size_t i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
 						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
 						if (Ufopaedia::isArticleAvailable(_game, ammo_article))

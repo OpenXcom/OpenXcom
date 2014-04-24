@@ -142,25 +142,44 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		}
 	}
 
-	unsigned int j = 0;
+	size_t j = 0;
 	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (type != "0")
+		if (type != "0" && rule->getCraftWeapon(type))
 		{
 			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(*i);
-			_weapons[j++] = w;
+			_weapons[j] = w;
 		}
+		else
+		{
+			_weapons[j] = 0;
+		}
+		j++;
 	}
 
 	_items->load(node["items"]);
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
+	{
+		if (std::find(rule->getItemsList().begin(), rule->getItemsList().end(), i->first) == rule->getItemsList().end())
+		{
+			_items->getContents()->erase(i++);
+		}
+		else
+		{
+			++i;
+		}
+	}
 	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Vehicle *v = new Vehicle(rule->getItem(type), 0, 4);
-		v->load(*i);
-		_vehicles.push_back(v);
+		if (rule->getItem(type))
+		{
+			Vehicle *v = new Vehicle(rule->getItem(type), 0, 4);
+			v->load(*i);
+			_vehicles.push_back(v);
+		}
 	}
 	_status = node["status"].as<std::string>(_status);
 	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
@@ -268,12 +287,7 @@ int Craft::getId() const
  */
 std::wstring Craft::getName(Language *lang) const
 {
-	if (_name.empty())
-	{
-		std::wostringstream name;
-		name << lang->getString(_rules->getType()) << "-" << _id;
-		return name.str();
-	}
+	if (_name.empty()) return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
 	return _name;
 }
 

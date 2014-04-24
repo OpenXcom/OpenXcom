@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEDGAMESTATE_H
-#define OPENXCOM__SAVEDGAMESTATE_H
+#ifndef OPENXCOM__LISTGAMESSTATE
+#define OPENXCOM__LISTGAMESSTATE
 
 #include "../Engine/State.h"
 #include "OptionsBaseState.h"
@@ -39,7 +39,7 @@ class ArrowButton;
  * Base class for saved game screens which
  * provides the common layout and listing.
  */
-class SavedGameState : public State
+class ListGamesState : public State
 {
 protected:
 	TextButton *_btnCancel;
@@ -55,11 +55,11 @@ protected:
 	void updateArrows();
 public:
 	/// Creates the Saved Game state.
-	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow);
+	ListGamesState(Game *game, OptionsOrigin origin, int firstValidRow);
 	/// Creates the Saved Game state (autosave option).
-	SavedGameState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg);
+	ListGamesState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg);
 	/// Cleans up the Saved Game state.
-	virtual ~SavedGameState();
+	virtual ~ListGamesState();
 	/// Updates the palette.
 	void init();
 	/// Sorts the savegame list.

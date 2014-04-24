@@ -1,0 +1,4 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+crafts:
+  - type: STR_SKYRANGER
+    weapons: 1

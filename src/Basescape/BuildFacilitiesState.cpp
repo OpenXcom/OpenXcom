@@ -51,7 +51,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -81,6 +81,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setScrolling(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
+	_lstFacilities->setWordWrap(true);
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();
@@ -119,6 +120,7 @@ void BuildFacilitiesState::PopulateBuildList()
  */
 void BuildFacilitiesState::init()
 {
+	State::init();
 	_state->init();
 }
 

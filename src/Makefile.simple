@@ -2,7 +2,7 @@
 # Leave blank for standard Linux builds.
 # Put DINGOO for Dingoo A320 builds.
 # Put OSX for MacOSX 10.7 unix-style builds.
-TARGET = OSX
+TARGET =
 
 # Directories and files
 OBJDIR = ../obj/

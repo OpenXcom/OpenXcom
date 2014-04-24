@@ -50,6 +50,16 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
 	_txtTimer = new Text(206, 20, 57, 100);
 	_timer = new Timer(1000);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
@@ -65,12 +75,11 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&OptionsConfirmState::btnYesClick);
-	//_btnYes->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&OptionsConfirmState::btnNoClick);
-	//_btnNo->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnNoClick, Options::keyCancel);
+	// no keyboard shortcuts to make sure users can see the message
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -96,7 +105,7 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
  */
 OptionsConfirmState::~OptionsConfirmState()
 {
-
+	delete _timer;
 }
 
 /**
@@ -131,6 +140,7 @@ void OptionsConfirmState::countdown()
 void OptionsConfirmState::btnYesClick(Action *)
 {
 	_game->popState();
+	OptionsBaseState::restart(_game, _origin);
 }
 
 /**
@@ -143,6 +153,7 @@ void OptionsConfirmState::btnNoClick(Action *)
 	Options::save();
 	_game->getScreen()->resetDisplay();
 	_game->popState();
+	OptionsBaseState::restart(_game, _origin);
 }
 
 }

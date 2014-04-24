@@ -1,0 +1,28 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+alienDeployments:
+  - type: STR_SMALL_SCOUT
+    shade: 15
+  - type: STR_MEDIUM_SCOUT
+    shade: 15
+  - type: STR_LARGE_SCOUT
+    shade: 15
+  - type: STR_HARVESTER
+    shade: 15
+  - type: STR_ABDUCTOR
+    shade: 15
+  - type: STR_TERROR_SHIP
+    shade: 15
+  - type: STR_BATTLESHIP
+    shade: 15
+  - type: STR_SUPPLY_SHIP
+    shade: 15
+  - type: STR_TERROR_MISSION
+    shade: 15
+  - type: STR_ALIEN_BASE_ASSAULT
+    shade: 15
+  - type: STR_BASE_DEFENSE
+    shade: 15
+  - type: STR_MARS_CYDONIA_LANDING
+    shade: 15
+  - type: STR_MARS_THE_FINAL_ASSAULT
+    shade: 15

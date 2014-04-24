@@ -21,10 +21,8 @@
 
 #include <vector>
 #include "Position.h"
-#include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleItem.h"
 #include <SDL.h>
-#include "BattlescapeGame.h"
-#include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -33,6 +31,7 @@ class SavedBattleGame;
 class BattleUnit;
 class BattleItem;
 class Tile;
+struct BattleAction;
 
 /**
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
@@ -48,7 +47,7 @@ private:
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
+	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.

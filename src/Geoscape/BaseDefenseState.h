@@ -56,8 +56,6 @@ public:
 	BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state);
 	/// Cleans up the Base Defense state.
 	~BaseDefenseState();
-	/// Updates the palette.
-	void init();
 	/// Handle the Timer.
 	void think();
 	/// do the next step.

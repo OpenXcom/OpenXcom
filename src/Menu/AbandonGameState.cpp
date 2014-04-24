@@ -26,8 +26,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
 #include "MainMenuState.h"
-#include "../Engine/Options.h"
-#include "SaveState.h"
+#include "ListSaveState.h"
 
 namespace OpenXcom
 {
@@ -56,6 +55,16 @@ AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(gam
 	_btnYes = new TextButton(50, 20, x+18, 140);
 	_btnNo = new TextButton(50, 20, x+148, 140);
 	_txtTitle = new Text(206, 15, x+5, 70);
+
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
 
 	add(_window);
 	add(_btnYes);
@@ -105,7 +114,7 @@ void AbandonGameState::btnYesClick(Action *)
 {
 	if (Options::autosave == 3)
 	{
-		SaveState *ss = new SaveState(_game, _origin, false);
+		ListSaveState *ss = new ListSaveState(_game, _origin, false);
 		delete ss;
 	}
 

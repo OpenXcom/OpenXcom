@@ -53,7 +53,7 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_txtFacility = new Text(142, 9, 25, 85);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);

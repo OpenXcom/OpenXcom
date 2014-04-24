@@ -376,7 +376,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_earthData.resize(_radius.size());
 
 	//filling normal field for each radius
-	for(unsigned int r = 0; r<_radius.size(); ++r)
+	for(size_t r = 0; r<_radius.size(); ++r)
 	{
 		_earthData[r].resize(width * height);
 		for(int j=0; j<height; ++j)
@@ -388,7 +388,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 
 	//filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
-	for(unsigned int i=0; i<_randomNoiseData.size(); ++i)
+	for(size_t i=0; i<_randomNoiseData.size(); ++i)
 		_randomNoiseData[i] = rand()%4;
 
 	cachePolygons();

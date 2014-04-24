@@ -53,7 +53,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_lstTransfers = new TextList(273, 112, 14, 50);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);

@@ -29,12 +29,14 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "Zoom.h"
-#include "OpenGL.h"
 #include "Timer.h"
 #include <SDL.h>
 
 namespace OpenXcom
 {
+
+const int Screen::ORIGINAL_WIDTH = 320;
+const int Screen::ORIGINAL_HEIGHT = 200;
 
 /**
  * Sets up all the internal display flags depending on
@@ -47,10 +49,6 @@ void Screen::makeVideoFlags()
 	{
 		_flags |= SDL_ASYNCBLIT;
 	}
-	if (Options::allowResize)
-	{
-		_flags |= SDL_RESIZABLE;
-	}
 	if (isOpenGLEnabled())
 	{
 		_flags = SDL_OPENGL;
@@ -59,6 +57,10 @@ void Screen::makeVideoFlags()
 		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
 		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
 		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+	}
+	if (Options::allowResize)
+	{
+		_flags |= SDL_RESIZABLE;
 	}
 	
 	// Handle window positioning
@@ -96,7 +98,7 @@ void Screen::makeVideoFlags()
 	}
 
 	_bpp = (isHQXEnabled() || isOpenGLEnabled()) ? 32 : 8;
-	_baseWidth = Options::baseXResolution;
+	_baseWidth = Options::baseXResolution - (Options::baseXResolution % 4);
 	_baseHeight = Options::baseYResolution;
 }
 
@@ -215,6 +217,8 @@ void Screen::flip()
 void Screen::clear()
 {
 	_surface->clear();
+	if (_screen->flags & SDL_SWSURFACE) memset(_screen->pixels, 0, _screen->h*_screen->pitch);
+	else SDL_FillRect(_screen, &_clear, 0);
 }
 
 /**
@@ -222,6 +226,7 @@ void Screen::clear()
  * @param colors Pointer to the set of colors.
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
+ * @param immediately Apply palette changes immediately, otherwise wait for next blit.
  */
 void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool immediately)
 {
@@ -296,7 +301,7 @@ int Screen::getHeight() const
  * Resets the screen surfaces based on the current display options,
  * as they don't automatically take effect.
  */
-void Screen::resetDisplay()
+void Screen::resetDisplay(bool resetVideo)
 {
 	int width = Options::displayWidth;
 	int height = Options::displayHeight;
@@ -313,22 +318,34 @@ void Screen::resetDisplay()
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
-	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
-	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
-	if (_screen == 0)
+	if (resetVideo)
 	{
-		Log(LOG_ERROR) << SDL_GetError();
-		Log(LOG_INFO) << "Attempting to set display to default resolution...";
-		_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
+		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 		if (_screen == 0)
 		{
-			throw Exception(SDL_GetError());
+			Log(LOG_ERROR) << SDL_GetError();
+			Log(LOG_INFO) << "Attempting to set display to default resolution...";
+			_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+			if (_screen == 0)
+			{
+				throw Exception(SDL_GetError());
+			}
 		}
 	}
+	else
+	{
+		clear();
+	}
+
 	Options::displayWidth = getWidth();
 	Options::displayHeight = getHeight();
 	_scaleX = getWidth() / (double)_baseWidth;
 	_scaleY = getHeight() / (double)_baseHeight;
+	_clear.x = 0;
+	_clear.y = 0;
+	_clear.w = getWidth();
+	_clear.h = getHeight();
 
 	bool cursorInBlackBands;
 	if (!Options::keepAspectRatio)
@@ -408,6 +425,7 @@ void Screen::resetDisplay()
 #endif
 	}
 
+
 	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 	if (_screen->format->BitsPerPixel == 8)
 	{
@@ -457,7 +475,7 @@ int Screen::getCursorLeftBlackBand() const
  */
 void Screen::screenshot(const std::string &filename) const
 {
-	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
+	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth() - getWidth()%4, getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
 	
 	if (isOpenGLEnabled())
 	{
@@ -466,7 +484,7 @@ void Screen::screenshot(const std::string &filename) const
 
 		for (int y = 0; y < getHeight(); ++y)
 		{
-			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
+			glReadPixels(0, getHeight()-(y+1), getWidth() - getWidth()%4, 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
 		}
 		glErrorCheck();
 #endif
@@ -476,7 +494,7 @@ void Screen::screenshot(const std::string &filename) const
 		SDL_BlitSurface(_screen, 0, screenshot, 0);
 	}
 
-	unsigned error = lodepng::encode(filename, (const unsigned char *)(screenshot->pixels), getWidth(), getHeight(), LCT_RGB);
+	unsigned error = lodepng::encode(filename, (const unsigned char *)(screenshot->pixels), getWidth() - getWidth()%4, getHeight(), LCT_RGB);
 	if (error)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);

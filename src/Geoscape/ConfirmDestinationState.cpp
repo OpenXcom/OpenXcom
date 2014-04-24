@@ -56,11 +56,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	// Set palette
 	if (w != 0 && w->getId() == 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 6);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 4);
 	}
 
 	add(_window);

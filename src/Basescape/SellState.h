@@ -52,20 +52,19 @@ private:
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
-	unsigned int _sel;
+	size_t _sel, _itemOffset;
 	int _total, _hasSci, _hasEng;
 	Timer *_timerInc, *_timerDec;
-	size_t _itemOffset;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Gets the Type of the selected item.
-	enum SellType getType(unsigned selected) const;
+	enum SellType getType(size_t selected) const;
 	/// Gets the index of selected item.
-	int getItemIndex(unsigned selected) const;
+	int getItemIndex(size_t selected) const;
 	/// Gets the index of the selected craft.
-	int getCraftIndex(unsigned selected) const;
+	int getCraftIndex(size_t selected) const;
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base);

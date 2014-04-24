@@ -197,6 +197,10 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang)
 			}
 			save.details = details.str();
 
+			if (doc["rulesets"])
+			{
+				save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
+			}
 			info.push_back(save);
 		}
 		catch (Exception &e)
@@ -271,17 +275,23 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Country *c = new Country(rule->getCountry(type), false);
-		c->load(*i);
-		_countries.push_back(c);
+		if (rule->getCountry(type))
+		{
+			Country *c = new Country(rule->getCountry(type), false);
+			c->load(*i);
+			_countries.push_back(c);
+		}
 	}
 
 	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Region *r = new Region(rule->getRegion(type));
-		r->load(*i);
-		_regions.push_back(r);
+		if (rule->getRegion(type))
+		{
+			Region *r = new Region(rule->getRegion(type));
+			r->load(*i);
+			_regions.push_back(r);
+		}
 	}
 
 	// Alien bases must be loaded before alien missions
@@ -306,9 +316,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(*i, *rule, *this);
-		_ufos.push_back(u);
+		if (rule->getUfo(type))
+		{
+			Ufo *u = new Ufo(rule->getUfo(type));
+			u->load(*i, *rule, *this);
+			_ufos.push_back(u);
+		}
 	}
 
 	for (YAML::const_iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
@@ -335,14 +348,20 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for(YAML::const_iterator it = doc["discovered"].begin(); it != doc["discovered"].end(); ++it)
 	{
 		std::string research = it->as<std::string>();
-		_discovered.push_back(rule->getResearch(research));
+		if (rule->getResearch(research))
+		{
+			_discovered.push_back(rule->getResearch(research));
+		}
 	}
 	
 	const YAML::Node &research = doc["poppedResearch"];
 	for(YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
 		std::string research = it->as<std::string>();
-		_poppedResearch.push_back(rule->getResearch(research));
+		if (rule->getResearch(research))
+		{
+			_poppedResearch.push_back(rule->getResearch(research));
+		}
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
@@ -386,6 +405,7 @@ void SavedGame::save(const std::string &filename) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
+	brief["rulesets"] = Options::rulesets;
 	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
@@ -1165,9 +1185,10 @@ Soldier *SavedGame::getSoldier(int id) const
 
 /**
  * Handles the higher promotions (not the rookie-squaddie ones).
+ * @param participants a list of soldiers that were actually present at the battle.
  * @return Whether or not some promotions happened - to show the promotions screen.
  */
-bool SavedGame::handlePromotions()
+bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 {
 	size_t soldiersPromoted = 0, soldiersTotal = 0;
 
@@ -1181,9 +1202,14 @@ bool SavedGame::handlePromotions()
 	// and the soldier with the heighest promotion score of the rank below it
 
 	size_t filledPositions = 0, filledPositions2 = 0;
+	std::vector<Soldier*>::const_iterator soldier, stayedHome;
+	stayedHome = participants.end();
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COMMANDER);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
-	if (filledPositions < 1 && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < 1 && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		// only promote one colonel to commander
 		highestRanked->promoteRank();
@@ -1191,21 +1217,30 @@ bool SavedGame::handlePromotions()
 	}
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
-	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
-	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
-	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;

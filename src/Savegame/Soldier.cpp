@@ -110,7 +110,12 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	_missions = node["missions"].as<int>(_missions);
 	_kills = node["kills"].as<int>(_kills);
 	_recovery = node["recovery"].as<int>(_recovery);
-	_armor = rule->getArmor(node["armor"].as<std::string>());
+	Armor *armor = rule->getArmor(node["armor"].as<std::string>());
+	if (armor == 0)
+	{
+		armor = rule->getArmor("STR_NONE_UC");
+	}
+	_armor = armor;
 	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
 	_improvement = node["improvement"].as<int>(_improvement);
 	if (const YAML::Node &layout = node["equipmentLayout"])

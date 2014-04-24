@@ -1,0 +1,54 @@
+# Based on UFOextender by Seb76 and Tycho
+items:
+  - type: STR_PISTOL
+    meleePower: 20
+    tuMelee: 15
+    accuracyMelee: 100
+  - type: STR_RIFLE
+    meleePower: 50
+    tuMelee: 40
+    accuracyMelee: 100
+  - type: STR_HEAVY_CANNON
+    meleePower: 65
+    tuMelee: 50
+    accuracyMelee: 100
+  - type: STR_AUTO_CANNON
+    meleePower: 65
+    tuMelee: 50
+    accuracyMelee: 100
+  - type: STR_ROCKET_LAUNCHER
+    meleePower: 80
+    tuMelee: 80
+    accuracyMelee: 100
+  - type: STR_LASER_PISTOL
+    meleePower: 20
+    tuMelee: 15
+    accuracyMelee: 100
+  - type: STR_LASER_RIFLE
+    meleePower: 50
+    tuMelee: 40
+    accuracyMelee: 100
+  - type: STR_HEAVY_LASER
+    meleePower: 65
+    tuMelee: 50
+    accuracyMelee: 100
+  - type: STR_HEAVY_PLASMA
+    meleePower: 65
+    tuMelee: 50
+    accuracyMelee: 100
+  - type: STR_PLASMA_RIFLE
+    meleePower: 50
+    tuMelee: 40
+    accuracyMelee: 100
+  - type: STR_PLASMA_PISTOL
+    meleePower: 20
+    tuMelee: 15
+    accuracyMelee: 100
+  - type: STR_BLASTER_LAUNCHER
+    meleePower: 80
+    tuMelee: 80
+    accuracyMelee: 100
+  - type: STR_SMALL_LAUNCHER
+    meleePower: 50
+    tuMelee: 40
+    accuracyMelee: 100

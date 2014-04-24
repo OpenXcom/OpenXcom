@@ -96,11 +96,11 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	// Set palette
 	if (hyperwave)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 2);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 7);
 	}
 
 	add(_window);
@@ -188,21 +188,6 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 UfoDetectedState::~UfoDetectedState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void UfoDetectedState::init()
-{
-	if (_hyperwave)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-	}
-	else
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-	}
 }
 
 /**

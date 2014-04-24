@@ -25,8 +25,8 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
-#include "LoadState.h"
-#include "SaveState.h"
+#include "ListLoadState.h"
+#include "ListSaveState.h"
 #include "../Engine/Options.h"
 #include "OptionsVideoState.h"
 #include "OptionsGeoscapeState.h"
@@ -64,9 +64,13 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_txtTitle = new Text(206, 15, x+5, 32);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
 	}
 
 	add(_window);
@@ -134,25 +138,12 @@ PauseState::~PauseState()
 }
 
 /**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void PauseState::init()
-{
-	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	}
-}
-
-/**
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
 void PauseState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, _origin));
+	_game->pushState(new ListLoadState(_game, _origin));
 }
 
 /**
@@ -161,7 +152,7 @@ void PauseState::btnLoadClick(Action *)
  */
 void PauseState::btnSaveClick(Action *)
 {
-	_game->pushState(new SaveState(_game, _origin));
+	_game->pushState(new ListSaveState(_game, _origin));
 }
 
 /**
@@ -170,6 +161,7 @@ void PauseState::btnSaveClick(Action *)
 */
 void PauseState::btnOptionsClick(Action *)
 {
+	Options::backupDisplay();
 	if (_origin == OPT_GEOSCAPE)
 	{
 		_game->pushState(new OptionsGeoscapeState(_game, _origin));

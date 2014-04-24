@@ -33,7 +33,7 @@ const int ComboBox::MAX_ITEMS = 7;
 
 /**
  * Sets up a combobox with the specified size and position.
- * @param state Pointer to state the window belongs to.
+ * @param state Pointer to state the combobox belongs to.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
@@ -48,7 +48,7 @@ ComboBox::ComboBox(State *state, int width, int height, int x, int y) : Interact
 
 	_window = new Window(state, width, MAX_ITEMS*8 + LIST_MARGIN*2, x, y + height);
 
-	_list = new TextList(width - LIST_MARGIN*5 - 1, MAX_ITEMS*8, x + LIST_MARGIN, y + height + LIST_MARGIN);
+	_list = new TextList(width - LIST_MARGIN*5 + 2, MAX_ITEMS*8-1, x + LIST_MARGIN, y + height + LIST_MARGIN);
 	_list->setComboBox(this);
 	_list->setColumns(1, _list->getWidth());
 	_list->setSelectable(true);
@@ -238,6 +238,7 @@ void ComboBox::setDropdown(int options)
 	int h = _button->getFont()->getHeight() + _button->getFont()->getSpacing();
 	_window->setHeight(items * h + LIST_MARGIN * 2);
 	_list->setHeight(items * h);
+	_list->setScrolling(options > MAX_ITEMS, 0);
 }
 
 /**

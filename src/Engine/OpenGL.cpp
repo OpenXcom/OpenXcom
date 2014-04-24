@@ -19,6 +19,7 @@
 
 #include "OpenGL.h"
 #include "Logger.h"
+#include "Surface.h"
 
 namespace OpenXcom 
 {
@@ -104,8 +105,8 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     if(gltexture == 0) glGenTextures(1, &gltexture);
 	glErrorCheck();
 	
-    iwidth  = SDL_max(width,  iwidth );
-    iheight = SDL_max(height, iheight);
+	iwidth = width;
+	iheight = height;
     if(buffer_surface) delete buffer_surface;
     buffer_surface = new Surface(iwidth, iheight, 0, 0, ibpp); // use OpenXcom's Surface class to get an aligned buffer with bonus SDL_Surface
 	buffer = (uint32_t*) buffer_surface->getSurface()->pixels;
@@ -128,14 +129,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   }
 
   void OpenGL::clear() {
-    memset(buffer, 0, iwidth * iheight * ibpp);
+    //memset(buffer, 0, iwidth * iheight * ibpp);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
+	glErrorCheck();
   }
 
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
+	clear();
     if(shader_support && (fragmentshader || vertexshader)) {    
       glUseProgram(glprogram);
       GLint location;

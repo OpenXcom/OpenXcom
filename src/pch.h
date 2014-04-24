@@ -57,16 +57,7 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-//#include <shlobj.h>
-//#include <shlwapi.h>
-#include <direct.h>
-#else
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/param.h>
 #include <pwd.h>
@@ -301,15 +292,16 @@
 #include "./Interface/Slider.h"
 #include "./Interface/Frame.h"
 #include "./lodepng.h"
-#include "./Menu/SaveState.h"
+#include "./Menu/ListSaveState.h"
 #include "./Menu/DeleteGameState.h"
 #include "./Menu/ErrorMessageState.h"
 #include "./Menu/NewBattleState.h"
 #include "./Menu/StartState.h"
 #include "./Menu/IntroState.h"
 #include "./Menu/TestState.h"
-#include "./Menu/LoadState.h"
-#include "./Menu/SavedGameState.h"
+#include "./Menu/ConfirmLoadState.h"
+#include "./Menu/ListLoadState.h"
+#include "./Menu/ListGamesState.h"
 #include "./Menu/NewGameState.h"
 #include "./Menu/MainMenuState.h"
 #include "./Menu/AbandonGameState.h"

@@ -67,7 +67,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_txtFacility = new Text(192, 9, 0, 0);
 	_view = new BaseView(192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
-	_edtBase = new TextEdit(127, 17, 193, 0);
+	_edtBase = new TextEdit(this, 127, 17, 193, 0);
 	_txtLocation = new Text(126, 9, 194, 16);
 	_txtFunds = new Text(126, 9, 194, 24);
 	_btnNewBase = new TextButton(128, 12, 192, 58);
@@ -83,7 +83,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnGeoscape = new TextButton(128, 12, 192, 188);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_mini);
@@ -115,14 +115,6 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-			break;
-		}
-	}
 	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
@@ -193,7 +185,7 @@ BasescapeState::~BasescapeState()
 		if (*i == _base)
 		{
 			exists = true;
-      break;
+			break;
 		}
 	}
 	if (!exists)
@@ -208,29 +200,9 @@ BasescapeState::~BasescapeState()
  */
 void BasescapeState::init()
 {
-	if (!_game->getSavedGame()->getBases()->empty())
-	{
-		bool exists = false;
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
-		{
-			if (*i == _base)
-			{
-				exists = true;
-			}
-		}
-		// If base was removed, select first one
-		if (!exists)
-		{
-			_base = _game->getSavedGame()->getBases()->front();
-			_mini->setSelectedBase(0);
-		}
-	}
-	else
-	{
-		// Use a blank base for special case when player has no bases
-		_base = new Base(_game->getRuleset());
-	}
+	State::init();
 
+	setBase(_base);
 	_view->setBase(_base);
 	_mini->draw();
 	_edtBase->setText(_base->getName());
@@ -247,7 +219,7 @@ void BasescapeState::init()
 
 	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
+	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
 }
 
 /**
@@ -256,16 +228,36 @@ void BasescapeState::init()
  */
 void BasescapeState::setBase(Base *base)
 {
-	_base = base;
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		// Check if base still exists
+		bool exists = false;
+		for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 		{
-			_mini->setSelectedBase(i);
-			break;
+			if (_game->getSavedGame()->getBases()->at(i) == base)
+			{
+				_base = base;
+				_mini->setSelectedBase(i);
+				_game->getSavedGame()->setSelectedBase(i);
+				exists = true;
+				break;
+			}
+		}
+		// If base was removed, select first one
+		if (!exists)
+		{
+			_base = _game->getSavedGame()->getBases()->front();
+			_mini->setSelectedBase(0);
+			_game->getSavedGame()->setSelectedBase(0);
 		}
 	}
-	init();
+	else
+	{
+		// Use a blank base for special case when player has no bases
+		_base = new Base(_game->getRuleset());
+		_mini->setSelectedBase(0);
+		_game->getSavedGame()->setSelectedBase(0);
+	}
 }
 
 /**
@@ -367,7 +359,6 @@ void BasescapeState::btnTransferClick(Action *)
 void BasescapeState::btnGeoscapeClick(Action *)
 {
 	_game->popState();
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
 /**
@@ -382,12 +373,12 @@ void BasescapeState::viewLeftClick(Action *)
 		// Is facility in use?
 		if (fac->inUse())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected?
 		else if (!_base->getDisconnectedFacilities(fac).empty())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{
@@ -494,12 +485,10 @@ void BasescapeState::viewMouseOut(Action *)
  */
 void BasescapeState::miniClick(Action *)
 {
-	unsigned int base = _mini->getHoveredBase();
+	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
-		_mini->setSelectedBase(base);
 		_base = _game->getSavedGame()->getBases()->at(base);
-		_game->getSavedGame()->setSelectedBase(base);
 		init();
 	}
 }
@@ -510,47 +499,29 @@ void BasescapeState::miniClick(Action *)
  */
 void BasescapeState::handleKeyPress(Action *action)
 {
-	if (!_edtBase->isFocused() && action->getDetails()->type == SDL_KEYDOWN)
+	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
+		SDLKey baseKeys[] = {Options::keyBaseSelect1,
+			                 Options::keyBaseSelect2,
+			                 Options::keyBaseSelect3,
+			                 Options::keyBaseSelect4,
+			                 Options::keyBaseSelect5,
+			                 Options::keyBaseSelect6,
+			                 Options::keyBaseSelect7,
+			                 Options::keyBaseSelect8};
 		int base = -1;
 		int key = action->getDetails()->key.keysym.sym;
-		if (key == Options::keyBaseSelect1)
+		for (int i = 0; i < MiniBaseView::MAX_BASES; ++i)
 		{
-			base = 0;
-		}
-		else if (key == Options::keyBaseSelect2)
-		{
-			base = 1;
-		}
-		else if (key == Options::keyBaseSelect3)
-		{
-			base = 2;
-		}
-		else if (key == Options::keyBaseSelect4)
-		{
-			base = 3;
-		}
-		else if (key == Options::keyBaseSelect5)
-		{
-			base = 4;
-		}
-		else if (key == Options::keyBaseSelect6)
-		{
-			base = 5;
-		}
-		else if (key == Options::keyBaseSelect7)
-		{
-			base = 6;
-		}
-		else if (key == Options::keyBaseSelect8)
-		{
-			base = 7;
+			if (key == baseKeys[i])
+			{
+				base = i;
+				break;
+			}
 		}
 		if (base > -1 && base < _game->getSavedGame()->getBases()->size())
 		{
-			_mini->setSelectedBase(base);
 			_base = _game->getSavedGame()->getBases()->at(base);
-			_game->getSavedGame()->setSelectedBase(base);
 			init();
 		}
 	}

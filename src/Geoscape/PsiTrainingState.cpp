@@ -19,6 +19,7 @@
 #include <sstream>
 #include "PsiTrainingState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -47,8 +48,7 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game)
 	_btnOk = new TextButton(160, 14, 80, 174);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 7);
 
 	add(_window);
 	add(_btnOk);
@@ -67,21 +67,23 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game)
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
+
 	int buttons = 0;
-	TextButton *_btnBase;
 	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
 		if((*b)->getAvailablePsiLabs())
 		{
+			TextButton *btnBase = new TextButton(160, 14, 80, 40 + 16 * buttons);
+			btnBase->setColor(Palette::blockOffset(15) + 6);
+			btnBase->onMouseClick((ActionHandler)&PsiTrainingState::btnBaseXClick);
+			btnBase->setText((*b)->getName());
+			add(btnBase);
 			_bases.push_back(*b);
-			if (buttons < 8)
+			_btnBases.push_back(btnBase);
+			++buttons;
+			if (buttons >= 8)
 			{
-				_btnBase = new TextButton(160, 14, 80, 40 + 16*buttons);
-				_btnBase->setColor(Palette::blockOffset(15)+6);
-				_btnBase->onMouseClick((ActionHandler)&PsiTrainingState::btnBaseXClick);
-				_btnBase->setText((*b)->getName());
-				add(_btnBase);
-				++buttons;
+				break;
 			}
 		}
 	}
@@ -97,27 +99,28 @@ PsiTrainingState::~PsiTrainingState()
 }
 
 /**
- * Resets the palette.
- */
-void PsiTrainingState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void PsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
+/**
+ * Goes to the allocation screen for the corresponding base.
+ * @param action Pointer to an action.
+ */
 void PsiTrainingState::btnBaseXClick(Action *action)
 {
-	int buttonIndex = (action->getSender()->getY() - 40) / 16;
-	_game->pushState (new AllocatePsiTrainingState(_game, _bases.at(buttonIndex)));
+	for (size_t i = 0; i < _btnBases.size(); ++i)
+	{
+		if (action->getSender() == _btnBases[i])
+		{
+			_game->pushState(new AllocatePsiTrainingState(_game, _bases.at(i)));
+			break;
+		}
+	}
 }
 
 }

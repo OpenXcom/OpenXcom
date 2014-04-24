@@ -395,7 +395,7 @@ public:
 	bool _hidingForTurn; // don't zone out and start patrolling again
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
-	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+	std::vector<BattleUnit *> &getUnitsSpottedThisTurn();
 	/// set the rank integer
 	void setRankInt(int rank);
 	/// get the rank integer

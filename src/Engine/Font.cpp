@@ -87,7 +87,7 @@ void Font::init()
 {
 	_surface->lock();
 	int length = (_surface->getWidth() / _width);
-	for (unsigned int i = 0; i < _index.length(); ++i)
+	for (size_t i = 0; i < _index.length(); ++i)
 	{
 		SDL_Rect rect;
 		int left = -1, right = -1;
@@ -218,7 +218,7 @@ void Font::fix(const std::string &file, int width)
 
 	int x = 0;
 	int y = 0;
-	for (unsigned int i = 0; i < _index.length(); ++i)
+	for (size_t i = 0; i < _index.length(); ++i)
 	{
 		SDL_Rect rect = _chars[_index[i]];
 		_surface->getCrop()->x = rect.x;

@@ -46,18 +46,9 @@ namespace {
 /**
  * Get a random point inside the given region zone.
  * The point will be used to land a UFO, so it HAS to be on land.
- * @note This is only until we fix our zone data.
- * @additional note: atlantic region gets stuck in an infinite loop
- * because it can't find land. limiting the tries to 1000 will result in
- * ships landing in the sea, but this is better than causing the game to hang.
  */
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
 {
-	// the last set of mission zones are WAY outside the region.
-	if (zone == region.getMissionZones().size())
-	{
-		zone--;
-	}
 	std::pair<double, double> pos;
 	do
 	{
@@ -330,6 +321,10 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, 0, globe, regionRules);
 	ufo->setAltitude(trajectory.getAltitude(0));
+	if (trajectory.getAltitude(0) == "STR_GROUND")
+	{
+		ufo->setSecondsRemaining(trajectory.groundTimer());
+	}
 	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
@@ -387,8 +382,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	const unsigned int curWaypoint = ufo.getTrajectoryPoint();
 	const unsigned int nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory &trajectory = ufo.getTrajectory();
-	const unsigned int waypointCount = trajectory.getWaypointCount();
-	if (curWaypoint == waypointCount)
+	if (nextWaypoint == trajectory.getWaypointCount())
 	{
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
@@ -396,6 +390,11 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	}
 	ufo.setAltitude(trajectory.getAltitude(nextWaypoint));
 	ufo.setTrajectoryPoint(nextWaypoint);
+	std::pair<double, double> pos = getWaypoint(trajectory, nextWaypoint, globe, *rules.getRegion(_region));
+	Waypoint *wp = new Waypoint();
+	wp->setLongitude(pos.first);
+	wp->setLatitude(pos.second);
+	ufo.setDestination(wp);
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
 		if (ufo.getLandId() != 0)
@@ -404,17 +403,12 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		}
 		// Set next waypoint.
 		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * trajectory.getSpeedPercentage(nextWaypoint)));
-		std::pair<double, double> pos = getWaypoint(trajectory, nextWaypoint, globe, *rules.getRegion(_region));
-		Waypoint *wp = new Waypoint();
-		wp->setLongitude(pos.first);
-		wp->setLatitude(pos.second);
-		ufo.setDestination(wp);
 	}
 	else
 	{
 		// UFO landed.
 
-		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(curWaypoint) == 0)
+		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(curWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 		{
 			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.
@@ -513,12 +507,12 @@ void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 		break;
 	case Ufo::LANDED:
 		{
-			if ((ufo.getRules()->getType() == "STR_HARVESTER" && _rule.getType() == "STR_ALIEN_HARVEST") || 
-				(ufo.getRules()->getType() == "STR_ABDUCTOR" && _rule.getType() == "STR_ALIEN_ABDUCTION"))
+			if (_rule.getType() == "STR_ALIEN_HARVEST" || _rule.getType() == "STR_ALIEN_ABDUCTION" || _rule.getType() == "STR_ALIEN_TERROR")
 			{
 				addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			}
-			ufoReachedWaypoint(ufo, engine, globe);
+			ufo.setAltitude("STR_VERY_LOW");
+			ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
 		}
 		break;
 	case Ufo::CRASHED:
@@ -668,13 +662,13 @@ void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
  */
 std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &trajectory, const unsigned int nextWaypoint, const Globe &globe, const RuleRegion &region)
 {
+	/* LOOK MA! NO HANDS!
 	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
 	{
 		return getLandPoint(globe, region, trajectory.getZone(nextWaypoint));
 	}
 	else
-	{
+	*/
 		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
-	}
 }
 }

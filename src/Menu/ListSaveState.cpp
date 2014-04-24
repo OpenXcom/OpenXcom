@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "SaveState.h"
+#include "ListSaveState.h"
 #include <cstdio>
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
@@ -41,10 +41,10 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
-	_edtSave = new TextEdit(168, 9, 0, 0);
+	_edtSave = new TextEdit(this, 168, 9, 0, 0);
 	_btnSaveGame = new TextButton(80, 16, 60, 172);
 
 	add(_edtSave);
@@ -54,17 +54,17 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
-	_lstSaves->onMousePress((ActionHandler)&SaveState::lstSavesPress);
+	_lstSaves->onMousePress((ActionHandler)&ListSaveState::lstSavesPress);
 
 	_btnCancel->setX(180);
 
 	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
 	_btnSaveGame->setText(tr("STR_SAVE_GAME"));
-	_btnSaveGame->onMouseClick((ActionHandler)&SaveState::btnSaveGameClick);
+	_btnSaveGame->onMouseClick((ActionHandler)&ListSaveState::btnSaveGameClick);
 
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
-	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
+	_edtSave->onKeyboardPress((ActionHandler)&ListSaveState::edtSaveKeyPress);
 
 	centerAllSurfaces();
 }
@@ -75,7 +75,7 @@ SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, 1, showMsg)
+ListSaveState::ListSaveState(Game *game, OptionsOrigin origin, bool showMsg) : ListGamesState(game, origin, 1, showMsg)
 {
 	game->getSavedGame()->setName(L"autosave");
 	quickSave("autosave");
@@ -84,7 +84,7 @@ SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGame
 /**
  *
  */
-SaveState::~SaveState()
+ListSaveState::~ListSaveState()
 {
 
 }
@@ -93,17 +93,17 @@ SaveState::~SaveState()
  * Updates the save game list with the current list
  * of available savegames.
  */
-void SaveState::updateList()
+void ListSaveState::updateList()
 {
 	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
-	SavedGameState::updateList();
+	ListGamesState::updateList();
 }
 
 /**
  * Names the selected save.
  * @param action Pointer to an action.
  */
-void SaveState::lstSavesPress(Action *action)
+void ListSaveState::lstSavesPress(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -135,12 +135,12 @@ void SaveState::lstSavesPress(Action *action)
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible(true);
-		_edtSave->setFocus(true);
+		_edtSave->setFocus(true, false);
 		_lstSaves->setScrolling(false);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)));
+		_game->pushState(new DeleteGameState(_game, _origin, _saves[_lstSaves->getSelectedRow() - 1].fileName));
 	}
 }
 
@@ -148,7 +148,7 @@ void SaveState::lstSavesPress(Action *action)
  * Saves the selected save.
  * @param action Pointer to an action.
  */
-void SaveState::edtSaveKeyPress(Action *action)
+void ListSaveState::edtSaveKeyPress(Action *action)
 {
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
@@ -161,7 +161,7 @@ void SaveState::edtSaveKeyPress(Action *action)
  * Saves the selected save.
  * @param action Pointer to an action.
  */
-void SaveState::btnSaveGameClick(Action *)
+void ListSaveState::btnSaveGameClick(Action *)
 {
 	if (_selectedRow != -1)
 	{
@@ -169,7 +169,7 @@ void SaveState::btnSaveGameClick(Action *)
 	}
 }
 
-void SaveState::saveGame()
+void ListSaveState::saveGame()
 {
 	updateStatus("STR_SAVING_GAME");
 	_game->getSavedGame()->setName(_edtSave->getText());
@@ -206,7 +206,7 @@ void SaveState::saveGame()
  * Quick save game.
  * @param filename name of file without ".sav"
  */
-void SaveState::quickSave(const std::string &filename)
+void ListSaveState::quickSave(const std::string &filename)
 {
 	if (_showMsg) updateStatus("STR_SAVING_GAME");
 
@@ -236,9 +236,9 @@ void SaveState::quickSave(const std::string &filename)
 		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 	catch (YAML::Exception &e)
 	{
@@ -246,9 +246,9 @@ void SaveState::quickSave(const std::string &filename)
 		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

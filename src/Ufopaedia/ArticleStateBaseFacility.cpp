@@ -45,7 +45,7 @@ namespace OpenXcom
 		_txtTitle = new Text(200, 17, 10, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+		setPalette("PAL_BASESCAPE");
 
 		ArticleState::initLayout();
 
