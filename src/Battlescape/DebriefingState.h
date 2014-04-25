@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include "../Savegame/GameTime.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {

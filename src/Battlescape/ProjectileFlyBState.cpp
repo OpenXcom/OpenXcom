@@ -491,7 +491,7 @@ void ProjectileFlyBState::think()
 
 				if (_parent->getSave()->getTile(_action.target)->getUnit())
 				{
-					_parent->getSave()->getTile(_action.target)->getUnit()->getMissionStatistics()->shotAtCounter++; // Only counts for guns, not throws or launches
+					_parent->getSave()->getTile(_action.target)->getUnit()->getStatistics()->shotAtCounter++; // Only counts for guns, not throws or launches
 				}
 
 				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
@@ -548,21 +548,21 @@ void ProjectileFlyBState::think()
 						BattleUnit *targetVictim = _parent->getSave()->getTile(_action.target)->getUnit(); // Who we were aiming at (not necessarily who we hit)
 						if (victim && !victim->isOut())
 						{
-							victim->getMissionStatistics()->hitCounter++;
+							victim->getStatistics()->hitCounter++;
 							if (_unit->getOriginalFaction() == FACTION_PLAYER) // Anyone getting hit by XCOM is getting hit by friendly fire, but who cares
 							{
-								victim->getMissionStatistics()->shotByFriendlyCounter++;
-								_unit->getMissionStatistics()->shotFriendlyCounter++;
+								victim->getStatistics()->shotByFriendlyCounter++;
+								_unit->getStatistics()->shotFriendlyCounter++;
 							}
 							if (victim == targetVictim) // Hit our target
 							{
 								if (_parent->getTileEngine()->distance(_action.actor->getPosition(), victim->getPosition()) > 30)
 								{
-									_unit->getMissionStatistics()->longDistanceHitCounter++;
+									_unit->getStatistics()->longDistanceHitCounter++;
 								}
 								if (_unit->getFiringAccuracy(_action.type, _action.weapon) < 30)
 								{
-									_unit->getMissionStatistics()->lowAccuracyHitCounter++;
+									_unit->getStatistics()->lowAccuracyHitCounter++;
 								}
 							}
 							if (victim->getFaction() == FACTION_HOSTILE)

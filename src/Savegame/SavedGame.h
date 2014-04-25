@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 #include <time.h>
-#include "SoldierDiary.h"
+#include "GameTime.h"
 
 namespace OpenXcom
 {
@@ -73,38 +73,37 @@ struct MissionStatistics
     // Load
     void load(const YAML::Node &node)
     {
-        id = node["missionId"].as<int>(id);
-        time.load(node["missionTime"]);
-        region = node["missionRegion"].as<std::string>(region);
-        country = node["missionCountry"].as<std::string>(country);
-        type = node["missionType"].as<std::string>(type);
-        ufo = node["missionUFO"].as<std::string>(ufo);
+        id = node["id"].as<int>(id);
+        time.load(node["time"]);
+        region = node["region"].as<std::string>(region);
+        country = node["country"].as<std::string>(country);
+        type = node["type"].as<std::string>(type);
+        ufo = node["ufo"].as<std::string>(ufo);
         success = node["success"].as<bool>(success);
         score = node["score"].as<int>(score);
         rating = node["rating"].as<std::string>(rating);
         alienRace = node["alienRace"].as<std::string>(alienRace);
-        daylight = node["missionDaylight"].as<int>(daylight);
+        daylight = node["daylight"].as<int>(daylight);
     }
     // Save
     YAML::Node save() const
     {
         YAML::Node node;
-        node["missionId"] = id;
-        node["missionTime"] = time.save();
-        node["missionRegion"] = region;
-        node["missionCountry"] = country;
-        node["missionType"] = type;
-        node["missionUFO"] = ufo;
+        node["id"] = id;
+        node["time"] = time.save();
+        node["region"] = region;
+        node["country"] = country;
+        node["type"] = type;
+        node["ufo"] = ufo;
         node["success"] = success;
         node["score"] = score;
         node["rating"] = rating;
         node["alienRace"] = alienRace;
-        node["missionDaylight"] = daylight;
+        node["daylight"] = daylight;
         return node;
     }
-    MissionStatistics(const YAML::Node& node) : missionTime(0,0,0,0,0,0,0) { load(node); }
-    MissionStatistics() :   missionTime(0,0,0,0,0,0,0), missionRegion(), missionCountry(), missionType(), missionUFO(), success(false), rating(), score(0),
-                            alienRace(), missionDaylight(0), soldierIds() { }
+    MissionStatistics(const YAML::Node& node) : time(0,0,0,0,0,0,0) { load(node); }
+    MissionStatistics() : time(0,0,0,0,0,0,0), region(), country(), type(), ufo(), success(false), rating(), score(0), alienRace(), daylight(0) { }
     ~MissionStatistics() { }
 };
 
@@ -155,7 +154,7 @@ private:
 	std::vector<const RuleResearch *> _poppedResearch;
 	std::vector<Soldier*> _deadSoldiers;
 	int _selectedBase;
-    std::vector<MissionStatistics*> _missionStatistics
+    std::vector<MissionStatistics*> _missionStatistics;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:

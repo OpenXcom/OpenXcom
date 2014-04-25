@@ -243,8 +243,8 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
-            (*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundedRecovery;
-            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary(_missionStatistics, (*j)->getKills(), (*j)->getStatistics());
+            (*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getKills(), (*j)->getStatistics(), _missionStatistics);
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
@@ -506,7 +506,7 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape())
 		{
 			_missionStatistics->ufo = (*i)->getRules()->getType();
-            _missionStatistics->race = (*i)->getAlienRace();
+            _missionStatistics->alienRace = (*i)->getAlienRace();
 			if (!aborted)
 			{
 				delete *i;
@@ -525,7 +525,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			_missionStatistics->race = (*i)->getAlienRace();
+			_missionStatistics->alienRace = (*i)->getAlienRace();
 			delete *i;
 			save->getTerrorSites()->erase(i);
 			break;
@@ -570,13 +570,13 @@ void DebriefingState::prepareDebriefing()
 			// if only one soldier survived, give him a medal! (unless he killed all the others...)
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->getMissionStatistics()->hasFriendlyFired() && deadSoldiers != 0)
 			{
-				(*j)->getMissionStatistics()->loneSurvivor = true;
+				(*j)->getStatistics()->loneSurvivor = true;
 				break;
 			}
 			// if only one soldier survived AND none have died, means only one soldier went on the mission...
 			else if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && deadSoldiers != 0)
 			{
-				(*j)->getMissionStatistics()->ironMan = true;
+				(*j)->getStatistics()->ironMan = true;
 			}
 		}
 	}
@@ -602,7 +602,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i)->isInBattlescape())
 			{
-				_missionStatistics->race = (*i)->getAlienRace();
+				_missionStatistics->alienRace = (*i)->getAlienRace();
 				if (destroyAlienBase)
 				{
 					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);

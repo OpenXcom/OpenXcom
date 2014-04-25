@@ -50,10 +50,6 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
  */
 SoldierDiary::~SoldierDiary()
 {
-	for (std::vector<SoldierDiaryEntries*>::iterator i = _diaryEntries.begin(); i != _diaryEntries.end(); ++i)
-	{
-		delete *i;
-	}
 	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin(); i != _commendations.end(); ++i)
 	{
 		delete *i;
@@ -66,11 +62,6 @@ SoldierDiary::~SoldierDiary()
  */
 void SoldierDiary::load(const YAML::Node& node)
 {
-	if (const YAML::Node &diaryEntries = node["diaryEntries"])
-	{
-		for (YAML::const_iterator i = diaryEntries.begin(); i != diaryEntries.end(); ++i)
-			_diaryEntries.push_back(new SoldierDiaryEntries(*i));
-	}
 	if (const YAML::Node &commendations = node["commendations"])
 	{
 		for (YAML::const_iterator i = commendations.begin(); i != commendations.end(); ++i)
@@ -79,7 +70,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	if (const YAML::Node &killList = node["killList"])
 	{
 		for (YAML::const_iterator i = killList.begin(); i != killList.end(); ++i)
-			_killList.push_back(new SoldierDiaryKills(*i));
+			_killList.push_back(new BattleUnitKills(*i));
 	}
 	_alienRankTotal = node["alienRankTotal"].as<std::map<std::string, int> >(_alienRankTotal);
 	_alienRaceTotal = node["alienRaceTotal"].as<std::map<std::string, int> >(_alienRaceTotal);
@@ -161,21 +152,21 @@ YAML::Node SoldierDiary::save() const
 /**
  * Updated soldier diary statistics
  */
-void SoldierDiary::updateDiary(MissionStatistics *missionStatistics, std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics)
+void SoldierDiary::updateDiary(std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics)
 {
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
     {
 		_killList.push_back(*kill);
-		(*kill)->makeTurnUnique(*missionStatistics->time);
+		(*kill)->makeTurnUnique();
 		if ((*kill)->getUnitFactionString() != "FACTION_HOSTILE") 
             continue;
         _alienRankTotal[(*kill)->rank.c_str()]++;
         _alienRaceTotal[(*kill)->race.c_str()]++;
         _weaponTotal[(*kill)->weapon.c_str()]++;
         _weaponAmmoTotal[(*kill)->weaponAmmo.c_str()]++;
-        if ((*kill)->getUnitStateString() == "STATUS_DEAD")
+        if ((*kill)->getUnitStatusString() == "STATUS_DEAD")
             _killTotal++;
-        else if ((*kill)->getUnitStateString() == "STATUS_UNCONSCIOUS")
+        else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             _stunTotal++;
     }
     _regionTotal[missionStatistics->region.c_str()]++;
@@ -198,7 +189,7 @@ void SoldierDiary::updateDiary(MissionStatistics *missionStatistics, std::vector
         _nightMissionTotal++;
     if (unitStatistics->wasUnconcious)
         _unconciousTotal++;
-    if (_missionStatistics->success && _missionStatistics->type != "STR_SMALL_SCOUT" && _missionStatistics->type != "STR_BASE_DEFENSE" && _missionStatistics->type != "STR_MEDIUM_SCOUT")
+    if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_BASE_DEFENSE" && missionStatistics->type != "STR_MEDIUM_SCOUT")
 		_importantMissionTotal++;
     _shotAtCounterTotal += (unitStatistics->shotAtCounter); // Commendation is for getting shot 10 times in one mission, BUT THIS DOES NOT SEPERATE MISSIONS
     _hitCounterTotal += (unitStatistics->hitCounter); // Commendation si for getting hit 5 times in one mission
@@ -211,8 +202,8 @@ void SoldierDiary::updateDiary(MissionStatistics *missionStatistics, std::vector
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
 
-    _daysWounded.push_back(make_pair(_missionStatistics->id, unitStatistics->daysWounded); // Catalogging purposes
-    _missionIdList.push_back(_missionStatistics->id);
+    _daysWounded.push_back(std::make_pair(missionStatistics->id, unitStatistics->daysWounded)); // Catalogging purposes
+    _missionIdList.push_back(missionStatistics->id);
     _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
 
@@ -516,14 +507,14 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                         {
                             int count = 0; // Each AND vector has to match the award criteria
                             // Loop over the KILLS
-                            for (std::vector<SoldierDiaryKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
+                            for (std::vector<BattleUnitKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                             {
                                 bool foundMatch = true;
                                 // Loop over the DETAILs of the AND vector
 								for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                                 {
                                     // See if we find no matches with any criteria. If so, break and try the next kill.
-                                    if ( (*singleKill)->getAlienRank() != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
+                                    if ( (*singleKill)->rank != (*detail) && (*singleKill)->getAlienRace() != (*detail) &&
                                          (*singleKill)->getWeapon() != (*detail) && (*singleKill)->getWeaponAmmo() != (*detail) &&
                                          (*singleKill)->getAlienState() != (*detail) && (*singleKill)->getAlienFaction() != (*detail) )
                                     {

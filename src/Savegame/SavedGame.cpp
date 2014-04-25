@@ -380,7 +380,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
     for (YAML::const_iterator i = doc["missionStatistics"].begin(); i != doc["missionStatistics"].end(); ++i)
 	{
 		MissionStatistics *ms = new MissionStatistics();
-		ms->load();
+		ms->load(*i);
 		_missionStatistics.push_back(ms);
 	}
 
@@ -1597,7 +1597,7 @@ std::vector<Soldier*> *SavedGame::getDeadSoldiers()
  * Returns the list of dead soldiers.
  * @return Pointer to soldier list.
  */
-std::vector<MissionStatistics*> *SavedGame::getMissionStatistics();
+std::vector<MissionStatistics*> *SavedGame::getMissionStatistics()
 {
 	return &_missionStatistics;
 }

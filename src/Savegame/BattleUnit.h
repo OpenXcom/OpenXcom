@@ -27,7 +27,6 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
 #include "Soldier.h"
-#include "SoldierDiary.h"
 
 namespace OpenXcom
 {
@@ -51,10 +50,6 @@ enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
 
-//
-// TODO fill the structs
-//
-
 /**
  * Container for battle unit kills statistics.
  */
@@ -68,9 +63,9 @@ struct BattleUnitKills
 
     /// Functions
     // Make turn unique across all kills
-    int makeTurnUnique(GameTime time)
+    int makeTurnUnique()
     {
-        turn += (time.getYear() + time.getMonth() + time.getDay() + time.getHour() + time.getMinute())*3; // Maintains divisibility by 3
+        turn += mission * 300; // Maintains divisibility by 3 as well
     }
     // Check to see if turn was on PLAYER side
     bool playerTurn()
@@ -216,8 +211,7 @@ struct BattleUnitStatistics
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() :	wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false),
-					ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }
 	~BattleUnitStatistics() {for (std::vector<BattleUnitKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;}
 };
 

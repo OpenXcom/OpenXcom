@@ -106,10 +106,8 @@ public:
 	void load(const YAML::Node& node);
 	/// Save a diary.
 	YAML::Node save() const;
-	/// Add an entry to the diary
-	void addSoldierDiaryEntry(GameTime missionTime, std::string missionRegion, std::string missionCountry, std::string missionType, std::string missionUFO, bool success, int score, std::string rating, std::string alienRace, int missionDaylight, int daysWounded, Statistics *missionStatistics);
 	/// Update the diary statistics
-	void updateDiary(MissionStatistics *missionStatistics, std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics);
+	void updateDiary(std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
 	/// Get
 	std::map<std::string, int> getAlienRankTotal() const;
 	/// Get
@@ -154,6 +152,8 @@ public:
 	void awardCommendation(std::string commendationName, std::string commendationDescription, std::string noun = "", int sprite = 100);
 	/// Increment soldier's service time.
 	void addMonthlyService();
+    /// Get mission Id list
+    std::vector<int> getMissionIdList() const { return _missionIdList; }
 };
 
 }

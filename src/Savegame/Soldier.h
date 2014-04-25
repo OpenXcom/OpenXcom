@@ -22,7 +22,6 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Ruleset/Unit.h"
-#include "../Savegame/SoldierDiary.h"
 
 namespace OpenXcom
 {
