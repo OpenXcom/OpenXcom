@@ -171,7 +171,7 @@ YAML::Node Soldier::save() const
  * Returns the soldier's full name (and, optionally, statString).
  * @return Soldier name.
  */
-std::wstring Soldier::getName(bool statstring, int maxLength) const
+std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
 {
 	if (statstring && _statString != L"") {
 		if (_name.length() + _statString.length() > maxLength) {
