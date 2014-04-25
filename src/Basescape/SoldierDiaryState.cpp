@@ -18,7 +18,7 @@
  */
 #include "SoldierDiaryState.h"
 #include "SoldierInfoState.h"
-#include "SoldierDiaryInfoState.h"
+#include "SoldierDiaryMissionState.h"
 #include "SoldierDiaryKillsState.h"
 #include <string>
 #include "../Engine/Game.h"
@@ -275,7 +275,8 @@ void SoldierDiaryState::btnNextClick(Action *)
  */
 void SoldierDiaryState::lstDiaryInfoClick(Action *)
 {
-	_game->pushState(new SoldierDiaryInfoState(_game, _base, _soldier,  _lstDiary->getSelectedRow()));
+    int absoluteRowEntry = _lstDiary->getSelectedRow() + lstDiary->getScroll();
+	_game->pushState(new SoldierDiaryMissionState(_game, _base, _soldier, absoluteRowEntry));
 }
 
 }

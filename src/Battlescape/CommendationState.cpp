@@ -95,7 +95,6 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 		_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
 		row++;
 
-
 		for (std::vector<SoldierCommendations*>::iterator j = (*i)->getDiary()->getSoldierCommendations()->begin() ; j != (*i)->getDiary()->getSoldierCommendations()->end() ; ++j)
 		{
 			if ((*j)->isNew())

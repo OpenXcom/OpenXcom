@@ -154,6 +154,8 @@ public:
 	void addMonthlyService();
     /// Get mission Id list
     std::vector<int> getMissionIdList() const { return _missionIdList; }
+    /// Get kill list
+    std::vector<BattleUnitKills*> getKills() const { return _kills; }
 };
 
 }
