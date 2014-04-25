@@ -82,7 +82,8 @@ const std::string StatString::getString()
 
 const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings)
 {
-	unsigned int i1, i2, minVal, maxVal, conditionsMet;
+	unsigned int i1, i2, conditionsMet;
+	int minVal, maxVal;
 	std::string conditionName, string;
 	std::wstring wstring;
 	std::wstring statString = L"";
