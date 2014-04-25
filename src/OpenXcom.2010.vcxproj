@@ -389,6 +389,7 @@
     <ClCompile Include="Menu\ListGamesState.cpp" />
     <ClCompile Include="Menu\ListLoadState.cpp" />
     <ClCompile Include="Menu\ListSaveState.cpp" />
+    <ClCompile Include="Menu\LoadGameState.cpp" />
     <ClCompile Include="Menu\OptionsAdvancedState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
@@ -405,6 +406,7 @@
     <ClCompile Include="Menu\OptionsModsState.cpp" />
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
+    <ClCompile Include="Menu\SaveGameState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="pch.cpp">
@@ -677,6 +679,7 @@
     <ClInclude Include="Menu\ListGamesState.h" />
     <ClInclude Include="Menu\ListLoadState.h" />
     <ClInclude Include="Menu\ListSaveState.h" />
+    <ClInclude Include="Menu\LoadGameState.h" />
     <ClInclude Include="Menu\OptionsAdvancedState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
@@ -693,6 +696,7 @@
     <ClInclude Include="Menu\OptionsModsState.h" />
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
+    <ClInclude Include="Menu\SaveGameState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="pch.h" />

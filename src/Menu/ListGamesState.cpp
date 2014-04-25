@@ -21,6 +21,7 @@
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
@@ -33,6 +34,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/ArrowButton.h"
+#include "DeleteGameState.h"
 
 namespace OpenXcom
 {
@@ -63,7 +65,6 @@ ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidR
 	_txtDelete = new Text(310, 9, 5, 23);
 	_txtName = new Text(150, 9, 16, 32);
 	_txtDate = new Text(110, 9, 204, 32);
-	_txtStatus = new Text(320, 17, 0, 92);
 	_lstSaves = new TextList(288, 112, 8, 40);
 	_txtDetails = new Text(288, 16, 16, 156);
 	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
@@ -86,7 +87,6 @@ ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidR
 	add(_txtName);
 	add(_txtDate);
 	add(_lstSaves);
-	add(_txtStatus);
 	add(_txtDetails);
 	add(_sortName);
 	add(_sortDate);
@@ -113,10 +113,6 @@ ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidR
 
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
-	
-	_txtStatus->setColor(Palette::blockOffset(8)+5);
-	_txtStatus->setBig();
-	_txtStatus->setAlign(ALIGN_CENTER);
 
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
@@ -126,6 +122,7 @@ ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidR
 	_lstSaves->setMargin(8);
 	_lstSaves->onMouseOver((ActionHandler)&ListGamesState::lstSavesMouseOver);
 	_lstSaves->onMouseOut((ActionHandler)&ListGamesState::lstSavesMouseOut);
+	_lstSaves->onMousePress((ActionHandler)&ListGamesState::lstSavesPress);
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -144,31 +141,6 @@ ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidR
 }
 
 /**
- * Initializes all the elements in the Saved Game screen.
- * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
- * @param showMsg True if need to show messages like "Loading game" or "Saving game".
- */
-ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidRow, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true), _firstValidRow(firstValidRow)
-{
-	if (_showMsg)
-	{
-		_txtStatus = new Text(320, 16, _game->getScreen()->getDX(), 92 + _game->getScreen()->getDY());
-		add(_txtStatus);
-
-		_txtStatus->setBig();
-		_txtStatus->setAlign(ALIGN_CENTER);
-		if (origin == OPT_BATTLESCAPE)
-		{
-			_txtStatus->setColor(Palette::blockOffset(5));
-			_txtStatus->setHighContrast(true);
-		}
-		else
-			_txtStatus->setColor(Palette::blockOffset(8)+5);
-	}
-}
-
-/**
  *
  */
 ListGamesState::~ListGamesState()
@@ -177,18 +149,11 @@ ListGamesState::~ListGamesState()
 }
 
 /**
- * Resets the palette and refreshes saves.
+ * Refreshes the saves list.
  */
 void ListGamesState::init()
 {
-	if (_noUI)
-	{
-		_game->popState();
-		return;
-	}
 	State::init();
-
-	_txtStatus->setText(L"");
 
 	if (_origin == OPT_BATTLESCAPE)
 	{
@@ -269,17 +234,6 @@ void ListGamesState::updateList()
 }
 
 /**
- * Updates the status message in the center of the screen.
- * @param msg New message ID.
- */
-void ListGamesState::updateStatus(const std::string &msg)
-{
-	_txtStatus->setText(tr(msg));
-	blit();
-	_game->getScreen()->flip();
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -310,6 +264,18 @@ void ListGamesState::lstSavesMouseOver(Action *)
 void ListGamesState::lstSavesMouseOut(Action *)
 {
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+}
+
+/**
+ * Deletes the selected save.
+ * @param action Pointer to an action.
+ */
+void ListGamesState::lstSavesPress(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow() >= _firstValidRow)
+	{
+		_game->pushState(new DeleteGameState(_game, _origin, _saves[_lstSaves->getSelectedRow() - _firstValidRow].fileName));
+	}
 }
 
 /**
