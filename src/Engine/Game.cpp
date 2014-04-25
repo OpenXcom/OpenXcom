@@ -238,11 +238,12 @@ void Game::run()
 					{
 						if (!stupidityFlag)
 						{
-							Options::displayWidth = _event.resize.w;
-							Options::displayHeight = _event.resize.h;
+							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
+							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
+							int dX = 0, dY = 0;
 							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 							{
-								(*i)->resize();
+								(*i)->resize(dX, dY);
 							}
 							_screen->resetDisplay();
 						}

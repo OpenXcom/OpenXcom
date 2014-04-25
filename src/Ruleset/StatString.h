@@ -20,7 +20,8 @@
 #define OPENXCOM_STATSTRING_H
 
 #include <yaml-cpp/yaml.h>
-#include "StatStringLimits.h"
+#include "Unit.h"
+#include "StatStringCondition.h"
 
 namespace OpenXcom
 {
@@ -106,9 +107,9 @@ long, nothing will be changed.
 class StatString
 {
 private:
-	std::string _string;	
-	std::map<std::string, StatStringLimits* > _conditions;
-	StatStringLimits *getCondition(const std::string &conditionName, const YAML::Node &node);
+	std::string _string;
+	std::vector< StatStringCondition* > _conditions;
+	StatStringCondition *getCondition(const std::string &conditionName, const YAML::Node &node);
 public:
 	/// Creates a blank StatString ruleset.
 	StatString();
@@ -117,7 +118,11 @@ public:
 	/// Loads the StatString from YAML.
 	void load(const YAML::Node& node);
  	/// Get the conditions for this StatString.
-	const std::map<std::string, StatStringLimits* > getConditions();
+	const std::vector< StatStringCondition* > getConditions();
+	/// Get the StatString string.
+	const std::string getString();
+	/// Calculate a StatString.
+	static const std::wstring calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings);
 };
 
 }

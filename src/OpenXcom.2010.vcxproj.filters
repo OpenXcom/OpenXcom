@@ -829,7 +829,7 @@
     <ClCompile Include="Ruleset\StatString.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\StatStringLimits.cpp">
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1680,7 +1680,7 @@
     <ClInclude Include="Ruleset\StatString.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\StatStringLimits.h">
+    <ClInclude Include="Ruleset\StatStringCondition.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>

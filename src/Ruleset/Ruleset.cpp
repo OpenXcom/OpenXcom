@@ -190,10 +190,6 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, StatString *>::const_iterator i = _statStrings.begin (); i != _statStrings.end (); ++i)
-	{
-		delete i->second;
-	}
 }
 
 /**
@@ -478,18 +474,11 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
-	int ruleNum = 0;
-	std::stringstream ss;
 	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
 	{
-		ss << ruleNum;
-		std::string string = (*i)["string"].as<std::string>() + ss.str();
-		std::auto_ptr<StatString> statString(new StatString());
+		StatString *statString = new StatString();
 		statString->load(*i);
-		_statStrings[string] = statString.release();
-		_statStringsIndex.push_back(string);
-		ruleNum++;
-		ss.str("");
+		_statStrings.push_back(statString);
 	}
 
   // refresh _psiRequirements for psiStrengthEval
@@ -1187,19 +1176,10 @@ std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 }
 
 /**
- * Gets the index of StatStrings.
- * @return The index of StatStrings.
- */
-std::vector<std::string> Ruleset::getStatStringsIndex() const
-{
-	return _statStringsIndex;
-}
-
-/**
  * Gets the list of StatStrings.
  * @return The list of StatStrings.
  */
-std::map<std::string, StatString *> Ruleset::getStatStrings() const
+std::vector<StatString *> Ruleset::getStatStrings() const
 {
 	return _statStrings;
 }

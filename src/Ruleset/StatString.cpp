@@ -50,13 +50,13 @@ void StatString::load(const YAML::Node &node)
 	{
 		if (node[conditionNames[i]])
 		{
-			_conditions[conditionNames[i]] = getCondition(conditionNames[i], node);
+			_conditions.push_back(getCondition(conditionNames[i], node));
 		}
 		i++;
 	}
 }
 
-StatStringLimits *StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
+StatStringCondition *StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
 {
 	// These are the defaults from xcomutil
 	int minValue = 0, maxValue = 255;
@@ -66,13 +66,108 @@ StatStringLimits *StatString::getCondition(const std::string &conditionName, con
 	if (node[conditionName][1]) {
 		maxValue = node[conditionName][1].as<int>(maxValue);
 	}
-	StatStringLimits *thisLimit = new StatStringLimits(minValue, maxValue);
-	return thisLimit;
+	StatStringCondition *thisCondition = new StatStringCondition(conditionName, minValue, maxValue);
+	return thisCondition;
 }
 
-const std::map<std::string, StatStringLimits* > StatString::getConditions()
+const std::vector< StatStringCondition* > StatString::getConditions()
 {
 	return _conditions;
+}
+
+const std::string StatString::getString()
+{
+	return _string;
+}
+
+const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings)
+{
+	int i1, i2, minVal, maxVal, conditionsMet;
+	std::string conditionName, string;
+	std::wstring wstring;
+	std::wstring statString = L"";
+	bool continueCalc = true;
+	for (i1=0; i1 < statStrings.size() && continueCalc; i1++)
+	{
+		string = statStrings[i1]->getString();
+		// now, iterate through the conditions found in the StatString
+		const std::vector<StatStringCondition* > conditions = statStrings[i1]->getConditions();
+		conditionsMet = 0;
+		for (i2=0; i2 < conditions.size() && continueCalc; i2++)
+		{
+			conditionName = conditions[i2]->getConditionName();
+			minVal = conditions[i2]->getMinVal();
+			maxVal = conditions[i2]->getMaxVal();
+			if (conditionName == "psiStrength")
+			{
+				if (currentStats.psiStrength >= minVal && currentStats.psiStrength <= maxVal) {
+					conditionsMet++;
+				}
+			}
+			else if (conditionName == "psiSkill")
+			{
+				if (currentStats.psiSkill >= minVal && currentStats.psiSkill <= maxVal) {
+					conditionsMet++;
+				}			
+			}
+			else if (conditionName == "bravery")
+			{
+				if (currentStats.bravery >= minVal && currentStats.bravery <= maxVal) {
+					conditionsMet++;
+				}			
+			}
+			else if (conditionName == "strength")
+			{
+				if (currentStats.strength >= minVal && currentStats.strength <= maxVal) {
+					conditionsMet++;
+				}			
+			}
+			else if (conditionName == "firing")
+			{
+				if (currentStats.firing >= minVal && currentStats.firing <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "reactions")
+			{
+				if (currentStats.reactions >= minVal && currentStats.reactions <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "stamina")
+			{
+				if (currentStats.stamina >= minVal && currentStats.stamina <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "tu")
+			{
+				if (currentStats.tu >= minVal && currentStats.tu <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "health")
+			{
+				if (currentStats.health >= minVal && currentStats.health <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			else if (conditionName == "throwing")
+			{
+				if (currentStats.throwing >= minVal && currentStats.throwing <= maxVal) {
+					conditionsMet++;
+				}	
+			}
+			if (conditionsMet == conditions.size()) {
+				wstring.assign(string.begin(), string.end());
+				statString = statString + wstring;
+				if (wstring.length() > 1) {
+					continueCalc = false;
+				}
+			}
+		}
+	}
+	return statString;
 }
 
 }

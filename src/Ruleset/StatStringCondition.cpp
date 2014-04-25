@@ -17,35 +17,42 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #define _USE_MATH_DEFINES
-#include "StatStringLimits.h"
+#include "StatStringCondition.h"
 
 
 namespace OpenXcom
 {
 /**
- * Creates a blank StatString.
+ * Creates a blank StatStringCondition.
  */
-StatStringLimits::StatStringLimits(int minVal, int maxVal)
+StatStringCondition::StatStringCondition(const std::string conditionName, int minVal, int maxVal)
 {
+	_conditionName = conditionName;
 	_minVal = minVal;
 	_maxVal = maxVal;
 }
 
 /**
- * Cleans up the extra StatString.
+ * Cleans up the extra StatStringCondition.
  */
-StatStringLimits::~StatStringLimits()
+StatStringCondition::~StatStringCondition()
 {
 }
 
+/// Get ConditionName.
+const std::string StatStringCondition::getConditionName()
+{
+	return _conditionName;
+}
+
 /// Get MinVal.
-int StatStringLimits::getMinVal()
+const int StatStringCondition::getMinVal()
 {
 	return _minVal;
 }
 
 /// Get MaxVal.
-int StatStringLimits::getMaxVal()
+const int StatStringCondition::getMaxVal()
 {
 	return _maxVal;
 }

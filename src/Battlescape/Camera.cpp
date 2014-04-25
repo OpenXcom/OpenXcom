@@ -581,4 +581,13 @@ bool Camera::isOnScreen(const Position &mapPos) const
 		&& screenPos.y <= _screenHeight - 48;
 }
 
+/**
+ * Resizes the viewable window of the camera.
+ */
+void Camera::resize()
+{
+	_screenWidth = _map->getWidth();
+	_screenHeight = _map->getHeight();
+	_visibleMapHeight = _map->getHeight() - Map::ICON_HEIGHT;
+}
 }

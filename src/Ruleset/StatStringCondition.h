@@ -16,28 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_STATSTRINGLIMITS_H
-#define OPENXCOM_STATSTRINGLIMITS_H
+#ifndef OPENXCOM_STATSTRINGCONDITION_H
+#define OPENXCOM_STATSTRINGCONDITION_H
 
-#include <yaml-cpp/yaml.h>
+#include <string>
 
 namespace OpenXcom
 {
 
-class StatStringLimits 
+class StatStringCondition 
 {
 private:
+	std::string _conditionName;
 	int _minVal;
 	int _maxVal;
 public:
-	/// Creates a blank StatStringLimits.
-	StatStringLimits(int minVal, int maxVal);
-	/// Cleans up the StatStringLimits.
-	virtual ~StatStringLimits();
+	/// Creates a blank StatStringCondition.
+	StatStringCondition(const std::string conditionName, int minVal, int maxVal);
+	/// Cleans up the StatStringCondition.
+	virtual ~StatStringCondition();
 	/// Get MinVal.
-	int getMinVal();
+	const std::string getConditionName();
+	/// Get MinVal.
+	const int getMinVal();
 	/// Get MaxVal.
-	int getMaxVal();
+	const int getMaxVal();
 };
 
 }

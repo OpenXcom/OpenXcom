@@ -93,13 +93,13 @@ protected:
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
-	std::map<std::string, StatString*> _statStrings;
+	std::vector<StatString*> _statStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex, _statStringsIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
@@ -217,10 +217,8 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
-	/// Gets the statStringsIndex.
-	std::vector<std::string> getStatStringsIndex() const;	
-	/// Gets the map of StatStrings.
-	std::map<std::string, StatString *> getStatStrings() const;	
+	/// Gets the list of StatStrings.
+    std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
