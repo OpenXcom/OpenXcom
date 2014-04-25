@@ -159,7 +159,7 @@ void StartState::think()
 					error << Language::fsToWstr(*i) << L'\n';
 				}
 				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 			}
 			Options::reload = false;
 		}
