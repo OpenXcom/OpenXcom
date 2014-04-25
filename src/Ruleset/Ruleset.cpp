@@ -61,6 +61,7 @@
 #include "../Engine/Logger.h"
 #include <algorithm>
 #include "../Ufopaedia/Ufopaedia.h"
+#include "StatString.h"
 
 namespace OpenXcom
 {
@@ -471,6 +472,13 @@ void Ruleset::loadFile(const std::string &filename)
 			_extraStrings[type] = extraStrings.release();
 			_extraStringsIndex.push_back(type);
 		}
+	}
+
+	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
+	{
+		StatString *statString = new StatString();
+		statString->load(*i);
+		_statStrings.push_back(statString);
 	}
 
   // refresh _psiRequirements for psiStrengthEval
@@ -1165,6 +1173,15 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
 std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
+}
+
+/**
+ * Gets the list of StatStrings.
+ * @return The list of StatStrings.
+ */
+std::vector<StatString *> Ruleset::getStatStrings() const
+{
+	return _statStrings;
 }
 
 /**

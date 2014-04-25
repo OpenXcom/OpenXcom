@@ -26,6 +26,7 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/StatString.h"
 
 namespace OpenXcom
 {
@@ -70,6 +71,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 			_gender = (SoldierGender)RNG::generate(0, 1);
 			_look = (SoldierLook)RNG::generate(0,3);
 		}
+		//calcStatString();
 	}
 	if (id != 0)
 	{
@@ -124,6 +126,7 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		_death = new SoldierDeath();
 		_death->load(node["death"]);
 	}
+	calcStatString(rule->getStatStrings());
 }
 
 /**
@@ -165,12 +168,22 @@ YAML::Node Soldier::save() const
 }
 
 /**
- * Returns the soldier's full name.
+ * Returns the soldier's full name (and, optionally, statString).
  * @return Soldier name.
  */
-std::wstring Soldier::getName() const
+std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
 {
-	return _name;
+	if (statstring && _statString != L"") {
+		if (_name.length() + _statString.length() > maxLength) {
+			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
+		}
+		else {
+			return _name + L"/" + _statString;
+		}
+	}
+	else {
+		return _name;
+	}
 }
 
 /**
@@ -549,6 +562,14 @@ void Soldier::die(SoldierDeath *death)
 		delete *i;
 	}
 	_equipmentLayout.clear();
+}
+
+/**
+ * Calculates the soldier's statString
+ */
+void Soldier::calcStatString(const std::vector<StatString *> &statStrings)
+{
+	_statString = StatString::calcStatString(_currentStats, statStrings);
 }
 
 }

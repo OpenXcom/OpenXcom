@@ -826,6 +826,12 @@
     <ClCompile Include="Menu\ListSaveState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\StatString.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1670,6 +1676,12 @@
     </ClInclude>
     <ClInclude Include="Menu\ListSaveState.h">
       <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatString.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatStringCondition.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -55,7 +55,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
 																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
 {
-	_name = soldier->getName();
+	_name = soldier->getName(true);
 	_id = soldier->getId();
 	_type = "SOLDIER";
 	_rank = soldier->getRankString();

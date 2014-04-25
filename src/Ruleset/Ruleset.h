@@ -57,6 +57,7 @@ class MCDPatch;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
+class StatString;
 
 /**
  * Set of rules and stats for a game.
@@ -92,6 +93,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
+	std::vector<StatString*> _statStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
@@ -215,6 +217,8 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
+	/// Gets the list of StatStrings.
+    std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)

@@ -143,7 +143,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		{
 			_qtys.push_back(0);
 			_soldiers.push_back(*i);
-			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+			_lstItems->addRow(4, (*i)->getName(true).c_str(), L"1", L"0", Text::formatFunding(0).c_str());
 			++_itemOffset;
 		}
 	}
