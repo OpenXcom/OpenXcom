@@ -59,17 +59,13 @@ namespace OpenXcom
 		switch (dt)
 		{
 		case DT_AP:
-		case DT_MELEE:
 			type = "STR_DAMAGE_ARMOR_PIERCING";
-			break;
-		case DT_HE:
-			type = "STR_DAMAGE_HIGH_EXPLOSIVE";
-			break;
-		case DT_SMOKE:
-			type = "STR_DAMAGE_SMOKE";
 			break;
 		case DT_IN:
 			type = "STR_DAMAGE_INCENDIARY";
+			break;
+		case DT_HE:
+			type = "STR_DAMAGE_HIGH_EXPLOSIVE";
 			break;
 		case DT_LASER:
 			type = "STR_DAMAGE_LASER_BEAM";
@@ -79,6 +75,15 @@ namespace OpenXcom
 			break;
 		case DT_STUN:
 			type = "STR_DAMAGE_STUN";
+			break;
+		case DT_MELEE:
+			type = "STR_DAMAGE_MELEE";
+			break;
+		case DT_ACID:
+			type = "STR_DAMAGE_ACID";
+			break;
+		case DT_SMOKE:
+			type = "STR_DAMAGE_SMOKE";
 			break;
 		default:
 			type = "STR_UNKNOWN";

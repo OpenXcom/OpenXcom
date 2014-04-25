@@ -53,9 +53,9 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	// Create objects
 	_displaySurface = new InteractiveSurface(110, 32, 94, 18);
 	_txtDisplayResolution = new Text(110, 9, 94, 8);
-	_txtDisplayWidth = new TextEdit(40, 17, 94, 26);
+	_txtDisplayWidth = new TextEdit(this, 40, 17, 94, 26);
 	_txtDisplayX = new Text(16, 17, 132, 26);
-	_txtDisplayHeight = new TextEdit(40, 17, 144, 26);
+	_txtDisplayHeight = new TextEdit(this, 40, 17, 144, 26);
 	_btnDisplayResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
 	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
@@ -148,7 +148,6 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtDisplayWidth->setBig();
 	_txtDisplayWidth->setNumerical(true);
 	_txtDisplayWidth->onChange((ActionHandler)&OptionsVideoState::txtDisplayWidthChange);
-	_txtDisplayWidth->onMouseClick((ActionHandler)&OptionsVideoState::txtDisplayWidthClick);
 
 	_txtDisplayX->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayX->setAlign(ALIGN_CENTER);
@@ -160,7 +159,6 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setNumerical(true);
 	_txtDisplayHeight->onChange((ActionHandler)&OptionsVideoState::txtDisplayHeightChange);
-	_txtDisplayHeight->onMouseClick((ActionHandler)&OptionsVideoState::txtDisplayHeightClick);
 
 	std::wostringstream ssW, ssH;
 	ssW << Options::displayWidth;
@@ -305,8 +303,9 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	scales.push_back("STR_ORIGINAL");
 	scales.push_back("STR_1.5X");
 	scales.push_back("STR_2X");
-	scales.push_back("STR_3X");
-	scales.push_back("STR_SCALE_TO_WINDOW");
+	scales.push_back("STR_THIRD_DISPLAY");
+	scales.push_back("STR_HALF_DISPLAY");
+	scales.push_back("STR_FULL_DISPLAY");
 
 	_cbxGeoScale->setColor(Palette::blockOffset(15)-1);
 	_cbxGeoScale->setOptions(scales);
@@ -399,7 +398,7 @@ void OptionsVideoState::updateGameResolution()
 {
 	if (Options::geoscapeScale == SCALE_SCREEN)
 	{
-		Options::baseXGeoscape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth - (Options::newDisplayWidth %4));
+		Options::baseXGeoscape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth);
 		Options::baseYGeoscape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
 		if (_origin != OPT_BATTLESCAPE)
 		{
@@ -409,7 +408,7 @@ void OptionsVideoState::updateGameResolution()
 	}
 	if (Options::battlescapeScale == SCALE_SCREEN)
 	{
-		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth - (Options::newDisplayWidth %4));
+		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth);
 		Options::baseYBattlescape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
 		if (_origin == OPT_BATTLESCAPE)
 		{
@@ -418,15 +417,6 @@ void OptionsVideoState::updateGameResolution()
 		}
 	}
 
-}
-
-/**
- * Unselects the other display size.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::txtDisplayWidthClick(Action *)
-{
-	_txtDisplayHeight->setFocus(false);
 }
 
 /**
@@ -441,15 +431,6 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
 	updateGameResolution();
-}
-
-/**
- * Unselects the other display size.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::txtDisplayHeightClick(Action *)
-{
-	_txtDisplayWidth->setFocus(false);
 }
 
 /**
@@ -576,4 +557,21 @@ void OptionsVideoState::updateBattlescapeScale(Action *)
 {
 	Options::newBattlescapeScale = _cbxBattleScale->getSelected();
 }
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void OptionsVideoState::resize(int &dX, int &dY)
+{
+	OptionsBaseState::resize(dX, dY);
+	std::wstringstream ss;
+	ss << Options::displayWidth;
+	_txtDisplayWidth->setText(ss.str());
+	ss.str(L"");
+	ss << Options::displayHeight;
+	_txtDisplayHeight->setText(ss.str());
+}
+
 }

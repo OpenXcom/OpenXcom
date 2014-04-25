@@ -32,14 +32,6 @@ enum OptionsOrigin
 	OPT_BATTLESCAPE
 };
 
-enum ScaleType
-{
-	SCALE_ORIGINAL,
-	SCALE_15X,
-	SCALE_2X,
-	SCALE_3X,
-	SCALE_SCREEN
-};
 class Window;
 class TextButton;
 class Text;
@@ -76,12 +68,15 @@ public:
 	/// Handler for clicking the Restore Defaults button.
 	void btnDefaultClick(Action *action);
 	/// Handler for clicking one of the grouping buttons.
-	void btnGroupClick(Action *action);
+	void btnGroupPress(Action *action);
 	/// Handler for showing tooltip.
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
-	void updateScale(int &type, int selection, int &x, int &y, bool change);
+	/// update the game scale as required.
+	static void updateScale(int &type, int selection, int &x, int &y, bool change);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }

@@ -621,15 +621,6 @@
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\LoadState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SaveState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SavedGameState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -824,6 +815,15 @@
       <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="Menu\ConfirmLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListGamesState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListSaveState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1449,15 +1449,6 @@
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\LoadState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SaveState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SavedGameState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Logger.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -1669,6 +1660,15 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Menu\ConfirmLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListGamesState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListSaveState.h">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>

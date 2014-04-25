@@ -48,7 +48,6 @@
 #include "BattlescapeMessage.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/Cursor.h"
-#include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 
@@ -896,7 +895,7 @@ void Map::drawTerrain(Surface *surface)
 			else if ((*i)->isHit())
 			{
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
+				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 25, 0);
 			}
 			else
 			{
@@ -1312,5 +1311,13 @@ void Map::refreshSelectorPosition()
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
-
+/*
+ * Special handling for setting the height of the map viewport.
+ * @param height the new base screen height.
+ */
+void Map::setHeight(int height)
+{
+	Surface::setHeight(height);
+	_visibleMapHeight = height - ICON_HEIGHT;
+}
 }

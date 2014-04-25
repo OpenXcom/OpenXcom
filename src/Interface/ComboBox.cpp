@@ -33,7 +33,7 @@ const int ComboBox::MAX_ITEMS = 7;
 
 /**
  * Sets up a combobox with the specified size and position.
- * @param state Pointer to state the window belongs to.
+ * @param state Pointer to state the combobox belongs to.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.

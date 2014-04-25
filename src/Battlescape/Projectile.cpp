@@ -20,8 +20,6 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
-#include "Position.h"
-#include "BattlescapeGame.h"
 #include "../aresame.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
@@ -397,7 +395,7 @@ Surface *Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	_position = _trajectory.size() - 2;
+	_position = _trajectory.size() - 1;
 }
 
 /**

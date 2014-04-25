@@ -102,8 +102,8 @@
 #include <algorithm>
 #include <functional>
 #include <assert.h>
-#include "../Menu/SaveState.h"
-#include "../Menu/LoadState.h"
+#include "../Menu/ListSaveState.h"
+#include "../Menu/ListLoadState.h"
 
 namespace OpenXcom
 {
@@ -114,8 +114,8 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
-	int screenWidth = Options::baseXResolution;
-	int screenHeight = Options::baseYResolution;
+	int screenWidth = Options::baseXGeoscape;
+	int screenHeight = Options::baseYGeoscape;
 
 	// Create objects
 	_bg = new Surface(320, 200, screenWidth-320, screenHeight/2-100);
@@ -448,9 +448,9 @@ void GeoscapeState::handle(Action *action)
 		}
 		// quick save and quick load
 		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
-			_game->pushState(new SaveState(_game, OPT_GEOSCAPE, true));
+			_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, true));
 		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
-			_game->pushState(new LoadState(_game, OPT_GEOSCAPE, true));
+			_game->pushState(new ListLoadState(_game, OPT_GEOSCAPE, true));
 	}
 	if(!_dogfights.empty())
 	{
@@ -1582,7 +1582,7 @@ void GeoscapeState::time1Day()
 
 	// Autosave
 	if (Options::autosave >= 2)
-		_game->pushState(new SaveState(_game, OPT_GEOSCAPE, false));
+		_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, false));
 }
 
 /**
@@ -2133,6 +2133,10 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
+/**
+ * Handler for clicking on a timer button.
+ * @param action pointer to the mouse action.
+ */
 void GeoscapeState::btnTimerClick(Action *action)
 {
 	SDL_Event ev;
@@ -2142,4 +2146,48 @@ void GeoscapeState::btnTimerClick(Action *action)
 	action->getSender()->mousePress(&a, this);
 }
 
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void GeoscapeState::resize(int &dX, int &dY)
+{
+	if (_game->getSavedGame()->getSavedBattle())
+		return;
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+	int divisor = 1;
+	switch (Options::geoscapeScale)
+	{
+	case SCALE_SCREEN_DIV_3:
+		divisor = 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		divisor = 2;
+		break;
+	case SCALE_SCREEN:
+		break;
+	default:
+		return;
+	}
+	
+	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+
+	_globe->resize();
+
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		if (*i != _globe)
+		{
+			(*i)->setX((*i)->getX() + dX);
+			(*i)->setY((*i)->getY() + dY/2);
+		}
+	}
+
+}
 }

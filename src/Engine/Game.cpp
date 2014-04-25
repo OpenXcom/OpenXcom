@@ -40,7 +40,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
-#include "../Menu/SaveState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -178,6 +178,8 @@ void Game::run()
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
+	bool stupidityFlag = Options::allowResize;
 	while (!_quit)
 	{
 		// Clean up states
@@ -234,9 +236,23 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						Options::displayWidth = _event.resize.w;
-						Options::displayHeight = _event.resize.h;
-						_screen->resetDisplay();
+						if (!stupidityFlag)
+						{
+							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
+							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
+							int dX = 0, dY = 0;
+							OptionsBaseState::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
+							OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);
+							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+							{
+								(*i)->resize(dX, dY);
+							}
+							_screen->resetDisplay();
+						}
+						else
+						{
+							stupidityFlag = false;
+						}
 					}
 					break;
 				case SDL_MOUSEMOTION:
@@ -348,7 +364,7 @@ void Game::run()
 	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
 	{
-		SaveState ss = SaveState(this, OPT_MENU, false);
+		ListSaveState ss = ListSaveState(this, OPT_MENU, false);
 	}
 
 	Options::save();

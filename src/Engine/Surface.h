@@ -41,7 +41,7 @@ class Surface
 protected:
 	SDL_Surface *_surface;
 	int _x, _y;
-	SDL_Rect _crop;
+	SDL_Rect _crop, _clear;
 	bool _visible, _hidden, _redraw;
 	void *_alignedBuffer;
 	std::string _tooltip;

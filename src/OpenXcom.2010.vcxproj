@@ -386,6 +386,9 @@
     <ClCompile Include="Menu\AbandonGameState.cpp" />
     <ClCompile Include="Menu\ConfirmLoadState.cpp" />
     <ClCompile Include="Menu\IntroState.cpp" />
+    <ClCompile Include="Menu\ListGamesState.cpp" />
+    <ClCompile Include="Menu\ListLoadState.cpp" />
+    <ClCompile Include="Menu\ListSaveState.cpp" />
     <ClCompile Include="Menu\OptionsAdvancedState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
@@ -393,7 +396,6 @@
     <ClCompile Include="Menu\OptionsConfirmState.cpp" />
     <ClCompile Include="Menu\OptionsDefaultsState.cpp" />
     <ClCompile Include="Menu\OptionsGeoscapeState.cpp" />
-    <ClCompile Include="Menu\LoadState.cpp" />
     <ClCompile Include="Menu\MainMenuState.cpp" />
     <ClCompile Include="Menu\NewBattleState.cpp" />
     <ClCompile Include="Menu\NewGameState.cpp" />
@@ -403,8 +405,6 @@
     <ClCompile Include="Menu\OptionsModsState.cpp" />
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
-    <ClCompile Include="Menu\SavedGameState.cpp" />
-    <ClCompile Include="Menu\SaveState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="pch.cpp">
@@ -674,6 +674,9 @@
     <ClInclude Include="Menu\AbandonGameState.h" />
     <ClInclude Include="Menu\ConfirmLoadState.h" />
     <ClInclude Include="Menu\IntroState.h" />
+    <ClInclude Include="Menu\ListGamesState.h" />
+    <ClInclude Include="Menu\ListLoadState.h" />
+    <ClInclude Include="Menu\ListSaveState.h" />
     <ClInclude Include="Menu\OptionsAdvancedState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
@@ -681,7 +684,6 @@
     <ClInclude Include="Menu\OptionsConfirmState.h" />
     <ClInclude Include="Menu\OptionsDefaultsState.h" />
     <ClInclude Include="Menu\OptionsGeoscapeState.h" />
-    <ClInclude Include="Menu\LoadState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />
     <ClInclude Include="Menu\NewBattleState.h" />
     <ClInclude Include="Menu\NewGameState.h" />
@@ -691,8 +693,6 @@
     <ClInclude Include="Menu\OptionsModsState.h" />
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
-    <ClInclude Include="Menu\SavedGameState.h" />
-    <ClInclude Include="Menu\SaveState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="pch.h" />

@@ -5,15 +5,17 @@
 
 	!include "MUI2.nsh"
 	!include "ZipDLL.nsh"
-	!include "FileFunc.nsh"
 	!include "x64.nsh"
 
 ;--------------------------------
-;General
+;Defines
 
 	!define GAME_NAME "OpenXcom"
 	!define GAME_VERSION "0.9"
-	!define GAME_AUTHOR "OpenXcom Developers"
+	!define GAME_AUTHOR "OpenXcom Developers"	
+	
+;--------------------------------
+;General
 
 	;Name and file
 	Name "${GAME_NAME} ${GAME_VERSION}"
@@ -31,50 +33,28 @@
 ;--------------------------------
 ;Variables
 
-  Var StartMenuFolder
-  Var UFODIR
-
-;--------------------------------
-;Get UFO folder from Steam
-
-Function .onInit
-${If} ${RunningX64}
-	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
-${Else}
-	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
-${EndIf}
-	StrCpy $StartMenuFolder "${GAME_NAME}"
-	StrCpy $UFODIR ""
-	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
-	IfErrors ufo_no
-	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
-	${DirState} $R0 $R1
-	IntCmp $R1 -1 ufo_no
-	StrCpy $UFODIR $R0
-	ufo_no:
-FunctionEnd
+	Var StartMenuFolder
+	Var UFODIR
 
 ;--------------------------------
 ;Interface Settings
 
 	!define MUI_HEADERIMAGE
 	!define MUI_HEADERIMAGE_BITMAP logo.bmp
-	!define MUI_HEADERIMAGE_UNBITMAP logo.bmp
 	!define MUI_WELCOMEFINISHPAGE_BITMAP side.bmp
-	!define MUI_UNWELCOMEFINISHPAGE_BITMAP side.bmp
-	!define MUI_ABORTWARNING
+
+;--------------------------------
+;Language Selection Dialog Settings
+
+	;Remember the installer language
+	!define MUI_LANGDLL_REGISTRY_ROOT "HKLM" 
+	!define MUI_LANGDLL_REGISTRY_KEY "Software\${GAME_NAME}" 
+	!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 ;--------------------------------
 ;Pages
 	
-	;Language strings
-	LangString PAGE_UfoFolder ${LANG_ENGLISH} "${GAME_NAME} requires a copy of UFO: Enemy Unknown / X-Com: UFO Defense. You can skip this step if you're upgrading an existing installation.$\n$\nSetup will copy the required files from the following folder. To copy from a different folder, click Browse and select another folder. Click Next to continue."
-	LangString PAGE_UfoFolder_TITLE ${LANG_ENGLISH} "Choose UFO Location"
-	LangString PAGE_UfoFolder_SUBTITLE ${LANG_ENGLISH} "Choose the folder where you have UFO installed."
-	LangString DEST_UfoFolder ${LANG_ENGLISH} "UFO Folder"
-	
 	!insertmacro MUI_PAGE_WELCOME
-	!insertmacro MUI_PAGE_LICENSE "gpl.txt"
 	!insertmacro MUI_PAGE_COMPONENTS
 	!insertmacro MUI_PAGE_DIRECTORY
 	
@@ -85,6 +65,8 @@ FunctionEnd
 	!define MUI_DIRECTORYPAGE_TEXT_DESTINATION $(DEST_UfoFolder)
 	!define MUI_DIRECTORYPAGE_VARIABLE $UFODIR
 	!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
+	!define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateUFO
+	
 	!insertmacro MUI_PAGE_DIRECTORY
 	
 	;Start Menu Folder Page Configuration
@@ -102,21 +84,85 @@ FunctionEnd
 	
 	!insertmacro MUI_PAGE_FINISH
 
-	!insertmacro MUI_UNPAGE_WELCOME
 	!insertmacro MUI_UNPAGE_COMPONENTS
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
-	!insertmacro MUI_UNPAGE_FINISH
 
 ;--------------------------------
 ;Languages
 
-	!insertmacro MUI_LANGUAGE "English"
+	!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+	!insertmacro MUI_LANGUAGE "German"
+	!insertmacro MUI_LANGUAGE "Russian"
+	!insertmacro MUI_LANGUAGE "PortugueseBR"
+	!insertmacro MUI_LANGUAGE "Polish"
+	!insertmacro MUI_LANGUAGE "Romanian"
+	!insertmacro MUI_LANGUAGE "Turkish"
+
+	!include "installerlang.nsh" ; Language strings
+
+;--------------------------------
+;Reserve Files
+  
+	;If you are using solid compression, files that are required before
+	;the actual installation should be stored first in the data block,
+	;because this will make your installer start faster.
+
+	!insertmacro MUI_RESERVEFILE_LANGDLL
+
+;--------------------------------
+;Installer functions
+
+Function .onInit
+${If} ${RunningX64}
+	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
+${Else}
+	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
+${EndIf}
+	StrCpy $StartMenuFolder "${GAME_NAME}"
+	
+	; Get UFO folder from Steam
+	StrCpy $UFODIR ""
+	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
+	IfErrors ufo_no
+	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
+	IfFileExists "$R0\*.*" ufo_yes ufo_no
+	ufo_yes:
+	StrCpy $UFODIR $R0
+	ufo_no:
+	
+	!insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
+
+;--------------------------------
+;Validate UFO folder
+
+Function ValidateUFO
+	StrCmp $UFODIR "" validate_yes
+	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
+	Goto validate_yes
+	confirm_ufo:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
+	confirm_xcu:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
+	validate_no:
+	Abort	
+	validate_yes:
+FunctionEnd
 
 ;--------------------------------
 ;Installer Sections
 
-Section "Game Files" SecMain
+Section "$(NAME_SecMain)" SecMain
 
 	SectionIn RO
 
@@ -138,8 +184,7 @@ ${EndIf}
 	File "..\..\bin\data\README.txt"
 	
 	;Copy UFO files
-	${DirState} $UFODIR $R1
-	IntCmp $R1 -1 ufo_no
+	IfFileExists "$UFODIR\*.*" 0 ufo_no
 	
 	CreateDirectory "$INSTDIR\data\GEODATA"
 	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\data\GEODATA" 361
@@ -219,17 +264,17 @@ ${EndIf}
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Data Folder.lnk" "$INSTDIR\data"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk" "$INSTDIR\OpenXcom.exe"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.TXT"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\User Folder.lnk" "$DOCUMENTS\OpenXcom"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_DataFolder).lnk" "$INSTDIR\data"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${GAME_NAME}.lnk" "$INSTDIR\OpenXcom.exe"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_Readme).lnk" "$INSTDIR\README.TXT"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_Uninstall).lnk" "$INSTDIR\Uninstall.exe"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_UserFolder).lnk" "$DOCUMENTS\OpenXcom"
   
 	!insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
-Section "Data Patch" SecPatch
+Section "$(NAME_SecPatch)" SecPatch
 	
 	;(uses NSISdl.dll)
 	NSISdl::download "http://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip"
@@ -253,10 +298,12 @@ Section "Data Patch" SecPatch
 
 SectionEnd
 
-Section "DOS Music" SecMusic
+Section "$(NAME_SecMusic)" SecMusic
+	
+	AddSize 31112
 	
 	;(uses NSISdl.dll)
-	NSISdl::download "original-music-ogg-128.zip" "$TEMP\original-music-ogg-128.zip"
+	NSISdl::download "http://openxcom.org/download/extras/original-music-ogg-128.zip" "$TEMP\original-music-ogg-128.zip"
 	Pop $0
 	StrCmp $0 success success1
 		SetDetailsView show
@@ -277,22 +324,16 @@ Section "DOS Music" SecMusic
 
 SectionEnd
 
-Section /o "Desktop Shortcut" SecDesktop
+Section /o "$(NAME_SecDesktop)" SecDesktop
 
 	SetOutPath "$INSTDIR"
 	
-	CreateShortCut "$DESKTOP\OpenXcom.lnk" "$INSTDIR\OpenXcom.exe"
+	CreateShortCut "$DESKTOP\${GAME_NAME}.lnk" "$INSTDIR\OpenXcom.exe"
 
 SectionEnd
 
 ;--------------------------------
 ;Descriptions
-
-	;Language strings
-	LangString DESC_SecMain ${LANG_ENGLISH} "Files required to run ${GAME_NAME}."
-	LangString DESC_SecPatch ${LANG_ENGLISH} "Fixes errors in the original X-Com data. Recommended for first installations. (requires an internet connection)"
-	LangString DESC_SecMusic ${LANG_ENGLISH} "Adlib/SoundBlaster music recording. Fixes Windows playback issues. (requires an internet connection)"
-	LangString DESC_SecDesktop ${LANG_ENGLISH} "Creates a shortcut in the desktop to play ${GAME_NAME}."
 
 	;Assign language strings to sections
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -303,13 +344,22 @@ SectionEnd
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
+;Uninstaller Functions
+
+Function un.onInit
+
+	!insertmacro MUI_UNGETLANGUAGE
+  
+FunctionEnd
+
+;--------------------------------
 ;Uninstaller Sections
 
-Section /o "un.Delete X-Com Data" UnData
+Section /o "un.$(NAME_UnData)" UnData
 	RMDir /r "$INSTDIR\data"
 SectionEnd
 
-Section /o "un.Delete User Data" UnUser
+Section /o "un.$(NAME_UnUser)" UnUser
 	RMDir /r "$DOCUMENTS\OpenXcom"
 SectionEnd
 
@@ -349,14 +399,10 @@ Section "-un.Main"
 	
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
     
-	Delete "$SMPROGRAMS\$StartMenuFolder\Data Folder.lnk"
-	Delete "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk"
-	Delete "$SMPROGRAMS\$StartMenuFolder\Readme.lnk"
-	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
-	Delete "$SMPROGRAMS\$StartMenuFolder\User Folder.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\*.*"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
 	
-	Delete "$DESKTOP\OpenXcom.lnk"
+	Delete "$DESKTOP\${GAME_NAME}.lnk"
 	
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}"
 	DeleteRegKey /ifempty HKLM "Software\${GAME_NAME}"
@@ -365,10 +411,6 @@ SectionEnd
 
 ;--------------------------------
 ;Uninstaller Descriptions
-
-	;Language strings
-	LangString DESC_UnData ${LANG_ENGLISH} "Deletes all OpenXcom data, including mods and X-Com resources. Recommended for a clean reinstall."
-	LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all OpenXcom user data, like savegames, screenshots and options. Recommended for a complete wipe."
 
 	;Assign language strings to sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN

@@ -336,4 +336,21 @@ void SelectDestinationState::btnCydoniaClick(Action *)
 		_game->pushState(new ConfirmCydoniaState(_game, _craft));
 	}
 }
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void SelectDestinationState::resize(int &dX, int &dY)
+{
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setX((*i)->getX() + dX / 2);
+		if (*i != _window && *i != _btnCancel && *i != _txtTitle && *i != _btnCydonia)
+		{
+			(*i)->setY((*i)->getY() + dY / 2);
+		}
+	}
+}
 }

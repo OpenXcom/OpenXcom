@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "LoadState.h"
+#include "ListLoadState.h"
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -43,13 +43,13 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin, 0)
+ListLoadState::ListLoadState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 0)
 {
 	centerAllSurfaces();
 	
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
-	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);
+	_lstSaves->onMousePress((ActionHandler)&ListLoadState::lstSavesPress);
 }
 
 /**
@@ -58,7 +58,7 @@ LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, 0,showMsg)
+ListLoadState::ListLoadState(Game *game, OptionsOrigin origin, bool showMsg) : ListGamesState(game, origin, 0,showMsg)
 {
 	quickLoad("autosave");
 }
@@ -66,7 +66,7 @@ LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGame
 /**
  *
  */
-LoadState::~LoadState()
+ListLoadState::~ListLoadState()
 {
 
 }
@@ -75,7 +75,7 @@ LoadState::~LoadState()
  * Loads the selected save.
  * @param action Pointer to an action.
  */
-void LoadState::lstSavesPress(Action *action)
+void ListLoadState::lstSavesPress(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -107,7 +107,7 @@ void LoadState::lstSavesPress(Action *action)
  * Quick load game.
  * @param filename name of file without ".sav"
  */
-void LoadState::quickLoad(const std::string &filename)
+void ListLoadState::quickLoad(const std::string &filename)
 {
 	if (_showMsg) updateStatus("STR_LOADING_GAME");
 
@@ -118,14 +118,14 @@ void LoadState::quickLoad(const std::string &filename)
 		_game->setSavedGame(s);
 		Options::baseXResolution = Options::baseXGeoscape;
 		Options::baseYResolution = Options::baseYGeoscape;
-		_game->getScreen()->resetDisplay();
+		_game->getScreen()->resetDisplay(false);
 		_game->setState(new GeoscapeState(_game));
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
 			Options::baseXResolution = Options::baseXBattlescape;
 			Options::baseYResolution = Options::baseYBattlescape;
-			_game->getScreen()->resetDisplay();
+			_game->getScreen()->resetDisplay(false);
 			BattlescapeState *bs = new BattlescapeState(_game);
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);

@@ -69,12 +69,8 @@ public:
 	void btnDisplayResolutionUpClick(Action *action);
 	/// Handler for clicking the Previous Resolution button.
 	void btnDisplayResolutionDownClick(Action *action);
-	/// Handler for clicking the Display Width text.
-	void txtDisplayWidthClick(Action *action);
 	/// Handler for changing the Display Width text.
 	void txtDisplayWidthChange(Action *action);
-	/// Handler for clicking the Display Height text.
-	void txtDisplayHeightClick(Action *action);
 	/// Handler for changing the Display Height text.
 	void txtDisplayHeightChange(Action *action);
 	/// Handler for changing the Language combobox.
@@ -89,8 +85,12 @@ public:
 	void btnResizeClick(Action *action);
 	/// Handler for clicking the Lock Mouse button.
 	void btnLockMouseClick(Action *action);
+	/// Handler for updating the selected battlescape scale.
 	void updateBattlescapeScale(Action *);
+	/// Handler for updating the selected geoscape scale.
 	void updateGeoscapeScale(Action *);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &, int &);
 };
 
 }

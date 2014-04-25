@@ -21,6 +21,7 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
+#include "Position.h"
 #include <set>
 #include <vector>
 
@@ -30,7 +31,6 @@ namespace OpenXcom
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class Position;
 class BattleUnit;
 class Projectile;
 class Explosion;
@@ -40,7 +40,6 @@ class Timer;
 class Text;
 
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
-
 /**
  * Interactive map of the battlescape.
  */
@@ -75,6 +74,7 @@ private:
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);
 public:
+	static const int ICON_HEIGHT = 56;
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
@@ -133,6 +133,8 @@ public:
 	void setUnitDying(bool flag);
 	/// Refreshes the battlescape selector after scrolling.
 	void refreshSelectorPosition();
+	/// Special handling for updating map height.
+	void setHeight(int height);
 };
 
 }

@@ -1395,7 +1395,7 @@ items:
     floorSprite: 0
     handSprite: 0
     bulletSprite: 4
-    fireSound: 2
+    fireSound: 12
     compatibleAmmo:
       - STR_HWP_CANNON_SHELLS
     accuracySnap: 60
@@ -1624,7 +1624,7 @@ items:
     floorSprite: 11
     handSprite: 24
     bulletSprite: 4
-    fireSound: 2
+    fireSound: 12
     compatibleAmmo:
       - STR_HC_AP_AMMO
       - STR_HC_HE_AMMO
@@ -1694,7 +1694,7 @@ items:
     floorSprite: 7
     handSprite: 32
     bulletSprite: 3
-    fireSound: 2
+    fireSound: 12
     compatibleAmmo:
       - STR_AC_AP_AMMO
       - STR_AC_HE_AMMO
@@ -1972,7 +1972,7 @@ items:
     bigSprite: 33
     floorSprite: 32
     handSprite: 88
-    hitSound: 36
+    meleeSound: 36
     battleType: 9
     twoHanded: true
     invWidth: 1
@@ -1987,7 +1987,7 @@ items:
     bigSprite: 26
     floorSprite: 26
     handSprite: 80
-    hitSound: 54
+    meleeSound: 54
     power: 65
     damageType: 6
     accuracyMelee: 100
@@ -2574,7 +2574,7 @@ items:
     bigSprite: -3
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     clipSize: -1
     strengthApplied: true
     damageType: 7
@@ -2590,7 +2590,7 @@ items:
     bigSprite: -1
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     clipSize: -1
     strengthApplied: true
     damageType: 7
@@ -2629,7 +2629,7 @@ items:
     bigSprite: -4
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     strengthApplied: true
     damageType: 7
     accuracyMelee: 100
@@ -2668,7 +2668,7 @@ items:
     bigSprite: 26
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    meleeSound: 48
     strengthApplied: true
     damageType: 7
     accuracyMelee: 100
@@ -2828,7 +2828,7 @@ items:
 # Usage of this is hard-coded.
 # DO NOT DELETE!
   - type: ALIEN_PSI_WEAPON
-    hitSound: 36
+    meleeSound: 36
     battleType: 9
     tuUse: 25
     flatRate: true
@@ -8206,7 +8206,7 @@ ufopaedia:
     section: STR_ALIEN_ARTIFACTS
     requires:
       - STR_HEAVY_PLASMA
-    text: STR_PLASMA_RIFLE_UFOPEDIA
+    text: STR_HEAVY_PLASMA_UFOPEDIA
   - id: STR_HEAVY_PLASMA_CLIP
     type_id: 4
     section: STR_ALIEN_ARTIFACTS

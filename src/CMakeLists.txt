@@ -378,10 +378,10 @@ set ( menu_src
   Menu/MainMenuState.h
   Menu/TestState.h
   Menu/TestState.cpp
-  Menu/SaveState.cpp
-  Menu/SaveState.h
-  Menu/LoadState.cpp
-  Menu/LoadState.h
+  Menu/ListSaveState.cpp
+  Menu/ListSaveState.h
+  Menu/ListLoadState.cpp
+  Menu/ListLoadState.h
   Menu/ConfirmLoadState.cpp
   Menu/ConfirmLoadState.h
   Menu/NewGameState.cpp
@@ -392,8 +392,8 @@ set ( menu_src
   Menu/ErrorMessageState.h
   Menu/DeleteGameState.cpp
   Menu/DeleteGameState.h
-  Menu/SavedGameState.cpp
-  Menu/SavedGameState.h
+  Menu/ListGamesState.cpp
+  Menu/ListGamesState.h
   Menu/OptionsBaseState.cpp
   Menu/OptionsBaseState.h
   Menu/OptionsControlsState.cpp
@@ -613,6 +613,13 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       add_definitions ( -Werror )
     endif ( FATAL_WARNING )
 endif()
+
+if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+  add_definitions ( -Qunused-arguments -pipe )
+  if ( ENABLE_CLANG_ANALYSIS )
+    add_definitions ( --analyze )
+  endif ()
+endif ()
 
 if ( MSVC )
   if ( ENABLE_WARNING )

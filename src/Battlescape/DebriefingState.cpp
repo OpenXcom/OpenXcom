@@ -74,7 +74,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
-	_game->getScreen()->resetDisplay();
+	_game->getScreen()->resetDisplay(false);
 
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
@@ -254,6 +254,13 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
+	std::vector<Soldier*> participants;
+	for (std::vector<BattleUnit*>::const_iterator i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
+		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
+	{
+		if ((*i)->getGeoscapeSoldier())
+			participants.push_back((*i)->getGeoscapeSoldier());
+	}
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -262,7 +269,7 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else if (!_destroyBase)
 	{
-		if (_game->getSavedGame()->handlePromotions())
+		if (_game->getSavedGame()->handlePromotions(participants))
 		{
 			_game->pushState(new PromotionsState(_game));
 		}

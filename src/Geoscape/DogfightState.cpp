@@ -329,7 +329,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	{
 		graphic = _game->getResourcePack()->getSurface(ufo->getRules()->getModSprite());
 		graphic->setX(0);
-		graphic->setY(0);
+		graphic->setY(15);
 	}
 	graphic->blit(_preview);
 	_preview->setVisible(false);
@@ -1333,11 +1333,11 @@ void DogfightState::btnCautiousClick(Action *)
 	{
 		_end = false;
 		setStatus("STR_CAUTIOUS_ATTACK");
-		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * _timeScale);
 		}
-		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * _timeScale);
 		}
@@ -1356,11 +1356,11 @@ void DogfightState::btnStandardClick(Action *)
 	{
 		_end = false;
 		setStatus("STR_STANDARD_ATTACK");
-		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * _timeScale);
 		}
-		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * _timeScale);
 		}
@@ -1379,11 +1379,11 @@ void DogfightState::btnAggressiveClick(Action *)
 	{
 		_end = false;
 		setStatus("STR_AGGRESSIVE_ATTACK");
-		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * _timeScale);
 		}
-		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * _timeScale);
 		}
