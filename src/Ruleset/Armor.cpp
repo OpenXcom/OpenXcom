@@ -86,9 +86,13 @@ void Armor::load(const YAML::Node &node, const ScriptParser<BattleUnit>& parser)
 	if (node["loftemps"])
 		_loftempsSet.push_back(node["loftemps"].as<int>());
 
-	std::string script;
-	script = node["recolorScript"].as<std::string>(script);
-	_recolorScript = parser.parse(script);
+	if(const YAML::Node &scr = node["recolorScript"])
+	{
+		std::string script;
+		script = scr.as<std::string>(script);
+		delete _recolorScript;
+		_recolorScript = parser.parse(script);
+	}
 }
 
 /**

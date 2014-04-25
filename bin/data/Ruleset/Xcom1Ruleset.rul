@@ -3787,7 +3787,7 @@ armors:
       add r1 soldier_face;
       ret r1;
   - type: STR_PERSONAL_ARMOR_UC
-    spriteSheet: XCOM_1.PCK
+    spriteSheet: XCOM_1.PCK_FIXHAIR #remove _FIXHAIR to get orginal sprite
     spriteInv: MAN_1
     corpseBattle:
       - STR_CORPSE_ARMOR

@@ -1,0 +1,7 @@
+
+armors:
+  - type: STR_NONE_UC
+    recolorScript: ~
+  - type: STR_PERSONAL_ARMOR_UC
+    spriteSheet: XCOM_1.PCK
+    recolorScript: ~

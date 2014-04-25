@@ -184,7 +184,7 @@ public:
 	/// Get cached surface.
 	Surface *getCache(int part = 0) const;
 	/// Is this unit require redrawn?
-	bool isInvalid() const;
+	bool isCacheInvalid() const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?
@@ -382,7 +382,7 @@ public:
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Sets the unit's spawn unit.
-	void setSpawnUnit(std::string spawnUnit);
+	void setSpawnUnit(const std::string &spawnUnit);
 	/// Gets the unit's aggro sound.
 	int getAggroSound() const;
 	/// Sets the unit's energy level.

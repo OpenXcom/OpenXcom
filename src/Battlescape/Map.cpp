@@ -1180,7 +1180,7 @@ void Map::cacheUnit(BattleUnit *unit)
 	unitSprite->setPalette(this->getPalette());
 	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
 
-	if (unit->isInvalid())
+	if (unit->isCacheInvalid())
 	{
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)

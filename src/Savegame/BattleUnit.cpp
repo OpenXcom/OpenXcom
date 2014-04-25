@@ -774,7 +774,7 @@ Surface *BattleUnit::getCache(int part) const
 /**
  * Check if the unit is still cached in the Map cache.
  */
-bool BattleUnit::isInvalid() const
+bool BattleUnit::isCacheInvalid() const
 {
 	return _cacheInvalid;
 }
@@ -2331,7 +2331,7 @@ std::string BattleUnit::getSpawnUnit() const
  * Set the unit that is spawned when this one dies.
  * @return unit.
  */
-void BattleUnit::setSpawnUnit(std::string spawnUnit)
+void BattleUnit::setSpawnUnit(const std::string &spawnUnit)
 {
 	_spawnUnit = spawnUnit;
 }
