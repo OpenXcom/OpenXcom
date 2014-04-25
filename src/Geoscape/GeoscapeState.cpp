@@ -1092,15 +1092,14 @@ bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 	Region *region = _game->getSavedGame()->locateRegion(*ts);
 	if (region)
 	{
-		//TODO: This should come from mission rules!
-		region->addActivityAlien(1000);
+		region->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
 		//kids, tell your folks... don't ignore terror sites.
 	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
 		{
-			(*k)->addActivityAlien(1000);
+			(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
 			break;
 		}
 	}
