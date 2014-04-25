@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include "StatString.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -42,17 +43,14 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
-	// NOTE: conditionNames must be terminated with an empty string
-	std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", ""};
 	_string = node["string"].as<std::string>(_string);
-	int i = 0;
-	while (conditionNames[i] != "")
+	std::vector<std::string> conditionNames = getConditionNames();
+	for(std::vector<std::string>::iterator it = conditionNames.begin(); it != conditionNames.end(); ++it)
 	{
-		if (node[conditionNames[i]])
+		if (node[*it])
 		{
-			_conditions.push_back(getCondition(conditionNames[i], node));
+			_conditions.push_back(getCondition(*it, node));
 		}
-		i++;
 	}
 }
 
@@ -88,10 +86,11 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 	std::wstring wstring;
 	std::wstring statString = L"";
 	bool continueCalc = true;
+	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
+
 	for (i1=0; i1 < statStrings.size() && continueCalc; i1++)
 	{
 		string = statStrings[i1]->getString();
-		// now, iterate through the conditions found in the StatString
 		const std::vector<StatStringCondition* > conditions = statStrings[i1]->getConditions();
 		conditionsMet = 0;
 		for (i2=0; i2 < conditions.size() && continueCalc; i2++)
@@ -99,65 +98,8 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 			conditionName = conditions[i2]->getConditionName();
 			minVal = conditions[i2]->getMinVal();
 			maxVal = conditions[i2]->getMaxVal();
-			if (conditionName == "psiStrength")
-			{
-				if (currentStats.psiStrength >= minVal && currentStats.psiStrength <= maxVal) {
+			if (currentStatsMap.find(conditionName)->second >= minVal && currentStatsMap.find(conditionName)->second <= maxVal) {
 					conditionsMet++;
-				}
-			}
-			else if (conditionName == "psiSkill")
-			{
-				if (currentStats.psiSkill >= minVal && currentStats.psiSkill <= maxVal) {
-					conditionsMet++;
-				}			
-			}
-			else if (conditionName == "bravery")
-			{
-				if (currentStats.bravery >= minVal && currentStats.bravery <= maxVal) {
-					conditionsMet++;
-				}			
-			}
-			else if (conditionName == "strength")
-			{
-				if (currentStats.strength >= minVal && currentStats.strength <= maxVal) {
-					conditionsMet++;
-				}			
-			}
-			else if (conditionName == "firing")
-			{
-				if (currentStats.firing >= minVal && currentStats.firing <= maxVal) {
-					conditionsMet++;
-				}	
-			}
-			else if (conditionName == "reactions")
-			{
-				if (currentStats.reactions >= minVal && currentStats.reactions <= maxVal) {
-					conditionsMet++;
-				}	
-			}
-			else if (conditionName == "stamina")
-			{
-				if (currentStats.stamina >= minVal && currentStats.stamina <= maxVal) {
-					conditionsMet++;
-				}	
-			}
-			else if (conditionName == "tu")
-			{
-				if (currentStats.tu >= minVal && currentStats.tu <= maxVal) {
-					conditionsMet++;
-				}	
-			}
-			else if (conditionName == "health")
-			{
-				if (currentStats.health >= minVal && currentStats.health <= maxVal) {
-					conditionsMet++;
-				}	
-			}
-			else if (conditionName == "throwing")
-			{
-				if (currentStats.throwing >= minVal && currentStats.throwing <= maxVal) {
-					conditionsMet++;
-				}	
 			}
 			if (conditionsMet == conditions.size()) {
 				wstring.assign(string.begin(), string.end());
@@ -170,5 +112,44 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 	}
 	return statString;
 }
+
+/**
+ * Get the ConditionNames vector.
+ */
+std::vector<std::string> StatString::getConditionNames()
+{
+	std::vector<std::string> conditionNames;
+	conditionNames.push_back("psiStrength");
+	conditionNames.push_back("psiSkill");
+	conditionNames.push_back("bravery");
+	conditionNames.push_back("strength");
+	conditionNames.push_back("firing");
+	conditionNames.push_back("reactions");
+	conditionNames.push_back("stamina");
+	conditionNames.push_back("tu");
+	conditionNames.push_back("health");
+	conditionNames.push_back("throwing");
+	return conditionNames;
+}
+
+/**
+ * Get a map of currentStats.
+ */
+std::map<std::string, int> StatString::getCurrentStats(UnitStats &currentStats)
+{
+	std::map<std::string, int> currentStatsMap;
+	currentStatsMap["psiStrength"] = currentStats.psiStrength;
+	currentStatsMap["psiSkill"] = currentStats.psiSkill;
+	currentStatsMap["bravery"] = currentStats.bravery;
+	currentStatsMap["strength"] = currentStats.strength;
+	currentStatsMap["firing"] = currentStats.firing;
+	currentStatsMap["reactions"] = currentStats.reactions;
+	currentStatsMap["stamina"] = currentStats.stamina;
+	currentStatsMap["tu"] = (currentStats.tu);
+	currentStatsMap["health"] = currentStats.health;
+	currentStatsMap["throwing"] = currentStats.throwing;
+	return currentStatsMap;
+}
+
 
 }

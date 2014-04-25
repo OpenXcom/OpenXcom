@@ -123,6 +123,10 @@ public:
 	const std::string getString();
 	/// Calculate a StatString.
 	static const std::wstring calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings);
+	/// Get the ConditionNames.
+	static std::vector<std::string> getConditionNames();
+	/// Get the CurrentStats.
+	static std::map<std::string, int> getCurrentStats(UnitStats &currentStats);
 };
 
 }
