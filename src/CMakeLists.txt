@@ -486,6 +486,10 @@ set ( ruleset_src
   Ruleset/UfoTrajectory.h
   Ruleset/RuleAlienMission.cpp
   Ruleset/RuleAlienMission.h
+  Ruleset/StatString.h
+  Ruleset/StatString.cpp
+  Ruleset/StatStringCondition.h
+  Ruleset/StatStringCondition.cpp
 )
 
 set ( savegame_src

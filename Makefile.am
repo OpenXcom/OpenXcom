@@ -535,6 +535,10 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
+	src/Ruleset/StatString.h \
+	src/Ruleset/StatString.cpp \
+	src/Ruleset/StatStringCondition.h \
+	src/Ruleset/StatStringCondition.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \
