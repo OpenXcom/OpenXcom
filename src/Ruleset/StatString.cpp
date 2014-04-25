@@ -145,7 +145,7 @@ std::map<std::string, int> StatString::getCurrentStats(UnitStats &currentStats)
 	currentStatsMap["firing"] = currentStats.firing;
 	currentStatsMap["reactions"] = currentStats.reactions;
 	currentStatsMap["stamina"] = currentStats.stamina;
-	currentStatsMap["tu"] = (currentStats.tu);
+	currentStatsMap["tu"] = currentStats.tu;
 	currentStatsMap["health"] = currentStats.health;
 	currentStatsMap["throwing"] = currentStats.throwing;
 	return currentStatsMap;
