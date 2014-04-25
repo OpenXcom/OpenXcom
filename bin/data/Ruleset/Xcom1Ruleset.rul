@@ -1395,7 +1395,7 @@ items:
     floorSprite: 0
     handSprite: 0
     bulletSprite: 4
-    fireSound: 2
+    fireSound: 12
     compatibleAmmo:
       - STR_HWP_CANNON_SHELLS
     accuracySnap: 60
@@ -1624,7 +1624,7 @@ items:
     floorSprite: 11
     handSprite: 24
     bulletSprite: 4
-    fireSound: 2
+    fireSound: 12
     compatibleAmmo:
       - STR_HC_AP_AMMO
       - STR_HC_HE_AMMO
@@ -1694,7 +1694,7 @@ items:
     floorSprite: 7
     handSprite: 32
     bulletSprite: 3
-    fireSound: 2
+    fireSound: 12
     compatibleAmmo:
       - STR_AC_AP_AMMO
       - STR_AC_HE_AMMO

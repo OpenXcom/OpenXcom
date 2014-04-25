@@ -241,6 +241,8 @@ void Game::run()
 							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
 							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
 							int dX = 0, dY = 0;
+							OptionsBaseState::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
+							OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);
 							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 							{
 								(*i)->resize(dX, dY);

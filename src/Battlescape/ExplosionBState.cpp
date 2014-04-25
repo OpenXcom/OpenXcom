@@ -122,7 +122,7 @@ void ExplosionBState::init()
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 			// explosion sound
 			if (_power <= 80)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 2)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 

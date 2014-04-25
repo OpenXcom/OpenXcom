@@ -1851,7 +1851,7 @@ void Globe::resize()
 	int width = Options::baseXGeoscape - 64;
 	int height = Options::baseYGeoscape;
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		surfaces[i]->setWidth(width);
 		surfaces[i]->setHeight(height);

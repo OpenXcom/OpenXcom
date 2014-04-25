@@ -2171,7 +2171,7 @@ void GeoscapeState::resize(int &dX, int &dY)
 	default:
 		return;
 	}
-
+	
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
 	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
 
