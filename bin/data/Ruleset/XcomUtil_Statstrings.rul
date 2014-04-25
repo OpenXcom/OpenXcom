@@ -32,8 +32,3 @@
     reactions: [60, ~]
   - string: "r"
     reactions: [50, 59]
-# Here are some additional test statStrings.
-  - string: "Wimp"
-    bravery: [~, 10]
-  - string: "Wimp"
-    strength: [~, 20]
