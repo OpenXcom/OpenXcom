@@ -46,13 +46,13 @@ const std::string StatStringCondition::getConditionName()
 }
 
 /// Get MinVal.
-const int StatStringCondition::getMinVal()
+int StatStringCondition::getMinVal()
 {
 	return _minVal;
 }
 
 /// Get MaxVal.
-const int StatStringCondition::getMaxVal()
+int StatStringCondition::getMaxVal()
 {
 	return _maxVal;
 }

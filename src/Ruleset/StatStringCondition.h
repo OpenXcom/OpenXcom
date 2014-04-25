@@ -38,9 +38,9 @@ public:
 	/// Get MinVal.
 	const std::string getConditionName();
 	/// Get MinVal.
-	const int getMinVal();
+	int getMinVal();
 	/// Get MaxVal.
-	const int getMaxVal();
+	int getMaxVal();
 };
 
 }
