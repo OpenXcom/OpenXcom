@@ -43,15 +43,18 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
-	_string = node["string"].as<std::string>(_string);
-	std::vector<std::string> conditionNames = getConditionNames();
-	for(std::vector<std::string>::iterator it = conditionNames.begin(); it != conditionNames.end(); ++it)
+    // NOTE: conditionNames must be terminated with an empty string
+    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", ""};
+	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
+    int i = 0;
+    while (conditionNames[i] != "")
 	{
-		if (node[*it])
+        if (node[conditionNames[i]])
 		{
-			_conditions.push_back(getCondition(*it, node));
-		}
-	}
+            _conditions.push_back(getCondition(conditionNames[i], node));
+        }
+        i++;
+    }
 }
 
 StatStringCondition *StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
@@ -75,37 +78,40 @@ const std::vector< StatStringCondition* > StatString::getConditions()
 
 const std::string StatString::getString()
 {
-	return _string;
+	return _stringToBeAddedIfAllConditionsAreMet;
 }
 
 const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings)
 {
 	unsigned int i1, i2, conditionsMet;
-	int minVal, maxVal;
+	int minVal, maxVal, currentVal;
 	std::string conditionName, string;
 	std::wstring wstring;
 	std::wstring statString = L"";
 	bool continueCalc = true;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
 
-	for (i1=0; i1 < statStrings.size() && continueCalc; i1++)
+	for (std::vector<StatString *>::const_iterator i1 = statStrings.begin(); i1 != statStrings.end(); ++i1)
 	{
-		string = statStrings[i1]->getString();
-		const std::vector<StatStringCondition* > conditions = statStrings[i1]->getConditions();
+		string = (*i1)->getString();
+		const std::vector<StatStringCondition* > conditions = (*i1)->getConditions();
 		conditionsMet = 0;
-		for (i2=0; i2 < conditions.size() && continueCalc; i2++)
+		for (std::vector<StatStringCondition* >::const_iterator i2 = conditions.begin(); i2 != conditions.end(); ++i2)
 		{
-			conditionName = conditions[i2]->getConditionName();
-			minVal = conditions[i2]->getMinVal();
-			maxVal = conditions[i2]->getMaxVal();
-			if (currentStatsMap.find(conditionName)->second >= minVal && currentStatsMap.find(conditionName)->second <= maxVal) {
-					conditionsMet++;
-			}
-			if (conditionsMet == conditions.size()) {
-				wstring.assign(string.begin(), string.end());
-				statString = statString + wstring;
-				if (wstring.length() > 1) {
-					continueCalc = false;
+			conditionName = (*i2)->getConditionName();
+			minVal = (*i2)->getMinVal();
+			maxVal = (*i2)->getMaxVal();
+			if (currentStatsMap.find(conditionName) != currentStatsMap.end())
+			{
+				if (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal) {
+						conditionsMet++;
+				}
+				if (conditionsMet == conditions.size()) {
+					wstring.assign(string.begin(), string.end());
+					statString = statString + wstring;
+					if (wstring.length() > 1) {
+						continueCalc = false;
+					}
 				}
 			}
 		}

@@ -107,7 +107,7 @@ long, nothing will be changed.
 class StatString
 {
 private:
-	std::string _string;
+	std::string _stringToBeAddedIfAllConditionsAreMet;
 	std::vector< StatStringCondition* > _conditions;
 	StatStringCondition *getCondition(const std::string &conditionName, const YAML::Node &node);
 public:
