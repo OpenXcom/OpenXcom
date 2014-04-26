@@ -40,8 +40,8 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
-#include "../Menu/SaveState.h"
 #include "../Menu/TestState.h"
+#include "../Menu/OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -238,11 +238,14 @@ void Game::run()
 					{
 						if (!stupidityFlag)
 						{
-							Options::displayWidth = _event.resize.w;
-							Options::displayHeight = _event.resize.h;
+							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
+							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
+							int dX = 0, dY = 0;
+							OptionsBaseState::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
+							OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);
 							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 							{
-								(*i)->resize();
+								(*i)->resize(dX, dY);
 							}
 							_screen->resetDisplay();
 						}
@@ -356,12 +359,6 @@ void Game::run()
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
 		}
-	}
-	
-	// Auto-save
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
-	{
-		SaveState ss = SaveState(this, OPT_MENU, false);
 	}
 
 	Options::save();
@@ -555,12 +552,16 @@ Ruleset *Game::getRuleset() const
 }
 
 /**
- * Changes the ruleset currently in use by the game.
- * @param filename Filename of the language file.
+ * Loads the rulesets specified in the game options.
  */
 void Game::loadRuleset()
 {
+	Options::badMods.clear();
 	_rules = new Ruleset();
+	if (Options::rulesets.empty())
+	{
+		Options::rulesets.push_back("Xcom1Ruleset");
+	}
 	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end();)
 	{
 		try
@@ -571,8 +572,14 @@ void Game::loadRuleset()
 		catch (YAML::Exception &e)
 		{
 			Log(LOG_WARNING) << e.what();
+			Options::badMods.push_back(*i);
+			Options::badMods.push_back(e.what());
 			i = Options::rulesets.erase(i);
 		}
+	}
+	if (Options::rulesets.empty())
+	{
+		throw Exception("Failed to load ruleset");
 	}
 	_rules->sortLists();
 }

@@ -366,25 +366,8 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 	_zoom = _game->getSavedGame()->getGlobeZoom();
-
-	_radius.push_back(0.45*height);
-	_radius.push_back(0.60*height);
-	_radius.push_back(0.90*height);
-	_radius.push_back(1.40*height);
-	_radius.push_back(2.25*height);
-	_radius.push_back(3.60*height);
-	_earthData.resize(_radius.size());
-
-	//filling normal field for each radius
-	for(size_t r = 0; r<_radius.size(); ++r)
-	{
-		_earthData[r].resize(width * height);
-		for(int j=0; j<height; ++j)
-			for(int i=0; i<width; ++i)
-			{
-				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
-			}
-	}
+	
+	setupRadii(width, height);
 
 	//filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
@@ -1850,10 +1833,65 @@ bool Globe::isZoomedOutToMax() const
 	return (_zoom == 0);
 }
 
+/*
+ * Turns Radar lines on or off.
+ */
 void Globe::toggleRadarLines()
 {
 	Options::globeRadarLines = !Options::globeRadarLines;
 	drawRadars();
 }
 
+/*
+ * Resizes the geoscape.
+ */
+void Globe::resize()
+{
+	Surface *surfaces[4] = {this, _markers, _countries, _radars};
+	int width = Options::baseXGeoscape - 64;
+	int height = Options::baseYGeoscape;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		surfaces[i]->setWidth(width);
+		surfaces[i]->setHeight(height);
+		surfaces[i]->invalidate();
+	}
+	_clipper->Wxrig = width;
+	_clipper->Wybot = height;
+	_cenX = width / 2;
+	_cenY = height / 2;
+	setupRadii(width, height);
+	cachePolygons();
+}
+
+/*
+ * Set up the Radius of earth at the various zoom levels.
+ * @param width the new width of the globe.
+ * @param height the new height of the globe.
+ */
+void Globe::setupRadii(int width, int height)
+{
+	_radius.clear();
+
+	_radius.push_back(0.45*height);
+	_radius.push_back(0.60*height);
+	_radius.push_back(0.90*height);
+	_radius.push_back(1.40*height);
+	_radius.push_back(2.25*height);
+	_radius.push_back(3.60*height);
+
+	_earthData.resize(_radius.size());
+	//filling normal field for each radius
+
+	for(size_t r = 0; r<_radius.size(); ++r)
+	{
+		_earthData[r].resize(width * height);
+		for(int j=0; j<height; ++j)
+			for(int i=0; i<width; ++i)
+			{
+				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
+			}
+	}
+}
 }//namespace OpenXcom

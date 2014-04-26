@@ -106,6 +106,8 @@ public:
 	bool getShowAllLayers() const;
 	/// Checks if map coordinates X,Y,Z are on screen.
 	bool isOnScreen(const Position &mapPos) const;
+	/// Resize the viewable area.
+	void resize();
 };
 }
 #endif

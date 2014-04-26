@@ -120,8 +120,8 @@ void BuildFacilitiesState::PopulateBuildList()
  */
 void BuildFacilitiesState::init()
 {
-	State::init();
 	_state->init();
+	State::init();
 }
 
 /**

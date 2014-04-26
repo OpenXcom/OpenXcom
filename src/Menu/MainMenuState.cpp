@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainMenuState.h"
+#include <sstream>
 #include "../version.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -27,12 +28,12 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Music.h"
-#include "NewGameState.h"
-#include "NewBattleState.h"
-#include "LoadState.h"
-#include "OptionsVideoState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "NewGameState.h"
+#include "NewBattleState.h"
+#include "ListLoadState.h"
+#include "OptionsVideoState.h"
 
 namespace OpenXcom
 {
@@ -46,6 +47,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
 	_game->getScreen()->resetDisplay(false);
+
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnNewGame = new TextButton(92, 20, 64, 90);
@@ -139,7 +141,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, OPT_MENU));
+	_game->pushState(new ListLoadState(_game, OPT_MENU));
 }
 
 /**
@@ -161,4 +163,18 @@ void MainMenuState::btnQuitClick(Action *)
 	_game->quit();
 }
 
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void MainMenuState::resize(int &dX, int &dY)
+{
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+	State::resize(dX, dY);
+}
 }

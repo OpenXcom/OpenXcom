@@ -1,0 +1,34 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+# See http://ufopaedia.org/index.php?title=Statstrings
+# These are the default statStrings from XcomUtil.
+  statStrings:
+  - string: "x"
+    psiStrength: [~, 30]
+  - string: "P"
+    psiStrength: [80, ~]
+  - string: "p"
+    psiStrength: [60, 79]
+  - string: "K"
+    psiSkill: [60, ~]
+  - string: "k"
+    psiSkill: [30, 59]
+  - string: "b"
+    bravery: [60, ~]
+  - string: "c"
+    bravery: [~, 10]
+  - string: "w"
+    strength: [~, 25]
+  - string: "Snpr"
+    firing: [60, ~]
+    reactions: [60, ~]
+  - string: "M"
+    firing: [70, ~]
+  - string: "m"
+    firing: [60, 69]
+  - string: "Sct"
+    reactions: [50, ~]
+    tu: [60, ~]
+  - string: "R"
+    reactions: [60, ~]
+  - string: "r"
+    reactions: [50, 59]

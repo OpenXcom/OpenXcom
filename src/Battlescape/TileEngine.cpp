@@ -552,11 +552,12 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 
 	int unitRadius = potentialUnit->getLoftemps(); //width == loft in default loftemps set
 	int targetSize = potentialUnit->getArmor()->getSize() - 1;
+	int xOffset = potentialUnit->getPosition().x - tile->getPosition().x;
+	int yOffset = potentialUnit->getPosition().y - tile->getPosition().y;
 	if (targetSize > 0)
 	{
 		unitRadius = 3;
 	}
-
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
 	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
@@ -598,8 +599,8 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 					for (int y = 0; y <= targetSize; ++y)
 					{
 						//voxel of hit must be inside of scanned box
-						if (_trajectory.at(0).x/16 == (scanVoxel->x/16) + x &&
-							_trajectory.at(0).y/16 == (scanVoxel->y/16) + y &&
+						if (_trajectory.at(0).x/16 == (scanVoxel->x/16) + x + xOffset &&
+							_trajectory.at(0).y/16 == (scanVoxel->y/16) + y + yOffset &&
 							_trajectory.at(0).z >= targetMinHeight &&
 							_trajectory.at(0).z <= targetMaxHeight)
 						{

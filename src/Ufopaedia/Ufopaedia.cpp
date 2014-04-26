@@ -97,31 +97,31 @@ namespace OpenXcom
 		switch(article->getType())
 		{
 			case UFOPAEDIA_TYPE_CRAFT:
-				return new ArticleStateCraft(game, static_cast<ArticleDefinitionCraft *> (article));
+				return new ArticleStateCraft(game, dynamic_cast<ArticleDefinitionCraft *> (article));
 				break;
 			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
-				return new ArticleStateCraftWeapon(game, static_cast<ArticleDefinitionCraftWeapon *> (article));
+				return new ArticleStateCraftWeapon(game, dynamic_cast<ArticleDefinitionCraftWeapon *> (article));
 				break;
 			case UFOPAEDIA_TYPE_VEHICLE:
-				return new ArticleStateVehicle(game, static_cast<ArticleDefinitionVehicle *> (article));
+				return new ArticleStateVehicle(game, dynamic_cast<ArticleDefinitionVehicle *> (article));
 				break;
 			case UFOPAEDIA_TYPE_ITEM:
-				return new ArticleStateItem(game, static_cast<ArticleDefinitionItem *> (article));
+				return new ArticleStateItem(game, dynamic_cast<ArticleDefinitionItem *> (article));
 				break;
 			case UFOPAEDIA_TYPE_ARMOR:
-				return new ArticleStateArmor(game, static_cast<ArticleDefinitionArmor *> (article));
+				return new ArticleStateArmor(game, dynamic_cast<ArticleDefinitionArmor *> (article));
 				break;
 			case UFOPAEDIA_TYPE_BASE_FACILITY:
-				return new ArticleStateBaseFacility(game, static_cast<ArticleDefinitionBaseFacility *> (article));
+				return new ArticleStateBaseFacility(game, dynamic_cast<ArticleDefinitionBaseFacility *> (article));
 				break;
 			case UFOPAEDIA_TYPE_TEXT:
-				return new ArticleStateText(game, static_cast<ArticleDefinitionText *> (article));
+				return new ArticleStateText(game, dynamic_cast<ArticleDefinitionText *> (article));
 				break;
 			case UFOPAEDIA_TYPE_TEXTIMAGE:
-				return new ArticleStateTextImage(game, static_cast<ArticleDefinitionTextImage *> (article));
+				return new ArticleStateTextImage(game, dynamic_cast<ArticleDefinitionTextImage *> (article));
 				break;
 			case UFOPAEDIA_TYPE_UFO:
-				return new ArticleStateUfo(game, static_cast<ArticleDefinitionUfo *> (article));
+				return new ArticleStateUfo(game, dynamic_cast<ArticleDefinitionUfo *> (article));
 				break;
 			default: break;
 		}

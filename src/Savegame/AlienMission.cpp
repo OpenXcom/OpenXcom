@@ -408,7 +408,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	{
 		// UFO landed.
 
-		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(curWaypoint) == 0)
+		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(curWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 		{
 			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.
@@ -507,7 +507,8 @@ void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 		break;
 	case Ufo::LANDED:
 		{
-			if (_rule.getType() == "STR_ALIEN_HARVEST" || _rule.getType() == "STR_ALIEN_ABDUCTION" || _rule.getType() == "STR_ALIEN_TERROR")
+			// base missions only get points when they are completed.
+			if (_rule.getPoints() > 0 && _rule.getType() != "STR_ALIEN_BASE")
 			{
 				addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			}

@@ -16,41 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_CONFIRMLOADSTATE_H
-#define OPENXCOM_CONFIRMLOADSTATE_H
+#ifndef OPENXCOM__LISTLOADSTATE_H
+#define OPENXCOM__LISTLOADSTATE_H
 
-#include "../Engine/State.h"
-#include <string>
-#include "OptionsBaseState.h"
+#include "ListGamesState.h"
 
 namespace OpenXcom
 {
-	
-class TextButton;
-class Window;
-class Text;
 
 /**
- * Confirms loading a save with missing content.
+ * Load Game screen for listing info on available
+ * saved games and loading them.
  */
-class ConfirmLoadState : public State
+class ListLoadState : public ListGamesState
 {
-private:
-	OptionsOrigin _origin;
-	std::string _fileName;
-	TextButton *_btnYes, *_btnNo;
-	Window *_window;
-	Text *_txtText;
 public:
-	/// Creates a new confirmation state.
-	ConfirmLoadState(Game *game, OptionsOrigin origin, std::string fileName);
-	/// Cleans up the confirmation state.
-	virtual ~ConfirmLoadState();
-	/// Handler for clicking the Yes button.
-	void btnYesClick(Action *action);
-	/// Handler for clicking the No button.
-	void btnNoClick(Action *action);
+	/// Creates the Load Game state.
+	ListLoadState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Load Game state.
+	~ListLoadState();
+	/// Handler for clicking the Saves list.
+	void lstSavesPress(Action *action);
 };
 
 }
+
 #endif

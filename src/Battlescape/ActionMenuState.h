@@ -48,6 +48,8 @@ public:
 	void handle(Action *action);
 	/// Handler for clicking a action menu item.
 	void btnActionMenuItemClick(Action *action);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }
