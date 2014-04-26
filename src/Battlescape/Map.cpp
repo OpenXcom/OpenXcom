@@ -1302,5 +1302,15 @@ void Map::setHeight(int height)
 {
 	Surface::setHeight(height);
 	_visibleMapHeight = height - ICON_HEIGHT;
+	_message->setY(height/2 - _message->getHeight()/2);
+}
+/*
+ * Special handling for setting the width of the map viewport.
+ * @param height the new base screen width.
+ */
+void Map::setWidth(int width)
+{
+	Surface::setWidth(width);
+	_message->setX(width/2 - _message->getWidth()/2);
 }
 }
