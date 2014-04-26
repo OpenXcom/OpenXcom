@@ -1585,6 +1585,13 @@ void GeoscapeState::time1Day()
 	// Handle resupply of alien bases.
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
+
+	// Autosave every 10 days
+	int day = _game->getSavedGame()->getTime()->getDay();
+	if (day == 1 || day % 10 == 0)
+	{
+		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+	}
 }
 
 /**
