@@ -26,12 +26,14 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
+#include "../Engine/Palette.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
 #include "IntroState.h"
+#include "ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -131,6 +133,7 @@ void StartState::think()
 		Mix_HaltMusic();
 		_game->getScreen()->clear();
 		blit();
+		_game->getScreen()->flip();
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
@@ -138,12 +141,26 @@ void StartState::think()
 		if (!Options::reload && Options::playIntro)
 		{
 			Options::keepAspectRatio = true;
+			_game->getScreen()->resetDisplay(false);
 			_game->setState(new IntroState(_game, _wasLetterBoxed));
 		}
 		else
 		{
 			Options::keepAspectRatio = _wasLetterBoxed;
-			_game->setState(new MainMenuState(_game));
+			State *state = new MainMenuState(_game);
+			_game->setState(state);
+			// Check for mod loading errors
+			if (!Options::badMods.empty())
+			{
+				std::wostringstream error;
+				error << tr("STR_MOD_UNSUCCESSFUL") << L'\x02';
+				for (std::vector<std::string>::iterator i = Options::badMods.begin(); i != Options::badMods.end(); ++i)
+				{
+					error << Language::fsToWstr(*i) << L'\n';
+				}
+				Options::badMods.clear();
+				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+			}
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);

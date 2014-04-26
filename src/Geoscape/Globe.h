@@ -194,7 +194,10 @@ public:
 	bool getShowRadar(void);
 	/// set the _radarLines variable
 	void toggleRadarLines();
-
+	/// Update the resolution settings, we just resized the window.
+	void resize();
+	/// Set up the radius of earth and stuff.
+	void setupRadii(int width, int height);
 };
 
 }

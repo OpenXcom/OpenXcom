@@ -76,6 +76,7 @@ class SavedGame
 private:
 	std::wstring _name;
 	GameDifficulty _difficulty;
+	bool _ironman;
 	GameTime *_time;
 	std::vector<int> _funds, _maintenance, _researchScores, _incomes, _expenditures;
 	double _globeLon, _globeLat;
@@ -121,6 +122,10 @@ public:
 	GameDifficulty getDifficulty() const;
 	/// Sets the game difficulty.
 	void setDifficulty(GameDifficulty difficulty);
+	/// Gets if the game is in ironman mode.
+	bool isIronman() const;
+	/// Sets if the game is in ironman mode.
+	void setIronman(bool ironman);
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Gets the list of funds from previous months.

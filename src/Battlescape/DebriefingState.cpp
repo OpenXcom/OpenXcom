@@ -643,7 +643,11 @@ void DebriefingState::prepareDebriefing()
 					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
 					if (soldier != 0)
+					{
 						recoverItems((*j)->getInventory(), base);
+						// calculate new statString
+						soldier->calcStatString(_game->getRuleset()->getStatStrings());
+					}
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);

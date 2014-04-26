@@ -98,7 +98,7 @@ void Screen::makeVideoFlags()
 	}
 
 	_bpp = (isHQXEnabled() || isOpenGLEnabled()) ? 32 : 8;
-	_baseWidth = Options::baseXResolution - (Options::baseXResolution % 4);
+	_baseWidth = Options::baseXResolution;
 	_baseHeight = Options::baseYResolution;
 }
 

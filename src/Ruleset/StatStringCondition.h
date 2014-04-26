@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,29 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__LISTLOADSTATE_H
-#define OPENXCOM__LISTLOADSTATE_H
+#ifndef OPENXCOM_STATSTRINGCONDITION_H
+#define OPENXCOM_STATSTRINGCONDITION_H
 
-#include "ListGamesState.h"
+#include <string>
 
 namespace OpenXcom
 {
 
-/**
- * Load Game screen for listing info on available
- * saved games and loading them.
- */
-class ListLoadState : public ListGamesState
+class StatStringCondition 
 {
+private:
+	std::string _conditionName;
+	int _minVal;
+	int _maxVal;
 public:
-	/// Creates the Load Game state.
-	ListLoadState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Load Game state.
-	~ListLoadState();
-	/// Handler for clicking the Saves list.
-	void lstSavesPress(Action *action);
+	/// Creates a blank StatStringCondition.
+	StatStringCondition(const std::string conditionName, int minVal, int maxVal);
+	/// Cleans up the StatStringCondition.
+	virtual ~StatStringCondition();
+	/// Get MinVal.
+	const std::string getConditionName();
+	/// Get MinVal.
+	int getMinVal();
+	/// Get MaxVal.
+	int getMaxVal();
 };
 
 }
-
 #endif

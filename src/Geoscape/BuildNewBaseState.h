@@ -93,6 +93,8 @@ public:
 	void btnZoomOutRightClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Let the state know the window has been resized.
+	void resize(int &dX, int &dY);
 };
 
 }
