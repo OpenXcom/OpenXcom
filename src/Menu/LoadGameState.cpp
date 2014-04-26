@@ -65,6 +65,7 @@ LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, const std::string
 
 		add(_txtStatus);
 
+		centerAllSurfaces();
 		// Set up objects
 		_txtStatus->setColor(Palette::blockOffset(8)+5);
 		_txtStatus->setBig();
