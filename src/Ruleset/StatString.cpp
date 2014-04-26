@@ -45,7 +45,7 @@ void StatString::load(const YAML::Node &node)
 {
     std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing"};
 	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
-    for (int i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
+    for (unsigned int i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
 	{
         if (node[conditionNames[i]])
 		{
@@ -80,20 +80,20 @@ const std::string StatString::getString()
 
 const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings)
 {
-	unsigned int i1, i2, conditionsMet;
-	int minVal, maxVal, currentVal;
+	unsigned int conditionsMet;
+	int minVal, maxVal;
 	std::string conditionName, string;
 	std::wstring wstring;
 	std::wstring statString = L"";
 	bool continueCalc = true;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
 
-	for (std::vector<StatString *>::const_iterator i1 = statStrings.begin(); i1 != statStrings.end(); ++i1)
+	for (std::vector<StatString *>::const_iterator i1 = statStrings.begin(); i1 != statStrings.end() && continueCalc; ++i1)
 	{
 		string = (*i1)->getString();
 		const std::vector<StatStringCondition* > conditions = (*i1)->getConditions();
 		conditionsMet = 0;
-		for (std::vector<StatStringCondition* >::const_iterator i2 = conditions.begin(); i2 != conditions.end(); ++i2)
+		for (std::vector<StatStringCondition* >::const_iterator i2 = conditions.begin(); i2 != conditions.end() && continueCalc; ++i2)
 		{
 			conditionName = (*i2)->getConditionName();
 			minVal = (*i2)->getMinVal();
