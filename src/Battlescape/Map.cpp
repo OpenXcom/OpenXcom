@@ -1306,7 +1306,7 @@ void Map::setHeight(int height)
 }
 /*
  * Special handling for setting the width of the map viewport.
- * @param height the new base screen width.
+ * @param width the new base screen width.
  */
 void Map::setWidth(int width)
 {
