@@ -43,17 +43,14 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
-    // NOTE: conditionNames must be terminated with an empty string
-    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", ""};
+    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing"};
 	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
-    int i = 0;
-    while (conditionNames[i] != "")
+    for (int i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
 	{
         if (node[conditionNames[i]])
 		{
             _conditions.push_back(getCondition(conditionNames[i], node));
         }
-        i++;
     }
 }
 
