@@ -40,8 +40,8 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
-#include "../Menu/ListSaveState.h"
 #include "../Menu/TestState.h"
+#include "../Menu/OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -360,12 +360,6 @@ void Game::run()
 				SDL_Delay(100); break; //More slowing down.
 		}
 	}
-	
-	// Auto-save
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::autosave == 3)
-	{
-		ListSaveState ss = ListSaveState(this, OPT_MENU, false);
-	}
 
 	Options::save();
 }
@@ -558,12 +552,16 @@ Ruleset *Game::getRuleset() const
 }
 
 /**
- * Changes the ruleset currently in use by the game.
- * @param filename Filename of the language file.
+ * Loads the rulesets specified in the game options.
  */
 void Game::loadRuleset()
 {
+	Options::badMods.clear();
 	_rules = new Ruleset();
+	if (Options::rulesets.empty())
+	{
+		Options::rulesets.push_back("Xcom1Ruleset");
+	}
 	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end();)
 	{
 		try
@@ -574,8 +572,14 @@ void Game::loadRuleset()
 		catch (YAML::Exception &e)
 		{
 			Log(LOG_WARNING) << e.what();
+			Options::badMods.push_back(*i);
+			Options::badMods.push_back(e.what());
 			i = Options::rulesets.erase(i);
 		}
+	}
+	if (Options::rulesets.empty())
+	{
+		throw Exception("Failed to load ruleset");
 	}
 	_rules->sortLists();
 }

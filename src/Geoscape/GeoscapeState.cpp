@@ -21,6 +21,10 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <ctime>
+#include <algorithm>
+#include <functional>
+#include <assert.h>
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -98,12 +102,8 @@
 #include "BaseDefenseState.h"
 #include "BaseDestroyedState.h"
 #include "DefeatState.h"
-#include <ctime>
-#include <algorithm>
-#include <functional>
-#include <assert.h>
-#include "../Menu/ListSaveState.h"
-#include "../Menu/ListLoadState.h"
+#include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -447,10 +447,17 @@ void GeoscapeState::handle(Action *action)
 			}
 		}
 		// quick save and quick load
-		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
-			_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, true));
-		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
-			_game->pushState(new ListLoadState(_game, OPT_GEOSCAPE, true));
+		if (!_game->getSavedGame()->isIronman())
+		{
+			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+			{
+				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, "quicksave"));
+			}
+			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+			{
+				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, "quicksave"));
+			}
+		}
 	}
 	if(!_dogfights.empty())
 	{
@@ -1085,15 +1092,14 @@ bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 	Region *region = _game->getSavedGame()->locateRegion(*ts);
 	if (region)
 	{
-		//TODO: This should come from mission rules!
-		region->addActivityAlien(1000);
+		region->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
 		//kids, tell your folks... don't ignore terror sites.
 	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
 		{
-			(*k)->addActivityAlien(1000);
+			(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
 			break;
 		}
 	}
@@ -1579,10 +1585,6 @@ void GeoscapeState::time1Day()
 	// Handle resupply of alien bases.
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
-
-	// Autosave
-	if (Options::autosave >= 2)
-		_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, false));
 }
 
 /**

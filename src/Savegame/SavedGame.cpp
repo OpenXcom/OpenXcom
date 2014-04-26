@@ -90,7 +90,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
@@ -195,6 +195,10 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang)
 				details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L", ";
 				details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
 			}
+			if (doc["ironman"].as<bool>(false))
+			{
+				details << L" (" << lang->getString("STR_IRONMAN") << L")";
+			}
 			save.details = details.str();
 
 			if (doc["rulesets"])
@@ -226,7 +230,7 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang)
  */
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
-	std::string s = Options::getUserFolder() + filename + ".sav";
+	std::string s = Options::getUserFolder() + filename;
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
 	if (file.empty())
 	{
@@ -251,6 +255,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		_name = Language::fsToWstr(filename);
 	}
+	_ironman = brief["ironman"].as<bool>(_ironman);
 
 	// Get full save data
 	YAML::Node doc = file[1];
@@ -385,11 +390,11 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
  */
 void SavedGame::save(const std::string &filename) const
 {
-	std::string s = Options::getUserFolder() + filename + ".sav";
+	std::string s = Options::getUserFolder() + filename;
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		throw Exception("Failed to save " + filename + ".sav");
+		throw Exception("Failed to save " + filename);
 	}
 
 	YAML::Emitter out;
@@ -406,6 +411,8 @@ void SavedGame::save(const std::string &filename) const
 		brief["turn"] = _battleGame->getTurn();
 	}
 	brief["rulesets"] = Options::rulesets;
+	if (_ironman)
+		brief["ironman"] = _ironman;
 	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
@@ -517,6 +524,26 @@ GameDifficulty SavedGame::getDifficulty() const
 void SavedGame::setDifficulty(GameDifficulty difficulty)
 {
 	_difficulty = difficulty;
+}
+
+/**
+ * Returns if the game is set to ironman mode.
+ * Ironman games cannot be manually saved.
+ * @return Tony Stark
+ */
+bool SavedGame::isIronman() const
+{
+	return _ironman;
+}
+
+/**
+ * Changes if the game is set to ironman mode.
+ * Ironman games cannot be manually saved.
+ * @param ironman Tony Stark
+ */
+void SavedGame::setIronman(bool ironman)
+{
+	_ironman = ironman;
 }
 
 /**

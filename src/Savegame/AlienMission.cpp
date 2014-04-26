@@ -507,7 +507,8 @@ void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 		break;
 	case Ufo::LANDED:
 		{
-			if (_rule.getType() == "STR_ALIEN_HARVEST" || _rule.getType() == "STR_ALIEN_ABDUCTION" || _rule.getType() == "STR_ALIEN_TERROR")
+			// base missions only get points when they are completed.
+			if (_rule.getPoints() > 0 && _rule.getType() != "STR_ALIEN_BASE")
 			{
 				addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			}

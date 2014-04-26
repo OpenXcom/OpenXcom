@@ -108,24 +108,29 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyCancel);
 	if (origin == OPT_GEOSCAPE)
+	{
 		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyGeoOptions);
+	}
 	else if (origin == OPT_BATTLESCAPE)
+	{
 		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyBattleOptions);
+	}
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
-	if (Options::autosave >= 2)
-	{
-		_btnSave->setVisible(false);
-		_btnLoad->setVisible(false);
-	}
-
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();
+	}
+
+	if (_game->getSavedGame()->isIronman())
+	{
+		_btnLoad->setVisible(false);
+		_btnSave->setVisible(false);
+		_btnAbandon->setText(tr("STR_SAVE_AND_ABANDON_GAME"));
 	}
 }
 

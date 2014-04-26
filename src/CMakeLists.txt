@@ -418,6 +418,10 @@ set ( menu_src
   Menu/AbandonGameState.h
   Menu/PauseState.cpp
   Menu/PauseState.h
+  Menu/LoadGameState.cpp
+  Menu/LoadGameState.h
+  Menu/SaveGameState.cpp
+  Menu/SaveGameState.h
 )
 
 set ( resource_src

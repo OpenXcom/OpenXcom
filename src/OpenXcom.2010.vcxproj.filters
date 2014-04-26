@@ -832,6 +832,12 @@
     <ClCompile Include="Ruleset\StatStringCondition.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\SaveGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\LoadGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1682,6 +1688,12 @@
     </ClInclude>
     <ClInclude Include="Ruleset\StatStringCondition.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SaveGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LoadGameState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

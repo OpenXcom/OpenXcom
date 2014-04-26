@@ -468,6 +468,10 @@ openxcom_SOURCES = \
 	src/Menu/ListGamesState.h \
 	src/Menu/ListSaveState.cpp \
 	src/Menu/ListSaveState.h \
+	src/Menu/LoadGameState.cpp \
+	src/Menu/LoadGameState.h \
+	src/Menu/SaveGameState.cpp \
+	src/Menu/SaveGameState.h \
 	src/Menu/IntroState.cpp \
 	src/Menu/IntroState.h \
 	src/Menu/StartState.cpp \
