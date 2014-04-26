@@ -451,11 +451,11 @@ void GeoscapeState::handle(Action *action)
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
-				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, "quicksave"));
+				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
-				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, "quicksave"));
+				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
 			}
 		}
 	}
@@ -2190,6 +2190,6 @@ void GeoscapeState::resize(int &dX, int &dY)
 			(*i)->setY((*i)->getY() + dY/2);
 		}
 	}
-
 }
+
 }
