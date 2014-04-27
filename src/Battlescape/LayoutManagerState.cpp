@@ -82,7 +82,7 @@ LayoutManagerState::LayoutManagerState(Game *game, bool isBattlescapeGame) : Sta
 	_txtLayout = new Text(75, 9, 222, 72);
 	_lstSoldiers = new TextList(197, 72, 104, 80);
 	_txtLayoutName = new Text(135, 9, 5, 158);
-	_edtLayout = new TextEdit(135, 16, 5, 167);
+	_edtLayout = new TextEdit(this, 135, 16, 5, 167);
 	_btnCreate = new TextButton(60, 12, 5, 183);
 	_btnRename = new TextButton(60, 12, 67, 183);
 	_btnDelete = new TextButton(60, 12, 129, 183);
