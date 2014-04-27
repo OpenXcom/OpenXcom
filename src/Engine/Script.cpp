@@ -105,11 +105,13 @@ inline void addShadeHelper(int& reg, const int& var)
 
 #define MACRO_PROC_DEFINITION(IMPL) \
 	/*	Name,		Arg0,	Arg1, Arg2, Arg3,	Implementation,							End excecution */ \
-	IMPL(ret,		Result, Data, None, None,	{ Result = Data1;						return true; }) \
-	IMPL(ret_gt,	Result, Data, Test, None,	{ Result = Data1;						return Test > 0; }) \
-	IMPL(ret_lt,	Result, Data, Test, None,	{ Result = Data1;						return Test < 0; }) \
-	IMPL(ret_eq,	Result, Data, Test, None,	{ Result = Data1;						return Test == 0; }) \
-	IMPL(ret_neq,	Result, Data, Test, None,	{ Result = Data1;						return Test != 0; }) \
+	IMPL(exit,		None,	None, None, None,	{										return true; }) \
+	\
+	IMPL(ret,		Result, Data, None, None,	{				Result = Data1;			return true; }) \
+	IMPL(ret_gt,	Result, Data, Test, None,	{ if(Test > 0)	Result = Data1;			return Test > 0; }) \
+	IMPL(ret_lt,	Result, Data, Test, None,	{ if(Test < 0)	Result = Data1;			return Test < 0; }) \
+	IMPL(ret_eq,	Result, Data, Test, None,	{ if(Test == 0)	Result = Data1;			return Test == 0; }) \
+	IMPL(ret_neq,	Result, Data, Test, None,	{ if(Test != 0)	Result = Data1;			return Test != 0; }) \
 	\
 	IMPL(skip,		Prog, Label, None, None,	{				Prog = Label1;			return false; }) \
 	IMPL(skip_gt,	Prog, Label, Test, None,	{ if(Test > 0)	Prog = Label1;			return false; }) \
@@ -132,17 +134,17 @@ inline void addShadeHelper(int& reg, const int& var)
 	\
 	IMPL(muladd,	Reg, Data, Data, None,		{ Reg0 = Reg0 * Data1 + Data2;			return false; }) \
 	\
-	IMPL(div,		Reg, Const, None, None,		{ if(Const1) Reg0 /= Const1;			return !Const1; }) \
-	IMPL(mod,		Reg, Const, None, None,		{ if(Const1) Reg0 %= Const1;			return !Const1; }) \
+	IMPL(div,		Reg, Data, None, None,		{ if(Data1) Reg0 /= Data1;				return !Data1; }) \
+	IMPL(mod,		Reg, Data, None, None,		{ if(Data1) Reg0 %= Data1;				return !Data1; }) \
 	\
-	IMPL(shl,		Reg, Const, None, None,		{ Reg0 <<= Const1;						return false; }) \
-	IMPL(shr,		Reg, Const, None, None,		{ Reg0 >>= Const1;						return false; }) \
+	IMPL(shl,		Reg, Data, None, None,		{ Reg0 <<= Data1;						return false; }) \
+	IMPL(shr,		Reg, Data, None, None,		{ Reg0 >>= Data1;						return false; }) \
 	\
 	IMPL(get_color,	Reg, Data, None, None,		{ Reg0 = Data1 >> 4;					return false; }) \
 	IMPL(set_color,	Reg, Data, None, None,		{ Reg0 = (Reg0 & 0xF) | (Data1 << 4);	return false; }) \
 	IMPL(get_shade,	Reg, Data, None, None,		{ Reg0 = Data1 & 0xF;					return false; }) \
 	IMPL(set_shade,	Reg, Data, None, None,		{ Reg0 = (Reg0 & 0xF0) | (Data1 & 0xF); return false; }) \
-	IMPL(add_shade,	Reg, Data, None, None,		{ addShadeHelper(Reg0, Data1);		return false; }) \
+	IMPL(add_shade,	Reg, Data, None, None,		{ addShadeHelper(Reg0, Data1);			return false; }) \
 	/* BEWARE OF COMMA IN "Implementation"! IT WILL BREAK CODE IF USED WITHOUT PARENTHESES */
 
 ////////////////////////////////////////////////////////////
@@ -184,7 +186,6 @@ inline Uint8 scriptExe(int in, int custom0, int custom1, int* reg, const Uint8* 
 	reg[RegIn] = in;
 	reg[RegCustom0] = custom0;
 	reg[RegCustom1] = custom1;
-	int result = 0;
 	int curr = 0;
 	//--------------------------------------------------
 	//			helper macros for this function
@@ -194,25 +195,25 @@ inline Uint8 scriptExe(int in, int custom0, int custom1, int* reg, const Uint8* 
 	#define MACRO_OP_None(i)
 	#define MACRO_OP_Prog(i)	curr ,
 	#define MACRO_OP_Test(i)	reg[RegCond] ,
-	#define MACRO_OP_Result(i)	result ,
+	#define MACRO_OP_Result(i)	reg[RegIn] ,
 
 	#define MACRO_OP_Reg(i)		reg[MACRO_REG_CURR(i)] ,
 	#define MACRO_OP_Data(i)	reg[MACRO_REG_CURR(i)] ,
 	#define MACRO_OP_Const(i)	reg[MACRO_REG_CURR(i)] ,
 	#define MACRO_OP_Label(i)	reg[MACRO_REG_CURR(i)] ,
 
-	#define MACRO_OP_OFF_SET(i, A0, A1, A2, A3) (MACRO_ARG_OFFSET(i, A0, A1, A2, A3) - MACRO_ARG_OFFSET(4, A0, A1, A2, A3))
+	#define MACRO_OP_OFFSET(i, A0, A1, A2, A3) (MACRO_ARG_OFFSET(i, A0, A1, A2, A3) - MACRO_ARG_OFFSET(4, A0, A1, A2, A3))
 
 	#define MACRO_OP(NAME, A0, A1, A2, A3, Impl) \
 		case MACRO_PROC_ID(NAME): \
 			curr += 1 + MACRO_ARG_OFFSET(4, A0, A1, A2, A3) ; \
 			if(MACRO_FUNC_ID(NAME)( \
-					MACRO_OP_##A0(MACRO_OP_OFF_SET(0, A0, A1, A2, A3)) \
-					MACRO_OP_##A1(MACRO_OP_OFF_SET(1, A0, A1, A2, A3)) \
-					MACRO_OP_##A2(MACRO_OP_OFF_SET(2, A0, A1, A2, A3)) \
-					MACRO_OP_##A3(MACRO_OP_OFF_SET(3, A0, A1, A2, A3)) \
+					MACRO_OP_##A0(MACRO_OP_OFFSET(0, A0, A1, A2, A3)) \
+					MACRO_OP_##A1(MACRO_OP_OFFSET(1, A0, A1, A2, A3)) \
+					MACRO_OP_##A2(MACRO_OP_OFFSET(2, A0, A1, A2, A3)) \
+					MACRO_OP_##A3(MACRO_OP_OFFSET(3, A0, A1, A2, A3)) \
 					0)) \
-				return result; \
+				return reg[RegIn]; \
 			continue;
 	//--------------------------------------------------
 
@@ -238,7 +239,7 @@ inline Uint8 scriptExe(int in, int custom0, int custom1, int* reg, const Uint8* 
 	#undef MACRO_OP_Label
 
 	#undef MACRO_REG_CURR
-	#undef MACRO_OP_OFF_SET
+	#undef MACRO_OP_OFFSET
 	#undef MACRO_OP
 	//--------------------------------------------------
 }
@@ -311,8 +312,7 @@ struct ParserHelper
 		for(ref_ite i = refListCurr.begin(); i != refListCurr.end(); ++i)
 			(scr->*procRefData).push_back(i->second);
 
-		(scr->*proc).push_back(MACRO_PROC_ID(ret));
-		(scr->*proc).push_back(RegIn);
+		(scr->*proc).push_back(MACRO_PROC_ID(exit));
 	}
 
 	bool getLabel(const std::string& s, int& index)
