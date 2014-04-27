@@ -25,6 +25,7 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 3
+    listOrder: 1510
 units:
   - type: STR_HOVERTANK_LASER
     race: STR_HOVERTANK_LASER
@@ -60,6 +61,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 5
       STR_ELERIUM_115: 30
+    listOrder: 610
 ufopaedia:
   - id: STR_HOVERTANK_LASER
     type_id: 3
@@ -69,6 +71,7 @@ ufopaedia:
       - STR_LASER_CANNON
       - STR_NEW_FIGHTER_CRAFT
     text: STR_HOVERTANK_LASER_UFOPEDIA
+    listOrder: 1510
 extraStrings:
 - type: en-US
   strings:

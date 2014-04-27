@@ -23,6 +23,7 @@ items:
     invWidth: 1
     invHeight: 2
     blastRadius: 10
+    listOrder: 5710
 manufacture:
   - name: STR_BLASTER_STUN_BOMB
     category: STR_AMMUNITION
@@ -34,6 +35,7 @@ manufacture:
     cost: 8000
     requiredItems:
       STR_ELERIUM_115: 3
+    listOrder: 2210
 ufopaedia:
   - id: STR_BLASTER_STUN_BOMB
     type_id: 4
@@ -42,6 +44,7 @@ ufopaedia:
       - STR_BLASTER_BOMB
       - STR_STUN_BOMB
     text: STR_BLASTER_STUN_BOMB_UFOPEDIA
+    listOrder: 5510
 extraStrings:
 - type: en-US
   strings:

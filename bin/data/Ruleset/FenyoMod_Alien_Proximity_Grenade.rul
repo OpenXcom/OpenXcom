@@ -13,6 +13,7 @@ items:
     damageType: 3
     battleType: 5
     blastRadius: 5
+    listOrder: 6010
 manufacture:
   - name: STR_ALIEN_PROXIMITY_GRENADE
     category: STR_WEAPON
@@ -23,6 +24,7 @@ manufacture:
     cost: 6800
     requiredItems:
       STR_ELERIUM_115: 2
+    listOrder: 2510
 ufopaedia:
   - id: STR_ALIEN_PROXIMITY_GRENADE
     type_id: 4
@@ -30,6 +32,7 @@ ufopaedia:
     requires:
       - STR_ALIEN_GRENADE
     text: STR_ALIEN_PROXIMITY_GRENADE_UFOPEDIA
+    listOrder: 4110
 extraStrings:
 - type: en-US
   strings:

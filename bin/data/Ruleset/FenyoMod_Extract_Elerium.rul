@@ -13,6 +13,7 @@ manufacture:
       STR_FUSION_BALL: 1
     producedItems:
       STR_ELERIUM_115: 4
+    listOrder: 2950
   - name: STR_HWP_FUSION_BOMB_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -27,6 +28,7 @@ manufacture:
     producedItems:
       STR_ALIEN_ALLOYS: 8
       STR_ELERIUM_115: 5
+    listOrder: 2951
   - name: STR_HEAVY_PLASMA_CLIP_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -39,6 +41,7 @@ manufacture:
       STR_HEAVY_PLASMA_CLIP: 1
     producedItems:
       STR_ELERIUM_115: 3
+    listOrder: 2952
   - name: STR_PLASMA_RIFLE_CLIP_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -51,6 +54,7 @@ manufacture:
       STR_PLASMA_RIFLE_CLIP: 1
     producedItems:
       STR_ELERIUM_115: 2
+    listOrder: 2953
   - name: STR_PLASMA_PISTOL_CLIP_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -63,6 +67,7 @@ manufacture:
       STR_PLASMA_PISTOL_CLIP: 1
     producedItems:
       STR_ELERIUM_115: 1
+    listOrder: 2954
   - name: STR_BLASTER_BOMB_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -75,6 +80,7 @@ manufacture:
       STR_BLASTER_BOMB: 1
     producedItems:
       STR_ELERIUM_115: 3
+    listOrder: 2955
   - name: STR_STUN_BOMB_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -87,6 +93,7 @@ manufacture:
       STR_STUN_BOMB: 1
     producedItems:
       STR_ELERIUM_115: 1
+    listOrder: 2956
   - name: STR_ALIEN_GRENADE_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -99,6 +106,7 @@ manufacture:
       STR_ALIEN_GRENADE: 1
     producedItems:
       STR_ELERIUM_115: 2
+    listOrder: 2957
   - name: STR_UFO_POWER_SOURCE_TO_ELERIUM_115
     category: STR_UFO_COMPONENT
     requires:
@@ -112,6 +120,7 @@ manufacture:
     producedItems:
       STR_ALIEN_ALLOYS: 5
       STR_ELERIUM_115: 16
+    listOrder: 2958
 extraStrings:
 - type: en-US
   strings:

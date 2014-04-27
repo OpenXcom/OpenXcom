@@ -22,6 +22,7 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 3
+    listOrder: 1810
   - type: STR_HWP_STRONGER_STUN_BOMB
     size: 0.6
     costSell: 30400
@@ -37,6 +38,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    listOrder: 1811
 units:
   - type: STR_HOVERTANK_STUN
     race: STR_HOVERTANK_STUN
@@ -72,6 +74,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 8
       STR_ELERIUM_115: 25
+    listOrder: 810
   - name: STR_HWP_STRONGER_STUN_BOMB
     category: STR_HWP_CANNON_SHELLS
     requires:
@@ -82,6 +85,7 @@ manufacture:
     cost: 15000
     requiredItems:
       STR_ELERIUM_115: 2
+    listOrder: 811
 ufopaedia:
   - id: STR_HOVERTANK_STUN
     type_id: 3
@@ -91,6 +95,7 @@ ufopaedia:
       - STR_STUN_BOMB
       - STR_NEW_FIGHTER_CRAFT
     text: STR_HOVERTANK_STUN_UFOPEDIA
+    listOrder: 1610
 extraStrings:
 - type: en-US
   strings:

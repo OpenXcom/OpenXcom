@@ -23,6 +23,7 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 0
+    listOrder: 1510
   - type: STR_HWP_STUN_BOMB
     size: 0.6
     costBuy: 3000
@@ -39,6 +40,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    listOrder: 1511
 units:
   - type: STR_TANK_STUN_BOMB
     race: STR_TANK_STUN_BOMB
@@ -67,6 +69,7 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_STUN_BOMB_UFOPEDIA
     weapon: STR_STUN_BOMB
+    listOrder: 1410
 extraStrings:
 - type: en-US
   strings:
