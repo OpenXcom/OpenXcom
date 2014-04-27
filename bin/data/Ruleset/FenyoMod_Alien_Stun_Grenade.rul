@@ -1,4 +1,4 @@
-# FenyoMod - Alien Shock Grenade
+# FenyoMod - Alien Stun Grenade
 # For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
 items:
   - type: STR_ALIEN_STUN_GRENADE
