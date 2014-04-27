@@ -35,7 +35,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
 											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
 											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit(""),
-											_strengthApplied(false), _meleeSound(39), _meleePower(0)
+											_strengthApplied(false), _LOSRequired(false), _meleeSound(39), _meleePower(0)
 {
 }
 
@@ -159,6 +159,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_shotgunPellets = node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
 	_strengthApplied = node["strengthApplied"].as<bool>(_strengthApplied);
+	_LOSRequired = node["LOSRequired"].as<bool>(_LOSRequired);
 	_meleeSound = node["meleeSound"].as<int>(_meleeSound);
 	_meleePower = node["meleePower"].as<int>(_meleePower);
 	if (!_listOrder)
@@ -823,4 +824,12 @@ int RuleItem::getMeleePower() const
 	return _meleePower;
 }
 
+/**
+ * Is line of sight required for this psionic weapon to function?
+ * @return If line of sight is required.
+ */
+bool RuleItem::isLOSRequired() const
+{
+	return _LOSRequired;
+}
 }
