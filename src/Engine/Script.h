@@ -39,13 +39,13 @@ const int ScriptMaxRef = 32;
  */
 struct ScriptData
 {
-	typedef void (*void_func)();
+	typedef void (*voidFunc)();
 
 	Uint8 type;
 	Uint8 index;
 
 	int value;
-	void_func env_func;
+	voidFunc envFunc;
 };
 
 /**
@@ -62,12 +62,12 @@ struct ScriptWorkRef
 class ScriptBase
 {
 	std::vector<Uint8> _proc;
-	std::vector<ScriptData> _proc_ref_data;
+	std::vector<ScriptData> _procRefData;
 
 protected:
 	~ScriptBase() { }
 	///common typeless part of updating data in script
-	void updateBase(ScriptWorkRef& ref, const void* t, int (*cast)(const void*, ScriptData::void_func)) const;
+	void updateBase(ScriptWorkRef& ref, const void* t, int (*cast)(const void*, ScriptData::voidFunc)) const;
 
 public:
 	///Blit src to dest using current script
@@ -83,13 +83,13 @@ template<typename T>
 class Script : public ScriptBase
 {
 public:
-	typedef int (*typed_func)(const T*);
+	typedef int (*typedFunc)(const T*);
 
 private:
 	///helper function using to hide type
-	static int cast(const void* v, ScriptData::void_func f)
+	static int cast(const void* v, ScriptData::voidFunc f)
 	{
-		return reinterpret_cast<typed_func>(f)((const T*)v);
+		return reinterpret_cast<typedFunc>(f)((const T*)v);
 	}
 
 public:
@@ -105,9 +105,9 @@ public:
  */
 struct ScriptParserData
 {
-	Uint8 proc_id;
-	Uint8 arg_type[ScriptMaxArg];
-	Uint8 arg_offset[ScriptMaxArg];
+	Uint8 procId;
+	Uint8 argType[ScriptMaxArg];
+	Uint8 argOffset[ScriptMaxArg];
 };
 
 /**
@@ -115,14 +115,14 @@ struct ScriptParserData
  */
 class ScriptParserBase
 {
-	std::map<std::string, ScriptParserData> _op_list;
-	std::map<std::string, ScriptData> _ref_list;
+	std::map<std::string, ScriptParserData> _procList;
+	std::map<std::string, ScriptData> _refList;
 
 protected:
 	///common typeless part of parsing string
-	bool parseBase(ScriptBase* scr, const std::string& src_code) const;
+	bool parseBase(ScriptBase* scr, const std::string& code) const;
 	///common typeless part of adding new function
-	void addFunctionBase(const std::string& s, ScriptData::void_func f);
+	void addFunctionBase(const std::string& s, ScriptData::voidFunc f);
 
 public:
 	///Default constructor
@@ -161,9 +161,9 @@ public:
 	}
 
 	///add new funcion that will be avaiable in script
-	void addFunction(const std::string& s, typename Script<T>::typed_func f)
+	void addFunction(const std::string& s, typename Script<T>::typedFunc f)
 	{
-		addFunctionBase(s, reinterpret_cast<ScriptData::void_func>(f));
+		addFunctionBase(s, reinterpret_cast<ScriptData::voidFunc>(f));
 	}
 };
 

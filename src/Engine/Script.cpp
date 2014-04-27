@@ -54,30 +54,30 @@ namespace
 #define MACRO_SIZE_Const	1
 #define MACRO_SIZE_Label	1
 
-#define MACRO_ARG_OFF_SET(i, A0, A1, A2, A3) ( \
+#define MACRO_ARG_OFFSET(i, A0, A1, A2, A3) ( \
 	(i > 0 ? MACRO_SIZE_##A0 : 0) + \
 	(i > 1 ? MACRO_SIZE_##A1 : 0) + \
 	(i > 2 ? MACRO_SIZE_##A2 : 0) + \
 	(i > 3 ? MACRO_SIZE_##A3 : 0) \
 )
 
-enum Arg_Type
+enum ArgEnum
 {
-	Arg_None,
-	Arg_Prog,
-	Arg_Test,
-	Arg_Result,
+	ArgNone,
+	ArgProg,
+	ArgTest,
+	ArgResult,
 
-	Arg_Reg,
-	Arg_Data,
-	Arg_Const,
-	Arg_Label,
+	ArgReg,
+	ArgData,
+	ArgConst,
+	ArgLabel,
 };
 
 ////////////////////////////////////////////////////////////
 //						reg definition
 ////////////////////////////////////////////////////////////
-enum RegPos
+enum RegEnum
 {
 	RegIn,
 	RegCond,
@@ -87,13 +87,13 @@ enum RegPos
 	RegR3,
 	RegCustom0,
 	RegCustom1,
-	RegMax,
+	RegEnumMax,
 };
 
 ////////////////////////////////////////////////////////////
-//						op definition
+//						proc definition
 ////////////////////////////////////////////////////////////
-inline void add_shade_helper(int& reg, const int& var)
+inline void addShadeHelper(int& reg, const int& var)
 {
 	const int newShade = (reg & 0xF) + var;
 	if (newShade > 0xF)
@@ -142,45 +142,45 @@ inline void add_shade_helper(int& reg, const int& var)
 	IMPL(set_color,	Reg, Data, None, None,		{ Reg0 = (Reg0 & 0xF) | (Data1 << 4);	return false; }) \
 	IMPL(get_shade,	Reg, Data, None, None,		{ Reg0 = Data1 & 0xF;					return false; }) \
 	IMPL(set_shade,	Reg, Data, None, None,		{ Reg0 = (Reg0 & 0xF0) | (Data1 & 0xF); return false; }) \
-	IMPL(add_shade,	Reg, Data, None, None,		{ add_shade_helper(Reg0, Data1);		return false; }) \
+	IMPL(add_shade,	Reg, Data, None, None,		{ addShadeHelper(Reg0, Data1);		return false; }) \
 	/* BEWARE OF COMMA IN "Implementation"! IT WILL BREAK CODE IF USED WITHOUT PARENTHESES */
 
 ////////////////////////////////////////////////////////////
 //					Proc_Enum definition
 ////////////////////////////////////////////////////////////
 
-#define MACRO_CREATE_SPECIAL_ENUM(NAME, A0, A1, A2, A3, Impl) \
-	Proc_##NAME,
+#define MACRO_PROC_ID(id) Proc##id
 
-enum Proc_Enum
+#define MACRO_CREATE_PROC_ENUM(NAME, A0, A1, A2, A3, Impl) \
+	MACRO_PROC_ID(NAME),
+
+enum ProcEnum
 {
-	MACRO_PROC_DEFINITION(MACRO_CREATE_SPECIAL_ENUM)
-	Proc_Enum_Max,
+	MACRO_PROC_DEFINITION(MACRO_CREATE_PROC_ENUM)
+	ProcEnumMax,
 };
 
-#undef MACRO_CREATE_SPECIAL_ENUM
-
-#define MACRO_SPEC_ID(id) ( \
-	Proc_##id \
-)
+#undef MACRO_CREATE_PROC_ENUM
 
 ////////////////////////////////////////////////////////////
 //					function definition
 ////////////////////////////////////////////////////////////
 
-#define MACRO_CREATE_NORMAL_FUNC(NAME, A0, A1, A2, A3, Impl) \
-	inline bool Func_##NAME(MACRO_ARG_##A0(0) MACRO_ARG_##A1(1) MACRO_ARG_##A2(2) MACRO_ARG_##A3(3) int Dummy) Impl
+#define MACRO_FUNC_ID(id) Func##id
 
-MACRO_PROC_DEFINITION(MACRO_CREATE_NORMAL_FUNC)
+#define MACRO_CREATE_FUNC(NAME, A0, A1, A2, A3, Impl) \
+	inline bool MACRO_FUNC_ID(NAME)(MACRO_ARG_##A0(0) MACRO_ARG_##A1(1) MACRO_ARG_##A2(2) MACRO_ARG_##A3(3) int Dummy) Impl
 
-#undef MACRO_CREATE_NORMAL_FUNC
+MACRO_PROC_DEFINITION(MACRO_CREATE_FUNC)
+
+#undef MACRO_CREATE_FUNC
 
 ////////////////////////////////////////////////////////////
 //					core loop function
 ////////////////////////////////////////////////////////////
-inline Uint8 script_func(int in, int custom0, int custom1, int* reg, const Uint8* proc)
+inline Uint8 scriptExe(int in, int custom0, int custom1, int* reg, const Uint8* proc)
 {
-	memset(reg, 0, RegMax*sizeof(int));
+	memset(reg, 0, RegEnumMax*sizeof(int));
 	reg[RegIn] = in;
 	reg[RegCustom0] = custom0;
 	reg[RegCustom1] = custom1;
@@ -201,12 +201,12 @@ inline Uint8 script_func(int in, int custom0, int custom1, int* reg, const Uint8
 	#define MACRO_OP_Const(i)	reg[MACRO_REG_CURR(i)] ,
 	#define MACRO_OP_Label(i)	reg[MACRO_REG_CURR(i)] ,
 
-	#define MACRO_OP_OFF_SET(i, A0, A1, A2, A3) (MACRO_ARG_OFF_SET(i, A0, A1, A2, A3) - MACRO_ARG_OFF_SET(4, A0, A1, A2, A3))
+	#define MACRO_OP_OFF_SET(i, A0, A1, A2, A3) (MACRO_ARG_OFFSET(i, A0, A1, A2, A3) - MACRO_ARG_OFFSET(4, A0, A1, A2, A3))
 
 	#define MACRO_OP(NAME, A0, A1, A2, A3, Impl) \
-		case Proc_##NAME: \
-			curr += 1 + MACRO_ARG_OFF_SET(4, A0, A1, A2, A3) ; \
-			if(Func_##NAME( \
+		case MACRO_PROC_ID(NAME): \
+			curr += 1 + MACRO_ARG_OFFSET(4, A0, A1, A2, A3) ; \
+			if(MACRO_FUNC_ID(NAME)( \
 					MACRO_OP_##A0(MACRO_OP_OFF_SET(0, A0, A1, A2, A3)) \
 					MACRO_OP_##A1(MACRO_OP_OFF_SET(1, A0, A1, A2, A3)) \
 					MACRO_OP_##A2(MACRO_OP_OFF_SET(2, A0, A1, A2, A3)) \
@@ -255,14 +255,14 @@ typedef typename std::map<std::string, ScriptData>::iterator ref_ite;
 /**
  * Token type
  */
-enum ParseTokenType
+enum TokenEnum
 {
-	Token_None,
-	Token_Invaild,
-	Token_Colon,
-	Token_Semicolon,
-	Token_Symbol,
-	Token_Number,
+	TokenNone,
+	TokenInvaild,
+	TokenColon,
+	TokenSemicolon,
+	TokenSymbol,
+	TokenNumber,
 };
 
 /**
@@ -270,7 +270,7 @@ enum ParseTokenType
  */
 struct SelectedToken
 {
-	ParseTokenType type;
+	TokenEnum type;
 	ite begin;
 	ite end;
 };
@@ -281,24 +281,24 @@ struct SelectedToken
 struct ParserHelper
 {
 	std::vector<Uint8> ScriptBase::* proc;
-	std::vector<ScriptData> ScriptBase::* proc_ref_data;
-	const std::map<std::string, ScriptParserData>& op_list;
-	const std::map<std::string, ScriptData>& ref_list;
-	std::map<std::string, ScriptData> ref_list_curr;
+	std::vector<ScriptData> ScriptBase::* procRefData;
+	const std::map<std::string, ScriptParserData>& procList;
+	const std::map<std::string, ScriptData>& refList;
+	std::map<std::string, ScriptData> refListCurr;
 
-	Uint8 ref_index_used;
+	Uint8 refIndexUsed;
 	ScriptBase* scr;
 
 	ParserHelper(
 			ScriptBase* scr,
 			std::vector<Uint8> ScriptBase::* proc,
-			std::vector<ScriptData> ScriptBase::* proc_ref_data,
-			const std::map<std::string, ScriptParserData>& op,
+			std::vector<ScriptData> ScriptBase::* procRefData,
+			const std::map<std::string, ScriptParserData>& procList,
 			const std::map<std::string, ScriptData>& ref):
-		proc(proc), proc_ref_data(proc_ref_data),
-		op_list(op), ref_list(ref),
-		ref_list_curr(),
-		ref_index_used(RegMax),
+		proc(proc), procRefData(procRefData),
+		procList(procList), refList(ref),
+		refListCurr(),
+		refIndexUsed(RegEnumMax),
 		scr(scr)
 	{
 
@@ -306,74 +306,74 @@ struct ParserHelper
 
 	void relese()
 	{
-		(scr->*proc_ref_data).reserve(RegMax + ref_list_curr.size());
-		(scr->*proc_ref_data).resize(RegMax);
-		for(ref_ite i = ref_list_curr.begin(); i != ref_list_curr.end(); ++i)
-			(scr->*proc_ref_data).push_back(i->second);
+		(scr->*procRefData).reserve(RegEnumMax + refListCurr.size());
+		(scr->*procRefData).resize(RegEnumMax);
+		for(ref_ite i = refListCurr.begin(); i != refListCurr.end(); ++i)
+			(scr->*procRefData).push_back(i->second);
 
-		(scr->*proc).push_back(Proc_ret);
+		(scr->*proc).push_back(MACRO_PROC_ID(ret));
 		(scr->*proc).push_back(RegIn);
 	}
 
-	bool get_label(const std::string& s, int& index)
+	bool getLabel(const std::string& s, int& index)
 	{
-		ref_ite pos = ref_list_curr.find(s);
-		if(pos == ref_list_curr.end())
+		ref_ite pos = refListCurr.find(s);
+		if(pos == refListCurr.end())
 		{
-			ScriptData data = { Arg_Label, ref_index_used, -1 };
-			ref_list_curr.insert(std::make_pair(s, data));
-			++ref_index_used;
+			ScriptData data = { ArgLabel, refIndexUsed, -1 };
+			refListCurr.insert(std::make_pair(s, data));
+			++refIndexUsed;
 			index = data.index;
 			return true;
 		}
-		if(pos->second.type != Arg_Label || pos->second.value != -1)
+		if(pos->second.type != ArgLabel || pos->second.value != -1)
 			return false;
 		index = pos->second.index;
 		return true;
 	}
-	bool set_label(const std::string& s, int offset)
+	bool setLabel(const std::string& s, int offset)
 	{
-		ref_ite pos = ref_list_curr.find(s);
-		if(pos == ref_list_curr.end())
+		ref_ite pos = refListCurr.find(s);
+		if(pos == refListCurr.end())
 			return true;
 		if(pos->second.value != -1)
 			return false;
 		pos->second.value = offset;
 		return true;
 	}
-	bool get_data(const std::string& s, int& index)
+	bool getData(const std::string& s, int& index)
 	{
-		if(get_reg(s, index))
+		if(getReg(s, index))
 			return true;
 
-		if(get_const(s, index))
+		if(getConst(s, index))
 			return true;
 
-		cref_ite pos = ref_list_curr.find(s);
-		if(pos == ref_list_curr.end())
+		cref_ite pos = refListCurr.find(s);
+		if(pos == refListCurr.end())
 		{
-			pos = ref_list.find(s);
-			if(pos == ref_list.end())
+			pos = refList.find(s);
+			if(pos == refList.end())
 			{
 				return false;
 			}
 			ScriptData data = pos->second;
-			if(data.type != Arg_Reg)
+			if(data.type != ArgReg)
 			{
-				data.index = ref_index_used;
-				++ref_index_used;
+				data.index = refIndexUsed;
+				++refIndexUsed;
 			}
-			pos = ref_list_curr.insert(std::make_pair(s, data)).first;
+			pos = refListCurr.insert(std::make_pair(s, data)).first;
 		}
-		if(pos->second.type == Arg_Label)
+		if(pos->second.type == ArgLabel)
 			return false;
 		index = pos->second.index;
 		return true;
 	}
-	bool get_const(const std::string& s, int& index)
+	bool getConst(const std::string& s, int& index)
 	{
-		ref_ite pos = ref_list_curr.find(s);
-		if(pos == ref_list_curr.end())
+		ref_ite pos = refListCurr.find(s);
+		if(pos == refListCurr.end())
 		{
 			int value = 0;
 			int offset = 0;
@@ -384,18 +384,18 @@ struct ParserHelper
 				ss >> std::hex;
 			if(!(ss >> value))
 				return false;
-			ScriptData data = { Arg_Const, ref_index_used, value };
-			ref_list_curr.insert(std::make_pair(s, data));
-			++ref_index_used;
+			ScriptData data = { ArgConst, refIndexUsed, value };
+			refListCurr.insert(std::make_pair(s, data));
+			++refIndexUsed;
 			index = data.index;
 			return true;
 		}
-		if(pos->second.type != Arg_Const)
+		if(pos->second.type != ArgConst)
 			return false;
 		index = pos->second.index;
 		return false;
 	}
-	bool get_reg(const std::string& s, int& index)
+	bool getReg(const std::string& s, int& index)
 	{
 		if(s.compare("in") == 0)
 		{
@@ -425,7 +425,7 @@ struct ParserHelper
 		return false;
 	}
 
-	bool skip_whitespace(ite& i, const ite& end)
+	bool findToken(ite& i, const ite& end)
 	{
 		bool coment = false;
 		for(; i != end; ++i)
@@ -448,42 +448,42 @@ struct ParserHelper
 				coment = true;
 				continue;
 			}
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
-	SelectedToken get_token(ite& i, const ite& end, ParseTokenType excepted = Token_None)
+	SelectedToken getToken(ite& i, const ite& end, TokenEnum excepted = TokenNone)
 	{
 		const int none = 1;
 		const int spec = 2;
 		const int digit = 3;
-		const int char_hex = 4;
-		const int char_rest = 5;
-		const int digit_sign = 6;
-		static short char_decoder[256] = { 0 };
+		const int charHex = 4;
+		const int charRest = 5;
+		const int digitSign = 6;
+		static short charDecoder[256] = { 0 };
 		static bool init = true;
 		if(init)
 		{
 			init = false;
 			for(int i = 0; i < 256; ++i)
 			{
-				if(i == '#' || isspace(i))	char_decoder[i] = none;
-				if(i == ':' || i == ';')	char_decoder[i] = spec;
+				if(i == '#' || isspace(i))	charDecoder[i] = none;
+				if(i == ':' || i == ';')	charDecoder[i] = spec;
 
-				if(i == '+' || i == '-')	char_decoder[i] = digit_sign;
-				if(i >= '0' && i <= '9')	char_decoder[i] = digit;
-				if(i >= 'A' && i <= 'F')	char_decoder[i] = char_hex;
-				if(i >= 'a' && i <= 'f')	char_decoder[i] = char_hex;
+				if(i == '+' || i == '-')	charDecoder[i] = digitSign;
+				if(i >= '0' && i <= '9')	charDecoder[i] = digit;
+				if(i >= 'A' && i <= 'F')	charDecoder[i] = charHex;
+				if(i >= 'a' && i <= 'f')	charDecoder[i] = charHex;
 
-				if(i >= 'G' && i <= 'Z')	char_decoder[i] = char_rest;
-				if(i >= 'g' && i <= 'z')	char_decoder[i] = char_rest;
-				if(i == '_' || i == '.')	char_decoder[i] = char_rest;
+				if(i >= 'G' && i <= 'Z')	charDecoder[i] = charRest;
+				if(i >= 'g' && i <= 'z')	charDecoder[i] = charRest;
+				if(i == '_' || i == '.')	charDecoder[i] = charRest;
 			}
 		}
 
-		SelectedToken token = { Token_None, end, end };
-		if(skip_whitespace(i, end))
+		SelectedToken token = { TokenNone, end, end };
+		if(!findToken(i, end))
 			return token;
 
 		token.begin = i;
@@ -493,7 +493,7 @@ struct ParserHelper
 		for(; i != end; ++i, ++off)
 		{
 			const char c = *i;
-			const short decode = char_decoder[c];
+			const short decode = charDecoder[c];
 
 			//end of string
 			if(decode == none)
@@ -504,23 +504,23 @@ struct ParserHelper
 			{
 				if(c == ':')
 				{
-					if(token.type != Token_None)
+					if(token.type != TokenNone)
 						break;
 					++i;
-					token.type = excepted == Token_Colon ? Token_Colon : Token_Invaild;
+					token.type = excepted == TokenColon ? TokenColon : TokenInvaild;
 					break;
 				}
 				else if(c == ';')
 				{
-					if(token.type != Token_None || excepted != Token_Semicolon)
+					if(token.type != TokenNone || excepted != TokenSemicolon)
 						break;
 					++i;
-					token.type = Token_Semicolon;
+					token.type = TokenSemicolon;
 					break;
 				}
 				else
 				{
-					token.type = Token_Invaild;
+					token.type = TokenInvaild;
 					break;
 				}
 			}
@@ -528,33 +528,33 @@ struct ParserHelper
 			switch(token.type)
 			{
 			//begin of string
-			case Token_None:
+			case TokenNone:
 				switch(decode)
 				{
 				//start of number
-				case digit_sign:
+				case digitSign:
 					--off;
 				case digit:
 					hex = c == '0';
-					token.type = Token_Number;
+					token.type = TokenNumber;
 					continue;
 
 				//start of symbol
-				case char_hex:
-				case char_rest:
-					token.type = Token_Symbol;
+				case charHex:
+				case charRest:
+					token.type = TokenSymbol;
 					continue;
 				}
 				break;
 
 			//middle of number
-			case Token_Number:
+			case TokenNumber:
 				switch(decode)
 				{
-				case char_rest:
+				case charRest:
 					if(off != 1) break;
 					if(c != 'x' && c != 'X') break;
-				case char_hex:
+				case charHex:
 					if(!hex) break;
 				case digit:
 					continue;
@@ -562,17 +562,17 @@ struct ParserHelper
 				break;
 
 			//middle of symbol
-			case Token_Symbol:
+			case TokenSymbol:
 				switch(decode)
 				{
-				case char_rest:
-				case char_hex:
+				case charRest:
+				case charHex:
 				case digit:
 					continue;
 				}
 				break;
 			}
-			token.type = Token_Invaild;
+			token.type = TokenInvaild;
 			break;
 		}
 		token.end = i;
@@ -586,24 +586,24 @@ struct ParserHelper
 ////////////////////////////////////////////////////////////
 //						Script class
 ////////////////////////////////////////////////////////////
-void ScriptBase::updateBase(ScriptWorkRef& ref, const void* t, int (*cast)(const void*, ScriptData::void_func)) const
+void ScriptBase::updateBase(ScriptWorkRef& ref, const void* t, int (*cast)(const void*, ScriptData::voidFunc)) const
 {
-	for(vec_ite i = _proc_ref_data.begin(); i != _proc_ref_data.end(); ++i)
+	for(vec_ite i = _procRefData.begin(); i != _procRefData.end(); ++i)
 	{
 		int& r = ref.ref[i->index];
 		switch(i->type)
 		{
-		case Arg_Reg:
+		case ArgReg:
 			r = 0;
 			break;
-		case Arg_Const:
+		case ArgConst:
 			r = i->value;
 			break;
-		case Arg_Label:
+		case ArgLabel:
 			r = i->value;
 			break;
-		case Arg_Data:
-			r =  cast(t, i->env_func);
+		case ArgData:
+			r =  cast(t, i->envFunc);
 			break;
 		}
 	}
@@ -622,18 +622,19 @@ struct ScriptReplace
 	{
 		if(src)
 		{
-			const int s = script_func(src, args.custom0, args.custom1, args.proc_ref, args.proc);
+			const int s = scriptExe(src, args.custom0, args.custom1, args.proc_ref, args.proc);
 			if (s) dest = s;
 		}
 	}
 };
+
 struct ScriptReplaceSelf
 {
 	static inline void func(Uint8& src, const ScriptReplace& args, int, int, int)
 	{
 		if(src)
 		{
-			src = script_func(src, args.custom0, args.custom1, args.proc_ref, args.proc);
+			src = scriptExe(src, args.custom0, args.custom1, args.proc_ref, args.proc);
 		}
 	}
 };
@@ -661,19 +662,19 @@ ScriptParserBase::ScriptParserBase()
 	{ \
 		ScriptParserData temp_var_##NAME = \
 		{ \
-			Proc_##NAME, \
+			MACRO_PROC_ID(NAME), \
 			/* types */\
-			Arg_##A0, \
-			Arg_##A1, \
-			Arg_##A2, \
-			Arg_##A3, \
+			Arg##A0, \
+			Arg##A1, \
+			Arg##A2, \
+			Arg##A3, \
 			/* offsets */\
-			MACRO_ARG_OFF_SET(0, A0, A1, A2, A3), \
-			MACRO_ARG_OFF_SET(1, A0, A1, A2, A3), \
-			MACRO_ARG_OFF_SET(2, A0, A1, A2, A3), \
-			MACRO_ARG_OFF_SET(3, A0, A1, A2, A3), \
+			MACRO_ARG_OFFSET(0, A0, A1, A2, A3), \
+			MACRO_ARG_OFFSET(1, A0, A1, A2, A3), \
+			MACRO_ARG_OFFSET(2, A0, A1, A2, A3), \
+			MACRO_ARG_OFFSET(3, A0, A1, A2, A3), \
 		}; \
-		_op_list[#NAME] = temp_var_##NAME; \
+		_procList[#NAME] = temp_var_##NAME; \
 	}
 
 	MACRO_PROC_DEFINITION(MACRO_ALL_INIT)
@@ -681,44 +682,44 @@ ScriptParserBase::ScriptParserBase()
 	#undef MACRO_ALL_INIT
 }
 
-void ScriptParserBase::addFunctionBase(const std::string& s, ScriptData::void_func f)
+void ScriptParserBase::addFunctionBase(const std::string& s, ScriptData::voidFunc f)
 {
-	ref_ite pos = _ref_list.find(s);
-	if(pos == _ref_list.end())
+	ref_ite pos = _refList.find(s);
+	if(pos == _refList.end())
 	{
-		ScriptData data = { Arg_Data, 0, 0, f };
-		_ref_list.insert(std::make_pair(s, data));
+		ScriptData data = { ArgData, 0, 0, f };
+		_refList.insert(std::make_pair(s, data));
 	}
 	else
 	{
-		pos->second.env_func = f;
+		pos->second.envFunc = f;
 	}
 }
 
 void ScriptParserBase::addCustom0(const std::string& s)
 {
-	ScriptData data = { Arg_Reg, RegCustom0 };
-	_ref_list.insert(std::make_pair(s, data));
+	ScriptData data = { ArgReg, RegCustom0 };
+	_refList.insert(std::make_pair(s, data));
 }
 
 void ScriptParserBase::addCustom1(const std::string& s)
 {
-	ScriptData data = { Arg_Reg, RegCustom1 };
-	_ref_list.insert(std::make_pair(s, data));
+	ScriptData data = { ArgReg, RegCustom1 };
+	_refList.insert(std::make_pair(s, data));
 }
 
 void ScriptParserBase::addConst(const std::string& s, int i)
 {
-	ScriptData data = { Arg_Const, 0, i };
-	_ref_list.insert(std::make_pair(s, data));
+	ScriptData data = { ArgConst, 0, i };
+	_refList.insert(std::make_pair(s, data));
 }
 
 bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) const
 {
 	ParserHelper help(
 		src,
-		&ScriptBase::_proc, &ScriptBase::_proc_ref_data,
-		_op_list, _ref_list);
+		&ScriptBase::_proc, &ScriptBase::_procRefData,
+		_procList, _refList);
 	ite curr = src_code.begin();
 	ite end = src_code.end();
 	if(curr == end)
@@ -726,16 +727,16 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 
 	while(true)
 	{
-		if(help.skip_whitespace(curr, end))
+		if(!help.findToken(curr, end))
 		{
-			if(help.ref_index_used > ScriptMaxRef)
+			if(help.refIndexUsed > ScriptMaxRef)
 			{
 				Log(LOG_ERROR) << "script used to many references\n";
 				return false;
 			}
-			for(ref_ite i = help.ref_list_curr.begin(); i != help.ref_list_curr.end(); ++i)
+			for(ref_ite i = help.refListCurr.begin(); i != help.refListCurr.end(); ++i)
 			{
-				if(i->second.type == Arg_Label && i->second.value == -1)
+				if(i->second.type == ArgLabel && i->second.value == -1)
 				{
 					Log(LOG_ERROR) << "invalid use of label: '" << i->first << "' without declaration\n";
 					return false;
@@ -747,32 +748,32 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 
 		ite line_begin = curr;
 		ite line_end;
-		SelectedToken label = { Token_None };
+		SelectedToken label = { TokenNone };
 
-		SelectedToken op = help.get_token(curr, end);
+		SelectedToken op = help.getToken(curr, end);
 		SelectedToken args[ScriptMaxArg] = { };
-		args[0] = help.get_token(curr, end, Token_Colon);
-		if(args[0].type == Token_Colon)
+		args[0] = help.getToken(curr, end, TokenColon);
+		if(args[0].type == TokenColon)
 		{
 			std::swap(op, label);
-			op = help.get_token(curr, end);
-			args[0] = help.get_token(curr, end);
+			op = help.getToken(curr, end);
+			args[0] = help.getToken(curr, end);
 		}
 		for(int i = 1; i < ScriptMaxArg; ++i)
-			args[i] = help.get_token(curr, end);
-		SelectedToken f = help.get_token(curr, end, Token_Semicolon);
+			args[i] = help.getToken(curr, end);
+		SelectedToken f = help.getToken(curr, end, TokenSemicolon);
 
 		line_end = curr;
 		//validation
 		bool valid = true;
-		valid &= label.type == Token_Symbol || label.type == Token_None;
-		valid &= op.type == Token_Symbol;
+		valid &= label.type == TokenSymbol || label.type == TokenNone;
+		valid &= op.type == TokenSymbol;
 		for(int i = 0; i < ScriptMaxArg; ++i)
-			valid &= args[i].type == Token_Symbol || args[i].type == Token_Number || args[i].type == Token_None;
-		valid &= f.type == Token_Semicolon;
+			valid &= args[i].type == TokenSymbol || args[i].type == TokenNumber || args[i].type == TokenNone;
+		valid &= f.type == TokenSemicolon;
 		if(!valid)
 		{
-			if(f.type != Token_Semicolon)
+			if(f.type != TokenSemicolon)
 			{
 				//fixing `line_end` position
 				while(curr != end && *curr != ';')
@@ -788,58 +789,58 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 			int temp;
 			std::string op_str(op.begin, op.end);
 			std::string label_str(label.begin, label.end);
-			cop_ite op_curr = _op_list.find(op_str);
-			if(op_curr == _op_list.end())
+			cop_ite op_curr = _procList.find(op_str);
+			if(op_curr == _procList.end())
 			{
 				Log(LOG_ERROR) << "invalid operation '"<< op_str <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 				return false;
 			}
 
-			if(!label_str.empty() && !help.set_label(label_str, help.scr->_proc.size()))
+			if(!label_str.empty() && !help.setLabel(label_str, help.scr->_proc.size()))
 			{
 				Log(LOG_ERROR) << "invalid label '"<< label_str <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 				return false;
 			}
 
 			int i = 0, j = 0;
-			help.scr->_proc.push_back(op_curr->second.proc_id);
+			help.scr->_proc.push_back(op_curr->second.procId);
 			while(i < ScriptMaxArg && j < ScriptMaxArg)
 			{
 				std::string arg_val(args[j].begin, args[j].end);
-				switch(op_curr->second.arg_type[i])
+				switch(op_curr->second.argType[i])
 				{
-				case Arg_None:
-				case Arg_Prog:
-				case Arg_Test:
-				case Arg_Result:
+				case ArgNone:
+				case ArgProg:
+				case ArgTest:
+				case ArgResult:
 					++i;
 					continue;
-				case Arg_Label:
-					if(!help.get_label(arg_val, temp))
+				case ArgLabel:
+					if(!help.getLabel(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid label argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
 					help.scr->_proc.push_back(temp);
 					break;
-				case Arg_Data:
-					if(!help.get_data(arg_val, temp))
+				case ArgData:
+					if(!help.getData(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid data argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
 					help.scr->_proc.push_back(temp);
 					break;
-				case Arg_Const:
-					if(!help.get_const(arg_val, temp))
+				case ArgConst:
+					if(!help.getConst(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid const argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
 					help.scr->_proc.push_back(temp);
 					break;
-				case Arg_Reg:
-					if(!help.get_reg(arg_val, temp))
+				case ArgReg:
+					if(!help.getReg(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid reg argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
@@ -850,7 +851,7 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 				++i;
 				++j;
 			}
-			if(!(j == ScriptMaxArg || args[j].type == Token_None))
+			if(!(j == ScriptMaxArg || args[j].type == TokenNone))
 			{
 				Log(LOG_ERROR) << "wrong arguments in line: '" << std::string(line_begin, line_end) << "'\n";
 				return false;
