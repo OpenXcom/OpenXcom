@@ -25,11 +25,18 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Options.h"
+#include "LoadGameState.h"
 
 namespace OpenXcom
 {
-/// Creates a new confirmation state.
-ConfirmLoadState::ConfirmLoadState(Game *game, OptionsOrigin origin, ListLoadState *parent, std::string fileName) : State(game), _origin(origin), _parent(parent), _fileName(fileName)
+
+/**
+ * Initializes all the elements in the Confirm Load screen.
+ * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
+ * @param fileName Name of the save file without extension.
+ */
+ConfirmLoadState::ConfirmLoadState(Game *game, OptionsOrigin origin, std::string fileName) : State(game), _origin(origin), _fileName(fileName)
 {
 	_screen = false;
 
@@ -46,7 +53,7 @@ ConfirmLoadState::ConfirmLoadState(Game *game, OptionsOrigin origin, ListLoadSta
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette("PAL_GEOSCAPE", 6);
 	}
 
 	add(_window);
@@ -94,7 +101,7 @@ ConfirmLoadState::~ConfirmLoadState()
 void ConfirmLoadState::btnYesClick(Action *)
 {
 	_game->popState();
-	_parent->quickLoad(_fileName);
+	_game->pushState(new LoadGameState(_game, _origin, _fileName));
 }
 
 /**

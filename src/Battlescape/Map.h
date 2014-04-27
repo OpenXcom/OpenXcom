@@ -135,6 +135,8 @@ public:
 	void refreshSelectorPosition();
 	/// Special handling for updating map height.
 	void setHeight(int height);
+	/// Special handling for updating map width.
+	void setWidth(int width);
 };
 
 }

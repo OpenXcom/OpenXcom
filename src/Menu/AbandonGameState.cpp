@@ -18,15 +18,14 @@
  */
 #include "AbandonGameState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
 #include "MainMenuState.h"
-#include "ListSaveState.h"
 
 namespace OpenXcom
 {
@@ -112,12 +111,6 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action *)
 {
-	if (Options::autosave == 3)
-	{
-		ListSaveState *ss = new ListSaveState(_game, _origin, false);
-		delete ss;
-	}
-
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
 }

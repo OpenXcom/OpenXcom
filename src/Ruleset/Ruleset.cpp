@@ -63,6 +63,7 @@
 #include "../Engine/Logger.h"
 #include <algorithm>
 #include "../Ufopaedia/Ufopaedia.h"
+#include "StatString.h"
 
 namespace OpenXcom
 {
@@ -477,6 +478,13 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
+	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
+	{
+		StatString *statString = new StatString();
+		statString->load(*i);
+		_statStrings.push_back(statString);
+	}
+
   // refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
@@ -600,7 +608,7 @@ SavedGame *Ruleset::newSave() const
 	int soldiers = _startingBase["randomSoldiers"].as<int>(0);
 	for (int i = 0; i < soldiers; ++i)
 	{
-		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
+		Soldier *soldier = genSoldier(save);
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}
@@ -1172,6 +1180,15 @@ std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 }
 
 /**
+ * Gets the list of StatStrings.
+ * @return The list of StatStrings.
+ */
+std::vector<StatString *> Ruleset::getStatStrings() const
+{
+	return _statStrings;
+}
+
+/**
  * Compares rules based on their list orders.
  */
 template <typename T>
@@ -1301,6 +1318,38 @@ void Ruleset::sortLists()
 std::vector<std::string> Ruleset::getPsiRequirements()
 {
 	return _psiRequirements;
+}
+
+/**
+ * Creates a new randomly-generated soldier.
+ * @param save Saved game the soldier belongs to.
+ */
+Soldier *Ruleset::genSoldier(SavedGame *save) const
+{
+	Soldier *soldier = 0;
+	int newId = save->getId("STR_SOLDIER");
+
+	// Check for duplicates
+	// Original X-COM gives up after 10 tries so might as well do the same here
+	bool duplicate = true;
+	for (int i = 0; i < 10 && duplicate; i++)
+	{
+		delete soldier;
+		soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, newId);
+		duplicate = false;
+		for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end() && !duplicate; ++i)
+		{
+			for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end() && !duplicate; ++j)
+			{
+				if ((*j)->getName() == soldier->getName())
+				{
+					duplicate = true;
+				}
+			}
+		}
+	}
+
+	return soldier;
 }
 
 }

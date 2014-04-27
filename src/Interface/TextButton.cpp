@@ -18,6 +18,7 @@
  */
 #include "TextButton.h"
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include "Text.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
@@ -280,7 +281,7 @@ void TextButton::mousePress(Action *action, State *state)
 		if (soundPress != 0 && _group == 0 &&
 			action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
 		{
-			soundPress->play(0);
+			soundPress->play(Mix_GroupAvailable(0));
 		}
 
 		if (_comboBox)

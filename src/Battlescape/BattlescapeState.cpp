@@ -21,6 +21,7 @@
 #include <sstream>
 #include <iomanip>
 #include <SDL_gfxPrimitives.h>
+#include "../lodepng.h"
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -78,11 +79,10 @@
 #include "BriefingState.h"
 #include "../Geoscape/DefeatState.h"
 #include "../Geoscape/VictoryState.h"
-#include "../lodepng.h"
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Menu/ListSaveState.h"
-#include "../Menu/ListLoadState.h"
+#include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -738,7 +738,7 @@ void BattlescapeState::mapClick(Action *action)
 void BattlescapeState::mapIn(Action *)
 {
 	_isMouseScrolling = false;
-	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
+	_map->setButtonsPressed(Options::battleDragScrollButton, false);
 }
 
 /**
@@ -1475,13 +1475,16 @@ inline void BattlescapeState::handle(Action *action)
 			}
 			// quick save and quick load
 			// not works in debug mode to prevent conflict in hotkeys by default
-			else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
+			else if (!_game->getSavedGame()->isIronman())
 			{
-				_game->pushState(new ListSaveState(_game, OPT_BATTLESCAPE, true));
-			}
-			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
-			{
-				_game->pushState(new ListLoadState(_game, OPT_BATTLESCAPE, true));
+				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+				{
+					_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SavedGame::QUICKSAVE));
+				}
+				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+				{
+					_game->pushState(new LoadGameState(_game, OPT_BATTLESCAPE, SavedGame::QUICKSAVE));
+				}
 			}
 
 			// voxel view dump

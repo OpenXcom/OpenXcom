@@ -210,6 +210,8 @@ void OptionsBaseState::setCategory(TextButton *button)
 void OptionsBaseState::btnOkClick(Action *)
 {
 
+	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 	Options::switchDisplay();
 	Options::save();
 	_game->loadLanguage(Options::language);

@@ -17,21 +17,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ListSaveState.h"
-#include <cstdio>
-#include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Engine/Exception.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextButton.h"
-#include "ErrorMessageState.h"
-#include "DeleteGameState.h"
+#include "SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -41,7 +36,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 1, false), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
 	_edtSave = new TextEdit(this, 168, 9, 0, 0);
@@ -54,8 +49,6 @@ ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
-	_lstSaves->onMousePress((ActionHandler)&ListSaveState::lstSavesPress);
-
 	_btnCancel->setX(180);
 
 	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
@@ -67,18 +60,6 @@ ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(
 	_edtSave->onKeyboardPress((ActionHandler)&ListSaveState::edtSaveKeyPress);
 
 	centerAllSurfaces();
-}
-
-/**
- * Creates the Quick Save Game state.
- * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
- * @param showMsg True if need to show messages like "Loading game" or "Saving game".
- */
-ListSaveState::ListSaveState(Game *game, OptionsOrigin origin, bool showMsg) : ListGamesState(game, origin, 1, showMsg)
-{
-	game->getSavedGame()->setName(L"autosave");
-	quickSave("autosave");
 }
 
 /**
@@ -95,7 +76,9 @@ ListSaveState::~ListSaveState()
  */
 void ListSaveState::updateList()
 {
-	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
+	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME_SLOT").c_str());
+	if (_origin != OPT_BATTLESCAPE)
+		_lstSaves->setRowColor(0, Palette::blockOffset(8) + 5);
 	ListGamesState::updateList();
 }
 
@@ -105,6 +88,7 @@ void ListSaveState::updateList()
  */
 void ListSaveState::lstSavesPress(Action *action)
 {
+	ListGamesState::lstSavesPress(action);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_previousSelectedRow = _selectedRow;
@@ -138,10 +122,6 @@ void ListSaveState::lstSavesPress(Action *action)
 		_edtSave->setFocus(true, false);
 		_lstSaves->setScrolling(false);
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
-	{
-		_game->pushState(new DeleteGameState(_game, _origin, _saves[_lstSaves->getSelectedRow() - 1].fileName));
-	}
 }
 
 /**
@@ -169,15 +149,27 @@ void ListSaveState::btnSaveGameClick(Action *)
 	}
 }
 
+/**
+ * Saves the selected save.
+ */
 void ListSaveState::saveGame()
 {
-	updateStatus("STR_SAVING_GAME");
 	_game->getSavedGame()->setName(_edtSave->getText());
 	std::string oldFilename, newFilename;
 	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()));
 	if (_selectedRow > 0)
 	{
-		oldFilename = _saves[_selectedRow-1].fileName;
+		oldFilename = _saves[_selectedRow - 1].fileName;
+		if (oldFilename != newFilename + ".sav")
+		{
+			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			{
+				newFilename += "_";
+			}
+			std::string oldPath = Options::getUserFolder() + oldFilename;
+			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
+			CrossPlatform::moveFile(oldPath, newPath);
+		}
 	}
 	else
 	{
@@ -185,71 +177,9 @@ void ListSaveState::saveGame()
 		{
 			newFilename += "_";
 		}
-		oldFilename = newFilename;
 	}
-	quickSave(oldFilename);
-	if (oldFilename != newFilename)
-	{
-		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-		{
-			newFilename += "_";
-		}
-		std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
-		std::string newPath = Options::getUserFolder() + newFilename + ".sav";
-		rename(oldPath.c_str(), newPath.c_str());
-	}
-	_game->popState();
-	_game->popState();
-}
-
-/**
- * Quick save game.
- * @param filename name of file without ".sav"
- */
-void ListSaveState::quickSave(const std::string &filename)
-{
-	if (_showMsg) updateStatus("STR_SAVING_GAME");
-
-	std::string fullPath = Options::getUserFolder() + filename + ".sav";
-	std::string bakPath = fullPath + ".bak";
-
-	try
-	{
-		if (CrossPlatform::fileExists(fullPath))
-		{
-			if (CrossPlatform::fileExists(bakPath) && !CrossPlatform::deleteFile(bakPath))
-			{
-				throw Exception("Failed to delete " + filename + ".sav.bak");
-			}
-			if (rename(fullPath.c_str(), bakPath.c_str()))
-			{
-				throw Exception("Failed to rename " + filename + ".sav");
-			}
-		}
-
-		_game->getSavedGame()->save(filename);
-		CrossPlatform::deleteFile(bakPath);
-	}
-	catch (Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wostringstream error;
-		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
-		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
-	}
-	catch (YAML::Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wostringstream error;
-		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
-		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
-	}
+	newFilename += ".sav";
+	_game->pushState(new SaveGameState(_game, _origin, newFilename));
 }
 
 }

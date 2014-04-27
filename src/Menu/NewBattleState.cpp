@@ -399,7 +399,7 @@ void NewBattleState::initSave()
 	// Generate soldiers
 	for (int i = 0; i < 30; ++i)
 	{
-		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
+		Soldier *soldier = rule->genSoldier(save);
 
         for (int n = 0; n < 5; ++n) 
         {
