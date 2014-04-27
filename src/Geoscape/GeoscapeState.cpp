@@ -1590,7 +1590,14 @@ void GeoscapeState::time1Day()
 	int day = _game->getSavedGame()->getTime()->getDay();
 	if (day == 1 || day % 10 == 0)
 	{
-		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		if (_game->getSavedGame()->isIronman())
+		{
+
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		}
 	}
 }
 

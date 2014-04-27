@@ -98,6 +98,7 @@ void SaveGameState::init()
 	if (_filename.find(".sav") != std::string::npos)
 	{
 		_game->popState();
+		_game->popState();
 	}
 	// automatic save, give it a default name
 	else
