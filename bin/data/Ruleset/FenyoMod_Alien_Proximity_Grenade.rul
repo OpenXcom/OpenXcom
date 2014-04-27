@@ -1,0 +1,48 @@
+# FenyoMod - Alien Proximity Grenade
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+items:
+  - type: STR_ALIEN_PROXIMITY_GRENADE
+    requires:
+      - STR_ALIEN_GRENADE
+    size: 0.1
+    costSell: 14900
+    weight: 3
+    bigSprite: 39
+    floorSprite: 38
+    power: 90
+    damageType: 3
+    battleType: 5
+    blastRadius: 5
+    listOrder: 6010
+manufacture:
+  - name: STR_ALIEN_PROXIMITY_GRENADE
+    category: STR_WEAPON
+    requires:
+      - STR_ALIEN_GRENADE
+    space: 2
+    time: 200
+    cost: 6800
+    requiredItems:
+      STR_ELERIUM_115: 2
+    listOrder: 2510
+ufopaedia:
+  - id: STR_ALIEN_PROXIMITY_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_ALIEN_GRENADE
+    text: STR_ALIEN_PROXIMITY_GRENADE_UFOPEDIA
+    listOrder: 4110
+extraStrings:
+- type: en-US
+  strings:
+    STR_ALIEN_PROXIMITY_GRENADE: "Alien Proximity Grenade"
+    STR_ALIEN_PROXIMITY_GRENADE_UFOPEDIA: "The Proximity version of the Alien Grenade."
+- type: en-GB
+  strings:
+    STR_ALIEN_PROXIMITY_GRENADE: "Alien Proximity Grenade"
+    STR_ALIEN_PROXIMITY_GRENADE_UFOPEDIA: "The Proximity version of the Alien Grenade."
+- type: hu-HU
+  strings:
+    STR_ALIEN_PROXIMITY_GRENADE: "Idegen Szomszédgránát"
+    STR_ALIEN_PROXIMITY_GRENADE_UFOPEDIA: "Az Idegen Gránát Szomszédgránát változata."

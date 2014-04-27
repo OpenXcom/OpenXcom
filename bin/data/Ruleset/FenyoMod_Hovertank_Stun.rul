@@ -1,0 +1,114 @@
+# FenyoMod - Hovertank/Stun
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+items:
+  - type: STR_HOVERTANK_STUN
+    size: 6
+    costSell: 980000
+    transferTime: 96
+    weight: 1
+    bigSprite: 40
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 9
+    fireSound: 53
+    compatibleAmmo:
+      - STR_HWP_STRONGER_STUN_BOMB
+    accuracySnap: 85
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 3
+    listOrder: 1810
+  - type: STR_HWP_STRONGER_STUN_BOMB
+    size: 0.6
+    costSell: 30400
+    transferTime: 48
+    weight: 6
+    bigSprite: -1
+    floorSprite: 12
+    hitSound: 0
+    hitAnimation: 0
+    power: 180
+    damageType: 6
+    clipSize: 8
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    listOrder: 1811
+units:
+  - type: STR_HOVERTANK_STUN
+    race: STR_HOVERTANK_STUN
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: HOVERTANK_ARMOR
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
+    value: 20
+    deathSound: 23
+    moveSound: 40
+    energyRecovery: 50
+manufacture:
+  - name: STR_HOVERTANK_STUN
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_STUN_BOMB
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 1200
+    cost: 900000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 25
+    listOrder: 810
+  - name: STR_HWP_STRONGER_STUN_BOMB
+    category: STR_HWP_CANNON_SHELLS
+    requires:
+      - STR_STUN_BOMB
+      - STR_NEW_FIGHTER_CRAFT
+    space: 25
+    time: 300
+    cost: 15000
+    requiredItems:
+      STR_ELERIUM_115: 2
+    listOrder: 811
+ufopaedia:
+  - id: STR_HOVERTANK_STUN
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_STUN_BOMB
+    requires:
+      - STR_STUN_BOMB
+      - STR_NEW_FIGHTER_CRAFT
+    text: STR_HOVERTANK_STUN_UFOPEDIA
+    listOrder: 1610
+extraStrings:
+- type: en-US
+  strings:
+    STR_HOVERTANK_STUN: "Hovertank/Stun"
+    STR_HWP_STRONGER_STUN_BOMB: "HWP Stronger Stun Bomb"
+    STR_HOVERTANK_STUN_UFOPEDIA: "The Stun Bomb version of Hovertanks."
+- type: en-GB
+  strings:
+    STR_HOVERTANK_STUN: "Hovertank/Stun"
+    STR_HWP_STRONGER_STUN_BOMB: "HWP Stronger Stun Bomb"
+    STR_HOVERTANK_STUN_UFOPEDIA: "The Stun Bomb version of Hovertanks."
+- type: hu-HU
+  strings:
+    STR_HOVERTANK_STUN: "Lebegõtank/Bénító"
+    STR_HWP_STRONGER_STUN_BOMB: "Erõsebb NFP Bénító Bomba"
+    STR_HOVERTANK_STUN_UFOPEDIA: "A lebegõtankok Bénító Bombás változata."
