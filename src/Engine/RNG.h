@@ -20,6 +20,7 @@
 #define OPENXCOM_RNG_H
 
 #include <algorithm>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 namespace OpenXcom
