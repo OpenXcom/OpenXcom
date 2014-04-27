@@ -1,0 +1,48 @@
+# FenyoMod - Alien Shock Grenade
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+items:
+  - type: STR_ALIEN_STUN_GRENADE
+    requires:
+      - STR_ALIEN_GRENADE
+    size: 0.1
+    costSell: 14900
+    weight: 3
+    bigSprite: 39
+    floorSprite: 38
+    power: 90
+    damageType: 6
+    battleType: 4
+    blastRadius: 5
+    listOrder: 6020
+manufacture:
+  - name: STR_ALIEN_STUN_GRENADE
+    category: STR_WEAPON
+    requires:
+      - STR_ALIEN_GRENADE
+    space: 2
+    time: 200
+    cost: 6800
+    requiredItems:
+      STR_ELERIUM_115: 2
+    listOrder: 2520
+ufopaedia:
+  - id: STR_ALIEN_STUN_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_ALIEN_GRENADE
+    text: STR_ALIEN_STUN_GRENADE_UFOPEDIA
+    listOrder: 4120
+extraStrings:
+- type: en-US
+  strings:
+    STR_ALIEN_STUN_GRENADE: "Alien Stun Grenade"
+    STR_ALIEN_STUN_GRENADE_UFOPEDIA: "The Stun version of the Alien Grenade."
+- type: en-GB
+  strings:
+    STR_ALIEN_STUN_GRENADE: "Alien Stun Grenade"
+    STR_ALIEN_STUN_GRENADE_UFOPEDIA: "The Stun version of the Alien Grenade."
+- type: hu-HU
+  strings:
+    STR_ALIEN_STUN_GRENADE: "Idegen Bénítógránát"
+    STR_ALIEN_STUN_GRENADE_UFOPEDIA: "Az Idegen Gránát Bénító változata."
