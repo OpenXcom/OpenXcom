@@ -85,7 +85,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		else
 		{
 			Mix_AllocateChannels(16);
-			Mix_ReserveChannels(1);
+			// Set up UI channels
+			Mix_ReserveChannels(2);
+			Mix_GroupChannels(0, 1, 0);
 			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		}
 	}
@@ -384,11 +386,18 @@ void Game::setVolume(int sound, int music, int ui)
 	if (!Options::mute)
 	{
 		if (sound >= 0)
+		{
 			Mix_Volume(-1, sound);
+		}
 		if (music >= 0)
+		{
 			Mix_VolumeMusic(music);
+		}
 		if (ui >= 0)
+		{
 			Mix_Volume(0, ui);
+			Mix_Volume(1, ui);
+		}
 	}
 }
 
