@@ -318,7 +318,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	YAML::Node doc = file[1];
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
 	if (doc["rng"] && !Options::newSeedOnLoad)
-		RNG::setSeed(doc["rng"].as<int>());
+		RNG::setSeed(doc["rng"].as<uint64_t>());
 	_monthsPassed = doc["monthsPassed"].as<int>(_monthsPassed);
 	_graphRegionToggles = doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles = doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
