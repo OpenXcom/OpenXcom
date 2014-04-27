@@ -1,0 +1,57 @@
+# FenyoMod - Blaster Launcher - Stun Bomb
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+items:
+  - type: STR_BLASTER_LAUNCHER
+    compatibleAmmo:
+      - STR_BLASTER_BOMB
+      - STR_BLASTER_STUN_BOMB
+  - type: STR_BLASTER_STUN_BOMB
+    requires:
+      - STR_BLASTER_BOMB
+      - STR_STUN_BOMB
+    size: 0.2
+    costSell: 17028
+    weight: 3
+    bigSprite: 36
+    floorSprite: 35
+    hitSound: 0
+    hitAnimation: 0
+    power: 200
+    damageType: 6
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 2
+    blastRadius: 10
+manufacture:
+  - name: STR_BLASTER_STUN_BOMB
+    category: STR_AMMUNITION
+    requires:
+      - STR_BLASTER_BOMB
+      - STR_STUN_BOMB
+    space: 3
+    time: 220
+    cost: 8000
+    requiredItems:
+      STR_ELERIUM_115: 3
+ufopaedia:
+  - id: STR_BLASTER_STUN_BOMB
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_BLASTER_BOMB
+      - STR_STUN_BOMB
+    text: STR_BLASTER_STUN_BOMB_UFOPEDIA
+extraStrings:
+- type: en-US
+  strings:
+    STR_BLASTER_STUN_BOMB: "Blaster Stun Bomb"
+    STR_BLASTER_STUN_BOMB_UFOPEDIA: "The Stun version of the Blaster Bomb for Blaster Launcher."
+- type: en-GB
+  strings:
+    STR_BLASTER_STUN_BOMB: "Blaster Stun Bomb"
+    STR_BLASTER_STUN_BOMB_UFOPEDIA: "The Stun version of the Blaster Bomb for Blaster Launcher."
+- type: hu-HU
+  strings:
+    STR_BLASTER_STUN_BOMB: "Pusztító Bénító Bomba"
+    STR_BLASTER_STUN_BOMB_UFOPEDIA: "A Pusztító Bomba Bénító változata a Pusztító Bomba Kilövõhöz."

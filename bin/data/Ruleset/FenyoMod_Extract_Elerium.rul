@@ -1,0 +1,159 @@
+# FenyoMod - Extract Elerium
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+manufacture:
+  - name: STR_FUSION_BALL_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_FUSION_MISSILE
+    space: 6
+    time: 300
+    cost: 0
+    requiredItems:
+      STR_FUSION_BALL: 1
+    producedItems:
+      STR_ELERIUM_115: 4
+  - name: STR_HWP_FUSION_BOMB_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_FUSION_MISSILE
+      - STR_NEW_FIGHTER_CRAFT
+    space: 25
+    time: 200
+    cost: 0
+    requiredItems:
+      STR_HWP_FUSION_BOMB: 1
+    producedItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 5
+  - name: STR_HEAVY_PLASMA_CLIP_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_HEAVY_PLASMA_CLIP
+    space: 4
+    time: 40
+    cost: 0
+    requiredItems:
+      STR_HEAVY_PLASMA_CLIP: 1
+    producedItems:
+      STR_ELERIUM_115: 3
+  - name: STR_PLASMA_RIFLE_CLIP_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_PLASMA_RIFLE_CLIP
+    space: 4
+    time: 40
+    cost: 0
+    requiredItems:
+      STR_PLASMA_RIFLE_CLIP: 1
+    producedItems:
+      STR_ELERIUM_115: 2
+  - name: STR_PLASMA_PISTOL_CLIP_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_PLASMA_PISTOL_CLIP
+    space: 4
+    time: 30
+    cost: 0
+    requiredItems:
+      STR_PLASMA_PISTOL_CLIP: 1
+    producedItems:
+      STR_ELERIUM_115: 1
+  - name: STR_BLASTER_BOMB_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_BLASTER_BOMB
+    space: 3
+    time: 110
+    cost: 0
+    requiredItems:
+      STR_BLASTER_BOMB: 1
+    producedItems:
+      STR_ELERIUM_115: 3
+  - name: STR_STUN_BOMB_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_STUN_BOMB
+    space: 2
+    time: 100
+    cost: 0
+    requiredItems:
+      STR_STUN_BOMB: 1
+    producedItems:
+      STR_ELERIUM_115: 1
+  - name: STR_ALIEN_GRENADE_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_ALIEN_GRENADE
+    space: 2
+    time: 100
+    cost: 0
+    requiredItems:
+      STR_ALIEN_GRENADE: 1
+    producedItems:
+      STR_ELERIUM_115: 2
+  - name: STR_UFO_POWER_SOURCE_TO_ELERIUM_115
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ELERIUM_115
+      - STR_UFO_POWER_SOURCE
+    space: 22
+    time: 700
+    cost: 0
+    requiredItems:
+      STR_UFO_POWER_SOURCE: 1
+    producedItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 16
+extraStrings:
+- type: en-US
+  strings:
+    STR_FUSION_BALL_TO_ELERIUM_115: "Elerium-115 <- Fusion Ball"
+    STR_HWP_FUSION_BOMB_TO_ELERIUM_115: "Elerium-115 <- HWP Fusion Bomb"
+    STR_HEAVY_PLASMA_CLIP_TO_ELERIUM_115: "Elerium-115 <- Heavy Plasma Clip"
+    STR_PLASMA_RIFLE_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plasma Rifle Clip"
+    STR_PLASMA_PISTOL_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plasma Pistol Clip"
+    STR_BLASTER_BOMB_TO_ELERIUM_115: "Elerium-115 <- Blaster Bomb"
+    STR_STUN_BOMB_TO_ELERIUM_115: "Elerium-115 <- Stun Bomb"
+    STR_ALIEN_GRENADE_TO_ELERIUM_115: "Elerium-115 <- Alien Grenade"
+    STR_UFO_POWER_SOURCE_TO_ELERIUM_115: "Elerium-115 <- UFO Power Source"
+- type: en-GB
+  strings:
+    STR_FUSION_BALL_TO_ELERIUM_115: "Elerium-115 <- Fusion Ball"
+    STR_HWP_FUSION_BOMB_TO_ELERIUM_115: "Elerium-115 <- HWP Fusion Bomb"
+    STR_HEAVY_PLASMA_CLIP_TO_ELERIUM_115: "Elerium-115 <- Heavy Plasma Clip"
+    STR_PLASMA_RIFLE_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plasma Rifle Clip"
+    STR_PLASMA_PISTOL_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plasma Pistol Clip"
+    STR_BLASTER_BOMB_TO_ELERIUM_115: "Elerium-115 <- Blaster Bomb"
+    STR_STUN_BOMB_TO_ELERIUM_115: "Elerium-115 <- Stun Bomb"
+    STR_ALIEN_GRENADE_TO_ELERIUM_115: "Elerium-115 <- Alien Grenade"
+    STR_UFO_POWER_SOURCE_TO_ELERIUM_115: "Elerium-115 <- UFO Power Source"
+- type: de
+  strings:
+    STR_FUSION_BALL_TO_ELERIUM_115: "Elerium-115 <- Fusionskugel"
+    STR_HWP_FUSION_BOMB_TO_ELERIUM_115: "Elerium-115 <- SWT-Fusionsbombe"
+    STR_HEAVY_PLASMA_CLIP_TO_ELERIUM_115: "Elerium-115 <- Schweres Plasmagewehr-Magazin"
+    STR_PLASMA_RIFLE_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plasmagewehr-Magazin"
+    STR_PLASMA_PISTOL_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plasmapistolen-Magazin"
+    STR_BLASTER_BOMB_TO_ELERIUM_115: "Elerium-115 <- Blaster-Bombe"
+    STR_STUN_BOMB_TO_ELERIUM_115: "Elerium-115 <- Betäubungsbombe"
+    STR_ALIEN_GRENADE_TO_ELERIUM_115: "Elerium-115 <- Außerirdischen-Granate"
+    STR_UFO_POWER_SOURCE_TO_ELERIUM_115: "Elerium-115 <- UFO-Energiequelle"
+- type: hu-HU
+  strings:
+    STR_FUSION_BALL_TO_ELERIUM_115: "Elerium-115 <- Fúziós Gömb"
+    STR_HWP_FUSION_BOMB_TO_ELERIUM_115: "Elerium-115 <- NFP Fúziós Bomba"
+    STR_HEAVY_PLASMA_CLIP_TO_ELERIUM_115: "Elerium-115 <- Nehézplazma Tár"
+    STR_PLASMA_RIFLE_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plazmapuska Tár"
+    STR_PLASMA_PISTOL_CLIP_TO_ELERIUM_115: "Elerium-115 <- Plazmapisztoly Tár"
+    STR_BLASTER_BOMB_TO_ELERIUM_115: "Elerium-115 <- Pusztító Bomba"
+    STR_STUN_BOMB_TO_ELERIUM_115: "Elerium-115 <- Bénító Bomba"
+    STR_ALIEN_GRENADE_TO_ELERIUM_115: "Elerium-115 <- Idegen Gránát"
+    STR_UFO_POWER_SOURCE_TO_ELERIUM_115: "Elerium-115 <- UFO Erőforrás"

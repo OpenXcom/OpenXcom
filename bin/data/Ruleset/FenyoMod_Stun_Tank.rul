@@ -1,0 +1,85 @@
+# FenyoMod - Stun Tank
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+items:
+  - type: STR_TANK_STUN_BOMB
+    size: 6
+    costBuy: 420000
+    costSell: 340000
+    transferTime: 96
+    weight: 1
+    bigSprite: 43
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 9
+    fireSound: 53
+    compatibleAmmo:
+      - STR_HWP_STUN_BOMB
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 0
+  - type: STR_HWP_STUN_BOMB
+    size: 0.6
+    costBuy: 3000
+    costSell: 2250
+    transferTime: 48
+    weight: 1
+    bigSprite: -1
+    floorSprite: 12
+    hitSound: 0
+    hitAnimation: 0
+    power: 70
+    damageType: 6
+    clipSize: 8
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+units:
+  - type: STR_TANK_STUN_BOMB
+    race: STR_TANK_STUN_BOMB
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: TANK_ARMOR
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    deathSound: 23
+    moveSound: 14
+    energyRecovery: 50
+ufopaedia:
+  - id: STR_TANK_STUN_BOMB
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_TANK_STUN_BOMB_UFOPEDIA
+    weapon: STR_STUN_BOMB
+extraStrings:
+- type: en-US
+  strings:
+    STR_TANK_STUN_BOMB: "Tank/Stun Bomb"
+    STR_HWP_STUN_BOMB: "HWP Stun Bomb"
+    STR_TANK_STUN_BOMB_UFOPEDIA: "The Stun Bomb version of the Tank/Cannon."
+- type: en-GB
+  strings:
+    STR_TANK_STUN_BOMB: "Tank/Stun Bomb"
+    STR_HWP_STUN_BOMB: "HWP Stun Bomb"
+    STR_TANK_STUN_BOMB_UFOPEDIA: The Stun Bomb version of the Tank/Cannon."
+- type: hu-HU
+  strings:
+    STR_TANK_STUN_BOMB: "Tank/Bénító Bomba"
+    STR_HWP_STUN_BOMB: "HWP Bénító Bomba"
+    STR_TANK_STUN_BOMB_UFOPEDIA: "A Tank/Ágyú Bénító Bombás változata."

@@ -1,0 +1,84 @@
+# FenyoMod - Hovertank/Laser
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+items:
+  - type: STR_HOVERTANK_LASER
+    size: 6
+    costSell: 980000
+    transferTime: 96
+    weight: 1
+    bigSprite: 40
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 5
+    fireSound: 11
+    hitSound: 19
+    power: 200
+    damageType: 4
+    hitAnimation: 36
+    accuracySnap: 85
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    clipSize: -1
+    invWidth: 2
+    invHeight: 3
+    turretType: 3
+units:
+  - type: STR_HOVERTANK_LASER
+    race: STR_HOVERTANK_LASER
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: HOVERTANK_ARMOR
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
+    value: 20
+    deathSound: 23
+    moveSound: 40
+    energyRecovery: 50
+manufacture:
+  - name: STR_HOVERTANK_LASER
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_LASER_CANNON
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 1200
+    cost: 850000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 30
+ufopaedia:
+  - id: STR_HOVERTANK_LASER
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_LASER_CANNON
+    requires:
+      - STR_LASER_CANNON
+      - STR_NEW_FIGHTER_CRAFT
+    text: STR_HOVERTANK_LASER_UFOPEDIA
+extraStrings:
+- type: en-US
+  strings:
+    STR_HOVERTANK_LASER: "Hovertank/Laser"
+    STR_HOVERTANK_LASER_UFOPEDIA: "The Laser Cannon version of Hovertanks."
+- type: en-GB
+  strings:
+    STR_HOVERTANK_LASER: "Hovertank/Laser"
+    STR_HOVERTANK_LASER_UFOPEDIA: "The Laser Cannon version of Hovertanks."
+- type: hu-HU
+  strings:
+    STR_HOVERTANK_LASER: "Lebegõtank/Lézer"
+    STR_HOVERTANK_LASER_UFOPEDIA: "A lebegõtankok Lézerágyús változata."
