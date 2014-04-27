@@ -191,6 +191,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Inventory.h \
 	src/Battlescape/InventoryState.cpp \
 	src/Battlescape/InventoryState.h \
+	src/Battlescape/LayoutManagerState.cpp \
+	src/Battlescape/LayoutManagerState.h \
 	src/Battlescape/Map.cpp \
 	src/Battlescape/Map.h \
 	src/Battlescape/MedikitState.cpp \
@@ -569,6 +571,8 @@ openxcom_SOURCES = \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/CraftWeaponProjectile.cpp \
 	src/Savegame/CraftWeaponProjectile.h \
+	src/Savegame/EquipmentLayout.cpp \
+	src/Savegame/EquipmentLayout.h \
 	src/Savegame/EquipmentLayoutItem.cpp \
 	src/Savegame/EquipmentLayoutItem.h \
 	src/Savegame/GameTime.cpp \

@@ -9418,6 +9418,12 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/reserve.png
+  - type: LayMan
+    width: 26
+    height: 22
+    singleImage: true
+    files:
+      0: Resources/UI/layman.png
   - type: BIGOBS.PCK
     width: 64
     height: 96

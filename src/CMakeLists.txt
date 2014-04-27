@@ -123,6 +123,8 @@ set ( battlescape_src
   Battlescape/Explosion.h
   Battlescape/InventoryState.cpp
   Battlescape/InventoryState.h
+  Battlescape/LayoutManagerState.cpp
+  Battlescape/LayoutManagerState.h
   Battlescape/UnitSprite.h
   Battlescape/UnitSprite.cpp
   Battlescape/BattleState.h
@@ -551,6 +553,8 @@ set ( savegame_src
   Savegame/TerrorSite.cpp
   Savegame/Vehicle.h
   Savegame/Vehicle.cpp
+  Savegame/EquipmentLayout.h
+  Savegame/EquipmentLayout.cpp
   Savegame/EquipmentLayoutItem.h
   Savegame/EquipmentLayoutItem.cpp
   Savegame/WeightedOptions.cpp

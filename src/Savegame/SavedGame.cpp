@@ -50,6 +50,7 @@
 #include "AlienStrategy.h"
 #include "AlienMission.h"
 #include "../Ruleset/RuleRegion.h"
+#include "EquipmentLayout.h"
 
 namespace OpenXcom
 {
@@ -95,7 +96,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _newSoldierLayout(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
@@ -117,6 +118,10 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	for (std::vector<Region*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<EquipmentLayout*>::iterator i = _layouts.begin(); i != _layouts.end(); ++i)
 	{
 		delete *i;
 	}
@@ -400,6 +405,21 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
+	if (const YAML::Node &layouts = doc["layouts"])
+	{
+		for (YAML::const_iterator i = layouts.begin(); i != layouts.end(); ++i)
+		{
+			_layouts.push_back(new EquipmentLayout(*i));
+		}
+	}
+
+	if (const YAML::Node &layoutId = doc["newSoldierLayoutId"])
+	{
+		int id = layoutId.as<int>(0);
+		_newSoldierLayout = (id == 0) ? 0 : getLayout(id);
+	}
+	else _newSoldierLayout = 0;
+
 	for (YAML::const_iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -430,7 +450,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		s->load(*i, rule);
+		s->load(*i, rule, this);
 		_deadSoldiers.push_back(s);
 	}
 
@@ -489,6 +509,10 @@ void SavedGame::save(const std::string &filename) const
 	node["globeLon"] = _globeLon;
 	node["globeLat"] = _globeLat;
 	node["globeZoom"] = _globeZoom;
+	if (_newSoldierLayout)
+	{
+		node["newSoldierLayoutId"] = _newSoldierLayout->getId();
+	}
 	node["ids"] = _ids;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
@@ -497,6 +521,10 @@ void SavedGame::save(const std::string &filename) const
 	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		node["regions"].push_back((*i)->save());
+	}
+	for (std::vector<EquipmentLayout*>::const_iterator i = _layouts.begin(); i != _layouts.end(); ++i)
+	{
+		node["layouts"].push_back((*i)->save());
 	}
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
@@ -693,6 +721,24 @@ void SavedGame::setGlobeZoom(int zoom)
 }
 
 /**
+ * Returns the layout which is automatically assigned to a new soldier.
+ * @return New soldier layout. (0 is custom(in this case empty) layout)
+ */
+EquipmentLayout *SavedGame::getNewSoldierLayout() const
+{
+	return _newSoldierLayout;
+}
+
+/**
+ * Changes the layout which is automatically assigned to a new soldier.
+ * @param layout New soldier layout. (0 is custom(in this case empty) layout)
+ */
+void SavedGame::setNewSoldierLayout(EquipmentLayout *layout)
+{
+	_newSoldierLayout = layout;
+}
+
+/**
  * Gives the player his monthly funds, taking in account
  * all maintenance and profit costs.
  */
@@ -786,6 +832,41 @@ int SavedGame::getCountryFunding() const
 std::vector<Region*> *SavedGame::getRegions()
 {
 	return &_regions;
+}
+
+/**
+ * Returns the list of player layouts.
+ * @return Pointer to layout list.
+ */
+std::vector<EquipmentLayout*> *SavedGame::getLayouts()
+{
+	return &_layouts;
+}
+
+/**
+ * Returns an immutable list of player layouts.
+ * @return Pointer to layout list.
+ */
+const std::vector<EquipmentLayout*> *SavedGame::getLayouts() const
+{
+	return &_layouts;
+}
+
+/**
+ * Returns pointer to the Layout given it's unique ID.
+ * @param id A layout's unique id.
+ * @return Pointer to Layout.
+ */
+EquipmentLayout *SavedGame::getLayout(int id) const
+{
+	for (std::vector<EquipmentLayout*>::const_iterator i = _layouts.begin(); i != _layouts.end(); ++i)
+	{
+		if ((*i)->getId() == id)
+		{
+			return (*i);
+		}
+	}
+	return 0;
 }
 
 /**

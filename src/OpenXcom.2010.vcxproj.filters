@@ -473,6 +473,9 @@
     <ClCompile Include="Battlescape\InventoryState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\LayoutManagerState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\RuleInventory.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -623,6 +626,9 @@
     </ClCompile>
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp">
       <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\EquipmentLayout.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\EquipmentLayoutItem.cpp">
       <Filter>Savegame</Filter>
@@ -1319,6 +1325,9 @@
     <ClInclude Include="Battlescape\InventoryState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
+    <ClInclude Include="Battlescape\LayoutManagerState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
     <ClInclude Include="Ruleset\RuleInventory.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
@@ -1478,6 +1487,9 @@
     </ClInclude>
     <ClInclude Include="Geoscape\AlienBaseState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\EquipmentLayout.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\EquipmentLayoutItem.h">
       <Filter>Savegame</Filter>

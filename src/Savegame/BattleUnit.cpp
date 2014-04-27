@@ -22,6 +22,7 @@
 #include <cmath>
 #include <sstream>
 #include <typeinfo>
+#include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -31,6 +32,7 @@
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattleAIState.h"
 #include "Soldier.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "../Engine/RNG.h"
@@ -38,6 +40,9 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "Tile.h"
 #include "SavedGame.h"
+#include "SavedBattleGame.h"
+#include "EquipmentLayout.h"
+#include "EquipmentLayoutItem.h"
 
 namespace OpenXcom
 {
@@ -2578,6 +2583,138 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
 bool BattleUnit::hasInventory() const
 {
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
+
+/**
+ * Tries to equip by the soldier's layout.
+ * If it can't, set soldier to custom and equip with fragments of the layout.
+ * @param game Pointer to the game.
+ * @param initialEquip Indicates whether this is an initial pre-equip (only when called from BattlescapeGenerator).
+ * @return A boolean which indicates if the layout was successfully set to the soldier (equipped).
+ */
+bool BattleUnit::equipByLayout(Game *game, bool initialEquip)
+{
+	// Theoretically this is impossible
+	if (_geoscapeSoldier == 0) return false;
+
+	SavedBattleGame *battleGame = game->getSavedGame()->getSavedBattle();
+	EquipmentLayout *layout = _geoscapeSoldier->getEquipmentLayout();
+	Tile *craftInventoryTile = battleGame->getCraftInventoryTile();
+	RuleInventory *ground = game->getRuleset()->getInventory("STR_GROUND");
+	RuleInventory *righthand = game->getRuleset()->getInventory("STR_RIGHT_HAND");
+	bool result = true;
+
+	// First, make the soldier empty (drop everything to ground)
+	if (!initialEquip)
+	{ // Of course the soldier is empty on the case of calling from BattlescapeGenerator
+		for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		{
+			craftInventoryTile->addItem((*i), ground);
+			(*i)->setOwner(0);
+			(*i)->setSlotX(0);
+			(*i)->setSlotY(0);
+			(*i)->setFuseTimer(-1);
+		}
+		_inventory.clear();
+	}
+
+	if (layout == 0) return true;
+
+	// Now try to equip the soldier according to the layout
+	for (std::vector<EquipmentLayoutItem*>::iterator i = layout->getItems()->begin(); i != layout->getItems()->end(); ++i)
+	{
+		BattleItem *item = 0, *ammoToLoad = 0;
+		std::string itemAmmo, layoutItemAmmo = (*i)->getAmmoItem();
+
+		// Let's find the item! (preferably with the correct ammo loaded already)
+		for (std::vector<BattleItem*>::iterator j = craftInventoryTile->getInventory()->begin(); j != craftInventoryTile->getInventory()->end(); ++j)
+		{
+			if ((*j)->getSlot() != ground && (*j)->getSlot() != 0) continue;
+			if ((*j)->getRules()->getType() != (*i)->getItemType()) continue;
+			item = (*j);
+			itemAmmo = ((*j)->getAmmoItem() == 0) ? "NONE" : (*j)->getAmmoItem()->getRules()->getType();
+			if (itemAmmo != layoutItemAmmo) continue;
+			break;
+		}
+
+		if (item == 0)
+		{ // So we have not found the item specified by the layout :(
+			result = false;
+			continue;
+		}
+
+		// Do we need to search an ammo for the item?
+		if (layoutItemAmmo != "NONE" && itemAmmo != layoutItemAmmo)
+		{
+			BattleItem *containerItem = 0;
+			for (std::vector<BattleItem*>::iterator j = craftInventoryTile->getInventory()->begin(); j != craftInventoryTile->getInventory()->end(); ++j)
+			{
+				if ((*j)->getSlot() != ground && (*j)->getSlot() != 0) continue;
+				if ((*j)->getAmmoItem() != 0 && (*j)->getAmmoItem()->getRules()->getType() == layoutItemAmmo) containerItem = (*j);
+				if ((*j)->getRules()->getType() != layoutItemAmmo) continue;
+				ammoToLoad = (*j);
+				break;
+			}
+			if (ammoToLoad == 0 && containerItem != 0)
+			{ // So we have only found this ammo loaded in an other weapon
+				ammoToLoad = containerItem->getAmmoItem();
+				if (initialEquip) battleGame->removeItem(ammoToLoad, false);
+				else craftInventoryTile->addItem(ammoToLoad, ground);
+				ammoToLoad->setSlot(ground);
+				containerItem->setAmmoItem(0);
+			}
+			if (ammoToLoad == 0)
+			{ // So we have not found the ammo which is specified by the layout :(
+				result = false;
+				continue;
+			}
+		}
+
+		// Do we have to unload the found item?
+		if (itemAmmo != "NONE" && itemAmmo != layoutItemAmmo)
+		{
+			BattleItem *ammo = item->getAmmoItem();
+			if (initialEquip) battleGame->removeItem(ammo, false);
+			else craftInventoryTile->addItem(ammo, ground);
+			ammo->setSlot(ground);
+			item->setAmmoItem(0);
+		}
+
+		// Do we have an ammo to load?
+		if (ammoToLoad != 0)
+		{
+			if (item->setAmmoItem(ammoToLoad) == 0)
+			{
+				if (initialEquip) battleGame->getItems()->push_back(ammoToLoad);
+				else craftInventoryTile->removeItem(ammoToLoad);
+				ammoToLoad->setSlot(righthand);
+			}
+			else
+			{ // We have an ammo compatibility problem! (The layout specified an uncompatible ammo!!)
+				result = false;
+				continue;
+			}
+		}
+
+		// Now put the item to the soldier!
+		if (initialEquip) battleGame->getItems()->push_back(item);
+		else craftInventoryTile->removeItem(item);
+		item->moveToOwner(this);
+		item->setSlot(game->getRuleset()->getInventory((*i)->getSlot()));
+		item->setSlotX((*i)->getSlotX());
+		item->setSlotY((*i)->getSlotY());
+		if (Options::includePrimeStateInSavedLayout
+		&& (item->getRules()->getBattleType() == BT_GRENADE
+		 || item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+			item->setFuseTimer((*i)->getFuseTimer());
+	}
+
+	if (!result)
+	{ // There were not enough equipments, so set to custom layout
+		_geoscapeSoldier->setEquipmentLayout(0);
+	}
+
+	return result;
 }
 
 }

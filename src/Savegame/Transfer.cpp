@@ -20,6 +20,7 @@
 #include "Base.h"
 #include "Soldier.h"
 #include "Craft.h"
+#include "SavedGame.h"
 #include "ItemContainer.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/Ruleset.h"
@@ -53,13 +54,13 @@ Transfer::~Transfer()
  * @param base Destination base.
  * @param rule Game ruleset.
  */
-bool Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
+bool Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule, SavedGame *save)
 {
 	_hours = node["hours"].as<int>(_hours);
 	if (const YAML::Node &soldier = node["soldier"])
 	{
 		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(soldier, rule);
+		_soldier->load(soldier, rule, save);
 	}
 	if (const YAML::Node &craft = node["craft"])
 	{

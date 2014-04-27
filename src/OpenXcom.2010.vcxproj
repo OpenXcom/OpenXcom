@@ -267,6 +267,7 @@
     <ClCompile Include="Battlescape\InfoboxState.cpp" />
     <ClCompile Include="Battlescape\Inventory.cpp" />
     <ClCompile Include="Battlescape\InventoryState.cpp" />
+    <ClCompile Include="Battlescape\LayoutManagerState.cpp" />
     <ClCompile Include="Battlescape\Map.cpp" />
     <ClCompile Include="Battlescape\MedikitState.cpp" />
     <ClCompile Include="Battlescape\MedikitView.cpp" />
@@ -459,6 +460,7 @@
     <ClCompile Include="Savegame\Craft.cpp" />
     <ClCompile Include="Savegame\CraftWeapon.cpp" />
     <ClCompile Include="Savegame\CraftWeaponProjectile.cpp" />
+    <ClCompile Include="Savegame\EquipmentLayout.cpp" />
     <ClCompile Include="Savegame\EquipmentLayoutItem.cpp" />
     <ClCompile Include="Savegame\GameTime.cpp" />
     <ClCompile Include="Savegame\ItemContainer.cpp" />
@@ -554,6 +556,7 @@
     <ClInclude Include="Battlescape\InfoboxState.h" />
     <ClInclude Include="Battlescape\Inventory.h" />
     <ClInclude Include="Battlescape\InventoryState.h" />
+    <ClInclude Include="Battlescape\LayoutManagerState.h" />
     <ClInclude Include="Battlescape\Map.h" />
     <ClInclude Include="Battlescape\MedikitState.h" />
     <ClInclude Include="Battlescape\MedikitView.h" />
@@ -747,6 +750,7 @@
     <ClInclude Include="Savegame\Craft.h" />
     <ClInclude Include="Savegame\CraftWeapon.h" />
     <ClInclude Include="Savegame\CraftWeaponProjectile.h" />
+    <ClInclude Include="Savegame\EquipmentLayout.h" />
     <ClInclude Include="Savegame\EquipmentLayoutItem.h" />
     <ClInclude Include="Savegame\GameTime.h" />
     <ClInclude Include="Savegame\ItemContainer.h" />

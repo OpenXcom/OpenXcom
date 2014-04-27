@@ -17,9 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Soldier.h"
+#include "SavedGame.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/EquipmentLayout.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/SoldierDeath.h"
 #include "../Ruleset/SoldierNamePool.h"
@@ -38,7 +40,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(id), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(id), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(0), _death(0)
 {
 	if (names != 0)
 	{
@@ -79,10 +81,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
  */
 Soldier::~Soldier()
 {
-	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
-	{
-		delete *i;
-	}
+	setEquipmentLayout(0);
 	delete _death;
 }
 
@@ -91,7 +90,7 @@ Soldier::~Soldier()
  * @param node YAML node.
  * @param rule Game ruleset.
  */
-void Soldier::load(const YAML::Node &node, const Ruleset *rule)
+void Soldier::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 {
 	_id = node["id"].as<int>(_id);
 	_name = Language::utf8ToWstr(node["name"].as<std::string>());
@@ -111,10 +110,23 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	_armor = armor;
 	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
 	_improvement = node["improvement"].as<int>(_improvement);
-	if (const YAML::Node &layout = node["equipmentLayout"])
+	if (const YAML::Node &layoutN = node["equipmentLayout"])
 	{
-		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
-			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+		if (layoutN.size() > 0)
+		{ // So we have a custom layout
+			EquipmentLayout *layout = new EquipmentLayout(L"", 0);
+			for (YAML::const_iterator i = layoutN.begin(); i != layoutN.end(); ++i)
+			{
+				layout->getItems()->push_back(new EquipmentLayoutItem(*i));
+			}
+			setEquipmentLayout(layout);
+		}
+		else
+		{ // So we have an Id pointing to a layout
+			int id = 0;
+			id = layoutN.as<int>(id);
+			setEquipmentLayout((id == 0) ? 0 : save->getLayout(id));
+		}
 	}
 	if (node["death"])
 	{
@@ -150,10 +162,19 @@ YAML::Node Soldier::save() const
 	if (_psiTraining)
 		node["psiTraining"] = _psiTraining;
 	node["improvement"] = _improvement;
-	if (!_equipmentLayout.empty())
+	if (_equipmentLayout)
 	{
-		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
-			node["equipmentLayout"].push_back((*i)->save());
+		if (_equipmentLayout->getId() == 0)
+		{ // So this is a custom layout
+			for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout->getItems()->begin(); i != _equipmentLayout->getItems()->end(); ++i)
+			{
+				node["equipmentLayout"].push_back((*i)->save());
+			}
+		}
+		else
+		{ // So this is a pointed (by id) layout
+			node["equipmentLayout"] = _equipmentLayout->getId();
+		}
 	}
 	if (_death != 0)
 	{
@@ -442,12 +463,26 @@ void Soldier::heal()
 }
 
 /**
- * Returns the list of EquipmentLayoutItems of a soldier.
- * @return Pointer to the EquipmentLayoutItem list.
+ * Returns the EquipmentLayout of a soldier.
+ * @return Pointer to the EquipmentLayout.
  */
-std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
+EquipmentLayout *Soldier::getEquipmentLayout()
 {
-	return &_equipmentLayout;
+	return _equipmentLayout;
+}
+
+/**
+ * Sets the equipment-layout of a soldier.
+ * @param layout Pointer to the EquipmentLayout.
+ */
+void Soldier::setEquipmentLayout(EquipmentLayout *layout)
+{
+	if (layout == _equipmentLayout) return;
+
+	// We have to destroy the previous first, if we had (a custom) one
+	if (_equipmentLayout != 0 && _equipmentLayout->getId() == 0) delete _equipmentLayout;
+
+	_equipmentLayout = layout;
 }
 
 /**
@@ -552,11 +587,7 @@ void Soldier::die(SoldierDeath *death)
 	_psiTraining = false;
 	_recentlyPromoted = false;
 	_recovery = 0;
-	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
-	{
-		delete *i;
-	}
-	_equipmentLayout.clear();
+	setEquipmentLayout(0);
 }
 
 /**

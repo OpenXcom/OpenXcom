@@ -51,7 +51,7 @@ private:
 	NumberText *_stackNumber;
 
 	/// Moves an item to a specified slot.
-	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
+	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y, BattleItem *containerItem = 0);
 	/// Gets the slot in the specified position.
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:
@@ -93,6 +93,8 @@ public:
 	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
 	/// Checks for item overlap.
 	static bool overlapItems(BattleUnit *unit, BattleItem *item, RuleInventory *slot, int x = 0, int y = 0);
+	/// Shows a warning message.
+	void showWarning(const std::wstring &msg);
 };
 
 }

@@ -75,6 +75,8 @@ private:
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
+	bool _equipByLayoutFailed;
+	Tile *_craftInventoryTile; // This is a save for equipByLayout()
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -176,7 +178,7 @@ public:
 	/// Resets tiles units are standing on
 	void resetUnitTiles();
 	/// Removes an item from the game.
-	void removeItem(BattleItem *item);
+	void removeItem(BattleItem *item, bool completeCheck = true);
 	/// Sets whether the mission was aborted.
 	void setAborted(bool flag);
 	/// Checks if the mission was aborted.
@@ -247,7 +249,14 @@ public:
 	void calculateModuleMap();
 	/// a shortcut to the geoscape save.
 	SavedGame *getGeoscapeSave();
-
+	/// Gets the value of _equipByLayoutFailed.
+	bool getEquipByLayoutFailed();
+	/// Sets the value of _equipByLayoutFailed.
+	void setEquipByLayoutFailed(bool value);
+	/// Gets the value of _craftInventoryTile.
+	Tile *getCraftInventoryTile();
+	/// Sets the value of _craftInventoryTile.
+	void setCraftInventoryTile(Tile *value);
 };
 
 }

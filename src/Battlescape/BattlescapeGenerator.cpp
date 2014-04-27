@@ -58,6 +58,7 @@
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
+#include "../Savegame/EquipmentLayout.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "CivilianBAIState.h"
 #include "AlienBAIState.h"
@@ -457,13 +458,26 @@ void BattlescapeGenerator::deployXCOM()
 		}
 	}
 
-	// equip soldiers based on equipment-layout
-	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	// Save the _craftInventoryTile into the SavedBattleGame, we need that in equipByLayout() !!
+	_save->setCraftInventoryTile(_craftInventoryTile);
+
+	// Equip soldiers based on equipment-layout
+	bool equipByLayoutFailed = false;
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		placeItemByLayout(*i);
+		// We need only X-Com soldiers
+		if ((*i)->getGeoscapeSoldier() == 0) continue;
+		
+		// Set soldiers with empty layout to the layout of "Newly recruited soldiers"
+		EquipmentLayout *layout = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+		if (layout == 0 || layout->getItems()->empty()) (*i)->getGeoscapeSoldier()->setEquipmentLayout(_game->getSavedGame()->getNewSoldierLayout());
+
+		// Equip!
+		if (!(*i)->equipByLayout(_game, true)) equipByLayoutFailed = true;
 	}
-	
-	// auto-equip soldiers (only soldiers without layout)
+	_save->setEquipByLayoutFailed(equipByLayoutFailed);
+
+	// auto-equip soldiers (only soldiers without layout -or with an empty layout)
 	for (int pass = 0; pass != 4; ++pass)
 	{
 		for (std::vector<BattleItem*>::iterator j = _craftInventoryTile->getInventory()->begin(); j != _craftInventoryTile->getInventory()->end();)
@@ -500,7 +514,7 @@ void BattlescapeGenerator::deployXCOM()
 				{
 					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 					{
-						if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
+						if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || ((*i)->getGeoscapeSoldier()->getEquipmentLayout() != 0 && !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->getItems()->empty()))
 						{
 							continue;
 						}
@@ -834,73 +848,6 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	}
 
 	return unit;
-}
-
-/**
- * Places an item on an XCom soldier based on equipment layout.
- * @param item Pointer to the Item.
- * @return Pointer to the Item.
- */
-bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
-{
-	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
-	if (item->getSlot() == ground)
-	{
-		bool loaded;
-		RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
-
-		// find the first soldier with a matching layout-slot
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-		{
-			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
-			if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-			if ((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty()) continue;
-
-			// find the first matching layout-slot which is not already occupied
-			std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
-			for (std::vector<EquipmentLayoutItem*>::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
-			{
-				if (item->getRules()->getType() != (*j)->getItemType()
-				|| (*i)->getItem((*j)->getSlot(), (*j)->getSlotX(), (*j)->getSlotY())) continue;
-
-				if ("NONE" == (*j)->getAmmoItem())
-					loaded = true;
-				else
-				{
-					loaded = false;
-					// maybe we find the layout-ammo on the ground to load it with
-					for (std::vector<BattleItem*>::iterator k = _craftInventoryTile->getInventory()->begin(); (!loaded) && k != _craftInventoryTile->getInventory()->end(); ++k)
-					{
-						if ((*k)->getRules()->getType() == (*j)->getAmmoItem() && (*k)->getSlot() == ground
-						&& item->setAmmoItem((*k)) == 0)
-						{
-							_save->getItems()->push_back(*k);
-							(*k)->setSlot(righthand);
-							loaded = true;
-							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
-						}
-					}
-				}
-				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
-				if (loaded)
-				{
-					item->moveToOwner((*i));
-					item->setSlot(_game->getRuleset()->getInventory((*j)->getSlot()));
-					item->setSlotX((*j)->getSlotX());
-					item->setSlotY((*j)->getSlotY());
-					if (Options::includePrimeStateInSavedLayout &&
-						(item->getRules()->getBattleType() == BT_GRENADE ||
-						item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
-					{
-						item->setFuseTimer((*j)->getFuseTimer());
-					}
-					_save->getItems()->push_back(item);
-					return true;
-				}
-			}
-		}
-	}
-	return false;
 }
 
 /**
