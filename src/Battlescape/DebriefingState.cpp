@@ -467,7 +467,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			if (!aborted)
+			if ((*i)->getStatus() == Ufo::CRASHED || !aborted)
 			{
 				delete *i;
 				save->getUfos()->erase(i);
