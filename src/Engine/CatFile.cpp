@@ -80,15 +80,18 @@ char *CatFile::load(unsigned int i, bool name)
 
 	seekg(_offset[i], std::ios::beg);
 
-	char namesize = peek();
-	// Skip filename
-	if (!name)
+	unsigned char namesize = peek();
+	// Skip filename (if there's any)
+	if (namesize<=56)
 	{
-		seekg(namesize + 1, std::ios::cur);
-	}
-	else
-	{
-		_size[i] += namesize + 1;
+		if (!name)
+		{
+			seekg(namesize + 1, std::ios::cur);
+		}
+		else
+		{
+			_size[i] += namesize + 1;
+		}
 	}
 
 	// Read object

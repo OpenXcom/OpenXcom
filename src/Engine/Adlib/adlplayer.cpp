@@ -297,6 +297,7 @@ void adlib_reg(int i, int v)
 
 void adlib_reg(int i, int v)
 {
+	if (opl[0]==0) return;
 	int v2,i3,v3;
 //	adlib0(i,v);
 	i3=-1;
@@ -867,6 +868,11 @@ void func_set_music_volume(int value)
 {
 	adl_gv_master_music_volume = value;
 	adl_gv_tmp_music_volume = adl_gv_master_music_volume;
+
+	for (int i=0; i<12; ++i)
+	{
+		adlib_set_amplitude(i, (adlib_channels[i].cur_volume*adl_gv_tmp_music_volume)>>7);
+	}
 }
 
 int func_get_polyphony()
