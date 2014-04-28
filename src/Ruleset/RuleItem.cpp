@@ -580,16 +580,16 @@ int RuleItem::getExplosionRadius() const
 		{
 			radius = _power / 20;
 		}
+		// cap the formula to 11
+		if (radius > 11)
+		{
+			radius = 11;
+		}
 	}
 	else
 	{
 		// unless a blast radius is actually defined.
 		radius = _blastRadius;
-	}
-
-	if (radius > 11)
-	{
-		radius = 11;
 	}
 
 	return radius;

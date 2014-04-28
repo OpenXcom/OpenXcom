@@ -1764,7 +1764,7 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
-	RuleItem *psiWeaponRules = _save->getBattleState()->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+	RuleItem *psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 	int cost = psiWeaponRules->getTUUse();
 	if (!psiWeaponRules->getFlatRate())
 	{
