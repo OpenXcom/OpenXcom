@@ -313,7 +313,7 @@ void adlib_reg(int i, int v)
 		if ((slot_array[i & 0x1f] & 1) == 1) //wave form
 			v2 = v2 & 0x02;
 	}
-	if ((i >= 0x60 && i <= 0x7F) && ((slot_array[i & 0x1f]) & 1 == 1)) //altered attack/decoy
+	if ((i >= 0x60 && i <= 0x7F) && ((slot_array[i & 0x1f] & 1) == 1)) //altered attack/decoy
 		v2 = v2 ^ 0x30;
 	OPLWrite(opl[1], 1, v2);
 	if (i3 != -1)
@@ -466,7 +466,7 @@ void adlib_play_note(int note, int volume, int instrument)
 		}
 		return;
 	}
-
+	if (volume>63) volume=63;
 	channel = adlib_get_unused_channel(sample_id, &same_sample);
 	adlib_channels[channel].cur_volume = volume;
 	adlib_channels[channel].cur_note = note;

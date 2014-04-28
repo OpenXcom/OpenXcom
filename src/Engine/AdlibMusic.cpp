@@ -148,6 +148,8 @@ void AdlibMusic::stop() const
 void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 {
 #ifndef __NO_MUSIC
+	if (Options::musicVolume == 0)
+		return;
 	while (len != 0)
 	{
 		if (!opl[0] || !opl[1])
