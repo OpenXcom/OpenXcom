@@ -257,7 +257,7 @@ set ( engine_src
   Engine/Scalers/init.cpp
   Engine/Adlib/adlplayer.cpp
   Engine/Adlib/adlplayer.h
-  Engine/Adlib/fmopl.c
+  Engine/Adlib/fmopl.cpp
   Engine/Adlib/fmopl.h
   Engine/AdlibMusic.h
   Engine/AdlibMusic.cpp

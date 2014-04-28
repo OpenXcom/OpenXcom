@@ -841,11 +841,11 @@
     <ClCompile Include="Engine\Adlib\adlplayer.cpp">
       <Filter>Engine\Adlib</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Adlib\fmopl.c">
-      <Filter>Engine\Adlib</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\AdlibMusic.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\fmopl.cpp">
+      <Filter>Engine\Adlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

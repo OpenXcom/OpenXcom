@@ -246,7 +246,7 @@ openxcom_SOURCES = \
 	src/dirent.h \
 	src/Engine/Adlib/adlplayer.cpp \
 	src/Engine/Adlib/adlplayer.h \
-	src/Engine/Adlib/fmopl.c \
+	src/Engine/Adlib/fmopl.cpp \
 	src/Engine/Adlib/fmopl.h \
 	src/Engine/AdlibMusic.cpp \
 	src/Engine/AdlibMusic.h \
