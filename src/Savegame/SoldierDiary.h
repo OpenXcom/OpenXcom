@@ -92,7 +92,8 @@ private:
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
-		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal;
+		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
+		_hitCounter5in1Mission;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 public:
@@ -109,21 +110,21 @@ public:
 	/// Update the diary statistics
 	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
 	/// Get
-	std::map<std::string, int> getAlienRankTotal() const;
+	std::map<std::string, int> &getAlienRankTotal();
 	/// Get
-	std::map<std::string, int> getAlienRaceTotal() const;
+	std::map<std::string, int> &getAlienRaceTotal();
 	/// Get
-	std::map<std::string, int> getWeaponTotal() const;
+	std::map<std::string, int> &getWeaponTotal();
 	/// Get
-	std::map<std::string, int> getWeaponAmmoTotal() const;
+	std::map<std::string, int> &getWeaponAmmoTotal();
 	/// Get
-	std::map<std::string, int> getRegionTotal() const;
+	std::map<std::string, int> &getRegionTotal();
 	/// Get
-	std::map<std::string, int> getCountryTotal() const;
+	std::map<std::string, int> &getCountryTotal();
 	/// Get
-	std::map<std::string, int> getTypeTotal() const;
+	std::map<std::string, int> &getTypeTotal();
 	/// Get
-	std::map<std::string, int> getUFOTotal() const;
+	std::map<std::string, int> &getUFOTotal();
 	/// Get
 	int getScoreTotal() const;
 	/// Get
@@ -153,11 +154,11 @@ public:
 	/// Increment soldier's service time.
 	void addMonthlyService();
     /// Get mission Id list
-    std::vector<int> getMissionIdList() const { return _missionIdList; }
+    std::vector<int> &getMissionIdList();
     /// Get kill list
-    std::vector<BattleUnitKills*> getKills() const { return _killList; }
+    std::vector<BattleUnitKills*> &getKills();
     /// Get mission issued days wounded
-    std::vector<std::pair<int, int> > getDaysWounded() const { return _daysWounded; }
+    std::vector<std::pair<int, int> > &getDaysWounded();
 };
 
 }

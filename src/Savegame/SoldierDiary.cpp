@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
     _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
-    _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0)
+    _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0)
 {
 
 }
@@ -107,6 +107,8 @@ void SoldierDiary::load(const YAML::Node& node)
 	_lowAccuracyHitCounterTotal = node["lowAccuracyHitCounterTotal"].as<int>(_lowAccuracyHitCounterTotal);
 	_shotsFiredCounterTotal = node["shotsFiredCounterTotal"].as<int>(_shotsFiredCounterTotal);
 	_shotsLandedCounterTotal = node["shotsLandedCounterTotal"].as<int>(_shotsLandedCounterTotal);
+	_shotAtCounter10in1Mission = node["shotAtCounter10in1Mission"].as<int>(_shotAtCounter10in1Mission);
+	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
 }
 
 /**
@@ -150,6 +152,8 @@ YAML::Node SoldierDiary::save() const
 	node["lowAccuracyHitCounterTotal"] = _lowAccuracyHitCounterTotal;
 	node["shotsFiredCounterTotal"] = _shotsFiredCounterTotal;
 	node["shotsLandedCounterTotal"] = _shotsLandedCounterTotal;
+	node["shotAtCounter10in1Mission"] = _shotAtCounter10in1Mission;
+	node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
 	return node;
 }
 
@@ -194,8 +198,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
         _unconciousTotal++;
     if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_BASE_DEFENSE" && missionStatistics->type != "STR_MEDIUM_SCOUT")
 		_importantMissionTotal++;
-    _shotAtCounterTotal += (unitStatistics->shotAtCounter); // Commendation is for getting shot 10 times in one mission, BUT THIS DOES NOT SEPERATE MISSIONS
-    _hitCounterTotal += (unitStatistics->hitCounter); // Commendation si for getting hit 5 times in one mission
+	_shotAtCounterTotal += unitStatistics->shotAtCounter;
+    _shotAtCounter10in1Mission += (unitStatistics->shotAtCounter)/10;
+	_hitCounterTotal += unitStatistics->hitCounter;
+    _hitCounter5in1Mission += (unitStatistics->hitCounter)/5;
 	_totalShotByFriendlyCounter += unitStatistics->shotByFriendlyCounter;
 	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
 	if (unitStatistics->loneSurvivor && missionStatistics->success)
@@ -210,154 +216,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
 
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getAlienRankTotal() const
-{
-	return _alienRankTotal;
-}
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getAlienRaceTotal() const
-{
-	return _alienRaceTotal;
-}
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getWeaponTotal() const
-{
-	return _weaponTotal;
-}
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal() const
-{
-	return _weaponAmmoTotal;
-}
-
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getRegionTotal() const
-{
-	return _regionTotal;
-}
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getCountryTotal() const
-{
-	return _countryTotal;
-}
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getTypeTotal() const
-{
-	return _typeTotal;
-}
-
-/**
- *
- */
-std::map<std::string, int> SoldierDiary::getUFOTotal() const
-{
-	return _UFOTotal;
-}
-
-/**
- *
- */
-int SoldierDiary::getScoreTotal() const
-{
-	return _scoreTotal;
-}
-
-/**
- *
- */
-int SoldierDiary::getKillTotal() const
-{
-	return _killTotal;
-}
-
-/**
- *
- */
-int SoldierDiary::getMissionTotal() const
-{
-	return _missionTotal;
-}
-
-/**
- *
- */
-int SoldierDiary::getWinTotal() const
-{
-	return _winTotal;
-}
-
-/**
- *
- */
-int SoldierDiary::getStunTotal() const
-{
-	return _stunTotal;
-}
-
-/*
- *
- */
-int SoldierDiary::getDaysWoundedTotal() const
-{
-	return _daysWoundedTotal;
-}
-
-/**
- * Get total base defense missions
- * @return int Total base defense missions
- */
-int SoldierDiary::getBaseDefenseMissionTotal() const
-{
-	return _baseDefenseMissionTotal;
-}
-
-/**
- * Get total terror missions
- * @return int Total terror missions
- */
-int SoldierDiary::getTerrorMissionTotal() const
-{
-	return _terrorMissionTotal;
-}
-
-/**
- * Get total night missions
- * @return int Total night missions
- */
-int SoldierDiary::getNightMissionTotal() const
-{
-	return _nightMissionTotal;
-}
-
-/**
- * Get total night terror missions
- * @return int Total night terror missions
- */
-int SoldierDiary::getNightTerrorMissionTotal() const
-{
-	return _nightTerrorMissionTotal;
-}
 /**
  * Get soldier commendations.
  * @return SoldierCommendations soldier commendations.
@@ -425,8 +283,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) || 
-                    ((*j).first == "total_shot_at_10_times" && _shotAtCounterTotal < (*j).second.at(_nextCommendationLevel[""])) || 
-					((*j).first == "total_hit_5_times" && _hitCounterTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+                    ((*j).first == "total_shot_at_10_times" && _shotAtCounter10in1Mission < (*j).second.at(_nextCommendationLevel[""])) || 
+					((*j).first == "total_hit_5_times" && _hitCounter5in1Mission < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_friendly_fired" && _totalShotByFriendlyCounter < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_lone_survivor" && _loneSurvivorTotal < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_iron_man" && _ironManTotal < (*j).second.at(_nextCommendationLevel[""])) ||
@@ -505,7 +363,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     // Loop over the AND vectors
                     for (std::map<int, std::vector<std::string> >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
                     {
-                        int count = 1; // How many AND vectors (list of DETAILs) have been successful
+                        int count = 0; // How many AND vectors (list of DETAILs) have been successful
+						if ((*j).first == "kills_with_criteria_turn" || (*j).first == "kills_with_criteria_mission")
+							count++; // Turns and missions start at 1 because of how thisTime and lastTime work.
                         int thisTime = -1; // Time being a turn or a mission
                         int lastTime = -1;
                         bool goToNextTime = false;
@@ -636,6 +496,176 @@ void SoldierDiary::awardCommendation(std::string _commendationName, std::string 
 }
 
 /**
+ *
+ */
+std::vector<int> &SoldierDiary::getMissionIdList()
+{ 
+    return _missionIdList;
+}
+/**
+ *
+ */
+std::vector<BattleUnitKills*> &SoldierDiary::getKills()
+{
+    return _killList;
+}
+/**
+ *
+ */
+std::vector<std::pair<int, int> > &SoldierDiary::getDaysWounded()
+{
+    return _daysWounded;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getAlienRankTotal()
+{
+	return _alienRankTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getAlienRaceTotal()
+{
+	return _alienRaceTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getWeaponTotal()
+{
+	return _weaponTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getWeaponAmmoTotal()
+{
+	return _weaponAmmoTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getRegionTotal()
+{
+	return _regionTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getCountryTotal()
+{
+	return _countryTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getTypeTotal()
+{
+	return _typeTotal;
+}
+
+/**
+ *
+ */
+std::map<std::string, int> &SoldierDiary::getUFOTotal()
+{
+	return _UFOTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getScoreTotal() const
+{
+	return _scoreTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getKillTotal() const
+{
+	return _killTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getMissionTotal() const
+{
+	return _missionTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getWinTotal() const
+{
+	return _winTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getStunTotal() const
+{
+	return _stunTotal;
+}
+
+/*
+ *
+ */
+int SoldierDiary::getDaysWoundedTotal() const
+{
+	return _daysWoundedTotal;
+}
+
+/**
+ * Get total base defense missions
+ * @return int Total base defense missions
+ */
+int SoldierDiary::getBaseDefenseMissionTotal() const
+{
+	return _baseDefenseMissionTotal;
+}
+
+/**
+ * Get total terror missions
+ * @return int Total terror missions
+ */
+int SoldierDiary::getTerrorMissionTotal() const
+{
+	return _terrorMissionTotal;
+}
+
+/**
+ * Get total night missions
+ * @return int Total night missions
+ */
+int SoldierDiary::getNightMissionTotal() const
+{
+	return _nightMissionTotal;
+}
+
+/**
+ * Get total night terror missions
+ * @return int Total night terror missions
+ */
+int SoldierDiary::getNightTerrorMissionTotal() const
+{
+	return _nightTerrorMissionTotal;
+}
+
+/**
  * Increment soldier's service time one month
  */
 void SoldierDiary::addMonthlyService()
@@ -665,6 +695,7 @@ SoldierCommendations::SoldierCommendations(std::string commendationName, std::st
  */
 SoldierCommendations::~SoldierCommendations()
 {
+
 }
 
 /**

@@ -84,16 +84,9 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	{
 		missionId = 0;
 	}
-    int score = missionStatistics->at(missionId)->score;
-    int time = missionStatistics->at(missionId)->daylight;
-	std::string type = missionStatistics->at(missionId)->type;
-	std::string ufo = missionStatistics->at(missionId)->ufo;
-	std::string alienRace = missionStatistics->at(missionId)->alienRace;
-
 
     int daysWounded = 0;
-	std::vector<std::pair<int, int> > woundList = s->getDiary()->getDaysWounded();
-    for (std::vector<std::pair<int, int> >::const_iterator wound = woundList.begin() ; wound != woundList.end(); ++wound)
+    for (std::vector<std::pair<int, int> >::const_iterator wound = s->getDiary()->getDaysWounded().begin() ; wound != s->getDiary()->getDaysWounded().end(); ++wound)
     {
         if (wound->first == missionId)
         {
@@ -117,32 +110,27 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	_txtScore->setColor(Palette::blockOffset(13)+5);
 	_txtScore->setSecondaryColor(Palette::blockOffset(13));
 	_txtScore->setAlign(ALIGN_LEFT);
-	_txtScore->setText(tr("STR_SCORE_VALUE").arg(score));
-
-	_txtKills->setColor(Palette::blockOffset(13)+5);
-	_txtKills->setSecondaryColor(Palette::blockOffset(13));
-	_txtKills->setAlign(ALIGN_LEFT);
-	///	Total kills for the mission are calculated lower
+	_txtScore->setText(tr("STR_SCORE_VALUE").arg(missionStatistics->at(missionId)->score));
 
 	_txtMissionType->setColor(Palette::blockOffset(13)+5);
 	_txtMissionType->setSecondaryColor(Palette::blockOffset(13));
-	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(type)));
+	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(missionStatistics->at(missionId)->getMissionTypeLowerCase())));
 
 	_txtUFO->setColor(Palette::blockOffset(13)+5);
 	_txtUFO->setSecondaryColor(Palette::blockOffset(13));
-	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(ufo)));
+	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(missionStatistics->at(missionId)->ufo)));
 	_txtUFO->setVisible(true);
-	if (ufo == "NO_UFO") _txtUFO->setVisible(false);
+	if (missionStatistics->at(missionId)->ufo == "NO_UFO") _txtUFO->setVisible(false);
 
 	_txtRace->setColor(Palette::blockOffset(13)+5);
 	_txtRace->setSecondaryColor(Palette::blockOffset(13));
-	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(alienRace)));
+	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(missionStatistics->at(missionId)->alienRace)));
 	_txtRace->setVisible(true);
-	if (alienRace == "STR_UNKNOWN") _txtUFO->setVisible(false);
+	if (missionStatistics->at(missionId)->alienRace == "STR_UNKNOWN") _txtUFO->setVisible(false);
 
 	_txtDaylight->setColor(Palette::blockOffset(13)+5);
 	_txtDaylight->setSecondaryColor(Palette::blockOffset(13));
-	if (time == 0)
+	if (missionStatistics->at(missionId)->daylight == 0)
 	{
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
 	}
@@ -165,9 +153,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 
 	int count = 0;
 	std::wstringstream wssKills;
-	std::vector<BattleUnitKills*> killList = s->getDiary()->getKills();
 
-	for (std::vector<BattleUnitKills*>::iterator j = killList.begin() ; j != killList.end() ; ++j)
+	for (std::vector<BattleUnitKills*>::iterator j = s->getDiary()->getKills().begin() ; j != s->getDiary()->getKills().end() ; ++j)
 	{
 		if ((*j)->mission != missionId) continue;
 		std::wstringstream wssRank, wssRace, wssWeapon, wssAmmo;
@@ -195,6 +182,10 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 		wssKills << tr("STR_NO_KILLS");
 		_lstKills->addRow(1, wssKills.str().c_str());
 	}
+
+	_txtKills->setColor(Palette::blockOffset(13)+5);
+	_txtKills->setSecondaryColor(Palette::blockOffset(13));
+	_txtKills->setAlign(ALIGN_LEFT);
 	_txtKills->setText(tr("STR_KILLS").arg(count));
 }
 

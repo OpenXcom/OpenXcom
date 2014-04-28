@@ -281,21 +281,11 @@ extraStrings:
 # or one of these faction   s: FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER
 # Use the strings from the ruleset to define them (mods can be used too). 
 # For example, look at "STR_MEDAL_BOLTS_CROSS_NAME". It is awarded if a soldier
-# stuns a hostile commander or stuns a hostile leader.
+# stuns one hostile commander or stuns one hostile leader.
 # kills_with_criteria_career 
 # kills_with_criteria_mission
 # kills_with_criteria_turn
 commendations:
-  - type: STR_MEDAL_BOLTS_CROSS_NAME
-    description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
-    sprite: 13
-    criteria:
-      kills_with_criteria_career: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
-    killCriteria:
-      -
-        1: ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
-      -
-        1: ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
     sprite: 0
@@ -377,9 +367,19 @@ commendations:
         1: ["STR_SNAKEMAN", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
         1: ["STR_MUTON", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
         1: ["STR_ETHEREAL", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
-  - type: STR_MEDAL_GRENADIERS_MEDAL_NAME
+  - type: STR_MEDAL_BOLTS_CROSS_NAME
+    description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
+    sprite: 13
+    criteria:
+      kills_with_criteria_career: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+    killCriteria:
+      -
+        1: ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+      -
+        1: ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
+    - type: STR_MEDAL_GRENADIERS_MEDAL_NAME
     description: STR_MEDAL_GRENADIERS_MEDAL_DESCRIPTION
-    sprite: 0
+    sprite: 14
     criteria:
       kills_with_criteria_turn: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
@@ -393,41 +393,49 @@ commendations:
         3: ["FACTION_HOSTILE", "STATUS_DEAD", "STR_HIGH_EXPLOSIVE"]
   - type: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME
     description: STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION
-    sprite: 0
+    sprite: 15
     criteria:
       total_shot_at_10_times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   - type: STR_MEDAL_MAN_OF_STEEL_NAME
     description: STR_MEDAL_MAN_OF_STEEL_DESCRIPTION
-    sprite: 0
+    sprite: 16
     criteria: 
       total_hit_5_times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   - type: STR_MEDAL_BLACK_CROSS_NAME
     description: STR_MEDAL_BLACK_CROSS_DESCRIPTION
-    sprite: 0
+    sprite: 17
     criteria:
       total_friendly_fired: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   - type: STR_MEDAL_STAR_OF_VALOR_NAME
     description: STR_MEDAL_STAR_OF_VALOR_DESCRIPTION
-    sprite: 0
+    sprite: 18
     criteria:
       total_lone_survivor: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   - type: STR_MEDAL_IRON_MAN_NAME
     description: STR_MEDAL_IRON_MAN_DESCRIPTION
-    sprite: 0
+    sprite: 19
     criteria:
       total_iron_man: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   - type: STR_MEDAL_ORDER_OF_EARTH_NAME
     description: STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION
-    sprite: 0
+    sprite: 20
     criteria:
-      total_important_missions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      total_important_missions: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
   - type: STR_MEDAL_SNIPER_TMPNAME
     description: STR_MEDAL_SNIPER_TMPDESCRIPTION
-    sprite: 0
+    sprite: 21
     criteria:
       total_long_distance_hits: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_LUCKYSHOT_TMPNAME
     description: STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION
-    sprite: 0
+    sprite: 22
     criteria:
       total_low_accuracy_hits: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_DBLKILL_TMPNAME
+    description: STR_MEDAL_DBLKILL_TMPDESCRIPTION
+    sprite: 23
+    criteria:
+      kills_with_criteria_turn: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    killCriteria:
+      -
+        2: ["STATUS_DEAD"]

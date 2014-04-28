@@ -507,7 +507,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	killStatWeaponAmmo = "STR_WEAPON_UNKNOWN";
 	if (murderer != 0)
 	{
-		killStatMission = _save->getGeoscapeSave()->getMissionStatistics()->size() + 1;
+		killStatMission = _save->getGeoscapeSave()->getMissionStatistics()->size();
 	}
 	if (_save->getSide() == FACTION_PLAYER)
 	{

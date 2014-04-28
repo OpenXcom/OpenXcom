@@ -213,7 +213,7 @@ struct BattleUnitStatistics
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
 	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0) { }
-	~BattleUnitStatistics() {for (std::vector<BattleUnitKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;}
+	~BattleUnitStatistics() { }
 };
 
 /**
