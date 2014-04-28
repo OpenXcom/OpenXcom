@@ -838,6 +838,15 @@
     <ClCompile Include="Menu\LoadGameState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Adlib\adlplayer.cpp">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\fmopl.c">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\AdlibMusic.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1695,6 +1704,15 @@
     <ClInclude Include="Menu\LoadGameState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Adlib\adlplayer.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\fmopl.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AdlibMusic.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1729,6 +1747,9 @@
     </Filter>
     <Filter Include="Engine\Scalers">
       <UniqueIdentifier>{fef61e76-5d44-4389-a40c-12da6e590e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Adlib">
+      <UniqueIdentifier>{09464f19-4bce-449f-a27c-5cd7b9850dbe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

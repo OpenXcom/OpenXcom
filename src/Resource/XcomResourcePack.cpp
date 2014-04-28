@@ -45,6 +45,7 @@
 #include "../Engine/Logger.h"
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/ExtraSounds.h"
+#include "../Engine/AdlibMusic.h"
 
 namespace OpenXcom
 {
@@ -291,8 +292,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMENBASE",
 							 "GMGEO1",
 							 "GMGEO2",
-							 "GMGEO3",
-							 "GMGEO4",
 							 "GMINTER",
 							 "GMINTRO1",
 							 "GMINTRO2",
@@ -302,14 +301,16 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMNEWMAR",
 							 "GMSTORY",
 							 "GMTACTIC",
-							 "GMTACTIC2",
 							 "GMWIN"};
 		std::string musOptional[] = {
+							 "GMGEO3",
+							 "GMGEO4",
 							 "GMGEO5",
 							 "GMGEO6",
 							 "GMGEO7",
 							 "GMGEO8",
 							 "GMGEO9",
+							 "GMTACTIC2",
 							 "GMTACTIC3",
 							 "GMTACTIC4",
 							 "GMTACTIC5",
@@ -318,22 +319,21 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMTACTIC8",
 							 "GMTACTIC9"};
 		std::string exts[] = {"flac", "ogg", "mp3", "mod", "wav"};
-		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
+		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 
 #ifndef __NO_MUSIC
 		// Check which music version is available
-		bool cat = true;
+		CatFile *adlibcat = 0;
 		GMCatFile *gmcat = 0;
 
-		std::string musDos = "SOUND/GM.CAT";
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musDos)))
+		std::string musicAdlib = "SOUND/ADLIB.CAT", musicGM = "SOUND/GM.CAT";
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
 		{
-			cat = true;
-			gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
+			adlibcat = new CatFile(CrossPlatform::getDataFile(musicAdlib).c_str());
 		}
-		else
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicGM)))
 		{
-			cat = false;
+			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str());
 		}
 
 		for (int i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
@@ -355,7 +355,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			if (!loaded)
 			{
 				// Try Adlib music
-				if (cat && tracks[i] != -1)
+				if (adlibcat && Options::audioBitDepth == 16)
+				{
+					_musics[mus[i]] = new AdlibMusic();
+					_musics[mus[i]]->load(adlibcat->load(tracks[i], true), adlibcat->getObjectSize(tracks[i]));
+					loaded = true;
+				}
+				// Try GM music
+				else if (gmcat)
 				{
 					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
 					loaded = true;
@@ -373,17 +380,17 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					}
 				}
 			}
-			if (!loaded && tracks[i] != -1)
+			if (!loaded)
 			{
 				throw Exception(mus[i] + " not found");
 			}
 		}
 		delete gmcat;
+		delete adlibcat;
 
 		// Ok, now try to load the optional musics
 		for (int i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
 		{
-			bool loaded = false;
 			// Try digital tracks
 			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
 			{
@@ -393,20 +400,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				{
 					_musics[musOptional[i]] = new Music();
 					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
-					loaded = true;
 					break;
-				}
-			}
-			if (!loaded)
-			{
-				// Try MIDI music
-				std::ostringstream s;
-				s << "SOUND/" << musOptional[i] << ".mid";
-				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
-				{
-					_musics[musOptional[i]] = new Music();
-					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
-					loaded = true;
 				}
 			}
 		}

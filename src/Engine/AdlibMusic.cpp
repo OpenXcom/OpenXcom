@@ -1,0 +1,175 @@
+/*
+ * Copyright 2010-2013 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "AdlibMusic.h"
+#include <fstream>
+#include <algorithm>
+#include "Exception.h"
+#include "Options.h"
+#include "Logger.h"
+extern "C" {
+#include "Adlib/fmopl.h"
+}
+#include "Adlib/adlplayer.h"
+
+extern FM_OPL* opl[2];
+
+namespace OpenXcom
+{
+
+int AdlibMusic::delay = 0;
+std::map<int, int> AdlibMusic::delayRates;
+
+/**
+ * Initializes a new music track.
+ */
+AdlibMusic::AdlibMusic() : _data(0), _size(0)
+{
+	if (!opl[0])
+	{
+		opl[0] = OPLCreate(OPL_TYPE_YM3812, 3579545, Options::audioSampleRate);
+	}
+	if (!opl[1])
+	{
+		opl[1] = OPLCreate(OPL_TYPE_YM3812, 3579545 * 0.985, Options::audioSampleRate);
+	}
+	//magic value - length of 1 tick per samplerate
+	if (delayRates.empty())
+	{
+		delayRates[8000] = 114 * 4;
+		delayRates[11025] = 157 * 4;
+		delayRates[16000] = 228 * 4;
+		delayRates[22050] = 314 * 4;
+		delayRates[32000] = 456 * 4;
+		delayRates[44100] = 629 * 4;
+		delayRates[48000] = 685 * 4;
+	}
+}
+
+/**
+ * Deletes the loaded music content.
+ */
+AdlibMusic::~AdlibMusic()
+{
+	if (opl[0])
+	{
+		stop();
+		OPLDestroy(opl[0]);
+		opl[0] = 0;
+	}
+	if (opl[1])
+	{
+		OPLDestroy(opl[1]);
+		opl[1] = 0;
+	}
+	delete[] _data;
+}
+
+/**
+ * Loads a music file from a specified filename.
+ * @param filename Filename of the music file.
+ */
+void AdlibMusic::load(const std::string &filename)
+{
+	std::ifstream file(filename.c_str(), std::ios::binary);
+	if (!file)
+	{
+		throw Exception(filename + " not found");
+	}
+
+	file.seekg(0, std::ifstream::end);
+	_size = file.tellg();
+	file.seekg(0);
+
+	_data = new char[_size];
+	file.read(_data, _size);
+}
+
+/**
+ * Loads a music file from a specified memory chunk.
+ * @param data Pointer to the music file in memory
+ * @param size Size of the music file in bytes.
+ */
+void AdlibMusic::load(const void *data, size_t size)
+{
+	_data = (char*)data;
+	_size = size;
+}
+
+/**
+ * Plays the contained music track.
+ * @param loop Amount of times to loop the track. -1 = infinite
+ */
+void AdlibMusic::play(int loop) const
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		stop();
+		func_setup_music((unsigned char*)_data, _size);
+		Mix_HookMusic(player, NULL);
+	}
+#endif
+}
+
+/**
+ * Stops the contained music track.
+ */
+void AdlibMusic::stop() const
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		func_mute();
+		Mix_HookMusic(NULL, NULL);
+	}
+#endif
+}
+
+/**
+ * Custom audio player.
+ * @param udata User data to send to the player.
+ * @param stream Raw audio to output.
+ * @param len Length of audio to output.
+ */
+void AdlibMusic::player(void *udata, Uint8 *stream, int len)
+{
+#ifndef __NO_MUSIC
+	while (len != 0)
+	{
+		if (!opl[0] || !opl[1])
+			return;
+		int i = std::min(delay, len);
+		if (i)
+		{
+			YM3812UpdateOne(opl[0], (INT16*)stream, i / 2);
+			YM3812UpdateOne(opl[1], ((INT16*)stream) + 1, i / 2);
+			stream += i;
+			delay -= i;
+			len -= i;
+		}
+		if (!len)
+			return;
+		func_play_tick();
+
+		delay = delayRates[Options::audioSampleRate]; 
+	}
+#endif
+}
+
+}

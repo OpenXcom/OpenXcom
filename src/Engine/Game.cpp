@@ -25,6 +25,7 @@
 #include <sstream>
 #include <SDL_mixer.h>
 #include <SDL_image.h>
+#include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
 #include "Language.h"
@@ -392,6 +393,7 @@ void Game::setVolume(int sound, int music, int ui)
 		if (music >= 0)
 		{
 			Mix_VolumeMusic(music);
+			func_set_music_volume(music);
 		}
 		if (ui >= 0)
 		{

@@ -244,6 +244,12 @@ openxcom_SOURCES = \
 	src/Battlescape/WarningMessage.cpp \
 	src/Battlescape/WarningMessage.h \
 	src/dirent.h \
+	src/Engine/Adlib/adlplayer.cpp \
+	src/Engine/Adlib/adlplayer.h \
+	src/Engine/Adlib/fmopl.c \
+	src/Engine/Adlib/fmopl.h \
+	src/Engine/AdlibMusic.cpp \
+	src/Engine/AdlibMusic.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \
 	src/Engine/CatFile.cpp \
