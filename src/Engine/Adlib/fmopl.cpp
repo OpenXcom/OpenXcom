@@ -1037,7 +1037,7 @@ static void OPL_UnLockTable(void)
 /*******************************************************************************/
 
 /* ---------- update one of chip ----------- */
-void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length)
+void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length, int stripe)
 {
     int i;
 	int data;
@@ -1064,7 +1064,7 @@ void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length)
 		vib_table = OPL->vib_table;
 	}
 	R_CH = rythm ? &S_CH[6] : E_CH;
-    for( i=0; i < length ; i+=2 )
+    for( i=0; i < length ; i+=stripe )
 	{
 		/*            channel A         channel B         channel C      */
 		/* LFO */
@@ -1080,7 +1080,7 @@ void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length)
 		/* limit check */
 		data = Limit( outd[0] , OPL_MAXOUT, OPL_MINOUT );
 		/* store to sound buffer */
-		/*buf[i+1] =*/ buf[i] = data >> OPL_OUTSB;
+		buf[i] = data >> OPL_OUTSB;
 	}
 
 	OPL->amsCnt = amsCnt;
@@ -1257,6 +1257,16 @@ FM_OPL *OPLCreate(int type, int clock, int rate)
 #endif
 	return OPL;
 }
+
+void OPLReInit(FM_OPL *OPL, int clock, int rate)
+{
+	/* set channel state pointer */
+	OPL->clock = clock;
+	OPL->rate  = rate;
+	/* init global tables */
+	OPL_initalize(OPL);
+}
+
 
 /* ----------  Destroy one of vietual YM3812 ----------       */
 void OPLDestroy(FM_OPL *OPL)

@@ -298,40 +298,28 @@ void adlib_reg(int i, int v)
 void adlib_reg(int i, int v)
 {
 	if (opl[0]==0) return;
-	int v2,i3,v3;
-//	adlib0(i,v);
-	i3=-1;
-/*
-	if (i>=0x80&&i<=0x9f)
-		if ((v&0x0f) >=0x00)
-			v=(v&0xf0) | 0x0f;
-*/
-	Transpose(i,v,&v2,&i3,&v3);
+	int v2, i3, v3;
+	i3 = -1;
+	Transpose(i, v, &v2, &i3, &v3);
 
-	OPLWrite(opl[0],0,i);
-	OPLWrite(opl[0],1,v);
-	OPLWrite(opl[1],0,i);
-	if (i>=0x20&&i<=0x3f) //no tremolo/vibrato
-		v2=(v2&0x3F);
-	if ((i>=0x60&&i<=0x7F)  && ((slot_array[i&0x1f]&1)==0)) //altered attack/decoy
-		v2=v2 ^ 0x55;
-	if (i>=0xE0&&i<=0xFC) 
+	OPLWrite(opl[0], 0, i);
+	OPLWrite(opl[0], 1, v);
+	OPLWrite(opl[1], 0, i);
+	if (i >= 0x20 && i <= 0x3f) //no tremolo/vibrato
+		v2 = (v2 & 0x3F);
+	if (i >= 0xE0 && i <= 0xFC)
 	{
-		if ((slot_array[i&0x1f]&1)==0) //wave form
-		v2=v2 & 0x02 | 0x01;
-		else
-		v2=v2 & 0x02;
+		if ((slot_array[i & 0x1f] & 1) == 1) //wave form
+			v2 = v2 & 0x02;
 	}
-
-
-	OPLWrite(opl[1],1,v2);
-	if (i3!=-1)
+	if ((i >= 0x60 && i <= 0x7F) && ((slot_array[i & 0x1f]) & 1 == 1)) //altered attack/decoy
+		v2 = v2 ^ 0x30;
+	OPLWrite(opl[1], 1, v2);
+	if (i3 != -1)
 	{
-		OPLWrite(opl[1],0,i3);
-		OPLWrite(opl[1],1,v3);
+		OPLWrite(opl[1], 0, i3);
+		OPLWrite(opl[1], 1, v3);
 	}
-//	YM3812Write(0, 0, i);
-//	YM3812Write(0, 1, v);
 }
 
 

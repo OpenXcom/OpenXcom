@@ -44,7 +44,7 @@ AdlibMusic::AdlibMusic() : _data(0), _size(0)
 	}
 	if (!opl[1])
 	{
-		opl[1] = OPLCreate(OPL_TYPE_YM3812, 3579545 * 0.985, Options::audioSampleRate);
+		opl[1] = OPLCreate(OPL_TYPE_YM3812, 3579545, Options::audioSampleRate);
 	}
 	//magic value - length of 1 tick per samplerate
 	if (delayRates.empty())
@@ -155,8 +155,8 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 		int i = std::min(delay, len);
 		if (i)
 		{
-			YM3812UpdateOne(opl[0], (INT16*)stream, i / 2);
-			YM3812UpdateOne(opl[1], ((INT16*)stream) + 1, i / 2);
+			YM3812UpdateOne(opl[0], (INT16*)stream, i / 2, 2);
+			YM3812UpdateOne(opl[1], ((INT16*)stream) + 1, i / 2, 2);
 			stream += i;
 			delay -= i;
 			len -= i;
