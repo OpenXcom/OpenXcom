@@ -3,10 +3,10 @@
 
 // General options
 OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolution, baseXGeoscape, baseYGeoscape, baseXBattlescape, baseYBattlescape,
-    autosave, soundVolume, musicVolume, uiVolume, audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS,
+    soundVolume, musicVolume, uiVolume, audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS,
 	changeValueByMouseWheel, dragScrollTimeTolerance, dragScrollPixelTolerance;
 OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpenGL, checkOpenGLErrors, vSyncForOpenGL, useOpenGLSmoothing,
-	allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio, dragScrollInvert,
+	autosave, allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio, dragScrollInvert,
 	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow;
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
@@ -15,7 +15,7 @@ OPT SDL_GrabMode captureMouse;
 OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave;
 
 // Geoscape options
-OPT int geoClockSpeed, dogfightSpeed, globeScrollSpeed, globeScrollDragButton, geoscapeScale;
+OPT int geoClockSpeed, dogfightSpeed, globeScrollSpeed, globeDragScrollButton, geoscapeScale;
 OPT bool includePrimeStateInSavedLayout, anytimePsiTraining, weaponSelfDestruction, spendResearchedItems, craftLaunchAlways, globeSeasons, globeDetail, globeRadarLines, globeFlightPaths, globeAllRadarsOnBaseBuild,
 	alienContainmentLimitEnforced, canSellLiveAliens, canTransferCraftsWhileAirborne, canManufactureMoreItemsPerHour, customInitialBase, aggressiveRetaliation,
 	allowBuildingQueue, allowAutoSellProduction, showFundsOnGeoscape, psiStrengthEval, fieldPromotions;
@@ -40,5 +40,4 @@ OPT SDLKey keyBattleLeft, keyBattleRight, keyBattleUp, keyBattleDown, keyBattleL
 OPT bool mute, reload, newOpenGL, newScaleFilter, newHQXFilter;
 OPT int newDisplayWidth, newDisplayHeight, newBattlescapeScale, newGeoscapeScale;
 OPT std::string newOpenGLShader;
-OPT std::vector<std::string> rulesets;
-OPT std::vector<std::string> purchaseExclusions;
+OPT std::vector<std::string> rulesets, purchaseExclusions, badMods;

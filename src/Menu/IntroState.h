@@ -31,9 +31,10 @@ class IntroState : public State
 {
 private:
 	std::string _introFile, _introSoundFileDOS, _introSoundFileWin;
+	bool _wasLetterBoxed;
 public:
 	/// Creates the Intro state.
-	IntroState(Game *game);
+	IntroState(Game *game, bool wasLetterBoxed);
 	/// Cleans up the Intro state.
 	~IntroState();
 	/// Starts the intro.

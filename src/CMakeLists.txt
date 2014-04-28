@@ -255,6 +255,12 @@ set ( engine_src
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
   Engine/Scalers/init.cpp
+  Engine/Adlib/adlplayer.cpp
+  Engine/Adlib/adlplayer.h
+  Engine/Adlib/fmopl.cpp
+  Engine/Adlib/fmopl.h
+  Engine/AdlibMusic.h
+  Engine/AdlibMusic.cpp
 )
 
 set ( geoscape_src
@@ -378,10 +384,10 @@ set ( menu_src
   Menu/MainMenuState.h
   Menu/TestState.h
   Menu/TestState.cpp
-  Menu/SaveState.cpp
-  Menu/SaveState.h
-  Menu/LoadState.cpp
-  Menu/LoadState.h
+  Menu/ListSaveState.cpp
+  Menu/ListSaveState.h
+  Menu/ListLoadState.cpp
+  Menu/ListLoadState.h
   Menu/ConfirmLoadState.cpp
   Menu/ConfirmLoadState.h
   Menu/NewGameState.cpp
@@ -392,8 +398,8 @@ set ( menu_src
   Menu/ErrorMessageState.h
   Menu/DeleteGameState.cpp
   Menu/DeleteGameState.h
-  Menu/SavedGameState.cpp
-  Menu/SavedGameState.h
+  Menu/ListGamesState.cpp
+  Menu/ListGamesState.h
   Menu/OptionsBaseState.cpp
   Menu/OptionsBaseState.h
   Menu/OptionsControlsState.cpp
@@ -418,6 +424,10 @@ set ( menu_src
   Menu/AbandonGameState.h
   Menu/PauseState.cpp
   Menu/PauseState.h
+  Menu/LoadGameState.cpp
+  Menu/LoadGameState.h
+  Menu/SaveGameState.cpp
+  Menu/SaveGameState.h
 )
 
 set ( resource_src
@@ -486,6 +496,10 @@ set ( ruleset_src
   Ruleset/UfoTrajectory.h
   Ruleset/RuleAlienMission.cpp
   Ruleset/RuleAlienMission.h
+  Ruleset/StatString.h
+  Ruleset/StatString.cpp
+  Ruleset/StatStringCondition.h
+  Ruleset/StatStringCondition.cpp
 )
 
 set ( savegame_src
@@ -613,6 +627,13 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       add_definitions ( -Werror )
     endif ( FATAL_WARNING )
 endif()
+
+if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+  add_definitions ( -Qunused-arguments -pipe )
+  if ( ENABLE_CLANG_ANALYSIS )
+    add_definitions ( --analyze )
+  endif ()
+endif ()
 
 if ( MSVC )
   if ( ENABLE_WARNING )

@@ -208,6 +208,8 @@ public:
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }

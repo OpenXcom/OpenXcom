@@ -621,15 +621,6 @@
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\LoadState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SaveState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SavedGameState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -825,6 +816,36 @@
     </ClCompile>
     <ClCompile Include="Menu\ConfirmLoadState.cpp">
       <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListGamesState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListSaveState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatString.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\SaveGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\LoadGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\adlplayer.cpp">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\AdlibMusic.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\fmopl.cpp">
+      <Filter>Engine\Adlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1449,15 +1470,6 @@
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\LoadState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SaveState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SavedGameState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Logger.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -1671,6 +1683,36 @@
     <ClInclude Include="Menu\ConfirmLoadState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Menu\ListGamesState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListSaveState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatString.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatStringCondition.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SaveGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LoadGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\adlplayer.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\fmopl.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AdlibMusic.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1705,6 +1747,9 @@
     </Filter>
     <Filter Include="Engine\Scalers">
       <UniqueIdentifier>{fef61e76-5d44-4389-a40c-12da6e590e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Adlib">
+      <UniqueIdentifier>{09464f19-4bce-449f-a27c-5cd7b9850dbe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -33,9 +33,23 @@ enum ScrollType { SCROLL_NONE, SCROLL_TRIGGER, SCROLL_AUTO };
 enum KeyboardType { KEYBOARD_OFF, KEYBOARD_ON, KEYBOARD_VIRTUAL };
 /// Enumeration for the savegame sorting modes.
 enum SaveSort { SORT_NAME_ASC, SORT_NAME_DESC, SORT_DATE_ASC, SORT_DATE_DESC };
-/// Enumeration for the path preview modes.
-enum PathPreview { PATH_NONE, PATH_ARROWS, PATH_TU_COST, PATH_FULL };
+/// Enumeration for the path preview modes (can be OR'd together).
+enum PathPreview {
+	PATH_NONE    = 0x00, // 0000 (must always be zero)
+	PATH_ARROWS  = 0x01, // 0001
+	PATH_TU_COST = 0x02, // 0010
+	PATH_FULL    = 0x03  // 0011 (must always be all values combined)
+};
 
+enum ScaleType
+{
+	SCALE_ORIGINAL,
+	SCALE_15X,
+	SCALE_2X,
+	SCALE_SCREEN_DIV_3,
+	SCALE_SCREEN_DIV_2,
+	SCALE_SCREEN
+};
 /**
  * Container for all the various global game options
  * and customizable settings.

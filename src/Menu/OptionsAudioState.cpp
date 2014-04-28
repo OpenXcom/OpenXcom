@@ -29,8 +29,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
-#include "../Menu/LoadState.h"
-#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
@@ -148,6 +146,7 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_cbxBitDepth->setColor(Palette::blockOffset(15)-1);
 	_cbxBitDepth->setOptions(bitsText);
 	_cbxBitDepth->setTooltip("STR_AUDIO_BIT_DEPTH_DESC");
+	_cbxBitDepth->onChange((ActionHandler)&OptionsAudioState::cbxBitDepthChange);
 	_cbxBitDepth->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_cbxBitDepth->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
@@ -157,6 +156,7 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_cbxSampleRate->setColor(Palette::blockOffset(15)-1);
 	_cbxSampleRate->setOptions(samplesText);
 	_cbxSampleRate->setTooltip("STR_AUDIO_SAMPLE_RATE_DESC");
+	_cbxSampleRate->onChange((ActionHandler)&OptionsAudioState::cbxSampleRateChange);
 	_cbxSampleRate->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_cbxSampleRate->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 }

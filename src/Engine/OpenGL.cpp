@@ -129,14 +129,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   }
 
   void OpenGL::clear() {
-    memset(buffer, 0, iwidth * iheight * ibpp);
+    //memset(buffer, 0, iwidth * iheight * ibpp);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
+	glErrorCheck();
   }
 
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
+	clear();
     if(shader_support && (fragmentshader || vertexshader)) {    
       glUseProgram(glprogram);
       GLint location;

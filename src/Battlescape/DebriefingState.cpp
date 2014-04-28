@@ -467,7 +467,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			if (!aborted)
+			if ((*i)->getStatus() == Ufo::CRASHED || !aborted)
 			{
 				delete *i;
 				save->getUfos()->erase(i);
@@ -643,7 +643,11 @@ void DebriefingState::prepareDebriefing()
 					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
 					if (soldier != 0)
+					{
 						recoverItems((*j)->getInventory(), base);
+						// calculate new statString
+						soldier->calcStatString(_game->getRuleset()->getStatStrings());
+					}
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);

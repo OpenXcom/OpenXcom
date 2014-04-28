@@ -150,8 +150,13 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		{
 			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(*i);
-			_weapons[j++] = w;
+			_weapons[j] = w;
 		}
+		else
+		{
+			_weapons[j] = 0;
+		}
+		j++;
 	}
 
 	_items->load(node["items"]);

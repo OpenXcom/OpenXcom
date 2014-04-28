@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class SavedGame;
 class SoldierNamePool;
+class Soldier;
 class RuleCountry;
 class RuleRegion;
 class RuleBaseFacility;
@@ -57,6 +58,7 @@ class MCDPatch;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
+class StatString;
 
 /**
  * Set of rules and stats for a game.
@@ -92,6 +94,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
+	std::vector<StatString*> _statStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
@@ -112,11 +115,11 @@ public:
 	/// Creates a blank ruleset.
 	Ruleset();
 	/// Cleans up the ruleset.
-	virtual ~Ruleset();
+	~Ruleset();
 	/// Loads a ruleset from the given source.
 	void load(const std::string &source);
 	/// Generates the starting saved game.
-	virtual SavedGame *newSave() const;
+	SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
 	const std::vector<SoldierNamePool*> &getPools() const;
 	/// Gets the ruleset for a country type.
@@ -215,12 +218,16 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
+	/// Gets the list of StatStrings.
+    std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 	std::vector<std::string> getPsiRequirements();
 	/// Returns the sorted list of inventories.
 	const std::vector<std::string> &getInvsList () const;
+	/// Generates a new soldier.
+	Soldier *genSoldier(SavedGame *save) const;
 
 };
 

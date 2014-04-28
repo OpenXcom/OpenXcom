@@ -64,6 +64,7 @@ struct SaveInfo
 	std::wstring isoDate, isoTime;
 	std::wstring details;
 	std::vector<std::string> rulesets;
+	bool reserved;
 };
 
 /**
@@ -76,6 +77,7 @@ class SavedGame
 private:
 	std::wstring _name;
 	GameDifficulty _difficulty;
+	bool _ironman;
 	GameTime *_time;
 	std::vector<int> _funds, _maintenance, _researchScores, _incomes, _expenditures;
 	double _globeLon, _globeLat;
@@ -102,13 +104,16 @@ private:
 	int _selectedBase;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
+	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
 public:
+	static const std::string AUTOSAVE_GEOSCAPE, AUTOSAVE_BATTLESCAPE, QUICKSAVE;
+
 	/// Creates a new saved game.
 	SavedGame();
 	/// Cleans up the saved game.
 	~SavedGame();
 	/// Gets list of saves in the user directory.
-	static std::vector<SaveInfo> getList(Language *lang);
+	static std::vector<SaveInfo> getList(Language *lang, bool autoquick);
 	/// Loads a saved game from YAML.
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML.
@@ -121,6 +126,10 @@ public:
 	GameDifficulty getDifficulty() const;
 	/// Sets the game difficulty.
 	void setDifficulty(GameDifficulty difficulty);
+	/// Gets if the game is in ironman mode.
+	bool isIronman() const;
+	/// Sets if the game is in ironman mode.
+	void setIronman(bool ironman);
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Gets the list of funds from previous months.
@@ -257,7 +266,6 @@ public:
 	void setSelectedBase(int base);
 	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 	int getSoldierScore(Soldier *soldier);
-
 };
 
 }

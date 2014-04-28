@@ -312,4 +312,14 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	}
 }
 
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void ActionMenuState::resize(int &dX, int &dY)
+{
+	State::recenter(dX, dY * 2);
+}
+
 }
