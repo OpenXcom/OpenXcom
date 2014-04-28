@@ -549,7 +549,7 @@ void ProjectileFlyBState::think()
 						if (victim && !victim->isOut())
 						{
 							victim->getStatistics()->hitCounter++;
-							if (_unit->getOriginalFaction() == FACTION_PLAYER) // Anyone getting hit by XCOM is getting hit by friendly fire, but who cares
+							if (_unit->getOriginalFaction() == FACTION_PLAYER && victim->getOriginalFaction() == FACTION_PLAYER) 
 							{
 								victim->getStatistics()->shotByFriendlyCounter++;
 								_unit->getStatistics()->shotFriendlyCounter++;
@@ -560,7 +560,7 @@ void ProjectileFlyBState::think()
 								{
 									_unit->getStatistics()->longDistanceHitCounter++;
 								}
-								if (_unit->getFiringAccuracy(_action.type, _action.weapon) < 30)
+								if (_unit->getFiringAccuracy(_action.type, _action.weapon) < _parent->getTileEngine()->distance(_action.actor->getPosition(), victim->getPosition()))
 								{
 									_unit->getStatistics()->lowAccuracyHitCounter++;
 								}

@@ -29,6 +29,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom

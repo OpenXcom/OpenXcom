@@ -78,30 +78,26 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 
 	// Set up objects
 	Soldier *s = _base->getSoldiers()->at(_soldier);
+	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
     int missionId = s->getDiary()->getMissionIdList().at(_rowEntry);
-    int score = missionStatistics[missionId]->score;
-    int time = missionStatistics[missionId]->daylight;
-	std::string type = missionStatistics[missionId]->type;
-	std::string ufo = missionStatistics[missionId]->ufo;
-	std::string alienRace = missionStatistics[missionId]->alienRace;
-    
-    std::vector<BattleUnitKills*> missionKills;
-    for (std::vector<BattleUnitKills*>::const_iterator globalKill = s->getDiary()->getKills().begin(); globalKill != s->getDiary()->getKills().end(); ++globalKill)
-    {
-        if (globalKill->mission == missionId)
-        {
-            missionKills.push_back(new BattleUnitKills());
-            missionKills.back() = globalKill;
-        }
-    }
-    int totalKills = missionKills.size();
+	if (missionId > missionStatistics->size())
+	{
+		missionId = 0;
+	}
+    int score = missionStatistics->at(missionId)->score;
+    int time = missionStatistics->at(missionId)->daylight;
+	std::string type = missionStatistics->at(missionId)->type;
+	std::string ufo = missionStatistics->at(missionId)->ufo;
+	std::string alienRace = missionStatistics->at(missionId)->alienRace;
+
 
     int daysWounded = 0;
-    for (std::vector<std::pair<int, int> >::const_iterator wounds = s->getDiary()->getDaysWounded().begin(); wound != s->getDiary()->getDaysWounded().end(); ++wound)
+	std::vector<std::pair<int, int> > woundList = s->getDiary()->getDaysWounded();
+    for (std::vector<std::pair<int, int> >::const_iterator wound = woundList.begin() ; wound != woundList.end(); ++wound)
     {
-        if (wound.first == missionId)
+        if (wound->first == missionId)
         {
-            daysWounded = wound.second;
+            daysWounded = wound->second;
             break;
         }
     }
@@ -126,7 +122,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	_txtKills->setColor(Palette::blockOffset(13)+5);
 	_txtKills->setSecondaryColor(Palette::blockOffset(13));
 	_txtKills->setAlign(ALIGN_LEFT);
-	_txtKills->setText(tr("STR_KILLS").arg(totalKills));
+	///	Total kills for the mission are calculated lower
 
 	_txtMissionType->setColor(Palette::blockOffset(13)+5);
 	_txtMissionType->setSecondaryColor(Palette::blockOffset(13));
@@ -167,40 +163,39 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	_lstKills->setBackground(_window);
 	_lstKills->setMargin(8);
 
+	int count = 0;
 	std::wstringstream wssKills;
+	std::vector<BattleUnitKills*> killList = s->getDiary()->getKills();
 
-	if (missionKills.empty())
+	for (std::vector<BattleUnitKills*>::iterator j = killList.begin() ; j != killList.end() ; ++j)
+	{
+		if ((*j)->mission != missionId) continue;
+		std::wstringstream wssRank, wssRace, wssWeapon, wssAmmo;
+
+		wssRace << tr((*j)->race.c_str());
+		wssRank << tr((*j)->rank.c_str());
+		wssWeapon << tr((*j)->weapon.c_str());
+
+		std::wstringstream wssUnit, wssStatus;
+		wssUnit << wssRace.str().c_str() << " " << wssRank.str().c_str();
+
+		if ((*j)->getUnitStatusString() == "STATUS_DEAD")
+		{
+			wssStatus << tr("STR_KILLED").c_str();
+		}
+		else
+		{
+			wssStatus << tr("STR_STUNNED").c_str();
+		}
+
+		_lstKills->addRow(3, wssStatus.str().c_str(), wssUnit.str().c_str(), wssWeapon.str().c_str());
+	}
+	if (count == 0)
 	{
 		wssKills << tr("STR_NO_KILLS");
 		_lstKills->addRow(1, wssKills.str().c_str());
 	}
-	else
-	{
-		for (std::vector<BattleUnitKills*>::iterator j = missionKills.begin() ; j != missionKills.end() ; ++j)
-		{
-			std::wstringstream wssRank, wssRace, wssWeapon, wssAmmo;
-
-			wssRace << tr((*j)->race.c_str());
-			wssRank << tr((*j)->rank.c_str());
-			wssWeapon << tr((*j)->weapon.c_str());
-
-			std::wstringstream wssUnit, wssStatus;
-			wssUnit << wssRace.str().c_str() << " " << wssRank.str().c_str();
-
-			if ((*j)->status == "STATUS_DEAD")
-			{
-				Status << tr("STR_KILLED").c_str();
-			}
-			else
-			{
-				Status << tr("STR_STUNNED").c_str();
-			}
-
-			_lstKills->addRow(3, wssStatus.str().c_str(), wssUnit.str().c_str(), wssWeapon.str().c_str());
-		}
-	}
-
-	
+	_txtKills->setText(tr("STR_KILLS").arg(count));
 }
 
 /**

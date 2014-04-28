@@ -55,6 +55,10 @@ SoldierDiary::~SoldierDiary()
 	{
 		delete *i;
 	}
+	for (std::vector<BattleUnitKills*>::iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -152,14 +156,12 @@ YAML::Node SoldierDiary::save() const
 /**
  * Updated soldier diary statistics
  */
-void SoldierDiary::updateDiary(std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics)
+void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics)
 {
+	std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
     {
-		_killList.push_back(*kill);
 		(*kill)->makeTurnUnique();
-		if ((*kill)->getUnitFactionString() != "FACTION_HOSTILE") 
-            continue;
         _alienRankTotal[(*kill)->rank.c_str()]++;
         _alienRaceTotal[(*kill)->race.c_str()]++;
         _weaponTotal[(*kill)->weapon.c_str()]++;
@@ -168,6 +170,7 @@ void SoldierDiary::updateDiary(std::vector<BattleUnitKills*> unitKills, BattleUn
             _killTotal++;
         else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             _stunTotal++;
+		_killList.push_back(*kill);
     }
     _regionTotal[missionStatistics->region.c_str()]++;
     _countryTotal[missionStatistics->country.c_str()]++;
@@ -511,21 +514,21 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                         {
                             if ((*j).first == "kills_with_criteria_mission")
                             {
-                                thisTime = (*singleKill)->mission
+                                thisTime = (*singleKill)->mission;
                                 if (singleKill != _killList.begin())
                                 {
                                     --singleKill;
-                                    lastTime = (*singleKill)->mission
+                                    lastTime = (*singleKill)->mission;
                                     ++singleKill;
                                 }
                             }
                             else if ((*j).first == "kills_with_criteria_turn")
                             {
-                                thisTime = (*singleKill)->turn
+                                thisTime = (*singleKill)->turn;
                                 if (singleKill != _killList.begin())
                                 {
                                     --singleKill;
-                                    lastTime = (*singleKill)->turn
+                                    lastTime = (*singleKill)->turn;
                                     ++singleKill;
                                 }
                             }
@@ -548,7 +551,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                 // See if we find no matches with any criteria. If so, break and try the next kill.
                                 if ( (*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
                                      (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
-                                     (*singleKill)->status != (*detail) && (*singleKill)->faction != (*detail) )
+                                     (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail) )
                                 {
                                     foundMatch = false;
                                     break;

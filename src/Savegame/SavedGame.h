@@ -103,7 +103,7 @@ struct MissionStatistics
         return node;
     }
     MissionStatistics(const YAML::Node& node) : time(0,0,0,0,0,0,0) { load(node); }
-    MissionStatistics() : time(0,0,0,0,0,0,0), region(), country(), type(), ufo(), success(false), rating(), score(0), alienRace(), daylight(0) { }
+    MissionStatistics() : id (0), time(0,0,0,0,0,0,0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), type(), ufo("NO_UFO"), success(false), score(0), rating(), alienRace("STR_UNKNOWN"), daylight(0) { }
     ~MissionStatistics() { }
 };
 

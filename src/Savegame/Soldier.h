@@ -139,6 +139,8 @@ public:
 	void die(SoldierDeath *death);
 	/// Gets the soldier's diary.
 	SoldierDiary *getDiary();
+	/// Get reference to the soldier's diary
+	SoldierDiary* *getDiaryRef() { return &_diary; }
 
 };
 

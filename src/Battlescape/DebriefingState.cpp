@@ -239,20 +239,20 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	SavedBattleGame *battle = save->getSavedBattle();
     
     _missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
+    _missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
             (*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
-            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getKills(), (*j)->getStatistics(), _missionStatistics);
+            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics);
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
 		}
 	}
-    _missionStatistics->id = _game->getSavedGame()->getMissionStatistics().size() + 1;
-    _game->getSavedGame()->getMissionStatistics().push_back(_missionStatistics);
+    _game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMMARS");
@@ -568,7 +568,7 @@ void DebriefingState::prepareDebriefing()
 		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 		{
 			// if only one soldier survived, give him a medal! (unless he killed all the others...)
-			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->getMissionStatistics()->hasFriendlyFired() && deadSoldiers != 0)
+			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->getStatistics()->hasFriendlyFired() && deadSoldiers != 0)
 			{
 				(*j)->getStatistics()->loneSurvivor = true;
 				break;

@@ -39,6 +39,7 @@
 #include "../Engine/Options.h"
 #include "../Savegame/Base.h"
 #include "../Battlescape/CommendationState.h"
+#include "../Savegame/SoldierDiary.h"
 
 namespace OpenXcom
 {

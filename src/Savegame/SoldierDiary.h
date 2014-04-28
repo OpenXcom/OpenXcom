@@ -88,7 +88,7 @@ private:
 	RuleCommendations *_rules;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-    std::vector<std::pair<int ,int> > _daysWounded;
+    std::vector<std::pair<int, int> > _daysWounded;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
@@ -107,7 +107,7 @@ public:
 	/// Save a diary.
 	YAML::Node save() const;
 	/// Update the diary statistics
-	void updateDiary(std::vector<BattleUnitKills*> unitKills, BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
+	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
 	/// Get
 	std::map<std::string, int> getAlienRankTotal() const;
 	/// Get
@@ -155,7 +155,9 @@ public:
     /// Get mission Id list
     std::vector<int> getMissionIdList() const { return _missionIdList; }
     /// Get kill list
-    std::vector<BattleUnitKills*> getKills() const { return _kills; }
+    std::vector<BattleUnitKills*> getKills() const { return _killList; }
+    /// Get mission issued days wounded
+    std::vector<std::pair<int, int> > getDaysWounded() const { return _daysWounded; }
 };
 
 }

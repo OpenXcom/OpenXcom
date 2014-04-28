@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierInfoState.h"
-#include "SoldierDiaryState.h"
+#include "SoldierDiaryOverviewState.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -634,7 +634,7 @@ void SoldierInfoState::btnSackClick(Action *)
  */
 void SoldierInfoState::btnDiaryClick(Action *)
 {
-	_game->pushState(new SoldierDiaryState(_game, _base, _soldierId, this));
+	_game->pushState(new SoldierDiaryOverviewState(_game, _base, _soldierId, this));
 }
 
 }

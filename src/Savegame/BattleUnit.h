@@ -65,7 +65,7 @@ struct BattleUnitKills
     // Make turn unique across all kills
     int makeTurnUnique()
     {
-        turn += mission * 300; // Maintains divisibility by 3 as well
+        return turn += mission * 300; // Maintains divisibility by 3 as well
     }
     // Check to see if turn was on PLAYER side
     bool playerTurn()
@@ -133,7 +133,8 @@ struct BattleUnitKills
         }
     }
     BattleUnitKills(const YAML::Node& node) { load(node); }
-    BattleUnitKills() : rank(), race(), weapon(), weaponAmmo(), faction(FACTION_PLAYER), status(STATUS_STANDING), mission(0), turn(0) { }
+    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn) : 
+						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn) { }
     ~BattleUnitKills() { }
 };
 
@@ -211,7 +212,7 @@ struct BattleUnitStatistics
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0) { }
 	~BattleUnitStatistics() {for (std::vector<BattleUnitKills*>::iterator i = kills.begin(); i != kills.end(); ++i) delete*i;}
 };
 
@@ -258,7 +259,6 @@ private:
 	int _turnsSinceSpotted;
 	std::string _spawnUnit;
 	std::string _activeHand;
-	std::vector<BattleUnitKills*> _unitKills;
     BattleUnitStatistics* _statistics;
 
 	// static data
@@ -585,8 +585,6 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
-	/// Get the unit's mission kills
-    std::vector<BattleUnitKills*> getKills() {return _unitKills;}
     /// Get the unit's mission statistics
     BattleUnitStatistics* getStatistics() {return _statistics;}
 };
