@@ -390,7 +390,7 @@ void adlib_set_instrument_pitch(int instrument, int pitch)
 			int freq = get_pitched_freq_instr(note, instrument);
 			adlib_channels[i].cur_freq = freq;
 			adlib_reg(0xA0+i, freq & 0xff);
-			int hf=(freq>>8) & 0x03 | (adl_gv_octave_table[note]<<2);
+			int hf=((freq>>8) & 0x03) | (adl_gv_octave_table[note]<<2);
 			adlib_channels[i].hifreq = hf;
 			adlib_reg(0xB0+i, hf | 0x20);
 		}
@@ -466,7 +466,7 @@ void adlib_play_note(int note, int volume, int instrument)
 		}
 		return;
 	}
-	if (volume>63) volume=63;
+	if (volume>127) volume=127;
 	channel = adlib_get_unused_channel(sample_id, &same_sample);
 	adlib_channels[channel].cur_volume = volume;
 	adlib_channels[channel].cur_note = note;
