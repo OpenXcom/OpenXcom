@@ -507,7 +507,8 @@ void DebriefingState::prepareDebriefing()
 		{
 			_missionStatistics->ufo = (*i)->getRules()->getType();
             _missionStatistics->alienRace = (*i)->getAlienRace();
-			if (!aborted)
+			if ((*i)->getStatus() == Ufo::CRASHED || !aborted)
+
 			{
 				delete *i;
 				save->getUfos()->erase(i);
@@ -708,6 +709,8 @@ void DebriefingState::prepareDebriefing()
 					if (soldier != 0)
 					{
 						recoverItems((*j)->getInventory(), base);
+						// calculate new statString
+						soldier->calcStatString(_game->getRuleset()->getStatStrings());
 					}
 					else
 					{ // non soldier player = tank

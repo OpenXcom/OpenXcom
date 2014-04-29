@@ -21,6 +21,7 @@
 #include <sstream>
 #include <iomanip>
 #include <SDL_gfxPrimitives.h>
+#include "../lodepng.h"
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -78,11 +79,10 @@
 #include "BriefingState.h"
 #include "../Geoscape/DefeatState.h"
 #include "../Geoscape/VictoryState.h"
-#include "../lodepng.h"
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Menu/ListSaveState.h"
-#include "../Menu/ListLoadState.h"
+#include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -98,7 +98,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBefor
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;
 	int iconsWidth = 320;
-	int iconsHeight = 56;
+	int iconsHeight = Map::ICON_HEIGHT;
 	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
@@ -738,7 +738,7 @@ void BattlescapeState::mapClick(Action *action)
 void BattlescapeState::mapIn(Action *)
 {
 	_isMouseScrolling = false;
-	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
+	_map->setButtonsPressed(Options::battleDragScrollButton, false);
 }
 
 /**
@@ -1475,13 +1475,16 @@ inline void BattlescapeState::handle(Action *action)
 			}
 			// quick save and quick load
 			// not works in debug mode to prevent conflict in hotkeys by default
-			else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
+			else if (!_game->getSavedGame()->isIronman())
 			{
-				_game->pushState(new ListSaveState(_game, OPT_BATTLESCAPE, true));
-			}
-			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
-			{
-				_game->pushState(new ListLoadState(_game, OPT_BATTLESCAPE, true));
+				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+				{
+					_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SavedGame::QUICKSAVE));
+				}
+				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+				{
+					_game->pushState(new LoadGameState(_game, OPT_BATTLESCAPE, SavedGame::QUICKSAVE));
+				}
 			}
 
 			// voxel view dump
@@ -2042,6 +2045,55 @@ void BattlescapeState::txtTooltipOut(Action *action)
 			_txtTooltip->setText(L"");
 		}
 	}
+}
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void BattlescapeState::resize(int &dX, int &dY)
+{
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+	int divisor = 1;
+	switch (Options::battlescapeScale)
+	{
+	case SCALE_SCREEN_DIV_3:
+		divisor = 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		divisor = 2;
+		break;
+	case SCALE_SCREEN:
+		break;
+	default:
+		return;
+	}
+
+	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+	_map->setWidth(Options::baseXResolution);
+	_map->setHeight(Options::baseYResolution);
+	_map->getCamera()->resize();
+	_map->getCamera()->jumpXY(dX/2, dY/2);
+
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		if (*i != _map && (*i) != _btnPsi && *i != _btnLaunch && *i != _txtDebug)
+		{
+			(*i)->setX((*i)->getX() + dX / 2);
+			(*i)->setY((*i)->getY() + dY);
+		}
+		else if (*i != _map && *i != _txtDebug)
+		{
+			(*i)->setX((*i)->getX() + dX);
+		}
+	}
+
 }
 
 }

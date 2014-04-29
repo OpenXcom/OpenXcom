@@ -22,7 +22,6 @@
 #include "../Engine/State.h"
 #include <string>
 #include "OptionsBaseState.h"
-#include "ListLoadState.h"
 
 namespace OpenXcom
 {
@@ -31,18 +30,20 @@ class TextButton;
 class Window;
 class Text;
 
+/**
+ * Confirms loading a save with missing content.
+ */
 class ConfirmLoadState : public State
 {
 private:
 	OptionsOrigin _origin;
-	ListLoadState *_parent;
 	std::string _fileName;
 	TextButton *_btnYes, *_btnNo;
 	Window *_window;
 	Text *_txtText;
 public:
 	/// Creates a new confirmation state.
-	ConfirmLoadState(Game *game, OptionsOrigin origin, ListLoadState *parent, std::string fileName);
+	ConfirmLoadState(Game *game, OptionsOrigin origin, std::string fileName);
 	/// Cleans up the confirmation state.
 	virtual ~ConfirmLoadState();
 	/// Handler for clicking the Yes button.

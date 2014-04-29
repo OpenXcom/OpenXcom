@@ -299,6 +299,9 @@
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
     <ClCompile Include="Battlescape\WarningMessage.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
+    <ClCompile Include="Engine\AdlibMusic.cpp" />
+    <ClCompile Include="Engine\Adlib\adlplayer.cpp" />
+    <ClCompile Include="Engine\Adlib\fmopl.cpp" />
     <ClCompile Include="Engine\CatFile.cpp" />
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
@@ -393,6 +396,7 @@
     <ClCompile Include="Menu\ListGamesState.cpp" />
     <ClCompile Include="Menu\ListLoadState.cpp" />
     <ClCompile Include="Menu\ListSaveState.cpp" />
+    <ClCompile Include="Menu\LoadGameState.cpp" />
     <ClCompile Include="Menu\OptionsAdvancedState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
@@ -409,6 +413,7 @@
     <ClCompile Include="Menu\OptionsModsState.cpp" />
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
+    <ClCompile Include="Menu\SaveGameState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="pch.cpp">
@@ -432,6 +437,8 @@
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
     <ClCompile Include="Ruleset\RuleCommendations.cpp" />
+    <ClCompile Include="Ruleset\StatString.cpp" />
+    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\Unit.cpp" />
     <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -589,6 +596,9 @@
     <ClInclude Include="Battlescape\WarningMessage.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Action.h" />
+    <ClInclude Include="Engine\AdlibMusic.h" />
+    <ClInclude Include="Engine\Adlib\adlplayer.h" />
+    <ClInclude Include="Engine\Adlib\fmopl.h" />
     <ClInclude Include="Engine\CatFile.h" />
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
@@ -687,6 +697,7 @@
     <ClInclude Include="Menu\ListGamesState.h" />
     <ClInclude Include="Menu\ListLoadState.h" />
     <ClInclude Include="Menu\ListSaveState.h" />
+    <ClInclude Include="Menu\LoadGameState.h" />
     <ClInclude Include="Menu\OptionsAdvancedState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
@@ -703,6 +714,7 @@
     <ClInclude Include="Menu\OptionsModsState.h" />
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
+    <ClInclude Include="Menu\SaveGameState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="pch.h" />
@@ -721,6 +733,8 @@
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\RuleCommendations.h" />
+    <ClInclude Include="Ruleset\StatString.h" />
+    <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />

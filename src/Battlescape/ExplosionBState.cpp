@@ -33,6 +33,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/RNG.h"
 
@@ -92,6 +93,11 @@ void ExplosionBState::init()
 		_power = _tile->getExplosive();
 		_areaOfEffect = true;
 	}
+	else if (_unit && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+	{
+		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
+		_areaOfEffect = true;
+	}
 	else
 	{
 		_power = 120;
@@ -122,7 +128,7 @@ void ExplosionBState::init()
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 			// explosion sound
 			if (_power <= 80)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 2)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
@@ -234,8 +240,13 @@ void ExplosionBState::explode()
 	}
 	if (!_tile && !_item)
 	{
+		int radius = 6;
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-		save->getTileEngine()->explode(_center, _power, DT_HE, 6);
+		if (_unit && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		{
+			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
+		}
+		save->getTileEngine()->explode(_center, _power, DT_HE, radius);
 		terrainExplosion = true;
 	}
 

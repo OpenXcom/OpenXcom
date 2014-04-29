@@ -70,19 +70,29 @@ CatFile::~CatFile()
 /**
  * Loads an object into memory.
  * @param i Object number to load.
+ * @param filename Preserve internal file name.
  * @return Pointer to the loaded object.
  */
-char *CatFile::load(unsigned int i)
+char *CatFile::load(unsigned int i, bool name)
 {
 	if (i >= _amount)
 		return 0;
 
 	seekg(_offset[i], std::ios::beg);
 
-	// Skip filename
-	char namesize;
-	read(&namesize, 1);
-	seekg(namesize, std::ios::cur);
+	unsigned char namesize = peek();
+	// Skip filename (if there's any)
+	if (namesize<=56)
+	{
+		if (!name)
+		{
+			seekg(namesize + 1, std::ios::cur);
+		}
+		else
+		{
+			_size[i] += namesize + 1;
+		}
+	}
 
 	// Read object
 	char *object = new char[_size[i]];

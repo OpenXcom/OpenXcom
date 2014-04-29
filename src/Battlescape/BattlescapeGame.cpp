@@ -1334,17 +1334,25 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else if (_currentAction.type == BA_USE && _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
-			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
+			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction() && _save->selectUnit(pos)->getVisible())
 			{
-				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+				if (!_currentAction.weapon->getRules()->isLOSRequired() ||
+					std::find(_currentAction.actor->getVisibleUnits()->begin(), _currentAction.actor->getVisibleUnits()->end(), _save->selectUnit(pos)) != _currentAction.actor->getVisibleUnits()->end())
 				{
-					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState, false, true));
-					cancelCurrentAction();
+					if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+					{
+						_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
+						_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState, false, true));
+						cancelCurrentAction();
+					}
+					else
+					{
+						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+					}
 				}
 				else
 				{
-					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+						_parentState->warning("STR_NO_LINE_OF_FIRE");
 				}
 			}
 		}
@@ -1357,30 +1365,38 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				{
 					_currentAction.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 				}
-				_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
+				_currentAction.TU = _currentAction.actor->getActionTUs(_currentAction.type, _currentAction.weapon);
 				_currentAction.target = pos;
-				// get the sound/animation started
-				getMap()->setCursorType(CT_NONE);
-				_parentState->getGame()->getCursor()->setVisible(false);
-				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-				statePushBack(new ProjectileFlyBState(this, _currentAction));
-				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
+				if (!_currentAction.weapon->getRules()->isLOSRequired() ||
+					std::find(_currentAction.actor->getVisibleUnits()->begin(), _currentAction.actor->getVisibleUnits()->end(), _save->selectUnit(pos)) != _currentAction.actor->getVisibleUnits()->end())
 				{
-					if (getTileEngine()->psiAttack(&_currentAction))
+					// get the sound/animation started
+					getMap()->setCursorType(CT_NONE);
+					_parentState->getGame()->getCursor()->setVisible(false);
+					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+					statePushBack(new ProjectileFlyBState(this, _currentAction));
+					if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
 					{
-						// show a little infobox if it's successful
-						Game *game = _parentState->getGame();
-						if (_currentAction.type == BA_PANIC)
-							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
-						else if (_currentAction.type == BA_MINDCONTROL)
-							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
-						_parentState->updateSoldierInfo();
+						if (getTileEngine()->psiAttack(&_currentAction))
+						{
+							// show a little infobox if it's successful
+							Game *game = _parentState->getGame();
+							if (_currentAction.type == BA_PANIC)
+								game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+							else if (_currentAction.type == BA_MINDCONTROL)
+								game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+							_parentState->updateSoldierInfo();
+						}
 					}
-					if (builtinpsi)
-					{
-						_save->removeItem(_currentAction.weapon);
-						_currentAction.weapon = 0;
-					}
+				}
+				else
+				{
+						_parentState->warning("STR_NO_LINE_OF_FIRE");
+				}
+				if (builtinpsi)
+				{
+					_save->removeItem(_currentAction.weapon);
+					_currentAction.weapon = 0;
 				}
 			}
 		}

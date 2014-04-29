@@ -18,6 +18,7 @@
  */
 #include "Window.h"
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include "../aresame.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Sound.h"
@@ -133,7 +134,7 @@ void Window::popup()
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)
 		{
-			soundPopup[sound]->play(0);
+			soundPopup[sound]->play(Mix_GroupAvailable(0));
 		}
 	}
 	if (_popupStep < 1.0)

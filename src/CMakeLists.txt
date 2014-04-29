@@ -255,6 +255,12 @@ set ( engine_src
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
   Engine/Scalers/init.cpp
+  Engine/Adlib/adlplayer.cpp
+  Engine/Adlib/adlplayer.h
+  Engine/Adlib/fmopl.cpp
+  Engine/Adlib/fmopl.h
+  Engine/AdlibMusic.h
+  Engine/AdlibMusic.cpp
 )
 
 set ( geoscape_src
@@ -418,6 +424,10 @@ set ( menu_src
   Menu/AbandonGameState.h
   Menu/PauseState.cpp
   Menu/PauseState.h
+  Menu/LoadGameState.cpp
+  Menu/LoadGameState.h
+  Menu/SaveGameState.cpp
+  Menu/SaveGameState.h
 )
 
 set ( resource_src
@@ -486,6 +496,10 @@ set ( ruleset_src
   Ruleset/UfoTrajectory.h
   Ruleset/RuleAlienMission.cpp
   Ruleset/RuleAlienMission.h
+  Ruleset/StatString.h
+  Ruleset/StatString.cpp
+  Ruleset/StatStringCondition.h
+  Ruleset/StatStringCondition.cpp
 )
 
 set ( savegame_src

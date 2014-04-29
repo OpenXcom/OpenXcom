@@ -32,15 +32,6 @@ enum OptionsOrigin
 	OPT_BATTLESCAPE
 };
 
-enum ScaleType
-{
-	SCALE_ORIGINAL,
-	SCALE_15X,
-	SCALE_2X,
-	SCALE_SCREEN_DIV_3,
-	SCALE_SCREEN_DIV_2,
-	SCALE_SCREEN
-};
 class Window;
 class TextButton;
 class Text;
@@ -83,8 +74,9 @@ public:
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
 	/// update the game scale as required.
-	void updateScale(int &type, int selection, int &x, int &y, bool change);
-	void resize();
+	static void updateScale(int &type, int selection, int &x, int &y, bool change);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }

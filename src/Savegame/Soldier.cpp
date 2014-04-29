@@ -27,6 +27,7 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/StatString.h"
 
 namespace OpenXcom
 {
@@ -38,7 +39,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0), _diary()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(id), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0), _diary()
 {
 	_diary = new SoldierDiary();
 
@@ -73,10 +74,6 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 			_gender = (SoldierGender)RNG::generate(0, 1);
 			_look = (SoldierLook)RNG::generate(0,3);
 		}
-	}
-	if (id != 0)
-	{
-		_id = id;
 	}
 }
 
@@ -133,6 +130,7 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
 	}
+	calcStatString(rule->getStatStrings());
 }
 
 /**
@@ -179,12 +177,22 @@ YAML::Node Soldier::save() const
 }
 
 /**
- * Returns the soldier's full name.
+ * Returns the soldier's full name (and, optionally, statString).
  * @return Soldier name.
  */
-std::wstring Soldier::getName() const
+std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
 {
-	return _name;
+	if (statstring && _statString != L"") {
+		if (_name.length() + _statString.length() > maxLength) {
+			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
+		}
+		else {
+			return _name + L"/" + _statString;
+		}
+	}
+	else {
+		return _name;
+	}
 }
 
 /**
@@ -572,6 +580,14 @@ void Soldier::die(SoldierDeath *death)
 SoldierDiary *Soldier::getDiary()
 {
 	return _diary;
+}
+
+/**
+ * Calculates the soldier's statString
+ */
+void Soldier::calcStatString(const std::vector<StatString *> &statStrings)
+{
+	_statString = StatString::calcStatString(_currentStats, statStrings);
 }
 
 }

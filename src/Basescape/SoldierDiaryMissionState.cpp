@@ -152,6 +152,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	_lstKills->setMargin(8);
 
 	int count = 0;
+    bool stunOrKill = false;
 	std::wstringstream wssKills;
 
 	for (std::vector<BattleUnitKills*>::iterator j = s->getDiary()->getKills().begin() ; j != s->getDiary()->getKills().end() ; ++j)
@@ -169,15 +170,18 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 		if ((*j)->getUnitStatusString() == "STATUS_DEAD")
 		{
 			wssStatus << tr("STR_KILLED").c_str();
+            count++;
+            stunOrKill = true;
 		}
 		else
 		{
 			wssStatus << tr("STR_STUNNED").c_str();
+            stunOrKill = true;
 		}
 
 		_lstKills->addRow(3, wssStatus.str().c_str(), wssUnit.str().c_str(), wssWeapon.str().c_str());
 	}
-	if (count == 0)
+	if (!stunOrKill)
 	{
 		wssKills << tr("STR_NO_KILLS");
 		_lstKills->addRow(1, wssKills.str().c_str());

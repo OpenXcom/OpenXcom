@@ -125,11 +125,11 @@ void create()
 	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 80));
 	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 20));
 	_info.push_back(OptionInfo("globeScrollSpeed", &globeScrollSpeed, 20));
-	_info.push_back(OptionInfo("globeScrollDragButton", &globeScrollDragButton, SDL_BUTTON_MIDDLE));
+	_info.push_back(OptionInfo("globeDragScrollButton", &globeDragScrollButton, SDL_BUTTON_MIDDLE));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
-	_info.push_back(OptionInfo("autosave", &autosave, 0, "STR_AUTOSAVE", "STR_GENERAL"));
+	_info.push_back(OptionInfo("autosave", &autosave, true, "STR_AUTOSAVE", "STR_GENERAL"));
 	_info.push_back(OptionInfo("newSeedOnLoad", &newSeedOnLoad, false, "STR_NEWSEEDONLOAD", "STR_GENERAL"));
 	_info.push_back(OptionInfo("changeValueByMouseWheel", &changeValueByMouseWheel, 0, "STR_CHANGEVALUEBYMOUSEWHEEL", "STR_GENERAL"));
 	_info.push_back(OptionInfo("dragScrollInvert", &dragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_GENERAL")); // true drags away from the cursor, false drags towards (like a grab)
@@ -172,8 +172,8 @@ void create()
 	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyCancel", &keyCancel, SDLK_ESCAPE, "STR_CANCEL", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyScreenshot", &keyScreenshot, SDLK_F12, "STR_SCREENSHOT", "STR_GENERAL"));
-	_info.push_back(OptionInfo("keyFps", &keyFps, SDLK_F5, "STR_FPS_COUNTER", "STR_GENERAL"));
-	_info.push_back(OptionInfo("keyQuickSave", &keyQuickSave, SDLK_F6, "STR_QUICK_SAVE", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyFps", &keyFps, SDLK_F7, "STR_FPS_COUNTER", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyQuickSave", &keyQuickSave, SDLK_F5, "STR_QUICK_SAVE", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyQuickLoad", &keyQuickLoad, SDLK_F9, "STR_QUICK_LOAD", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyGeoLeft", &keyGeoLeft, SDLK_LEFT, "STR_ROTATE_LEFT", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("keyGeoRight", &keyGeoRight, SDLK_RIGHT, "STR_ROTATE_RIGHT", "STR_GEOSCAPE"));

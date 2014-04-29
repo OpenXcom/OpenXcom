@@ -30,18 +30,13 @@ namespace OpenXcom
  */
 class ListLoadState : public ListGamesState
 {
-private:
 public:
 	/// Creates the Load Game state.
 	ListLoadState(Game *game, OptionsOrigin origin);
-	/// Creates the Quick Load Game state.
-	ListLoadState(Game *game, OptionsOrigin origin, bool showMsg);
 	/// Cleans up the Load Game state.
 	~ListLoadState();
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
-	/// Quick load game.
-	void quickLoad(const std::string &filename);
 };
 
 }

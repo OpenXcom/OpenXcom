@@ -178,7 +178,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     }
     _regionTotal[missionStatistics->region.c_str()]++;
     _countryTotal[missionStatistics->country.c_str()]++;
-    _typeTotal[missionStatistics->type.c_str()]++;
+    _typeTotal[missionStatistics->getMissionTypeLowerCase().c_str()]++;
     _UFOTotal[missionStatistics->ufo.c_str()]++;
     _scoreTotal += missionStatistics->score;
     if (missionStatistics->success)

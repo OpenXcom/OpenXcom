@@ -21,6 +21,10 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <ctime>
+#include <algorithm>
+#include <functional>
+#include <assert.h>
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -98,12 +102,8 @@
 #include "BaseDefenseState.h"
 #include "BaseDestroyedState.h"
 #include "DefeatState.h"
-#include <ctime>
-#include <algorithm>
-#include <functional>
-#include <assert.h>
-#include "../Menu/ListSaveState.h"
-#include "../Menu/ListLoadState.h"
+#include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -114,7 +114,7 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
-	int screenWidth = Options::baseXGeoscape - Options::baseXGeoscape%4;
+	int screenWidth = Options::baseXGeoscape;
 	int screenHeight = Options::baseYGeoscape;
 
 	// Create objects
@@ -447,10 +447,17 @@ void GeoscapeState::handle(Action *action)
 			}
 		}
 		// quick save and quick load
-		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave && Options::autosave == 1)
-			_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, true));
-		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad && Options::autosave == 1)
-			_game->pushState(new ListLoadState(_game, OPT_GEOSCAPE, true));
+		if (!_game->getSavedGame()->isIronman())
+		{
+			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+			{
+				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
+			}
+			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+			{
+				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
+			}
+		}
 	}
 	if(!_dogfights.empty())
 	{
@@ -1085,15 +1092,14 @@ bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 	Region *region = _game->getSavedGame()->locateRegion(*ts);
 	if (region)
 	{
-		//TODO: This should come from mission rules!
-		region->addActivityAlien(1000);
+		region->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
 		//kids, tell your folks... don't ignore terror sites.
 	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
 		{
-			(*k)->addActivityAlien(1000);
+			(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
 			break;
 		}
 	}
@@ -1580,9 +1586,19 @@ void GeoscapeState::time1Day()
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
-	// Autosave
-	if (Options::autosave >= 2)
-		_game->pushState(new ListSaveState(_game, OPT_GEOSCAPE, false));
+	// Autosave every 10 days
+	int day = _game->getSavedGame()->getTime()->getDay();
+	if (day == 1 || day % 10 == 0)
+	{
+		if (_game->getSavedGame()->isIronman())
+		{
+
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		}
+	}
 }
 
 /**
@@ -2133,6 +2149,10 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
+/**
+ * Handler for clicking on a timer button.
+ * @param action pointer to the mouse action.
+ */
 void GeoscapeState::btnTimerClick(Action *action)
 {
 	SDL_Event ev;
@@ -2140,6 +2160,50 @@ void GeoscapeState::btnTimerClick(Action *action)
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action a = Action(&ev, 0.0, 0.0, 0, 0);
 	action->getSender()->mousePress(&a, this);
+}
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void GeoscapeState::resize(int &dX, int &dY)
+{
+	if (_game->getSavedGame()->getSavedBattle())
+		return;
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+	int divisor = 1;
+	switch (Options::geoscapeScale)
+	{
+	case SCALE_SCREEN_DIV_3:
+		divisor = 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		divisor = 2;
+		break;
+	case SCALE_SCREEN:
+		break;
+	default:
+		return;
+	}
+	
+	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+
+	_globe->resize();
+
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		if (*i != _globe)
+		{
+			(*i)->setX((*i)->getX() + dX);
+			(*i)->setY((*i)->getY() + dY/2);
+		}
+	}
 }
 
 }
