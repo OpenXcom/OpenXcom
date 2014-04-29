@@ -9253,6 +9253,8 @@ MCDPatches:
         bigWall: 4
       - MCDIndex: 33
         bigWall: 4
+      - MCDIndex: 41
+        LOFTS: [6,1,1,63,63,0,0,0,0,0,0,0]
       - MCDIndex: 43
         bigWall: 6
       - MCDIndex: 44
