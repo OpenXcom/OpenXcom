@@ -2137,15 +2137,17 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		std::string targetRegion =
 		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
 		// Choose race for this mission.
-		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
+		std::string research = _game->getRuleset()->getAlienMissionList().front();
+		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(research);
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion, *_game->getRuleset());
-		otherMission->setRace("STR_SECTOID");
+		std::string sectoid = missionRules.getTopRace(_game->getSavedGame()->getMonthsPassed());
+		otherMission->setRace(sectoid);
 		otherMission->start(150);
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
 		// Make sure this combination never comes up again.
-		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
+		strategy.removeMission(targetRegion, research);
 	}
 }
 

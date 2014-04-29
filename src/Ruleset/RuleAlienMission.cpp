@@ -129,6 +129,13 @@ const std::string RuleAlienMission::generateRace(const unsigned monthsPassed) co
 	return rc->second->choose();
 }
 
+
+const std::string RuleAlienMission::getTopRace(const unsigned monthsPassed) const
+{
+	std::vector<std::pair<unsigned, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();	
+	return rc->second->top();
+}
+
 /**
  * Ensures the allocated memory is released.
  */
