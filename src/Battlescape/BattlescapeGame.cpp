@@ -501,7 +501,7 @@ void BattlescapeGame::endTurn()
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
 	std::string killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo;
-	int killStatFaction, killStatStatus, killStatMission, killStatTurn;
+	int killStatMission, killStatTurn;
 
 	killStatWeapon = "STR_WEAPON_UNKNOWN";
 	killStatWeaponAmmo = "STR_WEAPON_UNKNOWN";

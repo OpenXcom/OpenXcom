@@ -103,6 +103,12 @@ extraStrings:
      STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly an Iron Man or Iron Woman."
      STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of Earth"
      STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Given to a soldier who has been instrumental in Earth's defense."
+     STR_MEDAL_SNIPER_TMPNAME: "Marksman Citation"
+     STR_MEDAL_SNIPER_TMPDESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."
+     STR_MEDAL_LUCKYSHOT_TMPNAME: "Good Luck Citation"
+     STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Given to a soldier who as defied the odds, landing an unlikely shot on an intended target"
+     STR_MEDAL_DBLKILL_TMPNAME: "Performance Citation"
+     STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Given to a soldier who has performed admirably on the field, killing more than one hostile threat in short succession."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -218,6 +224,12 @@ extraStrings:
      STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly an Iron Man or Iron Woman."
      STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of Earth"
      STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Given to a soldier who has been instrumental in Earth's defense."
+     STR_MEDAL_SNIPER_TMPNAME: "Marksman Citation"
+     STR_MEDAL_SNIPER_TMPDESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."
+     STR_MEDAL_LUCKYSHOT_TMPNAME: "Good Luck Citation"
+     STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Given to a soldier who as defied the odds, landing an unlikely shot on an intended target"
+     STR_MEDAL_DBLKILL_TMPNAME: "Performance Citation"
+     STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Given to a soldier who has performed admirably on the field, killing more than one hostile threat in short succession."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -293,7 +305,7 @@ commendations:
       kills_with_criteria_career: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
     killCriteria:
       -
-        1: ["STATUS_DEAD"]
+        1: ["STATUS_DEAD", "FACTION_HOSTILE"]
   - type: STR_MEDAL_MILITARY_CROSS_NAME
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
@@ -303,7 +315,7 @@ commendations:
     description: STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION
     sprite: 2
     criteria:
-      kills_with_criteria_career: [1, 3, 5, 7, 9, 11, 13, 15, 17, 20]
+      kills_with_criteria_career: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
     killCriteria:
       -
         1: ["FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
@@ -351,7 +363,7 @@ commendations:
     description: STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION
     sprite: 11
     criteria:
-      kills_with_criteria_career: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      kills_with_criteria_career: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
     killCriteria:
       -
         1: ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
@@ -435,7 +447,7 @@ commendations:
     description: STR_MEDAL_DBLKILL_TMPDESCRIPTION
     sprite: 23
     criteria:
-      kills_with_criteria_turn: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      kills_with_criteria_turn: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
     killCriteria:
       -
-        2: ["STATUS_DEAD"]
+        2: ["STATUS_DEAD", "FACTION_HOSTILE"]
