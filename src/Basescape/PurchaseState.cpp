@@ -116,7 +116,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	std::wostringstream ss5;
-	ss5 << _base->getExactUsedStores() << ":" << _base->getAvailableStores();
+	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss5.str());
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
@@ -485,7 +485,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 + _crafts.size()
-		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 *_base->getExactUsedStores() + 0.5)))
+		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 *_base->getUsedStores() + 0.5)))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -514,7 +514,7 @@ void PurchaseState::increaseByValue(int change)
 
 			// Item count
 			int storesNeededPerItem = (int)(10 * rule->getSize());
-			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getExactUsedStores() + 0.5) - _iQty;
+			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getUsedStores() + 0.5) - _iQty;
 			int maxByStores;
 			if (storesNeededPerItem == 0)
 			{
@@ -590,7 +590,7 @@ void PurchaseState::updateItemStrings()
 			}
 		}
 	}
-	ss5 << _base->getExactUsedStores();
+	ss5 << _base->getUsedStores();
 	if (_iQty != 0)
 	{
 		ss5 << "(";

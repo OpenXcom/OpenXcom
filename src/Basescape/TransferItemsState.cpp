@@ -617,7 +617,7 @@ void TransferItemsState::increaseByValue(int change)
 	else if (TRANSFER_ITEM == selType && !selItem->getAlien() )
 	{
 		int storesNeededPerItem = (int)(10 * _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize());
-		int freeStores = 10 * _baseTo->getAvailableStores() - (int)(10 * _baseTo->getExactUsedStores()) - _iQty;
+		int freeStores = 10 * _baseTo->getAvailableStores() - (int)(10 * _baseTo->getUsedStores()) - _iQty;
 		int freeStoresForItem;
 
 		if (storesNeededPerItem == 0)

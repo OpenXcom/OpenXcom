@@ -143,7 +143,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 
 	std::wostringstream ss5;
-	ss5 << _base->getExactUsedStores() << ":" << _base->getAvailableStores();
+	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss5.str());
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
@@ -635,7 +635,7 @@ void SellState::updateItemStrings()
 		}
 	}
 
-	ss5 << _base->getExactUsedStores();
+	ss5 << _base->getUsedStores();
 	if (_spaceChange != 0)
 	{
 		ss5 << "(";

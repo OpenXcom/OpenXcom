@@ -553,21 +553,10 @@ int Base::getAvailableQuarters() const
 
 /**
  * Returns the amount of stores used up by equipment in the base,
- * rounded down to the nearest whole number.
+ * and equipment about to arrive.
  * @return Storage space.
  */
-int Base::getUsedStores()
-{
-	return (int)floor(getExactUsedStores() + 0.05);
-}
-
-/**
- * Returns the amount of stores used up by equipment in the base,
- * and equipment about to arrive,
- * to the nearest tenth of an XCom storage unit.
- * @return Storage space.
- */
-double Base::getExactUsedStores()
+double Base::getUsedStores()
 {
 	double total = _items->getTotalSize(_rule);
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
@@ -605,7 +594,7 @@ double Base::getExactUsedStores()
 bool Base::storesOverfull(int offset)
 {
 	int capacity = getAvailableStores() * 10;
-	int used = (int)(getExactUsedStores() * 10 + 0.5);
+	int used = (int)(getUsedStores() * 10 + 0.5);
 	return used + offset > capacity;
 }
 
@@ -1557,9 +1546,10 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	}
 	else if ((*facility)->getRules()->getStorage())
 	{
-		// we won't destroy the items physically AT the base, 
+		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
-		if ((getAvailableStores() - getUsedStores()) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
+		if ((getAvailableStores() - (int)floor(getUsedStores() + 0.05)) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
+
 		{
 			for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); )
 			{
