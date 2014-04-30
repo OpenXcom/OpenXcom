@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
-#include <SDL_mixer.h>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
@@ -27,6 +26,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
+#include "../Engine/Music.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
@@ -129,8 +130,8 @@ void StartState::think()
 		}
 		break;
 	case LOADING_NONE:
-		Mix_HaltChannel(-1);
-		Mix_HaltMusic();
+		Sound::stop();
+		Music::stop();
 		_game->getScreen()->clear();
 		blit();
 		_game->getScreen()->flip();
