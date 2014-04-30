@@ -99,6 +99,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Initializes the resources for the text list.
 	void initText(Font *big, Font *small, Language *lang);
+	/// Sets the height of the surface.
+	void setHeight(int height);
 	/// Sets the text color of the text list.
 	void setColor(Uint8 color);
 	/// Gets the text color of the text list.

@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 const int ComboBox::LIST_MARGIN = 5;
-const int ComboBox::MAX_ITEMS = 7;
+const int ComboBox::MAX_ITEMS = 10;
 
 /**
  * Sets up a combobox with the specified size and position.
@@ -54,6 +54,7 @@ ComboBox::ComboBox(State *state, int width, int height, int x, int y) : Interact
 	_list->setSelectable(true);
 	_list->setBackground(_window);
 	_list->setAlign(ALIGN_CENTER);
+	_list->setScrolling(true, 0);
 
 	toggle();
 }
@@ -236,9 +237,12 @@ void ComboBox::setDropdown(int options)
 {
 	int items = std::min(options, MAX_ITEMS);
 	int h = _button->getFont()->getHeight() + _button->getFont()->getSpacing();
+	while (_window->getY() + items * h + LIST_MARGIN * 2 > 200)
+	{
+		items--;
+	}
 	_window->setHeight(items * h + LIST_MARGIN * 2);
 	_list->setHeight(items * h);
-	_list->setScrolling(options > MAX_ITEMS, 0);
 }
 
 /**

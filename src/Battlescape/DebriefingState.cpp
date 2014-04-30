@@ -83,15 +83,15 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
-	_txtTitle = new Text(280, 17, 16, 8);
+	_txtTitle = new Text(300, 17, 16, 8);
 	_txtItem = new Text(180, 9, 16, 24);
 	_txtQuantity = new Text(60, 9, 200, 24);
-	_txtScore = new Text(55, 9, 260, 24);
+	_txtScore = new Text(55, 9, 270, 24);
 	_txtRecovery = new Text(180, 9, 16, 60);
-	_txtRating = new Text(120, 9, 64, 180);
-	_lstStats = new TextList(280, 80, 16, 32);
-	_lstRecovery = new TextList(280, 80, 16, 32);
-	_lstTotal = new TextList(280, 9, 16, 12);
+	_txtRating = new Text(200, 9, 64, 180);
+	_lstStats = new TextList(290, 80, 16, 32);
+	_lstRecovery = new TextList(290, 80, 16, 32);
+	_lstTotal = new TextList(290, 9, 16, 12);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
@@ -128,6 +128,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
+	_txtQuantity->setAlign(ALIGN_RIGHT);
 
 	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));
@@ -139,16 +140,16 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 
 	_lstStats->setColor(Palette::blockOffset(15)-1);
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstStats->setColumns(3, 184, 60, 64);
+	_lstStats->setColumns(3, 224, 30, 64);
 	_lstStats->setDot(true);
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstRecovery->setColumns(3, 184, 60, 64);
+	_lstRecovery->setColumns(3, 224, 30, 64);
 	_lstRecovery->setDot(true);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(2, 244, 64);
+	_lstTotal->setColumns(2, 254, 64);
 	_lstTotal->setDot(true);
 
 	prepareDebriefing();
