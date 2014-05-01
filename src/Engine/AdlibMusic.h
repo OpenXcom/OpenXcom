@@ -36,11 +36,12 @@ class AdlibMusic : public Music
 private:
 	char *_data;
 	size_t _size;
+	float _volume;
 	static int delay;
 	static std::map<int, int> delayRates;
 public:
 	/// Creates a blank music track.
-	AdlibMusic();
+	AdlibMusic(float volume = 1.0f);
 	/// Cleans up the music track.
 	~AdlibMusic();
 	/// Loads music from the specified file.
@@ -49,8 +50,6 @@ public:
 	void load(const void *data, size_t size);
 	/// Plays the music.
 	void play(int loop = -1) const;
-	/// Stops the music.
-	void stop() const;
 	/// Adlib music player.
 	static void player(void *udata, Uint8 *stream, int len);
 };

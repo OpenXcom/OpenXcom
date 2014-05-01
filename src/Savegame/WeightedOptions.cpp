@@ -48,6 +48,31 @@ const std::string WeightedOptions::choose() const
 }
 
 /**
+ * Select the most likely option.
+ * This MUST be called on non-empty objects.
+ * @return The key of the selected choice.
+ */
+const std::string WeightedOptions::top() const
+{
+	if (_totalWeight == 0)
+	{
+		return "";
+	}
+	int max = 0;
+	std::map<std::string, unsigned>::const_iterator i = _choices.begin();
+	for (std::map<std::string, unsigned>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
+	{
+		if (ii->second >= max)
+		{
+			max = ii->second;
+			i = ii;
+		}
+	}
+	// We always have a valid iterator here.
+	return i->first;
+}
+
+/**
  * Set an option's weight.
  * If @a weight is set to 0, the option is removed from the list of choices.
  * If @a id already exists, the new weight replaces the old one, otherwise

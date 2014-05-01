@@ -74,6 +74,7 @@ private:
 	bool _noContainment, _manageContainment, _destroyBase;
 	int _containmentLimit;
 	std::vector<Soldier*> _soldiersCommended;
+	int _limitsEnforced;
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);
