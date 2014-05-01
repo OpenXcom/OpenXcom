@@ -292,7 +292,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_cbxDisplayMode->setOptions(displayModes);
 	_cbxDisplayMode->setSelected(displayMode);
 	_cbxDisplayMode->onChange((ActionHandler)&OptionsVideoState::updateDisplayMode);
-	_cbxDisplayMode->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
+	_cbxDisplayMode->setTooltip("STR_DISPLAY_MODE_DESC");
 	_cbxDisplayMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxDisplayMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 	

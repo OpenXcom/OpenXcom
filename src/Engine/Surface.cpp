@@ -78,7 +78,7 @@ inline void* NewAligned(int bpp, int width, int height)
 	buffer = calloc( total, 1 );
 	if (!buffer)
 	{
-		throw Exception("Where's the memory, Lebowski?");
+		throw Exception("Failed to allocate surface");
 	}
 
 	#else
@@ -95,7 +95,7 @@ inline void* NewAligned(int bpp, int width, int height)
 	buffer = _aligned_malloc(total, 16);
 	if (!buffer)
 	{
-		throw Exception("Where's the memory, Lebowski?");
+		throw Exception("Failed to allocate surface");
 	}
 
 #endif

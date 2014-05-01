@@ -168,7 +168,7 @@ YAML::Node Soldier::save() const
  */
 std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
 {
-	if (statstring && _statString != L"") {
+	if (statstring && _statString != L"" && _missions >= 1) {
 		if (_name.length() + _statString.length() > maxLength) {
 			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
 		}

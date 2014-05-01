@@ -99,7 +99,7 @@ void ListSaveState::lstSavesPress(Action *action)
 			case -1:	// first click on the savegame list
 				break;
 			case 0:
-				_lstSaves->setCellText(_previousSelectedRow	, 0, tr("STR_NEW_SAVED_GAME"));
+				_lstSaves->setCellText(_previousSelectedRow	, 0, tr("STR_NEW_SAVED_GAME_SLOT"));
 				break;
 			default:
 				_lstSaves->setCellText(_previousSelectedRow	, 0, _selected);

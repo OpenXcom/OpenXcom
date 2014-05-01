@@ -21,6 +21,7 @@
 #include "Options.h"
 #include "Logger.h"
 #include "Language.h"
+#include "Adlib/adlplayer.h"
 
 namespace OpenXcom
 {
@@ -99,13 +100,15 @@ void Music::play(int loop) const
 }
 
 /**
- * Stops the contained music track.
+ * Stops all music playing.
  */
-void Music::stop() const
+void Music::stop()
 {
 #ifndef __NO_MUSIC
 	if (!Options::mute)
 	{
+		func_mute();
+		Mix_HookMusic(NULL, NULL);
 		Mix_HaltMusic();
 	}
 #endif

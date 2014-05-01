@@ -44,8 +44,7 @@ namespace OpenXcom
  */
 MainMenuState::MainMenuState(Game *game) : State(game)
 {
-	Options::baseXResolution = Options::baseXGeoscape;
-	Options::baseYResolution = Options::baseYGeoscape;
+	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
 
 	// Create objects
