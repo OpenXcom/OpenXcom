@@ -30,6 +30,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class Soldier;
 
 /**
  * Select Mission window that shows 
@@ -39,7 +40,9 @@ class SoldierDiaryMissionState : public State
 {
 private:
 	Base *_base;
-	size_t _soldier;
+	size_t _soldierId;
+	Soldier *_soldier;
+	std::vector<Soldier*> *_list;
 
 	TextButton *_btnOk;
 	Window *_window;
@@ -49,7 +52,7 @@ private:
 	int _rowEntry;
 public:
 	/// Creates the Soldier Diary Mission state.
-	SoldierDiaryMissionState(Game *game, Base *base, size_t soldier, int rowEntry);
+	SoldierDiaryMissionState(Game *game, Base *base, size_t soldierId, int rowEntry);
 	/// Cleans up the Soldier Diary Mission state.
 	~SoldierDiaryMissionState();
 	/// Handler for clicking the Cancel button.

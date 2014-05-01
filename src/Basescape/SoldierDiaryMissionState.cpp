@@ -42,8 +42,25 @@ namespace OpenXcom
  * @param soldier ID of the selected soldier.
  * @param row number to get mission info from.
  */
-SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_t soldier, int rowEntry) : State(game), _base(base), _soldier(soldier), _rowEntry(rowEntry)
+SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_t soldierId, int rowEntry) : State(game), _base(base), _soldierId(soldierId), _rowEntry(rowEntry)
 {
+	if (_base == 0)
+	{
+		_list = _game->getSavedGame()->getDeadSoldiers();
+		if (_soldierId >= _list->size())
+		{
+			_soldierId = 0;
+		}
+		else
+		{
+			_soldierId = _list->size() - (1 + _soldierId);
+		}
+	}
+	else
+	{
+		_list = _base->getSoldiers();
+	}
+
 	_screen = false;
 
 	// Create objects
@@ -77,16 +94,25 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	centerAllSurfaces();
 
 	// Set up objects
-	Soldier *s = _base->getSoldiers()->at(_soldier);
+	if (_list->empty())
+	{
+		_game->popState();
+		return;
+	}
+	if (_soldierId >= _list->size())
+	{
+		_soldierId = 0;
+	}
+	_soldier = _list->at(_soldierId);
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
-    int missionId = s->getDiary()->getMissionIdList().at(_rowEntry);
+    int missionId = _soldier->getDiary()->getMissionIdList().at(_rowEntry);
 	if (missionId > missionStatistics->size())
 	{
 		missionId = 0;
 	}
 
     int daysWounded = 0;
-    for (std::vector<std::pair<int, int> >::const_iterator wound = s->getDiary()->getDaysWounded().begin() ; wound != s->getDiary()->getDaysWounded().end(); ++wound)
+    for (std::vector<std::pair<int, int> >::const_iterator wound = _soldier->getDiary()->getDaysWounded().begin() ; wound != _soldier->getDiary()->getDaysWounded().end(); ++wound)
     {
         if (wound->first == missionId)
         {
@@ -155,7 +181,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
     bool stunOrKill = false;
 	std::wstringstream wssKills;
 
-	for (std::vector<BattleUnitKills*>::iterator j = s->getDiary()->getKills().begin() ; j != s->getDiary()->getKills().end() ; ++j)
+	for (std::vector<BattleUnitKills*>::iterator j = _soldier->getDiary()->getKills().begin() ; j != _soldier->getDiary()->getKills().end() ; ++j)
 	{
 		if ((*j)->mission != missionId) continue;
 		std::wstringstream wssRank, wssRace, wssWeapon, wssAmmo;

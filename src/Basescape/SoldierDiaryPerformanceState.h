@@ -32,7 +32,7 @@ class Base;
 class SoldierDiaryOverviewState;
 class Surface;
 class SurfaceSet;
-
+class Soldier;
 
 /**
  * Diary screen that lists totals.
@@ -41,8 +41,10 @@ class SoldierDiaryPerformanceState : public State
 {
 private:
 	Base *_base;
-	size_t _soldier;
+	size_t _soldierId;
 	SoldierDiaryOverviewState *_soldierDiaryOverviewState;
+	Soldier *_soldier;
+	std::vector<Soldier*> *_list;
 
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions, *_btnCommendations;
 	Window *_window;
@@ -61,7 +63,7 @@ private:
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryPerformanceState(Game *game, Base *base, size_t soldier, SoldierDiaryOverviewState *soldierDiaryState, int display);
+	SoldierDiaryPerformanceState(Game *game, Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryState, int display);
 	/// Cleans up the Soldiers state.
 	~SoldierDiaryPerformanceState();
 	/// Updates the soldier info.

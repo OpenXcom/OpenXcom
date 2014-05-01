@@ -43,8 +43,25 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Game *game, Base *base, size_t soldier, SoldierDiaryOverviewState *soldierDiaryOverviewState, int display) : State(game), _base(base), _soldier(soldier), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display)
+SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Game *game, Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryOverviewState, int display) : State(game), _base(base), _soldierId(soldierId), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display)
 {
+	if (_base == 0)
+	{
+		_list = _game->getSavedGame()->getDeadSoldiers();
+		if (_soldierId >= _list->size())
+		{
+			_soldierId = 0;
+		}
+		else
+		{
+			_soldierId = _list->size() - (1 + _soldierId);
+		}
+	}
+	else
+	{
+		_list = _base->getSoldiers();
+	}
+
 	if (_display == 0)
     {
         _displayKills = true;
@@ -282,6 +299,7 @@ SoldierDiaryPerformanceState::~SoldierDiaryPerformanceState()
  */
 void SoldierDiaryPerformanceState::init()
 {
+	State::init();
 	// Clear sprites
 	for (int i = 0; i != 10; ++i)
 	{
@@ -324,18 +342,27 @@ void SoldierDiaryPerformanceState::init()
 	_btnMissions->setVisible(!_displayMissions);
 	_btnCommendations->setVisible(!_displayCommendations);
 
-	Soldier *s = _base->getSoldiers()->at(_soldier);
+	if (_list->empty())
+	{
+		_game->popState();
+		return;
+	}
+	if (_soldierId >= _list->size())
+	{
+		_soldierId = 0;
+	}
+	_soldier = _list->at(_soldierId);
 	_lstKillTotals->clearList();
 	_lstMissionTotals->clearList();
 	_commendationsListEntry.clear();
-	_lstKillTotals->addRow(2, tr("STR_KILLS").arg(s->getDiary()->getKillTotal()).c_str(),
-							  tr("STR_STUNS").arg(s->getDiary()->getStunTotal()).c_str());
-	_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(s->getDiary()->getMissionTotal()).c_str(),
-								 tr("STR_WINS").arg(s->getDiary()->getWinTotal()).c_str(),
-								 tr("STR_SCORE_VALUE").arg(s->getDiary()->getScoreTotal()).c_str(),
-								 tr("STR_DAYS_WOUNDED").arg(s->getDiary()->getDaysWoundedTotal()).c_str());
+	_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
+							  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
+	_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_soldier->getDiary()->getMissionTotal()).c_str(),
+								 tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
+								 tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),
+								 tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
 
-	_txtTitle->setText(s->getName());
+	_txtTitle->setText(_soldier->getName());
 	_lstRace->clearList();
 	_lstRank->clearList();
 	_lstWeapon->clearList();
@@ -344,7 +371,7 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->clearList();
     _lstCommendations->clearList();
 
-	for (std::map<std::string, int>::const_iterator i = s->getDiary()->getAlienRaceTotal().begin() ; i != s->getDiary()->getAlienRaceTotal().end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _soldier->getDiary()->getAlienRaceTotal().begin() ; i != _soldier->getDiary()->getAlienRaceTotal().end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
@@ -353,7 +380,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstRace->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
-	for (std::map<std::string, int>::const_iterator i = s->getDiary()->getAlienRankTotal().begin() ; i != s->getDiary()->getAlienRankTotal().end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _soldier->getDiary()->getAlienRankTotal().begin() ; i != _soldier->getDiary()->getAlienRankTotal().end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
@@ -362,7 +389,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstRank->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
-	for (std::map<std::string, int>::const_iterator i = s->getDiary()->getWeaponTotal().begin() ; i != s->getDiary()->getWeaponTotal().end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _soldier->getDiary()->getWeaponTotal().begin() ; i != _soldier->getDiary()->getWeaponTotal().end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
@@ -371,7 +398,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstWeapon->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
-	for (std::map<std::string, int>::const_iterator i = s->getDiary()->getRegionTotal().begin() ; i != s->getDiary()->getRegionTotal().end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _soldier->getDiary()->getRegionTotal().begin() ; i != _soldier->getDiary()->getRegionTotal().end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
@@ -380,7 +407,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstLocation->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
-	for (std::map<std::string, int>::const_iterator i = s->getDiary()->getTypeTotal().begin() ; i != s->getDiary()->getTypeTotal().end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _soldier->getDiary()->getTypeTotal().begin() ; i != _soldier->getDiary()->getTypeTotal().end() ; ++i)
 	{
 		std::wstringstream ss1, ss2;
 
@@ -389,7 +416,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstType->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
 
-	for (std::map<std::string, int>::const_iterator i = s->getDiary()->getUFOTotal().begin() ; i != s->getDiary()->getUFOTotal().end() ; ++i)
+	for (std::map<std::string, int>::const_iterator i = _soldier->getDiary()->getUFOTotal().begin() ; i != _soldier->getDiary()->getUFOTotal().end() ; ++i)
 	{
 		if ((*i).first == "NO_UFO") continue;
 		std::wstringstream ss1, ss2;
@@ -399,7 +426,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstUFO->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 	}
     
-    for (std::vector<SoldierCommendations*>::const_iterator i = s->getDiary()->getSoldierCommendations()->begin() ; i != s->getDiary()->getSoldierCommendations()->end() ; ++i)
+    for (std::vector<SoldierCommendations*>::const_iterator i = _soldier->getDiary()->getSoldierCommendations()->begin() ; i != _soldier->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
 		std::wstringstream ss1, ss2, ss3;
 
@@ -434,7 +461,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 	int vectorIterator = 0; // Where we are currently located in the vector
 	int scrollDepth = _lstCommendations->getScroll(); // So we know where to start
 
-	for (std::vector<SoldierCommendations*>::const_iterator i = _base->getSoldiers()->at(_soldier)->getDiary()->getSoldierCommendations()->begin() ; i != _base->getSoldiers()->at(_soldier)->getDiary()->getSoldierCommendations()->end() ; ++i)
+	for (std::vector<SoldierCommendations*>::const_iterator i = _list->at(_soldierId)->getDiary()->getSoldierCommendations()->begin() ; i != _list->at(_soldierId)->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
 		// Skip commendations that are not visible in the textlist
 		if ( vectorIterator < scrollDepth || vectorIterator - scrollDepth >= _commendations.size())
@@ -469,7 +496,7 @@ void SoldierDiaryPerformanceState::drawSprites()
  */
 void SoldierDiaryPerformanceState::btnOkClick(Action *)
 {
-	_soldierDiaryOverviewState->setSoldierId(_soldier);
+	_soldierDiaryOverviewState->setSoldierId(_soldierId);
 	_game->popState();
 }
 
@@ -479,10 +506,10 @@ void SoldierDiaryPerformanceState::btnOkClick(Action *)
  */
 void SoldierDiaryPerformanceState::btnPrevClick(Action *)
 {
-	if (_soldier == 0)
-		_soldier = _base->getSoldiers()->size() - 1;
+	if (_soldierId == 0)
+		_soldierId = _list->size() - 1;
 	else
-		_soldier--;
+		_soldierId--;
 	init();
 }
 
@@ -492,9 +519,9 @@ void SoldierDiaryPerformanceState::btnPrevClick(Action *)
  */
 void SoldierDiaryPerformanceState::btnNextClick(Action *)
 {
-	_soldier++;
-	if (_soldier >= _base->getSoldiers()->size())
-		_soldier = 0;
+	_soldierId++;
+	if (_soldierId >= _list->size())
+		_soldierId = 0;
 	init();
 }
 

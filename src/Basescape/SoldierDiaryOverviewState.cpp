@@ -33,6 +33,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -42,8 +43,25 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryOverviewState::SoldierDiaryOverviewState(Game *game, Base *base, size_t soldier, SoldierInfoState *soldierInfoState) : State(game), _base(base), _soldier(soldier), _soldierInfoState(soldierInfoState)
+SoldierDiaryOverviewState::SoldierDiaryOverviewState(Game *game, Base *base, size_t soldierId, SoldierInfoState *soldierInfoState) : State(game), _base(base), _soldierId(soldierId), _soldierInfoState(soldierInfoState)
 {
+	if (_base == 0)
+	{
+		_list = _game->getSavedGame()->getDeadSoldiers();
+		if (_soldierId >= _list->size())
+		{
+			_soldierId = 0;
+		}
+		else
+		{
+			_soldierId = _list->size() - (1 + _soldierId);
+		}
+	}
+	else
+	{
+		_list = _base->getSoldiers();
+	}
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
     _btnKills = new TextButton(70, 16, 8, 176);
@@ -145,8 +163,18 @@ SoldierDiaryOverviewState::~SoldierDiaryOverviewState()
  */
 void SoldierDiaryOverviewState::init()
 {
-	Soldier *s = _base->getSoldiers()->at(_soldier);
-	_txtTitle->setText(s->getName());
+	State::init();
+	if (_list->empty())
+	{
+		_game->popState();
+		return;
+	}
+	if (_soldierId >= _list->size())
+	{
+		_soldierId = 0;
+	}
+	_soldier = _list->at(_soldierId);
+	_txtTitle->setText(_soldier->getName());
 	_lstDiary->clearList();
 	_lstDiary->setScroll(0);
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
@@ -156,7 +184,7 @@ void SoldierDiaryOverviewState::init()
 		int missionId = (*j)->id;
 		bool wasOnMission = false;
 
-		for (std::vector<int>::const_iterator k = s->getDiary()->getMissionIdList().begin(); k != s->getDiary()->getMissionIdList().end(); ++k)
+		for (std::vector<int>::const_iterator k = _soldier->getDiary()->getMissionIdList().begin(); k != _soldier->getDiary()->getMissionIdList().end(); ++k)
 		{
 			if (missionId == (*k))
 			{
@@ -214,7 +242,7 @@ void SoldierDiaryOverviewState::init()
  */
 void SoldierDiaryOverviewState::setSoldierId(size_t soldier)
 {
-	_soldier = soldier;
+	_soldierId = soldier;
 }
 
 /**
@@ -223,7 +251,7 @@ void SoldierDiaryOverviewState::setSoldierId(size_t soldier)
  */
 void SoldierDiaryOverviewState::btnOkClick(Action *)
 {
-	_soldierInfoState->setSoldierId(_soldier);
+	_soldierInfoState->setSoldierId(_soldierId);
 	_game->popState();
 }
 
@@ -234,7 +262,7 @@ void SoldierDiaryOverviewState::btnOkClick(Action *)
 void SoldierDiaryOverviewState::btnKillsClick(Action *)
 {
 	int _display = 0;
-	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldier, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldierId, this, _display));
 }
 
 /**
@@ -244,7 +272,7 @@ void SoldierDiaryOverviewState::btnKillsClick(Action *)
 void SoldierDiaryOverviewState::btnMissionsClick(Action *)
 {
 	int _display = 1;
-	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldier, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldierId, this, _display));
 }
 
 /**
@@ -254,7 +282,7 @@ void SoldierDiaryOverviewState::btnMissionsClick(Action *)
 void SoldierDiaryOverviewState::btnCommendationsClick(Action *)
 {
 	int _display = 2;
-	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldier, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldierId, this, _display));
 }
 
 
@@ -264,10 +292,10 @@ void SoldierDiaryOverviewState::btnCommendationsClick(Action *)
  */
 void SoldierDiaryOverviewState::btnPrevClick(Action *)
 {
-	if (_soldier == 0)
-		_soldier = _base->getSoldiers()->size() - 1;
+	if (_soldierId == 0)
+		_soldierId = _list->size() - 1;
 	else
-		_soldier--;
+		_soldierId--;
 	init();
 }
 
@@ -277,9 +305,9 @@ void SoldierDiaryOverviewState::btnPrevClick(Action *)
  */
 void SoldierDiaryOverviewState::btnNextClick(Action *)
 {
-	_soldier++;
-	if (_soldier >= _base->getSoldiers()->size())
-		_soldier = 0;
+	_soldierId++;
+	if (_soldierId >= _list->size())
+		_soldierId = 0;
 	init();
 }
 
@@ -290,7 +318,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action *)
 void SoldierDiaryOverviewState::lstDiaryInfoClick(Action *)
 {
     int absoluteRowEntry = _lstDiary->getSelectedRow() + _lstDiary->getScroll();
-	_game->pushState(new SoldierDiaryMissionState(_game, _base, _soldier, absoluteRowEntry));
+	_game->pushState(new SoldierDiaryMissionState(_game, _base, _soldierId, absoluteRowEntry));
 }
 
 }

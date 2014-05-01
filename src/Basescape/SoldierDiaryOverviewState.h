@@ -30,6 +30,7 @@ class Text;
 class TextList;
 class Base;
 class SoldierInfoState;
+class Soldier;
 
 /**
  * Medals screen that lets the player
@@ -39,8 +40,10 @@ class SoldierDiaryOverviewState : public State
 {
 private:
 	Base *_base;
-	size_t _soldier;
+	size_t _soldierId;
 	SoldierInfoState *_soldierInfoState;
+	Soldier *_soldier;
+	std::vector<Soldier*> *_list;
 
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions, *_btnCommendations;
 	Window *_window;
@@ -49,13 +52,13 @@ private:
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryOverviewState(Game *game, Base *base, size_t soldier, SoldierInfoState *soldierInfoState);
+	SoldierDiaryOverviewState(Game *game, Base *base, size_t soldierId, SoldierInfoState *soldierInfoState);
 	/// Cleans up the Soldiers state.
 	~SoldierDiaryOverviewState();
 	/// Updates the soldier info.
 	void init();
 	/// Set the soldier's Id.
-	void setSoldierId(size_t soldier);
+	void setSoldierId(size_t soldierId);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Previous button.
