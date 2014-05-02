@@ -49,6 +49,8 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
 	_wasLetterBoxed = Options::keepAspectRatio;
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
 
 
 	if (!Options::useOpenGL)
