@@ -1,2 +1,2 @@
-@cd Win32
+@cd bin\Win32
 @start Release\OpenXcom.exe -data "..\data"
