@@ -45,6 +45,7 @@
 #include "../Engine/Logger.h"
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/ExtraSounds.h"
+#include "../Engine/AdlibMusic.h"
 
 namespace OpenXcom
 {
@@ -78,7 +79,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 {
 	// Load palettes
 	const char *pal[] = {"PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA"};
-	for (int i = 0; i < sizeof(pal) / sizeof(pal[0]); ++i)
+	for (size_t i = 0; i < sizeof(pal) / sizeof(pal[0]); ++i)
 	{
 		std::string s = "GEODATA/PALETTES.DAT";
 		_palettes[pal[i]] = new Palette();
@@ -115,7 +116,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 								{8, 12, 16, 0},
 								{3, 4, 8, 0},
 								{3, 3, 6, 0}};
-		for (int i = 0; i < sizeof(gradient)/sizeof(gradient[0]); ++i)
+		for (size_t i = 0; i < sizeof(gradient)/sizeof(gradient[0]); ++i)
 		{
 			SDL_Color *color = _palettes[s2]->getColors(Palette::backPos + 16 + i);
 			*color = gradient[i];
@@ -189,7 +190,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 						  "INTICON.PCK",
 						  "TEXTURE.DAT"};
 
-	for (int i = 0; i < sizeof(sets)/sizeof(sets[0]); ++i)
+	for (size_t i = 0; i < sizeof(sets)/sizeof(sets[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "GEOGRAPH/" << sets[i];
@@ -253,7 +254,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	Polyline *l = 0;
 	int start = 0;
-	for (int i = 0; lines[i] > -19.999; ++i)
+	for (size_t i = 0; lines[i] > -19.999; ++i)
 	{
 		if (lines[i] < -9.999 && lines[i] > -10.001)
 		{
@@ -291,8 +292,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMENBASE",
 							 "GMGEO1",
 							 "GMGEO2",
-							 "GMGEO3",
-							 "GMGEO4",
 							 "GMINTER",
 							 "GMINTRO1",
 							 "GMINTRO2",
@@ -302,14 +301,16 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMNEWMAR",
 							 "GMSTORY",
 							 "GMTACTIC",
-							 "GMTACTIC2",
 							 "GMWIN"};
 		std::string musOptional[] = {
+							 "GMGEO3",
+							 "GMGEO4",
 							 "GMGEO5",
 							 "GMGEO6",
 							 "GMGEO7",
 							 "GMGEO8",
 							 "GMGEO9",
+							 "GMTACTIC2",
 							 "GMTACTIC3",
 							 "GMTACTIC4",
 							 "GMTACTIC5",
@@ -318,25 +319,29 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 							 "GMTACTIC8",
 							 "GMTACTIC9"};
 		std::string exts[] = {"flac", "ogg", "mp3", "mod", "wav"};
-		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
+		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
+		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f};
 
 #ifndef __NO_MUSIC
 		// Check which music version is available
-		bool cat = true;
+		CatFile *adlibcat = 0, *aintrocat = 0;
 		GMCatFile *gmcat = 0;
 
-		std::string musDos = "SOUND/GM.CAT";
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musDos)))
+		std::string musicAdlib = "SOUND/ADLIB.CAT", musicIntro = "SOUND/AINTRO.CAT", musicGM = "SOUND/GM.CAT";
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
 		{
-			cat = true;
-			gmcat = new GMCatFile(CrossPlatform::getDataFile(musDos).c_str());
+			adlibcat = new CatFile(CrossPlatform::getDataFile(musicAdlib).c_str());
+			if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicIntro)))
+			{
+				aintrocat = new CatFile(CrossPlatform::getDataFile(musicIntro).c_str());
+			}
 		}
-		else
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicGM)))
 		{
-			cat = false;
+			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str());
 		}
 
-		for (int i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
+		for (size_t i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
 		{
 			bool loaded = false;
 			// Try digital tracks
@@ -355,7 +360,24 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			if (!loaded)
 			{
 				// Try Adlib music
-				if (cat && tracks[i] != -1)
+				if (adlibcat && Options::audioBitDepth == 16)
+				{
+					_musics[mus[i]] = new AdlibMusic(tracks_normalize[i]);
+					if (tracks[i] < adlibcat->getAmount())
+					{
+						_musics[mus[i]]->load(adlibcat->load(tracks[i], true), adlibcat->getObjectSize(tracks[i]));
+						loaded = true;
+					}
+					// separate intro music
+					else if (aintrocat)
+					{
+						int track = tracks[i] - adlibcat->getAmount();
+						_musics[mus[i]]->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+						loaded = true;
+					}
+				}
+				// Try GM music
+				else if (gmcat)
 				{
 					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
 					loaded = true;
@@ -373,17 +395,18 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					}
 				}
 			}
-			if (!loaded && tracks[i] != -1)
+			if (!loaded)
 			{
 				throw Exception(mus[i] + " not found");
 			}
 		}
 		delete gmcat;
+		delete adlibcat;
+		delete aintrocat;
 
 		// Ok, now try to load the optional musics
-		for (int i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
+		for (size_t i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
 		{
-			bool loaded = false;
 			// Try digital tracks
 			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
 			{
@@ -393,20 +416,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				{
 					_musics[musOptional[i]] = new Music();
 					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
-					loaded = true;
 					break;
-				}
-			}
-			if (!loaded)
-			{
-				// Try MIDI music
-				std::ostringstream s;
-				s << "SOUND/" << musOptional[i] << ".mid";
-				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
-				{
-					_musics[musOptional[i]] = new Music();
-					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
-					loaded = true;
 				}
 			}
 		}
@@ -438,7 +448,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			wav = false;
 		}
 
-		for (int i = 0; i < sizeof(catsId)/sizeof(catsId[0]); ++i)
+		for (size_t i = 0; i < sizeof(catsId)/sizeof(catsId[0]); ++i)
 		{
 			if (cats == 0)
 			{
@@ -767,7 +777,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
 	std::string bsets[] = {"BLANKS.PCK"};
 
-	for (int i = 0; i < sizeof(bsets)/sizeof(bsets[0]); ++i)
+	for (size_t i = 0; i < sizeof(bsets)/sizeof(bsets[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "TERRAIN/" << bsets[i];
@@ -799,7 +809,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	std::string scrs[] = {"TAC00.SCR"};
 
-	for (int i = 0; i < sizeof(scrs)/sizeof(scrs[0]); ++i)
+	for (size_t i = 0; i < sizeof(scrs)/sizeof(scrs[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
@@ -815,7 +825,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "SCANBORD.PCK",
 						  "UNIBORD.PCK"};
 
-	for (int i = 0; i < sizeof(spks)/sizeof(spks[0]); ++i)
+	for (size_t i = 0; i < sizeof(spks)/sizeof(spks[0]); ++i)
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];

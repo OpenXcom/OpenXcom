@@ -45,7 +45,7 @@ private:
 	Language *_lang;
 	std::wstring _text, _wrappedText;
 	std::vector<int> _lineWidth, _lineHeight;
-	bool _wrap, _invert, _contrast;
+	bool _wrap, _invert, _contrast, _indent;
 	TextHAlign _align;
 	TextVAlign _valign;
 	Uint8 _color, _color2;
@@ -78,7 +78,7 @@ public:
 	/// Gets the text's string.
 	std::wstring getText() const;
 	/// Sets the text's wordwrap setting.
-	void setWordWrap(bool wrap);
+	void setWordWrap(bool wrap, bool indent = false);
 	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
 	/// Sets the text's high contrast color setting.

@@ -25,8 +25,11 @@
 #include <sstream>
 #include <SDL_mixer.h>
 #include <SDL_image.h>
+#include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
+#include "Sound.h"
+#include "Music.h"
 #include "Language.h"
 #include "Logger.h"
 #include "../Interface/Cursor.h"
@@ -147,8 +150,8 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
-	Mix_HaltChannel(-1);
-	Mix_HaltMusic();
+	Sound::stop();
+	Music::stop();
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
@@ -392,6 +395,7 @@ void Game::setVolume(int sound, int music, int ui)
 		if (music >= 0)
 		{
 			Mix_VolumeMusic(music);
+			func_set_music_volume(music);
 		}
 		if (ui >= 0)
 		{

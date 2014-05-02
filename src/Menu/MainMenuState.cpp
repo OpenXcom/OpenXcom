@@ -44,9 +44,6 @@ namespace OpenXcom
  */
 MainMenuState::MainMenuState(Game *game) : State(game)
 {
-	Options::baseXResolution = Options::baseXGeoscape;
-	Options::baseYResolution = Options::baseYGeoscape;
-	_game->getScreen()->resetDisplay(false);
 
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);

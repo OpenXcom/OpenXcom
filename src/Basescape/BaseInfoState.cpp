@@ -81,25 +81,25 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtWorkshops = new Text(114, 9, 8, 113);
 	_numWorkshops = new Text(40, 9, 126, 113);
 	_barWorkshops = new Bar(150, 5, 166, 115);
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		_txtContainment = new Text(114, 9, 8, 123);
 		_numContainment = new Text(40, 9, 126, 123);
 		_barContainment = new Bar(150, 5, 166, 125);
 	}
-	_txtHangars = new Text(114, 9, 8, Options::alienContainmentLimitEnforced ? 133 : 123);
-	_numHangars = new Text(40, 9, 126, Options::alienContainmentLimitEnforced ? 133 : 123);
-	_barHangars = new Bar(150, 5, 166, Options::alienContainmentLimitEnforced ? 135 : 125);
+	_txtHangars = new Text(114, 9, 8, Options::storageLimitsEnforced ? 133 : 123);
+	_numHangars = new Text(40, 9, 126, Options::storageLimitsEnforced ? 133 : 123);
+	_barHangars = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 135 : 125);
 
-	_txtDefense = new Text(114, 9, 8, Options::alienContainmentLimitEnforced ? 147 : 138);
-	_numDefense = new Text(40, 9, 126, Options::alienContainmentLimitEnforced ? 147 : 138);
-	_barDefense = new Bar(150, 5, 166, Options::alienContainmentLimitEnforced ? 149 : 140);
-	_txtShortRange = new Text(114, 9, 8, Options::alienContainmentLimitEnforced ? 157 : 153);
-	_numShortRange = new Text(40, 9, 126, Options::alienContainmentLimitEnforced ? 157 : 153);
-	_barShortRange = new Bar(150, 5, 166, Options::alienContainmentLimitEnforced ? 159 : 155);
-	_txtLongRange = new Text(114, 9, 8, Options::alienContainmentLimitEnforced ? 167 : 163);
-	_numLongRange = new Text(40, 9, 126, Options::alienContainmentLimitEnforced ? 167 : 163);
-	_barLongRange = new Bar(150, 5, 166, Options::alienContainmentLimitEnforced ? 169 : 165);
+	_txtDefense = new Text(114, 9, 8, Options::storageLimitsEnforced ? 147 : 138);
+	_numDefense = new Text(40, 9, 126, Options::storageLimitsEnforced ? 147 : 138);
+	_barDefense = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 149 : 140);
+	_txtShortRange = new Text(114, 9, 8, Options::storageLimitsEnforced ? 157 : 153);
+	_numShortRange = new Text(40, 9, 126, Options::storageLimitsEnforced ? 157 : 153);
+	_barShortRange = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 159 : 155);
+	_txtLongRange = new Text(114, 9, 8, Options::storageLimitsEnforced ? 167 : 163);
+	_numLongRange = new Text(40, 9, 126, Options::storageLimitsEnforced ? 167 : 163);
+	_barLongRange = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 169 : 165);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE");
@@ -136,7 +136,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_txtWorkshops);
 	add(_numWorkshops);
 	add(_barWorkshops);
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		add(_txtContainment);
 		add(_numContainment);
@@ -160,7 +160,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	// Set up objects
 	std::ostringstream ss;
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		ss << "ALT";
 	}
@@ -263,7 +263,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		_txtContainment->setColor(Palette::blockOffset(13)+5);
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
@@ -354,11 +354,11 @@ void BaseInfoState::init()
 	_barQuarters->setValue(_base->getUsedQuarters());
 
 	std::wostringstream ss5;
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	ss5 << (int)floor(_base->getUsedStores() + 0.05) << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
 
 	_barStores->setMax(_base->getAvailableStores());
-	_barStores->setValue(_base->getUsedStores());
+	_barStores->setValue((int)floor(_base->getUsedStores() + 0.05));
 
 	std::wostringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
@@ -374,7 +374,7 @@ void BaseInfoState::init()
 	_barWorkshops->setMax(_base->getAvailableWorkshops());
 	_barWorkshops->setValue(_base->getUsedWorkshops());
 
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		std::wostringstream ss72;
 		ss72 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();

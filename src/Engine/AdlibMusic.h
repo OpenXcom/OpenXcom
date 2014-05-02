@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MUSIC_H
-#define OPENXCOM_MUSIC_H
+#ifndef OPENXCOM_ADLIBMUSIC_H
+#define OPENXCOM_ADLIBMUSIC_H
 
+#include "Music.h"
+#include <map>
 #include <string>
 #include <SDL_mixer.h>
 
@@ -26,26 +28,30 @@ namespace OpenXcom
 {
 
 /**
- * Container for music tracks.
- * Handles loading and playing various formats through SDL_mixer.
+ * Container for Adlib music tracks.
+ * Uses a custom YM3812 music player passed to SDL_mixer.
  */
-class Music
+class AdlibMusic : public Music
 {
 private:
-	Mix_Music *_music;
+	char *_data;
+	size_t _size;
+	float _volume;
+	static int delay;
+	static std::map<int, int> delayRates;
 public:
 	/// Creates a blank music track.
-	Music();
+	AdlibMusic(float volume = 1.0f);
 	/// Cleans up the music track.
-	virtual ~Music();
+	~AdlibMusic();
 	/// Loads music from the specified file.
-	virtual void load(const std::string &filename);
+	void load(const std::string &filename);
 	/// Loads music from a chunk of memory.
-	virtual void load(const void *data, size_t size);
+	void load(const void *data, size_t size);
 	/// Plays the music.
-	virtual void play(int loop = -1) const;
-	/// Stops all music.
-	static void stop();
+	void play(int loop = -1) const;
+	/// Adlib music player.
+	static void player(void *udata, Uint8 *stream, int len);
 };
 
 }

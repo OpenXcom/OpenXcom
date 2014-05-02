@@ -58,6 +58,8 @@
 #include "../Menu/PauseState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
+#include "../Basescape/SellState.h"
+#include "../Menu/ErrorMessageState.h"
 #include "GraphsState.h"
 #include "FundingState.h"
 #include "MonthlyReportState.h"
@@ -1375,6 +1377,13 @@ void GeoscapeState::time1Hour()
 				popup(new ProductionCompleteState(_game, (*i),  tr(j->first->getRules()->getName()), this, j->second));
 			}
 		}
+
+		if (Options::storageLimitsEnforced && (*i)->storesOverfull())
+		{
+			_game->pushState(new SellState(_game, (*i)));
+			setPalette("PAL_BASESCAPE", 1);
+			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+		}
 	}
 }
 
@@ -1590,7 +1599,14 @@ void GeoscapeState::time1Day()
 	int day = _game->getSavedGame()->getTime()->getDay();
 	if (day == 1 || day % 10 == 0)
 	{
-		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		if (_game->getSavedGame()->isIronman())
+		{
+
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		}
 	}
 }
 
@@ -2130,15 +2146,17 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		std::string targetRegion =
 		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
 		// Choose race for this mission.
-		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
+		std::string research = _game->getRuleset()->getAlienMissionList().front();
+		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(research);
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion, *_game->getRuleset());
-		otherMission->setRace("STR_SECTOID");
+		std::string sectoid = missionRules.getTopRace(_game->getSavedGame()->getMonthsPassed());
+		otherMission->setRace(sectoid);
 		otherMission->start(150);
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
 		// Make sure this combination never comes up again.
-		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
+		strategy.removeMission(targetRegion, research);
 	}
 }
 

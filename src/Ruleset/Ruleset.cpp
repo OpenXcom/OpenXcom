@@ -53,6 +53,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Transfer.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Savegame/GameTime.h"
@@ -1342,6 +1343,13 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
 			for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end() && !duplicate; ++j)
 			{
 				if ((*j)->getName() == soldier->getName())
+				{
+					duplicate = true;
+				}
+			}
+			for (std::vector<Transfer*>::iterator k = (*i)->getTransfers()->begin(); k != (*i)->getTransfers()->end() && !duplicate; ++k)
+			{
+				if ((*k)->getType() == TRANSFER_SOLDIER && (*k)->getSoldier()->getName() == soldier->getName())
 				{
 					duplicate = true;
 				}

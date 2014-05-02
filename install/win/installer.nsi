@@ -298,32 +298,6 @@ Section "$(NAME_SecPatch)" SecPatch
 
 SectionEnd
 
-Section "$(NAME_SecMusic)" SecMusic
-	
-	AddSize 31112
-	
-	;(uses NSISdl.dll)
-	NSISdl::download "http://openxcom.org/download/extras/original-music-ogg-128.zip" "$TEMP\original-music-ogg-128.zip"
-	Pop $0
-	StrCmp $0 success success1
-		SetDetailsView show
-		DetailPrint "download failed: $0"
-		Abort
-	success1:
-
-	;(uses ZipDLL.dll)
-	!insertmacro ZIPDLL_EXTRACT "$TEMP\original-music-ogg-128.zip" "$INSTDIR\data\sound" "<ALL>"
-	Pop $0
-	StrCmp $0 success success2
-		SetDetailsView show
-		DetailPrint "unzipping failed: $0"
-		Abort
-	success2:
-
-	Delete "$TEMP\original-music-ogg-128.zip"
-
-SectionEnd
-
 Section /o "$(NAME_SecDesktop)" SecDesktop
 
 	SetOutPath "$INSTDIR"
@@ -339,7 +313,6 @@ SectionEnd
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(DESC_SecPatch)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecMusic} $(DESC_SecMusic)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
