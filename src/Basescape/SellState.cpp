@@ -572,7 +572,7 @@ void SellState::changeByValue(int change, int dir)
 		}
 		break;
 	case SELL_CRAFT:
-		double total;
+		double total = 0.0;
 		craft = _crafts[getCraftIndex(_sel)];
 		for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 		{
