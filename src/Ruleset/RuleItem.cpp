@@ -104,6 +104,13 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		if (_hitSound > 54)
 			_hitSound += modIndex;
 	}
+	if (node["meleeSound"])
+	{
+		_meleeSound = node["meleeSound"].as<int>(_meleeSound);
+		// BATTLE.CAT: 55 entries
+		if (_meleeSound > 54)
+			_meleeSound += modIndex;
+	}
 	if (node["hitAnimation"])
 	{		
 		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
@@ -160,7 +167,6 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
 	_strengthApplied = node["strengthApplied"].as<bool>(_strengthApplied);
 	_LOSRequired = node["LOSRequired"].as<bool>(_LOSRequired);
-	_meleeSound = node["meleeSound"].as<int>(_meleeSound);
 	_meleePower = node["meleePower"].as<int>(_meleePower);
 	if (!_listOrder)
 	{
