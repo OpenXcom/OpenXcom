@@ -85,4 +85,15 @@ void Sound::play(int channel) const
 	}
 }
 
+/**
+ * Stops all sounds playing.
+ */
+void Sound::stop()
+{
+	if (!Options::mute)
+	{
+		Mix_HaltChannel(-1);
+	}
+}
+
 }

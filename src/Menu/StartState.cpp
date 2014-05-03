@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
-#include <SDL_mixer.h>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
@@ -27,6 +26,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
+#include "../Engine/Music.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
@@ -48,6 +49,8 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
 	_wasLetterBoxed = Options::keepAspectRatio;
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
 
 
 	if (!Options::useOpenGL)
@@ -129,8 +132,8 @@ void StartState::think()
 		}
 		break;
 	case LOADING_NONE:
-		Mix_HaltChannel(-1);
-		Mix_HaltMusic();
+		Sound::stop();
+		Music::stop();
 		_game->getScreen()->clear();
 		blit();
 		_game->getScreen()->flip();

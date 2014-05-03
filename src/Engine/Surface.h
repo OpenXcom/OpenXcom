@@ -192,7 +192,7 @@ public:
 		return _surface->w;
 	}
 	/// Sets the width of the surface.
-	void setWidth(int width);
+	virtual void setWidth(int width);
 	/**
 	 * Returns the height of the surface.
 	 * @return Height in pixels
@@ -202,7 +202,7 @@ public:
 		return _surface->h;
 	}
 	/// Sets the height of the surface.
-	void setHeight(int height);
+	virtual void setHeight(int height);
 	/// Sets the surface's special hidden flag.
 	void setHidden(bool hidden);
 	/// Locks the surface.

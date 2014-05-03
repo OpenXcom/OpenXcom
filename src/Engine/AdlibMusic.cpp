@@ -36,7 +36,7 @@ std::map<int, int> AdlibMusic::delayRates;
 /**
  * Initializes a new music track.
  */
-AdlibMusic::AdlibMusic() : _data(0), _size(0)
+AdlibMusic::AdlibMusic(float volume) : Music(), _data(0), _size(0), _volume(volume)
 {
 	if (!opl[0])
 	{
@@ -120,21 +120,8 @@ void AdlibMusic::play(int loop) const
 	{
 		stop();
 		func_setup_music((unsigned char*)_data, _size);
+		func_set_music_volume(Options::musicVolume * _volume);
 		Mix_HookMusic(player, NULL);
-	}
-#endif
-}
-
-/**
- * Stops the contained music track.
- */
-void AdlibMusic::stop() const
-{
-#ifndef __NO_MUSIC
-	if (!Options::mute)
-	{
-		func_mute();
-		Mix_HookMusic(NULL, NULL);
 	}
 #endif
 }
@@ -148,6 +135,8 @@ void AdlibMusic::stop() const
 void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 {
 #ifndef __NO_MUSIC
+	if (Options::musicVolume == 0)
+		return;
 	while (len != 0)
 	{
 		if (!opl[0] || !opl[1])

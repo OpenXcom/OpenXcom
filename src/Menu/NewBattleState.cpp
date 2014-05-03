@@ -72,11 +72,11 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_frameRight = new Frame(148, 96, 164, 78);
 
 	_txtMission = new Text(100, 9, 8, 30);
-	_cbxMission = new ComboBox(this, 210, 16, 102, 26);
+	_cbxMission = new ComboBox(this, 214, 16, 98, 26);
 
 	_txtCraft = new Text(100, 9, 8, 50);
-	_cbxCraft = new ComboBox(this, 104, 16, 102, 46);
-	_btnEquip = new TextButton(104, 16, 208, 46);
+	_cbxCraft = new ComboBox(this, 106, 16, 98, 46);
+	_btnEquip = new TextButton(106, 16, 206, 46);
 	
 	_txtDarkness = new Text(120, 9, 22, 83);
 	_slrDarkness = new Slider(120, 16, 22, 93);
@@ -140,13 +140,13 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MISSION_GENERATOR"));
 
-	_txtMapOptions->setColor(Palette::blockOffset(8)+10);
+	_txtMapOptions->setColor(Palette::blockOffset(15)-1);
 	_txtMapOptions->setText(tr("STR_MAP_OPTIONS"));
 
 	_frameLeft->setThickness(3);
 	_frameLeft->setColor(Palette::blockOffset(15)-1);
 
-	_txtAlienOptions->setColor(Palette::blockOffset(8)+10);
+	_txtAlienOptions->setColor(Palette::blockOffset(15)-1);
 	_txtAlienOptions->setText(tr("STR_ALIEN_OPTIONS"));
 
 	_frameRight->setThickness(3);
@@ -421,7 +421,7 @@ void NewBattleState::initSave()
             stats->psiSkill    += RNG::generate(0, 20);
         }
 		UnitStats* stats = soldier->getCurrentStats();
-		stats->bravery = ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
+		stats->bravery = (int)ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())
