@@ -1,0 +1,8 @@
+# Based on UFOextender by Seb76 and Tycho
+items:
+  - type: STR_PSI_AMP
+    LOSRequired: true
+  - type: STR_MIND_PROBE
+    LOSRequired: true
+  - type: ALIEN_PSI_WEAPON
+    LOSRequired: true

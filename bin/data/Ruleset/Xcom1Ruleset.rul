@@ -2424,6 +2424,8 @@ items:
     size: 1
     costSell: 20000
     battleType: 11
+    power: 120
+    blastRadius: 6
   - type: CYBERDISC_CORPSE_1
     name: STR_CYBERDISC_CORPSE
     floorSprite: 56

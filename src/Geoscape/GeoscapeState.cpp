@@ -451,11 +451,11 @@ void GeoscapeState::handle(Action *action)
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
-				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, "quicksave"));
+				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
-				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, "quicksave"));
+				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
 			}
 		}
 	}
@@ -1585,6 +1585,20 @@ void GeoscapeState::time1Day()
 	// Handle resupply of alien bases.
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
+
+	// Autosave every 10 days
+	int day = _game->getSavedGame()->getTime()->getDay();
+	if (day == 1 || day % 10 == 0)
+	{
+		if (_game->getSavedGame()->isIronman())
+		{
+
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		}
+	}
 }
 
 /**
@@ -2190,6 +2204,6 @@ void GeoscapeState::resize(int &dX, int &dY)
 			(*i)->setY((*i)->getY() + dY/2);
 		}
 	}
-
 }
+
 }

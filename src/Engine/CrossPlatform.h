@@ -75,7 +75,7 @@ namespace CrossPlatform
 	std::pair<std::wstring, std::wstring> timeToString(time_t time);
 	/// Compares two strings by natural order.
 	bool naturalCompare(const std::wstring &a, const std::wstring &b);
-	/// Moves a file between paths.
+	/// Move/rename a file between paths.
 	bool moveFile(const std::string &src, const std::string &dest);
 }
 

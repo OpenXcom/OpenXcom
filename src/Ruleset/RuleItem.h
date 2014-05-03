@@ -66,7 +66,7 @@ private:
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
-	bool _strengthApplied;
+	bool _strengthApplied, _LOSRequired;
 	int _meleeSound, _meleePower;
 public:
 	/// Creates a blank item ruleset.
@@ -211,6 +211,8 @@ public:
 	int getMeleeSound() const;
 	/// Ok, so this isn't a melee type weapon but we're using it for melee... how much damage should it do?
 	int getMeleePower() const;
+	/// Check if LOS is required to use this item (only applies to psionic type items)
+	bool isLOSRequired() const;
 };
 
 }

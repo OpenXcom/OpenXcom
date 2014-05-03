@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class SavedGame;
 class SoldierNamePool;
+class Soldier;
 class RuleCountry;
 class RuleRegion;
 class RuleBaseFacility;
@@ -114,11 +115,11 @@ public:
 	/// Creates a blank ruleset.
 	Ruleset();
 	/// Cleans up the ruleset.
-	virtual ~Ruleset();
+	~Ruleset();
 	/// Loads a ruleset from the given source.
 	void load(const std::string &source);
 	/// Generates the starting saved game.
-	virtual SavedGame *newSave() const;
+	SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
 	const std::vector<SoldierNamePool*> &getPools() const;
 	/// Gets the ruleset for a country type.
@@ -225,6 +226,8 @@ public:
 	std::vector<std::string> getPsiRequirements();
 	/// Returns the sorted list of inventories.
 	const std::vector<std::string> &getInvsList () const;
+	/// Generates a new soldier.
+	Soldier *genSoldier(SavedGame *save) const;
 
 };
 

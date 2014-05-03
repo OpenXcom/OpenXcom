@@ -37,6 +37,8 @@
 #include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -1762,11 +1764,19 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
+	RuleItem *psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+	int cost = psiWeaponRules->getTUUse();
+	if (!psiWeaponRules->getFlatRate())
+	{
+		cost = (int)floor(_unit->getStats()->tu * cost / 100.0f);
+	}
+	bool LOSRequired = psiWeaponRules->isLOSRequired();
+
 	_aggroTarget = 0;
 		// don't let mind controlled soldiers mind control other soldiers.
 	if (_unit->getOriginalFaction() != FACTION_PLAYER
 		// and we have the required 25 TUs and can still make it to cover
-		&& _unit->getTimeUnits() > _escapeTUs + 25
+		&& _unit->getTimeUnits() > _escapeTUs + cost
 		// and we didn't already do a psi action this round
 		&& !_didPsi)
 	{
@@ -1779,7 +1789,9 @@ bool AlienBAIState::psiAction()
 			if ((*i)->getArmor()->getSize() == 1 &&
 				validTarget(*i, true, false) &&
 				// they must be player units
-				(*i)->getOriginalFaction() == FACTION_PLAYER)
+				(*i)->getOriginalFaction() == FACTION_PLAYER &&
+				(!LOSRequired ||
+				std::find(_unit->getVisibleUnits()->begin(), _unit->getVisibleUnits()->end(), *i) != _unit->getVisibleUnits()->end()))
 			{
 				int chanceToAttackMe = psiAttackStrength
 					+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
