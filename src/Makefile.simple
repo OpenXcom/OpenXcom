@@ -56,6 +56,9 @@ $(OBJDIR)%.o:: Engine/%.cpp
 $(OBJDIR)%.o:: Engine/Scalers/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+$(OBJDIR)%.o:: Engine/Adlib/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
 $(OBJDIR)%.o:: Geoscape/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 

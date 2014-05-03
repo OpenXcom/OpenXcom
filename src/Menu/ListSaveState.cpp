@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ListSaveState.h"
-#include <cstdio>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -37,7 +36,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 1), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 1, false), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
 	_edtSave = new TextEdit(this, 168, 9, 0, 0);
@@ -77,8 +76,9 @@ ListSaveState::~ListSaveState()
  */
 void ListSaveState::updateList()
 {
-	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
-	_lstSaves->setRowColor(0, Palette::blockOffset(8)+5);
+	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME_SLOT").c_str());
+	if (_origin != OPT_BATTLESCAPE)
+		_lstSaves->setRowColor(0, Palette::blockOffset(8) + 5);
 	ListGamesState::updateList();
 }
 
@@ -149,6 +149,9 @@ void ListSaveState::btnSaveGameClick(Action *)
 	}
 }
 
+/**
+ * Saves the selected save.
+ */
 void ListSaveState::saveGame()
 {
 	_game->getSavedGame()->setName(_edtSave->getText());
@@ -157,15 +160,15 @@ void ListSaveState::saveGame()
 	if (_selectedRow > 0)
 	{
 		oldFilename = _saves[_selectedRow - 1].fileName;
-		if (oldFilename != newFilename)
+		if (oldFilename != newFilename + ".sav")
 		{
 			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
 			{
 				newFilename += "_";
 			}
-			std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
+			std::string oldPath = Options::getUserFolder() + oldFilename;
 			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
-			rename(oldPath.c_str(), newPath.c_str());
+			CrossPlatform::moveFile(oldPath, newPath);
 		}
 	}
 	else
@@ -175,6 +178,7 @@ void ListSaveState::saveGame()
 			newFilename += "_";
 		}
 	}
+	newFilename += ".sav";
 	_game->pushState(new SaveGameState(_game, _origin, newFilename));
 }
 

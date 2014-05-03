@@ -33,6 +33,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/RNG.h"
 
@@ -90,6 +91,11 @@ void ExplosionBState::init()
 	else if (_tile)
 	{
 		_power = _tile->getExplosive();
+		_areaOfEffect = true;
+	}
+	else if (_unit && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+	{
+		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
 		_areaOfEffect = true;
 	}
 	else
@@ -234,8 +240,13 @@ void ExplosionBState::explode()
 	}
 	if (!_tile && !_item)
 	{
+		int radius = 6;
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-		save->getTileEngine()->explode(_center, _power, DT_HE, 6);
+		if (_unit && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		{
+			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
+		}
+		save->getTileEngine()->explode(_center, _power, DT_HE, radius);
 		terrainExplosion = true;
 	}
 

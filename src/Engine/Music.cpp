@@ -38,6 +38,7 @@ Music::Music() : _music(0)
 Music::~Music()
 {
 #ifndef __NO_MUSIC
+	stop();
 	Mix_FreeMusic(_music);
 #endif
 }
@@ -81,17 +82,31 @@ void Music::load(const void *data, size_t size)
 
 /**
  * Plays the contained music track.
+ * @param loop Amount of times to loop the track. -1 = infinite
  */
 void Music::play(int loop) const
 {
 #ifndef __NO_MUSIC
 	if (!Options::mute)
 	{
-		Mix_HaltMusic();
+		stop();
 		if (_music != 0 && Mix_PlayMusic(_music, loop) == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
 		}
+	}
+#endif
+}
+
+/**
+ * Stops the contained music track.
+ */
+void Music::stop() const
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		Mix_HaltMusic();
 	}
 #endif
 }

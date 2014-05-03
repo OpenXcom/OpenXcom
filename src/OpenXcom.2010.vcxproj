@@ -295,6 +295,9 @@
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
     <ClCompile Include="Battlescape\WarningMessage.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
+    <ClCompile Include="Engine\AdlibMusic.cpp" />
+    <ClCompile Include="Engine\Adlib\adlplayer.cpp" />
+    <ClCompile Include="Engine\Adlib\fmopl.cpp" />
     <ClCompile Include="Engine\CatFile.cpp" />
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
@@ -583,6 +586,9 @@
     <ClInclude Include="Battlescape\WarningMessage.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Action.h" />
+    <ClInclude Include="Engine\AdlibMusic.h" />
+    <ClInclude Include="Engine\Adlib\adlplayer.h" />
+    <ClInclude Include="Engine\Adlib\fmopl.h" />
     <ClInclude Include="Engine\CatFile.h" />
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />

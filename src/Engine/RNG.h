@@ -20,23 +20,23 @@
 #define OPENXCOM_RNG_H
 
 #include <algorithm>
+#define __STDC_LIMIT_MACROS
+#include <stdint.h>
 
 namespace OpenXcom
 {
 
 /**
  * Random Number Generator used throughout the game
- * for all your randomness needs. Uses a Mersenne Twister
- * pseudorandom number generator based on the code sample
- * from Game Coding Complete 4.
- * @note http://www.mcshaffry.com/GameCode/
+ * for all your randomness needs. Uses a 64-bit xorshift
+ * pseudorandom number generator.
  */
 namespace RNG
 {
 	/// Gets the seed in use.
-	unsigned int getSeed();
+	uint64_t getSeed();
 	/// Sets the seed in use.
-	void setSeed(unsigned int n);
+	void setSeed(uint64_t n);
 	/// Generates a random integer number, inclusive.
 	int generate(int min, int max);
 	/// Generates a random floating-point number.

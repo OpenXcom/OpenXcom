@@ -62,7 +62,7 @@ SaveGameState::SaveGameState(Game *game, OptionsOrigin origin, const std::string
 
 		add(_txtStatus);
 		
-		add(_txtStatus);
+		centerAllSurfaces();
 		// Set up objects
 		_txtStatus->setColor(Palette::blockOffset(8)+5);
 		_txtStatus->setBig();
@@ -94,10 +94,19 @@ void SaveGameState::init()
 	blit();
 	_game->getScreen()->flip();
 	_game->popState();
-	_game->popState(); // only if manual save
+	// manual save, close the save screen
+	if (_filename.find(".sav") != std::string::npos)
+	{
+		_game->popState();
+		_game->popState();
+	}
+	// automatic save, give it a default name
+	else
+	{
+		_game->getSavedGame()->setName(Language::fsToWstr(_filename));
+	}
 
 	// Save the game
-	_filename += ".sav";
 	try
 	{
 		std::string backup = _filename + ".bak";
