@@ -562,6 +562,7 @@ void SellState::changeByValue(int change, int dir)
 	// Calculate the change in storage space in tenths of an XCom storage unit.
 	Craft *craft;
 	RuleItem *armor, *item, *weapon, *ammo;
+	double total = 0.0;
 	switch (getType(_sel))
 	{
 	case SELL_SOLDIER:
@@ -572,7 +573,6 @@ void SellState::changeByValue(int change, int dir)
 		}
 		break;
 	case SELL_CRAFT:
-		double total;
 		craft = _crafts[getCraftIndex(_sel)];
 		for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 		{
@@ -588,8 +588,7 @@ void SellState::changeByValue(int change, int dir)
 		item = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 		_spaceChange -= dir * change * (int)(10 * item->getSize());
 		break;
-	case SELL_ENGINEER:
-	case SELL_SCIENTIST:
+	default:
 		break;
 	}
 

@@ -168,7 +168,7 @@ static const UINT32 KSL_TABLE[8*16]=
 };
 #undef DV
 
-/* sustain lebel table (3db per step) */
+/* sustain level table (3db per step) */
 /* 0 - 15: 0, 3, 6, 9,12,15,18,21,24,27,30,33,36,39,42,93 (dB)*/
 #define SC(db) (db*((3/EG_STEP)*(1<<ENV_BITS)))+EG_DST
 static const INT32 SL_TABLE[16]={
@@ -214,7 +214,7 @@ static int num_lock = 0;
 
 /* work table */
 static void *cur_chip = NULL;	/* current chip point */
-/* currenct chip state */
+/* current chip state */
 /* static OPLSAMPLE  *bufL,*bufR; */
 static OPL_CH *S_CH;
 static OPL_CH *E_CH;
@@ -308,7 +308,7 @@ INLINE void OPL_KEYOFF(OPL_SLOT *SLOT)
 {
 	if( SLOT->evm > ENV_MOD_RR)
 	{
-		/* set envelope counter from envleope output */
+		/* set envelope counter from envelope output */
 		SLOT->evm = ENV_MOD_RR;
 		if( !(SLOT->evc&EG_DST) )
 			SLOT->evc = (ENV_CURVE[SLOT->evc>>ENV_BITS]<<ENV_BITS) + EG_DST;
@@ -357,7 +357,7 @@ INLINE UINT32 OPL_CALC_SLOT( OPL_SLOT *SLOT )
 	return SLOT->TLL+ENV_CURVE[SLOT->evc>>ENV_BITS]+(SLOT->ams ? ams : 0);
 }
 
-/* set algorythm connection */
+/* set algorithm connection */
 static void set_algorythm( OPL_CH *CH)
 {
 	INT32 *carrier = &outd[0];
@@ -365,7 +365,7 @@ static void set_algorythm( OPL_CH *CH)
 	CH->connect2 = carrier;
 }
 
-/* ---------- frequency counter for operater update ---------- */
+/* ---------- frequency counter for operator update ---------- */
 INLINE void CALC_FCSLOT(OPL_CH *CH,OPL_SLOT *SLOT)
 {
 	int ksr;
@@ -464,7 +464,7 @@ INLINE void OPL_CALC_CH( OPL_CH *CH )
 		/* PG */
 		if(SLOT->vib) SLOT->Cnt += (SLOT->Incr*vib/VIB_RATE);
 		else          SLOT->Cnt += SLOT->Incr;
-		/* connectoion */
+		/* connection */
 		if(CH->FB)
 		{
 			int feedback1 = (CH->op1_out[0]+CH->op1_out[1])>>CH->FB;
@@ -488,7 +488,7 @@ INLINE void OPL_CALC_CH( OPL_CH *CH )
 		/* PG */
 		if(SLOT->vib) SLOT->Cnt += (SLOT->Incr*vib/VIB_RATE);
 		else          SLOT->Cnt += SLOT->Incr;
-		/* connectoion */
+		/* connection */
 		outd[0] += OP_OUT(SLOT,env_out, feedback2);
 	}
 }
@@ -514,7 +514,7 @@ INLINE void OPL_CALC_RH( OPL_CH *CH )
 		/* PG */
 		if(SLOT->vib) SLOT->Cnt += (SLOT->Incr*vib/VIB_RATE);
 		else          SLOT->Cnt += SLOT->Incr;
-		/* connectoion */
+		/* connection */
 		if(CH[6].FB)
 		{
 			int feedback1 = (CH[6].op1_out[0]+CH[6].op1_out[1])>>CH[6].FB;
@@ -539,7 +539,7 @@ INLINE void OPL_CALC_RH( OPL_CH *CH )
 		/* PG */
 		if(SLOT->vib) SLOT->Cnt += (SLOT->Incr*vib/VIB_RATE);
 		else          SLOT->Cnt += SLOT->Incr;
-		/* connectoion */
+		/* connection */
 		outd[0] += OP_OUT(SLOT,env_out, feedback2)*2;
 	}
 
@@ -578,7 +578,7 @@ INLINE void OPL_CALC_RH( OPL_CH *CH )
 		outd[0] += OP_OUT(SLOT7_2,env_hh,tone8)*2;
 }
 
-/* ----------- initialize time tabls ----------- */
+/* ----------- initialize time tables ----------- */
 static void init_timetables( FM_OPL *OPL , int ARRATE , int DRRATE )
 {
 	int i;
@@ -586,7 +586,7 @@ static void init_timetables( FM_OPL *OPL , int ARRATE , int DRRATE )
 
 	/* make attack rate & decay rate tables */
 	for (i = 0;i < 4;i++) OPL->AR_TABLE[i] = OPL->DR_TABLE[i] = 0;
-	for (i = 4;i <= 60;i++){
+	for (i = 4;i < 60;i++){
 		rate  = OPL->freqbase;						/* frequency rate */
 		if( i < 60 ) rate *= 1.0+(i&3)*0.25;		/* b0-1 : x1 , x1.25 , x1.5 , x1.75 */
 		rate *= 1<<((i>>2)-1);						/* b2-5 : shift bit */
@@ -594,7 +594,7 @@ static void init_timetables( FM_OPL *OPL , int ARRATE , int DRRATE )
 		OPL->AR_TABLE[i] = rate / ARRATE;
 		OPL->DR_TABLE[i] = rate / DRRATE;
 	}
-	for (i = 60;i < 76;i++)
+	for (i = 60;i < 75;i++)
 	{
 		OPL->AR_TABLE[i] = EG_AED-1;
 		OPL->DR_TABLE[i] = OPL->DR_TABLE[60];
@@ -649,7 +649,7 @@ static int OPLOpenTable( void )
 		TL_TABLE[t] = TL_TABLE[TL_MAX+t] = 0;
 	}
 
-	/* make sinwave table (total level offet) */
+	/* make sinwave table (total level offset) */
 	/* degree 0 = degree 180                   = off */
 	SIN_TABLE[0] = SIN_TABLE[SIN_ENT/2]         = &TL_TABLE[EG_ENT-1];
 	for (s = 1;s <= SIN_ENT/4;s++){
@@ -757,7 +757,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 
 	switch(r&0xe0)
 	{
-	case 0x00: /* 00-1f:controll */
+	case 0x00: /* 00-1f:control */
 		switch(r&0x1f)
 		{
 		case 0x01:
@@ -821,7 +821,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 					LOG(LOG_WAR,("OPL:write unmapped KEYBOARD port\n"));
 			}
 			return;
-		case 0x07:	/* DELTA-T controll : START,REC,MEMDATA,REPT,SPOFF,x,x,RST */
+		case 0x07:	/* DELTA-T control : START,REC,MEMDATA,REPT,SPOFF,x,x,RST */
 			if(OPL->type&OPL_TYPE_ADPCM)
 				YM_DELTAT_ADPCM_Write(OPL->deltat,r-0x07,v);
 			return;
@@ -1074,7 +1074,7 @@ void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length, int stripe)
 		/* FM part */
 		for(CH=S_CH ; CH < R_CH ; CH++)
 			OPL_CALC_CH(CH);
-		/* Rythn part */
+		/* Rythm part */
 		if(rythm)
 			OPL_CALC_RH(S_CH);
 		/* limit check */
@@ -1142,7 +1142,7 @@ void Y8950UpdateOne(FM_OPL *OPL, INT16 *buffer, int length)
 		/* FM part */
 		for(CH=S_CH ; CH < R_CH ; CH++)
 			OPL_CALC_CH(CH);
-		/* Rythn part */
+		/* Rythm part */
 		if(rythm)
 			OPL_CALC_RH(S_CH);
 		/* limit check */
@@ -1173,7 +1173,7 @@ void OPLResetChip(FM_OPL *OPL)
 	OPLWriteReg(OPL,0x03,0); /* Timer2 */
 	OPLWriteReg(OPL,0x04,0); /* IRQ mask clear */
 	for(i = 0xff ; i >= 0x20 ; i-- ) OPLWriteReg(OPL,i,0);
-	/* reset OPerator paramater */
+	/* reset OPerator parameter */
 	for( c = 0 ; c < OPL->max_ch ; c++ )
 	{
 		OPL_CH *CH = &OPL->P_CH[c];
@@ -1202,14 +1202,14 @@ void OPLResetChip(FM_OPL *OPL)
 #endif
 }
 
-/* ----------  Create one of vietual YM3812 ----------       */
+/* ----------  Create one of virtual YM3812 ----------       */
 /* 'rate'  is sampling rate and 'bufsiz' is the size of the  */
 FM_OPL *OPLCreate(int type, int clock, int rate)
 {
 	char *ptr;
 	FM_OPL *OPL;
 	int state_size;
-	int max_ch = 12; /* normaly 9 channels */
+	int max_ch = 12; /* normally 9 channels */
 
 	if( OPL_LockTable() ==-1) return NULL;
 	/* allocate OPL state space */
@@ -1268,7 +1268,7 @@ void OPLReInit(FM_OPL *OPL, int clock, int rate)
 }
 
 
-/* ----------  Destroy one of vietual YM3812 ----------       */
+/* ----------  Destroy one of virtual YM3812 ----------       */
 void OPLDestroy(FM_OPL *OPL)
 {
 #ifdef OPL_OUTPUT_LOG
@@ -1383,7 +1383,7 @@ int OPLTimerOver(FM_OPL *OPL,int c)
 	else
 	{	/* Timer A */
 		OPL_STATUS_SET(OPL,0x40);
-		/* CSM mode key,TL controll */
+		/* CSM mode key,TL control */
 		if( OPL->mode & 0x80 )
 		{	/* CSM mode total level latch and auto key on */
 			int ch;
