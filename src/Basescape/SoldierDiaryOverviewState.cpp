@@ -163,6 +163,7 @@ SoldierDiaryOverviewState::~SoldierDiaryOverviewState()
  */
 void SoldierDiaryOverviewState::init()
 {
+	State::init();
 	if (_list->empty())
 	{
 		_game->popState();

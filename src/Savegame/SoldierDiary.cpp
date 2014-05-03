@@ -37,8 +37,8 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
  * Initializes a new blank diary.
  */
 SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(), 
-    _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
-    _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
+    _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _missionIdList(), _commendations(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
+    _winTotal(0), _stunTotal(0), _baseDefenseMissionTotal(0), _daysWoundedTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0)
@@ -77,6 +77,7 @@ void SoldierDiary::load(const YAML::Node& node)
 		for (YAML::const_iterator i = killList.begin(); i != killList.end(); ++i)
 			_killList.push_back(new BattleUnitKills(*i));
 	}
+    _missionIdList = node["missionIdList"].as<std::vector<int> >(_missionIdList);
 	_alienRankTotal = node["alienRankTotal"].as<std::map<std::string, int> >(_alienRankTotal);
 	_alienRaceTotal = node["alienRaceTotal"].as<std::map<std::string, int> >(_alienRaceTotal);
 	_weaponTotal = node["weaponTotal"].as<std::map<std::string, int> >(_weaponTotal);
@@ -123,6 +124,7 @@ YAML::Node SoldierDiary::save() const
 			node["commendations"].push_back((*i)->save());
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
+    node["missionIdList"] = _missionIdList;
 	node["alienRankTotal"] = _alienRankTotal;
     node["alienRaceTotal"] = _alienRaceTotal;
     node["weaponTotal"] = _weaponTotal;
@@ -215,7 +217,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
 
-    _daysWounded.push_back(std::make_pair(missionStatistics->id, unitStatistics->daysWounded)); // Catalogging purposes
     _missionIdList.push_back(missionStatistics->id);
     _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
@@ -477,6 +478,7 @@ std::vector<int> &SoldierDiary::getMissionIdList()
 { 
     return _missionIdList;
 }
+
 /**
  * Get vector of kills.
  * @return vector of BattleUnitKills
@@ -484,14 +486,6 @@ std::vector<int> &SoldierDiary::getMissionIdList()
 std::vector<BattleUnitKills*> &SoldierDiary::getKills()
 {
     return _killList;
-}
-/**
- * Get number of days wounded.
- * @return vector of days wounded, sorted by mission id
- */
-std::vector<std::pair<int, int> > &SoldierDiary::getDaysWounded()
-{
-    return _daysWounded;
 }
 
 /**

@@ -300,6 +300,7 @@ SoldierDiaryPerformanceState::~SoldierDiaryPerformanceState()
  */
 void SoldierDiaryPerformanceState::init()
 {
+	State::init();
 	// Clear sprites
 	for (int i = 0; i != 10; ++i)
 	{
@@ -373,8 +374,8 @@ void SoldierDiaryPerformanceState::init()
 
 	std::map<std::string, int> mapArray[6] = {_soldier->getDiary()->getAlienRaceTotal(), _soldier->getDiary()->getAlienRankTotal(), _soldier->getDiary()->getWeaponTotal(), 
 												_soldier->getDiary()->getRegionTotal(), _soldier->getDiary()->getTypeTotal(), _soldier->getDiary()->getUFOTotal()};
-	TextList lstArray[6] = {*_lstRace, *_lstRank, *_lstWeapon, 
-								*_lstLocation, *_lstType, *_lstUFO};
+	TextList *lstArray[6] = {_lstRace, _lstRank, _lstWeapon, 
+								_lstLocation, _lstType, _lstUFO};
 
 	for (int i = 0; i != 6; ++i)
 	{
@@ -385,7 +386,7 @@ void SoldierDiaryPerformanceState::init()
 
 			ss1 << tr((*j).first.c_str());
 			ss2 << (*j).second;
-			lstArray[i].addRow(2, ss1.str().c_str(), ss2.str().c_str());
+			lstArray[i]->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 		}
 	}
     
@@ -555,7 +556,7 @@ void SoldierDiaryPerformanceState::lstInfoMouseOut(Action *)
  */
 void SoldierDiaryPerformanceState::think()
 {
-	State::think();
+	// State::think();
 	drawSprites();
 }
 

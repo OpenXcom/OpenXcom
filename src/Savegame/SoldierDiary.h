@@ -77,7 +77,6 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-    std::vector<std::pair<int, int> > _daysWounded;
 	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
@@ -137,8 +136,6 @@ public:
     std::vector<int> &getMissionIdList();
     /// Get the kill list.
     std::vector<BattleUnitKills*> &getKills();
-    /// Get the days wounded, sorted by mission id.
-    std::vector<std::pair<int, int> > &getDaysWounded();
 };
 
 }

@@ -246,12 +246,17 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
-            (*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics);
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
+            else if ((*j)->getStatus() == STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+            {
+                // Quietly award dead soldiers their commendations as well
+            }
 		}
 	}
     _game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
