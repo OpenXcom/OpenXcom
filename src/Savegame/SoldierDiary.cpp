@@ -202,7 +202,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
         _nightMissionTotal++;
     if (unitStatistics->wasUnconcious)
         _unconciousTotal++;
-    if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_BASE_DEFENSE" && missionStatistics->type != "STR_MEDIUM_SCOUT")
+    if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_BASE_DEFENSE" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
 		_importantMissionTotal++;
 	_shotAtCounterTotal += unitStatistics->shotAtCounter;
     _shotAtCounter10in1Mission += (unitStatistics->shotAtCounter)/10;
@@ -422,8 +422,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             for (std::map<std::string, int>::const_iterator j = _modularCommendations.begin(); j != _modularCommendations.end(); ++j)
             {
                 awardCommendation((*i).first, (*j).first);
-				_awardedCommendation = true;
             }
+			--i; // Maybe we did so good, we have to see if we can get another decoration!
 		}
 	}
 
