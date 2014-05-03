@@ -71,7 +71,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _commendationsListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -192,7 +192,7 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::vector<std::pair<std::string, RuleCommendations *> >::iterator i = _commendations.begin(); i != _commendations.end(); ++i)
+	for (std::map<std::string, RuleCommendations *>::const_iterator i = _commendations.begin(); i != _commendations.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -483,9 +483,8 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		std::auto_ptr<RuleCommendations> commendations(new RuleCommendations());
-		commendations->load(*i, _modIndex);
-		_commendations.push_back(std::make_pair(type, commendations.release()));
-		_commendationsIndex.push_back(type);
+		commendations->load(*i);
+        _commendations[type] = commendations.release();
 	}
 
 	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
@@ -845,19 +844,9 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
  * Gets the list of commendations
  * @return The list of commendations.
  */
-std::vector<std::pair<std::string, RuleCommendations *> > Ruleset::getCommendation() const
+std::map<std::string, RuleCommendations *> Ruleset::getCommendation() const
 {
 	return _commendations;
-}
-
-/**
- * Returns the list of all commendations
- * provided by the ruleset.
- * @return List of commendations.
- */
-const std::vector<std::string> &Ruleset::getCommendationList() const
-{
-	return _commendationsIndex;
 }
 
 /**

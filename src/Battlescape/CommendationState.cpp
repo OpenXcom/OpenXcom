@@ -104,11 +104,11 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 				ss << "   ";
 				if ((*j)->getNoun() == "")
 				{
-					ss << tr((*j)->getCommendationName()).c_str();
+					ss << tr((*j)->getType()).c_str();
 				}
 				else
 				{
-					ss << tr((*j)->getCommendationName()).arg(tr((*j)->getNoun())).c_str();					
+					ss << tr((*j)->getType()).arg(tr((*j)->getNoun())).c_str();					
 				}
 				// Medal name (change color)
 				_lstSoldiers->addRow(2, ss.str().c_str(), tr((*j)->getDecorationLevelName()).c_str());

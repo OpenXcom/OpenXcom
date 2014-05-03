@@ -110,16 +110,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 	{
 		missionId = 0;
 	}
-
-    int daysWounded = 0;
-    for (std::vector<std::pair<int, int> >::const_iterator wound = _soldier->getDiary()->getDaysWounded().begin() ; wound != _soldier->getDiary()->getDaysWounded().end(); ++wound)
-    {
-        if (wound->first == missionId)
-        {
-            daysWounded = wound->second;
-            break;
-        }
-    }
+	int daysWounded = missionStatistics->at(missionId)->injuryList[_soldier->getId()];
     
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));

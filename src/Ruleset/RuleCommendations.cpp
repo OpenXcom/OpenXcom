@@ -23,14 +23,14 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank set of extra sprite data.
+ * Creates a blank set of commendation data.
  */
-RuleCommendations::RuleCommendations() : _description(""), _criteria(), _sprite()
+RuleCommendations::RuleCommendations() : _description(""), _criteria(), _sprite(), _killCriteria()
 {
 }
 
 /**
- * Cleans up the extra sprite set.
+ * Cleans up the commendation.
  */
 RuleCommendations::~RuleCommendations()
 {
@@ -40,31 +40,17 @@ RuleCommendations::~RuleCommendations()
  * Loads the commendations from YAML.
  * @param node YAML node.
  */
-void RuleCommendations::load(const YAML::Node &node, int listOrder)
+void RuleCommendations::load(const YAML::Node &node)
 {
 	_description = node["description"].as<std::string>(_description);
-	_criteria = node["criteria"].as< std::map< std::string, std::vector<int> > >(_criteria);
+	_criteria = node["criteria"].as< std::map<std::string, std::vector<int> > >(_criteria);
     _sprite = node["sprite"].as<int>(_sprite);
-    _killCriteria = node["killCriteria"].as< std::vector<std::map< int, std::vector<std::string> > > >(_killCriteria);
-	_listOrder = node["listOrder"].as<int>(_listOrder);
-	if (!_listOrder)
-	{
-		_listOrder = listOrder;
-	}
+    _killCriteria = node["killCriteria"].as<std::vector<std::map<int, std::vector<std::string> > > >(_killCriteria);
 }
 
 /**
- * Gets the list order
- * @return The list order.
- */
-int RuleCommendations::getListOrder() const
-{
-	 return _listOrder;
-}
-
-/**
- * Get commendation description
- * @return string Commendation description
+ * Get the commendation's description.
+ * @return string Commendation description.
  */
 std::string RuleCommendations::getDescription() const
 {
@@ -72,8 +58,8 @@ std::string RuleCommendations::getDescription() const
 }
 
 /**
- * Get commendation award criteria
- * @return map<string, int> Commendation criteria
+ * Get the commendation's award criteria.
+ * @return map<string, int> Commendation criteria.
  */
 std::map<std::string, std::vector<int> > *RuleCommendations::getCriteria()
 {
@@ -81,17 +67,17 @@ std::map<std::string, std::vector<int> > *RuleCommendations::getCriteria()
 }
 
 /**
- * Get commendation award kill criteria
- * @return vecotr<string> Commendation kill criteria
+ * Get the commendation's award kill criteria.
+ * @return vecotr<string> Commendation kill criteria.
  */
-std::vector<std::map< int, std::vector<std::string> > > *RuleCommendations::getKillCriteria()
+std::vector<std::map<int, std::vector<std::string> > > *RuleCommendations::getKillCriteria()
 {
 	return &_killCriteria;
 }
 
 /**
- * Get the commendation's sprite
- * @return int Sprite number
+ * Get the commendation's sprite.
+ * @return int Sprite number.
  */
 int RuleCommendations::getSprite() const
 {

@@ -25,34 +25,32 @@ namespace OpenXcom
 {
 
 /**
- * For adding a set of extra sprite data to the game.
+ * Represents a specific type of commendation.
+ * Contains constant info about a commendation like
+ * award criteria, sprite, description, etc.
+ * @sa Commendation
  */
 class RuleCommendations
 {
 private:
 	std::map<std::string, std::vector<int> > _criteria;
-    std::vector<std::map< int, std::vector<std::string> > > _killCriteria;
+    std::vector<std::map<int, std::vector<std::string> > > _killCriteria;
 	std::string _description;
-	int _listOrder;
 	int _sprite;
 public:
 	/// Creates a blank commendation ruleset.
 	RuleCommendations();
 	/// Cleans up the commendation ruleset.
 	~RuleCommendations();
-	/// Loads the unit data from YAML.
-	void load(const YAML::Node& node, int listIndex);
-	/// Get list order.
-	int getListOrder() const;
-	/// Get commendation name
-	std::string getName() const;
-	/// Get commendation description
+	/// Loads commendation data from YAML.
+	void load(const YAML::Node& node);
+	/// Get the commendation's description.
 	std::string getDescription() const;
-	/// Get commendation award criteria
+	/// Get the commendation's award criteria.
 	std::map<std::string, std::vector<int> > *getCriteria();
-	/// Get commendation award kill related criteria
-	std::vector<std::map< int, std::vector<std::string> > > *getKillCriteria();
-	/// Get sprite
+	/// Get the commendation's award kill related criteria.
+	std::vector<std::map<int, std::vector<std::string> > > *getKillCriteria();
+	/// Get the commendation's sprite.
 	int getSprite() const;
 
 };
