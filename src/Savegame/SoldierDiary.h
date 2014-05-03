@@ -20,19 +20,15 @@
 #define OPENXCOM_SOLDIERDIARY_H
 
 #include <yaml-cpp/yaml.h>
-#include <vector>
-#include <string>
 #include "GameTime.h"
-#include "../Ruleset/RuleCommendations.h"
-#include "../Ruleset/Ruleset.h"
 #include "BattleUnit.h"
 #include "SavedGame.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
 
 class GameTime;
-class RuleCommendations;
 class Ruleset;
 
 /**
@@ -41,15 +37,15 @@ class Ruleset;
 class SoldierCommendations
 {
 private:
-	RuleCommendations *_rules;
-	std::string  _commendationName, _commendationDescription, _noun;
-	int  _decorationLevel, _sprite;
+	std::string  _type, _noun;
+	int  _decorationLevel;
 	bool _isNew;
+
 public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
 	/// Creates a commendation of the specified type.
-	SoldierCommendations(std::string commendationName, std::string commendationDescription, std::string noun, int decorationLevel, bool isNew, int sprite);
+	SoldierCommendations(std::string commendationName, std::string noun);
 	/// Cleans up the commendation.
 	~SoldierCommendations();
 	/// Loads the commendation information from YAML.
@@ -57,17 +53,13 @@ public:
 	/// Saves the commendation information to YAML.
 	YAML::Node save() const;
 	/// Get commendation name.
-	std::string getCommendationName() const;
-	/// Get commendation description.
-	std::string getCommendationDescription() const;
+	std::string getType() const;
 	/// Get commendation noun.
 	std::string getNoun() const;
 	/// Get the commendation's decoration level's name.
 	std::string getDecorationLevelName();
 	/// Get the commendation's decoration description.
 	std::string getDecorationDescription();
-	/// Get the commendation's decoration sprite.
-	int getDecorationSprite() const;
 	/// Get the commendation's decoration level's int.
 	int getDecorationLevelInt();
 	/// Get the newness of the commendation.
@@ -77,15 +69,12 @@ public:
 	/// Increment decoration level.
 	// Sets _isNew to true.
 	void addDecoration();
-	/// Get sprite
-	int getSprite() const;
 };
 
 class SoldierDiary
 {
 private:
 	std::vector<SoldierCommendations*> _commendations;
-	RuleCommendations *_rules;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
     std::vector<std::pair<int, int> > _daysWounded;
@@ -96,6 +85,7 @@ private:
 		_hitCounter5in1Mission;
 
 	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
+	void awardCommendation(std::string type, std::string noun = "");
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
@@ -107,57 +97,47 @@ public:
 	void load(const YAML::Node& node);
 	/// Save a diary.
 	YAML::Node save() const;
-	/// Update the diary statistics
+	/// Update the diary statistics.
 	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
-	/// Get
+	/// Get the list of kills, mapped by rank.
 	std::map<std::string, int> &getAlienRankTotal();
-	/// Get
+	/// Get the list of kills, mapped by race.
 	std::map<std::string, int> &getAlienRaceTotal();
-	/// Get
+	/// Get the list of kills, mapped by weapon used.
 	std::map<std::string, int> &getWeaponTotal();
-	/// Get
+	/// Get the list of kills, mapped by weapon ammo used.
 	std::map<std::string, int> &getWeaponAmmoTotal();
-	/// Get
+	/// Get the list of missions, mapped by region.
 	std::map<std::string, int> &getRegionTotal();
-	/// Get
+	/// Get the list of missions, mapped by country.
 	std::map<std::string, int> &getCountryTotal();
-	/// Get
+	/// Get the list of missions, mapped by type.
 	std::map<std::string, int> &getTypeTotal();
-	/// Get
+	/// Get the list of missions, mapped by UFO.
 	std::map<std::string, int> &getUFOTotal();
-	/// Get
+	/// Get the total score.
 	int getScoreTotal() const;
-	/// Get
+	/// Get the total number of kills.
 	int getKillTotal() const;
-	/// Get
+	/// Get the total number of missions.
 	int getMissionTotal() const;
-	/// Get
+	/// Get the total number of wins.
 	int getWinTotal() const;
-	/// Get
+	/// Get the total number of stuns.
 	int getStunTotal() const;
-	/// Get
+	/// Get the total number of days wounded.
 	int getDaysWoundedTotal() const;
-	/// Get total base defense missions.
-	int getBaseDefenseMissionTotal() const;
-	/// Get total terror missions.
-	int getTerrorMissionTotal() const;
-	/// Get total night missions.
-	int getNightMissionTotal() const;
-	/// Get total night terror missions.
-	int getNightTerrorMissionTotal() const;
-	/// Get commendations
+	/// Get the solder's commendations.
 	std::vector<SoldierCommendations*> *getSoldierCommendations();
 	/// Manage commendations, return true if a medal is awarded.
 	bool manageCommendations(Ruleset *rules);
-	/// Award commendations
-	void awardCommendation(std::string commendationName, std::string commendationDescription, std::string noun = "", int sprite = 100);
-	/// Increment soldier's service time.
+	/// Increment the soldier's service time.
 	void addMonthlyService();
-    /// Get mission Id list
+    /// Get the mission id list.
     std::vector<int> &getMissionIdList();
-    /// Get kill list
+    /// Get the kill list.
     std::vector<BattleUnitKills*> &getKills();
-    /// Get mission issued days wounded
+    /// Get the days wounded, sorted by mission id.
     std::vector<std::pair<int, int> > &getDaysWounded();
 };
 

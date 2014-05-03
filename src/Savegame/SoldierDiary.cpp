@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-	/**
+/**
  * Initializes a new diary entry from YAML.
  * @param node YAML node.
  */
@@ -34,7 +34,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 }
 
 /**
- * Constructor
+ * Initializes a new blank diary.
  */
 SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal(), _weaponTotal(), _weaponAmmoTotal(), 
     _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0), _killTotal(0), _missionTotal(0),
@@ -47,7 +47,7 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
 }
 
 /**
- * Deconstructor
+ *
  */
 SoldierDiary::~SoldierDiary()
 {
@@ -62,7 +62,8 @@ SoldierDiary::~SoldierDiary()
 }
 
 /**
- * Load function
+ * Loads the diary from a YAML file.
+ * @param node YAML node.
  */
 void SoldierDiary::load(const YAML::Node& node)
 {
@@ -112,7 +113,8 @@ void SoldierDiary::load(const YAML::Node& node)
 }
 
 /**
- * Save function
+ * Saves the diary to a YAML file.
+ * @return YAML node.
  */
 YAML::Node SoldierDiary::save() const
 {
@@ -158,7 +160,9 @@ YAML::Node SoldierDiary::save() const
 }
 
 /**
- * Updated soldier diary statistics
+ * Update soldier diary statistics.
+ * @param unitStatistics BattleUnitStatistics to get stats from.
+ * @param missionStatistics MissionStatistics to get stats from.
  */
 void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics)
 {
@@ -218,7 +222,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 
 /**
  * Get soldier commendations.
- * @return SoldierCommendations soldier commendations.
+ * @return SoldierCommendations list of soldier's commendations.
  */
 std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 {
@@ -232,14 +236,14 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
  */
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
-	std::vector<std::pair<std::string, RuleCommendations *> > _commendationsList = rules->getCommendation();
+	std::map<std::string, RuleCommendations *> _commendationsList = rules->getCommendation();
     bool _awardCommendation;
 	bool _awardedCommendation = false;
     std::map<std::string, int> _nextCommendationLevel;
     std::map<std::string, int> _modularCommendations;
 
 	// Loop over all possible commendations
-	for (std::vector<std::pair<std::string, RuleCommendations *> >::iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
+	for (std::map<std::string, RuleCommendations *>::iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
 		bool _awardCommendation = true;
         _nextCommendationLevel.clear();
@@ -249,7 +253,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 		// If so, get the level and noun
 		for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
 		{
-			if ( (*i).first == (*j)->getCommendationName() )
+			if ( (*i).first == (*j)->getType() )
 			{
                 // A map is used for modular medals
                 // A commendation that has no noun is always given the noun ""
@@ -271,16 +275,16 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				break;
 			}
             // These criteria have no nouns, so only the _nextCommendationLevel[""] will ever be used
-			else if(((*j).first == "total_kills" && getKillTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_missions" && getMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_wins" && getWinTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_score" && getScoreTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_stuns" && getStunTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_days_wounded" && getDaysWoundedTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_base_defense_missions" && getBaseDefenseMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_terror_missions" && getTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_night_missions" && getNightMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
-					((*j).first == "total_night_terror_missions" && getNightTerrorMissionTotal() < (*j).second.at(_nextCommendationLevel[""])) ||
+			else if(((*j).first == "total_kills" && _killList.size() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_missions" && _missionIdList.size() < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_wins" && _winTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_score" && _scoreTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_stuns" && _stunTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_days_wounded" && _daysWoundedTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_base_defense_missions" && _baseDefenseMissionTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_terror_missions" && _terrorMissionTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_night_missions" && _nightMissionTotal < (*j).second.at(_nextCommendationLevel[""])) ||
+					((*j).first == "total_night_terror_missions" && _nightTerrorMissionTotal < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_monthly_service" && _monthsService < (*j).second.at(_nextCommendationLevel[""])) ||
 					((*j).first == "total_fell_unconcious" && _unconciousTotal < (*j).second.at(_nextCommendationLevel[""])) || 
                     ((*j).first == "total_shot_at_10_times" && _shotAtCounter10in1Mission < (*j).second.at(_nextCommendationLevel[""])) || 
@@ -297,55 +301,25 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			}
 			// Medals with the following criteria are unique because they need a noun
             // And because they loop over a map<> (this allows for maximum moddability)
-			else if ((*j).first == "total_kills_with_a_weapon")
+			else if ((*j).first == "total_kills_with_a_weapon" || (*j).first == "total_missions_in_a_region" || (*j).first == "total_kills_by_race" || (*j).first == "total_kills_by_rank")
 			{
-                // Loop over the map of kills
-                // match nouns and decoration levels
-                for(std::map<std::string, int>::const_iterator k = _weaponTotal.begin(); k != _weaponTotal.end(); ++k)
-                {
+				std::map<std::string, int> tempTotal;
+				if ((*j).first == "total_kills_with_a_weapon")
+					tempTotal = _weaponTotal;
+				else if ((*j).first == "total_kills_with_a_region")
+					tempTotal = _regionTotal;
+				else if ((*j).first == "total_kills_with_a_race")
+					tempTotal = _alienRaceTotal;
+				else if ((*j).first == "total_kills_with_a_rank")
+					tempTotal = _alienRankTotal;
+				// Loop over the map of kills
+				// match nouns and decoration levels
+				for(std::map<std::string, int>::const_iterator k = tempTotal.begin(); k != tempTotal.end(); ++k)
+				{
 					int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
 					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), _criteria);
-                }
+				}
 				// If it is still empty, we did not get a commendation
-				if (_modularCommendations.empty())
-				{
-					_awardCommendation = false;
-					break;
-				}
-            }
-			else if ((*j).first == "total_missions_in_a_region")
-			{
-				for(std::map<std::string, int>::const_iterator k = _regionTotal.begin(); k != _regionTotal.end(); ++k)
-				{
-					int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
-					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), _criteria);
-				}
-				if (_modularCommendations.empty())
-				{
-					_awardCommendation = false;
-					break;
-				}
-			}
-			else if ((*j).first == "total_kills_by_race")
-			{
-				for(std::map<std::string, int>::const_iterator k = _alienRaceTotal.begin(); k != _alienRaceTotal.end(); ++k)
-				{
-					int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
-					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), _criteria);
-				}
-				if (_modularCommendations.empty())
-				{
-					_awardCommendation = false;
-					break;
-				}
-			}
-			else if ((*j).first == "total_kills_by_rank")
-			{
-				for(std::map<std::string, int>::const_iterator k = _alienRankTotal.begin(); k != _alienRankTotal.end(); ++k)
-				{
-					int _criteria = _nextCommendationLevel[""] == 0 ? 0 : (*j).second.at(_nextCommendationLevel.at((*k).first));
-					manageModularCommendations(_nextCommendationLevel, _modularCommendations, (*k), _criteria);
-				}
 				if (_modularCommendations.empty())
 				{
 					_awardCommendation = false;
@@ -446,7 +420,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             }
             for (std::map<std::string, int>::const_iterator j = _modularCommendations.begin(); j != _modularCommendations.end(); ++j)
             {
-                awardCommendation((*i).first, (*i).second->getDescription(), (*j).first, (*i).second->getSprite());
+                awardCommendation((*i).first, (*j).first);
 				_awardedCommendation = true;
             }
 		}
@@ -457,60 +431,63 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 
 /**
  * Manage modular commendations (private)
+ * @param nextCommendationLevel map<string, int> 
+ * @param modularCommendations map<string, int>
+ * @param statTotal pair<string, int>
+ * @param criteria int
  */
 void SoldierDiary::manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria)
 {
-	// If criteria is 0, we don't have this noun
-	if (criteria == 0 && statTotal.second >= criteria)
+	// If criteria is 0, we don't have this noun OR if we meet the criteria, remember the noun for award purposes
+	if ((criteria == 0 && statTotal.second >= criteria) || (criteria != 0 && nextCommendationLevel.at(statTotal.first) >= criteria))
 	{
 		modularCommendations[statTotal.first]++;
 	}
-	// If we meet the criteria, remember the noun for award purposes
-    else if (criteria != 0 && nextCommendationLevel.at(statTotal.first) >= criteria)
-    {
-        modularCommendations[statTotal.first]++;
-    }
 }
 
 /**
  * Award commendations to the soldier.
- * @param string Commendation Name.
+ * @param type string
+ * @param noun string
  */
-void SoldierDiary::awardCommendation(std::string _commendationName, std::string _commendationDescription, std::string _noun, int sprite)
+void SoldierDiary::awardCommendation(std::string type, std::string noun)
 {
-	bool _newCommendation = true;
+	bool newCommendation = true;
 
 	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)
 	{
-		if ( (*i)->getCommendationName() == _commendationName && (*i)->getNoun() == _noun)
+		if ( (*i)->getType() == type && (*i)->getNoun() == noun)
 		{
 			(*i)->addDecoration();
-			_newCommendation = false;
+			newCommendation = false;
 			break;
 		}
 	}
-	if (_newCommendation)
+	if (newCommendation)
 	{
-		_commendations.push_back(new SoldierCommendations(_commendationName, _commendationDescription, _noun, 0, true, sprite));
+		_commendations.push_back(new SoldierCommendations(type, noun));
 	}
 }
 
 /**
- *
+ * Get vector of mission ids.
+ * @return Vector of mission ids.
  */
 std::vector<int> &SoldierDiary::getMissionIdList()
 { 
     return _missionIdList;
 }
 /**
- *
+ * Get vector of kills.
+ * @return vector of BattleUnitKills
  */
 std::vector<BattleUnitKills*> &SoldierDiary::getKills()
 {
     return _killList;
 }
 /**
- *
+ * Get number of days wounded.
+ * @return vector of days wounded, sorted by mission id
  */
 std::vector<std::pair<int, int> > &SoldierDiary::getDaysWounded()
 {
@@ -518,7 +495,8 @@ std::vector<std::pair<int, int> > &SoldierDiary::getDaysWounded()
 }
 
 /**
- *
+ * Get list of kills sorted by rank
+ * @return 
  */
 std::map<std::string, int> &SoldierDiary::getAlienRankTotal()
 {
@@ -630,42 +608,6 @@ int SoldierDiary::getDaysWoundedTotal() const
 }
 
 /**
- * Get total base defense missions
- * @return int Total base defense missions
- */
-int SoldierDiary::getBaseDefenseMissionTotal() const
-{
-	return _baseDefenseMissionTotal;
-}
-
-/**
- * Get total terror missions
- * @return int Total terror missions
- */
-int SoldierDiary::getTerrorMissionTotal() const
-{
-	return _terrorMissionTotal;
-}
-
-/**
- * Get total night missions
- * @return int Total night missions
- */
-int SoldierDiary::getNightMissionTotal() const
-{
-	return _nightMissionTotal;
-}
-
-/**
- * Get total night terror missions
- * @return int Total night terror missions
- */
-int SoldierDiary::getNightTerrorMissionTotal() const
-{
-	return _nightTerrorMissionTotal;
-}
-
-/**
  * Increment soldier's service time one month
  */
 void SoldierDiary::addMonthlyService()
@@ -685,7 +627,7 @@ SoldierCommendations::SoldierCommendations(const YAML::Node &node)
 /**
  * Initializes a soldier commendation.
  */
-SoldierCommendations::SoldierCommendations(std::string commendationName, std::string commendationDescription, std::string noun, int decorationLevel, bool isNew, int sprite) : _commendationName(commendationName), _commendationDescription(commendationDescription), _noun(noun), _decorationLevel(decorationLevel), _isNew(isNew), _sprite(sprite)
+SoldierCommendations::SoldierCommendations(std::string commendationName, std::string noun) : _type(commendationName), _noun(noun), _decorationLevel(0), _isNew(true)
 {
 	
 }
@@ -704,12 +646,10 @@ SoldierCommendations::~SoldierCommendations()
  */
 void SoldierCommendations::load(const YAML::Node &node)
 {
-	_commendationName = node["commendationName"].as<std::string>(_commendationName);
-	_commendationDescription = node["commendationDescription"].as<std::string>(_commendationDescription);
+	_type = node["commendationName"].as<std::string>(_type);
 	_noun = node["noun"].as<std::string>(_noun);
 	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
 	_isNew = node["isNew"].as<bool>(_isNew);
-	_sprite = node["sprite"].as<int>(_sprite);
 }
 
 /**
@@ -719,12 +659,10 @@ void SoldierCommendations::load(const YAML::Node &node)
 YAML::Node SoldierCommendations::save() const
 {
 	YAML::Node node;
-	node["commendationName"] = _commendationName;
-	node["commendationDescription"] = _commendationDescription;
+	node["commendationName"] = _type;
 	node["noun"] = _noun;
 	node["decorationLevel"] = _decorationLevel;
 	node["isNew"] = _isNew;
-	node["sprite"] = _sprite;
 	return node;
 }
 
@@ -732,18 +670,9 @@ YAML::Node SoldierCommendations::save() const
  * Get the soldier's commendation's name.
  * @return string Commendation name.
  */
-std::string SoldierCommendations::getCommendationName() const
+std::string SoldierCommendations::getType() const
 {
-	return _commendationName;
-}
-
-/**
- * Get the soldier's commendation's description.
- * @return string Commendation description.
- */
-std::string SoldierCommendations::getCommendationDescription() const
-{
-	return _commendationDescription;
+	return _type;
 }
 
 /**
@@ -762,7 +691,6 @@ std::string SoldierCommendations::getNoun() const
 std::string SoldierCommendations::getDecorationLevelName()
 {
 	std::stringstream ss;
-
 	ss << "STR_AWARD_" << _decorationLevel;
 	return ss.str();
 }
@@ -774,19 +702,8 @@ std::string SoldierCommendations::getDecorationLevelName()
 std::string SoldierCommendations::getDecorationDescription()
 {
 	std::stringstream ss;
-
 	ss << "STR_AWARD_DECOR_" << _decorationLevel;
 	return ss.str();
-}
-
-/**
- * Get the soldier commendation decoration sprite number.
- * @return int sprite number.
- */
-int SoldierCommendations::getDecorationSprite() const
-{
-	// Assuming the ruleset still lists the sprites starting at 200
-	return _decorationLevel;
 }
 
 /**
@@ -822,15 +739,6 @@ void SoldierCommendations::addDecoration()
 {
 	_decorationLevel++;
 	_isNew = true;
-}
-
-/**
- * Get the sprite int
- * @return sprite int
- */
-int SoldierCommendations::getSprite() const
-{
-	return _sprite;
 }
 
 }

@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of extra sprite data.
  */
-RuleCommendations::RuleCommendations() : _description(""), _criteria(), _sprite()
+RuleCommendations::RuleCommendations() : _description(""), _criteria(), _sprite(), _killCriteria
 {
 }
 
@@ -40,26 +40,12 @@ RuleCommendations::~RuleCommendations()
  * Loads the commendations from YAML.
  * @param node YAML node.
  */
-void RuleCommendations::load(const YAML::Node &node, int listOrder)
+void RuleCommendations::load(const YAML::Node &node)
 {
 	_description = node["description"].as<std::string>(_description);
-	_criteria = node["criteria"].as< std::map< std::string, std::vector<int> > >(_criteria);
+	_criteria = node["criteria"].as< std::map<std::string, std::vector<int> > >(_criteria);
     _sprite = node["sprite"].as<int>(_sprite);
-    _killCriteria = node["killCriteria"].as< std::vector<std::map< int, std::vector<std::string> > > >(_killCriteria);
-	_listOrder = node["listOrder"].as<int>(_listOrder);
-	if (!_listOrder)
-	{
-		_listOrder = listOrder;
-	}
-}
-
-/**
- * Gets the list order
- * @return The list order.
- */
-int RuleCommendations::getListOrder() const
-{
-	 return _listOrder;
+    _killCriteria = node["killCriteria"].as<std::vector<std::map<int, std::vector<std::string> > > >(_killCriteria);
 }
 
 /**
@@ -84,7 +70,7 @@ std::map<std::string, std::vector<int> > *RuleCommendations::getCriteria()
  * Get commendation award kill criteria
  * @return vecotr<string> Commendation kill criteria
  */
-std::vector<std::map< int, std::vector<std::string> > > *RuleCommendations::getKillCriteria()
+std::vector<std::map<int, std::vector<std::string> > > *RuleCommendations::getKillCriteria()
 {
 	return &_killCriteria;
 }

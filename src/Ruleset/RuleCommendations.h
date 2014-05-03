@@ -31,9 +31,8 @@ class RuleCommendations
 {
 private:
 	std::map<std::string, std::vector<int> > _criteria;
-    std::vector<std::map< int, std::vector<std::string> > > _killCriteria;
+    std::vector<std::map<int, std::vector<std::string> > > _killCriteria;
 	std::string _description;
-	int _listOrder;
 	int _sprite;
 public:
 	/// Creates a blank commendation ruleset.
@@ -41,17 +40,13 @@ public:
 	/// Cleans up the commendation ruleset.
 	~RuleCommendations();
 	/// Loads the unit data from YAML.
-	void load(const YAML::Node& node, int listIndex);
-	/// Get list order.
-	int getListOrder() const;
-	/// Get commendation name
-	std::string getName() const;
+	void load(const YAML::Node& node);
 	/// Get commendation description
 	std::string getDescription() const;
 	/// Get commendation award criteria
 	std::map<std::string, std::vector<int> > *getCriteria();
 	/// Get commendation award kill related criteria
-	std::vector<std::map< int, std::vector<std::string> > > *getKillCriteria();
+	std::vector<std::map<int, std::vector<std::string> > > *getKillCriteria();
 	/// Get sprite
 	int getSprite() const;
 

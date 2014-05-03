@@ -17,9 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierDiaryOverviewState.h"
-#include "SoldierInfoState.h"
-#include "SoldierDiaryMissionState.h"
 #include "SoldierDiaryPerformanceState.h"
+#include "SoldierDiaryMissionState.h"
+#include "SoldierInfoState.h"
 #include <string>
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Game.h"
