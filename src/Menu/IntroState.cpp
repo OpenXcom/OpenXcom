@@ -18,6 +18,7 @@
  */
 #include "IntroState.h"
 #include <SDL_mixer.h>
+#include "../Engine/Adlib/adlplayer.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
@@ -28,6 +29,7 @@
 #include "../Engine/Sound.h"
 #include "../Resource/ResourcePack.h"
 #include "MainMenuState.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -416,7 +418,7 @@ void IntroState::init()
 #ifndef __NO_MUSIC
 		// fade out!
 		Mix_FadeOutChannel(-1, 45 * 20);
-		if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45 * 20); } // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
+		if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45 * 20); func_fade(); } // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 		else { Mix_HaltMusic(); }
 #endif
 
@@ -443,11 +445,13 @@ void IntroState::init()
 		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 
 #ifndef __NO_MUSIC
-		Mix_HaltChannel(-1);
-		Mix_HaltMusic();
+		Sound::stop();
+		Music::stop();
 #endif
 	}
 	Options::keepAspectRatio = _wasLetterBoxed;
+	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	_game->getScreen()->resetDisplay(false);
 	_game->setState(new MainMenuState(_game));
 }
 

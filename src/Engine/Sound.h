@@ -44,6 +44,8 @@ public:
 	void load(const void *data, unsigned int size);
 	/// Plays the sound.
 	void play(int channel = -1) const;
+	/// Stops all sounds.
+	static void stop();
 };
 
 }

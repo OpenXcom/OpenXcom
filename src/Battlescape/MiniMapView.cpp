@@ -279,13 +279,10 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 		_isMouseScrolled = true;
 
-		if (Options::dragScrollInvert)
-		{
-			// Set the mouse cursor back
-			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
-			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
-		}
+		// Set the mouse cursor back
+		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 		// Check the threshold
 		_totalMouseMoveX += action->getDetails()->motion.xrel;
@@ -331,12 +328,9 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewLevel()));
 		_redraw = true;
 
-		if (Options::dragScrollInvert)
-		{
-			// We don't want to look the mouse-cursor jumping :)
-			action->getDetails()->motion.x=_xBeforeMouseScrolling; action->getDetails()->motion.y=_yBeforeMouseScrolling;
-			_game->getCursor()->handle(action);
-		}
+		// We don't want to look the mouse-cursor jumping :)
+		action->getDetails()->motion.x=_xBeforeMouseScrolling; action->getDetails()->motion.y=_yBeforeMouseScrolling;
+		_game->getCursor()->handle(action);
 	}
 }
 

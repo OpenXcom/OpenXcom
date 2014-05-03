@@ -290,3 +290,40 @@ LangString LINK_Uninstall ${LANG_TURKISH} "Program Kaldır"
 
 LangString WARN_UFOMissing ${LANG_TURKISH} "X-COM 1 bu dizinde bulunamadı. ${GAME_NAME} için geçerli bir X-COM kurulumu zorunludur. Devam?"
 LangString WARN_XCUDetected ${LANG_TURKISH} "XcomUtil tespit edildi. ${GAME_NAME} XcomUtil ile uyumlu olmadığından tuhaf sorunlarla karşılabilirsiniz. Devam?"
+
+;================SPANISH================
+
+;--------------------------------
+;Pages
+   
+LangString PAGE_UfoFolder ${LANG_SPANISH} "${GAME_NAME} requiere una copia de UFO: Enemy Unknown / X-COM: UFO Defense. Puede omitir este paso si va a actualizar una instalación existente.$\n$\nEl programa de instalación copiará los archivos necesarios en la siguiente carpeta. Para copiar desde una carpeta diferente, presione en Explorar y seleccione otra carpeta. Precione en Siguiente para continuar."
+LangString PAGE_UfoFolder_TITLE ${LANG_SPANISH} "Selecione ubicación X-COM 1 "
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_SPANISH} "Selecione la carpeta donde tiene X-COM 1 instalado."
+LangString DEST_UfoFolder ${LANG_SPANISH} "X-COM 1 carpeta"
+;--------------------------------
+;Installer Sections
+   
+LangString NAME_SecMain ${LANG_SPANISH} "Archivos del juego"
+LangString DESC_SecMain ${LANG_SPANISH} "Archivos necesarios para ejecutar ${GAME_NAME}."
+LangString NAME_SecPatch ${LANG_SPANISH} "Parche de datos"
+LangString DESC_SecPatch ${LANG_SPANISH} "Corrige los errores en los datos de X-COM 1. Recomendado para instalaciones iniciales. (requiere una conexión al Internet)"
+LangString NAME_SecDesktop ${LANG_SPANISH} "Atajo en el escritorio"
+LangString DESC_SecDesktop ${LANG_SPANISH} "Crea un acceso directo en el escritorio para jugar ${GAME_NAME}."
+   
+;--------------------------------
+;Uninstaller Descriptions
+LangString NAME_UnData ${LANG_SPANISH} "Borra datos de X-COM"
+LangString DESC_UnData ${LANG_SPANISH} "Borra todos los datos de ${GAME_NAME}, incluyendo mods y los recursos de X-COM. Recomendado para una reinstalación limpia."
+LangString NAME_UnUser ${LANG_SPANISH} "Borra datos de usuario"
+LangString DESC_UnUser ${LANG_SPANISH} "Borra todos los datos del usuario ${GAME_NAME}, incluyendo partidas guardadas, capturas de pantalla y opciones. Recomendado para una limpieza completa. "
+;--------------------------------
+;Shortcuts
+LangString LINK_DataFolder ${LANG_SPANISH} "Carpeta de datos"
+LangString LINK_Readme ${LANG_SPANISH} "Leerme"
+LangString LINK_UserFolder ${LANG_SPANISH} "Carpeta de usuario"
+LangString LINK_Uninstall ${LANG_SPANISH} "Desinstalación"
+   
+;--------------------------------
+;Warnings
+LangString WARN_UFOMissing ${LANG_SPANISH} "X-COM 1 no se encuentra en esta carpeta. ${GAME_NAME} requiere una instalación válida de X-COM para ejecutarse. ¿Desea continuar?"
+LangString WARN_XCUDetected ${LANG_SPANISH} "XcomUtil detectado. ${GAME_NAME} es incompatible con XcomUtil y puede experimentar un comportamiento extraño. ¿Desea continuar?"

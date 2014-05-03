@@ -24,7 +24,9 @@
 #include "BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "Craft.h"
+#include "CraftWeapon.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/Ruleset.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
@@ -550,11 +552,11 @@ int Base::getAvailableQuarters() const
 }
 
 /**
- * Returns the amount of stores used up
- * by equipment in the base.
+ * Returns the amount of stores used up by equipment in the base,
+ * and equipment about to arrive.
  * @return Storage space.
  */
-int Base::getUsedStores() const
+double Base::getUsedStores()
 {
 	double total = _items->getTotalSize(_rule);
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
@@ -571,8 +573,29 @@ int Base::getUsedStores() const
 		{
 			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
 		}
+		else if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			Craft *craft = (*i)->getCraft();
+			total += craft->getItems()->getTotalSize(_rule);
+		}
 	}
-	return (int)floor(total);
+	total -= getIgnoredStores();
+	return total;
+}
+
+/**
+ * Checks if the base's stores are overfull.
+ *
+ * Supplying an offset will add/subtract to the used capacity before performing the check.
+ * A positive offset simulates adding items to the stores, whereas a negative offset
+ * can be used to check whether sufficient items have been removed to stop the stores overflowing.
+ * @param offset Adjusts the used capacity, expressed in tenths of an XCom storage unit.
+ */
+bool Base::storesOverfull(int offset)
+{
+	int capacity = getAvailableStores() * 10;
+	int used = (int)(getUsedStores() * 10 + 0.5);
+	return used + offset > capacity;
 }
 
 /**
@@ -591,6 +614,40 @@ int Base::getAvailableStores() const
 		}
 	}
 	return total;
+}
+
+/**
+ * Determines space taken up by ammo clips about to rearm craft.
+ * @return Ignored storage space.
+ */
+double Base::getIgnoredStores()
+{
+	double space = 0;
+	for (std::vector<Craft*>::iterator c = getCrafts()->begin(); c != getCrafts()->end(); ++c)
+	{
+		if ((*c)->getStatus() == "STR_REARMING")
+		{
+			for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end() ; ++w)
+			{
+				if (*w != 0 && (*w)->isRearming())
+				{
+					std::string clip = (*w)->getRules()->getClipItem();
+					int available = getItems()->getItem(clip);
+					if (clip != "" && available > 0)
+					{
+						int clipSize = _rule->getItem(clip)->getClipSize();
+						int needed;
+						if (clipSize > 0)
+						{
+							needed = ((*w)->getRules()->getAmmoMax() - (*w)->getAmmo()) / clipSize;
+						}
+						space += std::min(available, needed) * _rule->getItem(clip)->getSize();
+					}
+				}
+			}
+		}
+	}
+	return space;
 }
 
 /**
@@ -1036,7 +1093,7 @@ int Base::getUsedContainment() const
 			}
 		}
 	}
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 		{
@@ -1489,9 +1546,10 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	}
 	else if ((*facility)->getRules()->getStorage())
 	{
-		// we won't destroy the items physically AT the base, 
+		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
-		if ((getAvailableStores() - getUsedStores()) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
+		if ((getAvailableStores() - (int)floor(getUsedStores() + 0.05)) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
+
 		{
 			for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); )
 			{
