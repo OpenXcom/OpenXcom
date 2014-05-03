@@ -40,6 +40,7 @@ class Language;
 class EquipmentLayoutItem;
 class SoldierDeath;
 class SoldierDiary;
+class SavedGame;
 
 /**
  * Represents a soldier hired by the player.
@@ -70,7 +71,7 @@ public:
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Loads the soldier from YAML.
-	void load(const YAML::Node& node, const Ruleset *rule);
+	void load(const YAML::Node& node, const Ruleset *rule, SavedGame *save);
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.
@@ -142,7 +143,7 @@ public:
 	/// Gets the soldier's diary.
 	SoldierDiary *getDiary();
 	/// Calculate statString.
-	void calcStatString(const std::vector<StatString *> &statStrings);
+	void calcStatString(const std::vector<StatString *> &statStrings, bool psiStrengthEval);
 };
 
 }

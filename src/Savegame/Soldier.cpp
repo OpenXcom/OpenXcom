@@ -28,6 +28,8 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/StatString.h"
+#include "../Engine/Options.h"
+#include "SavedGame.h"
 
 namespace OpenXcom
 {
@@ -94,8 +96,9 @@ Soldier::~Soldier()
  * Loads the soldier from a YAML file.
  * @param node YAML node.
  * @param rule Game ruleset.
+ * @param save Pointer to savegame.
  */
-void Soldier::load(const YAML::Node &node, const Ruleset *rule)
+void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 {
 	_id = node["id"].as<int>(_id);
 	_name = Language::utf8ToWstr(node["name"].as<std::string>());
@@ -130,7 +133,7 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
 	}
-	calcStatString(rule->getStatStrings());
+	calcStatString(rule->getStatStrings(), (Options::psiStrengthEval && save->isResearched(rule->getPsiRequirements())));
 }
 
 /**
@@ -585,9 +588,9 @@ SoldierDiary *Soldier::getDiary()
 /**
  * Calculates the soldier's statString
  */
-void Soldier::calcStatString(const std::vector<StatString *> &statStrings)
+void Soldier::calcStatString(const std::vector<StatString *> &statStrings, bool psiStrengthEval)
 {
-	_statString = StatString::calcStatString(_currentStats, statStrings);
+	_statString = StatString::calcStatString(_currentStats, statStrings, psiStrengthEval);
 }
 
 }

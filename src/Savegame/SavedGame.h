@@ -116,6 +116,11 @@ struct MissionStatistics
     ~MissionStatistics() { }
 };
 
+ /**
+ * Enumerator for the various save types.
+ */
+enum SaveType { SAVE_DEFAULT, SAVE_QUICK, SAVE_AUTO_GEOSCAPE, SAVE_AUTO_BATTLESCAPE, SAVE_IRONMAN, SAVE_IRONMAN_END };
+
 /**
  * Container for savegame info displayed on listings.
  */

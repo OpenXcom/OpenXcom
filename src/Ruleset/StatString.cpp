@@ -58,10 +58,12 @@ StatStringCondition *StatString::getCondition(const std::string &conditionName, 
 {
 	// These are the defaults from xcomutil
 	int minValue = 0, maxValue = 255;
-	if (node[conditionName][0]) {
+	if (node[conditionName][0])
+	{
 		minValue = node[conditionName][0].as<int>(minValue);
 	}
-	if (node[conditionName][1]) {
+	if (node[conditionName][1])
+	{
 		maxValue = node[conditionName][1].as<int>(maxValue);
 	}
 	StatStringCondition *thisCondition = new StatStringCondition(conditionName, minValue, maxValue);
@@ -78,13 +80,12 @@ const std::string StatString::getString()
 	return _stringToBeAddedIfAllConditionsAreMet;
 }
 
-const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings)
+const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval)
 {
 	unsigned int conditionsMet;
 	int minVal, maxVal;
 	std::string conditionName, string;
-	std::wstring wstring;
-	std::wstring statString = L"";
+	std::wstring wstring, statString;
 	bool continueCalc = true;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
 
@@ -100,13 +101,17 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 			maxVal = (*i2)->getMaxVal();
 			if (currentStatsMap.find(conditionName) != currentStatsMap.end())
 			{
-				if (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal) {
-						conditionsMet++;
+				if (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal
+					&& conditionName != "psiStrength" || (currentStats.psiSkill > 0 || psiStrengthEval))
+				{
+					conditionsMet++;
 				}
-				if (conditionsMet == conditions.size()) {
+				if (conditionsMet == conditions.size())
+				{
 					wstring.assign(string.begin(), string.end());
 					statString = statString + wstring;
-					if (wstring.length() > 1) {
+					if (wstring.length() > 1)
+					{
 						continueCalc = false;
 					}
 				}
@@ -114,25 +119,6 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 		}
 	}
 	return statString;
-}
-
-/**
- * Get the ConditionNames vector.
- */
-std::vector<std::string> StatString::getConditionNames()
-{
-	std::vector<std::string> conditionNames;
-	conditionNames.push_back("psiStrength");
-	conditionNames.push_back("psiSkill");
-	conditionNames.push_back("bravery");
-	conditionNames.push_back("strength");
-	conditionNames.push_back("firing");
-	conditionNames.push_back("reactions");
-	conditionNames.push_back("stamina");
-	conditionNames.push_back("tu");
-	conditionNames.push_back("health");
-	conditionNames.push_back("throwing");
-	return conditionNames;
 }
 
 /**

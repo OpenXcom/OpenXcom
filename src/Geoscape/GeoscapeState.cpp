@@ -106,6 +106,7 @@
 #include "DefeatState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
+#include "../Menu/ListSaveState.h"
 
 namespace OpenXcom
 {
@@ -449,19 +450,19 @@ void GeoscapeState::handle(Action *action)
 			}
 		}
 		// quick save and quick load
-		if (!_game->getSavedGame()->isIronman())
+		else if (!_game->getSavedGame()->isIronman())
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
-				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
+				_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_QUICK));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
-				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, SavedGame::QUICKSAVE));
+				_game->pushState(new LoadGameState(_game, OPT_GEOSCAPE, SAVE_QUICK));
 			}
 		}
 	}
-	if(!_dogfights.empty())
+	if (!_dogfights.empty())
 	{
 		for(std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 		{
@@ -485,6 +486,12 @@ void GeoscapeState::init()
 	_globe->rotateStop();
 	_globe->setFocus(true);
 	_globe->draw();
+
+	// Pop up save screen if it's a new ironman game
+	if (_game->getSavedGame()->isIronman() && _game->getSavedGame()->getName().empty())
+	{
+		popup(new ListSaveState(_game, OPT_GEOSCAPE));
+	}
 
 	// Set music if it's not already playing
 	if (_dogfights.empty() && !_dogfightStartTimer->isRunning())
@@ -1601,11 +1608,11 @@ void GeoscapeState::time1Day()
 	{
 		if (_game->getSavedGame()->isIronman())
 		{
-
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN));
 		}
 		else if (Options::autosave)
 		{
-			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
 		}
 	}
 }

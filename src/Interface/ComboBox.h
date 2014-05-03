@@ -91,7 +91,7 @@ public:
 	/// Handle arrow buttons.
 	void handle(Action *action, State *state);
 	/// Toggles the combo box state.
-	void toggle();
+	void toggle(bool first = false);
 	/// Hooks an action handler to when the slider changes.
 	void onChange(ActionHandler handler);
 };

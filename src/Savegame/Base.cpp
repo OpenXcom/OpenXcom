@@ -133,7 +133,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	for (YAML::const_iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-		s->load(*i, _rule);
+		s->load(*i, _rule, save);
 		s->setCraft(0);
 		if (const YAML::Node &craft = (*i)["craft"])
 		{
@@ -173,7 +173,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	{
 		int hours = (*i)["hours"].as<int>();
 		Transfer *t = new Transfer(hours);
-		if (t->load(*i, this, _rule))
+		if (t->load(*i, this, _rule, save))
 		{
 			_transfers.push_back(t);
 		}

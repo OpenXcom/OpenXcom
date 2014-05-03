@@ -1331,7 +1331,7 @@ en-GB:
   STR_FIELDPROMOTIONS: "Field promotions"
   STR_FIELDPROMOTIONS_DESC: "Only soldiers that were present at the mission site are eligible for promotion."
   STR_IRONMAN: "IRONMAN"
-  STR_IRONMAN_DESC: "No manual saving. All choices are permanent."
+  STR_IRONMAN_DESC: "No manual saving"
   STR_SAVE_AND_ABANDON_GAME: "SAVE AND ABANDON GAME"
   STR_MOD_UNSUCCESSFUL: "Mod failed to load"
   STR_NEW_SAVED_GAME_SLOT: "<NEW SAVED GAME>"

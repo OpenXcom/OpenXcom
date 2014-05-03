@@ -717,7 +717,7 @@ void DebriefingState::prepareDebriefing()
 					{
 						recoverItems((*j)->getInventory(), base);
 						// calculate new statString
-						soldier->calcStatString(_game->getRuleset()->getStatStrings());
+						soldier->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 					}
 					else
 					{ // non soldier player = tank
