@@ -28,6 +28,8 @@
 #include "MainMenuState.h"
 #include "OptionsBaseState.h"
 #include "../Engine/Screen.h"
+#include "../Savegame/SavedGame.h"
+#include "SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -113,11 +115,18 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action *)
 {
-	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
-	_game->getScreen()->resetDisplay(false);
+	if (!_game->getSavedGame()->isIronman())
+	{
+		OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		_game->getScreen()->resetDisplay(false);
 
-	_game->setState(new MainMenuState(_game));
-	_game->setSavedGame(0);
+		_game->setState(new MainMenuState(_game));
+		_game->setSavedGame(0);
+	}
+	else
+	{
+		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN_END));
+	}
 }
 
 /**

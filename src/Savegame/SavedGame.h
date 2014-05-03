@@ -54,6 +54,11 @@ class Soldier;
 enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
 /**
+ * Enumerator for the various save types.
+ */
+enum SaveType { SAVE_DEFAULT, SAVE_QUICK, SAVE_AUTO_GEOSCAPE, SAVE_AUTO_BATTLESCAPE, SAVE_IRONMAN, SAVE_IRONMAN_END };
+
+/**
  * Container for savegame info displayed on listings.
  */
 struct SaveInfo

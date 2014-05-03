@@ -37,7 +37,7 @@ private:
 	char *_data;
 	size_t _size;
 	float _volume;
-	static int delay;
+	static int delay, rate;
 	static std::map<int, int> delayRates;
 public:
 	/// Creates a blank music track.
