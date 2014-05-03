@@ -25,7 +25,10 @@ namespace OpenXcom
 {
 
 /**
- * For adding a set of extra sprite data to the game.
+ * Represents a specific type of commendation.
+ * Contains constant info about a commendation like
+ * award criteria, sprite, description, etc.
+ * @sa Commendation
  */
 class RuleCommendations
 {
@@ -39,15 +42,15 @@ public:
 	RuleCommendations();
 	/// Cleans up the commendation ruleset.
 	~RuleCommendations();
-	/// Loads the unit data from YAML.
+	/// Loads commendation data from YAML.
 	void load(const YAML::Node& node);
-	/// Get commendation description
+	/// Get the commendation's description.
 	std::string getDescription() const;
-	/// Get commendation award criteria
+	/// Get the commendation's award criteria.
 	std::map<std::string, std::vector<int> > *getCriteria();
-	/// Get commendation award kill related criteria
+	/// Get the commendation's award kill related criteria.
 	std::vector<std::map<int, std::vector<std::string> > > *getKillCriteria();
-	/// Get sprite
+	/// Get the commendation's sprite.
 	int getSprite() const;
 
 };
