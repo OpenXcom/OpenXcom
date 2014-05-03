@@ -40,7 +40,7 @@ ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(
 {
 	// Create objects
 	_edtSave = new TextEdit(this, 168, 9, 0, 0);
-	_btnSaveGame = new TextButton(80, 16, 60, 172);
+	_btnSaveGame = new TextButton(_game->getSavedGame()->isIronman() ? 200 : 80, 16, 60, 172);
 
 	add(_edtSave);
 	add(_btnSaveGame);
@@ -49,7 +49,14 @@ ListSaveState::ListSaveState(Game *game, OptionsOrigin origin) : ListGamesState(
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
-	_btnCancel->setX(180);
+	if (_game->getSavedGame()->isIronman())
+	{
+		_btnCancel->setVisible(false);
+	}
+	else
+	{
+		_btnCancel->setX(180);
+	}
 
 	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
 	_btnSaveGame->setText(tr("STR_SAVE_GAME"));

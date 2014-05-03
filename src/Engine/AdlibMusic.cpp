@@ -31,6 +31,7 @@ namespace OpenXcom
 {
 
 int AdlibMusic::delay = 0;
+int AdlibMusic::rate = 0;
 std::map<int, int> AdlibMusic::delayRates;
 
 /**
@@ -46,7 +47,7 @@ AdlibMusic::AdlibMusic(float volume) : Music(), _data(0), _size(0), _volume(volu
 	{
 		opl[1] = OPLCreate(OPL_TYPE_YM3812, 3579545, Options::audioSampleRate);
 	}
-	//magic value - length of 1 tick per samplerate
+	// magic value - length of 1 tick per samplerate
 	if (delayRates.empty())
 	{
 		delayRates[8000] = 114 * 4;
@@ -57,6 +58,7 @@ AdlibMusic::AdlibMusic(float volume) : Music(), _data(0), _size(0), _volume(volu
 		delayRates[44100] = 629 * 4;
 		delayRates[48000] = 685 * 4;
 	}
+	rate = Options::audioSampleRate;
 }
 
 /**
@@ -154,7 +156,7 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 			return;
 		func_play_tick();
 
-		delay = delayRates[Options::audioSampleRate]; 
+		delay = delayRates[rate]; 
 	}
 #endif
 }
