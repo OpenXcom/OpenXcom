@@ -50,7 +50,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_btnOk = new TextButton(78, 16, 80, 164);
 	_btnCancel = new TextButton(78, 16, 162, 164);
 	_txtTitle = new Text(192, 9, 64, 20);
-	_txtIronman = new Text(90, 16, 162, 138);
+	_txtIronman = new Text(90, 24, 162, 135);
 
 	_difficulty = _btnBeginner;
 
