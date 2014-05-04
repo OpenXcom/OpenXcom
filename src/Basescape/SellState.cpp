@@ -44,7 +44,6 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -636,10 +635,10 @@ void SellState::updateItemStrings()
 	}
 
 	ss5 << _base->getUsedStores();
-	if (!AreSame(_spaceChange, 0.0))
+	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss5 << "(";
-		if (_spaceChange > 0.0)
+		if (_spaceChange > 0.05)
 			ss5 << "+";
 		ss5 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
