@@ -275,6 +275,9 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
 
+	if (_action.type != BA_THROW || _action.type != BA_LAUNCH)
+		_unit->getStatistics()->shotsFiredCounter++;
+
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel);
 
@@ -562,6 +565,7 @@ void ProjectileFlyBState::think()
 							}
 							if (victim == targetVictim) // Hit our target
 							{
+								_unit->getStatistics()->shotsLandedCounter++;
 								if (_parent->getTileEngine()->distance(_action.actor->getPosition(), victim->getPosition()) > 30)
 								{
 									_unit->getStatistics()->longDistanceHitCounter++;

@@ -45,7 +45,7 @@ public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
 	/// Creates a commendation of the specified type.
-	SoldierCommendations(std::string commendationName, std::string noun);
+	SoldierCommendations(std::string commendationName, std::string noun = "noNoun");
 	/// Cleans up the commendation.
 	~SoldierCommendations();
 	/// Loads the commendation information from YAML.
@@ -83,7 +83,7 @@ private:
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
 		_hitCounter5in1Mission;
 
-	void manageModularCommendations(std::map<std::string, int> nextCommendationLevel, std::map<std::string, int> modularCommendations, std::pair<std::string, int> statTotal, int criteria);
+	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "");
 public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
