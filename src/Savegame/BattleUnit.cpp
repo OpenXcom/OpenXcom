@@ -461,8 +461,12 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		end = 8 + 8 * (_direction % 2);
 		if (_armor->getSize() > 1)
 		{
-			if (_direction < 1 || _direction > 4)
+			if (_direction < 1 || _direction > 5)
 				middle = end;
+			else if (_direction == 5)
+				middle = 12;
+			else if (_direction == 1)
+				middle = 5;
 			else
 				middle = 1;
 		}
