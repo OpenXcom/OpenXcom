@@ -1245,6 +1245,14 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		else
 			midphase = 1;
 	}
+	else if (dir == 2)
+	{
+		midphase = 1;
+	}
+	else if (dir == 6)
+	{
+		midphase = endphase;
+	}
 
 	if (unit->getVerticalDirection())
 	{
