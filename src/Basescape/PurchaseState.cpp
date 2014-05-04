@@ -485,7 +485,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 + _crafts.size()
-		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 *_base->getUsedStores() + 0.5)))
+		&& _iQty + 10 * _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 * _base->getUsedStores() + 0.5)))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
