@@ -637,16 +637,6 @@ void Map::drawTerrain(Surface *surface)
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 					}
 
-					if (!tile->isVoid())
-					{
-						// Draw object
-						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
-						{
-							tmpSurface = tile->getSprite(MapData::O_OBJECT);
-							if (tmpSurface)
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
-						}
-					}
 					// Draw Path Preview
 					if (tile->getPreview() != -1 && tile->isDiscovered(0) && (_previewSetting & PATH_ARROWS))
 					{
@@ -662,6 +652,16 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), 0, false, tileColor);
+						}
+					}
+					if (!tile->isVoid())
+					{
+						// Draw object
+						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+						{
+							tmpSurface = tile->getSprite(MapData::O_OBJECT);
+							if (tmpSurface)
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 					}
 					// Draw cursor front
