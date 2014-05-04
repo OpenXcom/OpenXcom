@@ -320,7 +320,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				{
 					int criteria = -1;
 					if (_nextCommendationLevel.count("noNoun") != 0)
-						criteria = 0;
+						criteria = (*j).second.front();
 					else if (_nextCommendationLevel.count((*k).first) != 0  && (*j).second.at(_nextCommendationLevel.at((*k).first)))
 						criteria = (*j).second.at(_nextCommendationLevel.at((*k).first));
 					if (criteria != -1)
@@ -447,7 +447,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 void SoldierDiary::manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria)
 {
 	// If criteria is 0, we don't have this noun OR if we meet the criteria, remember the noun for award purposes
-	if ((criteria == 0 && statTotal.second >= criteria) || (criteria != 0 && nextCommendationLevel.at(statTotal.first) >= criteria))
+	if ((modularCommendations.count(statTotal.first) == 0 && statTotal.second >= criteria) || (modularCommendations.count(statTotal.first) != 0 && nextCommendationLevel.at(statTotal.first) >= criteria))
 	{
 		modularCommendations[statTotal.first]++;
 	}
