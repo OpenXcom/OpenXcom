@@ -44,6 +44,7 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
+#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -559,7 +560,7 @@ void SellState::changeByValue(int change, int dir)
 	_qtys[_sel] += dir * change;
 	_total += dir * getPrice() * change;
 
-	// Calculate the change in storage space in tenths of an XCom storage unit.
+	// Calculate the change in storage space in XCom storage units.
 	Craft *craft;
 	RuleItem *armor, *item, *weapon, *ammo;
 	double total = 0.0;
@@ -569,7 +570,7 @@ void SellState::changeByValue(int change, int dir)
 		if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 		{
 			armor = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
-			_spaceChange += dir * (int)(10 * armor->getSize());
+			_spaceChange += dir * armor->getSize();
 		}
 		break;
 	case SELL_CRAFT:
@@ -582,11 +583,11 @@ void SellState::changeByValue(int change, int dir)
 			if (ammo)
 				total += ammo->getSize() * (*w)->getClipsLoaded(_game->getRuleset());
 		}
-		_spaceChange += dir * (int)(10 * total);
+		_spaceChange += dir * total;
 		break;
 	case SELL_ITEM:
 		item = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		_spaceChange -= dir * change * (int)(10 * item->getSize());
+		_spaceChange -= dir * change * item->getSize();
 		break;
 	default:
 		break;
@@ -635,12 +636,12 @@ void SellState::updateItemStrings()
 	}
 
 	ss5 << _base->getUsedStores();
-	if (_spaceChange != 0)
+	if (!AreSame(_spaceChange, 0.0))
 	{
 		ss5 << "(";
-		if (_spaceChange > 0)
+		if (_spaceChange > 0.0)
 			ss5 << "+";
-		ss5 << std::fixed << std::setprecision(1) << (float)_spaceChange/10 << ")";
+		ss5 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));

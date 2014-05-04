@@ -54,7 +54,7 @@ private:
 	std::vector<std::string> _items;
 	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty, _aQty;
-	int _iQty;
+	double _iQty;
     int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;

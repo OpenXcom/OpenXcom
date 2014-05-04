@@ -591,10 +591,10 @@ double Base::getUsedStores()
  * can be used to check whether sufficient items have been removed to stop the stores overflowing.
  * @param offset Adjusts the used capacity, expressed in tenths of an XCom storage unit.
  */
-bool Base::storesOverfull(int offset)
+bool Base::storesOverfull(double offset)
 {
-	int capacity = getAvailableStores() * 10;
-	int used = (int)(getUsedStores() * 10 + 0.5);
+	double capacity = getAvailableStores();
+	double used = getUsedStores();
 	return used + offset > capacity;
 }
 

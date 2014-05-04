@@ -49,7 +49,8 @@ private:
 	std::vector<std::string> _crafts, _items;
 	std::vector<int> _qtys;
 	size_t _sel, _itemOffset;
-	int _total, _pQty, _cQty, _iQty;
+	int _total, _pQty, _cQty;
+	double _iQty;
 	Timer *_timerInc, *_timerDec;
 	/// Gets selected price.
 	int getPrice();

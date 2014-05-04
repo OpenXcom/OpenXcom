@@ -54,7 +54,8 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	size_t _sel, _itemOffset;
-	int _total, _hasSci, _hasEng, _spaceChange;
+	int _total, _hasSci, _hasEng;
+	double _spaceChange;
 	Timer *_timerInc, *_timerDec;
 	Uint8 _color, _color2, _color3, _colorAmmo;
 	/// Gets selected price.

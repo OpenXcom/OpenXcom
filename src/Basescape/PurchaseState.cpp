@@ -19,6 +19,7 @@
 #include "PurchaseState.h"
 #include <sstream>
 #include <climits>
+#include <cfloat>
 #include <cmath>
 #include <iomanip>
 #include "../aresame.h"
@@ -53,7 +54,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _iQty(0)
+PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -485,7 +486,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 + _crafts.size()
-		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > (10 * _base->getAvailableStores() - (int)(10 *_base->getUsedStores() + 0.5)))
+		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -513,18 +514,14 @@ void PurchaseState::increaseByValue(int change)
 			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()]);
 
 			// Item count
-			int storesNeededPerItem = (int)(10 * rule->getSize());
-			int freeStores = 10 * _base->getAvailableStores() - (int)(10 * _base->getUsedStores() + 0.5) - _iQty;
-			int maxByStores;
-			if (storesNeededPerItem == 0)
-			{
-				maxByStores = INT_MAX;
-			}
-			else
+			double storesNeededPerItem = rule->getSize();
+			double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
+			double maxByStores = DBL_MAX;
+			if (!AreSame(storesNeededPerItem, 0.0))
 			{
 				maxByStores = freeStores / storesNeededPerItem;
 			}
-			change = std::min(maxByStores, change);
+			change = std::min((int)maxByStores, change);
 			_iQty += change * storesNeededPerItem;
 		}
 		_qtys[_sel] += change;
@@ -553,13 +550,20 @@ void PurchaseState::decreaseByValue(int change)
 	change = std::min(_qtys[_sel], change);
 
 	// Personnel count
-	if (_sel <= 2) _pQty -= change;
+	if (_sel <= 2)
+	{
+		_pQty -= change;
+	}
 	// Craft count
-	else if (_sel >= 3 && _sel < 3 + _crafts.size()) _cQty -= change;
+	else if (_sel >= 3 && _sel < 3 + _crafts.size())
+	{
+		_cQty -= change;
+	}
 	// Item count
 	else
-		 _iQty -= (int)(10 * _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()) * change;
-
+	{
+		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * change;
+	}
 	_qtys[_sel] -= change;
 	_total -= getPrice() * change;
 	updateItemStrings();
@@ -591,12 +595,12 @@ void PurchaseState::updateItemStrings()
 		}
 	}
 	ss5 << _base->getUsedStores();
-	if (_iQty != 0)
+	if (!AreSame(_iQty, 0.0))
 	{
 		ss5 << "(";
-		if (_iQty > 0)
+		if (_iQty > 0.0)
 			ss5 << "+";
-		ss5 << std::fixed << std::setprecision(1) << (float)_iQty/10 << ")";
+		ss5 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));

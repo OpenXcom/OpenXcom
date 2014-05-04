@@ -208,7 +208,7 @@ const std::vector<std::string> &RuleItem::getRequirements() const
  * takes up in a storage facility.
  * @return The storage size.
  */
-float RuleItem::getSize() const
+double RuleItem::getSize() const
 {
 	return _size;
 }
