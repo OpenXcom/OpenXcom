@@ -429,7 +429,7 @@ void ProjectileFlyBState::think()
 			{
 				_unit->abortTurn();
 			}
-			if (_parent->getSave()->getSide() == FACTION_PLAYER)
+			if (_parent->getSave()->getSide() == FACTION_PLAYER || _parent->getSave()->getDebugMode())
 			{
 				_parent->setupCursor();
 			}
