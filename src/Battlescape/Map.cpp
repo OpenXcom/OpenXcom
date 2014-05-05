@@ -454,7 +454,7 @@ void Map::drawTerrain(Surface *surface)
 						/*
 						 * Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
 						 */
-						if (bu && bu->getVisible() && bu->getStatus() == STATUS_WALKING && bu->getArmor()->getSize() != 1)
+						if (bu && bu->getVisible() && bu->getStatus() == STATUS_WALKING && bu->getArmor()->getSize() != 1 && tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
 							Position tileOffset = Position(16,-8,0);
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
@@ -618,12 +618,12 @@ void Map::drawTerrain(Surface *surface)
 									tmpSurface = westUnit->getCache(&invalid, part);
 									if (tmpSurface)
 									{
-										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, tileWestShade, true);
+										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), tileWestShade, true);
 										if (westUnit->getFire() > 0)
 										{
 											frameNumber = 4 + (_animFrame / 2);
 											tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, 0);
+											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), 0);
 										}
 									}
 								}
