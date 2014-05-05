@@ -25,6 +25,31 @@
 #include "ShaderDraw.h"
 #include "ShaderMove.h"
 
+/**
+ * Script (`ScriptBase`) is build of two parts: proc (`_proc`) and ref (`_procRefData`).
+ *
+ * proc: vector of bytes describing script operations and its arguments
+ *
+ * [op0][arg][arg] [op1] [op2][arg] [op3] ...
+ *
+ * every operation have varied numbers of arguments.
+ * every argument is simple index in ref table, but script engine try keep
+ * separate every possible typ of arg: label, data, reg and const.
+ * all posible operations are stroed in macro `MACRO_PROC_DEFINITION` with its definitions.
+ *
+ * ref: table with definition of all possible arguments in script and functions that extract data form object.
+ * from ref is created array that script work on (`ScriptWorkRef`).
+ * ref have now fixed (`ScriptMaxRef`) size that can be problematic if people will create more complex scripts.
+ * hard limit is 255, after that proc type need be chanced to bigger int.
+ *
+ * Script have 4 diffrent argumetns types.
+ *
+ * label: position in proc table, read only.
+ * data: some data read form object, read only.
+ * const: const int value written in source code of script like "0", "42" or "0x13", read only, can be used in place of data arg.
+ * reg: register that store values that script work on, write/read, can be used in place of data arg.
+ */
+
 namespace OpenXcom
 {
 
@@ -99,10 +124,16 @@ inline void addShadeHelper(int& reg, const int& var)
 	if (newShade > 0xF)
 		// so dark it would flip over to another color - make it black instead
 		reg = 0xF;
-	else
+	else if(newShade >= 0)
 		reg = (reg & 0xF0) | newShade;
+	else
+		reg = (reg & 0xF0);
 }
 
+/**
+ * Main macro defining all available operation in script engine.
+ * @param IMPL macro function that access data. Take 6 args: Name, type of 4 proc args and definition of operation
+ */
 #define MACRO_PROC_DEFINITION(IMPL) \
 	/*	Name,		Arg0,	Arg1, Arg2, Arg3,	Implementation,							End excecution */ \
 	IMPL(exit,		None,	None, None, None,	{										return true; }) \
@@ -151,11 +182,20 @@ inline void addShadeHelper(int& reg, const int& var)
 //					Proc_Enum definition
 ////////////////////////////////////////////////////////////
 
+/**
+ * Macro returing enum form ProcEnum
+ */
 #define MACRO_PROC_ID(id) Proc##id
 
+/**
+ * Macro usef for creating ProcEnum from MACRO_PROC_DEFINITION
+ */
 #define MACRO_CREATE_PROC_ENUM(NAME, A0, A1, A2, A3, Impl) \
 	MACRO_PROC_ID(NAME),
 
+/**
+ * Enum storing id of all avaiable operations in script engine
+ */
 enum ProcEnum
 {
 	MACRO_PROC_DEFINITION(MACRO_CREATE_PROC_ENUM)
@@ -168,8 +208,14 @@ enum ProcEnum
 //					function definition
 ////////////////////////////////////////////////////////////
 
+/**
+ * Macro returing name of function
+ */
 #define MACRO_FUNC_ID(id) Func##id
 
+/**
+ * Macro usef for creating functions from MACRO_PROC_DEFINITION
+ */
 #define MACRO_CREATE_FUNC(NAME, A0, A1, A2, A3, Impl) \
 	inline bool MACRO_FUNC_ID(NAME)(MACRO_ARG_##A0(0) MACRO_ARG_##A1(1) MACRO_ARG_##A2(2) MACRO_ARG_##A3(3) int Dummy) Impl
 
@@ -180,6 +226,16 @@ MACRO_PROC_DEFINITION(MACRO_CREATE_FUNC)
 ////////////////////////////////////////////////////////////
 //					core loop function
 ////////////////////////////////////////////////////////////
+
+/**
+ * Core function in script engine used to executing scripts
+ * @param in arg that is visible in script under name "in"
+ * @param custom0 optional argument with is send to script under user defined name
+ * @param custom1 optional argument with is send to script under user defined name
+ * @param reg array of int storing data modified and read by script
+ * @param proc array storing operation of script
+ * @return Result of executing script
+ */
 inline Uint8 scriptExe(int in, int custom0, int custom1, int* reg, const Uint8* proc)
 {
 	memset(reg, 0, RegEnumMax*sizeof(int));
@@ -204,6 +260,9 @@ inline Uint8 scriptExe(int in, int custom0, int custom1, int* reg, const Uint8* 
 
 	#define MACRO_OP_OFFSET(i, A0, A1, A2, A3) (MACRO_ARG_OFFSET(i, A0, A1, A2, A3) - MACRO_ARG_OFFSET(4, A0, A1, A2, A3))
 
+	/**
+	 * Macro creating switch case from MACRO_PROC_DEFINITION
+	 */
 	#define MACRO_OP(NAME, A0, A1, A2, A3, Impl) \
 		case MACRO_PROC_ID(NAME): \
 			curr += 1 + MACRO_ARG_OFFSET(4, A0, A1, A2, A3) ; \
@@ -271,50 +330,73 @@ enum TokenEnum
  */
 struct SelectedToken
 {
+	///type of this token
 	TokenEnum type;
+	//iterator pointing place of first character
 	ite begin;
+	//iterator pointing place past of last character
 	ite end;
 };
 
 /**
- * Helper structur used by ScriptParser::parse
+ * Helper structure used by ScriptParser::parse
  */
 struct ParserHelper
 {
-	std::vector<Uint8> ScriptBase::* proc;
-	std::vector<ScriptData> ScriptBase::* procRefData;
+	///member pointer accessing script operations
+	std::vector<Uint8>& proc;
+	///member pointer accessing script data
+	std::vector<ScriptData>& procRefData;
+	///all available operations for script
 	const std::map<std::string, ScriptParserData>& procList;
+	///all available data for script
 	const std::map<std::string, ScriptData>& refList;
+	///temporary script data
 	std::map<std::string, ScriptData> refListCurr;
 
+	///index of used script data
 	Uint8 refIndexUsed;
-	ScriptBase* scr;
 
+	/**
+	 * Constructor
+     * @param scr parsed script
+     * @param proc member pointer accessing script operations
+     * @param procRefData member pointer accessing script data
+     * @param procList all available operations for script
+     * @param ref all available data for script
+     */
 	ParserHelper(
-			ScriptBase* scr,
-			std::vector<Uint8> ScriptBase::* proc,
-			std::vector<ScriptData> ScriptBase::* procRefData,
+			std::vector<Uint8>& proc,
+			std::vector<ScriptData>& procRefData,
 			const std::map<std::string, ScriptParserData>& procList,
 			const std::map<std::string, ScriptData>& ref):
 		proc(proc), procRefData(procRefData),
 		procList(procList), refList(ref),
 		refListCurr(),
-		refIndexUsed(RegEnumMax),
-		scr(scr)
+		refIndexUsed(RegEnumMax)
 	{
 
 	}
 
+	/**
+	 * Function finalizing parsing of script
+     */
 	void relese()
 	{
-		(scr->*procRefData).reserve(RegEnumMax + refListCurr.size());
-		(scr->*procRefData).resize(RegEnumMax);
+		procRefData.reserve(RegEnumMax + refListCurr.size());
+		procRefData.resize(RegEnumMax);
 		for(ref_ite i = refListCurr.begin(); i != refListCurr.end(); ++i)
-			(scr->*procRefData).push_back(i->second);
+			procRefData.push_back(i->second);
 
-		(scr->*proc).push_back(MACRO_PROC_ID(exit));
+		proc.push_back(MACRO_PROC_ID(exit));
 	}
 
+	/**
+	 * Function returning index of label
+     * @param s name of label
+     * @param index place where store found index of label
+     * @return true if label exists and is valid
+     */
 	bool getLabel(const std::string& s, int& index)
 	{
 		ref_ite pos = refListCurr.find(s);
@@ -331,6 +413,13 @@ struct ParserHelper
 		index = pos->second.index;
 		return true;
 	}
+
+	/**
+	 * Function setting offset of label
+     * @param s name of label
+     * @param offset set value where label is pointing
+     * @return true if operation success
+     */
 	bool setLabel(const std::string& s, int offset)
 	{
 		ref_ite pos = refListCurr.find(s);
@@ -341,6 +430,13 @@ struct ParserHelper
 		pos->second.value = offset;
 		return true;
 	}
+
+	/**
+	 * Function returning index of data (can be reg and const too)
+     * @param s name of data
+     * @param index place where store found index of data
+     * @return true if data exists and is valid
+     */
 	bool getData(const std::string& s, int& index)
 	{
 		if(getReg(s, index))
@@ -370,6 +466,13 @@ struct ParserHelper
 		index = pos->second.index;
 		return true;
 	}
+
+	/**
+	 * Function returning index of const
+     * @param s name of const
+     * @param index place where store found index of const
+     * @return true if const exists and is valid
+     */
 	bool getConst(const std::string& s, int& index)
 	{
 		ref_ite pos = refListCurr.find(s);
@@ -395,6 +498,13 @@ struct ParserHelper
 		index = pos->second.index;
 		return false;
 	}
+
+	/**
+	 * Function returning index of reg
+     * @param s name of reg
+     * @param index place where store found index of reg
+     * @return true if reg exists and is valid
+     */
 	bool getReg(const std::string& s, int& index)
 	{
 		if(s.compare("in") == 0)
@@ -425,12 +535,18 @@ struct ParserHelper
 		return false;
 	}
 
-	bool findToken(ite& i, const ite& end)
+	/**
+	 * Function finding next token in string
+     * @param pos current position in string
+     * @param end end of string
+     * @return true if pos pointing on next token
+     */
+	bool findToken(ite& pos, const ite& end)
 	{
 		bool coment = false;
-		for(; i != end; ++i)
+		for(; pos != end; ++pos)
 		{
-			const char c = *i;
+			const char c = *pos;
 			if(coment)
 			{
 				if(c == '\n')
@@ -453,14 +569,24 @@ struct ParserHelper
 		return false;
 	}
 
-	SelectedToken getToken(ite& i, const ite& end, TokenEnum excepted = TokenNone)
+	/**
+	 * Function extracting token form string
+     * @param pos current position in string
+     * @param end end of string
+     * @param excepted what token type we expecting now
+     * @return extracted token
+     */
+	SelectedToken getToken(ite& pos, const ite& end, TokenEnum excepted = TokenNone)
 	{
+		//groups of different types of ASCII characters
 		const int none = 1;
 		const int spec = 2;
 		const int digit = 3;
 		const int charHex = 4;
 		const int charRest = 5;
 		const int digitSign = 6;
+
+		//array storing data about every ASCII character
 		static short charDecoder[256] = { 0 };
 		static bool init = true;
 		if(init)
@@ -483,16 +609,16 @@ struct ParserHelper
 		}
 
 		SelectedToken token = { TokenNone, end, end };
-		if(!findToken(i, end))
+		if(!findToken(pos, end))
 			return token;
 
-		token.begin = i;
+		token.begin = pos;
 		bool hex = false;
 		int off = 0;
 
-		for(; i != end; ++i, ++off)
+		for(; pos != end; ++pos, ++off)
 		{
-			const char c = *i;
+			const char c = *pos;
 			const short decode = charDecoder[c];
 
 			//end of string
@@ -504,17 +630,24 @@ struct ParserHelper
 			{
 				if(c == ':')
 				{
+					//colon start new token, skip if we are in another one
 					if(token.type != TokenNone)
 						break;
-					++i;
+
+					++pos;
 					token.type = excepted == TokenColon ? TokenColon : TokenInvaild;
 					break;
 				}
 				else if(c == ';')
 				{
-					if(token.type != TokenNone || excepted != TokenSemicolon)
+					//semicolon start new token, skip if we are in another one
+					if(token.type != TokenNone)
 						break;
-					++i;
+					//semicolon wait for his turn, returning empty token
+					if(excepted != TokenSemicolon)
+						break;
+
+					++pos;
 					token.type = TokenSemicolon;
 					break;
 				}
@@ -533,9 +666,9 @@ struct ParserHelper
 				{
 				//start of number
 				case digitSign:
-					--off;
+					--off; //skipping +- sign
 				case digit:
-					hex = c == '0';
+					hex = c == '0'; //expecting hex number
 					token.type = TokenNumber;
 					continue;
 
@@ -553,10 +686,11 @@ struct ParserHelper
 				{
 				case charRest:
 					if(off != 1) break;
-					if(c != 'x' && c != 'X') break;
+					if(c != 'x' && c != 'X') break; //X in "0x1"
 				case charHex:
 					if(!hex) break;
 				case digit:
+					if(off == 0) hex = c == '0'; //expecting hex number
 					continue;
 				}
 				break;
@@ -572,10 +706,11 @@ struct ParserHelper
 				}
 				break;
 			}
+			//when decode == 0 or we find unexpected char we should end there
 			token.type = TokenInvaild;
 			break;
 		}
-		token.end = i;
+		token.end = pos;
 		return token;
 	}
 }; //struct ParserHelper
@@ -612,6 +747,9 @@ void ScriptBase::updateBase(ScriptWorkRef& ref, const void* t, int (*cast)(const
 namespace
 {
 
+/**
+ * struct used to bliting using script
+ */
 struct ScriptReplace
 {
 	int* proc_ref;
@@ -628,6 +766,9 @@ struct ScriptReplace
 	}
 };
 
+/**
+ * struct used to bliting using script
+ */
 struct ScriptReplaceSelf
 {
 	static inline void func(Uint8& src, const ScriptReplace& args, int, int, int)
@@ -641,6 +782,14 @@ struct ScriptReplaceSelf
 
 } //namespace
 
+/**
+ * Bliting one surface to another using script
+ * @param stack values required by script
+ * @param src source surface
+ * @param dest destination surface
+ * @param custom0 additional parameter to script
+ * @param custom1 additional parameter to script
+ */
 void ScriptBase::executeBlit(ScriptWorkRef& stack, Surface* src, Surface* dest, int custom0, int custom1) const
 {
 	ScriptReplace args = { stack.ref, &(_proc[0]), custom0, custom1 };
@@ -653,6 +802,10 @@ void ScriptBase::executeBlit(ScriptWorkRef& stack, Surface* src, Surface* dest, 
 ////////////////////////////////////////////////////////////
 //					ScriptParser class
 ////////////////////////////////////////////////////////////
+
+/**
+ * Default constructor
+ */
 ScriptParserBase::ScriptParserBase()
 {
 	//--------------------------------------------------
@@ -668,7 +821,7 @@ ScriptParserBase::ScriptParserBase()
 			Arg##A1, \
 			Arg##A2, \
 			Arg##A3, \
-			/* offsets */\
+			/* args offsets */\
 			MACRO_ARG_OFFSET(0, A0, A1, A2, A3), \
 			MACRO_ARG_OFFSET(1, A0, A1, A2, A3), \
 			MACRO_ARG_OFFSET(2, A0, A1, A2, A3), \
@@ -682,6 +835,11 @@ ScriptParserBase::ScriptParserBase()
 	#undef MACRO_ALL_INIT
 }
 
+/**
+ * Add new function extracting data for script
+ * @param s name for new data
+ * @param f void function pointer to function extrating data
+ */
 void ScriptParserBase::addFunctionBase(const std::string& s, ScriptData::voidFunc f)
 {
 	ref_ite pos = _refList.find(s);
@@ -696,32 +854,51 @@ void ScriptParserBase::addFunctionBase(const std::string& s, ScriptData::voidFun
 	}
 }
 
+/**
+ * Set name for first custom script param
+ * @param s name for first custom parameter
+ */
 void ScriptParserBase::addCustom0(const std::string& s)
 {
 	ScriptData data = { ArgReg, RegCustom0 };
 	_refList.insert(std::make_pair(s, data));
 }
 
+/**
+ * Set name for second custom script param
+ * @param s name for second custom parameter
+ */
 void ScriptParserBase::addCustom1(const std::string& s)
 {
 	ScriptData data = { ArgReg, RegCustom1 };
 	_refList.insert(std::make_pair(s, data));
 }
 
+/**
+ * Add const value to script
+ * @param s name for const
+ * @param i value
+ */
 void ScriptParserBase::addConst(const std::string& s, int i)
 {
 	ScriptData data = { ArgConst, 0, i };
 	_refList.insert(std::make_pair(s, data));
 }
 
-bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) const
+/**
+ * Parse string and write script to ScriptBase
+ * @param src struct where final script is write to
+ * @param src_code string with script
+ * @return true if string have valid script
+ */
+bool ScriptParserBase::parseBase(ScriptBase* destScript, const std::string& srcCode) const
 {
 	ParserHelper help(
-		src,
-		&ScriptBase::_proc, &ScriptBase::_procRefData,
-		_procList, _refList);
-	ite curr = src_code.begin();
-	ite end = src_code.end();
+		destScript->_proc, destScript->_procRefData,
+		_procList, _refList
+	);
+	ite curr = srcCode.begin();
+	ite end = srcCode.end();
 	if(curr == end)
 		return false;
 
@@ -751,7 +928,7 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 		SelectedToken label = { TokenNone };
 
 		SelectedToken op = help.getToken(curr, end);
-		SelectedToken args[ScriptMaxArg] = { };
+		SelectedToken args[ScriptMaxArg];
 		args[0] = help.getToken(curr, end, TokenColon);
 		if(args[0].type == TokenColon)
 		{
@@ -771,6 +948,7 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 		for(int i = 0; i < ScriptMaxArg; ++i)
 			valid &= args[i].type == TokenSymbol || args[i].type == TokenNumber || args[i].type == TokenNone;
 		valid &= f.type == TokenSemicolon;
+
 		if(!valid)
 		{
 			if(f.type != TokenSemicolon)
@@ -778,7 +956,8 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 				//fixing `line_end` position
 				while(curr != end && *curr != ';')
 					++curr;
-				++curr;
+				if(curr != end)
+					++curr;
 				line_end = curr;
 			}
 			Log(LOG_ERROR) << "invalid line: '" << std::string(line_begin, line_end) << "'\n";
@@ -796,56 +975,66 @@ bool ScriptParserBase::parseBase(ScriptBase* src, const std::string& src_code) c
 				return false;
 			}
 
-			if(!label_str.empty() && !help.setLabel(label_str, help.scr->_proc.size()))
+			if(!label_str.empty() && !help.setLabel(label_str, destScript->_proc.size()))
 			{
 				Log(LOG_ERROR) << "invalid label '"<< label_str <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 				return false;
 			}
 
+			//matching args form operation definition with args avaliable in string
 			int i = 0, j = 0;
-			help.scr->_proc.push_back(op_curr->second.procId);
+			destScript->_proc.push_back(op_curr->second.procId);
 			while(i < ScriptMaxArg && j < ScriptMaxArg)
 			{
 				std::string arg_val(args[j].begin, args[j].end);
 				switch(op_curr->second.argType[i])
 				{
+				//this is special args that arent visible in source, skip
 				case ArgNone:
 				case ArgProg:
 				case ArgTest:
 				case ArgResult:
 					++i;
 					continue;
+
+				//arg that is label
 				case ArgLabel:
 					if(!help.getLabel(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid label argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
-					help.scr->_proc.push_back(temp);
+					destScript->_proc.push_back(temp);
 					break;
+
+				//arg that is data like "solder_gender", "hp" etc. can be const or reg too.
 				case ArgData:
 					if(!help.getData(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid data argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
-					help.scr->_proc.push_back(temp);
+					destScript->_proc.push_back(temp);
 					break;
+
+				//arg that is const value e.g. "1", "-0x13"
 				case ArgConst:
 					if(!help.getConst(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid const argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
-					help.scr->_proc.push_back(temp);
+					destScript->_proc.push_back(temp);
 					break;
+
+				//arg that is reg like "in", "r0"
 				case ArgReg:
 					if(!help.getReg(arg_val, temp))
 					{
 						Log(LOG_ERROR) << "invalid reg argument '"<< arg_val <<"' in line: '" << std::string(line_begin, line_end) << "'\n";
 						return false;
 					}
-					help.scr->_proc.push_back(temp);
+					destScript->_proc.push_back(temp);
 					break;
 				}
 				++i;

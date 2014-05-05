@@ -32,7 +32,7 @@ class Surface;
 
 
 const int ScriptMaxArg = 4;
-const int ScriptMaxRef = 32;
+const int ScriptMaxRef = 64;
 
 /**
  * struct used to store definiton of used data by script
@@ -49,7 +49,7 @@ struct ScriptData
 };
 
 /**
- * struct that cache state of script data and is place of script wrtie temporaly data
+ * struct that cache state of script data and is place of script write temporary data
  */
 struct ScriptWorkRef
 {
@@ -65,6 +65,7 @@ class ScriptBase
 	std::vector<ScriptData> _procRefData;
 
 protected:
+	///destructor
 	~ScriptBase() { }
 	///common typeless part of updating data in script
 	void updateBase(ScriptWorkRef& ref, const void* t, int (*cast)(const void*, ScriptData::voidFunc)) const;
@@ -93,7 +94,7 @@ private:
 	}
 
 public:
-	///Update values in strcip form unit
+	///Update values in script form unit
 	void update(ScriptWorkRef& ref, const T* t) const
 	{
 		updateBase(ref, (const void*)t, &cast);
@@ -101,7 +102,7 @@ public:
 };
 
 /**
- * struct storing avaiable operation to scripts
+ * struct storing avaliable operation to scripts
  */
 struct ScriptParserData
 {
@@ -128,9 +129,9 @@ public:
 	///Default constructor
 	ScriptParserBase();
 
-	///Add name for first custom parametr
+	///Add name for first custom parameter
 	void addCustom0(const std::string& s);
-	///Add name for second custom parametr
+	///Add name for second custom parameter
 	void addCustom1(const std::string& s);
 	///Add const value
 	void addConst(const std::string& s, int i);
@@ -146,7 +147,7 @@ public:
 	///Default constructor
 	ScriptParser()
 	{
-		//ScriptParser requare static function in T to initialize data!
+		//ScriptParser require static function in T to initialize data!
 		T::registScript(this);
 	}
 
@@ -160,7 +161,7 @@ public:
 		return 0;
 	}
 
-	///add new funcion that will be avaiable in script
+	///add new function that will be avaliable in script
 	void addFunction(const std::string& s, typename Script<T>::typedFunc f)
 	{
 		addFunctionBase(s, reinterpret_cast<ScriptData::voidFunc>(f));
