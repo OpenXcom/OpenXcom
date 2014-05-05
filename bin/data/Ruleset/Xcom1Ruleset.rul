@@ -1996,6 +1996,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    skillApplied: false
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
