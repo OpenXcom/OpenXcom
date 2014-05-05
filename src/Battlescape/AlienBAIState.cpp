@@ -301,6 +301,7 @@ void AlienBAIState::think(BattleAction *action)
 	switch (_AIMode)
 	{
 	case AI_ESCAPE:
+		_unit->setCharging(0);
 		action->type = _escapeAction->type;
 		action->target = _escapeAction->target;
 		// end this unit's turn.
@@ -313,6 +314,7 @@ void AlienBAIState::think(BattleAction *action)
 		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
+		_unit->setCharging(0);
 		action->type = _patrolAction->type;
 		action->target = _patrolAction->target;
 		break;
@@ -343,6 +345,7 @@ void AlienBAIState::think(BattleAction *action)
 		}
 		break;
 	case AI_AMBUSH:
+		_unit->setCharging(0);
 		action->type = _ambushAction->type;
 		action->target = _ambushAction->target;
 		// face where we think our target will appear.
