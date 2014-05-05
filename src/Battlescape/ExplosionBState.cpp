@@ -200,6 +200,26 @@ void ExplosionBState::explode()
 {
 	bool terrainExplosion = false;
 	SavedBattleGame *save = _parent->getSave();
+	// last minute adjustment: determine if we actually 
+	if (_parent->getCurrentAction()->type == BA_HIT || _parent->getCurrentAction()->type == BA_STUN)
+	{
+		BattleUnit *targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
+		if (_unit && !_unit->isOut())
+		{
+			_unit->aim(false);
+		}
+		if (!RNG::percent(_unit->getFiringAccuracy(_parent->getCurrentAction()->type, _item)))
+		{
+			_parent->getMap()->cacheUnits();
+			_parent->popState();
+			return;
+		}
+		else if (targetUnit && targetUnit->getOriginalFaction() == FACTION_HOSTILE &&
+				_unit->getOriginalFaction() == FACTION_PLAYER)
+		{
+			_unit->addMeleeExp();
+		}
+	}
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
