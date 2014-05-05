@@ -44,7 +44,6 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -560,7 +559,7 @@ void SellState::changeByValue(int change, int dir)
 	_qtys[_sel] += dir * change;
 	_total += dir * getPrice() * change;
 
-	// Calculate the change in storage space in XCom storage units.
+	// Calculate the change in storage space.
 	Craft *craft;
 	RuleItem *armor, *item, *weapon, *ammo;
 	double total = 0.0;
@@ -636,10 +635,10 @@ void SellState::updateItemStrings()
 	}
 
 	ss5 << _base->getUsedStores();
-	if (!AreSame(_spaceChange, 0.0))
+	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss5 << "(";
-		if (_spaceChange > 0.0)
+		if (_spaceChange > 0.05)
 			ss5 << "+";
 		ss5 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}

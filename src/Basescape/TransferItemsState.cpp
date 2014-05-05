@@ -621,10 +621,9 @@ void TransferItemsState::increaseByValue(int change)
 		double storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
 		double freeStores = _baseTo->getAvailableStores() - _baseTo->getUsedStores() - _iQty;
 		double freeStoresForItem = DBL_MAX;
-
 		if (!AreSame(storesNeededPerItem, 0.0))
 		{
-			freeStoresForItem = freeStores / storesNeededPerItem;
+			freeStoresForItem = (freeStores + 0.05) / storesNeededPerItem;
 		}
 		change = std::min(std::min((int)freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
 		_iQty += change * storesNeededPerItem;

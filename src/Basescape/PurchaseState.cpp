@@ -519,7 +519,7 @@ void PurchaseState::increaseByValue(int change)
 			double maxByStores = DBL_MAX;
 			if (!AreSame(storesNeededPerItem, 0.0))
 			{
-				maxByStores = freeStores / storesNeededPerItem;
+				maxByStores = (freeStores + 0.05) / storesNeededPerItem;
 			}
 			change = std::min((int)maxByStores, change);
 			_iQty += change * storesNeededPerItem;
@@ -595,10 +595,10 @@ void PurchaseState::updateItemStrings()
 		}
 	}
 	ss5 << _base->getUsedStores();
-	if (!AreSame(_iQty, 0.0))
+	if (std::abs(_iQty) > 0.05)
 	{
 		ss5 << "(";
-		if (_iQty > 0.0)
+		if (_iQty > 0.05)
 			ss5 << "+";
 		ss5 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
