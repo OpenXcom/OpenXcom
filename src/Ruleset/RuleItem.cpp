@@ -35,7 +35,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
 											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
 											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit(""),
-											_strengthApplied(false), _skillApplied(true), _LOSRequired(false), _meleeSound(39), _meleePower(0)
+											_strengthApplied(false), _skillApplied(true), _LOSRequired(false), _meleeSound(39), _meleePower(0), _meleeAnimation(0), _meleeHitSound(-1)
 {
 }
 
@@ -117,6 +117,20 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		// SMOKE.PCK: 56 entries
 		if (_hitAnimation > 55)
 			_hitAnimation += modIndex;
+	}
+	if (node["meleeAnimation"])
+	{
+		_meleeAnimation = node["meleeAnimation"].as<int>(_meleeAnimation);
+		// HIT.PCK: 4 entries
+		if (_meleeAnimation > 3)
+			_meleeAnimation += modIndex;
+	}
+	if (node["meleeHitSound"])
+	{
+		_meleeHitSound = node["meleeHitSound"].as<int>(_meleeHitSound);
+		// BATTLE.CAT: 55 entries
+		if (_meleeHitSound > 54)
+			_meleeHitSound += modIndex;
 	}
 	_power = node["power"].as<int>(_power);
 	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
@@ -824,12 +838,21 @@ bool RuleItem::isSkillApplied() const
 }
 
 /**
- * What sound does this weapon make when you punch someone in the face with it?
- * @return The weapon's melee sound.
+ * What sound does this weapon make when you swing this at someone?
+ * @return The weapon's melee attack sound.
  */
-int RuleItem::getMeleeSound() const
+int RuleItem::getMeleeAttackSound() const
 {
 	return _meleeSound;
+}
+
+/**
+ * What sound does this weapon make when you punch someone in the face with it?
+ * @return The weapon's melee hit sound.
+ */
+int RuleItem::getMeleeHitSound() const
+{
+	return _meleeHitSound;
 }
 
 /**
@@ -848,5 +871,14 @@ int RuleItem::getMeleePower() const
 bool RuleItem::isLOSRequired() const
 {
 	return _LOSRequired;
+}
+
+/**
+ * What is the starting frame offset in hit.pck to use for the animation?
+ * @return the starting frame offset in hit.pck to use for the animation.
+ */
+int RuleItem::getMeleeAnimation() const
+{
+	return _meleeAnimation;
 }
 }

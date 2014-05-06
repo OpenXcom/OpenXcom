@@ -67,7 +67,7 @@ private:
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
 	bool _strengthApplied, _skillApplied, _LOSRequired;
-	int _meleeSound, _meleePower;
+	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -207,12 +207,16 @@ public:
 	std::string getZombieUnit() const;
 	/// Is strength applied to the damage of this weapon?
 	bool isStrengthApplied() const;
-	/// Is skill applied to the damage of this weapon?
+	/// Is skill applied to the accuracy of this weapon?
 	bool isSkillApplied() const;
+	/// What sound does this weapon make when you swing this at someone?
+	int getMeleeAttackSound() const;
 	/// What sound does this weapon make when you punch someone in the face with it?
-	int getMeleeSound() const;
+	int getMeleeHitSound() const;
 	/// Ok, so this isn't a melee type weapon but we're using it for melee... how much damage should it do?
 	int getMeleePower() const;
+	/// Get the melee animation starting frame (comes from hit.pck).
+	int getMeleeAnimation() const;
 	/// Check if LOS is required to use this item (only applies to psionic type items)
 	bool isLOSRequired() const;
 };

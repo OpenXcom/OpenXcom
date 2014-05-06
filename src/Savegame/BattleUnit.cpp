@@ -1287,8 +1287,9 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 	else if (actionType == BA_HIT || actionType == BA_STUN)
 	{
 		if (item->getRules()->isSkillApplied())
-			return getStats()->melee * (item->getRules()->getAccuracyMelee() / 100) * (getAccuracyModifier(item) / 100);
-
+		{
+			return (getStats()->melee * item->getRules()->getAccuracyMelee() / 100) * getAccuracyModifier(item) / 100;
+		}
 		return item->getRules()->getAccuracyMelee() * getAccuracyModifier(item) / 100;
 	}
 

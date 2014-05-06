@@ -148,14 +148,16 @@ void ExplosionBState::init()
 		int sound = _item->getRules()->getHitSound();
 		if (hit)
 		{
-			anim = 0;
-			sound = _item->getRules()->getMeleeSound();
+			anim = _item->getRules()->getMeleeAnimation();
+		}
+		if (sound != -1)
+		{
+			// bullet hit sound
+			_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
 		}
 		Explosion *explosion = new Explosion(_center, anim, false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
-		
-		// bullet hit sound
-		_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
+		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
 		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
@@ -203,12 +205,13 @@ void ExplosionBState::explode()
 	// last minute adjustment: determine if we actually 
 	if (_parent->getCurrentAction()->type == BA_HIT || _parent->getCurrentAction()->type == BA_STUN)
 	{
+		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 		BattleUnit *targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
 		if (_unit && !_unit->isOut())
 		{
 			_unit->aim(false);
 		}
-		if (!RNG::percent(_unit->getFiringAccuracy(_parent->getCurrentAction()->type, _item)))
+		if (!RNG::percent(_unit->getFiringAccuracy(BA_HIT, _item)))
 		{
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
@@ -218,6 +221,10 @@ void ExplosionBState::explode()
 				_unit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			_unit->addMeleeExp();
+		}
+		if (_item->getRules()->getMeleeHitSound() != -1)
+		{
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getMeleeHitSound())->play();
 		}
 	}
 	// after the animation is done, the real explosion/hit takes place

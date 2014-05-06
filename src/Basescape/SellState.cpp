@@ -576,11 +576,14 @@ void SellState::changeByValue(int change, int dir)
 		craft = _crafts[getCraftIndex(_sel)];
 		for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 		{
-			weapon = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
-			total += weapon->getSize();
-			ammo = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
-			if (ammo)
-				total += ammo->getSize() * (*w)->getClipsLoaded(_game->getRuleset());
+			if (*w)
+			{
+				weapon = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
+				total += weapon->getSize();
+				ammo = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
+				if (ammo)
+					total += ammo->getSize() * (*w)->getClipsLoaded(_game->getRuleset());
+			}
 		}
 		_spaceChange += dir * total;
 		break;
