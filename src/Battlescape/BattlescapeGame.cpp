@@ -972,14 +972,14 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 	{
 		effectiveTuReserved = BA_AIMEDSHOT;
 	}
-	const int tuKneel = _kneelReserved ? 4 : 0;
-	if ((effectiveTuReserved != BA_NONE || _kneelReserved) &&
+	const int tuKneel = getKneelReserved() ? 4 : 0;
+	if ((effectiveTuReserved != BA_NONE || getKneelReserved()) &&
 		tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		(tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits() || justChecking))
 	{
 		if (!justChecking)
 		{
-			if (_kneelReserved)
+			if (getKneelReserved())
 			{
 				switch (effectiveTuReserved)
 				{
@@ -1292,7 +1292,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			_currentAction.target = pos;
 			getMap()->setCursorType(CT_NONE);
-			
+
 			if (Options::battleConfirmFireMode)
 			{
 				_currentAction.waypoints.clear();
@@ -1989,8 +1989,8 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
  */
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
-	_kneelReserved = reserved;
-	_save->setKneelReserved(reserved);
+	_kneelReserved = (_save->getSelectedUnit() && _save->getSelectedUnit()->getGeoscapeSoldier()) ? reserved : false;
+	_save->setKneelReserved(_kneelReserved);
 }
 
 /**
