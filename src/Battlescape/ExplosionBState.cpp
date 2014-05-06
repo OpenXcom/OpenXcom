@@ -148,14 +148,16 @@ void ExplosionBState::init()
 		int sound = _item->getRules()->getHitSound();
 		if (hit)
 		{
-			anim = 0;
-			sound = _item->getRules()->getMeleeSound();
+			anim = _item->getRules()->getMeleeAnimation();
+		}
+		if (sound != -1)
+		{
+			// bullet hit sound
+			_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
 		}
 		Explosion *explosion = new Explosion(_center, anim, false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
 		
-		// bullet hit sound
-		_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
 
 		BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
 		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
@@ -218,6 +220,10 @@ void ExplosionBState::explode()
 				_unit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			_unit->addMeleeExp();
+		}
+		if (_item->getRules()->getMeleeHitSound() != -1)
+		{
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getMeleeHitSound())->play();
 		}
 	}
 	// after the animation is done, the real explosion/hit takes place

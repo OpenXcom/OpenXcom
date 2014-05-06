@@ -1972,7 +1972,7 @@ items:
     bigSprite: 33
     floorSprite: 32
     handSprite: 88
-    meleeSound: 36
+    hitSound: 36
     battleType: 9
     twoHanded: true
     invWidth: 1
@@ -2831,7 +2831,7 @@ items:
 # Usage of this is hard-coded.
 # DO NOT DELETE!
   - type: ALIEN_PSI_WEAPON
-    meleeSound: 36
+    hitSound: 36
     battleType: 9
     tuUse: 25
     flatRate: true
