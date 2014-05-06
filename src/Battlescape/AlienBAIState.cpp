@@ -157,6 +157,10 @@ void AlienBAIState::think(BattleAction *action)
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
+	if(_unit->getCharging() && _unit->getCharging()->isOut())
+	{
+		_unit->setCharging(0);
+	}
 
 	if (_traceAI)
 	{
@@ -1128,11 +1132,11 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 					if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
 					{
 						_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
-						if (_save->getPathfinding()->getStartDirection() != -1 && _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
+						if (_save->getPathfinding()->getStartDirection() != -1 && _save->getPathfinding()->getPath().size() < distance)
 						{
 							_attackAction->target = checkPath;
 							returnValue = true;
-							distance = _save->getTileEngine()->distance(checkPath, _unit->getPosition());
+							distance = _save->getPathfinding()->getPath().size();
 						}
 						_save->getPathfinding()->abortPath();
 					}
@@ -1148,6 +1152,11 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
  */
 void AlienBAIState::evaluateAIMode()
 {
+	if (_unit->getCharging() && _attackAction->type != BA_RETHINK)
+	{
+		_AIMode = AI_COMBAT;
+		return;
+	}
 	// don't try to run away as often if we're a melee type, and really don't try to run away if we have a viable melee target, or we still have 50% or more TUs remaining.
 	int escapeOdds = 15;
 	if (_melee)
@@ -1535,7 +1544,7 @@ void AlienBAIState::meleeAction()
 {
 	if (_aggroTarget != 0 && !_aggroTarget->isOut())
 	{
-		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirection()))
+		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _save->getTileEngine()->getDirectionTo(_unit->getPosition(), _aggroTarget->getPosition())))
 		{
 			meleeAttack();
 			return;
