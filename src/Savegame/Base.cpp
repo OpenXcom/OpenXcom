@@ -133,7 +133,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	for (YAML::const_iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-		s->load(*i, _rule);
+		s->load(*i, _rule, save);
 		s->setCraft(0);
 		if (const YAML::Node &craft = (*i)["craft"])
 		{
@@ -173,7 +173,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	{
 		int hours = (*i)["hours"].as<int>();
 		Transfer *t = new Transfer(hours);
-		if (t->load(*i, this, _rule))
+		if (t->load(*i, this, _rule, save))
 		{
 			_transfers.push_back(t);
 		}
@@ -589,12 +589,12 @@ double Base::getUsedStores()
  * Supplying an offset will add/subtract to the used capacity before performing the check.
  * A positive offset simulates adding items to the stores, whereas a negative offset
  * can be used to check whether sufficient items have been removed to stop the stores overflowing.
- * @param offset Adjusts the used capacity, expressed in tenths of an XCom storage unit.
+ * @param offset Adjusts the used capacity.
  */
-bool Base::storesOverfull(int offset)
+bool Base::storesOverfull(double offset)
 {
-	int capacity = getAvailableStores() * 10;
-	int used = (int)(getUsedStores() * 10 + 0.5);
+	double capacity = getAvailableStores();
+	double used = getUsedStores();
 	return used + offset > capacity;
 }
 
@@ -1414,8 +1414,8 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 }
 
 /**
- * removes a base module, and deals with the ramifications thereof
- * @param facility an iterator reference to the facility to destroy and remove.
+ * Removes a base module, and deals with the ramifications thereof.
+ * @param facility An iterator reference to the facility to destroy and remove.
  */
 void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 {
@@ -1548,8 +1548,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	{
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
-		if ((getAvailableStores() - (int)floor(getUsedStores() + 0.05)) - (*facility)->getRules()->getStorage() < 0 && !_transfers.empty())
-
+		if (storesOverfull((*facility)->getRules()->getStorage()) && !_transfers.empty())
 		{
 			for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); )
 			{

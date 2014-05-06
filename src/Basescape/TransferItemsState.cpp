@@ -19,6 +19,7 @@
 #include "TransferItemsState.h"
 #include <sstream>
 #include <climits>
+#include <cfloat>
 #include <cmath>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -43,6 +44,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"
+#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -53,7 +55,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0), _hasSci(0), _hasEng(0), _distance(0.0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0), _hasSci(0), _hasEng(0), _distance(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -570,7 +572,7 @@ void TransferItemsState::increaseByValue(int change)
 			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
-		if (Options::storageLimitsEnforced && _baseTo->storesOverfull(_iQty + (int)(craft->getItems()->getTotalSize(_game->getRuleset()) * 10 + 0.5)))
+		if (Options::storageLimitsEnforced && _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -578,7 +580,7 @@ void TransferItemsState::increaseByValue(int change)
 		}
 	}
 	if (TRANSFER_ITEM == selType && !selItem->getAlien()
-		&& _baseTo->storesOverfull((int)(selItem->getSize() * 10 + 0.5) + _iQty))
+		&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -608,7 +610,7 @@ void TransferItemsState::increaseByValue(int change)
 		Craft *craft = _crafts[_sel - _soldiers.size()];
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
-		_iQty += (int)(10 * craft->getItems()->getTotalSize(_game->getRuleset()));
+		_iQty += craft->getItems()->getTotalSize(_game->getRuleset());
 		_baseQty[_sel]--;
 		_transferQty[_sel]++;
 		if (!Options::canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
@@ -616,19 +618,14 @@ void TransferItemsState::increaseByValue(int change)
 	// Item count
 	else if (TRANSFER_ITEM == selType && !selItem->getAlien() )
 	{
-		int storesNeededPerItem = (int)(10 * _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize());
-		int freeStores = 10 * _baseTo->getAvailableStores() - (int)(10 * _baseTo->getUsedStores()) - _iQty;
-		int freeStoresForItem;
-
-		if (storesNeededPerItem == 0)
+		double storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
+		double freeStores = _baseTo->getAvailableStores() - _baseTo->getUsedStores() - _iQty;
+		double freeStoresForItem = DBL_MAX;
+		if (!AreSame(storesNeededPerItem, 0.0))
 		{
-			freeStoresForItem = INT_MAX;
+			freeStoresForItem = (freeStores + 0.05) / storesNeededPerItem;
 		}
-		else
-		{
-			freeStoresForItem = freeStores / storesNeededPerItem;
-		}
-		change = std::min(std::min(freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
+		change = std::min(std::min((int)freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
 		_iQty += change * storesNeededPerItem;
 		_baseQty[_sel] -= change;
 		_transferQty[_sel] += change;
@@ -678,7 +675,7 @@ void TransferItemsState::decreaseByValue(int change)
 		craft = _crafts[_sel - _soldiers.size()];
 		_cQty--;
 		_pQty -= craft->getNumSoldiers();
-		_iQty -= (int)(10 * craft->getItems()->getTotalSize(_game->getRuleset()));
+		_iQty -= craft->getItems()->getTotalSize(_game->getRuleset());
 	}
 	// Item count
 	else if (TRANSFER_ITEM == selType)
@@ -686,7 +683,7 @@ void TransferItemsState::decreaseByValue(int change)
 		const RuleItem * selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 		if (!selItem->getAlien())
 		{
-			_iQty -= (int)(selItem->getSize() * 10) * change;
+			_iQty -= selItem->getSize() * change;
 		}
 		else
 		{

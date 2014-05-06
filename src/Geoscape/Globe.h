@@ -70,6 +70,12 @@ private:
 	///list of dimension of earth on screen per zoom level
 	std::vector<double> _radius;
 
+	bool _isMouseScrolling, _isMouseScrolled;
+	int _xBeforeMouseScrolling, _yBeforeMouseScrolling;
+	double _lonBeforeMouseScrolling, _latBeforeMouseScrolling;
+	Uint32 _mouseScrollingStartTime;
+	int _totalMouseMoveX, _totalMouseMoveY;
+	bool _mouseMovedOverThreshold;
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
@@ -164,6 +170,8 @@ public:
 	void drawMarkers();
 	/// Blits the globe onto another surface.
 	void blit(Surface *surface);
+	/// Special handling for mouse hover.
+	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse presses.
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.

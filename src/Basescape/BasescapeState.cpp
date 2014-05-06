@@ -511,7 +511,7 @@ void BasescapeState::handleKeyPress(Action *action)
 			                 Options::keyBaseSelect8};
 		int base = -1;
 		int key = action->getDetails()->key.keysym.sym;
-		for (int i = 0; i < MiniBaseView::MAX_BASES; ++i)
+		for (size_t i = 0; i < MiniBaseView::MAX_BASES; ++i)
 		{
 			if (key == baseKeys[i])
 			{

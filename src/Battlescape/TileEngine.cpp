@@ -287,7 +287,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								visibleUnit->getTile()->setVisible(+1);
 								visibleUnit->setVisible(true);
 							}
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER)
 								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
 								unit->addToVisibleUnits(visibleUnit);
@@ -1066,7 +1066,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				}
 			}
 
-			if (bu->getOriginalFaction() == FACTION_HOSTILE && unit && unit->getOriginalFaction() == FACTION_PLAYER && type != DT_NONE)
+			if (bu->getOriginalFaction() == FACTION_HOSTILE &&
+				unit &&
+				unit->getOriginalFaction() == FACTION_PLAYER &&
+				type != DT_NONE &&
+				_save->getBattleGame()->getCurrentAction()->type != BA_HIT &&
+				_save->getBattleGame()->getCurrentAction()->type != BA_STUN)
 			{
 				unit->addFiringExp();
 			}

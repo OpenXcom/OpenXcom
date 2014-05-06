@@ -52,14 +52,15 @@ Transfer::~Transfer()
  * @param node YAML node.
  * @param base Destination base.
  * @param rule Game ruleset.
+ * @param save Pointer to savegame.
  */
-bool Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
+bool Transfer::load(const YAML::Node& node, Base *base, const Ruleset *rule, SavedGame *save)
 {
 	_hours = node["hours"].as<int>(_hours);
 	if (const YAML::Node &soldier = node["soldier"])
 	{
 		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(soldier, rule);
+		_soldier->load(soldier, rule, save);
 	}
 	if (const YAML::Node &craft = node["craft"])
 	{

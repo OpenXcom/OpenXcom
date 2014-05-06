@@ -157,6 +157,10 @@ void AlienBAIState::think(BattleAction *action)
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
+	if(_unit->getCharging() && _unit->getCharging()->isOut())
+	{
+		_unit->setCharging(0);
+	}
 
 	if (_traceAI)
 	{
@@ -301,6 +305,7 @@ void AlienBAIState::think(BattleAction *action)
 	switch (_AIMode)
 	{
 	case AI_ESCAPE:
+		_unit->setCharging(0);
 		action->type = _escapeAction->type;
 		action->target = _escapeAction->target;
 		// end this unit's turn.
@@ -309,10 +314,25 @@ void AlienBAIState::think(BattleAction *action)
 		action->desperate = true;
 		// spin 180 at the end of your route.
 		_unit->_hidingForTurn = true;
-		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
+		_unit->setCharging(0);
+		if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
+		{
+			switch (_unit->getAggression())
+			{
+			case 0:
+				_save->getBattleGame()->setTUReserved(BA_AIMEDSHOT, false);
+				break;
+			case 1:
+				_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+				break;
+			case 2:
+				_save->getBattleGame()->setTUReserved(BA_SNAPSHOT, false);
+			default:
+				break;
+			}
+		}
 		action->type = _patrolAction->type;
 		action->target = _patrolAction->target;
 		break;
@@ -343,14 +363,13 @@ void AlienBAIState::think(BattleAction *action)
 		}
 		break;
 	case AI_AMBUSH:
+		_unit->setCharging(0);
 		action->type = _ambushAction->type;
 		action->target = _ambushAction->target;
 		// face where we think our target will appear.
 		action->finalFacing = _ambushAction->finalFacing;
 		// end this unit's turn.
 		action->finalAction = true;
-		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	default:
 		break;
@@ -517,10 +536,12 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode != 0)
 		{
-			if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_toNode->getPosition()))  == _reachable.end())
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
 			{
 				_toNode = 0;
 			}
+			_save->getPathfinding()->abortPath();
 		}
 	}
 
@@ -598,7 +619,7 @@ void AlienBAIState::setupAmbush()
 						}
 						if (score > bestScore)
 						{
-							path = _save->getPathfinding()->_path;
+							path = _save->getPathfinding()->copyPath();
 							bestScore = score;
 							_ambushTUs = (pos == _unit->getPosition()) ? 1 : ambushTUs;
 							_ambushAction->target = pos;
@@ -1113,11 +1134,11 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 					if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
 					{
 						_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
-						if (_save->getPathfinding()->getStartDirection() != -1 && _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
+						if (_save->getPathfinding()->getStartDirection() != -1 && _save->getPathfinding()->getPath().size() < distance)
 						{
 							_attackAction->target = checkPath;
 							returnValue = true;
-							distance = _save->getTileEngine()->distance(checkPath, _unit->getPosition());
+							distance = _save->getPathfinding()->getPath().size();
 						}
 						_save->getPathfinding()->abortPath();
 					}
@@ -1133,6 +1154,11 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
  */
 void AlienBAIState::evaluateAIMode()
 {
+	if (_unit->getCharging() && _attackAction->type != BA_RETHINK)
+	{
+		_AIMode = AI_COMBAT;
+		return;
+	}
 	// don't try to run away as often if we're a melee type, and really don't try to run away if we have a viable melee target, or we still have 50% or more TUs remaining.
 	int escapeOdds = 15;
 	if (_melee)
@@ -1327,7 +1353,7 @@ void AlienBAIState::evaluateAIMode()
 	// enforce the validity of our decision, and try fallback behaviour according to priority.
 	if (_AIMode == AI_COMBAT)
 	{
-		if (_aggroTarget)
+		if (_save->getTile(_attackAction->target) && _save->getTile(_attackAction->target)->getUnit())
 		{
 			if (_attackAction->type != BA_RETHINK)
 			{
@@ -1520,7 +1546,7 @@ void AlienBAIState::meleeAction()
 {
 	if (_aggroTarget != 0 && !_aggroTarget->isOut())
 	{
-		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirection()))
+		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _save->getTileEngine()->getDirectionTo(_unit->getPosition(), _aggroTarget->getPosition())))
 		{
 			meleeAttack();
 			return;

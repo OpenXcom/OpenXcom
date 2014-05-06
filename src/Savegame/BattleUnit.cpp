@@ -509,10 +509,22 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		end = 8 + 8 * (_direction % 2);
 		if (_armor->getSize() > 1)
 		{
-			if (_direction < 1 || _direction > 4)
+			if (_direction < 1 || _direction > 5)
 				middle = end;
+			else if (_direction == 5)
+				middle = 12;
+			else if (_direction == 1)
+				middle = 5;
 			else
 				middle = 1;
+		}
+		else if (_direction == 2)
+		{
+			middle = 1;
+		}
+		else if (_direction == 6)
+		{
+			middle = end;
 		}
 	}
 	if (!cache)
@@ -1333,8 +1345,14 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 		weaponAcc = item->getRules()->getAccuracyAimed();
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
-	else if (actionType == BA_HIT)
-		return getStats()->melee * (item->getRules()->getAccuracyMelee() / 100) * (getAccuracyModifier(item) / 100);
+	else if (actionType == BA_HIT || actionType == BA_STUN)
+	{
+		if (item->getRules()->isSkillApplied())
+		{
+			return (getStats()->melee * item->getRules()->getAccuracyMelee() / 100) * getAccuracyModifier(item) / 100;
+		}
+		return item->getRules()->getAccuracyMelee() * getAccuracyModifier(item) / 100;
+	}
 
 	int result = getStats()->firing * weaponAcc / 100;
 

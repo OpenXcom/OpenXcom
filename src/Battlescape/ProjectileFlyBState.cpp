@@ -86,7 +86,10 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
-	if (_parent->getPanicHandled() && _action.actor->getTimeUnits() < _action.TU)
+	if (_parent->getPanicHandled() &&
+		_action.type != BA_HIT &&
+		_action.type != BA_STUN &&
+		_action.actor->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
@@ -177,7 +180,8 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-		break;
+		performMeleeAttack();
+		return;
 	case BA_PANIC:
 	case BA_MINDCONTROL:
 		_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
@@ -187,7 +191,7 @@ void ProjectileFlyBState::init()
 		return;
 	}
 	
-	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_parent->getPanicHandled())
+	if (_action.type == BA_LAUNCH || ((SDL_GetModState() & KMOD_CTRL) != 0 && _parent->getSave()->getSide() == FACTION_PLAYER) || !_parent->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
 		_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
@@ -425,11 +429,11 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
-			if (!_action.actor->isOut())
+			if (!_unit->isOut())
 			{
 				_unit->abortTurn();
 			}
-			if (_parent->getSave()->getSide() == FACTION_PLAYER)
+			if (_parent->getSave()->getSide() == FACTION_PLAYER || _parent->getSave()->getDebugMode())
 			{
 				_parent->setupCursor();
 			}
@@ -661,4 +665,31 @@ void ProjectileFlyBState::targetFloor()
 	_targetFloor = true;
 }
 
+void ProjectileFlyBState::performMeleeAttack()
+{
+	BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
+	int height = target->getFloatHeight() + (target->getHeight() / 2);
+	Position voxel;
+	_parent->getSave()->getPathfinding()->directionToVector(_unit->getDirection(), &voxel);
+	voxel = _action.target * Position(16, 16, 24) + Position(8,8,height - _parent->getSave()->getTile(_action.target)->getTerrainLevel()) - voxel;
+	// set the soldier in an aiming position
+	_unit->aim(true);
+	_parent->getMap()->cacheUnit(_unit);
+	// and we have a lift-off
+	if (_ammo->getRules()->getMeleeAttackSound() != -1)
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getMeleeAttackSound())->play();
+	}
+	else if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getMeleeAttackSound())->play();
+	}
+	if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
+	{
+		_parent->getSave()->removeItem(_ammo);
+		_action.weapon->setAmmoItem(0);
+	}
+	_parent->getMap()->setCursorType(CT_NONE);
+	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor));
+}
 }

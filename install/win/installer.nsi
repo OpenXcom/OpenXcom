@@ -97,6 +97,7 @@
 	!insertmacro MUI_LANGUAGE "PortugueseBR"
 	!insertmacro MUI_LANGUAGE "Polish"
 	!insertmacro MUI_LANGUAGE "Romanian"
+	!insertmacro MUI_LANGUAGE "Spanish"
 	!insertmacro MUI_LANGUAGE "Turkish"
 
 	!include "installerlang.nsh" ; Language strings
