@@ -310,11 +310,25 @@ void AlienBAIState::think(BattleAction *action)
 		action->desperate = true;
 		// spin 180 at the end of your route.
 		_unit->_hidingForTurn = true;
-		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		_unit->setCharging(0);
+		if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
+		{
+			switch (_unit->getAggression())
+			{
+			case 0:
+				_save->getBattleGame()->setTUReserved(BA_AIMEDSHOT, false);
+				break;
+			case 1:
+				_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+				break;
+			case 2:
+				_save->getBattleGame()->setTUReserved(BA_SNAPSHOT, false);
+			default:
+				break;
+			}
+		}
 		action->type = _patrolAction->type;
 		action->target = _patrolAction->target;
 		break;
@@ -352,8 +366,6 @@ void AlienBAIState::think(BattleAction *action)
 		action->finalFacing = _ambushAction->finalFacing;
 		// end this unit's turn.
 		action->finalAction = true;
-		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	default:
 		break;
