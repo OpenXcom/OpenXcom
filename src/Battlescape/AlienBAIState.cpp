@@ -536,10 +536,12 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode != 0)
 		{
-			if (std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(_toNode->getPosition()))  == _reachable.end())
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
 			{
 				_toNode = 0;
 			}
+			_save->getPathfinding()->abortPath();
 		}
 	}
 
