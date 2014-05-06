@@ -1330,7 +1330,7 @@ void AlienBAIState::evaluateAIMode()
 	// enforce the validity of our decision, and try fallback behaviour according to priority.
 	if (_AIMode == AI_COMBAT)
 	{
-		if (_aggroTarget)
+		if (_save->getTile(_attackAction->target) && _save->getTile(_attackAction->target)->getUnit())
 		{
 			if (_attackAction->type != BA_RETHINK)
 			{
