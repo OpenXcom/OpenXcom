@@ -207,7 +207,7 @@ public:
 	std::string getZombieUnit() const;
 	/// Is strength applied to the damage of this weapon?
 	bool isStrengthApplied() const;
-	/// Is skill applied to the damage of this weapon?
+	/// Is skill applied to the accuracy of this weapon?
 	bool isSkillApplied() const;
 	/// What sound does this weapon make when you punch someone in the face with it?
 	int getMeleeSound() const;
