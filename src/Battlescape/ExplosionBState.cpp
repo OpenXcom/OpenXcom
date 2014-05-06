@@ -205,12 +205,13 @@ void ExplosionBState::explode()
 	// last minute adjustment: determine if we actually 
 	if (_parent->getCurrentAction()->type == BA_HIT || _parent->getCurrentAction()->type == BA_STUN)
 	{
+		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 		BattleUnit *targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
 		if (_unit && !_unit->isOut())
 		{
 			_unit->aim(false);
 		}
-		if (!RNG::percent(_unit->getFiringAccuracy(_parent->getCurrentAction()->type, _item)))
+		if (!RNG::percent(_unit->getFiringAccuracy(BA_HIT, _item)))
 		{
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
