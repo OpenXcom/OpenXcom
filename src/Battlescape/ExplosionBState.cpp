@@ -157,7 +157,7 @@ void ExplosionBState::init()
 		}
 		Explosion *explosion = new Explosion(_center, anim, false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
-		
+		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
 		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
