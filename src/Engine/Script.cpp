@@ -35,19 +35,26 @@
  * every operation have varied numbers of arguments.
  * every argument is simple index in ref table, but script engine try keep
  * separate every possible typ of arg: label, data, reg and const.
- * all posible operations are stroed in macro `MACRO_PROC_DEFINITION` with its definitions.
+ * all possible operations are stored in macro `MACRO_PROC_DEFINITION` with its definitions.
  *
  * ref: table with definition of all possible arguments in script and functions that extract data form object.
  * from ref is created array that script work on (`ScriptWorkRef`).
  * ref have now fixed (`ScriptMaxRef`) size that can be problematic if people will create more complex scripts.
  * hard limit is 255, after that proc type need be chanced to bigger int.
  *
- * Script have 4 diffrent argumetns types.
+ * Script have 4 different arguments types.
  *
  * label: position in proc table, read only.
  * data: some data read form object, read only.
  * const: const int value written in source code of script like "0", "42" or "0x13", read only, can be used in place of data arg.
  * reg: register that store values that script work on, write/read, can be used in place of data arg.
+ *
+ * Internal arguments, not accessible by end user.
+ *
+ * none: "empty" argument.
+ * prog: current position of script execution.
+ * test: variable that is used for conditions (alias of one of reg).
+ * result: final value of script execution (alias of one of reg).
  */
 
 namespace OpenXcom
