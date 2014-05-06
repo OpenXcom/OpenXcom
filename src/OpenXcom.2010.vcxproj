@@ -790,7 +790,7 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <None Include="..\res\windows\openxcom.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
