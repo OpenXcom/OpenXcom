@@ -395,7 +395,7 @@ void SoldierDiaryPerformanceState::init()
 		RuleCommendations* commendation = _game->getRuleset()->getCommendation()[(*i)->getType()];
 		std::wstringstream ss1, ss2, ss3;
 
-		if ((*i)->getNoun() != "")
+		if ((*i)->getNoun() != "noNoun")
 		{
 			ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
 			ss3 << tr(commendation->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());

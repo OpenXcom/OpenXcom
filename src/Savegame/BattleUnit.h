@@ -118,7 +118,7 @@ struct BattleUnitKills
         {
         case STATUS_DEAD:           return "STATUS_DEAD";
         case STATUS_UNCONSCIOUS:    return "STATUS_UNCONSCIOUS";
-        default:                    return "";
+        default:                    return "status error";
         }
     }
     // Convert victim Faction to string
@@ -129,7 +129,7 @@ struct BattleUnitKills
         case FACTION_PLAYER:    return "FACTION_PLAYER";
         case FACTION_HOSTILE:   return "FACTION_HOSTILE";
         case FACTION_NEUTRAL:   return "FACTION_NEUTRAL";
-        default:                return "";
+        default:                return "faction error";
         }
     }
     BattleUnitKills(const YAML::Node& node) { load(node); }

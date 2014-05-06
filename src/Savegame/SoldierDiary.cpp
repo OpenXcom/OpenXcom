@@ -124,15 +124,15 @@ YAML::Node SoldierDiary::save() const
 			node["commendations"].push_back((*i)->save());
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
-    if (_missionIdList.empty()) node["missionIdList"] = _missionIdList;
-	if (_alienRankTotal.empty()) node["alienRankTotal"] = _alienRankTotal;
-    if (_alienRaceTotal.empty()) node["alienRaceTotal"] = _alienRaceTotal;
-    if (_weaponTotal.empty()) node["weaponTotal"] = _weaponTotal;
-    if (_weaponAmmoTotal.empty()) node["weaponAmmoTotal"] = _weaponAmmoTotal;
-    if (_regionTotal.empty()) node["regionTotal"] = _regionTotal;
-    if (_countryTotal.empty()) node["countryTotal"] = _countryTotal;
-    if (_typeTotal.empty()) node["typeTotal"] = _typeTotal;
-    if (_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
+    if (!_missionIdList.empty()) node["missionIdList"] = _missionIdList;
+	if (!_alienRankTotal.empty()) node["alienRankTotal"] = _alienRankTotal;
+    if (!_alienRaceTotal.empty()) node["alienRaceTotal"] = _alienRaceTotal;
+    if (!_weaponTotal.empty()) node["weaponTotal"] = _weaponTotal;
+    if (!_weaponAmmoTotal.empty()) node["weaponAmmoTotal"] = _weaponAmmoTotal;
+    if (!_regionTotal.empty()) node["regionTotal"] = _regionTotal;
+    if (!_countryTotal.empty()) node["countryTotal"] = _countryTotal;
+    if (!_typeTotal.empty()) node["typeTotal"] = _typeTotal;
+    if (!_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
     if (_scoreTotal) node["scoreTotal"] = _scoreTotal;
     if (_killTotal) node["killTotal"] = _killTotal;
     if (_missionTotal) node["missionTotal"] = _missionTotal;
@@ -241,11 +241,16 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 	bool _awardedCommendation = false;
     std::map<std::string, int> _nextCommendationLevel;
     std::map<std::string, int> _modularCommendations;
+	bool _awardCommendation = false;
 
 	// Loop over all possible commendations
 	for (std::map<std::string, RuleCommendations *>::iterator i = _commendationsList.begin(); i != _commendationsList.end(); ++i)
 	{	
-		bool _awardCommendation = true;
+		if (_awardCommendation)
+		{
+			--i; // If we awarded the last commendation, set the iterator back one step to see if we can get it again!
+		}
+		_awardCommendation = true;
         _nextCommendationLevel.clear();
         _modularCommendations.clear();
 
@@ -430,7 +435,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                 awardCommendation((*i).first, (*j).first);
             }
 			_awardedCommendation = true;
-			--i; // Maybe we did so good, we have to see if we can get another decoration!
 		}
 	}
 
@@ -630,7 +634,7 @@ SoldierCommendations::SoldierCommendations(const YAML::Node &node)
  */
 SoldierCommendations::SoldierCommendations(std::string commendationName, std::string noun) : _type(commendationName), _noun(noun), _decorationLevel(0), _isNew(true)
 {
-	
+
 }
 
 /**
@@ -648,7 +652,7 @@ SoldierCommendations::~SoldierCommendations()
 void SoldierCommendations::load(const YAML::Node &node)
 {
 	_type = node["commendationName"].as<std::string>(_type);
-	_noun = node["noun"].as<std::string>(_noun);
+	_noun = node["noun"].as<std::string>("noNoun");
 	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
 	_isNew = node["isNew"].as<bool>(_isNew);
 }

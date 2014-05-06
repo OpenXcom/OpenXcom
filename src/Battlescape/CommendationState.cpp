@@ -102,7 +102,7 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 			{
 				std::wstringstream ss;
 				ss << "   ";
-				if ((*j)->getNoun() == "")
+				if ((*j)->getNoun() == "noNoun")
 				{
 					ss << tr((*j)->getType()).c_str();
 				}
