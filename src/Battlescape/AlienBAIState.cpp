@@ -613,7 +613,7 @@ void AlienBAIState::setupAmbush()
 						}
 						if (score > bestScore)
 						{
-							path = _save->getPathfinding()->_path;
+							path = _save->getPathfinding()->copyPath();
 							bestScore = score;
 							_ambushTUs = (pos == _unit->getPosition()) ? 1 : ambushTUs;
 							_ambushAction->target = pos;
