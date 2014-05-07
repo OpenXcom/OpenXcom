@@ -315,9 +315,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					tempTotal = _weaponTotal;
 				else if ((*j).first == "total_missions_in_a_region")
 					tempTotal = _regionTotal;
-				else if ((*j).first == "total_kills_with_a_race")
+				else if ((*j).first == "total_kills_by_race")
 					tempTotal = _alienRaceTotal;
-				else if ((*j).first == "total_kills_with_a_rank")
+				else if ((*j).first == "total_kills_by_rank")
 					tempTotal = _alienRankTotal;
 				// Loop over the map of kills
 				// match nouns and decoration levels
