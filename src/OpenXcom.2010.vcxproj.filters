@@ -847,6 +847,9 @@
     <ClCompile Include="Engine\Adlib\fmopl.cpp">
       <Filter>Engine\Adlib</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\ScrollBar.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1712,6 +1715,9 @@
     </ClInclude>
     <ClInclude Include="Engine\AdlibMusic.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ScrollBar.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -226,7 +226,7 @@ int ComboBox::getSelected() const
 void ComboBox::setSelected(int sel)
 {
 	_sel = sel;
-	if (_sel < _list->getRows())
+	if (_sel < _list->getTexts())
 		_button->setText(_list->getCellText(_sel, 0));
 }
 
