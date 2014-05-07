@@ -1656,7 +1656,7 @@ void GeoscapeState::time1Month()
 						mission->setRegion((*i)->getRules()->getType(), *_game->getRuleset());
 						int race = RNG::generate(0, _game->getRuleset()->getAlienRacesList().size()-2); // -2 to avoid "MIXED" race
 						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
-						mission->start();
+						mission->start(150);
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
 						newRetaliation = false;
 					}
@@ -2121,7 +2121,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 	terrorMission->setRegion(region->getType(), *_game->getRuleset());
 	terrorMission->setRace(terrorRace);
-	terrorMission->start();
+	terrorMission->start(150);
 	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
 
 	if (!atGameStart)
