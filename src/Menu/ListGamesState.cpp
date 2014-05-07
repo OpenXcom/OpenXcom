@@ -95,7 +95,7 @@ ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidR
 	_txtDelete = new Text(310, 9, 5, 23);
 	_txtName = new Text(150, 9, 16, 32);
 	_txtDate = new Text(110, 9, 204, 32);
-	_lstSaves = new TextList(288, 112, 8, 40);
+	_lstSaves = new TextList(288, 112, 8, 42);
 	_txtDetails = new Text(288, 16, 16, 156);
 	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
 	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
