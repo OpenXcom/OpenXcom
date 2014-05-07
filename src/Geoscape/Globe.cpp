@@ -1721,7 +1721,7 @@ void Globe::mouseOver(Action *action, State *state)
 			// the mouse-release event is missed for any reason.
 			// (checking: is the dragScroll-mouse-button still pressed?)
 			// However if the SDL is also missed the release event, then it is to no avail :(
-			if (0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::battleDragScrollButton)))
+			if (0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::globeDragScrollButton)))
 			{ // so we missed again the mouse-release :(
 				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 				if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
@@ -1781,7 +1781,7 @@ void Globe::mousePress(Action *action, State *state)
 	// Check for errors
 	if (lat == lat && lon == lon)
 	{
-		if (action->getDetails()->button.button == Options::battleDragScrollButton)
+		if (action->getDetails()->button.button == Options::globeDragScrollButton)
 		{
 			_isMouseScrolling = true;
 			_isMouseScrolled = false;
@@ -1842,8 +1842,8 @@ void Globe::mouseClick(Action *action, State *state)
 		// (this part handles the release if it is missed and now an other button is used)
 		if (_isMouseScrolling)
 		{
-			if (action->getDetails()->button.button != Options::battleDragScrollButton
-				&& 0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::battleDragScrollButton)))
+			if (action->getDetails()->button.button != Options::globeDragScrollButton
+				&& 0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::globeDragScrollButton)))
 			{ // so we missed again the mouse-release :(
 				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 				if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
@@ -1858,7 +1858,7 @@ void Globe::mouseClick(Action *action, State *state)
 		if (_isMouseScrolling)
 		{
 			// While scrolling, other buttons are ineffective
-			if (action->getDetails()->button.button == Options::battleDragScrollButton) _isMouseScrolling = false; else return;
+			if (action->getDetails()->button.button == Options::globeDragScrollButton) _isMouseScrolling = false; else return;
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 			{
