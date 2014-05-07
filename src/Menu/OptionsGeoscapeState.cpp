@@ -99,7 +99,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 
 	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
-	_cbxDragScroll->setSelected(Options::globeDragScrollButton);
+	_cbxDragScroll->setSelected(Options::geoDragScrollButton);
 	_cbxDragScroll->onChange((ActionHandler)&OptionsGeoscapeState::cbxDragScrollChange);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
 	_cbxDragScroll->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
@@ -110,7 +110,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 
 	_slrScrollSpeed->setColor(Palette::blockOffset(15)-1);
 	_slrScrollSpeed->setRange(100, 10);
-	_slrScrollSpeed->setValue(Options::globeScrollSpeed);
+	_slrScrollSpeed->setValue(Options::geoScrollSpeed);
 	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_GEO_DESC");
 	_slrScrollSpeed->onChange((ActionHandler)&OptionsGeoscapeState::slrScrollSpeedChange);
 	_slrScrollSpeed->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
@@ -191,7 +191,7 @@ OptionsGeoscapeState::~OptionsGeoscapeState()
  */
 void OptionsGeoscapeState::cbxDragScrollChange(Action *)
 {
-	Options::globeDragScrollButton = _cbxDragScroll->getSelected();
+	Options::geoDragScrollButton = _cbxDragScroll->getSelected();
 }
 
 /**
@@ -200,7 +200,7 @@ void OptionsGeoscapeState::cbxDragScrollChange(Action *)
  */
 void OptionsGeoscapeState::slrScrollSpeedChange(Action *)
 {
-	Options::globeScrollSpeed = _slrScrollSpeed->getValue();
+	Options::geoScrollSpeed = _slrScrollSpeed->getValue();
 }
 
 /**

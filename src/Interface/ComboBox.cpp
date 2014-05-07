@@ -211,10 +211,19 @@ void ComboBox::setHighContrast(bool contrast)
 }
 
 /**
+ * Changes the color of the arrow buttons in the list.
+ * @param color Color value.
+ */
+void ComboBox::setArrowColor(Uint8 color)
+{
+	_list->setArrowColor(color);
+}
+
+/**
  * Returns the currently selected option.
  * @return Selected row.
  */
-int ComboBox::getSelected() const
+size_t ComboBox::getSelected() const
 {
 	return _sel;
 }
@@ -223,11 +232,14 @@ int ComboBox::getSelected() const
  * Changes the currently selected option.
  * @return Selected row.
  */
-void ComboBox::setSelected(int sel)
+void ComboBox::setSelected(size_t sel)
 {
 	_sel = sel;
 	if (_sel < _list->getTexts())
+	{
 		_button->setText(_list->getCellText(_sel, 0));
+		_list->scrollTo(_sel - _list->getVisibleRows()/2);
+	}
 }
 
 /**

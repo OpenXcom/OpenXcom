@@ -124,8 +124,8 @@ void create()
 	_info.push_back(OptionInfo("saveOrder", (int*)&saveOrder, SORT_DATE_DESC));
 	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 80));
 	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 20));
-	_info.push_back(OptionInfo("globeScrollSpeed", &globeScrollSpeed, 20));
-	_info.push_back(OptionInfo("globeDragScrollButton", &globeDragScrollButton, SDL_BUTTON_MIDDLE));
+	_info.push_back(OptionInfo("geoScrollSpeed", &geoScrollSpeed, 20));
+	_info.push_back(OptionInfo("geoDragScrollButton", &geoDragScrollButton, SDL_BUTTON_MIDDLE));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
