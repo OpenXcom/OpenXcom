@@ -19,9 +19,7 @@
 #include "Slider.h"
 #include <cmath>
 #include <algorithm>
-#include <sstream>
 #include "../Engine/Action.h"
-#include "../Engine/Font.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/Frame.h"
@@ -176,7 +174,8 @@ void Slider::handle(Action *action, State *state)
 {
 	InteractiveSurface::handle(action, state);
 	//_button->handle(action, state);
-	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
+	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		int cursorX = (int)floor(action->getDetails()->motion.x / action->getXScale());
 		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
@@ -242,8 +241,8 @@ int Slider::getValue() const
 }
 
 /**
- * Blits the slider contents.
- * to show when it's focused and editable.
+ * Blits the slider contents
+ * @param surface Pointer to surface to blit onto.
  */
 void Slider::blit(Surface *surface)
 {

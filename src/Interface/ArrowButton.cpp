@@ -79,7 +79,7 @@ void ArrowButton::setShape(ArrowShape shape)
 }
 
 /**
- * Changes the text associated with the arrow button.
+ * Changes the list associated with the arrow button.
  * This makes the button scroll that list.
  * @param list Pointer to text list.
  */

@@ -71,8 +71,7 @@ private:
 	std::vector<State*> _popups;
 	BattlescapeGame *_battleGame;
 	bool _firstInit;
-	bool _isMouseScrolling;
-	bool _isMouseScrolled;
+	bool _isMouseScrolling, _isMouseScrolled;
 	int _xBeforeMouseScrolling, _yBeforeMouseScrolling;
 	Position _mapOffsetBeforeMouseScrolling;
 	Uint32 _mouseScrollingStartTime;

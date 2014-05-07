@@ -1312,7 +1312,7 @@ void Ruleset::sortLists()
 /**
  * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
  */
-std::vector<std::string> Ruleset::getPsiRequirements()
+std::vector<std::string> Ruleset::getPsiRequirements() const
 {
 	return _psiRequirements;
 }

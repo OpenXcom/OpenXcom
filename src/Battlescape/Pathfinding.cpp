@@ -1144,4 +1144,22 @@ bool Pathfinding::isModifierUsed() const
 {
 	return _modifierUsed;
 }
+
+/**
+ * Gets a reference to the current path.
+ * @return the actual path.
+ */
+const std::vector<int> &Pathfinding::getPath()
+{
+	return _path;
+}
+
+/**
+ * Makes a copy of the current path.
+ * @return a copy of the path.
+ */
+std::vector<int> Pathfinding::copyPath() const
+{
+	return _path;
+}
 }

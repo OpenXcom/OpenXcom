@@ -33,6 +33,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "CraftInfoState.h"
 #include "SellState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -148,7 +149,7 @@ void CraftsState::btnOkClick(Action *)
 {
 	_game->popState();
 
-	if (Options::storageLimitsEnforced && _base->storesOverfull())
+	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_game, _base));
 		_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 0));

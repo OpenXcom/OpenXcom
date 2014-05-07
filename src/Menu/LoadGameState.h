@@ -22,6 +22,7 @@
 #include "../Engine/State.h"
 #include <string>
 #include "OptionsBaseState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -39,9 +40,13 @@ private:
 	std::string _filename;
 public:
 	/// Creates the Load Game state.
-	LoadGameState(Game *game, OptionsOrigin origin, const std::string &filename, bool showMsg = true);
+	LoadGameState(Game *game, OptionsOrigin origin, const std::string &filename);
+	/// Creates the Load Game state.
+	LoadGameState(Game *game, OptionsOrigin origin, SaveType type);
 	/// Cleans up the Load Game state.
 	~LoadGameState();
+	/// Creates the interface.
+	void buildUi();
 	/// Loads the game.
 	void init();
 };
