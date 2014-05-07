@@ -494,6 +494,8 @@ void UnitWalkBState::postPathProcedures()
 		else if (_unit->_hidingForTurn)
 		{
 			dir = _unit->getDirection() + 4;
+			_unit->_hidingForTurn = false;
+			_unit->dontReselect();
 		}
 		if (dir != -1)
 		{
