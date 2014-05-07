@@ -910,7 +910,7 @@ void Map::drawTerrain(Surface *surface)
 								BattleAction *action = _save->getBattleGame()->getCurrentAction();
 								RuleItem *weapon = action->weapon->getRules();
 								std::ostringstream ss;
-								int accuracy = _save->getSelectedUnit()->getFiringAccuracy(action->type, action->weapon);
+								int accuracy = action->actor->getFiringAccuracy(action->type, action->weapon);
 								int distance = _save->getTileEngine()->distance(Position (itX, itY,itZ), action->actor->getPosition());
 								int upperLimit = 200;
 								int lowerLimit = weapon->getMinRange();
