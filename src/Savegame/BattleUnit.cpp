@@ -24,6 +24,8 @@
 #include <typeinfo>
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Script.h"
+#include "../Engine/ScriptBind.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
@@ -38,9 +40,33 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "Tile.h"
 #include "SavedGame.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
+
+/**
+ * Helper namespace for BattleUnit::recolorSprite
+ */
+namespace
+{
+
+struct ColorCopy
+{
+	static const Uint8 Face = 6;
+	static const Uint8 Hair = 9;
+	static inline void func(Uint8& dest, const Uint8& src, int, int, int)
+	{
+		if(src)
+		{
+			dest = src;
+		}
+	}
+};
+
+} //namespace
 
 /**
  * Initializes a BattleUnit from a Soldier
@@ -53,7 +79,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+																_geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false),
+																_useScripts(false), _faceColor(0), _hairColor(0)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -106,6 +133,26 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+	_useScripts = _armor->getRecolorScript() != 0;
+
+	_faceColor = ColorCopy::Face<<4;
+	_hairColor = ColorCopy::Hair<<4;
+	switch(getGeoscapeSoldier()->getLook())
+	{
+		case LOOK_BLONDE:
+			break;
+		case LOOK_BROWNHAIR:
+			_hairColor = (10<<4) + 4;
+			break;
+		case LOOK_ORIENTAL:
+			_faceColor = (10<<4);
+			_hairColor = (15<<4) + 5;
+			break;
+		case LOOK_AFRICAN:
+			_faceColor = (10<<4) + 3;
+			_hairColor = (10<<4) + 6;
+			break;
+	}
 }
 
 /**
@@ -122,7 +169,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																						_turretType(-1), _hidingForTurn(false)
+																						_turretType(-1), _hidingForTurn(false),
+																						_useScripts(false), _faceColor(0), _hairColor(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -164,9 +212,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
-	
+
 	lastCover = Position(-1, -1, -1);
-	
+	_useScripts = _armor->getRecolorScript() != 0;
 }
 
 
@@ -176,7 +224,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
-		if (_cache[i]) delete _cache[i];
+		delete _cache[i];
 	//delete _currentAIState;
 }
 
@@ -705,9 +753,11 @@ UnitFaction BattleUnit::getFaction() const
 }
 
 /**
- * Sets the unit's cache flag.
- * Set to true when the unit has to be redrawn from scratch.
- * @param cache
+ * Set cached surface and unit's cache flag.
+ * After this function call unit is consider cached
+ * even if not all parts was updated.
+ * @param cache new cached surface
+ * @param part what cached part to cached
  */
 void BattleUnit::setCache(Surface *cache, int part)
 {
@@ -725,14 +775,21 @@ void BattleUnit::setCache(Surface *cache, int part)
 /**
  * Check if the unit is still cached in the Map cache.
  * When the unit changes it needs to be re-cached.
- * @param invalid
+ * @param part what cached part to return
  * @return cache
  */
-Surface *BattleUnit::getCache(bool *invalid, int part) const
+Surface *BattleUnit::getCache(int part) const
 {
 	if (part < 0) part = 0;
-	*invalid = _cacheInvalid;
 	return _cache[part];
+}
+
+/**
+ * Check if the unit is still cached in the Map cache.
+ */
+bool BattleUnit::isCacheInvalid() const
+{
+	return _cacheInvalid;
 }
 
 /**
@@ -956,6 +1013,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 
 	if (power > 0)
 	{
+		if(_useScripts) _cacheInvalid = true;
 		if (type == DT_STUN)
 		{
 			_stunlevel += power;
@@ -1000,6 +1058,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
  */
 void BattleUnit::healStun(int power)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_stunlevel -= power;
 	if (_stunlevel < 0) _stunlevel = 0;
 }
@@ -1017,6 +1076,7 @@ int BattleUnit::getStunlevel() const
  */
 void BattleUnit::knockOut(BattlescapeGame *battle)
 {
+	if(_useScripts) _cacheInvalid = true;
 	if (getArmor()->getSize() > 1) // large units die
 	{
 		_health = 0;
@@ -1150,6 +1210,7 @@ bool BattleUnit::spendTimeUnits(int tu)
 {
 	if (tu <= _tu)
 	{
+		if(_useScripts) _cacheInvalid = true;
 		_tu -= tu;
 		return true;
 	}
@@ -1359,6 +1420,7 @@ double BattleUnit::getThrowingAccuracy()
  */
 void BattleUnit::setArmor(int armor, UnitSide side)
 {
+	if(_useScripts) _cacheInvalid = true;
 	if (armor < 0)
 	{
 		armor = 0;
@@ -1406,6 +1468,7 @@ double BattleUnit::getReactionScore()
  */
 void BattleUnit::prepareNewTurn()
 {
+	if(_useScripts) _cacheInvalid = true;
 	// revert to original faction
 	_faction = _originalFaction;
 
@@ -1496,6 +1559,7 @@ void BattleUnit::moraleChange(int change)
 {
 	if (!isFearable()) return;
 
+	if(_useScripts) _cacheInvalid = true;
 	_morale += change;
 	if (_morale > 100)
 		_morale = 100;
@@ -1574,7 +1638,7 @@ void BattleUnit::think(BattleAction *action)
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
 	if (_currentAIState)
-	{		
+	{
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
@@ -2044,6 +2108,8 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 		return;
 	if(!_fatalWounds[part])
 		return;
+
+	if(_useScripts) _cacheInvalid = true;
 	_fatalWounds[part] -= woundAmount;
 	_health += healthAmount;
 	if (_health > getStats()->health)
@@ -2058,6 +2124,7 @@ void BattleUnit::painKillers ()
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
+		if(_useScripts) _cacheInvalid = true;
         _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
 		_moraleRestored = lostHealth;
 	}
@@ -2070,6 +2137,7 @@ void BattleUnit::painKillers ()
  */
 void BattleUnit::stimulant (int energy, int s)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_energy += energy;
 	if (_energy > getStats()->stamina)
 		_energy = getStats()->stamina;
@@ -2087,15 +2155,24 @@ int BattleUnit::getMotionPoints() const
 	return _motionPoints;
 }
 
+/**
+ * Gets the unit's armor.
+ * @return Pointer to armor.
+ */
+Armor *BattleUnit::getArmor()
+{
+	return _armor;
+}
 
 /**
  * Gets the unit's armor.
  * @return Pointer to armor.
  */
-Armor *BattleUnit::getArmor() const
+const Armor *BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
+
 /**
  * Get unit's name.
  * An aliens name is the translation of it's race and rank.
@@ -2125,11 +2202,21 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 
 	return _name;
 }
+
 /**
   * Gets pointer to the unit's stats.
   * @return stats Pointer to the unit's stats.
   */
 UnitStats *BattleUnit::getStats()
+{
+	return &_stats;
+}
+
+/**
+  * Gets pointer to the unit's stats.
+  * @return stats Pointer to the unit's stats.
+  */
+const UnitStats *BattleUnit::getStats() const
 {
 	return &_stats;
 }
@@ -2263,7 +2350,7 @@ std::string BattleUnit::getSpawnUnit() const
  * Set the unit that is spawned when this one dies.
  * @return unit.
  */
-void BattleUnit::setSpawnUnit(std::string spawnUnit)
+void BattleUnit::setSpawnUnit(const std::string &spawnUnit)
 {
 	_spawnUnit = spawnUnit;
 }
@@ -2331,6 +2418,7 @@ void BattleUnit::convertToFaction(UnitFaction f)
  */
 void BattleUnit::instaKill()
 {
+	if(_useScripts) _cacheInvalid = true;
 	_health = 0;
 	_status = STATUS_DEAD;
 }
@@ -2348,6 +2436,7 @@ int BattleUnit::getAggroSound() const
  */
 void BattleUnit::setEnergy(int energy)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_energy = energy;
 }
 
@@ -2456,6 +2545,7 @@ std::vector<BattleUnit *> &BattleUnit::getUnitsSpottedThisTurn()
 
 void BattleUnit::setRankInt(int rank)
 {
+	if(_useScripts) _cacheInvalid = true;
 	_rankInt = rank;
 }
 
@@ -2598,4 +2688,105 @@ bool BattleUnit::hasInventory() const
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
 
+/**
+ * Function used to recoloring sprite based on nationality of unit
+ * @param surf surface to recolor
+ */
+void BattleUnit::blitRecolored(Surface* src, Surface* dest, int blit_part) const
+{
+	Script<BattleUnit>* scr = _armor->getRecolorScript();
+	if(scr)
+	{
+		ScriptWorkRef ref;
+		scr->update(ref, this);
+		scr->executeBlit(ref, src, dest, blit_part, 0);
+	}
+	else
+	{
+		ShaderDraw<ColorCopy>(ShaderSurface(dest, 0, 0), ShaderSurface(src));
+	}
 }
+
+void BattleUnit::registScript(ScriptParser<BattleUnit>* parser)
+{
+	using namespace helper;
+	typedef BattleUnit BU;
+	typedef UnitStats US;
+	typedef Soldier S;
+	typedef Armor A;
+
+	typedef Bind<BU> bBU;
+	typedef BindFun<bBU, US, &BU::getStats> bUS;
+	typedef BindFun<bBU, A, &BU::getArmor> bA;
+	typedef BindPtr<bBU, S, &BU::_geoscapeSoldier> bS;
+
+	parser->addCustom0("blit_part");
+	parser->addConst("blit_torso", BODYPART_TORSO);
+	parser->addConst("blit_leftarm", BODYPART_LEFTARM);
+	parser->addConst("blit_rightarm", BODYPART_RIGHTARM);
+	parser->addConst("blit_legs", BODYPART_LEGS);
+	parser->addConst("blit_collapse", BODYPART_COLLAPSING);
+	parser->addConst("blit_inventory", BODYPART_ITEM);
+
+	parser->addFunction("health", &geter<bBU, &BU::_health>);
+	parser->addFunction("health_max", &geter<bUS, &US::health>);
+	parser->addFunction("energy", &geter<bBU, &BU::_energy>);
+	parser->addFunction("energy_max", &geter<bUS, &US::stamina>);
+	parser->addFunction("stun", &geter<bBU, &BU::_stunlevel>);
+	parser->addFunction("stun_max", &geter<bBU, &BU::_health>);
+	parser->addFunction("morale", &geter<bBU, &BU::_morale>);
+	parser->addFunction("morale_max", &geter<bBU, &BU::_morale>);
+
+	parser->addFunction("fatalwounds", &geter<bBU, &BU::getFatalWounds>);
+	parser->addFunction("fatalwounds_head", &geter<bBU, &BU::getFatalWound, BODYPART_HEAD>);
+	parser->addFunction("fatalwounds_torso", &geter<bBU, &BU::getFatalWound, BODYPART_TORSO>);
+	parser->addFunction("fatalwounds_leftarm", &geter<bBU, &BU::getFatalWound, BODYPART_LEFTARM>);
+	parser->addFunction("fatalwounds_rightarm", &geter<bBU, &BU::getFatalWound, BODYPART_RIGHTARM>);
+	parser->addFunction("fatalwounds_leftleg", &geter<bBU, &BU::getFatalWound, BODYPART_LEFTLEG>);
+	parser->addFunction("fatalwounds_rightleg", &geter<bBU, &BU::getFatalWound, BODYPART_RIGHTLEG>);
+
+	parser->addFunction("armor_front", &geter<bBU, UnitSide, &BU::getArmor, SIDE_FRONT>);
+	parser->addFunction("armor_left", &geter<bBU, UnitSide, &BU::getArmor, SIDE_LEFT>);
+	parser->addFunction("armor_right", &geter<bBU, UnitSide, &BU::getArmor, SIDE_RIGHT>);
+	parser->addFunction("armor_rear", &geter<bBU, UnitSide, &BU::getArmor, SIDE_REAR>);
+	parser->addFunction("armor_under", &geter<bBU, UnitSide, &BU::getArmor, SIDE_UNDER>);
+
+	parser->addFunction("unit_id", &geter<bBU, &BU::_id>);
+	parser->addFunction("unit_rank", &geter<bBU, &BU::_rankInt>);
+	parser->addFunction("unit_float", &geter_cast<bBU, bool, &BU::_floating>);
+	parser->addFunction("unit_kneel", &geter_cast<bBU, bool, &BU::_kneeled>);
+
+	parser->addFunction("soldier_hair", &geter_cast<bBU, Uint8, &BU::_hairColor>);
+	parser->addFunction("soldier_face", &geter_cast<bBU, Uint8, &BU::_faceColor>);
+	parser->addConst("color_hair", ColorCopy::Hair);
+	parser->addConst("color_face", ColorCopy::Face);
+
+	parser->addConst("color_null", 0);
+	parser->addConst("color_yellow", 1);
+	parser->addConst("color_red", 2);
+	parser->addConst("color_green0", 3);
+	parser->addConst("color_green1", 4);
+	parser->addConst("color_gray", 5);
+	parser->addConst("color_brown0", ColorCopy::Face);
+	parser->addConst("color_blue0", 7);
+	parser->addConst("color_blue1", 8);
+	parser->addConst("color_brown1", ColorCopy::Hair);
+	parser->addConst("color_brown2", 10);
+	parser->addConst("color_purple0", 11);
+	parser->addConst("color_purple1", 12);
+	parser->addConst("color_blue2", 13);
+	parser->addConst("color_silver", 14);
+	parser->addConst("color_special", 15);
+
+	parser->addFunction("soldier_look", &geter_cast<bS, SoldierLook, &S::getLook>);
+	parser->addConst("soldier_look_blonde", LOOK_BLONDE);
+	parser->addConst("soldier_look_brownhair", LOOK_BROWNHAIR);
+	parser->addConst("soldier_look_oriental", LOOK_ORIENTAL);
+	parser->addConst("soldier_look_african", LOOK_AFRICAN);
+
+	parser->addFunction("soldier_grender", &geter_cast<bS, SoldierGender, &S::getGender>);
+	parser->addConst("soldier_grender_male", GENDER_MALE);
+	parser->addConst("soldier_grender_female", GENDER_FEMALE);
+}
+
+} //namespace OpenXcom

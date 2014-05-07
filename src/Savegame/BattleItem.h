@@ -29,6 +29,8 @@ class RuleItem;
 class RuleInventory;
 class BattleUnit;
 class Tile;
+class SurfaceSet;
+class Surface;
 
 /**
  * Represents a single item in the battlescape.
@@ -130,6 +132,7 @@ public:
 	/// set the flag representing "not dropped on player turn"
 	void setTurnFlag(bool flag);
 
+	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
 };
 
 }

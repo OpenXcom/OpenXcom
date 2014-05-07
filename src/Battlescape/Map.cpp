@@ -230,6 +230,7 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void Map::drawTerrain(Surface *surface)
 {
 	int frameNumber = 0;
+	Surface bufferSurface(32, 40);
 	Surface *tmpSurface;
 	Tile *tile;
 	int beginX = 0, endX = _save->getMapSizeX() - 1;
@@ -239,9 +240,8 @@ void Map::drawTerrain(Surface *surface)
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
 	BattleUnit *unit = 0;
-	bool invalid;
 	int tileShade, wallShade, tileColor;
-	
+
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -461,7 +461,7 @@ void Map::drawTerrain(Surface *surface)
 							int part = 0;
 							part += tileNorth->getPosition().x - bu->getPosition().x;
 							part += (tileNorth->getPosition().y - bu->getPosition().y)*2;
-							tmpSurface = bu->getCache(&invalid, part);
+							tmpSurface = bu->getCache(part);
 							if (tmpSurface)
 							{
 								// draw unit
@@ -602,11 +602,22 @@ void Map::drawTerrain(Surface *surface)
 									}
 								}
 								// draw an item on top of the floor (if any)
-								int sprite = tileWest->getTopItemSprite();
-								if (sprite != -1)
+								BattleItem* item = tile->getTopItem();
+								if (item)
 								{
-									tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y, tileWestShade);
+									BattleUnit* itemUnit = item->getUnit();
+									int sprite = item->getRules()->getFloorSprite();
+									if (sprite != -1)
+									{
+										tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+										if(itemUnit)
+										{
+											bufferSurface.clear();
+											itemUnit->blitRecolored(tmpSurface, &bufferSurface, BODYPART_COLLAPSING);
+											tmpSurface = &bufferSurface;
+										}
+										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y, tileWestShade);
+									}
 								}
 								// Draw soldier
 								if (westUnit && westUnit->getStatus() != STATUS_WALKING && (!tileWest->getMapData(MapData::O_OBJECT) || tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6) && (westUnit->getVisible() || _save->getDebugMode()))
@@ -615,7 +626,7 @@ void Map::drawTerrain(Surface *surface)
 									int part = 0;
 									part += tileWest->getPosition().x - westUnit->getPosition().x;
 									part += (tileWest->getPosition().y - westUnit->getPosition().y)*2;
-									tmpSurface = westUnit->getCache(&invalid, part);
+									tmpSurface = westUnit->getCache(part);
 									if (tmpSurface)
 									{
 										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), tileWestShade, true);
@@ -693,11 +704,22 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 						// draw an item on top of the floor (if any)
-						int sprite = tile->getTopItemSprite();
-						if (sprite != -1)
+						BattleItem* item = tile->getTopItem();
+						if (item)
 						{
-							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false);
+							BattleUnit* itemUnit = item->getUnit();
+							int sprite = item->getRules()->getFloorSprite();
+							if (sprite != -1)
+							{
+								tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+								if(itemUnit)
+								{
+									bufferSurface.clear();
+									itemUnit->blitRecolored(tmpSurface, &bufferSurface, BODYPART_COLLAPSING);
+									tmpSurface = &bufferSurface;
+								}
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false);
+							}
 						}
 
 					}
@@ -706,7 +728,8 @@ void Map::drawTerrain(Surface *surface)
 					if (_projectile && _projectileInFOV)
 					{
 						tmpSurface = 0;
-						if (_projectile->getItem())
+						BattleItem* item = _projectile->getItem();
+						if (item)
 						{
 							tmpSurface = _projectile->getSprite();
 
@@ -734,6 +757,13 @@ void Map::drawTerrain(Surface *surface)
 								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								BattleUnit* itemUnit = item->getUnit();
+								if(itemUnit)
+								{
+									bufferSurface.clear();
+									itemUnit->blitRecolored(tmpSurface, &bufferSurface, BODYPART_COLLAPSING);
+									tmpSurface = &bufferSurface;
+								}
 								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 0);
 							}
 
@@ -787,7 +817,7 @@ void Map::drawTerrain(Surface *surface)
 						int part = 0;
 						part += tile->getPosition().x - unit->getPosition().x;
 						part += (tile->getPosition().y - unit->getPosition().y)*2;
-						tmpSurface = unit->getCache(&invalid, part);
+						tmpSurface = unit->getCache(part);
 						if (tmpSurface)
 						{
 							Position offset;
@@ -813,7 +843,7 @@ void Map::drawTerrain(Surface *surface)
 							int part = 0;
 							part += ttile->getPosition().x - tunit->getPosition().x;
 							part += (ttile->getPosition().y - tunit->getPosition().y)*2;
-							tmpSurface = tunit->getCache(&invalid, part);
+							tmpSurface = tunit->getCache(part);
 							if (tmpSurface)
 							{
 								Position offset;
@@ -1388,16 +1418,14 @@ void Map::cacheUnit(BattleUnit *unit)
 {
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, dummy;
 	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
 
-	unit->getCache(&invalid);
-	if (invalid)
+	if (unit->isCacheInvalid())
 	{
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)
 		{
-			Surface *cache = unit->getCache(&dummy, i);
+			Surface *cache = unit->getCache(i);
 			if (!cache) // no cache created yet
 			{
 				cache = new Surface(_spriteWidth, _spriteHeight);

@@ -61,6 +61,10 @@ private:
 	void drawRoutine9();
 	/// sort two handed sprites out.
 	void sortRifles();
+	/// blit weapon sprite
+	void blitItem(Surface* item);
+	/// blit body sprite
+	void blitBody(Surface* body, int part);
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);

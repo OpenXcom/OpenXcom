@@ -62,6 +62,9 @@
     <ClCompile Include="Engine\Screen.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Script.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Sound.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -917,6 +920,12 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Screen.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Script.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ScriptBind.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Sound.h">

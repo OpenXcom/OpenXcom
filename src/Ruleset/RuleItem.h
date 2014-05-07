@@ -143,6 +143,10 @@ public:
 	int getClipSize() const;
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
+	/// item's hand spite x offset
+	int getHandSpriteOffX() const;
+	/// item's hand spite y offset
+	int getHandSpriteOffY() const;
 	/// Gets the medikit heal quantity.
 	int getHealQuantity () const;
 	/// Gets the medikit pain killer quantity.

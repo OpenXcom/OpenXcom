@@ -44,12 +44,15 @@ class SavedGame;
 class Language;
 class AlienBAIState;
 class CivilianBAIState;
+template<typename> class Script;
+template<typename> class ScriptParser;
+class ScriptWorkRef;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
-
+enum UnitBodyPartEx {BODYPART_LEGS = BODYPART_LEFTLEG + 1, BODYPART_COLLAPSING, BODYPART_ITEM};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -112,8 +115,15 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	bool _useScripts;
+	Uint8 _faceColor;
+	Uint8 _hairColor;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
+
+	/// Regist all useful function
+	static void registScript(ScriptParser<BattleUnit>* parser);
+
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
@@ -169,10 +179,12 @@ public:
 	SoldierGender getGender() const;
 	/// Gets the unit's faction.
 	UnitFaction getFaction() const;
-	/// Set the cached flag.
+	/// Set cached surface and unit's cache flag.
 	void setCache(Surface *cache, int part = 0);
-	/// If this unit is cached on the battlescape.
-	Surface *getCache(bool *invalid, int part = 0) const;
+	/// Get cached surface.
+	Surface *getCache(int part = 0) const;
+	/// Is this unit require redrawn?
+	bool isCacheInvalid() const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?
@@ -318,11 +330,15 @@ public:
 	/// Get motion points for the motion scanner.
 	int getMotionPoints() const;
 	/// Gets the unit's armor.
-	Armor *getArmor() const;
+	Armor *getArmor();
+	/// Gets the unit's armor.
+	const Armor *getArmor() const;
 	/// Gets the unit's name.
 	std::wstring getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
 	UnitStats *getStats();
+	/// Gets the unit's stats.
+	const UnitStats *getStats() const;
 	/// Get the unit's stand height.
 	int getStandHeight() const;
 	/// Get the unit's kneel height.
@@ -366,7 +382,7 @@ public:
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Sets the unit's spawn unit.
-	void setSpawnUnit(std::string spawnUnit);
+	void setSpawnUnit(const std::string &spawnUnit);
 	/// Gets the unit's aggro sound.
 	int getAggroSound() const;
 	/// Sets the unit's energy level.
@@ -419,6 +435,8 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Recolor sprite
+	void blitRecolored(Surface* src, Surface* dest, int blit_part) const;
 };
 
 }
