@@ -503,6 +503,18 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	std::string killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo;
 	int killStatMission, killStatTurn;
 
+	// If the victim was killed by the murderer's death explosion, fetch who killed the murderer and make HIM the murderer!
+	if (murderer && !murderer->getGeoscapeSoldier() && murderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH && murderer->getStatus() == STATUS_DEAD && murderer->getMurdererId() != 0)
+	{
+		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		{
+			if ((*i)->getId() == murderer->getMurdererId())
+			{
+				murderer = (*i);
+			}
+		}
+	}
+
 	killStatWeapon = "STR_WEAPON_UNKNOWN";
 	killStatWeaponAmmo = "STR_WEAPON_UNKNOWN";
 	if (murderer != 0)
@@ -598,6 +610,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (murderer->getGeoscapeSoldier() && murderer->getFaction() == FACTION_PLAYER)
 				{
 					murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_DEAD, killStatMission, killStatTurn ));
+					victim->setMurdererId(murderer->getId());
 				}
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());

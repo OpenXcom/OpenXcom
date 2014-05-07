@@ -260,6 +260,7 @@ private:
 	std::string _spawnUnit;
 	std::string _activeHand;
     BattleUnitStatistics* _statistics;
+	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
 
 	// static data
 	std::string _type;
@@ -585,8 +586,12 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
-    /// Get the unit's mission statistics
-    BattleUnitStatistics* getStatistics() {return _statistics;}
+    /// Get the unit's mission statistics.
+    BattleUnitStatistics* getStatistics();
+	/// Set the unit murderer's id.
+	void setMurdererId(int id);
+	/// Get the unit murderer's id.
+	int getMurdererId() const;
 };
 
 }

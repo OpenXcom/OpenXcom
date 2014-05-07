@@ -54,7 +54,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
 																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false),
-																_statistics()
+																_statistics(), _murdererId(0)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -125,7 +125,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																						_turretType(-1), _hidingForTurn(false), _statistics()
+																						_turretType(-1), _hidingForTurn(false), _statistics(), _murdererId(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -2593,5 +2593,33 @@ bool BattleUnit::hasInventory() const
 {
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
+
+/**
+ * Get the unit's statistics.
+ * @return BattleUnitStatistics statistics.
+ */
+BattleUnitStatistics* BattleUnit::getStatistics()
+{
+	return _statistics;
+}
+
+/**
+ * Sets the unit murderer's id.
+ * @param int murderer id.
+ */
+void BattleUnit::setMurdererId(int id)
+{
+	_murdererId = id;
+}
+
+/**
+ * Gets the unit murderer's id.
+ * @return int murderer id.
+ */
+int BattleUnit::getMurdererId() const
+{
+	return _murdererId;
+}
+
 
 }
