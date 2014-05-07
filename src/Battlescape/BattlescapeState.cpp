@@ -1477,11 +1477,11 @@ inline void BattlescapeState::handle(Action *action)
 			{
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 				{
-					_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SavedGame::QUICKSAVE));
+					_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SAVE_QUICK));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
-					_game->pushState(new LoadGameState(_game, OPT_BATTLESCAPE, SavedGame::QUICKSAVE));
+					_game->pushState(new LoadGameState(_game, OPT_BATTLESCAPE, SAVE_QUICK));
 				}
 			}
 

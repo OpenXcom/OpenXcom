@@ -653,7 +653,7 @@ void DebriefingState::prepareDebriefing()
 					{
 						recoverItems((*j)->getInventory(), base);
 						// calculate new statString
-						soldier->calcStatString(_game->getRuleset()->getStatStrings());
+						soldier->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 					}
 					else
 					{ // non soldier player = tank
@@ -721,7 +721,14 @@ void DebriefingState::prepareDebriefing()
 				}
 				else
 				{
-					base->getItems()->addItem(corpseItem, 1);
+					if (Options::canSellLiveAliens)
+					{
+						_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(type)->getSellCost());
+					}
+					else
+					{
+						base->getItems()->addItem(corpseItem, 1);
+					}
 				}
 			}
 			else if (oldFaction == FACTION_NEUTRAL)

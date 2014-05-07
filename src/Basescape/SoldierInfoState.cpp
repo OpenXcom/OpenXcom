@@ -38,6 +38,8 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/Armor.h"
+#include "../Menu/ErrorMessageState.h"
+#include "SellState.h"
 #include "SoldierArmorState.h"
 #include "SackSoldierState.h"
 
@@ -116,11 +118,11 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_txtStrength = new Text(120, 9, 6, 166);
 	_numStrength = new Text(18, 9, 131, 166);
 	_barStrength = new Bar(170, 7, 150, 166);
-	
+
 	_txtPsiStrength = new Text(120, 9, 6, 178);
 	_numPsiStrength = new Text(18, 9, 131, 178);
 	_barPsiStrength = new Bar(170, 7, 150, 178);
-	
+
 	_txtPsiSkill = new Text(120, 9, 6, 190);
 	_numPsiSkill = new Text(18, 9, 131, 190);
 	_barPsiSkill = new Bar(170, 7, 150, 190);
@@ -524,7 +526,7 @@ void SoldierInfoState::init()
 		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
-	}	
+	}
 
 	// Dead can't talk
 	if (_base == 0)
@@ -563,6 +565,11 @@ void SoldierInfoState::edtSoldierChange(Action *action)
 void SoldierInfoState::btnOkClick(Action *)
 {
 	_game->popState();
+	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
+	{
+		_game->pushState(new SellState(_game, _base));
+		_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 0));
+	}
 }
 
 /**

@@ -61,7 +61,7 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_btnAbandon = new TextButton(180, 18, x+18, 96);
 	_btnOptions = new TextButton(180, 18, x+18, 122);
 	_btnCancel = new TextButton(180, 18, x+18, 150);
-	_txtTitle = new Text(206, 15, x+5, 32);
+	_txtTitle = new Text(206, 17, x+5, 32);
 
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)

@@ -58,8 +58,8 @@ private:
 	bool canFallDown(Tile *destinationTile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile *destinationTile, int size);
-public:
 	std::vector<int> _path;
+public:
 	/// Determines whether the unit is going up a stairs.
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	/// Determines whether or not movement between starttile and endtile is possible in the direction.
@@ -104,6 +104,10 @@ public:
 	bool isPathPreviewed() const;
 	/// Gets the modifier setting.
 	bool isModifierUsed() const;
+	/// Gets a reference to the path.
+	const std::vector<int> &getPath();
+	/// Makes a copy to the path.
+	std::vector<int> copyPath() const;
 };
 
 }

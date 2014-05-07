@@ -163,7 +163,7 @@ void Text::setText(const std::wstring &text)
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && /*!_wrap &&*/ getTextWidth() > getWidth() && _text[_text.size()-1] != L'.')
+	if (_font == _big && /*!_wrap &&*/ (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size()-1] != L'.')
 	{
 		setSmall();
 	}
@@ -371,7 +371,7 @@ void Text::processText()
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
-		else if (Font::isSpace((*str)[c]))
+		else if (Font::isSpace((*str)[c]) || Font::isSeparator((*str)[c]))
 		{
 			space = c;
 			width += font->getCharSize((*str)[c]).w;
@@ -396,12 +396,21 @@ void Text::processText()
 				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
 				{
 					// Go back to the last space and put a linebreak there
-					(*str)[space] = L'\n';
-					width -= word + font->getCharSize(L' ').w;
+					width -= word + font->getCharSize((*str)[space]).w;
+					size_t indent = space;
+					if (Font::isSpace((*str)[c]))
+					{
+						(*str)[space] = L'\n';
+					}
+					else
+					{
+						str->insert(space+1, L"\n");
+						indent++;
+					}
 					if (_indent)
 					{
-						str->insert(space+1, L" \xA0");
-						width += font->getCharSize(L' ').w * 2;
+						str->insert(indent+1, L" \xA0");
+						width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
 					}
 				}
 				else if (_lang->getTextWrapping() == WRAP_LETTERS)

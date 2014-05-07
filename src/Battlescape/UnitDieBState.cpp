@@ -199,6 +199,7 @@ void UnitDieBState::think()
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
 				_parent->getSave()->setSelectedUnit(0);
+				_parent->cancelCurrentAction(true);
 				_parent->requestEndTurn();
 			}
 		}

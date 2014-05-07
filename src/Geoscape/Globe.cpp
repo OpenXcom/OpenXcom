@@ -56,6 +56,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Interface/Cursor.h"
 
 namespace OpenXcom
 {
@@ -1702,6 +1703,72 @@ void Globe::blit(Surface *surface)
 }
 
 /**
+ * Ignores any mouse hovers that are outside the globe.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Globe::mouseOver(Action *action, State *state)
+{
+	double lon, lat;
+	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+
+	// Check for errors
+	if (lat == lat && lon == lon)
+	{
+		if (_isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
+		{
+			// The following is the workaround for a rare problem where sometimes
+			// the mouse-release event is missed for any reason.
+			// (checking: is the dragScroll-mouse-button still pressed?)
+			// However if the SDL is also missed the release event, then it is to no avail :(
+			if (0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::globeDragScrollButton)))
+			{ // so we missed again the mouse-release :(
+				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+				if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+				{
+					center(_lonBeforeMouseScrolling, _latBeforeMouseScrolling);
+				}
+				_isMouseScrolled = _isMouseScrolling = false;
+				return;
+			}
+
+			_isMouseScrolled = true;
+
+			// Set the mouse cursor back
+			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+			SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+
+			// Check the threshold
+			_totalMouseMoveX += action->getDetails()->motion.xrel;
+			_totalMouseMoveY += action->getDetails()->motion.yrel;
+			if (!_mouseMovedOverThreshold)
+				_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance));
+
+			// Scrolling
+			if (Options::dragScrollInvert)
+			{
+				double newLon = -action->getDetails()->motion.xrel * ROTATE_LONGITUDE/2;
+				double newLat = -action->getDetails()->motion.yrel * ROTATE_LATITUDE/2;
+				center(_cenLon + newLon, _cenLat + newLat);
+			}
+			else
+			{
+				double newLon = ((double)_totalMouseMoveX / action->getXScale()) * ROTATE_LONGITUDE/2;
+				double newLat = ((double)_totalMouseMoveY / action->getYScale()) * ROTATE_LATITUDE/2;
+				center(_lonBeforeMouseScrolling + newLon, _latBeforeMouseScrolling + newLat);
+			}
+
+			// We don't want to look the mouse-cursor jumping :)
+			action->getDetails()->motion.x = _xBeforeMouseScrolling; action->getDetails()->motion.y = _yBeforeMouseScrolling;
+			_game->getCursor()->handle(action);
+		}
+
+		InteractiveSurface::mouseOver(action, state);
+	}
+}
+
+/**
  * Ignores any mouse clicks that are outside the globe.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -1713,7 +1780,20 @@ void Globe::mousePress(Action *action, State *state)
 
 	// Check for errors
 	if (lat == lat && lon == lon)
+	{
+		if (action->getDetails()->button.button == Options::globeDragScrollButton)
+		{
+			_isMouseScrolling = true;
+			_isMouseScrolled = false;
+			SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
+			_lonBeforeMouseScrolling = _cenLon;
+			_latBeforeMouseScrolling = _cenLat;
+			_totalMouseMoveX = 0; _totalMouseMoveY = 0;
+			_mouseMovedOverThreshold = false;
+			_mouseScrollingStartTime = SDL_GetTicks();
+		}
 		InteractiveSurface::mousePress(action, state);
+	}
 }
 
 /**
@@ -1728,7 +1808,9 @@ void Globe::mouseRelease(Action *action, State *state)
 
 	// Check for errors
 	if (lat == lat && lon == lon)
+	{
 		InteractiveSurface::mouseRelease(action, state);
+	}
 }
 
 /**
@@ -1754,6 +1836,38 @@ void Globe::mouseClick(Action *action, State *state)
 	// Check for errors
 	if (lat == lat && lon == lon)
 	{
+		// The following is the workaround for a rare problem where sometimes
+		// the mouse-release event is missed for any reason.
+		// However if the SDL is also missed the release event, then it is to no avail :(
+		// (this part handles the release if it is missed and now an other button is used)
+		if (_isMouseScrolling)
+		{
+			if (action->getDetails()->button.button != Options::globeDragScrollButton
+				&& 0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::globeDragScrollButton)))
+			{ // so we missed again the mouse-release :(
+				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+				if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+				{
+					center(_lonBeforeMouseScrolling, _latBeforeMouseScrolling);
+				}
+				_isMouseScrolled = _isMouseScrolling = false;
+			}
+		}
+
+		// DragScroll-Button release: release mouse-scroll-mode
+		if (_isMouseScrolling)
+		{
+			// While scrolling, other buttons are ineffective
+			if (action->getDetails()->button.button == Options::globeDragScrollButton) _isMouseScrolling = false; else return;
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			{
+				_isMouseScrolled = false;
+				center(_lonBeforeMouseScrolling, _latBeforeMouseScrolling);
+			}
+			if (_isMouseScrolled) return;
+		}
+
 		InteractiveSurface::mouseClick(action, state);
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
@@ -1894,4 +2008,5 @@ void Globe::setupRadii(int width, int height)
 			}
 	}
 }
-}//namespace OpenXcom
+
+}

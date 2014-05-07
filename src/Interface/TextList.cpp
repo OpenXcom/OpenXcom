@@ -25,6 +25,7 @@
 #include "../Engine/Options.h"
 #include "ArrowButton.h"
 #include "ComboBox.h"
+#include "ScrollBar.h"
 
 namespace OpenXcom
 {
@@ -46,6 +47,10 @@ TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(wid
 	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 13);
 	_down->setVisible(false);
 	_down->setTextList(this);
+	int h = std::max(_down->getY() - _up->getY() - _up->getHeight(), 1);
+	_scrollbar = new ScrollBar(_up->getWidth(), h, getX() + getWidth() + _scrollPos, _up->getY() + _up->getHeight());
+	_scrollbar->setVisible(false);
+	_scrollbar->setTextList(this);
 }
 
 /**
@@ -71,6 +76,7 @@ TextList::~TextList()
 	delete _selector;
 	delete _up;
 	delete _down;
+	delete _scrollbar;
 }
 
 /**
@@ -82,6 +88,7 @@ void TextList::setX(int x)
 	Surface::setX(x);
 	_up->setX(getX() + getWidth() + _scrollPos);
 	_down->setX(getX() + getWidth() + _scrollPos);
+	_scrollbar->setX(getX() + getWidth() + _scrollPos);
 	if (_selector != 0)
 		_selector->setX(getX());
 }
@@ -95,6 +102,7 @@ void TextList::setY(int y)
 	Surface::setY(y);
 	_up->setY(getY());
 	_down->setY(getY() + getHeight() - 13);
+	_scrollbar->setY(_up->getY() + _up->getHeight());
 	if (_selector != 0)
 		_selector->setY(getY());
 }
@@ -207,9 +215,27 @@ int TextList::getRowY(int row) const
  * Returns the amount of text rows stored in the list.
  * @return Number of rows.
  */
-int TextList::getRows() const
+int TextList::getTexts() const
 {
 	return _texts.size();
+}
+
+/**
+ * Returns the amount of physical rows stored in the list.
+ * @return Number of rows.
+ */
+int TextList::getRows() const
+{
+	return _rows.size();
+}
+
+/**
+ * Returns the amount of visible rows stored in the list.
+ * @return Number of rows.
+ */
+int TextList::getVisibleRows() const
+{
+	return _visibleRows;
 }
 
 /**
@@ -372,6 +398,7 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 	_up->setPalette(colors, firstcolor, ncolors);
 	_down->setPalette(colors, firstcolor, ncolors);
+	_scrollbar->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
@@ -393,11 +420,8 @@ void TextList::initText(Font *big, Font *small, Language *lang)
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
 
-	_visibleRows = 0;
-	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
-	{
-		_visibleRows++;
-	}
+	updateVisible();
+
 }
 
 /**
@@ -407,12 +431,10 @@ void TextList::initText(Font *big, Font *small, Language *lang)
 void TextList::setHeight(int height)
 {
 	Surface::setHeight(height);
-	_visibleRows = 0;
-	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
-	{
-		_visibleRows++;
-	}
 	setY(getY());
+	int h = std::max(_down->getY() - _up->getY() - _up->getHeight(), 1);
+	_scrollbar->setHeight(h);
+	updateVisible();
 }
 
 /**
@@ -425,6 +447,7 @@ void TextList::setColor(Uint8 color)
 	_color = color;
 	_up->setColor(color);
 	_down->setColor(color);
+	_scrollbar->setColor(color);
 	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
 	{
 		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
@@ -545,10 +568,7 @@ void TextList::setBig()
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
 
-	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
-	{
-		_visibleRows++;
-	}
+	updateVisible();
 }
 
 /**
@@ -563,10 +583,7 @@ void TextList::setSmall()
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
 
-	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
-	{
-		_visibleRows++;
-	}
+	updateVisible();
 }
 
 /**
@@ -603,6 +620,7 @@ int TextList::getSelectedRow() const
 void TextList::setBackground(Surface *bg)
 {
 	_bg = bg;
+	_scrollbar->setBackground(_bg);
 }
 
 /**
@@ -631,6 +649,7 @@ void TextList::setArrowColor(Uint8 color)
 {
 	_up->setColor(color);
 	_down->setColor(color);
+	_scrollbar->setColor(color);
 }
 
 /**
@@ -753,10 +772,15 @@ void TextList::scrollUp(bool toMax)
 		return;
 	if (_rows.size() > _visibleRows && _scroll > 0)
 	{
-		if (toMax) _scroll=0; else _scroll--;
-		draw();
+		if (toMax)
+		{
+			scrollTo(0);
+		}
+		else
+		{
+			scrollTo(_scroll-1);
+		}
 	}
-	updateArrows();
 }
 
 /**
@@ -769,10 +793,15 @@ void TextList::scrollDown(bool toMax)
 		return;
 	if (_rows.size() > _visibleRows && _scroll < _rows.size() - _visibleRows)
 	{
-		if (toMax) _scroll=_rows.size()-_visibleRows; else _scroll++;
-		draw();
+		if (toMax)
+		{
+			scrollTo(_rows.size() - _visibleRows);
+		}
+		else
+		{
+			scrollTo(_scroll+1);
+		}
 	}
-	updateArrows();
 }
 
 /**
@@ -781,8 +810,24 @@ void TextList::scrollDown(bool toMax)
  */
 void TextList::updateArrows()
 {
-	_up->setVisible((_rows.size() > _visibleRows && _scroll > 0));
-	_down->setVisible((_rows.size() > _visibleRows && _scroll < _rows.size() - _visibleRows));
+	_up->setVisible(_rows.size() > _visibleRows /*&& _scroll > 0*/);
+	_down->setVisible(_rows.size() > _visibleRows /*&& _scroll < _rows.size() - _visibleRows*/);
+	_scrollbar->setVisible(_rows.size() > _visibleRows);
+	_scrollbar->invalidate();
+}
+
+/**
+ * Updates the amount of visible rows according to the
+ * current list and font size.
+ */
+void TextList::updateVisible()
+{
+	_visibleRows = 0;
+	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
+	{
+		_visibleRows++;
+	}
+	updateArrows();
 }
 
 /**
@@ -798,6 +843,7 @@ void TextList::setScrolling(bool scrolling, int scrollPos)
 		_scrollPos = scrollPos;
 		_up->setX(getX() + getWidth() + _scrollPos);
 		_down->setX(getX() + getWidth() + _scrollPos);
+		_scrollbar->setX(getX() + getWidth() + _scrollPos);
 	}
 }
 
@@ -851,6 +897,7 @@ void TextList::blit(Surface *surface)
 		}
 		_up->blit(surface);
 		_down->blit(surface);
+		_scrollbar->blit(surface);
 	}
 }
 
@@ -864,6 +911,7 @@ void TextList::handle(Action *action, State *state)
 	InteractiveSurface::handle(action, state);
 	_up->handle(action, state);
 	_down->handle(action, state);
+	_scrollbar->handle(action, state);
 	if (_arrowPos != -1)
 	{
 		for (size_t i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
@@ -882,6 +930,7 @@ void TextList::think()
 	InteractiveSurface::think();
 	_up->think();
 	_down->think();
+	_scrollbar->think();
 	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); ++i)
 	{
 		(*i)->think();
@@ -1034,9 +1083,11 @@ int TextList::getScroll()
  * set the scroll depth.
  * @param scroll set the scroll depth to this.
  */
-void TextList::setScroll(int scroll)
+void TextList::scrollTo(int scroll)
 {
 	_scroll = scroll;
+	draw();
+	updateArrows();
 }
 
 /**

@@ -385,7 +385,7 @@ void Camera::up()
 	if (_mapOffset.z < _mapsize_z - 1)
 	{
 		_mapOffset.z++;
-		_mapOffset.y += _spriteHeight / 2;
+		_mapOffset.y += _spriteHeight * 3 / 5;
 		_map->draw();
 	}
 }
@@ -398,7 +398,7 @@ void Camera::down()
 	if (_mapOffset.z > 0)
 	{
 		_mapOffset.z--;
-		_mapOffset.y -= _spriteHeight / 2;
+		_mapOffset.y -= _spriteHeight * 3 / 5;
 		_map->draw();
 	}
 }
@@ -589,5 +589,10 @@ void Camera::resize()
 	_screenWidth = _map->getWidth();
 	_screenHeight = _map->getHeight();
 	_visibleMapHeight = _map->getHeight() - Map::ICON_HEIGHT;
+}
+
+void Camera::stopMouseScrolling()
+{
+	_scrollMouseTimer->stop();
 }
 }

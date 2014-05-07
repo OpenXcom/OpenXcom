@@ -47,7 +47,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(112, 16, 200, 176);
-	_lstFacilities = new TextList(112, 104, 200, 64);
+	_lstFacilities = new TextList(100, 104, 200, 64);
 	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
@@ -76,9 +76,8 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 112);
+	_lstFacilities->setColumns(1, 100);
 	_lstFacilities->setSelectable(true);
-	_lstFacilities->setScrolling(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
 	_lstFacilities->setWordWrap(true);
