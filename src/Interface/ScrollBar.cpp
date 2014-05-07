@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ScrollBar.h"
+#include <cmath>
 #include <algorithm>
 #include "../Engine/Action.h"
 #include "../Interface/TextList.h"
