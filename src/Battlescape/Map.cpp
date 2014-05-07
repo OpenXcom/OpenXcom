@@ -559,7 +559,6 @@ void Map::drawTerrain(Surface *surface)
 								 */
 								Tile *tileWest = _save->getTile(mapPosition - Position(1,0,0));
 								BattleUnit *westUnit = tileWest->getUnit();
-								int tileWestShade;
 								if (tileWest->isDiscovered(2))
 								{
 									tileWestShade = tileWest->getShade();
