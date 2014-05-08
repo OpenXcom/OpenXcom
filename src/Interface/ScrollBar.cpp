@@ -35,7 +35,7 @@ namespace OpenXcom
  */
 ScrollBar::ScrollBar(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _list(0), _color(0), _pressed(false), _contrast(false), _bg(0)
 {
-	_track = new Surface(width, height, x, y);
+	_track = new Surface(width-2, height, x+1, y);
 	_thumb = new Surface(width, height, x, y);
 	_thumbRect.x = 0;
 	_thumbRect.y = 0;
@@ -59,7 +59,7 @@ ScrollBar::~ScrollBar()
 void ScrollBar::setX(int x)
 {
 	Surface::setX(x);
-	_track->setX(x);
+	_track->setX(x+1);
 	_thumb->setX(x);
 }
 
