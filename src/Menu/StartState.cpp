@@ -35,6 +35,7 @@
 #include "MainMenuState.h"
 #include "IntroState.h"
 #include "ErrorMessageState.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -150,6 +151,7 @@ void StartState::think()
 		else
 		{
 			Options::keepAspectRatio = _wasLetterBoxed;
+			OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
 			State *state = new MainMenuState(_game);
 			_game->setState(state);
