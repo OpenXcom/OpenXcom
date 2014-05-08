@@ -60,7 +60,7 @@ extraStrings:
      STR_MEDAL_MERIT_STAR_NAME: "Merit Star"
      STR_MEDAL_MERIT_STAR_DESCRIPTION: "Given to a soldier who has killed many aliens."
      STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
-     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in combating {0} soldiers."
+     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in combating the {0} menace."
      STR_MEDAL_DEFENDER_MEDAL_NAME: "Defender Medal"
      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defense mission."
      STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
@@ -302,7 +302,7 @@ commendations:
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
     sprite: 0
     criteria:
-      kills_with_criteria_career: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
+      kills_with_criteria_career: [5, 10, 15, 20, 30, 40, 50, 65, 80, 100]
     killCriteria:
       -
         1: ["STATUS_DEAD", "FACTION_HOSTILE"]
@@ -343,17 +343,17 @@ commendations:
     description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
     sprite: 7
     criteria:
-      total_kills_with_a_weapon: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+      total_kills_with_a_weapon: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
   - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME
     description: STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION
     sprite: 8
     criteria:
-      total_missions_in_a_region: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+      total_missions_in_a_region: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
   - type: STR_MEDAL_XENOCIDE_MEDAL_NAME
     description: STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION
     sprite: 9
     criteria:
-      total_kills_by_race: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+      total_kills_by_race: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
   - type: STR_MEDAL_MEDAL_OF_HEROISM_NAME
     description: STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION
     sprite: 10
@@ -371,7 +371,7 @@ commendations:
     description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
     sprite: 12
     criteria:
-      kills_with_criteria_career: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      kills_with_criteria_career: [1, 5, 10, 15, 20, 25, 30, 35, 40, 50]
     killCriteria:
       -
         1: ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]

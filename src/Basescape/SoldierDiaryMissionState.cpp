@@ -147,7 +147,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_
 
 	_txtDaylight->setColor(Palette::blockOffset(13)+5);
 	_txtDaylight->setSecondaryColor(Palette::blockOffset(13));
-	if (missionStatistics->at(missionId)->daylight == 0)
+	if (missionStatistics->at(missionId)->daylight <= 5)
 	{
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
 	}

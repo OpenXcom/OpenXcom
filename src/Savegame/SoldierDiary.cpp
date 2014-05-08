@@ -195,14 +195,14 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     else if (missionStatistics->type == "STR_TERROR_MISSION")
     {
         _terrorMissionTotal++;
-        if (missionStatistics->daylight != 0)
+        if (missionStatistics->daylight > 5)
             _nightTerrorMissionTotal++;
     }
     if (missionStatistics->daylight != 0)
         _nightMissionTotal++;
     if (unitStatistics->wasUnconcious)
         _unconciousTotal++;
-    if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_BASE_DEFENSE" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
+    if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
 		_importantMissionTotal++;
 	_shotAtCounterTotal += unitStatistics->shotAtCounter;
     _shotAtCounter10in1Mission += (unitStatistics->shotAtCounter)/10;
@@ -654,7 +654,7 @@ void SoldierCommendations::load(const YAML::Node &node)
 	_type = node["commendationName"].as<std::string>(_type);
 	_noun = node["noun"].as<std::string>("noNoun");
 	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
-	_isNew = node["isNew"].as<bool>(_isNew);
+	_isNew = node["isNew"].as<bool>(false);
 }
 
 /**
@@ -667,7 +667,6 @@ YAML::Node SoldierCommendations::save() const
 	node["commendationName"] = _type;
 	if (_noun != "noNoun") node["noun"] = _noun;
 	node["decorationLevel"] = _decorationLevel;
-	node["isNew"] = _isNew;
 	return node;
 }
 
