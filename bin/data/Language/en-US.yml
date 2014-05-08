@@ -1345,3 +1345,6 @@ en-US:
   STR_PREFERRED_SFX_FORMAT_DESC: "Chooses the preferred sound effects format to use when multiple ones are available."
   STR_PREFERRED_FORMAT_AUTO: "Auto"
   STR_CURRENT_FORMAT: "Current: {0}"
+  STR_MELEE_ACCURACY: "MELEE ACCURACY"
+  STR_FORCE_FIRE: "Alternate Fire Method"
+  STR_FORCE_FIRE_DESC: "Enables forcing your soldiers to take a shot, regardless of line of fire rules, when holding CTRL"
