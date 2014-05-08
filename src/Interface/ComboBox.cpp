@@ -238,7 +238,6 @@ void ComboBox::setSelected(size_t sel)
 	if (_sel < _list->getTexts())
 	{
 		_button->setText(_list->getCellText(_sel, 0));
-		_list->scrollTo(_sel - _list->getVisibleRows()/2);
 	}
 }
 
@@ -272,6 +271,7 @@ void ComboBox::setOptions(const std::vector<std::string> &options)
 		_list->addRow(1, _lang->getString(*i).c_str());
 	}
 	setSelected(_sel);
+	_list->draw();
 }
 
 /**
@@ -296,6 +296,7 @@ void ComboBox::setOptions(const std::vector<std::wstring> &options)
 void ComboBox::blit(Surface *surface)
 {
 	Surface::blit(surface);
+	_list->invalidate();
 	if (_visible && !_hidden)
 	{
 		_button->blit(surface);
@@ -354,6 +355,17 @@ void ComboBox::toggle(bool first)
 	if (!first && !_window->getVisible())
 	{
 		_toggled = true;
+	}
+	if (_list->getVisible())
+	{
+		if (_sel < _list->getVisibleRows()/2)
+		{
+			_list->scrollTo(0);
+		}
+		else
+		{
+			_list->scrollTo(_sel - _list->getVisibleRows()/2);
+		}
 	}
 }
 

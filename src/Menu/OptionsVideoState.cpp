@@ -52,29 +52,29 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 
 	// Create objects
 	_displaySurface = new InteractiveSurface(110, 32, 94, 18);
-	_txtDisplayResolution = new Text(110, 9, 94, 8);
+	_txtDisplayResolution = new Text(114, 9, 94, 8);
 	_txtDisplayWidth = new TextEdit(this, 40, 17, 94, 26);
 	_txtDisplayX = new Text(16, 17, 132, 26);
 	_txtDisplayHeight = new TextEdit(this, 40, 17, 144, 26);
 	_btnDisplayResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
 	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
-	_txtLanguage = new Text(110, 9, 94, 52);
+	_txtLanguage = new Text(114, 9, 94, 52);
 	_cbxLanguage = new ComboBox(this, 100, 16, 94, 62);
 
-	_txtFilter = new Text(110, 9, 210, 52);
+	_txtFilter = new Text(114, 9, 210, 52);
 	_cbxFilter = new ComboBox(this, 100, 16, 210, 62);
 
-	_txtMode = new Text(110, 9, 210, 22);
+	_txtMode = new Text(114, 9, 210, 22);
 	_cbxDisplayMode = new ComboBox(this, 100, 16, 210, 32);
 	
-	_txtGeoScale = new Text(110, 9, 94, 82);
+	_txtGeoScale = new Text(114, 9, 94, 82);
 	_cbxGeoScale = new ComboBox(this, 100, 16, 94, 92);
 	
-	_txtBattleScale = new Text(110, 9, 94, 118);
+	_txtBattleScale = new Text(114, 9, 94, 118);
 	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 128);
 
-	_txtOptions = new Text(110, 9, 210, 82);
+	_txtOptions = new Text(114, 9, 210, 82);
 	_btnLetterbox = new ToggleTextButton(100, 16, 210, 92);
 	_btnResize = new ToggleTextButton(100, 16, 210, 110);
 	_btnLockMouse = new ToggleTextButton(100, 16, 210, 128);

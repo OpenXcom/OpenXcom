@@ -45,24 +45,24 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 	setCategory(_btnGeoscape);
 
 	// Create objects
-	_txtDragScroll = new Text(110, 9, 210, 8);
+	_txtDragScroll = new Text(114, 9, 210, 8);
 	_cbxDragScroll = new ComboBox(this, 100, 16, 210, 18);
 
-	_txtScrollSpeed = new Text(110, 9, 94, 8);
+	_txtScrollSpeed = new Text(114, 9, 94, 8);
 	_slrScrollSpeed = new Slider(100, 16, 94, 18);
 
-	_txtDogfightSpeed = new Text(110, 9, 210, 40);
+	_txtDogfightSpeed = new Text(114, 9, 210, 40);
 	_slrDogfightSpeed = new Slider(100, 16, 210, 50);
 
-	_txtClockSpeed = new Text(110, 9, 94, 40);
+	_txtClockSpeed = new Text(114, 9, 94, 40);
 	_slrClockSpeed = new Slider(100, 16, 94, 50);
 
-	_txtGlobeDetails = new Text(110, 9, 94, 82);
+	_txtGlobeDetails = new Text(114, 9, 94, 82);
 	_btnGlobeCountries = new ToggleTextButton(100, 16, 94, 92);
 	_btnGlobeRadars = new ToggleTextButton(100, 16, 94, 110);
 	_btnGlobePaths = new ToggleTextButton(100, 16, 94, 128);
 
-	_txtOptions = new Text(110, 9, 210, 82);
+	_txtOptions = new Text(114, 9, 210, 82);
 	_btnShowFunds = new ToggleTextButton(100, 16, 210, 92);
 
 	add(_txtScrollSpeed);

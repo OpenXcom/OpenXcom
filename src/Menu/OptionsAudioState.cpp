@@ -43,19 +43,19 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	setCategory(_btnAudio);
 
 	// Create objects
-	_txtMusicVolume = new Text(110, 9, 94, 8);
+	_txtMusicVolume = new Text(114, 9, 94, 8);
 	_slrMusicVolume = new Slider(100, 16, 94, 18);
 
-	_txtSoundVolume = new Text(110, 9, 210, 8);
+	_txtSoundVolume = new Text(114, 9, 210, 8);
 	_slrSoundVolume = new Slider(100, 16, 210, 18);
 
-	_txtUiVolume = new Text(110, 9, 94, 40);
+	_txtUiVolume = new Text(114, 9, 94, 40);
 	_slrUiVolume = new Slider(100, 16, 94, 50);
 
-	_txtBitDepth = new Text(110, 9, 94, 72);
+	_txtBitDepth = new Text(114, 9, 94, 72);
 	_cbxBitDepth = new ComboBox(this, 100, 16, 94, 82);
 
-	_txtSampleRate = new Text(110, 9, 210, 72);
+	_txtSampleRate = new Text(114, 9, 210, 72);
 	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 82);
 
 	add(_txtMusicVolume);

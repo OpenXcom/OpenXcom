@@ -1090,7 +1090,7 @@ void TextList::scrollTo(size_t scroll)
 	if (!_scrolling)
 		return;
 	_scroll = std::max(0u, std::min(_rows.size() - _visibleRows, scroll));
-	draw();
+	draw(); // can't just set _redraw here because reasons
 	updateArrows();
 }
 
