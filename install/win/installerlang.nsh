@@ -327,3 +327,45 @@ LangString LINK_Uninstall ${LANG_SPANISH} "Desinstalación"
 ;Warnings
 LangString WARN_UFOMissing ${LANG_SPANISH} "X-COM 1 no se encuentra en esta carpeta. ${GAME_NAME} requiere una instalación válida de X-COM para ejecutarse. ¿Desea continuar?"
 LangString WARN_XCUDetected ${LANG_SPANISH} "XcomUtil detectado. ${GAME_NAME} es incompatible con XcomUtil y puede experimentar un comportamiento extraño. ¿Desea continuar?"
+
+;================FRENCH================
+
+;--------------------------------
+;Pages
+	
+LangString PAGE_UfoFolder ${LANG_FRENCH} "${GAME_NAME} nécessite UFO: Enemy Unknown / X-COM: UFO Defense. Vous pouvez passez cette étape si vous modifiez une installation existante.$\n$\n Le programme d'installation va transférer les fichiers nécessaires depuis le dossier suivant.  Pour transférer les fichiers depuis un autre dossier,  cliquez « Parcourir » et sélectionnez un autre dossier puis cliquez « suivant » pour continuer."
+LangString PAGE_UfoFolder_TITLE ${LANG_FRENCH} "Choisissez le répertoire d'installation  pour X-COM 1"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_FRENCH} "Choisissez le répertoire où est installé X-COM 1."
+LangString DEST_UfoFolder ${LANG_FRENCH} "Répertoire X-COM 1"
+
+;--------------------------------
+;Installer Sections
+	
+LangString NAME_SecMain ${LANG_FRENCH} "Fichiers du jeu"
+LangString DESC_SecMain ${LANG_FRENCH} "Fichiers nécessaires pour exécuter ${GAME_NAME}."
+LangString NAME_SecPatch ${LANG_FRENCH} "Données du Patch"
+LangString DESC_SecPatch ${LANG_FRENCH} "Corrige les problèmes dans les données originales de X-COM 1. Recommandé pour une première installation. (nécessite une connexion internet)"
+LangString NAME_SecDesktop ${LANG_FRENCH} "Raccourcis Bureau"
+LangString DESC_SecDesktop ${LANG_FRENCH} "Crée un raccourcis sur le bureau ${GAME_NAME}."
+	
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_FRENCH} "Désinstaller X-COM"
+LangString DESC_UnData ${LANG_FRENCH} "Effacer tous les fichier de ${GAME_NAME}, ainsi que les mods et les ressources. Recommandé pour une réinstallation propre."
+LangString NAME_UnUser ${LANG_FRENCH} "Effacer les données utilisateur"
+LangString DESC_UnUser ${LANG_FRENCH} "Effacer toutes les données utilisateur de ${GAME_NAME}, avec les sauvegardes, les impressions d'écran et les options. Recommandé pour une réinitialisation complète."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_FRENCH} "Répertoire de Données"
+LangString LINK_Readme ${LANG_FRENCH} "Lisez-Moi"
+LangString LINK_UserFolder ${LANG_FRENCH} "Répertoire Utilisateur"
+LangString LINK_Uninstall ${LANG_FRENCH} "Désinstaller"
+	
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_FRENCH} "X-COM 1 ne se trouve pas dans ce dossier. ${GAME_NAME} nécessite une installation valide de X-COM pour fonctionner. Continuer?"
+LangString WARN_XCUDetected ${LANG_FRENCH} "XcomUtil détécté. ${GAME_NAME} est incompatible avec XcomUtil et peut engendrer des instabilités. Continuer?"
