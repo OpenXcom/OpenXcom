@@ -225,6 +225,10 @@ void ScrollBar::drawTrack()
 		{
 			_track->offset(-5, 1);
 		}
+		else if (_list->getComboBox())
+		{
+			_track->offset(+1, Palette::backPos);
+		}
 		else
 		{
 			_track->offset(-5, Palette::backPos);

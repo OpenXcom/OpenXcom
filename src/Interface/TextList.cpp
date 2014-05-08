@@ -1043,6 +1043,10 @@ void TextList::mouseOver(Action *action, State *state)
 			{
 				_selector->offset(-10, 1);
 			}
+			else if (_comboBox)
+			{
+				_selector->offset(+1, Palette::backPos);
+			}
 			else
 			{
 				_selector->offset(-10, Palette::backPos);
@@ -1104,4 +1108,12 @@ void TextList::setComboBox(ComboBox *comboBox)
 	_comboBox = comboBox;
 }
 
+/**
+ * Gets the combobox that this list is attached to, if any.
+ * @return the attached combobox.
+ */
+ComboBox *TextList::getComboBox() const
+{
+	return _comboBox;
+}
 }

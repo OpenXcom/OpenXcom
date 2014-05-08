@@ -189,6 +189,8 @@ public:
 	void scrollTo(size_t scroll);
 	/// Attaches this button to a combobox.
 	void setComboBox(ComboBox *comboBox);
+	/// Check for a combobox.
+	ComboBox *getComboBox() const;
 };
 
 }
