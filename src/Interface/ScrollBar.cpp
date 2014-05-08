@@ -155,7 +155,6 @@ void ScrollBar::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void ScrollBar::handle(Action *action, State *state)
 {
 	InteractiveSurface::handle(action, state);
-	if (_visible && !_hidden) _redraw = true; // dumb hack
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -178,6 +177,7 @@ void ScrollBar::blit(Surface *surface)
 	{
 		_track->blit(surface);
 		_thumb->blit(surface);
+		invalidate();
 	}
 }
 

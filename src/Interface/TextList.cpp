@@ -816,6 +816,7 @@ void TextList::updateArrows()
 	_down->setVisible(_rows.size() > _visibleRows /*&& _scroll < _rows.size() - _visibleRows*/);
 	_scrollbar->setVisible(_rows.size() > _visibleRows);
 	_scrollbar->invalidate();
+	_scrollbar->blit(this);
 }
 
 /**
