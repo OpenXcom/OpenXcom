@@ -424,7 +424,7 @@ void Surface::offset(int off, int min, int max, int mul)
 		{
 			p = min;
 		}
-		if (max != -1 && p > max)
+		else if (max != -1 && p > max)
 		{
 			p = max;
 		}

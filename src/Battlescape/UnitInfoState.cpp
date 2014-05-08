@@ -585,16 +585,8 @@ void UnitInfoState::handle(Action *action)
 	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (action->getDetails()->key.keysym.sym == Options::keyBattleNextUnit)
-		{
-			if (!_mindProbe) btnNextClick(action);
-		}
-		else if (action->getDetails()->key.keysym.sym == Options::keyBattlePrevUnit)
-		{
-			if (!_mindProbe) btnPrevClick(action);
-		}
-		else if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
-				 action->getDetails()->key.keysym.sym == Options::keyBattleStats)
+		if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
+			action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
 			_game->popState();
 		}
