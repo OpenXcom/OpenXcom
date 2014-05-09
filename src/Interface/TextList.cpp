@@ -761,6 +761,7 @@ void TextList::clearList()
 	}
 	_texts.clear();
 	_rows.clear();
+	scrollTo(0);
 	_redraw = true;
 }
 

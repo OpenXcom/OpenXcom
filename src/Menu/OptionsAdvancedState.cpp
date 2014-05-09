@@ -116,6 +116,7 @@ OptionsAdvancedState::~OptionsAdvancedState()
 void OptionsAdvancedState::init()
 {
 	OptionsBaseState::init();
+	_lstOptions->clearList();
 	_lstOptions->addRow(2, tr("STR_GENERAL").c_str(), L"");
 	_lstOptions->setCellColor(0, 0, _colorGroup);
 	addSettings(_settingsGeneral);
