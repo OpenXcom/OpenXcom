@@ -434,12 +434,10 @@ void UnitWalkBState::think()
 		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
-		if (onScreen)
-		{
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
-		}
-		if (unitSpotted && !(_action.desperate || _unit->getCharging()) && !_falling)
+		_unit->setCache(0);
+		_parent->getMap()->cacheUnit(_unit);
+
+		if (unitSpotted && !_action.desperate && !_unit->getCharging() && !_falling)
 		{
 			if (_beforeFirstStep)
 			{
@@ -480,7 +478,7 @@ void UnitWalkBState::postPathProcedures()
 		if (_unit->getCharging() != 0)
 		{
 			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());
-			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
+			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), dir))
 			{
 				BattleAction action;
 				action.actor = _unit;
@@ -496,6 +494,8 @@ void UnitWalkBState::postPathProcedures()
 		else if (_unit->_hidingForTurn)
 		{
 			dir = _unit->getDirection() + 4;
+			_unit->_hidingForTurn = false;
+			_unit->dontReselect();
 		}
 		if (dir != -1)
 		{
@@ -509,9 +509,6 @@ void UnitWalkBState::postPathProcedures()
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
 			}
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
-
 		}
 	}
 	else if (!_parent->getPanicHandled())

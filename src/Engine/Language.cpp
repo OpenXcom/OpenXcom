@@ -68,9 +68,11 @@ Language::Language() : _id(""), _strings(), _handler(0), _direction(DIRECTION_LT
 		_names["nl"] = utf8ToWstr("Nederlands");
 		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl-PL"] = utf8ToWstr("Polski");
+		_names["pt-BR"] = utf8ToWstr("Português (BR)");
 		_names["pt-PT"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
+		_names["sk-SK"] = utf8ToWstr("Slovenčina");
 		_names["sv"] = utf8ToWstr("Svenska");
 		_names["tr-TR"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");

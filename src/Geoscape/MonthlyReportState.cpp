@@ -293,8 +293,14 @@ void MonthlyReportState::calculateChanges()
 	}
 	// apply research bonus AFTER calculating our total, because this bonus applies to the council ONLY,
 	// and shouldn't influence each country's decision.
+
+	// the council is more lenient after the first month
+	if (_game->getSavedGame()->getMonthsPassed() > 1)
+		_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
+
 	xcomTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xcomSubTotal;
-	_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
+
+
 	if (_game->getSavedGame()->getResearchScores().size() > 2)
 		_lastMonthsRating += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
 	// now that we have our totals we can send the relevant info to the countries
@@ -328,7 +334,7 @@ void MonthlyReportState::calculateChanges()
 		}
 	}
 	//calculate total.
-	_ratingTotal = xcomTotal - alienTotal + 400;
+	_ratingTotal = xcomTotal - alienTotal;
 }
 /**
  * Builds a sentence from a list of countries, adding the appropriate

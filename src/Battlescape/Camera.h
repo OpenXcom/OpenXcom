@@ -108,6 +108,8 @@ public:
 	bool isOnScreen(const Position &mapPos) const;
 	/// Resize the viewable area.
 	void resize();
+	/// stop mouse scrolling.
+	void stopMouseScrolling();
 };
 }
 #endif

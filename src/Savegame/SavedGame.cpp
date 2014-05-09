@@ -1487,7 +1487,7 @@ void SavedGame::addResearchScore(int score)
  * return the list of research scores
  * @return list of research scores.
  */
-std::vector<int> SavedGame::getResearchScores()
+std::vector<int> &SavedGame::getResearchScores()
 {
 	return _researchScores;
 }

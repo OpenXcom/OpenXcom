@@ -268,7 +268,6 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	}
 	else if (_rule.getType() == "STR_ALIEN_SUPPLY")
 	{
-		Log(LOG_DEBUG) << __FILE__ << ':' << __LINE__ << ' ' << _base;
 		if (ufoRule.getType() == "STR_SUPPLY_SHIP" && !_base)
 		{
 			// No base to supply!

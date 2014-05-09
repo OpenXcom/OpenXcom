@@ -54,6 +54,8 @@ public:
 	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == L'\x02'); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
 	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == L'\xA0'); }
+	/// Checks if a character is a word separator.
+	static inline bool isSeparator(wchar_t c) { return (c == L'-' || c == '/'); }
 	/// Checks if a character is a non-breaking space.
 	static inline bool isNonBreakableSpace(wchar_t c) { return (c == L'\xA0'); }
 	/// Sets the character index for every font.

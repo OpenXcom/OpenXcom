@@ -636,10 +636,8 @@ void BattlescapeState::mapOver(Action *action)
  */
 void BattlescapeState::mapPress(Action *action)
 {
-	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
-	int my = int(action->getAbsoluteYMouse());
-	int mx = int(action->getAbsoluteXMouse());
-	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
+	// don't handle mouseclicks over the buttons (it overlaps with map surface)
+	if (_mouseOverIcons) return;
 
 	if (action->getDetails()->button.button == Options::battleDragScrollButton)
 	{
@@ -696,11 +694,9 @@ void BattlescapeState::mapClick(Action *action)
 			return;
 		}
 	}
-
-	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
-	int my = int(action->getAbsoluteYMouse());
-	int mx = int(action->getAbsoluteXMouse());
-	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
+	
+	// don't handle mouseclicks over the buttons (it overlaps with map surface)
+	if (_mouseOverIcons) return;
 
 
 	// don't accept leftclicks if there is no cursor or there is an action busy

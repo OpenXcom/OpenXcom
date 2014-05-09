@@ -381,6 +381,7 @@
     <ClCompile Include="Interface\Frame.cpp" />
     <ClCompile Include="Interface\ImageButton.cpp" />
     <ClCompile Include="Interface\NumberText.cpp" />
+    <ClCompile Include="Interface\ScrollBar.cpp" />
     <ClCompile Include="Interface\Slider.cpp" />
     <ClCompile Include="Interface\Text.cpp" />
     <ClCompile Include="Interface\TextButton.cpp" />
@@ -683,6 +684,7 @@
     <ClInclude Include="Interface\Frame.h" />
     <ClInclude Include="Interface\ImageButton.h" />
     <ClInclude Include="Interface\NumberText.h" />
+    <ClInclude Include="Interface\ScrollBar.h" />
     <ClInclude Include="Interface\Slider.h" />
     <ClInclude Include="Interface\Text.h" />
     <ClInclude Include="Interface\TextButton.h" />
@@ -802,7 +804,7 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <None Include="..\res\windows\openxcom.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

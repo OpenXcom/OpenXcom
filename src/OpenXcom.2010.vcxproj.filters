@@ -787,27 +787,72 @@
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\SoldierDiary.cpp" />
-    <ClCompile Include="Battlescape\CommendationState.cpp" />
-    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
-    <ClCompile Include="Engine\OptionInfo.cpp" />
-    <ClCompile Include="Interface\ComboBox.cpp" />
-    <ClCompile Include="Menu\ConfirmLoadState.cpp" />
-    <ClCompile Include="Menu\IntroState.cpp" />
-    <ClCompile Include="Menu\ListGamesState.cpp" />
-    <ClCompile Include="Menu\ListLoadState.cpp" />
-    <ClCompile Include="Menu\ListSaveState.cpp" />
-    <ClCompile Include="Menu\OptionsAudioState.cpp" />
-    <ClCompile Include="Menu\OptionsConfirmState.cpp" />
-    <ClCompile Include="Menu\OptionsDefaultsState.cpp" />
-    <ClCompile Include="Menu\OptionsGeoscapeState.cpp" />
-    <ClCompile Include="Menu\OptionsModsState.cpp" />
-    <ClCompile Include="Menu\OptionsVideoState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp" />
+    <ClCompile Include="Menu\OptionsVideoState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsModsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsAudioState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsGeoscapeState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OptionInfo.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\ComboBox.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsDefaultsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsConfirmState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\IntroState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ConfirmLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListGamesState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListSaveState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatString.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\SaveGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\LoadGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\adlplayer.cpp">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\AdlibMusic.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\fmopl.cpp">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\ScrollBar.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Basescape\ManufactureState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
@@ -1608,27 +1653,72 @@
     <ClInclude Include="Basescape\SoldierMemorialState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\SoldierDiary.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Battlescape\CommendationState.h" />
-    <ClInclude Include="Ruleset\RuleCommendations.h" />
-    <ClInclude Include="Engine\OptionInfo.h" />
-    <ClInclude Include="Engine\Options.inc.h" />
-    <ClInclude Include="Interface\ComboBox.h" />
-    <ClInclude Include="Menu\ConfirmLoadState.h" />
-    <ClInclude Include="Menu\IntroState.h" />
-    <ClInclude Include="Menu\ListGamesState.h" />
-    <ClInclude Include="Menu\ListLoadState.h" />
-    <ClInclude Include="Menu\ListSaveState.h" />
-    <ClInclude Include="Menu\OptionsAudioState.h" />
-    <ClInclude Include="Menu\OptionsConfirmState.h" />
-    <ClInclude Include="Menu\OptionsDefaultsState.h" />
-    <ClInclude Include="Menu\OptionsGeoscapeState.h" />
-    <ClInclude Include="Menu\OptionsModsState.h" />
-    <ClInclude Include="Menu\OptionsVideoState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryMissionState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h" />
+    <ClInclude Include="Menu\OptionsVideoState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsModsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsAudioState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsGeoscapeState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OptionInfo.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ComboBox.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsDefaultsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsConfirmState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\IntroState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Options.inc.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ConfirmLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListGamesState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListSaveState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatString.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatStringCondition.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SaveGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LoadGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\adlplayer.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\fmopl.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AdlibMusic.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ScrollBar.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1664,11 +1754,14 @@
     <Filter Include="Engine\Scalers">
       <UniqueIdentifier>{fef61e76-5d44-4389-a40c-12da6e590e2c}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <Filter Include="Engine\Adlib">
+      <UniqueIdentifier>{09464f19-4bce-449f-a27c-5cd7b9850dbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\windows\openxcom.ico" />
   </ItemGroup>
 </Project>

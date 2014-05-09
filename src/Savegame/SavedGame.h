@@ -275,7 +275,7 @@ public:
 	/// sets the research score for the month
 	void addResearchScore(int score);
 	/// gets the list of research scores
-	std::vector<int> getResearchScores();
+	std::vector<int> &getResearchScores();
 	/// gets the list of incomes.
 	std::vector<int> getIncomes();
 	/// gets the list of expenditures.
