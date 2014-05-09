@@ -18,19 +18,15 @@
  */
 #ifndef OPENXCOM_SOLDIERDIARY_H
 #define OPENXCOM_SOLDIERDIARY_H
-
 #include <yaml-cpp/yaml.h>
 #include "GameTime.h"
 #include "BattleUnit.h"
 #include "SavedGame.h"
 #include "../Ruleset/Ruleset.h"
-
 namespace OpenXcom
 {
-
 class GameTime;
 class Ruleset;
-
 /**
  * Each entry will be its own commendation.
  */
@@ -40,7 +36,6 @@ private:
 	std::string  _type, _noun;
 	int  _decorationLevel;
 	bool _isNew;
-
 public:
 	/// Creates a new commendation and loads its contents from YAML.
 	SoldierCommendations(const YAML::Node& node);
@@ -70,7 +65,6 @@ public:
 	// Sets _isNew to true.
 	void addDecoration();
 };
-
 class SoldierDiary
 {
 private:
@@ -82,7 +76,6 @@ private:
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
 		_hitCounter5in1Mission;
-
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
 public:
@@ -137,7 +130,5 @@ public:
     /// Get the kill list.
     std::vector<BattleUnitKills*> &getKills();
 };
-
 }
-
 #endif

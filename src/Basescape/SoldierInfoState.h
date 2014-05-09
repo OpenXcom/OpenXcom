@@ -18,13 +18,10 @@
  */
 #ifndef OPENXCOM_SOLDIERINFOSTATE_H
 #define OPENXCOM_SOLDIERINFOSTATE_H
-
 #include "../Engine/State.h"
 #include <vector>
-
 namespace OpenXcom
 {
-
 class Base;
 class Surface;
 class TextButton;
@@ -32,7 +29,6 @@ class Text;
 class TextEdit;
 class Bar;
 class Soldier;
-
 /**
  * Soldier Info screen that shows all the
  * info of a specific soldier.
@@ -44,12 +40,10 @@ private:
 	size_t _soldierId;
 	Soldier *_soldier;
 	std::vector<Soldier*> *_list;
-
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;
 	Text *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
 	TextEdit *_edtSoldier;
-
 	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength, *_txtPsiStrength, *_txtPsiSkill;
 	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numStrength, *_numPsiStrength, *_numPsiSkill;
 	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength, *_barPsiStrength, *_barPsiSkill;
@@ -79,7 +73,5 @@ public:
 	/// Handler for clicking the Diary button.
 	void btnDiaryClick(Action *action);
 };
-
 }
-
 #endif

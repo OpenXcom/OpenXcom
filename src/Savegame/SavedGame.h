@@ -18,16 +18,13 @@
  */
 #ifndef OPENXCOM_SAVEDGAME_H
 #define OPENXCOM_SAVEDGAME_H
-
 #include <map>
 #include <vector>
 #include <string>
 #include <time.h>
 #include "GameTime.h"
-
 namespace OpenXcom
 {
-
 class Ruleset;
 class GameTime;
 class Country;
@@ -48,12 +45,10 @@ class AlienStrategy;
 class AlienMission;
 class Target;
 class Soldier;
-
 /**
  * Enumerator containing all the possible game difficulties.
  */
 enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
-
 /**
  * Container for mission statistics.
  */
@@ -118,12 +113,10 @@ struct MissionStatistics
     MissionStatistics() : id (0), time(0,0,0,0,0,0,0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), type(), ufo("NO_UFO"), success(false), score(0), rating(), alienRace("STR_UNKNOWN"), daylight(0), injuryList() { }
     ~MissionStatistics() { }
 };
-
  /**
  * Enumerator for the various save types.
  */
 enum SaveType { SAVE_DEFAULT, SAVE_QUICK, SAVE_AUTO_GEOSCAPE, SAVE_AUTO_BATTLESCAPE, SAVE_IRONMAN, SAVE_IRONMAN_END };
-
 /**
  * Container for savegame info displayed on listings.
  */
@@ -137,7 +130,6 @@ struct SaveInfo
 	std::vector<std::string> rulesets;
 	bool reserved;
 };
-
 /**
  * The game data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like funds,
@@ -174,12 +166,10 @@ private:
 	std::vector<Soldier*> _deadSoldiers;
 	int _selectedBase;
     std::vector<MissionStatistics*> _missionStatistics;
-
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
 public:
 	static const std::string AUTOSAVE_GEOSCAPE, AUTOSAVE_BATTLESCAPE, QUICKSAVE;
-
 	/// Creates a new saved game.
 	SavedGame();
 	/// Cleans up the saved game.
@@ -340,9 +330,6 @@ public:
 	int getSoldierScore(Soldier *soldier);
     /// Gets the list of missions statistics
 	std::vector<MissionStatistics*> *getMissionStatistics();
-
 };
-
 }
-
 #endif
