@@ -1226,7 +1226,6 @@ en-US:
   STR_LETTERBOXED: "Letterboxed"
   STR_LETTERBOXED_DESC: "Letterboxes the display to maintain the original aspect ratio."
   STR_RESIZABLE: "Resizable"
-  STR_RESIZABLE_DESC: "Makes the game window resizable."
   STR_LOCK_MOUSE: "Lock Mouse"
   STR_LOCK_MOUSE_DESC: "Keeps the mouse cursor from leaving the game window. Not recommended for multitasking."
   STR_MUSIC_VOLUME: "Music Volume"

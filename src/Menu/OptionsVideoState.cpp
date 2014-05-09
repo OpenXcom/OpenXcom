@@ -71,13 +71,12 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtGeoScale = new Text(114, 9, 94, 82);
 	_cbxGeoScale = new ComboBox(this, 100, 16, 94, 92);
 	
-	_txtBattleScale = new Text(114, 9, 94, 118);
-	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 128);
+	_txtBattleScale = new Text(114, 9, 94, 112);
+	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 122);
 
 	_txtOptions = new Text(114, 9, 210, 82);
 	_btnLetterbox = new ToggleTextButton(100, 16, 210, 92);
-	_btnResize = new ToggleTextButton(100, 16, 210, 110);
-	_btnLockMouse = new ToggleTextButton(100, 16, 210, 128);
+	_btnLockMouse = new ToggleTextButton(100, 16, 210, 110);
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
@@ -119,7 +118,6 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 
 	add(_txtOptions);
 	add(_btnLetterbox);
-	add(_btnResize);
 	add(_btnLockMouse);
 
 
@@ -185,15 +183,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
 	_btnLetterbox->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-	_btnResize->setColor(Palette::blockOffset(15)-1);
-	_btnResize->setText(tr("STR_RESIZABLE"));
-	_btnResize->setPressed(Options::allowResize);
-	_btnResize->onMouseClick((ActionHandler)&OptionsVideoState::btnResizeClick);
-	_btnResize->setTooltip("STR_RESIZABLE_DESC");
-	_btnResize->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnResize->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
+	
 	_btnLockMouse->setColor(Palette::blockOffset(15)-1);
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
 	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
@@ -281,11 +271,14 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	displayModes.push_back("STR_WINDOWED");
 	displayModes.push_back("STR_FULLSCREEN");
 	displayModes.push_back("STR_BORDERLESS");
+	displayModes.push_back("STR_RESIZABLE");
 
 	int displayMode = 0;
 	if (Options::fullscreen)
 		displayMode = 1;
 	else if (Options::borderless)
+		displayMode = 2;
+	else if (Options::allowResize)
 		displayMode = 2;
 
 	_cbxDisplayMode->setColor(Palette::blockOffset(15)-1);
@@ -499,14 +492,22 @@ void OptionsVideoState::updateDisplayMode(Action *)
 	case 0:
 		Options::fullscreen = false;
 		Options::borderless = false;
+		Options::allowResize = false;
 		break;
 	case 1:
 		Options::fullscreen = true;
 		Options::borderless = false;
+		Options::allowResize = false;
 		break;
 	case 2:
 		Options::fullscreen = false;
 		Options::borderless = true;
+		Options::allowResize = false;
+		break;
+	case 3:
+		Options::fullscreen = false;
+		Options::borderless = false;
+		Options::allowResize = true;
 		break;
 	default:
 		break;
@@ -520,15 +521,6 @@ void OptionsVideoState::updateDisplayMode(Action *)
 void OptionsVideoState::btnLetterboxClick(Action *)
 {
 	Options::keepAspectRatio = _btnLetterbox->getPressed();
-}
-
-/**
- * Changes the Resizable option.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnResizeClick(Action *)
-{
-	Options::allowResize = _btnResize->getPressed();
 }
 
 /**
