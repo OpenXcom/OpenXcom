@@ -122,10 +122,10 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size()*11);
 	else
 		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
-	_regionToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), 22));
+	_regionToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), 18));
 	_btnRegionTotal->onMousePress((ActionHandler)&GraphsState::btnRegionListClick);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
-	_btnRegionTotal->setInvertColor(22);
+	_btnRegionTotal->setInvertColor(18);
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
 	_alienRegionLines.push_back(new Surface(320,200,0,0));
 	add(_alienRegionLines.at(offset));
@@ -922,9 +922,9 @@ void GraphsState::drawRegionLines()
 		if (newLineVector.size() > 1)
 		{
 			if (_alien)
-				_alienRegionLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_alienRegionLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9)-8);
 			else
-				_xcomRegionLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_xcomRegionLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9)-8);
 		}
 	}
 	if (_alien)
