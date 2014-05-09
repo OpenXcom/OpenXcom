@@ -183,7 +183,7 @@ extraStrings:
      STR_MEDAL_MERIT_STAR_NAME: "Medal of Aggression"
      STR_MEDAL_MERIT_STAR_DESCRIPTION: "Given to a soldier who has killed many aliens."
      STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
-     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in fighting {0} soldiers."
+     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in combating the {0} menace."
      STR_MEDAL_DEFENDER_MEDAL_NAME: "Guardian Star"
      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defence mission."
      STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
