@@ -17,8 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
-#include <SDL_thread.h>
-#include <SDL_syswm.h>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
@@ -38,6 +36,8 @@
 #include "IntroState.h"
 #include "ErrorMessageState.h"
 #include "OptionsBaseState.h"
+#include <SDL_thread.h>
+#include <SDL_syswm.h>
 
 namespace OpenXcom
 {
