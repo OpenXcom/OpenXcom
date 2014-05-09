@@ -279,7 +279,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	else if (Options::borderless)
 		displayMode = 2;
 	else if (Options::allowResize)
-		displayMode = 2;
+		displayMode = 3;
 
 	_cbxDisplayMode->setColor(Palette::blockOffset(15)-1);
 	_cbxDisplayMode->setOptions(displayModes);
