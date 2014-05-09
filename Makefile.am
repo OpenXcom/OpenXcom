@@ -403,6 +403,8 @@ openxcom_SOURCES = \
 	src/Interface/ArrowButton.h \
 	src/Interface/Bar.cpp \
 	src/Interface/Bar.h \
+	src/Interface/ComboBox.cpp \
+	src/Interface/ComboBox.h \
 	src/Interface/Cursor.cpp \
 	src/Interface/Cursor.h \
 	src/Interface/FpsCounter.cpp \
@@ -413,6 +415,8 @@ openxcom_SOURCES = \
 	src/Interface/ImageButton.h \
 	src/Interface/NumberText.cpp \
 	src/Interface/NumberText.h \
+	src/Interface/ScrollBar.cpp \
+	src/Interface/ScrollBar.h \
 	src/Interface/Slider.cpp \
 	src/Interface/Slider.h \
 	src/Interface/TextButton.cpp \
@@ -427,8 +431,6 @@ openxcom_SOURCES = \
 	src/Interface/ToggleTextButton.h \
 	src/Interface/Window.cpp \
 	src/Interface/Window.h \
-	src/Interface/ComboBox.cpp \
-	src/Interface/ComboBox.h \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \

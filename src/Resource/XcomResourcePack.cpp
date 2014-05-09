@@ -487,6 +487,43 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 	
+
+	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
+	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
+
+	// first, let's do the base info screen
+	// erase the old lines, copying from a +2 offset to account for the dithering
+	for (int y = 91; y < 199; y += 12)
+		for (int x = 0; x < 149; ++x)
+			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x,y+2));
+	// drawn new lines, use the bottom row of pixels as a basis
+	for (int y = 89; y < 199; y += 11)
+		for (int x = 0; x < 149; ++x)
+			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x,199));
+	// finally, move the top of the graph up by one pixel, offset for the last iteration again due to dithering.
+	for (int y = 72; y < 80; ++y)
+		for (int x = 0; x < 320; ++x)
+		{
+			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x,y + (y == 79 ? 2 : 1)));
+		}
+
+	// now, let's adjust the battlescape info screen.
+	// erase the old lines, no need to worry about dithering on this one.
+	for (int y = 39; y < 199; y += 10)
+		for (int x = 0; x < 169; ++x)
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x,30));
+	// drawn new lines, use the bottom row of pixels as a basis
+	for (int y = 190; y > 37; y -= 9)
+		for (int x = 0; x < 169; ++x)
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x,199));
+	// move the top of the graph down by eight pixels to erase the row we don't need (we actually created ~1.8 extra rows earlier)
+	for (int y = 37; y > 29; --y)
+		for (int x = 0; x < 320; ++x)
+		{
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x,y-8));
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y-8, 0);
+		}
+
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 	
 	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)

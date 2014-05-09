@@ -31,6 +31,7 @@ enum ArrowOrientation { ARROW_VERTICAL, ARROW_HORIZONTAL };
 
 class ArrowButton;
 class ComboBox;
+class ScrollBar;
 
 /**
  * List of Text's split into columns.
@@ -51,6 +52,7 @@ private:
 	bool _dot, _selectable, _condensed, _contrast, _wrap;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
+	ScrollBar *_scrollbar;
 	int _margin;
 	bool _scrolling;
 	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
@@ -62,6 +64,8 @@ private:
 
 	/// Updates the arrow buttons.
 	void updateArrows();
+	/// Updates the visible rows.
+	void updateVisible();
 public:
 	/// Creates a text list with the specified size and position.
 	TextList(int width, int height, int x = 0, int y = 0);
@@ -89,8 +93,12 @@ public:
 	int getColumnX(int column) const;
 	/// Gets the Y position of a certain row.
 	int getRowY(int row) const;
+	/// Gets the amount of text in the list.
+	size_t getTexts() const;
 	/// Gets the amount of rows in the list.
-	int getRows() const;
+	size_t getRows() const;
+	/// Gets the amount of visible rows in the list.
+	size_t getVisibleRows() const;
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
@@ -178,9 +186,11 @@ public:
 	/// get the scroll depth
 	int getScroll();
 	/// set the scroll depth
-	void setScroll(int scroll);
+	void scrollTo(size_t scroll);
 	/// Attaches this button to a combobox.
 	void setComboBox(ComboBox *comboBox);
+	/// Check for a combobox.
+	ComboBox *getComboBox() const;
 };
 
 }

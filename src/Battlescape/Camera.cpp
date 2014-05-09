@@ -190,7 +190,7 @@ void Camera::mouseOver(Action *action, State *)
 			_scrollMouseY = scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
 			//up left
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
 			{
 				_scrollMouseX = scrollSpeed;
 				_scrollMouseY /=2;
@@ -385,7 +385,7 @@ void Camera::up()
 	if (_mapOffset.z < _mapsize_z - 1)
 	{
 		_mapOffset.z++;
-		_mapOffset.y += _spriteHeight / 2;
+		_mapOffset.y += _spriteHeight * 3 / 5;
 		_map->draw();
 	}
 }
@@ -398,7 +398,7 @@ void Camera::down()
 	if (_mapOffset.z > 0)
 	{
 		_mapOffset.z--;
-		_mapOffset.y -= _spriteHeight / 2;
+		_mapOffset.y -= _spriteHeight * 3 / 5;
 		_map->draw();
 	}
 }
@@ -589,5 +589,10 @@ void Camera::resize()
 	_screenWidth = _map->getWidth();
 	_screenHeight = _map->getHeight();
 	_visibleMapHeight = _map->getHeight() - Map::ICON_HEIGHT;
+}
+
+void Camera::stopMouseScrolling()
+{
+	_scrollMouseTimer->stop();
 }
 }

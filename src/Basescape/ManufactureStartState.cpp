@@ -136,6 +136,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_lstRequiredItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
 	_lstRequiredItems->setBackground(_window);
 	_lstRequiredItems->setColor(Palette::blockOffset(13));
+	_lstRequiredItems->setArrowColor(Palette::blockOffset(15)+1);
 
 	ItemContainer * itemContainer (base->getItems());
 	int row = 0;

@@ -51,7 +51,7 @@ protected:
 	bool _showMsg, _noUI;
 	std::vector<SaveInfo> _saves;
 	int _firstValidRow;
-	bool _autoquick;
+	bool _autoquick, _sortable;
 
 	void updateArrows();
 public:
@@ -77,6 +77,8 @@ public:
 	void sortNameClick(Action *action);
 	/// Handler for clicking the Date arrow.
 	void sortDateClick(Action *action);
+	/// disables the sort buttons.
+	void disableSort();
 };
 
 }

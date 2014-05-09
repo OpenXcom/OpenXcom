@@ -52,7 +52,7 @@ private:
 	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale;
 	Text *_txtMode;
 	Text *_txtOptions;
-	ToggleTextButton *_btnLetterbox, *_btnResize, *_btnLockMouse;
+	ToggleTextButton *_btnLetterbox, *_btnLockMouse;
 
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
@@ -81,8 +81,6 @@ public:
 	void updateDisplayMode(Action *action);
 	/// Handler for clicking the Letterboxed button.
 	void btnLetterboxClick(Action *action);
-	/// Handler for clicking the Resizable button.
-	void btnResizeClick(Action *action);
 	/// Handler for clicking the Lock Mouse button.
 	void btnLockMouseClick(Action *action);
 	/// Handler for updating the selected battlescape scale.

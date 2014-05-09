@@ -287,7 +287,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								visibleUnit->getTile()->setVisible(+1);
 								visibleUnit->setVisible(true);
 							}
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER)
 								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
 								unit->addToVisibleUnits(visibleUnit);
@@ -1048,9 +1048,15 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			const int sz = bu->getArmor()->getSize() * 8;
 			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz, bu->getFloatHeight() - tile->getTerrainLevel());
 			const Position relative = (center - target) - Position(0,0,verticaloffset);
+			const int wounds = bu->getFatalWounds();
 
 			adjustedDamage = bu->damage(relative, rndPower, type);
 
+			// if it's going to bleed to death and it's not a player, give credit for the kill.
+			if (unit && bu->getFaction() != FACTION_PLAYER && wounds < bu->getFatalWounds())
+			{
+				bu->killedBy(unit->getFaction());
+			}
 			const int bravery = (110 - bu->getStats()->bravery) / 10;
 			const int modifier = bu->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
 			const int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
@@ -1066,7 +1072,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				}
 			}
 
-			if (bu->getOriginalFaction() == FACTION_HOSTILE && unit && unit->getOriginalFaction() == FACTION_PLAYER && type != DT_NONE)
+			if (bu->getOriginalFaction() == FACTION_HOSTILE &&
+				unit &&
+				unit->getOriginalFaction() == FACTION_PLAYER &&
+				type != DT_NONE &&
+				_save->getBattleGame()->getCurrentAction()->type != BA_HIT &&
+				_save->getBattleGame()->getCurrentAction()->type != BA_STUN)
 			{
 				unit->addFiringExp();
 			}
@@ -1180,19 +1191,25 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						int dmgRng = (type == DT_HE || Options::TFTDDamage) ? 50 : 100;
 						int min = power_ * (100 - dmgRng) / 100;
 						int max = power_ * (100 + dmgRng) / 100;
+						BattleUnit *bu = dest->getUnit();
+						int wounds = 0;
+						if (bu && unit)
+						{
+							wounds = bu->getFatalWounds();
+						}
 						switch (type)
 						{
 						case DT_STUN:
 							// power 0 - 200%
-							if (dest->getUnit())
+							if (bu)
 							{
 								if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 								{
-									dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(min, max), type);
+									bu->damage(Position(0, 0, 0), RNG::generate(min, max), type);
 								}
 								else
 								{
-									dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(min, max), type);
+									bu->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(min, max), type);
 								}
 							}
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
@@ -1206,18 +1223,18 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						case DT_HE:
 							{
 								// power 50 - 150%
-								if (dest->getUnit())
+								if (bu)
 								{
 									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 									{
 										// ground zero effect is in effect
-										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(min, max)), type);
+										bu->damage(Position(0, 0, 0), (int)(RNG::generate(min, max)), type);
 									}
 									else
 									{
 										// directional damage relative to explosion position.
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
-										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(min, max)), type);
+										bu->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(min, max)), type);
 									}
 								}
 								bool done = false;
@@ -1260,16 +1277,16 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									dest->setFire(dest->getFuel() + 1);
 									dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
 								}
-								if (dest->getUnit())
+								if (bu)
 								{
-									float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
+									float resistance = bu->getArmor()->getDamageModifier(DT_IN);
 									if (resistance > 0.0)
 									{
-										dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+										bu->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
 										int burnTime = RNG::generate(0, int(5 * resistance));
-										if (dest->getUnit()->getFire() < burnTime)
+										if (bu->getFire() < burnTime)
 										{
-											dest->getUnit()->setFire(burnTime); // catch fire and burn
+											bu->setFire(burnTime); // catch fire and burn
 										}
 									}
 								}
@@ -1279,9 +1296,14 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							break;
 						}
 
-						if (unit && dest->getUnit() && dest->getUnit()->getFaction() != unit->getFaction())
+						if (unit && bu && bu->getFaction() != unit->getFaction())
 						{
 							unit->addFiringExp();
+							// if it's going to bleed to death and it's not a player, give credit for the kill.
+							if (wounds < bu->getFatalWounds() && bu->getFaction() != FACTION_PLAYER)
+							{
+								bu->killedBy(unit->getFaction());
+							}
 						}
 
 					}
@@ -2411,6 +2433,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 				if (liveAliens == 0 || liveSoldiers == 0)
 				{
 					_save->setSelectedUnit(0);
+					_save->getBattleGame()->cancelCurrentAction(true);
 					_save->getBattleGame()->requestEndTurn();
 				}
 			}

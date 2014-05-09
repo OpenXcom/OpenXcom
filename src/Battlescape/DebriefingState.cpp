@@ -721,7 +721,14 @@ void DebriefingState::prepareDebriefing()
 				}
 				else
 				{
-					base->getItems()->addItem(corpseItem, 1);
+					if (Options::canSellLiveAliens)
+					{
+						_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(type)->getSellCost());
+					}
+					else
+					{
+						base->getItems()->addItem(corpseItem, 1);
+					}
 				}
 			}
 			else if (oldFaction == FACTION_NEUTRAL)

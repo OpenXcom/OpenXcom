@@ -141,8 +141,6 @@ public:
 	void startDogfight();
 	/// Get first free dogfight slot.
 	int getFirstFreeDogfightSlot();
-	/// Create the starting missions.
-	void createStartingMissions() { determineAlienMissions(true); }
 	/// Handler for clicking the timer button.
 	void btnTimerClick(Action *action);
 	/// Process a terror site
@@ -154,6 +152,8 @@ public:
 private:
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
+	/// Handle Terror mission generation.
+	void setupTerrorMission();
 };
 
 }

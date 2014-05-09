@@ -43,7 +43,7 @@ class RuleItem
 private:
 	std::string _type, _name; // two types of objects can have the same name
 	std::vector<std::string> _requires;
-	float _size;
+	double _size;
 	int _costBuy, _costSell, _transferTime, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
@@ -66,8 +66,8 @@ private:
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
-	bool _strengthApplied, _LOSRequired;
-	int _meleeSound, _meleePower;
+	bool _strengthApplied, _skillApplied, _LOSRequired;
+	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -82,7 +82,7 @@ public:
 	/// Gets the item's requirements.
 	const std::vector<std::string> &getRequirements() const;
 	/// Gets the item's size.
-	float getSize() const;
+	double getSize() const;
 	/// Gets the item's purchase cost.
 	int getBuyCost() const;
 	/// Gets the item's sale cost.
@@ -207,10 +207,16 @@ public:
 	std::string getZombieUnit() const;
 	/// Is strength applied to the damage of this weapon?
 	bool isStrengthApplied() const;
+	/// Is skill applied to the accuracy of this weapon?
+	bool isSkillApplied() const;
+	/// What sound does this weapon make when you swing this at someone?
+	int getMeleeAttackSound() const;
 	/// What sound does this weapon make when you punch someone in the face with it?
-	int getMeleeSound() const;
+	int getMeleeHitSound() const;
 	/// Ok, so this isn't a melee type weapon but we're using it for melee... how much damage should it do?
 	int getMeleePower() const;
+	/// Get the melee animation starting frame (comes from hit.pck).
+	int getMeleeAnimation() const;
 	/// Check if LOS is required to use this item (only applies to psionic type items)
 	bool isLOSRequired() const;
 };

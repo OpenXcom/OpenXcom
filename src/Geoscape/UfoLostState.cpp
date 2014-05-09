@@ -41,7 +41,7 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	// Create objects
 	_window = new Window(this, 192, 104, 32, 48, POPUP_BOTH);
 	_btnOk = new TextButton(60, 12, 98, 112);
-	_txtTitle = new Text(160, 30, 48, 72);
+	_txtTitle = new Text(160, 32, 48, 72);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 7);

@@ -103,31 +103,31 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
 
 	_btnVideo->setColor(Palette::blockOffset(8)+5);
 	_btnVideo->setText(tr("STR_VIDEO"));
-	_btnVideo->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnVideo->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 
 	_btnAudio->setColor(Palette::blockOffset(8)+5);
 	_btnAudio->setText(tr("STR_AUDIO"));
-	_btnAudio->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnAudio->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(tr("STR_CONTROLS"));
-	_btnControls->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnControls->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 
 	_btnGeoscape->setColor(Palette::blockOffset(8)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
-	_btnGeoscape->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnGeoscape->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 
 	_btnBattlescape->setColor(Palette::blockOffset(8)+5);
 	_btnBattlescape->setText(tr("STR_BATTLESCAPE_UC"));
-	_btnBattlescape->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnBattlescape->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 
 	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
 	_btnAdvanced->setText(tr("STR_ADVANCED"));
-	_btnAdvanced->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnAdvanced->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 
 	_btnMods->setColor(Palette::blockOffset(8)+5);
 	_btnMods->setText(tr("STR_MODS"));
-	_btnMods->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress);
+	_btnMods->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
 	_btnMods->setVisible(_origin == OPT_MENU); // Mods require a restart, don't enable them in-game
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);

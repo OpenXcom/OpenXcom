@@ -102,7 +102,7 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 			if (currentStatsMap.find(conditionName) != currentStatsMap.end())
 			{
 				if (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal
-					&& conditionName != "psiStrength" || (currentStats.psiSkill > 0 || psiStrengthEval))
+					&& (conditionName != "psiStrength" || (currentStats.psiSkill > 0 || psiStrengthEval)))
 				{
 					conditionsMet++;
 				}

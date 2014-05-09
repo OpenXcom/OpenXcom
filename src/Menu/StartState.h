@@ -26,7 +26,7 @@ namespace OpenXcom
 
 class Surface;
 
-enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL };
+enum LoadingPhase { LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_DONE };
 
 /**
  * Initializes the game and loads all required content.
@@ -35,17 +35,26 @@ class StartState : public State
 {
 private:
 	Surface *_surface;
-	LoadingPhase _load;
+	SDL_Thread *_thread;
 	bool _wasLetterBoxed;
 public:
+	static LoadingPhase loading;
+	static std::string error;
+
 	/// Creates the Start state.
 	StartState(Game *game);
 	/// Cleans up the Start state.
 	~StartState();
-	/// Loads the game resources.
+	/// Reset everything.
+	void init();
+	/// Displays messages.
 	void think();
 	/// Handles key clicks.
 	void handle(Action *action);
+	/// Flash the window.
+	void flash();
+	/// Loads the game resources.
+	static int load(void *game_ptr);
 };
 
 }

@@ -373,6 +373,8 @@ set ( interface_src
   Interface/Slider.cpp
   Interface/ComboBox.h
   Interface/ComboBox.cpp
+  Interface/ScrollBar.h
+  Interface/ScrollBar.cpp
 )
 
 set ( menu_src

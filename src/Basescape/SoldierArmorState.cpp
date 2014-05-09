@@ -54,7 +54,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_txtSoldier = new Text(182, 9, 69, 56);
 	_txtType = new Text(90, 9, 80, 72);
 	_txtQuantity = new Text(70, 9, 177, 72);
-	_lstArmor = new TextList(160, 48, 73, 88);
+	_lstArmor = new TextList(160, 40, 73, 88);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 4);
