@@ -1278,7 +1278,7 @@ en-GB:
   STR_TOOLTIPS: "Tooltips"
   STR_TOOLTIPS_DESC: "Displays tooltips for the Battlescape buttons."
   STR_DEATH_NOTIFICATIONS: "Death Notifications"
-  STR_DEATH_NOTIFICATIONS_DESC: "Display a notification of who was killed each time one of your soldiers dies."
+  STR_DEATH_NOTIFICATIONS_DESC: "Pop up a notification detailing who was killed whenever a soldier dies."
   STR_SHOW_FUNDS: "Show Funds"
   STR_SHOW_FUNDS_DESC: "Shows your current funds next to the Geoscape clock."
   STR_MISSION_GENERATOR: "MISSION GENERATOR"
