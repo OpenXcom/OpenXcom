@@ -164,6 +164,8 @@ void ScrollBar::handle(Action *action, State *state)
 		int scroll = (int)floor(y * scale);
 		_list->scrollTo(scroll);
 	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) _list->scrollUp(false);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) _list->scrollDown(false);
 }
 
 /**
