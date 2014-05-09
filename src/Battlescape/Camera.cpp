@@ -190,7 +190,7 @@ void Camera::mouseOver(Action *action, State *)
 			_scrollMouseY = scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
 			//up left
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
 			{
 				_scrollMouseX = scrollSpeed;
 				_scrollMouseY /=2;
