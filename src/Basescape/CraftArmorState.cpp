@@ -50,8 +50,8 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
 	_txtName = new Text(114, 9, 16, 32);
-	_txtCraft = new Text(70, 9, 130, 32);
-	_txtArmor = new Text(100, 9, 210, 32);
+	_txtCraft = new Text(76, 9, 130, 32);
+	_txtArmor = new Text(100, 9, 204, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
@@ -90,7 +90,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setColumns(3, 114, 80, 86);
+	_lstSoldiers->setColumns(3, 114, 74, 92);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

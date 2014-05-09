@@ -78,7 +78,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_btnOk = new TextButton(48, 14, 30, 33);
 	_btnNext = new TextButton(28, 14, 80, 33);
 	_btnArmor = new TextButton(110, 14, 130, 33);
-	_edtSoldier = new TextEdit(this, 200, 16, 40, 9);
+	_edtSoldier = new TextEdit(this, 210, 16, 40, 9);
 	_btnSack = new TextButton(60, 14, 260, 33);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
