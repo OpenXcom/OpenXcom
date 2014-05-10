@@ -56,6 +56,9 @@ namespace OpenXcom
  */
 Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
+	Options::reload = false;
+	Options::mute = false;
+
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -63,8 +66,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
-	Options::reload = false;
-	Options::mute = false;
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
@@ -74,25 +75,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	else
 	{
-		Uint16 format;
-		if (Options::audioBitDepth == 8)
-			format = AUDIO_S8;
-		else
-			format = AUDIO_S16SYS;
-		if (Mix_OpenAudio(Options::audioSampleRate, format, 2, 1024) != 0)
-		{
-			Log(LOG_ERROR) << Mix_GetError();
-			Log(LOG_WARNING) << "No sound device detected, audio disabled.";
-			Options::mute = true;
-		}
-		else
-		{
-			Mix_AllocateChannels(16);
-			// Set up UI channels
-			Mix_ReserveChannels(2);
-			Mix_GroupChannels(0, 1, 0);
-			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
-		}
+		initAudio();
 	}
 
 	// trap the mouse inside the window
@@ -142,7 +125,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create blank language
 	_lang = new Language();
 
-	framestarttime = 0;
+	_framestarttime = 0;
 }
 
 /**
@@ -342,25 +325,20 @@ void Game::run()
 		switch (runningState)
 		{
 			case RUNNING: 
-// same here as in the header, not sure what to do with this ifdef, need advisement from morphos people.
-#ifdef __MORPHOS__
-				delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
-				if(delaytime > 0)
-					SDL_Delay((Uint32)delaytime);
-				framestarttime = SDL_GetTicks();
-#else
 				if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
 				{
-					delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
-					if(delaytime > 0)
-						SDL_Delay((Uint32)delaytime);
-					framestarttime = SDL_GetTicks();
+					_delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - _framestarttime);
+					if (_delaytime > 0)
+					{
+						SDL_Delay((Uint32)_delaytime);
+					}
+					_framestarttime = SDL_GetTicks();
 				}
 				else
-					SDL_Delay(1);
-#endif
-				
-				break; //Save CPU from going 100%
+				{
+					SDL_Delay(1); //Save CPU from going 100%
+				}
+				break;
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
 		}
@@ -539,6 +517,7 @@ ResourcePack *Game::getResourcePack() const
  */
 void Game::setResourcePack(ResourcePack *res)
 {
+	delete _res;
 	_res = res;
 }
 
@@ -675,6 +654,33 @@ void Game::defaultLanguage()
 		{
 			loadLanguage(defaultLang);
 		}
+	}
+}
+
+/**
+ * Initializes the audio subsystem.
+ */
+void Game::initAudio()
+{
+	Uint16 format;
+	if (Options::audioBitDepth == 8)
+		format = AUDIO_S8;
+	else
+		format = AUDIO_S16SYS;
+	if (Mix_OpenAudio(Options::audioSampleRate, format, 2, 1024) != 0)
+	{
+		Log(LOG_ERROR) << Mix_GetError();
+		Log(LOG_WARNING) << "No sound device detected, audio disabled.";
+		Options::mute = true;
+	}
+	else
+	{
+		Mix_AllocateChannels(16);
+		// Set up UI channels
+		Mix_ReserveChannels(2);
+		Mix_GroupChannels(0, 1, 0);
+		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
+		setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	}
 }
 

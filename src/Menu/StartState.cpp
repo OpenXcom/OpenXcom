@@ -36,6 +36,7 @@
 #include "IntroState.h"
 #include "ErrorMessageState.h"
 #include "OptionsBaseState.h"
+#include <SDL_mixer.h>
 #include <SDL_thread.h>
 #include <SDL_syswm.h>
 
@@ -93,7 +94,9 @@ StartState::StartState(Game *game) : State(game)
 StartState::~StartState()
 {
 	if (_thread != 0)
+	{
 		SDL_KillThread(_thread);
+	}
 }
 
 /**
@@ -102,9 +105,16 @@ StartState::~StartState()
 void StartState::init()
 {
 	State::init();
+
 	// Silence!
 	Sound::stop();
 	Music::stop();
+	_game->setResourcePack(0);
+	if (!Options::mute && Options::reload)
+	{
+		Mix_CloseAudio();
+		_game->initAudio();
+	}
 
 	// Load the game data in a separate thread
 	_thread = SDL_CreateThread(load, (void*)_game);
@@ -162,7 +172,7 @@ void StartState::think()
 					error << Language::fsToWstr(*i) << L'\n';
 				}
 				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			}
 			Options::reload = false;
 		}

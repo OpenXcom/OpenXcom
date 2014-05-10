@@ -11,6 +11,8 @@ OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpen
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
 OPT SaveSort saveOrder;
+OPT MusicFormat preferredMusic;
+OPT SoundFormat preferredSound;
 OPT SDL_GrabMode captureMouse;
 OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave;
 

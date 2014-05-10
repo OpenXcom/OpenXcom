@@ -126,6 +126,8 @@ void create()
 	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 20));
 	_info.push_back(OptionInfo("geoScrollSpeed", &geoScrollSpeed, 20));
 	_info.push_back(OptionInfo("geoDragScrollButton", &geoDragScrollButton, SDL_BUTTON_MIDDLE));
+	_info.push_back(OptionInfo("preferredMusic", (int*)&preferredMusic, MUSIC_AUTO));
+	_info.push_back(OptionInfo("preferredSound", (int*)&preferredSound, SOUND_AUTO));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));

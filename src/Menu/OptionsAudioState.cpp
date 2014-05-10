@@ -18,6 +18,7 @@
  */
 #include "OptionsAudioState.h"
 #include <sstream>
+#include <SDL_mixer.h>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -32,6 +33,8 @@
 
 namespace OpenXcom
 {
+/* MUS_NONE, MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3, MUS_MP3_MAD, MUS_FLAC, MUS_MODPLUG */
+const std::wstring OptionsAudioState::musFormats[] = {L"Adlib", L"?", L"WAV", L"MOD", L"MIDI", L"OGG", L"MP3", L"MP3", L"FLAC", L"MOD"};
 
 /**
  * Initializes all the elements in the Audio Options screen.
@@ -58,6 +61,14 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_txtSampleRate = new Text(114, 9, 210, 72);
 	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 82);
 
+	_txtMusicFormat = new Text(114, 9, 94, 108);
+	_cbxMusicFormat = new ComboBox(this, 100, 16, 94, 118);
+	_txtCurrentMusic = new Text(114, 9, 94, 136);
+
+	_txtSoundFormat = new Text(114, 9, 210, 108);
+	_cbxSoundFormat = new ComboBox(this, 100, 16, 210, 118);
+	_txtCurrentSound = new Text(114, 9, 210, 136);
+
 	add(_txtMusicVolume);
 	add(_slrMusicVolume);
 
@@ -70,8 +81,16 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	add(_txtBitDepth);
 	add(_txtSampleRate);
 
-	add(_cbxSampleRate);
+	add(_txtMusicFormat);
+	add(_txtCurrentMusic);
+	add(_txtSoundFormat);
+	add(_txtCurrentSound);
+
+	add(_cbxMusicFormat);
+	add(_cbxSoundFormat);
+
 	add(_cbxBitDepth);
+	add(_cbxSampleRate);
 
 	centerAllSurfaces();
 
@@ -111,9 +130,6 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_slrUiVolume->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_slrUiVolume->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
-	_txtBitDepth->setColor(Palette::blockOffset(8)+10);
-	_txtBitDepth->setText(tr("STR_AUDIO_BIT_DEPTH"));
-
 	std::wostringstream ss;
 	std::vector<std::wstring> bitsText, samplesText;
 	int bits[] = {8, 16};
@@ -141,7 +157,8 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 		}
 	}
 
-	std::vector<std::wstring> bitLabels, bitSamples;
+	_txtBitDepth->setColor(Palette::blockOffset(8)+10);
+	_txtBitDepth->setText(tr("STR_AUDIO_BIT_DEPTH"));
 
 	_cbxBitDepth->setColor(Palette::blockOffset(15)-1);
 	_cbxBitDepth->setOptions(bitsText);
@@ -160,11 +177,62 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_cbxSampleRate->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_cbxSampleRate->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
+	std::vector<std::wstring> musicText, soundText;
+	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
+	musicText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
+	musicText.push_back(L"FLAC");
+	musicText.push_back(L"OGG");
+	musicText.push_back(L"MP3");
+	musicText.push_back(L"MOD");
+	musicText.push_back(L"WAV");
+	musicText.push_back(L"Adlib");
+	musicText.push_back(L"MIDI");
+
+	soundText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
+	soundText.push_back(L"1.4");
+	soundText.push_back(L"1.0");
+
+	_txtMusicFormat->setColor(Palette::blockOffset(8)+10);
+	_txtMusicFormat->setText(tr("STR_PREFERRED_MUSIC_FORMAT"));
+
+	_cbxMusicFormat->setColor(Palette::blockOffset(15)-1);
+	_cbxMusicFormat->setOptions(musicText);
+	_cbxMusicFormat->setSelected(Options::preferredMusic);
+	_cbxMusicFormat->setTooltip("STR_PREFERRED_MUSIC_FORMAT_DESC");
+	_cbxMusicFormat->onChange((ActionHandler)&OptionsAudioState::cbxMusicFormatChange);
+	_cbxMusicFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
+	_cbxMusicFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
+
+	_txtCurrentMusic->setColor(Palette::blockOffset(8)+10);
+	std::wstring curMusic = musFormats[Mix_GetMusicType(0)];
+	_txtCurrentMusic->setText(tr("STR_CURRENT_FORMAT").arg(curMusic));
+
+	_txtSoundFormat->setColor(Palette::blockOffset(8)+10);
+	_txtSoundFormat->setText(tr("STR_PREFERRED_SFX_FORMAT"));
+
+	_cbxSoundFormat->setColor(Palette::blockOffset(15)-1);
+	_cbxSoundFormat->setOptions(soundText);
+	_cbxSoundFormat->setSelected(Options::preferredSound);
+	_cbxSoundFormat->setTooltip("STR_PREFERRED_SFX_FORMAT_DESC");
+	_cbxSoundFormat->onChange((ActionHandler)&OptionsAudioState::cbxSoundFormatChange);
+	_cbxSoundFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
+	_cbxSoundFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
+
+	_txtCurrentSound->setColor(Palette::blockOffset(8)+10);
+	std::wstring curSound = L"N/A";
+	_txtCurrentSound->setText(tr("STR_CURRENT_FORMAT").arg(curSound));
+
 	// These options require a restart, so don't enable them in-game
 	_txtBitDepth->setVisible(_origin == OPT_MENU);
 	_cbxBitDepth->setVisible(_origin == OPT_MENU);
 	_txtSampleRate->setVisible(_origin == OPT_MENU);
 	_cbxSampleRate->setVisible(_origin == OPT_MENU);
+	_txtMusicFormat->setVisible(_origin == OPT_MENU);
+	_cbxMusicFormat->setVisible(_origin == OPT_MENU);
+	_txtCurrentMusic->setVisible(_origin == OPT_MENU);
+	_txtSoundFormat->setVisible(_origin == OPT_MENU);
+	_cbxSoundFormat->setVisible(_origin == OPT_MENU);
+	_txtCurrentSound->setVisible(_origin == OPT_MENU);
 }
 
 /**
@@ -240,6 +308,26 @@ void OptionsAudioState::cbxBitDepthChange(Action *)
 void OptionsAudioState::cbxSampleRateChange(Action *)
 {
 	Options::audioSampleRate = _sampleRates[_cbxSampleRate->getSelected()];
+	Options::reload = true;
+}
+
+/**
+ * Changes the Music Format option.
+ * @param action Pointer to an action.
+ */
+void OptionsAudioState::cbxMusicFormatChange(Action *)
+{
+	Options::preferredMusic = (MusicFormat)_cbxMusicFormat->getSelected();
+	Options::reload = true;
+}
+
+/**
+ * Changes the Sound Format option.
+ * @param action Pointer to an action.
+ */
+void OptionsAudioState::cbxSoundFormatChange(Action *)
+{
+	Options::preferredSound = (SoundFormat)_cbxSoundFormat->getSelected();
 	Options::reload = true;
 }
 
