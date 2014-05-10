@@ -54,19 +54,12 @@ StartState::StartState(Game *game) : State(game)
 	// Create objects
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
-	_wasLetterBoxed = Options::keepAspectRatio;
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
 
 	_thread = 0;
 	loading = LOADING_STARTED;
 	error = "";
-
-	if (!Options::useOpenGL)
-	{
-		Options::keepAspectRatio = false;
-		game->getScreen()->resetDisplay(false);
-	}
 
 	_surface = new Surface(320, 200, dx, dy);
 
@@ -148,13 +141,13 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
+			bool letterbox = Options::keepAspectRatio;
 			Options::keepAspectRatio = true;
 			_game->getScreen()->resetDisplay(false);
-			_game->setState(new IntroState(_game, _wasLetterBoxed));
+			_game->setState(new IntroState(_game, letterbox));
 		}
 		else
 		{
-			Options::keepAspectRatio = _wasLetterBoxed;
 			OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
 			State *state = new MainMenuState(_game);

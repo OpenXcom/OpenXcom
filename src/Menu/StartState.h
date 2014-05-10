@@ -36,7 +36,6 @@ class StartState : public State
 private:
 	Surface *_surface;
 	SDL_Thread *_thread;
-	bool _wasLetterBoxed;
 public:
 	static LoadingPhase loading;
 	static std::string error;

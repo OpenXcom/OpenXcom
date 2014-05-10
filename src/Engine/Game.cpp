@@ -184,7 +184,7 @@ void Game::run()
 	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
 	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
 	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
-	bool stupidityFlag = Options::allowResize;
+	bool startupEvent = Options::allowResize;
 	while (!_quit)
 	{
 		// Clean up states
@@ -241,7 +241,7 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						if (!stupidityFlag)
+						if (!startupEvent)
 						{
 							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
 							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
@@ -256,7 +256,7 @@ void Game::run()
 						}
 						else
 						{
-							stupidityFlag = false;
+							startupEvent = false;
 						}
 					}
 					break;
