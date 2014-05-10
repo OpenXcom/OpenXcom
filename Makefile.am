@@ -465,7 +465,7 @@ openxcom_SOURCES = \
 	src/Menu/OptionsBattlescapeState.cpp \
 	src/Menu/OptionsBattlescapeState.h \
 	src/Menu/OptionsVideoState.cpp \
-	src/Menu/OptionsVideoState.h 
+	src/Menu/OptionsVideoState.h \
 	src/Menu/OptionsAudioState.cpp \
 	src/Menu/OptionsAudioState.h \
 	src/Menu/OptionsNoAudioState.cpp \
