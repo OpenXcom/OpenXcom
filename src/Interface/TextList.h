@@ -94,11 +94,11 @@ public:
 	/// Gets the Y position of a certain row.
 	int getRowY(int row) const;
 	/// Gets the amount of text in the list.
-	int getTexts() const;
+	size_t getTexts() const;
 	/// Gets the amount of rows in the list.
-	int getRows() const;
+	size_t getRows() const;
 	/// Gets the amount of visible rows in the list.
-	int getVisibleRows() const;
+	size_t getVisibleRows() const;
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
@@ -186,9 +186,11 @@ public:
 	/// get the scroll depth
 	int getScroll();
 	/// set the scroll depth
-	void scrollTo(int scroll);
+	void scrollTo(size_t scroll);
 	/// Attaches this button to a combobox.
 	void setComboBox(ComboBox *comboBox);
+	/// Check for a combobox.
+	ComboBox *getComboBox() const;
 };
 
 }

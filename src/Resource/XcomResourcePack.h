@@ -20,11 +20,16 @@
 #define OPENXCOM_XCOMRESOURCEPACK_H
 
 #include "ResourcePack.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
+
 class ExtraSprites;
 class ExtraSounds;
+class CatFile;
+class GMCatFile;
+class Music;
 
 /**
  * Resource pack for the X-Com: UFO Defense game.
@@ -36,9 +41,12 @@ public:
 	XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds);
 	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
-	/// Loads battlescape specific resources
+	/// Loads battlescape specific resources.
 	void loadBattlescapeResources();
+	/// Checks if an extension is a valid image file.
 	bool isImageFile(std::string extension);
+	/// Loads a specified music file.
+	Music *loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat);
 };
 
 }

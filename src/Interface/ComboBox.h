@@ -47,7 +47,7 @@ private:
 	TextList *_list;
 
 	ActionHandler _change;
-	int _sel;
+	size_t _sel;
 	State *_state;
 	Language *_lang;
 	Uint8 _color;
@@ -75,11 +75,13 @@ public:
 	/// Gets the border color.
 	Uint8 getColor() const;
 	/// Sets the high contrast color setting.
-	void setHighContrast(bool contrast);	
+	void setHighContrast(bool contrast);
+	/// Sets the arrow color of the text list.
+	void setArrowColor(Uint8 color);
 	/// Gets the selected option in the list.
-	int getSelected() const;
+	size_t getSelected() const;
 	/// Sets the selected option in the list.
-	void setSelected(int sel);
+	void setSelected(size_t sel);
 	/// Sets the list of options.
 	void setOptions(const std::vector<std::string> &options);
 	/// Sets the list of options.

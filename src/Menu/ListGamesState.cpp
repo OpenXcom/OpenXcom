@@ -84,7 +84,7 @@ struct compareSaveTimestamp : public std::binary_function<SaveInfo&, SaveInfo&, 
  * @param firstValidRow First row containing saves.
  * @param autoquick Show auto/quick saved games?
  */
-ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidRow, bool autoquick) : State(game), _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow), _autoquick(autoquick)
+ListGamesState::ListGamesState(Game *game, OptionsOrigin origin, int firstValidRow, bool autoquick) : State(game), _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow), _autoquick(autoquick), _sortable(true)
 {
 	_screen = false;
 
@@ -320,17 +320,20 @@ void ListGamesState::lstSavesPress(Action *action)
  */
 void ListGamesState::sortNameClick(Action *)
 {
-	if (Options::saveOrder == SORT_NAME_ASC)
+	if (_sortable)
 	{
-		Options::saveOrder = SORT_NAME_DESC;
+		if (Options::saveOrder == SORT_NAME_ASC)
+		{
+			Options::saveOrder = SORT_NAME_DESC;
+		}
+		else
+		{
+			Options::saveOrder = SORT_NAME_ASC;
+		}
+		updateArrows();
+		_lstSaves->clearList();
+		sortList(Options::saveOrder);
 	}
-	else
-	{
-		Options::saveOrder = SORT_NAME_ASC;
-	}
-	updateArrows();
-	_lstSaves->clearList();
-	sortList(Options::saveOrder);
 }
 
 /**
@@ -339,17 +342,25 @@ void ListGamesState::sortNameClick(Action *)
  */
 void ListGamesState::sortDateClick(Action *)
 {
-	if (Options::saveOrder == SORT_DATE_ASC)
+	if (_sortable)
 	{
-		Options::saveOrder = SORT_DATE_DESC;
+		if (Options::saveOrder == SORT_DATE_ASC)
+		{
+			Options::saveOrder = SORT_DATE_DESC;
+		}
+		else
+		{
+			Options::saveOrder = SORT_DATE_ASC;
+		}
+		updateArrows();
+		_lstSaves->clearList();
+		sortList(Options::saveOrder);
 	}
-	else
-	{
-		Options::saveOrder = SORT_DATE_ASC;
-	}
-	updateArrows();
-	_lstSaves->clearList();
-	sortList(Options::saveOrder);
+}
+
+void ListGamesState::disableSort()
+{
+	_sortable = false;
 }
 
 }

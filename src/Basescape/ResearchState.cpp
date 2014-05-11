@@ -53,8 +53,8 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_txtAllocated = new Text(150, 9, 160, 24);
 	_txtSpace = new Text(300, 9, 10, 34);
 	_txtProject = new Text(110, 17, 10, 44);
-	_txtScientists = new Text(110, 17, 120, 44);
-	_txtProgress = new Text(80, 9, 230, 44);
+	_txtScientists = new Text(106, 17, 120, 44);
+	_txtProgress = new Text(84, 9, 226, 44);
 	_lstResearch = new TextList(288, 112, 8, 62);
 
 	// Set palette
@@ -114,7 +114,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(3, 158, 62, 66);
+	_lstResearch->setColumns(3, 158, 58, 70);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);

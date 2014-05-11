@@ -19,6 +19,7 @@
 #include "TextList.h"
 #include <cstdarg>
 #include <cmath>
+#include <algorithm>
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
@@ -215,7 +216,7 @@ int TextList::getRowY(int row) const
  * Returns the amount of text rows stored in the list.
  * @return Number of rows.
  */
-int TextList::getTexts() const
+size_t TextList::getTexts() const
 {
 	return _texts.size();
 }
@@ -224,7 +225,7 @@ int TextList::getTexts() const
  * Returns the amount of physical rows stored in the list.
  * @return Number of rows.
  */
-int TextList::getRows() const
+size_t TextList::getRows() const
 {
 	return _rows.size();
 }
@@ -233,7 +234,7 @@ int TextList::getRows() const
  * Returns the amount of visible rows stored in the list.
  * @return Number of rows.
  */
-int TextList::getVisibleRows() const
+size_t TextList::getVisibleRows() const
 {
 	return _visibleRows;
 }
@@ -513,6 +514,7 @@ void TextList::setHighContrast(bool contrast)
 			(*v)->setHighContrast(contrast);
 		}
 	}
+	_scrollbar->setHighContrast(contrast);
 }
 
 /**
@@ -814,6 +816,7 @@ void TextList::updateArrows()
 	_down->setVisible(_rows.size() > _visibleRows /*&& _scroll < _rows.size() - _visibleRows*/);
 	_scrollbar->setVisible(_rows.size() > _visibleRows);
 	_scrollbar->invalidate();
+	_scrollbar->blit(this);
 }
 
 /**
@@ -1040,6 +1043,10 @@ void TextList::mouseOver(Action *action, State *state)
 			{
 				_selector->offset(-10, 1);
 			}
+			else if (_comboBox)
+			{
+				_selector->offset(+1, Palette::backPos);
+			}
 			else
 			{
 				_selector->offset(-10, Palette::backPos);
@@ -1083,10 +1090,12 @@ int TextList::getScroll()
  * set the scroll depth.
  * @param scroll set the scroll depth to this.
  */
-void TextList::scrollTo(int scroll)
+void TextList::scrollTo(size_t scroll)
 {
-	_scroll = scroll;
-	draw();
+	if (!_scrolling)
+		return;
+	_scroll = std::max((size_t)(0), std::min(_rows.size() - _visibleRows, scroll));
+	draw(); // can't just set _redraw here because reasons
 	updateArrows();
 }
 
@@ -1099,4 +1108,12 @@ void TextList::setComboBox(ComboBox *comboBox)
 	_comboBox = comboBox;
 }
 
+/**
+ * Gets the combobox that this list is attached to, if any.
+ * @return the attached combobox.
+ */
+ComboBox *TextList::getComboBox() const
+{
+	return _comboBox;
+}
 }

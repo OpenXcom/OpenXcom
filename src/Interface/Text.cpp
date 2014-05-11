@@ -163,7 +163,7 @@ void Text::setText(const std::wstring &text)
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && /*!_wrap &&*/ (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size()-1] != L'.')
+	if (_font == _big && (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size()-1] != L'.')
 	{
 		setSmall();
 	}
@@ -396,10 +396,11 @@ void Text::processText()
 				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
 				{
 					// Go back to the last space and put a linebreak there
-					width -= word + font->getCharSize((*str)[space]).w;
+					width -= word;
 					size_t indent = space;
-					if (Font::isSpace((*str)[c]))
+					if (Font::isSpace((*str)[space]))
 					{
+						width -= font->getCharSize((*str)[space]).w;
 						(*str)[space] = L'\n';
 					}
 					else

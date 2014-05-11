@@ -145,18 +145,21 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	size_t j = 0;
 	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		if (type != "0" && rule->getCraftWeapon(type))
+		if (_rules->getWeapons() > j)
 		{
-			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
-			w->load(*i);
-			_weapons[j] = w;
+			std::string type = (*i)["type"].as<std::string>();
+			if (type != "0" && rule->getCraftWeapon(type))
+			{
+				CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+				w->load(*i);
+				_weapons[j] = w;
+			}
+			else
+			{
+				_weapons[j] = 0;
+			}
+			j++;
 		}
-		else
-		{
-			_weapons[j] = 0;
-		}
-		j++;
 	}
 
 	_items->load(node["items"]);

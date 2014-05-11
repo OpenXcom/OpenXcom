@@ -51,7 +51,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtName = new Text(114, 9, 16, 36);
 	_txtRank = new Text(102, 9, 130, 36);
-	_txtDate = new Text(90, 9, 214, 36);
+	_txtDate = new Text(90, 9, 218, 36);
 	_txtRecruited = new Text(150, 9, 16, 24);
 	_txtLost = new Text(150, 9, 160, 24);
 	_lstSoldiers = new TextList(288, 120, 8, 44);

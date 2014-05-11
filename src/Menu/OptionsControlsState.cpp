@@ -53,7 +53,7 @@ OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : O
 	_lstControls->setColor(Palette::blockOffset(8)+10);
 	_lstControls->setArrowColor(Palette::blockOffset(8)+5);
 	_lstControls->setColumns(2, 152, 48);
-
+	_lstControls->setWordWrap(true);
 	_lstControls->setSelectable(true);
 	_lstControls->setBackground(_window);
 	_lstControls->onMouseClick((ActionHandler)&OptionsControlsState::lstControlsClick, 0);
@@ -110,6 +110,7 @@ OptionsControlsState::~OptionsControlsState()
 void OptionsControlsState::init()
 {
 	OptionsBaseState::init();
+	_lstControls->clearList();
 	_lstControls->addRow(2, tr("STR_GENERAL").c_str(), L"");
 	_lstControls->setCellColor(0, 0, _colorGroup);
 	addControls(_controlsGeneral);
