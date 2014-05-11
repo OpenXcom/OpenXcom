@@ -57,7 +57,7 @@ AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(gam
 	_window = new Window(this, 216, 160, x, 20, POPUP_BOTH);
 	_btnYes = new TextButton(50, 20, x+18, 140);
 	_btnNo = new TextButton(50, 20, x+148, 140);
-	_txtTitle = new Text(206, 15, x+5, 70);
+	_txtTitle = new Text(206, 17, x+5, 70);
 
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)

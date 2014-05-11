@@ -850,6 +850,9 @@
     <ClCompile Include="Interface\ScrollBar.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\OptionsNoAudioState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1718,6 +1721,9 @@
     </ClInclude>
     <ClInclude Include="Interface\ScrollBar.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsNoAudioState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

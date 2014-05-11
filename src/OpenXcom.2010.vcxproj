@@ -408,6 +408,7 @@
     <ClCompile Include="Menu\OptionsBattlescapeState.cpp" />
     <ClCompile Include="Menu\OptionsControlsState.cpp" />
     <ClCompile Include="Menu\OptionsModsState.cpp" />
+    <ClCompile Include="Menu\OptionsNoAudioState.cpp" />
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
     <ClCompile Include="Menu\SaveGameState.cpp" />
@@ -704,6 +705,7 @@
     <ClInclude Include="Menu\OptionsBattlescapeState.h" />
     <ClInclude Include="Menu\OptionsControlsState.h" />
     <ClInclude Include="Menu\OptionsModsState.h" />
+    <ClInclude Include="Menu\OptionsNoAudioState.h" />
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
     <ClInclude Include="Menu\SaveGameState.h" />

@@ -305,6 +305,9 @@ void Screen::resetDisplay(bool resetVideo)
 {
 	int width = Options::displayWidth;
 	int height = Options::displayHeight;
+#ifdef __linux__
+	Uint32 oldFlags = _flags;
+#endif
 	makeVideoFlags();
 
 	if (!_surface || (_surface && 
@@ -320,6 +323,17 @@ void Screen::resetDisplay(bool resetVideo)
 
 	if (resetVideo)
 	{
+#ifdef __linux__
+		// Workaround for segfault when switching to opengl
+		if (!(oldFlags & SDL_OPENGL) && (_flags & SDL_OPENGL))
+		{
+			SDL_QuitSubSystem(SDL_INIT_VIDEO);
+			SDL_InitSubSystem(SDL_INIT_VIDEO);
+			SDL_ShowCursor(SDL_ENABLE);
+			Uint8 cursor = 0;
+			SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
+		}
+#endif
 		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 		if (_screen == 0)
@@ -332,6 +346,7 @@ void Screen::resetDisplay(bool resetVideo)
 				throw Exception(SDL_GetError());
 			}
 		}
+		Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 	}
 	else
 	{
@@ -425,8 +440,6 @@ void Screen::resetDisplay(bool resetVideo)
 #endif
 	}
 
-
-	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 	if (_screen->format->BitsPerPixel == 8)
 	{
 		setPalette(getPalette());

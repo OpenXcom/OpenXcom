@@ -192,7 +192,7 @@ namespace OpenXcom
 				_txtDamage->setAlign(ALIGN_CENTER);
 				_txtDamage->setText(tr("STR_DAMAGE_UC"));
 
-				_txtAmmo = new Text(42, 10, 272, 7);
+				_txtAmmo = new Text(50, 10, 268, 7);
 				add(_txtAmmo);
 				_txtAmmo->setColor(Palette::blockOffset(14)+15);
 				_txtAmmo->setAlign(ALIGN_CENTER);

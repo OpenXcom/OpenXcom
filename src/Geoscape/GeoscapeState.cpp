@@ -553,6 +553,7 @@ void GeoscapeState::think()
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions(true);
+		setupTerrorMission();
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
 	}
 	if (_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
@@ -1728,6 +1729,9 @@ void GeoscapeState::time1Month()
 	determineAlienMissions();
 	if (monthsPassed > 5)
 		determineAlienMissions();
+
+	setupTerrorMission();
+
 	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
 	{
@@ -2198,28 +2202,6 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
  */
 void GeoscapeState::determineAlienMissions(bool atGameStart)
 {
-	//
-	// One terror mission per month
-	//
-
-	//Determine a random region with at least one city.
-	RuleRegion* region = 0;
-	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
-	do
-	{
-		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-	}
-	while (region->getCities()->empty());
-	// Choose race for terror mission.
-	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
-	const std::string &terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
-	AlienMission *terrorMission = new AlienMission(terrorRules);
-	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-	terrorMission->setRegion(region->getType(), *_game->getRuleset());
-	terrorMission->setRace(terrorRace);
-	terrorMission->start(150);
-	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
-
 	if (!atGameStart)
 	{
 		//
@@ -2263,6 +2245,30 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
+void GeoscapeState::setupTerrorMission()
+{
+	//Determine a random region with at least one city and no currently running terror mission.
+	RuleRegion* region = 0;
+	int counter = 0;
+	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+	do
+	{
+		// we try 40 times to pick a valid zone for a terror mission
+		if (counter == 40) return;
+		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
+		counter++;
+	}
+	while (region->getCities()->empty() || _game->getSavedGame()->getAlienMission(region->getType(), "STR_ALIEN_TERROR") != 0);
+	// Choose race for terror mission.
+	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
+	const std::string &terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
+	AlienMission *terrorMission = new AlienMission(terrorRules);
+	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+	terrorMission->setRegion(region->getType(), *_game->getRuleset());
+	terrorMission->setRace(terrorRace);
+	terrorMission->start(150);
+	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
+}
 /**
  * Handler for clicking on a timer button.
  * @param action pointer to the mouse action.

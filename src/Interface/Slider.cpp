@@ -174,8 +174,7 @@ void Slider::handle(Action *action, State *state)
 {
 	InteractiveSurface::handle(action, state);
 	//_button->handle(action, state);
-	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		int cursorX = (int)floor(action->getDetails()->motion.x / action->getXScale());
 		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
@@ -264,7 +263,8 @@ void Slider::blit(Surface *surface)
 void Slider::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
-	_pressed = true;
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_pressed = true;
 }
 
 /**
@@ -275,7 +275,8 @@ void Slider::mousePress(Action *action, State *state)
 void Slider::mouseRelease(Action *action, State *state)
 {
 	InteractiveSurface::mouseRelease(action, state);
-	_pressed = false;
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_pressed = false;
 }
 
 /**

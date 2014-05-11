@@ -211,10 +211,19 @@ void ComboBox::setHighContrast(bool contrast)
 }
 
 /**
+ * Changes the color of the arrow buttons in the list.
+ * @param color Color value.
+ */
+void ComboBox::setArrowColor(Uint8 color)
+{
+	_list->setArrowColor(color);
+}
+
+/**
  * Returns the currently selected option.
  * @return Selected row.
  */
-int ComboBox::getSelected() const
+size_t ComboBox::getSelected() const
 {
 	return _sel;
 }
@@ -223,11 +232,13 @@ int ComboBox::getSelected() const
  * Changes the currently selected option.
  * @return Selected row.
  */
-void ComboBox::setSelected(int sel)
+void ComboBox::setSelected(size_t sel)
 {
 	_sel = sel;
 	if (_sel < _list->getTexts())
+	{
 		_button->setText(_list->getCellText(_sel, 0));
+	}
 }
 
 /**
@@ -260,6 +271,7 @@ void ComboBox::setOptions(const std::vector<std::string> &options)
 		_list->addRow(1, _lang->getString(*i).c_str());
 	}
 	setSelected(_sel);
+	_list->draw();
 }
 
 /**
@@ -284,6 +296,7 @@ void ComboBox::setOptions(const std::vector<std::wstring> &options)
 void ComboBox::blit(Surface *surface)
 {
 	Surface::blit(surface);
+	_list->invalidate();
 	if (_visible && !_hidden)
 	{
 		_button->blit(surface);
@@ -342,6 +355,17 @@ void ComboBox::toggle(bool first)
 	if (!first && !_window->getVisible())
 	{
 		_toggled = true;
+	}
+	if (_list->getVisible())
+	{
+		if (_sel < _list->getVisibleRows()/2)
+		{
+			_list->scrollTo(0);
+		}
+		else
+		{
+			_list->scrollTo(_sel - _list->getVisibleRows()/2);
+		}
 	}
 }
 

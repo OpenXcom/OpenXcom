@@ -78,7 +78,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_btnOk = new TextButton(48, 14, 30, 33);
 	_btnNext = new TextButton(28, 14, 80, 33);
 	_btnArmor = new TextButton(110, 14, 130, 33);
-	_edtSoldier = new TextEdit(this, 200, 16, 40, 9);
+	_edtSoldier = new TextEdit(this, 210, 16, 40, 9);
 	_btnSack = new TextButton(60, 14, 260, 33);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
@@ -87,45 +87,62 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_txtRecovery = new Text(180, 9, 130, 56);
 	_txtPsionic = new Text(150, 9, 0, 66);
 
-	_txtTimeUnits = new Text(120, 9, 6, 82);
-	_numTimeUnits = new Text(18, 9, 131, 82);
-	_barTimeUnits = new Bar(170, 7, 150, 82);
+	int yPos = 80;
+	int step = 11;
 
-	_txtStamina = new Text(120, 9, 6, 94);
-	_numStamina = new Text(18, 9, 131, 94);
-	_barStamina = new Bar(170, 7, 150, 94);
+	_txtTimeUnits = new Text(120, 9, 6, yPos);
+	_numTimeUnits = new Text(18, 9, 131, yPos);
+	_barTimeUnits = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtHealth = new Text(120, 9, 6, 106);
-	_numHealth = new Text(18, 9, 131, 106);
-	_barHealth = new Bar(170, 7, 150, 106);
+	_txtStamina = new Text(120, 9, 6, yPos);
+	_numStamina = new Text(18, 9, 131, yPos);
+	_barStamina = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtBravery = new Text(120, 9, 6, 118);
-	_numBravery = new Text(18, 9, 131, 118);
-	_barBravery = new Bar(170, 7, 150, 118);
+	_txtHealth = new Text(120, 9, 6, yPos);
+	_numHealth = new Text(18, 9, 131, yPos);
+	_barHealth = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtReactions = new Text(120, 9, 6, 130);
-	_numReactions = new Text(18, 9, 131, 130);
-	_barReactions = new Bar(170, 7, 150, 130);
+	_txtBravery = new Text(120, 9, 6, yPos);
+	_numBravery = new Text(18, 9, 131, yPos);
+	_barBravery = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtFiring = new Text(120, 9, 6, 142);
-	_numFiring = new Text(18, 9, 131, 142);
-	_barFiring = new Bar(170, 7, 150, 142);
+	_txtReactions = new Text(120, 9, 6, yPos);
+	_numReactions = new Text(18, 9, 131, yPos);
+	_barReactions = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtThrowing = new Text(120, 9, 6, 154);
-	_numThrowing = new Text(18, 9, 131, 154);
-	_barThrowing = new Bar(170, 7, 150, 154);
+	_txtFiring = new Text(120, 9, 6, yPos);
+	_numFiring = new Text(18, 9, 131, yPos);
+	_barFiring = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtStrength = new Text(120, 9, 6, 166);
-	_numStrength = new Text(18, 9, 131, 166);
-	_barStrength = new Bar(170, 7, 150, 166);
+	_txtThrowing = new Text(120, 9, 6, yPos);
+	_numThrowing = new Text(18, 9, 131, yPos);
+	_barThrowing = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtPsiStrength = new Text(120, 9, 6, 178);
-	_numPsiStrength = new Text(18, 9, 131, 178);
-	_barPsiStrength = new Bar(170, 7, 150, 178);
+	_txtMelee = new Text(120, 9, 6, yPos);
+	_numMelee = new Text(18, 9, 131, yPos);
+	_barMelee = new Bar(170, 7, 150, yPos);
+	yPos += step;
 
-	_txtPsiSkill = new Text(120, 9, 6, 190);
-	_numPsiSkill = new Text(18, 9, 131, 190);
-	_barPsiSkill = new Bar(170, 7, 150, 190);
+	_txtStrength = new Text(120, 9, 6, yPos);
+	_numStrength = new Text(18, 9, 131, yPos);
+	_barStrength = new Bar(170, 7, 150, yPos);
+	yPos += step;
+
+	_txtPsiStrength = new Text(120, 9, 6, yPos);
+	_numPsiStrength = new Text(18, 9, 131, yPos);
+	_barPsiStrength = new Bar(170, 7, 150, yPos);
+	yPos += step;
+
+	_txtPsiSkill = new Text(120, 9, 6, yPos);
+	_numPsiSkill = new Text(18, 9, 131, yPos);
+	_barPsiSkill = new Bar(170, 7, 150, yPos);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE");
@@ -172,6 +189,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	add(_txtThrowing);
 	add(_numThrowing);
 	add(_barThrowing);
+
+	add(_txtMelee);
+	add(_numMelee);
+	add(_barMelee);
 
 	add(_txtStrength);
 	add(_numStrength);
@@ -323,6 +344,16 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : S
 	_barThrowing->setScale(1.0);
 	_barThrowing->setInvert(true);
 
+	_txtMelee->setColor(Palette::blockOffset(15)+1);
+	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
+
+	_numMelee->setColor(Palette::blockOffset(13));
+
+	_barMelee->setColor(Palette::blockOffset(4));
+	_barMelee->setColor2(Palette::blockOffset(4)+4);
+	_barMelee->setScale(1.0);
+	_barMelee->setInvert(true);
+
 	_txtStrength->setColor(Palette::blockOffset(15)+1);
 	_txtStrength->setText(tr("STR_STRENGTH"));
 
@@ -439,8 +470,15 @@ void SoldierInfoState::init()
 	_barThrowing->setValue2(initial->throwing);
 
 	std::wostringstream ss8;
-	ss8 << current->strength;
-	_numStrength->setText(ss8.str());
+	ss8 << current->melee;
+	_numMelee->setText(ss8.str());
+	_barMelee->setMax(current->melee);
+	_barMelee->setValue(current->melee);
+	_barMelee->setValue2(initial->melee);
+
+	std::wostringstream ss9;
+	ss9 << current->strength;
+	_numStrength->setText(ss9.str());
 	_barStrength->setMax(current->strength);
 	_barStrength->setValue(current->strength);
 	_barStrength->setValue2(initial->strength);
