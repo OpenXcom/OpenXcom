@@ -32,6 +32,7 @@ class Text;
 class TextList;
 class NumberText;
 class Slider;
+class ComboBox;
 
 /**
  * A state purely for testing game functionality.
@@ -51,6 +52,7 @@ private:
 	NumberText *_number;
 	TextList *_list;
 	Slider *_slider;
+	ComboBox *_comboBox;
 	int _i;
 
 	/// Creates a surface with every color in the palette.
