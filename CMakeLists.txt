@@ -107,6 +107,7 @@ if ( GIT_FOUND )
   set ( git_nb_commit ${CMAKE_MATCH_2} )
   set ( git_commit ${CMAKE_MATCH_3} )
   set ( git_dirty ${CMAKE_MATCH_4} )
+  add_definitions( -DOPENXCOM_VERSION_GIT="${git_commit}" )
 endif()
 
 if ( DEV_BUILD )
