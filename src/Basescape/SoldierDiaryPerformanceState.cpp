@@ -308,15 +308,15 @@ void SoldierDiaryPerformanceState::init()
 		_commendationDecorations[i]->clear();
 	}
 	// Reset scroll depth for lists
-	_lstRank->setScroll(0);
-	_lstRace->setScroll(0);
-	_lstWeapon->setScroll(0);
-	_lstKillTotals->setScroll(0);
-	_lstLocation->setScroll(0);
-	_lstType->setScroll(0);
-	_lstUFO->setScroll(0);
-	_lstMissionTotals->setScroll(0);
-	_lstCommendations->setScroll(0);
+	_lstRank->scrollTo(0);
+	_lstRace->scrollTo(0);
+	_lstWeapon->scrollTo(0);
+	_lstKillTotals->scrollTo(0);
+	_lstLocation->scrollTo(0);
+	_lstType->scrollTo(0);
+	_lstUFO->scrollTo(0);
+	_lstMissionTotals->scrollTo(0);
+	_lstCommendations->scrollTo(0);
 	// Set visibility for kills
 	_txtRace->setVisible(_displayKills);
 	_txtRank->setVisible(_displayKills);

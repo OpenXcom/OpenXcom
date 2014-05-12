@@ -176,7 +176,7 @@ void SoldierDiaryOverviewState::init()
 	_soldier = _list->at(_soldierId);
 	_txtTitle->setText(_soldier->getName());
 	_lstDiary->clearList();
-	_lstDiary->setScroll(0);
+	_lstDiary->scrollTo(0);
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
 
 	for (std::vector<MissionStatistics*>::iterator j = missionStatistics->begin() ; j != missionStatistics->end() ; ++j)
