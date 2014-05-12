@@ -36,7 +36,7 @@ class Slider;
 class OptionsAudioState : public OptionsBaseState
 {
 private:
-	static const std::wstring musFormats[];
+	static const std::wstring musFormats[], sndFormats[];
 	Text *_txtMusicVolume, *_txtSoundVolume, *_txtUiVolume;
 	Slider *_slrMusicVolume, *_slrSoundVolume, *_slrUiVolume;
 	Text *_txtBitDepth, *_txtSampleRate;
