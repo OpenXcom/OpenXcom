@@ -1032,26 +1032,21 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		else
 		{ // so this tank requires ammo
 			RuleItem *ammo = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+			int ammoPerVehicle = ammo->getClipSize();
 			int baqty = base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-			if (baqty < i->second * ammo->getClipSize())
+			if (baqty < i->second * ammoPerVehicle)
 			{ // missing ammo
-				int missing = (i->second * ammo->getClipSize()) - baqty;
+				int missing = (i->second * ammoPerVehicle) - baqty;
 				ReequipStat stat = {ammo->getType(), missing, craft->getName(_game->getLanguage())};
 				_missingItems.push_back(stat);
 			}
-			canBeAdded = std::min(canBeAdded, baqty);
+			canBeAdded = std::min(canBeAdded, baqty / ammoPerVehicle);
 			if (canBeAdded > 0)
 			{
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
-				int remainder = 0;
-				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
-				int newAmmo;
 				for (int j = 0; j < canBeAdded; ++j)
 				{
-					newAmmo = newAmmoPerVehicle;
-					if (j < remainder) ++newAmmo;
-					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo, size));
-					base->getItems()->removeItem(ammo->getType(), newAmmo);
+					craft->getVehicles()->push_back(new Vehicle(tankRule, ammoPerVehicle, size));
+					base->getItems()->removeItem(ammo->getType(), ammoPerVehicle);
 				}
 				base->getItems()->removeItem(i->first, canBeAdded);
 			}
