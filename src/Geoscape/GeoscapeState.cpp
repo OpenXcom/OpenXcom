@@ -1603,9 +1603,9 @@ void GeoscapeState::time1Day()
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
-	// Autosave every 10 days
+	// Autosave 3 times a month
 	int day = _game->getSavedGame()->getTime()->getDay();
-	if (day == 1 || day % 10 == 0)
+	if (day == 10 || day == 20)
 	{
 		if (_game->getSavedGame()->isIronman())
 		{
