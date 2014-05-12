@@ -40,7 +40,7 @@ Sound *Window::soundPopup[3] = {0, 0, 0};
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _dx(-x), _dy(-y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false)
+Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _dx(-x), _dy(-y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false), _thinBorder(false)
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)&Window::popup);
@@ -193,24 +193,61 @@ void Window::draw()
 	}
 	Uint8 color = _color + 3 * mul;
 
-	for (int i = 0; i < 5; ++i)
+	if (_thinBorder)
 	{
-		drawRect(&square, color);
-		if (i < 2)
-			color -= 1 * mul;
-		else
-			color += 1 * mul;
-		square.x++;
-		square.y++;
-		if (square.w >= 2)
-			square.w -= 2;
-		else
-			square.w = 1;
+		color = _color + 1 * mul;
+		for (int i = 0; i < 5; ++i)
+		{
+			drawRect(&square, color);
 
-		if (square.h >= 2)
-			square.h -= 2;
-		else
-			square.h = 1;
+			if (i % 2 == 0)
+			{
+				square.x++;
+				square.y++;
+			}
+			square.w--;
+			square.h--;
+
+			switch (i)
+			{
+			case 0:
+				color = _color + 5 * mul;
+				setPixel(square.w, 0, color);
+				break;
+			case 1:
+				color = _color + 2 * mul;
+				break;
+			case 2:
+				color = _color + 4 * mul;
+				setPixel(square.w+1, 1, color);
+				break;
+			case 3:
+				color = _color + 3 * mul;
+				break;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			drawRect(&square, color);
+			if (i < 2)
+				color -= 1 * mul;
+			else
+				color += 1 * mul;
+			square.x++;
+			square.y++;
+			if (square.w >= 2)
+				square.w -= 2;
+			else
+				square.w = 1;
+
+			if (square.h >= 2)
+				square.h -= 2;
+			else
+				square.h = 1;
+		}
 	}
 
 	if (_bg != 0)
@@ -243,4 +280,11 @@ void Window::setDY(int dy)
 	_dy = dy;
 }
 
+/**
+ * Changes the window to have a thin border.
+ */
+void Window::setThinBorder()
+{
+	_thinBorder = true;
+}
 }
