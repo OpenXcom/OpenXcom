@@ -29,8 +29,11 @@
 namespace OpenXcom
 {
 
-const int ComboBox::LIST_MARGIN = 5;
+const int ComboBox::HORIZONTAL_MARGIN = 2;
+const int ComboBox::VERTICAL_MARGIN = 3;
 const int ComboBox::MAX_ITEMS = 10;
+const int ComboBox::BUTTON_WIDTH = 14;
+const int ComboBox::TEXT_HEIGHT = 8;
 
 /**
  * Sets up a combobox with the specified size and position.
@@ -45,11 +48,15 @@ ComboBox::ComboBox(State *state, int width, int height, int x, int y) : Interact
 	_button = new TextButton(width, height, x, y);
 	_button->setComboBox(this);
 
-	_arrow = new Surface(11, 8, x + width - LIST_MARGIN*3 - 1, y + 4);
+	_arrow = new Surface(11, 8, x + width - BUTTON_WIDTH, y + 4);
 
-	_window = new Window(state, width, MAX_ITEMS*8 + LIST_MARGIN*2, x, y + height);
+	_window = new Window(state, width, MAX_ITEMS * 8 + VERTICAL_MARGIN * 2, x, y + height);
+	_window->setThinBorder();
 
-	_list = new TextList(width - LIST_MARGIN*5 + 2, MAX_ITEMS*8-1, x + LIST_MARGIN, y + height + LIST_MARGIN);
+	_list = new TextList(width - HORIZONTAL_MARGIN * 2 - BUTTON_WIDTH + 1,
+						MAX_ITEMS * TEXT_HEIGHT - 2,
+						x + HORIZONTAL_MARGIN,
+						y + height + VERTICAL_MARGIN);
 	_list->setComboBox(this);
 	_list->setColumns(1, _list->getWidth());
 	_list->setSelectable(true);
@@ -79,9 +86,9 @@ void ComboBox::setX(int x)
 {
 	Surface::setX(x);
 	_button->setX(x);
-	_arrow->setX(x + getWidth() - LIST_MARGIN*3 - 1);
+	_arrow->setX(x + getWidth() - BUTTON_WIDTH);
 	_window->setX(x);
-	_list->setX(x + LIST_MARGIN);
+	_list->setX(x + HORIZONTAL_MARGIN);
 }
 
 /**
@@ -94,7 +101,7 @@ void ComboBox::setY(int y)
 	_button->setY(y);
 	_arrow->setY(y + 4);
 	_window->setY(y + getHeight());
-	_list->setY(y + getHeight() + LIST_MARGIN);
+	_list->setY(y + getHeight() + VERTICAL_MARGIN);
 }
 
 /**
@@ -250,11 +257,11 @@ void ComboBox::setDropdown(int options)
 	int items = std::min(options, MAX_ITEMS);
 	int h = _button->getFont()->getHeight() + _button->getFont()->getSpacing();
 	int dy = (Options::baseYResolution - 200) / 2;
-	while (_window->getY() + items * h + LIST_MARGIN * 2 > 200 + dy)
+	while (_window->getY() + items * h + VERTICAL_MARGIN * 2 > 200 + dy)
 	{
 		items--;
 	}
-	_window->setHeight(items * h + LIST_MARGIN * 2);
+	_window->setHeight(items * h + VERTICAL_MARGIN * 2);
 	_list->setHeight(items * h);
 }
 
