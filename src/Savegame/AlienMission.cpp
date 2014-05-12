@@ -620,8 +620,7 @@ void AlienMission::spawnAlienBase(const Globe &globe, Game &engine)
 	const Ruleset &ruleset = *engine.getRuleset();
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
-	unsigned zone = 4;
-	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
+	std::pair<double, double> pos = getLandPoint(globe, regionRules, RuleRegion::ALIEN_BASE_ZONE);
 	AlienBase *ab = new AlienBase();
 	ab->setAlienRace(_race);
 	ab->setId(game.getId("STR_ALIEN_BASE"));
