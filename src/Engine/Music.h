@@ -46,6 +46,10 @@ public:
 	virtual void play(int loop = -1) const;
 	/// Stops all music.
 	static void stop();
+	/// Pauses all music.
+	static void pause();
+	/// Resumes all music.
+	static void resume();
 };
 
 }
