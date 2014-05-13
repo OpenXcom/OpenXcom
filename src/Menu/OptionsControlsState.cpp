@@ -110,6 +110,7 @@ OptionsControlsState::~OptionsControlsState()
 void OptionsControlsState::init()
 {
 	OptionsBaseState::init();
+	_lstControls->clearList();
 	_lstControls->addRow(2, tr("STR_GENERAL").c_str(), L"");
 	_lstControls->setCellColor(0, 0, _colorGroup);
 	addControls(_controlsGeneral);

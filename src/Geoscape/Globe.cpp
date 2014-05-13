@@ -595,7 +595,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
  */
 void Globe::rotateLeft()
 {
-	_rotLon = -ROTATE_LONGITUDE;
+	_rotLon = -ROTATE_LONGITUDE / (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -604,7 +604,7 @@ void Globe::rotateLeft()
  */
 void Globe::rotateRight()
 {
-	_rotLon = ROTATE_LONGITUDE;
+	_rotLon = ROTATE_LONGITUDE/ (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -613,7 +613,7 @@ void Globe::rotateRight()
  */
 void Globe::rotateUp()
 {
-	_rotLat = -ROTATE_LATITUDE;
+	_rotLat = -ROTATE_LATITUDE / (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -622,7 +622,7 @@ void Globe::rotateUp()
  */
 void Globe::rotateDown()
 {
-	_rotLat = ROTATE_LATITUDE;
+	_rotLat = ROTATE_LATITUDE / (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -642,7 +642,10 @@ void Globe::rotateStop()
 void Globe::rotateStopLon()
 {
 	_rotLon = 0.0;
-	if (abs(_rotLat) < ROTATE_LATITUDE / 2) _rotTimer->stop();
+	if (AreSame(_rotLat, 0.0))
+	{
+		_rotTimer->stop();
+	}
 }
 
 /**
@@ -651,7 +654,10 @@ void Globe::rotateStopLon()
 void Globe::rotateStopLat()
 {
 	_rotLat = 0.0;
-	if (abs(_rotLon) < ROTATE_LONGITUDE / 2) _rotTimer->stop();
+	if (AreSame(_rotLon, 0.0))
+	{
+		_rotTimer->stop();
+	}
 }
 
 /**
@@ -1748,14 +1754,14 @@ void Globe::mouseOver(Action *action, State *state)
 			// Scrolling
 			if (Options::dragScrollInvert)
 			{
-				double newLon = -action->getDetails()->motion.xrel * ROTATE_LONGITUDE/2;
-				double newLat = -action->getDetails()->motion.yrel * ROTATE_LATITUDE/2;
+				double newLon = -action->getDetails()->motion.xrel * ROTATE_LONGITUDE/(_zoom+1)/2;
+				double newLat = -action->getDetails()->motion.yrel * ROTATE_LATITUDE/(_zoom+1)/2;
 				center(_cenLon + newLon, _cenLat + newLat);
 			}
 			else
 			{
-				double newLon = ((double)_totalMouseMoveX / action->getXScale()) * ROTATE_LONGITUDE/2;
-				double newLat = ((double)_totalMouseMoveY / action->getYScale()) * ROTATE_LATITUDE/2;
+				double newLon = ((double)_totalMouseMoveX / action->getXScale()) * ROTATE_LONGITUDE/(_zoom+1)/2;
+				double newLat = ((double)_totalMouseMoveY / action->getYScale()) * ROTATE_LATITUDE/(_zoom+1)/2;
 				center(_lonBeforeMouseScrolling + newLon, _latBeforeMouseScrolling + newLat);
 			}
 

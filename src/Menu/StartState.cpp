@@ -36,14 +36,15 @@
 #include "IntroState.h"
 #include "ErrorMessageState.h"
 #include "OptionsBaseState.h"
+#include <SDL_mixer.h>
 #include <SDL_thread.h>
 #include <SDL_syswm.h>
 
 namespace OpenXcom
 {
 
-LoadingPhase StartState::loading = LOADING_STARTED;
-std::string StartState::error = "";
+LoadingPhase StartState::loading;
+std::string StartState::error;
 
 /**
  * Initializes all the elements in the Loading screen.
@@ -54,15 +55,12 @@ StartState::StartState(Game *game) : State(game)
 	// Create objects
 	int dx = (Options::baseXResolution - 320) / 2;
 	int dy = (Options::baseYResolution - 200) / 2;
-	_wasLetterBoxed = Options::keepAspectRatio;
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
 
-	if (!Options::useOpenGL)
-	{
-		Options::keepAspectRatio = false;
-		game->getScreen()->resetDisplay(false);
-	}
+	_thread = 0;
+	loading = LOADING_STARTED;
+	error = "";
 
 	_surface = new Surface(320, 200, dx, dy);
 
@@ -95,7 +93,10 @@ StartState::StartState(Game *game) : State(game)
  */
 StartState::~StartState()
 {
-	SDL_KillThread(_thread);
+	if (_thread != 0)
+	{
+		SDL_KillThread(_thread);
+	}
 }
 
 /**
@@ -104,9 +105,16 @@ StartState::~StartState()
 void StartState::init()
 {
 	State::init();
+
 	// Silence!
 	Sound::stop();
 	Music::stop();
+	_game->setResourcePack(0);
+	if (!Options::mute && Options::reload)
+	{
+		Mix_CloseAudio();
+		_game->initAudio();
+	}
 
 	// Load the game data in a separate thread
 	_thread = SDL_CreateThread(load, (void*)_game);
@@ -143,13 +151,13 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
+			bool letterbox = Options::keepAspectRatio;
 			Options::keepAspectRatio = true;
 			_game->getScreen()->resetDisplay(false);
-			_game->setState(new IntroState(_game, _wasLetterBoxed));
+			_game->setState(new IntroState(_game, letterbox));
 		}
 		else
 		{
-			Options::keepAspectRatio = _wasLetterBoxed;
 			OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
 			State *state = new MainMenuState(_game);
@@ -164,7 +172,7 @@ void StartState::think()
 					error << Language::fsToWstr(*i) << L'\n';
 				}
 				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			}
 			Options::reload = false;
 		}

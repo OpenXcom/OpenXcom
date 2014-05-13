@@ -28,6 +28,8 @@
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Music.h"
 #include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -78,6 +80,13 @@ VictoryState::VictoryState(Game *game) : State(game), _screen(-1)
 	_timer->start();
 
 	screenClick(0);
+
+	// Ironman is over
+	if (_game->getSavedGame()->isIronman())
+	{
+		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+	}
 }
 
 /**

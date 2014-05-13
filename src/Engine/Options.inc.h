@@ -11,6 +11,8 @@ OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpen
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
 OPT SaveSort saveOrder;
+OPT MusicFormat preferredMusic;
+OPT SoundFormat preferredSound;
 OPT SDL_GrabMode captureMouse;
 OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave;
 
@@ -41,3 +43,4 @@ OPT bool mute, reload, newOpenGL, newScaleFilter, newHQXFilter;
 OPT int newDisplayWidth, newDisplayHeight, newBattlescapeScale, newGeoscapeScale;
 OPT std::string newOpenGLShader;
 OPT std::vector<std::string> rulesets, purchaseExclusions, badMods;
+OPT SoundFormat currentSound;

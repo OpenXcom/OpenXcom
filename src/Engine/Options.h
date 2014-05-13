@@ -27,13 +27,17 @@
 namespace OpenXcom
 {
 
-/// Enumeration for the battlescape drag scrolling types.
+/// Battlescape drag scrolling types.
 enum ScrollType { SCROLL_NONE, SCROLL_TRIGGER, SCROLL_AUTO };
-/// Enumeration for the keyboard input modes.
+/// Keyboard input modes.
 enum KeyboardType { KEYBOARD_OFF, KEYBOARD_ON, KEYBOARD_VIRTUAL };
-/// Enumeration for the savegame sorting modes.
+/// Savegame sorting modes.
 enum SaveSort { SORT_NAME_ASC, SORT_NAME_DESC, SORT_DATE_ASC, SORT_DATE_DESC };
-/// Enumeration for the path preview modes (can be OR'd together).
+/// Music format preferences.
+enum MusicFormat { MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI };
+/// Sound format preferences.
+enum SoundFormat { SOUND_AUTO, SOUND_14, SOUND_10 };
+/// Path preview modes (can be OR'd together).
 enum PathPreview {
 	PATH_NONE    = 0x00, // 0000 (must always be zero)
 	PATH_ARROWS  = 0x01, // 0001

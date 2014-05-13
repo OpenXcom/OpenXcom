@@ -35,6 +35,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "OptionsVideoState.h"
 #include "OptionsAudioState.h"
+#include "OptionsNoAudioState.h"
 #include "OptionsControlsState.h"
 #include "OptionsGeoscapeState.h"
 #include "OptionsBattlescapeState.h"
@@ -209,7 +210,6 @@ void OptionsBaseState::setCategory(TextButton *button)
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
-
 	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
 	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 	Options::switchDisplay();
@@ -276,7 +276,14 @@ void OptionsBaseState::btnGroupPress(Action *action)
 		}
 		else if (sender == _btnAudio)
 		{
-			_game->pushState(new OptionsAudioState(_game, _origin));
+			if (!Options::mute)
+			{
+				_game->pushState(new OptionsAudioState(_game, _origin));
+			}
+			else
+			{
+				_game->pushState(new OptionsNoAudioState(_game, _origin));
+			}
 		}
 		else if (sender == _btnControls)
 		{
