@@ -2062,6 +2062,8 @@ void BattlescapeState::resize(int &dX, int &dY)
 	case SCALE_SCREEN:
 		break;
 	default:
+		dX = 0;
+		dY = 0;
 		return;
 	}
 
