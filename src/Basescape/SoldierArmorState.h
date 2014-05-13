@@ -44,7 +44,7 @@ private:
 
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtSoldier, *_txtType, *_txtQuantity;
+	Text *_txtTitle, *_txtType, *_txtQuantity;
 	TextList *_lstArmor;
 	std::vector<Armor*> _armors;
 public:

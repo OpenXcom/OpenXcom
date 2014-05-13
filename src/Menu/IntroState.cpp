@@ -402,6 +402,7 @@ static void audioHandler()
 void IntroState::init()
 {
 	State::init();
+	Options::keepAspectRatio = _wasLetterBoxed;
 	if (CrossPlatform::fileExists(_introFile) && (CrossPlatform::fileExists(_introSoundFileDOS) || CrossPlatform::fileExists(_introSoundFileWin)))
 	{
 		audioSequence = new AudioSequence(_game->getResourcePack());
@@ -449,7 +450,6 @@ void IntroState::init()
 		Music::stop();
 #endif
 	}
-	Options::keepAspectRatio = _wasLetterBoxed;
 	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
 	_game->setState(new MainMenuState(_game));

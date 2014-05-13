@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		game = new Game(title.str());
-		game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG

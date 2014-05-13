@@ -16,44 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_STARTSTATE_H
-#define OPENXCOM_STARTSTATE_H
+#ifndef OPENXCOM_OPTIONSNOAUDIOSTATE_H
+#define OPENXCOM_OPTIONSNOAUDIOSTATE_H
 
-#include "../Engine/State.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
 
-class Surface;
-
-enum LoadingPhase { LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_DONE };
+class Text;
 
 /**
- * Initializes the game and loads all required content.
+ * Screen that indicates there is no audio available.
  */
-class StartState : public State
+class OptionsNoAudioState : public OptionsBaseState
 {
 private:
-	Surface *_surface;
-	SDL_Thread *_thread;
+	Text *_txtError;
 public:
-	static LoadingPhase loading;
-	static std::string error;
-
-	/// Creates the Start state.
-	StartState(Game *game);
-	/// Cleans up the Start state.
-	~StartState();
-	/// Reset everything.
-	void init();
-	/// Displays messages.
-	void think();
-	/// Handles key clicks.
-	void handle(Action *action);
-	/// Flash the window.
-	void flash();
-	/// Loads the game resources.
-	static int load(void *game_ptr);
+	/// Creates the Audio Options state.
+	OptionsNoAudioState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Audio Options state.
+	~OptionsNoAudioState();
 };
 
 }

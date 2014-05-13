@@ -50,8 +50,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	// Create objects
 	_window = new Window(this, 192, 120, 64, 40, POPUP_BOTH);
 	_btnCancel = new TextButton(140, 16, 90, 136);
-	_txtTitle = new Text(182, 9, 69, 48);
-	_txtSoldier = new Text(182, 9, 69, 56);
+	_txtTitle = new Text(182, 16, 69, 48);
 	_txtType = new Text(90, 9, 80, 72);
 	_txtQuantity = new Text(70, 9, 177, 72);
 	_lstArmor = new TextList(160, 40, 73, 88);
@@ -62,7 +61,6 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
-	add(_txtSoldier);
 	add(_txtType);
 	add(_txtQuantity);
 	add(_lstArmor);
@@ -82,10 +80,6 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName()));
-
-	_txtSoldier->setColor(Palette::blockOffset(13)+5);
-	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(s->getName(true));
 
 	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));

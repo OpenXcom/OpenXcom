@@ -40,6 +40,8 @@
 #include "../Savegame/Base.h"
 #include "../Battlescape/CommendationState.h"
 #include "../Savegame/SoldierDiary.h"
+#include "../Menu/SaveGameState.h"
+
 namespace OpenXcom
 {
 /**
@@ -240,14 +242,25 @@ void MonthlyReportState::btnOkClick(Action *)
 			_game->pushState(new CommendationState(_game, _soldiersMedalled));
 		}
 		if (_psi)
-			_game->pushState (new PsiTrainingState(_game));
+		{
+			_game->pushState(new PsiTrainingState(_game));
+		}
+		// Autosave
+		if (_game->getSavedGame()->isIronman())
+		{
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN));
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
+		}
 	}
 	else
 	{
 		if (_txtFailure->getVisible())
 		{
 			_game->popState();
-			_game->pushState (new DefeatState(_game));
+			_game->pushState(new DefeatState(_game));
 		}
 		else
 		{
@@ -268,7 +281,7 @@ void MonthlyReportState::btnOkClick(Action *)
  * Update all our activity counters, gather all our scores, 
  * get our countries to make sign pacts, adjust their fundings,
  * assess their satisfaction, and finally calculate our overall
- * total score, with thanks to Volutar for the formulae.
+ * total score, with thanks to Volutar for the formulas.
  */
 void MonthlyReportState::calculateChanges()
 {

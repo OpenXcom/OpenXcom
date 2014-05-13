@@ -55,15 +55,8 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
-
-// not sure if i can remove this ifdef, morphos users please advise.
-#ifdef __MORPHOS__		
-	Uint32 framestarttime;// = 0;
-	Sint32 delaytime;
-#else
-	unsigned int framestarttime;
-	int delaytime;
-#endif
+	unsigned int _framestarttime;
+	int _delaytime;
 
 public:
 	/// Creates a new game and initializes SDL.
@@ -112,6 +105,8 @@ public:
 	bool isQuitting() const;
 	/// Sets up the default language.
 	void defaultLanguage();
+	/// Sets up the audio.
+	void initAudio();
 };
 
 }

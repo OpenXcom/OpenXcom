@@ -1603,9 +1603,9 @@ void GeoscapeState::time1Day()
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
-	// Autosave every 10 days
+	// Autosave 3 times a month
 	int day = _game->getSavedGame()->getTime()->getDay();
-	if (day == 1 || day % 10 == 0)
+	if (day == 10 || day == 20)
 	{
 		if (_game->getSavedGame()->isIronman())
 		{
@@ -2162,7 +2162,7 @@ void GeoscapeState::setupTerrorMission()
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
 		counter++;
 	}
-	while (region->getCities()->empty() && !_game->getSavedGame()->getAlienMission(region->getType(), "STR_ALIEN_TERROR"));
+	while (region->getCities()->empty() || _game->getSavedGame()->getAlienMission(region->getType(), "STR_ALIEN_TERROR") != 0);
 	// Choose race for terror mission.
 	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
 	const std::string &terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());

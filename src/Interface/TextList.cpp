@@ -45,7 +45,7 @@ TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(wid
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY());
 	_up->setVisible(false);
 	_up->setTextList(this);
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 13);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 14);
 	_down->setVisible(false);
 	_down->setTextList(this);
 	int h = std::max(_down->getY() - _up->getY() - _up->getHeight(), 1);
@@ -102,7 +102,7 @@ void TextList::setY(int y)
 {
 	Surface::setY(y);
 	_up->setY(getY());
-	_down->setY(getY() + getHeight() - 13);
+	_down->setY(getY() + getHeight() - 14);
 	_scrollbar->setY(_up->getY() + _up->getHeight());
 	if (_selector != 0)
 		_selector->setY(getY());

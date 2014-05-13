@@ -26,6 +26,14 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
+mapsdir = $(pkgdatadir)/data/MAPS/
+maps_DATA = \
+	bin/data/MAPS/*
+
+routesdir = $(pkgdatadir)/data/ROUTES/
+routes_DATA = \
+	bin/data/ROUTES/*
+
 weaponsdir = $(pkgdatadir)/data/Resources/Weapons/
 weapons_DATA = \
 	bin/data/Resources/Weapons/*
@@ -460,6 +468,8 @@ openxcom_SOURCES = \
 	src/Menu/OptionsVideoState.h \
 	src/Menu/OptionsAudioState.cpp \
 	src/Menu/OptionsAudioState.h \
+	src/Menu/OptionsNoAudioState.cpp \
+	src/Menu/OptionsNoAudioState.h \
 	src/Menu/OptionsGeoscapeState.cpp \
 	src/Menu/OptionsGeoscapeState.h \
 	src/Menu/OptionsModsState.cpp \
@@ -670,6 +680,8 @@ EXTRA_DIST = \
 	res/windows/openxcom.ico \
 	$(doc_DATA) \
 	$(pkgdata_DATA) \
+	$(maps_DATA) \
+	$(routes_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
 	$(weapons_DATA) \
