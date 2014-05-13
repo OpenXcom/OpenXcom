@@ -334,6 +334,7 @@ void Screen::resetDisplay(bool resetVideo)
 			SDL_QuitSubSystem(SDL_INIT_VIDEO);
 			SDL_InitSubSystem(SDL_INIT_VIDEO);
 			SDL_ShowCursor(SDL_ENABLE);
+			SDL_EnableUNICODE(1);
 			SDL_WM_SetCaption(title.c_str(), 0);
 			SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
 		}
