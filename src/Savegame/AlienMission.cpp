@@ -423,7 +423,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			{
 				std::stringstream error;
 				error << "Mission number: " << getId() << " in region: " << getRegion() << " trying to land at lon: " << ufo.getLongitude() << " lat: " << ufo.getLatitude() << " ufo is on flightpath: " << ufo.getTrajectory().getID() << " at point: " << ufo.getTrajectoryPoint() << ", no city found.";
-				Log(LOG_INFO) << error.str();
+				Log(LOG_FATAL) << error.str();
 				assert(0 && error.str().c_str());
 			}
 			game.getTerrorSites()->push_back(terrorSite);
