@@ -48,15 +48,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Game *game, Base *bas
 {
 	if (_base == 0)
 	{
-		_list = _game->getSavedGame()->getDeadSoldiers();
-		if (_soldierId >= _list->size())
-		{
-			_soldierId = 0;
-		}
-		else
-		{
-			_soldierId = _list->size() - (1 + _soldierId);
-		}
+		_list = _game->getSavedGame()->getDeadSoldiers();\
 	}
 	else
 	{
