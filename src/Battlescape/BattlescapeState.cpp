@@ -610,7 +610,7 @@ void BattlescapeState::mapOver(Action *action)
 			_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance));
 
 		// Scrolling
-		if (Options::dragScrollInvert)
+		if (Options::battleDragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
 				-action->getDetails()->motion.xrel,
