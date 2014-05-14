@@ -424,7 +424,14 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 				std::stringstream error;
 				error << "Mission number: " << getId() << " in region: " << getRegion() << " trying to land at lon: " << ufo.getLongitude() << " lat: " << ufo.getLatitude() << " ufo is on flightpath: " << ufo.getTrajectory().getID() << " at point: " << ufo.getTrajectoryPoint() << ", no city found.";
 				Log(LOG_FATAL) << error.str();
-				assert(0 && error.str().c_str());
+				std::vector<MissionArea> cityZones = engine.getRuleset()->getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
+				for (int i = 0; i != cityZones.size(); ++i)
+				{
+					error.str("");
+					error << "Zone " << i << ": Lattitudes: " << cityZones.at(i).latMin << " - " << cityZones.at(i).latMax << " Longitudes: " << cityZones.at(i).lonMin << " - " << cityZones.at(i).lonMax;
+					Log(LOG_INFO) << error.str();
+				}
+				assert(0 && "Terror Mission failed to find a city, please check your log file for more details");
 			}
 			game.getTerrorSites()->push_back(terrorSite);
 			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
