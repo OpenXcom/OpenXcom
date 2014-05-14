@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "AlienMission.h"
 #include "AlienBase.h"
 #include "Base.h"
@@ -41,6 +42,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <functional>
+#include <math.h>
 
 namespace {
 /**
@@ -428,7 +430,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 				for (int i = 0; i != cityZones.size(); ++i)
 				{
 					error.str("");
-					error << "Zone " << i << ": Lattitudes: " << cityZones.at(i).latMin << " - " << cityZones.at(i).latMax << " Longitudes: " << cityZones.at(i).lonMin << " - " << cityZones.at(i).lonMax;
+					error << "Zone " << i  << ": Longitudes: " << cityZones.at(i).lonMin * M_PI / 180 << " to " << cityZones.at(i).lonMax * M_PI / 180 << " Lattitudes: " << cityZones.at(i).latMin * M_PI / 180 << " to " << cityZones.at(i).latMax * M_PI / 180;
 					Log(LOG_INFO) << error.str();
 				}
 				assert(0 && "Terror Mission failed to find a city, please check your log file for more details");
