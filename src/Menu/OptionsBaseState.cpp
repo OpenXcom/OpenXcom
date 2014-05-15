@@ -249,6 +249,7 @@ void OptionsBaseState::btnCancelClick(Action *)
 {
 	Options::reload = false;
 	Options::load();
+	SDL_WM_GrabInput(Options::captureMouse);
 	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
 	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
