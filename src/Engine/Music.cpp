@@ -22,6 +22,7 @@
 #include "Logger.h"
 #include "Language.h"
 #include "Adlib/adlplayer.h"
+#include "AdlibMusic.h"
 
 namespace OpenXcom
 {
@@ -110,6 +111,34 @@ void Music::stop()
 		func_mute();
 		Mix_HookMusic(NULL, NULL);
 		Mix_HaltMusic();
+	}
+#endif
+}
+
+/**
+ * Pauses music playback when game loses focus.
+ */
+void Music::pause()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		Mix_PauseMusic();
+		Mix_HookMusic(NULL, NULL);
+	}
+#endif
+}
+
+/**
+ * Resumes music playback when game gains focus.
+ */
+void Music::resume()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		Mix_ResumeMusic();
+		Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
 }

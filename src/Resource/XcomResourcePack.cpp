@@ -791,7 +791,15 @@ void XcomResourcePack::loadBattlescapeResources()
 			_sets[*i] = new SurfaceSet(32, 48);
 		_sets[*i]->loadPck(path, tab);
 	}
-
+	// incomplete chryssalid set: 1.0 data: stop loading.
+	if (!_sets["CHRYS.PCK"]->getFrame(225))
+	{
+		Log(LOG_FATAL) << "Version 1.0 data detected." << std::endl << std::endl << "please install the official patches" << std::endl
+			<< "from http://www.strategycore.co.uk/files/ufo-1.2/" << std::endl
+			<< "and http://www.strategycore.co.uk/files/ufo-1.4/" << std::endl;
+		;
+		throw Exception("Invalid data, please check logfile.");
+	}
 	s.str("");
 	s << "GEODATA/" << "LOFTEMPS.DAT";
 	MapDataSet::loadLOFTEMPS(CrossPlatform::getDataFile(s.str()), &_voxelData);

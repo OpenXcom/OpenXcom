@@ -67,6 +67,7 @@ void RuleRegion::load(const YAML::Node &node)
 	{
 		for (YAML::const_iterator i = cities.begin(); i != cities.end(); ++i)
 		{
+			// if a city has been added, make sure that it has a zone 3 associated with it, if not, create one for it.
 			if (_missionZones.size() >= CITY_MISSION_ZONE)
 			{
 				MissionArea ma;
@@ -83,6 +84,24 @@ void RuleRegion::load(const YAML::Node &node)
 			City *rule = new City("", 0.0, 0.0);
 			rule->load(*i);
 			_cities.push_back(rule);
+		}
+		// make sure all the zone 3s line up with cities in this region
+		// only applicable if there ARE cities in this region.
+		for (std::vector<MissionArea>::iterator i = _missionZones.at(CITY_MISSION_ZONE).areas.begin(); i != _missionZones.at(CITY_MISSION_ZONE).areas.end();)
+		{
+			bool matching = false;
+			for (std::vector<City*>::iterator j = _cities.begin(); j != _cities.end() && !matching; ++j)
+			{
+				matching = ((*j)->getLatitude() == (*i).latMin * M_PI / 180 && (*j)->getLongitude() == (*i).lonMin * M_PI / 180 && (*i).latMax == (*i).latMin && (*i).lonMax == (*i).lonMin);
+			}
+			if (matching)
+			{
+				++i;
+			}
+			else
+			{
+				i = _missionZones.at(CITY_MISSION_ZONE).areas.erase(i);
+			}
 		}
 	}
 	if (const YAML::Node &weights = node["missionWeights"])
