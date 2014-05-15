@@ -263,6 +263,11 @@ void Game::run()
 						{
 							setState(new TestState(this));
 						}
+						if (action.getDetails()->key.keysym.sym == SDLK_l && (SDL_GetModState() & KMOD_CTRL) != 0)
+						{
+							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
+							SDL_WM_GrabInput(Options::captureMouse);
+						}
 						// "ctrl-u" debug UI
 						else if (action.getDetails()->key.keysym.sym == SDLK_u && (SDL_GetModState() & KMOD_CTRL) != 0)
 						{

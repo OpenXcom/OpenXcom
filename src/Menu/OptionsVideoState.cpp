@@ -530,6 +530,7 @@ void OptionsVideoState::btnLetterboxClick(Action *)
 void OptionsVideoState::btnLockMouseClick(Action *)
 {
 	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
+	SDL_WM_GrabInput(Options::captureMouse);
 }
 
 /**
@@ -566,4 +567,16 @@ void OptionsVideoState::resize(int &dX, int &dY)
 	_txtDisplayHeight->setText(ss.str());
 }
 
+/**
+ * Takes care of any events from the core game engine.
+ * @param action Pointer to an action.
+ */
+void OptionsVideoState::handle(Action *action)
+{
+	State::handle(action);
+	if (action->getDetails()->key.keysym.sym == SDLK_l && (SDL_GetModState() & KMOD_CTRL) != 0)
+	{
+		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
+	}
+}
 }
