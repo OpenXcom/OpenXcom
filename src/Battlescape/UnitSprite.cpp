@@ -498,7 +498,7 @@ void UnitSprite::drawRoutine0()
 	{
 	case 0: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
 	case 1: leftArm->blit(this); legs->blit(this); itemB?itemB->blit(this):void(); torso->blit(this); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
-	case 2: leftArm->blit(this); legs->blit(this); itemB?itemB->blit(this):void(); torso->blit(this); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
+	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
 	case 3:
 		if (_unit->getStatus() != STATUS_AIMING  && ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
 		{
