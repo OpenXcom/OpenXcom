@@ -886,8 +886,9 @@ void UnitSprite::drawRoutine6()
 	const int yoffWalk[8] = {3, 3, 2, 1, 0, 0, 1, 2}; // bobbing up and down
 	const int xoffWalka[8] = {0, 0, 1, 2, 3, 3, 2, 1};
 	const int xoffWalkb[8] = {0, 0, -1, -2, -3, -3, -2, -1};
-	const int offX[8] = { 8, 10, 8, 5, -8, -10, -5, -2 }; // for the weapons
-	const int offY[8] = { -6, -3, 0, -3, 0, -4, -7, -9 }; // for the weapons
+	const int yoffStand[8] = {2, 1, 1, 0, 0, 0, 0, 0};
+	const int offX[8] = { 8, 10, 5, 2, -8, -10, -5, -2 }; // for the weapons
+	const int offY[8] = { -6, -3, 0, 0, 2, -3, -7, -9 }; // for the weapons
 	const int offX2[8] = { -8, 2, 7, 13, 7, 0, -3, -15 }; // for the weapons
 	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 }; // for the weapons
 	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 }; // for the left handed rifles
@@ -949,7 +950,11 @@ void UnitSprite::drawRoutine6()
 		{
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
 			itemA->setX(0);
-			itemA->setY(1);
+			itemA->setY(0);
+			if (!_itemA->getRules()->isTwoHanded())
+			{
+				itemA->setY(yoffStand[_unit->getDirection()]);
+			}
 		}
 
 
@@ -994,7 +999,11 @@ void UnitSprite::drawRoutine6()
 		else
 		{
 			itemB->setX(0);
-			itemB->setY(1);
+			itemB->setY(0);
+			if (!_itemB->getRules()->isTwoHanded())
+			{
+				itemB->setY(yoffStand[_unit->getDirection()]);
+			}
 			rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
 		}
 
