@@ -181,7 +181,7 @@ void UnitSprite::drawRoutine0()
 	const int offX4[8] = { -8, 2, 7, 14, 7, -2, -4, -8 }; // for the left handed weapons
 	const int offY4[8] = { -3, -3, -1, 0, 3, 3, 0, 1 }; // for the left handed weapons
 	const int offX5[8] = { -1, 1, 1, 2, 0, -1, 0, 0 }; // for the weapons (muton)
-	const int offY5[8] = { 1, -1, -1, -1, -1, -2, -3, 0 }; // for the weapons (muton)
+	const int offY5[8] = { 1, -1, -1, -1, -1, -1, -3, 0 }; // for the weapons (muton)
 	const int offX6[8] = { 0, 6, 6, 12, -4, -5, -5, -13 }; // for the left handed rifles
 	const int offY6[8] = { -4, -4, -1, 0, 5, 0, 1, 0 }; // for the left handed rifles
 	const int offX7[8] = { 0, 6, 8, 12, 2, -5, -5, -13 }; // for the left handed rifles (muton)
@@ -256,6 +256,17 @@ void UnitSprite::drawRoutine0()
 		legs = _unitSurface->getFrame(legsWalk[_unit->getDirection()] + _unit->getWalkingPhase());
 		leftArm = _unitSurface->getFrame(larmWalk[_unit->getDirection()] + _unit->getWalkingPhase());
 		rightArm = _unitSurface->getFrame(rarmWalk[_unit->getDirection()] + _unit->getWalkingPhase());
+		if(_drawingRoutine == 10)
+		{
+			if (_unit->getDirection() == 2)
+			{
+				rightArm->setX(-6);
+			}
+			else if (_unit->getDirection() == 3)
+			{
+				leftArm->setY(-1);
+			}
+		}
 	}
 	else
 	{
@@ -327,7 +338,7 @@ void UnitSprite::drawRoutine0()
 		else
 		{
 			if(_drawingRoutine == 10)
-				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection()); // missing/wrong arms on muton here, investigate spriteset
+				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
 			else
 				rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 		}
