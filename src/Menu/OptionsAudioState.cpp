@@ -35,6 +35,7 @@ namespace OpenXcom
 {
 /* MUS_NONE, MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3, MUS_MP3_MAD, MUS_FLAC, MUS_MODPLUG */
 const std::wstring OptionsAudioState::musFormats[] = {L"Adlib", L"?", L"WAV", L"MOD", L"MIDI", L"OGG", L"MP3", L"MP3", L"FLAC", L"MOD"};
+const std::wstring OptionsAudioState::sndFormats[] = {L"?", L"1.4", L"1.0"};
 
 /**
  * Initializes all the elements in the Audio Options screen.
@@ -219,7 +220,7 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_cbxSoundFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
 	_txtCurrentSound->setColor(Palette::blockOffset(8)+10);
-	std::wstring curSound = L"N/A";
+	std::wstring curSound = sndFormats[Options::currentSound];
 	_txtCurrentSound->setText(tr("STR_CURRENT_FORMAT").arg(curSound));
 
 	// These options require a restart, so don't enable them in-game

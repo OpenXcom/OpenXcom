@@ -1585,7 +1585,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(5);
+				(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
 				break;
 			}
 		}
@@ -1593,7 +1593,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(5);
+				(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
 				break;
 			}
 		}
@@ -1603,9 +1603,9 @@ void GeoscapeState::time1Day()
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
-	// Autosave every 10 days
+	// Autosave 3 times a month
 	int day = _game->getSavedGame()->getTime()->getDay();
-	if (day == 1 || day % 10 == 0)
+	if (day == 10 || day == 20)
 	{
 		if (_game->getSavedGame()->isIronman())
 		{
@@ -2209,6 +2209,8 @@ void GeoscapeState::resize(int &dX, int &dY)
 	case SCALE_SCREEN:
 		break;
 	default:
+		dX = 0;
+		dY = 0;
 		return;
 	}
 	

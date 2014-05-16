@@ -1255,8 +1255,8 @@ void Base::setupDefenses()
 	// add vehicles left on the base
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); )
 	{
-		std::string itemId=(i)->first;
-		int iqty=(i)->second;
+		std::string itemId = (i)->first;
+		int itemQty = (i)->second;
 		RuleItem *rule = _rule->getItem(itemId);
 		if (rule->isFixed())
 		{
@@ -1267,25 +1267,25 @@ void Base::setupDefenses()
 			}
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
-				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
-				_items->removeItem(itemId, iqty);
+				for (int j = 0; j < itemQty; ++j)
+					_vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
+				_items->removeItem(itemId, itemQty);
 			}
 			else // so this vehicle needs ammo
 			{
 				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
-				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-				if (0 >= baqty || 0 >= iqty) { ++i; continue; }
-				int canBeAdded = std::min(iqty, baqty);
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
-				int remainder = 0;
-				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
-				int newAmmo;
+				int ammoPerVehicle = ammo->getClipSize();
+				int baseQty = _items->getItem(ammo->getType()) / ammoPerVehicle;
+				if (!baseQty)
+				{
+					++i;
+					continue;
+				}
+				int canBeAdded = std::min(itemQty, baseQty);
 				for (int j=0; j<canBeAdded; ++j)
 				{
-					newAmmo = newAmmoPerVehicle;
-					if (j<remainder) ++newAmmo;
-					_vehicles.push_back(new Vehicle(rule, newAmmo, size));
-					_items->removeItem(ammo->getType(), newAmmo);
+					_vehicles.push_back(new Vehicle(rule, ammoPerVehicle, size));
+					_items->removeItem(ammo->getType(), ammoPerVehicle);
 				}
 				_items->removeItem(itemId, canBeAdded);
 			}
