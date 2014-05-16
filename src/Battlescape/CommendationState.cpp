@@ -45,9 +45,7 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 10, 8);
-	_txtMedal = new Text(114, 9, 16, 32);
-	_txtDecoration = new Text(80, 9, 220, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_lstSoldiers = new TextList(288, 128, 8, 32);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
@@ -55,8 +53,6 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	add(_txtMedal);
-	add(_txtDecoration);
 	add(_lstSoldiers);
 
 	centerAllSurfaces();
@@ -76,12 +72,6 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_txtMedal->setColor(Palette::blockOffset(15)-1);
-	_txtMedal->setText(tr("STR_NEW_MEDAL"));
-
-	_txtDecoration->setColor(Palette::blockOffset(15)-1);
-	_txtDecoration->setText(tr("STR_MEDAL_AWARD_LEVEL"));
-
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(2, 204, 84);
 	_lstSoldiers->setSelectable(true);
@@ -89,35 +79,57 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	_lstSoldiers->setMargin(8);
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = soldiersMedalled.begin() ; i != soldiersMedalled.end(); ++i)
-	{
-		// Soldier name
-		_lstSoldiers->addRow(2, (*i)->getName().c_str(), L"");
-		_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
-		row++;
+	int titleRow = 0;
+	std::wstringstream ss, ss2;
+	bool decrementIterator = false;
 
-		for (std::vector<SoldierCommendations*>::iterator j = (*i)->getDiary()->getSoldierCommendations()->begin() ; j != (*i)->getDiary()->getSoldierCommendations()->end() ; ++j)
+	for (std::map<std::string, RuleCommendations *>::const_iterator commList = _game->getRuleset()->getCommendation().begin(); commList != _game->getRuleset()->getCommendation().end(); ++commList)
+	{
+		if (decrementIterator)
 		{
-			if ((*j)->isNew())
+			--commList;
+		}
+		decrementIterator = false;
+		ss.clear();
+		ss2.clear();
+		titleRow = row;
+
+		for (std::vector<Soldier*>::iterator s = soldiersMedalled.begin() ; s != soldiersMedalled.end(); ++s)
+		{
+			for (std::vector<SoldierCommendations*>::const_iterator soldierComm = (*s)->getDiary()->getSoldierCommendations()->begin(); soldierComm != (*s)->getDiary()->getSoldierCommendations()->end(); ++soldierComm)
 			{
-				std::wstringstream ss;
-				ss << "   ";
-				if ((*j)->getNoun() == "noNoun")
+				if ((*soldierComm)->getType() == (*commList).first && (*soldierComm)->isNew())
 				{
-					ss << tr((*j)->getType()).c_str();
+					(*soldierComm)->makeOld();
+					row++;
+
+					// Soldier name
+					ss2 << "   ";
+					ss2 << (*s)->getName().c_str();
+					_lstSoldiers->addRow(2, ss2, tr((*soldierComm)->getDecorationLevelName()).c_str());
+					_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
+
+					// Decide medal noun ...
+					if ((*soldierComm)->getNoun() == "noNoun")
+					{
+						ss << tr((*soldierComm)->getType()).c_str();
+					}
+					else
+					{
+						ss << tr((*soldierComm)->getType()).arg(tr((*soldierComm)->getNoun())).c_str();
+						decrementIterator = true; // In case we have more than one modular medal
+					}
 				}
-				else
-				{
-					ss << tr((*j)->getType()).arg(tr((*j)->getNoun())).c_str();					
-				}
-				// Medal name (change color)
-				_lstSoldiers->addRow(2, ss.str().c_str(), tr((*j)->getDecorationLevelName()).c_str());
-				_lstSoldiers->setRowColor(row, Palette::blockOffset(5)+10);
-				row++;
-				(*j)->makeOld();
 			}
 		}
-	}
+        
+        if (titleRow != row)
+		{
+			// Medal name
+			_lstSoldiers->addRow(2, ss, L"");
+			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
+		}
+	}	
 }
 
 /**
