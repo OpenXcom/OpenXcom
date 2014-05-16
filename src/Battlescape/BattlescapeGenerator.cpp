@@ -457,13 +457,23 @@ void BattlescapeGenerator::deployXCOM()
 		}
 	}
 
-	// load weapons before distribution, even before loadouts
-	// loading weapons take priority over extra clips.
-	loadWeapons();
-
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		// don't let the soldiers take extra ammo yet
+		if (item->getRules()->getBattleType() == BT_AMMO)
+			continue;
+		placeItemByLayout(*i);
+	}
+
+	// load weapons before loadouts take extra clips.
+	loadWeapons();
+
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	{
+		// we only need to distribute extra ammo at this point.
+		if (item->getRules()->getBattleType() != BT_AMMO)
+			continue;
 		placeItemByLayout(*i);
 	}
 	
@@ -876,7 +886,19 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 				}
 				else
 				{
-					loaded = item->getAmmoItem() || item->getRules()->getCompatibleAmmo()->empty();
+					loaded = false;
+					// maybe we find the layout-ammo on the ground to load it with
+					for (std::vector<BattleItem*>::iterator k = _craftInventoryTile->getInventory()->begin(); (!loaded) && k != _craftInventoryTile->getInventory()->end(); ++k)
+					{
+						if ((*k)->getRules()->getType() == (*j)->getAmmoItem() && (*k)->getSlot() == ground
+						&& item->setAmmoItem((*k)) == 0)
+						{
+							_save->getItems()->push_back(*k);
+							(*k)->setSlot(righthand);
+							loaded = true;
+							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
+						}
+					}
 				}
 				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
