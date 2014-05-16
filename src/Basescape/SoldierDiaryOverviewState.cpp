@@ -309,7 +309,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action *)
  */
 void SoldierDiaryOverviewState::lstDiaryInfoClick(Action *)
 {
-    int absoluteRowEntry = _lstDiary->getSelectedRow() + _lstDiary->getScroll();
+    int absoluteRowEntry = _lstDiary->getSelectedRow();
 	_game->pushState(new SoldierDiaryMissionState(_game, _base, _soldierId, absoluteRowEntry));
 }
 
