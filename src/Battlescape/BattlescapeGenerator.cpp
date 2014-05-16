@@ -858,8 +858,10 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
-			if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-			if ((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty()) continue;
+			if ((*i)->getArmor()->getSize() > 1 || !(*i)->getGeoscapeSoldier() || (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
+			{
+				continue;
+			}
 
 			// find the first matching layout-slot which is not already occupied
 			std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
@@ -869,22 +871,12 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 				|| (*i)->getItem((*j)->getSlot(), (*j)->getSlotX(), (*j)->getSlotY())) continue;
 
 				if ((*j)->getAmmoItem() == "NONE")
+				{
 					loaded = true;
+				}
 				else
 				{
-					loaded = false;
-					// maybe we find the layout-ammo on the ground to load it with
-					for (std::vector<BattleItem*>::iterator k = _craftInventoryTile->getInventory()->begin(); (!loaded) && k != _craftInventoryTile->getInventory()->end(); ++k)
-					{
-						if ((*k)->getRules()->getType() == (*j)->getAmmoItem() && (*k)->getSlot() == ground
-						&& item->setAmmoItem((*k)) == 0)
-						{
-							_save->getItems()->push_back(*k);
-							(*k)->setSlot(righthand);
-							loaded = true;
-							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
-						}
-					}
+					loaded = item->getAmmoItem() || item->getRules()->getCompatibleAmmo()->empty();
 				}
 				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
