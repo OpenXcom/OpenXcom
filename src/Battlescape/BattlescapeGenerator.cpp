@@ -461,7 +461,7 @@ void BattlescapeGenerator::deployXCOM()
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		// don't let the soldiers take extra ammo yet
-		if (item->getRules()->getBattleType() == BT_AMMO)
+		if ((*i)->getRules()->getBattleType() == BT_AMMO)
 			continue;
 		placeItemByLayout(*i);
 	}
@@ -472,7 +472,7 @@ void BattlescapeGenerator::deployXCOM()
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		// we only need to distribute extra ammo at this point.
-		if (item->getRules()->getBattleType() != BT_AMMO)
+		if ((*i)->getRules()->getBattleType() != BT_AMMO)
 			continue;
 		placeItemByLayout(*i);
 	}
