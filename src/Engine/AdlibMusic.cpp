@@ -123,7 +123,6 @@ void AdlibMusic::play(int loop) const
 		stop();
 		func_setup_music((unsigned char*)_data, _size);
 		func_set_music_volume(127 * _volume);
-		Log(LOG_INFO) << "music volume set to: " << 127 * _volume;
 		Mix_HookMusic(player, NULL);
 	}
 #endif
