@@ -270,7 +270,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_blinkTimer = new Timer(100);
 	_blinkTimer->onTimer((SurfaceHandler)&Globe::blink);
 	_blinkTimer->start();
-	_rotTimer = new Timer(Options::geoScrollSpeed);
+	_rotTimer = new Timer(10);
 	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
 
 	// Globe markers
@@ -595,7 +595,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
  */
 void Globe::rotateLeft()
 {
-	_rotLon = -ROTATE_LONGITUDE;
+	_rotLon = -ROTATE_LONGITUDE / (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -604,7 +604,7 @@ void Globe::rotateLeft()
  */
 void Globe::rotateRight()
 {
-	_rotLon = ROTATE_LONGITUDE;
+	_rotLon = ROTATE_LONGITUDE/ (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -613,7 +613,7 @@ void Globe::rotateRight()
  */
 void Globe::rotateUp()
 {
-	_rotLat = -ROTATE_LATITUDE;
+	_rotLat = -ROTATE_LATITUDE / (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -622,7 +622,7 @@ void Globe::rotateUp()
  */
 void Globe::rotateDown()
 {
-	_rotLat = ROTATE_LATITUDE;
+	_rotLat = ROTATE_LATITUDE / (_zoom+1);
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -642,7 +642,10 @@ void Globe::rotateStop()
 void Globe::rotateStopLon()
 {
 	_rotLon = 0.0;
-	if (abs(_rotLat) < ROTATE_LATITUDE / 2) _rotTimer->stop();
+	if (AreSame(_rotLat, 0.0))
+	{
+		_rotTimer->stop();
+	}
 }
 
 /**
@@ -651,7 +654,10 @@ void Globe::rotateStopLon()
 void Globe::rotateStopLat()
 {
 	_rotLat = 0.0;
-	if (abs(_rotLon) < ROTATE_LONGITUDE / 2) _rotTimer->stop();
+	if (AreSame(_rotLon, 0.0))
+	{
+		_rotTimer->stop();
+	}
 }
 
 /**
@@ -960,8 +966,8 @@ void Globe::blink()
  */
 void Globe::rotate()
 {
-	_cenLon += _rotLon;
-	_cenLat += _rotLat;
+	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0);
+	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0);
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 	cachePolygons();
@@ -1746,17 +1752,17 @@ void Globe::mouseOver(Action *action, State *state)
 				_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance));
 
 			// Scrolling
-			if (Options::dragScrollInvert)
+			if (Options::geoDragScrollInvert)
 			{
-				double newLon = -action->getDetails()->motion.xrel * ROTATE_LONGITUDE/2;
-				double newLat = -action->getDetails()->motion.yrel * ROTATE_LATITUDE/2;
-				center(_cenLon + newLon, _cenLat + newLat);
+				double newLon = ((double)_totalMouseMoveX / action->getXScale()) * ROTATE_LONGITUDE/(_zoom+1)/2;
+				double newLat = ((double)_totalMouseMoveY / action->getYScale()) * ROTATE_LATITUDE/(_zoom+1)/2;
+				center(_lonBeforeMouseScrolling + newLon / (Options::geoScrollSpeed / 10), _latBeforeMouseScrolling + newLat / (Options::geoScrollSpeed / 10));
 			}
 			else
 			{
-				double newLon = ((double)_totalMouseMoveX / action->getXScale()) * ROTATE_LONGITUDE/2;
-				double newLat = ((double)_totalMouseMoveY / action->getYScale()) * ROTATE_LATITUDE/2;
-				center(_lonBeforeMouseScrolling + newLon, _latBeforeMouseScrolling + newLat);
+				double newLon = -action->getDetails()->motion.xrel * ROTATE_LONGITUDE/(_zoom+1)/2;
+				double newLat = -action->getDetails()->motion.yrel * ROTATE_LATITUDE/(_zoom+1)/2;
+				center(_cenLon + newLon / (Options::geoScrollSpeed / 10), _cenLat + newLat / (Options::geoScrollSpeed / 10));
 			}
 
 			// We don't want to look the mouse-cursor jumping :)

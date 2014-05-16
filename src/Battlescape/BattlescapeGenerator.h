@@ -128,6 +128,8 @@ public:
 	bool placeUnitNearFriend(BattleUnit *unit);
 	/// Generates an inventory battlescape.
 	void runInventory(Craft *craft);
+	/// Load all Xcom weapons.
+	void loadWeapons();
 };
 
 }

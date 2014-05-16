@@ -89,6 +89,8 @@ public:
 	void updateGeoscapeScale(Action *);
 	/// Update the resolution settings, we just resized the window.
 	void resize(int &, int &);
+	/// Handles keypresses.
+	void handle(Action *action);
 };
 
 }

@@ -369,51 +369,51 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			}
 			if (music)
 			{
-				_musics[mus[i]] = music;
+				_musics[musOptional[i]] = music;
 			}
 		}
 #endif		
 		
 		// Load sounds
-		std::string catsId[] = {"GEO.CAT",
-								"BATTLE.CAT"};
-		std::string catsDos[] = {"SOUND2.CAT",
-								"SOUND1.CAT"};
-		std::string catsWin[] = {"SAMPLE.CAT",
-								"SAMPLE2.CAT"};
+		std::string catsId[] = {"GEO.CAT", "BATTLE.CAT"};
+		std::string catsDos[] = {"SOUND2.CAT", "SOUND1.CAT"};
+		std::string catsWin[] = {"SAMPLE.CAT", "SAMPLE2.CAT"};
 
-		// Check which sound version is available
-		std::string *cats = 0;
-		bool wav = true;
+		// Try the preferred format first, otherwise use the default priority
+		std::string *cats[] = {0, catsWin, catsDos};
+		if (Options::preferredSound == SOUND_14)
+			cats[0] = catsWin;
+		else if (Options::preferredSound == SOUND_10)
+			cats[1] = catsDos;
 
-		std::ostringstream win, dos;
-		win << "SOUND/" << catsWin[0];
-		dos << "SOUND/" << catsDos[0];
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(win.str())))
+		Options::currentSound = SOUND_AUTO;
+		for (size_t i = 0; i < sizeof(catsId) / sizeof(catsId[0]); ++i)
 		{
-			cats = catsWin;
-			wav = true;
-		}
-		else if (CrossPlatform::fileExists(CrossPlatform::getDataFile(dos.str())))
-		{
-			cats = catsDos;
-			wav = false;
-		}
-
-		for (size_t i = 0; i < sizeof(catsId)/sizeof(catsId[0]); ++i)
-		{
-			if (cats == 0)
+			SoundSet *sound = 0;
+			for (size_t j = 0; j < sizeof(cats) / sizeof(cats[0]) && sound == 0; ++j)
 			{
-				std::ostringstream ss;
-				ss << catsDos[i] << " not found";
-				throw Exception(ss.str());
+				bool wav = true;
+				if (cats[j] == 0)
+					continue;
+				else if (cats[j] == catsDos)
+					wav = false;
+				std::ostringstream s;
+				s << "SOUND/" << cats[j][i];
+				std::string file = CrossPlatform::getDataFile(s.str());
+				if (CrossPlatform::fileExists(file))
+				{
+					sound = new SoundSet();
+					sound->loadCat(file, wav);
+					Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
+				}
+			}
+			if (sound == 0)
+			{
+				throw Exception(catsWin[i] + " not found");
 			}
 			else
 			{
-				std::ostringstream s;
-				s << "SOUND/" << cats[i];
-				_sounds[catsId[i]] = new SoundSet();
-				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
+				_sounds[catsId[i]] = sound;
 			}
 		}
 		
@@ -426,10 +426,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
 		{
 			SoundSet *s = _sounds["SAMPLE3.CAT"] = new SoundSet();
-			wav = true;
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
 		}
-		
 	}
 
 	TextButton::soundPress = getSound("GEO.CAT", 0);
@@ -793,7 +791,15 @@ void XcomResourcePack::loadBattlescapeResources()
 			_sets[*i] = new SurfaceSet(32, 48);
 		_sets[*i]->loadPck(path, tab);
 	}
-
+	// incomplete chryssalid set: 1.0 data: stop loading.
+	if (!_sets["CHRYS.PCK"]->getFrame(225))
+	{
+		Log(LOG_FATAL) << "Version 1.0 data detected." << std::endl << std::endl << "please install the official patches" << std::endl
+			<< "from http://www.strategycore.co.uk/files/ufo-1.2/" << std::endl
+			<< "and http://www.strategycore.co.uk/files/ufo-1.4/" << std::endl;
+		;
+		throw Exception("Invalid data, please check logfile.");
+	}
 	s.str("");
 	s << "GEODATA/" << "LOFTEMPS.DAT";
 	MapDataSet::loadLOFTEMPS(CrossPlatform::getDataFile(s.str()), &_voxelData);

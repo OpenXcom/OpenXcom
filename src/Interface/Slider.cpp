@@ -176,7 +176,7 @@ void Slider::handle(Action *action, State *state)
 	//_button->handle(action, state);
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorX = (int)floor(action->getDetails()->motion.x / action->getXScale());
+		int cursorX = action->getAbsoluteXMouse();
 		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
 		double pos = (buttonX - _minX) / (_maxX - _minX);
 		int value = _min + (_max - _min) * pos;

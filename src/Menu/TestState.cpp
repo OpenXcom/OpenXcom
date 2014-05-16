@@ -35,6 +35,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Slider.h"
+#include "../Interface/ComboBox.h"
 
 namespace OpenXcom
 {
@@ -54,7 +55,7 @@ TestState::TestState(Game *game) : State(game)
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
 	_slider = new Slider(100, 15, 50, 50);
-
+	_comboBox = new ComboBox(this, 80, 16, 98, 100);
 	// Set palette
 	setPalette("PAL_BASESCAPE", 2);
 
@@ -64,6 +65,7 @@ TestState::TestState(Game *game) : State(game)
 	add(_list);
 	add(_number);
 	add(_slider);
+	add(_comboBox);
 
 	centerAllSurfaces();
 
@@ -91,6 +93,19 @@ TestState::TestState(Game *game) : State(game)
 	_number->setValue(1234567890);
 
 	_slider->setColor(Palette::blockOffset(15)+1);
+
+	std::vector<std::string> difficulty;
+	for (int i = 0; i != 3; ++i)
+	{
+		difficulty.push_back("STR_1_BEGINNER");
+		difficulty.push_back("STR_2_EXPERIENCED");
+		difficulty.push_back("STR_3_VETERAN");
+		difficulty.push_back("STR_4_GENIUS");
+		difficulty.push_back("STR_5_SUPERHUMAN");
+	}
+
+	_comboBox->setColor(Palette::blockOffset(15)+1);
+	_comboBox->setOptions(difficulty);
 
 	_i = 0;
 

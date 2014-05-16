@@ -542,39 +542,26 @@ void CraftEquipmentState::moveRightByValue(int change)
 			change = std::min(room, change);
 			if(!item->getCompatibleAmmo()->empty())
 			{
-				// We want to redistribute all the available ammo among the vehicles,
-				// so first we note the total number of vehicles we want in the craft
-				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
-				int newVehiclesCount = oldVehiclesCount + change;
-				// ...and we move back all of this vehicle-type to the base.
-				if (0 < oldVehiclesCount) moveLeftByValue(INT_MAX);
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-				int canBeAdded = std::min(newVehiclesCount, baqty);
+				int ammoPerVehicle = ammo->getClipSize();
+				int baseQty = _base->getItems()->getItem(ammo->getType()) / ammoPerVehicle;
+				if (_game->getSavedGame()->getMonthsPassed() == -1)
+					baseQty = 1;
+				int canBeAdded = std::min(change, baseQty);
 				if (canBeAdded > 0)
 				{
-					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
-					int remainder = 0;
-					if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
-					int newAmmo;
 					for (int i=0; i < canBeAdded; ++i)
 					{
-						newAmmo = newAmmoPerVehicle;
-						if (i<remainder) ++newAmmo;
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
-							_base->getItems()->removeItem(ammo->getType(), newAmmo);
+							_base->getItems()->removeItem(ammo->getType(), ammoPerVehicle);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
-						else
-						{
-							newAmmo = ammo->getClipSize();
-						}
-						c->getVehicles()->push_back(new Vehicle(item, newAmmo, size));
+						c->getVehicles()->push_back(new Vehicle(item, ammoPerVehicle, size));
 					}
 				}
-				if (oldVehiclesCount >= canBeAdded)
+				else
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
