@@ -168,9 +168,10 @@ void SoldierDiaryOverviewState::init()
 	_soldier = _list->at(_soldierId);
 	_txtTitle->setText(_soldier->getName());
 	_lstDiary->clearList();
-	_lstDiary->scrollTo(0);
+	
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
 
+	int row = 0;
 	for (std::vector<MissionStatistics*>::iterator j = missionStatistics->begin() ; j != missionStatistics->end() ; ++j)
 	{
 		int missionId = (*j)->id;
@@ -226,6 +227,11 @@ void SoldierDiaryOverviewState::init()
 		wssStatus << wssSuccess.str().c_str() << " - " << wssRating.str().c_str();
 		
 		_lstDiary->addRow(5, wssLocation.str().c_str(), wssStatus.str().c_str(), wssDay.str().c_str(), wssMonth.str().c_str(), wssYear.str().c_str());
+		row++;
+	}
+	if (row > 0 && _lstDiary->getScroll() >= row)
+	{
+		_lstDiary->scrollTo(0);
 	}
 }
 
@@ -309,7 +315,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action *)
  */
 void SoldierDiaryOverviewState::lstDiaryInfoClick(Action *)
 {
-    int absoluteRowEntry = _lstDiary->getSelectedRow() + _lstDiary->getScroll();
+    int absoluteRowEntry = _lstDiary->getSelectedRow();
 	_game->pushState(new SoldierDiaryMissionState(_game, _base, _soldierId, absoluteRowEntry));
 }
 
