@@ -1585,7 +1585,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(5);
+				(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
 				break;
 			}
 		}
@@ -1593,7 +1593,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(5);
+				(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
 				break;
 			}
 		}
@@ -2209,6 +2209,8 @@ void GeoscapeState::resize(int &dX, int &dY)
 	case SCALE_SCREEN:
 		break;
 	default:
+		dX = 0;
+		dY = 0;
 		return;
 	}
 	

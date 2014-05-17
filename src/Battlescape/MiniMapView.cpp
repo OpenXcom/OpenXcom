@@ -293,7 +293,7 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		// Calculate the move
 		int newX;
 		int newY;
-		if (Options::dragScrollInvert)
+		if (Options::battleDragScrollInvert)
 		{
 			_mouseScrollX += action->getDetails()->motion.xrel;
 			_mouseScrollY += action->getDetails()->motion.yrel;

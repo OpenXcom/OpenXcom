@@ -66,6 +66,13 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
 
+	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GM.CAT")) &&
+		!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GMDEFEND.MID")) &&
+		Options::audioBitDepth == 8)
+	{
+		Options::audioBitDepth = 16;
+	}
+
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
@@ -257,17 +264,26 @@ void Game::run()
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
-					if (action.getDetails()->type == SDL_KEYDOWN && Options::debug)
+					if (action.getDetails()->type == SDL_KEYDOWN)
 					{
-						if (action.getDetails()->key.keysym.sym == SDLK_t && (SDL_GetModState() & KMOD_CTRL) != 0)
+						// "ctrl-g" grab input
+						if (action.getDetails()->key.keysym.sym == SDLK_g && (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							setState(new TestState(this));
+							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
+							SDL_WM_GrabInput(Options::captureMouse);
 						}
-						// "ctrl-u" debug UI
-						else if (action.getDetails()->key.keysym.sym == SDLK_u && (SDL_GetModState() & KMOD_CTRL) != 0)
+						else if (Options::debug)
 						{
-							Options::debugUi = !Options::debugUi;
-							_states.back()->redrawText();
+							if (action.getDetails()->key.keysym.sym == SDLK_t && (SDL_GetModState() & KMOD_CTRL) != 0)
+							{
+								setState(new TestState(this));
+							}
+							// "ctrl-u" debug UI
+							else if (action.getDetails()->key.keysym.sym == SDLK_u && (SDL_GetModState() & KMOD_CTRL) != 0)
+							{
+								Options::debugUi = !Options::debugUi;
+								_states.back()->redrawText();
+							}
 						}
 					}
 					break;
@@ -379,7 +395,7 @@ void Game::setVolume(int sound, int music, int ui)
 		if (music >= 0)
 		{
 			Mix_VolumeMusic(music);
-			func_set_music_volume(music);
+			// func_set_music_volume(music);
 		}
 		if (ui >= 0)
 		{
