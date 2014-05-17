@@ -248,6 +248,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);
 
 	load();
+	cbxMissionChange(NULL);
 }
 
 /**
