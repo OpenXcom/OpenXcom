@@ -170,7 +170,7 @@ unsigned char OPLRead(FM_OPL *OPL,int a);
 int OPLTimerOver(FM_OPL *OPL,int c);
 
 /* YM3626/YM3812 local section */
-void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length, int stripe);
+void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length, int stripe, float volume);
 
 void Y8950UpdateOne(FM_OPL *OPL, INT16 *buffer, int length);
 

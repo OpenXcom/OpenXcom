@@ -457,13 +457,23 @@ void BattlescapeGenerator::deployXCOM()
 		}
 	}
 
-	// load weapons before distribution, even before loadouts
-	// loading weapons take priority over extra clips.
-	loadWeapons();
-
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		// don't let the soldiers take extra ammo yet
+		if ((*i)->getRules()->getBattleType() == BT_AMMO)
+			continue;
+		placeItemByLayout(*i);
+	}
+
+	// load weapons before loadouts take extra clips.
+	loadWeapons();
+
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	{
+		// we only need to distribute extra ammo at this point.
+		if ((*i)->getRules()->getBattleType() != BT_AMMO)
+			continue;
 		placeItemByLayout(*i);
 	}
 	
@@ -858,8 +868,10 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
-			if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-			if ((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty()) continue;
+			if ((*i)->getArmor()->getSize() > 1 || !(*i)->getGeoscapeSoldier() || (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
+			{
+				continue;
+			}
 
 			// find the first matching layout-slot which is not already occupied
 			std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
@@ -869,7 +881,9 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 				|| (*i)->getItem((*j)->getSlot(), (*j)->getSlotX(), (*j)->getSlotY())) continue;
 
 				if ((*j)->getAmmoItem() == "NONE")
+				{
 					loaded = true;
+				}
 				else
 				{
 					loaded = false;

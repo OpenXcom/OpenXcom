@@ -377,6 +377,40 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (direction == 5 || direction == 6 || direction == 7)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
+			switch (direction)
+			{
+			case 7:
+				// northwest
+				// tile west of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(-1,0,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
+				// tile north of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(0,-1,0))->getTUCost(MapData::O_WESTWALL, _movementType);
+				break;
+			case 3:
+				// southeast
+				// tile south of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(0,1,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
+				// tile east of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(1,0,0))->getTUCost(MapData::O_WESTWALL, _movementType);
+				break;
+			case 1:
+				// northeast
+				// tile east of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(1,0,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
+				// tile east of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(1,0,0))->getTUCost(MapData::O_WESTWALL, _movementType);
+				break;
+			case 5:
+				// southwest
+				// tile south of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(0,1,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
+				// tile south of start
+				wallcost += _save->getTile(startTile->getPosition() + Position(0,1,0))->getTUCost(MapData::O_WESTWALL, _movementType);
+				break;
+			default:
+				break;
+			}
+
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 			{
