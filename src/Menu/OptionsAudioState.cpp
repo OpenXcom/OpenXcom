@@ -30,6 +30,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
+#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -145,6 +146,13 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 			_cbxBitDepth->setSelected(i);
 		}
 	}
+
+	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GM.CAT")) &&
+		!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GMDEFEND.MID")))
+	{
+		_cbxBitDepth->setVisible(false);
+	}
+
 	int samples[] = {8000, 11025, 16000, 22050, 32000, 44100, 48000};
 	for (int i = 0; i < sizeof(samples) / sizeof(samples[0]); ++i)
 	{
