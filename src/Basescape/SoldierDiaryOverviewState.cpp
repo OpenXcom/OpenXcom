@@ -109,11 +109,29 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Game *game, Base *base, siz
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
-	_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick);
+	if (_base == 0)
+	{
+		_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnNextClick);
+		_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnNextClick, Options::keyBattlePrevUnit);
+	}
+	else
+	{
+		_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick);
+		_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick, Options::keyBattlePrevUnit);
+	}
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
-	_btnNext->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnNextClick);
+	if (_base == 0)
+	{
+		_btnNext->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick);
+		_btnNext->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick, Options::keyBattleNextUnit);
+	}
+	else
+	{
+		_btnNext->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnNextClick);
+		_btnNext->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnNextClick, Options::keyBattleNextUnit);
+	}
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

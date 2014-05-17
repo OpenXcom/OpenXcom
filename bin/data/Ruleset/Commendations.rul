@@ -310,7 +310,7 @@ commendations:
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
     criteria:
-      total_missions: [3, 6, 10, 15, 20, 25, 30, 35, 40, 50]
+      total_missions: [1, 2, 2, 2, 2, 3, 3, 3, 3, 4]
   - type: STR_MEDAL_ORDER_OF_RESTRAINT_NAME
     description: STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION
     sprite: 2
