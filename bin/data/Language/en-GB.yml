@@ -1145,7 +1145,7 @@ en-GB:
   STR_GLOBESEASONS_DESC: "Uses more realistic projection of sunlight on the Geoscape according to Earth's axial tilt."
   STR_PLAYINTRO: "Play intro"
   STR_PLAYINTRO_DESC: "Show the intro cinematic on startup."
-  STR_SHOWMORESTATSININVENTORYVIEW: "Inventory stats"
+  STR_SHOWMORESTATSININVENTORYVIEW: "Inventory Stats"
   STR_SHOWMORESTATSININVENTORYVIEW_DESC: "Show extra information on the selected soldier in the inventory screen."
   STR_SNEAKYAI: "Sneaky AI"
   STR_SNEAKYAI_DESC: "AI avoids exposing themselves to the player whenever possible."
