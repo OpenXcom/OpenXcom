@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _craftX(0), _craftY(0), _craftZ(0)
+														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _baseInventory(false), _craftX(0), _craftY(0), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -366,23 +366,26 @@ void BattlescapeGenerator::deployXCOM()
 
 	// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 	// however the item itself becomes the weapon it "holds".
-	if (_craft != 0)
+	if (!_baseInventory)
 	{
-		for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
+		if (_craft != 0)
 		{
-			BattleUnit *unit = addXCOMVehicle(*i);
-			if (unit && !_save->getSelectedUnit())
-				_save->setSelectedUnit(unit);
+			for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
+			{
+				BattleUnit *unit = addXCOMVehicle(*i);
+				if (unit && !_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
+			}
 		}
-	}
-	else if (_base != 0)
-	{
-		// add vehicles that are in the base inventory
-		for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
+		else if (_base != 0)
 		{
-			BattleUnit *unit = addXCOMVehicle(*i);
-			if (unit && !_save->getSelectedUnit())
-				_save->setSelectedUnit(unit);
+			// add vehicles that are in the base inventory
+			for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
+			{
+				BattleUnit *unit = addXCOMVehicle(*i);
+				if (unit && !_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
+			}
 		}
 	}
 
@@ -618,7 +621,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			}
 		}
 	}
-	else if (_craft && !_craft->getRules()->getDeployment().empty() && _mapsize_y != 1) // _mapsize_y 1 means we're in the faked out base inventory
+	else if (_craft && !_craft->getRules()->getDeployment().empty() && !_baseInventory)
 	{
 		for (std::vector<std::vector<int> >::const_iterator i = _craft->getRules()->getDeployment().begin(); i != _craft->getRules()->getDeployment().end(); ++i)
 		{
@@ -1878,6 +1881,7 @@ RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
 void BattlescapeGenerator::runInventory(Craft *craft)
 {
 	// we need to fake a map for soldier placement
+	_baseInventory = true;
 	int soldiers = craft->getNumSoldiers();
 	_mapsize_x = soldiers;
 	_mapsize_y = 1;
@@ -1897,27 +1901,6 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	// ok now generate the battleitems for inventory
 	setCraft(craft);
 	deployXCOM();
-	// ok, now remove any vehicles that may have somehow ended up in our battlescape
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); )
-	{
-		if ((*i)->getGeoscapeSoldier())
-		{
-			if (_save->getSelectedUnit() == 0)
-			{
-				_save->setSelectedUnit(*i);
-			}
-			++i;
-		}
-		else
-		{
-			if (_save->getSelectedUnit() == *i)
-			{
-				_save->setSelectedUnit(0);
-			}
-			delete *i;
-			i = _save->getUnits()->erase(i);
-		}
-	}
 	delete data;
 	delete set;
 }
