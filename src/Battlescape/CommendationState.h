@@ -39,7 +39,7 @@ class CommendationState : public State
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtMedal, *_txtDecoration;
+	Text *_txtTitle, *_txtName;
 	TextList *_lstSoldiers;
 public:
 	/// Creates the Medals state.
