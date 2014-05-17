@@ -30,7 +30,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
-#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -57,19 +56,16 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_txtUiVolume = new Text(114, 9, 94, 40);
 	_slrUiVolume = new Slider(100, 16, 94, 50);
 
-	_txtBitDepth = new Text(114, 9, 94, 72);
-	_cbxBitDepth = new ComboBox(this, 100, 16, 94, 82);
+	_txtSampleRate = new Text(114, 9, 210, 40);
+	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 50);
 
-	_txtSampleRate = new Text(114, 9, 210, 72);
-	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 82);
+	_txtMusicFormat = new Text(114, 9, 94, 72);
+	_cbxMusicFormat = new ComboBox(this, 100, 16, 94, 82);
+	_txtCurrentMusic = new Text(114, 9, 94, 100);
 
-	_txtMusicFormat = new Text(114, 9, 94, 108);
-	_cbxMusicFormat = new ComboBox(this, 100, 16, 94, 118);
-	_txtCurrentMusic = new Text(114, 9, 94, 136);
-
-	_txtSoundFormat = new Text(114, 9, 210, 108);
-	_cbxSoundFormat = new ComboBox(this, 100, 16, 210, 118);
-	_txtCurrentSound = new Text(114, 9, 210, 136);
+	_txtSoundFormat = new Text(114, 9, 210, 72);
+	_cbxSoundFormat = new ComboBox(this, 100, 16, 210, 82);
+	_txtCurrentSound = new Text(114, 9, 210, 100);
 
 	add(_txtMusicVolume);
 	add(_slrMusicVolume);
@@ -80,7 +76,6 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	add(_txtUiVolume);
 	add(_slrUiVolume);
 
-	add(_txtBitDepth);
 	add(_txtSampleRate);
 
 	add(_txtMusicFormat);
@@ -91,7 +86,6 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	add(_cbxMusicFormat);
 	add(_cbxSoundFormat);
 
-	add(_cbxBitDepth);
 	add(_cbxSampleRate);
 
 	centerAllSurfaces();
@@ -133,25 +127,7 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_slrUiVolume->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
 	std::wostringstream ss;
-	std::vector<std::wstring> bitsText, samplesText;
-	int bits[] = {8, 16};
-	for (int i = 0; i < sizeof(bits) / sizeof(bits[0]); ++i)
-	{
-		_bitDepths.push_back(bits[i]);
-		ss << bits[i] << L"-bit";
-		bitsText.push_back(ss.str());
-		ss.str(L"");
-		if (Options::audioBitDepth == bits[i])
-		{
-			_cbxBitDepth->setSelected(i);
-		}
-	}
-
-	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GM.CAT")) &&
-		!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GMDEFEND.MID")))
-	{
-		_cbxBitDepth->setVisible(false);
-	}
+	std::vector<std::wstring> samplesText;
 
 	int samples[] = {8000, 11025, 16000, 22050, 32000, 44100, 48000};
 	for (int i = 0; i < sizeof(samples) / sizeof(samples[0]); ++i)
@@ -165,16 +141,6 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 			_cbxSampleRate->setSelected(i);
 		}
 	}
-
-	_txtBitDepth->setColor(Palette::blockOffset(8)+10);
-	_txtBitDepth->setText(tr("STR_AUDIO_BIT_DEPTH"));
-
-	_cbxBitDepth->setColor(Palette::blockOffset(15)-1);
-	_cbxBitDepth->setOptions(bitsText);
-	_cbxBitDepth->setTooltip("STR_AUDIO_BIT_DEPTH_DESC");
-	_cbxBitDepth->onChange((ActionHandler)&OptionsAudioState::cbxBitDepthChange);
-	_cbxBitDepth->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
-	_cbxBitDepth->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
 	_txtSampleRate->setColor(Palette::blockOffset(8)+10);
 	_txtSampleRate->setText(tr("STR_AUDIO_SAMPLE_RATE"));
@@ -232,8 +198,6 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 	_txtCurrentSound->setText(tr("STR_CURRENT_FORMAT").arg(curSound));
 
 	// These options require a restart, so don't enable them in-game
-	_txtBitDepth->setVisible(_origin == OPT_MENU);
-	_cbxBitDepth->setVisible(_origin == OPT_MENU);
 	_txtSampleRate->setVisible(_origin == OPT_MENU);
 	_cbxSampleRate->setVisible(_origin == OPT_MENU);
 	_txtMusicFormat->setVisible(_origin == OPT_MENU);
@@ -298,16 +262,6 @@ void OptionsAudioState::slrUiVolumeChange(Action *)
 void OptionsAudioState::slrUiVolumeRelease(Action *)
 {
 	_game->getResourcePack()->getSound("GEO.CAT", 0)->play(0);
-}
-
-/**
- * Changes the Audio Bit Depth option.
- * @param action Pointer to an action.
- */
-void OptionsAudioState::cbxBitDepthChange(Action *)
-{
-	Options::audioBitDepth = _bitDepths[_cbxBitDepth->getSelected()];
-	Options::reload = true;
 }
 
 /**
