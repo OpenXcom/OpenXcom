@@ -210,8 +210,13 @@ void OptionsBaseState::setCategory(TextButton *button)
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
+	int dX = Options::baseXResolution;
+	int dY = Options::baseYResolution;
 	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
 	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+	recenter(dX, dY);
 	Options::switchDisplay();
 	Options::save();
 	_game->loadLanguage(Options::language);

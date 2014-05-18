@@ -1810,66 +1810,79 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 	{
 		for (int y = 0; y < size && door == -1; y++)
 		{
-			std::vector<std::pair<Position, int> > checkPositions;
+			std::pair<Position, int> checkPosition = std::make_pair(Position(0, 0, 0), 0);
 			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
 			switch (dir)
 			{
 			case 0: // north
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				checkPosition = std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL); // origin
 				break;
 			case 1: // north east
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
+				if (_save->getTile(unit->getPosition() + Position(1, -1, 0))->getMapData(MapData::O_WESTWALL))
+				{
+					checkPosition = std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL); // one tile east
+				}
+				else if (_save->getTile(unit->getPosition() + Position(1, 0, 0))->getMapData(MapData::O_NORTHWALL))
+				{
+					checkPosition = std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL); // origin
+				}
 				break;
 			case 2: // east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				checkPosition = std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL); // one tile east
 				break;
 			case 3: // south-east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
-				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
+				if (_save->getTile(unit->getPosition() + Position(1, 1, 0))->getMapData(MapData::O_WESTWALL))
+				{
+					checkPosition = std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL); // one tile east
+				}
+				else if (_save->getTile(unit->getPosition() + Position(1, 1, 0))->getMapData(MapData::O_NORTHWALL))
+				{
+					checkPosition = std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL); // one tile south
+				}
 				break;
 			case 4: // south
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+				checkPosition = std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL); // one tile south
 				break;
 			case 5: // south-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
+				if (_save->getTile(unit->getPosition() + Position(-1, 1, 0))->getMapData(MapData::O_NORTHWALL))
+				{
+					checkPosition = std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL); // one tile south
+				}
+				else if (_save->getTile(unit->getPosition() + Position(0, 1, 0))->getMapData(MapData::O_WESTWALL))
+				{
+					checkPosition = std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL); // origin
+				}
 				break;
 			case 6: // west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPosition = std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL); // origin
 				break;
 			case 7: // north-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
-				checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
+				if (_save->getTile(unit->getPosition() + Position(0,-1,0))->getMapData(MapData::O_WESTWALL))
+				{
+					checkPosition = std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL); // origin
+				}
+				else if (_save->getTile(unit->getPosition() + Position(-1,0,0))->getMapData(MapData::O_NORTHWALL))
+				{
+					checkPosition = std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL); // origin
+				}
 				break;
 			default:
 				break;
 			}
 
 			int part = 0;
-			for (std::vector<std::pair<Position, int> >::const_iterator i = checkPositions.begin(); i != checkPositions.end() && door == -1; ++i)
+			tile = _save->getTile(unit->getPosition() + Position(x,y,z) + checkPosition.first);
+			if (tile)
 			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,z) + i->first);
-				if (tile)
+				door = tile->openDoor(checkPosition.second, unit, _save->getBattleGame()->getReservedAction());
+				if (door != -1)
 				{
-					door = tile->openDoor(i->second, unit, _save->getBattleGame()->getReservedAction());
-					if (door != -1)
+					part = checkPosition.second;
+					if (door == 1)
 					{
-						part = i->second;
-						if (door == 1)
-						{
-							checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + i->first, i->second);
-						}
+						checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + checkPosition.first, checkPosition.second);
 					}
 				}
 			}
@@ -2285,9 +2298,9 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		return V_EMPTY;
 	}
 
-	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
+	if ((voxel.z % 24 == 0 || voxel.z % 24 == 1) && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
+		if ((tile->getPosition().z == 0) || (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift()))
 			return V_FLOOR;
 	}
 

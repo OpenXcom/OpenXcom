@@ -687,7 +687,7 @@ void Game::initAudio()
 		Mix_AllocateChannels(16);
 		// Set up UI channels
 		Mix_ReserveChannels(2);
-		Mix_GroupChannels(0, 1, 0);
+		Mix_GroupChannels(1, 2, 0);
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	}

@@ -1496,6 +1496,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
 
+	efficacy += diff/2;
 
 	BattleUnit *target = _save->getTile(targetPos)->getUnit();
 	if (target)
