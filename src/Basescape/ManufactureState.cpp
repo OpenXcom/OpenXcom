@@ -60,7 +60,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtEngineers = new Text(56, 18, 112, 44);
 	_txtProduced = new Text(56, 18, 168, 44);
 	_txtCost = new Text(44, 27, 222, 44);
-	_txtTimeLeft = new Text(60, 18, 260, 44);
+	_txtTimeLeft = new Text(60, 27, 260, 44);
 	_lstManufacture = new TextList(307, 90, 8, 80);
 
 	// Set palette
@@ -120,22 +120,18 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtEngineers->setColor(Palette::blockOffset(15)+1);
 	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtEngineers->setWordWrap(true);
-	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
 	_txtProduced->setWordWrap(true);
-	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 	
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
 	_txtCost->setWordWrap(true);
-	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
 	_txtTimeLeft->setWordWrap(true);
-	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
@@ -199,7 +195,7 @@ void ManufactureState::fillProductionList()
 		s1 << (*iter)->getAssignedEngineers();
 		std::wostringstream s2;
 		s2 << (*iter)->getAmountProduced() << "/";
-		if (Options::allowAutoSellProduction && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+		if ((*iter)->getSellItems())
 			s2 << "$$$";
 		else s2 << (*iter)->getAmountTotal();
 		std::wostringstream s3;
@@ -208,7 +204,7 @@ void ManufactureState::fillProductionList()
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
-			if (Options::allowAutoSellProduction && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+			if ((*iter)->getSellItems())
 				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			else timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			timeLeft /= (*iter)->getAssignedEngineers();

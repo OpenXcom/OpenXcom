@@ -45,22 +45,14 @@ namespace OpenXcom
  */
 NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State(game), _base(base)
 {
-	int width = 320;
-	int height = 140;
-	int max_width = 320;
-	int max_height = 200;
-	int start_x = (max_width - width) / 2;
-	int start_y = (max_height - height) / 2;
-	int button_x_border = 8;
-	int button_y_border = 8;
-	int button_height = 16;
 	_screen = false;
-	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
-	_btnOk = new TextButton (width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
-	_txtTitle = new Text (width - 2 * button_x_border, button_height, start_x + button_x_border + 2, start_y + button_y_border);
-	_txtItem = new Text (10 * button_x_border, button_height / 2, start_x + button_x_border + 2, start_y + 3 * button_y_border);
-	_txtCategory = new Text (10 * button_x_border, button_height / 2, start_x + 20.75f * button_x_border, start_y + 3 * button_y_border);
-	_lstManufacture = new TextList(width - 4 * button_x_border, height - 3.75f * button_height - 2 * button_y_border, start_x + button_x_border, start_y + 5 * button_y_border);
+
+	_window = new Window(this, 320, 140, 0, 30, POPUP_BOTH);
+	_btnOk = new TextButton(304, 16, 8, 146);
+	_txtTitle = new Text(320, 17, 0, 38);
+	_txtItem = new Text(156, 9, 10, 54);
+	_txtCategory = new Text(130, 9, 166, 54);
+	_lstManufacture = new TextList(288, 80, 8, 62);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);
@@ -87,7 +79,7 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	_txtCategory->setColor(Palette::blockOffset(15)+1);
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
-	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
+	_lstManufacture->setColumns(2, 156, 130);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(2);

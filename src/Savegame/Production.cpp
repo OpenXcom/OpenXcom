@@ -32,7 +32,7 @@
 
 namespace OpenXcom
 {
-Production::Production (const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _timeSpent(0), _engineers(0)
+Production::Production(const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _timeSpent(0), _engineers(0), _sell(false)
 {
 }
 
@@ -64,6 +64,16 @@ int Production::getAssignedEngineers() const
 void Production::setAssignedEngineers (int engineers)
 {
 	_engineers = engineers;
+}
+
+bool Production::getSellItems() const
+{
+	return _sell;
+}
+
+void Production::setSellItems (bool sell)
+{
+	_sell = sell;
 }
 
 bool Production::haveEnoughMoneyForOneMoreUnit(SavedGame * g)
@@ -128,7 +138,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 								(*c)->setStatus("STR_REFUELLING");
 						}
 					}
-					if (Options::allowAutoSellProduction && getAmountTotal() == std::numeric_limits<int>::max())
+					if (getSellItems())
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
 					else
 						b->getItems()->addItem(i->first, i->second);
@@ -183,13 +193,21 @@ YAML::Node Production::save() const
 	node["assigned"] = getAssignedEngineers ();
 	node["spent"] = getTimeSpent ();
 	node["amount"] = getAmountTotal ();
+	if (getSellItems())
+		node["sell"] = getSellItems ();
 	return node;
 }
 
 void Production::load(const YAML::Node &node)
 {
-	setAssignedEngineers(node["assigned"].as<int>());
-	setTimeSpent(node["spent"].as<int>());
-	setAmountTotal(node["amount"].as<int>());
+	setAssignedEngineers(node["assigned"].as<int>(getAssignedEngineers()));
+	setTimeSpent(node["spent"].as<int>(getTimeSpent()));
+	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
+	setSellItems(node["sell"].as<bool>(getSellItems()));
+	if (getAmountTotal() == std::numeric_limits<int>::max())
+	{
+		setAmountTotal(999);
+		setSellItems(true);
+	}
 }
 }
