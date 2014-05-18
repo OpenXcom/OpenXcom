@@ -249,7 +249,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);
 
 	load();
-	cbxMissionChange(NULL);
 }
 
 /**
@@ -291,6 +290,7 @@ void NewBattleState::load(const std::string &filename)
 		_cbxAlienRace->setSelected(std::min(doc["alienRace"].as<size_t>(0), _alienRaces.size()-1));
 		_cbxDifficulty->setSelected(doc["difficulty"].as<size_t>(0));
 		_slrAlienTech->setValue(doc["alienTech"].as<size_t>(0));
+		cbxMissionChange(NULL);
 
 		if (doc["base"])
 		{
