@@ -577,7 +577,6 @@ void DebriefingState::prepareDebriefing()
 	}
 	if (playersSurvived == 1)
 	{
-		int deadSoldiers = 0;
 		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 		{
 			// if only one soldier survived, give him a medal! (unless he killed all the others...)
