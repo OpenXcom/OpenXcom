@@ -114,6 +114,8 @@ extraStrings:
      STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Given to a soldier who was wounded on the battlefield."
      STR_MEDAL_CRIMSON_HEART_NAME: "Crimson Heart"
      STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Given to a soldier who was wounded for an extended period of time."
+     STR_MEDAL_ORDER_OF_GLORY_NAME: "Order of Glory"
+     STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Given to a soldier who was instrumental in a missions success."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -240,6 +242,8 @@ extraStrings:
      STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Given to a soldier who was wounded on the battlefield."
      STR_MEDAL_CRIMSON_HEART_NAME: "Crimson Heart"
      STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Given to a soldier who was wounded for an extended period of time."
+     STR_MEDAL_ORDER_OF_GLORY_NAME: "Order of Glory"
+     STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Given to a soldier who was instrumental in a missions success."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -478,3 +482,11 @@ commendations:
     sprite: 0
     criteria:
       total_days_wounded: [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]
+  - type: STR_MEDAL_ORDER_OF_GLORY_NAME
+    description: STR_MEDAL_ORDER_OF_GLORY_NAME
+    sprite: 0
+    criteria:
+      kills_with_criteria_mission: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    killCriteria:
+      -
+        7: ["STATUS_DEAD", "FACTION_HOSTILE"]
