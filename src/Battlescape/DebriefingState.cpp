@@ -263,6 +263,11 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 		{
 			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+			if ((*j)->getStatus() == STATUS_DEAD)
+			{
+				(*j)->getStatistics()->KIA = true;
+			}
+
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics);
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
