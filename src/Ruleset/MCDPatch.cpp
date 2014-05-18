@@ -83,6 +83,16 @@ void MCDPatch::load(const YAML::Node &node)
 			int specialType = (*i)["specialType"].as<int>();
 			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
 		}
+		if ((*i)["explosive"])
+		{
+			int explosive = (*i)["explosive"].as<int>();
+			_explosives.push_back(std::make_pair(MCDIndex, explosive));
+		}
+		if ((*i)["armor"])
+		{
+			int armor = (*i)["armor"].as<int>();
+			_armors.push_back(std::make_pair(MCDIndex, armor));
+		}
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
@@ -124,6 +134,14 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _specialTypes.begin(); i != _specialTypes.end(); ++i)
 	{
 		dataSet->getObjects()->at(i->first)->setSpecialType(i->second, dataSet->getObjects()->at(i->first)->getObjectType());
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _explosives.begin(); i != _explosives.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setExplosive(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setArmor(i->second);
 	}
 	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator i = _LOFTS.begin(); i != _LOFTS.end(); ++i)
 	{

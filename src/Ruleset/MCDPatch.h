@@ -24,7 +24,6 @@
 
 namespace OpenXcom
 {
-class Ruleset;
 class MapDataSet;
 /**
  * An MCD data Patch.
@@ -32,7 +31,7 @@ class MapDataSet;
 class MCDPatch
 {
 private:
-	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight, _specialTypes;
+	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight, _specialTypes, _armors, _explosives;
 	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
 public:
 	/// Creates an MCD Patch.

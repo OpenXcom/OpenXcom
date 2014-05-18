@@ -42,6 +42,48 @@ LangString LINK_Uninstall ${LANG_ENGLISH} "Uninstall"
 LangString WARN_UFOMissing ${LANG_ENGLISH} "X-COM 1 wasn't found in this folder. ${GAME_NAME} requires a valid installation of X-COM to run. Continue?"
 LangString WARN_XCUDetected ${LANG_ENGLISH} "XcomUtil detected. ${GAME_NAME} is incompatible with XcomUtil and may experience weird behavior. Continue?"
 
+;================HUNGARIAN================
+
+;--------------------------------
+;Pages
+
+LangString PAGE_UfoFolder ${LANG_HUNGARIAN} "Az ${GAME_NAME}nak szüksége van az UFO: Enemy Unknown / X-COM: UFO Defense egy másolatára. Ha egy meglévő telepítést frissítesz, akkor ez a lépés kihagyható.$\n$\nA telepítő az alábbi mappából fogja bemásolni a szükséges fájlokat. Más mappából való másoláshoz kattints a Tallóz gombra és válassz mappát. A folytatáshoz kattints a Tovább gombra."
+LangString PAGE_UfoFolder_TITLE ${LANG_HUNGARIAN} "Válaszd ki az X-COM 1 helyét"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_HUNGARIAN} "Válaszd ki a mappát, ahová az X-COM 1 telepítve van."
+LangString DEST_UfoFolder ${LANG_HUNGARIAN} "X-COM 1 Mappa"
+
+;--------------------------------
+;Installer Sections
+
+LangString NAME_SecMain ${LANG_HUNGARIAN} "Játék fájljai"
+LangString DESC_SecMain ${LANG_HUNGARIAN} "Az ${GAME_NAME} futtatásához szükséges fájlok."
+LangString NAME_SecPatch ${LANG_HUNGARIAN} "Adatok javítása"
+LangString DESC_SecPatch ${LANG_HUNGARIAN} "Az X-COM 1 adatfájljainak hibáit javítja. Első telepítéshez javasolt. (Internetkapcsolatot igényel)"
+LangString NAME_SecDesktop ${LANG_HUNGARIAN} "Asztali Parancsikon"
+LangString DESC_SecDesktop ${LANG_HUNGARIAN} "Parancsikont hoz létre az asztalon az ${GAME_NAME} indításához."
+
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_HUNGARIAN} "X-COM adatfájlok törlése"
+LangString DESC_UnData ${LANG_HUNGARIAN} "Töröl minden ${GAME_NAME} adatot, beleértve a modokat és az X-COM fájlokat. Tiszta újratelepítéshez javasolt."
+LangString NAME_UnUser ${LANG_HUNGARIAN} "Felhasználói adatok törlése"
+LangString DESC_UnUser ${LANG_HUNGARIAN} "Töröl minden ${GAME_NAME} felhasználói adatot, beleértve a játékmentéseket, mentett képernyőképeket és beállításokat. Teljes törléshez javasolt."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_HUNGARIAN} "Adat Mappa"
+LangString LINK_Readme ${LANG_HUNGARIAN} "Olvass el"
+LangString LINK_UserFolder ${LANG_HUNGARIAN} "Felhasználó Mappája"
+LangString LINK_Uninstall ${LANG_HUNGARIAN} "Eltávolítás"
+
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_HUNGARIAN} "Ebben a mappában X-COM 1 nem található. Az ${GAME_NAME}nak szüksége van egy telepített X-COM példányra a futtatáshoz. Folytatod?"
+LangString WARN_XCUDetected ${LANG_HUNGARIAN} "XcomUtil észlelve. Az ${GAME_NAME} nem kompatibilis az XcomUtillal és emiatt furcsa viselkedést tapasztalhatsz. Folytatod?"
+
 ;================ROMANIAN================
 
 ;--------------------------------

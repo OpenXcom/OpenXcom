@@ -26,7 +26,9 @@ New features:
 - Transitioned Translation system to GetLocalization rather than maintaining it manually.
 - Complete overhaul of menu system, now totally consistent between main menu/geoscape/battlescape.
 - Saved Games will now indicate the in-game date and time, and if appropriate, turn number.
+- Saved Games can now be sorted by creation date or name.
 - Combo Box and Slider functionality added.
+- Scroll bars added to text lists
 - Options menu completely overhauled.
   -- UI volume now adjustable.
   -- Internal game resolution may be adjusted for both battlescape and geoscape individually.
@@ -38,6 +40,11 @@ New features:
 - Support for old or modded savedgames improved, including warnings about potential incompatibilities.
 - Multiline support added for textlists.
 - Support added for multiple data folders.
+- FPS limiter added.
+- Dedicated auto-save and quick-save slots added.
+- Added ironman mode.
+- Multithreading added to startup loading.
+- Shortcut added to enable/disable input grabbing.
 
   Geoscape:
 - Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.
@@ -55,6 +62,9 @@ New features:
 - Fixed HWPs not reloading when new ammo arrived.
 - Added Prev/Next key shortcuts to Basescape soldier info.
 - Aircraft flight path line indicators added.
+- Storage limit enforcement option added, complete with "overflowed item" management screen.
+- Drag scroll added.
+- Melee accuracy now shown on soldier stat screens.
   
   Battlescape:
 - Inventory: Control-click an item to attempt to swap it between the ground and your soldier's inventory.
@@ -101,6 +111,7 @@ New features:
 - Smooth bullet camera mode, follows the bullet as it moves rather than jumping the camera around.*
 - Confirm fire mode, requires a second click to confirm a fire order.*
 - Melee skill now included in hit calculations.
+- More meaningful errors added to inventory screen.
 
 * These features are disabled by default but can be enabled in the advanced options menu or by editing your configuration file.
 
@@ -114,6 +125,7 @@ Bugfixes:
 - Added sprites fixed for OSX.
 - Game icon now correctly displayed in game window on all operating systems.
 - Palette system overhauled to prevent windows changing colours wrongly.
+- Letterboxing now clears screen edges properly.
   
   Geoscape:
 - Fixed various source files to properly #include other relevant files. (This should prevent errors compiling the code in some IDEs)
@@ -134,6 +146,8 @@ Bugfixes:
 - Rare music bug in base defences fixed.
 - Fix for soldiers in transfer not being counted when handing out promotions.
 - Fix the council congratulating XCom on a job well done as they cancel the project.
+- Downed UFOs will use appropriate behaviour after XCom dusts off.
+- Alien mission timers fixed.
   
   Battlescape:
 - Fixes to various UFOpaedia articles.
@@ -199,6 +213,11 @@ Bugfixes:
   -- Now updates appropriately according to reserve setting.
   -- No longer thinks that paths moving vertically wipe out all remaining TUs.
 - Energy recovery now in-line with vanilla formula.
+- Mouse Position (relative to screen) now preserved while drag-scrolling.
+- Z-axis scrolling corrected.
+- Large unit rendering fixed to no longer be drawn through walls.
+- Sprite drawing routines revised.
+
 
 
 Version 0.9 (07-05-2013)

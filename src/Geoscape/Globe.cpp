@@ -1394,7 +1394,7 @@ void Globe::drawDetail()
 		delete label;
 	}
 
-	// Draw the city markers
+	// Draw the city and base markers
 	if (_zoom >= 3)
 	{
 		Text *label = new Text(80, 9, 0, 0);
@@ -1425,6 +1425,18 @@ void Globe::drawDetail()
 				label->setText(_game->getLanguage()->getString((*j)->getName()));
 				label->blit(_countries);
 			}
+		}
+		// Draw bases names
+		for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
+		{
+			if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+				continue;
+			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
+			label->setX(x - 40);
+			label->setY(y + 2);
+			label->setColor(Palette::blockOffset(8)+5);
+			label->setText((*j)->getName());
+			label->blit(_countries);
 		}
 
 		delete label;
