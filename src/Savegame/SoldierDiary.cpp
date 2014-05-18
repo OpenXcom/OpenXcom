@@ -39,7 +39,7 @@ SoldierDiary::SoldierDiary() : _killList(), _alienRankTotal(), _alienRaceTotal()
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0)
+	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0)
 {
 }
 /**
@@ -108,6 +108,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
 	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
+	_valiantCruxTotal = ["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -156,6 +157,7 @@ YAML::Node SoldierDiary::save() const
 	if (_hitCounter5in1Mission) node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
 	if (_reactionFireTotal) node["reactionFireTotal"] = _reactionFireTotal;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
+	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
 	return node;
 }
 /**
@@ -217,6 +219,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_ironManTotal++;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
+	if (missionStatistics->valiantCrux)
+		_valiantCruxTotal++;
     _missionIdList.push_back(missionStatistics->id);
     _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
@@ -299,7 +303,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_low_accuracy_hits" && _lowAccuracyHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "total_reaction_fire" && _reactionFireTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "total_times_wounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "total_days_wounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+                    ((*j).first == "total_days_wounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "total_valient_crux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )					
 			{
 				awardCommendationBool = false;
 				break;

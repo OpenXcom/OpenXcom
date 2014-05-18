@@ -161,6 +161,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	prepareDebriefing();
 
 	int total = 0, statsY = 0, recoveryY = 0;
+	int civiliansSaved = 0, civiliansDead = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
@@ -180,7 +181,20 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 			_lstStats->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
 			statsY += 8;
 		}
+		if ((*i)->item == "STR_CIVILIANS_SAVED")
+		{
+			civiliansSaved = (*i)->qty;
+		}
+		if ((*i)->item == "STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES" || (*i)->item == "STR_CIVILIANS_KILLED_BY_ALIENS")
+		{
+			civiliansDead += (*i)->qty;
+		}
 	}
+	if (civiliansSaved && !civiliansDead)
+	{
+		_missionStatistics->valiantCrux = true;
+	}
+
 	std::wostringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
@@ -242,6 +256,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
     
     _missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
     _missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
+
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		if ((*j)->getGeoscapeSoldier())
