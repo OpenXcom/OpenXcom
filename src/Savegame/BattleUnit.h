@@ -67,22 +67,10 @@ struct BattleUnitKills
     {
         return turn += mission * 300; // Maintains divisibility by 3 as well
     }
-    // Check to see if turn was on PLAYER side
-    bool playerTurn()
-    {
-        if (turn % 3 == 0) return true;
-        return false;
-    }
     // Check to see if turn was on HOSTILE side
     bool hostileTurn()
     {
         if ((turn - 1) % 3 == 0) return true;
-        return false;
-    }
-    // Check to see if turn was on NEUTRAL side
-    bool netrualTurn()
-    {
-        if ((turn - 2) % 3 == 0) return true;
         return false;
     }
     // Load
