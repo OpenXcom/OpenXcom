@@ -39,7 +39,8 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  */
 IntroState::IntroState(Game *game, bool wasLetterBoxed) : State(game), _wasLetterBoxed(wasLetterBoxed)
-{	
+{
+	_game->setVolume(Options::soundVolume, Options::soundVolume/2, -1);
 	_introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
 	_introSoundFileWin = CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
