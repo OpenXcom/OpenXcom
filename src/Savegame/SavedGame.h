@@ -64,7 +64,7 @@ struct MissionStatistics
 	std::string alienRace;
 	int daylight;
 	std::map<int, int> injuryList;
-    bool valiantCrux;
+	bool valiantCrux;
     
     /// Functions
 	std::string getMissionTypeLowerCase()
@@ -91,7 +91,7 @@ struct MissionStatistics
         alienRace = node["alienRace"].as<std::string>(alienRace);
         daylight = node["daylight"].as<int>(daylight);
         injuryList = node["injuryList"].as<std::map<int, int> >(injuryList);
-        valiantCrux = ["node"].as<bool>(false);
+        valiantCrux = node["valiantCrux"].as<bool>(valiantCrux);
     }
     // Save
     YAML::Node save() const

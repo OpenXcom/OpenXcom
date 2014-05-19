@@ -103,7 +103,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
 	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
-	_valiantCruxTotal = ["valiantCruxTotal"].as<int>(_valiantCruxTotal);
+	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 }
 /**
  * Saves the diary to a YAML file.
