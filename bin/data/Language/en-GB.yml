@@ -1345,5 +1345,7 @@ en-GB:
   STR_FORCE_FIRE: "Override Line of Fire"
   STR_FORCE_FIRE_DESC: "Enables forcing your soldiers to take a shot when holding CTRL, regardless of line of fire rules."
   STR_NO_AUDIO_HARDWARE_DETECTED: "No audio hardware detected"
-  STR_SELL_PRODUCTION: "SELL PRODUCTION"
+  STR_SELL_PRODUCTION: "SELL"
   STR_BOTH_HANDS_MUST_BE_EMPTY: "Both hands must be empty!"
+  STR_MOUSEWHEEL_SPEED: "Mouse scroll speed."
+  STR_MOUSEWHEEL_SPEED_DESC: "Adjusts the number of lines scrolled with each increment of the mouse wheel."

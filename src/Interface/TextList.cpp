@@ -768,7 +768,7 @@ void TextList::clearList()
  * Scrolls the text in the list up by one row or to the top.
  * @param toMax If true then scrolls to the top of the list. false => one row up
  */
-void TextList::scrollUp(bool toMax)
+void TextList::scrollUp(bool toMax, bool scrollByWheel)
 {
 	if (!_scrolling)
 		return;
@@ -780,7 +780,14 @@ void TextList::scrollUp(bool toMax)
 		}
 		else
 		{
-			scrollTo(_scroll-1);
+			if (scrollByWheel)
+			{
+				scrollTo(_scroll - std::min((size_t)(Options::mousewheelSpeed), _scroll));
+			}
+			else
+			{
+				scrollTo(_scroll - 1);
+			}
 		}
 	}
 }
@@ -789,7 +796,7 @@ void TextList::scrollUp(bool toMax)
  * Scrolls the text in the list down by one row or to the bottom.
  * @param toMax If true then scrolls to the bottom of the list. false => one row down
  */
-void TextList::scrollDown(bool toMax)
+void TextList::scrollDown(bool toMax, bool scrollByWheel)
 {
 	if (!_scrolling)
 		return;
@@ -801,7 +808,14 @@ void TextList::scrollDown(bool toMax)
 		}
 		else
 		{
-			scrollTo(_scroll+1);
+			if (scrollByWheel)
+			{
+				scrollTo(_scroll + Options::mousewheelSpeed);
+			}
+			else
+			{
+				scrollTo(_scroll + 1);
+			}
 		}
 	}
 }
@@ -958,8 +972,8 @@ void TextList::mousePress(Action *action, State *state)
 	}
 	if (allowScroll)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) scrollUp(false);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) scrollDown(false);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) scrollUp(false, true);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) scrollDown(false, true);
 	}
 	if (_selectable)
 	{
