@@ -669,7 +669,7 @@ void Globe::zoomIn()
 	{
 		_zoom++;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
-		cachePolygons();
+		invalidate();
 	}
 }
 
@@ -682,7 +682,7 @@ void Globe::zoomOut()
 	{
 		_zoom--;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
-		cachePolygons();
+		invalidate();
 	}
 }
 
@@ -693,7 +693,7 @@ void Globe::zoomMin()
 {
 	_zoom = 0;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
-	cachePolygons();
+	invalidate();
 }
 
 /**
@@ -703,7 +703,7 @@ void Globe::zoomMax()
 {
 	_zoom = _radius.size() - 1;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
-	cachePolygons();
+	invalidate();
 }
 
 /**
@@ -718,7 +718,7 @@ void Globe::center(double lon, double lat)
 	_cenLat = lat;
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
-	cachePolygons();
+	invalidate();
 }
 
 /**
@@ -855,7 +855,6 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 void Globe::cachePolygons()
 {
 	cache(_game->getResourcePack()->getPolygons(), &_cacheLand);
-	_redraw = true;
 }
 
 /**
@@ -970,7 +969,7 @@ void Globe::rotate()
 	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom+1);
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
-	cachePolygons();
+	invalidate();
 }
 
 /**
@@ -978,6 +977,10 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
+	if (_redraw)
+	{
+		cachePolygons();
+	}
 	Surface::draw();
 	drawOcean();
 	drawLand();
@@ -1994,7 +1997,7 @@ void Globe::resize()
 	_cenX = width / 2;
 	_cenY = height / 2;
 	setupRadii(width, height);
-	cachePolygons();
+	invalidate();
 }
 
 /*
