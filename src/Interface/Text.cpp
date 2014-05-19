@@ -391,7 +391,7 @@ void Text::processText()
 			word += charWidth;
 
 			// Wordwrap if the last word doesn't fit the line
-			if (_wrap && width > getWidth() && !start)
+			if (_wrap && width >= getWidth() && !start)
 			{
 				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
 				{
@@ -454,7 +454,7 @@ int Text::getLineX(int line) const
 		case ALIGN_LEFT:
 			break;
 		case ALIGN_CENTER:
-			x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
+			x = (int)ceil((getWidth() - 1 - _lineWidth[line]) / 2.0);
 			break;
 		case ALIGN_RIGHT:
 			x = getWidth() - 1 - _lineWidth[line];
@@ -468,7 +468,7 @@ int Text::getLineX(int line) const
 			x = getWidth() - 1;
 			break;
 		case ALIGN_CENTER:
-			x = getWidth() - (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
+			x = getWidth() - (int)ceil((getWidth() - 1 - _lineWidth[line]) / 2.0);
 			break;
 		case ALIGN_RIGHT:
 			x = _lineWidth[line];

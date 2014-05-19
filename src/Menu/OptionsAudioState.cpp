@@ -48,24 +48,24 @@ OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : Options
 
 	// Create objects
 	_txtMusicVolume = new Text(114, 9, 94, 8);
-	_slrMusicVolume = new Slider(100, 16, 94, 18);
+	_slrMusicVolume = new Slider(104, 16, 94, 18);
 
-	_txtSoundVolume = new Text(114, 9, 210, 8);
-	_slrSoundVolume = new Slider(100, 16, 210, 18);
+	_txtSoundVolume = new Text(114, 9, 206, 8);
+	_slrSoundVolume = new Slider(104, 16, 206, 18);
 
 	_txtUiVolume = new Text(114, 9, 94, 40);
-	_slrUiVolume = new Slider(100, 16, 94, 50);
+	_slrUiVolume = new Slider(104, 16, 94, 50);
 
-	_txtSampleRate = new Text(114, 9, 210, 40);
-	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 50);
+	_txtSampleRate = new Text(114, 9, 206, 40);
+	_cbxSampleRate = new ComboBox(this, 104, 16, 206, 50);
 
 	_txtMusicFormat = new Text(114, 9, 94, 72);
-	_cbxMusicFormat = new ComboBox(this, 100, 16, 94, 82);
+	_cbxMusicFormat = new ComboBox(this, 104, 16, 94, 82);
 	_txtCurrentMusic = new Text(114, 9, 94, 100);
 
-	_txtSoundFormat = new Text(114, 9, 210, 72);
-	_cbxSoundFormat = new ComboBox(this, 100, 16, 210, 82);
-	_txtCurrentSound = new Text(114, 9, 210, 100);
+	_txtSoundFormat = new Text(114, 9, 206, 72);
+	_cbxSoundFormat = new ComboBox(this, 104, 16, 206, 82);
+	_txtCurrentSound = new Text(114, 9, 206, 100);
 
 	add(_txtMusicVolume);
 	add(_slrMusicVolume);
