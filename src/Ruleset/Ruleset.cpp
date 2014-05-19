@@ -19,7 +19,7 @@
 #include "Ruleset.h"
 #include <fstream>
 #include <algorithm>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"

@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom

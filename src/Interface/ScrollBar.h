@@ -37,6 +37,7 @@ private:
 	bool _pressed, _contrast;
 	Surface *_track, *_thumb;
 	SDL_Rect _thumbRect;
+	int _offset;
 	Surface *_bg;
 	/// Draws the scrollbar track.
 	void drawTrack();

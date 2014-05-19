@@ -7,7 +7,7 @@ crafts:
       name: INTERC
       mapDataSets:
         - BLANKS
-        - INTERC
+        - PLANE
       mapBlocks:
         - name: INTERC
           width: 20
@@ -19,7 +19,7 @@ crafts:
       name: FIRES
       mapDataSets:
         - BLANKS
-        - FIRES
+        - LIGHTNIN
       mapBlocks:
         - name: FIRES
           width: 20

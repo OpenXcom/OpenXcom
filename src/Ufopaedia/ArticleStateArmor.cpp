@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-
+#include "../fmath.h"
 #include "Ufopaedia.h"
 #include "ArticleStateArmor.h"
 #include "../Ruleset/ArticleDefinition.h"
@@ -101,7 +101,7 @@ namespace OpenXcom
 		for (int i = 0; i < Armor::DAMAGE_TYPES; ++i)
 		{
 			ItemDamageType dt = (ItemDamageType)i;
-			int percentage = (int)floor(armor->getDamageModifier(dt) * 100.0f + 0.5f);
+			int percentage = (int)Round(armor->getDamageModifier(dt) * 100.0f);
 			std::string damage = getDamageTypeText(dt);
 			if (percentage != 100 && damage != "STR_UNKNOWN")
 			{

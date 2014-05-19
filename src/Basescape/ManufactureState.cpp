@@ -61,7 +61,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtProduced = new Text(56, 18, 168, 44);
 	_txtCost = new Text(44, 27, 222, 44);
 	_txtTimeLeft = new Text(60, 27, 260, 44);
-	_lstManufacture = new TextList(307, 90, 8, 80);
+	_lstManufacture = new TextList(288, 90, 8, 80);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);
@@ -135,12 +135,12 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-	_lstManufacture->setColumns(5, 122, 17, 52, 56, 32);
+	_lstManufacture->setColumns(5, 115, 15, 52, 56, 48);
 	_lstManufacture->setAlign(ALIGN_RIGHT);
 	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->setMargin(1);
+	_lstManufacture->setMargin(2);
 	_lstManufacture->setWordWrap(true);
 	_lstManufacture->onMouseClick((ActionHandler)&ManufactureState::lstManufactureClick);
 	fillProductionList();

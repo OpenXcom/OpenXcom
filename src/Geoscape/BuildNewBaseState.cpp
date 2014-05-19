@@ -18,7 +18,7 @@
  */
 #include "BuildNewBaseState.h"
 #include <cmath>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
