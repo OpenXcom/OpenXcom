@@ -88,10 +88,10 @@ void ManufactureInfoState::buildUi()
 	_txtAllocated = new Text(40, 16, 128, 83);
 	_txtTodo = new Text(40, 16, 272, 83);
 
-	_surfaceEngineers = new InteractiveSurface(152, 70, 16, 75);
+	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
 	_surfaceEngineers->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelEngineer, 0);
 
-	_surfaceUnits = new InteractiveSurface(152, 70, 168, 75);
+	_surfaceUnits = new InteractiveSurface(160, 150, 160, 25);
 	_surfaceUnits->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelUnit, 0);
 
 	// Set palette

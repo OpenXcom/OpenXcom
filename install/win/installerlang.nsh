@@ -415,3 +415,45 @@ LangString LINK_Uninstall ${LANG_FRENCH} "Désinstaller"
 
 LangString WARN_UFOMissing ${LANG_FRENCH} "X-COM 1 ne se trouve pas dans ce dossier. ${GAME_NAME} nécessite une installation valide de X-COM pour fonctionner. Continuer?"
 LangString WARN_XCUDetected ${LANG_FRENCH} "XcomUtil détecté. ${GAME_NAME} est incompatible avec XcomUtil et peut engendrer des instabilités. Continuer?"
+
+;================SLOVAK================
+
+;--------------------------------
+;Pages
+	
+LangString PAGE_UfoFolder ${LANG_SLOVAK} "${GAME_NAME} vyžaduje kópiu hry UFO: Enemy Unknown / X-COM: UFO Defense. Tento krok môžete preskočiť pokiaľ aktualizujete existujúcu inštaláciu.$\n$\nSetup skopíruje vyžadované súbory do nasledujúcej zložky. Pre pokračovanie kliknite na ďalej."
+LangString PAGE_UfoFolder_TITLE ${LANG_SLOVAK} "Vyberte umiestnenie X-COM 1"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_SLOVAK} "Vyberte zložku, v ktorej je nainštalovaný X-COM 1."
+LangString DEST_UfoFolder ${LANG_SLOVAK} "Zložka s X-COM 1"
+
+;--------------------------------
+;Installer Sections
+	
+LangString NAME_SecMain ${LANG_SLOVAK} "Súbory hry"
+LangString DESC_SecMain ${LANG_SLOVAK} "Súbory potrebné pre spustenie ${GAME_NAME}."
+LangString NAME_SecPatch ${LANG_SLOVAK} "Data Patch"
+LangString DESC_SecPatch ${LANG_SLOVAK} "Opravuje chyby v dátach hry X-COM 1. Odporúča sa vybrať pri prvej inštalácii. (vyžaduje internetové spojenie)"
+LangString NAME_SecDesktop ${LANG_SLOVAK} "Ikona na plochu"
+LangString DESC_SecDesktop ${LANG_SLOVAK} "Vytvorí ikonu na ploche pre spustenie hry ${GAME_NAME}."
+	
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_SLOVAK} "Vymazať X-COM dáta"
+LangString DESC_UnData ${LANG_SLOVAK} "Vymaže všetky dáta hry ${GAME_NAME}, vrátane modov a pôvodných súborov. Odporúča sa pre čistú reinštaláciu."
+LangString NAME_UnUser ${LANG_SLOVAK} "Vymaž užívateľské dáta"
+LangString DESC_UnUser ${LANG_SLOVAK} "Vymaže všetky užívateľské dáta hry ${GAME_NAME}, vrátane uložených pozícii, screenshotov a nastavení. Odporúča sa pre kompletné vymazanie."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_SLOVAK} "Zložka dát"
+LangString LINK_Readme ${LANG_SLOVAK} "Readme"
+LangString LINK_UserFolder ${LANG_SLOVAK} "Užívateľská zložka"
+LangString LINK_Uninstall ${LANG_SLOVAK} "Odinštalovať"
+	
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_SLOVAK} "X-COM 1 sa nenašla v určenej zložke. ${GAME_NAME} vyžaduje platnú inštaláciu X-COMu, aby mohla fungovať. Pokračovať?"
+LangString WARN_XCUDetected ${LANG_SLOVAK} "Bol detekovaný XcomUtil. ${GAME_NAME} je nekompatibilná s XComUtil a môže viesť k neštandardnému chovaniu hry. Pokračovať?"

@@ -43,7 +43,7 @@ private:
 	int _min, _max, _value;
 	bool _pressed;
 	ActionHandler _change;
-	int _thickness, _textness, _minX, _maxX;
+	int _thickness, _textness, _minX, _maxX, _offsetX;
 	
 	/// Sets the slider's position.
 	void setPosition(double pos);

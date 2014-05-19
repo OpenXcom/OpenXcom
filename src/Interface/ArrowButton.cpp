@@ -339,8 +339,8 @@ void ArrowButton::mousePress(Action *action, State *state)
 		{
 			_timer->start();
 		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) _list->scrollUp(false);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) _list->scrollDown(false);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) _list->scrollUp(false, true);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) _list->scrollDown(false, true);
 	}
 }
 

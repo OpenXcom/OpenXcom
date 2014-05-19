@@ -22,6 +22,7 @@
 #include <windows.h>
 #include <SDL_syswm.h>
 #endif
+#include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
 #include <SDL_image.h>
@@ -48,6 +49,8 @@
 
 namespace OpenXcom
 {
+
+const double Game::VOLUME_GRADIENT = 10.0;
 
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
@@ -383,21 +386,27 @@ void Game::setVolume(int sound, int music, int ui)
 	{
 		if (sound >= 0)
 		{
+			sound = volumeExponent(sound) * (double)SDL_MIX_MAXVOLUME;
 			Mix_Volume(-1, sound);
 		}
 		if (music >= 0)
 		{
+			music = volumeExponent(music) * (double)SDL_MIX_MAXVOLUME;
 			Mix_VolumeMusic(music);
-			// func_set_music_volume(music);
 		}
 		if (ui >= 0)
 		{
+			ui = volumeExponent(ui) * (double)SDL_MIX_MAXVOLUME;
 			Mix_Volume(0, ui);
 			Mix_Volume(1, ui);
 		}
 	}
 }
 
+float Game::volumeExponent(int volume)
+{
+	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
+}
 /**
  * Returns the display screen used by the game.
  * @return Pointer to the screen.

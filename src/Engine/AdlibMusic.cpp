@@ -22,6 +22,7 @@
 #include "Exception.h"
 #include "Options.h"
 #include "Logger.h"
+#include "Game.h"
 #include "Adlib/fmopl.h"
 #include "Adlib/adlplayer.h"
 
@@ -146,7 +147,7 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 		int i = std::min(delay, len);
 		if (i)
 		{
-			float volume =  exp(4.606 / 128 * Options::musicVolume) / 100;
+			float volume = Game::volumeExponent(Options::musicVolume);
 			YM3812UpdateOne(opl[0], (INT16*)stream, i / 2, 2, volume);
 			YM3812UpdateOne(opl[1], ((INT16*)stream) + 1, i / 2, 2, volume);
 			stream += i;

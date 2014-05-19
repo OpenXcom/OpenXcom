@@ -50,7 +50,7 @@ void Unit::load(const YAML::Node &node, int modIndex)
 	_type = node["type"].as<std::string>(_type);
 	_race = node["race"].as<std::string>(_race);
 	_rank = node["rank"].as<std::string>(_rank);
-	_stats = node["stats"].as<UnitStats>(_stats);
+	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	_armor = node["armor"].as<std::string>(_armor);
 	_standHeight = node["standHeight"].as<int>(_standHeight);
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);

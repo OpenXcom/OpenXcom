@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__LISTGAMESSTATE
-#define OPENXCOM__LISTGAMESSTATE
+#ifndef OPENXCOM_LISTGAMESSTATE_H
+#define OPENXCOM_LISTGAMESSTATE_H
 
 #include "../Engine/State.h"
 #include "OptionsBaseState.h"

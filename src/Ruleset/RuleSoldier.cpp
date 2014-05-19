@@ -45,9 +45,9 @@ RuleSoldier::~RuleSoldier()
 void RuleSoldier::load(const YAML::Node &node)
 {
 	_type = node["type"].as<std::string>(_type);
-	_minStats = node["minStats"].as<UnitStats>(_minStats);
-	_maxStats = node["maxStats"].as<UnitStats>(_maxStats);
-	_statCaps = node["statCaps"].as<UnitStats>(_statCaps);
+	_minStats.merge(node["minStats"].as<UnitStats>(_minStats));
+	_maxStats.merge(node["maxStats"].as<UnitStats>(_maxStats));
+	_statCaps.merge(node["statCaps"].as<UnitStats>(_statCaps));
 	_armor = node["armor"].as<std::string>(_armor);
 	_standHeight = node["standHeight"].as<int>(_standHeight);
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);

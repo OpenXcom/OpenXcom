@@ -57,6 +57,7 @@ private:
 	bool _mouseActive;
 	unsigned int _framestarttime;
 	int _delaytime;
+	static const double VOLUME_GRADIENT;
 
 public:
 	/// Creates a new game and initializes SDL.
@@ -69,6 +70,8 @@ public:
 	void quit();
 	/// Sets the game's audio volume.
 	void setVolume(int sound, int music, int ui);
+	/// Adjusts a linear volume level to an exponential one.
+	static float volumeExponent(int volume);
 	/// Gets the game's display screen.
 	Screen *getScreen() const;
 	/// Gets the game's cursor.

@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Slider.h"
-#include <cmath>
+#include "../fmath.h"
 #include <algorithm>
 #include "../Engine/Action.h"
 #include "../Interface/TextButton.h"
@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _pos(0.0), _min(0), _max(100), _pressed(false), _change(0)
+Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _pos(0.0), _min(0), _max(100), _pressed(false), _change(0), _offsetX(0)
 {
 	_thickness = 5;
 	_textness = 8;
@@ -177,9 +177,9 @@ void Slider::handle(Action *action, State *state)
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		int cursorX = action->getAbsoluteXMouse();
-		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
+		double buttonX = std::min(std::max(_minX, cursorX + _offsetX), _maxX);
 		double pos = (buttonX - _minX) / (_maxX - _minX);
-		int value = _min + (_max - _min) * pos;
+		int value = _min + (int)Round((_max - _min) * pos);
 		setValue(value);
 		if (_change)
 		{
@@ -264,7 +264,18 @@ void Slider::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
 		_pressed = true;
+		int cursorX = action->getAbsoluteXMouse();
+		if (cursorX >= _button->getX() && cursorX < _button->getX() + _button->getWidth())
+		{
+			_offsetX = _button->getX() - cursorX;
+		}
+		else
+		{
+			_offsetX = -_button->getWidth() / 2;
+		}
+	}
 }
 
 /**
@@ -276,7 +287,10 @@ void Slider::mouseRelease(Action *action, State *state)
 {
 	InteractiveSurface::mouseRelease(action, state);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
 		_pressed = false;
+		_offsetX = 0;
+	}
 }
 
 /**
