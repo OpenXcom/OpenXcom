@@ -22,7 +22,7 @@
 #include <cfloat>
 #include <cmath>
 #include <iomanip>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"

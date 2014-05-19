@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ScrollBar.h"
-#include <cmath>
+#include "../fmath.h"
 #include <algorithm>
 #include "../Engine/Action.h"
 #include "../Interface/TextList.h"
@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ScrollBar::ScrollBar(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _list(0), _color(0), _pressed(false), _contrast(false), _bg(0)
+ScrollBar::ScrollBar(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _list(0), _color(0), _pressed(false), _contrast(false), _offset(0), _bg(0)
 {
 	_track = new Surface(width-2, height, x+1, y);
 	_thumb = new Surface(width, height, x, y);
@@ -157,10 +157,10 @@ void ScrollBar::handle(Action *action, State *state)
 	InteractiveSurface::handle(action, state);
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorY = action->getAbsoluteYMouse();
-		int y = std::min(std::max(cursorY - getY() - _thumbRect.h/2, 0), getHeight() - _thumbRect.h + 1);
+		int cursorY = action->getAbsoluteYMouse() - getY();
+		int y = std::min(std::max(cursorY + _offset, 0), getHeight() - _thumbRect.h + 1);
 		double scale = (double)_list->getRows() / getHeight();
-		int scroll = (int)floor(y * scale);
+		int scroll = (int)Round(y * scale);
 		_list->scrollTo(scroll);
 	}
 }
@@ -189,11 +189,26 @@ void ScrollBar::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		_pressed = true;
+	{
+		int cursorY = action->getAbsoluteYMouse() - getY();
+		if (cursorY >= _thumbRect.y && cursorY < _thumbRect.y + _thumbRect.h)
+		{
+			_offset = _thumbRect.y - cursorY;
+		}
+		else
+		{
+			_offset = -_thumbRect.h / 2;
+		}
+		_pressed = true;		
+	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
 		_list->scrollUp(false);
+	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
 		_list->scrollDown(false);
+	}
 }
 
 /**
@@ -205,7 +220,10 @@ void ScrollBar::mouseRelease(Action *action, State *state)
 {
 	InteractiveSurface::mouseRelease(action, state);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
 		_pressed = false;
+		_offset = 0;
+	}
 }
 
 /**

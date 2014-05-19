@@ -3,7 +3,7 @@ set ( root_src
   lodepng.cpp
   lodepng.h
   dirent.h
-  aresame.h
+  fmath.h
   version.h
 )
 

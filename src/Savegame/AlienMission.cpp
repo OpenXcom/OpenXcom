@@ -20,7 +20,7 @@
 #include "AlienMission.h"
 #include "AlienBase.h"
 #include "Base.h"
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"

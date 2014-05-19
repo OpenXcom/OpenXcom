@@ -39,7 +39,7 @@ grt,
 #include "Screen.h"
 #include "Surface.h"
 #include "Options.h"
-#include "../aresame.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -462,7 +462,7 @@ static double oldTick=0.0;
 		waitTicks = (oldTick + delay - SDL_GetTicks());
 
 		if(waitTicks > 0.0) {
-			//SDL_Delay(floor(waitTicks + 0.5)); // biased rounding? mehhh?
+			//SDL_Delay((int)Round(waitTicks)); // biased rounding? mehhh?
 			SDL_Delay(1);
 		}
 	} while (waitTicks > 0.0); 

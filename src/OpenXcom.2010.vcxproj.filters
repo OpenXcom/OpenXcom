@@ -1584,7 +1584,6 @@
     <ClInclude Include="Interface\ToggleTextButton.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="aresame.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Engine\ShaderDraw.h">
       <Filter>Engine</Filter>
@@ -1725,6 +1724,7 @@
     <ClInclude Include="Menu\OptionsNoAudioState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="fmath.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

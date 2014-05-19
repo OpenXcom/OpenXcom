@@ -20,7 +20,7 @@
 #include "Globe.h"
 #include <cmath>
 #include <fstream>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"

@@ -20,7 +20,7 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Resource/ResourcePack.h"

@@ -618,10 +618,9 @@ void BattlescapeState::mapOver(Action *action)
 		}
 		else
 		{
-			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_map->getCamera()->scrollXY(
-				(int)((double)_totalMouseMoveX / action->getXScale()),
-				(int)((double)_totalMouseMoveY / action->getYScale()), false);
+				action->getDetails()->motion.xrel,
+				action->getDetails()->motion.yrel, false);
 		}
 
 		// We don't want to look the mouse-cursor jumping :)

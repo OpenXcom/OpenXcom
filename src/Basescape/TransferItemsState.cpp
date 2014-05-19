@@ -44,7 +44,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"
-#include "../aresame.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
