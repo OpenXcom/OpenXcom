@@ -71,7 +71,7 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-	std::map<std::string, int> _alienRankTotal, _alienRaceTotal, _weaponTotal, _weaponAmmoTotal, _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
+	std::map<std::string, int> _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
@@ -92,13 +92,13 @@ public:
 	/// Update the diary statistics.
 	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
 	/// Get the list of kills, mapped by rank.
-	std::map<std::string, int> &getAlienRankTotal();
+	std::map<std::string, int> getAlienRankTotal();
 	/// Get the list of kills, mapped by race.
-	std::map<std::string, int> &getAlienRaceTotal();
+	std::map<std::string, int> getAlienRaceTotal();
 	/// Get the list of kills, mapped by weapon used.
-	std::map<std::string, int> &getWeaponTotal();
+	std::map<std::string, int> getWeaponTotal();
 	/// Get the list of kills, mapped by weapon ammo used.
-	std::map<std::string, int> &getWeaponAmmoTotal();
+	std::map<std::string, int> getWeaponAmmoTotal();
 	/// Get the list of missions, mapped by region.
 	std::map<std::string, int> &getRegionTotal();
 	/// Get the list of missions, mapped by country.
