@@ -40,7 +40,9 @@ namespace OpenXcom
  */
 IntroState::IntroState(Game *game, bool wasLetterBoxed) : State(game), _wasLetterBoxed(wasLetterBoxed)
 {
-	_game->setVolume(Options::soundVolume, Options::soundVolume/2, -1);
+	_oldVolume = Options::musicVolume;
+	Options::musicVolume = Options::soundVolume;
+	_game->setVolume(Options::soundVolume, Options::musicVolume, -1);
 	_introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
 	_introSoundFileWin = CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
@@ -443,7 +445,7 @@ void IntroState::init()
 		}
 		_game->getScreen()->clear();
 		_game->getScreen()->flip();
-
+		Options::musicVolume = _oldVolume;
 		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 
 #ifndef __NO_MUSIC
