@@ -595,7 +595,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
  */
 void Globe::rotateLeft()
 {
-	_rotLon = -ROTATE_LONGITUDE / (_zoom+1);
+	_rotLon = -ROTATE_LONGITUDE;
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -604,7 +604,7 @@ void Globe::rotateLeft()
  */
 void Globe::rotateRight()
 {
-	_rotLon = ROTATE_LONGITUDE/ (_zoom+1);
+	_rotLon = ROTATE_LONGITUDE;
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -613,7 +613,7 @@ void Globe::rotateRight()
  */
 void Globe::rotateUp()
 {
-	_rotLat = -ROTATE_LATITUDE / (_zoom+1);
+	_rotLat = -ROTATE_LATITUDE;
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -622,7 +622,7 @@ void Globe::rotateUp()
  */
 void Globe::rotateDown()
 {
-	_rotLat = ROTATE_LATITUDE / (_zoom+1);
+	_rotLat = ROTATE_LATITUDE;
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 }
 
@@ -966,8 +966,8 @@ void Globe::blink()
  */
 void Globe::rotate()
 {
-	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0);
-	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0);
+	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom+1);
+	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom+1);
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 	cachePolygons();
