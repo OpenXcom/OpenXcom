@@ -37,7 +37,8 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
 	_killTotal(0), _missionTotal(0), _winTotal(0), _stunTotal(0), _baseDefenseMissionTotal(0), _daysWoundedTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
-    _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0)
+    _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
+	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0)
 {
 }
 /**
@@ -100,6 +101,9 @@ void SoldierDiary::load(const YAML::Node& node)
 	_shotsLandedCounterTotal = node["shotsLandedCounterTotal"].as<int>(_shotsLandedCounterTotal);
 	_shotAtCounter10in1Mission = node["shotAtCounter10in1Mission"].as<int>(_shotAtCounter10in1Mission);
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
+	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
+    _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
+	_valiantCruxTotal = ["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -142,6 +146,9 @@ YAML::Node SoldierDiary::save() const
 	if (_shotsLandedCounterTotal) node["shotsLandedCounterTotal"] = _shotsLandedCounterTotal;
 	if (_shotAtCounter10in1Mission) node["shotAtCounter10in1Mission"] = _shotAtCounter10in1Mission;
 	if (_hitCounter5in1Mission) node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
+	if (_reactionFireTotal) node["reactionFireTotal"] = _reactionFireTotal;
+    if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
+	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
 	return node;
 }
 /**
@@ -160,6 +167,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
         else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             _stunTotal++;
 		_killList.push_back(*kill);
+		if ((*kill)->hostileTurn())
+			_reactionFireTotal++;
     }
     _regionTotal[missionStatistics->region.c_str()]++;
     _countryTotal[missionStatistics->country.c_str()]++;
@@ -169,6 +178,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     if (missionStatistics->success)
         _winTotal++;
     _daysWoundedTotal += unitStatistics->daysWounded;
+    if (unitStatistics->daysWounded)
+        _timesWoundedTotal++;
     if (missionStatistics->type == "STR_BASE_DEFENSE")
         _baseDefenseMissionTotal++;
     else if (missionStatistics->type == "STR_TERROR_MISSION")
@@ -195,6 +206,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_ironManTotal++;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
+	if (missionStatistics->valiantCrux)
+		_valiantCruxTotal++;
+	if (unitStatistics->KIA)
+		_KIA++;
     _missionIdList.push_back(missionStatistics->id);
     _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
@@ -274,7 +289,12 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "total_iron_man" && _ironManTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "total_important_missions" && _importantMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "total_long_distance_hits" && _longDistanceHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
-					((*j).first == "total_low_accuracy_hits" && _lowAccuracyHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+					((*j).first == "total_low_accuracy_hits" && _lowAccuracyHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "total_reaction_fire" && _reactionFireTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+                    ((*j).first == "total_times_wounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+                    ((*j).first == "total_days_wounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "total_valient_crux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
+					((*j).first == "is_dead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) )					
 			{
 				awardCommendationBool = false;
 				break;

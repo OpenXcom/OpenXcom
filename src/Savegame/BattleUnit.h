@@ -67,22 +67,10 @@ struct BattleUnitKills
     {
         return turn += mission * 300; // Maintains divisibility by 3 as well
     }
-    // Check to see if turn was on PLAYER side
-    bool playerTurn()
-    {
-        if (turn % 3 == 0) return true;
-        return false;
-    }
     // Check to see if turn was on HOSTILE side
     bool hostileTurn()
     {
         if ((turn - 1) % 3 == 0) return true;
-        return false;
-    }
-    // Check to see if turn was on NEUTRAL side
-    bool netrualTurn()
-    {
-        if ((turn - 2) % 3 == 0) return true;
         return false;
     }
     // Load
@@ -157,6 +145,7 @@ struct BattleUnitStatistics
 	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
     std::vector<BattleUnitKills*> kills;	// Tracks kills
     int daysWounded;                        // Tracks how many days the unit was wounded for
+	bool KIA;								// Tracks if the soldier was killed in battle
 
 	/// Functions
 	// Friendly fire check
@@ -212,7 +201,7 @@ struct BattleUnitStatistics
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false) { }
 	~BattleUnitStatistics() { }
 };
 
