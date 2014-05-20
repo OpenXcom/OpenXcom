@@ -85,8 +85,6 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 	std::string noun;
 	bool titleChosen = true;
 
-	// At the moment this does not take into account modular commendations
-
 	for (std::map<std::string, RuleCommendations *>::const_iterator commList = commendationsList.begin(); commList != commendationsList.end();)
 	{
 		modularCommendation = false;
@@ -129,7 +127,7 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 			// Medal name
 			if (modularCommendation)
 			{
-				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first).arg(noun.c_str()).c_str());
+				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first).arg(tr(noun).c_str()).c_str());
 			}
 			else
 			{

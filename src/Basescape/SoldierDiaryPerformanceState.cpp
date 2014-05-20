@@ -433,6 +433,13 @@ void SoldierDiaryPerformanceState::drawSprites()
 {
 	if (!_displayCommendations) return;
 
+	// Clear sprites
+	for (int i = 0; i != 10; ++i)
+	{
+		_commendations[i]->clear();
+		_commendationDecorations[i]->clear();
+	}
+
 	int vectorIterator = 0; // Where we are currently located in the vector
 	int scrollDepth = _lstCommendations->getScroll(); // So we know where to start
 

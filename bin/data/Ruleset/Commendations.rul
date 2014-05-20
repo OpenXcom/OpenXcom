@@ -492,7 +492,7 @@ commendations:
     criteria:
       total_days_wounded: [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]
   - type: STR_MEDAL_ORDER_OF_GLORY_NAME
-    description: STR_MEDAL_ORDER_OF_GLORY_NAME
+    description: STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION
     sprite: 27
     criteria:
       kills_with_criteria_mission: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

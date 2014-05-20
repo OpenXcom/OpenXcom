@@ -317,7 +317,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				for(std::map<std::string, int>::const_iterator k = tempTotal.begin(); k != tempTotal.end(); ++k)
 				{
 					int criteria = -1;
-					if (nextCommendationLevel.count("noNoun") != 0)
+					if (nextCommendationLevel.size() == 1) // Only has "noNoun"
 						criteria = (*j).second.front();
 					else if (nextCommendationLevel.count((*k).first) != 0  && (*j).second.at(nextCommendationLevel.at((*k).first)))
 						criteria = (*j).second.at(nextCommendationLevel.at((*k).first));
