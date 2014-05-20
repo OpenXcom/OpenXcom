@@ -59,7 +59,6 @@ private:
 	std::vector<std::string> _langs, _filters;
 
 	void updateDisplayResolution();
-	void updateGameResolution();
 public:
 	/// Creates the Options state.
 	OptionsVideoState(Game *game, OptionsOrigin origin);

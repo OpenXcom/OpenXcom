@@ -80,7 +80,7 @@ openxcom_CXXFLAGS = \
 	$(GL_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
 openxcom_SOURCES = \
-	src/aresame.h \
+	src/fmath.h \
 	src/Basescape/BaseInfoState.cpp \
 	src/Basescape/BaseInfoState.h \
 	src/Basescape/BasescapeState.cpp \

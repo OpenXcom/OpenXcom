@@ -295,6 +295,7 @@ void ExplosionBState::explode()
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
+		p += Position(8,8,0);
 		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
 	}
 

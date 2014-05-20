@@ -60,27 +60,27 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
 	_txtLanguage = new Text(114, 9, 94, 52);
-	_cbxLanguage = new ComboBox(this, 100, 16, 94, 62);
+	_cbxLanguage = new ComboBox(this, 104, 16, 94, 62);
 
-	_txtFilter = new Text(114, 9, 210, 52);
-	_cbxFilter = new ComboBox(this, 100, 16, 210, 62);
+	_txtFilter = new Text(114, 9, 206, 52);
+	_cbxFilter = new ComboBox(this, 104, 16, 206, 62);
 
-	_txtMode = new Text(114, 9, 210, 22);
-	_cbxDisplayMode = new ComboBox(this, 100, 16, 210, 32);
+	_txtMode = new Text(114, 9, 206, 22);
+	_cbxDisplayMode = new ComboBox(this, 104, 16, 206, 32);
 	
 	_txtGeoScale = new Text(114, 9, 94, 82);
-	_cbxGeoScale = new ComboBox(this, 100, 16, 94, 92);
+	_cbxGeoScale = new ComboBox(this, 104, 16, 94, 92);
 	
 	_txtBattleScale = new Text(114, 9, 94, 112);
-	_cbxBattleScale = new ComboBox(this, 100, 16, 94, 122);
+	_cbxBattleScale = new ComboBox(this, 104, 16, 94, 122);
 
-	_txtOptions = new Text(114, 9, 210, 82);
-	_btnLetterbox = new ToggleTextButton(100, 16, 210, 92);
-	_btnLockMouse = new ToggleTextButton(100, 16, 210, 110);
+	_txtOptions = new Text(114, 9, 206, 82);
+	_btnLetterbox = new ToggleTextButton(104, 16, 206, 92);
+	_btnLockMouse = new ToggleTextButton(104, 16, 206, 110);
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res > (SDL_Rect**)0)
+	if (_res != (SDL_Rect**)-1 && (SDL_Rect**)0)
 	{
 		int i;
 		_resCurrent = -1;
@@ -346,7 +346,6 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
 		_resCurrent--;
 	}
 	updateDisplayResolution();
-	updateGameResolution();
 }
 
 /**
@@ -366,7 +365,6 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
 		_resCurrent++;
 	}
 	updateDisplayResolution();
-	updateGameResolution();
 }
 
 /**
@@ -383,35 +381,6 @@ void OptionsVideoState::updateDisplayResolution()
 	Options::newDisplayWidth = _res[_resCurrent]->w;
 	Options::newDisplayHeight = _res[_resCurrent]->h;
 }
-
-/**
- * Updates the game resolution based on the selection.
- */
-void OptionsVideoState::updateGameResolution()
-{
-	if (Options::geoscapeScale == SCALE_SCREEN)
-	{
-		Options::baseXGeoscape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth);
-		Options::baseYGeoscape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
-		if (_origin != OPT_BATTLESCAPE)
-		{
-			Options::baseXResolution = Options::baseXGeoscape;
-			Options::baseYResolution = Options::baseYGeoscape;
-		}
-	}
-	if (Options::battlescapeScale == SCALE_SCREEN)
-	{
-		Options::baseXBattlescape = std::max(Screen::ORIGINAL_WIDTH, Options::newDisplayWidth);
-		Options::baseYBattlescape = std::max(Screen::ORIGINAL_HEIGHT, Options::newDisplayHeight);
-		if (_origin == OPT_BATTLESCAPE)
-		{
-			Options::baseXResolution = Options::baseXBattlescape;
-			Options::baseYResolution = Options::baseYBattlescape;
-		}
-	}
-
-}
-
 /**
  * Changes the Display Width option.
  * @param action Pointer to an action.
@@ -423,7 +392,6 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
 	ss << std::dec << _txtDisplayWidth->getText();
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
-	updateGameResolution();
 }
 
 /**
@@ -437,7 +405,6 @@ void OptionsVideoState::txtDisplayHeightChange(Action *)
 	ss << std::dec << _txtDisplayHeight->getText();
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
-	updateGameResolution();
 }
 
 /**

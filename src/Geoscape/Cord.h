@@ -20,7 +20,7 @@
 #define	OPENXCOM_CORD_H
 
 #include <cmath>
-#include "../aresame.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

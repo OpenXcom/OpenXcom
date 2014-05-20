@@ -9304,6 +9304,10 @@ MCDPatches:
         LOFTS: [44,44,44,44,44,44,44,44,44,44,44,44]
   - type: PLANE
     data:
+      - MCDIndex: 13
+        bigWall: 6
+      - MCDIndex: 14
+        bigWall: 6
       - MCDIndex: 49
         LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
       - MCDIndex: 51

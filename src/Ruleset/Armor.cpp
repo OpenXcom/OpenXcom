@@ -70,7 +70,7 @@ void Armor::load(const YAML::Node &node)
 	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
 	_size = node["size"].as<int>(_size);
 	_weight = node["weight"].as<int>(_weight);
-	_stats = node["stats"].as<UnitStats>(_stats);
+	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
 		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
