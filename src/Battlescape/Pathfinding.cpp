@@ -367,7 +367,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					return 255;
 			}
 
-			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally past doors (which is impossible), they're a special case unto themselves.
+			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally through doors (which is impossible),
+							// they're a special case unto themselves, if we can walk past them diagonally, it means we can go around,
+							// as there is no wall blocking us.
 			if (direction == 0 || ((direction == 7 || direction == 1) && startTile->getMapData(MapData::O_NORTHWALL) && !startTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
 			if (direction == 2 || ((direction == 1 || direction == 3) && destinationTile->getMapData(MapData::O_WESTWALL) && !destinationTile->getMapData(MapData::O_WESTWALL)->isDoor()))
