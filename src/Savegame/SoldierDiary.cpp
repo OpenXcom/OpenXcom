@@ -673,10 +673,10 @@ std::string SoldierCommendations::getNoun() const
  * Get the soldier commendation level's name.
  * @return string Commendation level.
  */
-std::string SoldierCommendations::getDecorationLevelName()
+std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
 {
 	std::stringstream ss;
-	ss << "STR_AWARD_" << _decorationLevel;
+	ss << "STR_AWARD_" << _decorationLevel - skipCounter;
 	return ss.str();
 }
 /**

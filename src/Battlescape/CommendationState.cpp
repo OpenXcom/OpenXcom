@@ -31,6 +31,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/RuleCommendations.h"
 
 namespace OpenXcom
 {
@@ -116,7 +117,31 @@ CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersM
 					std::wstringstream wss;
 					wss << "   ";
 					wss << (*s)->getName().c_str();
-					_lstSoldiers->addRow(2, wss.str().c_str(), tr((*soldierComm)->getDecorationLevelName()).c_str());
+					// Decoration level name
+					int skipCounter = 0;
+					int lastInt = -2;
+					int thisInt = -1;
+					int vectorIterator = 0;
+					for (std::vector<int>::const_iterator k = (*commList).second->getCriteria()->begin()->second.begin(); k != (*commList).second->getCriteria()->begin()->second.end(); ++k)
+					{
+						if (vectorIterator == (*soldierComm)->getDecorationLevelInt() + 1)
+						{
+							break;
+						}
+						thisInt = *k;
+						if (k != (*commList).second->getCriteria()->begin()->second.begin())
+						{
+							--k;
+							lastInt = *k;
+							++k;
+						}
+						if (thisInt == lastInt)
+						{
+							skipCounter++;
+						}
+						vectorIterator++;
+					}
+					_lstSoldiers->addRow(2, wss.str().c_str(), tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
 					// _lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
 					break;
 				}

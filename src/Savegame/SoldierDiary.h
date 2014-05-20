@@ -52,7 +52,7 @@ public:
 	/// Get commendation noun.
 	std::string getNoun() const;
 	/// Get the commendation's decoration level's name.
-	std::string getDecorationLevelName();
+	std::string getDecorationLevelName(int skipCounter);
 	/// Get the commendation's decoration description.
 	std::string getDecorationDescription();
 	/// Get the commendation's decoration level's int.
