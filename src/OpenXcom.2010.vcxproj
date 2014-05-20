@@ -500,7 +500,6 @@
     <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aresame.h" />
     <ClInclude Include="Basescape\BaseInfoState.h" />
     <ClInclude Include="Basescape\BasescapeState.h" />
     <ClInclude Include="Basescape\BaseView.h" />
@@ -629,6 +628,7 @@
     <ClInclude Include="Engine\SurfaceSet.h" />
     <ClInclude Include="Engine\Timer.h" />
     <ClInclude Include="Engine\Zoom.h" />
+    <ClInclude Include="fmath.h" />
     <ClInclude Include="Geoscape\AlienBaseState.h" />
     <ClInclude Include="Geoscape\AlienTerrorState.h" />
     <ClInclude Include="Geoscape\AllocatePsiTrainingState.h" />

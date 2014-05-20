@@ -22,6 +22,7 @@
 #include <windows.h>
 #include <SDL_syswm.h>
 #endif
+#include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
 #include <SDL_image.h>
@@ -49,6 +50,8 @@
 namespace OpenXcom
 {
 
+const double Game::VOLUME_GRADIENT = 10.0;
+
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
  * creates the display screen and sets up the cursor.
@@ -65,13 +68,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		throw Exception(SDL_GetError());
 	}
 	Log(LOG_INFO) << "SDL initialized successfully.";
-
-	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GM.CAT")) &&
-		!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GMDEFEND.MID")) &&
-		Options::audioBitDepth == 8)
-	{
-		Options::audioBitDepth = 16;
-	}
 
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
@@ -390,21 +386,27 @@ void Game::setVolume(int sound, int music, int ui)
 	{
 		if (sound >= 0)
 		{
+			sound = volumeExponent(sound) * (double)SDL_MIX_MAXVOLUME;
 			Mix_Volume(-1, sound);
 		}
 		if (music >= 0)
 		{
+			music = volumeExponent(music) * (double)SDL_MIX_MAXVOLUME;
 			Mix_VolumeMusic(music);
-			// func_set_music_volume(music);
 		}
 		if (ui >= 0)
 		{
+			ui = volumeExponent(ui) * (double)SDL_MIX_MAXVOLUME;
 			Mix_Volume(0, ui);
 			Mix_Volume(1, ui);
 		}
 	}
 }
 
+float Game::volumeExponent(int volume)
+{
+	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
+}
 /**
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
@@ -694,7 +696,7 @@ void Game::initAudio()
 		Mix_AllocateChannels(16);
 		// Set up UI channels
 		Mix_ReserveChannels(2);
-		Mix_GroupChannels(0, 1, 0);
+		Mix_GroupChannels(1, 2, 0);
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	}

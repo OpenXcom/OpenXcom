@@ -39,6 +39,8 @@ public:
 	int getAmountProduced () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
+	bool getSellItems() const;
+	void setSellItems (bool);
 	productionProgress_e step(Base * b, SavedGame * g, const Ruleset *r);
 	const RuleManufacture * getRules() const;
 	void startItem(Base * b, SavedGame * g);
@@ -49,6 +51,7 @@ private:
 	int _amount;
 	int _timeSpent;
 	int _engineers;
+	bool _sell;
 	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g);
 	bool haveEnoughMaterialsForOneMoreUnit(Base * b);
 };

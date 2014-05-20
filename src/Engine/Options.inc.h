@@ -4,7 +4,7 @@
 // General options
 OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolution, baseXGeoscape, baseYGeoscape, baseXBattlescape, baseYBattlescape,
     soundVolume, musicVolume, uiVolume, audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS,
-	changeValueByMouseWheel, dragScrollTimeTolerance, dragScrollPixelTolerance;
+	changeValueByMouseWheel, dragScrollTimeTolerance, dragScrollPixelTolerance, mousewheelSpeed;
 OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpenGL, checkOpenGLErrors, vSyncForOpenGL, useOpenGLSmoothing,
 	autosave, allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio,
 	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow;
@@ -20,7 +20,7 @@ OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave;
 OPT int geoClockSpeed, dogfightSpeed, geoScrollSpeed, geoDragScrollButton, geoscapeScale;
 OPT bool includePrimeStateInSavedLayout, anytimePsiTraining, weaponSelfDestruction, spendResearchedItems, craftLaunchAlways, globeSeasons, globeDetail, globeRadarLines, globeFlightPaths, globeAllRadarsOnBaseBuild,
 	storageLimitsEnforced, canSellLiveAliens, canTransferCraftsWhileAirborne, canManufactureMoreItemsPerHour, customInitialBase, aggressiveRetaliation, geoDragScrollInvert,
-	allowBuildingQueue, allowAutoSellProduction, showFundsOnGeoscape, psiStrengthEval, fieldPromotions;
+	allowBuildingQueue, showFundsOnGeoscape, psiStrengthEval, fieldPromotions;
 OPT SDLKey keyGeoLeft, keyGeoRight, keyGeoUp, keyGeoDown, keyGeoZoomIn, keyGeoZoomOut, keyGeoSpeed1, keyGeoSpeed2, keyGeoSpeed3, keyGeoSpeed4, keyGeoSpeed5, keyGeoSpeed6,
 	keyGeoIntercept, keyGeoBases, keyGeoGraphs, keyGeoUfopedia, keyGeoOptions, keyGeoFunding, keyGeoToggleDetail, keyGeoToggleRadar,
 	keyBaseSelect1, keyBaseSelect2, keyBaseSelect3, keyBaseSelect4, keyBaseSelect5, keyBaseSelect6, keyBaseSelect7, keyBaseSelect8;

@@ -45,30 +45,30 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	// Create objects
 	_txtEdgeScroll = new Text(114, 9, 94, 8);
-	_cbxEdgeScroll = new ComboBox(this, 100, 16, 94, 18);
+	_cbxEdgeScroll = new ComboBox(this, 104, 16, 94, 18);
 
-	_txtDragScroll = new Text(114, 9, 210, 8);
-	_cbxDragScroll = new ComboBox(this, 100, 16, 210, 18);
+	_txtDragScroll = new Text(114, 9, 206, 8);
+	_cbxDragScroll = new ComboBox(this, 104, 16, 206, 18);
 
 	_txtScrollSpeed = new Text(114, 9, 94, 40);
-	_slrScrollSpeed = new Slider(100, 16, 94, 50);
+	_slrScrollSpeed = new Slider(104, 16, 94, 50);
 
-	_txtFireSpeed = new Text(114, 9, 210, 40);
-	_slrFireSpeed = new Slider(100, 16, 210, 50);
+	_txtFireSpeed = new Text(114, 9, 206, 40);
+	_slrFireSpeed = new Slider(104, 16, 206, 50);
 
 	_txtXcomSpeed = new Text(114, 9, 94, 72);
-	_slrXcomSpeed = new Slider(100, 16, 94, 82);
+	_slrXcomSpeed = new Slider(104, 16, 94, 82);
 
-	_txtAlienSpeed = new Text(114, 9, 210, 72);
-	_slrAlienSpeed = new Slider(100, 16, 210, 82);
+	_txtAlienSpeed = new Text(114, 9, 206, 72);
+	_slrAlienSpeed = new Slider(104, 16, 206, 82);
 
 	_txtPathPreview = new Text(114, 9, 94, 100);
-	_btnArrows = new ToggleTextButton(100, 16, 94, 110);
-	_btnTuCost = new ToggleTextButton(100, 16, 94, 128);
+	_btnArrows = new ToggleTextButton(104, 16, 94, 110);
+	_btnTuCost = new ToggleTextButton(104, 16, 94, 128);
 
-	_txtOptions = new Text(114, 9, 210, 100);
-	_btnTooltips = new ToggleTextButton(100, 16, 210, 110);
-	_btnDeaths = new ToggleTextButton(100, 16, 210, 128);
+	_txtOptions = new Text(114, 9, 206, 100);
+	_btnTooltips = new ToggleTextButton(104, 16, 206, 110);
+	_btnDeaths = new ToggleTextButton(104, 16, 206, 128);
 
 	add(_txtEdgeScroll);
 	add(_txtDragScroll);

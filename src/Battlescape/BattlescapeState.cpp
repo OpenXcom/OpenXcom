@@ -97,7 +97,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBefor
 
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;
-	int iconsWidth = 320;
+	int iconsWidth = Map::ICON_WIDTH;
 	int iconsHeight = Map::ICON_HEIGHT;
 	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
@@ -618,10 +618,9 @@ void BattlescapeState::mapOver(Action *action)
 		}
 		else
 		{
-			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_map->getCamera()->scrollXY(
-				(int)((double)_totalMouseMoveX / action->getXScale()),
-				(int)((double)_totalMouseMoveY / action->getYScale()), false);
+				action->getDetails()->motion.xrel,
+				action->getDetails()->motion.yrel, false);
 		}
 
 		// We don't want to look the mouse-cursor jumping :)

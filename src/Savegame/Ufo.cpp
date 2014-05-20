@@ -22,7 +22,7 @@
 #include <math.h>
 #include <sstream>
 #include <algorithm>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"

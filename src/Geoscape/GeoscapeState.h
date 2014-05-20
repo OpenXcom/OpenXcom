@@ -43,14 +43,15 @@ class Base;
 class GeoscapeState : public State
 {
 private:
-	Surface *_bg;
+	Surface *_bg, *_sidebar;
 	Globe *_globe;
 	TextButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
 	TextButton *_timeSpeed;
 	TextButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
+	TextButton *_btnTop, *_btnBottom;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtFunds, *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
-	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
+	Timer *_gameTimer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
 	bool _pause, _zoomInEffectDone, _zoomOutEffectDone;
 	Text *_txtDebug;
 	std::list<State*> _popups;

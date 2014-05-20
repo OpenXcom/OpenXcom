@@ -49,7 +49,7 @@
 #include "../Engine/Options.h"
 #include "ProjectileFlyBState.h"
 #include "../Engine/Logger.h"
-#include "../aresame.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -201,7 +201,7 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+				int distance = (int)Round(sqrt(float(x*x + y*y)));
 
 				if (_save->getTile(Position(center.x + x,center.y + y, z)))
 					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
@@ -1104,9 +1104,9 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
  */
 void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
-	double centerZ = (int)(center.z / 24) + 0.5;
-	double centerX = (int)(center.x / 16) + 0.5;
-	double centerY = (int)(center.y / 16) + 0.5;
+	double centerZ = center.z / 24 + 0.5;
+	double centerX = center.x / 16 + 0.5;
+	double centerY = center.y / 16 + 0.5;
 	int power_, penetration;
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator,bool> ret;
@@ -1820,37 +1820,49 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
 				break;
 			case 1: // north east
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
+				if (rClick)
+				{
+					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+					checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
+					checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+					checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
+				}
 				break;
 			case 2: // east
 				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
 				break;
 			case 3: // south-east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
-				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
+				if (rClick)
+				{
+					checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+					checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
+					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
+				}
 				break;
 			case 4: // south
 				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
 				break;
 			case 5: // south-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
+				if (rClick)
+				{
+					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+					checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
+					checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+					checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
+				}
 				break;
 			case 6: // west
 				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
 				break;
 			case 7: // north-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
-				checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
+				if (rClick)
+				{
+					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+					checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
+					checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
+				}
 				break;
 			default:
 				break;
@@ -1873,7 +1885,6 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 					}
 				}
 			}
-
 			if (door == 0 && rClick)
 			{
 				if (part == MapData::O_WESTWALL)
@@ -2285,9 +2296,9 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		return V_EMPTY;
 	}
 
-	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
+	if ((voxel.z % 24 == 0 || voxel.z % 24 == 1) && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
+		if ((tile->getPosition().z == 0) || (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift()))
 			return V_FLOOR;
 	}
 
@@ -2365,7 +2376,7 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
-	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
+	return (int)Round(sqrt(float(x*x + y*y)));
 }
 
 /**

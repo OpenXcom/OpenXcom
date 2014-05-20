@@ -19,7 +19,7 @@
 #define _USE_MATH_DEFINES
 #include "MovingTarget.h"
 #include <cmath>
-#include "../aresame.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

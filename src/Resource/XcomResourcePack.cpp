@@ -151,6 +151,29 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		_surfaces[*i]->loadScr(path);
 	}
 
+	// bigger geoscape background
+	int newWidth = 320 - 64, newHeight = 200;
+	Surface *newGeo = new Surface(newWidth*3, newHeight*3);
+	Surface *oldGeo = _surfaces["GEOBORD.SCR"];
+	for (int x = 0; x < newWidth; ++x)
+	{
+		for (int y = 0; y < newHeight; ++y)
+		{
+			newGeo->setPixel(newWidth+x, newHeight+y, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth-x-1, newHeight+y, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth*3-x-1, newHeight+y, oldGeo->getPixel(x, y));
+			
+			newGeo->setPixel(newWidth+x, newHeight-y-1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth*3-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
+			
+			newGeo->setPixel(newWidth+x, newHeight*3-y-1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth*3-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
+		}
+	}
+	_surfaces["ALTGEOBORD.SCR"] = newGeo;
+
 	// here we create an "alternate" background surface for the base info screen.
 	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
 	_surfaces["ALTBACK07.SCR"]->loadScr(CrossPlatform::getDataFile("GEOGRAPH/BACK07.SCR"));

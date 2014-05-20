@@ -39,11 +39,11 @@ private:
 	static const std::wstring musFormats[], sndFormats[];
 	Text *_txtMusicVolume, *_txtSoundVolume, *_txtUiVolume;
 	Slider *_slrMusicVolume, *_slrSoundVolume, *_slrUiVolume;
-	Text *_txtBitDepth, *_txtSampleRate;
-	ComboBox *_cbxBitDepth, *_cbxSampleRate;
+	Text *_txtSampleRate;
+	ComboBox *_cbxSampleRate;
 	Text *_txtMusicFormat, *_txtCurrentMusic, *_txtSoundFormat, *_txtCurrentSound;
 	ComboBox *_cbxMusicFormat, *_cbxSoundFormat;
-	std::vector<int> _bitDepths, _sampleRates;
+	std::vector<int> _sampleRates;
 public:
 	/// Creates the Audio Options state.
 	OptionsAudioState(Game *game, OptionsOrigin origin);
@@ -59,8 +59,6 @@ public:
     void slrUiVolumeChange(Action *);
 	/// Handler for sound slider button release.
     void slrUiVolumeRelease(Action *);
-	/// Handler for changing the Bit Depth combobox.
-	void cbxBitDepthChange(Action *action);
     /// Handler for changing the Sample Rate combobox.
 	void cbxSampleRateChange(Action *action);
 	/// Handler for changing the Music Format combobox.

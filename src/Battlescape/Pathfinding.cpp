@@ -367,49 +367,17 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					return 255;
 			}
 
-			int wallcost = 0; // walking through rubble walls
-			if (direction == 7 || direction == 0 || direction == 1)
+			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally through doors (which is impossible),
+							// they're a special case unto themselves, if we can walk past them diagonally, it means we can go around,
+							// as there is no wall blocking us.
+			if (direction == 0 || ((direction == 7 || direction == 1) && startTile->getMapData(MapData::O_NORTHWALL) && !startTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 1 || direction == 2 || direction == 3)
+			if (direction == 2 || ((direction == 1 || direction == 3) && destinationTile->getMapData(MapData::O_WESTWALL) && !destinationTile->getMapData(MapData::O_WESTWALL)->isDoor()))
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 3 || direction == 4 || direction == 5)
+			if (direction == 4 || ((direction == 3 || direction == 5) && destinationTile->getMapData(MapData::O_NORTHWALL) && !destinationTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 5 || direction == 6 || direction == 7)
+			if (direction == 6 || ((direction == 5 || direction == 7) && startTile->getMapData(MapData::O_WESTWALL) && !startTile->getMapData(MapData::O_WESTWALL)->isDoor()))
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-
-			switch (direction)
-			{
-			case 7:
-				// northwest
-				// tile west of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(-1,0,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
-				// tile north of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(0,-1,0))->getTUCost(MapData::O_WESTWALL, _movementType);
-				break;
-			case 3:
-				// southeast
-				// tile south of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(0,1,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
-				// tile east of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(1,0,0))->getTUCost(MapData::O_WESTWALL, _movementType);
-				break;
-			case 1:
-				// northeast
-				// tile east of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(1,0,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
-				// tile east of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(1,0,0))->getTUCost(MapData::O_WESTWALL, _movementType);
-				break;
-			case 5:
-				// southwest
-				// tile south of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(0,1,0))->getTUCost(MapData::O_NORTHWALL, _movementType);
-				// tile south of start
-				wallcost += _save->getTile(startTile->getPosition() + Position(0,1,0))->getTUCost(MapData::O_WESTWALL, _movementType);
-				break;
-			default:
-				break;
-			}
 
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
