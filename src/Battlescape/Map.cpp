@@ -586,14 +586,7 @@ void Map::drawTerrain(Surface *surface)
 										wallShade = tileWest->getShade();
 									else
 										wallShade = tileWestShade;
-									if (tileWest->getMapData(MapData::O_WESTWALL))
-									{
-										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
-									}
-									else
-									{
-										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, false);
-									}
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
 								}
 								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 								if (tmpSurface && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
