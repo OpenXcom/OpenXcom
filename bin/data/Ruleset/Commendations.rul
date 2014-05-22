@@ -319,9 +319,14 @@ extraStrings:
 # Use the strings from the ruleset to define them (mods can be used too). 
 # For example, look at "STR_MEDAL_BOLTS_CROSS_NAME". It is awarded if a soldier
 # stuns one hostile commander or stuns one hostile leader.
-# kills_with_criteria_career 
-# kills_with_criteria_mission
-# kills_with_criteria_turn
+#   kills_with_criteria_career 
+#   kills_with_criteria_mission
+#   kills_with_criteria_turn
+# It is possible to reduce the amount of awards a commendation gets, but still reaching
+# the triple gold star decoration. To do this, repeat the numbres in the criteria vector.
+# For example, [5, 10, 20, 20, 20, 20, 40, 40, 40, 40] will have one award for 5, will have a 
+# second award for 10 (bronze star), will have a third award for 20 (2 silver stars) and 
+# will have a fourth award for 40 (3 gold stars). 
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION

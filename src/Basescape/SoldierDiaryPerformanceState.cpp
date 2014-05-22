@@ -34,6 +34,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Ruleset/RuleCommendations.h"
+#include "../Engine/Action.h"
 
 
 namespace OpenXcom
@@ -292,6 +293,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Game *game, Base *bas
 	_lstCommendations->setBackground(_window);
 	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryPerformanceState::lstInfoMouseOver);
 	_lstCommendations->onMouseOut((ActionHandler)&SoldierDiaryPerformanceState::lstInfoMouseOut);
+	_lstCommendations->onMousePress((ActionHandler)&SoldierDiaryPerformanceState::handle);
 
 	init(); // Populate the list
 }
@@ -571,10 +573,12 @@ void SoldierDiaryPerformanceState::lstInfoMouseOut(Action *)
  * Runs state functionality every cycle.
  * Used to update sprite vector
  */
-void SoldierDiaryPerformanceState::think()
+void SoldierDiaryPerformanceState::handle(Action *action)
 {
-	// State::think();
-	drawSprites();
+	State::handle(action);
+
+	if (action->getDetails()->button.state == SDL_PRESSED || action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_WHEELUP || action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		drawSprites();
 }
 
 }
