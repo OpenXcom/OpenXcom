@@ -1081,6 +1081,10 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 */
 bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const
 {
+	if (r == 0)
+	{
+		return false;
+	}
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
