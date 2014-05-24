@@ -32,7 +32,7 @@
 
 namespace OpenXcom
 {
-Production::Production(const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _timeSpent(0), _engineers(0), _sell(false)
+Production::Production(const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _infiniteAmount(false), _timeSpent(0), _engineers(0), _sell(false)
 {
 }
 
@@ -44,6 +44,16 @@ int Production::getAmountTotal () const
 void Production::setAmountTotal (int amount)
 {
 	_amount = amount;
+}
+
+bool Production::getInfiniteAmount () const
+{
+	return _infiniteAmount;
+}
+
+void Production::setInfiniteAmount (bool inf)
+{
+	_infiniteAmount = inf;
 }
 
 int Production::getTimeSpent () const
@@ -193,6 +203,7 @@ YAML::Node Production::save() const
 	node["assigned"] = getAssignedEngineers ();
 	node["spent"] = getTimeSpent ();
 	node["amount"] = getAmountTotal ();
+	node["infiniteAmount"] = getInfiniteAmount ();
 	if (getSellItems())
 		node["sell"] = getSellItems ();
 	return node;
@@ -203,11 +214,7 @@ void Production::load(const YAML::Node &node)
 	setAssignedEngineers(node["assigned"].as<int>(getAssignedEngineers()));
 	setTimeSpent(node["spent"].as<int>(getTimeSpent()));
 	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
+	setInfiniteAmount(node["infiniteAmount"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
-	if (getAmountTotal() == std::numeric_limits<int>::max())
-	{
-		setAmountTotal(999);
-		setSellItems(true);
-	}
 }
 }
