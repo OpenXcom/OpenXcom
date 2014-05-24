@@ -32,7 +32,7 @@
 
 namespace OpenXcom
 {
-Production::Production(const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _infiniteAmount(false), _timeSpent(0), _engineers(0), _sell(false)
+Production::Production(const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _infinite(false), _timeSpent(0), _engineers(0), _sell(false)
 {
 }
 
@@ -48,12 +48,12 @@ void Production::setAmountTotal (int amount)
 
 bool Production::getInfiniteAmount () const
 {
-	return _infiniteAmount;
+	return _infinite;
 }
 
 void Production::setInfiniteAmount (bool inf)
 {
-	_infiniteAmount = inf;
+	_infinite = inf;
 }
 
 int Production::getTimeSpent () const
@@ -166,7 +166,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		}
 		while (count < produced);
 	}
-	if (getAmountProduced () >= _amount) return PROGRESS_COMPLETE;
+	if (getAmountProduced () >= _amount && !getInfiniteAmount()) return PROGRESS_COMPLETE;
 	if (done < getAmountProduced ())
 	{
 		// We need to ensure that player has enough cash/item to produce a new unit
@@ -216,5 +216,12 @@ void Production::load(const YAML::Node &node)
 	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
 	setInfiniteAmount(node["infiniteAmount"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
+	// backwards compatiblity
+	if (getAmountTotal() == std::numeric_limits<int>::max())
+	{
+		setAmountTotal(999);
+		setInfiniteAmount(true);
+		setSellItems(true);
+	}
 }
 }

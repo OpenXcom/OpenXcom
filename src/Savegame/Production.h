@@ -51,7 +51,7 @@ public:
 private:
 	const RuleManufacture * _rules;
 	int _amount;
-	bool _infiniteAmount;
+	bool _infinite;
 	int _timeSpent;
 	int _engineers;
 	bool _sell;

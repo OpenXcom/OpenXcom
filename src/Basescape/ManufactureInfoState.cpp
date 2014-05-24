@@ -258,8 +258,9 @@ void ManufactureInfoState::setAssignedEngineer()
 	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 	std::wostringstream s4;
-	if (_production->getInfiniteAmount()) s4 << Language::utf8ToWstr("\U00E2889E");
-	else s4 << L">\x01" << _production->getAmountTotal();
+	s4 << L">\x01";
+	if (_production->getInfiniteAmount()) s4 << Language::utf8ToWstr("∞");
+	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
 }
 
@@ -415,8 +416,15 @@ void ManufactureInfoState::moreUnitRelease(Action * action)
 void ManufactureInfoState::moreUnitClick(Action * action)
 {
 	if (_production->getInfiniteAmount()) return; // We can't increase over infinite :)
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) _production->setInfiniteAmount(true);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moreUnit(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_production->setInfiniteAmount(true);
+		setAssignedEngineer();
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		moreUnit(1);
+	}
 }
 
 /**
