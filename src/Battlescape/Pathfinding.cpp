@@ -138,6 +138,12 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 						checkTile->getUnit()->getVisible() &&
 						checkTile->getUnit() != target))
 						return;
+					if (x && y)
+					{
+						if ((checkTile->getMapData(MapData::O_NORTHWALL) && checkTile->getMapData(MapData::O_NORTHWALL)->isDoor()) || 
+							(checkTile->getMapData(MapData::O_WESTWALL) && checkTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+							return;
+					}
 					++its;
 				}
 			}
