@@ -5326,6 +5326,7 @@ alienRaces:
       - STR_SECTOPOD_TERRORIST
       - STR_SECTOPOD_TERRORIST
   - id: STR_MIXED
+    retaliation: false
     members:
       - STR_ETHEREAL_SOLDIER
       - STR_ETHEREAL_LEADER

@@ -107,6 +107,7 @@
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Menu/ListSaveState.h"
+#include "../Ruleset/AlienRace.h"
 
 namespace OpenXcom
 {
@@ -1676,8 +1677,21 @@ void GeoscapeState::time1Month()
 						AlienMission *mission = new AlienMission(rule);
 						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 						mission->setRegion((*i)->getRules()->getType(), *_game->getRuleset());
-						int race = RNG::generate(0, _game->getRuleset()->getAlienRacesList().size()-2); // -2 to avoid "MIXED" race
-						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
+						// get races for retaliation missions
+						std::vector<std::string> races = _game->getRuleset()->getAlienRacesList();
+						for (std::vector<std::string>::iterator i = races.begin(); i != races.end();)
+						{
+							if (_game->getRuleset()->getAlienRace(*i)->canRetaliate())
+							{
+								i++;
+							}
+							else
+							{
+								i = races.erase(i);
+							}
+						}
+						int race = RNG::generate(0, races.size()-1);
+						mission->setRace(races[race]);
 						mission->start(150);
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
 						newRetaliation = false;
