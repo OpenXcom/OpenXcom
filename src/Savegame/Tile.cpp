@@ -315,6 +315,8 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 	{
 		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 			return 4;
+		if (_unit && _unit != unit && _unit->getPosition() != getPosition())
+			return -1;
 		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()), _objects[part]->getAltMCD(), _mapDataSetID[part],
 				   _objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
 		setMapData(0, -1, -1, part);
