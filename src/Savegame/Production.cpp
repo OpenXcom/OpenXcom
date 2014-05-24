@@ -203,7 +203,7 @@ YAML::Node Production::save() const
 	node["assigned"] = getAssignedEngineers ();
 	node["spent"] = getTimeSpent ();
 	node["amount"] = getAmountTotal ();
-	node["infiniteAmount"] = getInfiniteAmount ();
+	node["infinite"] = getInfiniteAmount ();
 	if (getSellItems())
 		node["sell"] = getSellItems ();
 	return node;
@@ -214,7 +214,7 @@ void Production::load(const YAML::Node &node)
 	setAssignedEngineers(node["assigned"].as<int>(getAssignedEngineers()));
 	setTimeSpent(node["spent"].as<int>(getTimeSpent()));
 	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
-	setInfiniteAmount(node["infiniteAmount"].as<bool>(getInfiniteAmount()));
+	setInfiniteAmount(node["infinite"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
 	// backwards compatiblity
 	if (getAmountTotal() == std::numeric_limits<int>::max())
