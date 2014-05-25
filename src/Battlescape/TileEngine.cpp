@@ -1836,7 +1836,6 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
 				break;
 			case 3: // south-east
-
 				if (!y)
 					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
 				if (!x)
