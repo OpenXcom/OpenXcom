@@ -35,7 +35,6 @@
 #include "MainMenuState.h"
 #include "IntroState.h"
 #include "ErrorMessageState.h"
-#include "OptionsBaseState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
 #include <SDL_syswm.h>
@@ -158,7 +157,7 @@ void StartState::think()
 		}
 		else
 		{
-			OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
 			State *state = new MainMenuState(_game);
 			_game->setState(state);

@@ -29,7 +29,6 @@
 #include "../Engine/Sound.h"
 #include "../Resource/ResourcePack.h"
 #include "MainMenuState.h"
-#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -453,7 +452,7 @@ void IntroState::init()
 		Music::stop();
 #endif
 	}
-	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
 	_game->setState(new MainMenuState(_game));
 }
