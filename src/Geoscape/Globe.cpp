@@ -476,7 +476,7 @@ bool Globe::pointBack(double lon, double lat) const
 {
 	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
 
-	return c < 0;
+	return c < 0.0;
 }
 
 
@@ -875,12 +875,18 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 	for (std::list<Polygon*>::iterator i = polygons->begin(); i != polygons->end(); ++i)
 	{
 		// Is quad on the back face?
-		bool backFace = true;
+		float closest = 0.0;
+		float z;
+		float furthest = 0.0;
 		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
-			backFace = backFace && pointBack((*i)->getLongitude(j), (*i)->getLatitude(j));
+			z = cos(_cenLat) * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - _cenLon) + sin(_cenLat) * sin((*i)->getLatitude(j));
+			if (z > closest)
+				closest = z;
+			else if (z < furthest)
+				furthest = z;
 		}
-		if (backFace)
+		if (-furthest > closest)
 			continue;
 
 		Polygon* p = new Polygon(**i);
