@@ -700,7 +700,7 @@ void UnitInfoState::btnNextClick(Action *)
 
 void UnitInfoState::exit()
 {
-	if (_fromInventory)
+	if (!_fromInventory)
 	{
 		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
 		_game->getScreen()->resetDisplay(false);
