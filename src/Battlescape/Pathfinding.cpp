@@ -376,15 +376,24 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally through doors (which is impossible),
 							// they're a special case unto themselves, if we can walk past them diagonally, it means we can go around,
 							// as there is no wall blocking us.
-			if (direction == 0 || ((direction == 7 || direction == 1) && startTile->getMapData(MapData::O_NORTHWALL) && !startTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
+			if (direction == 0 || direction == 7 || direction == 1)
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 2 || ((direction == 1 || direction == 3) && destinationTile->getMapData(MapData::O_WESTWALL) && !destinationTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+			if (direction == 2 || direction == 1 || direction == 3)
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 4 || ((direction == 3 || direction == 5) && destinationTile->getMapData(MapData::O_NORTHWALL) && !destinationTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
+			if (direction == 4 || direction == 3 || direction == 5)
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 6 || ((direction == 5 || direction == 7) && startTile->getMapData(MapData::O_WESTWALL) && !startTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+			if (direction == 6 || direction == 5 || direction == 7)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
+			// don't let tanks phase through doors.
+			if (x && y)
+			{
+				if ((destinationTile->getMapData(MapData::O_NORTHWALL) && destinationTile->getMapData(MapData::O_NORTHWALL)->isDoor()) || 
+					(destinationTile->getMapData(MapData::O_WESTWALL) && destinationTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+				{
+					return 255;
+				}
+			}
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 			{
