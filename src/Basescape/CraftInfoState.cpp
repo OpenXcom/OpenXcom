@@ -34,6 +34,7 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/SavedGame.h"
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
 #include "CraftEquipmentState.h"
@@ -51,7 +52,14 @@ namespace OpenXcom
 CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(game), _base(base), _craftId(craftId)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
+	{
+		_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	}
+	else
+	{
+		_window = new Window(this, 320, 200, 0, 0, POPUP_NONE);
+	}
 	_btnOk = new TextButton(64, 24, 128, 168);
 	_btnW1 = new TextButton(24, 32, 14, 48);
 	_btnW2 = new TextButton(24, 32, 282, 48);
