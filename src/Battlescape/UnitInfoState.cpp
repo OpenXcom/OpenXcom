@@ -616,7 +616,14 @@ void UnitInfoState::handle(Action *action)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_game->popState();
+			exit();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			if (action->getRelativeYMouse() > 20)
+			{
+				exit();
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
@@ -632,7 +639,7 @@ void UnitInfoState::handle(Action *action)
 		if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
 			action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
-			_game->popState();
+			exit();
 		}
 	}
 }
@@ -658,7 +665,7 @@ void UnitInfoState::btnPrevClick(Action *)
 	}
 	else
 	{
-		_game->popState();
+		exit();
 	}
 }
 
@@ -683,8 +690,14 @@ void UnitInfoState::btnNextClick(Action *)
 	}
 	else
 	{
-		_game->popState();
+		exit();
 	}
+}
+
+void UnitInfoState::exit()
+{
+	}
+	_game->popState();
 }
 
 }

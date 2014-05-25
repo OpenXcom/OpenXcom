@@ -73,6 +73,8 @@ public:
 	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
+	/// exit the state.
+	void exit();
 };
 
 }
