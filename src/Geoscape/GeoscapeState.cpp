@@ -2016,6 +2016,10 @@ void GeoscapeState::handleDogfights()
 		{
 			_minimizedDogfights++;
 		}
+		else
+		{
+			_globe->rotateStop();
+		}
 		(*d)->think();
 		if((*d)->dogfightEnded())
 		{
@@ -2064,6 +2068,7 @@ void GeoscapeState::startDogfight()
 		if(!_zoomInEffectTimer->isRunning())
 		{
 			_zoomInEffectTimer->start();
+			_globe->rotateStop();
 		}
 	}
 	else
