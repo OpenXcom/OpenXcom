@@ -34,6 +34,8 @@ public:
 	Production (const RuleManufacture * rules, int amount);
 	int getAmountTotal () const;
 	void setAmountTotal (int);
+	bool getInfiniteAmount () const;
+	void setInfiniteAmount (bool);
 	int getTimeSpent () const;
 	void setTimeSpent (int);
 	int getAmountProduced () const;
@@ -49,6 +51,7 @@ public:
 private:
 	const RuleManufacture * _rules;
 	int _amount;
+	bool _infinite;
 	int _timeSpent;
 	int _engineers;
 	bool _sell;

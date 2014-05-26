@@ -30,7 +30,6 @@
 #include "../Engine/Timer.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Options.h"
-#include "../Menu/OptionsBaseState.h"
 #include "../Engine/Screen.h"
 
 namespace OpenXcom
@@ -133,7 +132,7 @@ void DefeatState::screenClick(Action *)
 	else
 	{
 		_game->popState();
-		OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
 		_game->setState(new MainMenuState(_game));
 		_game->setSavedGame(0);

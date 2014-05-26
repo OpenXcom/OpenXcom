@@ -264,6 +264,7 @@ openxcom_SOURCES = \
 	src/Engine/CatFile.h \
 	src/Engine/CrossPlatform.cpp \
 	src/Engine/CrossPlatform.h \
+	src/Engine/DosFont.h \
 	src/Engine/Exception.cpp \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \

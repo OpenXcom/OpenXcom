@@ -87,13 +87,16 @@ void Camera::minMaxInt(int *value, const int minValue, const int maxValue) const
  */
 void Camera::mousePress(Action *action, State *)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (Options::battleDragScrollButton != SDL_BUTTON_MIDDLE || (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 	{
-		up();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		down();
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		{
+			up();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		{
+			down();
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{
@@ -575,10 +578,12 @@ bool Camera::isOnScreen(const Position &mapPos) const
 	convertMapToScreen(mapPos, &screenPos);
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
-	return screenPos.x >= -40
+	return screenPos.x >= -32
 		&& screenPos.x <= _screenWidth + 24
 		&& screenPos.y >= -32
-		&& screenPos.y <= _screenHeight - 48;
+		&& ((screenPos.y <= _screenHeight + 8 && (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2 || screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32))
+		||
+		screenPos.y <= _screenHeight - 16);
 }
 
 /**

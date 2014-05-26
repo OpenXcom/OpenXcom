@@ -258,7 +258,9 @@ void ManufactureInfoState::setAssignedEngineer()
 	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 	std::wostringstream s4;
-	s4 << L">\x01" << _production->getAmountTotal();
+	s4 << L">\x01";
+	if (_production->getInfiniteAmount()) s4 << Language::utf8ToWstr("∞");
+	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
 }
 
@@ -408,13 +410,21 @@ void ManufactureInfoState::moreUnitRelease(Action * action)
 }
 
 /**
- * Increases the units to produce to 999.
+ * Increases the "units to produce", in the case of a right-click, to infinite, and 1 on left-click.
  * @param action A pointer to an Action.
  */
 void ManufactureInfoState::moreUnitClick(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moreUnit(999 - _production->getAmountTotal());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moreUnit(1);
+	if (_production->getInfiniteAmount()) return; // We can't increase over infinite :)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_production->setInfiniteAmount(true);
+		setAssignedEngineer();
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		moreUnit(1);
+	}
 }
 
 /**
@@ -458,8 +468,18 @@ void ManufactureInfoState::lessUnitRelease(Action * action)
  */
 void ManufactureInfoState::lessUnitClick(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessUnit(std::numeric_limits<int>::max());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) lessUnit(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+	||  action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_production->setInfiniteAmount(false);
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+		|| _production->getAmountTotal() <= _production->getAmountProduced())
+		{ // So the produced item number is increased over the planned, OR it was simply a right-click
+			_production->setAmountTotal(_production->getAmountProduced()+1);
+			setAssignedEngineer();
+		}
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT) lessUnit(1);
+	}
 }
 
 /**

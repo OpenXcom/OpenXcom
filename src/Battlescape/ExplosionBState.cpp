@@ -159,7 +159,7 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
-		BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
+		BattleUnit *target = t->getUnit();
 		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
@@ -295,6 +295,7 @@ void ExplosionBState::explode()
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
+		p += Position(8,8,0);
 		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
 	}
 

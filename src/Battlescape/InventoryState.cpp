@@ -23,6 +23,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Interface/Text.h"
@@ -63,6 +64,10 @@ static const int _applyTemplateBtnY = 113;
  */
 InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false);
+
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
 	// Create objects
@@ -416,9 +421,16 @@ void InventoryState::btnOkClick(Action *)
 	}
 	if (_battleGame->getTileEngine())
 	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
 		_battleGame->getTileEngine()->applyGravity(inventoryTile);
 		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 		_battleGame->getTileEngine()->recalculateFOV();
+	}
+	else
+	{
+		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		_game->getScreen()->resetDisplay(false);
 	}
 }
 

@@ -705,7 +705,8 @@ void DebriefingState::prepareDebriefing()
 				}
 				// 10 points for recovery
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+				RuleResearch *research = _game->getRuleset()->getResearch(type);
+				if (research != 0 && _game->getSavedGame()->isResearchAvailable(research, _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
 					// more points if it's not researched
 					addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10);

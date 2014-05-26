@@ -29,7 +29,6 @@
 #include "../Engine/Sound.h"
 #include "../Resource/ResourcePack.h"
 #include "MainMenuState.h"
-#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -40,8 +39,9 @@ namespace OpenXcom
  */
 IntroState::IntroState(Game *game, bool wasLetterBoxed) : State(game), _wasLetterBoxed(wasLetterBoxed)
 {
-	_oldVolume = Options::musicVolume;
-	Options::musicVolume = Options::soundVolume;
+	_oldMusic = Options::musicVolume;
+	_oldSound = Options::soundVolume;
+	Options::musicVolume = Options::soundVolume = std::max(_oldMusic, _oldSound);
 	_game->setVolume(Options::soundVolume, Options::musicVolume, -1);
 	_introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
@@ -445,7 +445,8 @@ void IntroState::init()
 		}
 		_game->getScreen()->clear();
 		_game->getScreen()->flip();
-		Options::musicVolume = _oldVolume;
+		Options::musicVolume = _oldMusic;
+		Options::soundVolume = _oldSound;
 		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 
 #ifndef __NO_MUSIC
@@ -453,7 +454,7 @@ void IntroState::init()
 		Music::stop();
 #endif
 	}
-	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
 	_game->setState(new MainMenuState(_game));
 }
