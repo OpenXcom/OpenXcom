@@ -2073,7 +2073,5 @@ void Globe::stopScrolling(Action *action)
 {
 	SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, getX(), getY());
-	action->getDetails()->motion.x = _xBeforeMouseScrolling; action->getDetails()->motion.y = _yBeforeMouseScrolling;
-	_game->getCursor()->handle(action);
 }
 }
