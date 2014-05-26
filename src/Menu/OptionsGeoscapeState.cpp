@@ -92,7 +92,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
 	
 	std::vector<std::string> dragScrolls;
-	dragScrolls.push_back("STR_NONE");
+	dragScrolls.push_back("STR_DISABLED");
 	dragScrolls.push_back("STR_LEFT_MOUSE_BUTTON");
 	dragScrolls.push_back("STR_MIDDLE_MOUSE_BUTTON");
 	dragScrolls.push_back("STR_RIGHT_MOUSE_BUTTON");

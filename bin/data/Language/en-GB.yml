@@ -1349,3 +1349,4 @@ en-GB:
   STR_BOTH_HANDS_MUST_BE_EMPTY: "Both hands must be empty!"
   STR_MOUSEWHEEL_SPEED: "Mouse wheel scroll speed"
   STR_MOUSEWHEEL_SPEED_DESC: "Adjusts the number of lines scrolled in lists with each increment of the mouse wheel."
+  STR_DISABLED: "Disabled"
