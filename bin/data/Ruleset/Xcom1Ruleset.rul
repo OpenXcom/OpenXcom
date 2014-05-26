@@ -6924,10 +6924,7 @@ research:
     points: 25
     dependencies:
       - STR_ETHEREAL_COMMANDER
-      - STR_ETHEREAL_ENGINEER
       - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_MEDIC
-      - STR_ETHEREAL_NAVIGATOR
       - STR_ETHEREAL_SOLDIER
       - STR_SECTOID_LEADER
       - STR_SECTOID_COMMANDER
@@ -7148,35 +7145,6 @@ research:
       - STR_ALIEN_TERROR
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
-  - name: STR_SNAKEMAN_MEDIC
-    cost: 192
-    points: 50
-    lookup: STR_SNAKEMAN
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-    getOneFree:
-      - STR_SECTOID
-      - STR_MUTON
-      - STR_ETHEREAL
-      - STR_FLOATER
-      - STR_CHRYSSALID
-      - STR_SECTOPOD
-      - STR_CYBERDISC
-      - STR_SILACOID
-      - STR_CELATID
-      - STR_REAPER
-      - STR_SECTOID_CORPSE
-      - STR_SNAKEMAN_CORPSE
-      - STR_MUTON_CORPSE
-      - STR_ETHEREAL_CORPSE
-      - STR_FLOATER_CORPSE
-      - STR_CHRYSSALID_CORPSE
-      - STR_SECTOPOD_CORPSE
-      - STR_CYBERDISC_CORPSE
-      - STR_SILACOID_CORPSE
-      - STR_CELATID_CORPSE
-      - STR_REAPER_CORPSE
   - name: STR_SNAKEMAN_LEADER
     cost: 192
     points: 50
