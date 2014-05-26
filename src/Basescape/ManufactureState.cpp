@@ -194,9 +194,9 @@ void ManufactureState::fillProductionList()
 		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
 		std::wostringstream s2;
+		if ((*iter)->getSellItems()) s2 << "$";
 		s2 << (*iter)->getAmountProduced() << "/";
-		if ((*iter)->getSellItems())
-			s2 << "$$$";
+		if ((*iter)->getInfiniteAmount()) s2 << Language::utf8ToWstr("∞");
 		else s2 << (*iter)->getAmountTotal();
 		std::wostringstream s3;
 		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());

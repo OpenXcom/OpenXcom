@@ -23,6 +23,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
+#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -49,6 +50,9 @@ namespace OpenXcom
  */
 UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent, bool fromInventory, bool mindProbe) : State(game), _unit(unit), _parent(parent), _fromInventory(fromInventory), _mindProbe(mindProbe)
 {
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false);
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
 	// Create objects
@@ -616,7 +620,14 @@ void UnitInfoState::handle(Action *action)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_game->popState();
+			exit();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			if (action->getRelativeYMouse() > 20)
+			{
+				exit();
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
@@ -632,7 +643,7 @@ void UnitInfoState::handle(Action *action)
 		if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
 			action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
-			_game->popState();
+			exit();
 		}
 	}
 }
@@ -658,7 +669,7 @@ void UnitInfoState::btnPrevClick(Action *)
 	}
 	else
 	{
-		_game->popState();
+		exit();
 	}
 }
 
@@ -683,8 +694,18 @@ void UnitInfoState::btnNextClick(Action *)
 	}
 	else
 	{
-		_game->popState();
+		exit();
 	}
+}
+
+void UnitInfoState::exit()
+{
+	if (!_fromInventory)
+	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
+	}
+	_game->popState();
 }
 
 }

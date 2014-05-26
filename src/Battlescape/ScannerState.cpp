@@ -26,6 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Options.h"
 #include "../Interface/Text.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -44,6 +45,10 @@ namespace OpenXcom
  */
 ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _action(action)
 {
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false);
+
 	_surface1 = new InteractiveSurface(320, 200);
 	_surface2 = new InteractiveSurface(320, 200);
 	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
@@ -86,6 +91,8 @@ void ScannerState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
 		_game->popState();
 	}
 }

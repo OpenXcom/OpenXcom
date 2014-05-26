@@ -120,6 +120,10 @@ MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
  */
 MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action) : State (game), _targetUnit(targetUnit), _action(action)
 {
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false);
+
 	_unit = action->actor;
 	_item = action->weapon;
 	_surface = new InteractiveSurface(320, 200);
@@ -192,7 +196,7 @@ void MedikitState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->popState();
+		onEndClick(0);
 	}
 }
 
@@ -202,6 +206,8 @@ void MedikitState::handle(Action *action)
  */
 void MedikitState::onEndClick(Action *)
 {
+	Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+	_game->getScreen()->resetDisplay(false);
 	_game->popState();
 }
 
@@ -233,7 +239,7 @@ void MedikitState::onHealClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_game->popState();
+		onEndClick(0);
 	}
 }
 
@@ -259,13 +265,13 @@ void MedikitState::onStimulantClick(Action *)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
-			_game->popState();
+			onEndClick(0);
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_game->popState();
+		onEndClick(0);
 	}
 }
 
@@ -290,7 +296,7 @@ void MedikitState::onPainKillerClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_game->popState();
+		onEndClick(0);
 	}
 }
 

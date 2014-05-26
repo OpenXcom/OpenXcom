@@ -168,7 +168,7 @@ void MainMenuState::resize(int &dX, int &dY)
 {
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
-	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;
 	State::resize(dX, dY);

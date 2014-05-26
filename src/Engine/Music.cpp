@@ -124,7 +124,8 @@ void Music::pause()
 	if (!Options::mute)
 	{
 		Mix_PauseMusic();
-		Mix_HookMusic(NULL, NULL);
+		if (Mix_GetMusicType(0) == MUS_NONE)
+			Mix_HookMusic(NULL, NULL);
 	}
 #endif
 }
@@ -138,7 +139,8 @@ void Music::resume()
 	if (!Options::mute)
 	{
 		Mix_ResumeMusic();
-		Mix_HookMusic(AdlibMusic::player, NULL);
+		if (Mix_GetMusicType(0) == MUS_NONE)
+			Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
 }

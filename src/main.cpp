@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
 			return EXIT_SUCCESS;
 		std::ostringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		Options::baseXResolution = Options::displayWidth;
+		Options::baseYResolution = Options::displayHeight;
 		game = new Game(title.str());
 		game->setState(new StartState(game));
 		game->run();

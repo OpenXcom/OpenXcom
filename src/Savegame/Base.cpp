@@ -738,6 +738,7 @@ int Base::getUsedHangars() const
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
 		{
+			// This should be fixed on the case when (*i)->getInfiniteAmount() == TRUE
 			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
 		}
 	}

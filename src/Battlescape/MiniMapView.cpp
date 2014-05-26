@@ -246,11 +246,6 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewLevel()));
 		_redraw = true;
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-    // Closes the window on right-click.
-		_game->popState();
-	}
 }
 
 /**
@@ -291,37 +286,34 @@ void MiniMapView::mouseOver(Action *action, State *state)
 			_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance));
 
 		// Calculate the move
-		int newX;
-		int newY;
+		int newX, newY;
+		int scrollX, scrollY;
+
 		if (Options::battleDragScrollInvert)
 		{
-			_mouseScrollX += action->getDetails()->motion.xrel;
-			_mouseScrollY += action->getDetails()->motion.yrel;
-			newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
-			newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
-
-			// Keep the limits...
-			if (newX < -1 || _camera->getMapSizeX() < newX)
-			{
-				_mouseScrollX -= action->getDetails()->motion.xrel;
-				newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
-			}
-			if (newY < -1 || _camera->getMapSizeY() < newY)
-			{
-				_mouseScrollY -= action->getDetails()->motion.yrel;
-				newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
-			}
+			scrollX = action->getDetails()->motion.xrel;
+			scrollY = action->getDetails()->motion.yrel;
 		}
 		else
 		{
-			newX = _posBeforeMouseScrolling.x - (int)((double)_totalMouseMoveX / action->getXScale()) / 4;
-			newY = _posBeforeMouseScrolling.y - (int)((double)_totalMouseMoveY / action->getYScale()) / 4;
+			scrollX = -action->getDetails()->motion.xrel;
+			scrollY = -action->getDetails()->motion.yrel;
+		}
+		_mouseScrollX += scrollX;
+		_mouseScrollY += scrollY;
+		newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
+		newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
 
-			// Keep the limits...
-			if (newX < -1) newX = -1;
-			else if (_camera->getMapSizeX() < newX) newX = _camera->getMapSizeX();
-			if (newY < -1) newY = -1;
-			else if (_camera->getMapSizeY() < newY) newY = _camera->getMapSizeY();
+		// Keep the limits...
+		if (newX < -1 || _camera->getMapSizeX() < newX)
+		{
+			_mouseScrollX -= scrollX;
+			newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
+		}
+		if (newY < -1 || _camera->getMapSizeY() < newY)
+		{
+			_mouseScrollY -= scrollY;
+			newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
 		}
 
 		// Scrolling

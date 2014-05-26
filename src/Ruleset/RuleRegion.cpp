@@ -20,6 +20,7 @@
 #include <assert.h>
 #include "RuleRegion.h"
 #include "City.h"
+#include "../fmath.h"
 #include "../Engine/RNG.h"
 #include <math.h>
 
@@ -57,10 +58,10 @@ void RuleRegion::load(const YAML::Node &node)
 	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180);
-		_lonMax.push_back(areas[i][1] * M_PI / 180);
-		_latMin.push_back(areas[i][2] * M_PI / 180);
-		_latMax.push_back(areas[i][3] * M_PI / 180);
+		_lonMin.push_back(areas[i][0] * M_PI / 180.0);
+		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
+		_latMin.push_back(areas[i][2] * M_PI / 180.0);
+		_latMax.push_back(areas[i][3] * M_PI / 180.0);
 	}
 	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
 	if (const YAML::Node &cities = node["cities"])
@@ -92,7 +93,10 @@ void RuleRegion::load(const YAML::Node &node)
 			bool matching = false;
 			for (std::vector<City*>::iterator j = _cities.begin(); j != _cities.end() && !matching; ++j)
 			{
-				matching = ((*j)->getLatitude() == (*i).latMin * M_PI / 180 && (*j)->getLongitude() == (*i).lonMin * M_PI / 180 && (*i).latMax == (*i).latMin && (*i).lonMax == (*i).lonMin);
+				matching = (AreSame((*j)->getLatitude(), ((*i).latMin * M_PI / 180.0)) &&
+							AreSame((*j)->getLongitude(), ((*i).lonMin * M_PI / 180.0)) &&
+							AreSame((*i).latMax, (*i).latMin) &&
+							AreSame((*i).lonMax, (*i).lonMin));
 			}
 			if (matching)
 			{

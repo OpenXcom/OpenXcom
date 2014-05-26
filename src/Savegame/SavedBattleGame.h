@@ -57,7 +57,7 @@ private:
 	BattleUnit *_selectedUnit, *_lastSelectedUnit;
 	std::vector<Node*> _nodes;
 	std::vector<BattleUnit*> _units;
-	std::vector<BattleItem*> _items;
+	std::vector<BattleItem*> _items, _deleted;
 	Pathfinding *_pathfinding;
 	TileEngine *_tileEngine;
 	std::string _missionType;

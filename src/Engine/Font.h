@@ -28,6 +28,7 @@ namespace OpenXcom
 {
 
 class Surface;
+class Palette;
 
 /**
  * Takes care of loading and storing each character in a sprite font.
@@ -42,9 +43,9 @@ private:
 	static std::wstring _index;
 	static SDL_Color _palette[6];
 	Surface *_surface;
-	int _width, _height;
+	int _width, _height, _spacing;
 	std::map<wchar_t, SDL_Rect> _chars;
-	int _spacing; // For some reason the X-Com small font is smooshed together by one pixel...
+	bool _monospace;
 public:
 	/// Creates a blank font.
 	Font();
@@ -62,6 +63,8 @@ public:
 	static void setIndex(const std::wstring &index);
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
+	/// Generate the terminal font.
+	void loadTerminal();
 	/// Determines the size and position of each character in the font.
 	void init();
 	/// Gets a particular character from the font, with its real size.

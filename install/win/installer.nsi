@@ -92,7 +92,9 @@
 ;Languages
 
 	!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+	!insertmacro MUI_LANGUAGE "Czech"
 	!insertmacro MUI_LANGUAGE "French"
+	!insertmacro MUI_LANGUAGE "Finnish"
 	!insertmacro MUI_LANGUAGE "German"
 	!insertmacro MUI_LANGUAGE "Hungarian"
 	!insertmacro MUI_LANGUAGE "Russian"

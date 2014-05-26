@@ -98,9 +98,9 @@ public:
 	/// Gets the text's secondary color.
 	Uint8 getSecondaryColor() const;
 	/// Gets the rendered text's width.
-	int getTextWidth() const;
+	int getTextWidth(int line = -1) const;
 	/// Gets the rendered text's height.
-	int getTextHeight() const;
+	int getTextHeight(int line = -1) const;
 	/// Draws the text.
 	void draw();
 };

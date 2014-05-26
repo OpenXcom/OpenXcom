@@ -435,7 +435,7 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-					// special handling for a moving large unit.
+					// special handling for a moving unit.
 					if (mapPosition.y > 0)
 					{
 						Tile *tileNorth = _save->getTile(mapPosition - Position(0,1,0));
@@ -454,7 +454,7 @@ void Map::drawTerrain(Surface *surface)
 						/*
 						 * Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
 						 */
-						if (bu && bu->getVisible() && bu->getStatus() == STATUS_WALKING && bu->getArmor()->getSize() != 1 && tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
+						if (bu && bu->getVisible() && bu->getStatus() == STATUS_WALKING && tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
 							Position tileOffset = Position(16,-8,0);
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
@@ -568,16 +568,6 @@ void Map::drawTerrain(Surface *surface)
 									tileWestShade = 16;
 									westUnit = 0;
 								}
-								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
-								if (tmpSurface)
-								{
-									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() || tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-											&& tileWest->isDiscovered(1))
-										wallShade = tileWest->getShade();
-									else
-										wallShade = tileWestShade;
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
-								}
 								tmpSurface = tileWest->getSprite(MapData::O_WESTWALL);
 								if (tmpSurface && bu != unit)
 								{
@@ -588,8 +578,18 @@ void Map::drawTerrain(Surface *surface)
 										wallShade = tileWestShade;
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset() + tileOffset.y, wallShade, true);
 								}
-								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
 								if (tmpSurface)
+								{
+									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() || tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+											&& tileWest->isDiscovered(1))
+										wallShade = tileWest->getShade();
+									else
+										wallShade = tileWestShade;
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
+								}
+								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+								if (tmpSurface && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
 									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
@@ -1173,7 +1173,6 @@ void Map::setSelectorPosition(int mx, int my)
 {
 	int oldX = _selectorX, oldY = _selectorY;
 
-	if (!mx && !my) return; // cursor is offscreen
 	_camera->convertScreenToMap(mx, my + _spriteHeight/4, &_selectorX, &_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
@@ -1249,15 +1248,6 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		else
 			midphase = 1;
 	}
-	else if (dir == 2)
-	{
-		midphase = 1;
-	}
-	else if (dir == 6 || dir == 0)
-	{
-		midphase = endphase;
-	}
-
 	if (unit->getVerticalDirection())
 	{
 		midphase = 4;

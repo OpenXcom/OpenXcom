@@ -104,8 +104,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColumn(-1, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(4, 116, 80, 72, 30);
+	_lstSoldiers->setAlign(ALIGN_RIGHT, 3);
+	_lstSoldiers->setColumns(4, 114, 80, 62, 30);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(2);
@@ -118,7 +118,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 		_soldiers.push_back(*s);
 		if ((*s)->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+			ssStr << L"   " << (*s)->getCurrentStats()->psiStrength;
 		}
 		else
 		{
