@@ -2122,7 +2122,7 @@ void BattlescapeState::resize(int &dX, int &dY)
 void BattlescapeState::stopScrolling(Action *action)
 {
 	SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
-	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getHeight(), _map->getWidth());
+	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
 }
 
 }
