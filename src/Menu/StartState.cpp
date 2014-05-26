@@ -152,7 +152,7 @@ void StartState::init()
 		_game->initAudio();
 	}
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
 	addLine(ss.str());
 
