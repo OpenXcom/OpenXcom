@@ -69,6 +69,23 @@ void create()
 	_info.push_back(OptionInfo("asyncBlit", &asyncBlit, true));
 	_info.push_back(OptionInfo("keyboardMode", (int*)&keyboardMode, KEYBOARD_ON));
 #endif
+
+// this should probably be any small screen touch-device, i don't know the defines for all of them so i'll cover android and IOS as i imagine they're more common
+#ifdef __ANDROID_API__
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true));
+#elif __APPLE__
+	// todo: ask grussel how badly i messed this up.
+	#include "TargetConditionals.h"
+	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true));
+	#else
+		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false));
+	#endif
+#else
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false));
+#endif
+
+
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
