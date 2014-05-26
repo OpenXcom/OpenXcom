@@ -29,11 +29,11 @@ namespace OpenXcom
 std::wstring Font::_index = L"";
 
 SDL_Color Font::_palette[] = {{0, 0, 0, 0},
-							  {255, 255, 255, 0},
-							  {207, 207, 207, 0},
-							  {159, 159, 159, 0},
-							  {111, 111, 111, 0},
-							  {63, 63, 63, 0}};
+							  {255, 255, 255, 255},
+							  {207, 207, 207, 255},
+							  {159, 159, 159, 255},
+							  {111, 111, 111, 255},
+							  {63, 63, 63, 255}};
 
 /**
  * Initializes the font with a blank surface.
@@ -95,7 +95,7 @@ void Font::loadTerminal()
 	SDL_Surface *s = SDL_LoadBMP_RW(rw, 0);
 	SDL_FreeRW(rw);
 	_surface = new Surface(s->w, s->h);
-	SDL_Color terminal[2] = {{0, 0, 0, 0}, {185, 185, 185, 0}};
+	SDL_Color terminal[2] = {{0, 0, 0, 0}, {185, 185, 185, 255}};
 	_surface->setPalette(terminal, 0, 2);
 	SDL_BlitSurface(s, 0, _surface->getSurface(), 0);
 	SDL_FreeSurface(s);
