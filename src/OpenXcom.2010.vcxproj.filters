@@ -1725,6 +1725,9 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="fmath.h" />
+    <ClInclude Include="Engine\DosFont.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

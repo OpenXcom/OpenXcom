@@ -817,11 +817,8 @@ void XcomResourcePack::loadBattlescapeResources()
 	// incomplete chryssalid set: 1.0 data: stop loading.
 	if (!_sets["CHRYS.PCK"]->getFrame(225))
 	{
-		Log(LOG_FATAL) << "Version 1.0 data detected." << std::endl << std::endl << "please install the official patches" << std::endl
-			<< "from http://www.strategycore.co.uk/files/ufo-1.2/" << std::endl
-			<< "and http://www.strategycore.co.uk/files/ufo-1.4/" << std::endl;
-		;
-		throw Exception("Invalid data, please check logfile.");
+		Log(LOG_FATAL) << "Version 1.0 data detected";
+		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version");
 	}
 	s.str("");
 	s << "GEODATA/" << "LOFTEMPS.DAT";

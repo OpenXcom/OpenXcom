@@ -149,7 +149,10 @@ void Text::initText(Font *big, Font *small, Language *lang)
 {
 	_big = big;
 	_small = small;
-	_lang = lang;
+	if (lang == 0)
+		_lang = new Language();
+	else
+		_lang = lang;
 	_font = _small;
 	processText();
 }
@@ -294,33 +297,49 @@ Uint8 Text::getSecondaryColor() const
 
 /**
  * Returns the rendered text's height. Useful to check if wordwrap applies.
+ * @param line Line to get the height, or -1 to get whole text height.
  * @return Height in pixels.
  */
-int Text::getTextHeight() const
+int Text::getTextHeight(int line) const
 {
-	int height = 0;
-	for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
+	if (line == -1)
 	{
-		height += *i;
+		int height = 0;
+		for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
+		{
+			height += *i;
+		}
+		return height;
 	}
-	return height;
+	else
+	{
+		return _lineHeight[line];
+	}
 }
 
 /**
-  * Returns the rendered text's width.
-  * @return Width in pixels.
-  */
-int Text::getTextWidth() const
+ * Returns the rendered text's width.
+ * @param line Line to get the width, or -1 to get whole text width.
+ * @return Width in pixels.
+ */
+int Text::getTextWidth(int line) const
 {
-	int width = 0;
-	for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); ++i)
+	if (line == -1)
 	{
-		if (*i > width)
+		int width = 0;
+		for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); ++i)
 		{
-			width = *i;
+			if (*i > width)
+			{
+				width = *i;
+			}
 		}
+		return width;
 	}
-	return width;
+	else
+	{
+		return _lineWidth[line];
+	}
 }
 
 /**
@@ -329,7 +348,7 @@ int Text::getTextWidth() const
  */
 void Text::processText()
 {
-	if (_font == 0 || _lang == 0)
+	if (_font == 0)
 	{
 		return;
 	}
