@@ -131,4 +131,15 @@ void BattlescapeMessage::blit(Surface *surface)
 	_text->blit(surface);
 }
 
+/*
+ * Special handling for setting the height of the battlescape message.
+ * @param height the new height.
+ */
+void BattlescapeMessage::setHeight(int height)
+{
+	Surface::setHeight(height);
+	_window->setHeight(height);
+	_text->setHeight(height);
+}
+
 }

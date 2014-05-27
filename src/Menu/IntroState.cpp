@@ -438,6 +438,7 @@ void IntroState::init()
 				pal2[color].r = (((int)pal[color].r) * i) / 20;
 				pal2[color].g = (((int)pal[color].g) * i) / 20;
 				pal2[color].b = (((int)pal[color].b) * i) / 20;
+				pal2[color].unused = pal[color].unused;
 			}
 			_game->getScreen()->setPalette(pal2, 0, 256, true);
 			_game->getScreen()->flip();

@@ -20,6 +20,7 @@
 #include "Globe.h"
 #include <cmath>
 #include <fstream>
+#include <algorithm>
 #include "../fmath.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -373,6 +374,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 	_zoom = _game->getSavedGame()->getGlobeZoom();
+	_zoomOld = _zoom;
 	
 	setupRadii(width, height);
 
@@ -424,15 +426,15 @@ Globe::~Globe()
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
 {
 	// Orthographic projection
-	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon - _cenLon));
-	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
+	*x = _cenX + (Sint16)floor(_radius * cos(lat) * sin(lon - _cenLon));
+	*y = _cenY + (Sint16)floor(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
 
 void Globe::polarToCart(double lon, double lat, double *x, double *y) const
 {
 	// Orthographic projection
-	*x = _cenX + _radius[_zoom] * cos(lat) * sin(lon - _cenLon);
-	*y = _cenY + _radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon));
+	*x = _cenX + _radius * cos(lat) * sin(lon - _cenLon);
+	*y = _cenY + _radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon));
 }
 
 
@@ -451,7 +453,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	y -= _cenY;
 
 	double rho = sqrt((double)(x*x + y*y));
-	double c = asin(rho / _radius[_zoom]);
+	double c = asin(rho / _radius);
 	if ( AreSame(rho, 0.0) )
 	{
 		*lat = _cenLat;
@@ -667,15 +669,25 @@ void Globe::rotateStopLat()
 }
 
 /**
+ * Changes the current globe zoom factor.
+ * @param zoom New zoom.
+ */
+void Globe::setZoom(size_t zoom)
+{
+	_zoom = std::min(std::max(zoom, (size_t)0u), _zoomRadius.size() - 1);
+	_radius = _zoomRadius[_zoom];
+	_game->getSavedGame()->setGlobeZoom(_zoom);
+	invalidate();
+}
+
+/**
  * Increases the zoom level on the globe.
  */
 void Globe::zoomIn()
 {
-	if (_zoom < _radius.size() - 1)
+	if (_zoom < _zoomRadius.size() - 1)
 	{
-		_zoom++;
-		_game->getSavedGame()->setGlobeZoom(_zoom);
-		invalidate();
+		setZoom(_zoom + 1);
 	}
 }
 
@@ -686,9 +698,7 @@ void Globe::zoomOut()
 {
 	if (_zoom > 0)
 	{
-		_zoom--;
-		_game->getSavedGame()->setGlobeZoom(_zoom);
-		invalidate();
+		setZoom(_zoom - 1);
 	}
 }
 
@@ -697,9 +707,10 @@ void Globe::zoomOut()
  */
 void Globe::zoomMin()
 {
-	_zoom = 0;
-	_game->getSavedGame()->setGlobeZoom(_zoom);
-	invalidate();
+	if (_zoom > 0)
+	{
+		setZoom(0);
+	}
 }
 
 /**
@@ -707,9 +718,68 @@ void Globe::zoomMin()
  */
 void Globe::zoomMax()
 {
-	_zoom = _radius.size() - 1;
-	_game->getSavedGame()->setGlobeZoom(_zoom);
-	invalidate();
+	if (_zoom < _zoomRadius.size() - 1)
+	{
+		setZoom(_zoomRadius.size() - 1);
+	}
+}
+
+/**
+ * Stores the zoom used before a dogfight.
+ */
+void Globe::saveZoomDogfight()
+{
+	_zoomOld = _zoom;
+}
+
+/**
+ * Zooms the globe smoothly into dogfight level.
+ * @return Is the globe already zoomed in?
+ */
+bool Globe::zoomDogfightIn()
+{
+	if (_zoom < DOGFIGHT_ZOOM)
+	{
+		double radiusNow = _radius;
+		if (radiusNow + _radiusStep >= _zoomRadius[DOGFIGHT_ZOOM])
+		{
+			setZoom(DOGFIGHT_ZOOM);
+		}
+		else
+		{
+			if (radiusNow + _radiusStep >= _zoomRadius[_zoom + 1])
+				_zoom++;
+			setZoom(_zoom);
+			_radius = radiusNow + _radiusStep;
+		}
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Zooms the globe smoothly out of dogfight level.
+ * @return Is the globe already zoomed out?
+ */
+bool Globe::zoomDogfightOut()
+{
+	if (_zoom > _zoomOld)
+	{
+		double radiusNow = _radius;
+		if (radiusNow - _radiusStep <= _zoomRadius[_zoomOld])
+		{
+			setZoom(_zoomOld);
+		}
+		else
+		{
+			if (radiusNow - _radiusStep <= _zoomRadius[_zoom - 1])
+				_zoom--;
+			setZoom(_zoom);
+			_radius = radiusNow - _radiusStep;
+		}
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -881,9 +951,9 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 	for (std::list<Polygon*>::iterator i = polygons->begin(); i != polygons->end(); ++i)
 	{
 		// Is quad on the back face?
-		float closest = 0.0;
-		float z;
-		float furthest = 0.0;
+		double closest = 0.0;
+		double z;
+		double furthest = 0.0;
 		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
 			z = cos(_cenLat) * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - _cenLon) + sin(_cenLat) * sin((*i)->getLatitude(j));
@@ -1010,7 +1080,7 @@ void Globe::draw()
 void Globe::drawOcean()
 {
 	lock();
-	drawCircle(_cenX+1, _cenY, _radius[_zoom]+20, Palette::blockOffset(12)+0);
+	drawCircle(_cenX+1, _cenY, _radius+20, Palette::blockOffset(12)+0);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1043,7 +1113,7 @@ void Globe::drawLand()
 
 /**
  * Get position of sun from point on globe
- * @param lon lontidue of position
+ * @param lon longitude of position
  * @param lat latitude of position 
  * @return position of sun
  */
@@ -1989,18 +2059,9 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
  * Checks if the globe is zoomed in to it's maximum.
  * @return Returns true if globe is at max zoom, otherwise returns false.
  */
-bool Globe::isZoomedInToMax() const
+size_t Globe::getZoom() const
 {
-	return (_zoom == _radius.size() - 1);
-}
-
-/**
- * Checks if the globe is zoomed out to it's maximum.
- * @return Returns true if globe is at max zoom, otherwise returns false.
- */
-bool Globe::isZoomedOutToMax() const
-{
-	return (_zoom == 0);
+	return _zoom;
 }
 
 /*
@@ -2042,25 +2103,28 @@ void Globe::resize()
  */
 void Globe::setupRadii(int width, int height)
 {
-	_radius.clear();
+	_zoomRadius.clear();
 
-	_radius.push_back(0.45*height);
-	_radius.push_back(0.60*height);
-	_radius.push_back(0.90*height);
-	_radius.push_back(1.40*height);
-	_radius.push_back(2.25*height);
-	_radius.push_back(3.60*height);
+	_zoomRadius.push_back(0.45*height);
+	_zoomRadius.push_back(0.60*height);
+	_zoomRadius.push_back(0.90*height);
+	_zoomRadius.push_back(1.40*height);
+	_zoomRadius.push_back(2.25*height);
+	_zoomRadius.push_back(3.60*height);
 
-	_earthData.resize(_radius.size());
+	_radius = _zoomRadius[_zoom];
+	_radiusStep = (_zoomRadius[DOGFIGHT_ZOOM] - _zoomRadius[0]) / 10.0;
+
+	_earthData.resize(_zoomRadius.size());
 	//filling normal field for each radius
 
-	for(size_t r = 0; r<_radius.size(); ++r)
+	for(size_t r = 0; r<_zoomRadius.size(); ++r)
 	{
 		_earthData[r].resize(width * height);
 		for(int j=0; j<height; ++j)
 			for(int i=0; i<width; ++i)
 			{
-				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
+				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _zoomRadius[r], i+.5, j+.5);
 			}
 	}
 }

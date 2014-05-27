@@ -47,6 +47,7 @@ private:
 	bool _fromInventory, _mindProbe;
 
 	Surface *_bg;
+	InteractiveSurface *_exit;
 	Text *_txtName;
 
 	Text *_txtTimeUnits, *_txtEnergy, *_txtHealth, *_txtFatalWounds, *_txtBravery, *_txtMorale, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtMelee, *_txtStrength;
@@ -73,8 +74,8 @@ public:
 	void btnPrevClick(Action *action);
 	/// Handler for clicking the Next button.
 	void btnNextClick(Action *action);
-	/// exit the state.
-	void exit();
+	/// Handler for exiting the state.
+	void exitClick(Action *action);
 };
 
 }

@@ -103,7 +103,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 	_txtEdgeScroll->setText(tr("STR_EDGE_SCROLL"));
 
 	std::vector<std::string> edgeScrolls;
-	edgeScrolls.push_back("STR_NONE");
+	edgeScrolls.push_back("STR_DISABLED");
 	edgeScrolls.push_back("STR_TRIGGER_SCROLL");
 	edgeScrolls.push_back("STR_AUTO_SCROLL");
 
@@ -119,7 +119,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
 	
 	std::vector<std::string> dragScrolls;
-	dragScrolls.push_back("STR_NONE");
+	dragScrolls.push_back("STR_DISABLED");
 	dragScrolls.push_back("STR_LEFT_MOUSE_BUTTON");
 	dragScrolls.push_back("STR_MIDDLE_MOUSE_BUTTON");
 	dragScrolls.push_back("STR_RIGHT_MOUSE_BUTTON");

@@ -36,9 +36,10 @@ class SavedBattleGame;
  */
 class MiniMapState : public State
 {
-	InteractiveSurface * _surface;
-	MiniMapView * _miniMapView;
-	Text * _txtLevel;
+	Surface * _bg;
+	MiniMapView *_miniMapView;
+	InteractiveSurface *_btnLvlUp, *_btnLvlDwn, *_btnOk;
+	Text *_txtLevel;
 	Timer *_timerAnimate;
 	/// Handles Minimap animation.
 	void animate();

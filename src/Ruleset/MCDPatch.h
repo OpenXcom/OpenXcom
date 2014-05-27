@@ -31,7 +31,7 @@ class MapDataSet;
 class MCDPatch
 {
 private:
-	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight, _specialTypes, _armors, _explosives;
+	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight, _specialTypes, _armors, _explosives, _flammabilities, _fuels, _HEBlocks;
 	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
 public:
 	/// Creates an MCD Patch.

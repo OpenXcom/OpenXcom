@@ -55,6 +55,10 @@ std::string StartState::error;
  */
 StartState::StartState(Game *game) : State(game)
 {
+	//updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+
 	Options::baseXResolution = Options::displayWidth;
 	Options::baseYResolution = Options::displayHeight;
 	_game->getScreen()->resetDisplay(false);
@@ -148,7 +152,7 @@ void StartState::init()
 		_game->initAudio();
 	}
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
 	addLine(ss.str());
 

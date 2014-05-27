@@ -42,7 +42,7 @@ private:
 	Timer *_timer;
 
 	SDL_Thread *_thread;
-	std::wstringstream _output;
+	std::wostringstream _output;
 public:
 	static LoadingPhase loading;
 	static std::string error;

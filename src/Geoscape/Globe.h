@@ -48,12 +48,13 @@ private:
 	static const int NUM_LANDSHADES = 48;
 	static const int NUM_SEASHADES = 72;
 	static const int NEAR_RADIUS = 25;
+	static const int DOGFIGHT_ZOOM = 3;
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
 	double _cenLon, _cenLat, _rotLon, _rotLat, _hoverLon, _hoverLat;
 	Sint16 _cenX, _cenY;
-	size_t _zoom;
+	size_t _zoom, _zoomOld;
 	SurfaceSet *_texture;
 	Game *_game;
 	Surface *_markers, *_countries, *_radars;
@@ -63,12 +64,13 @@ private:
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 	FastLineClip *_clipper;
+	double _radius, _radiusStep;
 	///normal of each pixel in earth globe per zoom level
 	std::vector<std::vector<Cord> > _earthData;
 	///data sample used for noise in shading
 	std::vector<Sint16> _randomNoiseData;
 	///list of dimension of earth on screen per zoom level
-	std::vector<double> _radius;
+	std::vector<double> _zoomRadius;
 
 	bool _isMouseScrolling, _isMouseScrolled;
 	int _xBeforeMouseScrolling, _yBeforeMouseScrolling;
@@ -77,6 +79,8 @@ private:
 	int _totalMouseMoveX, _totalMouseMoveY;
 	bool _mouseMovedOverThreshold;
 
+	/// Sets the globe zoom factor.
+	void setZoom(size_t zoom);
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
 	/// Return latitude of last visible to player point on given longitude.
@@ -134,6 +138,14 @@ public:
 	void zoomMin();
 	/// Zooms the globe maximum.
 	void zoomMax();
+	/// Saves the zoom level for dogfights.
+	void saveZoomDogfight();
+	/// Zooms the globe in for dogfights.
+	bool zoomDogfightIn();
+	/// Zooms the globe out for dogfights.
+	bool zoomDogfightOut();
+	/// Gets the current zoom.
+	size_t getZoom() const;
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.
@@ -182,10 +194,6 @@ public:
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.
 	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const;
-	/// Checks if current globe zoom level is at maximum.
-	bool isZoomedInToMax() const;
-	/// Checks if current globe zoom level is at minimum.
-	bool isZoomedOutToMax() const;
 	/// Get the localized text.
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
