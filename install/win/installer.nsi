@@ -97,6 +97,7 @@
 	!insertmacro MUI_LANGUAGE "Finnish"
 	!insertmacro MUI_LANGUAGE "German"
 	!insertmacro MUI_LANGUAGE "Hungarian"
+	!insertmacro MUI_LANGUAGE "Italian"
 	!insertmacro MUI_LANGUAGE "Russian"
 	!insertmacro MUI_LANGUAGE "PortugueseBR"
 	!insertmacro MUI_LANGUAGE "Polish"
