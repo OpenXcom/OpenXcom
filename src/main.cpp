@@ -23,7 +23,6 @@
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Options.h"
-#include "Engine/Screen.h"
 #include "Menu/StartState.h"
 
 /** @mainpage

@@ -87,7 +87,7 @@ void UnitFallBState::think()
 			unit = _parent->getSave()->getFallingUnits()->erase(unit);
 			continue;
 		}
-		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition()));
+		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition(), true));
 		Tile *tileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(0,0,-1));
 		for (int x = size; x >= 0; x--)
 		{

@@ -45,6 +45,7 @@ New features:
 - Added ironman mode.
 - Multithreading added to startup loading.
 - Shortcut added to enable/disable input grabbing.
+- Mousewheel scroll speed is now configurable.
 
   Geoscape:
 - Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.
@@ -65,6 +66,8 @@ New features:
 - Storage limit enforcement option added, complete with "overflowed item" management screen.
 - Drag scroll added.
 - Melee accuracy now shown on soldier stat screens.
+- Manufacture auto sale button added to manufacture screen.
+- Background now filled out in higher base resolutions.
   
   Battlescape:
 - Inventory: Control-click an item to attempt to swap it between the ground and your soldier's inventory.

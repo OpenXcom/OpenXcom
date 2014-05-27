@@ -6924,10 +6924,7 @@ research:
     points: 25
     dependencies:
       - STR_ETHEREAL_COMMANDER
-      - STR_ETHEREAL_ENGINEER
       - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_MEDIC
-      - STR_ETHEREAL_NAVIGATOR
       - STR_ETHEREAL_SOLDIER
       - STR_SECTOID_LEADER
       - STR_SECTOID_COMMANDER
@@ -7148,35 +7145,6 @@ research:
       - STR_ALIEN_TERROR
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
-  - name: STR_SNAKEMAN_MEDIC
-    cost: 192
-    points: 50
-    lookup: STR_SNAKEMAN
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-    getOneFree:
-      - STR_SECTOID
-      - STR_MUTON
-      - STR_ETHEREAL
-      - STR_FLOATER
-      - STR_CHRYSSALID
-      - STR_SECTOPOD
-      - STR_CYBERDISC
-      - STR_SILACOID
-      - STR_CELATID
-      - STR_REAPER
-      - STR_SECTOID_CORPSE
-      - STR_SNAKEMAN_CORPSE
-      - STR_MUTON_CORPSE
-      - STR_ETHEREAL_CORPSE
-      - STR_FLOATER_CORPSE
-      - STR_CHRYSSALID_CORPSE
-      - STR_SECTOPOD_CORPSE
-      - STR_CYBERDISC_CORPSE
-      - STR_SILACOID_CORPSE
-      - STR_CELATID_CORPSE
-      - STR_REAPER_CORPSE
   - name: STR_SNAKEMAN_LEADER
     cost: 192
     points: 50
@@ -9269,7 +9237,7 @@ MCDPatches:
       - MCDIndex: 48
         bigWall: 2
       - MCDIndex: 54
-        TUFly: 2
+        TUSlide: 2
       - MCDIndex: 56
         terrainHeight: -7
   - type: LIGHTNIN
@@ -9335,6 +9303,37 @@ MCDPatches:
         bigWall: 2
       - MCDIndex: 15
         bigWall: 2
+  - type: U_BITS
+    data:
+      - MCDIndex: 6
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 7
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+  - type: U_BASE
+    data:
+      - MCDIndex: 9
+        TUFly: 2
+      - MCDIndex: 10
+        deathTile: 30
+      - MCDIndex: 17
+        armor: 60
+        HEBlock: 60
+      - MCDIndex: 22
+        flammability: 40
+        fuel: 4
+      - MCDIndex: 23
+        flammability: 40
+        fuel: 4
+      - MCDIndex: 24
+        flammability: 40
+        fuel: 4
+      - MCDIndex: 25
+        flammability: 40
+        fuel: 4
 # Mountain terrain death tile fix
   - type: MOUNT
     data:
@@ -9408,6 +9407,12 @@ MCDPatches:
         TUWalk: 4
         TUFly: 4
         TUSlide: 4
+  - type: URBITS
+    data:
+      - MCDIndex: 6
+        TUFly: 2
+      - MCDIndex: 7
+        TUFly: 2
 extraSprites:
   - type: Pathfinding
     files:
