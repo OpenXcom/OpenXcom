@@ -11,7 +11,7 @@
 ;Defines
 
 	!define GAME_NAME "OpenXcom"
-	!define GAME_VERSION "0.9"
+	!define GAME_VERSION "1.0"
 	!define GAME_AUTHOR "OpenXcom Developers"	
 	
 ;--------------------------------
