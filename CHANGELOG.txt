@@ -9,52 +9,54 @@ New features:
   -- Added support for custom images in the UFO craft preview window.
   -- Implemented a list weight value for items, which determines where they appear in buy/sell lists.
   -- Allow for resizing of UI surfaces through rulesets.
-  -- Allow for setting max range on weapons
+  -- Allow for setting max range on weapons.
+  -- Allow for setting producedItems for manufacture.
   -- Rulesets will now internally number themselves and offset IDs by 1000 to avoid conflicts intelligently.
 - Begun development on loading TFTD content, specifically .BDY files.
-- Various translation updates, including: Polish, Romanian.
-- Updated soldier names: Italian, Belgian, Congolese Dutch, Greek, Kenyan, Korean, Indian, Polynesian, Slovakian.
+- Various translation updates, including new languages: Dutch, Finnish, Greek, Norweigan, Portuguese (BR), Slovak, Swedish, Turkish.
+- Localized installer in multiple languages.
+- Updated soldier names: Italian, Belgian, Congolese, Dutch, Greek, French, Kenyan, Korean, Indian, Polynesian, Slovakian.
 - New Battle will now load available terrains from the ruleset instead of having them hardcoded.
 - New Battle now allows unlimited items to be assigned to the craft.
-- Showing some details of a savegame on the save screen by mouse hovering.
-- New Advanced-Option: Psi-Strength Evaluation after the appropriate research has been completed. Default: OFF
-- New attribute in the manufacture section of the ruleset: producedItems
-- Implemented weighting for which soldier look is chosen by which area. This should decrease the likelyhood of races not matching names to realistic levels.
-- Screen is now centered on higher resolution.
-- Mouse capture option added.
-- Updated YAML library to 0.5.
-- Transitioned Translation system to GetLocalization rather than maintaining it manually.
-- Complete overhaul of menu system, now totally consistent between main menu/geoscape/battlescape.
-- Saved Games will now indicate the in-game date and time, and if appropriate, turn number.
+- Implemented weighting for which soldier look is chosen by which area. This should decrease the likelihood of races not matching names to realistic levels.
+- Screen is now centered on higher base resolutions.
+- Mouse capture option added, as well as key shortcut.
+- New language format, system language auto-detected on first start.
+- Complete overhaul of pause menu, now totally consistent between geoscape/battlescape.
+- Options can be changed mid-game.
+- Saved Games will now indicate the system save time, in-game date and time, and if appropriate, turn number.
 - Saved Games can now be sorted by creation date or name.
 - Combo Box and Slider functionality added.
-- Scroll bars added to text lists
+- Scroll bars added to text lists.
 - Options menu completely overhauled.
+  -- Most hidden options now available on the menu.
+  -- All options have in-game descriptions.
   -- UI volume now adjustable.
-  -- Internal game resolution may be adjusted for both battlescape and geoscape individually.
+  -- Audio format adjustable.
+  -- New display options: Borderless, Resizable, Letterboxing.
+  -- Internal game resolution may be adjusted for battlescape and geoscape separately.
   -- All kinds of in-game timings are now adjustable, so you can make it run like your old 286, or pentium.
   -- Mods can now be activated from in-game, and don't require a restart.
   -- Many more advanced options added, most of which were previously omitted for requiring a restart.
-  -- Many UFOextender and XComUtil options added (either as advanced options or individual mods)
+  -- Many UFOextender and XComUtil options added (either as advanced options or individual mods).
+  -- Mousewheel scroll speed is now configurable.
+  -- FPS limiter added.
 - New Battle menu completely overhauled.
 - Support for old or modded savedgames improved, including warnings about potential incompatibilities.
 - Multiline support added for textlists.
 - Support added for multiple data folders.
-- FPS limiter added.
 - Dedicated auto-save and quick-save slots added.
 - Added ironman mode.
-- Multithreading added to startup loading.
-- Shortcut added to enable/disable input grabbing.
-- Mousewheel scroll speed is now configurable.
+- New loading screen with better error handling.
 
   Geoscape:
 - Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.
 - When areas don't have mission data set, they will now fall back to data for an area that does.
 - Psionic training at any time option added: allows adding/removing soldiers from psionic training at your discretion rather than on a monthly basis, and updates their progress daily.*
-- Fields added to craft rulesets for further modability.
+- Fields added to craft rulesets for further moddability.
 - Added "Sack" button to soldier info screen.
 - Added inventory screen to craft equip screen.
-- Added estimates for craft repair/refuel times
+- Added estimates for craft repair/refuel/rearm times.
 - Alien Containment management screen added.
 - Soldier Memorial screen added to keep track of Xcom casualties.
 - Hotkeys for base selection added.
@@ -67,10 +69,15 @@ New features:
 - Drag scroll added.
 - Melee accuracy now shown on soldier stat screens.
 - Manufacture auto sale button added to manufacture screen.
+- Infinite quantity added to manufacture screen.
 - Background now filled out in higher base resolutions.
+- Added various Go To Base shortcuts in Geoscape popups.
+- Added right-click on craft in Intercept screen to center on it.
+- Added right-click on soldier in Craft screen to show their stats.
+- New Advanced-Option: View soldier's Psi-Strength after the appropriate research has been completed.*
   
   Battlescape:
-- Inventory: Control-click an item to attempt to swap it between the ground and your soldier's inventory.
+- Inventory: Ctrl-click an item to attempt to swap it between the ground and your soldier's inventory.
 - Inventory: Added ability to define paper dolls for non-player units.
 - Alt-click can now be used as an alternative to right-clicking.
 - Various soldier weapon display changes:
@@ -84,7 +91,6 @@ New features:
 - Path preview option updated: displays yellow when you can move to a spot but are unable to perform auto shot (or the type of shot you have on reserve) with your remaining TUs.
 - Path preview option updated: can now be set to show arrows, remaining TUs, or both.*
 - Units will no longer poke their heads through floors above them when standing on tall objects.
-- Prime grenade buttons over 10 now work
 - AI almost completely re-written from scratch, should more closely resemble vanilla.
 - Painkillers from the medikit now work.
 - Tooltips added for all buttons.
@@ -121,19 +127,19 @@ New features:
 Bugfixes:
 
   General:
-- Fixed "classic mouse behaviour" and made it the default. (You should no longer be able to hold down the left mouse button and drag it down a list, incrementing several items)
-- Various Linux and OS X-related fixes.
+- Fixed "classic mouse behaviour" and made it the default. (You should now be able to hold down the left mouse button and drag it down a list, incrementing several items)
+- Various Linux and OSX-related fixes.
 - Renamable fields no longer accept blank strings. (ie. no more bases, interceptors, or soldiers named "")
 - Can now set the config folder via command line switch (-user)
-- Added sprites fixed for OSX.
+- Fixed loading data from multiple folders.
+- Extra sprites fixed for OSX.
 - Game icon now correctly displayed in game window on all operating systems.
-- Palette system overhauled to prevent windows changing colours wrongly.
-- Letterboxing now clears screen edges properly.
+- Palette system overhauled to prevent windows changing colours incorrectly.
+- Fixed various bugs with Unicode handling in paths and strings.
+- Fixed various UI bugs on tablets.
   
   Geoscape:
-- Fixed various source files to properly #include other relevant files. (This should prevent errors compiling the code in some IDEs)
-- Fixed a compile error related to datatypes in visual studio 2012.
-- XCOM now correctly pays their first month's rent and maintenence in advance.
+- X-Com now correctly pays their first month's rent and maintenance in advance.
 - To avoid lawsuits, sacked soldiers no longer take their armour with them.
 - Crashed and landed UFOs no longer display a heading, even if that information is available.
 - If a base is lost and a craft from that base is following a UFO but running low on fuel, do not prompt the player to return the craft to the lost base.
@@ -142,7 +148,7 @@ Bugfixes:
 - When the game starts, play the "GMGEO1" music track, instead of choosing randomly.
 - When only one item remains to research and is added to the active projects, properly clear it from the "new projects" menu.
 - Research now consumes items only as appropriate.
-- Landed/Crashed UFOs will no longer try to detect Xcom bases.
+- Landed/Crashed UFOs will no longer try to detect X-Com bases.
 - Graphs screen scale corrected.
 - UFO flight-paths fixed to use correct areas for waypoint selection. Flight paths should now mimic vanilla (as much as something that's random can)
 - Crafts teleporting when over poles corrected.
@@ -155,6 +161,7 @@ Bugfixes:
   Battlescape:
 - Fixes to various UFOpaedia articles.
 - Loading saved games now correctly preserves the difficulty adjustments to alien stats.
+- Prime grenade buttons over 10 now work.
 - Alien soldiers now reserve less TUs for reaction fire, and commanders reserve more.
 - Stop turning when a new enemy is spotted, but ensure units will always face their targets when shooting.
 - Re-wrote the reaction fire code to implement fixes and changes, including:
@@ -167,7 +174,7 @@ Bugfixes:
 - Explosions now correctly cause fire.
 - Fixed strafing through doors.
 - Fixed the order of events in the battlescape loop.
-- Fixed a bug causing some tiles to inappropirately act transparent.
+- Fixed a bug causing some tiles to inappropriately act transparent.
 - Aliens have night vision again, as per the original game, spotting soldiers within 20 tiles regardless of light.
 - XCOM soldiers should now always spot aliens within 18 tiles, regardless of light, and 20 tiles in good light.
 - Inventory: Allow scrolling of items on the ground when only two tiles of empty space remain, instead of just one.
@@ -182,7 +189,7 @@ Bugfixes:
 - Fixed a crash on loading the battlescape.
 - Fixed line of sight errors for certain walls.
 - Fixed a crash bug relating to automatically ending battles.
-- Tank inventories will no longer open during the cydonia phase two transition.
+- Tank inventories will no longer open during the Cydonia phase two transition.
 - Properly reset the turn counter for phase two of Cydonia.
 - Improved attribution of grenade kills.
 - Fixed issues with shooting blaster bombs directly into walls not damaging nearby units.
@@ -220,8 +227,6 @@ Bugfixes:
 - Z-axis scrolling corrected.
 - Large unit rendering fixed to no longer be drawn through walls.
 - Sprite drawing routines revised.
-
-
 
 Version 0.9 (07-05-2013)
 -------------------------
