@@ -213,7 +213,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_cbxLanguage->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
 	std::vector<std::wstring> filterNames;
-	filterNames.push_back(L"-");
+	filterNames.push_back(tr("STR_DISABLED"));
 	filterNames.push_back(L"Scale");
 	filterNames.push_back(L"HQX");
 	_filters.push_back("");
