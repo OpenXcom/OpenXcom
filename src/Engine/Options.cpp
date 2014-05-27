@@ -70,22 +70,6 @@ void create()
 	_info.push_back(OptionInfo("keyboardMode", (int*)&keyboardMode, KEYBOARD_ON));
 #endif
 
-// this should probably be any small screen touch-device, i don't know the defines for all of them so i'll cover android and IOS as i imagine they're more common
-#ifdef __ANDROID_API__
-	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true));
-#elif __APPLE__
-	// todo: ask grussel how badly i messed this up.
-	#include "TargetConditionals.h"
-	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true));
-	#else
-		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false));
-	#endif
-#else
-	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false));
-#endif
-
-
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
@@ -152,6 +136,21 @@ void create()
 	_info.push_back(OptionInfo("newSeedOnLoad", &newSeedOnLoad, false, "STR_NEWSEEDONLOAD", "STR_GENERAL"));
 	_info.push_back(OptionInfo("mousewheelSpeed", &mousewheelSpeed, 3, "STR_MOUSEWHEEL_SPEED", "STR_GENERAL"));
 	_info.push_back(OptionInfo("changeValueByMouseWheel", &changeValueByMouseWheel, 0, "STR_CHANGEVALUEBYMOUSEWHEEL", "STR_GENERAL"));
+
+// this should probably be any small screen touch-device, i don't know the defines for all of them so i'll cover android and IOS as i imagine they're more common
+#ifdef __ANDROID_API__
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+#elif __APPLE__
+	// todo: ask grussel how badly i messed this up.
+	#include "TargetConditionals.h"
+	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+	#else
+		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+	#endif
+#else
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+#endif
 
 	_info.push_back(OptionInfo("geoDragScrollInvert", &geoDragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_GEOSCAPE")); // true drags away from the cursor, false drags towards (like a grab)
 	_info.push_back(OptionInfo("aggressiveRetaliation", &aggressiveRetaliation, false, "STR_AGGRESSIVERETALIATION", "STR_GEOSCAPE"));
