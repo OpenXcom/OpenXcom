@@ -51,8 +51,8 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		_game->getScreen()->resetDisplay(false);
 	}
-	_surface1 = new InteractiveSurface(320, 200);
-	_surface2 = new InteractiveSurface(320, 200);
+	_bg = new InteractiveSurface(320, 200);
+	_scan = new Surface(320, 200);
 	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
 
 	if (_game->getScreen()->getDY() > 50)
@@ -63,14 +63,16 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
-	add(_surface2);
+	add(_scan);
 	add(_scannerView);
-	add(_surface1);
+	add(_bg);
 
 	centerAllSurfaces();
 
-	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_surface1);
-	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_surface2);
+	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_bg);
+	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_scan);
+	_bg->onMouseClick((ActionHandler)&ScannerState::exitClick);
+	_bg->onKeyboardPress((ActionHandler)&ScannerState::exitClick, Options::keyCancel);
 
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&ScannerState::animate);
@@ -93,12 +95,7 @@ void ScannerState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (Options::maximizeInfoScreens)
-		{
-			Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
-			_game->getScreen()->resetDisplay(false);
-		}
-		_game->popState();
+		exitClick(action);
 	}
 }
 
@@ -127,5 +124,18 @@ void ScannerState::think ()
 	_timerAnimate->think(this, 0);
 }
 
+/**
+ * Exits the screen.
+ * @param action Pointer to an action.
+ */
+void ScannerState::exitClick(Action *)
+{
+	if (Options::maximizeInfoScreens)
+	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
+	}
+	_game->popState();
+}
 
 }

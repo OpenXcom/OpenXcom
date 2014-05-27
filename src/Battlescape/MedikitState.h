@@ -36,9 +36,10 @@ struct BattleAction;
  */
 class MedikitState : public State
 {
-	InteractiveSurface *_surface;
+	Surface *_bg;
 	MedikitView *_medikitView;
 	Text *_pkText, *_stimulantTxt,  *_healTxt, *_partTxt, *_woundTxt;
+	InteractiveSurface *_endButton, *_stimulantButton, *_pkButton, *_healButton;
 	BattleUnit * _targetUnit, *_unit;
 	BattleItem *_item;
 	BattleAction *_action;

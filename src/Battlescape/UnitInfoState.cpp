@@ -30,7 +30,7 @@
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Engine/Surface.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
@@ -60,6 +60,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
+	_exit = new InteractiveSurface(320, 180, 0, 20);
 	_txtName = new Text(288, 17, 16, 4);
 
 	int yPos = 38;
@@ -164,6 +165,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
+	add(_exit);
 	add(_txtName);
 
 	add(_txtTimeUnits);
@@ -248,6 +250,10 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
+
+	_exit->onMouseClick((ActionHandler)&UnitInfoState::exitClick);
+	_exit->onKeyboardPress((ActionHandler)&UnitInfoState::exitClick, Options::keyCancel);
+	_exit->onKeyboardPress((ActionHandler)&UnitInfoState::exitClick, Options::keyBattleStats);
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
@@ -623,14 +629,7 @@ void UnitInfoState::handle(Action *action)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			exit();
-		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
-			if (action->getRelativeYMouse() > 20)
-			{
-				exit();
-			}
+			exitClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
@@ -641,21 +640,13 @@ void UnitInfoState::handle(Action *action)
 			if (!_mindProbe) btnPrevClick(action);
 		}
 	}
-	if (action->getDetails()->type == SDL_KEYDOWN)
-	{
-		if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
-			action->getDetails()->key.keysym.sym == Options::keyBattleStats)
-		{
-			exit();
-		}
-	}
 }
 
 /**
-* Selects the previous unit.
-* @param action Pointer to an action.
-*/
-void UnitInfoState::btnPrevClick(Action *)
+ * Selects the previous unit.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::btnPrevClick(Action *action)
 {
 	if (_parent)
 	{ // so we are here from a Battlescape Game
@@ -672,15 +663,15 @@ void UnitInfoState::btnPrevClick(Action *)
 	}
 	else
 	{
-		exit();
+		exitClick(action);
 	}
 }
 
 /**
-* Selects the next unit.
-* @param action Pointer to an action.
-*/
-void UnitInfoState::btnNextClick(Action *)
+ * Selects the next unit.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::btnNextClick(Action *action)
 {
 	if (_parent)
 	{ // so we are here from a Battlescape Game
@@ -697,11 +688,15 @@ void UnitInfoState::btnNextClick(Action *)
 	}
 	else
 	{
-		exit();
+		exitClick(action);
 	}
 }
 
-void UnitInfoState::exit()
+/**
+ * Exits the screen.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::exitClick(Action *)
 {
 	if (!_fromInventory && Options::maximizeInfoScreens)
 	{

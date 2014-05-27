@@ -48,21 +48,21 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 		_game->getScreen()->resetDisplay(false);
 	}
 
-	_surface = new InteractiveSurface(320, 200);
+	_bg = new Surface(320, 200);
 	_miniMapView = new MiniMapView(221, 148, 48, 16, game, camera, battleGame);
-	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
-	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
-	InteractiveSurface * btnOk = new InteractiveSurface(32, 32, 275, 145);
+	_btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
+	_btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
+	_btnOk = new InteractiveSurface(32, 32, 275, 145);
 	_txtLevel = new Text(20, 25, 281, 75);
 	
 	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
-	add(_surface);
+	add(_bg);
 	add(_miniMapView);
-	add(btnLvlUp);
-	add(btnLvlDwn);
-	add(btnOk);
+	add(_btnLvlUp);
+	add(_btnLvlDwn);
+	add(_btnOk);
 	add(_txtLevel);
 
 	centerAllSurfaces();
@@ -75,15 +75,15 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 		current.h = 151;
 		current.x = 46;
 		current.y = 14;
-		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(&current, Palette::blockOffset(15)+15);
 	}
 
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
-	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
-	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
-	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
-	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyCancel);
-	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyBattleMap);
+	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
+	_btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
+	_btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
+	_btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyBattleMap);
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
