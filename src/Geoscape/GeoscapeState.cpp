@@ -168,9 +168,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	_timeSpeed = _btn5Secs;
 	_gameTimer = new Timer(Options::geoClockSpeed);
 
-	_zoomInEffectTimer = new Timer(50);
-	_zoomOutEffectTimer = new Timer(50);
-	_dogfightStartTimer = new Timer(50);
+	_zoomInEffectTimer = new Timer(Options::dogfightSpeed+10);
+	_zoomOutEffectTimer = new Timer(Options::dogfightSpeed+10);
+	_dogfightStartTimer = new Timer(Options::dogfightSpeed+10);
 
 	_txtDebug = new Text(200, 18, 0, 0);
 
@@ -449,7 +449,7 @@ void GeoscapeState::blit()
  */
 void GeoscapeState::handle(Action *action)
 {
-	if(_dogfights.size() == _minimizedDogfights)
+	if (_dogfights.size() == _minimizedDogfights)
 	{
 		State::handle(action);
 	}
@@ -766,7 +766,7 @@ void GeoscapeState::time5Seconds()
 			{
 				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
-					if((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+					if ((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
 						break;
@@ -774,7 +774,7 @@ void GeoscapeState::time5Seconds()
 				}
 				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
 				{
-					if((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+					if ((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
 						break;
@@ -827,11 +827,11 @@ void GeoscapeState::time5Seconds()
 					(*j)->returnToBase();
 				}
 			}
-			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
+			if (!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
 			{
 				(*j)->think();
 			}
-			if((*j)->reachedDestination())
+			if ((*j)->reachedDestination())
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
@@ -843,16 +843,16 @@ void GeoscapeState::time5Seconds()
 					{
 					case Ufo::FLYING:
 						// Not more than 4 interceptions at a time.
-						if(_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
+						if (_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
 							++j;
 							continue;
 						}
-						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
+						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
 							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 
-							if(!_dogfightStartTimer->isRunning())
+							if (!_dogfightStartTimer->isRunning())
 							{
 								_pause = true;
 								timerReset();
@@ -868,7 +868,7 @@ void GeoscapeState::time5Seconds()
 					case Ufo::DESTROYED: // Just before expiration
 						if ((*j)->getNumSoldiers() > 0 || (*j)->getNumVehicles() > 0)
 						{
-							if(!(*j)->isInDogfight())
+							if (!(*j)->isInDogfight())
 							{
 								// look up polygons texture
 								int texture, shade;
@@ -908,7 +908,7 @@ void GeoscapeState::time5Seconds()
 				{
 					if (b->isDiscovered())
 					{
-						if((*j)->getNumSoldiers() > 0)
+						if ((*j)->getNumSoldiers() > 0)
 						{
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
@@ -931,12 +931,12 @@ void GeoscapeState::time5Seconds()
 	{
 		if ((*i)->getStatus() == Ufo::DESTROYED)
 		{
-			if(!(*i)->getFollowers()->empty())
+			if (!(*i)->getFollowers()->empty())
 			{
 				// Remove all dogfights with this UFO.
 				for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
 				{
-					if((*d)->getUfo() == (*i))
+					if ((*d)->getUfo() == (*i))
 					{
 						delete *d;
 						d = _dogfights.erase(d);
@@ -1059,7 +1059,7 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
+			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				// Base found
@@ -1074,7 +1074,7 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
+			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
@@ -1475,7 +1475,7 @@ void GeoscapeState::time1Day()
 		std::vector<ResearchProject*> finished;
 		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
 		{
-			if((*iter)->step())
+			if ((*iter)->step())
 			{
 				finished.push_back(*iter);
 			}
@@ -1496,7 +1496,7 @@ void GeoscapeState::time1Day()
 					)->getCorpseGeoscape()
 				); // ;)
 			}
-			if((*iter)->getRules()->getGetOneFree().size() != 0)
+			if ((*iter)->getRules()->getGetOneFree().size() != 0)
 			{
 				std::vector<std::string> possibilities;
 				for(std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
@@ -1504,23 +1504,23 @@ void GeoscapeState::time1Day()
 					bool newFound = true;
 					for(std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
 					{
-						if(*f == (*discovered)->getName())
+						if (*f == (*discovered)->getName())
 						{
 							newFound = false;
 						}
 					}
-					if(newFound)
+					if (newFound)
 					{
 						possibilities.push_back(*f);
 					}
 				}
-				if(possibilities.size() !=0)
+				if (possibilities.size() !=0)
 				{
 					int pick = RNG::generate(0, possibilities.size()-1);
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
-					if(bonus->getLookup() != "")
+					if (bonus->getLookup() != "")
 					{
 						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
 					}
@@ -1528,12 +1528,12 @@ void GeoscapeState::time1Day()
 			}
 			const RuleResearch * newResearch = research;
 			std::string name = research->getLookup() == "" ? research->getName() : research->getLookup();
-			if(_game->getSavedGame()->isResearched(name))
+			if (_game->getSavedGame()->isResearched(name))
 			{
 				newResearch = 0;
 			}
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
-			if(research->getLookup() != "")
+			if (research->getLookup() != "")
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
 			}
@@ -1719,11 +1719,11 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi, _globe));
 
 	// Handle Xcom Operatives discovering bases
-	if(!_game->getSavedGame()->getAlienBases()->empty() && RNG::percent(20))
+	if (!_game->getSavedGame()->getAlienBases()->empty() && RNG::percent(20))
 	{
 		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			if(!(*b)->isDiscovered())
+			if (!(*b)->isDiscovered())
 			{
 				(*b)->setDiscovered(true);
 				popup(new AlienBaseState(_game, *b, this));
@@ -1974,8 +1974,7 @@ void GeoscapeState::btnZoomOutRightClick(Action *)
  */
 void GeoscapeState::zoomInEffect()
 {
-	_globe->zoomIn();
-	if(_globe->isZoomedInToMax())
+	if (_globe->zoomDogfightIn())
 	{
 		_zoomInEffectDone = true;
 		_zoomInEffectTimer->stop();
@@ -1987,8 +1986,7 @@ void GeoscapeState::zoomInEffect()
  */
 void GeoscapeState::zoomOutEffect()
 {
-	_globe->zoomOut();
-	if(_globe->isZoomedOutToMax())
+	if (_globe->zoomDogfightOut())
 	{
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
@@ -2002,7 +2000,7 @@ void GeoscapeState::zoomOutEffect()
 void GeoscapeState::handleDogfights()
 {
 	// If all dogfights are minimized rotate the globe, etc.
-	if(_dogfights.size() == _minimizedDogfights)
+	if (_dogfights.size() == _minimizedDogfights)
 	{
 		_pause = false;
 		_gameTimer->think(this, 0);
@@ -2012,7 +2010,7 @@ void GeoscapeState::handleDogfights()
 	std::list<DogfightState*>::iterator d = _dogfights.begin();
 	while(d != _dogfights.end())
 	{
-		if((*d)->isMinimized())
+		if ((*d)->isMinimized())
 		{
 			_minimizedDogfights++;
 		}
@@ -2021,9 +2019,9 @@ void GeoscapeState::handleDogfights()
 			_globe->rotateStop();
 		}
 		(*d)->think();
-		if((*d)->dogfightEnded())
+		if ((*d)->dogfightEnded())
 		{
-			if((*d)->isMinimized())
+			if ((*d)->isMinimized())
 			{
 				_minimizedDogfights--;
 			}
@@ -2035,7 +2033,7 @@ void GeoscapeState::handleDogfights()
 			++d;
 		}
 	}
-	if(_dogfights.empty())
+	if (_dogfights.empty())
 	{
 		_zoomOutEffectTimer->start();
 	}
@@ -2050,7 +2048,7 @@ int GeoscapeState::minimizedDogfightsCount()
 	int minimizedDogfights = 0;
 	for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
-		if((*d)->isMinimized())
+		if ((*d)->isMinimized())
 		{
 			++minimizedDogfights;
 		}
@@ -2063,12 +2061,13 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
-	if(!_globe->isZoomedInToMax())
+	if (_globe->getZoom() < 3)
 	{
-		if(!_zoomInEffectTimer->isRunning())
+		if (!_zoomInEffectTimer->isRunning())
 		{
-			_zoomInEffectTimer->start();
+			_globe->saveZoomDogfight();
 			_globe->rotateStop();
+			_zoomInEffectTimer->start();
 		}
 	}
 	else
@@ -2099,7 +2098,7 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 	int slotNo = 1;
 	for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
-		if((*d)->getInterceptionNumber() == slotNo)
+		if ((*d)->getInterceptionNumber() == slotNo)
 		{
 			++slotNo;
 		}
