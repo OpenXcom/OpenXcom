@@ -45,7 +45,7 @@ class MiniMapView : public InteractiveSurface
 	bool _isMouseScrolled;
 	int _xBeforeMouseScrolling, _yBeforeMouseScrolling;
 	int _mouseScrollX, _mouseScrollY;
-	Position _posBeforeMouseScrolling;
+	Position _posBeforeMouseScrolling, _cursorPosition;
 	Uint32 _mouseScrollingStartTime;
 	int _totalMouseMoveX, _totalMouseMoveY;
 	bool _mouseMovedOverThreshold;
@@ -68,6 +68,7 @@ public:
 	int down ();
 	/// Updates the minimap animation.
 	void animate();
+	void stopScrolling(Action *action);
 };
 
 }
