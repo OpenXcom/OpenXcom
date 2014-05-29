@@ -45,7 +45,6 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "../Menu/TestState.h"
-#include "../Menu/OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -285,18 +284,28 @@ void Game::run()
 					break;
 			}
 		}
-
+		
 		// Process rendering
 		if (runningState != PAUSED)
 		{
 			// Process logic
 			_states.back()->think();
+			_fpsCounter->think();
+			if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
+			{
+				// Update our FPS delay time based on the time of the last draw.
+				_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame) - 1;
+			}
+			else
+			{
+				_timeUntilNextFrame = 0;
+			}
 
 			if (_init && _timeUntilNextFrame <= 0)
 			{
 				// make a note of when this frame update occured.
 				_timeOfLastFrame = SDL_GetTicks();
-				_fpsCounter->think();
+				_fpsCounter->addFrame();
 				_screen->clear();
 				std::list<State*>::iterator i = _states.end();
 				do
@@ -313,16 +322,6 @@ void Game::run()
 				_cursor->blit(_screen->getSurface());
 			}
 			_screen->flip();
-		}
-
-		if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
-		{
-			// Update our FPS delay time based on the time of the last draw.
-			_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame);
-		}
-		else
-		{
-			_timeUntilNextFrame = 0;
 		}
 
 		// Initialize active state

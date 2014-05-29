@@ -95,7 +95,6 @@ void FpsCounter::handle(Action *action)
  */
 void FpsCounter::think()
 {
-	_frames++;
 	_timer->think(0, this);
 }
 
@@ -119,4 +118,8 @@ void FpsCounter::draw()
 	_text->blit(this);
 }
 
+void FpsCounter::addFrame()
+{
+	_frames++;
+}
 }
