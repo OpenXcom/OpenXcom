@@ -57,7 +57,7 @@ const double Game::VOLUME_GRADIENT = 10.0;
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -128,7 +128,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create blank language
 	_lang = new Language();
 
-	_framestarttime = 0;
+	_timeOfLastFrame = 0;
 }
 
 /**
@@ -290,11 +290,13 @@ void Game::run()
 		if (runningState != PAUSED)
 		{
 			// Process logic
-			_fpsCounter->think();
 			_states.back()->think();
 
-			if (_init)
+			if (_init && _timeUntilNextFrame <= 0)
 			{
+				// make a note of when this frame update occured.
+				_timeOfLastFrame = SDL_GetTicks();
+				_fpsCounter->think();
 				_screen->clear();
 				std::list<State*>::iterator i = _states.end();
 				do
@@ -311,7 +313,17 @@ void Game::run()
 				_cursor->blit(_screen->getSurface());
 			}
 			_screen->flip();
-		}		
+		}
+
+		if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
+		{
+			// Update our FPS delay time based on the time of the last draw.
+			_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame);
+		}
+		else
+		{
+			_timeUntilNextFrame = 0;
+		}
 
 		// Initialize active state
 		if (!_init)
@@ -337,19 +349,7 @@ void Game::run()
 		switch (runningState)
 		{
 			case RUNNING: 
-				if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
-				{
-					_delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - _framestarttime);
-					if (_delaytime > 0)
-					{
-						SDL_Delay((Uint32)_delaytime);
-					}
-					_framestarttime = SDL_GetTicks();
-				}
-				else
-				{
-					SDL_Delay(1); //Save CPU from going 100%
-				}
+				SDL_Delay(1); //Save CPU from going 100%
 				break;
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
