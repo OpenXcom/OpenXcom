@@ -109,10 +109,10 @@ namespace OpenXcom
 		ArticleDefinitionList::iterator it;
 
 		_article_list.clear();
-		Ufopaedia::list(_game, _section, _article_list);
+		Ufopaedia::list(_game->getSavedGame(), _game->getRuleset(), _section, _article_list);
 		for(it = _article_list.begin(); it!=_article_list.end(); ++it)
 		{
-			_lstSelection->addRow(1, Ufopaedia::buildText(_game, (*it)->title).c_str());
+			_lstSelection->addRow(1, tr((*it)->title).c_str());
 		}
 	}
 

@@ -21,6 +21,7 @@
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleStateText.h"
 #include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Resource/ResourcePack.h"
@@ -55,11 +56,11 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 	}
 
 	ArticleStateText::~ArticleStateText()
