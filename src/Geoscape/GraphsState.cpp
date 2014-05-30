@@ -341,7 +341,8 @@ void GraphsState::btnGeoscapeClick(Action *)
 }
 
 /**
- * Switches to the ufo country activity screen
+ * Switches to the UFO Region Activity screen.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnUfoRegionClick(Action *)
 {
@@ -361,7 +362,8 @@ void GraphsState::btnUfoRegionClick(Action *)
 }
 
 /**
- * Switches to the ufo country activity screen
+ * Switches to the UFO Country activity screen.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnUfoCountryClick(Action *)
 {
@@ -381,7 +383,8 @@ void GraphsState::btnUfoCountryClick(Action *)
 }
 
 /**
- * Switches to the xcom region activity screen
+ * Switches to the XCom Region activity screen.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnXcomRegionClick(Action *)
 {
@@ -401,7 +404,8 @@ void GraphsState::btnXcomRegionClick(Action *)
 }
 
 /**
- * Switches to the xcom country activity screen
+ * Switches to the XCom Country activity screen.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnXcomCountryClick(Action *)
 {
@@ -421,7 +425,8 @@ void GraphsState::btnXcomCountryClick(Action *)
 }
 
 /**
- * Switches to the income screen
+ * Switches to the Income screen.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnIncomeClick(Action *)
 {
@@ -442,7 +447,8 @@ void GraphsState::btnIncomeClick(Action *)
 }
 
 /**
- * Switches to the finances screen
+ * Switches to the Finances screen.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnFinanceClick(Action *)
 {
@@ -463,7 +469,8 @@ void GraphsState::btnFinanceClick(Action *)
 }
 
 /**
- * handles a click on a region button
+ * Handles a click on a region button.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnRegionListClick(Action * action)
 {
@@ -485,7 +492,8 @@ void GraphsState::btnRegionListClick(Action * action)
 }
 
 /**
- * handles a click on a country button
+ * Handles a click on a country button.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnCountryListClick(Action * action)
 {
@@ -507,7 +515,8 @@ void GraphsState::btnCountryListClick(Action * action)
 }
 
 /**
- * handles a click on a finances button
+ * handles a click on a finances button.
+ * @param action Pointer to an action.
  */
 void GraphsState::btnFinanceListClick(Action *action)
 {
@@ -571,6 +580,8 @@ void GraphsState::resetScreen()
 
 /**
  * updates the text on the vertical scale
+ * @param lowerLimit minimum value
+ * @param upperLimit maximum value
  */
 void GraphsState::updateScale(double lowerLimit, double upperLimit)
 {

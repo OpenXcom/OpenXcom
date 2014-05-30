@@ -88,7 +88,7 @@ Or if those variables aren't available:
 Choose whichever you prefer.
 
 
-2. Customization
+2. Configuration
 =================
 
 OpenXcom has a variety of game settings and extras that can be
@@ -96,7 +96,7 @@ customized, both in-game and out-game. These options are global
 and affect any old or new savegame.
 
 For more details please check the wiki:
-http://ufopaedia.org/index.php?title=Customizing_(OpenXcom)
+http://ufopaedia.org/index.php?title=Options_(OpenXcom)
 
 2.1. User Folder
 -----------------
@@ -133,7 +133,8 @@ http://code.google.com/p/yaml-cpp/
 
 The source code includes files for the following tools:
 
-- Microsoft Visual C++ 2010.
+- Microsoft Visual C++ 2010 or newer.
+- Xcode.
 - Makefile.
 - CMake.
 - Autotools.

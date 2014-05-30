@@ -46,7 +46,7 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param game Pointer to the game.
+ * @param save Pointer to the battle game.
  * @param unit Pointer to the unit.
  * @param node Pointer to the node the unit originates from.
  */
@@ -99,7 +99,7 @@ void AlienBAIState::load(const YAML::Node &node)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
 YAML::Node AlienBAIState::save() const
 {
@@ -136,8 +136,7 @@ void AlienBAIState::exit()
 }
 
 /**
- * Runs any code the state needs to keep updating every
- * AI cycle.
+ * Runs any code the state needs to keep updating every AI cycle.
  * @param action (possible) AI action to execute after thinking is done.
  */
 void AlienBAIState::think(BattleAction *action)
@@ -1393,6 +1392,7 @@ void AlienBAIState::evaluateAIMode()
 /**
  * Find a position where we can see our target, and move there.
  * check the 11x11 grid for a position nearby where we can potentially target him.
+ * @return True if a possible position was found.
  */
 bool AlienBAIState::findFirePoint()
 {
@@ -1467,7 +1467,8 @@ bool AlienBAIState::findFirePoint()
  * @param attackingUnit The attacking unit.
  * @param radius How big the explosion will be.
  * @param diff Game difficulty.
- * @return True if it is worthwile creating an explosion in the target position.
+ * @param grenade Is the explosion coming from a grenade?
+ * @return True if it is worthwhile creating an explosion in the target position.
  */
 bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
@@ -1591,8 +1592,7 @@ void AlienBAIState::meleeAction()
 /**
  * Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
  *
- * Waypoint targetting: pick from any units currently spotted by our allies.
- * @param action Pointer to an action.
+ * Waypoint targeting: pick from any units currently spotted by our allies.
  */
 void AlienBAIState::wayPointAction()
 {
@@ -1666,8 +1666,7 @@ void AlienBAIState::wayPointAction()
 /**
  * Attempts to fire at an enemy we can see.
  *
- * Regular targetting: we can see an enemy, we have a gun, let's try to shoot.
- * @param action Pointer to an action.
+ * Regular targeting: we can see an enemy, we have a gun, let's try to shoot.
  */
 void AlienBAIState::projectileAction()
 {
@@ -1681,7 +1680,6 @@ void AlienBAIState::projectileAction()
 
 /**
  * Selects a fire method based on range, time units, and time units reserved for cover.
- * @param action Pointer to an action.
  */
 void AlienBAIState::selectFireMethod()
 {
@@ -1746,7 +1744,6 @@ void AlienBAIState::selectFireMethod()
 
 /**
  * Evaluates whether to throw a grenade at an enemy (or group of enemies) we can see.
- * @param action Pointer to an action.
  */
 void AlienBAIState::grenadeAction()
 {
@@ -1787,7 +1784,6 @@ void AlienBAIState::grenadeAction()
  * Psionic targetting: pick from any of the "exposed" units.
  * Exposed means they have been previously spotted, and are therefore "known" to the AI,
  * regardless of whether we can see them or not, because we're psychic.
- * @param action Pointer to an action.
  * @return True if a psionic attack is performed.
  */
 bool AlienBAIState::psiAction()
@@ -1892,7 +1888,6 @@ bool AlienBAIState::psiAction()
 
 /**
  * Performs a melee attack action.
- * @param action Pointer to an action.
  */
 void AlienBAIState::meleeAttack()
 {

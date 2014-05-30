@@ -3,14 +3,17 @@ Version 1.0 (In progress)
 New features:
   General:
 - Rudimentary mod support has been added to the ruleset loading, including:
+  -- Modular ruleset support.
   -- The ability to define extra strings, sounds and sprites.
   -- The starting date can now be set in the ruleset.
   -- Soldier stat caps are now acquired from the ruleset.
   -- Added support for custom images in the UFO craft preview window.
-  -- Implemented a list weight value for items, which determines where they appear in buy/sell lists.
+  -- Implemented a list weight value for items, which determines where they appear in ingame lists.
   -- Allow for resizing of UI surfaces through rulesets.
-  -- Allow for setting max range on weapons.
+  -- Allow for weapons to change max range, autoshots, blast radius, strength modifier, melee attack, dropoff, LOS, bullet speed, etc.
+  -- Allow for armors to change unit stats.
   -- Allow for setting producedItems for manufacture.
+  -- Allow for negative costs.
   -- Rulesets will now internally number themselves and offset IDs by 1000 to avoid conflicts intelligently.
 - Begun development on loading TFTD content, specifically .BDY files.
 - Various translation updates, including new languages: Dutch, Finnish, Greek, Norweigan, Portuguese (BR), Slovak, Swedish, Turkish.
@@ -18,7 +21,7 @@ New features:
 - Updated soldier names: Italian, Belgian, Congolese, Dutch, Greek, French, Kenyan, Korean, Indian, Polynesian, Slovakian.
 - New Battle will now load available terrains from the ruleset instead of having them hardcoded.
 - New Battle now allows unlimited items to be assigned to the craft.
-- Implemented weighting for which soldier look is chosen by which area. This should decrease the likelihood of races not matching names to realistic levels.
+- Implemented weighting for which soldier look is chosen by which origin. This should decrease the likelihood of races not matching names to realistic levels.
 - Screen is now centered on higher base resolutions.
 - Mouse capture option added, as well as key shortcut.
 - New language format, system language auto-detected on first start.
@@ -44,6 +47,7 @@ New features:
 - New Battle menu completely overhauled.
 - Support for old or modded savedgames improved, including warnings about potential incompatibilities.
 - Multiline support added for textlists.
+- Improved text input.
 - Support added for multiple data folders.
 - Dedicated auto-save and quick-save slots added.
 - Added ironman mode.
@@ -65,7 +69,7 @@ New features:
 - Fixed HWPs not reloading when new ammo arrived.
 - Added Prev/Next key shortcuts to Basescape soldier info.
 - Aircraft flight path line indicators added.
-- Storage limit enforcement option added, complete with "overflowed item" management screen.
+- Storage limit enforcement option added, complete with "overflowed item" management screen.*
 - Drag scroll added.
 - Melee accuracy now shown on soldier stat screens.
 - Manufacture auto sale button added to manufacture screen.
@@ -74,6 +78,7 @@ New features:
 - Added various Go To Base shortcuts in Geoscape popups.
 - Added right-click on craft in Intercept screen to center on it.
 - Added right-click on soldier in Craft screen to show their stats.
+- Ufopaedia now shows armor damage and stat modifiers.
 - New Advanced-Option: View soldier's Psi-Strength after the appropriate research has been completed.*
   
   Battlescape:

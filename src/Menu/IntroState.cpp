@@ -36,6 +36,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Intro screen.
  * @param game Pointer to the core game.
+ * @param wasLetterBoxed Was the game letterboxed?
  */
 IntroState::IntroState(Game *game, bool wasLetterBoxed) : State(game), _wasLetterBoxed(wasLetterBoxed)
 {

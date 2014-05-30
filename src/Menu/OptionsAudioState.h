@@ -50,15 +50,15 @@ public:
 	/// Cleans up the Audio Options state.
 	~OptionsAudioState();
 	/// Handler for changing the music slider.
-	void slrMusicVolumeChange(Action *);
+	void slrMusicVolumeChange(Action *action);
 	/// Handler for changing the sound slider.
-	void slrSoundVolumeChange(Action *);
+	void slrSoundVolumeChange(Action *action);
 	/// Handler for sound slider button release.
-	void slrSoundVolumeRelease(Action *);
+	void slrSoundVolumeRelease(Action *action);
     /// Handler for changing the sound slider.
-    void slrUiVolumeChange(Action *);
+    void slrUiVolumeChange(Action *action);
 	/// Handler for sound slider button release.
-    void slrUiVolumeRelease(Action *);
+    void slrUiVolumeRelease(Action *action);
     /// Handler for changing the Sample Rate combobox.
 	void cbxSampleRateChange(Action *action);
 	/// Handler for changing the Music Format combobox.

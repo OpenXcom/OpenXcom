@@ -193,9 +193,10 @@ int GameTime::getDay() const
 }
 
 /**
- * Returns a localizable-string representation of
- * the cardinal operator for the current ingame day.
- * @return Day string ID.
+ * Returns the localized representation of the current
+ * ingame day with the cardinal operator.
+ * @param lang Pointer to current language.
+ * @return Localized day string.
  */
 std::wstring GameTime::getDayString(Language *lang) const
 {

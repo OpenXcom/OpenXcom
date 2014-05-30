@@ -111,11 +111,11 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
-	_view->onKeyboardPress((ActionHandler)&BasescapeState::handleKeyPress);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
+	_mini->onKeyboardPress((ActionHandler)&BasescapeState::handleKeyPress);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 

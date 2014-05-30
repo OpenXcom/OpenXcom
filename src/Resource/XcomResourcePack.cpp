@@ -73,6 +73,8 @@ struct HairBleach
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
+ * @param extraSprites List of mod extra sprites.
+ * @param extraSounds List of mod extra sounds.
  */
 XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
 {
@@ -905,6 +907,7 @@ void XcomResourcePack::loadBattlescapeResources()
 /**
  * Determines if an image file is an acceptable format for the game.
  * @param extension Image file extension.
+ * @return True/false
  */
 bool XcomResourcePack::isImageFile(std::string extension)
 {

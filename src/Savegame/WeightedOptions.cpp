@@ -121,7 +121,7 @@ void WeightedOptions::load(const YAML::Node &nd)
 
 /**
  * Send the WeightedOption contents to a YAML::Emitter.
- * @param out The YAML emitter.
+ * @return YAML node.
  */
 YAML::Node WeightedOptions::save() const
 {

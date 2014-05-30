@@ -86,6 +86,7 @@ int CraftWeapon::getAmmo() const
 /**
  * Changes the ammo contained in this craft weapon.
  * @param ammo Weapon ammo.
+ * @return If the weapon ran out of ammo.
  */
 bool CraftWeapon::setAmmo(int ammo)
 {

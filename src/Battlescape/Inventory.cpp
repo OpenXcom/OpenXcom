@@ -50,6 +50,7 @@ namespace OpenXcom
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
+ * @param base Is the inventory being called from the basescape?
  */
 Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _groundOffset(0)
 {
@@ -331,6 +332,7 @@ void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 /**
  * Checks if an item in a certain slot position would
  * overlap with any other inventory item.
+ * @param unit Pointer to current unit.
  * @param item Pointer to battle item.
  * @param slot Inventory slot, or NULL if none.
  * @param x X position in slot.

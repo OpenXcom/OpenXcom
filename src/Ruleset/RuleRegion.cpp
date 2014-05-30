@@ -183,7 +183,8 @@ unsigned RuleRegion::getWeight() const
 /**
  * Gets a random point that is guaranteed to be inside the give zone.
  * If the region contains cities, they are the sites of zone 0 and the rest of the zones get one index higher.
- * @return A pair of longtitude and latitude.
+ * @param zone The target zone.
+ * @return A pair of longitude and latitude.
  */
 std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 {

@@ -64,6 +64,7 @@ RuleInventory::~RuleInventory()
 /**
  * Loads the inventory from a YAML file.
  * @param node YAML node.
+ * @param listOrder The list weight for this inventory.
  */
 void RuleInventory::load(const YAML::Node &node, int listOrder)
 {

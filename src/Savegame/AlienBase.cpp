@@ -126,7 +126,7 @@ void AlienBase::setAlienRace(const std::string &race)
 
 /**
  * Gets the alien base's battlescape status.
- * @return bool
+ * @return Is the base on the battlescape?
  */
 bool AlienBase::isInBattlescape() const
 {
@@ -135,7 +135,7 @@ bool AlienBase::isInBattlescape() const
 
 /**
  * Sets the alien base's battlescape status.
- * @param inbattle .
+ * @param inbattle True if it's in battle, False otherwise.
  */
 void AlienBase::setInBattlescape(bool inbattle)
 {
@@ -143,8 +143,8 @@ void AlienBase::setInBattlescape(bool inbattle)
 }
 
 /**
- * Gets the alien base's battlescape status.
- * @return bool.
+ * Gets the alien base's geoscape status.
+ * @return Has the base been discovered?
  */
 bool AlienBase::isDiscovered() const
 {
@@ -152,8 +152,8 @@ bool AlienBase::isDiscovered() const
 }
 
 /**
- * Sets the alien base's discovered status.
- * @param discovered.
+ * Sets the alien base's geoscape status.
+ * @param discovered Has the base been discovered?
  */
 void AlienBase::setDiscovered(bool discovered)
 {

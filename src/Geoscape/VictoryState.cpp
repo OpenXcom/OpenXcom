@@ -112,6 +112,7 @@ void VictoryState::think()
 /**
  * Shows the next screen in the slideshow
  * or goes back to the Main Menu.
+ * @param action Pointer to an action.
  */
 void VictoryState::screenClick(Action *)
 {

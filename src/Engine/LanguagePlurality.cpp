@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
  * Default plurality rules.
  * Provide rules for languages where 1 is singular and everything else is plural.
- * @langsuffixes one = 1; other = ...
+ * @note one = 1; other = ...
  */
 class OneSingular: public LanguagePlurality
 {
@@ -45,7 +45,7 @@ const char *OneSingular::getSuffix(unsigned n) const
 /**
  * Plurality rules where 0 is also singular.
  * Provide rules for languages where 0 and 1 are singular and everything else is plural.
- * @langsuffixes one = 0-1; other = ...
+ * @note one = 0-1; other = ...
  */
 class ZeroOneSingular : public LanguagePlurality
 {
@@ -66,7 +66,7 @@ const char *ZeroOneSingular::getSuffix(unsigned n) const
 /**
  * Plurality rules where there is no singular.
  * Provide rules for languages where everything is plural.
- * @langsuffixes other = ...
+ * @note other = ...
  */
 class NoSingular : public LanguagePlurality
 {
@@ -82,7 +82,7 @@ const char *NoSingular::getSuffix(unsigned) const
 
 /**
  * Plurality rules for Cyrillic languages (Russian, Ukranian, etc.)
- * @langsuffixes one = 1, 21, 31...; few = 2-4, 22-24, 32-34...; many = 0, 5-20, 25-30, 35-40...; other = ...
+ * @note one = 1, 21, 31...; few = 2-4, 22-24, 32-34...; many = 0, 5-20, 25-30, 35-40...; other = ...
  */
 class CyrillicPlurality : public LanguagePlurality
 {
@@ -113,7 +113,7 @@ const char *CyrillicPlurality::getSuffix(unsigned n) const
 
 /**
  * Plurality rules for Czech and Slovak languages.
- * @langsuffixes one = 1; few = 2-4; other = ...
+ * @note one = 1; few = 2-4; other = ...
  */
 class CzechPlurality : public LanguagePlurality
 {
@@ -137,7 +137,7 @@ const char *CzechPlurality::getSuffix(unsigned n) const
 
 /**
  * Plurality rules for the Polish language.
- * @langsuffixes one = 1; few = 2-4, 22-24, 32-34...; many = 0, 5-21, 25-31, 35-41, ...; other = ...
+ * @note one = 1; few = 2-4, 22-24, 32-34...; many = 0, 5-21, 25-31, 35-41, ...; other = ...
  */
 class PolishPlurality : public LanguagePlurality
 {
@@ -168,7 +168,7 @@ const char *PolishPlurality::getSuffix(unsigned n) const
 
 /**
  * Plurality rules for Romanian and Moldavian languages.
- * @langsuffixes one = 1; few = 0, 2-19, 101-119...; other = ...
+ * @note one = 1; few = 0, 2-19, 101-119...; other = ...
  */
 class RomanianPlurality : public LanguagePlurality
 {

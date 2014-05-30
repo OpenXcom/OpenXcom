@@ -1967,16 +1967,18 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
+ * @param action Pointer to an action.
  */
-void BattlescapeState::mouseInIcons(Action * /* action */)
+void BattlescapeState::mouseInIcons(Action *)
 {
 	_mouseOverIcons = true;
 }
 
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
+ * @param action Pointer to an action.
  */
-void BattlescapeState::mouseOutIcons(Action * /* action */)
+void BattlescapeState::mouseOutIcons(Action *)
 {
 	_mouseOverIcons = false;
 }
@@ -1997,6 +1999,7 @@ bool BattlescapeState::getMouseOverIcons() const
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
  * @param allowSaving True, if the help button was clicked.
+ * @return True if the player can still press buttons.
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {

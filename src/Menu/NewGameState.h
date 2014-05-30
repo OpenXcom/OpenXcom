@@ -50,9 +50,9 @@ public:
 	/// Cleans up the New Game state.
 	~NewGameState();
 	/// Handler for clicking the Ok button.
-	void btnOkClick(Action *);
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *);
+	void btnCancelClick(Action *action);
 };
 
 }
