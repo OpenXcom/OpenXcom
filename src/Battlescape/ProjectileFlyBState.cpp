@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -594,6 +594,9 @@ void ProjectileFlyBState::cancel()
 
 /**
  * Validates the throwing range.
+ * @param action Pointer to throw action.
+ * @param origin Position to throw from.
+ * @param target Tile to throw to.
  * @return True when the range is valid.
  */
 bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin, Tile *target)

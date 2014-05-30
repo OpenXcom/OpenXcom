@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -570,6 +570,7 @@ bool Camera::getShowAllLayers() const
 /**
  * Checks if map coordinates X,Y,Z are on screen.
  * @param mapPos Coordinates to check.
+ * @param unitWalking True to offset coordinates for a unit walking.
  * @return True if the map coordinates are on screen.
  */
 bool Camera::isOnScreen(const Position &mapPos, const bool unitWalking) const

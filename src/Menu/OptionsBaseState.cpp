@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -205,7 +205,7 @@ void OptionsBaseState::setCategory(TextButton *button)
 }
 
 /**
- * Saves the new options and returns to the proper origin screen..
+ * Saves the new options and returns to the proper origin screen.
  * @param action Pointer to an action.
  */
 void OptionsBaseState::btnOkClick(Action *)

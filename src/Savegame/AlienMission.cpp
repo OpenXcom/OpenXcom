@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -621,9 +621,10 @@ const AlienBase *AlienMission::getAlienBase() const
 }
 
 /**
- * Add alien points to the country and region at the coordinates given
- * @param lon Longitudinal coordinates to check
- * @param lat Lattitudinal coordinates to check
+ * Add alien points to the country and region at the coordinates given.
+ * @param lon Longitudinal coordinates to check.
+ * @param lat Latitudinal coordinates to check.
+ * @param engine The game engine, required to get access to game data and game rules.
  */
 void AlienMission::addScore(const double lon, const double lat, Game &engine)
 {

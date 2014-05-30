@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -64,6 +64,7 @@ RuleInventory::~RuleInventory()
 /**
  * Loads the inventory from a YAML file.
  * @param node YAML node.
+ * @param listOrder The list weight for this inventory.
  */
 void RuleInventory::load(const YAML::Node &node, int listOrder)
 {

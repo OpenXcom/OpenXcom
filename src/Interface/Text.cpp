@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,6 +51,7 @@ Text::~Text()
 /**
  * Takes an integer value and formats it as number with separators (spacing the thousands).
  * @param value The value.
+ * @param currency Currency symbol.
  * @return The formatted string.
  */
 std::wstring Text::formatNumber(int value, std::wstring currency)

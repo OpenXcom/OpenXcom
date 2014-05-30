@@ -12,10 +12,10 @@
 # norootforbuild
 
 Name:           openxcom
-Version:        0.9.0
+Version:        1.0.0
 Release:        0
 Group:          Amusements/Games/Strategy/Turn Based 
-License:        GPL-2.0
+License:        GPL-3.0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 URL:            http://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,6 +40,7 @@ private:
 	Text *_text, *_cursor;
 	Font *_font;
 	Timer *_timer;
+	int _anim;
 
 	SDL_Thread *_thread;
 	std::wostringstream _output;
@@ -59,8 +60,8 @@ public:
 	void handle(Action *action);
 	/// Flash the window.
 	void flash();
-	/// Blinks the cursor.
-	void blinkCursor();
+	/// Animates the terminal.
+	void animate();
 	/// Adds a line of text.
 	void addLine(const std::wstring &str);
 	/// Loads the game resources.

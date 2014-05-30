@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -300,6 +300,7 @@ int Screen::getHeight() const
 /**
  * Resets the screen surfaces based on the current display options,
  * as they don't automatically take effect.
+ * @param resetVideo Reset display surface.
  */
 void Screen::resetDisplay(bool resetVideo)
 {
@@ -522,8 +523,10 @@ void Screen::screenshot(const std::string &filename) const
 }
 
 
-/** Check whether useHQXFilter is set in Options and a compatible resolution
- *  has been selected.
+/** 
+ * Check whether useHQXFilter is set in Options and a compatible resolution
+ * has been selected.
+ * @return if it is enabled.
  */
 bool Screen::isHQXEnabled()
 {
@@ -544,7 +547,7 @@ bool Screen::isHQXEnabled()
 }
 
 /**
- * Check if openGl is enabled.
+ * Check if OpenGL is enabled.
  * @return if it is enabled.
  */
 bool Screen::isOpenGLEnabled()
