@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -313,6 +313,7 @@ void TextButton::mouseRelease(Action *action, State *state)
 /**
  * Hooks up the button to work as part of an existing combobox,
  * toggling its state when it's pressed.
+ * @param comboBox Pointer to ComboBox.
  */
 void TextButton::setComboBox(ComboBox *comboBox)
 {

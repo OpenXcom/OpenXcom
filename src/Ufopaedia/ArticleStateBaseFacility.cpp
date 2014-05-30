@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -60,7 +60,7 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(13)+10);
 		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		// build preview image
 		int tile_size = 32;
@@ -113,7 +113,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(13)+10);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 		_lstInfo = new TextList(200, 42, 10, 42);
 		add(_lstInfo);

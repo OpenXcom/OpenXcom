@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,6 +47,8 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param unit Pointer to the selected unit.
  * @param parent Pointer to parent Battlescape.
+ * @param fromInventory Is player coming from the inventory?
+ * @param mindProbe Is player using a Mind Probe?
  */
 UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent, bool fromInventory, bool mindProbe) : State(game), _unit(unit), _parent(parent), _fromInventory(fromInventory), _mindProbe(mindProbe)
 {

@@ -541,3 +541,45 @@ LangString LINK_Uninstall ${LANG_FINNISH} "Poista"
 
 LangString WARN_UFOMissing ${LANG_FINNISH} "X-COM 1:stä ei löytynyt tästä kansiosta. ${GAME_NAME} vaatii kelvollisen asennuksen X-COM:sta toimiakseen. Jatketaanko?"
 LangString WARN_XCUDetected ${LANG_FINNISH} "XcomUtil havaittu. ${GAME_NAME} ei ole yhteensopiva XcomUtilin kanssa, mikä saattaa aiheuttaa häiriöitä pelin toiminnassa. Jatketaanko?"
+
+;================ITALIAN================
+
+;--------------------------------
+;Pages
+   
+LangString PAGE_UfoFolder ${LANG_ITALIAN} "${GAME_NAME} necessita di una copia di UFO: Enemy Unknown / X-COM: UFO Defense. Puoi saltare questo passaggio se stai aggiornando un’installazione precedente.$\n$\nSetup copierà i file richiesti dalla cartella seguente. Per copiare da un'altra cartella, clicca Esplora e scegli un’altra cartella. Clicca Continua per continuare."
+LangString PAGE_UfoFolder_TITLE ${LANG_ITALIAN} "Scegli la cartella di X-COM 1"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_ITALIAN} "Scegli la cartella di installazione di X-COM 1"
+LangString DEST_UfoFolder ${LANG_ITALIAN} "Cartella X-COM 1"
+
+;--------------------------------
+;Installer Sections
+   
+LangString NAME_SecMain ${LANG_ITALIAN} "File di gioco"
+LangString DESC_SecMain ${LANG_ITALIAN} "File richiesti per far funzionare ${GAME_NAME}."
+LangString NAME_SecPatch ${LANG_ITALIAN} "Data Patch"
+LangString DESC_SecPatch ${LANG_ITALIAN} "Aggiusta errori nei dati di X-COM 1. Raccomandato per la prima installazione. (richiede una connessione a internet)"
+LangString NAME_SecDesktop ${LANG_ITALIAN} "Collegamento sul Desktop"
+LangString DESC_SecDesktop ${LANG_ITALIAN} "Crea un collegamento sul Desktop per giocare a ${GAME_NAME}."
+   
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_ITALIAN} "Cancella i dati di X-COM 1"
+LangString DESC_UnData ${LANG_ITALIAN} "Cancella tutti i dati di ${GAME_NAME}, incluse mods e risorse di gioco. Raccomandato per una reinstallazione pulita."
+LangString NAME_UnUser ${LANG_ITALIAN} "Elimina i dati utente"
+LangString DESC_UnUser ${LANG_ITALIAN} "Cancella tutti i dati utente di ${GAME_NAME}, inclusi salvataggi, screenshots e opzioni. Raccomandato per una pulizia completa."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_ITALIAN} "Cartella dati"
+LangString LINK_Readme ${LANG_ITALIAN} "Readme"
+LangString LINK_UserFolder ${LANG_ITALIAN} "Cartella utente"
+LangString LINK_Uninstall ${LANG_ITALIAN} "Disinstalla"
+   
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_ITALIAN} "X-COM 1 non è stato trovato in questa cartella. ${GAME_NAME} richiede un’installazione valida di X-COM per funzionare. Continuare?"
+LangString WARN_XCUDetected ${LANG_ITALIAN} "XcomUtil trovato. ${GAME_NAME} è incompatibile con XcomUtil e potrebbe subire malfunzionamenti vari. Continuare?"

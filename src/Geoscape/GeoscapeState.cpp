@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -1124,7 +1124,7 @@ public:
 	/// Store the parameters.
 	/**
 	 * @param game The game engine.
-	 * @param game The globe object.
+	 * @param globe The globe object.
 	 */
 	callThink(Game &game, const Globe &globe) : _game(game), _globe(globe) { /* Empty by design. */ }
 	/// Call AlienMission::think() with stored parameters.
@@ -1136,6 +1136,8 @@ private:
 
 /** @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
+ * @param ts Pointer to terror site.
+ * @return Has terror site expired?
  */
 bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 {
@@ -2188,6 +2190,7 @@ void GeoscapeState::startDogfight()
 
 /**
  * Returns the first free dogfight slot.
+ * @return free slot
  */
 int GeoscapeState::getFirstFreeDogfightSlot()
 {

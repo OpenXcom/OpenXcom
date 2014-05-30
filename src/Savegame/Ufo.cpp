@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -614,7 +614,7 @@ bool Ufo::getHyperDetected() const
 
 /**
  * Changes whether this UFO has been detected by hyper-wave.
- * @param detected Detection status.
+ * @param hyperdetected Detection status.
  */
 void Ufo::setHyperDetected(bool hyperdetected)
 {

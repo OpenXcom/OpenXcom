@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -112,6 +112,7 @@ void VictoryState::think()
 /**
  * Shows the next screen in the slideshow
  * or goes back to the Main Menu.
+ * @param action Pointer to an action.
  */
 void VictoryState::screenClick(Action *)
 {

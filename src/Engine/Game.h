@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,8 +55,8 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
-	unsigned int _framestarttime;
-	int _delaytime;
+	unsigned int _timeOfLastFrame;
+	int _timeUntilNextFrame;
 	static const double VOLUME_GRADIENT;
 
 public:
