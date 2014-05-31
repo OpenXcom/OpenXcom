@@ -294,7 +294,7 @@ void Game::run()
 			if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-				_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame) - 1;
+				_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame);
 			}
 			else
 			{
@@ -320,8 +320,8 @@ void Game::run()
 				}
 				_fpsCounter->blit(_screen->getSurface());
 				_cursor->blit(_screen->getSurface());
+				_screen->flip();
 			}
-			_screen->flip();
 		}
 
 		// Initialize active state
