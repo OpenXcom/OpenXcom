@@ -66,11 +66,11 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 		_lstStats->setColor(Palette::blockOffset(15)+4);
 		_lstStats->setColumns(2, 175, 145);

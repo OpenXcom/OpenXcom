@@ -24,6 +24,9 @@ namespace OpenXcom
 {
 /**
  * Creates a blank StatStringCondition.
+ * @param conditionName Name of the condition.
+ * @param minVal Minimum value.
+ * @param maxVal Maximum value.
  */
 StatStringCondition::StatStringCondition(const std::string conditionName, int minVal, int maxVal)
 {
@@ -39,19 +42,28 @@ StatStringCondition::~StatStringCondition()
 {
 }
 
-/// Get ConditionName.
+/**
+ * Gets the condition string.
+ * @return Name of the associated stat.
+ */
 const std::string StatStringCondition::getConditionName()
 {
 	return _conditionName;
 }
 
-/// Get MinVal.
+/**
+ * Gets the minimum value for the condition (default is 0).
+ * @return The minimum value.
+ */
 int StatStringCondition::getMinVal()
 {
 	return _minVal;
 }
 
-/// Get MaxVal.
+/**
+ * Gets the maximum value for the condition (default is 255).
+ * @return The maximum value.
+ */
 int StatStringCondition::getMaxVal()
 {
 	return _maxVal;

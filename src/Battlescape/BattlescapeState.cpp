@@ -83,6 +83,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -619,19 +620,26 @@ void BattlescapeState::mapOver(Action *action)
 		if (Options::battleDragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
-				-action->getDetails()->motion.xrel,
-				-action->getDetails()->motion.yrel, false);
+				-action->getDetails()->motion.xrel / action->getXScale(),
+				-action->getDetails()->motion.yrel / action->getYScale(), false);
+			action->getDetails()->motion.x = _xBeforeMouseScrolling;
+			action->getDetails()->motion.y = _yBeforeMouseScrolling;
+			_map->setCursorType(CT_NONE);
 		}
 		else
 		{
+			Position delta = _map->getCamera()->getMapOffset();
 			_map->getCamera()->scrollXY(
-				action->getDetails()->motion.xrel,
-				action->getDetails()->motion.yrel, false);
+				action->getDetails()->motion.xrel / action->getXScale(),
+				action->getDetails()->motion.yrel / action->getYScale(), false);
+			delta = _map->getCamera()->getMapOffset() - delta;
+			_cursorPosition.x = std::min(_game->getScreen()->getWidth() - (int)(Round(action->getXScale())), std::max(0, (int)(_cursorPosition.x + Round(delta.x * action->getXScale()))));
+			_cursorPosition.y = std::min(_game->getScreen()->getHeight() - (int)(Round(action->getYScale())), std::max(0, (int)(_cursorPosition.y + Round(delta.y * action->getYScale()))));
+			action->getDetails()->motion.x = _cursorPosition.x;
+			action->getDetails()->motion.y = _cursorPosition.y;
 		}
 
 		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x = _xBeforeMouseScrolling;
-		action->getDetails()->motion.y = _yBeforeMouseScrolling;
 		_game->getCursor()->handle(action);
 	}
 }
@@ -651,6 +659,13 @@ void BattlescapeState::mapPress(Action *action)
 		_isMouseScrolled = false;
 		SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
 		_mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
+		if (!Options::battleDragScrollInvert && _cursorPosition.z == 0);
+		{
+			_cursorPosition.x = action->getDetails()->motion.x;
+			_cursorPosition.y = action->getDetails()->motion.y;
+			// the Z is irrelevant to our mouse position, but we can use it as a boolean to check if the position is set or not
+			_cursorPosition.z = 1;
+		}
 		_totalMouseMoveX = 0; _totalMouseMoveY = 0;
 		_mouseMovedOverThreshold = false;
 		_mouseScrollingStartTime = SDL_GetTicks();
@@ -1430,9 +1445,10 @@ inline void BattlescapeState::handle(Action *action)
 	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		State::handle(action);
-		if (_isMouseScrolling)
+
+		if (_isMouseScrolling && !Options::battleDragScrollInvert)
 		{
-			_map->setSelectorPosition(_xBeforeMouseScrolling / action->getXScale(), _yBeforeMouseScrolling / action->getYScale());
+			_map->setSelectorPosition(_cursorPosition.x / action->getXScale(), _cursorPosition.y / action->getYScale());
 		}
 
 		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
@@ -1951,16 +1967,18 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
+ * @param action Pointer to an action.
  */
-void BattlescapeState::mouseInIcons(Action * /* action */)
+void BattlescapeState::mouseInIcons(Action *)
 {
 	_mouseOverIcons = true;
 }
 
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
+ * @param action Pointer to an action.
  */
-void BattlescapeState::mouseOutIcons(Action * /* action */)
+void BattlescapeState::mouseOutIcons(Action *)
 {
 	_mouseOverIcons = false;
 }
@@ -1981,6 +1999,7 @@ bool BattlescapeState::getMouseOverIcons() const
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
  * @param allowSaving True, if the help button was clicked.
+ * @return True if the player can still press buttons.
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
@@ -2121,8 +2140,20 @@ void BattlescapeState::resize(int &dX, int &dY)
  */
 void BattlescapeState::stopScrolling(Action *action)
 {
-	SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
-	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
+	if (Options::battleDragScrollInvert)
+	{
+		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
+		_battleGame->setupCursor();
+	}
+	else
+	{
+		SDL_WarpMouse(_cursorPosition.x, _cursorPosition.y);
+		action->setMouseAction(_cursorPosition.x/action->getXScale(), _cursorPosition.y/action->getYScale(), _game->getScreen()->getSurface()->getX(), _game->getScreen()->getSurface()->getY());
+		_map->setSelectorPosition(_cursorPosition.x / action->getXScale(), _cursorPosition.y / action->getYScale());
+	}
+	// reset our "mouse position stored" flag
+	_cursorPosition.z = 0;
 }
 
 }

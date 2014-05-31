@@ -73,6 +73,7 @@ RuleRegion *Region::getRules() const
 
 /**
  * Adds to the region's xcom activity level.
+ * @param activity Amount to add.
  */
 void Region::addActivityXcom(int activity)
 {
@@ -81,6 +82,7 @@ void Region::addActivityXcom(int activity)
 
 /**
  * Adds to the region's alien activity level.
+ * @param activity Amount to add.
  */
 void Region::addActivityAlien(int activity)
 {
@@ -105,6 +107,9 @@ const std::vector<int> &Region::getActivityAlien() const
 	return _activityAlien;
 }
 
+/**
+ * Store last month's counters, start new counters.
+ */
 void Region::newMonth()
 {
 	_activityAlien.push_back(0);

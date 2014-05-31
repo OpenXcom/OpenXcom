@@ -167,6 +167,8 @@ YAML::Node Soldier::save() const
 
 /**
  * Returns the soldier's full name (and, optionally, statString).
+ * @param statstring Add stat string?
+ * @param maxLength Restrict length to a certain value.
  * @return Soldier name.
  */
 std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
@@ -454,7 +456,7 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 }
 
 /**
- * Trains a soldier's Psychic abilities
+ * Trains a soldier's Psychic abilities after 1 month.
  */
 void Soldier::trainPsi()
 {
@@ -478,7 +480,8 @@ void Soldier::trainPsi()
 }
 
 /**
- * Trains a soldier's Psychic abilities (anytimePsiTraining option)
+ * Trains a soldier's Psychic abilities after 1 day.
+ * (anytimePsiTraining option)
  */
 void Soldier::trainPsi1Day()
 {
@@ -510,6 +513,7 @@ void Soldier::trainPsi1Day()
 
 /**
  * returns whether or not the unit is in psi training
+ * @return true/false
  */
 bool Soldier::isInPsiTraining()
 {
@@ -517,7 +521,7 @@ bool Soldier::isInPsiTraining()
 }
 
 /**
- * changes whether or not the unit is in psi training
+ * toggles whether or not the unit is in psi training
  */
 void Soldier::setPsiTraining()
 {
@@ -526,6 +530,7 @@ void Soldier::setPsiTraining()
 
 /**
  * returns this soldier's psionic improvement score for this month.
+ * @return score
  */
 int Soldier::getImprovement()
 {
@@ -563,7 +568,9 @@ void Soldier::die(SoldierDeath *death)
 }
 
 /**
- * Calculates the soldier's statString
+ * Calculates the soldier's statString.
+ * @param statStrings List of statString rules.
+ * @param psiStrengthEval Are psi stats available?
  */
 void Soldier::calcStatString(const std::vector<StatString *> &statStrings, bool psiStrengthEval)
 {

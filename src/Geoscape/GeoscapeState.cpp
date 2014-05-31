@@ -438,6 +438,9 @@ GeoscapeState::~GeoscapeState()
 void GeoscapeState::blit()
 {
 	State::blit();
+	_game->getScreen()->getSurface()->drawLine(_btnTop->getX() - 1, 0, _btnTop->getX() - 1, _game->getScreen()->getSurface()->getHeight(), 15);
+	_game->getScreen()->getSurface()->drawLine(_btnTop->getX(), _sidebar->getY() - 1, _game->getScreen()->getSurface()->getWidth(), _sidebar->getY() - 1, 15);
+	_game->getScreen()->getSurface()->drawLine(_btnBottom->getX(), _btnBottom->getY() - 1, _game->getScreen()->getSurface()->getWidth(), _btnBottom->getY() - 1, 15);
 	for(std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 	{
 		(*it)->blit();
@@ -1094,7 +1097,7 @@ public:
 	/// Store the parameters.
 	/**
 	 * @param game The game engine.
-	 * @param game The globe object.
+	 * @param globe The globe object.
 	 */
 	callThink(Game &game, const Globe &globe) : _game(game), _globe(globe) { /* Empty by design. */ }
 	/// Call AlienMission::think() with stored parameters.
@@ -1106,6 +1109,8 @@ private:
 
 /** @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
+ * @param ts Pointer to terror site.
+ * @return Has terror site expired?
  */
 bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 {
@@ -2092,6 +2097,7 @@ void GeoscapeState::startDogfight()
 
 /**
  * Returns the first free dogfight slot.
+ * @return free slot
  */
 int GeoscapeState::getFirstFreeDogfightSlot()
 {

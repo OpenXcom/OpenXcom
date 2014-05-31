@@ -23,7 +23,7 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param game Pointer to the game.
+ * @param save Pointer to the battle game.
  * @param unit Pointer to the unit.
  */
 BattleAIState::BattleAIState(SavedBattleGame *save, BattleUnit *unit) : _save(save), _unit(unit)
@@ -77,6 +77,7 @@ void BattleAIState::exit()
 /**
  * Runs any code the state needs to keep updating every
  * AI cycle.
+ * @param action (possible) AI action to execute after thinking is done.
  */
 void BattleAIState::think(BattleAction *)
 {

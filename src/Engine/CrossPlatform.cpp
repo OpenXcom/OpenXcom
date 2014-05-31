@@ -650,10 +650,11 @@ bool deleteFile(const std::string &path)
 }
 
 /**
-* Gets the base filename of a path.
-* @param path Full path to file.
-* @return Base filename.
-*/
+ * Gets the base filename of a path.
+ * @param path Full path to file.
+ * @param transform Optional function to transform the filename.
+ * @return Base filename.
+ */
 std::string baseFilename(const std::string &path, int (*transform)(int))
 {
 	size_t sep = path.find_last_of(PATH_SEPARATOR);
@@ -674,10 +675,10 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 }
 
 /**
-* Replaces invalid filesystem characters with _.
-* @param filename Original filename.
-* @return Filename without invalid characters
-*/
+ * Replaces invalid filesystem characters with _.
+ * @param filename Original filename.
+ * @return Filename without invalid characters
+ */
 std::string sanitizeFilename(const std::string &filename)
 {
 	std::string newFilename = filename;

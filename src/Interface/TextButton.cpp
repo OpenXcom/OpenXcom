@@ -313,6 +313,7 @@ void TextButton::mouseRelease(Action *action, State *state)
 /**
  * Hooks up the button to work as part of an existing combobox,
  * toggling its state when it's pressed.
+ * @param comboBox Pointer to ComboBox.
  */
 void TextButton::setComboBox(ComboBox *comboBox)
 {

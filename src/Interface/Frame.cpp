@@ -23,12 +23,10 @@ namespace OpenXcom
 
 /**
  * Sets up a blank frame with the specified size and position.
- * @param state Pointer to state the frame belongs to.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
- * @param popup Popup animation.
  */
 Frame::Frame(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _bg(0), _thickness(5), _contrast(false)
 {

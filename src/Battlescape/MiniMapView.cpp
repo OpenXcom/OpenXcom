@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
+#include "../fmath.h"
 #include "MiniMapView.h"
 #include "../Savegame/Tile.h"
 #include "Map.h"
@@ -28,6 +30,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
+#include "../Engine/Screen.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -188,6 +191,13 @@ void MiniMapView::mousePress(Action *action, State *state)
 		_isMouseScrolled = false;
 		SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
 		_posBeforeMouseScrolling = _camera->getCenterPosition();
+		if (!Options::battleDragScrollInvert && _cursorPosition.z == 0);
+		{
+			_cursorPosition.x = action->getDetails()->motion.x;
+			_cursorPosition.y = action->getDetails()->motion.y;
+			// the Z is irrelevant to our mouse position, but we can use it as a boolean to check if the position is set or not
+			_cursorPosition.z = 1;
+		}
 		_mouseScrollX = 0; _mouseScrollY = 0;
 		_totalMouseMoveX = 0; _totalMouseMoveY = 0;
 		_mouseMovedOverThreshold = false;
@@ -215,6 +225,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 				{ _camera->centerOnPosition(_posBeforeMouseScrolling); _redraw = true; }
 			_isMouseScrolled = _isMouseScrolling = false;
+			stopScrolling(action);
 		}
 	}
 
@@ -222,11 +233,20 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	if (_isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == Options::battleDragScrollButton) _isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == Options::battleDragScrollButton)
+		{
+			_isMouseScrolling = false;
+			stopScrolling(action);
+		}
+		else
+		{
+			return;
+		}
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 		{
 			_isMouseScrolled = false;
+			stopScrolling(action);
 			_camera->centerOnPosition(_posBeforeMouseScrolling);
 			_redraw = true;
 		}
@@ -267,8 +287,12 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton))) { // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
-				{ _camera->centerOnPosition(_posBeforeMouseScrolling); _redraw = true; }
+			{
+					_camera->centerOnPosition(_posBeforeMouseScrolling);
+					_redraw = true;
+			}
 			_isMouseScrolled = _isMouseScrolling = false;
+			stopScrolling(action);
 			return;
 		}
 
@@ -291,13 +315,13 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 		if (Options::battleDragScrollInvert)
 		{
-			scrollX = action->getDetails()->motion.xrel;
-			scrollY = action->getDetails()->motion.yrel;
+			scrollX = action->getDetails()->motion.xrel / action->getXScale();
+			scrollY = action->getDetails()->motion.yrel / action->getYScale();
 		}
 		else
 		{
-			scrollX = -action->getDetails()->motion.xrel;
-			scrollY = -action->getDetails()->motion.yrel;
+			scrollX = -action->getDetails()->motion.xrel / action->getXScale();
+			scrollY = -action->getDetails()->motion.yrel / action->getYScale();
 		}
 		_mouseScrollX += scrollX;
 		_mouseScrollY += scrollY;
@@ -321,7 +345,21 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		_redraw = true;
 
 		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x=_xBeforeMouseScrolling; action->getDetails()->motion.y=_yBeforeMouseScrolling;
+		if (Options::battleDragScrollInvert)
+		{
+			action->getDetails()->motion.x = _xBeforeMouseScrolling;
+			action->getDetails()->motion.y = _yBeforeMouseScrolling;
+		}
+		else
+		{
+			Position delta(-scrollX, -scrollY, 0);
+			_cursorPosition.x = Round(std::min(getX() + getWidth(), std::max(getX(), (int)(Round(_cursorPosition.x / action->getXScale()) + delta.x))) * action->getXScale());
+				//std::min(Round(getWidth() * action->getXScale() + getX() * action->getXScale()), std::max(Round(getX() * action->getXScale()), _cursorPosition.x + Round(delta.x * action->getXScale())));
+			_cursorPosition.y = Round(std::min(getY() + getHeight(), std::max(getY(), (int)(Round(_cursorPosition.y / action->getYScale()) + delta.y))) * action->getYScale());
+				//std::min(Round(getHeight() * action->getYScale() + getY() * action->getYScale()), std::max(Round(getY() * action->getYScale()), _cursorPosition.y + Round(delta.y * action->getYScale())));
+			action->getDetails()->motion.x = _cursorPosition.x;
+			action->getDetails()->motion.y = _cursorPosition.y;
+		}
 		_game->getCursor()->handle(action);
 	}
 }
@@ -353,4 +391,14 @@ void MiniMapView::animate()
 	_redraw = true;
 }
 
+void MiniMapView::stopScrolling(Action *action)
+{
+	if (!Options::battleDragScrollInvert)
+	{
+		SDL_WarpMouse(_cursorPosition.x, _cursorPosition.y);
+		action->setMouseAction(_cursorPosition.x/action->getXScale(), _cursorPosition.y/action->getYScale(), _game->getScreen()->getSurface()->getX(), _game->getScreen()->getSurface()->getY());
+	}
+	// reset our "mouse position stored" flag
+	_cursorPosition.z = 0;
+}
 }

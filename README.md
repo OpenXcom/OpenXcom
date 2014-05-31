@@ -76,13 +76,13 @@ Or if those variables aren't available:
 Choose whichever you prefer.
 
 
-## Customization
+## Configuration
 
 OpenXcom has a variety of game settings and extras that can be
 customized, both in-game and out-game. These options are global
 and affect any old or new savegame.
 
-For more details please check the [wiki](http://ufopaedia.org/index.php?title=Customizing_(OpenXcom)).
+For more details please check the [wiki](http://ufopaedia.org/index.php?title=Options_(OpenXcom)).
 
 ### User Folder
 
@@ -106,14 +106,14 @@ OpenXcom requires the following developer libraries:
 
 - [SDL](http://www.libsdl.org) (libsdl1.2)
 - [SDL\_mixer](http://www.libsdl.org/projects/SDL_mixer/) (libsdl-mixer1.2)
-- [TiMidity++](http://timidity.sourceforge.net/) (timidity), if you need MIDI playback
 - [SDL\_gfx](http://www.ferzkopp.net/joomla/content/view/19/14/) (libsdl-gfx1.2), version 2.0.22 or later
 - [SDL\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl-image1.2)
 - [yaml-cpp](http://code.google.com/p/yaml-cpp/), version 0.5 or later
 
 The source code includes files for the following tools:
 
-- Microsoft Visual C++ 2010.
+- Microsoft Visual C++ 2010 or newer.
+- Xcode.
 - Makefile.
 - CMake.
 - Autotools.

@@ -394,7 +394,7 @@ Tile *BattleItem::getTile() const
 
 /**
  * Sets the item's tile.
- * @param The tile.
+ * @param tile The tile.
  */
 void BattleItem::setTile(Tile *tile)
 {
@@ -421,7 +421,7 @@ BattleUnit *BattleItem::getUnit() const
 
 /**
  * Sets the corpse's unit.
- * @param Pointer to BattleUnit.
+ * @param unit Pointer to BattleUnit.
  */
 void BattleItem::setUnit(BattleUnit *unit)
 {
@@ -446,7 +446,7 @@ int BattleItem::getHealQuantity () const
 	return _heal;
 }
 
-/**.
+/**
  * Sets the pain killer quantity of the item.
  * @param pk The new pain killer quantity.
  */

@@ -23,15 +23,11 @@ namespace OpenXcom
 
 /**
  * Initializes a death event.
- * @time Time when the death occurred.
  */
 SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0)
 {
 }
 
-/**
- * Clean up timer.
- */
 SoldierDeath::~SoldierDeath()
 {
 }

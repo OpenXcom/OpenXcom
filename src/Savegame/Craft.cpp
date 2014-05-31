@@ -44,7 +44,7 @@ namespace OpenXcom
  * assigns it the latest craft ID available.
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
- * @param ids List of craft IDs (Leave NULL for no ID).
+ * @param id ID to assign to the craft (0 to not assign).
  */
 Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false), _name(L"")
 {
@@ -80,6 +80,7 @@ Craft::~Craft()
  * Loads the craft from a YAML file.
  * @param node YAML node.
  * @param rule Ruleset for the saved game.
+ * @param save Pointer to the saved game.
  */
 void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 {
@@ -262,8 +263,8 @@ RuleCraft *Craft::getRules() const
 
 /**
  * Changes the ruleset for the craft's type.
- * @return Pointer to ruleset.
- * @note NOT TO BE USED IN NORMAL CIRCUMSTANCES.
+ * @param rules Pointer to ruleset.
+ * @warning NOT TO BE USED IN NORMAL CIRCUMSTANCES.
  */
 void Craft::setRules(RuleCraft *rules)
 {
@@ -608,6 +609,7 @@ int Craft::getFuelLimit() const
 /**
  * Returns the minimum required fuel for the
  * craft to go to a base.
+ * @param base Pointer to target base.
  * @return Fuel amount.
  */
 int Craft::getFuelLimit(Base *base) const
@@ -743,6 +745,7 @@ void Craft::refuel()
 /**
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked in the base.
+ * @param rules Pointer to ruleset.
  * @return The ammo ID missing for rearming, or "" if none.
  */
 std::string Craft::rearm(Ruleset *rules)
@@ -882,6 +885,7 @@ void Craft::setInDogfight(bool inDogfight)
 
 /**
  * Sets interception order (first craft to leave the base gets 1, second 2, etc.).
+ * @param order Interception order.
  */
 void Craft::setInterceptionOrder(const int order)
 {
@@ -890,6 +894,7 @@ void Craft::setInterceptionOrder(const int order)
 
 /**
  * Gets interception order.
+ * @return Interception order.
  */
 int Craft::getInterceptionOrder() const
 {

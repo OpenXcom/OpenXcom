@@ -205,7 +205,7 @@ void OptionsBaseState::setCategory(TextButton *button)
 }
 
 /**
- * Saves the new options and returns to the proper origin screen..
+ * Saves the new options and returns to the proper origin screen.
  * @param action Pointer to an action.
  */
 void OptionsBaseState::btnOkClick(Action *)

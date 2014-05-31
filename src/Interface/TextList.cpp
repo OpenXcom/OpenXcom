@@ -767,6 +767,7 @@ void TextList::clearList()
 /**
  * Scrolls the text in the list up by one row or to the top.
  * @param toMax If true then scrolls to the top of the list. false => one row up
+ * @param scrollByWheel If true then use wheel scroll, otherwise scroll normally.
  */
 void TextList::scrollUp(bool toMax, bool scrollByWheel)
 {
@@ -795,6 +796,7 @@ void TextList::scrollUp(bool toMax, bool scrollByWheel)
 /**
  * Scrolls the text in the list down by one row or to the bottom.
  * @param toMax If true then scrolls to the bottom of the list. false => one row down
+ * @param scrollByWheel If true then use wheel scroll, otherwise scroll normally.
  */
 void TextList::scrollDown(bool toMax, bool scrollByWheel)
 {
@@ -1116,6 +1118,7 @@ void TextList::scrollTo(size_t scroll)
 /**
  * Hooks up the button to work as part of an existing combobox,
  * updating the selection when it's pressed.
+ * @param comboBox Pointer to combobox.
  */
 void TextList::setComboBox(ComboBox *comboBox)
 {
