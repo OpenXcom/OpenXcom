@@ -93,7 +93,7 @@ SavedBattleGame::~SavedBattleGame()
 				++j;
 			}
 		}
-		delete *i;
+		(*i)->unloadData();
 	}
 
 	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
