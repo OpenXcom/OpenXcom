@@ -138,7 +138,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
 		std::string name = i->as<std::string>();
-		MapDataSet *mds = new MapDataSet(name);
+		MapDataSet *mds = rule->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 
