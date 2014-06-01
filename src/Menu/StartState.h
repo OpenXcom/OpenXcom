@@ -58,8 +58,6 @@ public:
 	void think();
 	/// Handles key clicks.
 	void handle(Action *action);
-	/// Flash the window.
-	void flash();
 	/// Animates the terminal.
 	void animate();
 	/// Adds a line of text.

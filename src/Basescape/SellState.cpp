@@ -161,7 +161,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 
 	_lstItems->setColor(_color);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 60, 22, 55);
+	_lstItems->setColumns(4, 156, 54, 24, 53);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);

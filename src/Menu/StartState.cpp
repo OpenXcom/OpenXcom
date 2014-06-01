@@ -31,6 +31,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
@@ -41,7 +42,6 @@
 #include "ErrorMessageState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
-#include <SDL_syswm.h>
 
 namespace OpenXcom
 {
@@ -103,7 +103,7 @@ StartState::StartState(Game *game) : State(game), _anim(0)
 	}
 	else
 	{
-		addLine(L"C:\\GAMES\\OPENXCOM>openxcom");
+		addLine(Language::utf8ToWstr(CrossPlatform::getDosPath()) + L">openxcom");
 	}
 }
 
@@ -157,7 +157,7 @@ void StartState::think()
 	switch (loading)
 	{
 	case LOADING_FAILED:
-		flash();
+		CrossPlatform::flashWindow();
 		addLine(L"");
 		addLine(L"ERROR: " + Language::utf8ToWstr(error));
 		addLine(L"Make sure you installed OpenXcom correctly.");
@@ -167,7 +167,7 @@ void StartState::think()
 		loading = LOADING_DONE;
 		break;
 	case LOADING_SUCCESSFUL:
-		flash();
+		CrossPlatform::flashWindow();
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
@@ -221,22 +221,6 @@ void StartState::handle(Action *action)
 			_game->quit();
 		}
 	}
-}
-
-/**
- * Notifies the user that maybe he should have a look.
- */
-void StartState::flash()
-{
-#ifdef _WIN32
-	SDL_SysWMinfo wminfo;
-	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
-	{
-		HWND hwnd = wminfo.window;
-		FlashWindow(hwnd, true);
-	}
-#endif
 }
 
 /**
