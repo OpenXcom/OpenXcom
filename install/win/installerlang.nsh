@@ -583,3 +583,45 @@ LangString LINK_Uninstall ${LANG_ITALIAN} "Disinstalla"
 
 LangString WARN_UFOMissing ${LANG_ITALIAN} "X-COM 1 non è stato trovato in questa cartella. ${GAME_NAME} richiede un’installazione valida di X-COM per funzionare. Continuare?"
 LangString WARN_XCUDetected ${LANG_ITALIAN} "XcomUtil trovato. ${GAME_NAME} è incompatibile con XcomUtil e potrebbe subire malfunzionamenti vari. Continuare?"
+
+;================UKRAINIAN================
+
+;--------------------------------
+;Pages
+
+LangString PAGE_UfoFolder ${LANG_UKRAINIAN} "${GAME_NAME} потребує копію гри UFO: Enemy Unknown / X-COM: UFO Defense. Ви можете пропустити цей крок, якщо оновлюєте існуючу інсталяцію.$\n$\nВстанвлювач скопіює файли з наступної теки. Щоб копіювати з іншої теки, натисність Огляд і оберіть іншу теку. Натисніть Далі щоб продовжити."
+LangString PAGE_UfoFolder_TITLE ${LANG_UKRAINIAN} "Оберіть розташування X-COM 1"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_UKRAINIAN} "Оберіть теку, в яку у Вас встановлений X-COM 1."
+LangString DEST_UfoFolder ${LANG_UKRAINIAN} "Тека X-COM 1"
+
+;--------------------------------
+;Installer Sections
+
+LangString NAME_SecMain ${LANG_UKRAINIAN} "Ігрові файли"
+LangString DESC_SecMain ${LANG_UKRAINIAN} "Файли необхідні для запуску ${GAME_NAME}."
+LangString NAME_SecPatch ${LANG_UKRAINIAN} "Патч даних"
+LangString DESC_SecPatch ${LANG_UKRAINIAN} "Виправляє помилки в даних з X-COM 1. Рекомендується при першій інсталяції. (вимагає з`єднання з Інтернетом)"
+LangString NAME_SecDesktop ${LANG_UKRAINIAN} "Значок на стільниці"
+LangString DESC_SecDesktop ${LANG_UKRAINIAN} "Створює на стільниці значок для запуску ${GAME_NAME}."
+
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_UKRAINIAN} "Видалити дані X-COM"
+LangString DESC_UnData ${LANG_UKRAINIAN} "Видаляє дані ${GAME_NAME}, включаючи моди та ресурси X-COM. Рекомендується для чистого перевстановлення."
+LangString NAME_UnUser ${LANG_UKRAINIAN} "Видалити дані користувача"
+LangString DESC_UnUser ${LANG_UKRAINIAN} "Видаляє всі дані користувача ${GAME_NAME}, включаючи збереження, знімки екрану і налаштування. Рекомендується для повного стирання гри."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_UKRAINIAN} "Тека даних"
+LangString LINK_Readme ${LANG_UKRAINIAN} "ПрочитайМене"
+LangString LINK_UserFolder ${LANG_UKRAINIAN} "Тека користувача"
+LangString LINK_Uninstall ${LANG_UKRAINIAN} "Деінсталювати"
+
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_UKRAINIAN} "X-COM 1 не було знайдено в цій теці. ${GAME_NAME} вимагає коректну інсталяцію гри X-COM для запуску. Продовжити?"
+LangString WARN_XCUDetected ${LANG_UKRAINIAN} "Виявлено XcomUtil. ${GAME_NAME} несумісна з XcomUtil і може проявляти дивну поведінку. Продовжити?"
