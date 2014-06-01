@@ -633,8 +633,12 @@ void BattlescapeState::mapOver(Action *action)
 				action->getDetails()->motion.xrel / action->getXScale(),
 				action->getDetails()->motion.yrel / action->getYScale(), false);
 			delta = _map->getCamera()->getMapOffset() - delta;
-			_cursorPosition.x = std::min(_game->getScreen()->getWidth() - (int)(Round(action->getXScale())), std::max(0, (int)(_cursorPosition.x + Round(delta.x * action->getXScale()))));
-			_cursorPosition.y = std::min(_game->getScreen()->getHeight() - (int)(Round(action->getYScale())), std::max(0, (int)(_cursorPosition.y + Round(delta.y * action->getYScale()))));
+			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
+			int barHeight = _game->getScreen()->getCursorTopBlackBand();
+			int cursorX = _cursorPosition.x + Round(delta.x * action->getXScale());
+			int cursorY = _cursorPosition.y + Round(delta.y * action->getYScale());
+			_cursorPosition.x = std::min(_game->getScreen()->getWidth() - barWidth - (int)(Round(action->getXScale())), std::max(barWidth, cursorX));
+			_cursorPosition.y = std::min(_game->getScreen()->getHeight() - barHeight - (int)(Round(action->getYScale())), std::max(barHeight, cursorY));
 			action->getDetails()->motion.x = _cursorPosition.x;
 			action->getDetails()->motion.y = _cursorPosition.y;
 		}
@@ -1448,7 +1452,7 @@ inline void BattlescapeState::handle(Action *action)
 
 		if (_isMouseScrolling && !Options::battleDragScrollInvert)
 		{
-			_map->setSelectorPosition(_cursorPosition.x / action->getXScale(), _cursorPosition.y / action->getYScale());
+			_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
 		}
 
 		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
