@@ -17,15 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <SDL_syswm.h>
-#endif
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
-#include <SDL_image.h>
 #include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
@@ -84,25 +78,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	SDL_WM_GrabInput(Options::captureMouse);
 	
 	// Set the window icon
-#ifdef _WIN32
-	HINSTANCE handle = GetModuleHandle(NULL);
-	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(103));
-
-	SDL_SysWMinfo wminfo;
-	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
-	{
-		HWND hwnd = wminfo.window;
-		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
-	}
-#else
-	SDL_Surface *icon = IMG_Load(CrossPlatform::getDataFile("openxcom.png").c_str());
-	if (icon != 0)
-	{
-		SDL_WM_SetIcon(icon, NULL);
-		SDL_FreeSurface(icon);
-	}
-#endif
+	CrossPlatform::setWindowIcon(103, "openxcom.png");
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);

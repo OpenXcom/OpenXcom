@@ -179,7 +179,7 @@ BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
-	//delete _currentAIState;
+	delete _currentAIState;
 }
 
 /**

@@ -1049,11 +1049,21 @@ void TextList::mouseOver(Action *action, State *state)
 		if (_selRow < _rows.size())
 		{
 			Text *selText = _texts[_rows[_selRow]].front();
-			_selector->setY(getY() + selText->getY());
-			if (_selector->getHeight() != selText->getHeight() + _font->getSpacing())
+			int y = getY() + selText->getY();
+			int h = selText->getHeight() + _font->getSpacing();
+			if (y < getY() || y + h > getY() + getHeight())
 			{
-				_selector->setHeight(selText->getHeight() + _font->getSpacing());
+				h /= 2;
 			}
+			if (y < getY())
+			{
+				y = getY();
+			}
+			if (_selector->getHeight() != h)
+			{
+				_selector->setHeight(h);
+			}
+			_selector->setY(y);
 			_selector->copy(_bg);
 			if (_contrast)
 			{

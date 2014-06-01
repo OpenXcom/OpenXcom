@@ -220,9 +220,12 @@ void UnitDieBState::cancel()
 void UnitDieBState::convertUnitToCorpse()
 {
 	_parent->getSave()->getBattleState()->showPsiButton(false);
-	// in case the unit was unconscious
-	_parent->getSave()->removeUnconsciousBodyItem(_unit);
 	Position lastPosition = _unit->getPosition();
+	// remove the unconscious body item corresponding to this unit, and if it was being carried, keep track of what slot it was in
+	if (lastPosition != Position(-1,-1,-1))
+	{
+		_parent->getSave()->removeUnconsciousBodyItem(_unit);
+	}
 	int size = _unit->getArmor()->getSize();
 	BattleItem *itemToKeep = 0;
 	bool dropItems = !Options::weaponSelfDestruction || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
@@ -231,7 +234,7 @@ void UnitDieBState::convertUnitToCorpse()
 	{
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
-			_parent->dropItem(_unit->getPosition(), (*i));
+			_parent->dropItem(lastPosition, (*i));
 			if (!(*i)->getRules()->isFixed())
 			{
 				(*i)->setOwner(0);
@@ -252,19 +255,36 @@ void UnitDieBState::convertUnitToCorpse()
 	// remove unit-tile link
 	_unit->setTile(0);
 
-	int i = 0;
-	for (int y = 0; y < size; y++)
+	if (lastPosition == Position(-1,-1,-1)) // we're being carried
 	{
-		for (int x = 0; x < size; x++)
+		// replace the unconscious body item with a corpse in the carrying unit's inventory
+		for (std::vector<BattleItem*>::iterator it = _parent->getSave()->getItems()->begin(); it != _parent->getSave()->getItems()->end(); )
 		{
-			BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
-			corpse->setUnit(_unit);
-			if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
+			if ((*it)->getUnit() == _unit)
 			{
-				_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+				RuleItem *corpseRules = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]); // we're in an inventory, so we must be a 1x1 unit
+				(*it)->convertToCorpse(corpseRules);
+				break;
 			}
-			_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
-			i++;
+			++it;
+		}
+	}
+	else
+	{
+		int i = 0;
+		for (int y = 0; y < size; y++)
+		{
+			for (int x = 0; x < size; x++)
+			{
+				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
+				corpse->setUnit(_unit);
+				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
+				{
+					_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+				}
+				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
+				i++;
+			}
 		}
 	}
 }
