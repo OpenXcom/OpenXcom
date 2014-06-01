@@ -129,6 +129,8 @@ public:
 	bool getTurnFlag() const;
 	/// set the flag representing "not dropped on player turn"
 	void setTurnFlag(bool flag);
+	/// Sets the item's ruleset.
+	void convertToCorpse(RuleItem *rules);
 
 };
 
