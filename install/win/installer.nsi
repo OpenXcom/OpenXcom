@@ -104,6 +104,7 @@
 	!insertmacro MUI_LANGUAGE "Romanian"
 	!insertmacro MUI_LANGUAGE "Slovak"
 	!insertmacro MUI_LANGUAGE "Spanish"
+	!insertmacro MUI_LANGUAGE "SpanishInternational"
 	!insertmacro MUI_LANGUAGE "Turkish"
 	!insertmacro MUI_LANGUAGE "Ukrainian"
 
