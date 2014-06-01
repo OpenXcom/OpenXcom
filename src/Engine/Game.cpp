@@ -20,7 +20,6 @@
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
-#include <SDL_image.h>
 #include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"

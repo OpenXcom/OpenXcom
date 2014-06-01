@@ -17,9 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <SDL_image.h>
 #include <set>
 #include <algorithm>
 #include <iostream>
@@ -32,6 +29,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
+#include "Language.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -58,6 +56,9 @@
 #include <sys/types.h>
 #include <pwd.h>
 #endif
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <SDL_image.h>
 
 namespace OpenXcom
 {
@@ -956,7 +957,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 #else
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{
