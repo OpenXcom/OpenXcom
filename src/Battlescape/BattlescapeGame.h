@@ -187,6 +187,7 @@ public:
 	bool getKneelReserved();
 	/// Checks for and triggers proximity grenades.
 	bool checkForProximityGrenades(BattleUnit *unit);
+	void cleanupDeleted();
 };
 
 }
