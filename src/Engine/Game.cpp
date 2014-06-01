@@ -372,8 +372,8 @@ void Game::setVolume(int sound, int music, int ui)
 		if (ui >= 0)
 		{
 			ui = volumeExponent(ui) * (double)SDL_MIX_MAXVOLUME;
-			Mix_Volume(0, ui);
 			Mix_Volume(1, ui);
+			Mix_Volume(2, ui);
 		}
 	}
 }
@@ -672,7 +672,7 @@ void Game::initAudio()
 	{
 		Mix_AllocateChannels(16);
 		// Set up UI channels
-		Mix_ReserveChannels(2);
+		Mix_ReserveChannels(3);
 		Mix_GroupChannels(1, 2, 0);
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);

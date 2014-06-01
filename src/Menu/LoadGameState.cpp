@@ -187,6 +187,7 @@ void LoadGameState::init()
 		else
 			delete s;
 	}
+	CrossPlatform::flashWindow();
 }
 
 }
