@@ -323,9 +323,20 @@ GraphsState::~GraphsState()
 	std::string graphRegionToggles = "";
 	std::string graphCountryToggles = "";
 	std::string graphFinanceToggles = "";
-	for (size_t i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i]->_pushed ? '1' : '0');
-	for (size_t i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i]->_pushed ? '1' : '0');
-	for (size_t i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
+	for (size_t i = 0; i < _regionToggles.size(); ++i)
+	{
+		graphRegionToggles.push_back(_regionToggles[i]->_pushed ? '1' : '0');
+		delete _regionToggles[i];
+	}
+	for (size_t i = 0; i < _countryToggles.size(); ++i)
+	{
+		graphCountryToggles.push_back(_countryToggles[i]->_pushed ? '1' : '0');
+		delete _countryToggles[i];
+	}
+	for (size_t i = 0; i < _financeToggles.size(); ++i)
+	{
+		graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
+	}
 	_game->getSavedGame()->setGraphRegionToggles(graphRegionToggles);
 	_game->getSavedGame()->setGraphCountryToggles(graphCountryToggles);
 	_game->getSavedGame()->setGraphFinanceToggles(graphFinanceToggles);

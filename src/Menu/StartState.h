@@ -28,6 +28,7 @@ namespace OpenXcom
 class Text;
 class Font;
 class Timer;
+class Language;
 
 enum LoadingPhase { LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_DONE };
 
@@ -40,6 +41,7 @@ private:
 	Text *_text, *_cursor;
 	Font *_font;
 	Timer *_timer;
+	Language *_lang;
 	int _anim;
 
 	SDL_Thread *_thread;

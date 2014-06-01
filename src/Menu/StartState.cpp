@@ -70,6 +70,7 @@ StartState::StartState(Game *game) : State(game), _anim(0)
 
 	_font = new Font();
 	_font->loadTerminal();
+	_lang = new Language();
 
 	_text = new Text(Options::baseXResolution, Options::baseYResolution, 0, 0);
 	_cursor = new Text(_font->getWidth(), _font->getHeight(), 0, 0);
@@ -81,11 +82,11 @@ StartState::StartState(Game *game) : State(game), _anim(0)
 	add(_cursor);
 
 	// Set up objects
-	_text->initText(_font, _font, 0);
+	_text->initText(_font, _font, _lang);
 	_text->setColor(0);
 	_text->setWordWrap(true);
 
-	_cursor->initText(_font, _font, 0);
+	_cursor->initText(_font, _font, _lang);
 	_cursor->setColor(0);
 	_cursor->setText(L"_");
 
@@ -118,6 +119,7 @@ StartState::~StartState()
 	}
 	delete _font;
 	delete _timer;
+	delete _lang;
 }
 
 /**
