@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,11 +36,13 @@ private:
 	Globe *_globe;
 public:
 	/// Creates the Build Facilities state.
-	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities);
+	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe);
 	/// Cleans up the Build Facilities state.
 	~SelectStartFacilityState();
 	/// Populates the build option list.
 	virtual void populateBuildList();
+	/// Handler for clicking the Reset button.
+	void btnOkClick(Action *action);
 	/// Handler for clicking the Facilities list.
 	void lstFacilitiesClick(Action *action);
 	/// Handler for when the facility is actually built.

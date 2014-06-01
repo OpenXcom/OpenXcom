@@ -1,0 +1,49 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+armors:
+  - type: TANK_ARMOR
+    frontArmor: 130
+    sideArmor: 130
+    rearArmor: 130
+    underArmor: 100
+units:
+  - type: STR_TANK_CANNON
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+  - type: STR_TANK_ROCKET_LAUNCHER
+    race: STR_TANK_ROCKET_LAUNCHER
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+  - type: STR_TANK_LASER_CANNON
+    race: STR_TANK_LASER_CANNON
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70

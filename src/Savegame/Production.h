@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,18 +27,22 @@ class RuleManufacture;
 class Base;
 class SavedGame;
 class Ruleset;
-enum productionProgress_e { PROGRESS_NOT_COMPLETE, PROGRESS_COMPLETE, PROGRESS_NOT_ENOUGH_MONEY, PROGRESS_NOT_ENOUGH_MATERIALS, PROGRESS_MAX };
+enum productionProgress_e { PROGRESS_NOT_COMPLETE, PROGRESS_COMPLETE, PROGRESS_NOT_ENOUGH_MONEY, PROGRESS_NOT_ENOUGH_MATERIALS, PROGRESS_MAX, PROGRESS_CONSTRUCTION };
 class Production
 {
 public:
 	Production (const RuleManufacture * rules, int amount);
 	int getAmountTotal () const;
 	void setAmountTotal (int);
+	bool getInfiniteAmount () const;
+	void setInfiniteAmount (bool);
 	int getTimeSpent () const;
 	void setTimeSpent (int);
 	int getAmountProduced () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
+	bool getSellItems() const;
+	void setSellItems (bool);
 	productionProgress_e step(Base * b, SavedGame * g, const Ruleset *r);
 	const RuleManufacture * getRules() const;
 	void startItem(Base * b, SavedGame * g);
@@ -47,8 +51,10 @@ public:
 private:
 	const RuleManufacture * _rules;
 	int _amount;
+	bool _infinite;
 	int _timeSpent;
 	int _engineers;
+	bool _sell;
 	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g);
 	bool haveEnoughMaterialsForOneMoreUnit(Base * b);
 };

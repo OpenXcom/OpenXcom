@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -71,7 +71,7 @@ void MiniBaseView::setTexture(SurfaceSet *texture)
  * Returns the base the mouse cursor is currently over.
  * @return ID of the base.
  */
-unsigned int MiniBaseView::getHoveredBase() const
+size_t MiniBaseView::getHoveredBase() const
 {
 	return _hoverBase;
 }
@@ -81,7 +81,7 @@ unsigned int MiniBaseView::getHoveredBase() const
  * the mini base view.
  * @param base ID of base.
  */
-void MiniBaseView::setSelectedBase(unsigned int base)
+void MiniBaseView::setSelectedBase(size_t base)
 {
 	_base = base;
 	_redraw = true;
@@ -94,7 +94,7 @@ void MiniBaseView::setSelectedBase(unsigned int base)
 void MiniBaseView::draw()
 {
 	Surface::draw();
-	for (unsigned int i = 0; i < MAX_BASES; ++i)
+	for (size_t i = 0; i < MAX_BASES; ++i)
 	{
 		// Draw base squares
 		if (i == _base)

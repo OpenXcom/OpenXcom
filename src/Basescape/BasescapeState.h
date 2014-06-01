@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -87,8 +87,10 @@ public:
 	void viewMouseOut(Action *action);
 	/// Handler for clicking the mini base view.
 	void miniClick(Action *action);
-	/// Handler for pressing a key on the Name edit.
-	void edtBaseKeyPress(Action *action);
+	/// Handler for changing the text on the Name edit.
+	void edtBaseChange(Action *action);
+	/// Handler for pressing a base selection hotkey.
+	void handleKeyPress(Action *action);
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-
+#include <algorithm>
 #include "Ufopaedia.h"
 #include "ArticleStateItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -37,15 +37,15 @@
 namespace OpenXcom
 {
 
-	ArticleStateItem::ArticleStateItem(Game *game, ArticleDefinitionItem *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
+	ArticleStateItem::ArticleStateItem(Game *game, ArticleDefinitionItem *defs) : ArticleState(game, defs->id)
 	{
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(150, 32, 5, 24);
+		_txtTitle = new Text(148, 32, 5, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+		setPalette("PAL_BATTLEPEDIA");
 
 		ArticleState::initLayout();
 
@@ -61,7 +61,7 @@ namespace OpenXcom
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
 		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		// IMAGE
 		_image = new Surface(32, 48, 157, 5);
@@ -74,23 +74,23 @@ namespace OpenXcom
 		// SHOT STATS TABLE (for firearms only)
 		if (item->getBattleType() == BT_FIREARM)
 		{
-			_txtShotType = new Text(100, 16, 8, 66);
+			_txtShotType = new Text(100, 17, 8, 66);
 			add(_txtShotType);
 			_txtShotType->setColor(Palette::blockOffset(14)+15);
 			_txtShotType->setWordWrap(true);
-			_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
+			_txtShotType->setText(tr("STR_SHOT_TYPE"));
 
-			_txtAccuracy = new Text(50, 16, 108, 66);
+			_txtAccuracy = new Text(50, 17, 104, 66);
 			add(_txtAccuracy);
 			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
 			_txtAccuracy->setWordWrap(true);
-			_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
+			_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 
-			_txtTuCost = new Text(60, 16, 160, 66);
+			_txtTuCost = new Text(60, 17, 158, 66);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
 			_txtTuCost->setWordWrap(true);
-			_txtTuCost->setText(tr("STR_TU_COST").c_str());
+			_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 
 			_lstInfo = new TextList(204, 55, 8, 82);
 			add(_lstInfo);
@@ -108,7 +108,7 @@ namespace OpenXcom
 					tu.erase(tu.end() - 1);
 				}
 				_lstInfo->addRow(3,
-								 tr("STR_AUTO").c_str(),
+								 tr("STR_SHOT_TYPE_AUTO").c_str(),
 								 Text::formatPercentage(item->getAccuracyAuto()).c_str(),
 								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
@@ -123,7 +123,7 @@ namespace OpenXcom
 					tu.erase(tu.end() - 1);
 				}
 				_lstInfo->addRow(3,
-								 tr("STR_SNAP").c_str(),
+								 tr("STR_SHOT_TYPE_SNAP").c_str(),
 								 Text::formatPercentage(item->getAccuracySnap()).c_str(),
 								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
@@ -138,7 +138,7 @@ namespace OpenXcom
 					tu.erase(tu.end() - 1);
 				}
 				_lstInfo->addRow(3,
-								 tr("STR_AIMED").c_str(),
+								 tr("STR_SHOT_TYPE_AIMED").c_str(),
 								 Text::formatPercentage(item->getAccuracyAimed()).c_str(),
 								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
@@ -158,65 +158,75 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(14)+15);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 
 		// AMMO column
-		std::wstringstream ss;
+		std::wostringstream ss;
 
 		for (int i = 0; i<3; ++i)
 		{
-			_txtAmmoType[i] = new Text(90, 9, 200, 24 + i*49);
+			_txtAmmoType[i] = new Text(82, 16, 194, 20 + i*49);
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 			_txtAmmoType[i]->setAlign(ALIGN_CENTER);
+			_txtAmmoType[i]->setVerticalAlign(ALIGN_MIDDLE);
+			_txtAmmoType[i]->setWordWrap(true);
 
-			_txtAmmoDamage[i] = new Text(90, 16, 200, 40 + i*49);
+			_txtAmmoDamage[i] = new Text(82, 17, 194, 40 + i*49);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
 			_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
 			_txtAmmoDamage[i]->setBig();
 
-			_imageAmmo[i] = new Surface(32, 48, 280, 24 + i*49);
+			_imageAmmo[i] = new Surface(32, 48, 280, 16 + i*49);
 			add(_imageAmmo[i]);
 		}
 
 		switch (item->getBattleType())
 		{
 			case BT_FIREARM:
-				_txtDamage = new Text(80, 10, 200, 7);
+				_txtDamage = new Text(82, 10, 194, 7);
 				add(_txtDamage);
 				_txtDamage->setColor(Palette::blockOffset(14)+15);
 				_txtDamage->setAlign(ALIGN_CENTER);
-				_txtDamage->setText(tr("STR_DAMAGE_UC").c_str());
+				_txtDamage->setText(tr("STR_DAMAGE_UC"));
 
-				_txtAmmo = new Text(45, 10, 270, 7);
+				_txtAmmo = new Text(50, 10, 268, 7);
 				add(_txtAmmo);
 				_txtAmmo->setColor(Palette::blockOffset(14)+15);
 				_txtAmmo->setAlign(ALIGN_CENTER);
-				_txtAmmo->setText(tr("STR_AMMO").c_str());
+				_txtAmmo->setText(tr("STR_AMMO"));
 
-				if (item->getClipSize() == -1)
+				if (ammo_data->empty())
 				{
-					setDamageTypeText(_txtAmmoType[0], item);
+					_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 
 					ss.str(L"");ss.clear();
 					ss << item->getPower();
-					_txtAmmoDamage[0]->setText(ss.str().c_str());
+					if (item->getShotgunPellets())
+					{
+						ss << L"x" << item->getShotgunPellets();
+					}
+					_txtAmmoDamage[0]->setText(ss.str());
 				}
 				else
 				{
-					for (unsigned int i = 0; i < ammo_data->size(); ++i)
+					for (size_t i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
 						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
-						if (Ufopaedia::isArticleAvailable(_game, ammo_article))
+						if (Ufopaedia::isArticleAvailable(_game->getSavedGame(), ammo_article))
 						{
 							RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
-							setDamageTypeText(_txtAmmoType[i], ammo_rule);
+							_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
 
 							ss.str(L"");ss.clear();
 							ss << ammo_rule->getPower();
-							_txtAmmoDamage[i]->setText(ss.str().c_str());
+							if (ammo_rule->getShotgunPellets())
+							{
+								ss << L"x" << ammo_rule->getShotgunPellets();
+							}
+							_txtAmmoDamage[i]->setText(ss.str());
 
 							ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
 						}
@@ -226,45 +236,17 @@ namespace OpenXcom
 			case BT_AMMO:
 			case BT_GRENADE:
 			case BT_PROXIMITYGRENADE:
-				setDamageTypeText(_txtAmmoType[0], item);
+			case BT_MELEE:
+				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 
 				ss.str(L"");ss.clear();
 				ss << item->getPower();
-				_txtAmmoDamage[0]->setText(ss.str().c_str());
+				_txtAmmoDamage[0]->setText(ss.str());
 				break;
 			default: break;
 		}
 
 		centerAllSurfaces();
-	}
-
-	void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
-	{
-		switch(ammo_rule->getDamageType())
-		{
-			case DT_AP:
-				text_field->setText(tr("STR_ARMOR_PIERCING").c_str());
-				break;
-			case DT_HE:
-			case DT_SMOKE:
-				text_field->setText(tr("STR_HIGH_EXPLOSIVE_UC").c_str());
-				break;
-			case DT_IN:
-				text_field->setText(tr("STR_INCENDIARY").c_str());
-				break;
-			case DT_LASER:
-				text_field->setText(tr("STR_LASER_BEAM").c_str());
-				break;
-			case DT_PLASMA:
-				text_field->setText(tr("STR_PLASMA_BEAM_UC").c_str());
-				break;
-			case DT_STUN:
-				text_field->setText(tr("STR_STUN_UC").c_str());
-				break;
-			default:
-				text_field->setText(tr("STR_UNKNOWN").c_str());
-				break;
-		}
 	}
 
 	ArticleStateItem::~ArticleStateItem()

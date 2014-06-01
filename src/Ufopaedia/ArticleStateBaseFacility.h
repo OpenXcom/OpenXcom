@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,7 +38,7 @@ namespace OpenXcom
 	class ArticleStateBaseFacility : public ArticleState
 	{
 	public:
-		ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *article_defs, int palSwitch);
+		ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *article_defs);
 		virtual ~ArticleStateBaseFacility();
 
 	protected:

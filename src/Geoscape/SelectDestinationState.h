@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,7 @@ public:
 	SelectDestinationState(Game *game, Craft *craft, Globe *globe);
 	/// Cleans up the Select Destination state.
 	~SelectDestinationState();
-	/// Updates the palette.
+	/// Resets globe.
 	void init();
 	/// Runs the timer.
 	void think();
@@ -86,6 +86,8 @@ public:
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Cydonia mission button.
 	void btnCydoniaClick(Action *action);
+	/// Let the state know the window has been resized.
+	void resize(int &dX, int &dY);
 
 };
 

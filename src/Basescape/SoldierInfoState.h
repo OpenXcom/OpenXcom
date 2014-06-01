@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_SOLDIERINFOSTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -30,6 +31,7 @@ class TextButton;
 class Text;
 class TextEdit;
 class Bar;
+class Soldier;
 
 /**
  * Soldier Info screen that shows all the
@@ -39,25 +41,29 @@ class SoldierInfoState : public State
 {
 private:
 	Base *_base;
-	size_t _soldier;
+	size_t _soldierId;
+	Soldier *_soldier;
+	std::vector<Soldier*> *_list;
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack;
-	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
+	Text *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
 	TextEdit *_edtSoldier;
 
-	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength, *_txtPsiStrength, *_txtPsiSkill;
-	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numStrength, *_numPsiStrength, *_numPsiSkill;
-	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength, *_barPsiStrength, *_barPsiSkill;
+	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtMelee, *_txtStrength, *_txtPsiStrength, *_txtPsiSkill;
+	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numMelee, *_numStrength, *_numPsiStrength, *_numPsiSkill;
+	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barMelee, *_barStrength, *_barPsiStrength, *_barPsiSkill;
 public:
 	/// Creates the Soldier Info state.
-	SoldierInfoState(Game *game, Base *base, size_t soldier);
+	SoldierInfoState(Game *game, Base *base, size_t soldierId);
 	/// Cleans up the Soldier Info state.
 	~SoldierInfoState();
 	/// Updates the soldier info.
 	void init();
-	/// Handler for pressing a key on the Name edit.
-	void edtSoldierKeyPress(Action *action);
+	/// Handler for pressing on the Name edit.
+	void edtSoldierPress(Action *action);
+	/// Handler for changing text on the Name edit.
+	void edtSoldierChange(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Previous button.

@@ -5,22 +5,32 @@ lookWeights:
   - 13
 maleFirst:
   - Alain
+  - Alban
   - Armand
+  - Benoit
+  - Bruno
   - Calvin
   - Christian
   - Claude
   - Corentin
+  - Damien
+  - Denis
   - Emile
+  - Etienne
   - Ethan
+  - Fabien
+  - Francis
   - Frederic
   - Gaston
   - Gerard
+  - Guillaume
   - Henri
   - Hugo
   - Jacques
   - Jean
   - Jules
   - Leon
+  - Lionel
   - Louis
   - Lucas
   - Mathis
@@ -29,34 +39,64 @@ maleFirst:
   - Michel
   - Nathan
   - Nicolas
+  - Olivier
+  - Pascal
   - Paul
   - Pierre
   - Philippe
+  - Quentin
+  - Raphael
+  - Remi
   - Rene
-  - Yanis
+  - Robert
+  - Roger
+  - Sebastien
+  - Simon
+  - Sylvain
+  - Thibault
+  - Victor
+  - Vincent
+  - Yves
 femaleFirst:
   - Anne
+  - Audrey
   - Brigitte
   - Camille
   - Catherine
+  - Chantal
+  - Claire
   - Clara
   - Cloe
   - Danielle
   - Dominique
   - Elisabeth
   - Eva
+  - Florence
   - Francoise
+  - Gaelle
   - Geraldine
+  - Helene
+  - Isabelle
+  - Ludivine
+  - Lydia
   - Jacqueline
   - Jeanne
   - Julie
+  - Laure
   - Lina
   - Lilou
   - Maelys
   - Marie
-  - Marielle
+  - Marion
   - Marguerite
-  - Micheline
+  - Maud
+  - Murielle
+  - Nathalie
+  - Odile
+  - Rachel
+  - Rose
+  - Sabine
+  - Sandrine
   - Stephanie
   - Sonia
   - Sylvie
@@ -65,56 +105,84 @@ femaleFirst:
   - Zoe
 maleLast:
   - Andre
+  - Berger
   - Bernard
   - Bertrand
   - Bonnet
   - Bouissou
+  - Bourgeois
   - Bouton
+  - Bouvier
   - Blanc
+  - Blondel
   - Buchard
+  - Caron
+  - Chevalier
   - Coicard
+  - Collet
   - Collignon
+  - Coste
+  - Couturier
   - Clement
   - Cuvelier
   - Dagallier
-  - David
+  - Delorme
   - Dreyfus
   - Dubois
+  - Ducourtioux
   - Dujardin
   - Dumont
+  - Dupuis
+  - Dupre
+  - Duval
+  - Fabre
   - Faure
   - Fontaine
   - Fournier
+  - Gaillard
   - Garcia
-  - Gaudin
+  - Gaudrin
   - Gautier
   - Gressier
   - Guerin
+  - Guillot
   - Girard
+  - Giraudon
+  - Heroin
+  - Lacroix
   - Laroyenne
   - Lambert
+  - Laroche
+  - Larue
   - Laurent
+  - Leclerc
   - Lecointe
+  - Lecomte
+  - Leduc
   - Lefevre
-  - Lagrand
+  - Legrand
   - Leroy
   - Luget
   - Marcelle
   - Martin
+  - Menardier
   - Mercier
+  - Meunier
   - Moreau
   - Morel
   - Morin
   - Mathieu
   - Muller
   - Pecheux
-  - Petain
+  - Pelletier
   - Perrin
-  - Robert
+  - Perrot
+  - Petit
+  - Picar
   - Roussel
   - Revenu
   - Roux
   - Richard
   - Simon
   - Thomas
-  - Vincent
+  - Verdier

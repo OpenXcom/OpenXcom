@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,7 +22,8 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Ruleset/Unit.h"
-
+#include "../Ruleset/StatString.h"
+	 
 namespace OpenXcom
 {
 
@@ -37,6 +38,8 @@ class RuleSoldier;
 class Armor;
 class Language;
 class EquipmentLayoutItem;
+class SoldierDeath;
+class SavedGame;
 
 /**
  * Represents a soldier hired by the player.
@@ -58,17 +61,19 @@ private:
 	bool _recentlyPromoted, _psiTraining;
 	Armor *_armor;
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
+	SoldierDeath *_death;
+	std::wstring _statString;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Loads the soldier from YAML.
-	void load(const YAML::Node& node, const Ruleset *rule);
+	void load(const YAML::Node& node, const Ruleset *rule, SavedGame *save);
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.
-	std::wstring getName() const;
+	std::wstring getName(bool statstring = false, unsigned int maxLength = 20) const;
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
@@ -129,6 +134,12 @@ public:
 	void setPsiTraining();
 	/// returns this soldier's psionic improvement score for this month.
 	int getImprovement();
+	/// Gets the soldier death info.
+	SoldierDeath *getDeath() const;
+	/// Kills the soldier.
+	void die(SoldierDeath *death);
+	/// Calculate statString.
+	void calcStatString(const std::vector<StatString *> &statStrings, bool psiStrengthEval);
 };
 
 }

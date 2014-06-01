@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Font;
+class Language;
 
 enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
@@ -41,20 +42,25 @@ class Text : public Surface
 {
 private:
 	Font *_big, *_small, *_font;
+	Language *_lang;
 	std::wstring _text, _wrappedText;
 	std::vector<int> _lineWidth, _lineHeight;
-	bool _wrap, _invert, _contrast;
+	bool _wrap, _invert, _contrast, _indent;
 	TextHAlign _align;
 	TextVAlign _valign;
 	Uint8 _color, _color2;
 
 	/// Processes the contained text.
 	void processText();
+	/// Gets the X position of a text line.
+	int getLineX(int line) const;
 public:
 	/// Creates a new text with the specified size and position.
 	Text(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text.
 	~Text();
+	/// Formats an integer value as number with separators.
+	static std::wstring formatNumber(int value, std::wstring currency = L"");
 	/// Formats an integer value as currency.
 	static std::wstring formatFunding(int funds);
 	/// Formats an integer value as percentage.
@@ -65,14 +71,14 @@ public:
 	void setSmall();
 	/// Gets the text's current font.
 	Font *getFont() const;
-	/// Sets the text's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the resources for the text.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text's string.
 	void setText(const std::wstring &text);
 	/// Gets the text's string.
 	std::wstring getText() const;
 	/// Sets the text's wordwrap setting.
-	void setWordWrap(bool wrap);
+	void setWordWrap(bool wrap, bool indent = false);
 	/// Sets the text's color invert setting.
 	void setInvert(bool invert);
 	/// Sets the text's high contrast color setting.
@@ -92,9 +98,9 @@ public:
 	/// Gets the text's secondary color.
 	Uint8 getSecondaryColor() const;
 	/// Gets the rendered text's width.
-	int getTextWidth() const;
+	int getTextWidth(int line = -1) const;
 	/// Gets the rendered text's height.
-	int getTextHeight() const;
+	int getTextHeight(int line = -1) const;
 	/// Draws the text.
 	void draw();
 };

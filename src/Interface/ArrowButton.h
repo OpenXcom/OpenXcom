@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-enum ArrowShape { ARROW_BIG_UP, ARROW_BIG_DOWN, ARROW_SMALL_UP, ARROW_SMALL_DOWN, ARROW_SMALL_LEFT, ARROW_SMALL_RIGHT };
+enum ArrowShape { ARROW_NONE, ARROW_BIG_UP, ARROW_BIG_DOWN, ARROW_SMALL_UP, ARROW_SMALL_DOWN, ARROW_SMALL_LEFT, ARROW_SMALL_RIGHT };
 
 class TextList;
 class Timer;
@@ -40,7 +40,8 @@ private:
 	ArrowShape _shape;
 	TextList *_list;
 	Timer *_timer;
-	bool _listButton;
+protected:
+	bool isButtonHandled(Uint8 button = 0);
 public:
 	/// Creates a new arrow button with the specified size and position.
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);
@@ -48,6 +49,8 @@ public:
 	~ArrowButton();
 	/// Sets the arrow button's color.
 	void setColor(Uint8 color);
+	/// Sets the arrow button's shape.
+	void setShape(ArrowShape shape);
 	/// Sets the arrow button's list.
 	void setTextList(TextList *list);
 	/// Handles the timers.

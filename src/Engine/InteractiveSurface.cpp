@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,8 @@
 namespace OpenXcom
 {
 
+const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
+
 /**
  * Sets up a blank interactive surface with the specified size and position.
  * @param width Width in pixels.
@@ -39,6 +41,20 @@ InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Su
  */
 InteractiveSurface::~InteractiveSurface()
 {
+}
+
+bool InteractiveSurface::isButtonHandled(Uint8 button)
+{
+	bool handled = (_click.find(0) != _click.end() ||
+					_press.find(0) != _press.end() ||
+					_release.find(0) != _release.end());
+	if (!handled && button != 0)
+	{
+		handled = (_click.find(button) != _click.end() ||
+				   _press.find(button) != _press.end() ||
+				   _release.find(button) != _release.end());
+	}
+	return handled;
 }
 
 bool InteractiveSurface::isButtonPressed(Uint8 button)
@@ -103,8 +119,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 	{
 		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
 	}
-	// Modern system mouse handling: Press/releases are only triggered by button up/down events
-	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
+
 	if (action->isMouseAction())
 	{
 		if ((action->getAbsoluteXMouse() >= getX() && action->getAbsoluteXMouse() < getX() + getWidth()) &&
@@ -186,20 +201,23 @@ void InteractiveSurface::handle(Action *action, State *state)
 }
 
 /**
- * Marks ths surface as focused. Surfaces will only receive
+ * Changes the surface's focus. Surfaces will only receive
  * keyboard events if focused.
+ * @param focus Is it focused?
  */
-void InteractiveSurface::focus()
+void InteractiveSurface::setFocus(bool focus)
 {
-	_isFocused = true;
+	_isFocused = focus;
 }
 
 /**
- * Marks ths surface as unfocused.
+ * Returns the surface's focus. Surfaces will only receive
+ * keyboard events if focused.
+ * @return Is it focused?
  */
-void InteractiveSurface::deFocus()
+bool InteractiveSurface::isFocused() const
 {
-	_isFocused = false;
+	return _isFocused;
 }
 
 /**
@@ -343,7 +361,7 @@ void InteractiveSurface::mouseOut(Action *action, State *state)
  */
 void InteractiveSurface::keyboardPress(Action *action, State *state)
 {
-	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyPress.find(SDLK_UNKNOWN);
+	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyPress.find(SDLK_ANY);
 	std::map<SDLKey, ActionHandler>::iterator oneHandler = _keyPress.find(action->getDetails()->key.keysym.sym);
 	if (allHandler != _keyPress.end())
 	{
@@ -368,7 +386,7 @@ void InteractiveSurface::keyboardPress(Action *action, State *state)
  */
 void InteractiveSurface::keyboardRelease(Action *action, State *state)
 {
-	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyRelease.find(SDLK_UNKNOWN);
+	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyRelease.find(SDLK_ANY);
 	std::map<SDLKey, ActionHandler>::iterator oneHandler = _keyRelease.find(action->getDetails()->key.keysym.sym);
 	if (allHandler != _keyRelease.end())
 	{

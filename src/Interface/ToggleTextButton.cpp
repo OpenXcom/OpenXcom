@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,9 +39,6 @@ ToggleTextButton::~ToggleTextButton(void)
 /// handle mouse clicks by toggling the button state; use _fakeGroup to trick TextButton into drawing the right thing
 void ToggleTextButton::mousePress(Action *action, State *state)
 {
-    if (soundPress != 0)
-        soundPress->play();
-
     if (action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
     {
         _isPressed = !_isPressed;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,7 +35,6 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
-class BattlescapeState;
 class Node;
 class Surface;
 class RuleInventory;
@@ -92,10 +91,10 @@ private:
 	int _moraleRestored;
 	int _coverReserve;
 	BattleUnit *_charging;
-	int _turnsExposed;
-	std::string _zombieUnit, _spawnUnit;
+	int _turnsSinceSpotted;
+	std::string _spawnUnit;
 	std::string _activeHand;
-	
+
 	// static data
 	std::string _type;
 	std::string _rank;
@@ -198,6 +197,8 @@ public:
 	void healStun(int power);
 	/// Gets the unit's stun level.
 	int getStunlevel() const;
+	/// Knocks the unit out instantly.
+	void knockOut(BattlescapeGame *battle);
 	/// Start falling sequence.
 	void startFalling();
 	/// Increment the falling sequence.
@@ -227,9 +228,9 @@ public:
 	/// Clear visible tiles.
 	void clearVisibleTiles();
 	/// Calculate firing accuracy.
-	double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
+	int getFiringAccuracy(BattleActionType actionType, BattleItem *item);
 	/// Calculate accuracy modifier.
-	double getAccuracyModifier();
+	int getAccuracyModifier(BattleItem *item = 0);
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy();
 	/// Set armor value.
@@ -296,6 +297,8 @@ public:
 	void addPsiExp();
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
+	/// Updates the stats of a Geoscape soldier.
+	void updateGeoscapeStats(Soldier *soldier);
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap
@@ -360,8 +363,6 @@ public:
 	void convertToFaction(UnitFaction f);
 	/// Set health to 0 and set status dead
 	void instaKill();
-	/// Gets the unit's zombie unit.
-	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Sets the unit's spawn unit.
@@ -383,21 +384,21 @@ public:
 	/// Get the carried weight in strength units.
 	int getCarriedWeight(BattleItem *draggingItem = 0) const;
 	/// Set how many turns this unit will be exposed for.
-	void setTurnsExposed (int turns);
+	void setTurnsSinceSpotted (int turns);
 	/// Set how many turns this unit will be exposed for.
-	int getTurnsExposed () const;
+	int getTurnsSinceSpotted () const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
 	/// call this after the default copy constructor deletes the cache?
 	void invalidateCache();
-	
+
 	Unit *getUnitRules() const { return _unitRules; }
 
 	/// scratch value for AI's left hand to tell its right hand what's up...
 	bool _hidingForTurn; // don't zone out and start patrolling again
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
-	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+	std::vector<BattleUnit *> &getUnitsSpottedThisTurn();
 	/// set the rank integer
 	void setRankInt(int rank);
 	/// get the rank integer
@@ -413,7 +414,11 @@ public:
 	/// switch the state of the fire damage tracker.
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
-	int getCoverReserve();
+	int getCoverReserve() const;
+	/// Is this unit selectable?
+	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
+	/// Does this unit have an inventory?
+	bool hasInventory() const;
 };
 
 }

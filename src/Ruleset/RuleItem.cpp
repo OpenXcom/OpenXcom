@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,9 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0), _bulletSpeed(0), _autoShots(3)
+											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
+											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit(""),
+											_strengthApplied(false), _skillApplied(true), _LOSRequired(false), _meleeSound(39), _meleePower(0), _meleeAnimation(0), _meleeHitSound(-1)
 {
 }
 
@@ -55,40 +57,81 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_size = node["size"].as<float>(_size);
+	_size = node["size"].as<double>(_size);
 	_costBuy = node["costBuy"].as<int>(_costBuy);
 	_costSell = node["costSell"].as<int>(_costSell);
 	_transferTime = node["transferTime"].as<int>(_transferTime);
 	_weight = node["weight"].as<int>(_weight);
-	_bigSprite = node["bigSprite"].as<int>(_bigSprite);
-	// BIGOBS.PCK: 57 entries
-	if (_bigSprite > 56)
-		_bigSprite += modIndex;
-	_floorSprite = node["floorSprite"].as<int>(_floorSprite);
-	// FLOOROB.PCK: 73 entries
-	if (_floorSprite > 72)
-		_floorSprite += modIndex;
-	_handSprite = node["handSprite"].as<int>(_handSprite);
-	// HANDOBS.PCK: 128 entries
-	if (_handSprite > 127)
-		_handSprite += modIndex;
-	_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite);
-	// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-	_bulletSprite *= 35;
-	if (_bulletSprite >= 385)
-		_bulletSprite += modIndex;
-	_fireSound = node["fireSound"].as<int>(_fireSound);
-	// BATTLE.CAT: 55 entries
-	if (_fireSound > 54)
-		_fireSound += modIndex;
-	_hitSound = node["hitSound"].as<int>(_hitSound);
-	// BATTLE.CAT: 55 entries
-	if (_hitSound > 54)
-		_hitSound += modIndex;
-	_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
-	// SMOKE.PCK: 56 entries
-	if (_hitAnimation > 55)
-		_hitAnimation += modIndex;
+	if (node["bigSprite"])
+	{
+		_bigSprite = node["bigSprite"].as<int>(_bigSprite);
+		// BIGOBS.PCK: 57 entries
+		if (_bigSprite > 56)
+			_bigSprite += modIndex;
+	}
+	if (node["floorSprite"])
+	{
+		_floorSprite = node["floorSprite"].as<int>(_floorSprite);
+		// FLOOROB.PCK: 73 entries
+		if (_floorSprite > 72)
+			_floorSprite += modIndex;
+	}
+	if (node["handSprite"])
+	{
+		_handSprite = node["handSprite"].as<int>(_handSprite);
+		// HANDOBS.PCK: 128 entries
+		if (_handSprite > 127)
+			_handSprite += modIndex;
+	}
+	if (node["bulletSprite"])
+	{
+		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
+		_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite) * 35;
+		if (_bulletSprite >= 385)
+			_bulletSprite += modIndex;
+	}
+	if (node["fireSound"])
+	{
+		_fireSound = node["fireSound"].as<int>(_fireSound);
+		// BATTLE.CAT: 55 entries
+		if (_fireSound > 54)
+			_fireSound += modIndex;
+	}
+	if (node["hitSound"])
+	{		
+		_hitSound = node["hitSound"].as<int>(_hitSound);
+		// BATTLE.CAT: 55 entries
+		if (_hitSound > 54)
+			_hitSound += modIndex;
+	}
+	if (node["meleeSound"])
+	{
+		_meleeSound = node["meleeSound"].as<int>(_meleeSound);
+		// BATTLE.CAT: 55 entries
+		if (_meleeSound > 54)
+			_meleeSound += modIndex;
+	}
+	if (node["hitAnimation"])
+	{		
+		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
+		// SMOKE.PCK: 56 entries
+		if (_hitAnimation > 55)
+			_hitAnimation += modIndex;
+	}
+	if (node["meleeAnimation"])
+	{
+		_meleeAnimation = node["meleeAnimation"].as<int>(_meleeAnimation);
+		// HIT.PCK: 4 entries
+		if (_meleeAnimation > 3)
+			_meleeAnimation += modIndex;
+	}
+	if (node["meleeHitSound"])
+	{
+		_meleeHitSound = node["meleeHitSound"].as<int>(_meleeHitSound);
+		// BATTLE.CAT: 55 entries
+		if (_meleeHitSound > 54)
+			_meleeHitSound += modIndex;
+	}
 	_power = node["power"].as<int>(_power);
 	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
 	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
@@ -125,9 +168,21 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_flatRate = node["flatRate"].as<bool>(_flatRate);
 	_arcingShot = node["arcingShot"].as<bool>(_arcingShot);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
-	_range = node["maxRange"].as<int>(_range);
+	_maxRange = node["maxRange"].as<int>(_maxRange);
+	_aimRange = node["aimRange"].as<int>(_aimRange);
+	_snapRange = node["snapRange"].as<int>(_snapRange);
+	_autoRange = node["autoRange"].as<int>(_autoRange);
+	_minRange = node["minRange"].as<int>(_minRange);
+	_dropoff = node["dropoff"].as<int>(_dropoff);
 	_bulletSpeed = node["bulletSpeed"].as<int>(_bulletSpeed);
+	_explosionSpeed = node["explosionSpeed"].as<int>(_explosionSpeed);
 	_autoShots = node["autoShots"].as<int>(_autoShots);
+	_shotgunPellets = node["shotgunPellets"].as<int>(_shotgunPellets);
+	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
+	_strengthApplied = node["strengthApplied"].as<bool>(_strengthApplied);
+	_skillApplied = node["skillApplied"].as<bool>(_skillApplied);
+	_LOSRequired = node["LOSRequired"].as<bool>(_LOSRequired);
+	_meleePower = node["meleePower"].as<int>(_meleePower);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
@@ -168,7 +223,7 @@ const std::vector<std::string> &RuleItem::getRequirements() const
  * takes up in a storage facility.
  * @return The storage size.
  */
-float RuleItem::getSize() const
+double RuleItem::getSize() const
 {
 	return _size;
 }
@@ -532,25 +587,30 @@ int RuleItem::getTUUse() const
 int RuleItem::getExplosionRadius() const
 {
 	int radius = 0;
+
 	if (_blastRadius == -1)
 	{
+		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
+		// all the rest hits one point:
+		// AP, melee (stun or AP), laser, plasma, acid
 		if (_damageType == DT_IN)
 		{
 			radius = (_power / 30) + 1;
 		}
-		else if (_damageType == DT_HE || _damageType == DT_STUN)
+		else if (_damageType == DT_HE || _damageType == DT_STUN || _damageType == DT_SMOKE)
 		{
 			radius = _power / 20;
+		}
+		// cap the formula to 11
+		if (radius > 11)
+		{
+			radius = 11;
 		}
 	}
 	else
 	{
+		// unless a blast radius is actually defined.
 		radius = _blastRadius;
-	}
-
-	if (radius > 11)
-	{
-		radius = 11;
 	}
 
 	return radius;
@@ -642,12 +702,57 @@ int RuleItem::getListOrder() const
 }
 
 /**
- * Gets the maximim range of this weapon (0 = unlimited)
+ * Gets the maximum range of this weapon
  * @return The maximum range.
  */
-int RuleItem::getRange() const
+int RuleItem::getMaxRange() const
 {
-	return _range;
+	return _maxRange;
+}
+
+/**
+ * Gets the maximum effective range of this weapon when using Aimed Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getAimRange() const
+{
+	return _aimRange;
+}
+
+/**
+ * Gets the maximim effective range of this weapon for Snap Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getSnapRange() const
+{
+	return _snapRange;
+}
+
+/**
+ * Gets the maximim effective range of this weapon for Auto Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getAutoRange() const
+{
+	return _autoRange;
+}
+
+/**
+ * Gets the minimum effective range of this weapon.
+ * @return The minimum effective range.
+ */
+int RuleItem::getMinRange() const
+{
+	return _minRange;
+}
+
+/**
+ * Gets the accuracy dropoff value of this weapon.
+ * @return The per-tile dropoff.
+ */
+int RuleItem::getDropoff() const
+{
+	return _dropoff;
 }
 
 /**
@@ -660,6 +765,15 @@ int RuleItem::getBulletSpeed() const
 }
 
 /**
+ * Gets the speed at which this bullet explodes.
+ * @return The speed.
+ */
+int RuleItem::getExplosionSpeed() const
+{
+	return _explosionSpeed;
+}
+
+/**
 * Gets the amount of auto shots fired by this weapon.
 * @return The shots.
 */
@@ -668,4 +782,103 @@ int RuleItem::getAutoShots() const
 	return _autoShots;
 }
 
+/**
+* is this item a rifle?
+* @return whether or not it is a rifle.
+*/
+bool RuleItem::isRifle() const
+{
+	return (_battleType == BT_FIREARM || _battleType == BT_MELEE) && _twoHanded;
+}
+
+/**
+* is this item a pistol?
+* @return whether or not it is a pistol.
+*/
+bool RuleItem::isPistol() const
+{
+	return (_battleType == BT_FIREARM || _battleType == BT_MELEE) && !_twoHanded;
+}
+
+/**
+ * Gets the number of projectiles this ammo shoots at once.
+ * @return The number of projectiles.
+ */
+int RuleItem::getShotgunPellets() const
+{
+	return _shotgunPellets;
+}
+
+/**
+ * Gets the unit that the victim is morphed into when attacked.
+ * @return The weapon's zombie unit.
+ */
+std::string RuleItem::getZombieUnit() const
+{
+	return _zombieUnit;
+}
+
+/**
+ * Is strength applied to the damage of this weapon?
+ * @return If we should apply strength.
+ */
+bool RuleItem::isStrengthApplied() const
+{
+	return _strengthApplied;
+}
+
+/**
+ * Is skill applied to the accuracy of this weapon?
+ * this only applies to melee weapons.
+ * @return If we should apply skill.
+ */
+bool RuleItem::isSkillApplied() const
+{
+	return _skillApplied;
+}
+
+/**
+ * What sound does this weapon make when you swing this at someone?
+ * @return The weapon's melee attack sound.
+ */
+int RuleItem::getMeleeAttackSound() const
+{
+	return _meleeSound;
+}
+
+/**
+ * What sound does this weapon make when you punch someone in the face with it?
+ * @return The weapon's melee hit sound.
+ */
+int RuleItem::getMeleeHitSound() const
+{
+	return _meleeHitSound;
+}
+
+/**
+ * How much damage does this weapon do when you punch someone in the face with it?
+ * @return The weapon's melee power.
+ */
+int RuleItem::getMeleePower() const
+{
+	return _meleePower;
+}
+
+/**
+ * Is line of sight required for this psionic weapon to function?
+ * @return If line of sight is required.
+ */
+bool RuleItem::isLOSRequired() const
+{
+	return _LOSRequired;
+}
+
+/**
+ * What is the starting frame offset in hit.pck to use for the animation?
+ * @return the starting frame offset in hit.pck to use for the animation.
+ */
+int RuleItem::getMeleeAnimation() const
+{
+	return _meleeAnimation;
+}
 }

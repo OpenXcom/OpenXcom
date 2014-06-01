@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ufo.h"
+#include <assert.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <sstream>
+#include <algorithm>
+#include "../fmath.h"
 #include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
@@ -26,10 +32,6 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
-#include <assert.h>
-#include <cmath>
-#include <sstream>
-#include <algorithm>
 
 namespace OpenXcom
 {
@@ -42,7 +44,7 @@ Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
-  , _detected(false), _hyperDetected(false), _shootingAt(0)
+  , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
 {
 }
 
@@ -103,7 +105,7 @@ private:
 void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 {
 	MovingTarget::load(node);
-	_id = _crashId = _landId = node["id"].as<int>(_id);
+	_id = node["id"].as<int>(_id);
 	_crashId = node["crashId"].as<int>(_crashId);
 	_landId = node["landId"].as<int>(_landId);
 	_damage = node["damage"].as<int>(_damage);
@@ -244,21 +246,21 @@ void Ufo::setId(int id)
  */
 std::wstring Ufo::getName(Language *lang) const
 {
-	std::wstringstream name;
 	switch (_status)
 	{
 	case FLYING:
 	case DESTROYED: // Destroyed also means leaving Earth.
-		name << lang->getString("STR_UFO_") << _id;
+		return lang->getString("STR_UFO_").arg(_id);
 		break;
 	case LANDED:
-		name << lang->getString("STR_LANDING_SITE_") << _landId;
+		return lang->getString("STR_LANDING_SITE_").arg(_landId);
 		break;
 	case CRASHED:
-		name << lang->getString("STR_CRASH_SITE_") << _crashId;
+		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
 		break;
+	default:
+		return L"";
 	}
-	return name.str();
 }
 
 /**
@@ -393,46 +395,77 @@ bool Ufo::isDestroyed() const
 void Ufo::calculateSpeed()
 {
 	MovingTarget::calculateSpeed();
-	if (_speedLon > 0)
+
+	double x = _speedLon;
+	double y = -_speedLat;
+
+	// This section guards vs. divide-by-zero.
+	if (AreSame(x, 0.0) || AreSame(y, 0.0))
 	{
-		if (_speedLat > 0)
+		if (AreSame(x, 0.0) && AreSame(y, 0.0))
 		{
-			_direction = "STR_SOUTH_EAST";
+			_direction = "STR_NONE_UC";
 		}
-		else if (_speedLat < 0)
+		else if (AreSame(x, 0.0))
 		{
-			_direction = "STR_NORTH_EAST";
+			if (y > 0.f)
+			{
+				_direction = "STR_NORTH";
+			}
+			else if (y < 0.f)
+			{
+				_direction = "STR_SOUTH";
+			}
 		}
-		else
+		else if (AreSame(y, 0.0))
 		{
-			_direction = "STR_EAST";
+			if (x > 0.f)
+			{
+				_direction = "STR_EAST";
+			}
+			else if (x < 0.f)
+			{
+				_direction = "STR_WEST";
+			}
 		}
+
+		return;
 	}
-	else if (_speedLon < 0)
+
+	double theta = atan2(y, x); // radians
+	theta = theta * 180.f / M_PI; // +/- 180 deg.
+
+	if (22.5f > theta && theta > -22.5f)
 	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH_WEST";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH_WEST";
-		}
-		else
-		{
-			_direction = "STR_WEST";
-		}
+		_direction = "STR_EAST";
+	}
+	else if (-22.5f > theta && theta > -67.5f)
+	{
+		_direction = "STR_SOUTH_EAST";
+	}
+	else if (-67.5f > theta && theta > -112.5f)
+	{
+		_direction = "STR_SOUTH";
+	}
+	else if (-112.5f > theta && theta > -157.5f)
+	{
+		_direction = "STR_SOUTH_WEST";
+	}
+	else if (-157.5f > theta || theta > 157.5f)
+	{
+		_direction = "STR_WEST";
+	}
+	else if (157.5f > theta && theta > 112.5f)
+	{
+		_direction = "STR_NORTH_WEST";
+	}
+	else if (112.5f > theta && theta > 67.5f)
+	{
+		_direction = "STR_NORTH";
 	}
 	else
 	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH";
-		}
+		_direction = "STR_NORTH_EAST";
 	}
 }
 
@@ -581,7 +614,7 @@ bool Ufo::getHyperDetected() const
 
 /**
  * Changes whether this UFO has been detected by hyper-wave.
- * @param detected Detection status.
+ * @param hyperdetected Detection status.
  */
 void Ufo::setHyperDetected(bool hyperdetected)
 {
@@ -627,5 +660,15 @@ int Ufo::getCrashId() const
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
+}
+/// Sets the UFO's hit frame.
+void Ufo::setHitFrame(int frame)
+{
+	_hitFrame = frame;
+}
+/// Gets the UFO's hit frame.
+int Ufo::getHitFrame()
+{
+	return _hitFrame;
 }
 }

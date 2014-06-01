@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -54,7 +54,7 @@ private:
 	const UfoTrajectory *_trajectory;
 	unsigned _trajectoryPoint;
 	bool _detected, _hyperDetected;
-	int _shootingAt;
+	int _shootingAt, _hitFrame;
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 public:
@@ -146,6 +146,10 @@ public:
 	int getCrashId() const;
 	/// Sets the UFO's crash site ID.
 	void setCrashId(int id);
+	/// Sets the UFO's hit frame.
+	void setHitFrame(int frame);
+	/// Gets the UFO's hit frame.
+	int getHitFrame();
 
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,9 @@ namespace OpenXcom
 
 class Text;
 class Font;
+class Language;
 class Sound;
+class ComboBox;
 
 /**
  * Coloured button with a text label.
@@ -42,6 +44,9 @@ private:
 	Text *_text;
 	TextButton **_group;
 	bool _contrast;
+	ComboBox *_comboBox;
+protected:
+	bool isButtonHandled(Uint8 button = 0);
 public:
 	static Sound *soundPress;
 	/// Creates a new text button with the specified size and position.
@@ -60,8 +65,8 @@ public:
 	void setSmall();
 	/// Gets the text button's current font.
 	Font *getFont() const;
-	/// Sets the text button's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the text edit's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text button's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the text button's text.
@@ -78,6 +83,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
+	/// Attaches this button to a combobox.
+	void setComboBox(ComboBox *comboBox);
 };
 
 }

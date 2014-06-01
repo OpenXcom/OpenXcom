@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -95,9 +95,7 @@ void Waypoint::setId(int id)
  */
 std::wstring Waypoint::getName(Language *lang) const
 {
-	std::wstringstream name;
-	name << lang->getString("STR_WAY_POINT_") << _id;
-	return name.str();
+	return lang->getString("STR_WAY_POINT_").arg(_id);
 }
 
 }

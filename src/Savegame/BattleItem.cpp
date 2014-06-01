@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param id The id of the item.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _fuseTimer(-1), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
 {
 	if (_rules && _rules->getBattleType() == BT_AMMO)
 	{
@@ -44,10 +44,10 @@ BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _own
 	(*id)++;
 
 	// weapon does not need ammo, ammo item points to weapon
-	if (_rules && _rules->getClipSize() == -1)
+	if (_rules && (_rules->getBattleType() == BT_FIREARM || _rules->getBattleType() == BT_MELEE) && _rules->getCompatibleAmmo()->empty())
 	{
+		setAmmoQuantity(_rules->getClipSize());
 		_ammoItem = this;
-		setAmmoQuantity(99999);
 	}
 }
 
@@ -70,7 +70,7 @@ void BattleItem::load(const YAML::Node &node)
 	_painKiller = node["painKiller"].as<int>(_painKiller);
 	_heal = node["heal"].as<int>(_heal);
 	_stimulant = node["stimulant"].as<int>(_stimulant);
-	_explodeTurn = node["explodeTurn"].as<int>(_explodeTurn);
+	_fuseTimer = node["fuseTimer"].as<int>(_fuseTimer);
 	_droppedOnAlienTurn = node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
@@ -132,7 +132,7 @@ YAML::Node BattleItem::save() const
 	node["painKiller"] = _painKiller;
 	node["heal"] = _heal;
 	node["stimulant"] = _stimulant;
-	node["explodeTurn"] = _explodeTurn;
+	node["fuseTimer"] = _fuseTimer;
 	if (_droppedOnAlienTurn)
 		node["droppedOnAlienTurn"] = _droppedOnAlienTurn;
 
@@ -149,21 +149,21 @@ RuleItem *BattleItem::getRules() const
 }
 
 /**
- * Gets the turn to explode on. 0 = unprimed grenade
- * @return Explode turn.
+ * Gets the turns until detonation. -1 = unprimed grenade
+ * @return turns until detonation.
  */
-int BattleItem::getExplodeTurn() const
+int BattleItem::getFuseTimer() const
 {
-	return _explodeTurn;
+	return _fuseTimer;
 }
 
 /**
  * Sets the turn to explode on.
- * @param turn Turn to explode on.
+ * @param turns Turns until detonation (player/alien turns, not game turns).
  */
-void BattleItem::setExplodeTurn(int turn)
+void BattleItem::setFuseTimer(int turns)
 {
-	_explodeTurn = turn;
+	_fuseTimer = turns;
 }
 
 /**
@@ -172,6 +172,10 @@ void BattleItem::setExplodeTurn(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
+	if (_rules->getClipSize() == -1)
+	{
+		return 255;
+	}
 	return _ammoQuantity;
 }
 
@@ -390,7 +394,7 @@ Tile *BattleItem::getTile() const
 
 /**
  * Sets the item's tile.
- * @param The tile.
+ * @param tile The tile.
  */
 void BattleItem::setTile(Tile *tile)
 {
@@ -417,7 +421,7 @@ BattleUnit *BattleItem::getUnit() const
 
 /**
  * Sets the corpse's unit.
- * @param Pointer to BattleUnit.
+ * @param unit Pointer to BattleUnit.
  */
 void BattleItem::setUnit(BattleUnit *unit)
 {
@@ -442,7 +446,7 @@ int BattleItem::getHealQuantity () const
 	return _heal;
 }
 
-/**.
+/**
  * Sets the pain killer quantity of the item.
  * @param pk The new pain killer quantity.
  */
@@ -514,4 +518,17 @@ void BattleItem::setTurnFlag(bool flag)
 {
 	_droppedOnAlienTurn = flag;
 }
+
+/**
+ * Converts an unconscious body into a dead one.
+ * @param rules the rules of the corpse item to convert this item into.
+ */
+void BattleItem::convertToCorpse(RuleItem *rules)
+{
+	if (_unit && _rules->getBattleType() == BT_CORPSE && rules->getBattleType() == BT_CORPSE)
+	{
+		_rules = rules;
+	}
+}
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,20 +45,18 @@ private:
 	WarningMessage *_warning;
 	BattleUnit *_selUnit;
 	BattleItem *_selItem;
-	bool _tu;
+	bool _tu, _base;
 	int _groundOffset;
 	std::map<int, std::map<int, int> > _stackLevel;
 	NumberText *_stackNumber;
 
 	/// Moves an item to a specified slot.
 	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
-	/// Checks for item overlap.
-	bool overlapItems(BattleItem *item, RuleInventory *slot, int x, int y) const;
 	/// Gets the slot in the specified position.
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
 public:
 	/// Creates a new inventory view at the specified position and size.
-	Inventory(Game *game, int width, int height, int x = 0, int y = 0);
+	Inventory(Game *game, int width, int height, int x = 0, int y = 0, bool base = false);
 	/// Cleans up the inventory.
 	~Inventory();
 	/// Sets the inventory's palette.
@@ -93,6 +91,8 @@ public:
 	bool fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning);
 	/// Checks if two items can be stacked on one another.
 	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
+	/// Checks for item overlap.
+	static bool overlapItems(BattleUnit *unit, BattleItem *item, RuleInventory *slot, int x = 0, int y = 0);
 };
 
 }

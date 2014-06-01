@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,8 @@
  */
 #include "Window.h"
 #include <SDL.h>
-#include "../aresame.h"
+#include <SDL_mixer.h>
+#include "../fmath.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
@@ -26,7 +27,7 @@
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.075;
+const double Window::POPUP_SPEED = 0.05;
 
 Sound *Window::soundPopup[3] = {0, 0, 0};
 
@@ -39,7 +40,7 @@ Sound *Window::soundPopup[3] = {0, 0, 0};
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false)
+Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _dx(-x), _dy(-y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false), _thinBorder(false)
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)&Window::popup);
@@ -50,6 +51,7 @@ Window::Window(State *state, int width, int height, int x, int y, WindowPopup po
 	}
 	else
 	{
+		setHidden(true);
 		_timer->start();
 		if (_state != 0)
 		{
@@ -74,12 +76,6 @@ Window::~Window()
  */
 void Window::setBackground(Surface *bg)
 {
-	if (_popupStep < 1.0)
-	{
-		_state->hideAll();
-		setHidden(false);
-	}
-
 	_bg = bg;
 	_redraw = true;
 }
@@ -90,12 +86,6 @@ void Window::setBackground(Surface *bg)
  */
 void Window::setColor(Uint8 color)
 {
-	if (_popupStep < 1.0)
-	{
-		_state->hideAll();
-		setHidden(false);
-	}
-
 	_color = color;
 	_redraw = true;
 }
@@ -125,6 +115,12 @@ void Window::setHighContrast(bool contrast)
  */
 void Window::think()
 {
+	if (_hidden && _popupStep < 1.0)
+	{
+		_state->hideAll();
+		setHidden(false);
+	}
+
 	_timer->think(0, this);
 }
 
@@ -133,12 +129,12 @@ void Window::think()
  */
 void Window::popup()
 {
-	if ( AreSame(_popupStep, 0.0) )
+	if (AreSame(_popupStep, 0.0))
 	{
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)
 		{
-			soundPopup[sound]->play();
+			soundPopup[sound]->play(Mix_GroupAvailable(0));
 		}
 	}
 	if (_popupStep < 1.0)
@@ -197,35 +193,98 @@ void Window::draw()
 	}
 	Uint8 color = _color + 3 * mul;
 
-	for (int i = 0; i < 5; ++i)
+	if (_thinBorder)
 	{
-		drawRect(&square, color);
-		if (i < 2)
-			color -= 1 * mul;
-		else
-			color += 1 * mul;
-		square.x++;
-		square.y++;
-		if (square.w >= 2)
-			square.w -= 2;
-		else
-			square.w = 1;
+		color = _color + 1 * mul;
+		for (int i = 0; i < 5; ++i)
+		{
+			drawRect(&square, color);
 
-		if (square.h >= 2)
-			square.h -= 2;
-		else
-			square.h = 1;
+			if (i % 2 == 0)
+			{
+				square.x++;
+				square.y++;
+			}
+			square.w--;
+			square.h--;
+
+			switch (i)
+			{
+			case 0:
+				color = _color + 5 * mul;
+				setPixel(square.w, 0, color);
+				break;
+			case 1:
+				color = _color + 2 * mul;
+				break;
+			case 2:
+				color = _color + 4 * mul;
+				setPixel(square.w+1, 1, color);
+				break;
+			case 3:
+				color = _color + 3 * mul;
+				break;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			drawRect(&square, color);
+			if (i < 2)
+				color -= 1 * mul;
+			else
+				color += 1 * mul;
+			square.x++;
+			square.y++;
+			if (square.w >= 2)
+				square.w -= 2;
+			else
+				square.w = 1;
+
+			if (square.h >= 2)
+				square.h -= 2;
+			else
+				square.h = 1;
+		}
 	}
 
 	if (_bg != 0)
 	{
-		_bg->getCrop()->x = getX() + square.x - _dx;
-		_bg->getCrop()->y = getY() + square.y - _dy;
+		_bg->getCrop()->x = square.x - _dx;
+		_bg->getCrop()->y = square.y - _dy;
 		_bg->getCrop()->w = square.w ;
 		_bg->getCrop()->h = square.h ;
 		_bg->setX(square.x);
 		_bg->setY(square.y);
 		_bg->blit(this);
 	}
+}
+
+/**
+ * Changes the horizontal offset of the surface in the X axis.
+ * @param dx X position in pixels.
+ */
+void Window::setDX(int dx)
+{
+	_dx = dx;
+}
+
+/**
+ * Changes the vertical offset of the surface in the Y axis.
+ * @param dy Y position in pixels.
+ */
+void Window::setDY(int dy)
+{
+	_dy = dy;
+}
+
+/**
+ * Changes the window to have a thin border.
+ */
+void Window::setThinBorder()
+{
+	_thinBorder = true;
 }
 }

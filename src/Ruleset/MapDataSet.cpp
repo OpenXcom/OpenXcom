@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -107,6 +107,7 @@ void MapDataSet::loadData()
 	int objNumber = 0;
 
 	// the struct below helps to read the xcom file format
+	#pragma pack(push, 1)
 	struct MCD
 	{
 	unsigned char Frame[8];
@@ -130,8 +131,8 @@ void MapDataSet::loadData()
 	unsigned char Block_Smoke;
 	unsigned char u39;
 	unsigned char TU_Walk;
-	unsigned char TU_Fly;
 	unsigned char TU_Slide;
+	unsigned char TU_Fly;
 	unsigned char Armor;
 	unsigned char HE_Block;
 	unsigned char Die_MCD;
@@ -150,14 +151,15 @@ void MapDataSet::loadData()
 	unsigned char Fuel;
 	unsigned char Light_Source;
 	unsigned char Target_Type;
-	unsigned char u61;
+	unsigned char Xcom_Base;
 	unsigned char u62;
 	};
+	#pragma pack(pop)
 
 	MCD mcd;
 
 	// Load Terrain Data from MCD file
-	std::stringstream s;
+	std::ostringstream s;
 	s << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
@@ -180,12 +182,12 @@ void MapDataSet::loadData()
 		to->setYOffset((int)mcd.P_Level);
 		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
 		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
-		to->setFlags(mcd.UFO_Door != 0, mcd.Stop_LOS != 0, mcd.No_Floor != 0, (int)mcd.Big_Wall, mcd.Gravlift != 0, mcd.Door != 0, mcd.Block_Fire != 0, mcd.Block_Smoke != 0);
+		to->setFlags(mcd.UFO_Door != 0, mcd.Stop_LOS != 0, mcd.No_Floor != 0, (int)mcd.Big_Wall, mcd.Gravlift != 0, mcd.Door != 0, mcd.Block_Fire != 0, mcd.Block_Smoke != 0, mcd.Xcom_Base != 0);
 		to->setTerrainLevel((int)mcd.T_Level);
 		to->setFootstepSound((int)mcd.Footstep);
 		to->setAltMCD((int)(mcd.Alt_MCD));
 		to->setDieMCD((int)(mcd.Die_MCD));
-		to->setBlockValue((int)mcd.Light_Block, (int)mcd.Stop_LOS, (int)mcd.HE_Block, (int)mcd.Block_Smoke, (int)mcd.Block_Fire, (int)mcd.Block_Smoke);
+		to->setBlockValue((int)mcd.Light_Block, (int)mcd.Stop_LOS, (int)mcd.HE_Block, (int)mcd.Block_Smoke, (int)mcd.Flammable, (int)mcd.HE_Block);
 		to->setLightSource((int)mcd.Light_Source);
 		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
@@ -224,16 +226,16 @@ void MapDataSet::loadData()
 	{
 		if ((*i)->getObjectType() == MapData::O_FLOOR && (*i)->getBlock(DT_HE) == 0)
 		{
-			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,(*i)->getArmor());
 			if ((*i)->getDieMCD())
 			{
-				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,(*i)->getArmor());
 			}
 		}
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
-	std::stringstream s1,s2;
+	std::ostringstream s1,s2;
 	s1 << "TERRAIN/" << _name << ".PCK";
 	s2 << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);

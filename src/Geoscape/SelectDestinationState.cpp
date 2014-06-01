@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,8 +48,8 @@ namespace OpenXcom
  */
 SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
 {
-	int dx = Screen::getDX();
-	int dy = Screen::getDY();
+	int dx = _game->getScreen()->getDX();
+	int dy = _game->getScreen()->getDY();
 	_screen = false;
 
 	// Create objects
@@ -60,14 +60,15 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_btnZoomIn = new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
 
-	_window = new Window(this, 256, 28, 0 + dx, 0);
+	_window = new Window(this, 256, 28, 0, 0);
+	_window->setX(dx);
 	_window->setDY(0);
 	_btnCancel = new TextButton(60, 12, 110 + dx, 8);
 	_btnCydonia = new TextButton(60, 12, 180 + dx, 8);
 	_txtTitle = new Text(100, 16, 10 + dx, 6);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -81,37 +82,36 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	add(_btnCydonia);
 	add(_txtTitle);
 
-
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&SelectDestinationState::globeClick);
 
 	_btnRotateLeft->onMousePress((ActionHandler)&SelectDestinationState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateLeftRelease);
-	_btnRotateLeft->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
-	_btnRotateLeft->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
+	_btnRotateLeft->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateLeftPress, Options::keyGeoLeft);
+	_btnRotateLeft->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateLeftRelease, Options::keyGeoLeft);
 
 	_btnRotateRight->onMousePress((ActionHandler)&SelectDestinationState::btnRotateRightPress);
 	_btnRotateRight->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateRightRelease);
-	_btnRotateRight->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateRightPress, (SDLKey)Options::getInt("keyGeoRight"));
-	_btnRotateRight->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateRightRelease, (SDLKey)Options::getInt("keyGeoRight"));
+	_btnRotateRight->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateRightPress, Options::keyGeoRight);
+	_btnRotateRight->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateRightRelease, Options::keyGeoRight);
 
 	_btnRotateUp->onMousePress((ActionHandler)&SelectDestinationState::btnRotateUpPress);
 	_btnRotateUp->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateUpRelease);
-	_btnRotateUp->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateUpPress, (SDLKey)Options::getInt("keyGeoUp"));
-	_btnRotateUp->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateUpRelease, (SDLKey)Options::getInt("keyGeoUp"));
+	_btnRotateUp->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateUpPress, Options::keyGeoUp);
+	_btnRotateUp->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateUpRelease, Options::keyGeoUp);
 
 	_btnRotateDown->onMousePress((ActionHandler)&SelectDestinationState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&SelectDestinationState::btnRotateDownRelease);
-	_btnRotateDown->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateDownPress, (SDLKey)Options::getInt("keyGeoDown"));
-	_btnRotateDown->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateDownRelease, (SDLKey)Options::getInt("keyGeoDown"));
+	_btnRotateDown->onKeyboardPress((ActionHandler)&SelectDestinationState::btnRotateDownPress, Options::keyGeoDown);
+	_btnRotateDown->onKeyboardRelease((ActionHandler)&SelectDestinationState::btnRotateDownRelease, Options::keyGeoDown);
 
 	_btnZoomIn->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomIn->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomIn->onKeyboardPress((ActionHandler)&SelectDestinationState::btnZoomInLeftClick, (SDLKey)Options::getInt("keyGeoZoomIn"));
+	_btnZoomIn->onKeyboardPress((ActionHandler)&SelectDestinationState::btnZoomInLeftClick, Options::keyGeoZoomIn);
 
 	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomOut->onKeyboardPress((ActionHandler)&SelectDestinationState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
+	_btnZoomOut->onKeyboardPress((ActionHandler)&SelectDestinationState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
 
 	// dirty hacks to get the rotate buttons to work in "classic" style
 	_btnRotateLeft->setListButton();
@@ -125,7 +125,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SelectDestinationState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SelectDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&SelectDestinationState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
@@ -153,11 +153,12 @@ SelectDestinationState::~SelectDestinationState()
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
+ * Stop the globe movement.
  */
 void SelectDestinationState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	State::init();
+	_globe->rotateStop();
 }
 
 /**
@@ -226,7 +227,7 @@ void SelectDestinationState::btnRotateLeftPress(Action *)
  */
 void SelectDestinationState::btnRotateLeftRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -244,7 +245,7 @@ void SelectDestinationState::btnRotateRightPress(Action *)
  */
 void SelectDestinationState::btnRotateRightRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -262,7 +263,7 @@ void SelectDestinationState::btnRotateUpPress(Action *)
  */
 void SelectDestinationState::btnRotateUpRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**
@@ -280,7 +281,7 @@ void SelectDestinationState::btnRotateDownPress(Action *)
  */
 void SelectDestinationState::btnRotateDownRelease(Action *)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**
@@ -332,8 +333,24 @@ void SelectDestinationState::btnCydoniaClick(Action *)
 {
 	if (_craft->getNumSoldiers() > 0 || _craft->getNumVehicles() > 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(5)), Palette::backPos, 16);
 		_game->pushState(new ConfirmCydoniaState(_game, _craft));
+	}
+}
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void SelectDestinationState::resize(int &dX, int &dY)
+{
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setX((*i)->getX() + dX / 2);
+		if (*i != _window && *i != _btnCancel && *i != _txtTitle && *i != _btnCydonia)
+		{
+			(*i)->setY((*i)->getY() + dY / 2);
+		}
 	}
 }
 }

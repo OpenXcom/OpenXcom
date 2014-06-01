@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,137 +22,173 @@ namespace OpenXcom
 {
 
 /**
- * Plurality rules for English (also used as default).
- * Provide rules for languages that have singular and plural, with zero using the plural form.
- * @langsuffixes _1 for singular and _2 for plural.
+ * Default plurality rules.
+ * Provide rules for languages where 1 is singular and everything else is plural.
+ * @note one = 1; other = ...
  */
-class ManyOneMany: public LanguagePlurality
+class OneSingular: public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new ManyOneMany; }
+	static LanguagePlurality *create() { return new OneSingular; }
 };
 
-const char *ManyOneMany::getSuffix(unsigned n) const
+const char *OneSingular::getSuffix(unsigned n) const
 {
 	if (n == 1)
-		return "_1";
-	return "_2";
+	{
+		return "_one";
+	}
+	return "_other";
 }
 
 /**
- * Plurality rules for French.
- * Provide rules for languages that have singular and plural, with zero using the singular form.
- * @langsuffixes _1 for singular and _2 for plural.
+ * Plurality rules where 0 is also singular.
+ * Provide rules for languages where 0 and 1 are singular and everything else is plural.
+ * @note one = 0-1; other = ...
  */
-class FrenchRules: public LanguagePlurality
+class ZeroOneSingular : public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new FrenchRules; }
+	static LanguagePlurality *create() { return new ZeroOneSingular; }
 };
 
-const char *FrenchRules::getSuffix(unsigned n) const
+const char *ZeroOneSingular::getSuffix(unsigned n) const
 {
-	if (n < 2)
-		return "_1";
-	return "_2";
+	if (n == 0 || n == 1)
+	{
+		return "_one";
+	}
+	return "_other";
 }
 
 /**
- * Plurality rules for Czech.
- * @langsuffixes _1 n%100 == 1, 2<= n%100 <= 4, _3 otherwise.
+ * Plurality rules where there is no singular.
+ * Provide rules for languages where everything is plural.
+ * @note other = ...
  */
-class CzechRules: public LanguagePlurality
+class NoSingular : public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new CzechRules; }
+	static LanguagePlurality *create() { return new NoSingular; }
 };
 
-const char *CzechRules::getSuffix(unsigned n) const
+const char *NoSingular::getSuffix(unsigned) const
 {
-	if (n%100 == 1)
-		return "_1";
-	if (n%100 >= 2 && n%100 <=4)
-		return "_2";
-	return "_3";
+	return "_other";
 }
 
 /**
- * Plurality rules for Polish.
- * @langsuffixes _1 n%100 == 1, 2<= n%100 <= 4 && (n%100<10 || n%100>20), _3 otherwise.
+ * Plurality rules for Cyrillic languages (Russian, Ukranian, etc.)
+ * @note one = 1, 21, 31...; few = 2-4, 22-24, 32-34...; many = 0, 5-20, 25-30, 35-40...; other = ...
  */
-class PolishRules: public LanguagePlurality
+class CyrillicPlurality : public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new PolishRules; }
+	static LanguagePlurality *create() { return new CyrillicPlurality; }
 };
 
-const char *PolishRules::getSuffix(unsigned n) const
+const char *CyrillicPlurality::getSuffix(unsigned n) const
 {
-	if (n%100 == 1)
-		return "_1";
-	if ( 2 <= n%10 && n%10 <=4 && (n%100 < 10 || n%100 > 20))
-		return "_2";
-	return "_3";
+	if (n % 10 == 1 && n % 100 != 11)
+	{
+		return "_one";
+	}
+	else if ((n % 10 >= 2 && n % 10 <= 4) &&
+			!(n % 100 >= 12 && n % 100 <= 14))
+	{
+		return "_few";
+	}
+	else if (n % 10 == 0 ||
+			(n % 10 >= 5 && n % 10 <= 9) ||
+			(n % 100 >= 11 && n % 100 <= 14))
+	{
+		return "_many";
+	}
+	return "_other";
 }
 
 /**
- * Plurality rules for Romanian.
- * @langsuffixes _1 n%100 == 1, _2 n == 0 || 1 <= n%100 <= 20, _3 otherwise.
+ * Plurality rules for Czech and Slovak languages.
+ * @note one = 1; few = 2-4; other = ...
  */
-class RomanianRules: public LanguagePlurality
+class CzechPlurality : public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new RomanianRules; }
+	static LanguagePlurality *create() { return new CzechPlurality; }
 };
 
-const char *RomanianRules::getSuffix(unsigned n) const
+const char *CzechPlurality::getSuffix(unsigned n) const
 {
-	if (n%100 == 1)
-		return "_1";
-	if (0 == n || (1 <= n%100 && n%100 <= 20))
-		return "_2";
-	return "_3";
+	if (n == 1)
+	{
+		return "_one";
+	}
+	else if (n >= 2 && n <= 4)
+	{
+		return "_few";
+	}
+	return "_other";
 }
 
 /**
- * Plurality rules for Russian.
- * @langsuffixes _1 n%10 == 1 && n%100 != 11, 2<= n%100 <= 4 && (n%100<10 || n%100>20), _3 otherwise.
+ * Plurality rules for the Polish language.
+ * @note one = 1; few = 2-4, 22-24, 32-34...; many = 0, 5-21, 25-31, 35-41, ...; other = ...
  */
-class RusianRules: public LanguagePlurality
+class PolishPlurality : public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new RusianRules; }
+	static LanguagePlurality *create() { return new PolishPlurality; }
 };
 
-const char *RusianRules::getSuffix(unsigned n) const
+const char *PolishPlurality::getSuffix(unsigned n) const
 {
-	if (n%10 == 1 && n%100 != 11)
-		return "_1";
-	if ( 2 <= n%10 && n%10 <=4 && (n%100 < 10 || n%100 > 20))
-		return "_2";
-	return "_3";
+	if (n == 1)
+	{
+		return "_one";
+	}
+	else if ((n % 10 >= 2 && n % 10 <= 4) &&
+			!(n % 100 >= 12 && n % 100 <= 14))
+	{
+		return "_few";
+	}
+	else if ((n % 10 <= 1) ||
+			(n % 10 >= 5 && n % 10 <= 9) ||
+			(n % 100 >= 12 && n % 100 <= 14))
+	{
+		return "_many";
+	}
+	return "_other";
 }
 
 /**
- * Plurality rules for Hungarian.
- * @langsuffixes _1 for everything.
+ * Plurality rules for Romanian and Moldavian languages.
+ * @note one = 1; few = 0, 2-19, 101-119...; other = ...
  */
-class HungarianRules: public LanguagePlurality
+class RomanianPlurality : public LanguagePlurality
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static LanguagePlurality *create() { return new HungarianRules; }
+	static LanguagePlurality *create() { return new RomanianPlurality; }
 };
 
-const char *HungarianRules::getSuffix(unsigned) const
+const char *RomanianPlurality::getSuffix(unsigned n) const
 {
-	return "_1";
+	if (n == 1)
+	{
+		return "_one";
+	}
+	else if (n == 0 ||
+			(n % 100 >= 1 && n % 100 <= 19))
+	{
+		return "_few";
+	}
+	return "_other";
 }
 
 /** A mapping of language to plurality rules.
@@ -166,8 +202,6 @@ std::map<std::string, LanguagePlurality::PFCreate> LanguagePlurality::s_factoryF
  * If the language was not found, a default with the same rules as English is returned.
  * @param language The target language.
  * @return A newly created LanguagePlurality instance for the given language.
- * @todo Make sure the rest of the languages we support in OpenXcom are ok with
- * the English rules for plurality.
  * @internal The first time this is called, we populate the language => rules mapping.
  */
 LanguagePlurality *LanguagePlurality::create(const std::string &language)
@@ -175,14 +209,21 @@ LanguagePlurality *LanguagePlurality::create(const std::string &language)
 	// Populate factory the first time we are called.
 	if (s_factoryFunctions.empty())
 	{
-		s_factoryFunctions.insert(std::make_pair("fr", &FrenchRules::create));
-		s_factoryFunctions.insert(std::make_pair("cs-CZ", &CzechRules::create));
-		s_factoryFunctions.insert(std::make_pair("pl-PL", &PolishRules::create));
-		s_factoryFunctions.insert(std::make_pair("ro", &RomanianRules::create));
-		s_factoryFunctions.insert(std::make_pair("ru", &RusianRules::create));
-		s_factoryFunctions.insert(std::make_pair("hu-HU", &HungarianRules::create));
+		s_factoryFunctions.insert(std::make_pair("fr", &ZeroOneSingular::create));
+		s_factoryFunctions.insert(std::make_pair("hu-HU", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("tr-TR", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("cs-CZ", &CzechPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("pl-PL", &PolishPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ro", &RomanianPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ru", &CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("sk-SK", &CzechPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("uk", &CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ja-JP", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("ko", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-CN", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-TW", &NoSingular::create));
 	}
-	PFCreate creator = &ManyOneMany::create;
+	PFCreate creator = &OneSingular::create;
 	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);
 	if (found != s_factoryFunctions.end())
 	{

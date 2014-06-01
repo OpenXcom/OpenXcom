@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -36,8 +37,8 @@ namespace OpenXcom
 	 * @param game Pointer to current game.
 	 * @param article_id The article id of this article state instance.
 	 */
-	ArticleState::ArticleState(Game *game, std::string article_id, int palSwitch) :
-		State(game), _id(article_id), _palSwitch(palSwitch)
+	ArticleState::ArticleState(Game *game, std::string article_id) :
+		State(game), _id(article_id)
 	{
 		// init background and navigation elements
 		_bg = new Surface(320, 200, 0, 0);
@@ -52,6 +53,45 @@ namespace OpenXcom
 	ArticleState::~ArticleState()
 	{}
 
+	std::string ArticleState::getDamageTypeText(ItemDamageType dt) const
+	{
+		std::string type;
+		switch (dt)
+		{
+		case DT_AP:
+			type = "STR_DAMAGE_ARMOR_PIERCING";
+			break;
+		case DT_IN:
+			type = "STR_DAMAGE_INCENDIARY";
+			break;
+		case DT_HE:
+			type = "STR_DAMAGE_HIGH_EXPLOSIVE";
+			break;
+		case DT_LASER:
+			type = "STR_DAMAGE_LASER_BEAM";
+			break;
+		case DT_PLASMA:
+			type = "STR_DAMAGE_PLASMA_BEAM";
+			break;
+		case DT_STUN:
+			type = "STR_DAMAGE_STUN";
+			break;
+		case DT_MELEE:
+			type = "STR_DAMAGE_MELEE";
+			break;
+		case DT_ACID:
+			type = "STR_DAMAGE_ACID";
+			break;
+		case DT_SMOKE:
+			type = "STR_DAMAGE_SMOKE";
+			break;
+		default:
+			type = "STR_UNKNOWN";
+			break;
+		}
+		return type;
+	}
+
 	/**
 	 * Set captions and click handlers for the common control elements.
 	 */
@@ -64,8 +104,8 @@ namespace OpenXcom
 
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&ArticleState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyOk"));
-		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyCancel"));
+		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,Options::keyOk);
+		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,Options::keyCancel);
 		_btnPrev->setText(L"<<");
 		_btnPrev->onMouseClick((ActionHandler)&ArticleState::btnPrevClick);
 		_btnNext->setText(L">>");
@@ -79,9 +119,6 @@ namespace OpenXcom
 	void ArticleState::btnOkClick(Action *)
 	{
 		_game->popState();
-		std::stringstream ss;
-		ss << "PALETTES.DAT_" << _palSwitch;
-		_game->setPalette(_game->getResourcePack()->getPalette(ss.str())->getColors());
 	}
 
 	/**

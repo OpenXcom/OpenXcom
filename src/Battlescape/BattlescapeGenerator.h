@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -62,6 +62,8 @@ private:
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
 	int _alienItemLevel;
+	bool _allowAutoLoadout, _baseInventory;
+	int _craftX, _craftY, _craftZ;
 
 	/// Generates a new battlescape map.
 	void generateMap();
@@ -74,13 +76,11 @@ private:
 	/// Adds a civlian to the game.
 	BattleUnit *addCivilian(Unit *rules);
 	/// Places an item on a soldier based on equipment layout.
-	BattleItem* placeItemByLayout(BattleItem *item);
-	/// Adds an item to the game.
-	BattleItem* addItem(BattleItem *item, bool secondPass);
-	/// Adds an item to a unit.
-	BattleItem* addItem(RuleItem *item, BattleUnit *unit);
+	bool placeItemByLayout(BattleItem *item);
+	/// Adds an item to a unit and the game.
+	bool addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip = false);
 	/// Loads an XCom MAP file.
-	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false);
+	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false, bool craft = false);
 	/// Loads an XCom RMP file.
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
 	/// Fills power sources with an elerium-115 object.
@@ -89,6 +89,8 @@ private:
 	void explodePowerSources();
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
+	/// Runs necessary checks before physically setting the position.
+	bool canPlaceXCOMUnit(Tile *tile);
 	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
@@ -126,6 +128,8 @@ public:
 	bool placeUnitNearFriend(BattleUnit *unit);
 	/// Generates an inventory battlescape.
 	void runInventory(Craft *craft);
+	/// Load all Xcom weapons.
+	void loadWeapons();
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
+#include <SDL_mixer.h>
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
@@ -35,7 +36,7 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -140,7 +141,7 @@ std::list<Polyline*> *ResourcePack::getPolylines()
  */
 Music *ResourcePack::getMusic(const std::string &name) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteMusic;
 	}
@@ -158,7 +159,7 @@ Music *ResourcePack::getMusic(const std::string &name) const
  */
 Music *ResourcePack::getRandomMusic(const std::string &name) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteMusic;
 	}
@@ -180,6 +181,24 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 }
 
 /**
+ * Plays the specified track if it's not already playing.
+ * @param name Name of the music.
+ * @param random Pick a random track?
+ */
+void ResourcePack::playMusic(const std::string &name, bool random)
+{
+	if (!Options::mute && _playingMusic != name)
+	{
+		_playingMusic = name;
+		if (name == "GMGEO1") _playingMusic = "GMGEO"; // hack
+		if (random)
+			getRandomMusic(name)->play();
+		else
+			getMusic(name)->play();
+	}
+}
+
+/**
  * Returns a specific sound from the resource set.
  * @param set Name of the sound set.
  * @param sound ID of the sound.
@@ -187,7 +206,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
  */
 Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteSound;
 	}

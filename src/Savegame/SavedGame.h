@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <time.h>
 
 namespace OpenXcom
 {
@@ -45,11 +46,31 @@ class AlienBase;
 class AlienStrategy;
 class AlienMission;
 class Target;
+class Soldier;
 
 /**
  * Enumerator containing all the possible game difficulties.
  */
 enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
+
+/**
+ * Enumerator for the various save types.
+ */
+enum SaveType { SAVE_DEFAULT, SAVE_QUICK, SAVE_AUTO_GEOSCAPE, SAVE_AUTO_BATTLESCAPE, SAVE_IRONMAN, SAVE_IRONMAN_END };
+
+/**
+ * Container for savegame info displayed on listings.
+ */
+struct SaveInfo
+{
+	std::string fileName;
+	std::wstring displayName;
+	time_t timestamp;
+	std::wstring isoDate, isoTime;
+	std::wstring details;
+	std::vector<std::string> rulesets;
+	bool reserved;
+};
 
 /**
  * The game data that gets written to disk when the game is saved.
@@ -59,9 +80,11 @@ enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GE
 class SavedGame
 {
 private:
+	std::wstring _name;
 	GameDifficulty _difficulty;
+	bool _ironman;
 	GameTime *_time;
-	std::vector<int> _funds, _maintenance, _researchScores;
+	std::vector<int> _funds, _maintenance, _researchScores, _incomes, _expenditures;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -76,29 +99,42 @@ private:
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	std::vector<AlienMission*> _activeMissions;
-	bool _debug, _warned, _detail, _radarLines;
+	bool _debug, _warned;
 	int _monthsPassed;
 	std::string _graphRegionToggles;
 	std::string _graphCountryToggles;
 	std::string _graphFinanceToggles;
 	std::vector<const RuleResearch *> _poppedResearch;
+	std::vector<Soldier*> _deadSoldiers;
+	int _selectedBase;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
+	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
 public:
+	static const std::string AUTOSAVE_GEOSCAPE, AUTOSAVE_BATTLESCAPE, QUICKSAVE;
+
 	/// Creates a new saved game.
 	SavedGame();
 	/// Cleans up the saved game.
 	~SavedGame();
 	/// Gets list of saves in the user directory.
-	static void getList(TextList *list, Language *lang);
+	static std::vector<SaveInfo> getList(Language *lang, bool autoquick);
 	/// Loads a saved game from YAML.
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML.
 	void save(const std::string &filename) const;
-	/// Gets game difficulty.
+	/// Gets the game name.
+	std::wstring getName() const;
+	/// Sets the game name.
+	void setName(const std::wstring &name);
+	/// Gets the game difficulty.
 	GameDifficulty getDifficulty() const;
-	/// Sets game difficulty.
+	/// Sets the game difficulty.
 	void setDifficulty(GameDifficulty difficulty);
+	/// Gets if the game is in ironman mode.
+	bool isIronman() const;
+	/// Sets if the game is in ironman mode.
+	void setIronman(bool ironman);
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Gets the list of funds from previous months.
@@ -125,8 +161,6 @@ public:
 	void setTime(GameTime time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
-	/// Initializes te IDs list.
-	void initIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
@@ -170,7 +204,7 @@ public:
 	/// Gets the soldier matching this ID.
 	Soldier *getSoldier(int id) const;
 	/// Handles the higher promotions.
-	bool handlePromotions();
+	bool handlePromotions(std::vector<Soldier*> &participants);
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
 	///  Returns the list of alien bases.
@@ -184,7 +218,11 @@ public:
 	/// sets the research score for the month
 	void addResearchScore(int score);
 	/// gets the list of research scores
-	std::vector<int> getResearchScores();
+	std::vector<int> &getResearchScores();
+	/// gets the list of incomes.
+	std::vector<int> getIncomes();
+	/// gets the list of expenditures.
+	std::vector<int> getExpenditures();
 	/// gets whether or not the player has been warned
 	bool getWarned() const;
 	/// sets whether or not the player has been warned
@@ -219,21 +257,20 @@ public:
 	void setGraphFinanceToggles(const std::string &value);
 	/// Increment the month counter.
 	void addMonth();
-	/// toggle the current state of the radar line drawing
-	void toggleRadarLines();
-	/// check the current state of the radar line drawing
-	bool getRadarLines();
-	/// toggle the current state of the detail drawing
-	void toggleDetail();
-	/// check the current state of the detail drawing
-	bool getDetail();
 	/// add a research to the "popped up" array
 	void addPoppedResearch(const RuleResearch* research);
 	/// check if a research is on the "popped up" array
 	bool wasResearchPopped(const RuleResearch* research);
 	/// remove a research from the "popped up" array
 	void removePoppedResearch(const RuleResearch* research);
-
+	/// Gets the list of dead soldiers.
+	std::vector<Soldier*> *getDeadSoldiers();
+	/// Gets the last selected player base.
+	Base *getSelectedBase();
+	/// Set the last selected player base.
+	void setSelectedBase(int base);
+	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
+	int getSoldierScore(Soldier *soldier);
 };
 
 }

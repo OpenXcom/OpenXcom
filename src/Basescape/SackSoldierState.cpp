@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,9 +38,9 @@ namespace OpenXcom
  * Initializes all the elements in a Sack Soldier window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param soldier Pointer to the soldier to sack.
+ * @param soldierId ID of the soldier to sack.
  */
-SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : State(game), _base(base), _soldier(soldier)
+SackSoldierState::SackSoldierState(Game *game, Base *base, size_t soldierId) : State(game), _base(base), _soldierId(soldierId)
 {
 	_screen = false;
 
@@ -52,7 +52,7 @@ SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : S
 	_txtSoldier = new Text(142, 9, 89, 85);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -69,12 +69,12 @@ SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : S
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SackSoldierState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SackSoldierState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&SackSoldierState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SackSoldierState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SackSoldierState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&SackSoldierState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -82,7 +82,7 @@ SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : S
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+10);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(_soldier->getName());
+	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName(true));
 }
 
 /**
@@ -100,19 +100,13 @@ SackSoldierState::~SackSoldierState()
  */
 void SackSoldierState::btnOkClick(Action *)
 {
-	if(_soldier->getArmor()->getStoreItem() != "STR_NONE")
+	Soldier *soldier = _base->getSoldiers()->at(_soldierId);
+	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
 	{
-		_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
+		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
 	}
-	for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
-	{
-		if (*s == _soldier)
-		{
-			_base->getSoldiers()->erase(s);
-			break;
-		}
-	}
-	delete(_soldier);
+	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
+	delete soldier;
 	_game->popState();
 }
 

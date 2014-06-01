@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,15 +25,11 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain
  * type of armor.
  * @param type String defining the type.
- * @param spriteSheet Spritesheet used to render the unit.
- * @param drawingRoutine The drawing routine for this armor.
- * @param movementType The movement type for this armor (walk, fly or slide).
- * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
+Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
-		_damageModifier[i] = 1.0;
+		_damageModifier[i] = 1.0f;
 }
 
 /**
@@ -53,7 +49,18 @@ void Armor::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
 	_spriteInv = node["spriteInv"].as<std::string>(_spriteInv);
-	_corpseItem = node["corpseItem"].as<std::string>(_corpseItem);
+	if (node["corpseItem"])
+	{
+		_corpseBattle.clear();
+		_corpseBattle.push_back(node["corpseItem"].as<std::string>());
+		_corpseGeo = _corpseBattle[0];
+	}
+	else if (node["corpseBattle"])
+	{
+		_corpseBattle = node["corpseBattle"].as< std::vector<std::string> >();
+		_corpseGeo = _corpseBattle[0];
+	}
+	_corpseGeo = node["corpseGeo"].as<std::string>(_corpseGeo);
 	_storeItem = node["storeItem"].as<std::string>(_storeItem);
 	_frontArmor = node["frontArmor"].as<int>(_frontArmor);
 	_sideArmor = node["sideArmor"].as<int>(_sideArmor);
@@ -62,6 +69,8 @@ void Armor::load(const YAML::Node &node)
 	_drawingRoutine = node["drawingRoutine"].as<int>(_drawingRoutine);
 	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
 	_size = node["size"].as<int>(_size);
+	_weight = node["weight"].as<int>(_weight);
+	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
 		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
@@ -140,12 +149,22 @@ int Armor::getUnderArmor() const
 
 
 /**
- * Gets the corpse item.
+ * Gets the corpse item used in the Geoscape.
  * @return The name of the corpse item.
  */
-std::string Armor::getCorpseItem() const
+std::string Armor::getCorpseGeoscape() const
 {
-	return _corpseItem;
+	return _corpseGeo;
+}
+
+/**
+ * Gets the list of corpse items dropped by the unit
+ * in the Battlescape (one per unit tile).
+ * @return The list of corpse items.
+ */
+const std::vector<std::string> &Armor::getCorpseBattlescape() const
+{
+	return _corpseBattle;
 }
 
 /**
@@ -203,4 +222,21 @@ std::vector<int> Armor::getLoftempsSet() const
 	return _loftempsSet;
 }
 
+/**
+  * Gets pointer to the armor's stats.
+  * @return stats Pointer to the armor's stats.
+  */
+UnitStats *Armor::getStats()
+{
+	return &_stats;
+}
+
+/**
+ * Gets the armor's weight.
+ * @return the weight of the armor.
+ */
+int Armor::getWeight()
+{
+	return _weight;
+}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,8 +49,7 @@ void Sound::load(const std::string &filename)
 {
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::wstring wstr = Language::cpToWstr(filename);
-	std::string utf8 = Language::wstrToUtf8(wstr);
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	_sound = Mix_LoadWAV(utf8.c_str());
 	if (_sound == 0)
@@ -77,12 +76,24 @@ void Sound::load(const void *data, unsigned int size)
 
 /**
  * Plays the contained sound effect.
+ * @param channel Use specified channel, -1 to use any channel
  */
 void Sound::play(int channel) const
 {
-	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
+	if (!Options::mute && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
 	{
 		Log(LOG_WARNING) << Mix_GetError();
+	}
+}
+
+/**
+ * Stops all sounds playing.
+ */
+void Sound::stop()
+{
+	if (!Options::mute)
+	{
+		Mix_HaltChannel(-1);
 	}
 }
 

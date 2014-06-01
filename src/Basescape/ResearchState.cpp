@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,21 +48,17 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnNew = new TextButton(148, 16, 8, 176);
 	_btnOk = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 8);
 	_txtAvailable = new Text(150, 9, 10, 24);
 	_txtAllocated = new Text(150, 9, 160, 24);
 	_txtSpace = new Text(300, 9, 10, 34);
-	_txtProject = new Text(110, 16, 10, 44);
-	_txtScientists = new Text(110, 16, 120, 44);
-	_txtProgress = new Text(80, 9, 230, 44);
+	_txtProject = new Text(110, 17, 10, 44);
+	_txtScientists = new Text(106, 17, 120, 44);
+	_txtProgress = new Text(84, 9, 226, 44);
 	_lstResearch = new TextList(288, 112, 8, 62);
-	
-	// back up palette in case we're being called from Geoscape!
-	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256*sizeof(SDL_Color));
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 1);
 
 	add(_window);
 	add(_btnNew);
@@ -89,7 +85,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -118,10 +114,11 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(3, 158, 62, 66);
+	_lstResearch->setColumns(3, 158, 58, 70);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
+	_lstResearch->setWordWrap(true);
 	_lstResearch->onMouseClick((ActionHandler)&ResearchState::onSelectProject);
 	fillProjectList();
 }
@@ -139,9 +136,6 @@ ResearchState::~ResearchState()
  */
 void ResearchState::btnOkClick(Action *)
 {
-	// restore palette
-	_game->setPalette(_oldPalette);
-	
 	_game->popState();
 }
 
@@ -170,6 +164,7 @@ void ResearchState::onSelectProject(Action *)
  */
 void ResearchState::init()
 {
+	State::init();
 	fillProjectList();
 }
 
@@ -182,21 +177,15 @@ void ResearchState::fillProjectList()
 	_lstResearch->clearList();
 	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
 	{
-		std::wstringstream sstr;
+		std::wostringstream sstr;
 		sstr << (*iter)->getAssigned ();
 		const RuleResearch *r = (*iter)->getRules();
 
 		std::wstring wstr = tr(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 	}
-	std::wstringstream ss;
-	ss << tr("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
-	_txtAvailable->setText(ss.str());
-	std::wstringstream ss2;
-	ss2 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
-	_txtAllocated->setText(ss2.str());
-	std::wstringstream ss3;
-	ss3 << tr("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
-	_txtSpace->setText(ss3.str());
+	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE").arg(_base->getAvailableScientists()));
+	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_base->getAllocatedScientists()));
+	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE").arg(_base->getFreeLaboratories()));
 }
 }

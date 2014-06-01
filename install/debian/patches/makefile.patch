@@ -1,13 +1,14 @@
 Description: Add default makefile
 Author: Krzysztof Knapik <knapsu@gmail.com>
 
---- /dev/null
-+++ openxcom-0.5.0/src/Makefile
-@@ -0,0 +1,74 @@
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ openxcom-0.9/src/Makefile	2013-10-08 17:30:32.712746969 +0200
+@@ -0,0 +1,83 @@
 +# Target system.
 +# Leave blank for standard Linux builds.
 +# Put DINGOO for Dingoo A320 builds.
-+TARGET =
++# Put OSX for MacOSX 10.7 unix-style builds.
++TARGET = 
 +
 +# Directories and files
 +OBJDIR = ../obj/
@@ -26,11 +27,19 @@ Author: Krzysztof Knapik <knapsu@gmail.com>
 +endif
 +
 +# Compiler settings
++ifeq ($(TARGET),OSX)
++CXXFLAGS ?= -Wall -Wextra -O2 
++else
 +CXXFLAGS ?= -Wall -Wextra -O2 -rdynamic
++endif
++
 +CXXFLAGS += $(addprefix -D,$(TARGET))
 +CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
-+
++ifeq ($(TARGET),OSX)
++LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -framework OpenGL
++else
 +LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL
++endif
 +
 +# Rules
 +all: $(BINDIR)$(BIN)

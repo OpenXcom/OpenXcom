@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,10 +36,13 @@ namespace OpenXcom
 
 /**
  * Sets up a CivilianBAIState.
+ * @param save Pointer to the battle game.
+ * @param unit Pointer to the unit.
+ * @param node Pointer to the node the unit originates from.
  */
-CivilianBAIState::CivilianBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _aggroTarget(0), _escapeTUs(0), _AIMode(0), _visibleEnemies(0), _spottingEnemies(0), _fromNode(node), _toNode(0)
+CivilianBAIState::CivilianBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node) : BattleAIState(save, unit), _aggroTarget(0), _escapeTUs(0), _AIMode(0), _visibleEnemies(0), _spottingEnemies(0), _fromNode(node), _toNode(0)
 {
-	_traceAI = _save->getTraceSetting();
+	_traceAI = Options::traceAI;
 	_escapeAction = new BattleAction();
 	_patrolAction = new BattleAction();
 }
@@ -60,9 +63,9 @@ CivilianBAIState::~CivilianBAIState()
 void CivilianBAIState::load(const YAML::Node &node)
 {
 	int fromNodeID, toNodeID;
-	fromNodeID = node["fromNode"].as<int>();
-	toNodeID = node["toNode"].as<int>();
-	_AIMode = node["AIMode"].as<int>();
+	fromNodeID = node["fromNode"].as<int>(-1);
+	toNodeID = node["toNode"].as<int>(-1);
+	_AIMode = node["AIMode"].as<int>(0);
 	if (fromNodeID != -1)
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);
@@ -75,7 +78,7 @@ void CivilianBAIState::load(const YAML::Node &node)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
 YAML::Node CivilianBAIState::save() const
 {
@@ -109,8 +112,8 @@ void CivilianBAIState::exit()
 }
 
 /**
- * Runs any code the state needs to keep updating every
- * AI cycle.
+ * Runs any code the state needs to keep updating every AI cycle.
+ * @param action (possible) AI action to execute after thinking is done.
  */
 void CivilianBAIState::think(BattleAction *action)
 {
@@ -154,7 +157,7 @@ void CivilianBAIState::think(BattleAction *action)
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies || _visibleEnemies || RNG::generate(0, 100) < 10)
+		if (_spottingEnemies || _visibleEnemies || RNG::percent(10))
 		{
 			evaluate = true;
 		}
@@ -192,7 +195,7 @@ void CivilianBAIState::think(BattleAction *action)
 		action->number = 3;
 		_unit->dontReselect();
 		action->desperate = true;
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		action->type = _patrolAction->type;
@@ -225,8 +228,8 @@ int CivilianBAIState::selectNearestTarget()
 				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 				if (dist < closest)
 				{
-					bool validTarget = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
-					if (validTarget)
+					bool valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+					if (valid)
 					{
 						closest = dist;
 						_aggroTarget = *i;
@@ -241,7 +244,7 @@ int CivilianBAIState::selectNearestTarget()
 	return 0;
 }
 
-const int CivilianBAIState::getSpottingUnits(Position pos)
+int CivilianBAIState::getSpottingUnits(Position pos) const
 {
 	bool checking = pos != _unit->getPosition();
 	int tally = 0;
@@ -300,7 +303,7 @@ void CivilianBAIState::setupEscape()
 
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
-	std::random_shuffle(randomTileSearch.begin(), randomTileSearch.end());
+	RNG::shuffle(randomTileSearch);
 	
 	while (tries < 150 && !coverFound)
 	{
@@ -489,12 +492,27 @@ void CivilianBAIState::setupPatrol()
 	}
 
 	// look for a new node to walk towards
-	if (_toNode == 0)
+	
+	int triesLeft = 5;
+
+	while (_toNode == 0 && triesLeft)
 	{
+		triesLeft--;
+
 		_toNode = _save->getPatrolNode(true, _unit, _fromNode);
 		if (_toNode == 0)
 		{
 			_toNode = _save->getPatrolNode(false, _unit, _fromNode);
+		}
+
+		if (_toNode != 0)
+		{
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_save->getPathfinding()->abortPath();
 		}
 	}
 

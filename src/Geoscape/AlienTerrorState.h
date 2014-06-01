@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,7 +24,7 @@
 namespace OpenXcom
 {
 
-class City;
+class TerrorSite;
 class TextButton;
 class Window;
 class Text;
@@ -36,19 +36,19 @@ class GeoscapeState;
 class AlienTerrorState : public State
 {
 private:
-	const City *_city;
+	TerrorSite *_terror;
 	GeoscapeState *_state;
 
-	TextButton *_btnCentre, *_btnCancel;
+	TextButton *_btnIntercept, *_btnCentre, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtCity;
 public:
 	/// Creates the Ufo Detected state.
-	AlienTerrorState(Game *game, const City *city, GeoscapeState *state);
+	AlienTerrorState(Game *game, TerrorSite *terror, const std::string &city, GeoscapeState *state);
 	/// Cleans up the Ufo Detected state.
 	~AlienTerrorState();
-	/// Updates the palette.
-	void init();
+	/// Handler for clicking the Intercept button.
+	void btnInterceptClick(Action *action);
 	/// Handler for clicking the Centre on UFO button.
 	void btnCentreClick(Action *action);
 	/// Handler for clicking the Cancel button.

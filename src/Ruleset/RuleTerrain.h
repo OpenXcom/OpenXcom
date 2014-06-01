@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,7 +45,8 @@ private:
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name;
 	int _largeBlockLimit;
-	std::vector<int> _textures;
+	std::vector<int> _textures, _roadTypeOdds;
+	std::vector<std::string> _civilianTypes;
 	int _hemisphere;
 public:
 	RuleTerrain(const std::string &name);
@@ -69,6 +70,10 @@ public:
 	void resetMapBlocks();
 	std::vector<int> *getTextures();
 	int getHemisphere() const;
+	/// Gets teh civilian types to use.
+	std::vector<std::string> getCivilianTypes() const;
+	/// Gets road type odds.
+	std::vector<int> getRoadTypeOdds() const;
 
 };
 

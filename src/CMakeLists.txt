@@ -3,7 +3,7 @@ set ( root_src
   lodepng.cpp
   lodepng.h
   dirent.h
-  aresame.h
+  fmath.h
   version.h
 )
 
@@ -78,6 +78,10 @@ set ( basescape_src
   Basescape/PlaceStartFacilityState.cpp
   Basescape/SelectStartFacilityState.h
   Basescape/SelectStartFacilityState.cpp
+  Basescape/SoldierMemorialState.cpp
+  Basescape/SoldierMemorialState.h
+  Basescape/ManageAlienContainmentState.h
+  Basescape/ManageAlienContainmentState.cpp
 )
 
 set ( battlescape_src
@@ -145,8 +149,6 @@ set ( battlescape_src
   Battlescape/CivilianBAIState.h
   Battlescape/WarningMessage.cpp
   Battlescape/WarningMessage.h
-  Battlescape/BattlescapeOptionsState.cpp
-  Battlescape/BattlescapeOptionsState.h
   Battlescape/AbortMissionState.cpp
   Battlescape/AbortMissionState.h
   Battlescape/DebriefingState.cpp
@@ -177,6 +179,8 @@ set ( battlescape_src
   Battlescape/CannotReequipState.h
   Battlescape/PathfindingOpenSet.cpp
   Battlescape/PathfindingOpenSet.h
+  Battlescape/AliensCrashState.cpp
+  Battlescape/AliensCrashState.h
 )
 
 set ( engine_src
@@ -212,10 +216,13 @@ set ( engine_src
   Engine/Surface.h
   Engine/Font.cpp
   Engine/Font.h
+  Engine/DosFont.h
   Engine/OpenGL.cpp
   Engine/OpenGL.h
   Engine/Options.cpp
   Engine/Options.h
+  Engine/OptionInfo.cpp
+  Engine/OptionInfo.h
   Engine/CrossPlatform.cpp
   Engine/CrossPlatform.h
   Engine/Sound.h
@@ -233,6 +240,10 @@ set ( engine_src
   Engine/Flc.h
   Engine/Zoom.cpp
   Engine/Zoom.h
+  Engine/ShaderDraw.h
+  Engine/ShaderDrawHelper.h
+  Engine/ShaderMove.h
+  Engine/ShaderRepeat.h
   Engine/Scalers/scale2x.cpp
   Engine/Scalers/scale2x.h
   Engine/Scalers/scale3x.cpp
@@ -245,6 +256,12 @@ set ( engine_src
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
   Engine/Scalers/init.cpp
+  Engine/Adlib/adlplayer.cpp
+  Engine/Adlib/adlplayer.h
+  Engine/Adlib/fmopl.cpp
+  Engine/Adlib/fmopl.h
+  Engine/AdlibMusic.h
+  Engine/AdlibMusic.cpp
 )
 
 set ( geoscape_src
@@ -284,16 +301,12 @@ set ( geoscape_src
   Geoscape/Polygon.cpp
   Geoscape/UfoLostState.cpp
   Geoscape/UfoLostState.h
-  Geoscape/AbandonGameState.cpp
-  Geoscape/AbandonGameState.h
   Geoscape/GraphsState.cpp
   Geoscape/GraphsState.h
   Geoscape/ConfirmCydoniaState.cpp
   Geoscape/ConfirmCydoniaState.h
   Geoscape/ConfirmLandingState.cpp
   Geoscape/ConfirmLandingState.h
-  Geoscape/GeoscapeOptionsState.h
-  Geoscape/GeoscapeOptionsState.cpp
   Geoscape/BaseNameState.cpp
   Geoscape/BaseNameState.h
   Geoscape/BaseDestroyedState.cpp
@@ -326,6 +339,8 @@ set ( geoscape_src
   Geoscape/VictoryState.cpp
   Geoscape/DefeatState.h
   Geoscape/DefeatState.cpp
+  Geoscape/ResearchRequiredState.h
+  Geoscape/ResearchRequiredState.cpp
 )
 
 set ( interface_src
@@ -357,39 +372,67 @@ set ( interface_src
   Interface/Frame.cpp
   Interface/Slider.h
   Interface/Slider.cpp
+  Interface/ComboBox.h
+  Interface/ComboBox.cpp
+  Interface/ScrollBar.h
+  Interface/ScrollBar.cpp
 )
 
 set ( menu_src
-  Menu/AdvancedOptionsState.cpp
-  Menu/AdvancedOptionsState.h
   Menu/StartState.cpp
   Menu/StartState.h
-  Menu/NoteState.cpp
-  Menu/NoteState.h
+  Menu/IntroState.cpp
+  Menu/IntroState.h
   Menu/MainMenuState.cpp
   Menu/MainMenuState.h
   Menu/TestState.h
   Menu/TestState.cpp
-  Menu/LanguageState.h
-  Menu/LanguageState.cpp
-  Menu/SaveState.cpp
-  Menu/SaveState.h
-  Menu/LoadState.cpp
-  Menu/LoadState.h
+  Menu/ListSaveState.cpp
+  Menu/ListSaveState.h
+  Menu/ListLoadState.cpp
+  Menu/ListLoadState.h
+  Menu/ConfirmLoadState.cpp
+  Menu/ConfirmLoadState.h
   Menu/NewGameState.cpp
   Menu/NewGameState.h
   Menu/NewBattleState.cpp
   Menu/NewBattleState.h
-  Menu/OptionsState.cpp
-  Menu/OptionsState.h
   Menu/ErrorMessageState.cpp
   Menu/ErrorMessageState.h
   Menu/DeleteGameState.cpp
   Menu/DeleteGameState.h
-  Menu/SavedGameState.cpp
-  Menu/SavedGameState.h
+  Menu/ListGamesState.cpp
+  Menu/ListGamesState.h
+  Menu/OptionsBaseState.cpp
+  Menu/OptionsBaseState.h
   Menu/OptionsControlsState.cpp
   Menu/OptionsControlsState.h
+  Menu/OptionsAdvancedState.cpp
+  Menu/OptionsAdvancedState.h
+  Menu/OptionsBattlescapeState.cpp
+  Menu/OptionsBattlescapeState.h
+  Menu/OptionsVideoState.cpp
+  Menu/OptionsVideoState.h
+  Menu/OptionsAudioState.cpp
+  Menu/OptionsAudioState.h
+  Menu/OptionsNoAudioState.cpp
+  Menu/OptionsNoAudioState.h
+  Menu/OptionsGeoscapeState.cpp
+  Menu/OptionsGeoscapeState.h
+  Menu/OptionsModsState.cpp
+  Menu/OptionsModsState.h
+  Menu/OptionsConfirmState.cpp
+  Menu/OptionsConfirmState.h
+  Menu/OptionsDefaultsState.cpp
+  Menu/OptionsDefaultsState.h
+  Menu/AbandonGameState.cpp
+  Menu/AbandonGameState.h
+  Menu/PauseState.cpp
+  Menu/PauseState.h
+  Menu/LoadGameState.cpp
+  Menu/LoadGameState.h
+  Menu/SaveGameState.cpp
+  Menu/SaveGameState.h
 )
 
 set ( resource_src
@@ -458,6 +501,10 @@ set ( ruleset_src
   Ruleset/UfoTrajectory.h
   Ruleset/RuleAlienMission.cpp
   Ruleset/RuleAlienMission.h
+  Ruleset/StatString.h
+  Ruleset/StatString.cpp
+  Ruleset/StatStringCondition.h
+  Ruleset/StatStringCondition.cpp
 )
 
 set ( savegame_src
@@ -523,6 +570,8 @@ set ( savegame_src
   Savegame/AlienStrategy.h
   Savegame/SerializationHelper.cpp
   Savegame/SerializationHelper.h
+  Savegame/SoldierDeath.h
+  Savegame/SoldierDeath.cpp
 )
 
 set ( ufopedia_src
@@ -561,28 +610,35 @@ endif ()
 if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
     # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
-      -Wsign-compare
       -Winit-self
       -Wmissing-include-dirs
       -Wunknown-pragmas
       -Wmissing-format-attribute
       -Wredundant-decls
-      -Winline
       -Wformat-security
       -Wtype-limits
       -Wclobbered
       -Wempty-body
       -Wlogical-op
       -Wuninitialized
-      -Wshadow
-# These two warning options actually generate way too many warnings. Should be enabled later.
+# These warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
+      -Wno-sign-compare
+#      -Winline
+#      -Wshadow
       )
     if ( FATAL_WARNING )
       add_definitions ( -Werror )
     endif ( FATAL_WARNING )
 endif()
+
+if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+  add_definitions ( -Qunused-arguments -pipe )
+  if ( ENABLE_CLANG_ANALYSIS )
+    add_definitions ( --analyze )
+  endif ()
+endif ()
 
 if ( MSVC )
   if ( ENABLE_WARNING )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateUfo::ArticleStateUfo(Game *game, ArticleDefinitionUfo *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
+	ArticleStateUfo::ArticleStateUfo(Game *game, ArticleDefinitionUfo *defs) : ArticleState(game, defs->id)
 	{
 		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
 
@@ -44,7 +44,7 @@ namespace OpenXcom
 		_txtTitle = new Text(155, 32, 5, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+		setPalette("PAL_GEOSCAPE");
 
 		ArticleState::initLayout();
 
@@ -60,7 +60,7 @@ namespace OpenXcom
 		_txtTitle->setColor(Palette::blockOffset(8)+5);
 		_txtTitle->setBig();
 		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		_image = new Surface(160, 52, 160, 6);
 		add(_image);
@@ -100,39 +100,26 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(8)+5);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
-		_lstInfo = new TextList(300, 64, 10, 68);
+		_lstInfo = new TextList(310, 64, 10, 68);
 		add(_lstInfo);
 
 		centerAllSurfaces();
 
 		_lstInfo->setColor(Palette::blockOffset(8)+5);
-		_lstInfo->setColumns(2, 200, 100);
+		_lstInfo->setColumns(2, 200, 110);
 //		_lstInfo->setCondensed(true);
 		_lstInfo->setBig();
 		_lstInfo->setDot(true);
 
-		std::wstringstream ss;
-		ss.str(L"");ss.clear();
-		ss << ufo->getMaxDamage();
-		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), Text::formatNumber(ufo->getMaxDamage()).c_str());
 
-		ss.str(L"");ss.clear();
-		ss << ufo->getWeaponPower();
-		_lstInfo->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_WEAPON_POWER").c_str(), Text::formatNumber(ufo->getWeaponPower()).c_str());
 
-		ss.str(L"");ss.clear();
-		ss << ufo->getWeaponRange();
-		_lstInfo->addRow(2, tr("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_WEAPON_RANGE").c_str(), tr("STR_KILOMETERS").arg(ufo->getWeaponRange()).c_str());
 
-		ss.str(L"");ss.clear();
-		ss << ufo->getMaxSpeed();
-		ss << " ";
-		ss << tr("STR_KNOTS");
-		_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), ss.str().c_str());
-
-		_lstInfo->draw();
+		_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), tr("STR_KNOTS").arg(Text::formatNumber(ufo->getMaxSpeed())).c_str());
 	}
 
 	ArticleStateUfo::~ArticleStateUfo()

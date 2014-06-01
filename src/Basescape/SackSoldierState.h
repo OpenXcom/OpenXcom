@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,14 +38,14 @@ class SackSoldierState : public State
 {
 private:
 	Base *_base;
-	Soldier *_soldier;
+	size_t _soldierId;
 
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtSoldier;
 public:
 	/// Creates the Sack Soldier state.
-	SackSoldierState(Game *game, Base *base, Soldier *soldier);
+	SackSoldierState(Game *game, Base *base, size_t soldierId);
 	/// Cleans up the Sack Soldier state.
 	~SackSoldierState();
 	/// Handler for clicking the OK button.

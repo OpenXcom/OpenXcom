@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,7 +49,7 @@ protected:
 	TextList *_lstFacilities;
 public:
 	/// Creates the Build Facilities state.
-	BuildFacilitiesState(Game *game, Base *base, State *state, bool cancellable);
+	BuildFacilitiesState(Game *game, Base *base, State *state);
 	/// Cleans up the Build Facilities state.
 	~BuildFacilitiesState();
 	/// Populates the build option list.

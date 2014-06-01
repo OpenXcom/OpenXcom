@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,8 +44,6 @@ public:
 	BaseDestroyedState(Game *game, Base *base);
 	/// Cleans up the Select Destination state.
 	~BaseDestroyedState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the Cydonia mission button.
 	void btnOkClick(Action *action);
 

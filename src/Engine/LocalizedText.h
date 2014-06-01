@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -75,7 +75,7 @@ private:
  * Create a LocalizedText from a localized std::wstring.
  */
 inline LocalizedText::LocalizedText(const std::wstring &text)
-  : _text(text), _nextArg(1)
+  : _text(text), _nextArg(0)
 {
 	// Empty by design.
 }

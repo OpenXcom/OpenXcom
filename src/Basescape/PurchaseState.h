@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,16 +44,14 @@ private:
 
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity;
+	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity, *_txtSpaceUsed;
 	TextList *_lstItems;
 	std::vector<std::string> _crafts, _items;
 	std::vector<int> _qtys;
-	unsigned int _sel;
+	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty;
-	float _iQty;
+	double _iQty;
 	Timer *_timerInc, *_timerDec;
-	int _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel;
 	/// Gets selected price.
 	int getPrice();
 	/// Is it excluded in the options file?

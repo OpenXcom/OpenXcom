@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,7 +47,6 @@ private:
 	bool _showAllLayers;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
 	Map *_map;
-	bool _mouseScroll, _keyboardScroll;
 public:
 	static const int SCROLL_BORDER = 5;
 	static const int SCROLL_DIAGONAL_EDGE = 60;
@@ -106,7 +105,11 @@ public:
 	/// Checks if the camera is showing all map layers.
 	bool getShowAllLayers() const;
 	/// Checks if map coordinates X,Y,Z are on screen.
-	bool isOnScreen(const Position &mapPos) const;
+	bool isOnScreen(const Position &mapPos, const bool unitWalking) const;
+	/// Resize the viewable area.
+	void resize();
+	/// stop mouse scrolling.
+	void stopMouseScrolling();
 };
 }
 #endif

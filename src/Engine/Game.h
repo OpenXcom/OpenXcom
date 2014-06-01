@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,12 +55,10 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
+	unsigned int _timeOfLastFrame;
+	int _timeUntilNextFrame;
+	static const double VOLUME_GRADIENT;
 
-#ifdef __MORPHOS__		
-	Uint32 waittime;// = 1000.0f/FPS;
-	Uint32 framestarttime;// = 0;
-	Sint32 delaytime;
-#endif
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -71,15 +69,15 @@ public:
 	/// Quits the game.
 	void quit();
 	/// Sets the game's audio volume.
-	void setVolume(int sound, int music);
+	void setVolume(int sound, int music, int ui);
+	/// Adjusts a linear volume level to an exponential one.
+	static float volumeExponent(int volume);
 	/// Gets the game's display screen.
 	Screen *getScreen() const;
 	/// Gets the game's cursor.
 	Cursor *getCursor() const;
 	/// Gets the FpsCounter.
 	FpsCounter *getFpsCounter() const;
-	/// Sets the game's 8bpp palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.
 	void setState(State *state);
 	/// Pushes a new state into the state stack.
@@ -90,8 +88,6 @@ public:
 	Language *getLanguage() const;
 	/// Loads a new language for the game.
 	void loadLanguage(const std::string &filename);
-	/// Loads a new language for the game.
-	void loadLng(const std::string &filename);
 	/// Gets the currently loaded resource pack.
 	ResourcePack *getResourcePack() const;
 	/// Sets a new resource pack for the game.
@@ -110,6 +106,10 @@ public:
 	bool isState(State *state) const;
 	/// Returns whether the game is shutting down.
 	bool isQuitting() const;
+	/// Sets up the default language.
+	void defaultLanguage();
+	/// Sets up the audio.
+	void initAudio();
 };
 
 }

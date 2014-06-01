@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #define	OPENXCOM_GRAPHSUBSET_H
 
 #include <utility>
+#include <algorithm>
 
 namespace OpenXcom
 {

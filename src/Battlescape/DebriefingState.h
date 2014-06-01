@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,6 +51,7 @@ class DebriefingState : public State
 private:
 	Region *_region;
 	Country *_country;
+	Base *_base;
 	std::vector<DebriefingStat*> _stats;
 	TextButton *_btnOk;
 	Window *_window;
@@ -66,8 +67,8 @@ private:
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
 	/// Reequips a craft after a mission.
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
-	bool _noContainment, _destroyBase;
-	int _containmentLimit;
+	bool _noContainment, _manageContainment, _destroyBase;
+	int _limitsEnforced;
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

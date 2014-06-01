@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -121,15 +121,15 @@ double Target::getLatitude() const
 void Target::setLatitude(double lat)
 {
 	_lat = lat;
-	// Keep between -PI/2 and PI/2
+	// If you travel past a pole, continue on the other side of the globe.
 	if (_lat < -M_PI/2)
 	{
-		_lat = M_PI - _lat;
+		_lat = -M_PI - _lat;
 		setLongitude(_lon + M_PI);
 	}
 	else if (_lat > M_PI/2)
 	{
-		_lat = -M_PI + _lat;
+		_lat = M_PI - _lat;
 		setLongitude(_lon - M_PI);
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,11 +20,9 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
-#include "../Battlescape/Position.h"
-#include "../Battlescape/TileEngine.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -49,12 +47,30 @@ namespace OpenXcom
  * @param save Pointer to battlesavegame.
  * @param action An action.
  * @param origin Position the projectile originates from.
+ * @param targetVoxel Position the projectile is targeting.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0)
 {
-	if (_action.weapon && _action.type == BA_THROW)
+	// this is the number of pixels the sprite will move between frames
+	_speed = Options::battleFireSpeed;
+
+	if (_action.weapon)
 	{
-		_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		if (_action.type == BA_THROW)
+		{
+			_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+		}
+		else
+		{
+			if (_action.weapon->getRules()->getBulletSpeed() != 0)
+			{
+				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+			}
+			else if (_action.weapon->getAmmoItem() && _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
+			{
+				_speed = std::max(1, _speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
+			}
+		}
 	}
 }
 
@@ -71,162 +87,93 @@ Projectile::~Projectile()
  * @param accuracy The unit's accuracy.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire).
  */
+
 int Projectile::calculateTrajectory(double accuracy)
 {
-	Position originVoxel, targetVoxel;
-	Tile *targetTile = 0;
-	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
-	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
-	// maybe if i get around to making that function to calculate a firepoint origin for fire point estimations i'll use the array above
-	// so i'll leave it commented for the time being.
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
+	return calculateTrajectory(accuracy, originVoxel);
+}
 
-	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
+int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
+{
+	Tile *targetTile = _save->getTile(_action.target);
 	BattleUnit *bu = _action.actor;
-	int offset = 8 * bu->getArmor()->getSize();
-
-	// take into account soldier height and terrain level if the projectile is launched from a soldier
-	if (_action.actor->getPosition() == _origin)
+	
+	int test = _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, false, &_trajectory, bu);
+	if (test != V_EMPTY &&
+		!_trajectory.empty() &&
+		_action.actor->getFaction() == FACTION_PLAYER &&
+		_action.autoShotCounter == 1 &&
+		((SDL_GetModState() & KMOD_CTRL) == 0 || !Options::forceFire) &&
+		_save->getBattleGame()->getPanicHandled() &&
+		_action.type != BA_LAUNCH)
 	{
-		// calculate offset of the starting point of the projectile
-		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-
-		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
-		originVoxel.z -= 4;
-		Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
-		if (originVoxel.z >= (_origin.z + 1)*24)
+		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+		if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
 		{
-			if (tileAbove && tileAbove->hasNoFloor(0))
+			hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
+		}
+
+		if (hitPos != _action.target && _action.result == "")
+		{
+			if (test == V_NORTHWALL)
 			{
-				_origin.z++;
-			}
-			else
-			{
-				while (originVoxel.z >= (_origin.z + 1)*24)
+				if (hitPos.y - 1 != _action.target.y)
 				{
-					originVoxel.z--;
+					_trajectory.clear();
+					return V_EMPTY;
 				}
-				originVoxel.z -= 4;
 			}
-		}
-		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
-		originVoxel.x += offset;
-		originVoxel.y += offset;
-	}
-	else
-	{
-		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 12;
-	}
-
-	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0)
-	{
-		// target nothing, targets the middle of the tile
-		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
-	}
-	else
-	{
-		// determine the target voxel.
-		// aim at the center of the unit, the object, the walls or the floor (in that priority)
-		// if there is no LOF to the center, try elsewhere (more outward).
-		// Store this target voxel.
-		targetTile = _save->getTile(_action.target);
-		Position hitPos;
-		int test = -1;
-		if (targetTile->getUnit() != 0)
-		{
-			if (_origin == _action.target || targetTile->getUnit() == _action.actor)
+			else if (test == V_WESTWALL)
 			{
-				// don't shoot at yourself but shoot at the floor
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+				if (hitPos.x - 1 != _action.target.x)
+				{
+					_trajectory.clear();
+					return V_EMPTY;
+				}
+			}
+			else if (test == V_UNIT)
+			{
+				BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
+				BattleUnit *targetUnit = targetTile->getUnit();
+				if (hitUnit != targetUnit)
+				{
+					_trajectory.clear();
+					return V_EMPTY;
+				}
 			}
 			else
 			{
-				_save->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &targetVoxel, bu);
+				_trajectory.clear();
+				return V_EMPTY;
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
+	}
+
+	_trajectory.clear();
+
+	bool extendLine = true;
+	// even guided missiles drift, but how much is based on
+	// the shooter's faction, rather than accuracy.
+	if (_action.type == BA_LAUNCH)
+	{
+		if (_action.actor->getFaction() == FACTION_PLAYER)
 		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
-		{
-			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &targetVoxel, bu))
-			{
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
-			}
+			accuracy = 0.60;
 		}
 		else
 		{
-			// target nothing, targets the middle of the tile
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			accuracy = 0.55;
 		}
-		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-		if (test == 4 && !_trajectory.empty())
-		{
-			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (_save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
-			{
-				hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
-			}
-		}
-		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
-		{
-			//skip already estimated hitPos
-			if (test != 4)
-			{
-				hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			}
-			if (hitPos != _action.target && _action.result == "")
-			{
-				if (test == 2)
-				{
-					if (hitPos.y - 1 == _action.target.y)
-					{
-						_trajectory.clear();
-						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
-					}
-				}
-				if (test == 1)
-				{
-					if (hitPos.x - 1 == _action.target.x)
-					{
-						_trajectory.clear();
-						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
-					}
-				}
-				_trajectory.clear();
-				return -1;
-			}
-		}
-		_trajectory.clear();
+		extendLine = _action.waypoints.size() <= 1;
 	}
 
-	// apply some accuracy modifiers (todo: calculate this)
+	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
+	applyAccuracy(originVoxel, &_targetVoxel, accuracy, false, targetTile, extendLine);
 
 	// finally do a line calculation and store this trajectory.
-	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+	return _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, true, &_trajectory, bu);
 }
 
 /**
@@ -234,113 +181,68 @@ int Projectile::calculateTrajectory(double accuracy)
  * @param accuracy The unit's accuracy.
  * @return True when a trajectory is possible.
  */
-bool Projectile::calculateThrow(double accuracy)
+int Projectile::calculateThrow(double accuracy)
 {
-	Position originVoxel, targetVoxel;
-	bool foundCurve = false;
+	Tile *targetTile = _save->getTile(_action.target);
+		
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
+	Position targetVoxel = _action.target * Position(16,16,24) + Position(8,8, (2 + -targetTile->getTerrainLevel()));
 
-	// object blocking - can't throw here
-	if (_action.type == BA_THROW &&_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-	{
-		return false;
-	}
-
-	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
-	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-	BattleUnit *bu = _save->getTile(_origin)->getUnit();
-	Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
-	if(!bu)
-		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
-	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
-	originVoxel.z -= 3;
-	if (originVoxel.z >= (_origin.z + 1)*24)
-	{
-		if (!tileAbove || !tileAbove->hasNoFloor(0))
-		{
-			while (originVoxel.z > (_origin.z + 1)*24)
-			{
-				originVoxel.z--;
-			}
-			originVoxel.z -=4;
-		}
-		else
-		{
-			_origin.z++;
-		}
-	}
-
-	// determine the target voxel.
-	// aim at the center of the floor
-	targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
-	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
 	if (_action.type != BA_THROW)
 	{
-		BattleUnit *tu = _save->getTile(_action.target)->getUnit();
-		if(!tu && _action.target.z > 0 && _save->getTile(_action.target)->hasNoFloor(0))
-			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z-1))->getUnit();
+		BattleUnit *tu = targetTile->getUnit();
+		if(!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
+			tu = _save->getTile(_action.target - Position(0, 0, 1))->getUnit();
 		if (tu)
 		{
-			targetVoxel.z += (tu->getHeight()/2) + tu->getFloatHeight();
+			targetVoxel.z += ((tu->getHeight()/2) + tu->getFloatHeight()) - 2;
 		}
 	}
 
-	// we try 4 different curvatures to try and reach our goal.
-	double curvature = 1.0;
-	while (!foundCurve && curvature < 5.0)
+	double curvature = 0.0;
+	int retVal = V_OUTOFBOUNDS;
+	if (_save->getTileEngine()->validateThrow(_action, originVoxel, targetVoxel, &curvature, &retVal))
 	{
-		int check = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
-		if (check != 5 && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		int test = V_OUTOFBOUNDS;
+		// finally do a line calculation and store this trajectory, make sure it's valid.
+		while (test == V_OUTOFBOUNDS)
 		{
-			foundCurve = true;
+			Position deltas = targetVoxel;
+			// apply some accuracy modifiers
+			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false); //calling for best flavor
+			deltas -= targetVoxel;
+			_trajectory.clear();
+			test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
+
+			Position endPoint = _trajectory.back();
+			endPoint.x /= 16;
+			endPoint.y /= 16;
+			endPoint.z /= 24;
+			Tile *endTile = _save->getTile(endPoint);
+			// check if the item would land on a tile with a blocking object
+			if (_action.type == BA_THROW
+				&& endTile
+				&& endTile->getMapData(MapData::O_OBJECT)
+				&& endTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+			{
+				test = V_OUTOFBOUNDS;
+			}
 		}
-		else
-		{
-			curvature += 1.0;
-		}
-		_trajectory.clear();
+		return retVal;
 	}
-	if ( AreSame(curvature, 5.0) )
-	{
-		return false;
-	}
-
-	// apply some accuracy modifiers
-	if (accuracy > 1)
-		accuracy = 1;
-	static const double maxDeviation = 0.08;
-	static const double minDeviation = 0;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	double deviation = RNG::boxMuller(0, baseDeviation);
-
-	_trajectory.clear();
-	// finally do a line calculation and store this trajectory.
-	_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
-
-	Position endPoint = _trajectory.at(_trajectory.size() - 1);
-	endPoint.x /= 16;
-	endPoint.y /= 16;
-	endPoint.z /= 24;
-	// check if the item would land on a tile with a blocking object, if so then we let it fly without deviation, it must land on a valid tile in that case
-	if (_save->getTile(endPoint) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT) && _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-	{
-		_trajectory.clear();
-		// finally do a line calculation and store this trajectory.
-		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
-	}
-
-
-	return true;
+	return V_OUTOFBOUNDS;
 }
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin Startposition of the trajectory.
- * @param target Endpoint of the trajectory.
+ * @param origin Startposition of the trajectory in voxels.
+ * @param target Endpoint of the trajectory in voxels.
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
+ * @param extendLine should this line get extended to maximum distance?
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -348,104 +250,96 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
+	RuleItem *weapon = _action.weapon->getRules();
 
-	if (Options::getBool("battleRangeBasedAccuracy"))
+	if (_action.type != BA_THROW && _action.type != BA_HIT)
 	{
-		double baseDeviation, accuracyPenalty;
-
-		if (targetTile)
+		double modifier = 0.0;
+		int upperLimit = weapon->getAimRange();
+		int lowerLimit = weapon->getMinRange();
+		if (Options::battleUFOExtenderAccuracy)
 		{
-			BattleUnit* targetUnit = targetTile->getUnit();
-			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
-				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
-			else
-				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
-			// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-			if (targetUnit && targetUnit->isKneeled())
-				accuracyPenalty += 0.05;
+			if (_action.type == BA_AUTOSHOT)
+			{
+				upperLimit = weapon->getAutoRange();
+			}
+			else if (_action.type == BA_SNAPSHOT)
+			{
+				upperLimit = weapon->getSnapRange();
+			}
 		}
-		else
-			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
-
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
-
-		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
-		if (baseDeviation < 0.02)
-			baseDeviation = 0.02;
-		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
-		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
-		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
-		double cos_fi = cos(fi);
-
-		// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
-		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
-		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
-		target->z = (int)(origin.z + maxRange * sin(fi));
-
-		return;
+		if (realDistance / 16 < lowerLimit)
+		{
+			modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
+		}
+		else if (upperLimit < realDistance / 16)
+		{
+			modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
+		}
+		accuracy = std::max(0.0, accuracy - modifier);
 	}
 
-	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	double maxDeviation = 2.5;
-	// minDeviation is the min angle deviation for accuracy 100% in degrees
-	double minDeviation = 0.4;
-	double dRot, dTilt;
-	double rotation, tilt;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	// check if we hit
-	if (RNG::generate(0.0, 1.0) < accuracy)
-	{
-		// we hit, so no deviation
-		dRot = 0;
-		dTilt = 0;
-	}
+	int xDist = abs(origin.x - target->x);
+	int yDist = abs(origin.y - target->y);
+	int zDist = abs(origin.z - target->z);
+	int xyShift, zShift;
+
+	if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
+		xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
 	else
-	{
-		dRot = RNG::boxMuller(0, baseDeviation);
-		dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
-	}
-	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-	tilt = atan2(double(target->z - origin.z),
-		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
-	// add deviations
-	rotation += dRot;
-	tilt += dTilt;
-	// calculate new target
-	// this new target can be very far out of the map, but we don't care about that right now
-	double cos_fi = cos(tilt * M_PI / 180.0);
-	double sin_fi = sin(tilt * M_PI / 180.0);
-	double cos_te = cos(rotation * M_PI / 180.0);
-	double sin_te = sin(rotation * M_PI / 180.0);
-	target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
-	target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
-	target->z = (int)(origin.z + maxRange * sin_fi);
-}
+		xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
 
+	if (xyShift <= zDist)				//slight z deviation
+		zShift = xyShift / 2 + zDist;
+	else
+		zShift = xyShift + zDist / 2;
+
+	int deviation = RNG::generate(0, 100) - (accuracy * 100);
+
+	if (deviation >= 0)
+		deviation += 50;				// add extra spread to "miss" cloud
+	else
+		deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
+	
+	deviation = std::max(1, zShift * deviation / 200);	//range ratio
+		
+	target->x += RNG::generate(0, deviation) - deviation / 2;
+	target->y += RNG::generate(0, deviation) - deviation / 2;
+	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
+	
+	if (extendLine)
+	{
+		double rotation, tilt;
+		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
+		tilt = atan2(double(target->z - origin.z),
+			sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
+		// calculate new target
+		// this new target can be very far out of the map, but we don't care about that right now
+		double cos_fi = cos(tilt * M_PI / 180.0);
+		double sin_fi = sin(tilt * M_PI / 180.0);
+		double cos_te = cos(rotation * M_PI / 180.0);
+		double sin_te = sin(rotation * M_PI / 180.0);
+		target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
+		target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
+		target->z = (int)(origin.z + maxRange * sin_fi);
+	}
+}
 /**
  * Moves further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.
  */
 bool Projectile::move()
 {
-	_position++;
-	if (_position == _trajectory.size())
+	for (int i = 0; i < _speed; ++i)
 	{
-		_position--;
-		return false;
+		_position++;
+		if (_position == _trajectory.size())
+		{
+			_position--;
+			return false;
+		}
 	}
-	_position++;
-	if (_position == _trajectory.size())
-	{
-		_position--;
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 /**
@@ -469,7 +363,9 @@ Position Projectile::getPosition(int offset) const
  */
 int Projectile::getParticle(int i) const
 {
-	if (_action.weapon->getRules()->getBulletSprite() == -1)
+	if (_action.weapon->getAmmoItem() && _action.weapon->getAmmoItem()->getRules()->getBulletSprite() != -1)
+		return _action.weapon->getAmmoItem()->getRules()->getBulletSprite() + i;
+	else if (_action.weapon->getRules()->getBulletSprite() == -1)
 		return -1;
 	else
 		return _action.weapon->getRules()->getBulletSprite() + i;
@@ -502,7 +398,28 @@ Surface *Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	_position = _trajectory.size() - 2;
+	_position = _trajectory.size() - 1;
 }
 
+/**
+ * Gets the Position of origin for the projectile
+ * @return origin as a tile position.
+ */
+Position Projectile::getOrigin()
+{
+	// instead of using the actor's position, we'll use the voxel origin translated to a tile position
+	// this is a workaround for large units.
+	return _trajectory.front() / Position(16,16,24);
+}
+
+/**
+ * Gets the INTENDED target for this projectile
+ * it is important to note that we do not use the final position of the projectile here,
+ * but rather the targetted tile
+ * @return target as a tile position.
+ */
+Position Projectile::getTarget()
+{
+	return _action.target;
+}
 }

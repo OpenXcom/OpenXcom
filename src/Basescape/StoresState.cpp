@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,14 +46,14 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(300, 16, 10, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtItem = new Text(142, 8, 10, 32);
-	_txtQuantity = new Text(88, 8, 152, 32);
-	_txtSpaceUsed = new Text(74, 8, 240, 32);
+	_txtTitle = new Text(310, 17, 5, 8);
+	_txtItem = new Text(142, 9, 10, 32);
+	_txtQuantity = new Text(88, 9, 152, 32);
+	_txtSpaceUsed = new Text(74, 9, 240, 32);
 	_lstStores = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -72,8 +72,8 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -87,7 +87,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 162, 92, 32);
@@ -102,7 +102,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 		if (qty > 0)
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();
 			_lstStores->addRow(3, tr(*i).c_str(), ss.str().c_str(), ss2.str().c_str());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include "../fmath.h"
 #include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
@@ -34,6 +35,11 @@ namespace OpenXcom
 struct MissionArea
 {
 	double lonMin, lonMax, latMin, latMax;
+
+    bool operator== (const MissionArea& ma) const
+	{
+		return AreSame(lonMax, ma.lonMax) && AreSame(lonMin, ma.lonMin) && AreSame(latMax, ma.latMax) && AreSame(latMin, ma.latMin);
+	}
 };
 
 /**
@@ -72,6 +78,8 @@ private:
 	/// Do missions in the region defined by this string instead.
 	std::string _missionRegion;
 public:
+	static const int CITY_MISSION_ZONE = 3;
+	static const int ALIEN_BASE_ZONE = 4;
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
 	/// Cleans up the region ruleset.
@@ -102,6 +110,7 @@ public:
 	const std::vector<double> &getLatMax() const { return _latMax; }
 	/// Gets the minimum latitude.
 	const std::vector<double> &getLatMin() const { return _latMin; }
+	const std::vector<MissionZone> &getMissionZones() const;
 };
 
 }

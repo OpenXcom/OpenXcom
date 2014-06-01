@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,15 +52,14 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	// Create objects
 	_window = new Window(this, 220, 160, 50, 20, POPUP_BOTH);
 	_btnCancel = new TextButton(140, 16, 90, 156);
-	_txtTitle = new Text(208, 16, 56, 28);
+	_txtTitle = new Text(208, 17, 56, 28);
 	_txtArmament = new Text(76, 9, 66, 52);
-	_txtQuantity = new Text(50, 9, 145, 52);
-	_txtAmmunition = new Text(68, 9, 195, 44);
-	_txtAvailable = new Text(68, 9, 195, 52);
+	_txtQuantity = new Text(50, 9, 140, 52);
+	_txtAmmunition = new Text(68, 17, 200, 44);
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);
@@ -68,7 +67,6 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	add(_txtArmament);
 	add(_txtQuantity);
 	add(_txtAmmunition);
-	add(_txtAvailable);
 	add(_lstWeapons);
 
 	centerAllSurfaces();
@@ -80,7 +78,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&CraftWeaponsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&CraftWeaponsState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -94,10 +92,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
-	_txtAmmunition->setText(tr("STR_AMMUNITION_UC"));
-
-	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(tr("STR_AVAILABLE"));
+	_txtAmmunition->setText(tr("STR_AMMUNITION_AVAILABLE"));
+	_txtAmmunition->setWordWrap(true);
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
@@ -116,9 +112,16 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		{
 			_weapons.push_back(w);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			ss << _base->getItems()->getItem(w->getLauncherItem());
-			ss2 << _base->getItems()->getItem(w->getClipItem());
+			if (w->getClipItem() != "")
+			{
+				ss2 << _base->getItems()->getItem(w->getClipItem());
+			}
+			else
+			{
+				ss2 << tr("STR_NOT_AVAILABLE");
+			}
 			_lstWeapons->addRow(3, tr(w->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
@@ -153,7 +156,7 @@ void CraftWeaponsState::lstWeaponsClick(Action *)
 	if (current != 0)
 	{
 		_base->getItems()->addItem(current->getRules()->getLauncherItem());
-		_base->getItems()->addItem(current->getRules()->getClipItem(), (int)floor((double)current->getAmmo() / current->getRules()->getRearmRate()));
+		_base->getItems()->addItem(current->getRules()->getClipItem(), current->getClipsLoaded(_game->getRuleset()));
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}

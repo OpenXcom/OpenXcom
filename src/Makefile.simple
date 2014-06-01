@@ -1,8 +1,11 @@
 # Target system.
 # Leave blank for standard Linux builds.
 # Put DINGOO for Dingoo A320 builds.
-# Put OSX for MacOSX 10.7 unix-style builds.
+# Put OSX for MacOSX unix-style builds.
+TARGET =
+ifeq ($(shell uname),Darwin)
 TARGET = OSX
+endif
 
 # Directories and files
 OBJDIR = ../obj/
@@ -54,6 +57,9 @@ $(OBJDIR)%.o:: Engine/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJDIR)%.o:: Engine/Scalers/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Engine/Adlib/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJDIR)%.o:: Geoscape/%.cpp

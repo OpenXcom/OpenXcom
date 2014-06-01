@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,7 +37,7 @@ namespace OpenXcom
 	class ArticleStateCraft : public ArticleState
 	{
 	public:
-		ArticleStateCraft(Game *game, ArticleDefinitionCraft *article_defs, int palSwitch);
+		ArticleStateCraft(Game *game, ArticleDefinitionCraft *article_defs);
 		virtual ~ArticleStateCraft();
 
 	protected:

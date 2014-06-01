@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Interface/Text.h"
@@ -29,6 +30,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -53,33 +55,35 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Inventory screen.
  * @param game Pointer to the core game.
- * @param tu Inventory Time Unit mode.
+ * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
 InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
-	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
-	// remove any path preview if in the middle of a battlegame
-	if(tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
+	if (Options::maximizeInfoScreens)
 	{
-		_battleGame->getPathfinding()->removePreview();
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	}
+	else if (!_battleGame->getTileEngine())
+	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
 	}
 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
-	_txtName = new Text(200, 16, 36, 6);
-	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
-	if (_showMoreStatsInInventoryView)
-	{
-		_txtWeight = new Text(70, 9, 245, 24);
-		_txtFAcc = new Text(40, 9, 245, 32);
-		_txtReact = new Text(40, 9, 245, 40);
-		_txtPSkill = new Text(40, 9, 245, 48);
-		_txtPStr = new Text(40, 9, 245, 56);
-	}
+	_txtName = new Text(210, 17, 28, 6);
+	_txtTus = new Text(40, 9, 245, Options::showMoreStatsInInventoryView ? 32 : 24);
+	_txtWeight = new Text(70, 9, 245, 24);
+	_txtFAcc = new Text(40, 9, 245, 32);
+	_txtReact = new Text(40, 9, 245, 40);
+	_txtPSkill = new Text(40, 9, 245, 48);
+	_txtPStr = new Text(40, 9, 245, 56);
 	_txtItem = new Text(160, 9, 128, 140);
 	_txtAmmo = new Text(66, 24, 254, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
@@ -89,20 +93,20 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnGround = new InteractiveSurface(32, 15, 289, 137);
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
-	_inv = new Inventory(_game, 320, 200, 0, 0);
+	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
+
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
 	add(_soldier);
 	add(_txtName);
 	add(_txtTus);
-	if (_showMoreStatsInInventoryView)
-	{
-		add(_txtWeight);
-		add(_txtFAcc);
-		add(_txtReact);
-		add(_txtPSkill);
-		add(_txtPStr);
-	}
+	add(_txtWeight);
+	add(_txtFAcc);
+	add(_txtReact);
+	add(_txtPSkill);
+	add(_txtPStr);
 	add(_txtItem);
 	add(_txtAmmo);
 	add(_btnOk);
@@ -127,28 +131,25 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtTus->setSecondaryColor(Palette::blockOffset(1));
 	_txtTus->setHighContrast(true);
 
-	if (_showMoreStatsInInventoryView)
-	{
-		_txtWeight->setColor(Palette::blockOffset(4));
-		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
-		_txtWeight->setHighContrast(true);
+	_txtWeight->setColor(Palette::blockOffset(4));
+	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+	_txtWeight->setHighContrast(true);
 
-		_txtFAcc->setColor(Palette::blockOffset(4));
-		_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
-		_txtFAcc->setHighContrast(true);
+	_txtFAcc->setColor(Palette::blockOffset(4));
+	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
+	_txtFAcc->setHighContrast(true);
 
-		_txtReact->setColor(Palette::blockOffset(4));
-		_txtReact->setSecondaryColor(Palette::blockOffset(1));
-		_txtReact->setHighContrast(true);
+	_txtReact->setColor(Palette::blockOffset(4));
+	_txtReact->setSecondaryColor(Palette::blockOffset(1));
+	_txtReact->setHighContrast(true);
 
-		_txtPSkill->setColor(Palette::blockOffset(4));
-		_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
-		_txtPSkill->setHighContrast(true);
+	_txtPSkill->setColor(Palette::blockOffset(4));
+	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
+	_txtPSkill->setHighContrast(true);
 
-		_txtPStr->setColor(Palette::blockOffset(4));
-		_txtPStr->setSecondaryColor(Palette::blockOffset(1));
-		_txtPStr->setHighContrast(true);
-	}
+	_txtPStr->setColor(Palette::blockOffset(4));
+	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
+	_txtPStr->setHighContrast(true);
 
 	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
@@ -159,11 +160,12 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, Options::keyBattleInventory);
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
-	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, Options::keyBattlePrevUnit);
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
-	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, Options::keyBattleNextUnit);
 	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
 	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
@@ -172,6 +174,13 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
+
+	_txtTus->setVisible(_tu);
+	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
+	_txtFAcc->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 }
 
 /**
@@ -179,7 +188,23 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
  */
 InventoryState::~InventoryState()
 {
-
+	Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
+	if (_battleGame->getTileEngine())
+	{
+		if (Options::maximizeInfoScreens)
+		{
+			Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+			_game->getScreen()->resetDisplay(false);
+		}
+		_battleGame->getTileEngine()->applyGravity(inventoryTile);
+		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+		_battleGame->getTileEngine()->recalculateFOV();
+	}
+	else
+	{
+		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		_game->getScreen()->resetDisplay(false);
+	}
 }
 
 /**
@@ -187,6 +212,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	State::init();
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	// no selected unit, close inventory
@@ -196,10 +222,18 @@ void InventoryState::init()
 		return;
 	}
 	// skip to the first unit with inventory
-	if (!hasInventory(unit))
+	if (!unit->hasInventory())
 	{
+		if (_parent)
+		{
+			_parent->selectNextPlayerUnit(false, false, true);
+		}
+		else
+		{
+			_battleGame->selectNextPlayerUnit(false, false, true);
+		}
 		// no available unit, close inventory
-		if (unit == selectNextUnit())
+		if (_battleGame->getSelectedUnit() == 0 || !_battleGame->getSelectedUnit()->hasInventory())
 		{
 			// starting a mission with just vehicles
 			btnOkClick(0);
@@ -212,7 +246,7 @@ void InventoryState::init()
 	}
 
 	if (_parent)
-		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition());
+		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
 	unit->setCache(0);
 	_soldier->clear();
@@ -258,32 +292,6 @@ void InventoryState::init()
 		}
 	}
 
-	if (_showMoreStatsInInventoryView && !_tu)
-	{
-		std::wstringstream ss2;
-		ss2 << tr("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
-		_txtFAcc->setText(ss2.str());
-
-		std::wstringstream ss3;
-		ss3 << tr("STR_REACT") << L'\x01' << unit->getStats()->reactions;
-		_txtReact->setText(ss3.str());
-
-		if (unit->getStats()->psiSkill > 0)
-		{
-			std::wstringstream ss4;
-			ss4 << tr("STR_PSKILL") << L'\x01' << unit->getStats()->psiSkill;
-			_txtPSkill->setText(ss4.str());
-
-			std::wstringstream ss5;
-			ss5 << tr("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
-			_txtPStr->setText(ss5.str());
-		}
-		else
-		{
-			_txtPSkill->setText(L"");
-			_txtPStr->setText(L"");
-		}
-	}
 	updateStats();
 }
 
@@ -293,21 +301,40 @@ void InventoryState::init()
 void InventoryState::updateStats()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
-	if (_showMoreStatsInInventoryView)
+
+	_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
+
+	int weight = unit->getCarriedWeight(_inv->getSelectedItem());
+	_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
+	if (weight > unit->getStats()->strength)
 	{
-		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
-		std::wstringstream ss;
-		ss << tr("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
-		_txtWeight->setText(ss.str());
-		if (Weight > unit->getStats()->strength)
-			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
-		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		_txtWeight->setSecondaryColor(Palette::blockOffset(2));
 	}
-	if (_tu)
+	else
 	{
-		std::wstringstream ss;
-		ss << tr("STR_TUS") << L'\x01' << unit->getTimeUnits();
-		_txtTus->setText(ss.str());
+		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+	}
+
+	_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg((int)(unit->getStats()->firing * unit->getHealth()) / unit->getStats()->health));
+
+	_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
+
+	if (unit->getStats()->psiSkill > 0)
+	{
+		_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(unit->getStats()->psiSkill));
+	}
+	else
+	{
+		_txtPSkill->setText(L"");
+	}
+
+	if (unit->getStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	{
+		_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
+	}
+	else
+	{
+		_txtPStr->setText(L"");
 	}
 }
 
@@ -344,7 +371,7 @@ void InventoryState::saveEquipmentLayout()
 				(*j)->getSlotX(),
 				(*j)->getSlotY(),
 				ammo,
-				(*j)->getExplodeTurn()
+				(*j)->getFuseTimer()
 			));
 		}
 	}
@@ -360,19 +387,20 @@ void InventoryState::btnOkClick(Action *)
 	if (_inv->getSelectedItem() != 0)
 		return;
 	_game->popState();
+	Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
 	if (!_tu)
 	{
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
-			if ((*i)->getFaction() == _battleGame->getSide())
-				(*i)->prepareNewTurn();
-	}
-	if (_battleGame->getTileEngine())
-	{
-		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
-		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
-		_battleGame->getTileEngine()->recalculateFOV();
+		if (_battleGame->getTurn() == 1)
+		{
+			_battleGame->randomizeItemLocations(inventoryTile);
+			if (inventoryTile->getUnit())
+			{
+				// make sure we select the unit closest to the ramp.
+				_battleGame->setSelectedUnit(inventoryTile->getUnit());
+			}
+		}
 	}
 }
 
@@ -383,8 +411,17 @@ void InventoryState::btnOkClick(Action *)
 void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
+	{
 		return;
-	selectPreviousUnit();
+	}
+	if (_parent)
+	{
+		_parent->selectPreviousPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_battleGame->selectPreviousPlayerUnit(false, false, true);
+	}
 	init();
 }
 
@@ -395,8 +432,17 @@ void InventoryState::btnPrevClick(Action *)
 void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
+	{
 		return;
-	selectNextUnit();
+	}
+	if (_parent)
+	{
+		_parent->selectNextPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_battleGame->selectNextPlayerUnit(false, false, true);
+	}
 	init();
 }
 
@@ -406,9 +452,8 @@ void InventoryState::btnNextClick(Action *)
  */
 void InventoryState::btnUnloadClick(Action *)
 {
-	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
+	if (_inv->unload())
 	{
-		_inv->unload();
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
@@ -431,7 +476,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent, true, false));
 }
 
 /**
@@ -461,10 +506,10 @@ void InventoryState::invClick(Action *)
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 			}
 		}
-		std::wstringstream ss;
+		std::wstring s;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
-			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
@@ -480,9 +525,13 @@ void InventoryState::invClick(Action *)
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
-			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
-		_txtAmmo->setText(ss.str());
+		else if (item->getRules()->getBattleType() == BT_MEDIKIT)
+		{
+			s = tr("STR_MEDI_KIT_QUANTITIES_LEFT").arg(item->getPainKillerQuantity()).arg(item->getStimulantQuantity()).arg(item->getHealQuantity());
+		}
+		_txtAmmo->setText(s);
 	}
 	updateStats();
 }
@@ -496,7 +545,7 @@ void InventoryState::handle(Action *action)
 	State::handle(action);
 
 
-#ifndef __MORPHOS__	
+#ifndef __MORPHOS__
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -509,55 +558,6 @@ void InventoryState::handle(Action *action)
 		}
 	}
 #endif
-}
-
-/**
-* Selects the previous player unit, ignoring units without inventory.
-* @return Pointer to selected unit.
-*/
-BattleUnit *InventoryState::selectPreviousUnit() const
-{
-	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
-	do
-	{
-		if (_parent)
-			_parent->selectPreviousPlayerUnit(false);
-		else
-			_battleGame->selectPreviousPlayerUnit(false);
-		unit = _battleGame->getSelectedUnit();
-	}
-	while (!hasInventory(unit) && unit != current);
-	return unit;
-}
-
-/**
-* Selects the next player unit, ignoring units without inventory.
-* @return Pointer to selected unit.
-*/
-BattleUnit *InventoryState::selectNextUnit() const
-{
-	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
-	do
-	{
-		if (_parent)
-			_parent->selectNextPlayerUnit(false, false);
-		else
-			_battleGame->selectNextPlayerUnit(false, false);
-		unit = _battleGame->getSelectedUnit();
-	}
-	while (!hasInventory(unit) && unit != current);
-	return unit;
-}
-
-/**
-* Checks if a unit has an inventory. Large units and
-* terror units don't have inventories.
-* @param Pointer to battle unit.
-* @return True if an inventory is available, false otherwise.
-*/
-bool InventoryState::hasInventory(BattleUnit *unit) const
-{
-	return ((unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode());
 }
 
 }

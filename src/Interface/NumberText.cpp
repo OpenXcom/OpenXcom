@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -249,7 +249,7 @@ void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 void NumberText::draw()
 {
 	Surface::draw();
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << _value;
 	std::string s = ss.str();
 	int x = 0;

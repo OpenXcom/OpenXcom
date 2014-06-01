@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,16 +51,16 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_window = new Window(this, 224, 72, 16, 64);
 	_btnOk = new TextButton(50, 12, 68, 104);
 	_btnCancel = new TextButton(50, 12, 138, 104);
-	_txtTarget = new Text(214, 32, 21, 72);
+	_txtTarget = new Text(212, 32, 22, 72);
 
 	// Set palette
 	if (w != 0 && w->getId() == 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 6);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 4);
 	}
 
 	add(_window);
@@ -77,28 +77,26 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmDestinationState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnCancelClick, Options::keyCancel);
 
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTarget->setWordWrap(true);
-	std::wstringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
-		ss << tr("STR_TARGET_WAY_POINT");
+		_txtTarget->setText(tr("STR_TARGET").arg(tr("STR_WAY_POINT")));
 	}
 	else
 	{
-		ss << tr("STR_TARGET") << _target->getName(_game->getLanguage());
+		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
 	}
-	_txtTarget->setText(ss.str());
 }
 
 /**

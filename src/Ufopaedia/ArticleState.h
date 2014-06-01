@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #define OPENXCOM_ARTICLESTATE_H
 
 #include "../Engine/State.h"
+#include "../Ruleset/RuleItem.h"
 #include <string>
 
 namespace OpenXcom
@@ -40,7 +41,7 @@ namespace OpenXcom
 	{
 	protected:
 		/// constructor (protected, so it can only be instantiated by derived classes)
-		ArticleState(Game *game, std::string article_id, int palSwitch);
+		ArticleState(Game *game, std::string article_id);
 		/// destructor
 		virtual ~ArticleState();
 
@@ -49,6 +50,9 @@ namespace OpenXcom
 		std::string getId() const { return _id; }
 
 	protected:
+
+		/// converts damage type to string
+		std::string getDamageTypeText(ItemDamageType dt) const;
 
 		/// screen layout helpers
 		void initLayout();
@@ -69,8 +73,6 @@ namespace OpenXcom
 		TextButton *_btnOk;
 		TextButton *_btnPrev;
 		TextButton *_btnNext;
-
-		int _palSwitch;
 	};
 }
 

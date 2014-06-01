@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,6 +32,7 @@ class TextButton;
 class ToggleTextButton;
 class TextList;
 class Region;
+struct GraphButInfo;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -40,7 +41,7 @@ class Region;
 class GraphsState : public State
 {
 private:
-	Surface *_bg;
+	InteractiveSurface *_bg;
 	InteractiveSurface *_btnGeoscape;
 	InteractiveSurface *_btnXcomCountry, *_btnUfoCountry;
 	InteractiveSurface *_btnXcomRegion, *_btnUfoRegion;
@@ -48,15 +49,20 @@ private:
 	Text *_txtTitle, *_txtFactor;
 	TextList *_txtMonths, *_txtYears;
 	std::vector<Text *> _txtScale;
-	std::vector<ToggleTextButton *> _btnRegions, _btnCountries;
-	std::vector<ToggleTextButton *> _btnFinances;
-	std::vector<bool> _regionToggles, _countryToggles;
+	std::vector<ToggleTextButton *> _btnRegions, _btnCountries, _btnFinances;
+	std::vector<GraphButInfo *>  _regionToggles, _countryToggles;
 	std::vector<bool> _financeToggles;
 	ToggleTextButton *_btnRegionTotal, *_btnCountryTotal;
 	std::vector<Surface *> _alienRegionLines, _alienCountryLines;
 	std::vector<Surface *> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface *> _financeLines, _incomeLines;
 	bool _alien, _income, _country, _finance;
+	static const size_t GRAPH_MAX_BUTTONS=16;
+	//will be only between 0 and size()
+	size_t _butRegionsOffset, _butCountriesOffset;
+	//scroll and repaint buttons functions
+	void scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, size_t &offset, int step);
+	void updateButton(GraphButInfo *from,ToggleTextButton *to);
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -82,6 +88,8 @@ public:
 	void btnCountryListClick(Action *action);
 	/// Handler for clicking  on a finances button.
 	void btnFinanceListClick(Action *action);
+	/// Mouse wheel handler for shifting up/down the buttons
+	void shiftButtons(Action *action);
 	/// Reset all the elements on screen.
 	void resetScreen();
 	/// Update the scale 
@@ -94,6 +102,7 @@ public:
 	void drawCountryLines();
 	/// Draw Finances Lines.
 	void drawFinanceLines();
+	/// Scroll button lists
 };
 
 }

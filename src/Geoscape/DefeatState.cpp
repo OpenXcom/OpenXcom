@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,9 @@
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Music.h"
 #include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Options.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -36,35 +39,55 @@ namespace OpenXcom
  * Initializes all the elements in the Defeat screen.
  * @param game Pointer to the core game.
  */
-DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
+DefeatState::DefeatState(Game *game) : State(game), _screen(-1)
 {
-	// Create objects
-	_screen = new InteractiveSurface(320, 200, 0, 0);
-	_txtText.push_back(new Text(190, 104, 0, 0));
-	_txtText.push_back(new Text(200, 34, 32, 0));
-	_timer = new Timer(20000);
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	game->getScreen()->resetDisplay(false);
+	const char *files[] = {"PICT4.LBM", "PICT5.LBM"};
 
-	add(_screen);
+	_timer = new Timer(30000);
 
-	// Set up objects
-	_screen->onMouseClick((ActionHandler)&DefeatState::windowClick);
-	
-	_game->getResourcePack()->getMusic("GMLOSE")->play();
+	_text[0] = new Text(190, 104, 0, 0);
+	_text[1] = new Text(200, 34, 32, 0);
 
-	for (int text = 0; text != 2; ++text)
+	for (int i = 0; i < SCREENS; ++i)
 	{
-		std::stringstream ss2;
-		ss2 << "STR_GAME_OVER_" << text+1;
-		_txtText[text]->setText(tr(ss2.str()));
-		_txtText[text]->setWordWrap(true);
-		add(_txtText[text]);
-		_txtText[text]->setVisible(false);
+		Surface *screen = _game->getResourcePack()->getSurface(files[i]);
+		_bg[i] = new InteractiveSurface(320, 200, 0, 0);
+
+		setPalette(screen->getPalette());
+
+		add(_bg[i]);
+		add(_text[i]);
+
+		screen->blit(_bg[i]);
+		_bg[i]->setVisible(false);
+		_bg[i]->onMouseClick((ActionHandler)&DefeatState::screenClick);
+
+		std::ostringstream ss;
+		ss << "STR_GAME_OVER_" << i + 1;
+		_text[i]->setText(tr(ss.str()));
+		_text[i]->setColor(Palette::blockOffset(15)+9);
+		_text[i]->setWordWrap(true);
+		_text[i]->setVisible(false);
 	}
+	
+	_game->getResourcePack()->playMusic("GMLOSE");
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)&DefeatState::windowClick);
+	_timer->onTimer((StateHandler)&DefeatState::screenClick);
 	_timer->start();
+
+	screenClick(0);
+
+	// Ironman is over
+	if (_game->getSavedGame()->isIronman())
+	{
+		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+	}
 }
 
 /**
@@ -75,45 +98,46 @@ DefeatState::~DefeatState()
 	delete _timer;
 }
 
-void DefeatState::init()
-{
-	nextScreen();
-}
-
+/**
+ * Handle timers.
+ */
 void DefeatState::think()
 {
 	_timer->think(this, 0);
 }
 
 /**
- * Returns to the previous screen.
+ * Shows the next screen in the slideshow
+ * or goes back to the Main Menu.
  * @param action Pointer to an action.
  */
-void DefeatState::windowClick(Action *)
+void DefeatState::screenClick(Action *)
 {
-	if(_screenNumber == 2)
+	if (_screen >= 0)
+	{
+		_bg[_screen]->setVisible(false);
+		_text[_screen]->setVisible(false);
+	}
+
+	++_screen;
+
+	// next screen
+	if (_screen < SCREENS)
+	{
+		setPalette(_bg[_screen]->getPalette());
+		_bg[_screen]->setVisible(true);
+		_text[_screen]->setVisible(true);
+		init();
+	}
+	// quit game
+	else
 	{
 		_game->popState();
+		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		_game->getScreen()->resetDisplay(false);
 		_game->setState(new MainMenuState(_game));
 		_game->setSavedGame(0);
 	}
-	else
-		nextScreen();
-}
-
-void DefeatState::nextScreen()
-{
-	++_screenNumber;
-	std::stringstream ss;
-	ss << "PICT" << _screenNumber+3 << ".LBM";
-	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_screen->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_game->getResourcePack()->getSurface(ss.str())->blit(_screen);
-	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
-	_txtText[_screenNumber-1]->setVisible(true);
-	if (_screenNumber > 1)
-		_txtText[_screenNumber-2]->setVisible(false);
 }
 
 }

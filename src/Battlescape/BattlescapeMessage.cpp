@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,11 +34,11 @@ namespace OpenXcom
 BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y) : Surface(width, height, x, y)
 {
 	_window = new Window(0, width, height, x, y, POPUP_NONE);
-	_window->setColor(Palette::blockOffset(0));
+	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 
 	_text = new Text(width, height, x, y);
-	_text->setColor(Palette::blockOffset(0));
+	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setHighContrast(true);
@@ -51,6 +51,28 @@ BattlescapeMessage::~BattlescapeMessage()
 {
 	delete _window;
 	delete _text;
+}
+
+/**
+* Changes the position of the surface in the X axis.
+* @param x X position in pixels.
+*/
+void BattlescapeMessage::setX(int x)
+{
+	Surface::setX(x);
+	_window->setX(x);
+	_text->setX(x);
+}
+
+/**
+* Changes the position of the surface in the Y axis.
+* @param y Y position in pixels.
+*/
+void BattlescapeMessage::setY(int y)
+{
+	Surface::setY(y);
+	_window->setY(y);
+	_text->setY(y);
 }
 
 /**
@@ -72,15 +94,17 @@ void BattlescapeMessage::setText(const std::wstring &message)
 }
 
 /**
- * Changes the various fonts for the message to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void BattlescapeMessage::setFonts(Font *big, Font *small)
+void BattlescapeMessage::initText(Font *big, Font *small, Language *lang)
 {
-	_text->setFonts(big, small);
+	_text->initText(big, small, lang);
 	_text->setBig();
 }
 
@@ -105,6 +129,17 @@ void BattlescapeMessage::blit(Surface *surface)
 	Surface::blit(surface);
 	_window->blit(surface);
 	_text->blit(surface);
+}
+
+/*
+ * Special handling for setting the height of the battlescape message.
+ * @param height the new height.
+ */
+void BattlescapeMessage::setHeight(int height)
+{
+	Surface::setHeight(height);
+	_window->setHeight(height);
+	_text->setHeight(height);
 }
 
 }

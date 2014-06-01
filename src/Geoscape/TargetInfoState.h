@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,7 @@ class TextButton;
 class Window;
 class Text;
 class Target;
+class Globe;
 
 /**
  * Generic window used to display all the
@@ -37,15 +38,18 @@ class TargetInfoState : public State
 {
 private:
 	Target *_target;
+	Globe *_globe;
 
-	TextButton *_btnOk;
+	TextButton *_btnIntercept, *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtTargetted, *_txtFollowers;
 public:
 	/// Creates the Target Info state.
-	TargetInfoState(Game *game, Target *target);
+	TargetInfoState(Game *game, Target *target, Globe *globe);
 	/// Cleans up the Target Info state.
 	~TargetInfoState();
+	/// Handler for clicking the Intercept button.
+	void btnInterceptClick(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };

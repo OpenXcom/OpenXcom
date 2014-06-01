@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,13 +31,13 @@
 namespace OpenXcom
 {
 
-	ArticleStateTextImage::ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
+	ArticleStateTextImage::ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
-		_txtTitle = new Text(defs->text_width, 32, 5, 22);
+		_txtTitle = new Text(defs->text_width, 48, 5, 22);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+		setPalette("PAL_UFOPAEDIA");
 
 		ArticleState::initLayout();
 
@@ -53,7 +53,7 @@ namespace OpenXcom
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
 		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		int text_height = _txtTitle->getTextHeight();
 
@@ -62,7 +62,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 		centerAllSurfaces();
 	}

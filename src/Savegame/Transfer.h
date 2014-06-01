@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,6 +32,7 @@ class Craft;
 class Language;
 class Base;
 class Ruleset;
+class SavedGame;
 
 /**
  * Represents an item transfer.
@@ -53,13 +54,15 @@ public:
 	/// Cleans up the transfer.
 	~Transfer();
 	/// Loads the transfer from YAML.
-	void load(const YAML::Node& node, Base *base, const Ruleset *rule);
+	bool load(const YAML::Node& node, Base *base, const Ruleset *rule, SavedGame *save);
 	/// Saves the transfer to YAML.
 	YAML::Node save() const;
 	/// Sets the soldier of the transfer.
 	void setSoldier(Soldier *soldier);
 	/// Sets the craft of the transfer.
 	void setCraft(Craft *craft);
+	/// Gets the craft of the transfer.
+	Craft *getCraft();
 	/// Gets the items of the transfer.
 	std::string getItems() const;
 	/// Sets the items of the transfer.
@@ -78,6 +81,9 @@ public:
 	TransferType getType() const;
 	/// Advances the transfer.
 	void advance(Base *base);
+	/// Get a pointer to the soldier being transferred.
+	Soldier *getSoldier();
+
 };
 
 }

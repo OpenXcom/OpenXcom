@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,7 +28,6 @@ class Window;
 class Text;
 class TextButton;
 class Craft;
-class GeoscapeState;
 
 /**
  * Window that allows the player
@@ -40,14 +39,15 @@ private:
 	Craft *_craft;
 	Window *_window;
 	int _texture, _shade;
-	Text *_txtCraft, *_txtTarget, *_txtReady, *_txtBegin;
+	Text *_txtMessage, *_txtBegin;
 	TextButton *_btnYes, *_btnNo;
-	GeoscapeState *_state;
 public:
 	/// Creates the Confirm Landing state.
-	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state);
+	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
+	/// initialize the state, make a sanity check.
+	void init();
 	/// Handler for clicking the Yes button.
 	void btnYesClick(Action *action);
 	/// Handler for clicking the No button.

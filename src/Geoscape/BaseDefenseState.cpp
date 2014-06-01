@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -63,14 +63,13 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_ufo = ufo;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 16, 6);
+	_txtTitle = new Text(300, 17, 16, 6);
 	_txtInit = new Text(300, 10, 16, 24);
 	_lstDefenses = new TextList(300, 130, 16, 40);
 	_btnOk = new TextButton(120, 18, 100, 170);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -87,15 +86,13 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, Options::keyCancel);
 	_btnOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	std::wstringstream ss;
-	ss << _base->getName() << tr("STR_UNDER_ATTACK");
-	_txtTitle->setText(ss.str());
+	_txtTitle->setText(tr("STR_BASE_UNDER_ATTACK").arg(_base->getName()));
 	_txtInit->setVisible(false);
 
 	_txtInit->setColor(Palette::blockOffset(13)+10);
@@ -115,15 +112,6 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 BaseDefenseState::~BaseDefenseState()
 {
 	delete _timer;
-}
-
-/**
- * Resets the palette.
- */
-void BaseDefenseState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
 }
 
 void BaseDefenseState::think()
@@ -191,7 +179,7 @@ void BaseDefenseState::nextStep()
 			_action = BDA_RESOLVE;
 			return;
 		case BDA_RESOLVE:
-			if (RNG::generate(0, 100) > (def)->getRules()->getHitRatio())
+			if (!RNG::percent((def)->getRules()->getHitRatio()))
 			{
 				_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
 			}
@@ -219,7 +207,6 @@ void BaseDefenseState::nextStep()
 void BaseDefenseState::btnOkClick(Action *)
 {
 	_timer->stop();
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{

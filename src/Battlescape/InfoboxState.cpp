@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,6 +41,9 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_frame = new Frame(261, 122, 34, 10);
 	_text = new Text(251, 112, 39, 15);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_frame);
 	add(_text);
 
@@ -56,7 +59,7 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_text->setBig();
 	_text->setWordWrap(true);
 	_text->setText(msg);
-	_text->setColor(Palette::blockOffset(0));
+	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setHighContrast(true);
 	_text->setPalette(_frame->getPalette());
 

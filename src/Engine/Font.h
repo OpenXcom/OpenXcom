@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,7 @@ namespace OpenXcom
 {
 
 class Surface;
+class Palette;
 
 /**
  * Takes care of loading and storing each character in a sprite font.
@@ -42,18 +43,28 @@ private:
 	static std::wstring _index;
 	static SDL_Color _palette[6];
 	Surface *_surface;
-	int _width, _height;
+	int _width, _height, _spacing;
 	std::map<wchar_t, SDL_Rect> _chars;
-	int _spacing; // For some reason the X-Com small font is smooshed together by one pixel...
+	bool _monospace;
 public:
 	/// Creates a blank font.
 	Font();
 	/// Cleans up the font.
 	~Font();
+	/// Checks if a character is a linebreak.
+	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == L'\x02'); }
+	/// Checks if a character is a blank space (includes non-breaking spaces).
+	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == L'\xA0'); }
+	/// Checks if a character is a word separator.
+	static inline bool isSeparator(wchar_t c) { return (c == L'-' || c == '/'); }
+	/// Checks if a character is a non-breaking space.
+	static inline bool isNonBreakableSpace(wchar_t c) { return (c == L'\xA0'); }
 	/// Sets the character index for every font.
 	static void setIndex(const std::wstring &index);
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
+	/// Generate the terminal font.
+	void loadTerminal();
 	/// Determines the size and position of each character in the font.
 	void init();
 	/// Gets a particular character from the font, with its real size.
@@ -62,8 +73,10 @@ public:
 	int getWidth() const;
 	/// Gets the font's character height.
 	int getHeight() const;
-	/// Gets the horizontal spacing between characters.
+	/// Gets the spacing between characters.
 	int getSpacing() const;
+	/// Gets the size of a particular character;
+	SDL_Rect getCharSize(wchar_t c);
 	/// Gets the font's surface.
 	Surface *getSurface() const;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,12 +45,12 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_window = new Window(this, 320, 80, 0, 60);
 	_btnCancel = new TextButton(128, 16, 176, 115);
 	_btnOk = new TextButton(128, 16, 16, 115);
-	_txtTitle = new Text(310, 16, 5, 75);
-	_txtCost = new Text(60, 16, 110, 95);
-	_txtTotal = new Text(100, 16, 170, 95);
+	_txtTitle = new Text(310, 17, 5, 75);
+	_txtCost = new Text(60, 17, 110, 95);
+	_txtTotal = new Text(100, 17, 170, 95);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnCancel);
@@ -68,19 +68,17 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferConfirmState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&TransferConfirmState::btnCancelClick, Options::keyCancel);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransferConfirmState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TransferConfirmState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&TransferConfirmState::btnOkClick, Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	std::wstring s = tr("STR_TRANSFER_ITEMS_TO");
-	s += _base->getName();
-	_txtTitle->setText(s);
+	_txtTitle->setText(tr("STR_TRANSFER_ITEMS_TO").arg(_base->getName()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setBig();

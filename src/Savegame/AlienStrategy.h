@@ -43,9 +43,9 @@ public:
 	/// Saves the data to YAML.
 	YAML::Node save() const;
 	/// Choose a random region for a regular mission.
-	const std::string &chooseRandomRegion() const;
+	const std::string chooseRandomRegion(const Ruleset *rules);
 	/// Choose a random mission for a region.
-	const std::string &chooseRandomMission(const std::string &region) const;
+	const std::string chooseRandomMission(const std::string &region) const;
 	/// Remove a region and mission from the list of posibilities.
 	bool removeMission(const std::string &region, const std::string &mission);
 private:

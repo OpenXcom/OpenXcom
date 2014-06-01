@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,12 +44,8 @@ private:
 	Surface *_selAmmo;
 	Inventory *_inv;
 	SavedBattleGame *_battleGame;
-	bool _tu, _showMoreStatsInInventoryView;
+	bool _tu;
 	BattlescapeState *_parent;
-
-	bool hasInventory(BattleUnit *unit) const;
-	BattleUnit *selectPreviousUnit() const;
-	BattleUnit *selectNextUnit() const;
 public:
 	/// Creates the Inventory state.
 	InventoryState(Game *game, bool tu, BattlescapeState *parent);

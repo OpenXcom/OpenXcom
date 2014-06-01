@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,18 +28,19 @@ namespace OpenXcom
 
 /**
  * Sets up a blank text edit with the specified size and position.
+ * @param state Pointer to state the text edit belongs to.
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0), _numerical(false)
+TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0), _state(state)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
-	_caret = new Text(16, 16, 0, 0);
+	_caret = new Text(16, 17, 0, 0);
 	_caret->setText(L"|");
 }
 
@@ -53,36 +54,56 @@ TextEdit::~TextEdit()
 	delete _timer;
 	// In case it was left focused
 	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+	_state->setModal(0);
 }
 
 /**
- * Starts the blinking animation when
- * the text edit is focused.
+ * Passes events to internal components.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
  */
-void TextEdit::focus()
+void TextEdit::handle(Action *action, State *state)
 {
-	if (!_isFocused)
+	InteractiveSurface::handle(action, state);
+	if (_isFocused && _modal && action->getDetails()->type == SDL_MOUSEBUTTONDOWN &&
+		(action->getAbsoluteXMouse() < getX() || action->getAbsoluteXMouse() >= getX() + getWidth() ||
+		 action->getAbsoluteYMouse() < getY() || action->getAbsoluteYMouse() >= getY() + getHeight()))
 	{
-		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-		_caretPos = _value.length();
-		_blink = true;
-		_timer->start();
-		_redraw = true;
+		setFocus(false);
 	}
-	InteractiveSurface::focus();
 }
 
 /**
-* Stops the blinking animation when
-* the text edit is defocused.
+ * Controls the blinking animation when
+ * the text edit is focused.
+ * @param focus True if focused, false otherwise.
+ * @param modal True to lock input to this control, false otherwise.
  */
-void TextEdit::deFocus()
+void TextEdit::setFocus(bool focus, bool modal)
 {
-	InteractiveSurface::deFocus();
-	_blink = false;
-	_redraw = true;
-	_timer->stop();
-	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+	_modal = modal;
+	if (focus != _isFocused)
+	{
+		_redraw = true;
+		InteractiveSurface::setFocus(focus);
+		if (_isFocused)
+		{
+			SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+			_caretPos = _value.length();
+			_blink = true;
+			_timer->start();
+			if (_modal)
+				_state->setModal(this);
+		}
+		else
+		{
+			_blink = false;
+			_timer->stop();
+			SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+			if (_modal)
+				_state->setModal(0);
+		}
+	}
 }
 
 /**
@@ -109,11 +130,12 @@ void TextEdit::setSmall()
  * text size can change mid-text.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void TextEdit::setFonts(Font *big, Font *small)
+void TextEdit::initText(Font *big, Font *small, Language *lang)
 {
-	_text->setFonts(big, small);
-	_caret->setFonts(big, small);
+	_text->initText(big, small, lang);
+	_caret->initText(big, small, lang);
 }
 
 /**
@@ -278,7 +300,7 @@ void TextEdit::draw()
 {
 	Surface::draw();
 	_text->setText(_value);
-	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
+	if (Options::keyboardMode == KEYBOARD_OFF)
 	{
 		std::wstring newValue = _value;
 		if (_isFocused && _blink)
@@ -289,7 +311,7 @@ void TextEdit::draw()
 	}
 	clear();
 	_text->blit(this);
-	if (Options::getInt("keyboardMode") == KEYBOARD_ON)
+	if (Options::keyboardMode == KEYBOARD_ON)
 	{
 		if (_isFocused && _blink)
 		{
@@ -306,16 +328,9 @@ void TextEdit::draw()
 				x = _text->getWidth() - _text->getTextWidth();
 				break;
 			}
-			for (unsigned int i = 0; i < _caretPos; ++i)
+			for (size_t i = 0; i < _caretPos; ++i)
 			{
-				if (_value[i] == ' ')
-				{
-					x += _text->getFont()->getWidth() / 2;
-				}
-				else
-				{
-					x += _text->getFont()->getChar(_value[i])->getCrop()->w + _text->getFont()->getSpacing();
-				}
+				x += _text->getFont()->getCharSize(_value[i]).w;
 			}
 			_caret->setX(x);
 			_caret->blit(this);
@@ -338,14 +353,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 	s += c;
 	for (std::wstring::iterator i = s.begin(); i < s.end(); ++i)
 	{
-		if (*i == ' ')
-		{
-			w += _text->getFont()->getWidth() / 2;
-		}
-		else
-		{
-			w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
-		}
+		w += _text->getFont()->getCharSize(*i).w;
 	}
 
 	return (w > getWidth());
@@ -360,7 +368,32 @@ void TextEdit::mousePress(Action *action, State *state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		focus();
+		if (!_isFocused)
+		{
+			setFocus(true);
+		}
+		else
+		{
+			double mouseX = action->getRelativeXMouse();
+			double scaleX = action->getXScale();
+			double w = 0;
+			int c = 0;
+			for (std::wstring::iterator i = _value.begin(); i < _value.end(); ++i)
+			{
+				if (mouseX <= w)
+				{
+					break;
+				}
+				w += (double)_text->getFont()->getCharSize(*i).w / 2 * scaleX;
+				if (mouseX <= w)
+				{
+					break;
+				}
+				c++;
+				w += (double) _text->getFont()->getCharSize(*i).w / 2 * scaleX;
+			}
+			_caretPos = c;
+		}
 	}
 	InteractiveSurface::mousePress(action, state);
 }
@@ -373,7 +406,7 @@ void TextEdit::mousePress(Action *action, State *state)
  */
 void TextEdit::keyboardPress(Action *action, State *state)
 {
-	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
+	if (Options::keyboardMode == KEYBOARD_OFF)
 	{
 		switch (action->getDetails()->key.keysym.sym)
 		{
@@ -406,7 +439,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		default: break;
 		}
 	}
-	else if (Options::getInt("keyboardMode") == KEYBOARD_ON)
+	else if (Options::keyboardMode == KEYBOARD_ON)
 	{
 		switch (action->getDetails()->key.keysym.sym)
 		{
@@ -445,7 +478,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		case SDLK_KP_ENTER:
 			if (!_value.empty())
 			{
-				deFocus();
+				setFocus(false);
 			}
 			break;
 		default:
@@ -460,8 +493,21 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		}
 	}
 	_redraw = true;
+	if (_change)
+	{
+		(state->*_change)(action);
+	}
 
 	InteractiveSurface::keyboardPress(action, state);
+}
+
+/**
+ * Sets a function to be called every time the text changes.
+ * @param handler Action handler.
+ */
+void TextEdit::onChange(ActionHandler handler)
+{
+	_change = handler;
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,16 +43,22 @@ public:
 	BattlescapeMessage(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the Battlescape message.
 	~BattlescapeMessage();
+	/// Sets the X position of the surface.
+	void setX(int x);
+	/// Sets the Y position of the surface.
+	void setY(int y);
 	/// Sets the Battlescape message's background.
 	void setBackground(Surface *background);
 	/// Sets the Battlescape message's text.
 	void setText(const std::wstring &message);
-	/// Sets the Battlescape message's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the Battlescape message's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the Battlescape message's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Blits the warning message.
 	void blit(Surface *surface);
+	/// Special handling for setting the height of the battlescape message.
+	void setHeight(int height);
 };
 
 }

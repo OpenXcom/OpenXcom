@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,8 +26,9 @@ namespace OpenXcom
  * Initializes a vehicle of the specified type.
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
+ * @param size Size in tiles.
  */
-Vehicle::Vehicle(RuleItem *rules, int ammo) : _rules(rules), _ammo(ammo)
+Vehicle::Vehicle(RuleItem *rules, int ammo, int size) : _rules(rules), _ammo(ammo), _size(size)
 {
 }
 
@@ -45,6 +46,7 @@ Vehicle::~Vehicle()
 void Vehicle::load(const YAML::Node &node)
 {
 	_ammo = node["ammo"].as<int>(_ammo);
+	_size = node["size"].as<int>(_size);
 }
 
 /**
@@ -56,6 +58,7 @@ YAML::Node Vehicle::save() const
 	YAML::Node node;
 	node["type"] = _rules->getType();
 	node["ammo"] = _ammo;
+	node["size"] = _size;
 	return node;
 }
 
@@ -74,6 +77,10 @@ RuleItem *Vehicle::getRules() const
  */
 int Vehicle::getAmmo() const
 {
+	if (_ammo == -1)
+	{
+		return 255;
+	}
 	return _ammo;
 }
 
@@ -83,7 +90,19 @@ int Vehicle::getAmmo() const
  */
 void Vehicle::setAmmo(int ammo)
 {
-	_ammo = ammo;
+	if (_ammo != -1)
+	{
+		_ammo = ammo;
+	}
 }
 
+/**
+ * Returns the size occupied by this vehicle
+ * in a transport craft.
+ * @return Size in tiles.
+ */
+int Vehicle::getSize() const
+{
+	return _size;
+}
 }

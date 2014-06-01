@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0), _listButton(false)
+ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
 {
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
@@ -46,6 +46,18 @@ ArrowButton::~ArrowButton()
 	delete _timer;
 }
 
+bool ArrowButton::isButtonHandled(Uint8 button)
+{
+	if (_list != 0)
+	{
+		return (button == SDL_BUTTON_LEFT || button == SDL_BUTTON_RIGHT);
+	}
+	else
+	{
+		return ImageButton::isButtonHandled(button);
+	}
+}
+
 /**
  * Changes the color for the image button.
  * @param color Color value.
@@ -57,7 +69,17 @@ void ArrowButton::setColor(Uint8 color)
 }
 
 /**
- * Changes the text associated with the arrow button.
+ * Changes the shape for the arrow button.
+ * @param shape Shape of the arrow.
+ */
+void ArrowButton::setShape(ArrowShape shape)
+{
+	_shape = shape;
+	_redraw = true;
+}
+
+/**
+ * Changes the list associated with the arrow button.
  * This makes the button scroll that list.
  * @param list Pointer to text list.
  */
@@ -71,7 +93,7 @@ void ArrowButton::setTextList(TextList *list)
  */
 void ArrowButton::draw()
 {
-  ImageButton::draw();
+	ImageButton::draw();
 	lock();
 
 	// Draw button
@@ -103,191 +125,179 @@ void ArrowButton::draw()
 
 	color = _color + 1;
 
-  switch (_shape)
-  {
-  case OpenXcom::ARROW_BIG_UP:
-    {
-      // Draw arrow square
-      square.x = 5;
-      square.y = 8;
-      square.w = 3;
-      square.h = 3;
+	switch (_shape)
+	{
+	case OpenXcom::ARROW_BIG_UP:
+		// Draw arrow square
+		square.x = 5;
+		square.y = 8;
+		square.w = 3;
+		square.h = 3;
 
-      drawRect(&square, color);
+		drawRect(&square, color);
 
-      // Draw arrow triangle
-      square.x = 2;
-      square.y = 7;
-      square.w = 9;
-      square.h = 1;
+		// Draw arrow triangle
+		square.x = 2;
+		square.y = 7;
+		square.w = 9;
+		square.h = 1;
 
-      for (; square.w > 1; square.w -= 2)
-      {
-        drawRect(&square, color);
-        square.x++;
-        square.y--;
-      }
-      drawRect(&square, color);
-    }
-    break;
-  case OpenXcom::ARROW_BIG_DOWN:
-    {
-      // Draw arrow square
-      square.x = 5;
-      square.y = 3;
-      square.w = 3;
-      square.h = 3;
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color);
+			square.x++;
+			square.y--;
+		}
+		drawRect(&square, color);
+		break;
+	case OpenXcom::ARROW_BIG_DOWN:
+		// Draw arrow square
+		square.x = 5;
+		square.y = 3;
+		square.w = 3;
+		square.h = 3;
 
-      drawRect(&square, color);
+		drawRect(&square, color);
 
-      // Draw arrow triangle
-      square.x = 2;
-      square.y = 6;
-      square.w = 9;
-      square.h = 1;
+		// Draw arrow triangle
+		square.x = 2;
+		square.y = 6;
+		square.w = 9;
+		square.h = 1;
 
-      for (; square.w > 1; square.w -= 2)
-      {
-        drawRect(&square, color);
-        square.x++;
-        square.y++;
-      }
-      drawRect(&square, color);
-    }
-    break;
-  case OpenXcom::ARROW_SMALL_UP:
-    {
-      // Draw arrow triangle 1
-      square.x = 1;
-      square.y = 5;
-      square.w = 9;
-      square.h = 1;
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color);
+			square.x++;
+			square.y++;
+		}
+		drawRect(&square, color);
+		break;
+	case OpenXcom::ARROW_SMALL_UP:
+		// Draw arrow triangle 1
+		square.x = 1;
+		square.y = 5;
+		square.w = 9;
+		square.h = 1;
 
-      for (; square.w > 1; square.w -= 2)
-      {
-        drawRect(&square, color + 2);
-        square.x++;
-        square.y--;
-      }
-      drawRect(&square, color + 2);
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color + 2);
+			square.x++;
+			square.y--;
+		}
+		drawRect(&square, color + 2);
 
-      // Draw arrow triangle 2
-      square.x = 2;
-      square.y = 5;
-      square.w = 7;
-      square.h = 1;
+		// Draw arrow triangle 2
+		square.x = 2;
+		square.y = 5;
+		square.w = 7;
+		square.h = 1;
 
-      for (; square.w > 1; square.w -= 2)
-      {
-        drawRect(&square, color);
-        square.x++;
-        square.y--;
-      }
-      drawRect(&square, color);
-    }
-    break;
-  case OpenXcom::ARROW_SMALL_DOWN:
-    {
-      // Draw arrow triangle 1
-      square.x = 1;
-      square.y = 2;
-      square.w = 9;
-      square.h = 1;
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color);
+			square.x++;
+			square.y--;
+		}
+		drawRect(&square, color);
+		break;
+	case OpenXcom::ARROW_SMALL_DOWN:
+		// Draw arrow triangle 1
+		square.x = 1;
+		square.y = 2;
+		square.w = 9;
+		square.h = 1;
 
-      for (; square.w > 1; square.w -= 2)
-      {
-        drawRect(&square, color + 2);
-        square.x++;
-        square.y++;
-      }
-      drawRect(&square, color + 2);
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color + 2);
+			square.x++;
+			square.y++;
+		}
+		drawRect(&square, color + 2);
 
-      // Draw arrow triangle 2
-      square.x = 2;
-      square.y = 2;
-      square.w = 7;
-      square.h = 1;
+		// Draw arrow triangle 2
+		square.x = 2;
+		square.y = 2;
+		square.w = 7;
+		square.h = 1;
 
-      for (; square.w > 1; square.w -= 2)
-      {
-        drawRect(&square, color);
-        square.x++;
-        square.y++;
-      }
-      drawRect(&square, color);
-    }
-    break;
-  case OpenXcom::ARROW_SMALL_LEFT:
-    {
-      // Draw arrow triangle 1
-      square.x = 2;
-      square.y = 4;
-      square.w = 2;
-      square.h = 1;
+		for (; square.w > 1; square.w -= 2)
+		{
+			drawRect(&square, color);
+			square.x++;
+			square.y++;
+		}
+		drawRect(&square, color);
+		break;
+	case OpenXcom::ARROW_SMALL_LEFT:
+		// Draw arrow triangle 1
+		square.x = 2;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
 
-      for (; square.h < 5; square.h += 2)
-      {
-        drawRect(&square, color + 2);
-        square.x += 2;
-        square.y--;
-      }
-      square.w = 1;
-      drawRect(&square, color + 2);
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color + 2);
+			square.x += 2;
+			square.y--;
+		}
+		square.w = 1;
+		drawRect(&square, color + 2);
 
-      // Draw arrow triangle 2
-      square.x = 3;
-      square.y = 4;
-      square.w = 2;
-      square.h = 1;
+		// Draw arrow triangle 2
+		square.x = 3;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
 
-      for (; square.h < 5; square.h += 2)
-      {
-        drawRect(&square, color);
-        square.x += 2;
-        square.y--;
-      }
-      square.w = 1;
-      drawRect(&square, color);
-    }
-    break;
-  case OpenXcom::ARROW_SMALL_RIGHT:
-    {
-      // Draw arrow triangle 1
-      square.x = 7;
-      square.y = 4;
-      square.w = 2;
-      square.h = 1;
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color);
+			square.x += 2;
+			square.y--;
+		}
+		square.w = 1;
+		drawRect(&square, color);
+		break;
+	case OpenXcom::ARROW_SMALL_RIGHT:
+		// Draw arrow triangle 1
+		square.x = 7;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
 
-      for (; square.h < 5; square.h += 2)
-      {
-        drawRect(&square, color + 2);
-        square.x -= 2;
-        square.y--;
-      }
-      square.x++;
-      square.w = 1;
-      drawRect(&square, color + 2);
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color + 2);
+			square.x -= 2;
+			square.y--;
+		}
+		square.x++;
+		square.w = 1;
+		drawRect(&square, color + 2);
 
-      // Draw arrow triangle 2
-      square.x = 6;
-      square.y = 4;
-      square.w = 2;
-      square.h = 1;
+		// Draw arrow triangle 2
+		square.x = 6;
+		square.y = 4;
+		square.w = 2;
+		square.h = 1;
 
-      for (; square.h < 5; square.h += 2)
-      {
-        drawRect(&square, color);
-        square.x -= 2;
-        square.y--;
-      }
-      square.x++;
-      square.w = 1;
-      drawRect(&square, color);
-    }
-    break;
-  default:
-    break;
-  }
+		for (; square.h < 5; square.h += 2)
+		{
+			drawRect(&square, color);
+			square.x -= 2;
+			square.y--;
+		}
+		square.x++;
+		square.w = 1;
+		drawRect(&square, color);
+		break;
+	default:
+		break;
+	}
 
 	unlock();
 }
@@ -323,9 +333,14 @@ void ArrowButton::scroll()
 void ArrowButton::mousePress(Action *action, State *state)
 {
 	ImageButton::mousePress(action, state);
-	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_list != 0)
 	{
-		_timer->start();
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_timer->start();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) _list->scrollUp(false, true);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) _list->scrollDown(false, true);
 	}
 }
 
@@ -351,7 +366,7 @@ void ArrowButton::mouseRelease(Action *action, State *state)
 void ArrowButton::mouseClick(Action *action, State *state)
 {
 	ImageButton::mouseClick(action, state);
-	if (0 != _list && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
+	if (_list != 0 && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
 		if (_shape == ARROW_BIG_UP) _list->scrollUp(true);
 		else if (_shape == ARROW_BIG_DOWN) _list->scrollDown(true);
 	}

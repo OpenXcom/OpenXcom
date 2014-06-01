@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,8 @@
 #include "Options.h"
 #include "Logger.h"
 #include "Language.h"
+#include "Adlib/adlplayer.h"
+#include "AdlibMusic.h"
 
 namespace OpenXcom
 {
@@ -38,6 +40,7 @@ Music::Music() : _music(0)
 Music::~Music()
 {
 #ifndef __NO_MUSIC
+	stop();
 	Mix_FreeMusic(_music);
 #endif
 }
@@ -51,8 +54,7 @@ void Music::load(const std::string &filename)
 #ifndef __NO_MUSIC
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::wstring wstr = Language::cpToWstr(filename);
-	std::string utf8 = Language::wstrToUtf8(wstr);
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	_music = Mix_LoadMUS(utf8.c_str());
 	if (_music == 0)
@@ -82,17 +84,63 @@ void Music::load(const void *data, size_t size)
 
 /**
  * Plays the contained music track.
+ * @param loop Amount of times to loop the track. -1 = infinite
  */
 void Music::play(int loop) const
 {
 #ifndef __NO_MUSIC
-	if (!Options::getBool("mute"))
+	if (!Options::mute)
 	{
-		Mix_HaltMusic();
+		stop();
 		if (_music != 0 && Mix_PlayMusic(_music, loop) == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
 		}
+	}
+#endif
+}
+
+/**
+ * Stops all music playing.
+ */
+void Music::stop()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		func_mute();
+		Mix_HookMusic(NULL, NULL);
+		Mix_HaltMusic();
+	}
+#endif
+}
+
+/**
+ * Pauses music playback when game loses focus.
+ */
+void Music::pause()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		Mix_PauseMusic();
+		if (Mix_GetMusicType(0) == MUS_NONE)
+			Mix_HookMusic(NULL, NULL);
+	}
+#endif
+}
+
+/**
+ * Resumes music playback when game gains focus.
+ */
+void Music::resume()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		Mix_ResumeMusic();
+		if (Mix_GetMusicType(0) == MUS_NONE)
+			Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
 }

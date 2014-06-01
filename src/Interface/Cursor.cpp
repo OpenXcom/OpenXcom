@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,6 @@ namespace OpenXcom
  */
 Cursor::Cursor(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0)
 {
-	SDL_ShowCursor(SDL_DISABLE);
 }
 
 /**
@@ -44,7 +43,6 @@ Cursor::Cursor(int width, int height, int x, int y) : Surface(width, height, x, 
  */
 Cursor::~Cursor()
 {
-
 }
 
 /**

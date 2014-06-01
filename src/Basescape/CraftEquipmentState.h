@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,12 +45,9 @@ private:
 	Text *_txtTitle, *_txtItem, *_txtStores, *_txtAvailable, *_txtUsed, *_txtCrew;
 	TextList *_lstEquipment;
 	Timer *_timerLeft, *_timerRight;
-	unsigned int _sel;
+	size_t _sel, _craft;
 	Base *_base;
-	size_t _craft;
 	std::vector<std::string> _items;
-	int _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:

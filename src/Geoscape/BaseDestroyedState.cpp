@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,12 +39,14 @@ namespace OpenXcom
 BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _base(base)
 {
 	_screen = false;
+
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
 	_btnOk = new TextButton(100, 20, 110, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 7);
 	
 	add(_window);
 	add(_btnOk);
@@ -59,17 +61,15 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyCancel);
 		
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
 
-	std::wstringstream ss;
-	ss << tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE") << _base->getName();
-	_txtMessage->setText(ss.str());
+	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE").arg(_base->getName()));
 
 	std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin();
 	for (; k != _game->getSavedGame()->getRegions()->end(); ++k)
@@ -111,14 +111,6 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
  */
 BaseDestroyedState::~BaseDestroyedState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void BaseDestroyedState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 }
 
 /**

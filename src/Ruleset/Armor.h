@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,8 +20,10 @@
 #define OPENXCOM_ARMOR_H
 
 #include <string>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
+#include "Unit.h"
 
 namespace OpenXcom
 {
@@ -33,17 +35,20 @@ namespace OpenXcom
  */
 class Armor
 {
-private:
+public:	
 	static const int DAMAGE_TYPES = 10;
-	std::string _type, _spriteSheet, _spriteInv, _corpseItem, _storeItem;
+private:
+	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem;
+	std::vector<std::string> _corpseBattle;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
-	int _size;
+	int _size, _weight;
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
+	UnitStats _stats;
 public:
 	/// Creates a blank armor ruleset.
-	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
+	Armor(const std::string &type);
 	/// Cleans up the armor ruleset.
 	~Armor();
 	/// Loads the armor data from YAML.
@@ -62,8 +67,10 @@ public:
 	int getRearArmor() const;
 	/// Gets the under armor level.
 	int getUnderArmor() const;
-	/// Gets the corpse item.
-	std::string getCorpseItem() const;
+	/// Gets the Geoscape corpse item.
+	std::string getCorpseGeoscape() const;
+	/// Gets the Battlescape corpse item.
+	const std::vector<std::string> &getCorpseBattlescape() const;
 	/// Gets the stores item.
 	std::string getStoreItem() const;
 	/// Gets the battlescape drawing routine ID.
@@ -76,6 +83,10 @@ public:
 	float getDamageModifier(ItemDamageType dt);
 	/// Gets loftempSet
 	std::vector<int> getLoftempsSet() const;
+	/// Gets the armor's stats.
+	UnitStats *getStats();
+	/// Gets the armor's weight.
+	int getWeight();
 };
 
 }

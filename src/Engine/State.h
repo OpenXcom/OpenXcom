@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,6 +29,7 @@ namespace OpenXcom
 
 class Game;
 class Surface;
+class InteractiveSurface;
 class Action;
 class LocalizedText;
 
@@ -42,11 +43,14 @@ class LocalizedText;
  */
 class State
 {
+	friend class Timer;
+
 protected:
 	Game *_game;
 	std::vector<Surface*> _surfaces;
 	bool _screen;
-
+	InteractiveSurface *_modal;
+	SDL_Color _palette[256];
 public:
 	/// Creates a new state linked to a game.
 	State(Game* game);
@@ -76,9 +80,26 @@ public:
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
+	/// redraw all the text-type surfaces.
+	void redrawText();
+	/// center all surfaces relative to the screen.
 	void centerAllSurfaces();
+	/// lower all surfaces by half the screen height.
 	void lowerAllSurfaces();
-	friend class Timer;
+	/// switch the colours to use the battlescape palette.
+	void applyBattlescapeTheme();
+	/// Sets a modal surface.
+	void setModal(InteractiveSurface *surface);
+	/// Changes a set of colors on the state's 8bpp palette.
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256, bool immediately = true);
+	/// Changes the state's 8bpp palette with certain resources.
+	void setPalette(const std::string &palette, int backpals = -1);
+	/// Gets the state's 8bpp palette.
+	SDL_Color *const getPalette();
+	/// Let the state know the window has been resized.
+	virtual void resize(int &dX, int &dY);
+	/// Re-orients all the surfaces in the state.
+	virtual void recenter(int dX, int dY);
 };
 
 }

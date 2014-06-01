@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,6 +31,7 @@ class Globe;
 class Game;
 class SavedGame;
 class Ruleset;
+class RuleRegion;
 class RuleUfo;
 class UfoTrajectory;
 class AlienBase;
@@ -110,7 +111,9 @@ private:
 	/// Spawns a UFO, based on mission rules.
 	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
 	/// Spawn an alien base
-	void spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine);
+	void spawnAlienBase(const Globe &globe, Game &engine);
+	/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
+	std::pair<double, double> getWaypoint(const UfoTrajectory &trajectory, const unsigned int nextWaypoint, const Globe &globe, const RuleRegion &region);
 };
 
 }

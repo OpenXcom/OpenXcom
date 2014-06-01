@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -118,7 +118,7 @@ double RuleCountry::getLabelLatitude() const
  */
 bool RuleCountry::insideCountry(double lon, double lat) const
 {
-	for (unsigned int i = 0; i < _lonMin.size(); ++i)
+	for (size_t i = 0; i < _lonMin.size(); ++i)
 	{
 		bool inLon, inLat;
 

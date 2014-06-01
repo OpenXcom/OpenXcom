@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -94,7 +94,7 @@ inline Logger::~Logger()
 		fprintf(stderr, "%s", os.str().c_str());
 		fflush(stderr);
 	}
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "[" << now() << "]" << "\t" << os.str();
 	FILE *file = fopen(logFile().c_str(), "a");
 	fprintf(file, "%s", ss.str().c_str());

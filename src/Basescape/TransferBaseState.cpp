@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,14 +46,14 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	// Create objects
 	_window = new Window(this, 280, 140, 20, 30);
 	_btnCancel = new TextButton(264, 16, 28, 146);
-	_txtTitle = new Text(270, 16, 25, 38);
+	_txtTitle = new Text(270, 17, 25, 38);
 	_txtFunds = new Text(250, 9, 30, 54);
-	_txtName = new Text(130, 16, 28, 64);
-	_txtArea = new Text(130, 16, 160, 64);
+	_txtName = new Text(130, 17, 28, 64);
+	_txtArea = new Text(130, 17, 160, 64);
 	_lstBases = new TextList(248, 64, 28, 80);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);
@@ -72,7 +72,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
@@ -81,9 +81,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 
 	_txtFunds->setColor(Palette::blockOffset(13)+5);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s = tr("STR_CURRENT_FUNDS");
-	s += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtFunds->setText(s);
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtName->setColor(Palette::blockOffset(13)+5);
 	_txtName->setText(tr("STR_NAME"));

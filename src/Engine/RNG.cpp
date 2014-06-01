@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,78 +17,64 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RNG.h"
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <math.h>
+#include <time.h>
 
 namespace OpenXcom
 {
 namespace RNG
 {
 
-unsigned int _seed = 0;
-long _count = 0;
+/*  Written in 2014 by Sebastiano Vigna (vigna@acm.org)
 
-/**
- * Seeds the random generator with a new number.
- * Defaults to the current time if none is set.
- * @param count Number of generations.
- * @param seed New seed.
- */
-void init(long count, unsigned int seed)
+To the extent possible under law, the author has dedicated all copyright
+and related and neighboring rights to this software to the public domain
+worldwide. This software is distributed without any warranty.
+
+See <http://creativecommons.org/publicdomain/zero/1.0/>. */
+
+/* This is a good generator if you're short on memory, but otherwise we
+   rather suggest to use a xorshift128+ (for maximum speed) or
+   xorshift1024* (for speed and very long period) generator. */
+
+uint64_t x = time(0); /* The state must be seeded with a nonzero value. */
+
+uint64_t next()
 {
-	_seed = seed;
-	_count = count;
-	if (count == -1)
-	{
-		_seed = (unsigned int)time(NULL);
-		_count = 0;
-		srand(_seed);
-	}
-	else
-	{
-		srand(_seed);
-		for (long i = 0; i < count; ++i)
-		{
-			rand();
-		}
-	}
+	x ^= x >> 12; // a
+	x ^= x << 25; // b
+	x ^= x >> 27; // c
+	return x * 2685821657736338717LL;
 }
 
 /**
- * Loads the RNG from a YAML file.
- * @param node YAML node.
- */
-void load(const YAML::Node &node)
+* Returns the current seed in use by the generator.
+* @return Current seed.
+*/
+uint64_t getSeed()
 {
-	if (node["rngCount"])
-	{
-		init(node["rngCount"].as<int>(), node["rngSeed"].as<int>());
-	}
+	return x;
 }
 
 /**
- * Saves the RNG to a YAML file.
- * @return YAML node.
- */
-void save(YAML::Node &node)
+* Changes the current seed in use by the generator.
+* @param n New seed.
+*/
+void setSeed(uint64_t n)
 {
-	node["rngCount"] = _count;
-	node["rngSeed"] = _seed;
+	x = n;
 }
 
 /**
  * Generates a random integer number within a certain range.
- * @param min Minimum number.
- * @param max Maximum number.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
  * @return Generated number.
  */
 int generate(int min, int max)
 {
-	_count++;
-	int num = rand();
-	return (num % (max - min + 1) + min);
+	uint64_t num = next();
+	return (int)(num % (max - min + 1) + min);
 }
 
 /**
@@ -99,9 +85,8 @@ int generate(int min, int max)
  */
 double generate(double min, double max)
 {
-	_count++;
-	int num = rand();
-	return (num * (max - min) / RAND_MAX + min);
+	double num = next();
+	return (double)(num / ((double)UINT64_MAX / (max - min)) + min);
 }
 
 /**
@@ -137,6 +122,28 @@ double boxMuller(double m, double s)
 	}
 
 	return( m + y1 * s );
+}
+
+/**
+ * Generates a random percent chance of an event occuring,
+ * and returns the result
+ * @param value Value percentage (0-100%)
+ * @return True if the chance succeeded.
+ */
+bool percent(int value)
+{
+	return (generate(0, 99) < value);
+}
+
+/**
+ * Generates a random positive integer up to a number.
+ * @param max Maximum number, exclusive.
+ * @return Generated number.
+ */
+int generateEx(int max)
+{
+	uint64_t num = next();
+	return (int)(num % max);
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,14 +48,13 @@ private:
 	static const int NUM_LANDSHADES = 48;
 	static const int NUM_SEASHADES = 72;
 	static const int NEAR_RADIUS = 25;
-	static const double QUAD_LONGITUDE;
-	static const double QUAD_LATITUDE;
+	static const int DOGFIGHT_ZOOM = 3;
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
 	double _cenLon, _cenLat, _rotLon, _rotLat, _hoverLon, _hoverLat;
 	Sint16 _cenX, _cenY;
-	size_t _zoom;
+	size_t _zoom, _zoomOld;
 	SurfaceSet *_texture;
 	Game *_game;
 	Surface *_markers, *_countries, *_radars;
@@ -65,14 +64,23 @@ private:
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 	FastLineClip *_clipper;
+	double _radius, _radiusStep;
 	///normal of each pixel in earth globe per zoom level
 	std::vector<std::vector<Cord> > _earthData;
 	///data sample used for noise in shading
 	std::vector<Sint16> _randomNoiseData;
 	///list of dimension of earth on screen per zoom level
-	std::vector<double> _radius;
+	std::vector<double> _zoomRadius;
 
+	bool _isMouseScrolling, _isMouseScrolled;
+	int _xBeforeMouseScrolling, _yBeforeMouseScrolling;
+	double _lonBeforeMouseScrolling, _latBeforeMouseScrolling;
+	Uint32 _mouseScrollingStartTime;
+	int _totalMouseMoveX, _totalMouseMoveY;
+	bool _mouseMovedOverThreshold;
 
+	/// Sets the globe zoom factor.
+	void setZoom(size_t zoom);
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
 	/// Return latitude of last visible to player point on given longitude.
@@ -85,6 +93,14 @@ private:
 	void cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache);
 	/// Get position of sun relative to given position in polar cords and date.
 	Cord getSunDirection(double lon, double lat) const;
+	/// Draw globe range circle.
+	void drawGlobeCircle(double lat, double lon, double radius, int segments);
+	/// Special "transparent" line.
+	void XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, int shade);
+	/// Draw line on globe surface.
+	void drawVHLine(Surface *surface, double lon1, double lat1, double lon2, double lat2, Uint8 color);
+	/// Draw flight path.
+	void drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2);
 public:
 	/// Creates a new globe at the specified position and size.
 	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
@@ -94,6 +110,7 @@ public:
 	static void loadDat(const std::string &filename, std::list<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const;
+	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, double *x, double *y) const;
 	/// Converts cartesian coordinates to polar coordinates.
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const;
@@ -109,6 +126,10 @@ public:
 	void rotateDown();
 	/// Stops rotating the globe.
 	void rotateStop();
+	/// Stops longitude rotation of the globe.
+	void rotateStopLon();
+	/// Stops latitude rotation of the globe.
+	void rotateStopLat();
 	/// Zooms the globe in.
 	void zoomIn();
 	/// Zooms the globe out.
@@ -117,6 +138,14 @@ public:
 	void zoomMin();
 	/// Zooms the globe maximum.
 	void zoomMax();
+	/// Saves the zoom level for dogfights.
+	void saveZoomDogfight();
+	/// Zooms the globe in for dogfights.
+	bool zoomDogfightIn();
+	/// Zooms the globe out for dogfights.
+	bool zoomDogfightOut();
+	/// Gets the current zoom.
+	size_t getZoom() const;
 	/// Centers the globe on a point.
 	void center(double lon, double lat);
 	/// Checks if a point is inside land.
@@ -143,14 +172,18 @@ public:
 	void drawLand();
 	/// Draws the shadow.
 	void drawShadow();
-	/// Draws the country details of the globe.
+	/// Draws the radar ranges of the globe.
 	void drawRadars();
+	/// Draws the flight paths of the globe.
+	void drawFlights();
 	/// Draws the country details of the globe.
 	void drawDetail();
 	/// Draws all the markers over the globe.
 	void drawMarkers();
 	/// Blits the globe onto another surface.
 	void blit(Surface *surface);
+	/// Special handling for mouse hover.
+	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse presses.
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
@@ -161,18 +194,10 @@ public:
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.
 	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const;
-	/// Checks if current globe zoom level is at maximum.
-	bool isZoomedInToMax() const;
-	/// Checks if current globe zoom level is at minimum.
-	bool isZoomedOutToMax() const;
 	/// Get the localized text.
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
-	/// Draw globe range circle.
-	void drawGlobeCircle(double lat, double lon, double radius, int segments);
-	/// Special "transparent" line.
-	void XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 Color);
 	/// Sets hover base position.
 	void setNewBaseHoverPos(double lon, double lat);
 	/// Turns on new base hover mode.
@@ -185,9 +210,12 @@ public:
 	bool getShowRadar(void);
 	/// set the _radarLines variable
 	void toggleRadarLines();
-
-	void drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour);
-
+	/// Update the resolution settings, we just resized the window.
+	void resize();
+	/// Set up the radius of earth and stuff.
+	void setupRadii(int width, int height);
+	/// Move the mouse back to where it started after we finish drag scrolling.
+	void stopScrolling(Action *action);
 };
 
 }

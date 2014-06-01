@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ConfirmNewBaseState.h"
-#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -55,7 +54,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_txtArea = new Text(120, 9, 68, 90);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -72,34 +71,31 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, Options::keyCancel);
 
-	std::wstringstream ss;
+	std::wstring area;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
-			ss << tr("STR_AREA_") << L'\x01' << tr((*i)->getRules()->getType());
+			area = tr((*i)->getRules()->getType());
 			break;
 		}
 	}
 
-	std::wstring s = tr("STR_COST_");
-	s.erase(s.size()-1, 1);
-	s += L'\x01' + Text::formatFunding(_cost);
 	_txtCost->setColor(Palette::blockOffset(15)-1);
 	_txtCost->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtCost->setText(s);
+	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
 
 	_txtArea->setColor(Palette::blockOffset(15)-1);
 	_txtArea->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtArea->setText(ss.str());
+	_txtArea->setText(tr("STR_AREA_").arg(area));
 }
 
 /**
@@ -124,7 +120,7 @@ void ConfirmNewBaseState::btnOkClick(Action *)
 	}
 	else
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(8)+10, "BACK01.SCR", 0));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 0));
 	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
+BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _lang(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
 {
 	for (int x = 0; x < BASE_SIZE; ++x)
 		for (int y = 0; y < BASE_SIZE; ++y)
@@ -63,16 +63,19 @@ BaseView::~BaseView()
 }
 
 /**
- * Changes the various fonts for the text to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void BaseView::setFonts(Font *big, Font *small)
+void BaseView::initText(Font *big, Font *small, Language *lang)
 {
 	_big = big;
 	_small = small;
+	_lang = lang;
 }
 
 /**
@@ -209,7 +212,7 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 		}
 	}
 
-	bool bq=Options::getBool("allowBuildingQueue");
+	bool bq=Options::allowBuildingQueue;
 
 	// Check for another facility to connect to
 	for (int i = 0; i < rule->getSize(); ++i)
@@ -295,78 +298,6 @@ void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacil
 }
 
 /**
- * Counts all the occupied squares connected to a certain position in the
- * grid inclusive, INCLUDING facilities under construction.
- * Mostly used to ensure a base stays connected to the Access Lift.
- * -1 = Unoccupied, 0 = Occupied, 1 = Connected.
- * @param x X position in grid.
- * @param y Y position in grid.
- * @param grid Pointer to connection grid (Null to create one from scratch).
- * @param remove Facility to ignore (in case of facility dismantling).
- * @return Number of squares connected to the starting position.
- */
-int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove) const
-{
-	bool newgrid = (grid == 0);
-
-	// Create connection grid
-	if (newgrid)
-	{
-		grid = new int*[BASE_SIZE];
-
-		for (int xx = 0; xx < BASE_SIZE; ++xx)
-		{
-			grid[xx] = new int[BASE_SIZE];
-			for (int yy = 0; yy < BASE_SIZE; ++yy)
-			{
-				if (_facilities[xx][yy] == 0 || _facilities[xx][yy] == remove)
-				{
-					grid[xx][yy] = -1;
-				}
-				else
-				{
-					grid[xx][yy] = 0;
-				}
-			}
-		}
-	}
-
-	if (x < 0 || x >= BASE_SIZE || y < 0 || y >= BASE_SIZE || grid[x][y] != 0)
-	{
-		return 0;
-	}
-
-	// Add connected (neighbor) facilities to grid
-	int total = 1;
-	grid[x][y]++;
-
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (x-1>=0 && 0!=_facilities[x-1][y] && (_facilities[x-1][y] == _facilities[x][y] || _facilities[x-1][y]->getBuildTime() > _facilities[x-1][y]->getRules()->getBuildTime())))
-		total += countConnected(x - 1, y, grid, remove);
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (y-1>=0 && 0!=_facilities[x][y-1] && (_facilities[x][y-1] == _facilities[x][y] || _facilities[x][y-1]->getBuildTime() > _facilities[x][y-1]->getRules()->getBuildTime())))
-		total += countConnected(x, y - 1, grid, remove);
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (x+1<BASE_SIZE && 0!=_facilities[x+1][y] && (_facilities[x+1][y] == _facilities[x][y] || _facilities[x+1][y]->getBuildTime() > _facilities[x+1][y]->getRules()->getBuildTime())))
-		total += countConnected(x + 1, y, grid, remove);
-	if (0 == _facilities[x][y]->getBuildTime()
-	|| (y+1<BASE_SIZE && 0!=_facilities[x][y+1] && (_facilities[x][y+1] == _facilities[x][y] || _facilities[x][y+1]->getBuildTime() > _facilities[x][y+1]->getRules()->getBuildTime())))
-		total += countConnected(x, y + 1, grid, remove);
-
-	// Delete connection grid
-	if (newgrid)
-	{
-		for (int xx = 0; xx < BASE_SIZE; ++xx)
-		{
-			delete[] grid[xx];
-		}
-		delete[] grid;
-	}
-
-	return total;
-}
-
-/**
  * Keeps the animation timers running.
  */
 void BaseView::think()
@@ -417,9 +348,9 @@ void BaseView::draw()
 	Surface::draw();
 
 	// Draw grid squares
-	for (int x = 0; x < 8; ++x)
+	for (int x = 0; x < BASE_SIZE; ++x)
 	{
-		for (int y = 0; y < 8; ++y)
+		for (int y = 0; y < BASE_SIZE; ++y)
 		{
 			Surface *frame = _texture->getFrame(0);
 			frame->setX(x * GRID_SIZE);
@@ -543,11 +474,11 @@ void BaseView::draw()
 		{
 			Text *text = new Text(GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
 			text->setPalette(getPalette());
-			text->setFonts(_big, _small);
+			text->initText(_big, _small, _lang);
 			text->setX((*i)->getX() * GRID_SIZE);
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << (*i)->getBuildTime();
 			text->setAlign(ALIGN_CENTER);
 			text->setColor(Palette::blockOffset(13)+5);

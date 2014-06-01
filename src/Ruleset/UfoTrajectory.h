@@ -49,6 +49,7 @@ bool operator>>(const YAML::Node &node, TrajectoryWaypoint &wp);
 class UfoTrajectory
 {
 public:
+	UfoTrajectory(const std::string &id);
 	/**
 	 * Gets the trajectory's ID.
 	 * @return The trajectory's ID.
@@ -62,7 +63,7 @@ public:
 	 * Gets the number of waypoints in this trajectory.
 	 * @return The number of waypoints.
 	 */
-	unsigned getWaypointCount() const { return _waypoints.size(); }
+	size_t getWaypointCount() const { return _waypoints.size(); }
 
 	/**
 	 * Gets the zone index at a waypoint.

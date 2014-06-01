@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,6 +29,7 @@ class Window;
 class Text;
 class TextList;
 class GeoscapeState;
+class Base;
 
 /**
  * Items Arriving window that displays all
@@ -38,7 +39,8 @@ class ItemsArrivingState : public State
 {
 private:
 	GeoscapeState *_state;
-	TextButton *_btnOk, *_btnOk5Secs;
+	Base *_base;
+	TextButton *_btnOk, *_btnGotoBase;
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtDestination;
 	TextList *_lstTransfers;
@@ -47,12 +49,10 @@ public:
 	ItemsArrivingState(Game *game, GeoscapeState *state);
 	/// Cleans up the ItemsArriving state.
 	~ItemsArrivingState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the OK - 5 Secs button.
-	void btnOk5SecsClick(Action *action);
+	/// Handler for clicking the Go To Base button.
+	void btnGotoBaseClick(Action *action);
 };
 
 }

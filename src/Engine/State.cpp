@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,13 +24,18 @@
 #include "Font.h"
 #include "Language.h"
 #include "LocalizedText.h"
+#include "Palette.h"
 #include "../Resource/ResourcePack.h"
+#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
-#include "../Basescape/BaseView.h"
-#include "../Battlescape/WarningMessage.h"
+#include "../Interface/ArrowButton.h"
+#include "../Interface/Slider.h"
+#include "../Interface/ComboBox.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -40,9 +45,10 @@ namespace OpenXcom
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game *game) : _game(game), _surfaces(), _screen(true)
+State::State(Game *game) : _game(game), _surfaces(), _screen(true), _modal(0)
 {
-
+	// initialize palette to all black
+	memset(_palette, 0, sizeof(_palette));
 }
 
 /**
@@ -69,11 +75,11 @@ State::~State()
 void State::add(Surface *surface)
 {
 	// Set palette
-	surface->setPalette(_game->getScreen()->getPalette());
+	surface->setPalette(_palette);
 
-	// Set default fonts
-	if (_game->getResourcePack())
-		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	// Set default text resources
+	if (_game->getLanguage() && _game->getResourcePack())
+		surface->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 
 	_surfaces.push_back(surface);
 }
@@ -93,7 +99,7 @@ bool State::isScreen() const
 
 /**
  * Toggles the full-screen flag. Used by windows to
- * keep the previous screen is display while the window
+ * keep the previous screen in display while the window
  * is still "popping up".
  */
 void State::toggleScreen()
@@ -111,7 +117,15 @@ void State::toggleScreen()
  */
 void State::init()
 {
-
+	_game->getScreen()->setPalette(_palette);
+	_game->getCursor()->setPalette(_palette);
+	_game->getCursor()->draw();
+	_game->getFpsCounter()->setPalette(_palette);
+	_game->getFpsCounter()->draw();
+	if (_game->getResourcePack() != 0)
+	{
+		_game->getResourcePack()->setPalette(_palette);
+	}
 }
 
 /**
@@ -131,11 +145,18 @@ void State::think()
  */
 void State::handle(Action *action)
 {
-	for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
+	if (!_modal)
 	{
-		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
-		if (j != 0)
-			j->handle(action, this);
+		for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
+		{
+			InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
+			if (j != 0)
+				j->handle(action, this);
+		}
+	}
+	else
+	{
+		_modal->handle(action, this);
 	}
 }
 
@@ -179,6 +200,7 @@ void State::resetAll()
 		if (s != 0)
 		{
 			s->unpress(this);
+			//s->setFocus(false);
 		}
 	}
 }
@@ -206,20 +228,189 @@ LocalizedText State::tr(const std::string &id, unsigned n) const
 	return _game->getLanguage()->getString(id, n);
 }
 
+/**
+ * centers all the surfaces on the screen.
+ */
 void State::centerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		(*i)->setX((*i)->getX() + Screen::getDX());
-		(*i)->setY((*i)->getY() + Screen::getDY());
+		(*i)->setX((*i)->getX() + _game->getScreen()->getDX());
+		(*i)->setY((*i)->getY() + _game->getScreen()->getDY());
 	}
 }
 
+/**
+ * drop all the surfaces by half the screen height
+ */
 void State::lowerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
+		(*i)->setY((*i)->getY() + _game->getScreen()->getDY() / 2);
+	}
+}
+
+/**
+ * switch all the colours to something a little more battlescape appropriate.
+ */
+void State::applyBattlescapeTheme()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		Window* window = dynamic_cast<Window*>(*i);
+		if (window)
+		{
+			window->setColor(Palette::blockOffset(0)-1);
+			window->setHighContrast(true);
+			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+		}
+		Text* text = dynamic_cast<Text*>(*i);
+		if (text)
+		{
+			text->setColor(Palette::blockOffset(0)-1);
+			text->setHighContrast(true);
+		}
+		TextButton* button = dynamic_cast<TextButton*>(*i);
+		if (button)
+		{
+			button->setColor(Palette::blockOffset(0)-1);
+			button->setHighContrast(true);
+		}
+		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
+		if (edit)
+		{
+			edit->setColor(Palette::blockOffset(0)-1);
+			edit->setHighContrast(true);
+		}
+		TextList* list = dynamic_cast<TextList*>(*i);
+		if (list)
+		{
+			list->setColor(Palette::blockOffset(0)-1);
+			list->setArrowColor(Palette::blockOffset(0));
+			list->setHighContrast(true);
+		}
+		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
+		if (arrow)
+		{
+			arrow->setColor(Palette::blockOffset(0));
+		}
+		Slider *slider = dynamic_cast<Slider*>(*i);
+		if (slider)
+		{
+			slider->setColor(Palette::blockOffset(0)-1);
+			slider->setHighContrast(true);
+		}
+		ComboBox *combo = dynamic_cast<ComboBox*>(*i);
+		if (combo)
+		{
+			combo->setColor(Palette::blockOffset(0)-1);
+			combo->setArrowColor(Palette::blockOffset(0));
+			combo->setHighContrast(true);
+		}
+	}
+}
+
+/**
+ * redraw all the text-type surfaces.
+ */
+void State::redrawText()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		Text* text = dynamic_cast<Text*>(*i);
+		TextButton* button = dynamic_cast<TextButton*>(*i);
+		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
+		TextList* list = dynamic_cast<TextList*>(*i);
+		if (text || button || edit || list)
+		{
+			(*i)->draw();
+		}
+	}
+}
+
+/**
+ * Changes the current modal surface. If a surface is modal,
+ * then only that surface can receive events. This is used
+ * when an element needs to take priority over everything else,
+ * eg. focus.
+ * @param surface Pointer to modal surface, NULL for no modal.
+ */
+void State::setModal(InteractiveSurface *surface)
+{
+	_modal = surface;
+}
+
+/**
+ * Replaces a certain amount of colors in the state's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ * @param immediately Apply changes immediately, otherwise wait in case of multiple setPalettes.
+ */
+void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool immediately)
+{
+	if (colors)
+	{
+		memcpy(_palette + firstcolor, colors, ncolors * sizeof(SDL_Color));
+	}
+	if (immediately)
+	{
+		_game->getCursor()->setPalette(_palette);
+		_game->getCursor()->draw();
+		_game->getFpsCounter()->setPalette(_palette);
+		_game->getFpsCounter()->draw();
+		if (_game->getResourcePack() != 0)
+		{
+			_game->getResourcePack()->setPalette(_palette);
+		}
+	}
+}
+
+/**
+ * Loads palettes from the game resources into the state.
+ * @param palette String ID of the palette to load.
+ * @param backpals BACKPALS.DAT offset to use.
+ */
+void State::setPalette(const std::string &palette, int backpals)
+{
+	setPalette(_game->getResourcePack()->getPalette(palette)->getColors(), 0, 256, false);
+	if (backpals != -1)
+		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
+	setPalette(NULL); // delay actual update to the end
+}
+
+/**
+ * Returns the state's 8bpp palette.
+ * @return Pointer to the palette's colors.
+ */
+SDL_Color *const State::getPalette()
+{
+	return _palette;
+}
+
+/**
+ * Each state will probably need its own resize handling,
+ * so this space intentionally left blank
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void State::resize(int &dX, int &dY)
+{
+	recenter(dX, dY);
+}
+
+/**
+ * Re-orients all the surfaces in the state.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void State::recenter(int dX, int dY)
+{
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setX((*i)->getX() + dX / 2);
+		(*i)->setY((*i)->getY() + dY / 2);
 	}
 }
 

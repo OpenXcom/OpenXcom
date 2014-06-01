@@ -113,11 +113,19 @@ YAML::Node AlienStrategy::save() const
 
 /**
  * Choose one of the regions for a mission.
+ * @param rules Pointer to the ruleset.
  * @return The region id.
  */
-const std::string &AlienStrategy::chooseRandomRegion() const
+const std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)
 {
-	return _regionChances.choose();
+	std::string chosen = _regionChances.choose();
+	if (chosen == "")
+	{
+		init(rules);
+		chosen = _regionChances.choose();
+	}
+	assert ("" != chosen);
+	return chosen;
 }
 
 /**
@@ -125,7 +133,7 @@ const std::string &AlienStrategy::chooseRandomRegion() const
  * @param region The region id.
  * @return The mission id.
  */
-const std::string &AlienStrategy::chooseRandomMission(const std::string &region) const
+const std::string AlienStrategy::chooseRandomMission(const std::string &region) const
 {
 	MissionsByRegion::const_iterator found = _regionMissions.find(region);
 	assert(found != _regionMissions.end());

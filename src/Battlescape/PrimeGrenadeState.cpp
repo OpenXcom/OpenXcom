@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,7 +37,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Prime Grenade window.
  * @param game Pointer to the core game.
- * @param action Pointer to  the action.
+ * @param action Pointer to the action.
+ * @param inInventoryView Called from inventory?
+ * @param grenadeInInventory Pointer to associated grenade.
  */
 PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
@@ -55,6 +57,9 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		_button[i] = new InteractiveSurface(22, 22, x-1+((i%8)*24), y-4+((i/8)*25));
 		_number[i] = new Text(20, 20, x+((i%8)*24), y-1+((i/8)*25));
 	}
+
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
 
 	// Set up objects
 	SDL_Rect square;
@@ -93,7 +98,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		square.h = _button[i]->getHeight()-2;
 		_button[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << i;
 		add(_number[i]);
 		_number[i]->setBig();
@@ -157,7 +162,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (btnID != -1)
 	{
-		if (_inInventoryView) _grenadeInInventory->setExplodeTurn(1 + btnID);
+		if (_inInventoryView) _grenadeInInventory->setFuseTimer(0 + btnID);
 		else _action->value = btnID;
 		_game->popState();
 		if (!_inInventoryView) _game->popState();

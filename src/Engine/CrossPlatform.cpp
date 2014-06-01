@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,13 +17,22 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
+#include <set>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <locale>
+#include <stdint.h>
+#include <sys/stat.h>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
@@ -32,11 +41,12 @@
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
+#ifndef __GNUC__
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
+#endif
 #else
-#include <sys/stat.h>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -71,6 +81,7 @@ void showError(const std::string &error)
 	Log(LOG_FATAL) << error;
 }
 
+#ifndef _WIN32
 /**
  * Gets the user's home folder according to the system.
  * @return Absolute path to home folder.
@@ -87,6 +98,7 @@ static char const *getHome()
 #endif
 	return home;
 }
+#endif
 
 /**
  * Builds a list of predefined paths for the Data folder
@@ -96,7 +108,6 @@ static char const *getHome()
 std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
-	
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:data/");
 	return list;
@@ -127,10 +138,10 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
+	char const *home = getHome();
 #ifdef __HAIKU__
 	list.push_back("/boot/apps/OpenXcom/data/");
 #endif
-	char const *home = getHome();
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
@@ -386,7 +397,7 @@ std::string getDataFile(const std::string &filename)
 	}
 
 	// Check every other path
-	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		std::string path = caseInsensitive(*i, name);
 		if (path != "")
@@ -422,7 +433,7 @@ std::string getDataFolder(const std::string &foldername)
 	}
 
 	// Check every other path
-	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		std::string path = caseInsensitiveFolder(*i, name);
 		if (path != "")
@@ -533,6 +544,52 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 }
 
 /**
+ * Gets the name of all the files
+ * contained in a Data subfolder.
+ * Repeated files are ignored.
+ * @param folder Path to the data folder.
+ * @param ext Extension of files ("" if it doesn't matter).
+ * @return Ordered list of all the files.
+ */
+std::vector<std::string> getDataContents(const std::string &folder, const std::string &ext)
+{
+	std::set<std::string> unique;
+	std::vector<std::string> files;
+
+	// Check current data path
+	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
+	if (current != "")
+	{
+		std::vector<std::string> contents = getFolderContents(current, ext);
+		for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+		{
+			unique.insert(*file);
+		}
+	}
+
+	// Check every other path
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
+	{
+		std::string path = caseInsensitiveFolder(*i, folder);
+		if (path == current)
+		{
+			continue;
+		}
+		if (path != "")
+		{
+			std::vector<std::string> contents = getFolderContents(path, ext);
+			for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+			{
+				unique.insert(*file);
+			}
+		}
+	}
+
+	files = std::vector<std::string>(unique.begin(), unique.end());
+	return files;
+}
+
+/**
  * Checks if a certain path exists and is a folder.
  * @param path Full path to folder.
  * @return Does it exist?
@@ -593,10 +650,11 @@ bool deleteFile(const std::string &path)
 }
 
 /**
-* Gets the base filename of a path.
-* @param path Full path to file.
-* @return Base filename.
-*/
+ * Gets the base filename of a path.
+ * @param path Full path to file.
+ * @param transform Optional function to transform the filename.
+ * @return Base filename.
+ */
 std::string baseFilename(const std::string &path, int (*transform)(int))
 {
 	size_t sep = path.find_last_of(PATH_SEPARATOR);
@@ -614,6 +672,207 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
 	}
 	return filename;
+}
+
+/**
+ * Replaces invalid filesystem characters with _.
+ * @param filename Original filename.
+ * @return Filename without invalid characters
+ */
+std::string sanitizeFilename(const std::string &filename)
+{
+	std::string newFilename = filename;
+	for (std::string::iterator i = newFilename.begin(); i != newFilename.end(); ++i)
+	{
+		if ((*i) == '<' ||
+			(*i) == '>' ||
+			(*i) == ':' ||
+			(*i) == '"' || 
+			(*i) == '/' ||
+			(*i) == '?' ||
+			(*i) == '\\')
+		{
+			*i = '_';
+		}
+	}
+	return newFilename;
+}
+
+/**
+ * Removes the extension from a filename.
+ * @param filename Original filename.
+ * @return Filename without the extension.
+ */
+std::string noExt(const std::string &filename)
+{
+	size_t dot = filename.find_last_of('.');
+	if (dot == std::string::npos)
+	{
+		return filename;
+	}
+	return filename.substr(0, filename.find_last_of('.'));
+}
+
+/**
+ * Gets the current locale of the system in language-COUNTRY format.
+ * @return Locale string.
+ */
+std::string getLocale()
+{
+#ifdef _WIN32
+	char language[9], country[9];
+
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
+
+	std::ostringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
+	/*
+	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
+	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
+
+	return Language::wstrToUtf8(locale);
+	*/
+#else
+	std::locale l("");
+	std::string name = l.name();
+	size_t dash = name.find_first_of('_'), dot = name.find_first_of('.');
+	if (dot != std::string::npos)
+	{
+		name = name.substr(0, dot - 1);
+	}
+	if (dash != std::string::npos)
+	{
+		std::string language = name.substr(0, dash - 1);
+		std::string country = name.substr(dash - 1);
+		std::ostringstream locale;
+		locale << language << "-" << country;
+		return locale.str();
+	}
+	else
+	{
+		return name + "-";
+	}
+#endif
+}
+
+/**
+ * Checks if the system's default quit shortcut was pressed.
+ * @param ev SDL event.
+ * @return Is quitting necessary?
+ */
+bool isQuitShortcut(const SDL_Event &ev)
+{
+#ifdef _WIN32
+	// Alt + F4
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_F4 && ev.key.keysym.mod & KMOD_ALT);
+#elif __APPLE__
+	// Command + Q
+	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
+#else
+	//TODO add other OSs shortcuts.
+    (void)ev;
+	return false;
+#endif
+}
+
+/**
+ * Gets the last modified date of a file.
+ * @param path Full path to file.
+ * @return The timestamp in integral format.
+ */
+time_t getDateModified(const std::string &path)
+{
+/*#ifdef _WIN32
+	WIN32_FILE_ATTRIBUTE_DATA info;
+	if (GetFileAttributesExA(path.c_str(), GetFileExInfoStandard, &info))
+	{
+		FILETIME ft = info.ftLastWriteTime;
+		LARGE_INTEGER li;
+		li.HighPart = ft.dwHighDateTime;
+		li.LowPart = ft.dwLowDateTime;
+		return li.QuadPart;
+	}
+	else
+	{
+		return 0;
+	}
+#endif*/
+	struct stat info;
+	if (stat(path.c_str(), &info) == 0)
+	{
+		return info.st_mtime;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Converts a date/time into a human-readable string
+ * using the ISO 8601 standard.
+ * @param time Value in timestamp format.
+ * @return String pair with date and time.
+ */
+std::pair<std::wstring, std::wstring> timeToString(time_t time)
+{
+	wchar_t localDate[25], localTime[25];
+
+/*#ifdef _WIN32
+	LARGE_INTEGER li;
+	li.QuadPart = time;
+	FILETIME ft;
+	ft.dwHighDateTime = li.HighPart;
+	ft.dwLowDateTime = li.LowPart;
+	SYSTEMTIME st;
+	FileTimeToLocalFileTime(&ft, &ft);
+	FileTimeToSystemTime(&ft, &st);
+
+	GetDateFormatW(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, localDate, 25);
+	GetTimeFormatW(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, localTime, 25);
+#endif*/
+
+	struct tm *timeinfo = localtime(&(time));
+	wcsftime(localDate, 25, L"%Y-%m-%d", timeinfo);
+	wcsftime(localTime, 25, L"%H:%M", timeinfo);
+
+	return std::make_pair(localDate, localTime);
+}
+
+/**
+ * Compares two Unicode strings using natural human ordering.
+ * @param a String A.
+ * @param b String B.
+ * @return String A comes before String B.
+ */
+bool naturalCompare(const std::wstring &a, const std::wstring &b)
+{
+#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
+	return (StrCmpLogicalW(a.c_str(), b.c_str()) < 0);
+#else
+	// sorry unix users you get ASCII sort
+	std::wstring::const_iterator i, j;
+	for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
+	return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
+#endif
+}
+
+/**
+ * Moves a file from one path to another,
+ * replacing any existing file.
+ * @param src Source path.
+ * @param dest Destination path.
+ * @return True if the operation succeeded, False otherwise.
+ */
+bool moveFile(const std::string &src, const std::string &dest)
+{
+#ifdef _WIN32
+	return (MoveFileExA(src.c_str(), dest.c_str(), MOVEFILE_REPLACE_EXISTING) != 0);
+#else
+	return (rename(src.c_str(), dest.c_str()) == 0);
+#endif
 }
 
 }

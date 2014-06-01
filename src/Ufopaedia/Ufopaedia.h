@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,6 +25,8 @@
 namespace OpenXcom
 {
 	class Game;
+	class SavedGame;
+	class Ruleset;
 	class ArticleDefinition;
 	class ArticleState;
 
@@ -58,10 +60,10 @@ namespace OpenXcom
 	{
 	public:
 		/// check, if a specific article is currently available.
-		static bool isArticleAvailable(Game *game, ArticleDefinition *article);
+		static bool isArticleAvailable(SavedGame *save, ArticleDefinition *article);
 
 		/// open Ufopaedia on a certain entry.
-		static void openArticle(Game *game, std::string &article_id, int palSwitch);
+		static void openArticle(Game *game, std::string &article_id);
 
 		/// open Ufopaedia article from a given article definition.
 		static void openArticle(Game *game, ArticleDefinition *article);
@@ -76,13 +78,7 @@ namespace OpenXcom
 		static void prev(Game *game);
 
 		/// load a vector with article ids that are currently visible of a given section.
-		static void list(Game *game, const std::string &section, ArticleDefinitionList &data);
-
-		/// build a text string from a string template using current game settings.
-		static std::wstring buildText(Game *game, std::string &str_template);
-
-		/// TO BE REMOVED! run in test mode during development only.
-		static void runStandalone(Game *game);
+		static void list(SavedGame *save, Ruleset *rule, const std::string &section, ArticleDefinitionList &data);
 
 	protected:
 
@@ -90,13 +86,13 @@ namespace OpenXcom
 		static size_t _current_index;
 
 		/// get index of the given article id in the visible list.
-		static size_t getArticleIndex(Game *game, std::string &article_id);
+		static size_t getArticleIndex(SavedGame *save, Ruleset *rule, std::string &article_id);
 
 		/// get list of researched articles
-		static ArticleDefinitionList getAvailableArticles(Game *game);
+		static ArticleDefinitionList getAvailableArticles(SavedGame *save, Ruleset *rule);
 
 		/// create a new state object from article definition.
-		static ArticleState *createArticleState(Game *game, ArticleDefinition *article, int palSwitch);
+		static ArticleState *createArticleState(Game *game, ArticleDefinition *article);
 	};
 }
 

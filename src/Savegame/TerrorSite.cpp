@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -103,9 +103,7 @@ void TerrorSite::setId(int id)
  */
 std::wstring TerrorSite::getName(Language *lang) const
 {
-	std::wstringstream name;
-	name << lang->getString("STR_TERROR_SITE_UC") << _id;
-	return name.str();
+	return lang->getString("STR_TERROR_SITE").arg(_id);
 }
 
 /**

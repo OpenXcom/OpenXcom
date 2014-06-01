@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,10 @@ void UnitPanicBState::think()
 	// reset the unit's time units when all panicking is done
 	if (_unit)
 	{
+		if (!_unit->isOut())
+		{
+			_unit->abortTurn(); // set the unit status to standing in case it wasn't otherwise changed from berserk/panicked
+		}
 		_unit->setTimeUnits(0);
 	}
 	_parent->popState();

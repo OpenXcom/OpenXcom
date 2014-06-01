@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,6 +18,7 @@
  */
 #include "BriefingState.h"
 #include "BattlescapeState.h"
+#include "AliensCrashState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
@@ -35,6 +36,7 @@
 #include "../Savegame/Ufo.h"
 #include <sstream>
 #include "../Engine/Options.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -47,34 +49,32 @@ namespace OpenXcom
  */
 BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 {
-	_screen = false;
+	_screen = true;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
-	_txtTitle = new Text(300, 16, 16, 24);
-	_txtTarget = new Text(300, 16, 16, 40);
-	_txtCraft = new Text(300, 16, 16, 56);
+	_txtTitle = new Text(300, 17, 16, 24);
+	_txtTarget = new Text(300, 17, 16, 40);
+	_txtCraft = new Text(300, 17, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
 	// Set palette
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMENBASE")->play();
+		setPalette("PAL_GEOSCAPE", 2);
+		_game->getResourcePack()->playMusic("GMENBASE");
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+		setPalette("PAL_GEOSCAPE", 6);
+		_game->getResourcePack()->playMusic("GMNEWMAR");
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMDEFEND")->play();
+		setPalette("PAL_GEOSCAPE", 0);
+		_game->getResourcePack()->playMusic("GMDEFEND");
 	}
 
 	add(_window);
@@ -102,8 +102,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -113,7 +113,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
-	std::wstringstream ss;
+	std::wstring s;
 	if (craft)
 	{
 		if (craft->getDestination())
@@ -121,13 +121,13 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 		}
 
-		ss << tr("STR_CRAFT_") << craft->getName(_game->getLanguage());
+		s = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
-	else if(base)
+	else if (base)
 	{
-		ss << tr("STR_BASE_UC_") << base->getName();
+		s = tr("STR_BASE_UC_").arg(base->getName());
 	}
-	_txtCraft->setText(ss.str());
+	_txtCraft->setText(s);
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
@@ -143,7 +143,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	}
 
 	_txtTitle->setText(tr(mission));
-	std::stringstream briefingtext;
+	std::ostringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(briefingtext.str()));
 
@@ -169,11 +169,27 @@ BriefingState::~BriefingState()
 void BriefingState::btnOkClick(Action *)
 {
 	_game->popState();
+	Options::baseXResolution = Options::baseXBattlescape;
+	Options::baseYResolution = Options::baseYBattlescape;
+	_game->getScreen()->resetDisplay(false);
 	BattlescapeState *bs = new BattlescapeState(_game);
-	_game->pushState(bs);
-	_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
-	_game->pushState(new InventoryState(_game, false, bs));
+	int liveAliens = 0, liveSoldiers = 0;
+	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	if (liveAliens > 0)
+	{
+		_game->pushState(bs);
+		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+		_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
+		_game->pushState(new InventoryState(_game, false, bs));
+	}
+	else
+	{
+		Options::baseXResolution = Options::baseXGeoscape;
+		Options::baseYResolution = Options::baseYGeoscape;
+		_game->getScreen()->resetDisplay(false);;
+		delete bs;
+		_game->pushState(new AliensCrashState(_game));
+	}
 }
 
 }

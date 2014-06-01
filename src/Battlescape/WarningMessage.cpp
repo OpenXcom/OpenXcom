@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,9 +34,11 @@ namespace OpenXcom
  */
 WarningMessage::WarningMessage(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _fade(0)
 {
-	_text = new Text(width, 9, 0, (height - 8) / 2);
+	_text = new Text(width, height, 0, 0);
 	_text->setHighContrast(true);
 	_text->setAlign(ALIGN_CENTER);
+	_text->setVerticalAlign(ALIGN_MIDDLE);
+	_text->setWordWrap(true);
 
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&WarningMessage::fade);
@@ -72,15 +74,17 @@ void WarningMessage::setTextColor(Uint8 color)
 }
 
 /**
- * Changes the various fonts for the message to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void WarningMessage::setFonts(Font *big, Font *small)
+void WarningMessage::initText(Font *big, Font *small, Language *lang)
 {
-	_text->setFonts(big, small);
+	_text->initText(big, small, lang);
 }
 
 /**

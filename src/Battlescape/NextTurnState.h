@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,7 @@ class Window;
 class Text;
 class SavedBattleGame;
 class BattlescapeState;
+class Timer;
 
 /**
  * Screen which announces the next turn.
@@ -35,10 +36,12 @@ class BattlescapeState;
 class NextTurnState : public State
 {
 private:
+	static const int NEXT_TURN_DELAY = 500;
 	Window *_window;
 	Text *_txtTitle, *_txtTurn, *_txtSide, *_txtMessage;
 	SavedBattleGame *_battleGame;
 	BattlescapeState *_state;
+	Timer *_timer;
 public:
 	/// Creates the Next Turn state.
 	NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
@@ -46,6 +49,10 @@ public:
 	~NextTurnState();
 	/// Handler for clicking anything.
 	void handle(Action *action);
+	/// Handles the timer.
+	void think();
+	/// Closes the window.
+	void close();
 };
 
 }

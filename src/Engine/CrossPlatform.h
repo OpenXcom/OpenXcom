@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,8 +19,10 @@
 #ifndef OPENXCOM_CROSSPLATFORM_H
 #define OPENXCOM_CROSSPLATFORM_H
 
+#include <SDL.h>
 #include <string>
 #include <vector>
+#include <utility>
 
 namespace OpenXcom
 {
@@ -49,6 +51,8 @@ namespace CrossPlatform
 	std::string endPath(const std::string &path);
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
+	/// Returns the list of files in a data folder.
+	std::vector<std::string> getDataContents(const std::string &path, const std::string &ext = "");
 	/// Checks if the path is an existing folder.
 	bool folderExists(const std::string &path);
 	/// Checks if the path is an existing file.
@@ -57,6 +61,22 @@ namespace CrossPlatform
 	bool deleteFile(const std::string &path);
 	/// Gets the basename of a file.
 	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
+	/// Sanitizes the characters in a filename.
+	std::string sanitizeFilename(const std::string &filename);
+	/// Removes the extension from a file.
+	std::string noExt(const std::string &file);
+	/// Gets the system locale.
+	std::string getLocale();
+	/// Checks if an event is a quit shortcut.
+	bool isQuitShortcut(const SDL_Event &ev);
+	/// Gets the modified date of a file.
+	time_t getDateModified(const std::string &path);
+	/// Converts a timestamp to a string.
+	std::pair<std::wstring, std::wstring> timeToString(time_t time);
+	/// Compares two strings by natural order.
+	bool naturalCompare(const std::wstring &a, const std::wstring &b);
+	/// Move/rename a file between paths.
+	bool moveFile(const std::string &src, const std::string &dest);
 }
 
 }
