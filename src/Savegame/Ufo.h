@@ -65,7 +65,7 @@ public:
 	/// Loads the UFO from YAML.
 	void load(const YAML::Node& node, const Ruleset &ruleset, SavedGame &game);
 	/// Saves the UFO to YAML.
-	YAML::Node save() const;
+	YAML::Node save(bool newBattle) const;
 	/// Saves the UFO's ID to YAML.
 	YAML::Node saveId() const;
 	/// Gets the UFO's ruleset.
