@@ -148,18 +148,21 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 			_status = FLYING;
 		}
 	}
-	int missionID = node["mission"].as<int>();
-	std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
-	if (found == game.getAlienMissions().end())
+	if (game.getMonthsPassed() != -1)
 	{
-		// Corrupt save file.
-		throw Exception("Unknown mission, save file is corrupt.");
-	}
-	_mission = *found;
+		int missionID = node["mission"].as<int>();
+		std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+		if (found == game.getAlienMissions().end())
+		{
+			// Corrupt save file.
+			throw Exception("Unknown mission, save file is corrupt.");
+		}
+		_mission = *found;
 
-	std::string tid = node["trajectory"].as<std::string>();
-	_trajectory = ruleset.getUfoTrajectory(tid);
-	_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
+		std::string tid = node["trajectory"].as<std::string>();
+		_trajectory = ruleset.getUfoTrajectory(tid);
+		_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
+	}
 	if (_inBattlescape)
 		setSpeed(0);
 }
