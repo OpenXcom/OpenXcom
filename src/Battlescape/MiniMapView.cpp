@@ -50,7 +50,7 @@ const int MAX_FRAME = 2;
  * @param camera The Battlescape camera.
  * @param battleGame Pointer to the SavedBattleGame.
  */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _mouseScrollX(0), _mouseScrollY(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _mouseScrollX(0), _mouseScrollY(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _remainderMouseMoveX(0), _remainderMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
@@ -200,6 +200,7 @@ void MiniMapView::mousePress(Action *action, State *state)
 		}
 		_mouseScrollX = 0; _mouseScrollY = 0;
 		_totalMouseMoveX = 0; _totalMouseMoveY = 0;
+		_remainderMouseMoveX = 0; _remainderMouseMoveY = 0;
 		_mouseMovedOverThreshold = false;
 		_mouseScrollingStartTime = SDL_GetTicks();
 	}
@@ -311,17 +312,15 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 		// Calculate the move
 		int newX, newY;
-		int scrollX, scrollY;
+		int scrollX = (action->getDetails()->motion.xrel + _remainderMouseMoveX) / action->getXScale();
+		int scrollY = (action->getDetails()->motion.yrel + _remainderMouseMoveY) / action->getYScale();
+		_remainderMouseMoveX += (action->getDetails()->motion.xrel - (scrollX * action->getXScale()));
+		_remainderMouseMoveY += (action->getDetails()->motion.yrel - (scrollY * action->getYScale()));
 
-		if (Options::battleDragScrollInvert)
+		if (!Options::battleDragScrollInvert)
 		{
-			scrollX = action->getDetails()->motion.xrel / action->getXScale();
-			scrollY = action->getDetails()->motion.yrel / action->getYScale();
-		}
-		else
-		{
-			scrollX = -action->getDetails()->motion.xrel / action->getXScale();
-			scrollY = -action->getDetails()->motion.yrel / action->getYScale();
+			scrollX = -scrollX;
+			scrollY = -scrollY;
 		}
 		_mouseScrollX += scrollX;
 		_mouseScrollY += scrollY;
