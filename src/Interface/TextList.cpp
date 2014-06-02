@@ -1061,8 +1061,10 @@ void TextList::mouseOver(Action *action, State *state)
 			}
 			if (_selector->getHeight() != h)
 			{
-				_selector->clear();
-				_selector->setHeight(h);
+				// resizing doesn't work, but recreating does, so let's do that!
+				delete _selector;
+				_selector = new Surface(getWidth(), h, getX(), y);
+				_selector->setPalette(getPalette());
 			}
 			_selector->setY(y);
 			_selector->copy(_bg);
