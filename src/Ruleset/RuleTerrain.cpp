@@ -175,7 +175,7 @@ MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		mdf = *i;
-		if (*id - mdf->getSize() < 0)
+		if (*id < mdf->getSize())
 		{
 			break;
 		}
