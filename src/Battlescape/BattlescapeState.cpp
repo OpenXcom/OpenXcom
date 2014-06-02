@@ -92,7 +92,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
+BattlescapeState::BattlescapeState(Game *game) : State(game), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _remainderMouseMoveX(0), _remainderMouseMoveY(0), _mouseMovedOverThreshold(0)
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 
@@ -617,11 +617,15 @@ void BattlescapeState::mapOver(Action *action)
 		}
 
 		// Scrolling
+		int motionTmpX = (action->getDetails()->motion.xrel + _remainderMouseMoveX) / action->getXScale();
+		int motionTmpY = (action->getDetails()->motion.yrel + _remainderMouseMoveY) / action->getYScale();
+		_remainderMouseMoveX += (action->getDetails()->motion.xrel - (motionTmpX * action->getXScale()));
+		_remainderMouseMoveY += (action->getDetails()->motion.yrel - (motionTmpY * action->getYScale()));
 		if (Options::battleDragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
-				-action->getDetails()->motion.xrel / action->getXScale(),
-				-action->getDetails()->motion.yrel / action->getYScale(), false);
+				-motionTmpX,
+				-motionTmpY, false);
 			action->getDetails()->motion.x = _xBeforeMouseScrolling;
 			action->getDetails()->motion.y = _yBeforeMouseScrolling;
 			_map->setCursorType(CT_NONE);
@@ -630,8 +634,8 @@ void BattlescapeState::mapOver(Action *action)
 		{
 			Position delta = _map->getCamera()->getMapOffset();
 			_map->getCamera()->scrollXY(
-				action->getDetails()->motion.xrel / action->getXScale(),
-				action->getDetails()->motion.yrel / action->getYScale(), false);
+				motionTmpX,
+				motionTmpY, false);
 			delta = _map->getCamera()->getMapOffset() - delta;
 			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
 			int barHeight = _game->getScreen()->getCursorTopBlackBand();
@@ -671,6 +675,7 @@ void BattlescapeState::mapPress(Action *action)
 			_cursorPosition.z = 1;
 		}
 		_totalMouseMoveX = 0; _totalMouseMoveY = 0;
+		_remainderMouseMoveX = 0; _remainderMouseMoveY = 0;
 		_mouseMovedOverThreshold = false;
 		_mouseScrollingStartTime = SDL_GetTicks();
 	}

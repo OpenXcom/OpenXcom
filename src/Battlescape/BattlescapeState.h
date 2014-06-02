@@ -76,6 +76,7 @@ private:
 	Position _mapOffsetBeforeMouseScrolling;
 	Uint32 _mouseScrollingStartTime;
 	int _totalMouseMoveX, _totalMouseMoveY;
+	int _remainderMouseMoveX, _remainderMouseMoveY;
 	bool _mouseMovedOverThreshold;
 	bool _mouseOverIcons;
 	std::string _currentTooltip;
