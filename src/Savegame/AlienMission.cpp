@@ -62,10 +62,6 @@ std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenX
 	while (!(globe.insideLand(pos.first, pos.second)
 		&& region.insideRegion(pos.first, pos.second))
 		&& tries < 100);
-	if (tries == 100)
-	{
-		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Lattitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
-	}
 	return pos;
 
 }
