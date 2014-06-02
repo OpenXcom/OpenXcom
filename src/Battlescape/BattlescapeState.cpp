@@ -619,9 +619,20 @@ void BattlescapeState::mapOver(Action *action)
 		// Scrolling
 		if (Options::battleDragScrollInvert)
 		{
-			_map->getCamera()->scrollXY(
-				-action->getDetails()->motion.xrel / action->getXScale(),
-				-action->getDetails()->motion.yrel / action->getYScale(), false);
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			int scrollX = -(int)((double)_totalMouseMoveX / action->getXScale());
+			int scrollY = -(int)((double)_totalMouseMoveY / action->getYScale());
+			Position delta2 = _map->getCamera()->getMapOffset();
+			_map->getCamera()->scrollXY(scrollX, scrollY, true);
+			delta2 = _map->getCamera()->getMapOffset() - delta2;
+
+			// Keep the limits...
+			if (scrollX != delta2.x || scrollY != delta2.y)
+			{
+				_totalMouseMoveX = -(int) (delta2.x * action->getXScale());
+				_totalMouseMoveY = -(int) (delta2.y * action->getYScale());
+			}
+
 			action->getDetails()->motion.x = _xBeforeMouseScrolling;
 			action->getDetails()->motion.y = _yBeforeMouseScrolling;
 			_map->setCursorType(CT_NONE);
@@ -629,10 +640,21 @@ void BattlescapeState::mapOver(Action *action)
 		else
 		{
 			Position delta = _map->getCamera()->getMapOffset();
-			_map->getCamera()->scrollXY(
-				action->getDetails()->motion.xrel / action->getXScale(),
-				action->getDetails()->motion.yrel / action->getYScale(), false);
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			int scrollX = (int)((double)_totalMouseMoveX / action->getXScale());
+			int scrollY = (int)((double)_totalMouseMoveY / action->getYScale());
+			Position delta2 = _map->getCamera()->getMapOffset();
+			_map->getCamera()->scrollXY(scrollX, scrollY, true);
+			delta2 = _map->getCamera()->getMapOffset() - delta2;
 			delta = _map->getCamera()->getMapOffset() - delta;
+
+			// Keep the limits...
+			if (scrollX != delta2.x || scrollY != delta2.y)
+			{
+				_totalMouseMoveX = (int) (delta2.x * action->getXScale());
+				_totalMouseMoveY = (int) (delta2.y * action->getYScale());
+			}
+
 			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
 			int barHeight = _game->getScreen()->getCursorTopBlackBand();
 			int cursorX = _cursorPosition.x + Round(delta.x * action->getXScale());

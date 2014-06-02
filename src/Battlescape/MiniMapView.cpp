@@ -19,6 +19,7 @@
 #include <cmath>
 #include "../fmath.h"
 #include "MiniMapView.h"
+#include "MiniMapState.h"
 #include "../Savegame/Tile.h"
 #include "Map.h"
 #include "Camera.h"
@@ -253,6 +254,11 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		if (_isMouseScrolled) return;
 	}
 
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		((MiniMapState*)(state))->btnOkClick(action);
+	}
+
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		int origX = action->getRelativeXMouse() / action->getXScale();
@@ -315,18 +321,18 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 		if (Options::battleDragScrollInvert)
 		{
-			scrollX = action->getDetails()->motion.xrel / action->getXScale();
-			scrollY = action->getDetails()->motion.yrel / action->getYScale();
+			scrollX = action->getDetails()->motion.xrel;
+			scrollY = action->getDetails()->motion.yrel;
 		}
 		else
 		{
-			scrollX = -action->getDetails()->motion.xrel / action->getXScale();
-			scrollY = -action->getDetails()->motion.yrel / action->getYScale();
+			scrollX = -action->getDetails()->motion.xrel;
+			scrollY = -action->getDetails()->motion.yrel;
 		}
 		_mouseScrollX += scrollX;
 		_mouseScrollY += scrollY;
-		newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
-		newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
+		newX = _posBeforeMouseScrolling.x + _mouseScrollX / action->getXScale() / 4;
+		newY = _posBeforeMouseScrolling.y + _mouseScrollY / action->getYScale() / 4;
 
 		// Keep the limits...
 		if (newX < -1 || _camera->getMapSizeX() < newX)
