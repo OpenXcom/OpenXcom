@@ -52,13 +52,20 @@ namespace {
  */
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, size_t zone)
 {
+	int tries = 0;
 	std::pair<double, double> pos;
 	do
 	{
 		pos = region.getRandomPoint(zone);
+		++tries;
 	}
 	while (!(globe.insideLand(pos.first, pos.second)
-		&& region.insideRegion(pos.first, pos.second)));
+		&& region.insideRegion(pos.first, pos.second))
+		&& tries < 100);
+	if (tries == 100)
+	{
+		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Lattitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+	}
 	return pos;
 
 }
