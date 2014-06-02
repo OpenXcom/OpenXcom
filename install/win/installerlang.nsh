@@ -420,7 +420,7 @@ LangString WARN_XCUDetected ${LANG_FRENCH} "XcomUtil détecté. ${GAME_NAME} est
 
 ;--------------------------------
 ;Pages
-	
+
 LangString PAGE_UfoFolder ${LANG_SLOVAK} "${GAME_NAME} vyžaduje kópiu hry UFO: Enemy Unknown / X-COM: UFO Defense. Tento krok môžete preskočiť pokiaľ aktualizujete existujúcu inštaláciu.$\n$\nSetup skopíruje vyžadované súbory do nasledujúcej zložky. Pre pokračovanie kliknite na ďalej."
 LangString PAGE_UfoFolder_TITLE ${LANG_SLOVAK} "Vyberte umiestnenie X-COM 1"
 LangString PAGE_UfoFolder_SUBTITLE ${LANG_SLOVAK} "Vyberte zložku, v ktorej je nainštalovaný X-COM 1."
@@ -428,14 +428,14 @@ LangString DEST_UfoFolder ${LANG_SLOVAK} "Zložka s X-COM 1"
 
 ;--------------------------------
 ;Installer Sections
-	
+
 LangString NAME_SecMain ${LANG_SLOVAK} "Súbory hry"
 LangString DESC_SecMain ${LANG_SLOVAK} "Súbory potrebné pre spustenie ${GAME_NAME}."
 LangString NAME_SecPatch ${LANG_SLOVAK} "Data Patch"
 LangString DESC_SecPatch ${LANG_SLOVAK} "Opravuje chyby v dátach hry X-COM 1. Odporúča sa vybrať pri prvej inštalácii. (vyžaduje internetové spojenie)"
 LangString NAME_SecDesktop ${LANG_SLOVAK} "Ikona na plochu"
 LangString DESC_SecDesktop ${LANG_SLOVAK} "Vytvorí ikonu na ploche pre spustenie hry ${GAME_NAME}."
-	
+
 ;--------------------------------
 ;Uninstaller Descriptions
 
@@ -451,7 +451,7 @@ LangString LINK_DataFolder ${LANG_SLOVAK} "Zložka dát"
 LangString LINK_Readme ${LANG_SLOVAK} "Readme"
 LangString LINK_UserFolder ${LANG_SLOVAK} "Užívateľská zložka"
 LangString LINK_Uninstall ${LANG_SLOVAK} "Odinštalovať"
-	
+
 ;--------------------------------
 ;Warnings
 
@@ -462,7 +462,7 @@ LangString WARN_XCUDetected ${LANG_SLOVAK} "Bol detekovaný XcomUtil. ${GAME_NAM
 
 ;--------------------------------
 ;Pages
-	
+
 LangString PAGE_UfoFolder ${LANG_CZECH} "${GAME_NAME} vyžaduje kopii hry UFO: Enemy Unknown / X-COM: UFO Defense. Tento krok můžete přeskočit pokud aktualizuje existující instalaci. Setup překopíruje požadované soubory do následujicí složky. Pro pokačování klikněte na další."
 LangString PAGE_UfoFolder_TITLE ${LANG_CZECH} "Vyberte umístění X-COM 1"
 LangString PAGE_UfoFolder_SUBTITLE ${LANG_CZECH} "Vyberte složku, ve které je nainstalovaný X-COM 1."
@@ -470,14 +470,14 @@ LangString DEST_UfoFolder ${LANG_CZECH} "Složka s X-COM 1"
 
 ;--------------------------------
 ;Installer Sections
-	
+
 LangString NAME_SecMain ${LANG_CZECH} "Soubory hry"
 LangString DESC_SecMain ${LANG_CZECH} "Soubory potřebné pro spuštění ${GAME_NAME}."
 LangString NAME_SecPatch ${LANG_CZECH} "Data Patch"
 LangString DESC_SecPatch ${LANG_CZECH} "Opravuje chyby v datech hry X-COM 1. Doporučeno vybrat při první instalaci. (nutné internetové připojení)"
 LangString NAME_SecDesktop ${LANG_CZECH} "Ikona na plochu"
 LangString DESC_SecDesktop ${LANG_CZECH} "Vytvoří ikonu na ploše pro spouštění hry ${GAME_NAME}."
-	
+
 ;--------------------------------
 ;Uninstaller Descriptions
 
@@ -493,7 +493,7 @@ LangString LINK_DataFolder ${LANG_CZECH} "Datová složka"
 LangString LINK_Readme ${LANG_CZECH} "Readme"
 LangString LINK_UserFolder ${LANG_CZECH} "Uživatelská složka"
 LangString LINK_Uninstall ${LANG_CZECH} "Odinstalovat"
-	
+
 ;--------------------------------
 ;Warnings
 
@@ -504,7 +504,7 @@ LangString WARN_XCUDetected ${LANG_CZECH} "Nalezeno XcomUtil. ${GAME_NAME} není
 
 ;--------------------------------
 ;Pages
-	
+
 LangString PAGE_UfoFolder ${LANG_FINNISH} "${GAME_NAME} edellyttää pelin UFO: Enemy Unknown / X-COM: UFO Defense alkuperäiskappaleen omistamista. Voit ohittaa tämän vaiheen, jos olet päivittämässä aiempaa asennusta.$\n$\nAsennus kopioi vaadittavat tiedostot seuraavasta kansiosta. Kopioidaksesi toisesta kansiosta napsauta Selaa ja valitse toinen kansio. Napsauta Seuraava jatkaaksesi."
 LangString PAGE_UfoFolder_TITLE ${LANG_FINNISH} "Valitse X-COM 1:n sijainti"
 LangString PAGE_UfoFolder_SUBTITLE ${LANG_FINNISH} "Valitse kansio, johon X-COM 1 on asennettu."
@@ -512,14 +512,14 @@ LangString DEST_UfoFolder ${LANG_FINNISH} "X-COM 1:n kansio"
 
 ;--------------------------------
 ;Installer Sections
-	
+
 LangString NAME_SecMain ${LANG_FINNISH} "Pelin tiedostot"
 LangString DESC_SecMain ${LANG_FINNISH} "Vaadittavat tiedostot ohjelman ${GAME_NAME} ajamiseksi."
 LangString NAME_SecPatch ${LANG_FINNISH} "Datakorjauspäivitys"
 LangString DESC_SecPatch ${LANG_FINNISH} "Korjaa virheitä X-COM 1:n datassa. Suositellaan ensiasennuksen yhteydessä. (Vaatii Internet-yhteyden)"
 LangString NAME_SecDesktop ${LANG_FINNISH} "Työpöydän pikakuvake"
 LangString DESC_SecDesktop ${LANG_FINNISH} "Luo työpöydälle pikakuvakkeen pelin ${GAME_NAME} pelaamiseksi."
-	
+
 ;--------------------------------
 ;Uninstaller Descriptions
 
@@ -535,7 +535,7 @@ LangString LINK_DataFolder ${LANG_FINNISH} "Datakansio"
 LangString LINK_Readme ${LANG_FINNISH} "Lueminut"
 LangString LINK_UserFolder ${LANG_FINNISH} "Käyttäjän kansio"
 LangString LINK_Uninstall ${LANG_FINNISH} "Poista"
-	
+
 ;--------------------------------
 ;Warnings
 
@@ -630,7 +630,7 @@ LangString WARN_XCUDetected ${LANG_UKRAINIAN} "Виявлено XcomUtil. ${GAME
 
 ;--------------------------------
 ;Pages
-	
+
 LangString PAGE_UfoFolder ${LANG_SPANISH} "${GAME_NAME} requiere una copia de UFO: Enemy Unknown / X-COM: UFO Defense. Este paso puede omitirse si es la actualización a una instalación previamente realizada.$\n$\nLa instalación copiará los archivos necesarios de la siguiente carpeta. Para elegir otra carpeta, haga click en Explorar y selecciónela. Haga click en Siguiente para continuar."
 LangString PAGE_UfoFolder_TITLE ${LANG_SPANISH} "Elegir la ubicación de X-COM 1"
 LangString PAGE_UfoFolder_SUBTITLE ${LANG_SPANISH} "Elija la carpeta donde tiene instalada la copia de X-COM 1."
@@ -638,14 +638,14 @@ LangString DEST_UfoFolder ${LANG_SPANISH} "Carpeta de X-COM 1"
 
 ;--------------------------------
 ;Installer Sections
-	
+
 LangString NAME_SecMain ${LANG_SPANISH} "Archivos de Juegos"
 LangString DESC_SecMain ${LANG_SPANISH} "Archivos requeridos para ejecutar ${GAME_NAME}."
 LangString NAME_SecPatch ${LANG_SPANISH} "Parchear los archivos originales"
 LangString DESC_SecPatch ${LANG_SPANISH} "Soluciona diversos errores encontrados de los archivos de X-COM 1. Recomendable para una primera instalación. (Requere de tener acceso a internet)"
 LangString NAME_SecDesktop ${LANG_SPANISH} "Acceso Directo al Escritorio"
 LangString DESC_SecDesktop ${LANG_SPANISH} "Crea un acceso directo en el escritorio para jugar a ${GAME_NAME}."
-	
+
 ;--------------------------------
 ;Uninstaller Descriptions
 
@@ -661,9 +661,51 @@ LangString LINK_DataFolder ${LANG_SPANISH} "Carpeta Data"
 LangString LINK_Readme ${LANG_SPANISH} "Léame"
 LangString LINK_UserFolder ${LANG_SPANISH} "Carpeta User"
 LangString LINK_Uninstall ${LANG_SPANISH} "Desinstalar"
-	
+
 ;--------------------------------
 ;Warnings
 
 LangString WARN_UFOMissing ${LANG_SPANISH} "No se ha encontrado el juego X-COM 1 en esta carpeta. ${GAME_NAME} reqiere una instalación válida de X-COM para funcionar. ¿Desea continuar?"
 LangString WARN_XCUDetected ${LANG_SPANISH} "Se ha detectado el programa XcomUtil. ${GAME_NAME} es incompatible con XcomUtil y puede ocasionar un comportamiento inesperado. ¿Desea continuar?"
+
+;================PORTUGUESE================
+
+;--------------------------------
+;Pages
+
+LangString PAGE_UfoFolder ${LANG_PORTUGUESE} "A aplicação ${GAME_NAME} requer uma cópia do jogo UFO: Enemy Unknown / X-COM: UFO Defense. Se estiver a atualizar uma instalação já existente pode seguir para o próximo passo.$\n$\nO assistente de instalação vai agora copiar os ficheiros necessários da seguinte pasta. Para selecionar uma pasta diferente, clique no botão 'Procurar'. Clique no botão 'Seguinte' para proceder."
+LangString PAGE_UfoFolder_TITLE ${LANG_PORTUGUESE} "Selecionar localização do jogo X-COM 1"
+LangString PAGE_UfoFolder_SUBTITLE ${LANG_PORTUGUESE} "Selecionar a pasta que contém uma instalação do jogo original X-COM 1"
+LangString DEST_UfoFolder ${LANG_PORTUGUESE} "Localização do jogo X-COM 1"
+
+;--------------------------------
+;Installer Sections
+
+LangString NAME_SecMain ${LANG_PORTUGUESE} "Ficheiros da aplicação"
+LangString DESC_SecMain ${LANG_PORTUGUESE} "Ficheiros essenciais para executar a aplicação ${GAME_NAME}."
+LangString NAME_SecPatch ${LANG_PORTUGUESE} "Atualizar X-COM 1"
+LangString DESC_SecPatch ${LANG_PORTUGUESE} "Esta atualização corrige erros nos ficheiros do jogo original X-COM 1. Utilizar esta opção se estiver a instalar a aplicação pela primeira vez. (requer uma ligação à Internet)"
+LangString NAME_SecDesktop ${LANG_PORTUGUESE} "Criar atalho"
+LangString DESC_SecDesktop ${LANG_PORTUGUESE} "Criar atalho no ambiente de trabalho para executar o jogo."
+
+;--------------------------------
+;Uninstaller Descriptions
+
+LangString NAME_UnData ${LANG_PORTUGUESE} "Apagar ficheiros originais X-COM"
+LangString DESC_UnData ${LANG_PORTUGUESE} "Apagar todos os ficheiros relativos à aplicação ${GAME_NAME}, incluindo modificações e ficheiros do jogo original. Utilizar esta opção se desejar fazer uma reinstalação limpa do jogo."
+LangString NAME_UnUser ${LANG_PORTUGUESE} "Apagar informações do utilizador"
+LangString DESC_UnUser ${LANG_PORTUGUESE} "Apagar todos os ficheiros do utilizador relativos à aplicação ${GAME_NAME}, incluindo jogos guardados, capturas de ecrã e perfis de configuração. Utilizar esta opção para remover completamente a aplicação do sistema."
+
+;--------------------------------
+;Shortcuts
+
+LangString LINK_DataFolder ${LANG_PORTUGUESE} "Pasta de ficheiros"
+LangString LINK_Readme ${LANG_PORTUGUESE} "Leia-me"
+LangString LINK_UserFolder ${LANG_PORTUGUESE} "Pasta de utilizador"
+LangString LINK_Uninstall ${LANG_PORTUGUESE} "Remover"
+
+;--------------------------------
+;Warnings
+
+LangString WARN_UFOMissing ${LANG_PORTUGUESE} "O jogo X-COM 1 não foi encontrado nesta pasta. A aplicação${GAME_NAME} requer uma instalação válida do jogo X-COM 1 para correr. Deseja proceder?"
+LangString WARN_XCUDetected ${LANG_PORTUGUESE} "A expansão XcomUtil foi detetada neste instalação. A aplicação ${GAME_NAME} é incompatível com a expansão XcomUtil, o que pode dar origem a irregularidades. Deseja proceder?"
