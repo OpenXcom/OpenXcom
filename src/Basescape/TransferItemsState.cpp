@@ -780,7 +780,7 @@ enum TransferType TransferItemsState::getType(size_t selected) const
  * @param selected Currently selected item.
  * @return Index of the selected item.
  */
-int TransferItemsState::getItemIndex(size_t selected) const
+size_t TransferItemsState::getItemIndex(size_t selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }

@@ -509,20 +509,15 @@ void BasescapeState::handleKeyPress(Action *action)
 			                 Options::keyBaseSelect6,
 			                 Options::keyBaseSelect7,
 			                 Options::keyBaseSelect8};
-		int base = -1;
 		int key = action->getDetails()->key.keysym.sym;
-		for (size_t i = 0; i < MiniBaseView::MAX_BASES; ++i)
+		for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 		{
 			if (key == baseKeys[i])
 			{
-				base = i;
+				_base = _game->getSavedGame()->getBases()->at(i);
+				init();
 				break;
 			}
-		}
-		if (base > -1 && base < _game->getSavedGame()->getBases()->size())
-		{
-			_base = _game->getSavedGame()->getBases()->at(base);
-			init();
 		}
 	}
 }

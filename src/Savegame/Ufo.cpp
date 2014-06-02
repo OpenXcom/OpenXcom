@@ -113,7 +113,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	_direction = node["direction"].as<std::string>(_direction);
 	_detected = node["detected"].as<bool>(_detected);
 	_hyperDetected = node["hyperDetected"].as<bool>(_hyperDetected);
-	_secondsRemaining = node["secondsRemaining"].as<int>(_secondsRemaining);
+	_secondsRemaining = node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 	double lon = _lon;
 	double lat = _lat;
@@ -159,7 +159,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 
 	std::string tid = node["trajectory"].as<std::string>();
 	_trajectory = ruleset.getUfoTrajectory(tid);
-	_trajectoryPoint = node["trajectoryPoint"].as<unsigned>(_trajectoryPoint);
+	_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
 	if (_inBattlescape)
 		setSpeed(0);
 }
@@ -320,7 +320,7 @@ void Ufo::setDetected(bool detected)
  * crashed.
  * @return Amount of seconds.
  */
-int Ufo::getSecondsRemaining() const
+size_t Ufo::getSecondsRemaining() const
 {
 	return _secondsRemaining;
 }
@@ -331,7 +331,7 @@ int Ufo::getSecondsRemaining() const
  * crashed.
  * @param seconds Amount of seconds.
  */
-void Ufo::setSecondsRemaining(int seconds)
+void Ufo::setSecondsRemaining(size_t seconds)
 {
 	_secondsRemaining = seconds;
 }

@@ -378,7 +378,7 @@ void Game::setVolume(int sound, int music, int ui)
 	}
 }
 
-float Game::volumeExponent(int volume)
+double Game::volumeExponent(int volume)
 {
 	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
 }

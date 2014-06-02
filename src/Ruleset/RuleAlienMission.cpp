@@ -40,9 +40,9 @@ namespace YAML
 				return false;
 
 			rhs.ufoType = node["ufo"].as<std::string>();
-			rhs.ufoCount = node["count"].as<unsigned>();
+			rhs.ufoCount = node["count"].as<size_t>();
 			rhs.trajectory = node["trajectory"].as<std::string>();
-			rhs.spawnTimer = node["timer"].as<unsigned>();
+			rhs.spawnTimer = node["timer"].as<size_t>();
 			return true;
 		}
 	};
@@ -67,8 +67,8 @@ void RuleAlienMission::load(const YAML::Node &node)
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
-		typedef std::map<unsigned, WeightedOptions*> Associative;
-		typedef std::vector<std::pair<unsigned, WeightedOptions*> > Linear;
+		typedef std::map<size_t, WeightedOptions*> Associative;
+		typedef std::vector<std::pair<size_t, WeightedOptions*> > Linear;
 
 		Associative assoc;
 		//Place in the associative container so we can index by month and keep entries sorted.
@@ -80,7 +80,7 @@ void RuleAlienMission::load(const YAML::Node &node)
 		// Now go through the node contents and merge with existing data.
 		for (YAML::const_iterator nn = weights.begin(); nn != weights.end(); ++nn)
 		{
-			unsigned month = nn->first.as<unsigned>();
+			size_t month = nn->first.as<size_t>();
 			Associative::iterator existing = assoc.find(month);
 			if (assoc.end() == existing)
 			{
@@ -121,18 +121,18 @@ void RuleAlienMission::load(const YAML::Node &node)
  * @param monthsPassed The number of months that have passed in the game world.
  * @return The string id of the race.
  */
-const std::string RuleAlienMission::generateRace(const unsigned monthsPassed) const
+const std::string RuleAlienMission::generateRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<unsigned, WeightedOptions*> >::const_reverse_iterator rc = _raceDistribution.rbegin();
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rc = _raceDistribution.rbegin();
 	while (monthsPassed < rc->first)
 		++rc;
 	return rc->second->choose();
 }
 
 
-const std::string RuleAlienMission::getTopRace(const unsigned monthsPassed) const
+const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<unsigned, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();	
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();	
 	return rc->second->top();
 }
 
@@ -141,7 +141,7 @@ const std::string RuleAlienMission::getTopRace(const unsigned monthsPassed) cons
  */
 RuleAlienMission::~RuleAlienMission()
 {
-	for (std::vector<std::pair<unsigned, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
 	{
 		delete ii->second;
 	}

@@ -45,7 +45,7 @@ void StatString::load(const YAML::Node &node)
 {
     std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing"};
 	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
-    for (unsigned int i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
+    for (size_t i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
 	{
         if (node[conditionNames[i]])
 		{
@@ -103,7 +103,7 @@ const std::string StatString::getString()
  */
 const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval)
 {
-	unsigned int conditionsMet;
+	size_t conditionsMet;
 	int minVal, maxVal;
 	std::string conditionName, string;
 	std::wstring wstring, statString;
@@ -143,7 +143,7 @@ const std::wstring StatString::calcStatString(UnitStats &currentStats, const std
 }
 
 /**
- * Get a map assocating stat names to unit stats.
+ * Get a map associating stat names to unit stats.
  * @param currentStats Unit stats to use.
  * @return Map of unit stats.
  */

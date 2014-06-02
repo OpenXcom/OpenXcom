@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "GraphsState.h"
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
@@ -35,7 +36,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
-#include <sstream>
 #include "../Engine/Options.h"
 
 namespace OpenXcom
@@ -46,7 +46,7 @@ struct GraphButInfo
 	LocalizedText _name;
 	int _color;
 	bool _pushed;
-	GraphButInfo(const LocalizedText& name, int color): _name(name), _color(color), _pushed(false) {}
+	GraphButInfo(const LocalizedText& name, Uint8 color): _name(name), _color(color), _pushed(false) {}
 };
 /**
  * Initializes all the elements in the Graphs screen.

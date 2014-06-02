@@ -30,7 +30,7 @@ inline bool AreSame(const _Tx& l, const _Tx& r) {
 template <class _Tx>
 inline _Tx Round(const _Tx& x)
 {
-	return x < 0.0 ? std::ceil(x - 0.5) : std::floor(x + 0.5);
+	return x < static_cast<_Tx>(0) ? std::ceil(x - static_cast<_Tx>(0.5)) : std::floor(x + static_cast<_Tx>(0.5));
 }
 
 #endif

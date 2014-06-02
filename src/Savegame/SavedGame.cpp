@@ -819,7 +819,7 @@ Base *SavedGame::getSelectedBase()
  * Sets the last selected player base.
  * @param base number of the base.
  */
-void SavedGame::setSelectedBase(int base)
+void SavedGame::setSelectedBase(size_t base)
 {
 	_selectedBase = base;
 }

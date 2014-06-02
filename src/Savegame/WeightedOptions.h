@@ -41,7 +41,7 @@ public:
 	/// Select the top item.
 	const std::string top() const;
 	/// Set an option's weight.
-	void set(const std::string &id, unsigned weight);
+	void set(const std::string &id, size_t weight);
 	/// Is this empty?
 	bool empty() const { return 0 == _totalWeight; }
 	/// Remove all entries.
@@ -51,8 +51,8 @@ public:
 	/// Store our list in YAML.
 	YAML::Node save() const;
 private:
-	std::map<std::string, unsigned> _choices; //!< Options and weights
-	unsigned _totalWeight; //!< The total weight of all options.
+	std::map<std::string, size_t> _choices; //!< Options and weights
+	size_t _totalWeight; //!< The total weight of all options.
 };
 
 }
