@@ -45,29 +45,6 @@
 #include <functional>
 #include <math.h>
 
-namespace {
-/**
- * Get a random point inside the given region zone.
- * The point will be used to land a UFO, so it HAS to be on land.
- */
-std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, size_t zone)
-{
-	int tries = 0;
-	std::pair<double, double> pos;
-	do
-	{
-		pos = region.getRandomPoint(zone);
-		++tries;
-	}
-	while (!(globe.insideLand(pos.first, pos.second)
-		&& region.insideRegion(pos.first, pos.second))
-		&& tries < 100);
-	return pos;
-
-}
-
-}
-
 namespace OpenXcom
 {
 
@@ -714,4 +691,29 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	*/
 		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
+
+/**
+ * Get a random point inside the given region zone.
+ * The point will be used to land a UFO, so it HAS to be on land.
+ */
+std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone)
+{
+	int tries = 0;
+	std::pair<double, double> pos;
+	do
+	{
+		pos = region.getRandomPoint(zone);
+		++tries;
+	}
+	while (!(globe.insideLand(pos.first, pos.second)
+		&& region.insideRegion(pos.first, pos.second))
+		&& tries < 100);
+	if (tries == 100)
+	{
+		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Lattitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+	}
+	return pos;
+
+}
+
 }
