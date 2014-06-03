@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Game *game, Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryOverviewState, int display) : State(game), _base(base), _soldierId(soldierId), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display)
+SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Game *game, Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryOverviewState, int display) : State(game), _base(base), _soldierId(soldierId), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display), _lastScrollPos(0)
 {
 	if (_base == 0)
 	{
@@ -329,6 +329,7 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->scrollTo(0);
 	_lstMissionTotals->scrollTo(0);
 	_lstCommendations->scrollTo(0);
+	_lastScrollPos = 0;
 	// Set visibility for kills
 	_txtRace->setVisible(_displayKills);
 	_txtRank->setVisible(_displayKills);
@@ -573,12 +574,15 @@ void SoldierDiaryPerformanceState::lstInfoMouseOut(Action *)
  * Runs state functionality every cycle.
  * Used to update sprite vector
  */
-void SoldierDiaryPerformanceState::handle(Action *action)
+void SoldierDiaryPerformanceState::think()
 {
-	State::handle(action);
+	State::think();
 
-	if (action->getDetails()->button.state == SDL_PRESSED || action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_WHEELUP || action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	if (_lastScrollPos != _lstCommendations->getScroll())
+	{
 		drawSprites();
+		_lastScrollPos = _lstCommendations->getScroll();
+	}
 }
 
 }

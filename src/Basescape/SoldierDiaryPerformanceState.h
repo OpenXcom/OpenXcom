@@ -58,7 +58,7 @@ private:
 	std::vector<Surface*> _commendations, _commendationDecorations;
 	SurfaceSet *_commendationSprite, *_commendationDecoration;
 
-	int _display; // 0 displays kills, 1 displays missions, 2 displays commendations
+	int _display, _lastScrollPos; // 0 displays kills, 1 displays missions, 2 displays commendations
 	bool _displayKills, _displayMissions, _displayCommendations;
 
 public:
@@ -87,7 +87,7 @@ public:
     /// Handler for moving the mouse outside the medals list.
     void lstInfoMouseOut(Action *action);
 	/// Runs state functionality every cycle.
-	void handle(Action *action);
+	void think();
 };
 
 }
