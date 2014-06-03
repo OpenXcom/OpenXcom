@@ -359,12 +359,12 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		else
 		{
 			Position delta(-scrollX, -scrollY, 0);
-			int barWidth = Round(_game->getScreen()->getCursorLeftBlackBand() / action->getXScale());
-			int barHeight = Round(_game->getScreen()->getCursorTopBlackBand() / action->getYScale());
-			int cursorX = Round(_cursorPosition.x / action->getXScale() + delta.x);
-			int cursorY = Round(_cursorPosition.y / action->getYScale() + delta.y);
-			_cursorPosition.x = Round(std::min(getX() + getWidth() + barWidth, std::max(getX() + barWidth, cursorX)) * action->getXScale());
-			_cursorPosition.y = Round(std::min(getY() + getHeight() + barHeight, std::max(getY() + barHeight, cursorY)) * action->getYScale());
+			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
+			int barHeight = _game->getScreen()->getCursorTopBlackBand();
+			int cursorX = _cursorPosition.x + delta.x;
+			int cursorY =_cursorPosition.y + delta.y;
+			_cursorPosition.x = std::min((int)Round((getX() + getWidth()) * action->getXScale()) + barWidth, std::max((int)Round(getX() * action->getXScale()) + barWidth, cursorX));
+			_cursorPosition.y = std::min((int)Round((getY() + getHeight()) * action->getYScale()) + barHeight, std::max((int)Round(getY() * action->getYScale()) + barHeight, cursorY));
 			action->getDetails()->motion.x = _cursorPosition.x;
 			action->getDetails()->motion.y = _cursorPosition.y;
 		}
