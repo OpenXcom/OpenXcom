@@ -98,7 +98,14 @@ public:
 	 */
 	SDL_Color *getPalette() const
 	{
-		return _surface->format->palette->colors;
+		if(_surface->format->palette)
+		{
+			return _surface->format->palette->colors;
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 	/// Sets the X position of the surface.
 	virtual void setX(int x);
