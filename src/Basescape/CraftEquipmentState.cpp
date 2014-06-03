@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -141,7 +141,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
-	_lstEquipment->setColumns(3, 154, 85, 41);
+	_lstEquipment->setColumns(3, 156, 83, 41);
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);

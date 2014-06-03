@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,6 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "MainMenuState.h"
-#include "OptionsBaseState.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedGame.h"
 #include "SaveGameState.h"
@@ -117,7 +116,7 @@ void AbandonGameState::btnYesClick(Action *)
 {
 	if (!_game->getSavedGame()->isIronman())
 	{
-		OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
 
 		_game->setState(new MainMenuState(_game));

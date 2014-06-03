@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -70,7 +70,7 @@ CatFile::~CatFile()
 /**
  * Loads an object into memory.
  * @param i Object number to load.
- * @param filename Preserve internal file name.
+ * @param name Preserve internal file name.
  * @return Pointer to the loaded object.
  */
 char *CatFile::load(unsigned int i, bool name)

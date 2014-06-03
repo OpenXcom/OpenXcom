@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -161,7 +161,7 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 
 	_lstItems->setColor(_color);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 60, 22, 55);
+	_lstItems->setColumns(4, 156, 54, 24, 53);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
@@ -267,7 +267,7 @@ void SellState::think()
  * @param selected Selected craft.
  * @return Index of the selected craft.
  */
-int SellState::getCraftIndex(size_t selected) const
+size_t SellState::getCraftIndex(size_t selected) const
 {
 	return selected - _soldiers.size();
 }
@@ -679,7 +679,7 @@ enum SellType SellState::getType(size_t selected) const
  * @param selected Currently selected item.
  * @return Index of the selected item.
  */
-int SellState::getItemIndex(size_t selected) const
+size_t SellState::getItemIndex(size_t selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -80,6 +80,11 @@ SavedBattleGame::~SavedBattleGame()
 	}
 	delete[] _tiles;
 
+	for (std::vector<MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	{
+		(*i)->unloadData();
+	}
+
 	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		delete *i;
@@ -91,6 +96,10 @@ SavedBattleGame::~SavedBattleGame()
 	}
 
 	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<BattleItem*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
 	{
 		delete *i;
 	}
@@ -118,7 +127,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
 		std::string name = i->as<std::string>();
-		MapDataSet *mds = new MapDataSet(name);
+		MapDataSet *mds = rule->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 
@@ -940,6 +949,7 @@ void SavedBattleGame::resetUnitTiles()
  
 /**
  * Gives access to the "storage space" vector, for distribution of items in base defense missions.
+ * @return Vector of storage positions.
  */
 std::vector<Position> &SavedBattleGame::getStorageSpace()
 {
@@ -988,7 +998,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 			}
 		}
 	}
-	else if (b)
+	if (b)
 	{
 		for (std::vector<BattleItem*>::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
 		{
@@ -1009,6 +1019,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 		}
 	}
 
+	_deleted.push_back(item);
 	/*
 	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
@@ -1119,8 +1130,9 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 
 /**
  * Finds a fitting node where a unit can patrol to.
- * @param nodeRank Rank of the node (this is not the rank of the alien!).
+ * @param scout Is the unit scouting?
  * @param unit Pointer to the unit (to get its position).
+ * @param fromNode Pointer to the node the unit is at.
  * @return Pointer to the choosen node.
  */
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
@@ -1476,8 +1488,10 @@ bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
 }
 
 /**
- * Adds this unit to the vector of falling units.
+ * Adds this unit to the vector of falling units,
+ * if it doesn't already exist.
  * @param unit The unit.
+ * @return Was the unit added?
  */
 bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
@@ -1487,6 +1501,7 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 		if (unit == *i)
 		{
 			add = false;
+			break;
 		}
 	}
 	if (add)
@@ -1709,7 +1724,7 @@ void SavedBattleGame::setKneelReserved(bool reserved)
  * this map contains information on how many destructible base modules
  * remain at any given grid reference in the basescape, using [x][y] format.
  * -1 for "no items" 0 for "destroyed" and any actual number represents how many left.
- * @Return the base module damage map.
+ * @return the base module damage map.
  */
 std::vector< std::vector<std::pair<int, int> > > &SavedBattleGame::getModuleMap()
 {

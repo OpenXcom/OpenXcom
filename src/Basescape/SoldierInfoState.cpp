@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -553,7 +553,7 @@ void SoldierInfoState::init()
 		_numPsiSkill->setText(ss15.str());
 		_barPsiSkill->setMax(current->psiSkill);
 		_barPsiSkill->setValue(current->psiSkill);
-		_barPsiSkill->setValue2(initial->psiSkill);
+		_barPsiSkill->setValue2(current->psiSkill - _soldier->getImprovement());
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);

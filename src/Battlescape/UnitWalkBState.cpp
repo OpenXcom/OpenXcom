@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,6 +43,8 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitWalkBState.
+ * @param parent Pointer to the Battlescape.
+ * @param action Pointer to an action.
  */
 UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false), _beforeFirstStep(false), _numUnitsSpotted(0), _preMovementCost(0)
 {
@@ -82,7 +84,7 @@ void UnitWalkBState::init()
 void UnitWalkBState::think()
 {
 	bool unitSpotted = false;
-	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
+	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true));
 	if (_unit->isKneeled())
 	{
 		if (_parent->kneel(_unit))
@@ -166,7 +168,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
+			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
@@ -446,6 +448,7 @@ void UnitWalkBState::think()
 			if (Options::traceAI) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
+			_unit->abortTurn(); //revert to a standing state.
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->popState();
@@ -542,7 +545,7 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) return;
+	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true)) return;
 
 	if (_unit->getMoveSound() != -1)
 	{

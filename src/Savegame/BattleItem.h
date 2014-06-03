@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -129,6 +129,8 @@ public:
 	bool getTurnFlag() const;
 	/// set the flag representing "not dropped on player turn"
 	void setTurnFlag(bool flag);
+	/// Sets the item's ruleset.
+	void convertToCorpse(RuleItem *rules);
 
 };
 

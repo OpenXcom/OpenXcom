@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -205,15 +205,15 @@ void OptionsBaseState::setCategory(TextButton *button)
 }
 
 /**
- * Saves the new options and returns to the proper origin screen..
+ * Saves the new options and returns to the proper origin screen.
  * @param action Pointer to an action.
  */
 void OptionsBaseState::btnOkClick(Action *)
 {
 	int dX = Options::baseXResolution;
 	int dY = Options::baseYResolution;
-	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
-	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
+	Screen::updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	Screen::updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;
 	recenter(dX, dY);
@@ -255,8 +255,8 @@ void OptionsBaseState::btnCancelClick(Action *)
 	Options::reload = false;
 	Options::load();
 	SDL_WM_GrabInput(Options::captureMouse);
-	updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
-	updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
+	Screen::updateScale(Options::battlescapeScale, Options::newBattlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, _origin == OPT_BATTLESCAPE);
+	Screen::updateScale(Options::geoscapeScale, Options::newGeoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, _origin != OPT_BATTLESCAPE);
 	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	_game->popState();
 }
@@ -333,57 +333,6 @@ void OptionsBaseState::txtTooltipOut(Action *action)
 	if (_currentTooltip == action->getSender()->getTooltip())
 	{
 		_txtTooltip->setText(L"");
-	}
-}
-
-/**
-* Changes a given scale, and if necessary, switch the current base resolution.
-* @param type reference to which scale option we are using, battlescape or geoscape.
-* @param selection the new scale level.
-* @param width reference to which x scale to adjust.
-* @param height reference to which y scale to adjust.
-* @param change should we change the current scale.
-*/
-void OptionsBaseState::updateScale(int &type, int selection, int &width, int &height, bool change)
-{
-	type = selection;
-	switch (type)
-	{
-	case SCALE_15X:
-		width = Screen::ORIGINAL_WIDTH * 1.5;
-		height = Screen::ORIGINAL_HEIGHT * 1.5;
-		break;
-	case SCALE_2X:
-		width = Screen::ORIGINAL_WIDTH * 2;
-		height = Screen::ORIGINAL_HEIGHT * 2;
-		break;
-	case SCALE_SCREEN_DIV_3:
-		width = Options::newDisplayWidth / 3;
-		height = Options::newDisplayHeight / 3;
-		break;
-	case SCALE_SCREEN_DIV_2:
-		width = Options::newDisplayWidth / 2;
-		height = Options::newDisplayHeight / 2;
-		break;
-	case SCALE_SCREEN:
-		width = Options::newDisplayWidth;
-		height = Options::newDisplayHeight;
-		break;
-	case SCALE_ORIGINAL:
-	default:
-		width = Screen::ORIGINAL_WIDTH;
-		height = Screen::ORIGINAL_HEIGHT;
-		break;
-	}
-
-	// don't go under minimum resolution... it's bad, mmkay?
-	width = std::max(width, Screen::ORIGINAL_WIDTH);
-	height = std::max(height, Screen::ORIGINAL_HEIGHT);
-
-	if (change && (Options::baseXResolution != width || Options::baseYResolution != height))
-	{
-		Options::baseXResolution = width;
-		Options::baseYResolution = height;
 	}
 }
 

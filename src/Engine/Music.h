@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,7 +41,7 @@ public:
 	/// Loads music from the specified file.
 	virtual void load(const std::string &filename);
 	/// Loads music from a chunk of memory.
-	virtual void load(const void *data, size_t size);
+	virtual void load(const void *data, int size);
 	/// Plays the music.
 	virtual void play(int loop = -1) const;
 	/// Stops all music.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -394,7 +394,7 @@ Tile *BattleItem::getTile() const
 
 /**
  * Sets the item's tile.
- * @param The tile.
+ * @param tile The tile.
  */
 void BattleItem::setTile(Tile *tile)
 {
@@ -421,7 +421,7 @@ BattleUnit *BattleItem::getUnit() const
 
 /**
  * Sets the corpse's unit.
- * @param Pointer to BattleUnit.
+ * @param unit Pointer to BattleUnit.
  */
 void BattleItem::setUnit(BattleUnit *unit)
 {
@@ -446,7 +446,7 @@ int BattleItem::getHealQuantity () const
 	return _heal;
 }
 
-/**.
+/**
  * Sets the pain killer quantity of the item.
  * @param pk The new pain killer quantity.
  */
@@ -518,4 +518,17 @@ void BattleItem::setTurnFlag(bool flag)
 {
 	_droppedOnAlienTurn = flag;
 }
+
+/**
+ * Converts an unconscious body into a dead one.
+ * @param rules the rules of the corpse item to convert this item into.
+ */
+void BattleItem::convertToCorpse(RuleItem *rules)
+{
+	if (_unit && _rules->getBattleType() == BT_CORPSE && rules->getBattleType() == BT_CORPSE)
+	{
+		_rules = rules;
+	}
+}
+
 }

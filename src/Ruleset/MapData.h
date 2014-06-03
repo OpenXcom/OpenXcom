@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -90,6 +90,8 @@ public:
 	int getBlock(ItemDamageType type) const;
 	/// Sets the amount of blockage for all types.
 	void setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock);
+	/// Sets the amount of HE blockage.
+	void setHEBlock(int HEBlock);
 	/// Gets the offset on the Y axis when drawing this object.
 	int getYOffset() const;
 	/// Sets the offset on the Y axis for drawing this object.

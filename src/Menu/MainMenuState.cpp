@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -168,7 +168,7 @@ void MainMenuState::resize(int &dX, int &dY)
 {
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
-	OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;
 	State::resize(dX, dY);

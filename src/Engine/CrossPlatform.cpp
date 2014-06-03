@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,6 +29,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
+#include "Language.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -55,6 +56,9 @@
 #include <sys/types.h>
 #include <pwd.h>
 #endif
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <SDL_image.h>
 
 namespace OpenXcom
 {
@@ -650,10 +654,11 @@ bool deleteFile(const std::string &path)
 }
 
 /**
-* Gets the base filename of a path.
-* @param path Full path to file.
-* @return Base filename.
-*/
+ * Gets the base filename of a path.
+ * @param path Full path to file.
+ * @param transform Optional function to transform the filename.
+ * @return Base filename.
+ */
 std::string baseFilename(const std::string &path, int (*transform)(int))
 {
 	size_t sep = path.find_last_of(PATH_SEPARATOR);
@@ -674,10 +679,10 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 }
 
 /**
-* Replaces invalid filesystem characters with _.
-* @param filename Original filename.
-* @return Filename without invalid characters
-*/
+ * Replaces invalid filesystem characters with _.
+ * @param filename Original filename.
+ * @return Filename without invalid characters
+ */
 std::string sanitizeFilename(const std::string &filename)
 {
 	std::string newFilename = filename;
@@ -871,6 +876,94 @@ bool moveFile(const std::string &src, const std::string &dest)
 	return (MoveFileExA(src.c_str(), dest.c_str(), MOVEFILE_REPLACE_EXISTING) != 0);
 #else
 	return (rename(src.c_str(), dest.c_str()) == 0);
+#endif
+}
+
+/**
+ * Notifies the user that maybe he should have a look.
+ */
+void flashWindow()
+{
+#ifdef _WIN32
+	SDL_SysWMinfo wminfo;
+	SDL_VERSION(&wminfo.version)
+	if (SDL_GetWMInfo(&wminfo))
+	{
+		HWND hwnd = wminfo.window;
+		FlashWindow(hwnd, true);
+	}
+#endif
+}
+
+/**
+ * Gets the executable path in DOS-style (short) form.
+ * For non-Windows systems, just use a dummy path.
+ * @return Executable path.
+ */
+std::string getDosPath()
+{
+#ifdef _WIN32
+	std::string path, bufstr;
+	char buf[MAX_PATH];
+	if (GetModuleFileNameA(0, buf, MAX_PATH) != 0)
+	{
+		bufstr = buf;
+		size_t c1 = bufstr.find_first_of('\\');
+		path += bufstr.substr(0, c1+1);
+		size_t c2 = bufstr.find_first_of('\\', c1+1);
+		while (c2 != std::string::npos)
+		{
+			std::string dirname = bufstr.substr(c1+1, c2-c1-1);
+			if (dirname == "..")
+			{
+				path = path.substr(0, path.find_last_of('\\', path.length()-2));
+			}
+			else
+			{
+				if (dirname.length() > 8)
+					dirname = dirname.substr(0, 6) + "~1";
+				std::transform(dirname.begin(), dirname.end(), dirname.begin(), toupper);
+				path += dirname;
+			}
+			c1 = c2;
+			c2 = bufstr.find_first_of('\\', c1+1);
+			if (c2 != std::string::npos)
+				path += '\\';
+		}
+	}
+	else
+	{
+		path = "C:\\GAMES\\OPENXCOM";
+	}
+	return path;
+#else
+	return "C:\\GAMES\\OPENXCOM";
+#endif
+}
+
+void setWindowIcon(int winResource, const std::string &unixPath)
+{
+#ifdef _WIN32
+	HINSTANCE handle = GetModuleHandle(NULL);
+	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(winResource));
+
+	SDL_SysWMinfo wminfo;
+	SDL_VERSION(&wminfo.version)
+	if (SDL_GetWMInfo(&wminfo))
+	{
+		HWND hwnd = wminfo.window;
+		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
+	}
+#else
+	// SDL only takes UTF-8 filenames
+	// so here's an ugly hack to match this ugly reasoning
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
+	SDL_Surface *icon = IMG_Load(utf8.c_str());
+	if (icon != 0)
+	{
+		SDL_WM_SetIcon(icon, NULL);
+		SDL_FreeSurface(icon);
+	}
 #endif
 }
 

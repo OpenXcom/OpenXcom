@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -517,6 +517,7 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
  * Returns the localized text with the specified ID, in the proper form for the gender.
  * If it's not found, just returns the ID.
  * @param id ID of the string.
+ * @param gender Current soldier gender.
  * @return String with the requested ID.
  */
 const LocalizedText &Language::getString(const std::string &id, SoldierGender gender) const
@@ -588,11 +589,11 @@ TextWrapping Language::getTextWrapping() const
 
 /** @page LanguageFiles Format of the language files.
 
-Language files (.yml) contain UTF-8 text.
+Language files are formatted as YAML (.yml) containing UTF-8 (no BOM) text.
 The first line in a language file is the language's identifier.
 The rest of the file are key-value pairs. The key of each pair
 contains the ID string (dictionary key), and the value contains the localized
-text for the given key.
+text for the given key in quotes.
 
 The localized text may contain the following special markers:
 <table>
@@ -608,7 +609,7 @@ The localized text may contain the following special markers:
  <td><tt>{NEWLINE}</tt></td>
  <td>It will be replaced with a line break in the game.</td></tr>
 <tr>
- <td>{SMALLLINE}</td>
+ <td><tt>{SMALLLINE}</tt></td>
  <td>The rest of the text will be in a small font.</td></tr>
 </table>
 
@@ -616,36 +617,16 @@ There is an additional marker sequence, that should only appear in texts that
 depend on a number. This marker <tt>{N}</tt> will be replaced by the actual
 number used. The keys for texts that depend on numbers also have special
 suffixes, that depend on the language. For all languages, a suffix of
-<tt>_zero/tt> is tried if the number is zero, before trying the actual key
-according to the language rules. The rest of the suffixes depend on the language.
-
-<table>
-<caption>Current rules</caption>
-<tr><th>Language</th><th>Suffixes</th></tr>
-<tr><td>English</td><td><tt>_1</tt> n == 1, <tt>_2</tt> otherwise</td></tr>
-<tr><td>French</td><td><tt>_1</tt> n < 2, <tt>_2</tt> otherwise</td></tr>
-<tr><td>Czech</td><td><tt>_1</tt> n % 100 == 1, <tt>_2</tt> 2 <= n % 100 <= 4, <tt>_3</tt> otherwise</td></tr>
-<tr><td>Polish</td><td><tt>_1</tt> n % 100 == 1,
- <tt>_2</tt> 2 <= n % 10 <= 4 && (n % 100 < 10 || n % 100 > 20),
- <tt>_3</tt> otherwise</td></tr>
-<tr><td>Romanian</td><td><tt>_1</tt> n % 100 == 1,
- <tt>_2</tt> n == 0 || 1 <= n % 100 <= 20,
- <tt>_3</tt> otherwise</td></tr>
-<tr><td>Russian</td><td><tt>_1</tt> n % 10 == 1 && n % 100 != 11,
- <tt>_2</tt> 2 <= n % 10 <= 4 && (n % 100 < 10 || n % 100 > 20),
- <tt>_3</tt> otherwise</td></tr>
-<tr><td>Hungarian</td><td><tt>_1</tt> for every case.</td></tr>
-<tr><td><i>Other languages</i></th><td><tt>_1</tt> n == 1, <tt>_2</tt> otherwise</td></tr>
-</table>
+<tt>_zero</tt> is tried if the number is zero, before trying the actual key
+according to the language rules. The rest of the suffixes depend on the language,
+as described <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">here</a>.
 
 So, you would write (for English):
 <pre>
-STR_ENEMIES_0
-There are no enemies left.
-STR_ENEMIES_1
-There is a single enemy left.
-STR_ENEMIES_2
-There are {N} enemies left.
+STR_ENEMIES:
+  zero:  "There are no enemies left."
+  one:   "There is a single enemy left."
+  other: "There are {N} enemies left."
 </pre>
 
 */

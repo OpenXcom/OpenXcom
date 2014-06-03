@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -119,7 +119,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
-		if (craft->getRentCost() > 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
+		if (craft->getRentCost() != 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
 			std::wostringstream ss2;
 			ss2 << _base->getCraftCount((*i));

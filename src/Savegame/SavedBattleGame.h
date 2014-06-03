@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -57,7 +57,7 @@ private:
 	BattleUnit *_selectedUnit, *_lastSelectedUnit;
 	std::vector<Node*> _nodes;
 	std::vector<BattleUnit*> _units;
-	std::vector<BattleItem*> _items;
+	std::vector<BattleItem*> _items, _deleted;
 	Pathfinding *_pathfinding;
 	TileEngine *_tileEngine;
 	std::string _missionType;

@@ -8,7 +8,7 @@
   <!ENTITY dhyear	"2012">
   <!ENTITY dhsection	"6">
   <!ENTITY dhpackage	"openxcom">
-  <!ENTITY dhversion	"0.9">
+  <!ENTITY dhversion	"1.0">
   <!ENTITY dhauthor	"OpenXcom Developers">
 ]>
 
@@ -63,7 +63,7 @@
 				<term><option>-data</option> <replaceable>PATH</replaceable></term>
 				<listitem>
 				<para>
-					use <replaceable>PATH</replaceable> as the default User Folder instead of auto-detecting
+					use <replaceable>PATH</replaceable> as the default Data Folder instead of auto-detecting
 				</para>
 				</listitem>
 			</varlistentry>
@@ -71,7 +71,7 @@
 				<term><option>-user</option> <replaceable>PATH</replaceable></term>
 				<listitem>
 				<para>
-					use <replaceable>PATH</replaceable> as the default Data Folder instead of auto-detecting
+					use <replaceable>PATH</replaceable> as the default User Folder instead of auto-detecting
 				</para>
 				</listitem>
 			</varlistentry>

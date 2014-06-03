@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
+#include "../version.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
@@ -28,17 +29,19 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Music.h"
+#include "../Engine/Font.h"
+#include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
+#include "../Interface/Text.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
 #include "IntroState.h"
 #include "ErrorMessageState.h"
-#include "OptionsBaseState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
-#include <SDL_syswm.h>
 
 namespace OpenXcom
 {
@@ -50,42 +53,59 @@ std::string StartState::error;
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
  */
-StartState::StartState(Game *game) : State(game)
+StartState::StartState(Game *game) : State(game), _anim(0)
 {
-	// Create objects
-	int dx = (Options::baseXResolution - 320) / 2;
-	int dy = (Options::baseYResolution - 200) / 2;
+	//updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
 
+	Options::baseXResolution = Options::displayWidth;
+	Options::baseYResolution = Options::displayHeight;
+	_game->getScreen()->resetDisplay(false);
+
+	// Create objects
 	_thread = 0;
 	loading = LOADING_STARTED;
 	error = "";
 
-	_surface = new Surface(320, 200, dx, dy);
+	_font = new Font();
+	_font->loadTerminal();
+	_lang = new Language();
 
-	// Set palette (set to {0} here to ensure all fields are initialized)
-	SDL_Color bnw[3] = { {0} };
+	_text = new Text(Options::baseXResolution, Options::baseYResolution, 0, 0);
+	_cursor = new Text(_font->getWidth(), _font->getHeight(), 0, 0);
+	_timer = new Timer(150);
+	
+	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
-	bnw[0].r = 0;
-	bnw[0].g = 0;
-	bnw[0].b = 0;
-	bnw[1].r = 255;
-	bnw[1].g = 255;
-	bnw[1].b = 255;
-	bnw[2].r = 255;
-	bnw[2].g = 255;
-	bnw[2].b = 0;
-
-	setPalette(bnw, 0, 3);
-
-	add(_surface);
+	add(_text);
+	add(_cursor);
 
 	// Set up objects
-	_surface->drawString(120, 96, "Loading...", 1);
+	_text->initText(_font, _font, _lang);
+	_text->setColor(0);
+	_text->setWordWrap(true);
 
+	_cursor->initText(_font, _font, _lang);
+	_cursor->setColor(0);
+	_cursor->setText(L"_");
+
+	_timer->onTimer((StateHandler)&StartState::animate);
+	_timer->start();
+
+	// Hide UI
 	_game->getCursor()->setVisible(false);
 	_game->getFpsCounter()->setVisible(false);
+
+	if (Options::reload)
+	{
+		addLine(L"Restarting...");
+		addLine(L"");
+	}
+	else
+	{
+		addLine(Language::utf8ToWstr(CrossPlatform::getDosPath()) + L">openxcom");
+	}
 }
 
 /**
@@ -97,6 +117,9 @@ StartState::~StartState()
 	{
 		SDL_KillThread(_thread);
 	}
+	delete _font;
+	delete _timer;
+	delete _lang;
 }
 
 /**
@@ -131,34 +154,35 @@ void StartState::init()
 void StartState::think()
 {
 	State::think();
+	_timer->think(this, 0);
 
 	switch (loading)
 	{
 	case LOADING_FAILED:
-		flash();
-		_surface->clear();
-		_surface->drawString(1, 9, "ERROR:", 2);
-		_surface->drawString(1, 17, error.c_str(), 2);
-		_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
-		_surface->drawString(1, 57, "correctly.", 1);
-		_surface->drawString(1, 73, "Check the requirements and", 1);
-		_surface->drawString(1, 81, "documentation for more details.", 1);
-		_surface->drawString(75, 183, "Press any key to quit", 1);
+		CrossPlatform::flashWindow();
+		addLine(L"");
+		addLine(L"ERROR: " + Language::utf8ToWstr(error));
+		addLine(L"Make sure you installed OpenXcom correctly.");
+		addLine(L"Check the wiki documentation for more details.");
+		addLine(L"");
+		addLine(L"Press any key to continue.");
 		loading = LOADING_DONE;
 		break;
 	case LOADING_SUCCESSFUL:
-		flash();
+		CrossPlatform::flashWindow();
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
 			bool letterbox = Options::keepAspectRatio;
 			Options::keepAspectRatio = true;
+			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 			_game->getScreen()->resetDisplay(false);
 			_game->setState(new IntroState(_game, letterbox));
 		}
 		else
 		{
-			OptionsBaseState::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
 			State *state = new MainMenuState(_game);
 			_game->setState(state);
@@ -202,24 +226,78 @@ void StartState::handle(Action *action)
 }
 
 /**
- * Notifies the user that maybe he should have a look.
+ * Blinks the cursor and spreads out terminal output.
  */
-void StartState::flash()
+void StartState::animate()
 {
-#ifdef _WIN32
-	SDL_SysWMinfo wminfo;
-	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
+	_cursor->setVisible(!_cursor->getVisible());
+	_anim++;
+
+	if (loading == LOADING_STARTED)
 	{
-		HWND hwnd = wminfo.window;
-		FlashWindow(hwnd, true);
+		std::wostringstream ss;
+		ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
+		if (Options::reload)
+		{
+			if (_anim == 2)
+				addLine(ss.str());
+		}
+		else
+		{
+			switch (_anim)
+			{
+			case 1:
+				addLine(L"DOS/4GW Protected Mode Run-time  Version 1.9");
+				addLine(L"Copyright (c) Rational Systems, Inc. 1990-1993");
+				break;
+			case 6:
+				addLine(L"");
+				addLine(L"OpenXcom initialisation");
+				break;
+			case 7:
+				addLine(L"");
+				if (Options::mute)
+				{
+					addLine(L"No Sound Detected");
+				}
+				else
+				{
+					addLine(L"SoundBlaster Sound Effects");
+					if (Options::preferredMusic == MUSIC_MIDI)
+						addLine(L"General MIDI Music");
+					else
+						addLine(L"SoundBlaster Music");
+					addLine(L"Base Port 220  Irq 7  Dma 1");
+				}
+				addLine(L"");
+				break;
+			case 9:
+				addLine(ss.str());
+				break;
+			}
+		}
 	}
-#endif
+}
+
+/**
+ * Adds a line of text to the terminal and moves
+ * the cursor appropriately.
+ * @param str Text line to add.
+ */
+void StartState::addLine(const std::wstring &str)
+{
+	_output << L"\n" << str;
+	_text->setText(_output.str());
+	int y = _text->getTextHeight() - _font->getHeight();
+	int x = _text->getTextWidth(y / _font->getHeight());
+	_cursor->setX(x);
+	_cursor->setY(y);
 }
 
 /**
  * Loads game data and updates status accordingly.
  * @param game_ptr Pointer to the game.
+ * @return Thread status, 0 = ok
  */
 int StartState::load(void *game_ptr)
 {
@@ -238,6 +316,12 @@ int StartState::load(void *game_ptr)
 		loading = LOADING_SUCCESSFUL;
 	}
 	catch (Exception &e)
+	{
+		error = e.what();
+		Log(LOG_ERROR) << error;
+		loading = LOADING_FAILED;
+	}
+	catch (YAML::Exception &e)
 	{
 		error = e.what();
 		Log(LOG_ERROR) << error;

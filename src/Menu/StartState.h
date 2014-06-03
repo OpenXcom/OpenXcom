@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,11 +20,15 @@
 #define OPENXCOM_STARTSTATE_H
 
 #include "../Engine/State.h"
+#include <sstream>
 
 namespace OpenXcom
 {
 
-class Surface;
+class Text;
+class Font;
+class Timer;
+class Language;
 
 enum LoadingPhase { LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_DONE };
 
@@ -34,8 +38,14 @@ enum LoadingPhase { LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING
 class StartState : public State
 {
 private:
-	Surface *_surface;
+	Text *_text, *_cursor;
+	Font *_font;
+	Timer *_timer;
+	Language *_lang;
+	int _anim;
+
 	SDL_Thread *_thread;
+	std::wostringstream _output;
 public:
 	static LoadingPhase loading;
 	static std::string error;
@@ -50,8 +60,10 @@ public:
 	void think();
 	/// Handles key clicks.
 	void handle(Action *action);
-	/// Flash the window.
-	void flash();
+	/// Animates the terminal.
+	void animate();
+	/// Adds a line of text.
+	void addLine(const std::wstring &str);
 	/// Loads the game resources.
 	static int load(void *game_ptr);
 };

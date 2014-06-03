@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,6 +47,7 @@ namespace OpenXcom
  * @param save Pointer to battlesavegame.
  * @param action An action.
  * @param origin Position the projectile originates from.
+ * @param targetVoxel Position the projectile is targeting.
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0)
 {

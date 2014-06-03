@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -129,6 +129,17 @@ void BattlescapeMessage::blit(Surface *surface)
 	Surface::blit(surface);
 	_window->blit(surface);
 	_text->blit(surface);
+}
+
+/*
+ * Special handling for setting the height of the battlescape message.
+ * @param height the new height.
+ */
+void BattlescapeMessage::setHeight(int height)
+{
+	Surface::setHeight(height);
+	_window->setHeight(height);
+	_text->setHeight(height);
 }
 
 }

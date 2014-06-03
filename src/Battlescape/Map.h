@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -61,7 +61,7 @@ private:
 	int _animFrame;
 	Projectile *_projectile;
 	bool _projectileInFOV;
-	std::set<Explosion *> _explosions;
+	std::list<Explosion *> _explosions;
 	bool _explosionInFOV, _launch;
 	BattlescapeMessage *_message;
 	Camera *_camera;
@@ -119,7 +119,7 @@ public:
 	/// Gets projectile.
 	Projectile *getProjectile() const;
 	/// Gets explosion set.
-	std::set<Explosion*> *getExplosions();
+	std::list<Explosion*> *getExplosions();
 	/// Gets the pointer to the camera.
 	Camera *getCamera();
 	/// Mouse-scrolls the camera.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -92,7 +92,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_save = _game->getSavedGame()->getSavedBattle();
 	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, 0, 0);
 	_message->setX(_game->getScreen()->getDX());
-	_message->setY(_game->getScreen()->getDY());
+	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
@@ -126,7 +126,7 @@ Map::~Map()
 void Map::init()
 {
 	// load the tiny arrow into a surface
-	int f = Palette::blockOffset(1)+1; // yellow
+	int f = Palette::blockOffset(1); // yellow
 	int b = 15; // black
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
@@ -182,7 +182,7 @@ void Map::draw()
 	_explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
-		for (std::set<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+		for (std::list<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
 			t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
 			if (t && ((*i)->isBig() || t->getVisible()))
@@ -351,8 +351,8 @@ void Map::drawTerrain(Surface *surface)
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
 	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
-	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
-	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
+	_camera->convertScreenToMap(surface->getWidth() + _spriteWidth, surface->getHeight() + _spriteHeight, &endX, &dummy);
+	_camera->convertScreenToMap(0, surface->getHeight() + _spriteHeight, &dummy, &endY);
 	beginY -= (_camera->getViewLevel() * 2);
 	beginX -= (_camera->getViewLevel() * 2);
 	if (beginX < 0)
@@ -568,16 +568,6 @@ void Map::drawTerrain(Surface *surface)
 									tileWestShade = 16;
 									westUnit = 0;
 								}
-								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
-								if (tmpSurface)
-								{
-									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() || tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-											&& tileWest->isDiscovered(1))
-										wallShade = tileWest->getShade();
-									else
-										wallShade = tileWestShade;
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
-								}
 								tmpSurface = tileWest->getSprite(MapData::O_WESTWALL);
 								if (tmpSurface && bu != unit)
 								{
@@ -588,8 +578,18 @@ void Map::drawTerrain(Surface *surface)
 										wallShade = tileWestShade;
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset() + tileOffset.y, wallShade, true);
 								}
-								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
 								if (tmpSurface)
+								{
+									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() || tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+											&& tileWest->isDiscovered(1))
+										wallShade = tileWest->getShade();
+									else
+										wallShade = tileWestShade;
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
+								}
+								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+								if (tmpSurface && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
 									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
@@ -1069,9 +1069,14 @@ void Map::drawTerrain(Surface *surface)
 		{
 			offset.y += 4;
 		}
+		offset.y += 24 - unit->getHeight();
+		if (unit->isKneeled())
+		{
+			offset.y -= 2;
+		}
 		if (this->getCursorType() != CT_NONE)
 		{
-			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + 4*sin((_animFrame*6.28)/8), 0);
+			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + sin((_animFrame*2*M_PI)/4), 0);
 		}
 	}
 	delete _numWaypid;
@@ -1079,7 +1084,7 @@ void Map::drawTerrain(Surface *surface)
 	// check if we got big explosions
 	if (_explosionInFOV)
 	{
-		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+		for (std::list<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
 			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
@@ -1173,7 +1178,6 @@ void Map::setSelectorPosition(int mx, int my)
 {
 	int oldX = _selectorX, oldY = _selectorY;
 
-	if (!mx && !my) return; // cursor is offscreen
 	_camera->convertScreenToMap(mx, my + _spriteHeight/4, &_selectorX, &_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
@@ -1448,7 +1452,7 @@ Projectile *Map::getProjectile() const
  * Gets a list of explosion sprites on the map.
  * @return A list of explosion sprites.
  */
-std::set<Explosion*> *Map::getExplosions()
+std::list<Explosion*> *Map::getExplosions()
 {
 	return &_explosions;
 }
@@ -1522,7 +1526,8 @@ void Map::setHeight(int height)
 {
 	Surface::setHeight(height);
 	_visibleMapHeight = height - ICON_HEIGHT;
-	_message->setY(height/2 - _message->getHeight()/2);
+	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight : 200);
+	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
 }
 /*
  * Special handling for setting the width of the map viewport.
@@ -1530,7 +1535,8 @@ void Map::setHeight(int height)
  */
 void Map::setWidth(int width)
 {
+	int dX = width - getWidth();
 	Surface::setWidth(width);
-	_message->setX(width/2 - _message->getWidth()/2);
+	_message->setX(_message->getX() + dX / 2);
 }
 }

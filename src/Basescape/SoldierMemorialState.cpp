@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -96,8 +96,8 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 	_txtDate->setColor(Palette::blockOffset(13)+10);
 	_txtDate->setText(tr("STR_DATE_UC"));
 
-	int lost = _game->getSavedGame()->getDeadSoldiers()->size();
-	int recruited = lost;
+	size_t lost = _game->getSavedGame()->getDeadSoldiers()->size();
+	size_t recruited = lost;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		recruited += (*i)->getTotalSoldiers();

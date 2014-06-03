@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -69,7 +69,7 @@ void Music::load(const std::string &filename)
  * @param data Pointer to the music file in memory
  * @param size Size of the music file in bytes.
  */
-void Music::load(const void *data, size_t size)
+void Music::load(const void *data, int size)
 {
 #ifndef __NO_MUSIC
 	SDL_RWops *rwops = SDL_RWFromConstMem(data, size);
@@ -124,7 +124,8 @@ void Music::pause()
 	if (!Options::mute)
 	{
 		Mix_PauseMusic();
-		Mix_HookMusic(NULL, NULL);
+		if (Mix_GetMusicType(0) == MUS_NONE)
+			Mix_HookMusic(NULL, NULL);
 	}
 #endif
 }
@@ -138,7 +139,8 @@ void Music::resume()
 	if (!Options::mute)
 	{
 		Mix_ResumeMusic();
-		Mix_HookMusic(AdlibMusic::player, NULL);
+		if (Mix_GetMusicType(0) == MUS_NONE)
+			Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
 }

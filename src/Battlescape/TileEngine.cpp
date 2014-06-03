@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -422,7 +422,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		Tile *t = _save->getTile(currentUnit->getPosition());
-		int visibleDistance = _trajectory.size();
+		size_t visibleDistance = _trajectory.size();
 		for (size_t i = 0; i < _trajectory.size(); i++)
 		{
 			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
@@ -1818,12 +1818,16 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 			{
 			case 0: // north
 				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				if (x != 0)
+				{
+					checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
+				}
 				break;
 			case 1: // north east
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-					checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
 					checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
 					checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
 				}
@@ -1832,34 +1836,48 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
 				break;
 			case 3: // south-east
+				if (!y)
+					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
+				if (!x)
+					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
 				if (rClick)
 				{
 					checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
 					checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
-					checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
 				}
 				break;
 			case 4: // south
 				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
 				break;
 			case 5: // south-west
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
 					checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
 					checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-					checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
 				}
 				break;
 			case 6: // west
 				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				if (y != 0)
+				{
+					checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
+				}
 				break;
 			case 7: // north-west
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				if (x)
+				{
+					checkPositions.push_back(std::make_pair(Position(-1, -1, 0), MapData::O_WESTWALL)); // one tile north
+				}
+				if (y)
+				{
+					checkPositions.push_back(std::make_pair(Position(-1, -1, 0), MapData::O_NORTHWALL)); // one tile north
+				}
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-					checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
 					checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
 					checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
 				}
@@ -2569,8 +2587,9 @@ bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int d
  * Validates the melee range between a tile and a unit.
  * @param pos Position to check from.
  * @param direction Direction to check.
- * @param size For large units, we have to do extra checks.
+ * @param attacker The attacking unit.
  * @param target The unit we want to attack, 0 for any unit.
+ * @param dest Destination position.
  * @return True when the range is valid.
  */
 bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest)
@@ -2626,6 +2645,7 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attack
 
 /**
  * Gets the AI to look through a window.
+ * @param position Current position.
  * @return Direction or -1 when no window found.
  */
 int TileEngine::faceWindow(const Position &position)
@@ -2650,7 +2670,7 @@ int TileEngine::faceWindow(const Position &position)
  * @param action The action to validate.
  * @param originVoxel The origin point of the action.
  * @param targetVoxel The target point of the action.
- * @param curvature The curvature of the throw.
+ * @param curve The curvature of the throw.
  * @param voxelType The type of voxel at which this parabola terminates.
  * @return Validity of action.
  */
@@ -2660,7 +2680,7 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 	double curvature = 0.5;
 	if (action.type == BA_THROW)
 	{
-		curvature = std::max(0.48, 1.73 / sqrt(sqrt((double)(action.actor->getStats()->strength / action.weapon->getRules()->getWeight()))) + (action.actor->isKneeled()? 0.1 : 0.0));
+		curvature = std::max(0.48, 1.73 / sqrt(sqrt((double)(action.actor->getStats()->strength) / (double)(action.weapon->getRules()->getWeight()))) + (action.actor->isKneeled()? 0.1 : 0.0));
 	}
 	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
@@ -2720,6 +2740,8 @@ void TileEngine::recalculateFOV()
 
 /**
  * Returns the direction from origin to target.
+ * @param origin The origin point of the action.
+ * @param target The target point of the action.
  * @return direction.
  */
 int TileEngine::getDirectionTo(const Position &origin, const Position &target) const
@@ -2766,6 +2788,12 @@ int TileEngine::getDirectionTo(const Position &origin, const Position &target) c
 	return dir;
 }
 
+/**
+ * Gets the origin voxel of a certain action.
+ * @param action Battle action.
+ * @param tile Pointer to the action tile.
+ * @return origin position.
+ */
 Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 {
 	
@@ -2835,7 +2863,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 	return originVoxel;
 }
 
-/*
+/**
  * mark a region of the map as "dangerous" for a turn.
  * @param pos is the epicenter of the explosion.
  * @param radius how far to spread out.

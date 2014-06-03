@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -105,7 +105,7 @@ public:
 	/// Checks if the camera is showing all map layers.
 	bool getShowAllLayers() const;
 	/// Checks if map coordinates X,Y,Z are on screen.
-	bool isOnScreen(const Position &mapPos) const;
+	bool isOnScreen(const Position &mapPos, const bool unitWalking) const;
 	/// Resize the viewable area.
 	void resize();
 	/// stop mouse scrolling.
