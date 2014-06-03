@@ -103,6 +103,7 @@ public:
 			return _surface->format->palette->colors;
 		}
 		else
+		{
 			return NULL;
 		}
 	}
