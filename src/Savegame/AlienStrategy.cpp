@@ -113,6 +113,7 @@ YAML::Node AlienStrategy::save() const
 
 /**
  * Choose one of the regions for a mission.
+ * @param rules Pointer to the ruleset.
  * @return The region id.
  */
 const std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)

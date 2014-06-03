@@ -1,5 +1,5 @@
 	/*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -97,6 +97,8 @@ public:
 	static bool isHQXEnabled();
 	/// Checks whether OpenGL output is requested
 	static bool isOpenGLEnabled();
+	/// update the game scale as required.
+	static void updateScale(int &type, int selection, int &x, int &y, bool change);
 };
 
 }

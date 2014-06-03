@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -202,15 +202,16 @@ void BuildNewBaseState::hoverRedraw(void)
 {
 	double lon, lat;
 	_globe->cartToPolar(_mousex, _mousey, &lon, &lat);
-	_globe->setNewBaseHoverPos(lon,lat);
-
-	_globe->setNewBaseHover();
-	
+	if (lon == lon && lat == lat)
+	{
+		_globe->setNewBaseHoverPos(lon,lat);
+		_globe->setNewBaseHover();
+	}
 	if (Options::globeRadarLines && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
 	{
 		_oldlat=lat;
 		_oldlon=lon;
-		_globe->draw();
+		_globe->invalidate();
 	}
 }
 

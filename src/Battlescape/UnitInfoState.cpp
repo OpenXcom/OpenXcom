@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,13 +23,14 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
+#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Engine/Surface.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
@@ -46,13 +47,22 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param unit Pointer to the selected unit.
  * @param parent Pointer to parent Battlescape.
+ * @param fromInventory Is player coming from the inventory?
+ * @param mindProbe Is player using a Mind Probe?
  */
 UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent, bool fromInventory, bool mindProbe) : State(game), _unit(unit), _parent(parent), _fromInventory(fromInventory), _mindProbe(mindProbe)
 {
+	if (Options::maximizeInfoScreens)
+	{
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	}
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
+	_exit = new InteractiveSurface(320, 180, 0, 20);
 	_txtName = new Text(288, 17, 16, 4);
 
 	int yPos = 38;
@@ -157,6 +167,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
+	add(_exit);
 	add(_txtName);
 
 	add(_txtTimeUnits);
@@ -241,6 +252,10 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
+
+	_exit->onMouseClick((ActionHandler)&UnitInfoState::exitClick);
+	_exit->onKeyboardPress((ActionHandler)&UnitInfoState::exitClick, Options::keyCancel);
+	_exit->onKeyboardPress((ActionHandler)&UnitInfoState::exitClick, Options::keyBattleStats);
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
@@ -616,7 +631,7 @@ void UnitInfoState::handle(Action *action)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_game->popState();
+			exitClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
@@ -627,21 +642,13 @@ void UnitInfoState::handle(Action *action)
 			if (!_mindProbe) btnPrevClick(action);
 		}
 	}
-	if (action->getDetails()->type == SDL_KEYDOWN)
-	{
-		if (action->getDetails()->key.keysym.sym == Options::keyCancel ||
-			action->getDetails()->key.keysym.sym == Options::keyBattleStats)
-		{
-			_game->popState();
-		}
-	}
 }
 
 /**
-* Selects the previous unit.
-* @param action Pointer to an action.
-*/
-void UnitInfoState::btnPrevClick(Action *)
+ * Selects the previous unit.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::btnPrevClick(Action *action)
 {
 	if (_parent)
 	{ // so we are here from a Battlescape Game
@@ -658,15 +665,15 @@ void UnitInfoState::btnPrevClick(Action *)
 	}
 	else
 	{
-		_game->popState();
+		exitClick(action);
 	}
 }
 
 /**
-* Selects the next unit.
-* @param action Pointer to an action.
-*/
-void UnitInfoState::btnNextClick(Action *)
+ * Selects the next unit.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::btnNextClick(Action *action)
 {
 	if (_parent)
 	{ // so we are here from a Battlescape Game
@@ -683,8 +690,22 @@ void UnitInfoState::btnNextClick(Action *)
 	}
 	else
 	{
-		_game->popState();
+		exitClick(action);
 	}
+}
+
+/**
+ * Exits the screen.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::exitClick(Action *)
+{
+	if (!_fromInventory && Options::maximizeInfoScreens)
+	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
+	}
+	_game->popState();
 }
 
 }

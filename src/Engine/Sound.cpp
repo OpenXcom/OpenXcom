@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -76,6 +76,7 @@ void Sound::load(const void *data, unsigned int size)
 
 /**
  * Plays the contained sound effect.
+ * @param channel Use specified channel, -1 to use any channel
  */
 void Sound::play(int channel) const
 {

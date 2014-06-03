@@ -32,11 +32,11 @@ namespace OpenXcom
 struct TrajectoryWaypoint
 {
 	/// The mission zone.
-	unsigned zone;
+	size_t zone;
 	/// The altitude to reach.
-	unsigned altitude;
+	size_t altitude;
 	/// The speed percentage ([0..100])
-	unsigned speed;
+	size_t speed;
 };
 
 YAML::Emitter &operator<<(YAML::Emitter &emitter, const TrajectoryWaypoint &wp);
@@ -70,26 +70,26 @@ public:
 	 * @param wp The waypoint.
 	 * @return The zone index.
 	 */
-	unsigned getZone(unsigned wp) const { return _waypoints[wp].zone; }
+	size_t getZone(size_t wp) const { return _waypoints[wp].zone; }
 
 	/// Gets the altitude at a waypoint.
-	std::string getAltitude(unsigned wp) const;
+	std::string getAltitude(size_t wp) const;
 
 	/**
 	 * Gets the speed percentage at a waypoint.
 	 * @param wp The waypoint.
 	 * @return The speed as a percentage.
 	 */
-	float getSpeedPercentage(unsigned wp) const { return _waypoints[wp].speed / 100.0f; }
+	float getSpeedPercentage(size_t wp) const { return _waypoints[wp].speed / 100.0f; }
 
 	/**
 	 * Gets the number of seconds UFOs should spend on the ground.
 	 * @return The number of seconds.
 	 */
-	unsigned groundTimer() const { return _groundTimer; }
+	size_t groundTimer() const { return _groundTimer; }
 private:
 	std::string _id;
-	unsigned _groundTimer;
+	size_t _groundTimer;
 	std::vector<TrajectoryWaypoint> _waypoints;
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,14 +46,12 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage, _interceptionOrder;
+	int _id, _fuel, _damage, _interceptionOrder, _takeoff;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
 	std::string _status;
-	bool _lowFuel;
-	bool _inBattlescape;
-	bool _inDogfight;
+	bool _lowFuel, _inBattlescape, _inDogfight;
 	std::wstring _name;
 public:
 	/// Creates a craft of the specified type.

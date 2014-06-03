@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -95,7 +95,6 @@ void FpsCounter::handle(Action *action)
  */
 void FpsCounter::think()
 {
-	_frames++;
 	_timer->think(0, this);
 }
 
@@ -119,4 +118,8 @@ void FpsCounter::draw()
 	_text->blit(this);
 }
 
+void FpsCounter::addFrame()
+{
+	_frames++;
+}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,6 +51,7 @@ Text::~Text()
 /**
  * Takes an integer value and formats it as number with separators (spacing the thousands).
  * @param value The value.
+ * @param currency Currency symbol.
  * @return The formatted string.
  */
 std::wstring Text::formatNumber(int value, std::wstring currency)
@@ -294,33 +295,49 @@ Uint8 Text::getSecondaryColor() const
 
 /**
  * Returns the rendered text's height. Useful to check if wordwrap applies.
+ * @param line Line to get the height, or -1 to get whole text height.
  * @return Height in pixels.
  */
-int Text::getTextHeight() const
+int Text::getTextHeight(int line) const
 {
-	int height = 0;
-	for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
+	if (line == -1)
 	{
-		height += *i;
+		int height = 0;
+		for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
+		{
+			height += *i;
+		}
+		return height;
 	}
-	return height;
+	else
+	{
+		return _lineHeight[line];
+	}
 }
 
 /**
-  * Returns the rendered text's width.
-  * @return Width in pixels.
-  */
-int Text::getTextWidth() const
+ * Returns the rendered text's width.
+ * @param line Line to get the width, or -1 to get whole text width.
+ * @return Width in pixels.
+ */
+int Text::getTextWidth(int line) const
 {
-	int width = 0;
-	for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); ++i)
+	if (line == -1)
 	{
-		if (*i > width)
+		int width = 0;
+		for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); ++i)
 		{
-			width = *i;
+			if (*i > width)
+			{
+				width = *i;
+			}
 		}
+		return width;
 	}
-	return width;
+	else
+	{
+		return _lineWidth[line];
+	}
 }
 
 /**
@@ -454,7 +471,7 @@ int Text::getLineX(int line) const
 		case ALIGN_LEFT:
 			break;
 		case ALIGN_CENTER:
-			x = (int)ceil((getWidth() - 1 - _lineWidth[line]) / 2.0);
+			x = (int)ceil((getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.0);
 			break;
 		case ALIGN_RIGHT:
 			x = getWidth() - 1 - _lineWidth[line];
@@ -468,7 +485,7 @@ int Text::getLineX(int line) const
 			x = getWidth() - 1;
 			break;
 		case ALIGN_CENTER:
-			x = getWidth() - (int)ceil((getWidth() - 1 - _lineWidth[line]) / 2.0);
+			x = getWidth() - (int)ceil((getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.0);
 			break;
 		case ALIGN_RIGHT:
 			x = _lineWidth[line];

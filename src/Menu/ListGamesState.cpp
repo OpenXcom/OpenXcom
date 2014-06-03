@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -228,8 +228,8 @@ void ListGamesState::updateArrows()
 }
 
 /**
- * Updates the save game list with the current list
- * of available savegames.
+ * Sorts the save game list.
+ * @param sort Order to sort the games in.
  */
 void ListGamesState::sortList(SaveSort sort)
 {

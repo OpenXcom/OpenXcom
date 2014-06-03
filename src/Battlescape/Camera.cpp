@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -87,13 +87,16 @@ void Camera::minMaxInt(int *value, const int minValue, const int maxValue) const
  */
 void Camera::mousePress(Action *action, State *)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (Options::battleDragScrollButton != SDL_BUTTON_MIDDLE || (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 	{
-		up();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		down();
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		{
+			up();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		{
+			down();
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{
@@ -567,20 +570,31 @@ bool Camera::getShowAllLayers() const
 /**
  * Checks if map coordinates X,Y,Z are on screen.
  * @param mapPos Coordinates to check.
+ * @param unitWalking True to offset coordinates for a unit walking.
  * @return True if the map coordinates are on screen.
  */
-bool Camera::isOnScreen(const Position &mapPos) const
+bool Camera::isOnScreen(const Position &mapPos, const bool unitWalking) const
 {
 	Position screenPos;
 	convertMapToScreen(mapPos, &screenPos);
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
-	return screenPos.x >= -32
-		&& screenPos.x <= _screenWidth + 24
-		&& screenPos.y >= -32
-		&& ((screenPos.y <= _screenHeight + 8 && (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2 || screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32))
-		||
-		screenPos.y <= _screenHeight - 16);
+	if (unitWalking)
+	{
+		return screenPos.x >= -32
+			&& screenPos.x <= _screenWidth + 24
+			&& screenPos.y >= -32
+			&& ((screenPos.y <= _screenHeight + 8 && (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2 || screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32))
+			||
+			screenPos.y <= _screenHeight - 16);
+	}
+	else
+	{
+		return screenPos.x >= 0
+			&& screenPos.x <= _screenWidth - 10
+			&& screenPos.y >= 0
+			&& screenPos.y <= _screenHeight - 10;
+	}
 }
 
 /**

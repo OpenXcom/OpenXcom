@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -192,9 +192,10 @@ public:
 	/// Gets the retaliation status of this base.
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
-	unsigned getDetectionChance(int difficulty) const;
+	size_t getDetectionChance(int difficulty) const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
+	/// Setup base defenses.
 	void setupDefenses();
 	/// Get a list of Defensive Facilities
 	std::vector<BaseFacility*> *getDefenses();

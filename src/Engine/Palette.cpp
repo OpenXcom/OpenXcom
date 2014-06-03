@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -73,7 +73,9 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 		_colors[i].r = value[0] * 4;
 		_colors[i].g = value[1] * 4;
 		_colors[i].b = value[2] * 4;
+		_colors[i].unused = 255;
 	}
+	_colors[0].unused = 0;
 
 	palFile.close();
 }

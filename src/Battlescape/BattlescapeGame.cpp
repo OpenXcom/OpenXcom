@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -84,7 +84,6 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
-
 }
 
 
@@ -93,6 +92,11 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
  */
 BattlescapeGame::~BattlescapeGame()
 {
+	for (std::list<BattleState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+	{
+		delete *i;
+	}
+	cleanupDeleted();
 }
 
 /**
@@ -153,7 +157,7 @@ void BattlescapeGame::think()
  */
 void BattlescapeGame::init()
 {
-	if (_save->getSide() == FACTION_PLAYER)
+	if (_save->getSide() == FACTION_PLAYER && _save->getTurn() > 1)
 	{
 		_playerPanicHandled = false;
 	}
@@ -364,6 +368,7 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
  */
 void BattlescapeGame::endTurn()
 {
+
 	Position p;
 
 	_tuReserved = _playerTUReserved;
@@ -470,7 +475,6 @@ void BattlescapeGame::endTurn()
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}
 	_endTurnRequested = false;
-
 }
 
 
@@ -913,6 +917,7 @@ void BattlescapeGame::popState()
 		_parentState->warning(action.result);
 		actionFailed = true;
 	}
+	_deleted.push_back(_states.front());
 	_states.pop_front();
 
 	// handle the end of this unit's actions
@@ -1053,6 +1058,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * Checks against reserved time units.
  * @param bu Pointer to the unit.
  * @param tu Number of time units to check.
+ * @param justChecking True to suppress error messages, false otherwise.
  * @return bool Whether or not we got enough time units.
  */
 bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
@@ -1622,7 +1628,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
  * Converts a unit into a unit of another type.
  * @param unit The unit to convert.
  * @param newType The type of unit to convert to.
- * @param Pointer to the new unit.
+ * @return Pointer to the new unit.
  */
 BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 {
@@ -2162,6 +2168,15 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
 		}
 	}
 	return false;
+}
+
+void BattlescapeGame::cleanupDeleted()
+{
+	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
+	{
+		delete *i;
+	}
+	_deleted.clear();
 }
 
 }

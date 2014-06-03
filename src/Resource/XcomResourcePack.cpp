@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -73,6 +73,8 @@ struct HairBleach
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
+ * @param extraSprites List of mod extra sprites.
+ * @param extraSounds List of mod extra sounds.
  */
 XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
 {
@@ -99,22 +101,22 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		_palettes[s2]->loadDat(CrossPlatform::getDataFile(s1), 256, Palette::palOffset(4));
 
 		// Last 16 colors are a greyish gradient
-		SDL_Color gradient[] = {{140, 152, 148, 0},
-								{132, 136, 140, 0},
-								{116, 124, 132, 0},
-								{108, 116, 124, 0},
-								{92, 104, 108, 0},
-								{84, 92, 100, 0},
-								{76, 80, 92, 0},
-								{56, 68, 84, 0},
-								{48, 56, 68, 0},
-								{40, 48, 56, 0},
-								{32, 36, 48, 0},
-								{24, 28, 32, 0},
-								{16, 20, 24, 0},
-								{8, 12, 16, 0},
-								{3, 4, 8, 0},
-								{3, 3, 6, 0}};
+		SDL_Color gradient[] = {{140, 152, 148, 255},
+								{132, 136, 140, 255},
+								{116, 124, 132, 255},
+								{108, 116, 124, 255},
+								{92, 104, 108, 255},
+								{84, 92, 100, 255},
+								{76, 80, 92, 255},
+								{56, 68, 84, 255},
+								{48, 56, 68, 255},
+								{40, 48, 56, 255},
+								{32, 36, 48, 255},
+								{24, 28, 32, 255},
+								{16, 20, 24, 255},
+								{8, 12, 16, 255},
+								{3, 4, 8, 255},
+								{3, 3, 6, 255}};
 		for (size_t i = 0; i < sizeof(gradient)/sizeof(gradient[0]); ++i)
 		{
 			SDL_Color *color = _palettes[s2]->getColors(Palette::backPos + 16 + i);
@@ -817,11 +819,8 @@ void XcomResourcePack::loadBattlescapeResources()
 	// incomplete chryssalid set: 1.0 data: stop loading.
 	if (!_sets["CHRYS.PCK"]->getFrame(225))
 	{
-		Log(LOG_FATAL) << "Version 1.0 data detected." << std::endl << std::endl << "please install the official patches" << std::endl
-			<< "from http://www.strategycore.co.uk/files/ufo-1.2/" << std::endl
-			<< "and http://www.strategycore.co.uk/files/ufo-1.4/" << std::endl;
-		;
-		throw Exception("Invalid data, please check logfile.");
+		Log(LOG_FATAL) << "Version 1.0 data detected";
+		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version");
 	}
 	s.str("");
 	s << "GEODATA/" << "LOFTEMPS.DAT";
@@ -908,6 +907,7 @@ void XcomResourcePack::loadBattlescapeResources()
 /**
  * Determines if an image file is an acceptable format for the game.
  * @param extension Image file extension.
+ * @return True/false
  */
 bool XcomResourcePack::isImageFile(std::string extension)
 {

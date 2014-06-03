@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -57,6 +57,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Blits the warning message.
 	void blit(Surface *surface);
+	/// Special handling for setting the height of the battlescape message.
+	void setHeight(int height);
 };
 
 }

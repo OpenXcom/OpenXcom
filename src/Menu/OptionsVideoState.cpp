@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -80,7 +80,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res != (SDL_Rect**)-1 && (SDL_Rect**)0)
+	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
 	{
 		int i;
 		_resCurrent = -1;
@@ -213,7 +213,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_cbxLanguage->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
 	std::vector<std::wstring> filterNames;
-	filterNames.push_back(L"-");
+	filterNames.push_back(tr("STR_DISABLED"));
 	filterNames.push_back(L"Scale");
 	filterNames.push_back(L"HQX");
 	_filters.push_back("");
@@ -526,7 +526,7 @@ void OptionsVideoState::updateBattlescapeScale(Action *)
 void OptionsVideoState::resize(int &dX, int &dY)
 {
 	OptionsBaseState::resize(dX, dY);
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << Options::displayWidth;
 	_txtDisplayWidth->setText(ss.str());
 	ss.str(L"");

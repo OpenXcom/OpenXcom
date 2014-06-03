@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -300,6 +300,7 @@ int Screen::getHeight() const
 /**
  * Resets the screen surfaces based on the current display options,
  * as they don't automatically take effect.
+ * @param resetVideo Reset display surface.
  */
 void Screen::resetDisplay(bool resetVideo)
 {
@@ -387,7 +388,7 @@ void Screen::resetDisplay(bool resetVideo)
 
 	if (_scaleX > _scaleY && Options::keepAspectRatio)
 	{
-		int targetWidth = floor(_scaleY * (double)_baseWidth);
+		int targetWidth = (int)floor(_scaleY * (double)_baseWidth);
 		_topBlackBand = _bottomBlackBand = 0;
 		_leftBlackBand = (getWidth() - targetWidth) / 2;
 		if (_leftBlackBand < 0)
@@ -409,7 +410,7 @@ void Screen::resetDisplay(bool resetVideo)
 	}
 	else if (_scaleY > _scaleX && Options::keepAspectRatio)
 	{
-		int targetHeight = floor(_scaleX * (double)_baseHeight);
+		int targetHeight = (int)floor(_scaleX * (double)_baseHeight);
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)
 		{
@@ -522,8 +523,10 @@ void Screen::screenshot(const std::string &filename) const
 }
 
 
-/** Check whether useHQXFilter is set in Options and a compatible resolution
- *  has been selected.
+/** 
+ * Check whether useHQXFilter is set in Options and a compatible resolution
+ * has been selected.
+ * @return if it is enabled.
  */
 bool Screen::isHQXEnabled()
 {
@@ -544,7 +547,7 @@ bool Screen::isHQXEnabled()
 }
 
 /**
- * Check if openGl is enabled.
+ * Check if OpenGL is enabled.
  * @return if it is enabled.
  */
 bool Screen::isOpenGLEnabled()
@@ -572,6 +575,57 @@ int Screen::getDX()
 int Screen::getDY()
 {
 	return (_baseHeight - ORIGINAL_HEIGHT) / 2;
+}
+
+/**
+* Changes a given scale, and if necessary, switch the current base resolution.
+* @param type reference to which scale option we are using, battlescape or geoscape.
+* @param selection the new scale level.
+* @param width reference to which x scale to adjust.
+* @param height reference to which y scale to adjust.
+* @param change should we change the current scale.
+*/
+void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
+{
+	type = selection;
+	switch (type)
+	{
+	case SCALE_15X:
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
+		break;
+	case SCALE_2X:
+		width = Screen::ORIGINAL_WIDTH * 2;
+		height = Screen::ORIGINAL_HEIGHT * 2;
+		break;
+	case SCALE_SCREEN_DIV_3:
+		width = Options::newDisplayWidth / 3;
+		height = Options::newDisplayHeight / 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		width = Options::newDisplayWidth / 2;
+		height = Options::newDisplayHeight / 2;
+		break;
+	case SCALE_SCREEN:
+		width = Options::newDisplayWidth;
+		height = Options::newDisplayHeight;
+		break;
+	case SCALE_ORIGINAL:
+	default:
+		width = Screen::ORIGINAL_WIDTH;
+		height = Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
+	// don't go under minimum resolution... it's bad, mmkay?
+	width = std::max(width, Screen::ORIGINAL_WIDTH);
+	height = std::max(height, Screen::ORIGINAL_HEIGHT);
+
+	if (change && (Options::baseXResolution != width || Options::baseYResolution != height))
+	{
+		Options::baseXResolution = width;
+		Options::baseYResolution = height;
+	}
 }
 
 }

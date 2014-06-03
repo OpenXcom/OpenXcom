@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -792,7 +792,8 @@ void DebriefingState::prepareDebriefing()
 				}
 				// 10 points for recovery
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+				RuleResearch *research = _game->getRuleset()->getResearch(type);
+				if (research != 0 && _game->getSavedGame()->isResearchAvailable(research, _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
 					// more points if it's not researched
 					addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10);
@@ -1220,7 +1221,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						// It's a weapon, count any rounds left in the clip.
 						{
 							BattleItem *clip = (*it)->getAmmoItem();
-							if (clip && clip->getRules()->getClipSize() > 0)
+							if (clip && clip->getRules()->getClipSize() > 0 && clip != *it)
 							{
 								_rounds[clip->getRules()] += clip->getAmmoQuantity();
 							}

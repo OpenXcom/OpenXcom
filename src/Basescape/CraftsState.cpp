@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -108,7 +108,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);
+	_lstCrafts->setColumns(5, 94, 68, 44, 46, 28);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);

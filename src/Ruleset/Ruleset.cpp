@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -524,9 +524,11 @@ void Ruleset::loadFiles(const std::string &dirname)
 
 /**
  * Loads a rule element, adding/removing from vectors as necessary.
+ * @param node YAML node.
  * @param map Map associated to the rule type.
- * @param vector Index vector for the rule type.
+ * @param index Index vector for the rule type.
  * @param key Rule key name.
+ * @return Pointer to new rule if one was created, or NULL if one was removed.
  */
 template <typename T>
 T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
@@ -567,7 +569,6 @@ T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std
 			}
 		}
 	}
-
 	return rule;
 }
 
@@ -1345,6 +1346,7 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
 /**
  * Creates a new randomly-generated soldier.
  * @param save Saved game the soldier belongs to.
+ * @return Newly generated soldier.
  */
 Soldier *Ruleset::genSoldier(SavedGame *save) const
 {

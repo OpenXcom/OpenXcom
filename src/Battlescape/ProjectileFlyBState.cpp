@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -423,6 +423,11 @@ void ProjectileFlyBState::think()
 			&& (hasFloor || unitCanFly))
 		{
 			createNewProjectile();
+			if (_action.cameraPosition.z != -1)
+			{
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+				_parent->getMap()->invalidate();
+			}
 		}
 		else
 		{
@@ -544,7 +549,7 @@ void ProjectileFlyBState::think()
 								if (_projectileImpact != V_OUTOFBOUNDS)
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation(), false, false);
-									_parent->getMap()->getExplosions()->insert(explosion);
+									_parent->getMap()->getExplosions()->push_back(explosion);
 									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), 0);
 								}
 								++i;
@@ -618,13 +623,16 @@ void ProjectileFlyBState::cancel()
 	{
 		_parent->getMap()->getProjectile()->skipTrajectory();
 		Position p = _parent->getMap()->getProjectile()->getPosition();
-		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24)))
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false))
 			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x/16, p.y/16, p.z/24));
 	}
 }
 
 /**
  * Validates the throwing range.
+ * @param action Pointer to throw action.
+ * @param origin Position to throw from.
+ * @param target Tile to throw to.
  * @return True when the range is valid.
  */
 bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin, Tile *target)

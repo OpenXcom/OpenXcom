@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -149,7 +149,7 @@ void TextList::unpress(State *state)
  * @param column Column number.
  * @param color Text color.
  */
-void TextList::setCellColor(int row, int column, Uint8 color)
+void TextList::setCellColor(size_t row, size_t column, Uint8 color)
 {
 	_texts[row][column]->setColor(color);
 	_redraw = true;
@@ -160,7 +160,7 @@ void TextList::setCellColor(int row, int column, Uint8 color)
  * @param row Row number.
  * @param color Text color.
  */
-void TextList::setRowColor(int row, Uint8 color)
+void TextList::setRowColor(size_t row, Uint8 color)
 {
 	for (std::vector<Text*>::iterator i = _texts[row].begin(); i < _texts[row].end(); ++i)
 	{
@@ -175,7 +175,7 @@ void TextList::setRowColor(int row, Uint8 color)
  * @param column Column number.
  * @return Text string.
  */
-std::wstring TextList::getCellText(int row, int column) const
+std::wstring TextList::getCellText(size_t row, size_t column) const
 {
 	return _texts[row][column]->getText();
 }
@@ -186,7 +186,7 @@ std::wstring TextList::getCellText(int row, int column) const
  * @param column Column number.
  * @param text Text string.
  */
-void TextList::setCellText(int row, int column, const std::wstring &text)
+void TextList::setCellText(size_t row, size_t column, const std::wstring &text)
 {
 	_texts[row][column]->setText(text);
 	_redraw = true;
@@ -197,7 +197,7 @@ void TextList::setCellText(int row, int column, const std::wstring &text)
  * @param column Column number.
  * @return X position in pixels.
  */
-int TextList::getColumnX(int column) const
+int TextList::getColumnX(size_t column) const
 {
 	return getX() + _texts[0][column]->getX();
 }
@@ -207,7 +207,7 @@ int TextList::getColumnX(int column) const
  * @param row Row number.
  * @return Y position in pixels.
  */
-int TextList::getRowY(int row) const
+int TextList::getRowY(size_t row) const
 {
 	return getY() + _texts[row][0]->getY();
 }
@@ -767,6 +767,7 @@ void TextList::clearList()
 /**
  * Scrolls the text in the list up by one row or to the top.
  * @param toMax If true then scrolls to the top of the list. false => one row up
+ * @param scrollByWheel If true then use wheel scroll, otherwise scroll normally.
  */
 void TextList::scrollUp(bool toMax, bool scrollByWheel)
 {
@@ -795,6 +796,7 @@ void TextList::scrollUp(bool toMax, bool scrollByWheel)
 /**
  * Scrolls the text in the list down by one row or to the bottom.
  * @param toMax If true then scrolls to the bottom of the list. false => one row down
+ * @param scrollByWheel If true then use wheel scroll, otherwise scroll normally.
  */
 void TextList::scrollDown(bool toMax, bool scrollByWheel)
 {
@@ -1047,11 +1049,24 @@ void TextList::mouseOver(Action *action, State *state)
 		if (_selRow < _rows.size())
 		{
 			Text *selText = _texts[_rows[_selRow]].front();
-			_selector->setY(getY() + selText->getY());
-			if (_selector->getHeight() != selText->getHeight() + _font->getSpacing())
+			int y = getY() + selText->getY();
+			int h = selText->getHeight() + _font->getSpacing();
+			if (y < getY() || y + h > getY() + getHeight())
 			{
-				_selector->setHeight(selText->getHeight() + _font->getSpacing());
+				h /= 2;
 			}
+			if (y < getY())
+			{
+				y = getY();
+			}
+			if (_selector->getHeight() != h)
+			{
+				// resizing doesn't work, but recreating does, so let's do that!
+				delete _selector;
+				_selector = new Surface(getWidth(), h, getX(), y);
+				_selector->setPalette(getPalette());
+			}
+			_selector->setY(y);
 			_selector->copy(_bg);
 			if (_contrast)
 			{
@@ -1095,7 +1110,7 @@ void TextList::mouseOut(Action *action, State *state)
  * get the scroll depth.
  * @return scroll depth.
  */
-int TextList::getScroll()
+size_t TextList::getScroll()
 {
 	return _scroll;
 }
@@ -1116,6 +1131,7 @@ void TextList::scrollTo(size_t scroll)
 /**
  * Hooks up the button to work as part of an existing combobox,
  * updating the selection when it's pressed.
+ * @param comboBox Pointer to combobox.
  */
 void TextList::setComboBox(ComboBox *comboBox)
 {

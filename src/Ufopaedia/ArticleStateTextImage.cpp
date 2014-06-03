@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,7 +53,7 @@ namespace OpenXcom
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
 		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		int text_height = _txtTitle->getTextHeight();
 
@@ -62,7 +62,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 		centerAllSurfaces();
 	}

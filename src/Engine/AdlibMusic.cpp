@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,6 +37,7 @@ std::map<int, int> AdlibMusic::delayRates;
 
 /**
  * Initializes a new music track.
+ * @param volume Music volume modifier (1.0 = 100%).
  */
 AdlibMusic::AdlibMusic(float volume) : Music(), _data(0), _size(0), _volume(volume)
 {
@@ -106,10 +107,10 @@ void AdlibMusic::load(const std::string &filename)
  * @param data Pointer to the music file in memory
  * @param size Size of the music file in bytes.
  */
-void AdlibMusic::load(const void *data, size_t size)
+void AdlibMusic::load(const void *data, int size)
 {
 	_data = (char*)data;
-	_size = size;
+	_size = (size_t)(size);
 }
 
 /**

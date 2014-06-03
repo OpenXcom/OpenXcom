@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -67,7 +67,7 @@ private:
 	/// Gets type of selected item.
 	enum TransferType getType(size_t selected) const;
 	/// Gets item Index.
-	int getItemIndex(size_t selected) const;
+	size_t getItemIndex(size_t selected) const;
 public:
 	/// Creates the Transfer Items state.
 	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);

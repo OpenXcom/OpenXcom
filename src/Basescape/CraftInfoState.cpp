@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,6 +34,7 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/SavedGame.h"
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
 #include "CraftEquipmentState.h"
@@ -51,7 +52,14 @@ namespace OpenXcom
 CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(game), _base(base), _craftId(craftId)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
+	{
+		_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	}
+	else
+	{
+		_window = new Window(this, 320, 200, 0, 0, POPUP_NONE);
+	}
 	_btnOk = new TextButton(64, 24, 128, 168);
 	_btnW1 = new TextButton(24, 32, 14, 48);
 	_btnW2 = new TextButton(24, 32, 282, 48);
@@ -176,7 +184,7 @@ void CraftInfoState::init()
 
 	std::wostringstream ss;
 	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
-	if (_craft->getStatus() == "STR_REPAIRS")
+	if (_craft->getStatus() == "STR_REPAIRS" && _craft->getDamage() > 0)
 	{
 		int damageHours = (int)ceil((double)_craft->getDamage() / _craft->getRules()->getRepairRate());
 		ss << formatTime(damageHours);
@@ -185,7 +193,7 @@ void CraftInfoState::init()
 
 	std::wostringstream ss2;
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	if (_craft->getStatus() == "STR_REFUELLING")
+	if (_craft->getStatus() == "STR_REFUELLING" && _craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
 	{
 		int fuelHours = (int)ceil((double)(_craft->getRules()->getMaxFuel() - _craft->getFuel()) / _craft->getRules()->getRefuelRate() / 2.0);
 		ss2 << formatTime(fuelHours);
@@ -241,7 +249,7 @@ void CraftInfoState::init()
 			frame->blit(_weapon1);
 
 			_txtW1Name->setText(tr(w1->getRules()->getType()));
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING" && w1->getAmmo() < w1->getRules()->getAmmoMax())
@@ -278,7 +286,7 @@ void CraftInfoState::init()
 			frame->blit(_weapon2);
 
 			_txtW2Name->setText(tr(w2->getRules()->getType()));
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING" && w2->getAmmo() < w2->getRules()->getAmmoMax())

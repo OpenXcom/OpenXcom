@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -112,10 +112,12 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 }
 
 /**
- * Initializes a BattleUnit from a Unit object.
+ * Initializes a BattleUnit from a Unit (non-player) object.
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
- * @param difficulty level (for stat adjustement)
+ * @param id Unique unit ID.
+ * @param armor Pointer to unit Armor.
+ * @param diff difficulty level (for stat adjustement).
  */
 BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
 																						_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
@@ -182,7 +184,6 @@ BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
-	//delete _currentAIState;
 	if (!getGeoscapeSoldier())
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator i = _statistics->kills.begin(); i != _statistics->kills.end(); ++i)
@@ -191,6 +192,7 @@ BattleUnit::~BattleUnit()
 		}
 	}
 	delete _statistics;
+	delete _currentAIState;
 }
 
 /**
@@ -310,6 +312,7 @@ int BattleUnit::getId() const
 /**
  * Changes the BattleUnit's position.
  * @param pos position
+ * @param updateLastPos refresh last stored position
  */
 void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
 {
@@ -345,8 +348,9 @@ const Position& BattleUnit::getDestination() const
 }
 
 /**
- * Changes the BattleUnit's direction. Only used for initial unit placement.
- * @param direction
+ * Changes the BattleUnit's (horizontal) direction.
+ * Only used for initial unit placement.
+ * @param direction new horizontal direction
  */
 void BattleUnit::setDirection(int direction)
 {
@@ -356,8 +360,9 @@ void BattleUnit::setDirection(int direction)
 }
 
 /**
- * Changes the facedirection. Only used for strafing moves.
- * @param direction
+ * Changes the BattleUnit's (horizontal) face direction.
+ * Only used for strafing moves.
+ * @param direction new face direction
  */
 void BattleUnit::setFaceDirection(int direction)
 {
@@ -366,7 +371,7 @@ void BattleUnit::setFaceDirection(int direction)
 
 /**
  * Gets the BattleUnit's (horizontal) direction.
- * @return direction
+ * @return horizontal direction
  */
 int BattleUnit::getDirection() const
 {
@@ -374,8 +379,9 @@ int BattleUnit::getDirection() const
 }
 
 /**
- * Gets the BattleUnit's (horizontal) face direction. Used only during strafing moves
- * @return direction
+ * Gets the BattleUnit's (horizontal) face direction.
+ * Used only during strafing moves.
+ * @return face direction
  */
 int BattleUnit::getFaceDirection() const
 {
@@ -422,6 +428,8 @@ UnitStatus BattleUnit::getStatus() const
  * Initialises variables to start walking.
  * @param direction Which way to walk.
  * @param destination The position we should end up on.
+ * @param tileBelowMe Which tile is currently below the unit.
+ * @param cache Update cache?
  */
 void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
 {
@@ -459,6 +467,8 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 
 /**
  * This will increment the walking phase.
+ * @param tileBelowMe Pointer to tile currently below the unit.
+ * @param cache Refresh the unit cache.
  */
 void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
@@ -557,7 +567,8 @@ int BattleUnit::getDiagonalWalkingPhase() const
 
 /**
  * Look at a point.
- * @param point
+ * @param point Position to look at.
+ * @param turret True to turn the turret, false to turn the unit.
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
@@ -585,7 +596,8 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 
 /**
  * Look at a direction.
- * @param direction
+ * @param direction Direction to look at.
+ * @param force True to reset the direction, false to animate to it.
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
@@ -607,6 +619,7 @@ void BattleUnit::lookAt(int direction, bool force)
 
 /**
  * Advances the turning towards the target direction.
+ * @param turret True to turn the turret, false to turn the unit.
  */
 void BattleUnit::turn(bool turret)
 {
@@ -712,8 +725,8 @@ UnitFaction BattleUnit::getFaction() const
 
 /**
  * Sets the unit's cache flag.
- * Set to true when the unit has to be redrawn from scratch.
- * @param cache
+ * @param cache Pointer to cache surface to use, NULL to redraw from scratch.
+ * @param part Unit part to cache.
  */
 void BattleUnit::setCache(Surface *cache, int part)
 {
@@ -731,8 +744,9 @@ void BattleUnit::setCache(Surface *cache, int part)
 /**
  * Check if the unit is still cached in the Map cache.
  * When the unit changes it needs to be re-cached.
- * @param invalid
- * @return cache
+ * @param invalid Get if the cache is invalid.
+ * @param part Unit part to check.
+ * @return Pointer to cache surface used.
  */
 Surface *BattleUnit::getCache(bool *invalid, int part) const
 {
@@ -771,7 +785,7 @@ bool BattleUnit::isFloating() const
 
 /**
  * Aim. (shows the right hand sprite and weapon holding)
- * @param aiming
+ * @param aiming true/false
  */
 void BattleUnit::aim(bool aiming)
 {
@@ -786,6 +800,7 @@ void BattleUnit::aim(bool aiming)
 
 /**
  * Returns the direction from this unit to a given point.
+ * @param point given position.
  * @return direction.
  */
 int BattleUnit::directionTo(const Position &point) const
@@ -870,9 +885,10 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param position The position defines which part of armor and/or bodypart is hit.
- * @param power
- * @param type
+ * @param relative The relative position of which part of armor and/or bodypart is hit.
+ * @param power The amount of damage to inflict.
+ * @param type The type of damage being inflicted.
+ * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
 int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
@@ -1625,7 +1641,8 @@ bool BattleUnit::getVisible() const
 
 /**
  * Sets the unit's tile it's standing on
- * @param tile
+ * @param tile Pointer to tile.
+ * @param tileBelow Pointer to tile below.
  */
 void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 {
@@ -1785,7 +1802,8 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 }
 
 /**
- * Check if we have ammo and reload if needed (used for AI)
+ * Check if we have ammo and reload if needed (used for AI).
+ * @return Do we have ammo?
  */
 bool BattleUnit::checkAmmo()
 {
@@ -1826,6 +1844,7 @@ bool BattleUnit::checkAmmo()
 
 /**
  * Check if this unit is in the exit area.
+ * @param stt Type of exit tile to check for.
  * @return Is in the exit area?
  */
 bool BattleUnit::isInExitArea(SpecialTileType stt) const
@@ -1891,6 +1910,7 @@ void BattleUnit::updateGeoscapeStats(Soldier *soldier)
 /**
  * Check if unit eligible for squaddie promotion. If yes, promote the unit.
  * Increase the mission counter. Calculate the experience increases.
+ * @param geoscape Pointer to geoscape save.
  * @return True if the soldier was eligible for squaddie promotion.
  */
 bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
@@ -2107,6 +2127,7 @@ Armor *BattleUnit::getArmor() const
  * An aliens name is the translation of it's race and rank.
  * hence the language pointer needed.
  * @param lang Pointer to language.
+ * @param debugAppendId Append unit ID to name for debug purposes.
  * @return name Widecharstring of the unit's name.
  */
 std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
@@ -2168,7 +2189,9 @@ int BattleUnit::getFloatHeight() const
 }
 
 /**
-  * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
+  * Get the unit's loft ID, one per unit tile.
+  * Each tile only has one loft, as it is repeated over the entire height of the unit.
+  * @param entry Unit tile
   * @return The unit's line of fire template ID.
   */
 int BattleUnit::getLoftemps(int entry) const
@@ -2205,35 +2228,36 @@ int BattleUnit::getMoveSound() const
 
 
 /**
-  * Get whether the unit is affected by fatal wounds.
-  * Normally only soldiers are affected by fatal wounds.
-  * @return true or false
-  */
+ * Get whether the unit is affected by fatal wounds.
+ * Normally only soldiers are affected by fatal wounds.
+ * @return Is the unit affected by wounds?
+ */
 bool BattleUnit::isWoundable() const
 {
 	return (_type=="SOLDIER" || (Options::alienBleeding && _faction != FACTION_PLAYER && _armor->getSize() == 1));
 }
 /**
-  * Get whether the unit is affected by morale loss.
-  * Normally only small units are affected by morale loss.
-  * @return true or false
-  */
+ * Get whether the unit is affected by morale loss.
+ * Normally only small units are affected by morale loss.
+ * @return Is the unit affected by morale?
+ */
 bool BattleUnit::isFearable() const
 {
 	return (_armor->getSize() == 1);
 }
 
 /**
-  * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
-  * @return intelligence 
-  */
+ * Get the number of turns an AI unit remembers a soldier's position.
+ * @return intelligence.
+ */
 int BattleUnit::getIntelligence() const
 {
 	return _intelligence;
 }
 
 /**
-/// Get the unit's aggression.
+ * Get the unit's aggression.
+ * @return aggression.
  */
 int BattleUnit::getAggression() const
 {
@@ -2241,7 +2265,8 @@ int BattleUnit::getAggression() const
 }
 
 /**
-/// Get the units's special ability.
+ * Returns the unit's special ability.
+ * @return special ability.
  */
 int BattleUnit::getSpecialAbility() const
 {
@@ -2249,7 +2274,8 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
-/// Get the units's special ability.
+ * Changes the unit's special ability.
+ * @param specab special ability.
  */
 void BattleUnit::setSpecialAbility(SpecialAbility specab)
 {
@@ -2267,7 +2293,7 @@ std::string BattleUnit::getSpawnUnit() const
 
 /**
  * Set the unit that is spawned when this one dies.
- * @return unit.
+ * @param spawnUnit unit.
  */
 void BattleUnit::setSpawnUnit(std::string spawnUnit)
 {
@@ -2275,7 +2301,8 @@ void BattleUnit::setSpawnUnit(std::string spawnUnit)
 }
 
 /**
-/// Get the units's rank string.
+ * Get the units's rank string.
+ * @return rank.
  */
 std::string BattleUnit::getRankString() const
 {
@@ -2283,7 +2310,8 @@ std::string BattleUnit::getRankString() const
 }
 
 /**
-/// Get the geoscape-soldier object.
+ * Get the geoscape-soldier object.
+ * @return soldier.
  */
 Soldier *BattleUnit::getGeoscapeSoldier() const
 {
@@ -2291,7 +2319,7 @@ Soldier *BattleUnit::getGeoscapeSoldier() const
 }
 
 /**
-/// Add a kill to the counter.
+ * Add a kill to the counter.
  */
 void BattleUnit::addKillCount()
 {
@@ -2299,7 +2327,8 @@ void BattleUnit::addKillCount()
 }
 
 /**
-/// Get unit type.
+ * Get unit type.
+ * @return unit type.
  */
 std::string BattleUnit::getType() const
 {
@@ -2307,7 +2336,8 @@ std::string BattleUnit::getType() const
 }
 
 /**
-/// Set unit's active hand.
+ * Set unit's active hand.
+ * @param hand active hand.
  */
 void BattleUnit::setActiveHand(const std::string &hand)
 {
@@ -2316,6 +2346,7 @@ void BattleUnit::setActiveHand(const std::string &hand)
 }
 /**
  * Get unit's active hand.
+ * @return active hand.
  */
 std::string BattleUnit::getActiveHand() const
 {
@@ -2326,6 +2357,7 @@ std::string BattleUnit::getActiveHand() const
 
 /**
  * Converts unit to another faction (original faction is still stored).
+ * @param f faction.
  */
 void BattleUnit::convertToFaction(UnitFaction f)
 {
@@ -2342,15 +2374,17 @@ void BattleUnit::instaKill()
 }
 
 /**
- * Set health to 0 and set status dead - used when getting zombified.
+ * Get sound to play when unit aggros.
+ * @return sound
  */
 int BattleUnit::getAggroSound() const
 {
 	return _aggroSound;
 }
+
 /**
  * Set a specific number of energy.
- * @param tu
+ * @param energy energy.
  */
 void BattleUnit::setEnergy(int energy)
 {
@@ -2407,6 +2441,7 @@ BattleUnit *BattleUnit::getCharging()
 
 /**
  * Get the units carried weight in strength units.
+ * @param draggingItem item to ignore
  * @return weight
  */
 int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
@@ -2423,7 +2458,7 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 
 /**
  * Set how long since this unit was last exposed.
- * @param turns
+ * @param turns number of turns
  */
 void BattleUnit::setTurnsSinceSpotted (int turns)
 {
@@ -2432,7 +2467,7 @@ void BattleUnit::setTurnsSinceSpotted (int turns)
 
 /**
  * Get how long since this unit was exposed.
- * @return turns
+ * @return number of turns
  */
 int BattleUnit::getTurnsSinceSpotted () const
 {
@@ -2440,7 +2475,7 @@ int BattleUnit::getTurnsSinceSpotted () const
 }
 
 /**
- * Get This unit's original Faction.
+ * Get this unit's original Faction.
  * @return original faction
  */
 UnitFaction BattleUnit::getOriginalFaction() const
@@ -2448,28 +2483,46 @@ UnitFaction BattleUnit::getOriginalFaction() const
 	return _originalFaction;
 }
 
-/// invalidate cache; call after copying object :(
+/**
+ * invalidate cache; call after copying object :(
+ */
 void BattleUnit::invalidateCache()
 {
 	for (int i = 0; i < 5; ++i) { _cache[i] = 0; }
 	_cacheInvalid = true;
 }
 
+/**
+ * Get the list of units spotted this turn.
+ * @return List of units.
+ */
 std::vector<BattleUnit *> &BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }
 
+/**
+ * Change the numeric version of the unit's rank.
+ * @param rank unit rank, 0 = lowest
+ */
 void BattleUnit::setRankInt(int rank)
 {
 	_rankInt = rank;
 }
 
+/**
+ * Return the numeric version of the unit's rank.
+ * @return unit rank, 0 = lowest
+ */
 int BattleUnit::getRankInt() const
 {
 	return _rankInt;
 }
 
+/**
+ * Derive the numeric unit rank from the string rank
+ * (for soldier units).
+ */
 void BattleUnit::deriveRank()
 {
 	if (_faction == FACTION_PLAYER)
@@ -2541,6 +2594,7 @@ bool BattleUnit::checkViewSector (Position pos) const
 
 /**
  * common function to adjust a unit's stats according to difficulty setting.
+ * @param diff difficulty level (for stat adjustement).
  */
 void BattleUnit::adjustStats(const int diff)
 {
@@ -2558,6 +2612,7 @@ void BattleUnit::adjustStats(const int diff)
 /**
  * did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
+ * @return ow it burns
  */
 bool BattleUnit::tookFireDamage() const
 {
@@ -2572,10 +2627,19 @@ void BattleUnit::toggleFireDamage()
 	_hitByFire = !_hitByFire;
 }
 
+/**
+ * Changes the amount of TUs reserved for cover.
+ * @param reserve time units.
+ */
 void BattleUnit::setCoverReserve(int reserve)
 {
 	_coverReserve = reserve;
 }
+
+/**
+ * Returns the amount of TUs reserved for cover.
+ * @return time units.
+ */
 int BattleUnit::getCoverReserve() const
 {
 	return _coverReserve;

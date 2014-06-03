@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,6 +56,7 @@ public:
 	void update();
 	/// Draws the FPS counter.
 	void draw();
+	void addFrame();
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,9 +36,10 @@ class SavedBattleGame;
  */
 class MiniMapState : public State
 {
-	InteractiveSurface * _surface;
-	MiniMapView * _miniMapView;
-	Text * _txtLevel;
+	Surface * _bg;
+	MiniMapView *_miniMapView;
+	InteractiveSurface *_btnLvlUp, *_btnLvlDwn, *_btnOk;
+	Text *_txtLevel;
 	Timer *_timerAnimate;
 	/// Handles Minimap animation.
 	void animate();

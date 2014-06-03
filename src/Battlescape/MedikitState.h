@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,9 +36,10 @@ struct BattleAction;
  */
 class MedikitState : public State
 {
-	InteractiveSurface *_surface;
+	Surface *_bg;
 	MedikitView *_medikitView;
 	Text *_pkText, *_stimulantTxt,  *_healTxt, *_partTxt, *_woundTxt;
+	InteractiveSurface *_endButton, *_stimulantButton, *_pkButton, *_healButton;
 	BattleUnit * _targetUnit, *_unit;
 	BattleItem *_item;
 	BattleAction *_action;

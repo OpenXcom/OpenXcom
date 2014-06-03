@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -140,6 +140,7 @@ void NextTurnState::think()
  */
 void NextTurnState::close()
 {
+	_battleGame->getBattleGame()->cleanupDeleted();
 	_game->popState();
 
 	int liveAliens = 0;

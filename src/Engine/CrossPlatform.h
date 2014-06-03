@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -77,6 +77,12 @@ namespace CrossPlatform
 	bool naturalCompare(const std::wstring &a, const std::wstring &b);
 	/// Move/rename a file between paths.
 	bool moveFile(const std::string &src, const std::string &dest);
+	/// Flashes the game window.
+	void flashWindow();
+	/// Gets the DOS-style executable path.
+	std::string getDosPath();
+	/// Sets the window icon.
+	void setWindowIcon(int winResource, const std::string &unixPath);
 }
 
 }

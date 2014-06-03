@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -83,6 +83,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -588,11 +589,15 @@ void BattlescapeState::mapOver(Action *action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton))) { // so we missed again the mouse-release :(
+		if ((SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			}
 			_isMouseScrolled = _isMouseScrolling = false;
+			stopScrolling(action);
 			return;
 		}
 
@@ -600,31 +605,67 @@ void BattlescapeState::mapOver(Action *action)
 
 		// Set the mouse cursor back
 		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+		SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - Map::ICON_HEIGHT / 2);
 		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 		// Check the threshold
 		_totalMouseMoveX += action->getDetails()->motion.xrel;
 		_totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!_mouseMovedOverThreshold)
+		{
 			_mouseMovedOverThreshold = ((std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance) || (std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance));
+		}
 
 		// Scrolling
 		if (Options::battleDragScrollInvert)
 		{
-			_map->getCamera()->scrollXY(
-				-action->getDetails()->motion.xrel,
-				-action->getDetails()->motion.yrel, false);
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			int scrollX = -(int)((double)_totalMouseMoveX / action->getXScale());
+			int scrollY = -(int)((double)_totalMouseMoveY / action->getYScale());
+			Position delta2 = _map->getCamera()->getMapOffset();
+			_map->getCamera()->scrollXY(scrollX, scrollY, true);
+			delta2 = _map->getCamera()->getMapOffset() - delta2;
+
+			// Keep the limits...
+			if (scrollX != delta2.x || scrollY != delta2.y)
+			{
+				_totalMouseMoveX = -(int) (delta2.x * action->getXScale());
+				_totalMouseMoveY = -(int) (delta2.y * action->getYScale());
+			}
+
+			action->getDetails()->motion.x = _xBeforeMouseScrolling;
+			action->getDetails()->motion.y = _yBeforeMouseScrolling;
+			_map->setCursorType(CT_NONE);
 		}
 		else
 		{
-			_map->getCamera()->scrollXY(
-				action->getDetails()->motion.xrel,
-				action->getDetails()->motion.yrel, false);
+			Position delta = _map->getCamera()->getMapOffset();
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			int scrollX = (int)((double)_totalMouseMoveX / action->getXScale());
+			int scrollY = (int)((double)_totalMouseMoveY / action->getYScale());
+			Position delta2 = _map->getCamera()->getMapOffset();
+			_map->getCamera()->scrollXY(scrollX, scrollY, true);
+			delta2 = _map->getCamera()->getMapOffset() - delta2;
+			delta = _map->getCamera()->getMapOffset() - delta;
+
+			// Keep the limits...
+			if (scrollX != delta2.x || scrollY != delta2.y)
+			{
+				_totalMouseMoveX = (int) (delta2.x * action->getXScale());
+				_totalMouseMoveY = (int) (delta2.y * action->getYScale());
+			}
+
+			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
+			int barHeight = _game->getScreen()->getCursorTopBlackBand();
+			int cursorX = _cursorPosition.x + Round(delta.x * action->getXScale());
+			int cursorY = _cursorPosition.y + Round(delta.y * action->getYScale());
+			_cursorPosition.x = std::min(_game->getScreen()->getWidth() - barWidth - (int)(Round(action->getXScale())), std::max(barWidth, cursorX));
+			_cursorPosition.y = std::min(_game->getScreen()->getHeight() - barHeight - (int)(Round(action->getYScale())), std::max(barHeight, cursorY));
+			action->getDetails()->motion.x = _cursorPosition.x;
+			action->getDetails()->motion.y = _cursorPosition.y;
 		}
 
 		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x = _xBeforeMouseScrolling; action->getDetails()->motion.y = _yBeforeMouseScrolling;
 		_game->getCursor()->handle(action);
 	}
 }
@@ -644,6 +685,13 @@ void BattlescapeState::mapPress(Action *action)
 		_isMouseScrolled = false;
 		SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
 		_mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
+		if (!Options::battleDragScrollInvert && _cursorPosition.z == 0)
+		{
+			_cursorPosition.x = action->getDetails()->motion.x;
+			_cursorPosition.y = action->getDetails()->motion.y;
+			// the Z is irrelevant to our mouse position, but we can use it as a boolean to check if the position is set or not
+			_cursorPosition.z = 1;
+		}
 		_totalMouseMoveX = 0; _totalMouseMoveY = 0;
 		_mouseMovedOverThreshold = false;
 		_mouseScrollingStartTime = SDL_GetTicks();
@@ -661,13 +709,18 @@ void BattlescapeState::mapClick(Action *action)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now an other button is used)
-	if (_isMouseScrolling) {
+	if (_isMouseScrolling)
+	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
-		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton))) { // so we missed again the mouse-release :(
+		&& (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		{   // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			}
 			_isMouseScrolled = _isMouseScrolling = false;
+			stopScrolling(action);
 		}
 	}
 
@@ -675,12 +728,20 @@ void BattlescapeState::mapClick(Action *action)
 	if (_isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == Options::battleDragScrollButton) _isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == Options::battleDragScrollButton)
+		{
+			_isMouseScrolling = false;
+			stopScrolling(action);
+		}
+		else
+		{
+			return;
+		}
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
 		{
 			_isMouseScrolled = false;
-			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			stopScrolling(action);
 		}
 		if (_isMouseScrolled) return;
 	}
@@ -1411,6 +1472,11 @@ inline void BattlescapeState::handle(Action *action)
 	{
 		State::handle(action);
 
+		if (_isMouseScrolling && !Options::battleDragScrollInvert)
+		{
+			_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
+		}
+
 		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -1927,16 +1993,18 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
+ * @param action Pointer to an action.
  */
-void BattlescapeState::mouseInIcons(Action * /* action */)
+void BattlescapeState::mouseInIcons(Action *)
 {
 	_mouseOverIcons = true;
 }
 
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
+ * @param action Pointer to an action.
  */
-void BattlescapeState::mouseOutIcons(Action * /* action */)
+void BattlescapeState::mouseOutIcons(Action *)
 {
 	_mouseOverIcons = false;
 }
@@ -1957,6 +2025,7 @@ bool BattlescapeState::getMouseOverIcons() const
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
  * @param allowSaving True, if the help button was clicked.
+ * @return True if the player can still press buttons.
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
@@ -2089,6 +2158,28 @@ void BattlescapeState::resize(int &dX, int &dY)
 		}
 	}
 
+}
+
+/**
+ * Move the mouse back to where it started after we finish drag scrolling.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::stopScrolling(Action *action)
+{
+	if (Options::battleDragScrollInvert)
+	{
+		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
+		_battleGame->setupCursor();
+	}
+	else
+	{
+		SDL_WarpMouse(_cursorPosition.x, _cursorPosition.y);
+		action->setMouseAction(_cursorPosition.x/action->getXScale(), _cursorPosition.y/action->getYScale(), _game->getScreen()->getSurface()->getX(), _game->getScreen()->getSurface()->getY());
+		_map->setSelectorPosition(_cursorPosition.x / action->getXScale(), _cursorPosition.y / action->getYScale());
+	}
+	// reset our "mouse position stored" flag
+	_cursorPosition.z = 0;
 }
 
 }
