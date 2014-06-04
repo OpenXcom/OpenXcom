@@ -77,7 +77,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _cursorFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
 {
 	_previewSetting = Options::battleNewPreviewPath;
 	_smoothCamera = Options::battleSmoothCamera;
@@ -128,15 +128,16 @@ void Map::init()
 	// load the tiny arrow into a surface
 	int f = Palette::blockOffset(1); // yellow
 	int b = 15; // black
-	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-				       0, 0, b, f, f, f, b, 0, 0,
-					   b, b, b, f, f, f, b, b, b,
-					   b, f, f, f, f, f, f, f, b,
-					   0, b, f, f, f, f, f, b, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-					   0, 0, 0, b, f, b, 0, 0, 0,
-					   0, 0, 0, 0, b, 0, 0, 0, 0 };
+	int pixels[81] = {
+		0, 0, b, b, b, b, b, 0, 0,
+		0, 0, b, f, f, f, b, 0, 0,
+		0, 0, b, f, f, f, b, 0, 0,
+		b, b, b, f, f, f, b, b, b,
+		b, f, f, f, f, f, f, f, b,
+		0, b, f, f, f, f, f, b, 0,
+		0, 0, b, f, f, f, b, 0, 0,
+		0, 0, 0, b, f, b, 0, 0, 0,
+		0, 0, 0, 0, b, 0, 0, 0, 0 };
 
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
@@ -146,6 +147,24 @@ void Map::init()
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 
+	int pixels_kneel[81] = {
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, b, b, b, b, b, 0, 0,
+		b, b, b, f, f, f, b, b, b,
+		b, f, f, f, f, f, f, f, b,
+		0, b, f, f, f, f, f, b, 0,
+		0, 0, b, f, f, f, b, 0, 0,
+		0, 0, 0, b, f, b, 0, 0, 0,
+		0, 0, 0, 0, b, 0, 0, 0, 0 };
+
+	_arrow_kneel = new Surface(9, 9);
+	_arrow_kneel->setPalette(this->getPalette());
+	_arrow_kneel->lock();
+	for (int y = 0; y < 9;++y)
+		for (int x = 0; x < 9; ++x)
+			_arrow_kneel->setPixel(x, y, pixels_kneel[x+(y*9)]);
+	_arrow_kneel->unlock();
 	_projectile = 0;
 }
 
@@ -241,7 +260,7 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
-	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
+	static const int arrowBob[10] = {0,2,3,3,2,0,-2,-3,-3,-2};
 	
 	NumberText *_numWaypid = 0;
 
@@ -1071,13 +1090,14 @@ void Map::drawTerrain(Surface *surface)
 			offset.y += 4;
 		}
 		offset.y += 24 - unit->getHeight();
-		if (unit->isKneeled())
+		if (unit->isKneeled() && this->getCursorType() != CT_NONE)
 		{
 			offset.y -= 2;
+			_arrow_kneel->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + arrowBob[_cursorFrame], 0);
 		}
-		if (this->getCursorType() != CT_NONE)
+		else if (this->getCursorType() != CT_NONE)
 		{
-			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + arrowBob[_animFrame], 0);
+			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + arrowBob[_cursorFrame], 0);
 		}
 	}
 	delete _numWaypid;
@@ -1194,7 +1214,9 @@ void Map::setSelectorPosition(int mx, int my)
 void Map::animate(bool redraw)
 {
 	_animFrame++;
+	_cursorFrame++;
 	if (_animFrame == 8) _animFrame = 0;
+	if (_cursorFrame == 10) _cursorFrame = 0;
 
 	// animate tiles
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
