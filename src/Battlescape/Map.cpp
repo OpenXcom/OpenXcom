@@ -241,6 +241,7 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
+	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 	
 	NumberText *_numWaypid = 0;
 
@@ -1076,7 +1077,7 @@ void Map::drawTerrain(Surface *surface)
 		}
 		if (this->getCursorType() != CT_NONE)
 		{
-			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + sin((_animFrame*2*M_PI)/4), 0);
+			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + arrowBob[_animFrame], 0);
 		}
 	}
 	delete _numWaypid;
