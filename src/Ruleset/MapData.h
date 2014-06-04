@@ -160,6 +160,8 @@ public:
 	void setTUSlide(const int TUSlide);
 	/// Check if this is an xcom base object.
 	bool isBaseModule();
+	/// Sets this tile as not a floor (water, etc.)
+	void setNoFloor(bool isNoFloor);
 };
 
 }

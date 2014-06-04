@@ -9413,6 +9413,47 @@ MCDPatches:
         TUFly: 2
       - MCDIndex: 7
         TUFly: 2
+  - type: POLAR
+    data:
+      - MCDIndex: 0
+        TUFly: 4
+        noFloor: true
+      - MCDIndex: 63
+        noFloor: true
+      - MCDIndex: 64
+        noFloor: true
+      - MCDIndex: 65
+        noFloor: true
+      - MCDIndex: 66
+        noFloor: true
+      - MCDIndex: 67
+        noFloor: true
+      - MCDIndex: 68
+        noFloor: true
+      - MCDIndex: 69
+        noFloor: true
+      - MCDIndex: 70
+        noFloor: true
+      - MCDIndex: 71
+        noFloor: true
+      - MCDIndex: 72
+        noFloor: true
+      - MCDIndex: 73
+        noFloor: true
+      - MCDIndex: 74
+        noFloor: true
+      - MCDIndex: 75
+        noFloor: true
+      - MCDIndex: 76
+        noFloor: true
+      - MCDIndex: 77
+        noFloor: true
+      - MCDIndex: 78
+        noFloor: true
+      - MCDIndex: 79
+        noFloor: true
+      - MCDIndex: 80
+        noFloor: true
 extraSprites:
   - type: Pathfinding
     files:
