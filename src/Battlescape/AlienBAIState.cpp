@@ -1510,8 +1510,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 		if (!(*i)->isOut() &&
 			(*i) != attackingUnit &&
 			(*i) != target &&
-			((*i)->getPosition().z >= targetPos.z + Options::battleExplosionHeight ||
-			(*i)->getPosition().z <= targetPos.z - Options::battleExplosionHeight) &&
+			abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight &&
 			_save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsSinceSpotted() > _intelligence)
