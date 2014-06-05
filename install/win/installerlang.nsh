@@ -173,7 +173,7 @@ LangString WARN_XCUDetected ${LANG_POLISH} "Wykryto modyfikację XcomUtil. Gra $
 ;--------------------------------
 ;Pages
 
-LangString PAGE_UfoFolder ${LANG_GERMAN} "${GAME_NAME} efordert eine Ausgabe von UFO: Enemy Unknown / XCOM: UFO Defense. Dieser Schritt kann übergangen werden, wenn eine bestehende  Installation eine Aufrüstung bekommt. $\n$\nDas Setup wird die benötigten Dateien aus dem folgenden Ordner kopieren. Um aus einem anderen Ordner zu kopieren, klick auf Durchsuchen und wähle einen anderen Ordner. Klicke auf Weiter, um fortzusetzen. "
+LangString PAGE_UfoFolder ${LANG_GERMAN} "${GAME_NAME} benötigt das original von UFO: Enemy Unknown / XCOM: UFO Defense. Dieser Schritt kann überprungen werden, wenn eine bestehende Installation vorhanden ist. $\n$\nDas Setup wird die benötigten Dateien aus dem folgenden Ordner kopieren. Um aus einem anderen Ordner zu kopieren, klicke auf durchsuchen und wähle einen anderen Ordner. Klicke auf Weiter, um fortzusetzen. "
 LangString PAGE_UfoFolder_TITLE ${LANG_GERMAN} "Wähle X-COM 1 Installationspfad."
 LangString PAGE_UfoFolder_SUBTITLE ${LANG_GERMAN} "Wähle den Ordner, wo XCOM 1 installiert ist."
 LangString DEST_UfoFolder ${LANG_GERMAN} "X-COM 1 Ordner"
@@ -184,7 +184,7 @@ LangString DEST_UfoFolder ${LANG_GERMAN} "X-COM 1 Ordner"
 LangString NAME_SecMain ${LANG_GERMAN} "Spieldateien"
 LangString DESC_SecMain ${LANG_GERMAN} "Dateien, die zum Betrieb erforderlich sind ${GAME_NAME}."
 LangString NAME_SecPatch ${LANG_GERMAN} "Datei-Patch"
-LangString DESC_SecPatch ${LANG_GERMAN} "Repariert Fehler in Dateien von XCOM 1. Wird für die erste Installation empfohlen. (Braucht eine Verbidung zum Internet.)"
+LangString DESC_SecPatch ${LANG_GERMAN} "Repariert Fehler in Dateien von XCOM 1. Wird für die erste Installation empfohlen. (Benötigt eine Verbidung zum Internet.)"
 LangString NAME_SecDesktop ${LANG_GERMAN} "Verknüpfung auf dem Desktop"
 LangString DESC_SecDesktop ${LANG_GERMAN} "Stellt eine Verknüpfung auf dem Desktop her, um  ${GAME_NAME} spielen zu können."
    
@@ -207,7 +207,7 @@ LangString LINK_Uninstall ${LANG_GERMAN} "Deinstallation"
 ;--------------------------------
 ;Warnings
 
-LangString WARN_UFOMissing ${LANG_GERMAN} "X-COM 1 wurde in diesem Ordner nicht gefunden. ${GAME_NAME} bedarf einer gültigen Installation von XCOM. Fortsetzen?"
+LangString WARN_UFOMissing ${LANG_GERMAN} "X-COM 1 wurde in diesem Ordner nicht gefunden. ${GAME_NAME} benötigt einer gültigen Installation von XCOM. Fortsetzen?"
 LangString WARN_XCUDetected ${LANG_GERMAN} "XcomUtil wurde entdeckt. ${GAME_NAME} ist nicht mit XcomUtil kompatibel und kann zu unvorhersagbaren Fehlern führen. Fortsetzen?"
 
 ;================BRAZILIAN================
