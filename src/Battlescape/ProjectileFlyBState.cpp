@@ -420,6 +420,11 @@ void ProjectileFlyBState::think()
 			&& (hasFloor || unitCanFly))
 		{
 			createNewProjectile();
+			if (_action.cameraPosition.z != -1)
+			{
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+				_parent->getMap()->invalidate();
+			}
 		}
 		else
 		{

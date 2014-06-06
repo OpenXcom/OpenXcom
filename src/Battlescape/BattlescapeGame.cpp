@@ -95,10 +95,7 @@ BattlescapeGame::~BattlescapeGame()
 	{
 		delete *i;
 	}
-	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
-	{
-		delete *i;
-	}
+	cleanupDeleted();
 }
 
 /**
@@ -159,7 +156,7 @@ void BattlescapeGame::think()
  */
 void BattlescapeGame::init()
 {
-	if (_save->getSide() == FACTION_PLAYER)
+	if (_save->getSide() == FACTION_PLAYER && _save->getTurn() > 1)
 	{
 		_playerPanicHandled = false;
 	}
@@ -370,11 +367,6 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
  */
 void BattlescapeGame::endTurn()
 {
-	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
-	{
-		delete *i;
-	}
-	_deleted.clear();
 
 	Position p;
 
@@ -482,7 +474,6 @@ void BattlescapeGame::endTurn()
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}
 	_endTurnRequested = false;
-
 }
 
 
@@ -2063,6 +2054,15 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
 		}
 	}
 	return false;
+}
+
+void BattlescapeGame::cleanupDeleted()
+{
+	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
+	{
+		delete *i;
+	}
+	_deleted.clear();
 }
 
 }

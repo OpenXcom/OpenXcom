@@ -149,7 +149,7 @@ void TextList::unpress(State *state)
  * @param column Column number.
  * @param color Text color.
  */
-void TextList::setCellColor(int row, int column, Uint8 color)
+void TextList::setCellColor(size_t row, size_t column, Uint8 color)
 {
 	_texts[row][column]->setColor(color);
 	_redraw = true;
@@ -160,7 +160,7 @@ void TextList::setCellColor(int row, int column, Uint8 color)
  * @param row Row number.
  * @param color Text color.
  */
-void TextList::setRowColor(int row, Uint8 color)
+void TextList::setRowColor(size_t row, Uint8 color)
 {
 	for (std::vector<Text*>::iterator i = _texts[row].begin(); i < _texts[row].end(); ++i)
 	{
@@ -175,7 +175,7 @@ void TextList::setRowColor(int row, Uint8 color)
  * @param column Column number.
  * @return Text string.
  */
-std::wstring TextList::getCellText(int row, int column) const
+std::wstring TextList::getCellText(size_t row, size_t column) const
 {
 	return _texts[row][column]->getText();
 }
@@ -186,7 +186,7 @@ std::wstring TextList::getCellText(int row, int column) const
  * @param column Column number.
  * @param text Text string.
  */
-void TextList::setCellText(int row, int column, const std::wstring &text)
+void TextList::setCellText(size_t row, size_t column, const std::wstring &text)
 {
 	_texts[row][column]->setText(text);
 	_redraw = true;
@@ -197,7 +197,7 @@ void TextList::setCellText(int row, int column, const std::wstring &text)
  * @param column Column number.
  * @return X position in pixels.
  */
-int TextList::getColumnX(int column) const
+int TextList::getColumnX(size_t column) const
 {
 	return getX() + _texts[0][column]->getX();
 }
@@ -207,7 +207,7 @@ int TextList::getColumnX(int column) const
  * @param row Row number.
  * @return Y position in pixels.
  */
-int TextList::getRowY(int row) const
+int TextList::getRowY(size_t row) const
 {
 	return getY() + _texts[row][0]->getY();
 }
@@ -1061,7 +1061,10 @@ void TextList::mouseOver(Action *action, State *state)
 			}
 			if (_selector->getHeight() != h)
 			{
-				_selector->setHeight(h);
+				// resizing doesn't work, but recreating does, so let's do that!
+				delete _selector;
+				_selector = new Surface(getWidth(), h, getX(), y);
+				_selector->setPalette(getPalette());
 			}
 			_selector->setY(y);
 			_selector->copy(_bg);
@@ -1107,7 +1110,7 @@ void TextList::mouseOut(Action *action, State *state)
  * get the scroll depth.
  * @return scroll depth.
  */
-int TextList::getScroll()
+size_t TextList::getScroll()
 {
 	return _scroll;
 }

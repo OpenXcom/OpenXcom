@@ -255,7 +255,7 @@ int SurfaceSet::getHeight() const
  * stored in the set.
  * @return Number of frames.
  */
-int SurfaceSet::getTotalFrames() const
+size_t SurfaceSet::getTotalFrames() const
 {
 	return _frames.size();
 }

@@ -112,7 +112,7 @@ void RuleRegion::load(const YAML::Node &node)
 	{
 		_missionWeights.load(weights);
 	}
-	_regionWeight = node["regionWeight"].as<unsigned>(_regionWeight);
+	_regionWeight = node["regionWeight"].as<size_t>(_regionWeight);
 	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
 }
 
@@ -175,7 +175,7 @@ std::vector<City*> *RuleRegion::getCities()
  * This is only used when creating a new game, since these weights change in the course of the game.
  * @return The initial weight of this region.
  */
-unsigned RuleRegion::getWeight() const
+size_t RuleRegion::getWeight() const
 {
 	return _regionWeight;
 }
@@ -186,11 +186,11 @@ unsigned RuleRegion::getWeight() const
  * @param zone The target zone.
  * @return A pair of longitude and latitude.
  */
-std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
+std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 {
 	if (zone < _missionZones.size())
 	{
-		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
+		size_t a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
 		double lonMin = _missionZones[zone].areas[a].lonMin;
 		double lonMax = _missionZones[zone].areas[a].lonMax;
 		double latMin = _missionZones[zone].areas[a].latMin;

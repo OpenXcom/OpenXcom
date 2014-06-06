@@ -320,7 +320,7 @@ void TextButton::setComboBox(ComboBox *comboBox)
 	_comboBox = comboBox;
 	if (_comboBox)
 	{
-		_text->setX(-8);
+		_text->setX(-6);
 	}
 	else
 	{

@@ -124,8 +124,8 @@ Game::~Game()
 	delete _cursor;
 	delete _lang;
 	delete _res;
-	delete _rules;
 	delete _save;
+	delete _rules;
 	delete _screen;
 	delete _fpsCounter;
 
@@ -300,26 +300,6 @@ void Game::run()
 			}
 		}
 
-		// Initialize active state
-		if (!_init)
-		{
-			_init = true;
-			_states.back()->init();
-
-			// Unpress buttons
-			_states.back()->resetAll();
-
-			// Refresh mouse position
-			SDL_Event ev;
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			ev.type = SDL_MOUSEMOTION;
-			ev.motion.x = x;
-			ev.motion.y = y;
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
-			_states.back()->handle(&action);
-		}
-
 		// Save on CPU
 		switch (runningState)
 		{
@@ -372,13 +352,13 @@ void Game::setVolume(int sound, int music, int ui)
 		if (ui >= 0)
 		{
 			ui = volumeExponent(ui) * (double)SDL_MIX_MAXVOLUME;
-			Mix_Volume(0, ui);
 			Mix_Volume(1, ui);
+			Mix_Volume(2, ui);
 		}
 	}
 }
 
-float Game::volumeExponent(int volume)
+double Game::volumeExponent(int volume)
 {
 	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
 }
@@ -672,7 +652,7 @@ void Game::initAudio()
 	{
 		Mix_AllocateChannels(16);
 		// Set up UI channels
-		Mix_ReserveChannels(2);
+		Mix_ReserveChannels(3);
 		Mix_GroupChannels(1, 2, 0);
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);

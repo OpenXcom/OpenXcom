@@ -106,7 +106,7 @@ private:
 	std::string _graphFinanceToggles;
 	std::vector<const RuleResearch *> _poppedResearch;
 	std::vector<Soldier*> _deadSoldiers;
-	int _selectedBase;
+	size_t _selectedBase;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
@@ -268,7 +268,7 @@ public:
 	/// Gets the last selected player base.
 	Base *getSelectedBase();
 	/// Set the last selected player base.
-	void setSelectedBase(int base);
+	void setSelectedBase(size_t base);
 	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 	int getSoldierScore(Soldier *soldier);
 };

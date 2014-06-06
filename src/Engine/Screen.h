@@ -63,7 +63,9 @@ public:
 	Screen();
 	/// Cleans up the display screen.
 	~Screen();
+	/// Get horizontal offset.
 	int getDX();
+	/// Get vertical offset.
 	int getDY();
 	/// Gets the internal buffer.
 	Surface *getSurface();

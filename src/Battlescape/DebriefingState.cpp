@@ -1133,7 +1133,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						// It's a weapon, count any rounds left in the clip.
 						{
 							BattleItem *clip = (*it)->getAmmoItem();
-							if (clip && clip->getRules()->getClipSize() > 0)
+							if (clip && clip->getRules()->getClipSize() > 0 && clip != *it)
 							{
 								_rounds[clip->getRules()] += clip->getAmmoQuantity();
 							}
