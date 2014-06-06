@@ -63,7 +63,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 
 		if (!names->empty())
 		{
-			int nationality = RNG::generate(0, names->size()-1);
+			size_t nationality = RNG::generate(0, names->size()-1);
 			_name = names->at(nationality)->genName(&_gender);
 			_look = (SoldierLook)names->at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
 		}

@@ -232,7 +232,6 @@ InventoryState::~InventoryState()
 {
 	_clearInventoryTemplate(_curInventoryTemplate);
 
-	Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
 	if (_battleGame->getTileEngine())
 	{
 		if (Options::maximizeInfoScreens)
@@ -240,6 +239,7 @@ InventoryState::~InventoryState()
 			Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
 			_game->getScreen()->resetDisplay(false);
 		}
+		Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
 		_battleGame->getTileEngine()->applyGravity(inventoryTile);
 		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 		_battleGame->getTileEngine()->recalculateFOV();

@@ -1678,7 +1678,7 @@ void DogfightState::setInterceptionNumber(const int number)
  * Sets interceptions count. Used to properly position the window.
  * @param count Amount of interception windows.
  */
-void DogfightState::setInterceptionsCount(const int count)
+void DogfightState::setInterceptionsCount(const size_t count)
 {
 	_interceptionsCount = count;
 	calculateWindowPosition();

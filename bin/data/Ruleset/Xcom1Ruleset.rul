@@ -6800,8 +6800,6 @@ research:
     dependencies:
       - STR_CYDONIA_DEP
   - name: STR_CYDONIA_DEP
-    cost: 0
-    points: 0
     unlocks:
       - STR_CYDONIA_OR_BUST
     requires:
@@ -6817,6 +6815,7 @@ research:
     needItem: true
   - name: STR_EXAMINATION_ROOM
     cost: 150
+    points: 30
     needItem: true
   - name: STR_FLYING_SUIT
     cost: 330
@@ -6943,7 +6942,6 @@ research:
       - STR_ALIEN_ORIGINS
       - STR_LEADER_PLUS
   - name: STR_LEADER_PLUS
-    cost: 0
     requires:
       - STR_ALIEN_ORIGINS
     dependencies:
@@ -6969,6 +6967,7 @@ research:
     needItem: true
   - name: STR_UFO_POWER_SOURCE
     cost: 450
+    points: 30
     needItem: true
   - name: STR_ULTIMATE_CRAFT
     cost: 900
@@ -7282,6 +7281,7 @@ research:
     lookup: STR_SECTOID
   - name: STR_SECTOID_ENGINEER
     cost: 192
+    points: 50
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7333,37 +7333,30 @@ research:
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_PLASMA_CANNON_DEP1
-    cost: 0
     dependencies:
       - STR_HEAVY_PLASMA
       - STR_HEAVY_PLASMA_CLIP
     unlocks:
       - STR_PLASMA_CANNON
   - name: STR_PLASMA_CANNON_DEP2
-    cost: 0
     dependencies:
       - STR_PLASMA_RIFLE
       - STR_PLASMA_RIFLE_CLIP
     unlocks:
       - STR_PLASMA_CANNON
   - name: STR_SECTOID
-    cost: 0
     points: 50
     needItem: true
   - name: STR_FLOATER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SNAKEMAN
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MUTON
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ETHEREAL
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERDISC_TERRORIST
@@ -7374,7 +7367,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CYBERDISC
-    cost: 0
     points: 50
     needItem: true
   - name: STR_REAPER_TERRORIST
@@ -7385,7 +7377,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_REAPER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_TERRORIST
@@ -7396,7 +7387,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID
-    cost: 170
     points: 50
     needItem: true
   - name: STR_SILACOID_TERRORIST
@@ -7407,7 +7397,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SILACOID
-    cost: 170
     points: 50
     needItem: true
   - name: STR_CELATID_TERRORIST
@@ -7429,115 +7418,87 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_RESEARCH
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_HARVEST
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_ABDUCTION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_INFILTRATION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_BASE
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_TERROR
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_RETALIATION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_SUPPLY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SMALL_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MEDIUM_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_LARGE_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_HARVESTER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ABDUCTOR
-    cost: 0
     points: 50
     needItem: true
   - name: STR_TERROR_SHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_BATTLESHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SUPPLY_SHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SNAKEMAN_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_FLOATER_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MUTON_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ETHEREAL_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERDISC_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_REAPER_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CELATID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SILACOID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOPOD_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
 manufacture:
@@ -9413,6 +9374,47 @@ MCDPatches:
         TUFly: 2
       - MCDIndex: 7
         TUFly: 2
+  - type: POLAR
+    data:
+      - MCDIndex: 0
+        TUFly: 4
+        noFloor: true
+      - MCDIndex: 63
+        noFloor: true
+      - MCDIndex: 64
+        noFloor: true
+      - MCDIndex: 65
+        noFloor: true
+      - MCDIndex: 66
+        noFloor: true
+      - MCDIndex: 67
+        noFloor: true
+      - MCDIndex: 68
+        noFloor: true
+      - MCDIndex: 69
+        noFloor: true
+      - MCDIndex: 70
+        noFloor: true
+      - MCDIndex: 71
+        noFloor: true
+      - MCDIndex: 72
+        noFloor: true
+      - MCDIndex: 73
+        noFloor: true
+      - MCDIndex: 74
+        noFloor: true
+      - MCDIndex: 75
+        noFloor: true
+      - MCDIndex: 76
+        noFloor: true
+      - MCDIndex: 77
+        noFloor: true
+      - MCDIndex: 78
+        noFloor: true
+      - MCDIndex: 79
+        noFloor: true
+      - MCDIndex: 80
+        noFloor: true
 extraSprites:
   - type: Pathfinding
     files:

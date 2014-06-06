@@ -184,7 +184,7 @@ void CraftInfoState::init()
 
 	std::wostringstream ss;
 	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
-	if (_craft->getStatus() == "STR_REPAIRS")
+	if (_craft->getStatus() == "STR_REPAIRS" && _craft->getDamage() > 0)
 	{
 		int damageHours = (int)ceil((double)_craft->getDamage() / _craft->getRules()->getRepairRate());
 		ss << formatTime(damageHours);
@@ -193,7 +193,7 @@ void CraftInfoState::init()
 
 	std::wostringstream ss2;
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	if (_craft->getStatus() == "STR_REFUELLING")
+	if (_craft->getStatus() == "STR_REFUELLING" && _craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
 	{
 		int fuelHours = (int)ceil((double)(_craft->getRules()->getMaxFuel() - _craft->getFuel()) / _craft->getRules()->getRefuelRate() / 2.0);
 		ss2 << formatTime(fuelHours);

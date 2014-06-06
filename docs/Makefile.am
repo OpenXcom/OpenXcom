@@ -1,13 +1,11 @@
 EXTRA_DIST = \
 	Doxyfile \
-	CMakeLists.txt \
-	language_id.html
+	CMakeLists.txt
 
 if WITH_OPENXCOM_DOCS
 
 install-data-am:
 	mkdir -p $(DESTDIR)$(docdir)/html/search
-	$(INSTALL_DATA) $(srcdir)/*.html $(DESTDIR)$(docdir)/html/
 	$(INSTALL_DATA) html/*.html $(DESTDIR)$(docdir)/html/
 	$(INSTALL_DATA) html/*.png $(DESTDIR)$(docdir)/html/
 	$(INSTALL_DATA) html/*.css $(DESTDIR)$(docdir)/html/

@@ -33,7 +33,7 @@ class TerrorSite : public Target
 {
 private:
 	int _id;
-	unsigned _secondsRemaining;
+	size_t _secondsRemaining;
 	std::string _race;
 	bool _inBattlescape;
 public:
@@ -54,9 +54,9 @@ public:
 	/// Gets the terror site's name.
 	std::wstring getName(Language *lang) const;
 	/// Gets the seconds until this terror site expires.
-	unsigned getSecondsRemaining() const;
+	size_t getSecondsRemaining() const;
 	/// Sets the seconds until this terror site expires.
-	void setSecondsRemaining(unsigned seconds);
+	void setSecondsRemaining(size_t seconds);
 	/// Gets the terror site's alien race.
 	std::string getAlienRace() const;
 	/// Sets the terror site's alien race.

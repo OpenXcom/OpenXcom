@@ -52,6 +52,7 @@ New features:
 - Dedicated auto-save and quick-save slots added.
 - Added ironman mode.
 - New loading screen with better error handling.
+- Adlib music emulation added, MIDI playback is no longer required.
 
   Geoscape:
 - Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.

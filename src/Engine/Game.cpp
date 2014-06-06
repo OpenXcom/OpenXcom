@@ -17,15 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <SDL_syswm.h>
-#endif
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
-#include <SDL_image.h>
 #include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
@@ -84,25 +78,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	SDL_WM_GrabInput(Options::captureMouse);
 	
 	// Set the window icon
-#ifdef _WIN32
-	HINSTANCE handle = GetModuleHandle(NULL);
-	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(103));
-
-	SDL_SysWMinfo wminfo;
-	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
-	{
-		HWND hwnd = wminfo.window;
-		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
-	}
-#else
-	SDL_Surface *icon = IMG_Load(CrossPlatform::getDataFile("openxcom.png").c_str());
-	if (icon != 0)
-	{
-		SDL_WM_SetIcon(icon, NULL);
-		SDL_FreeSurface(icon);
-	}
-#endif
+	CrossPlatform::setWindowIcon(103, "openxcom.png");
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
@@ -148,8 +124,8 @@ Game::~Game()
 	delete _cursor;
 	delete _lang;
 	delete _res;
-	delete _rules;
 	delete _save;
+	delete _rules;
 	delete _screen;
 	delete _fpsCounter;
 
@@ -294,7 +270,7 @@ void Game::run()
 			if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-				_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame) - 1;
+				_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame);
 			}
 			else
 			{
@@ -320,28 +296,8 @@ void Game::run()
 				}
 				_fpsCounter->blit(_screen->getSurface());
 				_cursor->blit(_screen->getSurface());
+				_screen->flip();
 			}
-			_screen->flip();
-		}
-
-		// Initialize active state
-		if (!_init)
-		{
-			_init = true;
-			_states.back()->init();
-
-			// Unpress buttons
-			_states.back()->resetAll();
-
-			// Refresh mouse position
-			SDL_Event ev;
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			ev.type = SDL_MOUSEMOTION;
-			ev.motion.x = x;
-			ev.motion.y = y;
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
-			_states.back()->handle(&action);
 		}
 
 		// Save on CPU
@@ -396,13 +352,13 @@ void Game::setVolume(int sound, int music, int ui)
 		if (ui >= 0)
 		{
 			ui = volumeExponent(ui) * (double)SDL_MIX_MAXVOLUME;
-			Mix_Volume(0, ui);
 			Mix_Volume(1, ui);
+			Mix_Volume(2, ui);
 		}
 	}
 }
 
-float Game::volumeExponent(int volume)
+double Game::volumeExponent(int volume)
 {
 	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
 }
@@ -696,7 +652,7 @@ void Game::initAudio()
 	{
 		Mix_AllocateChannels(16);
 		// Set up UI channels
-		Mix_ReserveChannels(2);
+		Mix_ReserveChannels(3);
 		Mix_GroupChannels(1, 2, 0);
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 		setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);

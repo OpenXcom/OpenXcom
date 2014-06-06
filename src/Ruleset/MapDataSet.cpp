@@ -71,7 +71,7 @@ std::string MapDataSet::getName() const
  * Gets the MapDataSet size.
  * @return The size in number of records.
  */
-int MapDataSet::getSize() const
+size_t MapDataSet::getSize() const
 {
 	return _objects.size();
 }
@@ -250,11 +250,13 @@ void MapDataSet::unloadData()
 {
 	if (_loaded)
 	{
-		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
+		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end();)
 		{
 			delete *i;
+			i = _objects.erase(i);
 		}
 		delete _surfaceSet;
+		_loaded = false;
 	}
 }
 

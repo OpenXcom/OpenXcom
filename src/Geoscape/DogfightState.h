@@ -61,7 +61,8 @@ private:
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
 	int _timeScale;
-	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
+	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionNumber;
+	size_t _interceptionsCount;
 	int _x, _y, _minimizedIconX, _minimizedIconY;
 
 	// Ends the dogfight.
@@ -133,7 +134,7 @@ public:
 	/// Sets interception number.
 	void setInterceptionNumber(const int number);
 	/// Sets interceptions count.
-	void setInterceptionsCount(const int count);
+	void setInterceptionsCount(const size_t count);
 	/// Calculates window position according to opened interception windows.
 	void calculateWindowPosition();
 	/// Moves window to new position.

@@ -481,6 +481,7 @@ void NewBattleState::btnOkClick(Action *)
 		_craft->setDestination(t);
 		bgen.setTerrorSite(t);
 		bgen.setCraft(_craft);
+		_game->getSavedGame()->getTerrorSites()->push_back(t);
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
@@ -515,6 +516,7 @@ void NewBattleState::btnOkClick(Action *)
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 		else
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 	if (_craft)
 		_craft->setSpeed(0);
@@ -596,6 +598,19 @@ void NewBattleState::cbxMissionChange(Action *)
 void NewBattleState::cbxCraftChange(Action *)
 {
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
+	int current = _craft->getNumSoldiers();
+	int max = _craft->getRules()->getSoldiers();
+	if (current > max)
+	{
+		for (std::vector<Soldier*>::reverse_iterator i = _craft->getBase()->getSoldiers()->rbegin(); i != _craft->getBase()->getSoldiers()->rend() && current > max; ++i)
+		{
+			if ((*i)->getCraft() == _craft)
+			{
+				(*i)->setCraft(0);
+				current--;
+			}
+		}
+	}
 }
 
 }

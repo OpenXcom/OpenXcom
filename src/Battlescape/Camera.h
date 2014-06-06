@@ -35,7 +35,6 @@ class Map;
 class Camera
 {
 private:
-	static const int SCROLL_INTERVAL = 50;
 	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	int _spriteWidth, _spriteHeight;
 	int _mapsize_x, _mapsize_y, _mapsize_z;

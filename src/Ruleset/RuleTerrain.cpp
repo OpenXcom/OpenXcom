@@ -139,7 +139,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
 
 	if (compliantMapBlocks.empty()) return 0;
 
-	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
+	size_t n = RNG::generate(0, compliantMapBlocks.size() - 1);
 
 	if (type == MT_DEFAULT)
 		compliantMapBlocks[n]->markUsed();
@@ -175,7 +175,7 @@ MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		mdf = *i;
-		if (*id - mdf->getSize() < 0)
+		if (*id < mdf->getSize())
 		{
 			break;
 		}

@@ -45,7 +45,7 @@ void TerrorSite::load(const YAML::Node &node)
 {
 	Target::load(node);
 	_id = node["id"].as<int>(_id);
-	_secondsRemaining = node["secondsRemaining"].as<int>(_secondsRemaining);
+	_secondsRemaining = node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_race = node["race"].as<std::string>(_race);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 }
@@ -110,7 +110,7 @@ std::wstring TerrorSite::getName(Language *lang) const
  * Returns the number of seconds remaining before the terror site expires.
  * @return Amount of seconds.
  */
-unsigned TerrorSite::getSecondsRemaining() const
+size_t TerrorSite::getSecondsRemaining() const
 {
 	return _secondsRemaining;
 }
@@ -119,7 +119,7 @@ unsigned TerrorSite::getSecondsRemaining() const
  * Changes the number of seconds before the terror site expires.
  * @param seconds Amount of seconds.
  */
-void TerrorSite::setSecondsRemaining(unsigned seconds)
+void TerrorSite::setSecondsRemaining(size_t seconds)
 {
 	_secondsRemaining = seconds;
 }
