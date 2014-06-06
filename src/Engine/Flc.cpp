@@ -559,8 +559,15 @@ void FlcMain(void (*frameCallBack)())
 				{
 					Options::displayWidth = event.resize.w;
 					Options::displayHeight = event.resize.h;
-					flc.realscreen->resetDisplay();
-					flc.mainscreen = flc.realscreen->getSurface()->getSurface();
+					if (flc.mainscreen != flc.realscreen->getSurface()->getSurface())
+					{
+						flc.realscreen->resetDisplay();
+					}
+					else
+					{
+						flc.realscreen->resetDisplay();
+						flc.mainscreen = flc.realscreen->getSurface()->getSurface();
+					}
 				}
 				break;
 			case SDL_QUIT:

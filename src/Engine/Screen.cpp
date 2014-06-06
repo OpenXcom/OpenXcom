@@ -322,7 +322,7 @@ void Screen::resetDisplay(bool resetVideo)
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
-	if (resetVideo)
+	if (resetVideo || _screen->format->BitsPerPixel != _bpp)
 	{
 #ifdef __linux__
 		// Workaround for segfault when switching to opengl
