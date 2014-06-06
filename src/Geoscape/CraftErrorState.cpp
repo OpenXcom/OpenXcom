@@ -44,7 +44,7 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(100, 18, 48, 150);
 	_btnOk5Secs = new TextButton(100, 18, 172, 150);
-	_txtMessage = new Text(226, 80, 47, 50);
+	_txtMessage = new Text(246, 96, 37, 42);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);

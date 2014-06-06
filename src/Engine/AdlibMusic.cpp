@@ -107,10 +107,10 @@ void AdlibMusic::load(const std::string &filename)
  * @param data Pointer to the music file in memory
  * @param size Size of the music file in bytes.
  */
-void AdlibMusic::load(const void *data, size_t size)
+void AdlibMusic::load(const void *data, int size)
 {
 	_data = (char*)data;
-	_size = size;
+	_size = (size_t)(size);
 }
 
 /**

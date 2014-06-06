@@ -80,6 +80,11 @@ SavedBattleGame::~SavedBattleGame()
 	}
 	delete[] _tiles;
 
+	for (std::vector<MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	{
+		(*i)->unloadData();
+	}
+
 	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		delete *i;
@@ -122,7 +127,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
 		std::string name = i->as<std::string>();
-		MapDataSet *mds = new MapDataSet(name);
+		MapDataSet *mds = rule->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 

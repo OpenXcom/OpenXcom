@@ -69,7 +69,7 @@ void Music::load(const std::string &filename)
  * @param data Pointer to the music file in memory
  * @param size Size of the music file in bytes.
  */
-void Music::load(const void *data, size_t size)
+void Music::load(const void *data, int size)
 {
 #ifndef __NO_MUSIC
 	SDL_RWops *rwops = SDL_RWFromConstMem(data, size);

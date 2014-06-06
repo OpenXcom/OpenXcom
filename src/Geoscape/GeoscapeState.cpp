@@ -154,7 +154,9 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	// Create objects
 	Surface *hd = _game->getResourcePack()->getSurface("ALTGEOBORD.SCR");
 	_bg = new Surface(hd->getWidth(), hd->getHeight(), 0, 0);
+	_sideLine = new Surface(64, screenHeight, screenWidth - 64, 0);
 	_sidebar = new Surface(64, 200, screenWidth - 64, screenHeight / 2 - 100);
+
 	_globe = new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, 0, 0);
 	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
 	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
@@ -181,8 +183,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	_btnZoomOut = new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82);
 
 	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-	_btnTop = new TextButton(63, height, screenWidth-63, _sidebar->getY() - height - 1);
-	_btnBottom = new TextButton(63, height, screenWidth-63, _sidebar->getY() + _sidebar->getHeight() + 1);
+	_sideTop = new TextButton(63, height, screenWidth-63, _sidebar->getY() - height - 1);
+	_sideBottom = new TextButton(63, height, screenWidth-63, _sidebar->getY() + _sidebar->getHeight() + 1);
 
 	_txtHour = new Text(20, 16, screenWidth-61, screenHeight/2-26);
 	_txtHourSep = new Text(4, 16, screenWidth-41, screenHeight/2-26);
@@ -212,6 +214,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 	add(_bg);
+	add(_sideLine);
 	add(_sidebar);
 	add(_globe);
 
@@ -236,8 +239,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
-	add(_btnTop);
-	add(_btnBottom);
+	add(_sideTop);
+	add(_sideBottom);
 
 	add(_txtFunds);
 	add(_txtHour);
@@ -258,6 +261,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	geobord->setY(_sidebar->getY());
 	_sidebar->copy(geobord);
 	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg);
+
+	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
 
 	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -377,8 +382,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEf
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
 
-	_btnTop->setColor(Palette::blockOffset(15)+6);
-	_btnBottom->setColor(Palette::blockOffset(15)+6);
+	_sideTop->setColor(Palette::blockOffset(15)+6);
+	_sideBottom->setColor(Palette::blockOffset(15)+6);
 	
 	_txtFunds->setColor(Palette::blockOffset(15)+4);
 	_txtFunds->setAlign(ALIGN_CENTER);
@@ -1572,9 +1577,9 @@ void GeoscapeState::time1Day()
 						possibilities.push_back(*f);
 					}
 				}
-				if (possibilities.size() !=0)
+				if (possibilities.size() != 0)
 				{
-					int pick = RNG::generate(0, possibilities.size()-1);
+					size_t pick = RNG::generate(0, possibilities.size()-1);
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
@@ -1788,7 +1793,7 @@ void GeoscapeState::time1Month()
 								i = races.erase(i);
 							}
 						}
-						int race = RNG::generate(0, races.size()-1);
+						size_t race = RNG::generate(0, races.size()-1);
 						mission->setRace(races[race]);
 						mission->start(150);
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
@@ -2368,11 +2373,16 @@ void GeoscapeState::resize(int &dX, int &dY)
 
 	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
 	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
+
 	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-	_btnTop->setHeight(height);
-	_btnTop->setY(_sidebar->getY() - height - 1);
-	_btnBottom->setHeight(height);
-	_btnBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
+	_sideTop->setHeight(height);
+	_sideTop->setY(_sidebar->getY() - height - 1);
+	_sideBottom->setHeight(height);
+	_sideBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
+
+	_sideLine->setHeight(Options::baseYResolution);
+	_sideLine->setY(0);
+	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
 }
 
 }

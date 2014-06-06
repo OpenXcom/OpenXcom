@@ -40,7 +40,7 @@ struct MissionWave
 	/**
 	 * The UFOs are generated sequentially, one every @a spawnTimer minutes.
 	 */
-	unsigned ufoCount;
+	size_t ufoCount;
 	/// The trajectory ID for this wave's UFOs.
 	/**
 	 * Trajectories control the way UFOs fly around the Geoscape.
@@ -50,7 +50,7 @@ struct MissionWave
 	/**
 	 * The actual value used is spawnTimer/4 or 3*spawnTimer/4.
 	 */
-	unsigned spawnTimer;
+	size_t spawnTimer;
 };
 
 /**
@@ -67,22 +67,22 @@ public:
 	/// Gets the mission's type.
 	const std::string &getType() const { return _type; }
 	/// Gets a race based on the game time and the racial distribution.
-	const std::string generateRace(const unsigned monthsPassed) const;
+	const std::string generateRace(const size_t monthsPassed) const;
 	/// Gets the most likely race based on the game time and the racial distribution.
-	const std::string getTopRace(const unsigned monthsPassed) const;
+	const std::string getTopRace(const size_t monthsPassed) const;
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
 	/// Gets the number of waves.
 	size_t getWaveCount() const { return _waves.size(); }
 	/// Gets the full wave information.
-	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
+	const MissionWave &getWave(size_t index) const { return _waves[index]; }
 	/// Gets the score for this mission.
 	int getPoints() const;
 private:
 	/// The mission's type ID.
 	std::string _type;
 	/// The race distribution over game time.
-	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;
+	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 	/// The mission's points

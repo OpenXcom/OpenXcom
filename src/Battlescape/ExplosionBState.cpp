@@ -119,7 +119,7 @@ void ExplosionBState::init()
 				p.x += X; p.y += Y;
 				Explosion *explosion = new Explosion(p, frame, true);
 				// add the explosion on the map
-				_parent->getMap()->getExplosions()->insert(explosion);
+				_parent->getMap()->getExplosions()->push_back(explosion);
 				if (i > 0 && i % counter == 0)
 				{
 					--frame;
@@ -156,7 +156,7 @@ void ExplosionBState::init()
 			_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
 		}
 		Explosion *explosion = new Explosion(_center, anim, false, hit);
-		_parent->getMap()->getExplosions()->insert(explosion);
+		_parent->getMap()->getExplosions()->push_back(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = t->getUnit();
@@ -173,17 +173,21 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(), inext = i; i != _parent->getMap()->getExplosions()->end(); i = inext)
+	for (std::list<Explosion*>::iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end();)
 	{
-		++inext;
 		if(!(*i)->animate())
 		{
-			_parent->getMap()->getExplosions()->erase((*i));
+			delete (*i);
+			i = _parent->getMap()->getExplosions()->erase(i);
 			if (_parent->getMap()->getExplosions()->empty())
 			{
 				explode();
 				return;
 			}
+		}
+		else
+		{
+			++i;
 		}
 	}
 }

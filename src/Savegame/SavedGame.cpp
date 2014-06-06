@@ -524,7 +524,7 @@ void SavedGame::save(const std::string &filename) const
 	// UFOs must be after missions
 	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
-		node["ufos"].push_back((*i)->save());
+		node["ufos"].push_back((*i)->save(getMonthsPassed() == -1));
 	}
 	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
 	{
@@ -819,7 +819,7 @@ Base *SavedGame::getSelectedBase()
  * Sets the last selected player base.
  * @param base number of the base.
  */
-void SavedGame::setSelectedBase(int base)
+void SavedGame::setSelectedBase(size_t base)
 {
 	_selectedBase = base;
 }

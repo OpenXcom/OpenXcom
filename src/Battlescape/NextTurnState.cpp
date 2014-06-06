@@ -140,6 +140,7 @@ void NextTurnState::think()
  */
 void NextTurnState::close()
 {
+	_battleGame->getBattleGame()->cleanupDeleted();
 	_game->popState();
 
 	int liveAliens = 0;

@@ -60,7 +60,7 @@ public:
 	/// Gets the height of all frames.
 	int getHeight() const;
 	/// Gets the total frames in the set.
-	int getTotalFrames() const;
+	size_t getTotalFrames() const;
 	/// Sets the surface set's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	std::map<int, Surface*> *getFrames();

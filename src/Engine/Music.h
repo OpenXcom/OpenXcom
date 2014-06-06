@@ -41,7 +41,7 @@ public:
 	/// Loads music from the specified file.
 	virtual void load(const std::string &filename);
 	/// Loads music from a chunk of memory.
-	virtual void load(const void *data, size_t size);
+	virtual void load(const void *data, int size);
 	/// Plays the music.
 	virtual void play(int loop = -1) const;
 	/// Stops all music.

@@ -542,4 +542,13 @@ bool MapData::isBaseModule()
 {
 	return _baseModule;
 }
+
+/**
+ * set the "no floor" flag.
+ * @param isNoFloor set the flag to THIS.
+ */
+void MapData::setNoFloor(bool isNoFloor)
+{
+	_isNoFloor = isNoFloor;
+}
 }

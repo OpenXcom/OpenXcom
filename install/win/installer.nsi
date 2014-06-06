@@ -4,7 +4,6 @@
 ;Includes
 
 	!include "MUI2.nsh"
-	!include "ZipDLL.nsh"
 	!include "x64.nsh"
 
 ;--------------------------------
@@ -98,13 +97,16 @@
 	!insertmacro MUI_LANGUAGE "German"
 	!insertmacro MUI_LANGUAGE "Hungarian"
 	!insertmacro MUI_LANGUAGE "Italian"
-	!insertmacro MUI_LANGUAGE "Russian"
+	!insertmacro MUI_LANGUAGE "Portuguese"
 	!insertmacro MUI_LANGUAGE "PortugueseBR"
 	!insertmacro MUI_LANGUAGE "Polish"
 	!insertmacro MUI_LANGUAGE "Romanian"
+	!insertmacro MUI_LANGUAGE "Russian"
 	!insertmacro MUI_LANGUAGE "Slovak"
 	!insertmacro MUI_LANGUAGE "Spanish"
+	!insertmacro MUI_LANGUAGE "SpanishInternational"
 	!insertmacro MUI_LANGUAGE "Turkish"
+	!insertmacro MUI_LANGUAGE "Ukrainian"
 
 	!include "installerlang.nsh" ; Language strings
 
@@ -182,7 +184,7 @@ ${Else}
 	File "..\..\bin\Win32\Release\OpenXcom.exe"
 	File "..\..\bin\Win32\*.dll"
 ${EndIf}
-	File "..\..\COPYING"
+	File "..\..\LICENSE.txt"
 	File "..\..\CHANGELOG.txt"
 	File "..\..\README.txt"
 	
@@ -292,10 +294,10 @@ Section "$(NAME_SecPatch)" SecPatch
 		Abort
 	success1:
 
-	;(uses ZipDLL.dll)
-	!insertmacro ZIPDLL_EXTRACT "$TEMP\universal-patch.zip" "$INSTDIR\data" "<ALL>"
+	;(uses nsisunz.dll)
+	nsisunz::UnzipToLog "$TEMP\universal-patch.zip" "$INSTDIR\data"
 	Pop $0
-	StrCmp $0 success success2
+	StrCmp $0 "success" success2
 		SetDetailsView show
 		DetailPrint "unzipping failed: $0"
 		Abort
@@ -349,7 +351,7 @@ Section "-un.Main"
 	
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\*.dll"
-	Delete "$INSTDIR\COPYING"
+	Delete "$INSTDIR\LICENSE.txt"
 	Delete "$INSTDIR\README.txt"
 	Delete "$INSTDIR\CHANGELOG.txt"
 	

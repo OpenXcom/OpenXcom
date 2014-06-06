@@ -45,26 +45,6 @@
 #include <functional>
 #include <math.h>
 
-namespace {
-/**
- * Get a random point inside the given region zone.
- * The point will be used to land a UFO, so it HAS to be on land.
- */
-std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
-{
-	std::pair<double, double> pos;
-	do
-	{
-		pos = region.getRandomPoint(zone);
-	}
-	while (!(globe.insideLand(pos.first, pos.second)
-		&& region.insideRegion(pos.first, pos.second)));
-	return pos;
-
-}
-
-}
-
 namespace OpenXcom
 {
 
@@ -97,10 +77,10 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 {
 	_region = node["region"].as<std::string>(_region);
 	_race = node["race"].as<std::string>(_race);
-	_nextWave = node["nextWave"].as<unsigned>(_nextWave);
-	_nextUfoCounter = node["nextUfoCounter"].as<unsigned>(_nextUfoCounter);
-	_spawnCountdown = node["spawnCountdown"].as<unsigned>(_spawnCountdown);
-	_liveUfos = node["liveUfos"].as<unsigned>(_liveUfos);
+	_nextWave = node["nextWave"].as<size_t>(_nextWave);
+	_nextUfoCounter = node["nextUfoCounter"].as<size_t>(_nextUfoCounter);
+	_spawnCountdown = node["spawnCountdown"].as<size_t>(_spawnCountdown);
+	_liveUfos = node["liveUfos"].as<size_t>(_liveUfos);
 	_uniqueID = node["uniqueID"].as<int>(_uniqueID);
 	if (const YAML::Node &base = node["alienBase"])
 	{
@@ -218,7 +198,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
-		int spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
+		size_t spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
 		_spawnCountdown = (spawnTimer/2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 }
@@ -338,14 +318,14 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	return ufo;
 }
 
-void AlienMission::start(unsigned initialCount)
+void AlienMission::start(size_t initialCount)
 {
 	_nextWave = 0;
 	_nextUfoCounter = 0;
 	_liveUfos = 0;
 	if (initialCount == 0)
 	{
-		int spawnTimer = _rule.getWave(0).spawnTimer / 30;
+		size_t spawnTimer = _rule.getWave(0).spawnTimer / 30;
 		_spawnCountdown = (spawnTimer / 2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 	else
@@ -381,8 +361,8 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 {
 	const Ruleset &rules = *engine.getRuleset();
 	SavedGame &game = *engine.getSavedGame();
-	const unsigned int curWaypoint = ufo.getTrajectoryPoint();
-	const unsigned int nextWaypoint = curWaypoint + 1;
+	const size_t curWaypoint = ufo.getTrajectoryPoint();
+	const size_t nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory &trajectory = ufo.getTrajectory();
 	if (nextWaypoint == trajectory.getWaypointCount())
 	{
@@ -571,7 +551,7 @@ void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
  * Calling this on a finished mission has no effect.
  * @param minutes The minutes until the next UFO wave will spawn.
  */
-void AlienMission::setWaveCountdown(unsigned minutes)
+void AlienMission::setWaveCountdown(size_t minutes)
 {
 	assert(minutes != 0 && minutes % 30 == 0);
 	if (isOver())
@@ -700,7 +680,7 @@ void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
  * @param region the ruleset for the region of our mission.
  * @return a set of lon and lat coordinates based on the criteria of the trajectory.
  */
-std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &trajectory, const unsigned int nextWaypoint, const Globe &globe, const RuleRegion &region)
+std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region)
 {
 	/* LOOK MA! NO HANDS!
 	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
@@ -711,4 +691,29 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	*/
 		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
+
+/**
+ * Get a random point inside the given region zone.
+ * The point will be used to land a UFO, so it HAS to be on land.
+ */
+std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone)
+{
+	int tries = 0;
+	std::pair<double, double> pos;
+	do
+	{
+		pos = region.getRandomPoint(zone);
+		++tries;
+	}
+	while (!(globe.insideLand(pos.first, pos.second)
+		&& region.insideRegion(pos.first, pos.second))
+		&& tries < 100);
+	if (tries == 100)
+	{
+		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Lattitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+	}
+	return pos;
+
+}
+
 }

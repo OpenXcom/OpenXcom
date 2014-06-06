@@ -19,6 +19,7 @@
 #include <cmath>
 #include "../fmath.h"
 #include "MiniMapView.h"
+#include "MiniMapState.h"
 #include "../Savegame/Tile.h"
 #include "Map.h"
 #include "Camera.h"
@@ -68,11 +69,7 @@ void MiniMapView::draw()
 	{
 		return;
 	}
-	SDL_Rect current;
-	current.x = current.y = 0;
-	current.w = getWidth ();
-	current.h = getHeight ();
-	drawRect(&current, 0);
+	drawRect(0, 0, getWidth(), getHeight(), 0);
 	this->lock();
 	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
 	{
@@ -158,7 +155,7 @@ void MiniMapView::draw()
  * Increments the displayed level.
  * @return New display level.
  */
-int MiniMapView::up ()
+int MiniMapView::up()
 {
 	_camera->setViewLevel(_camera->getViewLevel()+1);
 	_redraw = true;
@@ -169,7 +166,7 @@ int MiniMapView::up ()
  * Decrements the displayed level.
  * @return New display level.
  */
-int MiniMapView::down ()
+int MiniMapView::down()
 {
 	_camera->setViewLevel(_camera->getViewLevel()-1);
 	_redraw = true;
@@ -191,7 +188,7 @@ void MiniMapView::mousePress(Action *action, State *state)
 		_isMouseScrolled = false;
 		SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
 		_posBeforeMouseScrolling = _camera->getCenterPosition();
-		if (!Options::battleDragScrollInvert && _cursorPosition.z == 0);
+		if (!Options::battleDragScrollInvert && _cursorPosition.z == 0)
 		{
 			_cursorPosition.x = action->getDetails()->motion.x;
 			_cursorPosition.y = action->getDetails()->motion.y;
@@ -210,7 +207,7 @@ void MiniMapView::mousePress(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void MiniMapView::mouseClick (Action *action, State *state)
+void MiniMapView::mouseClick(Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
 
@@ -251,6 +248,11 @@ void MiniMapView::mouseClick (Action *action, State *state)
 			_redraw = true;
 		}
 		if (_isMouseScrolled) return;
+	}
+
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		((MiniMapState*)(state))->btnOkClick(action);
 	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -315,18 +317,18 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 		if (Options::battleDragScrollInvert)
 		{
-			scrollX = action->getDetails()->motion.xrel / action->getXScale();
-			scrollY = action->getDetails()->motion.yrel / action->getYScale();
+			scrollX = action->getDetails()->motion.xrel;
+			scrollY = action->getDetails()->motion.yrel;
 		}
 		else
 		{
-			scrollX = -action->getDetails()->motion.xrel / action->getXScale();
-			scrollY = -action->getDetails()->motion.yrel / action->getYScale();
+			scrollX = -action->getDetails()->motion.xrel;
+			scrollY = -action->getDetails()->motion.yrel;
 		}
 		_mouseScrollX += scrollX;
 		_mouseScrollY += scrollY;
-		newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
-		newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
+		newX = _posBeforeMouseScrolling.x + _mouseScrollX / action->getXScale() / 4;
+		newY = _posBeforeMouseScrolling.y + _mouseScrollY / action->getYScale() / 4;
 
 		// Keep the limits...
 		if (newX < -1 || _camera->getMapSizeX() < newX)
@@ -353,10 +355,12 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		else
 		{
 			Position delta(-scrollX, -scrollY, 0);
-			_cursorPosition.x = Round(std::min(getX() + getWidth(), std::max(getX(), (int)(Round(_cursorPosition.x / action->getXScale()) + delta.x))) * action->getXScale());
-				//std::min(Round(getWidth() * action->getXScale() + getX() * action->getXScale()), std::max(Round(getX() * action->getXScale()), _cursorPosition.x + Round(delta.x * action->getXScale())));
-			_cursorPosition.y = Round(std::min(getY() + getHeight(), std::max(getY(), (int)(Round(_cursorPosition.y / action->getYScale()) + delta.y))) * action->getYScale());
-				//std::min(Round(getHeight() * action->getYScale() + getY() * action->getYScale()), std::max(Round(getY() * action->getYScale()), _cursorPosition.y + Round(delta.y * action->getYScale())));
+			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
+			int barHeight = _game->getScreen()->getCursorTopBlackBand();
+			int cursorX = _cursorPosition.x + delta.x;
+			int cursorY =_cursorPosition.y + delta.y;
+			_cursorPosition.x = std::min((int)Round((getX() + getWidth()) * action->getXScale()) + barWidth, std::max((int)Round(getX() * action->getXScale()) + barWidth, cursorX));
+			_cursorPosition.y = std::min((int)Round((getY() + getHeight()) * action->getYScale()) + barHeight, std::max((int)Round(getY() * action->getYScale()) + barHeight, cursorY));
 			action->getDetails()->motion.x = _cursorPosition.x;
 			action->getDetails()->motion.y = _cursorPosition.y;
 		}

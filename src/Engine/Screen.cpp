@@ -322,7 +322,7 @@ void Screen::resetDisplay(bool resetVideo)
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
-	if (resetVideo)
+	if (resetVideo || _screen->format->BitsPerPixel != _bpp)
 	{
 #ifdef __linux__
 		// Workaround for segfault when switching to opengl
@@ -388,7 +388,7 @@ void Screen::resetDisplay(bool resetVideo)
 
 	if (_scaleX > _scaleY && Options::keepAspectRatio)
 	{
-		int targetWidth = floor(_scaleY * (double)_baseWidth);
+		int targetWidth = (int)floor(_scaleY * (double)_baseWidth);
 		_topBlackBand = _bottomBlackBand = 0;
 		_leftBlackBand = (getWidth() - targetWidth) / 2;
 		if (_leftBlackBand < 0)
@@ -410,7 +410,7 @@ void Screen::resetDisplay(bool resetVideo)
 	}
 	else if (_scaleY > _scaleX && Options::keepAspectRatio)
 	{
-		int targetHeight = floor(_scaleX * (double)_baseHeight);
+		int targetHeight = (int)floor(_scaleX * (double)_baseHeight);
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)
 		{

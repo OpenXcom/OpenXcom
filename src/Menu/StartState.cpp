@@ -31,6 +31,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
@@ -41,7 +42,6 @@
 #include "ErrorMessageState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
-#include <SDL_syswm.h>
 
 namespace OpenXcom
 {
@@ -70,6 +70,7 @@ StartState::StartState(Game *game) : State(game), _anim(0)
 
 	_font = new Font();
 	_font->loadTerminal();
+	_lang = new Language();
 
 	_text = new Text(Options::baseXResolution, Options::baseYResolution, 0, 0);
 	_cursor = new Text(_font->getWidth(), _font->getHeight(), 0, 0);
@@ -81,11 +82,11 @@ StartState::StartState(Game *game) : State(game), _anim(0)
 	add(_cursor);
 
 	// Set up objects
-	_text->initText(_font, _font, 0);
+	_text->initText(_font, _font, _lang);
 	_text->setColor(0);
 	_text->setWordWrap(true);
 
-	_cursor->initText(_font, _font, 0);
+	_cursor->initText(_font, _font, _lang);
 	_cursor->setColor(0);
 	_cursor->setText(L"_");
 
@@ -103,7 +104,7 @@ StartState::StartState(Game *game) : State(game), _anim(0)
 	}
 	else
 	{
-		addLine(L"C:\\GAMES\\OPENXCOM>openxcom");
+		addLine(Language::utf8ToWstr(CrossPlatform::getDosPath()) + L">openxcom");
 	}
 }
 
@@ -118,6 +119,7 @@ StartState::~StartState()
 	}
 	delete _font;
 	delete _timer;
+	delete _lang;
 }
 
 /**
@@ -157,7 +159,7 @@ void StartState::think()
 	switch (loading)
 	{
 	case LOADING_FAILED:
-		flash();
+		CrossPlatform::flashWindow();
 		addLine(L"");
 		addLine(L"ERROR: " + Language::utf8ToWstr(error));
 		addLine(L"Make sure you installed OpenXcom correctly.");
@@ -167,7 +169,7 @@ void StartState::think()
 		loading = LOADING_DONE;
 		break;
 	case LOADING_SUCCESSFUL:
-		flash();
+		CrossPlatform::flashWindow();
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
@@ -221,22 +223,6 @@ void StartState::handle(Action *action)
 			_game->quit();
 		}
 	}
-}
-
-/**
- * Notifies the user that maybe he should have a look.
- */
-void StartState::flash()
-{
-#ifdef _WIN32
-	SDL_SysWMinfo wminfo;
-	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
-	{
-		HWND hwnd = wminfo.window;
-		FlashWindow(hwnd, true);
-	}
-#endif
 }
 
 /**

@@ -47,12 +47,12 @@ private:
 	int _id, _crashId, _landId, _damage;
 	std::string _direction, _altitude;
 	enum UfoStatus _status;
-	unsigned _secondsRemaining;
+	size_t _secondsRemaining;
 	bool _inBattlescape;
 	int _shotDownByCraftId;
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
-	unsigned _trajectoryPoint;
+	size_t _trajectoryPoint;
 	bool _detected, _hyperDetected;
 	int _shootingAt, _hitFrame;
 	/// Calculates a new speed vector to the destination.
@@ -65,7 +65,7 @@ public:
 	/// Loads the UFO from YAML.
 	void load(const YAML::Node& node, const Ruleset &ruleset, SavedGame &game);
 	/// Saves the UFO to YAML.
-	YAML::Node save() const;
+	YAML::Node save(bool newBattle) const;
 	/// Saves the UFO's ID to YAML.
 	YAML::Node saveId() const;
 	/// Gets the UFO's ruleset.
@@ -85,9 +85,9 @@ public:
 	/// Sets the UFO's detection status.
 	void setDetected(bool detected);
 	/// Gets the UFO's seconds left on the ground.
-	int getSecondsRemaining() const;
+	size_t getSecondsRemaining() const;
 	/// Sets the UFO's seconds left on the ground.
-	void setSecondsRemaining(int seconds);
+	void setSecondsRemaining(size_t seconds);
 	/// Gets the UFO's direction.
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.
@@ -125,9 +125,9 @@ public:
 	/// Sets the UFO's hyper detection status.
 	void setHyperDetected(bool hyperdetected);
 	/// Gets the UFO's progress on the trajectory track.
-	unsigned getTrajectoryPoint() const { return _trajectoryPoint; }
+	size_t getTrajectoryPoint() const { return _trajectoryPoint; }
 	/// Sets the UFO's progress on the trajectory track.
-	void setTrajectoryPoint(unsigned np) { _trajectoryPoint = np; }
+	void setTrajectoryPoint(size_t np) { _trajectoryPoint = np; }
 	/// Gets the UFO's trajectory.
 	const UfoTrajectory &getTrajectory() const { return *_trajectory; }
 	/// Gets the UFO's mission object.
