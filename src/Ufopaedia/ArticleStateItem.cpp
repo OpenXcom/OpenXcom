@@ -237,6 +237,12 @@ namespace OpenXcom
 			case BT_GRENADE:
 			case BT_PROXIMITYGRENADE:
 			case BT_MELEE:
+				_txtDamage = new Text(82, 10, 194, 7);
+				add(_txtDamage);
+				_txtDamage->setColor(Palette::blockOffset(14)+15);
+				_txtDamage->setAlign(ALIGN_CENTER);
+				_txtDamage->setText(tr("STR_DAMAGE_UC"));
+
 				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 
 				ss.str(L"");ss.clear();
