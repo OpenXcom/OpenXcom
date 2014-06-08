@@ -213,6 +213,7 @@ void BattlescapeGenerator::nextStage()
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
 				(*j)->setTurnsSinceSpotted(255);
+				(*j)->getVisibleTiles()->clear();
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
 				{
 					_save->setSelectedUnit(*j);
@@ -222,7 +223,12 @@ void BattlescapeGenerator::nextStage()
 				if (node)
 				{
 					_save->setUnitPosition((*j), node->getPosition());
-					(*j)->getVisibleTiles()->clear();
+					if (!_craftInventoryTile)
+					{
+						_craftInventoryTile = (*j)->getTile();
+					}
+					_craftInventoryTile->setUnit(*j);
+					(*j)->setVisible(false);
 					if ((*j)->getId() > highestSoldierID)
 					{
 						highestSoldierID = (*j)->getId();
@@ -230,11 +236,12 @@ void BattlescapeGenerator::nextStage()
 				}
 				else if (placeUnitNearFriend(*j))
 				{
-					(*j)->getVisibleTiles()->clear();
 					if ((*j)->getId() > highestSoldierID)
 					{
 						highestSoldierID = (*j)->getId();
 					}
+					_craftInventoryTile->setUnit(*j);
+					(*j)->setVisible(false);
 				}
 			}
 		}
