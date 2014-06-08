@@ -22,3 +22,5 @@ items:
     attraction: 10
   - type: STR_MIND_PROBE
     attraction: 10
+  - type: STR_ALIEN_GRENADE
+    attraction: 6 # pick up grenades they're standing on, but don't chase after ones they throw
