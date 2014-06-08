@@ -1231,8 +1231,6 @@ en-US:
   STR_SFX_VOLUME_DESC: "Changes the volume of the sound effects."
   STR_UI_VOLUME: "UI Volume"
   STR_UI_VOLUME_DESC: "Changes the volume of the interface beeps."
-  STR_AUDIO_BIT_DEPTH: "Audio Bit Depth"
-  STR_AUDIO_BIT_DEPTH_DESC: "Changes the bit depth of the audio output. Smaller values are closer to the original sounds, but may not work on every system."
   STR_AUDIO_SAMPLE_RATE: "Audio Sample Rate"
   STR_AUDIO_SAMPLE_RATE_DESC: "Changes the sample rate of the audio output. Smaller values are closer to the original sounds, but may not work on every system."
   STR_SCROLL_SPEED: "Scroll Speed"
