@@ -487,9 +487,6 @@ void TextEdit::keyboardPress(Action *action, State *state)
 				(!_numerical && ((key >= L' ' && key <= L'~') || key >= 160))) &&
 				!exceedsMaxWidth((wchar_t)key))
 			{
-				// Workaround for that one cyrillic letter
-				if (key == 0x0451) { action->getDetails()->key.keysym.unicode = 0x00EB; }
-				if (key == 0x0401) { action->getDetails()->key.keysym.unicode = 0x00CB; }
 				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
 				_caretPos++;
 			}
