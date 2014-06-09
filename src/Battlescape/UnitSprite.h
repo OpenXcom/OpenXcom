@@ -59,6 +59,8 @@ private:
 	void drawRoutine8();
 	/// Drawing routine for celatids.
 	void drawRoutine9();
+	/// Drawing routine for TFTD tanks.
+	void drawRoutine10();
 	/// sort two handed sprites out.
 	void sortRifles();
 public:

@@ -153,7 +153,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine7,
 										&UnitSprite::drawRoutine8,
 										&UnitSprite::drawRoutine9,
-										&UnitSprite::drawRoutine0};
+										&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine10};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -1180,6 +1181,82 @@ void UnitSprite::drawRoutine9()
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 
 	torso->blit(this);
+}
+
+/**
+* Drawing routine for terror tanks.
+*/
+void UnitSprite::drawRoutine10()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	int hoverTank = 0;
+	if (_unit->getArmor()->getMovementType() == MT_FLY)
+	{
+		hoverTank = 128;
+	}
+	const int offX[8] = { -2, -7, -5, 0, 5, 7, 2, 0 }; // turret offsets
+	const int offy[8] = { -1, -3, -4, -5, -4, -3, -1, -1 }; // turret offsets
+
+	Surface *s = 0;
+	int turret = _unit->getTurretType();
+
+	if (hoverTank != 0)
+	{
+		// draw the displacer
+		s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
+		s->blit(this);
+	}
+	else
+	{
+		// draw the coelacanth
+		if (_unit->getStatus() == STATUS_WALKING)
+		{
+			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() % 4));
+		}
+		else
+		{
+			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
+		}
+		s->blit(this);
+	}
+
+	int turretOffsetX;
+	int turretOffsetY;
+	switch (_part)
+	{
+		case 0:
+			turretOffsetX = 0;
+			turretOffsetY = 0;
+			break;
+		case 1:
+			turretOffsetX = -16;
+			turretOffsetY = -8;
+			break;
+		case 2:
+			turretOffsetX = 16;
+			turretOffsetY = -8;
+			break;
+		case 3:
+			turretOffsetY = -16;
+			break;
+	}
+
+	// draw the turret, overlapping all 4 parts
+	if (turret != -1)
+	{
+		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
+		turretOffsetX += offX[_unit->getDirection()];
+		turretOffsetY += offy[_unit->getDirection()];
+		s->setX(turretOffsetX);
+		s->setY(turretOffsetY);
+		s->blit(this);
+	}
+
 }
 
 /**
