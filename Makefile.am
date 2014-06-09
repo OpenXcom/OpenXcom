@@ -248,6 +248,7 @@ openxcom_SOURCES = \
 	src/Engine/OpenGL.h \
 	src/Engine/Options.cpp \
 	src/Engine/Options.h \
+	src/Engine/Options.inc.h \
 	src/Engine/OptionInfo.cpp \
 	src/Engine/OptionInfo.h \
 	src/Engine/Palette.cpp \
@@ -615,7 +616,7 @@ openxcom_SOURCES = \
 
 EXTRA_DIST = \
 	autogen.sh \
-	bin/ \
+	bin/data \
 	docs/openxcom.6.xml \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
@@ -652,6 +653,18 @@ dist-hook:
 	else \
 		echo A git clone is required to generate a ChangeLog >&2; \
 	fi
+
+install-data-local:
+	@mkdir -p $(DESTDIR)$(pkgdatadir); \
+	cp -r $(top_srcdir)/bin/data/* $(DESTDIR)$(pkgdatadir)/ ; \
+	find $(DESTDIR)$(pkgdatadir) | xargs chmod a=rX,u+w
+
+# NOTE: this might wipe user unpacked xcom if it is in the dir, as there
+#       is no way of distinguishing between our content and their.
+#       If user uses distro package or if he does not use uninstall
+#       command this won't of course happen.
+uninstall-local:
+	@find $(DESTDIR)$(pkgdatadir) -type f -exec rm -rf {} +
 
 distclean-local: clean-local
 
