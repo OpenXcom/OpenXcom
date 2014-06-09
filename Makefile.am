@@ -24,118 +24,6 @@ icon_DATA = \
 desktopdir = $(datadir)/applications
 desktop_DATA = res/linux/openxcom.desktop
 
-pkgdata_DATA = bin/data/README.txt
-
-mapsdir = $(pkgdatadir)/data/MAPS/
-maps_DATA = \
-	bin/data/MAPS/*
-
-routesdir = $(pkgdatadir)/data/ROUTES/
-routes_DATA = \
-	bin/data/ROUTES/*
-
-terraindir = $(pkgdatadir)/data/TERRAIN/
-terrain_DATA = \
-	bin/data/TERRAIN/*
-
-weaponsdir = $(pkgdatadir)/data/Resources/Weapons/
-weapons_DATA = \
-	bin/data/Resources/Weapons/Terror.png
-
-pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
-pathfinding_DATA = \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_02.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_03.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_04.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_05.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_06.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_07.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_08.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_09.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_10.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_11.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_12.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_13.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_14.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_15.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_16.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_17.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_18.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_19.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
-
-bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
-bulletsprite_DATA = \
-	bin/data/Resources/BulletSprites/BulletSprites.png
-
-uispritedir =  $(pkgdatadir)/data/Resources/UI/
-uisprite_DATA = \
-	bin/data/Resources/UI/reserve.png
-
-rulesetdir =  $(pkgdatadir)/data/Ruleset
-ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
-
-languagedir = $(pkgdatadir)/data/Language
-language_DATA = \
-	bin/data/Language/Font.dat \
-	bin/data/Language/FontBig.png \
-	bin/data/Language/FontSmall.png \
-	bin/data/Language/FontGeoBig.png \
-	bin/data/Language/FontGeoSmall.png \
-	bin/data/Language/en-GB.yml \
-	bin/data/Language/en-US.yml
-
-namedir = $(pkgdatadir)/data/SoldierName
-name_DATA = \
-	bin/data/SoldierName/American.nam \
-	bin/data/SoldierName/Arabic.nam \
-	bin/data/SoldierName/British.nam \
-	bin/data/SoldierName/Czech.nam \
-	bin/data/SoldierName/Danish.nam \
-	bin/data/SoldierName/Finnish.nam \
-	bin/data/SoldierName/French.nam \
-	bin/data/SoldierName/German.nam \
-	bin/data/SoldierName/Hungarian.nam \
-	bin/data/SoldierName/Chinese.nam \
-	bin/data/SoldierName/Irish.nam \
-	bin/data/SoldierName/Italian.nam \
-	bin/data/SoldierName/Japanese.nam \
-	bin/data/SoldierName/Nigerian.nam \
-	bin/data/SoldierName/Polish.nam \
-	bin/data/SoldierName/Portuguese.nam \
-	bin/data/SoldierName/Romanian.nam \
-	bin/data/SoldierName/Russian.nam \
-	bin/data/SoldierName/Spanish.nam \
-	bin/data/SoldierName/Swedish.nam \
-	bin/data/SoldierName/Turkish.nam
-	
-shaderdir = $(pkgdatadir)/data/Shaders
-shader_DATA = \
-	bin/data/Shaders/Raw.OpenGL.shader \
-	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
-	bin/data/Shaders/CRT.OpenGL.shader \
-	bin/data/Shaders/CRT-simple.OpenGL.shader \
-	bin/data/Shaders/Curvature.OpenGL.shader \
-	bin/data/Shaders/dot_n_bloom.OpenGL.shader \
-	bin/data/Shaders/heavybloom.OpenGL.shader \
-	bin/data/Shaders/HQ2x.OpenGL.shader \
-	bin/data/Shaders/Openxcom.OpenGL.shader \
-	bin/data/Shaders/Phosphor-simple.OpenGL.shader \
-	bin/data/Shaders/Pixellate.OpenGL.shader \
-	bin/data/Shaders/Quilez.OpenGL.shader \
-	bin/data/Shaders/SABR.OpenGL.shader \
-	bin/data/Shaders/Scale4xHQ.OpenGL.shader \
-	bin/data/Shaders/simplebloom.OpenGL.shader
-
-iconprogramdir = $(pkgdatadir)/data/
-iconprogram_DATA = \
-	bin/data/openxcom.png
-
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) $(GL_LIBS)
@@ -727,6 +615,7 @@ openxcom_SOURCES = \
 
 EXTRA_DIST = \
 	autogen.sh \
+	bin/ \
 	docs/openxcom.6.xml \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
@@ -747,20 +636,8 @@ EXTRA_DIST = \
 	res/linux/icons/openxcom_48x48.png \
 	res/windows/openxcom.ico \
 	$(doc_DATA) \
-	$(pkgdata_DATA) \
-	$(maps_DATA) \
-	$(routes_DATA) \
-	$(language_DATA) \
-	$(name_DATA) \
-	$(weapons_DATA) \
-	$(pathfinding_DATA) \
-	$(bulletsprite_DATA) \
-	$(uisprite_DATA) \
-	$(ruleset_DATA) \
-	$(shader_DATA) \
 	$(desktop_DATA) \
-	$(icon_DATA) \
-	$(iconprogram_DATA)
+	$(icon_DATA)
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \
