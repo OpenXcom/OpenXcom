@@ -85,12 +85,16 @@ AC_ARG_WITH(man,
 
 AS_IF([test "x$with_man" != "xno"], [
 	build_man=yes
+	# Ask your favorite distribution WHY
 	AS_IF([test -z "$DOCBOOK2MAN"], [
-		AC_PATH_PROG(DOCBOOK2MAN,[docbook2x-man])
+		AC_PATH_PROG(DOCBOOK2MAN,[docbook-to-man])
 		AS_IF([test -z "$DOCBOOK2MAN"], [
-			AC_PATH_PROG(DOCBOOK2MAN,[docbook2man.pl])
+			AC_PATH_PROG(DOCBOOK2MAN,[docbook2x-man])
 			AS_IF([test -z "$DOCBOOK2MAN"], [
-				AC_MSG_ERROR([docbook2x-man is missing. Install docbook2X package.])
+				AC_PATH_PROG(DOCBOOK2MAN,[docbook2man.pl])
+				AS_IF([test -z "$DOCBOOK2MAN"], [
+					AC_MSG_ERROR([docbook-to-man is missing. Install docbook2X package.])
+				])
 			])
 		])
 	])
