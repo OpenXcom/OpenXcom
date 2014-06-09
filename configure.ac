@@ -4,8 +4,8 @@ AC_PREREQ([2.65])
 # ====================
 # Version informations
 # ====================
-m4_define([openxcom_version_major],[0])
-m4_define([openxcom_version_minor],[9])
+m4_define([openxcom_version_major],[1])
+m4_define([openxcom_version_minor],[0])
 m4_define([openxcom_version_micro],[0])
 m4_define([openxcom_version],[openxcom_version_major.openxcom_version_minor.openxcom_version_micro])
 
