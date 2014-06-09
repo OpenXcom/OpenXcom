@@ -741,7 +741,7 @@ EXTRA_DIST = \
 	cmake/modules/nsis.cmake \
 	cmake/modules/NSIS.template.in \
 	cmake/modules/rpm.cmake \
-	res/mac/openxcom.icns \
+	res/mac/AppIcon.icns \
 	res/linux/icons/openxcom_128x128.png \
 	res/linux/icons/openxcom.svg \
 	res/linux/icons/openxcom_48x48.png \
