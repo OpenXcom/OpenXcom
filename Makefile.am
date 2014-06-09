@@ -34,6 +34,10 @@ routesdir = $(pkgdatadir)/data/ROUTES/
 routes_DATA = \
 	bin/data/ROUTES/*
 
+terraindir = $(pkgdatadir)/data/TERRAIN/
+terrain_DATA = \
+	bin/data/TERRAIN/*
+
 weaponsdir = $(pkgdatadir)/data/Resources/Weapons/
 weapons_DATA = \
 	bin/data/Resources/Weapons/*
