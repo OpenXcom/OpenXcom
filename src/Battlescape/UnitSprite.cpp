@@ -154,7 +154,7 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine8,
 										&UnitSprite::drawRoutine9,
 										&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine10};
+										&UnitSprite::drawRoutine11};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -1186,7 +1186,7 @@ void UnitSprite::drawRoutine9()
 /**
 * Drawing routine for terror tanks.
 */
-void UnitSprite::drawRoutine10()
+void UnitSprite::drawRoutine11()
 {
 	if (_unit->isOut())
 	{
