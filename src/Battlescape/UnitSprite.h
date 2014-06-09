@@ -61,6 +61,8 @@ private:
 	void drawRoutine9();
 	/// Drawing routine for TFTD tanks.
 	void drawRoutine11();
+	/// Drawing routine for hallucinoids.
+	void drawRoutine12();
 	/// sort two handed sprites out.
 	void sortRifles();
 public:

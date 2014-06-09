@@ -154,7 +154,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine8,
 										&UnitSprite::drawRoutine9,
 										&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine11};
+										&UnitSprite::drawRoutine11,
+										&UnitSprite::drawRoutine12};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -1258,6 +1259,23 @@ void UnitSprite::drawRoutine11()
 	}
 
 }
+
+/**
+* Drawing routine for hallucinoids.
+*/
+void UnitSprite::drawRoutine12()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
+	s->blit(this);
+}
+
 
 /**
  * Determines which weapons to display in the case of two-handed weapons.
