@@ -176,7 +176,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[RNG::generate(0, music.size()-1)];
+			return music[SDL_GetTicks() % music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
 	}
 }
 

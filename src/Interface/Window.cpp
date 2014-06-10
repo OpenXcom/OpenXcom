@@ -131,7 +131,7 @@ void Window::popup()
 {
 	if (AreSame(_popupStep, 0.0))
 	{
-		int sound = RNG::generate(0, 2);
+		int sound = SDL_GetTicks() % 3; // this is a hack to avoid calling  RNG::generate(0, 2) and skewing our seed.
 		if (soundPopup[sound] != 0)
 		{
 			soundPopup[sound]->play(Mix_GroupAvailable(0));
