@@ -27,7 +27,6 @@
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom

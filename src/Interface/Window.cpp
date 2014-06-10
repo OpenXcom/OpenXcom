@@ -22,7 +22,6 @@
 #include "../fmath.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
