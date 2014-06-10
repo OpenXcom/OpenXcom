@@ -155,7 +155,9 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine9,
 										&UnitSprite::drawRoutine0,
 										&UnitSprite::drawRoutine11,
-										&UnitSprite::drawRoutine12};
+										&UnitSprite::drawRoutine12,
+										&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine0};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -167,8 +169,63 @@ void UnitSprite::drawRoutine0()
 {
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
 	// magic numbers
-	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264, legsFloat = 275;
-	const int larmStand = 0, rarmStand = 8, rarm1H = 232, larm2H = 240, rarm2H = 248, rarmShoot = 256;
+	const int legsStand = 16, legsKneel = 24;
+	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat;
+	if (_drawingRoutine <= 10)
+	{
+		die = 264; // ufo:eu death frame
+		maleTorso = 32;
+		femaleTorso = 267;
+		rarm1H = 232;
+		larm2H = 240;
+		rarm2H = 248;
+		rarmShoot = 256;
+		legsFloat = 275;
+	}
+	else if (_drawingRoutine == 13)
+	{
+/*		if (_depth > 0)
+		{
+			die = 259; // aquanaut underwater death frame
+			maleTorso = 32; // aquanaut underwater ion armour torso
+            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") || 
+			     (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
+			{
+				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
+			}
+			else
+			{
+				femaleTorso = 286; // aquanaut underwater magnetic ion armour torso
+			}
+			rarm1H = 248;
+			larm2H = 232;
+			rarm2H = rarmShoot = 240;
+			legsFloat = 294;
+		}*/
+//		else
+		{
+			die = 256; // aquanaut land death frame
+			// aquanaut land torso
+			maleTorso = 270;
+			femaleTorso = 262;
+			rarm1H = 248;
+			larm2H = 232;
+			rarm2H = rarmShoot = 240;
+			legsFloat = 294;
+		}
+	}
+	else
+	{
+		die = 256; // tftd unit death frame
+		// tftd unit torso
+		maleTorso = 32;
+		femaleTorso = 267;
+		rarm1H = 248;
+		larm2H = 232;
+		rarm2H = 240;
+		rarmShoot = 256;
+	}
+	const int larmStand = 0, rarmStand = 8;
 	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
 	const int larmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
 	const int rarmWalk[8] = { 48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7 };

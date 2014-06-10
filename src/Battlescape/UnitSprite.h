@@ -39,7 +39,8 @@ private:
 	BattleItem *_itemA, *_itemB;
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
 	int _part, _animationFrame, _drawingRoutine;
-	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
+	/// Drawing routine for XCom soldiers in overalls, Sectoids, Mutons (routine 10),
+	/// Aquanauts (routine 13), Aquatoids (routine 14).
 	void drawRoutine0();
 	/// Drawing routine for floaters.
 	void drawRoutine1();
