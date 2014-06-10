@@ -157,7 +157,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine11,
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine0};
+										&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine12};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -219,11 +220,11 @@ void UnitSprite::drawRoutine0()
 		die = 256; // tftd unit death frame
 		// tftd unit torso
 		maleTorso = 32;
-		femaleTorso = 267;
+		femaleTorso = 262;
 		rarm1H = 248;
 		larm2H = 232;
-		rarm2H = 240;
-		rarmShoot = 256;
+		rarm2H = rarmShoot = 240;
+		legsFloat = 294;
 	}
 	const int larmStand = 0, rarmStand = 8;
 	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
@@ -1330,6 +1331,7 @@ void UnitSprite::drawRoutine12()
 
 	Surface *s = 0;
 	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
+	_redraw = true;
 	s->blit(this);
 }
 
