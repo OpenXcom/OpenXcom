@@ -62,7 +62,7 @@ private:
 	void drawRoutine9();
 	/// Drawing routine for TFTD tanks.
 	void drawRoutine11();
-	/// Drawing routine for hallucinoids.
+	/// Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
 	void drawRoutine12();
 	/// sort two handed sprites out.
 	void sortRifles();

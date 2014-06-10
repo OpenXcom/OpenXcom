@@ -1319,7 +1319,7 @@ void UnitSprite::drawRoutine11()
 }
 
 /**
-* Drawing routine for hallucinoids.
+* Drawing routine for hallucinoids and biodrones.
 */
 void UnitSprite::drawRoutine12()
 {
