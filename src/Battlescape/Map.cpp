@@ -1207,7 +1207,9 @@ void Map::animate(bool redraw)
 	{
 		if (((*i)->getArmor()->getSize() > 1 && (*i)->getArmor()->getMovementType() == MT_FLY) 
 			|| (*i)->getArmor()->getDrawingRoutine() == 8
-			|| (*i)->getArmor()->getDrawingRoutine() == 9)
+			|| (*i)->getArmor()->getDrawingRoutine() == 9
+			|| (*i)->getArmor()->getDrawingRoutine() == 12
+			|| (*i)->getArmor()->getDrawingRoutine() == 15)
 		{
 			(*i)->setCache(0);
 			cacheUnit(*i);
