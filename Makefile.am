@@ -10,7 +10,7 @@ doc_DATA = \
 if WITH_OPENXCOM_MAN
 
 openxcom.6: $(srcdir)/docs/openxcom.6.xml
-	$(DOCBOOK2MAN) $<
+	$(XMLTO) man $<
 
 dist_man_MANS = openxcom.6
 
