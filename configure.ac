@@ -93,7 +93,7 @@ AS_IF([test "x$with_man" != "xno"], [
 		])
 	])
 ], [build_man=no])
-AC_SUBST(DOCBOOK2MAN)
+AC_SUBST(XMLTO)
 AM_CONDITIONAL([WITH_OPENXCOM_MAN], [test "x$build_man" != "xno"])
 
 # ==================
