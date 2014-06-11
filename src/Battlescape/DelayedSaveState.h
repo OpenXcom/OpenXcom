@@ -20,7 +20,7 @@
 #define OPENXCOM_DELAYEDSAVESTATE_H
 
 #include "BattleState.h"
-#include "..\Savegame\SavedGame.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {

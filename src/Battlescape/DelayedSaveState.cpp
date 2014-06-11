@@ -18,8 +18,8 @@
  */
 #include "DelayedSaveState.h"
 #include "BattlescapeState.h"
-#include "..\Menu\SaveGameState.h"
-#include "..\Engine\Game.h"
+#include "../Menu/SaveGameState.h"
+#include "../Engine/Game.h"
 
 namespace OpenXcom
 {
