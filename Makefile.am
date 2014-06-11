@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = docs
 
 doc_DATA = \
-	README.md \
+	README.txt \
 	CHANGELOG.txt
 
 if WITH_OPENXCOM_MAN

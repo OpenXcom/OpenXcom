@@ -186,7 +186,7 @@ ${Else}
 ${EndIf}
 	File "..\..\LICENSE.txt"
 	File "..\..\CHANGELOG.txt"
-	File "..\..\README.md"
+	File "..\..\README.txt"
 	
 	SetOutPath "$INSTDIR\data"
 	
@@ -352,7 +352,7 @@ Section "-un.Main"
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\*.dll"
 	Delete "$INSTDIR\LICENSE.txt"
-	Delete "$INSTDIR\README.md"
+	Delete "$INSTDIR\README.txt"
 	Delete "$INSTDIR\CHANGELOG.txt"
 	
 	Delete "$INSTDIR\data\README.txt"
