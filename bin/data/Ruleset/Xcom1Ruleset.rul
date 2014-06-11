@@ -1564,7 +1564,6 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    attraction: 1
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 70
@@ -1579,7 +1578,6 @@ items:
     clipSize: 12
     battleType: 2
     armor: 12
-    attraction: 1
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -1652,7 +1650,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -1668,7 +1665,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -1684,7 +1680,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -1754,7 +1749,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -2057,7 +2051,6 @@ items:
     invHeight: 3
     recoveryPoints: 5
     armor: 50
-    attraction: 1
   - type: STR_HEAVY_PLASMA_CLIP
     requires:
       - STR_HEAVY_PLASMA_CLIP
@@ -2073,7 +2066,6 @@ items:
     clipSize: 35
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_PLASMA_RIFLE
     requires:
       - STR_PLASMA_RIFLE
@@ -2099,7 +2091,6 @@ items:
     invHeight: 3
     recoveryPoints: 4
     armor: 50
-    attraction: 1
   - type: STR_PLASMA_RIFLE_CLIP
     requires:
       - STR_PLASMA_RIFLE_CLIP
@@ -2115,7 +2106,6 @@ items:
     clipSize: 28
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_PLASMA_PISTOL
     requires:
       - STR_PLASMA_PISTOL
@@ -2140,7 +2130,6 @@ items:
     invHeight: 2
     recoveryPoints: 3
     armor: 45
-    attraction: 1
   - type: STR_PLASMA_PISTOL_CLIP
     requires:
       - STR_PLASMA_PISTOL_CLIP
@@ -2156,7 +2145,6 @@ items:
     clipSize: 26
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_BLASTER_LAUNCHER
     requires:
       - STR_BLASTER_LAUNCHER
@@ -2179,7 +2167,6 @@ items:
     invHeight: 3
     recoveryPoints: 5
     armor: 40
-    attraction: 1
   - type: STR_BLASTER_BOMB
     requires:
       - STR_BLASTER_BOMB
@@ -2198,7 +2185,6 @@ items:
     invHeight: 2
     recoveryPoints: 1
     blastRadius: 10
-    attraction: 1
   - type: STR_SMALL_LAUNCHER
     requires:
       - STR_SMALL_LAUNCHER
@@ -2221,7 +2207,6 @@ items:
     invWidth: 2
     invHeight: 2
     recoveryPoints: 4
-    attraction: 1
   - type: STR_STUN_BOMB
     requires:
       - STR_STUN_BOMB
@@ -2237,7 +2222,6 @@ items:
     clipSize: 1
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_ALIEN_GRENADE
     requires:
       - STR_ALIEN_GRENADE
@@ -2251,7 +2235,6 @@ items:
     battleType: 4
     recoveryPoints: 1
     blastRadius: 5
-    attraction: 1
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -2260,7 +2243,6 @@ items:
     floorSprite: 37
     invWidth: 1
     invHeight: 1
-    attraction: 4
   - type: STR_MIND_PROBE
     requires:
       - STR_MIND_PROBE
@@ -2275,7 +2257,6 @@ items:
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
-    attraction: 1
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000

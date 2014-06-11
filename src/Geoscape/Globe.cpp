@@ -677,6 +677,12 @@ void Globe::setZoom(size_t zoom)
 	_zoom = std::min(std::max(zoom, (size_t)0u), _zoomRadius.size() - 1);
 	_radius = _zoomRadius[_zoom];
 	_game->getSavedGame()->setGlobeZoom(_zoom);
+	if (_isMouseScrolling)
+	{
+		_lonBeforeMouseScrolling = _cenLon;
+		_latBeforeMouseScrolling = _cenLat;
+		_totalMouseMoveX = 0; _totalMouseMoveY = 0;
+	}
 	invalidate();
 }
 
