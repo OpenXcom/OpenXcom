@@ -164,7 +164,8 @@ void UnitSprite::draw()
 }
 
 /**
- * Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
+ * Drawing routine for XCom soldiers in overalls, sectoids, mutons (routine 10),
+ * aquanauts (routine 13), aquatoids, calcinites (routine 14).
  */
 void UnitSprite::drawRoutine0()
 {
