@@ -1319,10 +1319,12 @@ void UnitSprite::drawRoutine11()
 }
 
 /**
-* Drawing routine for hallucinoids and biodrones.
+* Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
 */
 void UnitSprite::drawRoutine12()
 {
+	const int die = 8;
+
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
@@ -1332,6 +1334,14 @@ void UnitSprite::drawRoutine12()
 	Surface *s = 0;
 	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
+
+	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 15) )
+	{
+		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		s->blit(this);
+		return;
+	}
+
 	s->blit(this);
 }
 
