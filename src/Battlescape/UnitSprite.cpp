@@ -164,8 +164,10 @@ void UnitSprite::draw()
 }
 
 /**
- * Drawing routine for XCom soldiers in overalls, sectoids, mutons (routine 10),
- * aquanauts (routine 13), aquatoids, calcinites (routine 14).
+ * Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
+ * mutons (routine 10),
+ * aquanauts (routine 13),
+ * aquatoids, calcinites (routine 14).
  */
 void UnitSprite::drawRoutine0()
 {
@@ -1338,6 +1340,7 @@ void UnitSprite::drawRoutine12()
 
 	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 15) )
 	{
+		// biodrone death frames
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		s->blit(this);
 		return;
