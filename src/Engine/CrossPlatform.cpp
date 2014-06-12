@@ -541,9 +541,6 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 		files.push_back(file);
 	}
 	closedir(dp);
-#ifndef _WIN32
-	std::sort(files.begin(), files.end());
-#endif
 	return files;
 }
 

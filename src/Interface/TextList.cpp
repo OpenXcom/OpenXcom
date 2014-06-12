@@ -872,8 +872,10 @@ void TextList::setScrolling(bool scrolling, int scrollPos)
 void TextList::draw()
 {
 	Surface::draw();
-	int y = _scroll * -(_font->getHeight() + _font->getSpacing());
-	for (size_t i = 0; i < _texts.size() && i < _scroll + _visibleRows; ++i)
+	int y = 0;
+	if (_scroll > 0 && _rows[_scroll] == _rows[_scroll-1])
+		y -= _font->getHeight() + _font->getSpacing();
+	for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
 	{
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
 		{
@@ -906,7 +908,7 @@ void TextList::blit(Surface *surface)
 	{
 		if (_arrowPos != -1)
 		{
-			for (size_t i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
+			for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
 			{
 				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowLeft[i]->blit(surface);
@@ -933,7 +935,7 @@ void TextList::handle(Action *action, State *state)
 	_scrollbar->handle(action, state);
 	if (_arrowPos != -1)
 	{
-		for (size_t i = _scroll; i < _texts.size() && i < _scroll + _visibleRows; ++i)
+		for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
 		{
 			_arrowLeft[i]->handle(action, state);
 			_arrowRight[i]->handle(action, state);
