@@ -1489,36 +1489,51 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 
 	int efficacy = desperation;
 
-	if (attackingUnit->getPosition().z == targetPos.z && distance <= radius)
+	// don't go kamikaze unless we're already doomed.
+	if (abs(attackingUnit->getPosition().z - targetPos.z) <= Options::battleExplosionHeight && distance <= radius)
 	{
 		efficacy -= 4;
 	}
+
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
 
+	// allow difficulty to have its influence
 	efficacy += diff/2;
 
+	// account for the unit we're targetting
 	BattleUnit *target = _save->getTile(targetPos)->getUnit();
 	if (target)
 	{
 		++enemiesAffected;
 		++efficacy;
 	}
+
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
+			// don't grenade dead guys
 		if (!(*i)->isOut() &&
+			// don't count ourself twice
 			(*i) != attackingUnit &&
+			// don't count the target twice
 			(*i) != target &&
+			// don't count units that probably won't be affected cause they're out of range
 			abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight &&
 			_save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsSinceSpotted() > _intelligence)
+				// don't count people who were already grenaded this turn
+			if ((*i)->getTile()->getDangerous() ||
+				// don't count units we don't know about
+				((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsSinceSpotted() > _intelligence))
 				continue;
+
+			// trace a line from the grenade origin to the unit we're checking against
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
 			std::vector<Position> traj;
 			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, &traj, target, true, false, *i);
+
 			if (collidesWith == V_UNIT && traj.front() / Position(16,16,24) == (*i)->getPosition())
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
