@@ -42,7 +42,7 @@ private:
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
 	/// mutons (routine 10),
 	/// aquanauts (routine 13),
-	/// aquatoids, calcinites (routine 14).
+	/// aquatoids, calcinites, deep ones, gill men, lobster men, tasoths (routine 14).
 	void drawRoutine0();
 	/// Drawing routine for floaters.
 	void drawRoutine1();
