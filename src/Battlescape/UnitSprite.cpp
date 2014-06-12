@@ -158,7 +158,9 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine0,
 										&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine12};
+										&UnitSprite::drawRoutine12,
+										&UnitSprite::drawRoutine4,
+										&UnitSprite::drawRoutine4};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -816,7 +818,8 @@ void UnitSprite::drawRoutine3()
 }
 
 /**
- * Drawing routine for civilians and ethereals.
+ * Drawing routine for civilians, ethereals (routine 4),
+ * tftd civilians (routine 16, 17).
  * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
  */
 void UnitSprite::drawRoutine4()
@@ -828,14 +831,27 @@ void UnitSprite::drawRoutine4()
 	}
 
 	Surface *s = 0, *itemA = 0, *itemB = 0;
-	const int stand = 0, walk = 8, die = 72;
+	int stand = 0, walk = 8, die = 72;
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
 	const int offX2[8] = { -8, 3, 5, 12, 6, -1, -5, -13 }; // for the weapons
 	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 }; // for the weapons
 	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 }; // for the left handed rifles
 	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 }; // for the left handed rifles
-	
+	const int standConvert[8] = { 3, 2, 1, 0, 7, 6, 5, 4 }; // array for converting stand frames for some tftd civilians
+
+	if (_drawingRoutine == 16) // tftd civilian - first set
+	{
+		stand = 64;
+		walk = 0;
+	}
+	else if (_drawingRoutine == 17) // tftd civilian - second set
+	{
+		stand = 140;
+		walk = 76;
+		die = 148;
+	}
+
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
@@ -854,9 +870,13 @@ void UnitSprite::drawRoutine4()
 	{
 		s = _unitSurface->getFrame(walk + (8 * unitDir) + _unit->getWalkingPhase());
 	}
-	else
+	else if (_drawingRoutine != 16)
 	{
 		s = _unitSurface->getFrame(stand + unitDir);
+	}
+	else
+	{
+		s = _unitSurface->getFrame(stand + standConvert[unitDir]);
 	}
 
 	sortRifles();
