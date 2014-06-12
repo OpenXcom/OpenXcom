@@ -4,8 +4,8 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://docbook.org/xml/4.5/docbookx.dtd" [
 
-  <!ENTITY dhdate	"<date>2013.05.07</date>">
-  <!ENTITY dhyear	"2012">
+  <!ENTITY dhdate	"<date>2014.06.12</date>">
+  <!ENTITY dhyear	"2014">
   <!ENTITY dhsection	"6">
   <!ENTITY dhpackage	"openxcom">
   <!ENTITY dhversion	"1.0">
@@ -72,6 +72,14 @@
 				<listitem>
 				<para>
 					use <replaceable>PATH</replaceable> as the default User Folder instead of auto-detecting
+				</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><option>-cfg</option> <replaceable>PATH</replaceable></term>
+				<listitem>
+				<para>
+					use <replaceable>PATH</replaceable> as the default Config Folder instead of auto-detecting
 				</para>
 				</listitem>
 			</varlistentry>
