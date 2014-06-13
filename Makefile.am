@@ -5,7 +5,8 @@ SUBDIRS = docs
 
 doc_DATA = \
 	README.txt \
-	CHANGELOG.txt
+	CHANGELOG.txt \
+	LICENSE.txt
 
 if WITH_OPENXCOM_MAN
 
