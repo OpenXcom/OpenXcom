@@ -50,8 +50,8 @@ private:
 	void drawRoutine2();
 	/// Drawing routine for cyberdiscs.
 	void drawRoutine3();
-	/// Drawing routine for civilians, ethereals (routine 4),
-	/// tftd civilians (routine 16, 17).
+	/// Drawing routine for civilians, ethereals, zombies (routine 4),
+	/// tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
 	void drawRoutine4();
 	/// Drawing routine for sectopods and reapers.
 	void drawRoutine5();

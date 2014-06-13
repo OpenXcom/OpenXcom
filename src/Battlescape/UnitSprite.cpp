@@ -821,8 +821,8 @@ void UnitSprite::drawRoutine3()
 }
 
 /**
- * Drawing routine for civilians, ethereals (routine 4),
- * tftd civilians (routine 16, 17).
+ * Drawing routine for civilians, ethereals, zombies (routine 4),
+ * tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
  * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
  */
 void UnitSprite::drawRoutine4()
