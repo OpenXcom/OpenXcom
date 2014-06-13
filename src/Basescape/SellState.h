@@ -58,6 +58,7 @@ private:
 	double _spaceChange;
 	Timer *_timerInc, *_timerDec;
 	Uint8 _color, _color2, _color3, _colorAmmo;
+	OptionsOrigin _origin;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
