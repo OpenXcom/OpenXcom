@@ -67,6 +67,8 @@ private:
 	void drawRoutine11();
 	/// Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
 	void drawRoutine12();
+	/// Drawing routine for tentaculats.
+	void drawRoutine18();
 	/// sort two handed sprites out.
 	void sortRifles();
 public:

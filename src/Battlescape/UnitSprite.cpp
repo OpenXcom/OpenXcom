@@ -160,7 +160,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine0,
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine4,
-										&UnitSprite::drawRoutine4};
+										&UnitSprite::drawRoutine4,
+										&UnitSprite::drawRoutine18};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -1369,6 +1370,39 @@ void UnitSprite::drawRoutine12()
 	s->blit(this);
 }
 
+/**
+ * Drawing routine for tentaculats.
+ */
+void UnitSprite::drawRoutine18()
+{
+	Surface *s = 0;
+	// magic numbers
+	const int stand = 0, move = 8, die = 16;
+
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_COLLAPSING)
+	{
+		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		s->blit(this);
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame(move + _unit->getDirection());
+	}
+	else
+	{
+		s = _unitSurface->getFrame(stand + _unit->getDirection());
+	}
+
+	s->blit(this);
+}
 
 /**
  * Determines which weapons to display in the case of two-handed weapons.
