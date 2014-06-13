@@ -161,7 +161,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine4,
 										&UnitSprite::drawRoutine4,
-										&UnitSprite::drawRoutine18};
+										&UnitSprite::drawRoutine18,
+										&UnitSprite::drawRoutine19};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -1399,6 +1400,31 @@ void UnitSprite::drawRoutine18()
 	else
 	{
 		s = _unitSurface->getFrame(stand + _unit->getDirection());
+	}
+
+	s->blit(this);
+}
+
+/**
+ * Drawing routine for triscenes.
+ */
+void UnitSprite::drawRoutine19()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) % 4));
+	}
+	else
+	{
+		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20));
 	}
 
 	s->blit(this);

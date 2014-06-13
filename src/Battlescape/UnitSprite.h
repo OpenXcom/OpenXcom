@@ -69,6 +69,8 @@ private:
 	void drawRoutine12();
 	/// Drawing routine for tentaculats.
 	void drawRoutine18();
+	/// Drawing routine for triscenes.
+	void drawRoutine19();
 	/// sort two handed sprites out.
 	void sortRifles();
 public:
