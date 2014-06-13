@@ -188,12 +188,23 @@ void ResourcePack::playMusic(const std::string &name, bool random)
 {
 	if (!Options::mute && _playingMusic != name)
 	{
+		int loop = -1;
 		_playingMusic = name;
-		if (name == "GMGEO1") _playingMusic = "GMGEO"; // hack
+
+		// hacks
+		if (name == "GMGEO1")
+			_playingMusic = "GMGEO";
+		else if (!Options::musicAlwaysLoop && (name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+			loop = 0;
+
 		if (random)
-			getRandomMusic(name)->play();
+		{
+			getRandomMusic(name)->play(loop);
+		}
 		else
-			getMusic(name)->play();
+		{
+			getMusic(name)->play(loop);
+		}
 	}
 }
 

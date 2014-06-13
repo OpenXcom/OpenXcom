@@ -141,7 +141,7 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 #ifndef __NO_MUSIC
 	if (Options::musicVolume == 0)
 		return;
-	if (!func_is_music_playing())
+	if (Options::musicAlwaysLoop && !func_is_music_playing())
 	{
 		AdlibMusic *music = (AdlibMusic*)udata;
 		music->play();
