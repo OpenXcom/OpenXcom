@@ -1317,7 +1317,7 @@ void AlienBAIState::evaluateAIMode()
 	}
 
 	// generate a random number to represent our decision.
-	int decision = 1 + RNG::generate(0, patrolOdds + ambushOdds + escapeOdds + combatOdds);
+	int decision = RNG::generate(1, patrolOdds + ambushOdds + escapeOdds + combatOdds);
 
 	if (decision > escapeOdds)
 	{
