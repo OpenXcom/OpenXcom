@@ -873,22 +873,25 @@ void TextList::draw()
 {
 	Surface::draw();
 	int y = 0;
-	if (_scroll > 0 && _rows[_scroll] == _rows[_scroll-1])
-		y -= _font->getHeight() + _font->getSpacing();
-	for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
+	if (_rows.size() > 0)
 	{
-		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
+		if (_scroll > 0 && _rows[_scroll] == _rows[_scroll-1])
+			y -= _font->getHeight() + _font->getSpacing();
+		for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
 		{
-			(*j)->setY(y);
-			(*j)->blit(this);
-		}
-		if (!_texts[i].empty())
-		{
-			y += _texts[i].front()->getHeight() + _font->getSpacing();
-		}
-		else
-		{
-			y += _font->getHeight() + _font->getSpacing();
+			for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
+			{
+				(*j)->setY(y);
+				(*j)->blit(this);
+			}
+			if (!_texts[i].empty())
+			{
+				y += _texts[i].front()->getHeight() + _font->getSpacing();
+			}
+			else
+			{
+				y += _font->getHeight() + _font->getSpacing();
+			}
 		}
 	}
 }
