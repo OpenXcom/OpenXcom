@@ -565,6 +565,7 @@ void NewBattleState::btnRandomClick(Action *)
 	_cbxDifficulty->setSelected(RNG::generate(0, 4));
 	_slrAlienTech->setValue(RNG::generate(0, _game->getRuleset()->getAlienItemLevels().size()-1));
 	cbxMissionChange(0);
+	cbxCraftChange(0);
 
 	initSave();
 }
