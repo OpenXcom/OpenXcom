@@ -71,6 +71,8 @@ private:
 	void drawRoutine18();
 	/// Drawing routine for triscenes.
 	void drawRoutine19();
+	/// Drawing routine for xarquids.
+	void drawRoutine20();
 	/// sort two handed sprites out.
 	void sortRifles();
 public:

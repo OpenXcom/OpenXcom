@@ -1209,7 +1209,8 @@ void Map::animate(bool redraw)
 			|| (*i)->getArmor()->getDrawingRoutine() == 8
 			|| (*i)->getArmor()->getDrawingRoutine() == 9
 			|| (*i)->getArmor()->getDrawingRoutine() == 12
-			|| (*i)->getArmor()->getDrawingRoutine() == 15)
+			|| (*i)->getArmor()->getDrawingRoutine() == 15
+			|| (*i)->getArmor()->getDrawingRoutine() == 20)
 		{
 			(*i)->setCache(0);
 			cacheUnit(*i);

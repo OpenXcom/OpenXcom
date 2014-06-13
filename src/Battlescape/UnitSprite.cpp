@@ -162,7 +162,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine4,
 										&UnitSprite::drawRoutine4,
 										&UnitSprite::drawRoutine18,
-										&UnitSprite::drawRoutine19};
+										&UnitSprite::drawRoutine19,
+										&UnitSprite::drawRoutine20};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -1426,6 +1427,25 @@ void UnitSprite::drawRoutine19()
 	{
 		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20));
 	}
+
+	s->blit(this);
+}
+
+/**
+ * Drawing routine for xarquids.
+ */
+void UnitSprite::drawRoutine20()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+
+	s = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
+	_redraw = true;
 
 	s->blit(this);
 }
