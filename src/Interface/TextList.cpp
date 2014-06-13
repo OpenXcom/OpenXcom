@@ -873,7 +873,7 @@ void TextList::draw()
 {
 	Surface::draw();
 	int y = 0;
-	if (_rows.size() > 0)
+	if (!_rows.empty())
 	{
 		if (_scroll > 0 && _rows[_scroll] == _rows[_scroll-1])
 			y -= _font->getHeight() + _font->getSpacing();
@@ -909,7 +909,7 @@ void TextList::blit(Surface *surface)
 	Surface::blit(surface);
 	if (_visible && !_hidden)
 	{
-		if (_arrowPos != -1)
+		if (_arrowPos != -1 && !_rows.empty())
 		{
 			for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
 			{
@@ -938,10 +938,13 @@ void TextList::handle(Action *action, State *state)
 	_scrollbar->handle(action, state);
 	if (_arrowPos != -1)
 	{
-		for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
+		if (!_rows.empty())
 		{
-			_arrowLeft[i]->handle(action, state);
-			_arrowRight[i]->handle(action, state);
+			for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
+			{
+				_arrowLeft[i]->handle(action, state);
+				_arrowRight[i]->handle(action, state);
+			}
 		}
 	}
 }
