@@ -25,8 +25,6 @@ BuildRequires:  gcc-c++
 BuildRequires:  gcc 
 BuildRequires:  fdupes
 BuildRequires:	pkg-config
-BuildRequires:	timidity
-Requires:	timidity
 BuildRequires:	libSDL-devel
 BuildRequires:	libSDL_mixer-devel
 BuildRequires:	libSDL_image-devel
