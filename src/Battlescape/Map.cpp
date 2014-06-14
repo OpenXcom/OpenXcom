@@ -1411,7 +1411,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache->setPalette(this->getPalette());
 			}
 
-			cache->setWidth(unitSprite->getWidth())
+			cache->setWidth(unitSprite->getWidth());
 
 			unitSprite->setBattleUnit(unit, i);
 
