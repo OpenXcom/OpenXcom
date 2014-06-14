@@ -855,7 +855,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
-	int total = 0;
+	int total = _unit->isKneeled() ? 8 : 0;
 	bool switchBack = false;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{

@@ -81,6 +81,29 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
 	}
 
+	if (weapon->getBattleType() == BT_FIREARM)
+	{
+		if (weapon->isWaypoint() || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
+		{
+			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
+		}
+		else
+		{
+			if (weapon->getAccuracyAuto() != 0)
+			{
+				addItem(BA_AUTOSHOT, "STR_AUTO_SHOT", &id);
+			}
+			if (weapon->getAccuracySnap() != 0)
+			{
+				addItem(BA_SNAPSHOT, "STR_SNAP_SHOT", &id);
+			}
+			if (weapon->getAccuracyAimed() != 0)
+			{
+				addItem(BA_AIMEDSHOT, "STR_AIMED_SHOT", &id);
+			}
+		}
+	}
+
 	if (weapon->getTUMelee())
 	{
 		// stun rod
@@ -111,28 +134,6 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	else if (weapon->getBattleType() == BT_MINDPROBE)
 	{
 		addItem(BA_USE, "STR_USE_MIND_PROBE", &id);
-	}
-	if (weapon->getBattleType() == BT_FIREARM)
-	{
-		if (weapon->isWaypoint() || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
-		{
-			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
-		}
-		else
-		{
-			if (weapon->getAccuracyAuto() != 0)
-			{
-				addItem(BA_AUTOSHOT, "STR_AUTO_SHOT", &id);
-			}
-			if (weapon->getAccuracySnap() != 0)
-			{
-				addItem(BA_SNAPSHOT, "STR_SNAP_SHOT", &id);
-			}
-			if (weapon->getAccuracyAimed() != 0)
-			{
-				addItem(BA_AIMEDSHOT, "STR_AIMED_SHOT", &id);
-			}
-		}
 	}
 
 }

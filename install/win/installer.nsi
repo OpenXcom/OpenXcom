@@ -222,9 +222,7 @@ ${EndIf}
 	
 	SetOutPath "$INSTDIR\data\Ruleset"
 	
-	File "..\..\bin\data\Ruleset\Xcom1Ruleset.rul"
-	File "..\..\bin\data\Ruleset\XcomUtil_*.rul"
-	File "..\..\bin\data\Ruleset\UFOextender_*.rul"
+	File "..\..\bin\data\Ruleset\*.*"
 	
 	SetOutPath "$INSTDIR\data\Resources\BulletSprites"
 	
