@@ -234,12 +234,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
     std::map<std::string, int> modularCommendations;
 	bool awardCommendationBool = false;
 	// Loop over all possible commendations
-	for (std::map<std::string, RuleCommendations *>::iterator i = commendationsList.begin(); i != commendationsList.end(); ++i)
+	for (std::map<std::string, RuleCommendations *>::iterator i = commendationsList.begin(); i != commendationsList.end(); )
 	{	
-		if (awardCommendationBool)
-		{
-			--i; // If we awarded the previous commendation, set the iterator back one step to see if we can get it again!
-		}
 		awardCommendationBool = true;
         nextCommendationLevel.clear();
         modularCommendations.clear();
@@ -414,6 +410,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     if (awardCommendationBool) break; // Stop looking because we are getting one regardless
             }
         }
+		bool awardedModularCommendation = false;
 		if (awardCommendationBool)
 		{
             // If we do not have modular medals, but are awarded a different medal,
@@ -422,11 +419,19 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             {
                 modularCommendations["noNoun"] = 0;
             }
+			else
+			{
+				awardedModularCommendation = true;
+			}
             for (std::map<std::string, int>::const_iterator j = modularCommendations.begin(); j != modularCommendations.end(); ++j)
             {
                 awardCommendation((*i).first, (*j).first);
             }
 			awardedCommendation = true;
+		}
+		if (!awardedModularCommendation)
+		{
+			++i;
 		}
 	}
 	return awardedCommendation;
