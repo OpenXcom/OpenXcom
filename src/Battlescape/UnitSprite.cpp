@@ -1354,8 +1354,9 @@ void UnitSprite::drawRoutine11()
 	{
 		hoverTank = 128;
 	}
-	const int offX[8] = { -2, -7, -5, 0, 5, 7, 2, 0 }; // turret offsets
-	const int offy[8] = { -1, -3, -4, -5, -4, -3, -1, -1 }; // turret offsets
+	const int offY[8] = { 6, 1, 4, 1, 4, 1, 6, 1 }; // tank offset
+	const int offTurretX[8] = { -3, -2, 0, 0, 0, 2, 3, 0 }; // turret offsets
+	const int offTurretY[8] = { -3, -5, -4, -2, -4, -5, -3, -3 }; // turret offsets
 
 	Surface *s = 0;
 	int turret = _unit->getTurretType();
@@ -1364,6 +1365,7 @@ void UnitSprite::drawRoutine11()
 	{
 		// draw the displacer
 		s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
+		s->setY(offY[_unit->getDirection()]);
 		s->blit(this);
 	}
 	else
@@ -1377,6 +1379,7 @@ void UnitSprite::drawRoutine11()
 		{
 			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
 		}
+		s->setY(offY[_unit->getDirection()]);
 		s->blit(this);
 	}
 
@@ -1397,6 +1400,7 @@ void UnitSprite::drawRoutine11()
 			turretOffsetY = -8;
 			break;
 		case 3:
+			turretOffsetX = 0;
 			turretOffsetY = -16;
 			break;
 	}
@@ -1405,8 +1409,9 @@ void UnitSprite::drawRoutine11()
 	if (turret != -1)
 	{
 		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
-		turretOffsetX += offX[_unit->getDirection()];
-		turretOffsetY += offy[_unit->getDirection()];
+		turretOffsetX += offTurretX[_unit->getDirection()];
+		turretOffsetY += offTurretY[_unit->getDirection()];
+		turretOffsetY += offY[_unit->getDirection()];
 		s->setX(turretOffsetX);
 		s->setY(turretOffsetY);
 		s->blit(this);
