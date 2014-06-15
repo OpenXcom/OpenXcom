@@ -1380,6 +1380,9 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
 		}
 	}
 
+	// calculate new statString
+	soldier->calcStatString(getStatStrings(), (Options::psiStrengthEval && save->isResearched(getPsiRequirements())));
+
 	return soldier;
 }
 

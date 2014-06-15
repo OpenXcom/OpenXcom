@@ -1231,8 +1231,6 @@ en-US:
   STR_SFX_VOLUME_DESC: "Changes the volume of the sound effects."
   STR_UI_VOLUME: "UI Volume"
   STR_UI_VOLUME_DESC: "Changes the volume of the interface beeps."
-  STR_AUDIO_BIT_DEPTH: "Audio Bit Depth"
-  STR_AUDIO_BIT_DEPTH_DESC: "Changes the bit depth of the audio output. Smaller values are closer to the original sounds, but may not work on every system."
   STR_AUDIO_SAMPLE_RATE: "Audio Sample Rate"
   STR_AUDIO_SAMPLE_RATE_DESC: "Changes the sample rate of the audio output. Smaller values are closer to the original sounds, but may not work on every system."
   STR_SCROLL_SPEED: "Scroll Speed"
@@ -1352,3 +1350,4 @@ en-US:
   STR_DISABLED: "Disabled"
   STR_MAXIMIZE_INFO_SCREENS: "Maximize info screens"
   STR_MAXIMIZE_INFO_SCREENS_DESC: "Inventory and various other screens will be displayed at full screen, regardless of scale settings."
+  STR_JAPANESE_FONT: "If you have a Japanese font that works in OpenXCom: please, send it to us and let us know if we can use it."

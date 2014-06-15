@@ -581,6 +581,10 @@ void SoldierInfoState::init()
 		_btnSack->setVisible(false);
 		_txtCraft->setVisible(false);
 	}
+	else
+	{
+		_btnSack->setVisible(_game->getSavedGame()->getMonthsPassed() > -1);
+	}
 }
 
 /**

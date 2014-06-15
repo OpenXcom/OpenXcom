@@ -300,26 +300,6 @@ void Game::run()
 			}
 		}
 
-		// Initialize active state
-		if (!_init)
-		{
-			_init = true;
-			_states.back()->init();
-
-			// Unpress buttons
-			_states.back()->resetAll();
-
-			// Refresh mouse position
-			SDL_Event ev;
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			ev.type = SDL_MOUSEMOTION;
-			ev.motion.x = x;
-			ev.motion.y = y;
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
-			_states.back()->handle(&action);
-		}
-
 		// Save on CPU
 		switch (runningState)
 		{

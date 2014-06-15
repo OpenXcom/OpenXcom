@@ -63,9 +63,9 @@ public:
 	/// Draws the minimap.
 	void draw();
 	/// Changes the displayed minimap level.
-	int up ();
+	int up();
 	/// Changes the displayed minimap level.
-	int down ();
+	int down();
 	/// Updates the minimap animation.
 	void animate();
 	void stopScrolling(Action *action);

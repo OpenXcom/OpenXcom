@@ -335,8 +335,6 @@ static struct AudioSequence
 
 	void operator ()()
 	{
-	
-
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
 			int command = introSoundTrack[trackPosition].sound;

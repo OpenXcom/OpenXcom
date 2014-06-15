@@ -1149,6 +1149,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	_save->setSelectedUnit(unit);
+	_parentState->getMap()->setCursorType(CT_NONE);
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	Game *game = _parentState->getGame();

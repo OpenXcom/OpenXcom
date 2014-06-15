@@ -287,6 +287,7 @@
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
     <ClCompile Include="Battlescape\PromotionsState.cpp" />
+    <ClCompile Include="Battlescape\DelayedSaveState.cpp" />
     <ClCompile Include="Battlescape\ScannerState.cpp" />
     <ClCompile Include="Battlescape\ScannerView.cpp" />
     <ClCompile Include="Battlescape\UnitFallBState.cpp" />
@@ -584,6 +585,7 @@
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
     <ClInclude Include="Battlescape\PromotionsState.h" />
+    <ClInclude Include="Battlescape\DelayedSaveState.h" />
     <ClInclude Include="Battlescape\ScannerState.h" />
     <ClInclude Include="Battlescape\ScannerView.h" />
     <ClInclude Include="Battlescape\UnitFallBState.h" />

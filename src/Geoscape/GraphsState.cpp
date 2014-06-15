@@ -227,29 +227,20 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	}
 
 	// set up the grid
-	SDL_Rect current;
-	current.w = 188;
-	current.h = 127;
-	current.x = 125;
-	current.y = 49;
-	_bg->drawRect(&current, Palette::blockOffset(10));
+	_bg->drawRect(125, 49, 188, 127, Palette::blockOffset(10));
 
 	for (int grid = 0; grid !=5; ++grid)
 	{
-	current.w = 16 - (grid*2);
-	current.h = 13 - (grid*2);
 		for (int y = 50 + grid; y <= 163 + grid; y += 14)
 		{
-			current.y = y;
 			for (int x = 126 + grid; x <= 297 + grid; x += 17)
 			{
-				current.x = x;
 				Uint8 color = Palette::blockOffset(10)+grid+1;
 				if (grid == 4)
 				{
 					color = 0;
 				} 
-				_bg->drawRect(&current, color);
+				_bg->drawRect(x, y, 16 - (grid*2), 13 - (grid*2), color);
 			}
 		}
 	}

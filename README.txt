@@ -61,8 +61,6 @@ OpenXcom requires the following libraries:
 http://www.libsdl.org
 - SDL_mixer (libsdl-mixer1.2):
 http://www.libsdl.org/projects/SDL_mixer/
-- TiMidity++ (timidity), if you need MIDI playback:
-http://timidity.sourceforge.net/
 - SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later:
 http://www.ferzkopp.net/joomla/content/view/19/14/
 - SDL_image (libsdl-image1.2)

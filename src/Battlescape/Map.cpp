@@ -241,6 +241,7 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
+	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 	
 	NumberText *_numWaypid = 0;
 
@@ -605,7 +606,7 @@ void Map::drawTerrain(Surface *surface)
 								if (sprite != -1)
 								{
 									tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y, tileWestShade);
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y, tileWestShade, true);
 								}
 								// Draw soldier
 								if (westUnit && westUnit->getStatus() != STATUS_WALKING && (!tileWest->getMapData(MapData::O_OBJECT) || tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6) && (westUnit->getVisible() || _save->getDebugMode()))
@@ -622,7 +623,7 @@ void Map::drawTerrain(Surface *surface)
 										{
 											frameNumber = 4 + (_animFrame / 2);
 											tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), 0);
+											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), 0, true);
 										}
 									}
 								}
@@ -645,7 +646,7 @@ void Map::drawTerrain(Surface *surface)
 										frameNumber += (_animFrame / 2) + tileWest->getAnimationOffset();
 									}
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, 0);
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, 0, true);
 								}
 							}
 						}
@@ -1076,7 +1077,7 @@ void Map::drawTerrain(Surface *surface)
 		}
 		if (this->getCursorType() != CT_NONE)
 		{
-			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + sin((_animFrame*2*M_PI)/4), 0);
+			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + arrowBob[_animFrame], 0);
 		}
 	}
 	delete _numWaypid;
@@ -1312,6 +1313,18 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	else
 	{
 		offset->y += getTerrainLevel(unit->getPosition(), size);
+
+		if (unit->getArmor()->getDrawingRoutine() == 0 ||
+			unit->getArmor()->getDrawingRoutine() == 1 ||
+			unit->getArmor()->getDrawingRoutine() == 4 ||
+			unit->getArmor()->getDrawingRoutine() == 6 ||
+			unit->getArmor()->getDrawingRoutine() == 10)
+		{
+			if (unit->getStatus() == STATUS_AIMING)
+			{
+				offset->x = -16;
+			}
+		}
 	}
 
 }
@@ -1380,7 +1393,7 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit *unit)
 {
-	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
+	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
 	bool invalid, dummy;
 	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
@@ -1397,6 +1410,9 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache = new Surface(_spriteWidth, _spriteHeight);
 				cache->setPalette(this->getPalette());
 			}
+
+			cache->setWidth(unitSprite->getWidth());
+
 			unitSprite->setBattleUnit(unit, i);
 
 			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
@@ -1538,5 +1554,14 @@ void Map::setWidth(int width)
 	int dX = width - getWidth();
 	Surface::setWidth(width);
 	_message->setX(_message->getX() + dX / 2);
+}
+
+/*
+ * Get the hidden movement screen's vertical position.
+ * @return the vertical position of the hidden movement window.
+ */
+int Map::getMessageY()
+{
+	return _message->getY();
 }
 }

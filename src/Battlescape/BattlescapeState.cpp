@@ -1348,23 +1348,12 @@ void BattlescapeState::blinkVisibleUnitButtons()
 {
 	static int delta = 1, color = 32;
 
-	SDL_Rect square1;
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = 15;
-	square1.h = 12;
-	SDL_Rect square2;
-	square2.x = 1;
-	square2.y = 1;
-	square2.w = 13;
-	square2.h = 10;
-
 	for (int i = 0; i < VISIBLE_MAX;  ++i)
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
-			_btnVisibleUnit[i]->drawRect(&square1, 15);
-			_btnVisibleUnit[i]->drawRect(&square2, color);
+			_btnVisibleUnit[i]->drawRect(0, 0, 15, 12, 15);
+			_btnVisibleUnit[i]->drawRect(1, 1, 13, 10, color);
 		}
 	}
 
