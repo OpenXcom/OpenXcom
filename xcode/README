@@ -1,6 +1,6 @@
 To successfully build an OpenXcom OSX bundle you will need the relevant Xcode project files provided herewith as well as all the relevant dependencies installed in /usr/local/.
 
-The dependancies you require are following:
+The dependencies you require are following:
 - SDL (libsdl1.2)
 - SDL_mixer (libsdl-mixer1.2)
 - SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later
@@ -10,7 +10,7 @@ The dependancies you require are following:
 If you want to save yourself the trouble - don’t do it manually, use Homebrew package manager instead - http://mxcl.github.com/homebrew/. 
 
 1. This guide assumes you listened to the previous recommendation and had your dependencies installed with brew terminal command, like this:
-$ brew install yaml-cpp sdl sdl_gfx sdl_mixer sdl_image
+$ brew install yaml-cpp sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis
 
 2. Now, open the OpenXcom.xcodeproj’ file and add the source folder to the project:
 ‘Right-Click’ on the OpenXcom project icon in the left pane, select ‘Add Files to “OpenXcom”’, traverse the folder tree up one level and select the ‘src’ folder to be added. Just make sure you choose ‘Create groups for any added folders’ option when adding this to your build target.

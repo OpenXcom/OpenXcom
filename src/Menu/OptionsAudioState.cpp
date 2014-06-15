@@ -261,7 +261,7 @@ void OptionsAudioState::slrUiVolumeChange(Action *)
  */
 void OptionsAudioState::slrUiVolumeRelease(Action *)
 {
-	_game->getResourcePack()->getSound("GEO.CAT", 0)->play(0);
+	_game->getResourcePack()->getSound("GEO.CAT", 0)->play(Mix_GroupAvailable(0));
 }
 
 /**

@@ -564,6 +564,8 @@ void NewBattleState::btnRandomClick(Action *)
 	_cbxAlienRace->setSelected(RNG::generate(0, _alienRaces.size()-1));
 	_cbxDifficulty->setSelected(RNG::generate(0, 4));
 	_slrAlienTech->setValue(RNG::generate(0, _game->getRuleset()->getAlienItemLevels().size()-1));
+	cbxMissionChange(0);
+	cbxCraftChange(0);
 
 	initSave();
 }
@@ -598,6 +600,19 @@ void NewBattleState::cbxMissionChange(Action *)
 void NewBattleState::cbxCraftChange(Action *)
 {
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
+	int current = _craft->getNumSoldiers();
+	int max = _craft->getRules()->getSoldiers();
+	if (current > max)
+	{
+		for (std::vector<Soldier*>::reverse_iterator i = _craft->getBase()->getSoldiers()->rbegin(); i != _craft->getBase()->getSoldiers()->rend() && current > max; ++i)
+		{
+			if ((*i)->getCraft() == _craft)
+			{
+				(*i)->setCraft(0);
+				current--;
+			}
+		}
+	}
 }
 
 }

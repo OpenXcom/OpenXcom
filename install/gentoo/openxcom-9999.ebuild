@@ -33,7 +33,7 @@ src_prepare() {
 
 pkg_postinst() {
     einfo "You will need to install the Xcom data files in:"
-    einfo "\$XDG_DATA_HOME/openxcomi/data or \$XDG_CONFIG_HOME/openxcom/data"
+    einfo "\$XDG_DATA_HOME/openxcom/data or \$XDG_CONFIG_HOME/openxcom/data"
 	einfo "see http://ufopaedia.org/index.php?title=Installing_(OpenXcom)"
 	einfo "for more info."
 }

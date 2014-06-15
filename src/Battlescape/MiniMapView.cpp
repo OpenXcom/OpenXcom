@@ -69,11 +69,7 @@ void MiniMapView::draw()
 	{
 		return;
 	}
-	SDL_Rect current;
-	current.x = current.y = 0;
-	current.w = getWidth ();
-	current.h = getHeight ();
-	drawRect(&current, 0);
+	drawRect(0, 0, getWidth(), getHeight(), 0);
 	this->lock();
 	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
 	{
@@ -159,7 +155,7 @@ void MiniMapView::draw()
  * Increments the displayed level.
  * @return New display level.
  */
-int MiniMapView::up ()
+int MiniMapView::up()
 {
 	_camera->setViewLevel(_camera->getViewLevel()+1);
 	_redraw = true;
@@ -170,7 +166,7 @@ int MiniMapView::up ()
  * Decrements the displayed level.
  * @return New display level.
  */
-int MiniMapView::down ()
+int MiniMapView::down()
 {
 	_camera->setViewLevel(_camera->getViewLevel()-1);
 	_redraw = true;
@@ -211,7 +207,7 @@ void MiniMapView::mousePress(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void MiniMapView::mouseClick (Action *action, State *state)
+void MiniMapView::mouseClick(Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
 

@@ -1564,7 +1564,6 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    attraction: 1
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 70
@@ -1579,7 +1578,6 @@ items:
     clipSize: 12
     battleType: 2
     armor: 12
-    attraction: 1
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -1652,7 +1650,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -1668,7 +1665,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -1684,7 +1680,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -1754,7 +1749,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -2057,7 +2051,6 @@ items:
     invHeight: 3
     recoveryPoints: 5
     armor: 50
-    attraction: 1
   - type: STR_HEAVY_PLASMA_CLIP
     requires:
       - STR_HEAVY_PLASMA_CLIP
@@ -2073,7 +2066,6 @@ items:
     clipSize: 35
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_PLASMA_RIFLE
     requires:
       - STR_PLASMA_RIFLE
@@ -2099,7 +2091,6 @@ items:
     invHeight: 3
     recoveryPoints: 4
     armor: 50
-    attraction: 1
   - type: STR_PLASMA_RIFLE_CLIP
     requires:
       - STR_PLASMA_RIFLE_CLIP
@@ -2115,7 +2106,6 @@ items:
     clipSize: 28
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_PLASMA_PISTOL
     requires:
       - STR_PLASMA_PISTOL
@@ -2140,7 +2130,6 @@ items:
     invHeight: 2
     recoveryPoints: 3
     armor: 45
-    attraction: 1
   - type: STR_PLASMA_PISTOL_CLIP
     requires:
       - STR_PLASMA_PISTOL_CLIP
@@ -2156,7 +2145,6 @@ items:
     clipSize: 26
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_BLASTER_LAUNCHER
     requires:
       - STR_BLASTER_LAUNCHER
@@ -2179,7 +2167,6 @@ items:
     invHeight: 3
     recoveryPoints: 5
     armor: 40
-    attraction: 1
   - type: STR_BLASTER_BOMB
     requires:
       - STR_BLASTER_BOMB
@@ -2198,7 +2185,6 @@ items:
     invHeight: 2
     recoveryPoints: 1
     blastRadius: 10
-    attraction: 1
   - type: STR_SMALL_LAUNCHER
     requires:
       - STR_SMALL_LAUNCHER
@@ -2221,7 +2207,6 @@ items:
     invWidth: 2
     invHeight: 2
     recoveryPoints: 4
-    attraction: 1
   - type: STR_STUN_BOMB
     requires:
       - STR_STUN_BOMB
@@ -2237,7 +2222,6 @@ items:
     clipSize: 1
     battleType: 2
     recoveryPoints: 1
-    attraction: 1
   - type: STR_ALIEN_GRENADE
     requires:
       - STR_ALIEN_GRENADE
@@ -2251,7 +2235,6 @@ items:
     battleType: 4
     recoveryPoints: 1
     blastRadius: 5
-    attraction: 1
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -2260,7 +2243,6 @@ items:
     floorSprite: 37
     invWidth: 1
     invHeight: 1
-    attraction: 4
   - type: STR_MIND_PROBE
     requires:
       - STR_MIND_PROBE
@@ -2275,7 +2257,6 @@ items:
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
-    attraction: 1
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -6800,8 +6781,6 @@ research:
     dependencies:
       - STR_CYDONIA_DEP
   - name: STR_CYDONIA_DEP
-    cost: 0
-    points: 0
     unlocks:
       - STR_CYDONIA_OR_BUST
     requires:
@@ -6817,6 +6796,7 @@ research:
     needItem: true
   - name: STR_EXAMINATION_ROOM
     cost: 150
+    points: 30
     needItem: true
   - name: STR_FLYING_SUIT
     cost: 330
@@ -6943,7 +6923,6 @@ research:
       - STR_ALIEN_ORIGINS
       - STR_LEADER_PLUS
   - name: STR_LEADER_PLUS
-    cost: 0
     requires:
       - STR_ALIEN_ORIGINS
     dependencies:
@@ -6969,6 +6948,7 @@ research:
     needItem: true
   - name: STR_UFO_POWER_SOURCE
     cost: 450
+    points: 30
     needItem: true
   - name: STR_ULTIMATE_CRAFT
     cost: 900
@@ -7282,6 +7262,7 @@ research:
     lookup: STR_SECTOID
   - name: STR_SECTOID_ENGINEER
     cost: 192
+    points: 50
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7333,37 +7314,30 @@ research:
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_PLASMA_CANNON_DEP1
-    cost: 0
     dependencies:
       - STR_HEAVY_PLASMA
       - STR_HEAVY_PLASMA_CLIP
     unlocks:
       - STR_PLASMA_CANNON
   - name: STR_PLASMA_CANNON_DEP2
-    cost: 0
     dependencies:
       - STR_PLASMA_RIFLE
       - STR_PLASMA_RIFLE_CLIP
     unlocks:
       - STR_PLASMA_CANNON
   - name: STR_SECTOID
-    cost: 0
     points: 50
     needItem: true
   - name: STR_FLOATER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SNAKEMAN
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MUTON
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ETHEREAL
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERDISC_TERRORIST
@@ -7374,7 +7348,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CYBERDISC
-    cost: 0
     points: 50
     needItem: true
   - name: STR_REAPER_TERRORIST
@@ -7385,7 +7358,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_REAPER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_TERRORIST
@@ -7396,7 +7368,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID
-    cost: 170
     points: 50
     needItem: true
   - name: STR_SILACOID_TERRORIST
@@ -7407,7 +7378,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SILACOID
-    cost: 170
     points: 50
     needItem: true
   - name: STR_CELATID_TERRORIST
@@ -7429,115 +7399,87 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_RESEARCH
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_HARVEST
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_ABDUCTION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_INFILTRATION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_BASE
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_TERROR
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_RETALIATION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_SUPPLY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SMALL_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MEDIUM_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_LARGE_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_HARVESTER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ABDUCTOR
-    cost: 0
     points: 50
     needItem: true
   - name: STR_TERROR_SHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_BATTLESHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SUPPLY_SHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SNAKEMAN_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_FLOATER_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MUTON_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ETHEREAL_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERDISC_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_REAPER_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CELATID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SILACOID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOPOD_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
 manufacture:
@@ -9413,6 +9355,47 @@ MCDPatches:
         TUFly: 2
       - MCDIndex: 7
         TUFly: 2
+  - type: POLAR
+    data:
+      - MCDIndex: 0
+        TUFly: 4
+        noFloor: true
+      - MCDIndex: 63
+        noFloor: true
+      - MCDIndex: 64
+        noFloor: true
+      - MCDIndex: 65
+        noFloor: true
+      - MCDIndex: 66
+        noFloor: true
+      - MCDIndex: 67
+        noFloor: true
+      - MCDIndex: 68
+        noFloor: true
+      - MCDIndex: 69
+        noFloor: true
+      - MCDIndex: 70
+        noFloor: true
+      - MCDIndex: 71
+        noFloor: true
+      - MCDIndex: 72
+        noFloor: true
+      - MCDIndex: 73
+        noFloor: true
+      - MCDIndex: 74
+        noFloor: true
+      - MCDIndex: 75
+        noFloor: true
+      - MCDIndex: 76
+        noFloor: true
+      - MCDIndex: 77
+        noFloor: true
+      - MCDIndex: 78
+        noFloor: true
+      - MCDIndex: 79
+        noFloor: true
+      - MCDIndex: 80
+        noFloor: true
 extraSprites:
   - type: Pathfinding
     files:

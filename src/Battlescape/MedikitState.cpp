@@ -137,12 +137,7 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
-		SDL_Rect current;
-		current.w = 190;
-		current.h = 100;
-		current.x = 67;
-		current.y = 44;
-		_bg->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(67, 44, 190, 100, Palette::blockOffset(15)+15);
 	}
 	_partTxt = new Text(62, 9, 82, 120);
 	_woundTxt = new Text(14, 9, 145, 120);

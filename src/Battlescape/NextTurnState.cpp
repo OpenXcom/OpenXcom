@@ -33,6 +33,8 @@
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
 #include "../Menu/SaveGameState.h"
+#include "DelayedSaveState.h"
+#include "Map.h"
 
 namespace OpenXcom
 {
@@ -46,6 +48,8 @@ namespace OpenXcom
 NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _timer(0)
 {
 	// Create objects
+	int y = state->getMap()->getMessageY();
+
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(320, 17, 0, 68);
 	_txtTurn = new Text(320, 17, 0, 92);
@@ -62,6 +66,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	add(_txtMessage);
 
 	centerAllSurfaces();
+
+	// make this screen line up with the hidden movement screen
+	_window->setY(y);
+	_txtTitle->setY(y + 68);
+	_txtTurn->setY(y + 92);
+	_txtSide->setY(y + 108);
+	_txtMessage->setY(y + 132);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
@@ -158,11 +169,11 @@ void NextTurnState::close()
 		{
 			if (_game->getSavedGame()->isIronman())
 			{
-				_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SAVE_IRONMAN));
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_IRONMAN));
 			}
 			else if (Options::autosave)
 			{
-				_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SAVE_AUTO_BATTLESCAPE));
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_AUTO_BATTLESCAPE));
 			}
 		}
 	}

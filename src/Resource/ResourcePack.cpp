@@ -27,7 +27,6 @@
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom
@@ -176,7 +175,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[RNG::generate(0, music.size()-1)];
+			return music[SDL_GetTicks() % music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
 	}
 }
 
@@ -189,12 +188,23 @@ void ResourcePack::playMusic(const std::string &name, bool random)
 {
 	if (!Options::mute && _playingMusic != name)
 	{
+		int loop = -1;
 		_playingMusic = name;
-		if (name == "GMGEO1") _playingMusic = "GMGEO"; // hack
+
+		// hacks
+		if (name == "GMGEO1")
+			_playingMusic = "GMGEO";
+		else if (!Options::musicAlwaysLoop && (name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+			loop = 0;
+
 		if (random)
-			getRandomMusic(name)->play();
+		{
+			getRandomMusic(name)->play(loop);
+		}
 		else
-			getMusic(name)->play();
+		{
+			getMusic(name)->play(loop);
+		}
 	}
 }
 
