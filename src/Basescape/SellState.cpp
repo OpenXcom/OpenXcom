@@ -41,6 +41,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/CraftWeapon.h"
+#include "../Savegame/Transfer.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
@@ -54,7 +55,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _hasSci(0), _hasEng(0), _spaceChange(0)
+SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _hasSci(0), _hasEng(0), _spaceChange(0), _origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
@@ -215,6 +216,20 @@ SellState::SellState(Game *game, Base *base, OptionsOrigin origin) : State(game)
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
+		if (Options::storageLimitsEnforced && origin == OPT_BATTLESCAPE)
+		{
+			for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			{
+				if ((*j)->getItems() == *i)
+				{
+					qty += (*j)->getQuantity();
+				}
+			}
+			for (std::vector<Craft*>::iterator j = _base->getCrafts()->begin(); j != _base->getCrafts()->end(); ++j)
+			{
+				qty += (*j)->getItems()->getItem(*i);
+			}
+		}
 		if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
 		{
 			_qtys.push_back(0);
@@ -362,7 +377,56 @@ void SellState::btnOkClick(Action *)
 				break;
 
 			case SELL_ITEM:
-				_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
+				if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
+				{
+					const std::string itemName = _items[getItemIndex(i)];
+					int toRemove = _qtys[i] - _base->getItems()->getItem(itemName);
+
+					// remove all of said items from base
+					_base->getItems()->removeItem(itemName, INT_MAX);
+
+					// if we still need to remove any, remove them from the crafts first, and keep a running tally
+					for (std::vector<Craft*>::iterator j = _base->getCrafts()->begin(); j != _base->getCrafts()->end() && toRemove; ++j)
+					{
+						if ((*j)->getItems()->getItem(itemName) < toRemove)
+						{
+							toRemove -= (*j)->getItems()->getItem(itemName);
+							(*j)->getItems()->removeItem(itemName, INT_MAX);
+						}
+						else
+						{
+							(*j)->getItems()->removeItem(itemName, toRemove);
+							toRemove = 0;
+						}
+					}
+
+					// if there are STILL any left to remove, take them from the transfers, and if necessary, delete it.
+					for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end() && toRemove;)
+					{
+						if ((*j)->getItems() == itemName)
+						{
+							if ((*j)->getQuantity() <= toRemove)
+							{
+								toRemove -= (*j)->getQuantity();
+								delete *j;
+								j = _base->getTransfers()->erase(j);
+							}
+							else
+							{
+								(*j)->setItems((*j)->getItems(), (*j)->getQuantity() - toRemove);
+								toRemove = 0;
+							}
+						}
+						else
+						{
+							++j;
+						}
+					}
+				}
+				else
+				{
+					_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
+				}
 			}
 		}
 	}
@@ -512,6 +576,7 @@ int SellState::getPrice()
  */
 int SellState::getQuantity()
 {
+	int qty = 0;
 	// Soldiers/crafts are individual
 	switch(getType(_sel))
 	{
@@ -523,7 +588,22 @@ int SellState::getQuantity()
 	case SELL_ENGINEER:
 		return _base->getAvailableEngineers();
 	case SELL_ITEM:
-		return _base->getItems()->getItem(_items[getItemIndex(_sel)]);
+		qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
+		if (Options::storageLimitsEnforced && _origin == OPT_BATTLESCAPE)
+		{
+			for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			{
+				if ((*j)->getItems() == _items[getItemIndex(_sel)])
+				{
+					qty += (*j)->getQuantity();
+				}
+			}
+			for (std::vector<Craft*>::iterator j = _base->getCrafts()->begin(); j != _base->getCrafts()->end(); ++j)
+			{
+				qty += (*j)->getItems()->getItem(_items[getItemIndex(_sel)]);
+			}
+		}
+		return qty;
 	}
 
 	return 0;

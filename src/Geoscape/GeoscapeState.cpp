@@ -1671,8 +1671,11 @@ void GeoscapeState::time1Day()
 		// Handle psionic training
 		if ((*i)->getAvailablePsiLabs() > 0 && Options::anytimePsiTraining)
 		{
-			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
+			for (std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
+			{
 				(*s)->trainPsi1Day();
+				(*s)->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+			}
 		}
 
 		// if research has been completed but no new research events are triggered, show an empty NewPossibleResearchState so
@@ -1811,6 +1814,7 @@ void GeoscapeState::time1Month()
 				if ((*s)->isInPsiTraining())
 				{
 					(*s)->trainPsi();
+					(*s)->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 				}
 			}
 		}

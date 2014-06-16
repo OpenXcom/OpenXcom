@@ -5,12 +5,13 @@ SUBDIRS = docs
 
 doc_DATA = \
 	README.txt \
-	CHANGELOG.txt
+	CHANGELOG.txt \
+	LICENSE.txt
 
 if WITH_OPENXCOM_MAN
 
 openxcom.6: $(srcdir)/docs/openxcom.6.xml
-	$(DOCBOOK2MAN) $<
+	$(XMLTO) man $<
 
 dist_man_MANS = openxcom.6
 
@@ -23,51 +24,6 @@ icon_DATA = \
 
 desktopdir = $(datadir)/applications
 desktop_DATA = res/linux/openxcom.desktop
-
-pkgdata_DATA = bin/data/README.txt
-
-mapsdir = $(pkgdatadir)/data/MAPS/
-maps_DATA = \
-	bin/data/MAPS/*
-
-routesdir = $(pkgdatadir)/data/ROUTES/
-routes_DATA = \
-	bin/data/ROUTES/*
-
-weaponsdir = $(pkgdatadir)/data/Resources/Weapons/
-weapons_DATA = \
-	bin/data/Resources/Weapons/*
-
-pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
-pathfinding_DATA = \
-	bin/data/Resources/Pathfinding/*
-
-bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
-bulletsprite_DATA = \
-	bin/data/Resources/BulletSprites/*
-
-uispritedir =  $(pkgdatadir)/data/Resources/UI/
-uisprite_DATA = \
-	bin/data/Resources/UI/*
-
-rulesetdir =  $(pkgdatadir)/data/Ruleset
-ruleset_DATA = bin/data/Ruleset/*
-
-languagedir = $(pkgdatadir)/data/Language
-language_DATA = \
-	bin/data/Language/*
-
-namedir = $(pkgdatadir)/data/SoldierName
-name_DATA = \
-	bin/data/SoldierName/*
-	
-shaderdir = $(pkgdatadir)/data/Shaders
-shader_DATA = \
-	bin/data/Shaders/*
-
-iconprogramdir = $(pkgdatadir)/data/
-iconprogram_DATA = \
-	bin/data/openxcom.png
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
@@ -187,6 +143,8 @@ openxcom_SOURCES = \
 	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
+	src/Battlescape/DelayedSaveState.cpp \
+	src/Battlescape/DelayedSaveState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
@@ -293,6 +251,7 @@ openxcom_SOURCES = \
 	src/Engine/OpenGL.h \
 	src/Engine/Options.cpp \
 	src/Engine/Options.h \
+	src/Engine/Options.inc.h \
 	src/Engine/OptionInfo.cpp \
 	src/Engine/OptionInfo.h \
 	src/Engine/Palette.cpp \
@@ -660,6 +619,7 @@ openxcom_SOURCES = \
 
 EXTRA_DIST = \
 	autogen.sh \
+	bin/data \
 	docs/openxcom.6.xml \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
@@ -674,26 +634,14 @@ EXTRA_DIST = \
 	cmake/modules/nsis.cmake \
 	cmake/modules/NSIS.template.in \
 	cmake/modules/rpm.cmake \
-	res/mac/openxcom.icns \
+	res/mac/AppIcon.icns \
 	res/linux/icons/openxcom_128x128.png \
 	res/linux/icons/openxcom.svg \
 	res/linux/icons/openxcom_48x48.png \
 	res/windows/openxcom.ico \
 	$(doc_DATA) \
-	$(pkgdata_DATA) \
-	$(maps_DATA) \
-	$(routes_DATA) \
-	$(language_DATA) \
-	$(name_DATA) \
-	$(weapons_DATA) \
-	$(pathfinding_DATA) \
-	$(bulletsprite_DATA) \
-	$(uisprite_DATA) \
-	$(ruleset_DATA) \
-	$(shader_DATA) \
 	$(desktop_DATA) \
-	$(icon_DATA) \
-	$(iconprogram_DATA)
+	$(icon_DATA)
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \
@@ -708,6 +656,18 @@ dist-hook:
 	else \
 		echo A git clone is required to generate a ChangeLog >&2; \
 	fi
+
+install-data-local:
+	@mkdir -p $(DESTDIR)$(pkgdatadir)/data; \
+	cp -r $(top_srcdir)/bin/data/* $(DESTDIR)$(pkgdatadir)/data/ ; \
+	find $(DESTDIR)$(pkgdatadir) | xargs chmod a=rX,u+w
+
+# NOTE: this might wipe user unpacked xcom if it is in the dir, as there
+#       is no way of distinguishing between our content and their.
+#       If user uses distro package or if he does not use uninstall
+#       command this won't of course happen.
+uninstall-local:
+	@find $(DESTDIR)$(pkgdatadir) -type f -exec rm -rf {} +
 
 distclean-local: clean-local
 
