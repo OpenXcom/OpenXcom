@@ -557,8 +557,8 @@ void FlcMain(void (*frameCallBack)())
 			case SDL_VIDEORESIZE:
 				if (Options::allowResize)
 				{
-					Options::displayWidth = event.resize.w;
-					Options::displayHeight = event.resize.h;
+					Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, event.resize.w);
+					Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, event.resize.h);
 					if (flc.mainscreen != flc.realscreen->getSurface()->getSurface())
 					{
 						flc.realscreen->resetDisplay();

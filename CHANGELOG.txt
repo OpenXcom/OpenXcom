@@ -1,4 +1,4 @@
-Version 1.0 (In progress)
+Version 1.0 (13-06-2014)
 -------------------------
 New features:
   General:

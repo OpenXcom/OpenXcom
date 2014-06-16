@@ -18,7 +18,7 @@ Vcs-Browser: https://github.com/SupSuper/OpenXcom
 
 Package: openxcom
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, timidity
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: openxcom-data
 Description: Open-source clone of UFO: Enemy Unknown
  OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA)
