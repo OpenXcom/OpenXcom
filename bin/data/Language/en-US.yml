@@ -1130,6 +1130,8 @@ en-US:
   STR_BATTLEINSTANTGRENADE_DESC: "Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn."
   STR_BATTLEUFOEXTENDERACCURACY: "UFO Extender accuracy"
   STR_BATTLEUFOEXTENDERACCURACY_DESC: "Accuracy of shots drops off after a certain distance, according to shot type. Adjusted accuracy will be displayed on the cursor."
+  STR_BATTLEREALISTICACCURACY: "Realistic accuracy"
+  STR_BATTLEREALISTICACCURACY_DESC: "Accuracy determines how far off true a shot angle is likely to be, so cover and distance have realistic effects on hit-chance."
   STR_CANMANUFACTUREMOREITEMSPERHOUR: "TFTD manufacture rules"
   STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC: "Allows manufacturing projects to produce multiple items per hour, as opposed to X-COM: UFO Defense's one item limit."
   STR_CANTRANSFERCRAFTSWHILEAIRBORNE: "Airborne transfers"

@@ -233,6 +233,70 @@ int Projectile::calculateThrow(double accuracy)
 	return V_OUTOFBOUNDS;
 }
 
+
+/**
+ * Calculates inverse cumulative normal; based on code by Thomas Ziegler,
+ * implementing an approximation due to Peter John Acklam
+ * http://home.online.no/~pjacklam/notes/invnorm/
+ */
+double invnorm(double p)
+{
+	double a1 = -39.69683028665376;
+	double a2 = 220.9460984245205;
+	double a3 = -275.9285104469687;
+	double a4 = 138.3577518672690;
+	double a5 =-30.66479806614716;
+	double a6 = 2.506628277459239;
+
+	double b1 = -54.47609879822406;
+	double b2 = 161.5858368580409;
+	double b3 = -155.6989798598866;
+	double b4 = 66.80131188771972;
+	double b5 = -13.28068155288572;
+
+	double c1 = -0.007784894002430293;
+	double c2 = -0.3223964580411365;
+	double c3 = -2.400758277161838;
+	double c4 = -2.549732539343734;
+	double c5 = 4.374664141464968;
+	double c6 = 2.938163982698783;
+
+	double d1 = 0.007784695709041462;
+	double d2 = 0.3224671290700398;
+	double d3 = 2.445134137142996;
+	double d4 = 3.754408661907416;
+
+	//Define break-points.
+
+	double p_low =  0.02425;
+	double p_high = 1 - p_low;
+	double q, x, r;
+
+	//Rational approximation for lower region.
+
+	if (0 < p && p < p_low) {
+		q = sqrt(-2*log(p));
+		x = (((((c1*q+c2)*q+c3)*q+c4)*q+c5)*q+c6) / ((((d1*q+d2)*q+d3)*q+d4)*q+1);
+	}
+
+	//Rational approximation for central region.
+
+	if (p_low <= p && p <= p_high) {
+		q = p - 0.5;
+		r = q*q;
+		x = (((((a1*r+a2)*r+a3)*r+a4)*r+a5)*r+a6)*q / (((((b1*r+b2)*r+b3)*r+b4)*r+b5)*r+1);
+	}
+
+	//Rational approximation for upper region.
+
+	if (p_high < p && p < 1) {
+		q = sqrt(-2*log(1-p));
+		x = -(((((c1*q+c2)*q+c3)*q+c4)*q+c5)*q+c6) / ((((d1*q+d2)*q+d3)*q+d4)*q+1);
+	}
+
+	return x;
+}
+
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
  * @param origin Startposition of the trajectory in voxels.
@@ -252,76 +316,112 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 	RuleItem *weapon = _action.weapon->getRules();
 
-	if (_action.type != BA_THROW && _action.type != BA_HIT)
+	if (Options::battleRealisticAccuracy)
 	{
-		double modifier = 0.0;
-		int upperLimit = weapon->getAimRange();
-		int lowerLimit = weapon->getMinRange();
-		if (Options::battleUFOExtenderAccuracy)
-		{
-			if (_action.type == BA_AUTOSHOT)
-			{
-				upperLimit = weapon->getAutoRange();
-			}
-			else if (_action.type == BA_SNAPSHOT)
-			{
-				upperLimit = weapon->getSnapRange();
-			}
-		}
-		if (realDistance / 16 < lowerLimit)
-		{
-			modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
-		}
-		else if (upperLimit < realDistance / 16)
-		{
-			modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
-		}
-		accuracy = std::max(0.0, accuracy - modifier);
-	}
+		// actualAcc means chance of shooting through a door accDist tiles
+		// away.
+		// For throwing, it means chance of getting the distance right so
+		// you'll hit the right square if your aim is true.
+		double actualAcc = std::min(0.98, accuracy / 1.1);
+		double s = 1 / invnorm((1 - actualAcc)/2);
+		static const double accDist = 16;
+		static const double refAngle = atan2(8, accDist*16);
 
-	int xDist = abs(origin.x - target->x);
-	int yDist = abs(origin.y - target->y);
-	int zDist = abs(origin.z - target->z);
-	int xyShift, zShift;
 
-	if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
-		xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
-	else
-		xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
-
-	if (xyShift <= zDist)				//slight z deviation
-		zShift = xyShift / 2 + zDist;
-	else
-		zShift = xyShift + zDist / 2;
-
-	int deviation = RNG::generate(0, 100) - (accuracy * 100);
-
-	if (deviation >= 0)
-		deviation += 50;				// add extra spread to "miss" cloud
-	else
-		deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
-	
-	deviation = std::max(1, zShift * deviation / 200);	//range ratio
-		
-	target->x += RNG::generate(0, deviation) - deviation / 2;
-	target->y += RNG::generate(0, deviation) - deviation / 2;
-	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
-	
-	if (extendLine)
-	{
 		double rotation, tilt;
-		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-		tilt = atan2(double(target->z - origin.z),
-			sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
-		// calculate new target
-		// this new target can be very far out of the map, but we don't care about that right now
-		double cos_fi = cos(tilt * M_PI / 180.0);
-		double sin_fi = sin(tilt * M_PI / 180.0);
-		double cos_te = cos(rotation * M_PI / 180.0);
-		double sin_te = sin(rotation * M_PI / 180.0);
-		target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
-		target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
-		target->z = (int)(origin.z + maxRange * sin_fi);
+		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x));
+		tilt = atan2(double(target->z - origin.z), realDistance);
+
+		rotation += refAngle * RNG::boxMuller(0,s);
+		tilt += refAngle/2 * RNG::boxMuller(0,s);
+
+		double range;
+		if (extendLine)
+			range = maxRange;
+		else
+			range = realDistance + 8 * RNG::boxMuller(0,s);
+
+		double cos_fi = cos(tilt);
+		double sin_fi = sin(tilt);
+		double cos_te = cos(rotation);
+		double sin_te = sin(rotation);
+		target->x = (int)(origin.x + range * cos_te * cos_fi);
+		target->y = (int)(origin.y + range * sin_te * cos_fi);
+		target->z = (int)(origin.z + range * sin_fi);
+	}
+	else
+	{
+		if (_action.type != BA_THROW && _action.type != BA_HIT)
+		{
+			double modifier = 0.0;
+			int upperLimit = weapon->getAimRange();
+			int lowerLimit = weapon->getMinRange();
+			if (Options::battleUFOExtenderAccuracy)
+			{
+				if (_action.type == BA_AUTOSHOT)
+				{
+					upperLimit = weapon->getAutoRange();
+				}
+				else if (_action.type == BA_SNAPSHOT)
+				{
+					upperLimit = weapon->getSnapRange();
+				}
+			}
+			if (realDistance / 16 < lowerLimit)
+			{
+				modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
+			}
+			else if (upperLimit < realDistance / 16)
+			{
+				modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
+			}
+			accuracy = std::max(0.0, accuracy - modifier);
+		}
+
+		int xDist = abs(origin.x - target->x);
+		int yDist = abs(origin.y - target->y);
+		int zDist = abs(origin.z - target->z);
+		int xyShift, zShift;
+
+		if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
+			xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
+		else
+			xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
+
+		if (xyShift <= zDist)				//slight z deviation
+			zShift = xyShift / 2 + zDist;
+		else
+			zShift = xyShift + zDist / 2;
+
+		int deviation = RNG::generate(0, 100) - (accuracy * 100);
+
+		if (deviation >= 0)
+			deviation += 50;				// add extra spread to "miss" cloud
+		else
+			deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
+
+		deviation = std::max(1, zShift * deviation / 200);	//range ratio
+
+		target->x += RNG::generate(0, deviation) - deviation / 2;
+		target->y += RNG::generate(0, deviation) - deviation / 2;
+		target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
+
+		if (extendLine)
+		{
+			double rotation, tilt;
+			rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
+			tilt = atan2(double(target->z - origin.z),
+					sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
+			// calculate new target
+			// this new target can be very far out of the map, but we don't care about that right now
+			double cos_fi = cos(tilt * M_PI / 180.0);
+			double sin_fi = sin(tilt * M_PI / 180.0);
+			double cos_te = cos(rotation * M_PI / 180.0);
+			double sin_te = sin(rotation * M_PI / 180.0);
+			target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
+			target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
+			target->z = (int)(origin.z + maxRange * sin_fi);
+		}
 	}
 }
 /**
