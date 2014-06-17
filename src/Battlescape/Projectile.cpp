@@ -318,14 +318,20 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 	if (Options::battleRealisticAccuracy)
 	{
-		// actualAcc means chance of shooting through a door accDist tiles
-		// away.
-		// For throwing, it means chance of getting the distance right so
-		// you'll hit the right square if your aim is true.
-		double actualAcc = std::min(0.98, accuracy / 1.1);
-		double s = 1 / invnorm((1 - actualAcc)/2);
-		static const double accDist = 16;
-		static const double refAngle = atan2(8, accDist*16);
+		// effectiveAccuracy means chance of hitting a tile wall
+		// refDistance away.
+		//
+		// For throwing and blasters and such, it also means chance,
+		// when the target is refDistance/2 away, of getting the
+		// distance right enough that you'll hit the right square if
+		// your directional aim is true.
+		//
+		// s is set such that RNG::boxMuller(0,s) has
+		// effectiveAccuracy chance of being within [-1,1].
+		double effectiveAccuracy = std::min(0.99, accuracy / 1.1);
+		double s = 1 / fabs(invnorm((1 - effectiveAccuracy)/2));
+		static const double refDistance = 16*16;
+		static const double refAngle = atan2(8, refDistance);
 
 
 		double rotation, tilt;
@@ -339,7 +345,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		if (extendLine)
 			range = maxRange;
 		else
-			range = realDistance + 8 * RNG::boxMuller(0,s);
+			range = realDistance + (realDistance/(refDistance/2)) * 8 * RNG::boxMuller(0,s);
 
 		double cos_fi = cos(tilt);
 		double sin_fi = sin(tilt);
