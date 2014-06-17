@@ -538,7 +538,10 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape())
 		{
 			_missionStatistics->ufo = (*i)->getRules()->getType();
-            _missionStatistics->alienRace = (*i)->getAlienRace();
+			if (save->getMonthsPassed() != -1)
+			{
+				_missionStatistics->alienRace = (*i)->getAlienRace();
+			}
 			(*i)->setInBattlescape(false);
 			if ((*i)->getStatus() == Ufo::LANDED && aborted)
 			{
