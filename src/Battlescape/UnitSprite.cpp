@@ -498,7 +498,7 @@ void UnitSprite::drawRoutine0()
 		if (itemB)
 			itemB->setX(itemB->getX() + offXAiming);
 	}
-	else if(_drawingRoutine == 10 && _unit->getStatus() == STATUS_WALKING && unitDir == 2)
+	else if(!itemA && _drawingRoutine == 10 && _unit->getStatus() == STATUS_WALKING && unitDir == 2)
 	{
 		rightArm->setX(-6);
 	}
