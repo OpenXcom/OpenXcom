@@ -170,7 +170,7 @@ int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
 
 	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &_targetVoxel, accuracy, false, targetTile, extendLine);
+	applyAccuracy(originVoxel, &_targetVoxel, accuracy, false, targetTile, true, extendLine);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, true, &_trajectory, bu);
@@ -209,7 +209,7 @@ int Projectile::calculateThrow(double accuracy)
 		{
 			Position deltas = targetVoxel;
 			// apply some accuracy modifiers
-			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false); //calling for best flavor
+			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false, false); //calling for best flavor
 			deltas -= targetVoxel;
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
@@ -304,9 +304,10 @@ double invnorm(double p)
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
+ * @param linear Whether the trajectory is a straight line
  * @param extendLine should this line get extended to maximum distance?
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool linear, bool extendLine)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -316,15 +317,17 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 	RuleItem *weapon = _action.weapon->getRules();
 
-	if (Options::battleRealisticAccuracy)
+	if (Options::battleRealisticAccuracy && linear)
 	{
+		// accuracy determines some gaussian noise applied to firing
+		// angles.
+		//
+		// This applies only to linear trajectories; when (!linear),
+		// we use the vanilla code, since the magic in
+		// TileEngine::calculateParabola expects it.
+		//
 		// effectiveAccuracy means chance of hitting a tile wall
 		// refDistance away.
-		//
-		// For throwing and blasters and such, it also means chance,
-		// when the target is refDistance/2 away, of getting the
-		// distance right enough that you'll hit the right square if
-		// your directional aim is true.
 		//
 		// s is set such that RNG::boxMuller(0,s) has
 		// effectiveAccuracy chance of being within [-1,1].
@@ -345,7 +348,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		if (extendLine)
 			range = maxRange;
 		else
-			range = realDistance + (realDistance/(refDistance/2)) * 8 * RNG::boxMuller(0,s);
+			range = realDistance + (realDistance/refDistance) * 8 * RNG::boxMuller(0,s);
 
 		double cos_fi = cos(tilt);
 		double sin_fi = sin(tilt);

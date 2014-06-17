@@ -47,7 +47,7 @@ private:
 	size_t _position;
 	Surface *_sprite;
 	int _speed;
-	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine);
+	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool linear, bool extendLine);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position target);
