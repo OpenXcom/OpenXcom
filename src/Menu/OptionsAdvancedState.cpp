@@ -226,9 +226,13 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 			min = 0;
 			max = 50;
 		}
-		else if (i == &Options::FPS || i == &Options::FPSInactive)
+		else if (i == &Options::FPS)
 		{
 			min = 0;
+			max = 120;
+		}
+		else if (i == &Options::FPSInactive) {
+			min = 10;
 			max = 120;
 		}
 		else if (i == &Options::mousewheelSpeed)
