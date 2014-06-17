@@ -34,6 +34,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
+#include "../Engine/InvNorm.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Game.h"
@@ -170,7 +171,7 @@ int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
 
 	// apply some accuracy modifiers.
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &_targetVoxel, accuracy, false, targetTile, extendLine);
+	applyAccuracy(originVoxel, &_targetVoxel, accuracy, false, targetTile, true, extendLine);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, true, &_trajectory, bu);
@@ -209,7 +210,7 @@ int Projectile::calculateThrow(double accuracy)
 		{
 			Position deltas = targetVoxel;
 			// apply some accuracy modifiers
-			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false); //calling for best flavor
+			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false, false); //calling for best flavor
 			deltas -= targetVoxel;
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
@@ -240,9 +241,10 @@ int Projectile::calculateThrow(double accuracy)
  * @param accuracy Accuracy modifier.
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
+ * @param linear Whether the trajectory is a straight line
  * @param extendLine should this line get extended to maximum distance?
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool linear, bool extendLine)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -252,76 +254,120 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 	RuleItem *weapon = _action.weapon->getRules();
 
-	if (_action.type != BA_THROW && _action.type != BA_HIT)
+	if (Options::battleRealisticAccuracy && linear)
 	{
-		double modifier = 0.0;
-		int upperLimit = weapon->getAimRange();
-		int lowerLimit = weapon->getMinRange();
-		if (Options::battleUFOExtenderAccuracy)
-		{
-			if (_action.type == BA_AUTOSHOT)
-			{
-				upperLimit = weapon->getAutoRange();
-			}
-			else if (_action.type == BA_SNAPSHOT)
-			{
-				upperLimit = weapon->getSnapRange();
-			}
-		}
-		if (realDistance / 16 < lowerLimit)
-		{
-			modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
-		}
-		else if (upperLimit < realDistance / 16)
-		{
-			modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
-		}
-		accuracy = std::max(0.0, accuracy - modifier);
-	}
+		// accuracy determines some gaussian noise applied to firing
+		// angles.
+		//
+		// This applies only to linear trajectories; when (!linear),
+		// we use the vanilla code, since the magic in
+		// TileEngine::calculateParabola expects it.
+		//
+		// effectiveAccuracy means chance of hitting a tile wall
+		// refDistance away.
+		//
+		// s is set such that RNG::boxMuller(0,s) has
+		// effectiveAccuracy chance of being within [-1,1].
+		double effectiveAccuracy = std::min(0.99, accuracy / 1.1);
+		double s = 1 / fabs(invNorm((1 - effectiveAccuracy)/2));
+		static const double refDistance = 16*16;
+		static const double refAngle = atan2(8, refDistance);
 
-	int xDist = abs(origin.x - target->x);
-	int yDist = abs(origin.y - target->y);
-	int zDist = abs(origin.z - target->z);
-	int xyShift, zShift;
 
-	if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
-		xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
-	else
-		xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
-
-	if (xyShift <= zDist)				//slight z deviation
-		zShift = xyShift / 2 + zDist;
-	else
-		zShift = xyShift + zDist / 2;
-
-	int deviation = RNG::generate(0, 100) - (accuracy * 100);
-
-	if (deviation >= 0)
-		deviation += 50;				// add extra spread to "miss" cloud
-	else
-		deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
-	
-	deviation = std::max(1, zShift * deviation / 200);	//range ratio
-		
-	target->x += RNG::generate(0, deviation) - deviation / 2;
-	target->y += RNG::generate(0, deviation) - deviation / 2;
-	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
-	
-	if (extendLine)
-	{
 		double rotation, tilt;
-		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-		tilt = atan2(double(target->z - origin.z),
-			sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
-		// calculate new target
-		// this new target can be very far out of the map, but we don't care about that right now
-		double cos_fi = cos(tilt * M_PI / 180.0);
-		double sin_fi = sin(tilt * M_PI / 180.0);
-		double cos_te = cos(rotation * M_PI / 180.0);
-		double sin_te = sin(rotation * M_PI / 180.0);
-		target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
-		target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
-		target->z = (int)(origin.z + maxRange * sin_fi);
+		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x));
+		tilt = atan2(double(target->z - origin.z), realDistance);
+
+		rotation += refAngle * RNG::boxMuller(0,s);
+		tilt += refAngle/2 * RNG::boxMuller(0,s);
+
+		double range;
+		if (extendLine)
+			range = maxRange;
+		else
+			range = realDistance + (realDistance/refDistance) * 8 * RNG::boxMuller(0,s);
+
+		double cos_fi = cos(tilt);
+		double sin_fi = sin(tilt);
+		double cos_te = cos(rotation);
+		double sin_te = sin(rotation);
+		target->x = (int)(origin.x + range * cos_te * cos_fi);
+		target->y = (int)(origin.y + range * sin_te * cos_fi);
+		target->z = (int)(origin.z + range * sin_fi);
+	}
+	else
+	{
+		if (_action.type != BA_THROW && _action.type != BA_HIT)
+		{
+			double modifier = 0.0;
+			int upperLimit = weapon->getAimRange();
+			int lowerLimit = weapon->getMinRange();
+			if (Options::battleUFOExtenderAccuracy)
+			{
+				if (_action.type == BA_AUTOSHOT)
+				{
+					upperLimit = weapon->getAutoRange();
+				}
+				else if (_action.type == BA_SNAPSHOT)
+				{
+					upperLimit = weapon->getSnapRange();
+				}
+			}
+			if (realDistance / 16 < lowerLimit)
+			{
+				modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
+			}
+			else if (upperLimit < realDistance / 16)
+			{
+				modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
+			}
+			accuracy = std::max(0.0, accuracy - modifier);
+		}
+
+		int xDist = abs(origin.x - target->x);
+		int yDist = abs(origin.y - target->y);
+		int zDist = abs(origin.z - target->z);
+		int xyShift, zShift;
+
+		if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
+			xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
+		else
+			xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
+
+		if (xyShift <= zDist)				//slight z deviation
+			zShift = xyShift / 2 + zDist;
+		else
+			zShift = xyShift + zDist / 2;
+
+		int deviation = RNG::generate(0, 100) - (accuracy * 100);
+
+		if (deviation >= 0)
+			deviation += 50;				// add extra spread to "miss" cloud
+		else
+			deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
+
+		deviation = std::max(1, zShift * deviation / 200);	//range ratio
+
+		target->x += RNG::generate(0, deviation) - deviation / 2;
+		target->y += RNG::generate(0, deviation) - deviation / 2;
+		target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
+
+		if (extendLine)
+		{
+			double rotation, tilt;
+			rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
+			tilt = atan2(double(target->z - origin.z),
+					sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
+			// calculate new target
+			// this new target can be very far out of the map, but we don't care about that right now
+			double cos_fi = cos(tilt * M_PI / 180.0);
+			double sin_fi = sin(tilt * M_PI / 180.0);
+			double cos_te = cos(rotation * M_PI / 180.0);
+			double sin_te = sin(rotation * M_PI / 180.0);
+			target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
+			target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
+			target->z = (int)(origin.z + maxRange * sin_fi);
+		}
 	}
 }
 /**
