@@ -238,6 +238,8 @@ openxcom_SOURCES = \
 	src/Engine/GraphSubset.h \
 	src/Engine/InteractiveSurface.cpp \
 	src/Engine/InteractiveSurface.h \
+	src/Engine/InvNorm.cpp \
+	src/Engine/InvNorm.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
 	src/Engine/LanguagePlurality.cpp \
