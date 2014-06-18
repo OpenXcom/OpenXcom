@@ -279,9 +279,18 @@ void ProjectileFlyBState::init()
 bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
-
+	
+	int bulletSprite = -1;
+	if (_action.type != BA_THROW)
+	{
+		bulletSprite = _ammo->getRules()->getBulletSprite();
+		if (bulletSprite == -1)
+		{
+			bulletSprite = _action.weapon->getRules()->getBulletSprite();
+		}
+	}
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -526,10 +535,15 @@ void ProjectileFlyBState::think()
 					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
 					{
 						int i = 1;
+						int bulletSprite = _ammo->getRules()->getBulletSprite();
+						if (bulletSprite == -1)
+						{
+							bulletSprite = _action.weapon->getRules()->getBulletSprite();
+						}
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
 							// create a projectile
-							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel);
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(std::max(0.0, (_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0) - i * 5.0));
 							if (_projectileImpact != V_EMPTY)
