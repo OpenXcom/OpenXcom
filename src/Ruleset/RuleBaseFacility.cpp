@@ -47,7 +47,13 @@ void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_spriteShape = node["spriteShape"].as<int>(_spriteShape);
+	if (node["spriteShape"])
+	{
+		_spriteShape = node["spriteShape"].as<int>(_spriteShape);
+		// BASEBITS.PCK: 34 entries
+		if (_spriteShape > 33)
+			_spriteShape += modIndex;
+	}
 	if (node["spriteFacility"])
 	{
 		_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
