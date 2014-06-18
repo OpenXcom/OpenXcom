@@ -3,12 +3,12 @@ Upstream-Name: openxcom
 Source: http://openxcom.org/
 
 Files: *
-Copyright: 2009 SupSuper <openxcom@gmail.com>
+Copyright: 2009 Daniel Filipe "SupSuper" <openxcom@gmail.com>
            2009 Others
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2012 Krzysztof Knapik <knapsu@gmail.com>
+Copyright: 2012 Krzysztof Knapik "Knapsu" <knapsu@gmail.com>
 License: GPL-3.0+
 
 License: GPL-3.0+
