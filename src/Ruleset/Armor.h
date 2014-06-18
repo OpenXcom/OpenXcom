@@ -46,6 +46,7 @@ private:
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
+	int _deathFrames;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -87,6 +88,8 @@ public:
 	UnitStats *getStats();
 	/// Gets the armor's weight.
 	int getWeight();
+	/// Gets number of death frames.
+	int getDeathFrames();
 };
 
 }

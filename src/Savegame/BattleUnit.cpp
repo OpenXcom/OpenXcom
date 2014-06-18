@@ -1057,12 +1057,7 @@ void BattleUnit::startFalling()
 void BattleUnit::keepFalling()
 {
 	_fallPhase++;
-	int endFrame = 3;
-	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
-	{
-		endFrame = 18;
-	}
-	if (_fallPhase == endFrame)
+	if (_fallPhase == _armor->getDeathFrames())
 	{
 		_fallPhase--;
 		if (_health == 0)
