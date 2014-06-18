@@ -236,6 +236,12 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 			min = 1;
 			max = 7;
 		}
+		else if (i == &Options::autosaveFrequency)
+		{
+			min = 1;
+			max = 5;
+		}
+
 		if (*i < min)
 		{
 			*i = max;
