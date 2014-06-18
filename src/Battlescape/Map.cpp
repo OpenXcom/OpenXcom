@@ -590,7 +590,7 @@ void Map::drawTerrain(Surface *surface)
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
 								}
 								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
-								if (tmpSurface && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
+								if (tmpSurface && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6 && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
 									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
@@ -647,6 +647,12 @@ void Map::drawTerrain(Surface *surface)
 									}
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, 0, true);
+								}
+								// Draw object
+								if (tileWest->getMapData(MapData::O_OBJECT) && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+								{
+									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
 								}
 							}
 						}
