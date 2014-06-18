@@ -2434,11 +2434,12 @@ bool TileEngine::psiAttack(BattleAction *action)
 		defenseStrength += 20;
 	}
 
-	action->actor->addPsiExp();
+	action->actor->addPsiSkillExp();
+	if (Options::allowPsiStrengthImprovement) victim->addPsiStrengthExp();
 	if (attackStrength > defenseStrength)
 	{
-		action->actor->addPsiExp();
-		action->actor->addPsiExp();
+		action->actor->addPsiSkillExp();
+		action->actor->addPsiSkillExp();
 		if (action->type == BA_PANIC)
 		{
 			int moraleLoss = (110-_save->getTile(action->target)->getUnit()->getStats()->bravery);
@@ -2469,7 +2470,15 @@ bool TileEngine::psiAttack(BattleAction *action)
 		}
 		return true;
 	}
-	return false;
+	else
+	{
+		if (Options::allowPsiStrengthImprovement)
+		{
+			victim->addPsiStrengthExp();
+			victim->addPsiStrengthExp();
+		}
+		return false;
+	}
 }
 
 /**

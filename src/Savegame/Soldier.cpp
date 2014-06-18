@@ -19,6 +19,7 @@
 #include "Soldier.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/SoldierDeath.h"
@@ -40,7 +41,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(id), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
 {
 	if (names != 0)
 	{
@@ -114,6 +115,7 @@ void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 	_armor = armor;
 	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
 	_improvement = node["improvement"].as<int>(_improvement);
+	_psiStrImprovement = node["psiStrImprovement"].as<int>(_psiStrImprovement);
 	if (const YAML::Node &layout = node["equipmentLayout"])
 	{
 		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
@@ -153,6 +155,7 @@ YAML::Node Soldier::save() const
 	if (_psiTraining)
 		node["psiTraining"] = _psiTraining;
 	node["improvement"] = _improvement;
+	node["psiStrImprovement"] = _psiStrImprovement;
 	if (!_equipmentLayout.empty())
 	{
 		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
@@ -464,7 +467,10 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
-	_improvement = 0;
+	int psiSkillCap = _rules->getStatCaps().psiSkill;
+	int psiStrengthCap = _rules->getStatCaps().psiStrength;
+
+	_improvement = _psiStrImprovement = 0;
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
@@ -474,13 +480,21 @@ void Soldier::trainPsi()
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
 	}
-	else if(_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
-		_improvement = RNG::generate(5, 12);
-	else if(_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
-		_improvement = RNG::generate(1, 3);
+	else
+	{
+		if(_currentStats.psiSkill <= (psiSkillCap / 2)) _improvement = RNG::generate(5, 12);
+		else if(_currentStats.psiSkill < psiSkillCap) _improvement = RNG::generate(1, 3);
+
+		if (Options::allowPsiStrengthImprovement)
+		{
+			if(_currentStats.psiStrength <= (psiStrengthCap / 2)) _psiStrImprovement = RNG::generate(5, 12);
+			else if(_currentStats.psiStrength < psiStrengthCap) _psiStrImprovement = RNG::generate(1, 3);
+		}
+	}
 	_currentStats.psiSkill += _improvement;
-	if(_currentStats.psiSkill > 100)
-		_currentStats.psiSkill = 100;
+	_currentStats.psiStrength += _psiStrImprovement;
+	if(_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
+	if(_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
 }
 
 /**
@@ -501,6 +515,15 @@ void Soldier::trainPsi1Day()
 		{
 			++_improvement;
 			++_currentStats.psiSkill;
+		}
+
+		if (Options::allowPsiStrengthImprovement)
+		{
+			if (8 * 100 >= _currentStats.psiStrength * RNG::generate(1, 100) && _currentStats.psiStrength < _rules->getStatCaps().psiStrength)
+			{
+				++_psiStrImprovement;
+				++_currentStats.psiStrength;
+			}
 		}
 	}
 	else if (_currentStats.psiSkill < _rules->getMinStats().psiSkill)
@@ -533,12 +556,20 @@ void Soldier::setPsiTraining()
 }
 
 /**
- * returns this soldier's psionic improvement score for this month.
+ * returns this soldier's psionic skill improvement score for this month.
  * @return score
  */
 int Soldier::getImprovement()
 {
 	return _improvement;
+}
+
+/**
+ * returns this soldier's psionic strength improvement score for this month.
+ */
+int Soldier::getPsiStrImprovement()
+{
+	return _psiStrImprovement;
 }
 
 /**
