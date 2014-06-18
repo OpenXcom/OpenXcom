@@ -1,14 +1,19 @@
 Description: Add default makefile
 Author: Krzysztof Knapik <knapsu@gmail.com>
 
+Index: openxcom-1.0/src/Makefile
+===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ openxcom-0.9/src/Makefile	2013-10-08 17:30:32.712746969 +0200
-@@ -0,0 +1,83 @@
++++ openxcom-1.0/src/Makefile	2014-06-17 21:42:25.000000000 +0200
+@@ -0,0 +1,89 @@
 +# Target system.
 +# Leave blank for standard Linux builds.
 +# Put DINGOO for Dingoo A320 builds.
-+# Put OSX for MacOSX 10.7 unix-style builds.
-+TARGET = 
++# Put OSX for MacOSX unix-style builds.
++TARGET =
++ifeq ($(shell uname),Darwin)
++TARGET = OSX
++endif
 +
 +# Directories and files
 +OBJDIR = ../obj/
@@ -28,7 +33,7 @@ Author: Krzysztof Knapik <knapsu@gmail.com>
 +
 +# Compiler settings
 +ifeq ($(TARGET),OSX)
-+CXXFLAGS ?= -Wall -Wextra -O2 
++CXXFLAGS ?= -Wall -Wextra -O2
 +else
 +CXXFLAGS ?= -Wall -Wextra -O2 -rdynamic
 +endif
@@ -52,7 +57,7 @@ Author: Krzysztof Knapik <knapsu@gmail.com>
 +
 +$(OBJDIR)%.o:: Basescape/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
-+	
++
 +$(OBJDIR)%.o:: Battlescape/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
 +
@@ -60,6 +65,9 @@ Author: Krzysztof Knapik <knapsu@gmail.com>
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
 +
 +$(OBJDIR)%.o:: Engine/Scalers/%.cpp
++	$(CXX) $(CXXFLAGS) -c -o $@ $<
++
++$(OBJDIR)%.o:: Engine/Adlib/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
 +
 +$(OBJDIR)%.o:: Geoscape/%.cpp
@@ -70,13 +78,13 @@ Author: Krzysztof Knapik <knapsu@gmail.com>
 +
 +$(OBJDIR)%.o:: Menu/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
-+	
++
 +$(OBJDIR)%.o:: Resource/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
-+	
++
 +$(OBJDIR)%.o:: Ruleset/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
-+	
++
 +$(OBJDIR)%.o:: Savegame/%.cpp
 +	$(CXX) $(CXXFLAGS) -c -o $@ $<
 +
