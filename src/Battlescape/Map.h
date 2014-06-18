@@ -52,13 +52,13 @@ private:
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Surface *_arrow;
+	Surface *_arrow, *_arrow_kneel;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
 	int _mouseX, _mouseY;
 	CursorType _cursorType;
 	int _cursorSize;
-	int _animFrame;
+	int _animFrame, _cursorFrame;
 	Projectile *_projectile;
 	bool _projectileInFOV;
 	std::list<Explosion *> _explosions;
