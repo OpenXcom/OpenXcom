@@ -112,6 +112,36 @@
 namespace OpenXcom
 {
 
+// struct definitions used when enqueuing notification events
+struct ProductionCompleteInfo
+{
+	std::wstring         item;
+	bool                 showGotoBaseButton;
+	productionProgress_e endType;
+
+	ProductionCompleteInfo(const std::wstring &a_item, bool a_showGotoBaseButton, productionProgress_e a_endType)
+		: item(a_item), showGotoBaseButton(a_showGotoBaseButton), endType(a_endType)
+	{ }
+};
+struct NewPossibleResearchInfo
+{
+	std::vector<RuleResearch *> newPossibleResearch;
+	bool                        showResearchButton;
+
+	NewPossibleResearchInfo(const std::vector<RuleResearch *> &a_newPossibleResearch, bool a_showResearchButton)
+		: newPossibleResearch(a_newPossibleResearch), showResearchButton(a_showResearchButton)
+	{ }
+};
+struct NewPossibleManufactureInfo
+{
+	std::vector<RuleManufacture *> newPossibleManufacture;
+	bool                           showManufactureButton;
+
+	NewPossibleManufactureInfo(const std::vector<RuleManufacture *> &a_newPossibleManufacture, bool a_showManufactureButton)
+		: newPossibleManufacture(a_newPossibleManufacture), showManufactureButton(a_showManufactureButton)
+	{ }
+};
+
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
@@ -1396,7 +1426,9 @@ void GeoscapeState::time1Hour()
 	{
 		popup(new ItemsArrivingState(_game, this));
 	}
+
 	// Handle Production
+	std::vector<ProductionCompleteInfo> events;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		std::map<Production*, productionProgress_e> toRemove;
@@ -1409,7 +1441,12 @@ void GeoscapeState::time1Hour()
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				popup(new ProductionCompleteState(_game, (*i),  tr(j->first->getRules()->getName()), this, j->second));
+				if (!events.empty())
+				{
+					// only show the action button for the last completion notification
+					events.back().showGotoBaseButton = false;
+				}
+				events.push_back(ProductionCompleteInfo(tr(j->first->getRules()->getName()), true, j->second));
 			}
 		}
 
@@ -1417,6 +1454,11 @@ void GeoscapeState::time1Hour()
 		{
 			popup(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, Palette::blockOffset(15) + 1, "BACK13.SCR", 6));
 			popup(new SellState(_game, (*i)));
+		}
+
+		for (std::vector<ProductionCompleteInfo>::iterator eventIt = events.begin(); eventIt != events.end(); ++eventIt)
+		{
+			popup(new ProductionCompleteState(_game, (*i),  eventIt->item, this, eventIt->showGotoBaseButton, eventIt->endType));
 		}
 	}
 }
@@ -1466,6 +1508,10 @@ void GeoscapeState::time1Day()
 {
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
+		// create list of pending events for this base so we can show a slightly different
+		// dialog layout for the last event of each type
+		std::vector<ProductionCompleteInfo> productionCompleteEvents;
+
 		// Handle facility construction
 		for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
 		{
@@ -1474,11 +1520,17 @@ void GeoscapeState::time1Day()
 				(*j)->build();
 				if ((*j)->getBuildTime() == 0)
 				{
-					popup(new ProductionCompleteState(_game, (*i),  tr((*j)->getRules()->getType()), this, PROGRESS_CONSTRUCTION));
+					if (!productionCompleteEvents.empty())
+					{
+						// only show the action button for the last completion notification
+						productionCompleteEvents.back().showGotoBaseButton = false;
+					}
+					productionCompleteEvents.push_back(ProductionCompleteInfo(tr((*j)->getRules()->getType()), true, PROGRESS_CONSTRUCTION));
 				}
 			}
 		}
-		// Handle science project
+
+		// Handle science projects
 		std::vector<ResearchProject*> finished;
 		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
 		{
@@ -1487,6 +1539,10 @@ void GeoscapeState::time1Day()
 				finished.push_back(*iter);
 			}
 		}
+
+		std::vector<State *>                    researchCompleteEvents;
+		std::vector<NewPossibleResearchInfo>    newPossibleResearchEvents;
+		std::vector<NewPossibleManufactureInfo> newPossibleManufactureEvents;
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->removeResearch(*iter);
@@ -1501,7 +1557,7 @@ void GeoscapeState::time1Day()
 							research->getName()
 						)->getArmor()
 					)->getCorpseGeoscape()
-				); // ;)
+				);
 			}
 			if ((*iter)->getRules()->getGetOneFree().size() != 0)
 			{
@@ -1544,7 +1600,7 @@ void GeoscapeState::time1Day()
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
 			}
-			popup(new ResearchCompleteState(_game, newResearch, bonus));
+			researchCompleteEvents.push_back(new ResearchCompleteState(_game, newResearch, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
@@ -1563,17 +1619,32 @@ void GeoscapeState::time1Day()
 						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 						if (ammo && std::find(req.begin(), req.end(), ammo->getType()) != req.end() && !_game->getSavedGame()->isResearched(req))
 						{
-							popup(new ResearchRequiredState(_game, item));
+							researchCompleteEvents.push_back(new ResearchRequiredState(_game, item));
 						}
 					}
 				}
 			}
 
-			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			if (!newPossibleResearch.empty())
+			{
+				if (!newPossibleResearchEvents.empty())
+				{
+					// only show the "allocate research" button for the last notification
+					newPossibleResearchEvents.back().showResearchButton = false;
+				}
+				newPossibleResearchEvents.push_back(NewPossibleResearchInfo(newPossibleResearch, true));
+			}
+
 			if (!newPossibleManufacture.empty())
 			{
-				popup(new NewPossibleManufactureState(_game, *i, newPossibleManufacture));
+				if (!newPossibleManufactureEvents.empty())
+				{
+					// only show the "allocate research" button for the last notification
+					newPossibleManufactureEvents.back().showManufactureButton = false;
+				}
+				newPossibleManufactureEvents.push_back(NewPossibleManufactureInfo(newPossibleManufacture, true));
 			}
+			
 			// now iterate through all the bases and remove this project from their labs
 			for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
 			{
@@ -1605,6 +1676,31 @@ void GeoscapeState::time1Day()
 				(*s)->trainPsi1Day();
 				(*s)->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 			}
+		}
+
+		// if research has been completed but no new research events are triggered, show an empty NewPossibleResearchState so
+		// players have a chance to allocate the now-free scientists
+		if (!researchCompleteEvents.empty() && newPossibleResearchEvents.empty())
+		{
+			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(std::vector<RuleResearch *>(), true));
+		}
+
+		// show events
+		for (std::vector<ProductionCompleteInfo>::iterator pceIt = productionCompleteEvents.begin(); pceIt != productionCompleteEvents.end(); ++pceIt)
+		{
+			popup(new ProductionCompleteState(_game, (*i),  pceIt->item, this, pceIt->showGotoBaseButton, pceIt->endType));
+		}
+		for (std::vector<State *>::iterator rceIt = researchCompleteEvents.begin(); rceIt != researchCompleteEvents.end(); ++rceIt)
+		{
+			popup(*rceIt);
+		}
+		for (std::vector<NewPossibleResearchInfo>::iterator npreIt = newPossibleResearchEvents.begin(); npreIt != newPossibleResearchEvents.end(); ++npreIt)
+		{
+			popup(new NewPossibleResearchState(_game, *i, npreIt->newPossibleResearch, npreIt->showResearchButton));
+		}
+		for (std::vector<NewPossibleManufactureInfo>::iterator npmeIt = newPossibleManufactureEvents.begin(); npmeIt != newPossibleManufactureEvents.end(); ++npmeIt)
+		{
+			popup(new NewPossibleManufactureState(_game, *i, npmeIt->newPossibleManufacture, npmeIt->showManufactureButton));
 		}
 	}
 	// handle regional and country points for alien bases

@@ -42,13 +42,13 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape state.
  * @param endType What ended the production.
  */
-ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType) : State(game), _base(base), _state(state), _endType(endType)
+ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const std::wstring &item, GeoscapeState *state, bool showGotoBaseButton, productionProgress_e endType) : State(game), _base(base), _state(state), _endType(endType)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnOk = new TextButton(118, 18, 40, 154);
+	_btnOk = new TextButton(118, 18, showGotoBaseButton ? 40 : 101, 154);
 	_btnGotoBase = new TextButton(118, 18, 162, 154);
 	_txtMessage = new Text(246, 110, 37, 35);
 
@@ -65,9 +65,8 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
-
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr(showGotoBaseButton ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, Options::keyCancel);
 
@@ -81,6 +80,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 		_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	}
 	_btnGotoBase->onMouseClick((ActionHandler)&ProductionCompleteState::btnGotoBaseClick);
+	_btnGotoBase->setVisible(showGotoBaseButton);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);

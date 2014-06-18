@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ManufactureProject
  */
-NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities) : State (game), _base(base)
+NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities, bool showManufactureButton) : State (game), _base(base)
 {
 	_screen = false;
 
@@ -64,13 +64,14 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr(showManufactureButton ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, Options::keyCancel);
 	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnManufactureClick);
 	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, Options::keyOk);
+	_btnManufacture->setVisible(showManufactureButton);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
