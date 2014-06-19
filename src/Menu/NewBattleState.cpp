@@ -599,7 +599,7 @@ void NewBattleState::cbxMissionChange(Action *)
  */
 void NewBattleState::cbxCraftChange(Action *)
 {
-	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
+	_craft->changeRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
 	int current = _craft->getNumSoldiers();
 	int max = _craft->getRules()->getSoldiers();
 	if (current > max)
