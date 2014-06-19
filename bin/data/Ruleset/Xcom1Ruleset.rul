@@ -9418,6 +9418,30 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/reserve.png
+  - type: InvCopy
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invcopy.png
+  - type: InvCopyActive
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invcopy_active.png
+  - type: InvPaste
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invpaste.png
+  - type: InvPasteEmpty
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invpaste_empty.png
   - type: BIGOBS.PCK
     width: 64
     height: 96

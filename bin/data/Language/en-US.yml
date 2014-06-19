@@ -1110,6 +1110,8 @@ en-US:
   STR_CENTER_ON_ENEMY_8: "Center on Enemy 8"
   STR_CENTER_ON_ENEMY_9: "Center on Enemy 9"
   STR_CENTER_ON_ENEMY_10: "Center on Enemy 10"
+  STR_CREATE_INVENTORY_TEMPLATE: "Create inventory template"
+  STR_APPLY_INVENTORY_TEMPLATE: "Apply inventory template"
   STR_GROUNDED: "GROUND"
   STR_LIVING_QUARTERS_PLURAL: "Living Quarters"
   STR_LIST_ITEM: "ITEM"

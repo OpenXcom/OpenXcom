@@ -784,7 +784,7 @@ void Inventory::mouseClick(Action *action, State *state)
 /**
  * Unloads the selected weapon, placing the gun
  * on the right hand and the ammo on the left hand.
- * @return The success of the weapon being unlaoded.
+ * @return The success of the weapon being unloaded.
  */
 bool Inventory::unload()
 {
@@ -988,4 +988,14 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
 
 }
+
+/**
+ * Shows a warning message.
+ * @param msg The message to show.
+ */
+void Inventory::showWarning(const std::wstring &msg)
+{
+	_warning->showMessage(msg);
+}
+
 }
