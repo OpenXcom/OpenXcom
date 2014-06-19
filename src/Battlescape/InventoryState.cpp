@@ -184,23 +184,10 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
-	if (_tu)
-	{
-		_btnCreateTemplate->setVisible(false);
-		_btnApplyTemplate->setVisible(false);
-	}
-	else
-	{
-		Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
-		createTemplateIcon->setX(_templateBtnX);
-		createTemplateIcon->setY(_createTemplateBtnY);
-		createTemplateIcon->blit(_bg);
-
-		Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
-		applyTemplateIcon->setX(_templateBtnX);
-		applyTemplateIcon->setY(_applyTemplateBtnY);
-		applyTemplateIcon->blit(_bg);
-	}
+	_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
+	_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
+	_btnCreateTemplate->setVisible(!_tu);
+	_btnApplyTemplate->setVisible(!_tu);
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -214,15 +201,16 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtFAcc->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);}
+	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+}
 
 static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*> &inventoryTemplate)
 {
-	std::vector<EquipmentLayoutItem*>::iterator eraseIt;
-	for (eraseIt = inventoryTemplate.begin(); eraseIt != inventoryTemplate.end(); )
+	for (std::vector<EquipmentLayoutItem*>::iterator eraseIt = inventoryTemplate.begin();
+		 eraseIt != inventoryTemplate.end();
+		 eraseIt = inventoryTemplate.erase(eraseIt))
 	{
 		delete *eraseIt;
-		eraseIt = inventoryTemplate.erase(eraseIt);
 	}
 }
 
@@ -562,28 +550,14 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 	if (_curInventoryTemplate.empty())
 	{
 		// use "empty template" icons
-		Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
-		createTemplateIcon->setX(_templateBtnX);
-		createTemplateIcon->setY(_createTemplateBtnY);
-		createTemplateIcon->blit(_bg);
-
-		Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
-		applyTemplateIcon->setX(_templateBtnX);
-		applyTemplateIcon->setY(_applyTemplateBtnY);
-		applyTemplateIcon->blit(_bg);
+		_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
+		_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
 	}
 	else
 	{
 		// use "active template" icons
-		Surface *createTemplateIcon = _game->getResourcePack()->getSurface("InvCopyActive");
-		createTemplateIcon->setX(_templateBtnX);
-		createTemplateIcon->setY(_createTemplateBtnY);
-		createTemplateIcon->blit(_bg);
-
-		Surface *applyTemplateIcon = _game->getResourcePack()->getSurface("InvPaste");
-		applyTemplateIcon->setX(_templateBtnX);
-		applyTemplateIcon->setY(_applyTemplateBtnY);
-		applyTemplateIcon->blit(_bg);
+		_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
+		_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
 	}
 }
 
@@ -712,10 +686,14 @@ void InventoryState::invMouseOver(Action *)
 			r.h -= 2;
 			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
+			_btnCreateTemplate->setVisible(false);
+			_btnApplyTemplate->setVisible(false);
 		}
 		else
 		{
 			_selAmmo->clear();
+			_btnCreateTemplate->setVisible(!_tu);
+			_btnApplyTemplate->setVisible(!_tu);
 		}
 		if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
@@ -732,6 +710,8 @@ void InventoryState::invMouseOver(Action *)
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
+		_btnCreateTemplate->setVisible(!_tu);
+		_btnApplyTemplate->setVisible(!_tu);
 	}
 }
 
@@ -741,14 +721,11 @@ void InventoryState::invMouseOver(Action *)
  */
 void InventoryState::invMouseOut(Action *)
 {
-	if (_inv->getSelectedItem() != 0)
-	{
-		return;
-	}
-
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
 	_selAmmo->clear();
+	_btnCreateTemplate->setVisible(!_tu);
+	_btnApplyTemplate->setVisible(!_tu);
 }
 
 /**
