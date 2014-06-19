@@ -249,10 +249,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);
 
-	if (CrossPlatform::fileExists(Options::getConfigFolder() + "battle.cfg"))
-	{
-		load();
-	}
+	load();
 }
 
 /**
@@ -271,7 +268,7 @@ void NewBattleState::init()
 {
 	State::init();
 
-	if (_craft == 0 && CrossPlatform::fileExists(Options::getConfigFolder() + "battle.cfg"))
+	if (_craft == 0)
 	{
 		load();
 	}
@@ -284,68 +281,84 @@ void NewBattleState::init()
 void NewBattleState::load(const std::string &filename)
 {
 	std::string s = Options::getConfigFolder() + filename + ".cfg";
-	try
+	if (!CrossPlatform::fileExists(s))
 	{
-		YAML::Node doc = YAML::LoadFile(s);
-		_cbxMission->setSelected(std::min(doc["mission"].as<size_t>(0), _missionTypes.size()-1));
-		_cbxCraft->setSelected(std::min(doc["craft"].as<size_t>(0), _crafts.size()-1));
-		_slrDarkness->setValue(doc["darkness"].as<size_t>(0));
-		_cbxTerrain->setSelected(std::min(doc["terrain"].as<size_t>(0), _terrainTypes.size()-1));
-		_cbxAlienRace->setSelected(std::min(doc["alienRace"].as<size_t>(0), _alienRaces.size()-1));
-		_cbxDifficulty->setSelected(doc["difficulty"].as<size_t>(0));
-		_slrAlienTech->setValue(doc["alienTech"].as<size_t>(0));
-		cbxMissionChange(NULL);
-
-		if (doc["base"])
+		initSave();
+	}
+	else
+	{
+		try
 		{
-			const Ruleset *rule = _game->getRuleset();
-			SavedGame *save = new SavedGame();
+			YAML::Node doc = YAML::LoadFile(s);
+			_cbxMission->setSelected(std::min(doc["mission"].as<size_t>(0), _missionTypes.size() - 1));
+			_cbxCraft->setSelected(std::min(doc["craft"].as<size_t>(0), _crafts.size() - 1));
+			_slrDarkness->setValue(doc["darkness"].as<size_t>(0));
+			_cbxTerrain->setSelected(std::min(doc["terrain"].as<size_t>(0), _terrainTypes.size() - 1));
+			_cbxAlienRace->setSelected(std::min(doc["alienRace"].as<size_t>(0), _alienRaces.size() - 1));
+			_cbxDifficulty->setSelected(doc["difficulty"].as<size_t>(0));
+			_slrAlienTech->setValue(doc["alienTech"].as<size_t>(0));
+			cbxMissionChange(NULL);
 
-			Base *base = new Base(rule);
-			base->load(doc["base"], save, false);
-			save->getBases()->push_back(base);
-
-			// Add research
-			const std::vector<std::string> &research = rule->getResearchList();
-			for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
+			if (doc["base"])
 			{
-				save->addFinishedResearch(rule->getResearch(*i));
-			}
+				const Ruleset *rule = _game->getRuleset();
+				SavedGame *save = new SavedGame();
 
-			// Generate items
-			base->getItems()->getContents()->clear();
-			const std::vector<std::string> &items = rule->getItemsList();
-			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-			{
-				RuleItem *rule = _game->getRuleset()->getItem(*i);
-				if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+				Base *base = new Base(rule);
+				base->load(doc["base"], save, false);
+				save->getBases()->push_back(base);
+
+				// Add research
+				const std::vector<std::string> &research = rule->getResearchList();
+				for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
 				{
-					base->getItems()->addItem(*i, 1);
+					save->addFinishedResearch(rule->getResearch(*i));
 				}
-			}
 
-			// Clear invalid contents
-			_craft = base->getCrafts()->front();
-			for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
-			{
-				RuleItem *rule = _game->getRuleset()->getItem(i->first);
-				if (!rule)
+				// Generate items
+				base->getItems()->getContents()->clear();
+				const std::vector<std::string> &items = rule->getItemsList();
+				for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 				{
-					i->second = 0;
+					RuleItem *rule = _game->getRuleset()->getItem(*i);
+					if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+					{
+						base->getItems()->addItem(*i, 1);
+					}
 				}
-			}
 
-			_game->setSavedGame(save);
+				// Fix invalid contents
+				if (base->getCrafts()->empty())
+				{
+					std::string craftType = _crafts[_cbxCraft->getSelected()];
+					_craft = new Craft(_game->getRuleset()->getCraft(craftType), base, save->getId(craftType));
+					base->getCrafts()->push_back(_craft);
+				}
+				else
+				{
+					_craft = base->getCrafts()->front();
+					for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
+					{
+						RuleItem *rule = _game->getRuleset()->getItem(i->first);
+						if (!rule)
+						{
+							i->second = 0;
+						}
+					}
+				}
+
+				_game->setSavedGame(save);
+			}
+			else
+			{
+				initSave();
+			}
 		}
-		else
+		catch (YAML::Exception e)
 		{
+			Log(LOG_WARNING) << e.what();
 			initSave();
 		}
-	}
-	catch (YAML::Exception e)
-	{
-		Log(LOG_WARNING) << e.what();
-		initSave();
 	}
 }
 
