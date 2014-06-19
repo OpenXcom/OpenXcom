@@ -53,6 +53,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "../Basescape/CraftInfoState.h"
+#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -248,7 +249,10 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);
 
-	load();
+	if (CrossPlatform::fileExists(Options::getConfigFolder() + "battle.cfg"))
+	{
+		load();
+	}
 }
 
 /**
@@ -267,7 +271,7 @@ void NewBattleState::init()
 {
 	State::init();
 
-	if (_craft == 0)
+	if (_craft == 0 && CrossPlatform::fileExists(Options::getConfigFolder() + "battle.cfg"))
 	{
 		load();
 	}
