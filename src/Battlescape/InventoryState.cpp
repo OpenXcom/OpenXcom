@@ -174,14 +174,15 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
+	_inv->onMouseOver((ActionHandler)&InventoryState::invMouseOver);
+	_inv->onMouseOut((ActionHandler)&InventoryState::invMouseOut);
 
 	_txtTus->setVisible(_tu);
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
 	_txtFAcc->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-}
+	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);}
 
 /**
  *
@@ -485,10 +486,21 @@ void InventoryState::btnRankClick(Action *)
  */
 void InventoryState::invClick(Action *)
 {
-	BattleItem *item = _inv->getSelectedItem();
-	_txtItem->setText(L"");
-	_txtAmmo->setText(L"");
-	_selAmmo->clear();
+	updateStats();
+}
+
+/**
+ * Shows item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invMouseOver(Action *)
+{
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
+	BattleItem *item = _inv->getMouseOverItem();
 	if (item != 0)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -523,7 +535,11 @@ void InventoryState::invClick(Action *)
 			_selAmmo->drawRect(&r, 0);
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 		}
-		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
+		else
+		{
+			_selAmmo->clear();
+		}
+		if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
 			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
@@ -533,7 +549,28 @@ void InventoryState::invClick(Action *)
 		}
 		_txtAmmo->setText(s);
 	}
-	updateStats();
+	else
+	{
+		_txtItem->setText(L"");
+		_txtAmmo->setText(L"");
+		_selAmmo->clear();
+	}
+}
+
+/**
+ * Hides item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invMouseOut(Action *)
+{
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
+	_txtItem->setText(L"");
+	_txtAmmo->setText(L"");
+	_selAmmo->clear();
 }
 
 /**

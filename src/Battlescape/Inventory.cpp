@@ -414,6 +414,24 @@ void Inventory::setSelectedItem(BattleItem *item)
 }
 
 /**
+ * Returns the item currently under mouse cursor.
+ * @return Pointer to selected item, or 0 if none.
+ */
+BattleItem *Inventory::getMouseOverItem() const
+{
+	return _mouseOverItem;
+}
+
+/**
+ * Changes the item currently under mouse cursor.
+ * @param item Pointer to selected item, or NULL if none.
+ */
+void Inventory::setMouseOverItem(BattleItem *item)
+{
+	_mouseOverItem = (item && !item->getRules()->isFixed()) ? item : 0;
+}
+
+/**
  * Handles timers.
  */
 void Inventory::think()
@@ -442,6 +460,28 @@ void Inventory::blit(Surface *surface)
  */
 void Inventory::mouseOver(Action *action, State *state)
 {
+	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - getX());
+	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - getY());
+	if (_selUnit == 0)
+		return;
+
+	int x = (int)floor(action->getAbsoluteXMouse()) - getX(),
+		y = (int)floor(action->getAbsoluteYMouse()) - getY();
+	RuleInventory *slot = getSlotInPosition(&x, &y);
+	if (slot != 0)
+	{
+		if (slot->getType() == INV_GROUND)
+		{
+			x += _groundOffset;
+		}
+		BattleItem *item = _selUnit->getItem(slot, x, y);
+		setMouseOverItem(item);
+	}
+	else
+	{
+		setMouseOverItem(0);
+	}
+
 	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - getX());
 	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - getY());
 	InteractiveSurface::mouseOver(action, state);

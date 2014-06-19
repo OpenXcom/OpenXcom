@@ -46,6 +46,7 @@ private:
 	BattleUnit *_selUnit;
 	BattleItem *_selItem;
 	bool _tu, _base;
+	BattleItem *_mouseOverItem;
 	int _groundOffset;
 	std::map<int, std::map<int, int> > _stackLevel;
 	NumberText *_stackNumber;
@@ -75,6 +76,10 @@ public:
 	BattleItem *getSelectedItem() const;
 	/// Sets the currently selected item.
 	void setSelectedItem(BattleItem *item);
+	/// Gets the mouse over item.
+	BattleItem *getMouseOverItem() const;
+	/// Sets the mouse over item.
+	void setMouseOverItem(BattleItem *item);
 	/// Handles timers.
 	void think();
 	/// Blits the inventory onto another surface.
