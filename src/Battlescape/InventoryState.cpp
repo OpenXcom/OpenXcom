@@ -647,8 +647,7 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 
 	if (itemMissing)
 	{
-		// TODO: _inv.showWarning(_game->getLanguage()->getString("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
-		_inv->showWarning(L"Equipment on ground insufficient to fulfill requested template");
+		_inv->showWarning(tr("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
 	}
 
 	// refresh ui

@@ -1358,3 +1358,4 @@ en-US:
   STR_MAXIMIZE_INFO_SCREENS: "Maximize info screens"
   STR_MAXIMIZE_INFO_SCREENS_DESC: "Inventory and various other screens will be displayed at full screen, regardless of scale settings."
   STR_JAPANESE_FONT: "If you have a Japanese font that works in OpenXCom: please, send it to us and let us know if we can use it."
+  STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE: "Not enough items to copy template!"
