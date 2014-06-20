@@ -1211,12 +1211,7 @@ void Map::animate(bool redraw)
 	// animate certain units (large flying units have a propultion animation)
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (((*i)->getArmor()->getSize() > 1 && (*i)->getArmor()->getMovementType() == MT_FLY) 
-			|| (*i)->getArmor()->getDrawingRoutine() == 8
-			|| (*i)->getArmor()->getDrawingRoutine() == 9
-			|| (*i)->getArmor()->getDrawingRoutine() == 12
-			|| (*i)->getArmor()->getDrawingRoutine() == 15
-			|| (*i)->getArmor()->getDrawingRoutine() == 20)
+		if ((*i)->getArmor()->getConstantAnimation())
 		{
 			(*i)->setCache(0);
 			cacheUnit(*i);
