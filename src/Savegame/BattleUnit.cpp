@@ -51,7 +51,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
 																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
-																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
+																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
 																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
 {
@@ -121,7 +121,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
 																						_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
 																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
-																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
+																						_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
 																						_turretType(-1), _hidingForTurn(false)
@@ -211,6 +211,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_expFiring = node["expFiring"].as<int>(_expFiring);
 	_expThrowing = node["expThrowing"].as<int>(_expThrowing);
 	_expPsiSkill = node["expPsiSkill"].as<int>(_expPsiSkill);
+	_expPsiStrength = node["expPsiStrength"].as<int>(_expPsiStrength);
 	_expMelee = node["expMelee"].as<int>(_expMelee);
 	_turretType = node["turretType"].as<int>(_turretType);
 	_visible = node["visible"].as<bool>(_visible);
@@ -261,6 +262,7 @@ YAML::Node BattleUnit::save() const
 	node["expFiring"] = _expFiring;
 	node["expThrowing"] = _expThrowing;
 	node["expPsiSkill"] = _expPsiSkill;
+	node["expPsiStrength"] = _expPsiStrength;
 	node["expMelee"] = _expMelee;
 	node["turretType"] = _turretType;
 	node["visible"] = _visible;
@@ -1057,12 +1059,7 @@ void BattleUnit::startFalling()
 void BattleUnit::keepFalling()
 {
 	_fallPhase++;
-	int endFrame = 3;
-	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
-	{
-		endFrame = 18;
-	}
-	if (_fallPhase == endFrame)
+	if (_fallPhase == _armor->getDeathFrames())
 	{
 		_fallPhase--;
 		if (_health == 0)
@@ -1864,7 +1861,7 @@ void BattleUnit::addFiringExp()
 }
 
 /**
- * Adds one to the firing exp counter.
+ * Adds one to the throwing exp counter.
  */
 void BattleUnit::addThrowingExp()
 {
@@ -1872,15 +1869,23 @@ void BattleUnit::addThrowingExp()
 }
 
 /**
- * Adds one to the firing exp counter.
+ * Adds one to the psi skill exp counter.
  */
-void BattleUnit::addPsiExp()
+void BattleUnit::addPsiSkillExp()
 {
 	_expPsiSkill++;
 }
 
 /**
- * Adds one to the firing exp counter.
+ * Adds one to the psi strength exp counter.
+ */
+void BattleUnit::addPsiStrengthExp()
+{
+	_expPsiStrength++;
+}
+
+/**
+ * Adds one to the melee exp counter.
  */
 void BattleUnit::addMeleeExp()
 {
@@ -1939,8 +1944,12 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
+	if (_expPsiStrength && stats->psiStrength < caps.psiStrength)
+	{
+		stats->psiStrength += improveStat(_expPsiStrength);
+	}
 
-	if (_expBravery || _expReactions || _expFiring || _expPsiSkill || _expMelee)
+	if (_expBravery || _expReactions || _expFiring || _expPsiSkill || _expPsiStrength || _expMelee)
 	{
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();

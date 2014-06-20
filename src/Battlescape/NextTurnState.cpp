@@ -164,8 +164,9 @@ void NextTurnState::close()
 	else
 	{
 		_state->btnCenterClick(0);
-		// Autosave every 5 turns
-		if (_battleGame->getTurn() % 5 == 0 && _battleGame->getSide() == FACTION_PLAYER)
+
+		// Autosave every set amount of turns
+		if (_battleGame->getTurn() % Options::autosaveFrequency == 0 && _battleGame->getSide() == FACTION_PLAYER)
 		{
 			if (_game->getSavedGame()->isIronman())
 			{

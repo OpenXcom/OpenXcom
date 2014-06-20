@@ -82,7 +82,7 @@ private:
 	bool _visible;
 	Surface *_cache[5];
 	bool _cacheInvalid;
-	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
+	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expPsiStrength, _expMelee;
 	int improveStat(int exp);
 	int _motionPoints;
 	int _kills;
@@ -293,8 +293,10 @@ public:
 	void addFiringExp();
 	/// Adds one to the throwing exp counter.
 	void addThrowingExp();
-	/// Adds one to the psi exp counter.
-	void addPsiExp();
+	/// Adds one to the psi skill exp counter.
+	void addPsiSkillExp();
+	/// Adds one to the psi strength exp counter.
+	void addPsiStrengthExp();
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
 	/// Updates the stats of a Geoscape soldier.

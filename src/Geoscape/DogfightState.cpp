@@ -750,7 +750,6 @@ void DogfightState::move()
 		if(_ufo->getSpeed() > _craft->getSpeed())
 		{
 			_ufoBreakingOff = true;
-			finalRun = true;
 		}
 	}
 	// Check if UFO is not breaking off.
@@ -991,6 +990,11 @@ void DogfightState::move()
 			_craft->returnToBase();
 		}
 		endDogfight();
+	}
+
+	if (_currentDist > 640 && _ufoBreakingOff)
+	{
+		finalRun = true;
 	}
 
 	// End dogfight if craft is destroyed.

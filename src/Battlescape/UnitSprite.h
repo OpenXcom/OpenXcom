@@ -39,7 +39,10 @@ private:
 	BattleItem *_itemA, *_itemB;
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
 	int _part, _animationFrame, _drawingRoutine;
-	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
+	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
+	/// mutons (routine 10),
+	/// aquanauts (routine 13),
+	/// aquatoids, calcinites, deep ones, gill men, lobster men, tasoths (routine 14).
 	void drawRoutine0();
 	/// Drawing routine for floaters.
 	void drawRoutine1();
@@ -47,7 +50,8 @@ private:
 	void drawRoutine2();
 	/// Drawing routine for cyberdiscs.
 	void drawRoutine3();
-	/// Drawing routine for civilians and ethereals.
+	/// Drawing routine for civilians, ethereals, zombies (routine 4),
+	/// tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
 	void drawRoutine4();
 	/// Drawing routine for sectopods and reapers.
 	void drawRoutine5();
@@ -59,6 +63,16 @@ private:
 	void drawRoutine8();
 	/// Drawing routine for celatids.
 	void drawRoutine9();
+	/// Drawing routine for TFTD tanks.
+	void drawRoutine11();
+	/// Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
+	void drawRoutine12();
+	/// Drawing routine for tentaculats.
+	void drawRoutine18();
+	/// Drawing routine for triscenes.
+	void drawRoutine19();
+	/// Drawing routine for xarquids.
+	void drawRoutine20();
 	/// sort two handed sprites out.
 	void sortRifles();
 public:

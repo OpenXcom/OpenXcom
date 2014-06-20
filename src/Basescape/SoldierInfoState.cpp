@@ -415,73 +415,76 @@ void SoldierInfoState::init()
 	UnitStats *initial = _soldier->getInitStats();
 	UnitStats *current = _soldier->getCurrentStats();
 
+	UnitStats withArmor(*current);
+	withArmor += *(_soldier->getArmor()->getStats());
+
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
 
 	std::wostringstream ss;
-	ss << current->tu;
+	ss << withArmor.tu;
 	_numTimeUnits->setText(ss.str());
 	_barTimeUnits->setMax(current->tu);
-	_barTimeUnits->setValue(current->tu);
-	_barTimeUnits->setValue2(initial->tu);
+	_barTimeUnits->setValue(withArmor.tu);
+	_barTimeUnits->setValue2(std::min(withArmor.tu, initial->tu));
 
 	std::wostringstream ss2;
-	ss2 << current->stamina;
+	ss2 << withArmor.stamina;
 	_numStamina->setText(ss2.str());
 	_barStamina->setMax(current->stamina);
-	_barStamina->setValue(current->stamina);
-	_barStamina->setValue2(initial->stamina);
+	_barStamina->setValue(withArmor.stamina);
+	_barStamina->setValue2(std::min(withArmor.stamina, initial->stamina));
 
 	std::wostringstream ss3;
-	ss3 << current->health;
+	ss3 << withArmor.health;
 	_numHealth->setText(ss3.str());
 	_barHealth->setMax(current->health);
-	_barHealth->setValue(current->health);
-	_barHealth->setValue2(initial->health);
+	_barHealth->setValue(withArmor.health);
+	_barHealth->setValue2(std::min(withArmor.health, initial->health));
 
 	std::wostringstream ss4;
-	ss4 << current->bravery;
+	ss4 << withArmor.bravery;
 	_numBravery->setText(ss4.str());
 	_barBravery->setMax(current->bravery);
-	_barBravery->setValue(current->bravery);
-	_barBravery->setValue2(initial->bravery);
+	_barBravery->setValue(withArmor.bravery);
+	_barBravery->setValue2(std::min(withArmor.bravery, initial->bravery));
 
 	std::wostringstream ss5;
-	ss5 << current->reactions;
+	ss5 << withArmor.reactions;
 	_numReactions->setText(ss5.str());
 	_barReactions->setMax(current->reactions);
-	_barReactions->setValue(current->reactions);
-	_barReactions->setValue2(initial->reactions);
+	_barReactions->setValue(withArmor.reactions);
+	_barReactions->setValue2(std::min(withArmor.reactions, initial->reactions));
 
 	std::wostringstream ss6;
-	ss6 << current->firing;
+	ss6 << withArmor.firing;
 	_numFiring->setText(ss6.str());
 	_barFiring->setMax(current->firing);
-	_barFiring->setValue(current->firing);
-	_barFiring->setValue2(initial->firing);
+	_barFiring->setValue(withArmor.firing);
+	_barFiring->setValue2(std::min(withArmor.firing, initial->firing));
 
 	std::wostringstream ss7;
-	ss7 << current->throwing;
+	ss7 << withArmor.throwing;
 	_numThrowing->setText(ss7.str());
 	_barThrowing->setMax(current->throwing);
-	_barThrowing->setValue(current->throwing);
-	_barThrowing->setValue2(initial->throwing);
+	_barThrowing->setValue(withArmor.throwing);
+	_barThrowing->setValue2(std::min(withArmor.throwing, initial->throwing));
 
 	std::wostringstream ss8;
 	ss8 << current->melee;
 	_numMelee->setText(ss8.str());
 	_barMelee->setMax(current->melee);
-	_barMelee->setValue(current->melee);
-	_barMelee->setValue2(initial->melee);
+	_barMelee->setValue(withArmor.melee);
+	_barMelee->setValue2(std::min(withArmor.melee, initial->melee));
 
 	std::wostringstream ss9;
-	ss9 << current->strength;
+	ss9 << withArmor.strength;
 	_numStrength->setText(ss9.str());
 	_barStrength->setMax(current->strength);
-	_barStrength->setValue(current->strength);
-	_barStrength->setValue2(initial->strength);
+	_barStrength->setValue(withArmor.strength);
+	_barStrength->setValue2(std::min(withArmor.strength, initial->strength));
 
 	std::wstring wsArmor;
 	std::string armorType = _soldier->getArmor()->getType();
@@ -528,12 +531,12 @@ void SoldierInfoState::init()
 
 	if (current->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
-		std::wostringstream ss14;
-		ss14 << current->psiStrength;
+		std::wstringstream ss14;
+		ss14 << withArmor.psiStrength;
 		_numPsiStrength->setText(ss14.str());
 		_barPsiStrength->setMax(current->psiStrength);
-		_barPsiStrength->setValue(current->psiStrength);
-		_barPsiStrength->setValue2(initial->psiStrength);
+		_barPsiStrength->setValue(withArmor.psiStrength);
+		_barPsiStrength->setValue2(std::min(withArmor.psiStrength, initial->psiStrength));
 
 		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
@@ -548,12 +551,12 @@ void SoldierInfoState::init()
 
 	if (current->psiSkill > 0)
 	{
-		std::wostringstream ss15;
-		ss15 << current->psiSkill;
+		std::wstringstream ss15;
+		ss15 << withArmor.psiSkill;
 		_numPsiSkill->setText(ss15.str());
 		_barPsiSkill->setMax(current->psiSkill);
-		_barPsiSkill->setValue(current->psiSkill);
-		_barPsiSkill->setValue2(current->psiSkill - _soldier->getImprovement());
+		_barPsiSkill->setValue(withArmor.psiSkill);
+		_barPsiSkill->setValue2(std::min(withArmor.psiSkill, initial->psiSkill));
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);

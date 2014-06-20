@@ -50,7 +50,7 @@ class Soldier
 {
 private:
 	std::wstring _name;
-	int _id, _improvement;
+	int _id, _improvement, _psiStrImprovement;
 	RuleSoldier *_rules;
 	UnitStats _initialStats, _currentStats;
 	SoldierRank _rank;
@@ -132,8 +132,10 @@ public:
 	bool isInPsiTraining();
 	/// set the psi training status
 	void setPsiTraining();
-	/// returns this soldier's psionic improvement score for this month.
+	/// returns this soldier's psionic skill improvement score for this month.
 	int getImprovement();
+	/// returns this soldier's psionic strength improvement score for this month.
+	int getPsiStrImprovement();
 	/// Gets the soldier death info.
 	SoldierDeath *getDeath() const;
 	/// Kills the soldier.
