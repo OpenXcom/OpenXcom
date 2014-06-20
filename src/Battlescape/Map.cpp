@@ -1318,11 +1318,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	{
 		offset->y += getTerrainLevel(unit->getPosition(), size);
 
-		if (unit->getArmor()->getDrawingRoutine() == 0 ||
-			unit->getArmor()->getDrawingRoutine() == 1 ||
-			unit->getArmor()->getDrawingRoutine() == 4 ||
-			unit->getArmor()->getDrawingRoutine() == 6 ||
-			unit->getArmor()->getDrawingRoutine() == 10)
+		if (unit->getArmor()->getCanHoldWeapon())
 		{
 			if (unit->getStatus() == STATUS_AIMING)
 			{
