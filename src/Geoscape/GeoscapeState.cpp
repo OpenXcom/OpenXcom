@@ -1224,9 +1224,13 @@ void GeoscapeState::time30Minutes()
 										   .arg((*i)->getName());
 						popup(new CraftErrorState(_game, this, msg));
 						if ((*j)->getFuel() > 0)
+						{
 							(*j)->setStatus("STR_READY");
+						}
 						else
+						{
 							(*j)->setLowFuel(true);
+						}
 					}
 				}
 			}

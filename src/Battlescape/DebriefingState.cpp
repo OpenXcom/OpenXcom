@@ -476,7 +476,7 @@ void DebriefingState::prepareDebriefing()
 				base = (*i);
 				craftIterator = j;
 				craft->returnToBase();
-				craft->setLowFuel(true);
+				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
 			}
 			else if ((*j)->getDestination() != 0)

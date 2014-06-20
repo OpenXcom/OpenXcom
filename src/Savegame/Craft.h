@@ -51,7 +51,7 @@ private:
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
 	std::string _status;
-	bool _lowFuel, _inBattlescape, _inDogfight;
+	bool _lowFuel, _mission, _inBattlescape, _inDogfight;
 	std::wstring _name;
 public:
 	/// Creates a craft of the specified type.
@@ -67,7 +67,7 @@ public:
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.
-	void setRules(RuleCraft *rules);
+	void changeRules(RuleCraft *rules);
 	/// Gets the craft's ID.
 	int getId() const;
 	/// Gets the craft's name.
@@ -77,9 +77,7 @@ public:
 	/// Gets the craft's base.
 	Base *getBase() const;
 	/// Sets the craft's base.
-	void setBase(Base *base);
-	/// Sets the craft's base. (without setting the craft's coordinates)
-	void setBaseOnly(Base *base);
+	void setBase(Base *base, bool move = true);
 	/// Gets the craft's status.
 	std::string getStatus() const;
 	/// Sets the craft's status.
@@ -118,6 +116,10 @@ public:
 	bool getLowFuel() const;
 	/// Sets whether the craft is running out of fuel.
 	void setLowFuel(bool low);
+	/// Gets whether the craft has just finished a mission.
+	bool getMissionComplete() const;
+	/// Sets whether the craft has just finished a mission.
+	void setMissionComplete(bool mission);
 	/// Gets the craft's distance from its base.
 	double getDistanceFromBase() const;
 	/// Gets the craft's fuel consumption.

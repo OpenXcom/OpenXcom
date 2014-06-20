@@ -136,6 +136,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 	}
+	else if (_craft->getMissionComplete())
+	{
+		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
+	}
 	else if (_craft->getDestination() == 0)
 	{
 		status = tr("STR_PATROLLING");
@@ -256,7 +260,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
 
-	if (_craft->getLowFuel())
+	if (_craft->getLowFuel() || _craft->getMissionComplete())
 	{
 		_btnBase->setVisible(false);
 		_btnTarget->setVisible(false);

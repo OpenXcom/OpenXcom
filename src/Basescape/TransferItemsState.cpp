@@ -303,7 +303,7 @@ void TransferItemsState::completeTransfer()
 						{
 							bool returning = (craft->getDestination() == (Target*)craft->getBase());
 							_baseTo->getCrafts()->push_back(craft);
-							craft->setBaseOnly(_baseTo);
+							craft->setBase(_baseTo, false);
 							if (craft->getFuel() <= craft->getFuelLimit(_baseTo))
 							{
 								craft->setLowFuel(true);
