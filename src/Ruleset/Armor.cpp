@@ -95,6 +95,10 @@ void Armor::load(const YAML::Node &node)
 	{
 		_canHoldWeapon = true;
 	}
+	else
+	{
+		_canHoldWeapon = false;
+	}
 }
 
 /**
