@@ -498,6 +498,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
 				{
 					_region = (*k);
+                    _missionStatistics->region = _region->getRules()->getType();
 					break;
 				}
 			}
@@ -506,6 +507,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*k)->getRules()->insideCountry(base->getLongitude(), base->getLatitude()))
 				{
 					_country = (*k);
+                    _missionStatistics->country= _country->getRules()->getType();
 					break;
 				}
 			}
