@@ -47,6 +47,8 @@ private:
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
 	int _deathFrames;
+	bool _constantAnimation;
+	bool _canHoldWeapon;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -90,6 +92,10 @@ public:
 	int getWeight();
 	/// Gets number of death frames.
 	int getDeathFrames();
+	/// Gets if armor uses constant animation.
+	bool getConstantAnimation();
+	/// Gets if armor can hold weapon.
+	bool getCanHoldWeapon();
 };
 
 }

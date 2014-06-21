@@ -1354,7 +1354,7 @@ void UnitSprite::drawRoutine11()
 	{
 		hoverTank = 128;
 	}
-	const int offY[8] = { 6, 1, 4, 1, 4, 1, 6, 1 }; // tank offset
+	const int offY[8] = { 6, 1, 4, 1, 4, 1, 6, 1 }; // coelacanth offset
 	const int offTurretX[8] = { -3, -2, 0, 0, 0, 2, 3, 0 }; // turret offsets
 	const int offTurretY[8] = { -3, -5, -4, -2, -4, -5, -3, -3 }; // turret offsets
 
@@ -1365,7 +1365,6 @@ void UnitSprite::drawRoutine11()
 	{
 		// draw the displacer
 		s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
-		s->setY(offY[_unit->getDirection()]);
 		s->blit(this);
 	}
 	else
