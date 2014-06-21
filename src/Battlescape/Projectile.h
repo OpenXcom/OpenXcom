@@ -48,6 +48,7 @@ private:
 	Surface *_sprite;
 	int _speed;
 	int _bulletSprite;
+	bool _reversed;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine);
 public:
 	/// Creates a new Projectile.
@@ -75,6 +76,7 @@ public:
 	Position getOrigin();
 	/// Gets the targetted tile for the projectile.
 	Position getTarget();
+	bool isReversed() const;
 };
 
 }

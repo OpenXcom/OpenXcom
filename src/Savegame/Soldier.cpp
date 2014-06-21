@@ -119,7 +119,17 @@ void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 	if (const YAML::Node &layout = node["equipmentLayout"])
 	{
 		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
-			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+		{
+			EquipmentLayoutItem *layoutItem = new EquipmentLayoutItem(*i);
+			if (rule->getInventory(layoutItem->getSlot()))
+			{
+				_equipmentLayout.push_back(layoutItem);
+			}
+			else
+			{
+				delete layoutItem;
+			}
+		}
 	}
 	if (node["death"])
 	{

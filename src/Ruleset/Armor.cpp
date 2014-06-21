@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  */
-Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3)
+Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -82,6 +82,23 @@ void Armor::load(const YAML::Node &node)
 	if (node["loftemps"])
 		_loftempsSet.push_back(node["loftemps"].as<int>());
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
+	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
+	if (_drawingRoutine == 0 ||
+		_drawingRoutine == 1 ||
+		_drawingRoutine == 4 ||
+		_drawingRoutine == 6 ||
+		_drawingRoutine == 10 ||
+		_drawingRoutine == 13 ||
+		_drawingRoutine == 14 ||
+		_drawingRoutine == 16 ||
+		_drawingRoutine == 17)
+	{
+		_canHoldWeapon = true;
+	}
+	else
+	{
+		_canHoldWeapon = false;
+	}
 }
 
 /**
@@ -248,5 +265,23 @@ int Armor::getWeight()
 int Armor::getDeathFrames()
 {
 	return _deathFrames;
+}
+
+/*
+ * Gets if armor uses constant animation.
+ * @return if it uses constant animation
+ */
+bool Armor::getConstantAnimation()
+{
+	return _constantAnimation;
+}
+
+/*
+ * Gets if armor can hold weapon.
+ * @return if it can hold weapon
+ */
+bool Armor::getCanHoldWeapon()
+{
+	return _canHoldWeapon;
 }
 }
