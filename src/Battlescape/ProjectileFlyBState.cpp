@@ -446,7 +446,7 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
-			if (!_unit->isOut())
+			if (!_unit->isOut() && _action.type != BA_HIT)
 			{
 				_unit->abortTurn();
 			}
