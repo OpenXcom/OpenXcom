@@ -1679,6 +1679,13 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, part);
 			}
 		}
+		if (craft && _craftZ == z)
+		{
+			for (int z2 = _save->getMapSizeZ()-1; z2 >= _craftZ; --z2)
+			{
+				_save->getTile(Position(x, y, z2))->setDiscovered(true, 2);
+			}
+		}
 		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
 
 		x++;
