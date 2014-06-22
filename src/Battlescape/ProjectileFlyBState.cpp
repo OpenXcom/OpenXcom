@@ -718,5 +718,6 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
 	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor));
+	_unit->aim(false);
 }
 }
