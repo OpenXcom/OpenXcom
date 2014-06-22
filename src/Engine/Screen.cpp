@@ -368,6 +368,13 @@ void Screen::resetDisplay(bool resetVideo)
 	_clear.w = getWidth();
 	_clear.h = getHeight();
 
+	double pixelRatioX = 1.0;
+	double pixelRatioY = 1.0;
+	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	{
+		pixelRatioX = 0.75;
+		pixelRatioY = 1.2;
+	}
 	bool cursorInBlackBands;
 	if (!Options::keepAspectRatio)
 	{
@@ -417,6 +424,10 @@ void Screen::resetDisplay(bool resetVideo)
 			_topBlackBand = 0;
 		}
         _bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
+		if (_bottomBlackBand < 0)
+		{
+			_bottomBlackBand = 0;
+		}
 		_leftBlackBand = _rightBlackBand = 0;
 		_cursorLeftBlackBand = 0;
 
@@ -587,28 +598,41 @@ int Screen::getDY()
 */
 void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
 {
+	double pixelRatioY = 1.0;
+	double pixelRatioX = 1.0;
+	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	{
+		pixelRatioX = 0.75;
+		pixelRatioY = 1.2;
+	}
 	type = selection;
 	switch (type)
 	{
 	case SCALE_15X:
-		width = Screen::ORIGINAL_WIDTH * 1.5;
-		height = Screen::ORIGINAL_HEIGHT * 1.5;
+		width = int(floor(Screen::ORIGINAL_WIDTH * 1.5));
+		height = int(floor(Screen::ORIGINAL_HEIGHT * 1.5));
 		break;
 	case SCALE_2X:
-		width = Screen::ORIGINAL_WIDTH * 2;
-		height = Screen::ORIGINAL_HEIGHT * 2;
+		width = int(floor(Screen::ORIGINAL_WIDTH * 2));
+		height = int(floor(Screen::ORIGINAL_HEIGHT * 2));
 		break;
 	case SCALE_SCREEN_DIV_3:
-		width = Options::newDisplayWidth / 3;
-		height = Options::newDisplayHeight / 3;
+		width = int(floor(Options::displayWidth / 3 * pixelRatioY));
+		height = int(floor(Options::displayHeight / 3));
+		width = std::max(width, int(floor(Screen::ORIGINAL_WIDTH / pixelRatioX  * pixelRatioY)));
+		height = std::max(height, int(floor(Screen::ORIGINAL_HEIGHT * pixelRatioY)));
 		break;
 	case SCALE_SCREEN_DIV_2:
-		width = Options::newDisplayWidth / 2;
-		height = Options::newDisplayHeight / 2;
+		width = int(floor(Options::displayWidth / 2 * pixelRatioY));
+		height = int(floor(Options::displayHeight / 2));
+		width = std::max(width, int(floor(Screen::ORIGINAL_WIDTH / pixelRatioX  * pixelRatioY)));
+		height = std::max(height, int(floor(Screen::ORIGINAL_HEIGHT * pixelRatioY)));
 		break;
 	case SCALE_SCREEN:
-		width = Options::newDisplayWidth;
-		height = Options::newDisplayHeight;
+		width = int(floor(Options::displayWidth * pixelRatioY));
+		height = int(floor(Options::displayHeight));
+		width = std::max(width, int(floor(Screen::ORIGINAL_WIDTH / pixelRatioX  * pixelRatioY)));
+		height = std::max(height, int(floor(Screen::ORIGINAL_HEIGHT * pixelRatioY)));
 		break;
 	case SCALE_ORIGINAL:
 	default:
