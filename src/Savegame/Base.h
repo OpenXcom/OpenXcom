@@ -139,10 +139,14 @@ public:
 	int getFreeLaboratories () const;
 	/// Get the number of available space lab (not used by a Production)
 	int getFreeWorkshops () const;
-
+	/// Gets the number of scientists currently in use.
 	int getAllocatedScientists() const;
-
+	/// Gets the number of engineers currently in use.
 	int getAllocatedEngineers() const;
+	/// Assigns idle scientists to any ongoing research.
+	void assignFreeScientists();
+	/// Assigns idle engineers to any ongoing productions.
+	void assignFreeEngineers();
 	/// Gets the base's defense value.
 	int getDefenseValue() const;
 	/// Gets the base's short range detection.

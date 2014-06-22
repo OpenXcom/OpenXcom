@@ -1583,13 +1583,21 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
+					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
+						if (Options::autoAssignBasePersonnel)
+						{
+							(*j)->assignFreeScientists();
+						}
 						break;
 					}
 				}
+			}
+			if (Options::autoAssignBasePersonnel)
+			{
+				(*i)->assignFreeScientists();
 			}
 			delete(*iter);
 		}

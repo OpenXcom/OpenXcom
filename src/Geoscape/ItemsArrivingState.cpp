@@ -152,6 +152,17 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 						}
 					}
 				}
+				else if (Options::autoAssignBasePersonnel)
+				{
+					if ((*j)->getType() == TRANSFER_SCIENTIST)
+					{
+						_base->assignFreeScientists();
+					}
+					else if ((*j)->getType() == TRANSFER_ENGINEER)
+					{
+						_base->assignFreeEngineers();
+					}
+				}
 
 				// Remove transfer
 				std::wostringstream ss;
