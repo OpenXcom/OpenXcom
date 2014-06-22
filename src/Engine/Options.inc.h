@@ -6,7 +6,7 @@ OPT int displayWidth, displayHeight, maxFrameSkip, baseXResolution, baseYResolut
     soundVolume, musicVolume, uiVolume, audioSampleRate, audioBitDepth, pauseMode, windowedModePositionX, windowedModePositionY, FPS,
 	changeValueByMouseWheel, dragScrollTimeTolerance, dragScrollPixelTolerance, mousewheelSpeed, autosaveFrequency;
 OPT bool fullscreen, asyncBlit, playIntro, useScaleFilter, useHQXFilter, useOpenGL, checkOpenGLErrors, vSyncForOpenGL, useOpenGLSmoothing,
-	autosave, allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio,
+	autosave, allowResize, borderless, debug, debugUi, fpsCounter, newSeedOnLoad, keepAspectRatio, nonSquarePixelRatio,
 	cursorInBlackBandsInFullscreen, cursorInBlackBandsInWindow, cursorInBlackBandsInBorderlessWindow, maximizeInfoScreens, musicAlwaysLoop;
 OPT std::string language, useOpenGLShader;
 OPT KeyboardType keyboardMode;
