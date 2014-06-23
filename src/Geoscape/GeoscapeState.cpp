@@ -1491,29 +1491,60 @@ void GeoscapeState::time1Day()
 				finished.push_back(*iter);
 			}
 		}
-		if (Options::autoAssignBasePersonnel && (*i)->getResearch().empty() && (*i)->getAvailableScientists())
+		if (Options::autoAssignBasePersonnel)
 		{
-			// Pick a random project from the possible projects at this base.
-			std::vector<RuleResearch *> projects;
-			_game->getSavedGame()->getAvailableResearchProjects(projects, _game->getRuleset() , *i);
-			std::vector<RuleResearch*>::iterator rp = projects.begin();
-			while (rp != projects.end ())
+			if ((*i)->getResearch().empty() && (*i)->getAvailableScientists() && (*i)->getFreeLaboratories())
 			{
-				if ((*rp)->getRequirements().empty())
+				// Pick a random project from the possible projects at this base.
+				std::vector<RuleResearch *> projects;
+				_game->getSavedGame()->getAvailableResearchProjects(projects, _game->getRuleset() , *i);
+				std::vector<RuleResearch*>::iterator rp = projects.begin();
+				while (rp != projects.end ())
 				{
-					++rp;
+					if ((*rp)->getRequirements().empty())
+					{
+						++rp;
+					}
+					else
+					{
+						rp = projects.erase(rp);
+					}
 				}
-				else
+				if (!projects.empty())
 				{
-					rp = projects.erase(rp);
+					rp = projects.begin();
+					std::advance(rp, RNG::generateEx(projects.size()));
+					ResearchProject *project = new ResearchProject(*rp, int((*rp)->getCost() * RNG::generate(50, 150)/100));
+					(*i)->addResearch(project);
 				}
 			}
-			if (!projects.empty())
+
+			if ((*i)->getProductions().empty() && (*i)->getAvailableEngineers() && (*i)->getFreeWorkshops())
 			{
-				rp = projects.begin();
-				std::advance(rp, RNG::generateEx(projects.size()));
-				ResearchProject *project = new ResearchProject(*rp, int((*rp)->getCost() * RNG::generate(50, 150)/100));
-				(*i)->addResearch(project);
+				// Pick a random production from the possible productions at this base
+				// that is not a craft and does not use up resources
+				std::vector<RuleManufacture *> productions;
+				_game->getSavedGame()->getAvailableProductions(productions, _game->getRuleset(), *i);
+
+				std::vector<RuleManufacture*>::iterator rm = productions.begin();
+				while (rm != productions.end ())
+				{
+					if ((*rm)->getCategory() == "STR_CRAFT" || (*rm)->getRequiredSpace() > (*i)->getFreeWorkshops() || !(*rm)->getRequiredItems().empty() )
+					{
+						rm = productions.erase(rm);
+					}
+					else
+					{
+						++rm;
+					}
+				}
+				if (!productions.empty())
+				{
+					rm = productions.begin();
+					std::advance(rm, RNG::generateEx(productions.size()));
+					Production *production = new Production(*rm, 10);
+					(*i)->addProduction(production);
+				}
 			}
 		}
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
@@ -1621,6 +1652,7 @@ void GeoscapeState::time1Day()
 		if (Options::autoAssignBasePersonnel)
 		{
 			(*i)->assignFreeScientists();
+			(*i)->assignFreeEngineers();
 		}
 		// Handle soldier wounds
 		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
