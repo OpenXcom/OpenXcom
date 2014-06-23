@@ -1119,6 +1119,8 @@ en-GB:
   STR_QUICK_SAVE: "Quick Save"
   STR_QUICK_LOAD: "Quick Load"
   STR_ADVANCED: "ADVANCED"
+  STR_AUTOASSIGNBASEPERSONNEL: "Assign idle base personnel"
+  STR_AUTOASSIGNBASEPERSONNEL_DESC: "Attempts to keep scientists and engineers busy if they have been left idle for too long."
   STR_AGGRESSIVERETALIATION: "Aggressive retaliation"
   STR_AGGRESSIVERETALIATION_DESC: "UFOs will attempt to detect your bases at all times, regardless of their mission parameters."
   STR_STORAGELIMITSENFORCED: "Storage limits for recovered items"
