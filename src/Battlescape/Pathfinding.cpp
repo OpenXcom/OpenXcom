@@ -898,7 +898,7 @@ bool Pathfinding::previewPath(bool bRemove)
 						int nextDir = *(i + 1);
 						tile->setPreview(nextDir);
 					}
-					if (x && y)
+					if ((x && y) || size == 0)
 					{
 						tile->setTUMarker(std::max(0,tus));
 					}
