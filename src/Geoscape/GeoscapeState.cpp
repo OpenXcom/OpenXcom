@@ -1491,6 +1491,31 @@ void GeoscapeState::time1Day()
 				finished.push_back(*iter);
 			}
 		}
+		if (Options::autoAssignBasePersonnel && (*i)->getResearch().empty() && (*i)->getAvailableScientists())
+		{
+			// Pick a random project from the possible projects at this base.
+			std::vector<RuleResearch *> projects;
+			_game->getSavedGame()->getAvailableResearchProjects(projects, _game->getRuleset() , *i);
+			std::vector<RuleResearch*>::iterator rp = projects.begin();
+			while (rp != projects.end ())
+			{
+				if ((*rp)->getRequirements().empty())
+				{
+					++rp;
+				}
+				else
+				{
+					rp = projects.erase(rp);
+				}
+			}
+			if (!projects.empty())
+			{
+				rp = projects.begin();
+				std::advance(rp, RNG::generateEx(projects.size()));
+				ResearchProject *project = new ResearchProject(*rp, int((*rp)->getCost() * RNG::generate(50, 150)/100));
+				(*i)->addResearch(project);
+			}
+		}
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->removeResearch(*iter);
@@ -1587,19 +1612,15 @@ void GeoscapeState::time1Day()
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
-						if (Options::autoAssignBasePersonnel)
-						{
-							(*j)->assignFreeScientists();
-						}
 						break;
 					}
 				}
 			}
-			if (Options::autoAssignBasePersonnel)
-			{
-				(*i)->assignFreeScientists();
-			}
 			delete(*iter);
+		}
+		if (Options::autoAssignBasePersonnel)
+		{
+			(*i)->assignFreeScientists();
 		}
 		// Handle soldier wounds
 		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
