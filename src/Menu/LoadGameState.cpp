@@ -148,7 +148,7 @@ void LoadGameState::init()
         _game->setState(new GeoscapeState);
         if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
-            _game->getSavedGame()->getSavedBattle()->loadMapResources();
+            _game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
 			Options::baseXResolution = Options::baseXBattlescape;
 			Options::baseYResolution = Options::baseYBattlescape;
 			_game->getScreen()->resetDisplay(false);
