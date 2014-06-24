@@ -69,11 +69,11 @@ void ListLoadState::lstSavesPress(Action *action)
 		}
 		if (confirm)
 		{
-			_game->pushState(new ConfirmLoadState(_game, _origin, _saves[_lstSaves->getSelectedRow()].fileName));
+            _game->pushState(new ConfirmLoadState(_origin, _saves[_lstSaves->getSelectedRow()].fileName));
 		}
 		else
 		{
-			_game->pushState(new LoadGameState(_game, _origin, _saves[_lstSaves->getSelectedRow()].fileName));
+            _game->pushState(new LoadGameState(_origin, _saves[_lstSaves->getSelectedRow()].fileName));
 		}
 	}
 }
