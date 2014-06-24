@@ -92,7 +92,7 @@ void PlaceLiftState::viewClick(Action *)
 	_game->pushState(bState);
 	if (_first)
 	{
-        _game->pushState(new SelectStartFacilityState(_base, bState, _globe));
+		_game->pushState(new SelectStartFacilityState(_base, bState, _globe));
 	}
 }
 

@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-NewResearchListState::NewResearchListState(Base *base) :  _base(base)
+NewResearchListState::NewResearchListState(Base *base) : _base(base)
 {
 	_screen = false;
 

@@ -140,12 +140,12 @@ void PlaceFacilityState::viewClick(Action *)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-        _game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
 		_game->popState();
-        _game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else
 	{

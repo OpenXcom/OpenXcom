@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ManufactureState::ManufactureState(Base *base) :  _base(base)
+ManufactureState::ManufactureState(Base *base) : _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

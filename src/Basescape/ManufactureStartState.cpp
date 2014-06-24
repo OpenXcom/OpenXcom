@@ -107,7 +107,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 
 	const std::map<std::string, int> & requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
-    bool productionPossible (_game->getSavedGame()->getFunds() > _item->getManufactureCost ());
+	bool productionPossible = _game->getSavedGame()->getFunds() > _item->getManufactureCost();
 	productionPossible &= (availableWorkSpace > 0);
 
 	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);

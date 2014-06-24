@@ -373,7 +373,7 @@ void ManufactureInfoState::moreUnit(int change)
 	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_timerMoreUnit->stop();
-        _game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
 	else
 	{

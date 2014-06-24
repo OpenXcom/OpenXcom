@@ -120,15 +120,15 @@ void NewManufactureListState::lstProdClick(Action *)
 	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
-        _game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
 	else if (rule->getRequiredSpace() > _base->getFreeWorkshops())
 	{
-        _game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_WORK_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_WORK_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
 	else
 	{
-        _game->pushState(new ManufactureStartState(_base, rule));
+		_game->pushState(new ManufactureStartState(_base, rule));
 	}
 }
 

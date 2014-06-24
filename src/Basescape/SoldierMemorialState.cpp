@@ -155,7 +155,7 @@ void SoldierMemorialState::btnOkClick(Action *)
  */
 void SoldierMemorialState::lstSoldiersClick(Action *)
 {
-    _game->pushState(new SoldierInfoState(0, _lstSoldiers->getSelectedRow()));
+	_game->pushState(new SoldierInfoState(0, _lstSoldiers->getSelectedRow()));
 }
 
 }

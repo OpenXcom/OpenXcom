@@ -63,7 +63,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	bool craftHasACrew = c->getNumSoldiers() > 0;
-    bool isNewBattle = _game->getSavedGame()->getMonthsPassed() == -1;
+	bool isNewBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -461,7 +461,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 				}
 				else ++i;
 			}
-            if (_game->getSavedGame()->getMonthsPassed() != -1)
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
 			{
 				_base->getItems()->addItem(_items[_sel], cQty);
 			}
@@ -566,7 +566,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-                    _game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
 			}
 			else
