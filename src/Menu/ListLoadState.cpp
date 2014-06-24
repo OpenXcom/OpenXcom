@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-ListLoadState::ListLoadState(Game *game, OptionsOrigin origin) : ListGamesState(game, origin, 0, true)
+ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, true)
 {
 	centerAllSurfaces();
 	
