@@ -44,7 +44,7 @@ private:
 	Base *_base;
 public:
 	/// Creates the Crafts state.
-    CraftsState( Base *base);
+	CraftsState(Base *base);
 	/// Cleans up the Crafts state.
 	~CraftsState();
 	/// Updates the craft info.

@@ -235,7 +235,7 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action *)
 {
-    _game->pushState(new TransferConfirmState( _baseTo, this));
+	_game->pushState(new TransferConfirmState(_baseTo, this));
 }
 
 /**

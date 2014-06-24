@@ -44,7 +44,7 @@ private:
 	Base *_base;
 public:
 	/// Creates the Soldiers state.
-    SoldiersState( Base *base);
+	SoldiersState(Base *base);
 	/// Cleans up the Soldiers state.
 	~SoldiersState();
 	/// Updates the soldier names.

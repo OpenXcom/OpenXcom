@@ -45,7 +45,7 @@ private:
 	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;
 public:
 	/// Creates the Monthly Costs state.
-    MonthlyCostsState( Base *base);
+	MonthlyCostsState(Base *base);
 	/// Cleans up the Monthly Costs state.
 	~MonthlyCostsState();
 	/// Handler for clicking the OK button.

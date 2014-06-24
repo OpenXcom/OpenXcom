@@ -170,6 +170,6 @@ void ManufactureStartState::btnCancelClick(Action *)
  */
 void ManufactureStartState::btnStartClick(Action *)
 {
-    _game->pushState(new ManufactureInfoState( _base, _item));
+	_game->pushState(new ManufactureInfoState(_base, _item));
 }
 }

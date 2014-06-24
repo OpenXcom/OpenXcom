@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-CraftsState::CraftsState( Base *base) :  _base(base)
+CraftsState::CraftsState(Base *base) :  _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -164,7 +164,7 @@ void CraftsState::lstCraftsClick(Action *)
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{
-        _game->pushState(new CraftInfoState( _base, _lstCrafts->getSelectedRow()));
+		_game->pushState(new CraftInfoState(_base, _lstCrafts->getSelectedRow()));
 	}
 }
 

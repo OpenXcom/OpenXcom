@@ -70,7 +70,7 @@ private:
 	size_t getItemIndex(size_t selected) const;
 public:
 	/// Creates the Transfer Items state.
-    TransferItemsState( Base *baseFrom, Base *baseTo);
+	TransferItemsState(Base *baseFrom, Base *baseTo);
 	/// Cleans up the Transfer Items state.
 	~TransferItemsState();
 	/// Runs the timers.
