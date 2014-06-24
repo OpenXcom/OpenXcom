@@ -84,7 +84,7 @@ struct compareSaveTimestamp : public std::binary_function<SaveInfo&, SaveInfo&, 
  * @param firstValidRow First row containing saves.
  * @param autoquick Show auto/quick saved games?
  */
-ListGamesState::ListGamesState(GOptionsOrigin origin, int firstValidRow, bool autoquick) : _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow), _autoquick(autoquick), _sortable(true)
+ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool autoquick) : _origin(origin), _showMsg(true), _noUI(false), _firstValidRow(firstValidRow), _autoquick(autoquick), _sortable(true)
 {
 	_screen = false;
 
