@@ -137,7 +137,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new ListLoadState(_game, OPT_MENU));
+    _game->pushState(new ListLoadState(OPT_MENU));
 }
 
 /**
@@ -147,7 +147,7 @@ void MainMenuState::btnLoadClick(Action *)
 void MainMenuState::btnOptionsClick(Action *)
 {
 	Options::backupDisplay();
-	_game->pushState(new OptionsVideoState(_game, OPT_MENU));
+    _game->pushState(new OptionsVideoState(OPT_MENU));
 }
 
 /**
