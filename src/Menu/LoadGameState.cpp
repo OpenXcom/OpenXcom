@@ -145,27 +145,27 @@ void LoadGameState::init()
 		Options::baseXResolution = Options::baseXGeoscape;
 		Options::baseYResolution = Options::baseYGeoscape;
 		_game->getScreen()->resetDisplay(false);
-		_game->setState(new GeoscapeState(_game));
-		if (_game->getSavedGame()->getSavedBattle() != 0)
+        _game->setState(new GeoscapeState);
+        if ->getSavedGame()->getSavedBattle() != 0)
 		{
-			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+            _game->getSavedGame()->getSavedBattle()->loadMapResources);
 			Options::baseXResolution = Options::baseXBattlescape;
 			Options::baseYResolution = Options::baseYBattlescape;
 			_game->getScreen()->resetDisplay(false);
-			BattlescapeState *bs = new BattlescapeState(_game);
+            BattlescapeState *bs = new BattlescapeState;
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
-	}
+    }
 	catch (Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+            _game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+            _game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);
@@ -178,9 +178,9 @@ void LoadGameState::init()
 		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+            _game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+            _game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);

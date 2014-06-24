@@ -116,7 +116,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
 	int screenWidth = Options::baseXGeoscape;
 	int screenHeight = Options::baseYGeoscape;
@@ -479,11 +479,11 @@ void GeoscapeState::handle(Action *action)
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
-				popup(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_QUICK));
+                popup(new SaveGameState(OPT_GEOSCAPE, SAVE_QUICK));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
-				popup(new LoadGameState(_game, OPT_GEOSCAPE, SAVE_QUICK));
+                popup(new LoadGameState(OPT_GEOSCAPE, SAVE_QUICK));
 			}
 		}
 	}
@@ -515,7 +515,7 @@ void GeoscapeState::init()
 	// Pop up save screen if it's a new ironman game
 	if (_game->getSavedGame()->isIronman() && _game->getSavedGame()->getName().empty())
 	{
-		popup(new ListSaveState(_game, OPT_GEOSCAPE));
+        popup(new ListSaveState(OPT_GEOSCAPE));
 	}
 
 	// Set music if it's not already playing
@@ -879,7 +879,7 @@ void GeoscapeState::time5Seconds()
 								int texture, shade;
 								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 								timerReset();
-								popup(new ConfirmLandingState(_game, *j, texture, shade));
+                                popup(new ConfirmLandingState(*j, texture, shade));
 							}
 						}
 						else if (u->getStatus() != Ufo::LANDED)
@@ -902,7 +902,7 @@ void GeoscapeState::time5Seconds()
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
 						timerReset();
-						popup(new ConfirmLandingState(_game, *j, texture, shade));
+                        popup(new ConfirmLandingState(*j, texture, shade));
 					}
 					else
 					{
@@ -918,7 +918,7 @@ void GeoscapeState::time5Seconds()
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade));
+                            popup(new ConfirmLandingState(*j, texture, shade));
 						}
 						else
 						{
@@ -1057,7 +1057,7 @@ void GeoscapeState::time10Minutes()
 			}
 		}
 	}
-	int diff = (int)(_game->getSavedGame()->getDifficulty());
+    int diff = (int)(_game->getSavedGame()->getDifficulty());
 	if (Options::aggressiveRetaliation)
 	{
 		// Detect as many bases as possible.
@@ -1419,8 +1419,8 @@ void GeoscapeState::time1Hour()
 
 		if (Options::storageLimitsEnforced && (*i)->storesOverfull())
 		{
-			popup(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, Palette::blockOffset(15) + 1, "BACK13.SCR", 6));
-			popup(new SellState(_game, (*i)));
+            popup(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, Palette::blockOffset(15) + 1, "BACK13.SCR", 6));
+            popup(new SellState((*i)));
 		}
 	}
 }
@@ -1567,16 +1567,16 @@ void GeoscapeState::time1Day()
 						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 						if (ammo && std::find(req.begin(), req.end(), ammo->getType()) != req.end() && !_game->getSavedGame()->isResearched(req))
 						{
-							popup(new ResearchRequiredState(_game, item));
+                            popup(new ResearchRequiredState(item));
 						}
 					}
 				}
 			}
 
-			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+            popup(new NewPossibleResearchState(*i, newPossibleResearch));
 			if (!newPossibleManufacture.empty())
 			{
-				popup(new NewPossibleManufactureState(_game, *i, newPossibleManufacture));
+                popup(new NewPossibleManufactureState(*i, newPossibleManufacture));
 			}
 			// now iterate through all the bases and remove this project from their labs
 			for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
@@ -1642,11 +1642,11 @@ void GeoscapeState::time1Day()
 	{
 		if (_game->getSavedGame()->isIronman())
 		{
-			popup(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN));
+            popup(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN));
 		}
 		else if (Options::autosave)
 		{
-			popup(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
+            popup(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
 		}
 	}
 }
@@ -1832,11 +1832,11 @@ void GeoscapeState::btnBasesClick(Action *)
 	timerReset();
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getSelectedBase(), _globe));
+        _game->pushState(new BasescapeState(_game->getSavedGame()->getSelectedBase(), _globe));
 	}
 	else
 	{
-		_game->pushState(new BasescapeState(_game, 0, _globe));
+        _game->pushState(new BasescapeState(0, _globe));
 	}
 }
 
@@ -2142,12 +2142,12 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 		bgen.setAlienRace(ufo->getAlienRace());
 		bgen.run();
 		_pause = true;
-		_game->pushState(new BriefingState(_game, 0, base));
+        _game->pushState(new BriefingState(0, base));
 	}
 	else
 	{
 	    // Please garrison your bases in future
-		popup(new BaseDestroyedState(_game, base));
+        popup(new BaseDestroyedState(_base));
 	}
 }
 

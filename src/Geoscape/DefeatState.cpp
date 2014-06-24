@@ -39,7 +39,7 @@ namespace OpenXcom
  * Initializes all the elements in the Defeat screen.
  * @param game Pointer to the core game.
  */
-DefeatState::DefeatState(Game *game) : State(game), _screen(-1)
+DefeatState::DefeatState() : _screen(-1)
 {
 	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
