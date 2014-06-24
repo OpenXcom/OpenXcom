@@ -46,7 +46,7 @@ class State
 	friend class Timer;
 
 protected:
-	Game *_game;
+    static Game *_game;
 	std::vector<Surface*> _surfaces;
 	bool _screen;
 	InteractiveSurface *_modal;
@@ -79,7 +79,6 @@ public:
 	/// Get the localized text.
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
-    static void setGamePtr(Game* game);
 	LocalizedText tr(const std::string &id, unsigned n) const;
 	/// redraw all the text-type surfaces.
 	void redrawText();
@@ -89,6 +88,8 @@ public:
 	void lowerAllSurfaces();
 	/// switch the colours to use the battlescape palette.
 	void applyBattlescapeTheme();
+    /// Sets game object pointer
+    static void setGamePtr(Game* game);
 	/// Sets a modal surface.
 	void setModal(InteractiveSurface *surface);
 	/// Changes a set of colors on the state's 8bpp palette.

@@ -40,6 +40,9 @@
 namespace OpenXcom
 {
 
+/// Initializes static member
+Game* State::_game = 0;
+
 /**
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
