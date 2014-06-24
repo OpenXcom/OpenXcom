@@ -135,7 +135,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
-    BattlescapeGenerator bgen(_game);
+	BattlescapeGenerator bgen(_game);
 	bgen.setWorldTexture(_texture);
 	bgen.setWorldShade(_shade);
 	bgen.setCraft(_craft);
@@ -165,7 +165,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		throw Exception("No mission available!");
 	}
 	bgen.run();
-    _game->pushState(new BriefingState( _craft));
+	_game->pushState(new BriefingState(_craft));
 }
 
 /**

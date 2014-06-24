@@ -79,13 +79,13 @@ struct GlobeStaticData
 	
 	/**
 	 * Function returning normal vector of sphere surface
-     * @param ox x cord of sphere center
-     * @param oy y cord of sphere center
-     * @param r radius of sphere
-     * @param x cord of point where we getting this vector
-     * @param y cord of point where we getting this vector
-     * @return normal vector of sphere surface 
-     */
+	 * @param ox x cord of sphere center
+	 * @param oy y cord of sphere center
+	 * @param r radius of sphere
+	 * @param x cord of point where we getting this vector
+	 * @param y cord of point where we getting this vector
+	 * @return normal vector of sphere surface
+	 */
 	inline Cord circle_norm(double ox, double oy, double r, double x, double y)
 	{
 		const double limit = r*r;
@@ -1207,19 +1207,19 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 	}
 
 	if (y2<y1) { 
-    SY=-1;
+	SY=-1;
   } else if ( AreSame(deltay, 0.0) ) {
-    SY=0;
+	SY=0;
   } else {
-    SY=1;
+	SY=1;
   }
 
 	if (x2<x1) {
-    SX=-1;
+	SX=-1;
   } else if ( AreSame(deltax, 0.0) ) {
-    SX=0;
+	SX=0;
   } else {
-    SX=1;
+	SX=1;
   }
 
 	x0=x1;  y0=y1;

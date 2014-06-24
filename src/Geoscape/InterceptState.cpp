@@ -186,7 +186,7 @@ void InterceptState::btnCancelClick(Action *)
 void InterceptState::btnGotoBaseClick(Action *)
 {
 	_game->popState();
-    _game->pushState(new BasescapeState(_base, _globe));
+	_game->pushState(new BasescapeState(_base, _globe));
 }
 
 /**
@@ -201,11 +201,11 @@ void InterceptState::lstCraftsLeftClick(Action *)
 		_game->popState();
 		if (_target == 0)
 		{
-            _game->pushState(new SelectDestinationState(c, _globe));
+			_game->pushState(new SelectDestinationState(c, _globe));
 		}
 		else
 		{
-            _game->pushState(new ConfirmDestinationState(c, _target));
+			_game->pushState(new ConfirmDestinationState(c, _target));
 		}
 	}
 }

@@ -120,7 +120,7 @@ void NewPossibleResearchState::btnOkClick(Action *)
 void NewPossibleResearchState::btnResearchClick(Action *)
 {
 	_game->popState();
-    _game->pushState (new ResearchState( _base));
+	_game->pushState (new ResearchState(_base));
 }
 
 }

@@ -246,24 +246,24 @@ void MonthlyReportState::btnOkClick(Action *)
 		_game->popState();
 		if (_psi)
 		{
-            _game->pushState(new PsiTrainingState);
+			_game->pushState(new PsiTrainingState);
 		}
 		// Autosave
 		if (_game->getSavedGame()->isIronman())
 		{
-            _game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN));
 		}
 		else if (Options::autosave)
 		{
-            _game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
 		}
 	}
 	else
 	{
 		if (_txtFailure->getVisible())
 		{
-            _game->popState();
-            _game->pushState(new DefeatState);
+			_game->popState();
+			_game->pushState(new DefeatState);
 		}
 		else
 		{

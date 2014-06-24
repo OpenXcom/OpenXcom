@@ -43,7 +43,7 @@ DefeatState::DefeatState() : _screen(-1)
 {
 	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-    _game->getScreen()->resetDisplay(false);
+	_game->getScreen()->resetDisplay(false);
 	const char *files[] = {"PICT4.LBM", "PICT5.LBM"};
 
 	_timer = new Timer(30000);
@@ -135,7 +135,7 @@ void DefeatState::screenClick(Action *)
 		_game->popState();
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
-        _game->setState(new MainMenuState);
+		_game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 }

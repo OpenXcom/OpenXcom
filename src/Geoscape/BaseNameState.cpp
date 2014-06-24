@@ -132,7 +132,7 @@ void BaseNameState::btnOkClick(Action *)
 			{
 				_game->popState();
 			}
-            _game->pushState(new PlaceLiftState(_base, _globe, _first));
+			_game->pushState(new PlaceLiftState(_base, _globe, _first));
 		}
 	}
 }

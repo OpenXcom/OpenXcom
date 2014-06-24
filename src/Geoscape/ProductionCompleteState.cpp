@@ -135,11 +135,11 @@ void ProductionCompleteState::btnGotoBaseClick(Action *)
 	_game->popState();
 	if (_endType != PROGRESS_CONSTRUCTION)
 	{
-        _game->pushState(new ManufactureState(_base));
+		_game->pushState(new ManufactureState(_base));
 	}
 	else
 	{
-        _game->pushState(new BasescapeState(_base, _state->getGlobe()));
+		_game->pushState(new BasescapeState(_base, _state->getGlobe()));
 	}
 }
 

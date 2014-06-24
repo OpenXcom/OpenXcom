@@ -212,7 +212,7 @@ void BaseDefenseState::btnOkClick(Action *)
 	{
 		// Whatever happens in the base defense, the UFO has finished its duty
 		_ufo->setStatus(Ufo::DESTROYED);
-        _state->handleBaseDefense(_base, _ufo);
+		_state->handleBaseDefense(_base, _ufo);
 	}
 }
 }

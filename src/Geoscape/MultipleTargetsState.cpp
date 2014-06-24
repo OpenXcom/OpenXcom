@@ -126,24 +126,24 @@ void MultipleTargetsState::popupTarget(Target *target)
 		Ufo* u = dynamic_cast<Ufo*>(target);
 		if (b != 0)
 		{
-            _game->pushState(new InterceptState( _state->getGlobe(), b));
+			_game->pushState(new InterceptState(_state->getGlobe(), b));
 		}
 		else if (c != 0)
 		{
-            _game->pushState(new GeoscapeCraftState(c, _state->getGlobe(), 0));
+			_game->pushState(new GeoscapeCraftState(c, _state->getGlobe(), 0));
 		}
 		else if (u != 0)
 		{
-            _game->pushState(new UfoDetectedState(u, _state, false, u->getHyperDetected()));
+			_game->pushState(new UfoDetectedState(u, _state, false, u->getHyperDetected()));
 		}
 		else
 		{
-            _game->pushState(new TargetInfoState(target, _state->getGlobe()));
+			_game->pushState(new TargetInfoState(target, _state->getGlobe()));
 		}
 	}
 	else
 	{
-        _game->pushState(new ConfirmDestinationState(_craft, target));
+		_game->pushState(new ConfirmDestinationState(_craft, target));
 	}
 }
 

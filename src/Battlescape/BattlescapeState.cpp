@@ -1065,7 +1065,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 
 		_battleGame->cancelCurrentAction(true);
 
-        if (b) popup(new UnitInfoState(_save->getSelectedUnit(), this, false, false));
+		if (b) popup(new UnitInfoState(_save->getSelectedUnit(), this, false, false));
 	}
 }
 
