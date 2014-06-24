@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craftId ID of the selected craft.
  */
-CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(game), _base(base), _craftId(craftId)
+CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craftId(craftId)
 {
 	// Create objects
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
