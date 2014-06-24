@@ -31,11 +31,12 @@ class Game;
 class DelayedSaveState : public BattleState
 {
 private:
+    Game *_game;
 	SaveType _type;
 	bool _firstRun;
 public:
 	/// Constructor for the delayed save state.
-    DelayedSaveState(BattlescapeGame *parent, SaveType type);
+    DelayedSaveState(BattlescapeGame *parent, Game *game, SaveType type);
 	/// Deletes the state.
 	~DelayedSaveState();
 	/// Initializes the state.
