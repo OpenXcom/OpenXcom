@@ -87,7 +87,7 @@ void PlaceLiftState::viewClick(Action *)
 	fac->setY(_view->getGridY());
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
-    BasescapeState *bState = new BasescapeState(_base, _globe);
+	BasescapeState *bState = new BasescapeState(_base, _globe);
 	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
 	_game->pushState(bState);
 	if (_first)

@@ -849,7 +849,7 @@ void BattlescapeState::btnShowMapClick(Action *)
 {
 	//MiniMapState
 	if (allowButtons())
-        _game->pushState (new MiniMapState (_map->getCamera(), _save));
+		_game->pushState (new MiniMapState (_map->getCamera(), _save));
 }
 
 /**
@@ -906,7 +906,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 		_battleGame->getPathfinding()->removePreview();
 		_battleGame->cancelCurrentAction(true);
 
-        _game->pushState(new InventoryState( !_save->getDebugMode(), this));
+		_game->pushState(new InventoryState(!_save->getDebugMode(), this));
 	}
 }
 
@@ -1007,7 +1007,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
 void BattlescapeState::btnHelpClick(Action *)
 {
 	if (allowButtons(true))
-        _game->pushState(new PauseState( OPT_BATTLESCAPE));
+		_game->pushState(new PauseState(OPT_BATTLESCAPE));
 }
 
 /**
@@ -1030,7 +1030,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
 void BattlescapeState::btnAbortClick(Action *)
 {
 	if (allowButtons())
-        _game->pushState(new AbortMissionState( _save, this));
+		_game->pushState(new AbortMissionState(_save, this));
 }
 
 /**
@@ -1376,7 +1376,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()) || _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			_battleGame->getCurrentAction()->weapon = item;
-            popup(new ActionMenuState( _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+			popup(new ActionMenuState(_battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
 		}
 		else
 		{
@@ -1527,11 +1527,11 @@ inline void BattlescapeState::handle(Action *action)
 			{
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 				{
-                    _game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK));
+					_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
-                    _game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK));
+					_game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK));
 				}
 			}
 
@@ -1907,7 +1907,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		bgen.setAlienRace("STR_MIXED");
 		bgen.nextStage();
 		_game->popState();
-        _game->pushState(new BriefingState( 0, 0));
+		_game->pushState(new BriefingState(0, 0));
 	}
 	else
 	{
@@ -1921,11 +1921,11 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			// this concludes to defeat when in mars or mars landing mission
 			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-                _game->pushState (new DefeatState);
+				_game->pushState (new DefeatState);
 			}
 			else
 			{
-                _game->pushState(new DebriefingState);
+				_game->pushState(new DebriefingState);
 			}
 		}
 		else
@@ -1934,11 +1934,11 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			// this concludes to victory when in mars mission
 			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-                _game->pushState (new VictoryState);
+				_game->pushState (new VictoryState);
 			}
 			else
 			{
-                _game->pushState(new DebriefingState);
+				_game->pushState(new DebriefingState);
 			}
 		}
 		_game->getCursor()->setColor(Palette::blockOffset(15)+12);

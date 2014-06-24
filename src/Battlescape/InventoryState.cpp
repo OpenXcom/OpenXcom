@@ -508,7 +508,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-    _game->pushState(new UnitInfoState(_battleGame->getSelectedUnit(), _parent, true, false));
+	_game->pushState(new UnitInfoState(_battleGame->getSelectedUnit(), _parent, true, false));
 }
 
 void InventoryState::btnCreateTemplateClick(Action *action)
@@ -569,11 +569,11 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 		return;
 	}
 
-	BattleUnit               *unit          = _battleGame->getSelectedUnit();
-	std::vector<BattleItem*> *unitInv       = unit->getInventory();
-	Tile                     *groundTile    = unit->getTile();
-	std::vector<BattleItem*> *groundInv     = groundTile->getInventory();
-	RuleInventory            *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
+	BattleUnit			   *unit		  = _battleGame->getSelectedUnit();
+	std::vector<BattleItem*> *unitInv	   = unit->getInventory();
+	Tile					 *groundTile	= unit->getTile();
+	std::vector<BattleItem*> *groundInv	 = groundTile->getInventory();
+	RuleInventory			*groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
 
 	// clear unit's inventory (i.e. move everything to the ground)
 	for (std::vector<BattleItem*>::iterator i = unitInv->begin(); i != unitInv->end(); )

@@ -566,7 +566,7 @@ int SellState::getPrice()
 		Craft *craft =  _crafts[getCraftIndex(_sel)];
 		return craft->getRules()->getSellCost();
 	}
-    return 0;
+	return 0;
 }
 
 /**

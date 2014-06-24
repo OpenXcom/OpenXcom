@@ -71,7 +71,7 @@ private:
 	int _limitsEnforced;
 public:
 	/// Creates the Debriefing state.
-    DebriefingState();
+	DebriefingState();
 	/// Cleans up the Debriefing state.
 	~DebriefingState();
 	/// Handler for clicking the OK button.

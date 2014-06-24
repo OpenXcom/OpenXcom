@@ -172,15 +172,15 @@ void BriefingState::btnOkClick(Action *)
 	Options::baseXResolution = Options::baseXBattlescape;
 	Options::baseYResolution = Options::baseYBattlescape;
 	_game->getScreen()->resetDisplay(false);
-    BattlescapeState *bs = new BattlescapeState;
+	BattlescapeState *bs = new BattlescapeState;
 	int liveAliens = 0, liveSoldiers = 0;
 	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);
 		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-        _game->pushState(new NextTurnState(_game->getSavedGame()->getSavedBattle(), bs));
-        _game->pushState(new InventoryState(false, bs));
+		_game->pushState(new NextTurnState(_game->getSavedGame()->getSavedBattle(), bs));
+		_game->pushState(new InventoryState(false, bs));
 	}
 	else
 	{
@@ -188,7 +188,7 @@ void BriefingState::btnOkClick(Action *)
 		Options::baseYResolution = Options::baseYGeoscape;
 		_game->getScreen()->resetDisplay(false);;
 		delete bs;
-        _game->pushState(new AliensCrashState);
+		_game->pushState(new AliensCrashState);
 	}
 }
 

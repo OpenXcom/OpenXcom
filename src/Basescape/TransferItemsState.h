@@ -55,7 +55,7 @@ private:
 	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty, _aQty;
 	double _iQty;
-    int _hasSci, _hasEng;
+	int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	/// Gets selected cost.

@@ -751,7 +751,7 @@ void Inventory::mouseClick(Action *action, State *state)
 										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 										item->setFuseTimer(0);
 									}
-                                    else _game->pushState(new PrimeGrenadeState(0, true, item));
+									else _game->pushState(new PrimeGrenadeState(0, true, item));
 								}
 								else
 								{

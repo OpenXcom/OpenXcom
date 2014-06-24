@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-NextTurnState::NextTurnState( SavedBattleGame *battleGame, BattlescapeState *state) :  _battleGame(battleGame), _state(state), _timer(0)
+NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *state) : _battleGame(battleGame), _state(state), _timer(0)
 {
 	// Create objects
 	int y = state->getMap()->getMessageY();
@@ -170,11 +170,11 @@ void NextTurnState::close()
 		{
 			if (_game->getSavedGame()->isIronman())
 			{
-                _battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_IRONMAN));
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_IRONMAN));
 			}
 			else if (Options::autosave)
 			{
-                _battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_AUTO_BATTLESCAPE));
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_AUTO_BATTLESCAPE));
 			}
 		}
 	}
