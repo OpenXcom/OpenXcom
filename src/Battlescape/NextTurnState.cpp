@@ -170,11 +170,11 @@ void NextTurnState::close()
 		{
 			if (_game->getSavedGame()->isIronman())
 			{
-                _battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), SAVE_IRONMAN));
+                _battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_IRONMAN));
 			}
 			else if (Options::autosave)
 			{
-                _battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), SAVE_AUTO_BATTLESCAPE));
+                _battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_AUTO_BATTLESCAPE));
 			}
 		}
 	}
