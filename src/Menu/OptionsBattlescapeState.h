@@ -48,7 +48,7 @@ private:
 	ToggleTextButton *_btnTooltips, *_btnDeaths;
 public:
 	/// Creates the Battlescape Options state.
-	OptionsBattlescapeState(Game *game, OptionsOrigin origin);
+    OptionsBattlescapeState( OptionsOrigin origin);
 	/// Cleans up the Battlescape Options state.
 	~OptionsBattlescapeState();
 	/// Handler for changing the Edge Scroll combobox.

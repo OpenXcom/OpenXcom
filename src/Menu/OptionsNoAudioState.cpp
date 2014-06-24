@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsNoAudioState::OptionsNoAudioState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsNoAudioState::OptionsNoAudioState(OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	setCategory(_btnAudio);
 

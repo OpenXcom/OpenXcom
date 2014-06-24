@@ -42,7 +42,7 @@ const std::wstring OptionsAudioState::sndFormats[] = {L"?", L"1.4", L"1.0"};
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsAudioState::OptionsAudioState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	setCategory(_btnAudio);
 
