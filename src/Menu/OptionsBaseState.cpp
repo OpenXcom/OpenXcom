@@ -241,7 +241,7 @@ void OptionsBaseState::btnOkClick(Action *)
 		}
 		else
 		{
-			restart(_game, _origin);
+            restart(_origin);
 		}
 	}
 }

@@ -46,7 +46,7 @@ private:
 	std::vector<int> _sampleRates;
 public:
 	/// Creates the Audio Options state.
-	OptionsAudioState(Game *game, OptionsOrigin origin);
+    OptionsAudioState(OptionsOrigin origin);
 	/// Cleans up the Audio Options state.
 	~OptionsAudioState();
 	/// Handler for changing the music slider.
