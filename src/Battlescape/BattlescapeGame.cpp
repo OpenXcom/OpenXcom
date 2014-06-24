@@ -298,8 +298,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			{
 				// show a little infobox with the name of the unit and "... is under alien control"
 				Game *game = _parentState->getGame();
-				BattleUnit *unit = _save->getTile(action.target)->getUnit();
-                game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+                BattleUnit *unit = _save->getTile(action.target)->getUnit();
+                _game->pushState(new InfoboxState(_game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(_game->getLanguage()))));
 			}
 			_save->removeItem(action.weapon);
 		}
