@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
  */
-LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, const std::string &filename) : State(game), _origin(origin), _filename(filename)
+LoadGameState::LoadGameState(OptionsOrigin origin, const std::string &filename) : _origin(origin), _filename(filename)
 {
 	buildUi();
 }
@@ -53,7 +53,7 @@ LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, const std::string
  * @param origin Game section that originated this state.
  * @param type Type of auto-load being used.
  */
-LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, SaveType type) : State(game), _origin(origin)
+LoadGameState::LoadGameState(OptionsOrigin origin, SaveType type) : _origin(origin)
 {
 	switch (type)
 	{
@@ -146,7 +146,7 @@ void LoadGameState::init()
 		Options::baseYResolution = Options::baseYGeoscape;
 		_game->getScreen()->resetDisplay(false);
         _game->setState(new GeoscapeState);
-        if ->getSavedGame()->getSavedBattle() != 0)
+        if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
             _game->getSavedGame()->getSavedBattle()->loadMapResources);
 			Options::baseXResolution = Options::baseXBattlescape;
