@@ -29,7 +29,7 @@ namespace OpenXcom
  * Very simple state, runs interference between the autosave and the screen clearing on the "new turn" screen.
  * This all happens before panic is handled, and forces the text to be rendered over the battlescape rather than the "next turn" screen.
  */
-DelayedSaveState::DelayedSaveState(BattlescapeGame *parent, Game *game, SaveType type) : BattleState(parent), _game(game), _type(type), _firstRun(true)
+DelayedSaveState::DelayedSaveState(BattlescapeGame *parent, SaveType type) : BattleState(parent), _type(type), _firstRun(true)
 {
 }
 
@@ -60,7 +60,7 @@ void DelayedSaveState::think()
 	else
 	{
 		_parent->popState();
-		_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, _type));
+        _game->pushState(new SaveGameState(OPT_BATTLESCAPE, _type));
 	}
 }
 
