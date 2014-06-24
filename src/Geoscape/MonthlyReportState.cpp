@@ -262,7 +262,7 @@ void MonthlyReportState::btnOkClick(Action *)
 	{
 		if (_txtFailure->getVisible())
 		{
-            ->popState();
+            _game->popState();
             _game->pushState(new DefeatState);
 		}
 		else
