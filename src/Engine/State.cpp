@@ -45,7 +45,7 @@ namespace OpenXcom
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game *game) : _game(game), _surfaces(), _screen(true), _modal(0)
+State::State() : _surfaces(), _screen(true), _modal(0)
 {
 	// initialize palette to all black
 	memset(_palette, 0, sizeof(_palette));
