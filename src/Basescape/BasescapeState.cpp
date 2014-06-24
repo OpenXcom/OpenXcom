@@ -373,16 +373,16 @@ void BasescapeState::viewLeftClick(Action *)
 		// Is facility in use?
 		if (fac->inUse())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+            _game->pushState(new ErrorMessageState("STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected?
 		else if (!_base->getDisconnectedFacilities(fac).empty())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+            _game->pushState(new ErrorMessageState("STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{
-			_game->pushState(new DismantleFacilityState(_game, _base, _view, fac));
+            _game->pushState(new DismantleFacilityState(_base, _view, fac));
 		}
 	}
 }
@@ -396,47 +396,47 @@ void BasescapeState::viewRightClick(Action *)
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
 	{
-		_game->pushState(new BaseInfoState(_game, _base, this));
+        _game->pushState(new BaseInfoState(_base, this));
 	}
 	else if (f->getRules()->getCrafts() > 0)
 	{
 		if (f->getCraft() == 0)
 		{
-			_game->pushState(new CraftsState(_game, _base));
+            _game->pushState(new CraftsState(_base));
 		}
 		else
 			for (size_t craft = 0; craft < _base->getCrafts()->size(); ++craft)
 			{
 				if (f->getCraft() == _base->getCrafts()->at(craft))
 				{
-					_game->pushState(new CraftInfoState(_game, _base, craft));
+                    _game->pushState(new CraftInfoState(_base, craft));
 					break;
 				}
 			}
 	}
 	else if (f->getRules()->getStorage() > 0)
 	{
-		_game->pushState(new SellState(_game, _base));
+        _game->pushState(new SellState(_base));
 	}
 	else if (f->getRules()->getPersonnel() > 0)
 	{
-		_game->pushState(new SoldiersState(_game, _base));
+        _game->pushState(new SoldiersState(_base));
 	}
 	else if (f->getRules()->getPsiLaboratories() > 0 && Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0)
 	{
-		_game->pushState(new AllocatePsiTrainingState(_game, _base));
+        _game->pushState(new AllocatePsiTrainingState(_base));
 	}
 	else if (f->getRules()->getLaboratories() > 0)
 	{
-		_game->pushState(new ResearchState(_game, _base));
+        _game->pushState(new ResearchState(_base));
 	}
 	else if (f->getRules()->getWorkshops() > 0)
 	{
-		_game->pushState(new ManufactureState(_game, _base));
+        _game->pushState(new ManufactureState(_base));
 	}
 	else if (f->getRules()->getAliens() > 0)
 	{
-		_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_GEOSCAPE));
+        _game->pushState(new ManageAlienContainmentState(_base, OPT_GEOSCAPE));
 	}
 	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
 	{
