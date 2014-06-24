@@ -473,23 +473,23 @@ void PurchaseState::increaseByValue(int change)
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+        _game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel <= 2 && _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_LIVING_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+        _game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_LIVING_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 && _sel < 3 + _crafts.size() && _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+        _game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_PURCHASE"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 + _crafts.size()
 		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+        _game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_STORE_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else
 	{
