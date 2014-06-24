@@ -43,7 +43,7 @@ DefeatState::DefeatState() : _screen(-1)
 {
 	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	game->getScreen()->resetDisplay(false);
+    _game->getScreen()->resetDisplay(false);
 	const char *files[] = {"PICT4.LBM", "PICT5.LBM"};
 
 	_timer = new Timer(30000);
