@@ -623,7 +623,7 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 		_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 		_game->getScreen()->clear();
-		_game->pushState(new InventoryState(_game, false, 0));
+        _game->pushState(new InventoryState( false, 0));
 	}
 }
 

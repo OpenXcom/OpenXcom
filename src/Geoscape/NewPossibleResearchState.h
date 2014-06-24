@@ -44,7 +44,7 @@ private:
 	Base * _base;
 public:
 	/// Creates the NewPossibleResearch state.
-	NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities);
+    NewPossibleResearchState(Base * base, const std::vector<RuleResearch *> & possibilities);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Allocate Research button.

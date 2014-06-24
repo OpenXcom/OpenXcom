@@ -44,7 +44,7 @@ namespace OpenXcom
 	                                                     UFOPAEDIA_UFO_COMPONENTS,
 	                                                     UFOPAEDIA_UFOS};
 	
-	UfopaediaStartState::UfopaediaStartState(Game *game) : State(game)
+    UfopaediaStartState::UfopaediaStartState()
 	{
 		_screen = false;
 
@@ -120,7 +120,7 @@ namespace OpenXcom
 		{
 			if (action->getSender() == _btnSection[i])
 			{
-				_game->pushState(new UfopaediaSelectState(_game, SECTIONS[i]));
+                _game->pushState(new UfopaediaSelectState(SECTIONS[i]));
 				break;
 			}
 		}

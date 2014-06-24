@@ -136,7 +136,7 @@ namespace OpenXcom
 		_current_index = getArticleIndex(game->getSavedGame(), game->getRuleset(), article->id);
 		if (_current_index != (size_t) -1)
 		{
-			game->pushState(createArticleState(game, article));
+            game->pushState(createArticleState(article));
 		}
 	}
 
@@ -152,7 +152,7 @@ namespace OpenXcom
 		if (_current_index != (size_t) -1)
 		{
 			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(article_id);
-			game->pushState(createArticleState(game, article));
+            game->pushState(createArticleState(article));
 		}
 	}
 
@@ -160,9 +160,9 @@ namespace OpenXcom
 	 * Open Ufopaedia start state, presenting the section selection buttons.
 	 * @param game Pointer to actual game.
 	 */
-	void Ufopaedia::open(Game *game)
+    void Ufopaedia::open(Game *game)
 	{
-		game->pushState(new UfopaediaStartState(game));
+        game->pushState(new UfopaediaStartState);
 	}
 
 	/**
@@ -182,7 +182,7 @@ namespace OpenXcom
 			_current_index++;
 		}
 		game->popState();
-		game->pushState(createArticleState(game, articles[_current_index]));
+        game->pushState(createArticleState(articles[_current_index]));
 	}
 
 	/**
@@ -202,7 +202,7 @@ namespace OpenXcom
 			_current_index--;
 		}
 		game->popState();
-		game->pushState(createArticleState(game, articles[_current_index]));
+        game->pushState(createArticleState(articles[_current_index]));
 	}
 
 	/**

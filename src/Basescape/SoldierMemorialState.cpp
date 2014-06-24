@@ -43,7 +43,7 @@ namespace OpenXcom
  * Initializes all the elements in the Soldier Memorial screen.
  * @param game Pointer to the core game.
  */
-SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
+SoldierMemorialState::SoldierMemorialState()
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

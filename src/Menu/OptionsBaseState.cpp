@@ -53,7 +53,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+OptionsBaseState::OptionsBaseState( OptionsOrigin origin) :  _origin(origin)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

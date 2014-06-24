@@ -138,7 +138,7 @@ void VictoryState::screenClick(Action *)
 		_game->popState();
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
-		_game->setState(new MainMenuState(_game));
+        _game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 }

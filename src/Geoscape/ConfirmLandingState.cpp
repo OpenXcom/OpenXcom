@@ -165,7 +165,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		throw Exception("No mission available!");
 	}
 	bgen.run();
-	_game->pushState(new BriefingState(_game, _craft));
+    _game->pushState(new BriefingState( _craft));
 }
 
 /**

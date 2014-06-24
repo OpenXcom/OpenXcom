@@ -69,7 +69,7 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::st
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+10);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+    _window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));

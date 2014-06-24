@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param base Pointer to the base to place.
  * @param globe Pointer to the Geoscape globe.
  */
-ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe), _cost(0)
+ConfirmNewBaseState::ConfirmNewBaseState( Base *base, Globe *globe) :  _base(base), _globe(globe), _cost(0)
 {
 	_screen = false;
 

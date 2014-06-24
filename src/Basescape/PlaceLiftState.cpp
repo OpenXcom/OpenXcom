@@ -44,7 +44,7 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this a custom starting base?
  */
-PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+PlaceLiftState::PlaceLiftState( Base *base, Globe *globe, bool first) :  _base(base), _globe(globe), _first(first)
 {
 	// Create objects
 	_view = new BaseView(192, 192, 0, 8);

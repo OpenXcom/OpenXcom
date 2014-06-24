@@ -299,7 +299,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 				// show a little infobox with the name of the unit and "... is under alien control"
 				Game *game = _parentState->getGame();
 				BattleUnit *unit = _save->getTile(action.target)->getUnit();
-				game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+                game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 			}
 			_save->removeItem(action.weapon);
 		}
@@ -471,7 +471,7 @@ void BattlescapeGame::endTurn()
 	if ((_save->getSide() != FACTION_NEUTRAL || battleComplete)
 		&& _endTurnRequested)
 	{
-		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
+        _parentState->getGame()->pushState(new NextTurnState(_save, _parentState));
 	}
 	_endTurnRequested = false;
 }
@@ -1527,7 +1527,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	if (Options::battleNotifyDeath && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
+        _parentState->getGame()->pushState(new InfoboxState( _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
 	}
 
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
