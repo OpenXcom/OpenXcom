@@ -92,7 +92,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game), _reserve(0), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
+BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 
@@ -849,7 +849,7 @@ void BattlescapeState::btnShowMapClick(Action *)
 {
 	//MiniMapState
 	if (allowButtons())
-		_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
+        _game->pushState (new MiniMapState (_map->getCamera(), _save));
 }
 
 /**
@@ -1065,7 +1065,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 
 		_battleGame->cancelCurrentAction(true);
 
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this, false, false));
+        if (b) popup(new UnitInfoState(_save->getSelectedUnit(), this, false, false));
 	}
 }
 
@@ -1527,11 +1527,11 @@ inline void BattlescapeState::handle(Action *action)
 			{
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 				{
-					_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SAVE_QUICK));
+                    _game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
-					_game->pushState(new LoadGameState(_game, OPT_BATTLESCAPE, SAVE_QUICK));
+                    _game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK));
 				}
 			}
 

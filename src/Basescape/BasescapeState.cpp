@@ -61,7 +61,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param globe Pointer to the Geoscape globe.
  */
-BasescapeState::BasescapeState( Base *base, Globe *globe) :  _base(base), _globe(globe)
+BasescapeState::BasescapeState(Base *base, Globe *globe) : _base(base), _globe(globe)
 {
 	// Create objects
 	_txtFacility = new Text(192, 9, 0, 0);
@@ -268,7 +268,7 @@ void BasescapeState::btnNewBaseClick(Action *)
 {
 	Base *base = new Base(_game->getRuleset());
 	_game->popState();
-    _game->pushState(new BuildNewBaseState( base, _globe, false));
+    _game->pushState(new BuildNewBaseState(base, _globe, false));
 }
 
 /**
@@ -277,7 +277,7 @@ void BasescapeState::btnNewBaseClick(Action *)
  */
 void BasescapeState::btnBaseInfoClick(Action *)
 {
-    _game->pushState(new BaseInfoState( _base, this));
+    _game->pushState(new BaseInfoState(_base, this));
 }
 
 /**
@@ -286,7 +286,7 @@ void BasescapeState::btnBaseInfoClick(Action *)
  */
 void BasescapeState::btnSoldiersClick(Action *)
 {
-    _game->pushState(new SoldiersState( _base));
+    _game->pushState(new SoldiersState(_base));
 }
 
 /**
@@ -295,7 +295,7 @@ void BasescapeState::btnSoldiersClick(Action *)
  */
 void BasescapeState::btnCraftsClick(Action *)
 {
-    _game->pushState(new CraftsState( _base));
+    _game->pushState(new CraftsState(_base));
 }
 
 /**
@@ -304,7 +304,7 @@ void BasescapeState::btnCraftsClick(Action *)
  */
 void BasescapeState::btnFacilitiesClick(Action *)
 {
-    _game->pushState(new BuildFacilitiesState( _base, this));
+    _game->pushState(new BuildFacilitiesState(_base, this));
 }
 
 /**
@@ -313,7 +313,7 @@ void BasescapeState::btnFacilitiesClick(Action *)
  */
 void BasescapeState::btnResearchClick(Action *)
 {
-    _game->pushState(new ResearchState( _base));
+    _game->pushState(new ResearchState(_base));
 }
 
 /**
@@ -322,7 +322,7 @@ void BasescapeState::btnResearchClick(Action *)
  */
 void BasescapeState::btnManufactureClick(Action *)
 {
-    _game->pushState(new ManufactureState( _base));
+    _game->pushState(new ManufactureState(_base));
 }
 
 /**
@@ -331,7 +331,7 @@ void BasescapeState::btnManufactureClick(Action *)
  */
 void BasescapeState::btnPurchaseClick(Action *)
 {
-    _game->pushState(new PurchaseState( _base));
+    _game->pushState(new PurchaseState(_base));
 }
 
 /**
@@ -340,7 +340,7 @@ void BasescapeState::btnPurchaseClick(Action *)
  */
 void BasescapeState::btnSellClick(Action *)
 {
-    _game->pushState(new SellState( _base));
+    _game->pushState(new SellState(_base));
 }
 
 /**
@@ -349,7 +349,7 @@ void BasescapeState::btnSellClick(Action *)
  */
 void BasescapeState::btnTransferClick(Action *)
 {
-    _game->pushState(new TransferBaseState( _base));
+    _game->pushState(new TransferBaseState(_base));
 }
 
 /**
@@ -373,12 +373,12 @@ void BasescapeState::viewLeftClick(Action *)
 		// Is facility in use?
 		if (fac->inUse())
 		{
-            _game->pushState(new ErrorMessageState("STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+            _game->pushState(new ErrorMessageState(tr("STR_FACILITY_IN_USE"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected?
 		else if (!_base->getDisconnectedFacilities(fac).empty())
 		{
-            _game->pushState(new ErrorMessageState("STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+            _game->pushState(new ErrorMessageState(tr("STR_CANNOT_DISMANTLE_FACILITY"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{
