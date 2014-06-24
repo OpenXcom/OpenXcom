@@ -36,7 +36,7 @@
 namespace OpenXcom
 {
 
-BaseDestroyedState::BaseDestroyedState( Base *base) :  _base(base)
+BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 {
 	_screen = false;
 
