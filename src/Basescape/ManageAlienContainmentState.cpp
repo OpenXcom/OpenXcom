@@ -238,11 +238,11 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 
 	if (Options::storageLimitsEnforced && _base->storesOverfull())
 	{
-		_game->pushState(new SellState(_game, _base, _origin));
+        _game->pushState(new SellState(_base, _origin));
 		if (_origin == OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+            _game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		else
-			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+            _game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
  	}
 }
 
