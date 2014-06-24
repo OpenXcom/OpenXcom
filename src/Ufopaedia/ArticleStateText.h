@@ -35,7 +35,7 @@ namespace OpenXcom
 	class ArticleStateText : public ArticleState
 	{
 	public:
-        ArticleStateText(ArticleDefinitionText *article_defs);
+		ArticleStateText(ArticleDefinitionText *article_defs);
 		virtual ~ArticleStateText();
 
 	protected:

@@ -35,7 +35,7 @@
 namespace OpenXcom
 {
 
-    ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft *defs) : ArticleState( defs->id)
+	ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft *defs) : ArticleState(defs->id)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
 

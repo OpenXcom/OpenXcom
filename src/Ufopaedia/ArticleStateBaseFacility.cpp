@@ -37,7 +37,7 @@
 namespace OpenXcom
 {
 
-    ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility *defs) : ArticleState( defs->id)
+	ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility *defs) : ArticleState(defs->id)
 	{
 		RuleBaseFacility *facility = _game->getRuleset()->getBaseFacility(defs->id);
 

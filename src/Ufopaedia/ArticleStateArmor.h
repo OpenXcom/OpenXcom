@@ -38,7 +38,7 @@ namespace OpenXcom
 	class ArticleStateArmor : public ArticleState
 	{
 	public:
-        ArticleStateArmor(ArticleDefinitionArmor *article_defs);
+		ArticleStateArmor(ArticleDefinitionArmor *article_defs);
 		virtual ~ArticleStateArmor();
 
 	protected:

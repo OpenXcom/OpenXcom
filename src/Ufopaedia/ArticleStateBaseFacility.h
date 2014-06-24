@@ -38,7 +38,7 @@ namespace OpenXcom
 	class ArticleStateBaseFacility : public ArticleState
 	{
 	public:
-        ArticleStateBaseFacility(ArticleDefinitionBaseFacility *article_defs);
+		ArticleStateBaseFacility(ArticleDefinitionBaseFacility *article_defs);
 		virtual ~ArticleStateBaseFacility();
 
 	protected:

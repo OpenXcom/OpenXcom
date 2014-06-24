@@ -38,7 +38,7 @@ namespace OpenXcom
 	class ArticleStateUfo : public ArticleState
 	{
 	public:
-        ArticleStateUfo(ArticleDefinitionUfo *article_defs);
+		ArticleStateUfo(ArticleDefinitionUfo *article_defs);
 		virtual ~ArticleStateUfo();
 
 	protected:
