@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,7 +22,7 @@
 #include <math.h>
 #include <sstream>
 #include <algorithm>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
@@ -44,7 +44,7 @@ Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
-  , _detected(false), _hyperDetected(false), _shootingAt(0)
+  , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
 {
 }
 
@@ -113,7 +113,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	_direction = node["direction"].as<std::string>(_direction);
 	_detected = node["detected"].as<bool>(_detected);
 	_hyperDetected = node["hyperDetected"].as<bool>(_hyperDetected);
-	_secondsRemaining = node["secondsRemaining"].as<int>(_secondsRemaining);
+	_secondsRemaining = node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 	double lon = _lon;
 	double lat = _lat;
@@ -148,18 +148,21 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 			_status = FLYING;
 		}
 	}
-	int missionID = node["mission"].as<int>();
-	std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
-	if (found == game.getAlienMissions().end())
+	if (game.getMonthsPassed() != -1)
 	{
-		// Corrupt save file.
-		throw Exception("Unknown mission, save file is corrupt.");
-	}
-	_mission = *found;
+		int missionID = node["mission"].as<int>();
+		std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+		if (found == game.getAlienMissions().end())
+		{
+			// Corrupt save file.
+			throw Exception("Unknown mission, save file is corrupt.");
+		}
+		_mission = *found;
 
-	std::string tid = node["trajectory"].as<std::string>();
-	_trajectory = ruleset.getUfoTrajectory(tid);
-	_trajectoryPoint = node["trajectoryPoint"].as<unsigned>(_trajectoryPoint);
+		std::string tid = node["trajectory"].as<std::string>();
+		_trajectory = ruleset.getUfoTrajectory(tid);
+		_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
+	}
 	if (_inBattlescape)
 		setSpeed(0);
 }
@@ -168,7 +171,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
  * Saves the UFO to a YAML file.
  * @return YAML node.
  */
-YAML::Node Ufo::save() const
+YAML::Node Ufo::save(bool newBattle) const
 {
 	YAML::Node node = MovingTarget::save();
 	node["type"] = _rules->getType();
@@ -193,9 +196,12 @@ YAML::Node Ufo::save() const
 		node["secondsRemaining"] = _secondsRemaining;
 	if (_inBattlescape)
 		node["inBattlescape"] = _inBattlescape;
-	node["mission"] = _mission->getId();
-	node["trajectory"] = _trajectory->getID();
-	node["trajectoryPoint"] = _trajectoryPoint;
+	if (!newBattle)
+	{
+		node["mission"] = _mission->getId();
+		node["trajectory"] = _trajectory->getID();
+		node["trajectoryPoint"] = _trajectoryPoint;
+	}
 	return node;
 }
 
@@ -317,7 +323,7 @@ void Ufo::setDetected(bool detected)
  * crashed.
  * @return Amount of seconds.
  */
-int Ufo::getSecondsRemaining() const
+size_t Ufo::getSecondsRemaining() const
 {
 	return _secondsRemaining;
 }
@@ -328,7 +334,7 @@ int Ufo::getSecondsRemaining() const
  * crashed.
  * @param seconds Amount of seconds.
  */
-void Ufo::setSecondsRemaining(int seconds)
+void Ufo::setSecondsRemaining(size_t seconds)
 {
 	_secondsRemaining = seconds;
 }
@@ -614,7 +620,7 @@ bool Ufo::getHyperDetected() const
 
 /**
  * Changes whether this UFO has been detected by hyper-wave.
- * @param detected Detection status.
+ * @param hyperdetected Detection status.
  */
 void Ufo::setHyperDetected(bool hyperdetected)
 {
@@ -660,5 +666,15 @@ int Ufo::getCrashId() const
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
+}
+/// Sets the UFO's hit frame.
+void Ufo::setHitFrame(int frame)
+{
+	_hitFrame = frame;
+}
+/// Gets the UFO's hit frame.
+int Ufo::getHitFrame()
+{
+	return _hitFrame;
 }
 }

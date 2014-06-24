@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #include <assert.h>
 #include "RuleRegion.h"
 #include "City.h"
+#include "../fmath.h"
 #include "../Engine/RNG.h"
 #include <math.h>
 
@@ -57,26 +58,61 @@ void RuleRegion::load(const YAML::Node &node)
 	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180);
-		_lonMax.push_back(areas[i][1] * M_PI / 180);
-		_latMin.push_back(areas[i][2] * M_PI / 180);
-		_latMax.push_back(areas[i][3] * M_PI / 180);
+		_lonMin.push_back(areas[i][0] * M_PI / 180.0);
+		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
+		_latMin.push_back(areas[i][2] * M_PI / 180.0);
+		_latMax.push_back(areas[i][3] * M_PI / 180.0);
 	}
+	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
 	if (const YAML::Node &cities = node["cities"])
 	{
 		for (YAML::const_iterator i = cities.begin(); i != cities.end(); ++i)
 		{
+			// if a city has been added, make sure that it has a zone 3 associated with it, if not, create one for it.
+			if (_missionZones.size() >= CITY_MISSION_ZONE)
+			{
+				MissionArea ma;
+				ma.lonMin = ma.lonMax = (*i)["lon"].as<double>(0.0);
+				ma.latMin = ma.latMax = (*i)["lat"].as<double>(0.0);
+				if (std::find(_missionZones.at(CITY_MISSION_ZONE).areas.begin(),
+					_missionZones.at(CITY_MISSION_ZONE).areas.end(),
+					ma)	== _missionZones.at(CITY_MISSION_ZONE).areas.end())
+				{
+					_missionZones.at(CITY_MISSION_ZONE).areas.push_back(ma);
+				}
+			}
+
 			City *rule = new City("", 0.0, 0.0);
 			rule->load(*i);
 			_cities.push_back(rule);
+		}
+		// make sure all the zone 3s line up with cities in this region
+		// only applicable if there ARE cities in this region.
+		for (std::vector<MissionArea>::iterator i = _missionZones.at(CITY_MISSION_ZONE).areas.begin(); i != _missionZones.at(CITY_MISSION_ZONE).areas.end();)
+		{
+			bool matching = false;
+			for (std::vector<City*>::iterator j = _cities.begin(); j != _cities.end() && !matching; ++j)
+			{
+				matching = (AreSame((*j)->getLatitude(), ((*i).latMin * M_PI / 180.0)) &&
+							AreSame((*j)->getLongitude(), ((*i).lonMin * M_PI / 180.0)) &&
+							AreSame((*i).latMax, (*i).latMin) &&
+							AreSame((*i).lonMax, (*i).lonMin));
+			}
+			if (matching)
+			{
+				++i;
+			}
+			else
+			{
+				i = _missionZones.at(CITY_MISSION_ZONE).areas.erase(i);
+			}
 		}
 	}
 	if (const YAML::Node &weights = node["missionWeights"])
 	{
 		_missionWeights.load(weights);
 	}
-	_regionWeight = node["regionWeight"].as<unsigned>(_regionWeight);
-	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
+	_regionWeight = node["regionWeight"].as<size_t>(_regionWeight);
 	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
 }
 
@@ -108,7 +144,7 @@ int RuleRegion::getBaseCost() const
  */
 bool RuleRegion::insideRegion(double lon, double lat) const
 {
-	for (unsigned int i = 0; i < _lonMin.size(); ++i)
+	for (size_t i = 0; i < _lonMin.size(); ++i)
 	{
 		bool inLon, inLat;
 
@@ -139,7 +175,7 @@ std::vector<City*> *RuleRegion::getCities()
  * This is only used when creating a new game, since these weights change in the course of the game.
  * @return The initial weight of this region.
  */
-unsigned RuleRegion::getWeight() const
+size_t RuleRegion::getWeight() const
 {
 	return _regionWeight;
 }
@@ -147,22 +183,14 @@ unsigned RuleRegion::getWeight() const
 /**
  * Gets a random point that is guaranteed to be inside the give zone.
  * If the region contains cities, they are the sites of zone 0 and the rest of the zones get one index higher.
- * @return A pair of longtitude and latitude.
+ * @param zone The target zone.
+ * @return A pair of longitude and latitude.
  */
-std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
+std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 {
-	if (zone == 0 && !_cities.empty())
-	{
-		unsigned p = RNG::generate(0, _cities.size() - 1);
-		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());
-	}
-	if (zone != 0)
-	{
-		--zone;
-	}
 	if (zone < _missionZones.size())
 	{
-		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
+		size_t a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
 		double lonMin = _missionZones[zone].areas[a].lonMin;
 		double lonMax = _missionZones[zone].areas[a].lonMax;
 		double latMin = _missionZones[zone].areas[a].latMin;

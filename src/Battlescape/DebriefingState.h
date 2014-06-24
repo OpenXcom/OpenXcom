@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -68,7 +68,7 @@ private:
 	/// Reequips a craft after a mission.
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _manageContainment, _destroyBase;
-	int _containmentLimit;
+	int _limitsEnforced;
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

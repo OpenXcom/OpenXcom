@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,15 +23,11 @@ namespace OpenXcom
 
 /**
  * Initializes a death event.
- * @time Time when the death occurred.
  */
 SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0)
 {
 }
 
-/**
- * Clean up timer.
- */
 SoldierDeath::~SoldierDeath()
 {
 }
@@ -67,11 +63,11 @@ const GameTime *SoldierDeath::getTime() const
 
 /**
  * Changes the time of death of this soldier.
- * @param time Pointer to the time.
+ * @param time The time of death.
  */
-void SoldierDeath::setTime(GameTime *time)
+void SoldierDeath::setTime(GameTime time)
 {
-	_time = *time;
+	_time = time;
 }
 
 }

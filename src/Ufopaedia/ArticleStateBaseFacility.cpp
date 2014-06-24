@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,7 +45,7 @@ namespace OpenXcom
 		_txtTitle = new Text(200, 17, 10, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+		setPalette("PAL_BASESCAPE");
 
 		ArticleState::initLayout();
 
@@ -60,7 +60,7 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(13)+10);
 		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		// build preview image
 		int tile_size = 32;
@@ -113,7 +113,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(13)+10);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 		_lstInfo = new TextList(200, 42, 10, 42);
 		add(_lstInfo);
@@ -125,7 +125,7 @@ namespace OpenXcom
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), tr("STR_DAY", facility->getBuildTime()).c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << Text::formatFunding(facility->getBuildCost());
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);

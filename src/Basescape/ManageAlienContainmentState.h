@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,6 +42,7 @@ class ManageAlienContainmentState : public State
 {
 private:
 	Base *_base;
+	OptionsOrigin _origin;
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtUsed, *_txtAvailable, *_txtItem, *_txtLiveAliens, *_txtDeadAliens;
@@ -49,9 +50,9 @@ private:
 	Timer *_timerInc, *_timerDec;
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
-	unsigned int _sel;
-	int _aliensSold, _researchedAliens, _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel, _containmentLimit, _overCrowded;
+	size_t _sel;
+	int _aliensSold, _researchedAliens;
+	bool _overCrowded;
 	Uint8 _color, _color2;
 	/// Gets selected quantity.
 	int getQuantity();

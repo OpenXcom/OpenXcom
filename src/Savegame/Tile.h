@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -77,6 +77,7 @@ protected:
 	int _preview;
 	int _TUMarker;
 	int _overlaps;
+	bool _danger;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -98,6 +99,10 @@ public:
 	 */
 	MapData *getMapData(int part) const
 	{
+		if (0 > part || 3 < part)
+		{
+			return NULL;
+		}
 		return _objects[part];
 	}
 
@@ -223,6 +228,11 @@ public:
 	int getOverlaps() const;
 	/// increment the overlap value on this tile.
 	void addOverlap();
+	/// set the danger flag on this tile (so the AI will avoid it).
+	void setDangerous();
+	/// check the danger flag on this tile.
+	bool getDangerous();
+
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -74,15 +74,17 @@ void WarningMessage::setTextColor(Uint8 color)
 }
 
 /**
- * Changes the various fonts for the message to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
+ * @param lang Pointer to current language.
  */
-void WarningMessage::setFonts(Font *big, Font *small)
+void WarningMessage::initText(Font *big, Font *small, Language *lang)
 {
-	_text->setFonts(big, small);
+	_text->initText(big, small, lang);
 }
 
 /**
@@ -138,14 +140,7 @@ void WarningMessage::fade()
 void WarningMessage::draw()
 {
 	Surface::draw();
-
-	SDL_Rect square1;
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = getWidth();
-	square1.h = getHeight();
-	drawRect(&square1, _color + (_fade > 12 ? 12 : _fade));
-
+	drawRect(0, 0, getWidth(), getHeight(), _color + (_fade > 12 ? 12 : _fade));
 	_text->blit(this);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,7 +43,7 @@ namespace OpenXcom
 		_txtTitle = new Text(155, 32, 5, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+		setPalette("PAL_UFOPAEDIA");
 
 		ArticleState::initLayout();
 
@@ -59,14 +59,14 @@ namespace OpenXcom
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
 		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		_txtInfo = new Text(defs->rect_text.width, defs->rect_text.height, defs->rect_text.x, defs->rect_text.y);
 		add(_txtInfo);
 
 		_txtInfo->setColor(Palette::blockOffset(14)+15);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
 		_txtStats = new Text(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
 		add(_txtStats);
@@ -74,7 +74,7 @@ namespace OpenXcom
 		_txtStats->setColor(Palette::blockOffset(14)+15);
 		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(craft->getMaxSpeed())) << L'\n';
 		ss << tr("STR_ACCELERATION").arg(craft->getAcceleration()) << L'\n';
 		ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(craft->getMaxFuel())) << L'\n';

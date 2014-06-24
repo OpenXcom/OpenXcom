@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,25 +19,25 @@
 #ifndef OPENXCOM_RNG_H
 #define OPENXCOM_RNG_H
 
+#include <algorithm>
+#define __STDC_LIMIT_MACROS
+#include <stdint.h>
+
 namespace OpenXcom
 {
 
 /**
  * Random Number Generator used throughout the game
- * for all your randomness needs. Uses a Mersenne Twister
- * pseudorandom number generator based on the code sample
- * from Game Coding Complete 4.
- * @note http://www.mcshaffry.com/GameCode/
+ * for all your randomness needs. Uses a 64-bit xorshift
+ * pseudorandom number generator.
  */
 namespace RNG
 {
-	/// Initializes the generator.
-	void init();
-	/// Initializes the generator.
-	void init(unsigned int seed);
 	/// Gets the seed in use.
-	unsigned int getSeed();
-	/// Generates a random integer number.
+	uint64_t getSeed();
+	/// Sets the seed in use.
+	void setSeed(uint64_t n);
+	/// Generates a random integer number, inclusive.
 	int generate(int min, int max);
 	/// Generates a random floating-point number.
 	double generate(double min, double max);
@@ -45,6 +45,18 @@ namespace RNG
 	double boxMuller(double m = 0, double s = 1);
 	/// Generates a percentage chance.
 	bool percent(int value);
+	/// Generates a random integer number, exclusive.
+	int generateEx(int max);
+	/// Shuffles a list randomly.
+	/**
+	 * Randomly changes the orders of the elements in a list.
+	 * @param list The container to randomize.
+	 */
+	template <typename T>
+	void shuffle(T &list)
+	{
+		std::random_shuffle(list.begin(), list.end(), generateEx);
+	}
 }
 
 }

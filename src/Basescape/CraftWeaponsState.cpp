@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,7 +59,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);
@@ -78,7 +78,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&CraftWeaponsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&CraftWeaponsState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -112,7 +112,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		{
 			_weapons.push_back(w);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			ss << _base->getItems()->getItem(w->getLauncherItem());
 			if (w->getClipItem() != "")
 			{

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,6 +47,7 @@ class Vehicle;
 class Base : public Target
 {
 private:
+	static const int BASE_SIZE = 6;
 	const Ruleset *_rule;
 	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
@@ -61,6 +62,8 @@ private:
 	bool _retaliationTarget;
 	std::vector<Vehicle*> _vehicles;
 	std::vector<BaseFacility*> _defenses;
+	/// Determines space taken up by ammo clips about to rearm craft.
+	double getIgnoredStores();
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -115,7 +118,9 @@ public:
 	/// Gets the base's available living quarters.
 	int getAvailableQuarters() const;
 	/// Gets the base's used storage space.
-	int getUsedStores() const;
+	double getUsedStores();
+	/// Checks if the base's stores are overfull.
+	bool storesOverfull(double offset = 0.0);
 	/// Gets the base's available storage space.
 	int getAvailableStores() const;
 	/// Gets the base's used laboratory space.
@@ -172,6 +177,8 @@ public:
 	int getUsedPsiLabs() const;
 	/// Gets the base's total available psi lab space.
 	int getAvailablePsiLabs() const;
+	/// Gets the base's total free psi lab space.
+	int getFreePsiLabs() const;
 	/// Gets the total amount of Containment Space
 	int getAvailableContainment() const;
 	/// Gets the total amount of used Containment Space
@@ -185,14 +192,21 @@ public:
 	/// Gets the retaliation status of this base.
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
-	unsigned getDetectionChance() const;
+	size_t getDetectionChance(int difficulty) const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
+	/// Setup base defenses.
 	void setupDefenses();
 	/// Get a list of Defensive Facilities
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.
 	std::vector<Vehicle*> *getVehicles();
+	/// Destroys all disconnected facilities in the base.
+	void destroyDisconnectedFacilities();
+	/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
+	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
+	/// destroy a facility and deal with the side effects.
+	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,10 +44,10 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk = new TextButton(100, 18, 48, 150);
 	_btnOk5Secs = new TextButton(100, 18, 172, 150);
-	_txtMessage = new Text(226, 80, 47, 50);
+	_txtMessage = new Text(246, 96, 37, 42);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnOk);
@@ -63,12 +63,12 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftErrorState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftErrorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftErrorState::btnOkClick, Options::keyCancel);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&CraftErrorState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress((ActionHandler)&CraftErrorState::btnOk5SecsClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk5Secs->onKeyboardPress((ActionHandler)&CraftErrorState::btnOk5SecsClick, Options::keyOk);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -84,14 +84,6 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 CraftErrorState::~CraftErrorState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void CraftErrorState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

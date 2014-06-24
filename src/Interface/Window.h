@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,13 +43,14 @@ class Window : public Surface
 {
 private:
 	static const double POPUP_SPEED;
+	int _dx, _dy;
 	Surface *_bg;
 	Uint8 _color;
 	WindowPopup _popup;
 	double _popupStep;
 	Timer *_timer;
 	State *_state;
-	bool _contrast, _screen;
+	bool _contrast, _screen, _thinBorder;
 public:
 	static Sound *soundPopup[3];
 	/// Creates a new window with the specified size and position.
@@ -70,6 +71,12 @@ public:
 	void popup();
 	/// Draws the window.
 	void draw();
+	/// sets the X delta.
+	void setDX(int dx);
+	/// sets the Y delta.
+	void setDY(int dy);
+	/// Give this window a thin border.
+	void setThinBorder();
 };
 
 }

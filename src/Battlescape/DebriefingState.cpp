@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,6 +52,7 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
+#include "../Savegame/BaseFacility.h"
 #include <sstream>
 #include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
@@ -60,6 +61,8 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Basescape/ManageAlienContainmentState.h"
+#include "../Engine/Screen.h"
+#include "../Basescape/SellState.h"
 
 namespace OpenXcom
 {
@@ -70,25 +73,29 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay(false);
+
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
+	_limitsEnforced = Options::storageLimitsEnforced ? 1 : 0;
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
-	_txtTitle = new Text(280, 17, 16, 8);
+	_txtTitle = new Text(300, 17, 16, 8);
 	_txtItem = new Text(180, 9, 16, 24);
 	_txtQuantity = new Text(60, 9, 200, 24);
-	_txtScore = new Text(55, 9, 260, 24);
+	_txtScore = new Text(55, 9, 270, 24);
 	_txtRecovery = new Text(180, 9, 16, 60);
-	_txtRating = new Text(120, 9, 64, 180);
-	_lstStats = new TextList(280, 80, 16, 32);
-	_lstRecovery = new TextList(280, 80, 16, 32);
-	_lstTotal = new TextList(280, 9, 16, 12);
+	_txtRating = new Text(200, 9, 64, 180);
+	_lstStats = new TextList(290, 80, 16, 32);
+	_lstRecovery = new TextList(290, 80, 16, 32);
+	_lstTotal = new TextList(290, 9, 16, 12);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -111,8 +118,8 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -122,6 +129,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
+	_txtQuantity->setAlign(ALIGN_RIGHT);
 
 	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));
@@ -133,16 +141,16 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 
 	_lstStats->setColor(Palette::blockOffset(15)-1);
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstStats->setColumns(3, 184, 60, 64);
+	_lstStats->setColumns(3, 224, 30, 64);
 	_lstStats->setDot(true);
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstRecovery->setColumns(3, 184, 60, 64);
+	_lstRecovery->setColumns(3, 224, 30, 64);
 	_lstRecovery->setDot(true);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(2, 244, 64);
+	_lstTotal->setColumns(2, 254, 64);
 	_lstTotal->setDot(true);
 
 	prepareDebriefing();
@@ -153,7 +161,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 		if ((*i)->qty == 0)
 			continue;
 
-		std::wstringstream ss, ss2;
+		std::wostringstream ss, ss2;
 		ss << L'\x01' << (*i)->qty << L'\x01';
 		ss2 << L'\x01' << (*i)->score;
 		total += (*i)->score;
@@ -168,7 +176,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 			statsY += 8;
 		}
 	}
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
 
@@ -219,8 +227,9 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMMARS")->play();
+	_game->getResourcePack()->playMusic("GMMARS");
 
+	// Restore system colors
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
@@ -247,6 +256,13 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
+	std::vector<Soldier*> participants;
+	for (std::vector<BattleUnit*>::const_iterator i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
+		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
+	{
+		if ((*i)->getGeoscapeSoldier())
+			participants.push_back((*i)->getGeoscapeSoldier());
+	}
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -255,7 +271,7 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else if (!_destroyBase)
 	{
-		if (_game->getSavedGame()->handlePromotions())
+		if (_game->getSavedGame()->handlePromotions(participants))
 		{
 			_game->pushState(new PromotionsState(_game));
 		}
@@ -270,7 +286,12 @@ void DebriefingState::btnOkClick(Action *)
 		else if (_manageContainment)
 		{
 			_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_BATTLESCAPE));
-			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+		}
+		if (!_manageContainment && Options::storageLimitsEnforced && _base->storesOverfull())
+		{
+			_game->pushState(new SellState(_game, _base, OPT_BATTLESCAPE));
+			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
 }
@@ -392,7 +413,7 @@ void DebriefingState::prepareDebriefing()
 				base = (*i);
 				craftIterator = j;
 				craft->returnToBase();
-				craft->setLowFuel(true);
+				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
 			}
 			else if ((*j)->getDestination() != 0)
@@ -411,7 +432,7 @@ void DebriefingState::prepareDebriefing()
 			base->setInBattlescape(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
 				{
 					_region = (*k);
 					break;
@@ -419,7 +440,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*k)->getRules()->insideCountry(base->getLongitude(), base->getLatitude()))
 				{
 					_country = (*k);
 					break;
@@ -429,6 +450,20 @@ void DebriefingState::prepareDebriefing()
 			{
 				_destroyBase = true;
 			}
+			for (std::vector<BaseFacility*>::iterator k = base->getFacilities()->begin(); k != base->getFacilities()->end();)
+			{
+				// this facility was demolished
+				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
+				{
+					base->destroyFacility(k);
+				}
+				else
+				{
+					++k;
+				}
+			}
+			// this may cause the base to become disjointed, destroy the disconnected parts.
+			base->destroyDisconnectedFacilities();
 		}
 	}
 
@@ -439,15 +474,16 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			if (!aborted)
+			(*i)->setInBattlescape(false);
+			if ((*i)->getStatus() == Ufo::LANDED && aborted)
+			{
+				 (*i)->setSecondsRemaining(5);
+			}
+			else if ((*i)->getStatus() == Ufo::CRASHED || !aborted)
 			{
 				delete *i;
 				save->getUfos()->erase(i);
 				break;
-			}
-			else
-			{
-				(*i)->setInBattlescape(false);
 			}
 		}
 	}
@@ -544,9 +580,28 @@ void DebriefingState::prepareDebriefing()
 		{
 			type = (*j)->getSpawnUnit();
 		}
+
 		if (!(*j)->getTile())
 		{
-			(*j)->setTile(battle->getTile((*j)->getPosition()));
+			Position pos = (*j)->getPosition();
+			if (pos == Position(-1, -1, -1))
+			{
+				for (std::vector<BattleItem*>::iterator k = battle->getItems()->begin(); k != battle->getItems()->end(); ++k)
+				{
+					if ((*k)->getUnit() && (*k)->getUnit() == *j)
+					{
+						if ((*k)->getOwner())
+						{
+							pos = (*k)->getOwner()->getPosition();
+						}
+						else if ((*k)->getTile())
+						{
+							pos = (*k)->getTile()->getPosition();
+						}
+					}
+				}
+			}
+			(*j)->setTile(battle->getTile(pos));
 		}
 
 		if (status == STATUS_DEAD)
@@ -566,7 +621,7 @@ void DebriefingState::prepareDebriefing()
 						{
 							(*j)->updateGeoscapeStats(*i);
 							SoldierDeath *death = new SoldierDeath();
-							death->setTime(new GameTime(*save->getTime()));
+							death->setTime(*save->getTime());
 							(*i)->die(death);
 							save->getDeadSoldiers()->push_back(*i);
 							base->getSoldiers()->erase(i);
@@ -596,7 +651,11 @@ void DebriefingState::prepareDebriefing()
 					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
 					if (soldier != 0)
+					{
 						recoverItems((*j)->getInventory(), base);
+						// calculate new statString
+						soldier->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+					}
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);
@@ -617,7 +676,7 @@ void DebriefingState::prepareDebriefing()
 							{
 								(*j)->updateGeoscapeStats(*i);
 								SoldierDeath *death = new SoldierDeath();
-								death->setTime(new GameTime(*save->getTime()));
+								death->setTime(*save->getTime());
 								(*i)->die(death);
 								save->getDeadSoldiers()->push_back(*i);
 								base->getSoldiers()->erase(i);
@@ -629,7 +688,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea())
 				// mind controlled units may as well count as unconscious
-				&& faction == FACTION_PLAYER)
+				&& faction == FACTION_PLAYER && !(*j)->isOut())
 			{
 				for (std::vector<BattleItem*>::iterator k = (*j)->getInventory()->begin(); k != (*j)->getInventory()->end(); ++k)
 				{
@@ -646,7 +705,8 @@ void DebriefingState::prepareDebriefing()
 				}
 				// 10 points for recovery
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+				RuleResearch *research = _game->getRuleset()->getResearch(type);
+				if (research != 0 && _game->getSavedGame()->isResearchAvailable(research, _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
 					// more points if it's not researched
 					addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10);
@@ -658,12 +718,19 @@ void DebriefingState::prepareDebriefing()
 					else
 					{
 						base->getItems()->addItem(type, 1);
-						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0;
+						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0;
 					}
 				}
 				else
 				{
-					base->getItems()->addItem(corpseItem, 1);
+					if (Options::canSellLiveAliens)
+					{
+						_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(type)->getSellCost());
+					}
+					else
+					{
+						base->getItems()->addItem(corpseItem, 1);
+					}
 				}
 			}
 			else if (oldFaction == FACTION_NEUTRAL)
@@ -944,11 +1011,12 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	{
 		int qty = base->getItems()->getItem(i->first);
 		RuleItem *tankRule = _game->getRuleset()->getItem(i->first);
-				int size = 4;
-				if (_game->getRuleset()->getUnit(tankRule->getType()))
-				{
-					size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
-				}
+		int size = 4;
+		if (_game->getRuleset()->getUnit(tankRule->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
+			size *= size;
+		}
 		int canBeAdded = std::min(qty, i->second);
 		if (qty < i->second)
 		{ // missing tanks
@@ -965,26 +1033,21 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		else
 		{ // so this tank requires ammo
 			RuleItem *ammo = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+			int ammoPerVehicle = ammo->getClipSize();
 			int baqty = base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-			if (baqty < i->second * ammo->getClipSize())
+			if (baqty < i->second * ammoPerVehicle)
 			{ // missing ammo
-				int missing = (i->second * ammo->getClipSize()) - baqty;
+				int missing = (i->second * ammoPerVehicle) - baqty;
 				ReequipStat stat = {ammo->getType(), missing, craft->getName(_game->getLanguage())};
 				_missingItems.push_back(stat);
 			}
-			canBeAdded = std::min(canBeAdded, baqty);
+			canBeAdded = std::min(canBeAdded, baqty / ammoPerVehicle);
 			if (canBeAdded > 0)
 			{
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
-				int remainder = 0;
-				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
-				int newAmmo;
 				for (int j = 0; j < canBeAdded; ++j)
 				{
-					newAmmo = newAmmoPerVehicle;
-					if (j < remainder) ++newAmmo;
-					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo, size));
-					base->getItems()->removeItem(ammo->getType(), newAmmo);
+					craft->getVehicles()->push_back(new Vehicle(tankRule, ammoPerVehicle, size));
+					base->getItems()->removeItem(ammo->getType(), ammoPerVehicle);
 				}
 				base->getItems()->removeItem(i->first, canBeAdded);
 			}
@@ -1035,7 +1098,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 							else
 							{
 								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
-								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0);
+								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0);
 							}
 						}
 						else
@@ -1070,7 +1133,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						// It's a weapon, count any rounds left in the clip.
 						{
 							BattleItem *clip = (*it)->getAmmoItem();
-							if (clip && clip->getRules()->getClipSize() > 0)
+							if (clip && clip->getRules()->getClipSize() > 0 && clip != *it)
 							{
 								_rounds[clip->getRules()] += clip->getAmmoQuantity();
 							}

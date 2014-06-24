@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,8 @@
 #define OPENXCOM_MAP_H
 
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/Options.h"
+#include "Position.h"
 #include <set>
 #include <vector>
 
@@ -29,23 +31,22 @@ namespace OpenXcom
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class Position;
 class BattleUnit;
 class Projectile;
 class Explosion;
 class BattlescapeMessage;
 class Camera;
 class Timer;
+class Text;
 
 enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
-
 /**
  * Interactive map of the battlescape.
  */
 class Map : public InteractiveSurface
 {
 private:
-	static const int SCROLL_INTERVAL = 20;
+	static const int SCROLL_INTERVAL = 15;
 	static const int BULLET_SPRITES = 35;
 	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;
@@ -59,19 +60,22 @@ private:
 	int _cursorSize;
 	int _animFrame;
 	Projectile *_projectile;
-	bool projectileInFOV;
-	std::set<Explosion *> _explosions;
-	bool explosionInFOV;
-	bool _launch;
+	bool _projectileInFOV;
+	std::list<Explosion *> _explosions;
+	bool _explosionInFOV, _launch;
 	BattlescapeMessage *_message;
 	Camera *_camera;
 	int _visibleMapHeight;
+	std::vector<Position> _waypoints;
+	bool _unitDying, _smoothCamera, _smoothingEngaged;
+	PathPreview _previewSetting;
+	Text *_txtAccuracy;
+
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);
-	std::vector<Position> _waypoints;
-	bool _unitDying;
-	int _previewSetting;
 public:
+	static const int ICON_HEIGHT = 56;
+	static const int ICON_WIDTH = 320;
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
@@ -115,7 +119,7 @@ public:
 	/// Gets projectile.
 	Projectile *getProjectile() const;
 	/// Gets explosion set.
-	std::set<Explosion*> *getExplosions();
+	std::list<Explosion*> *getExplosions();
 	/// Gets the pointer to the camera.
 	Camera *getCamera();
 	/// Mouse-scrolls the camera.
@@ -130,6 +134,12 @@ public:
 	void setUnitDying(bool flag);
 	/// Refreshes the battlescape selector after scrolling.
 	void refreshSelectorPosition();
+	/// Special handling for updating map height.
+	void setHeight(int height);
+	/// Special handling for updating map width.
+	void setWidth(int width);
+	/// Get the vertical position of the hidden movement screen.
+	int getMessageY();
 };
 
 }

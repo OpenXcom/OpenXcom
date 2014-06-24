@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,8 +43,6 @@ public:
 	MainMenuState(Game *game);
 	/// Cleans up the Main Menu state.
 	~MainMenuState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the New Game button.
 	void btnNewGameClick(Action *action);
 	/// Handler for clicking the New Battle button.
@@ -55,6 +53,8 @@ public:
 	void btnOptionsClick(Action *action);
 	/// Handler for clicking the Quit button.
 	void btnQuitClick(Action *action);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }

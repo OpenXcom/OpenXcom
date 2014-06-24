@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,7 +53,7 @@ public:
 		return (i < _amount) ? _size[i] : 0;
 	}
 	/// Load an object into memory.
-	char *load(unsigned int i);
+	char *load(unsigned int i, bool name = false);
 };
 
 }

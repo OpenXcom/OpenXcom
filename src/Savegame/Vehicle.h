@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ private:
 	int _ammo, _size;
 public:
 	/// Creates a vehicle of the specified type.
-	Vehicle(RuleItem *rules, int ammo, int space);
+	Vehicle(RuleItem *rules, int ammo, int size);
 	/// Cleans up the vehicle.
 	~Vehicle();
 	/// Loads the vehicle from YAML.

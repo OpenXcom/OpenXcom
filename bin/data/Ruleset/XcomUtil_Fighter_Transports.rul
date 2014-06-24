@@ -1,0 +1,26 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+crafts:
+  - type: STR_INTERCEPTOR
+    soldiers: 6
+    vehicles: 1
+    battlescapeTerrainData:
+      name: INTERC
+      mapDataSets:
+        - BLANKS
+        - PLANE
+      mapBlocks:
+        - name: INTERC
+          width: 20
+          length: 10
+  - type: STR_FIRESTORM
+    soldiers: 10
+    vehicles: 1
+    battlescapeTerrainData:
+      name: FIRES
+      mapDataSets:
+        - BLANKS
+        - LIGHTNIN
+      mapBlocks:
+        - name: FIRES
+          width: 20
+          length: 10

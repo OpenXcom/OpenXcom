@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,7 +58,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstTotal = new TextList(100, 9, 205, 136);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -83,8 +83,8 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyCostsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&MonthlyCostsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&MonthlyCostsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&MonthlyCostsState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&MonthlyCostsState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -107,7 +107,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtSalaries->setText(tr("STR_SALARIES"));
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << tr("STR_INCOME") << L"=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
@@ -119,9 +119,9 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
-		if (craft->getRentCost() > 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
+		if (craft->getRentCost() != 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
-			std::wstringstream ss2;
+			std::wostringstream ss2;
 			ss2 << _base->getCraftCount((*i));
 			_lstCrafts->addRow(4, tr(*i).c_str(), Text::formatFunding(craft->getRentCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getRentCost()).c_str());
 		}
@@ -131,13 +131,13 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstSalaries->setColumns(4, 125, 70, 44, 60);
 	_lstSalaries->setDot(true);
 
-	std::wstringstream ss4;
+	std::wostringstream ss4;
 	ss4 << _base->getSoldiers()->size();
 	_lstSalaries->addRow(4, tr("STR_SOLDIERS").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * _game->getRuleset()->getSoldierCost()).c_str());
-	std::wstringstream ss5;
+	std::wostringstream ss5;
 	ss5 << _base->getTotalEngineers();
 	_lstSalaries->addRow(4, tr("STR_ENGINEERS").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost()).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * _game->getRuleset()->getEngineerCost()).c_str());
-	std::wstringstream ss6;
+	std::wostringstream ss6;
 	ss6 << _base->getTotalScientists();
 	_lstSalaries->addRow(4, tr("STR_SCIENTISTS").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost()).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * _game->getRuleset()->getScientistCost()).c_str());
 

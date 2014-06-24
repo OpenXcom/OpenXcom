@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class Font;
 class Timer;
 
 /**
@@ -38,29 +37,30 @@ class TextEdit : public InteractiveSurface
 private:
 	Text *_text, *_caret;
 	std::wstring _value;
-	bool _blink;
+	bool _blink, _modal;
 	Timer *_timer;
 	wchar_t _ascii;
 	size_t _caretPos;
 	bool _numerical;
-
+	ActionHandler _change;
+	State *_state;
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);
 public:
 	/// Creates a new text edit with the specified size and position.
-	TextEdit(int width, int height, int x = 0, int y = 0);
+	TextEdit(State *state, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text edit.
 	~TextEdit();
+	/// Handle focus.
+	void handle(Action *action, State *state);
 	/// Sets focus on this text edit.
-	void focus();
-	/// Removes focus from this text box.
-	void deFocus();
+	void setFocus(bool focus, bool modal = true);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
-	/// Sets the text edit's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the text edit's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text's string.
 	void setText(const std::wstring &text);
 	/// Gets the text edit's string.
@@ -97,6 +97,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state);
+	/// Hooks an action handler to when the slider changes.
+	void onChange(ActionHandler handler);
 };
 
 }

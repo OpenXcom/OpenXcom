@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -64,7 +64,7 @@ namespace OpenXcom
 		_btnOk = new TextButton(224, 12, 48, y);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+		setPalette("PAL_GEOSCAPE", 0);
 
 		add(_window);
 		add(_txtTitle);
@@ -94,8 +94,8 @@ namespace OpenXcom
 		_btnOk->setColor(Palette::blockOffset(8)+5);
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyCancel);
+		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyGeoUfopedia);
 	}
 
 	UfopaediaStartState::~UfopaediaStartState()
@@ -108,7 +108,6 @@ namespace OpenXcom
 	void UfopaediaStartState::btnOkClick(Action *)
 	{
 		_game->popState();
-//		_game->quit();
 	}
 
 	/**

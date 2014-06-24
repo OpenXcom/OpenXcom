@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-
+#include "../fmath.h"
 #include "Ufopaedia.h"
 #include "ArticleStateArmor.h"
 #include "../Ruleset/ArticleDefinition.h"
@@ -37,7 +37,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateArmor::ArticleStateArmor(Game *game, ArticleDefinitionArmor *defs) : ArticleState(game, defs->id)
+	ArticleStateArmor::ArticleStateArmor(Game *game, ArticleDefinitionArmor *defs) : ArticleState(game, defs->id), _row(0)
 	{
 		Armor *armor = _game->getRuleset()->getArmor(defs->id);
 
@@ -45,7 +45,7 @@ namespace OpenXcom
 		_txtTitle = new Text(300, 17, 5, 24);
 
 		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+		setPalette("PAL_BATTLEPEDIA");
 
 		ArticleState::initLayout();
 
@@ -59,7 +59,7 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+		_txtTitle->setText(tr(defs->title));
 
 		_image = new Surface(320, 200, 0, 0);
 		add(_image);
@@ -73,7 +73,7 @@ namespace OpenXcom
 		_game->getResourcePack()->getSurface(look)->blit(_image);
 
 
-		_lstInfo = new TextList(150, 60, 150, 69);
+		_lstInfo = new TextList(150, 96, 150, 46);
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
@@ -85,33 +85,44 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(14)+15);
 		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+		_txtInfo->setText(tr(defs->text));
 
-		std::wstringstream ss;
-		ss.str(L"");ss.clear();
-		ss << armor->getFrontArmor();
-		_lstInfo->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
+		// Add armor values
+		addStat("STR_FRONT_ARMOR", armor->getFrontArmor());
+		addStat("STR_LEFT_ARMOR", armor->getSideArmor());
+		addStat("STR_RIGHT_ARMOR", armor->getSideArmor());
+		addStat("STR_REAR_ARMOR", armor->getRearArmor());
+		addStat("STR_UNDER_ARMOR", armor->getUnderArmor());
 
-		ss.str(L"");ss.clear();
-		ss << armor->getSideArmor();
-		_lstInfo->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
+		_lstInfo->addRow(0);
+		++_row;
 
-		ss.str(L"");ss.clear();
-		ss << armor->getSideArmor();
-		_lstInfo->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
+		// Add damage modifiers
+		for (int i = 0; i < Armor::DAMAGE_TYPES; ++i)
+		{
+			ItemDamageType dt = (ItemDamageType)i;
+			int percentage = (int)Round(armor->getDamageModifier(dt) * 100.0f);
+			std::string damage = getDamageTypeText(dt);
+			if (percentage != 100 && damage != "STR_UNKNOWN")
+			{
+				addStat(damage, Text::formatPercentage(percentage));
+			}
+		}
 
-		ss.str(L"");ss.clear();
-		ss << armor->getRearArmor();
-		_lstInfo->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
+		_lstInfo->addRow(0);
+		++_row;
 
-		ss.str(L"");ss.clear();
-		ss << armor->getUnderArmor();
-		_lstInfo->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
+		// Add unit stats
+		addStat("STR_TIME_UNITS", armor->getStats()->tu, true);
+		addStat("STR_STAMINA", armor->getStats()->stamina, true);
+		addStat("STR_HEALTH", armor->getStats()->health, true);
+		addStat("STR_BRAVERY", armor->getStats()->bravery, true);
+		addStat("STR_REACTIONS", armor->getStats()->reactions, true);
+		addStat("STR_FIRING_ACCURACY", armor->getStats()->firing, true);
+		addStat("STR_THROWING_ACCURACY", armor->getStats()->throwing, true);
+		addStat("STR_STRENGTH", armor->getStats()->strength, true);
+		addStat("STR_PSIONIC_STRENGTH", armor->getStats()->psiStrength, true);
+		addStat("STR_PSIONIC_SKILL", armor->getStats()->psiSkill, true);
 
 		centerAllSurfaces();
 	}
@@ -119,4 +130,24 @@ namespace OpenXcom
 	ArticleStateArmor::~ArticleStateArmor()
 	{}
 
+	void ArticleStateArmor::addStat(std::string label, int stat, bool plus)
+	{
+		if (stat != 0)
+		{
+			std::wostringstream ss;
+			if (plus && stat > 0)
+				ss << L"+";
+			ss << stat;
+			_lstInfo->addRow(2, tr(label).c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);
+			++_row;
+		}
+	}
+
+	void ArticleStateArmor::addStat(std::string label, std::wstring stat)
+	{
+		_lstInfo->addRow(2, tr(label).c_str(), stat.c_str());
+		_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);
+		++_row;
+	}
 }

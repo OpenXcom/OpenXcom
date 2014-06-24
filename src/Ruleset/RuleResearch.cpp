@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,7 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""), _cost(0), _points(0), _getOneFree(0), _requires(0), _needItem(false), _listOrder(0)
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""), _cost(0), _points(0), _getOneFree(), _requires(), _needItem(false), _listOrder(0)
 {
 }
 

@@ -1,15 +1,17 @@
+AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = docs
 
 doc_DATA = \
 	README.txt \
-	CHANGELOG.txt
+	CHANGELOG.txt \
+	LICENSE.txt
 
 if WITH_OPENXCOM_MAN
 
 openxcom.6: $(srcdir)/docs/openxcom.6.xml
-	$(DOCBOOK2MAN) $<
+	$(XMLTO) man $<
 
 dist_man_MANS = openxcom.6
 
@@ -23,98 +25,6 @@ icon_DATA = \
 desktopdir = $(datadir)/applications
 desktop_DATA = res/linux/openxcom.desktop
 
-pkgdata_DATA = bin/data/README.txt
-
-pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
-pathfinding_DATA = \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_02.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_03.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_04.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_05.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_06.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_07.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_08.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_09.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_10.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_11.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_12.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_13.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_14.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_15.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_16.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_17.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_18.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_19.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
-
-bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
-bulletsprite_DATA = \
-	bin/data/Resources/BulletSprites/BulletSprites.png
-
-uispritedir =  $(pkgdatadir)/data/Resources/UI/
-uisprite_DATA = \
-	bin/data/Resources/UI/reserve.png
-
-rulesetdir =  $(pkgdatadir)/data/Ruleset
-ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
-
-languagedir = $(pkgdatadir)/data/Language
-language_DATA = \
-	bin/data/Language/Font.dat \
-	bin/data/Language/FontBig.png \
-	bin/data/Language/FontSmall.png \
-	bin/data/Language/FontGeoBig.png \
-	bin/data/Language/FontGeoSmall.png \
-	bin/data/Language/en-GB.yml \
-	bin/data/Language/en-US.yml
-
-namedir = $(pkgdatadir)/data/SoldierName
-name_DATA = \
-	bin/data/SoldierName/American.nam \
-	bin/data/SoldierName/Arabic.nam \
-	bin/data/SoldierName/British.nam \
-	bin/data/SoldierName/Czech.nam \
-	bin/data/SoldierName/Danish.nam \
-	bin/data/SoldierName/Finnish.nam \
-	bin/data/SoldierName/French.nam \
-	bin/data/SoldierName/German.nam \
-	bin/data/SoldierName/Hungarian.nam \
-	bin/data/SoldierName/Chinese.nam \
-	bin/data/SoldierName/Irish.nam \
-	bin/data/SoldierName/Italian.nam \
-	bin/data/SoldierName/Japanese.nam \
-	bin/data/SoldierName/Nigerian.nam \
-	bin/data/SoldierName/Polish.nam \
-	bin/data/SoldierName/Portuguese.nam \
-	bin/data/SoldierName/Romanian.nam \
-	bin/data/SoldierName/Russian.nam \
-	bin/data/SoldierName/Spanish.nam \
-	bin/data/SoldierName/Swedish.nam \
-	bin/data/SoldierName/Turkish.nam
-	
-shaderdir = $(pkgdatadir)/data/Shaders
-shader_DATA = \
-	bin/data/Shaders/Raw.OpenGL.shader \
-	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
-	bin/data/Shaders/CRT.OpenGL.shader \
-	bin/data/Shaders/CRT-simple.OpenGL.shader \
-	bin/data/Shaders/Curvature.OpenGL.shader \
-	bin/data/Shaders/dot_n_bloom.OpenGL.shader \
-	bin/data/Shaders/heavybloom.OpenGL.shader \
-	bin/data/Shaders/HQ2x.OpenGL.shader \
-	bin/data/Shaders/Openxcom.OpenGL.shader \
-	bin/data/Shaders/Phosphor-simple.OpenGL.shader \
-	bin/data/Shaders/Pixellate.OpenGL.shader \
-	bin/data/Shaders/Quilez.OpenGL.shader \
-	bin/data/Shaders/SABR.OpenGL.shader \
-	bin/data/Shaders/Scale4xHQ.OpenGL.shader \
-	bin/data/Shaders/simplebloom.OpenGL.shader
-
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) $(GL_LIBS)
@@ -126,7 +36,7 @@ openxcom_CXXFLAGS = \
 	$(GL_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
 openxcom_SOURCES = \
-	src/aresame.h \
+	src/fmath.h \
 	src/Basescape/BaseInfoState.cpp \
 	src/Basescape/BaseInfoState.h \
 	src/Basescape/BasescapeState.cpp \
@@ -233,6 +143,8 @@ openxcom_SOURCES = \
 	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
+	src/Battlescape/DelayedSaveState.cpp \
+	src/Battlescape/DelayedSaveState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
@@ -298,17 +210,23 @@ openxcom_SOURCES = \
 	src/Battlescape/WarningMessage.cpp \
 	src/Battlescape/WarningMessage.h \
 	src/dirent.h \
+	src/Engine/Adlib/adlplayer.cpp \
+	src/Engine/Adlib/adlplayer.h \
+	src/Engine/Adlib/fmopl.cpp \
+	src/Engine/Adlib/fmopl.h \
+	src/Engine/AdlibMusic.cpp \
+	src/Engine/AdlibMusic.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \
 	src/Engine/CatFile.cpp \
 	src/Engine/CatFile.h \
 	src/Engine/CrossPlatform.cpp \
 	src/Engine/CrossPlatform.h \
+	src/Engine/DosFont.h \
 	src/Engine/Exception.cpp \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \
-	src/Engine/FixedFloat.h \
 	src/Engine/Flc.cpp \
 	src/Engine/Flc.h \
 	src/Engine/Font.cpp \
@@ -333,6 +251,9 @@ openxcom_SOURCES = \
 	src/Engine/OpenGL.h \
 	src/Engine/Options.cpp \
 	src/Engine/Options.h \
+	src/Engine/Options.inc.h \
+	src/Engine/OptionInfo.cpp \
+	src/Engine/OptionInfo.h \
 	src/Engine/Palette.cpp \
 	src/Engine/Palette.h \
 	src/Engine/RNG.cpp \
@@ -355,7 +276,6 @@ openxcom_SOURCES = \
 	src/Engine/ShaderDrawHelper.h \
 	src/Engine/ShaderMove.h \
 	src/Engine/ShaderRepeat.h \
-	src/Engine/ShaderRotate.h \
 	src/Engine/Sound.cpp \
 	src/Engine/Sound.h \
 	src/Engine/SoundSet.cpp \
@@ -451,6 +371,8 @@ openxcom_SOURCES = \
 	src/Interface/ArrowButton.h \
 	src/Interface/Bar.cpp \
 	src/Interface/Bar.h \
+	src/Interface/ComboBox.cpp \
+	src/Interface/ComboBox.h \
 	src/Interface/Cursor.cpp \
 	src/Interface/Cursor.h \
 	src/Interface/FpsCounter.cpp \
@@ -461,6 +383,8 @@ openxcom_SOURCES = \
 	src/Interface/ImageButton.h \
 	src/Interface/NumberText.cpp \
 	src/Interface/NumberText.h \
+	src/Interface/ScrollBar.cpp \
+	src/Interface/ScrollBar.h \
 	src/Interface/Slider.cpp \
 	src/Interface/Slider.h \
 	src/Interface/TextButton.cpp \
@@ -478,12 +402,14 @@ openxcom_SOURCES = \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
+	src/Menu/ConfirmLoadState.cpp \
+	src/Menu/ConfirmLoadState.h \
 	src/Menu/DeleteGameState.cpp \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/LoadState.cpp \
-	src/Menu/LoadState.h \
+	src/Menu/ListLoadState.cpp \
+	src/Menu/ListLoadState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
 	src/Menu/NewBattleState.cpp \
@@ -492,24 +418,40 @@ openxcom_SOURCES = \
 	src/Menu/NewGameState.h \
 	src/Menu/OptionsBaseState.cpp \
 	src/Menu/OptionsBaseState.h \
-	src/Menu/OptionsState.cpp \
-	src/Menu/OptionsState.h \
 	src/Menu/OptionsControlsState.cpp \
 	src/Menu/OptionsControlsState.h \
-	src/Menu/OptionsLanguageState.cpp \
-	src/Menu/OptionsLanguageState.h \
 	src/Menu/OptionsAdvancedState.cpp \
 	src/Menu/OptionsAdvancedState.h \
 	src/Menu/OptionsBattlescapeState.cpp \
 	src/Menu/OptionsBattlescapeState.h \
+	src/Menu/OptionsVideoState.cpp \
+	src/Menu/OptionsVideoState.h \
+	src/Menu/OptionsAudioState.cpp \
+	src/Menu/OptionsAudioState.h \
+	src/Menu/OptionsNoAudioState.cpp \
+	src/Menu/OptionsNoAudioState.h \
+	src/Menu/OptionsGeoscapeState.cpp \
+	src/Menu/OptionsGeoscapeState.h \
+	src/Menu/OptionsModsState.cpp \
+	src/Menu/OptionsModsState.h \
+	src/Menu/OptionsConfirmState.cpp \
+	src/Menu/OptionsConfirmState.h \
+	src/Menu/OptionsDefaultsState.cpp \
+	src/Menu/OptionsDefaultsState.h \
 	src/Menu/AbandonGameState.cpp \
 	src/Menu/AbandonGameState.h \
 	src/Menu/PauseState.cpp \
 	src/Menu/PauseState.h \
-	src/Menu/SavedGameState.cpp \
-	src/Menu/SavedGameState.h \
-	src/Menu/SaveState.cpp \
-	src/Menu/SaveState.h \
+	src/Menu/ListGamesState.cpp \
+	src/Menu/ListGamesState.h \
+	src/Menu/ListSaveState.cpp \
+	src/Menu/ListSaveState.h \
+	src/Menu/LoadGameState.cpp \
+	src/Menu/LoadGameState.h \
+	src/Menu/SaveGameState.cpp \
+	src/Menu/SaveGameState.h \
+	src/Menu/IntroState.cpp \
+	src/Menu/IntroState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \
@@ -575,6 +517,10 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
+	src/Ruleset/StatString.h \
+	src/Ruleset/StatString.cpp \
+	src/Ruleset/StatStringCondition.h \
+	src/Ruleset/StatStringCondition.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \
@@ -673,6 +619,7 @@ openxcom_SOURCES = \
 
 EXTRA_DIST = \
 	autogen.sh \
+	bin/data \
 	docs/openxcom.6.xml \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
@@ -687,20 +634,12 @@ EXTRA_DIST = \
 	cmake/modules/nsis.cmake \
 	cmake/modules/NSIS.template.in \
 	cmake/modules/rpm.cmake \
-	res/mac/openxcom.icns \
+	res/mac/AppIcon.icns \
 	res/linux/icons/openxcom_128x128.png \
 	res/linux/icons/openxcom.svg \
 	res/linux/icons/openxcom_48x48.png \
 	res/windows/openxcom.ico \
 	$(doc_DATA) \
-	$(pkgdata_DATA) \
-	$(language_DATA) \
-	$(name_DATA) \
-	$(pathfinding_DATA) \
-	$(bulletsprite_DATA) \
-	$(uisprite_DATA) \
-	$(ruleset_DATA) \
-	$(shader_DATA) \
 	$(desktop_DATA) \
 	$(icon_DATA)
 
@@ -717,6 +656,18 @@ dist-hook:
 	else \
 		echo A git clone is required to generate a ChangeLog >&2; \
 	fi
+
+install-data-local:
+	@mkdir -p $(DESTDIR)$(pkgdatadir)/data; \
+	cp -r $(top_srcdir)/bin/data/* $(DESTDIR)$(pkgdatadir)/data/ ; \
+	find $(DESTDIR)$(pkgdatadir) | xargs chmod a=rX,u+w
+
+# NOTE: this might wipe user unpacked xcom if it is in the dir, as there
+#       is no way of distinguishing between our content and their.
+#       If user uses distro package or if he does not use uninstall
+#       command this won't of course happen.
+uninstall-local:
+	@find $(DESTDIR)$(pkgdatadir) -type f -exec rm -rf {} +
 
 distclean-local: clean-local
 

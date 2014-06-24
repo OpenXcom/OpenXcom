@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,7 +37,7 @@ namespace OpenXcom
  */
 FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, height, x, y), _frames(0)
 {
-	_visible = Options::getBool("fpsCounter");
+	_visible = Options::fpsCounter;
 
 	_timer = new Timer(1000);
 	_timer->onTimer((SurfaceHandler)&FpsCounter::update);
@@ -83,10 +83,10 @@ void FpsCounter::setColor(Uint8 color)
  */
 void FpsCounter::handle(Action *action)
 {
-	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::getInt("keyFps"))
+	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::keyFps)
 	{
 		_visible = !_visible;
-		Options::setBool("fpsCounter", _visible);
+		Options::fpsCounter = _visible;
 	}
 }
 
@@ -95,7 +95,6 @@ void FpsCounter::handle(Action *action)
  */
 void FpsCounter::think()
 {
-	_frames++;
 	_timer->think(0, this);
 }
 
@@ -119,4 +118,8 @@ void FpsCounter::draw()
 	_text->blit(this);
 }
 
+void FpsCounter::addFrame()
+{
+	_frames++;
+}
 }

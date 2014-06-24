@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,13 +20,13 @@
 #define OPENXCOM_BATTLEAISTATE_H
 
 #include <yaml-cpp/yaml.h>
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
 
 class SavedBattleGame;
 class BattleUnit;
+struct BattleAction;
 
 enum AIMode { AI_PATROL, AI_AMBUSH, AI_COMBAT, AI_ESCAPE };
 /**
@@ -43,7 +43,7 @@ public:
 	/// Cleans up the BattleAIState.
 	virtual ~BattleAIState();
 	/// Loads the AI state from YAML.
-	virtual void load(const YAML::Node& node);
+	void load(const YAML::Node& node);
 	/// Saves the AI state to YAML.
 	virtual YAML::Node save() const;
 	/// Enters the state.

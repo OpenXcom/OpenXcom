@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,10 +36,13 @@ namespace OpenXcom
 
 /**
  * Sets up a CivilianBAIState.
+ * @param save Pointer to the battle game.
+ * @param unit Pointer to the unit.
+ * @param node Pointer to the node the unit originates from.
  */
-CivilianBAIState::CivilianBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _aggroTarget(0), _escapeTUs(0), _AIMode(0), _visibleEnemies(0), _spottingEnemies(0), _fromNode(node), _toNode(0)
+CivilianBAIState::CivilianBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node) : BattleAIState(save, unit), _aggroTarget(0), _escapeTUs(0), _AIMode(0), _visibleEnemies(0), _spottingEnemies(0), _fromNode(node), _toNode(0)
 {
-	_traceAI = _save->getTraceSetting();
+	_traceAI = Options::traceAI;
 	_escapeAction = new BattleAction();
 	_patrolAction = new BattleAction();
 }
@@ -75,7 +78,7 @@ void CivilianBAIState::load(const YAML::Node &node)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
 YAML::Node CivilianBAIState::save() const
 {
@@ -109,8 +112,8 @@ void CivilianBAIState::exit()
 }
 
 /**
- * Runs any code the state needs to keep updating every
- * AI cycle.
+ * Runs any code the state needs to keep updating every AI cycle.
+ * @param action (possible) AI action to execute after thinking is done.
  */
 void CivilianBAIState::think(BattleAction *action)
 {
@@ -225,8 +228,8 @@ int CivilianBAIState::selectNearestTarget()
 				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 				if (dist < closest)
 				{
-					bool validTarget = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
-					if (validTarget)
+					bool valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+					if (valid)
 					{
 						closest = dist;
 						_aggroTarget = *i;
@@ -300,7 +303,7 @@ void CivilianBAIState::setupEscape()
 
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
-	std::random_shuffle(randomTileSearch.begin(), randomTileSearch.end());
+	RNG::shuffle(randomTileSearch);
 	
 	while (tries < 150 && !coverFound)
 	{

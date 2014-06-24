@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -111,9 +111,9 @@ void ResearchProject::setCost(int f)
  */
 void ResearchProject::load(const YAML::Node& node)
 {
-	setAssigned(node["assigned"].as<int>());
-	setSpent(node["spent"].as<int>());
-	setCost(node["cost"].as<int>());
+	setAssigned(node["assigned"].as<int>(getAssigned()));
+	setSpent(node["spent"].as<int>(getSpent()));
+	setCost(node["cost"].as<int>(getCost()));
 }
 
 /**

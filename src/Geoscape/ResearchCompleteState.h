@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,12 +42,11 @@ class ResearchCompleteState : public State
 public:
 	/// Creates the EndResearch state.
 	ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus);
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Report button.
 	void btnReportClick(Action *action);
 };
+
 }
 #endif

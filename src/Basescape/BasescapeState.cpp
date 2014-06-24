@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -67,7 +67,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_txtFacility = new Text(192, 9, 0, 0);
 	_view = new BaseView(192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
-	_edtBase = new TextEdit(127, 17, 193, 0);
+	_edtBase = new TextEdit(this, 127, 17, 193, 0);
 	_txtLocation = new Text(126, 9, 194, 16);
 	_txtFunds = new Text(126, 9, 194, 24);
 	_btnNewBase = new TextButton(128, 12, 192, 58);
@@ -83,7 +83,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnGeoscape = new TextButton(128, 12, 192, 188);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_mini);
@@ -114,21 +114,14 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-			break;
-		}
-	}
 	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
+	_mini->onKeyboardPress((ActionHandler)&BasescapeState::handleKeyPress);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)&BasescapeState::edtBaseKeyPress);
+	_edtBase->onChange((ActionHandler)&BasescapeState::edtBaseChange);
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 
@@ -177,7 +170,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
-	_btnGeoscape->onKeyboardPress((ActionHandler)&BasescapeState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnGeoscape->onKeyboardPress((ActionHandler)&BasescapeState::btnGeoscapeClick, Options::keyCancel);
 }
 
 /**
@@ -192,7 +185,7 @@ BasescapeState::~BasescapeState()
 		if (*i == _base)
 		{
 			exists = true;
-      break;
+			break;
 		}
 	}
 	if (!exists)
@@ -207,29 +200,9 @@ BasescapeState::~BasescapeState()
  */
 void BasescapeState::init()
 {
-	if (!_game->getSavedGame()->getBases()->empty())
-	{
-		bool exists = false;
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
-		{
-			if (*i == _base)
-			{
-				exists = true;
-			}
-		}
-		// If base was removed, select first one
-		if (!exists)
-		{
-			_base = _game->getSavedGame()->getBases()->front();
-			_mini->setSelectedBase(0);
-		}
-	}
-	else
-	{
-		// Use a blank base for special case when player has no bases
-		_base = new Base(_game->getRuleset());
-	}
+	State::init();
 
+	setBase(_base);
 	_view->setBase(_base);
 	_mini->draw();
 	_edtBase->setText(_base->getName());
@@ -246,7 +219,7 @@ void BasescapeState::init()
 
 	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
+	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
 }
 
 /**
@@ -255,16 +228,36 @@ void BasescapeState::init()
  */
 void BasescapeState::setBase(Base *base)
 {
-	_base = base;
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		// Check if base still exists
+		bool exists = false;
+		for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 		{
-			_mini->setSelectedBase(i);
-			break;
+			if (_game->getSavedGame()->getBases()->at(i) == base)
+			{
+				_base = base;
+				_mini->setSelectedBase(i);
+				_game->getSavedGame()->setSelectedBase(i);
+				exists = true;
+				break;
+			}
+		}
+		// If base was removed, select first one
+		if (!exists)
+		{
+			_base = _game->getSavedGame()->getBases()->front();
+			_mini->setSelectedBase(0);
+			_game->getSavedGame()->setSelectedBase(0);
 		}
 	}
-	init();
+	else
+	{
+		// Use a blank base for special case when player has no bases
+		_base = new Base(_game->getRuleset());
+		_mini->setSelectedBase(0);
+		_game->getSavedGame()->setSelectedBase(0);
+	}
 }
 
 /**
@@ -377,28 +370,15 @@ void BasescapeState::viewLeftClick(Action *)
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
-		// Pre-calculate values to ensure base stays connected
-		int x = -1, y = -1, squares = 0;
-		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
-		{
-			if ((*i)->getRules()->isLift())
-			{
-				x = (*i)->getX();
-				y = (*i)->getY();
-			}
-			squares += (*i)->getRules()->getSize() * (*i)->getRules()->getSize();
-		}
-		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
-
 		// Is facility in use?
 		if (fac->inUse())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
-		// Would base become disconnected? (occupied squares connected to Access Lift < total squares occupied by base)
-		else if (_view->countConnected(x, y, 0, fac) < squares)
+		// Would base become disconnected?
+		else if (!_base->getDisconnectedFacilities(fac).empty())
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{
@@ -415,12 +395,15 @@ void BasescapeState::viewRightClick(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
+	{
 		_game->pushState(new BaseInfoState(_game, _base, this));
-
+	}
 	else if (f->getRules()->getCrafts() > 0)
 	{
 		if (f->getCraft() == 0)
+		{
 			_game->pushState(new CraftsState(_game, _base));
+		}
 		else
 			for (size_t craft = 0; craft < _base->getCrafts()->size(); ++craft)
 			{
@@ -432,25 +415,33 @@ void BasescapeState::viewRightClick(Action *)
 			}
 	}
 	else if (f->getRules()->getStorage() > 0)
+	{
 		_game->pushState(new SellState(_game, _base));
-
+	}
 	else if (f->getRules()->getPersonnel() > 0)
+	{
 		_game->pushState(new SoldiersState(_game, _base));
-
-	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+	}
+	else if (f->getRules()->getPsiLaboratories() > 0 && Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0)
+	{
 		_game->pushState(new AllocatePsiTrainingState(_game, _base));
-
+	}
 	else if (f->getRules()->getLaboratories() > 0)
+	{
 		_game->pushState(new ResearchState(_game, _base));
-
+	}
 	else if (f->getRules()->getWorkshops() > 0)
+	{
 		_game->pushState(new ManufactureState(_game, _base));
-
+	}
 	else if (f->getRules()->getAliens() > 0)
+	{
 		_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_GEOSCAPE));
-
+	}
 	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
+	{
 		_game->popState();
+	}
 }
 
 /**
@@ -460,7 +451,7 @@ void BasescapeState::viewRightClick(Action *)
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
-	std::wstringstream ss;
+	std::wostringstream ss;
 	if (f != 0)
 	{
 		if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
@@ -494,12 +485,40 @@ void BasescapeState::viewMouseOut(Action *)
  */
 void BasescapeState::miniClick(Action *)
 {
-	unsigned int base = _mini->getHoveredBase();
+	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
-		_mini->setSelectedBase(base);
 		_base = _game->getSavedGame()->getBases()->at(base);
 		init();
+	}
+}
+
+/**
+ * Selects a new base to display.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::handleKeyPress(Action *action)
+{
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		SDLKey baseKeys[] = {Options::keyBaseSelect1,
+			                 Options::keyBaseSelect2,
+			                 Options::keyBaseSelect3,
+			                 Options::keyBaseSelect4,
+			                 Options::keyBaseSelect5,
+			                 Options::keyBaseSelect6,
+			                 Options::keyBaseSelect7,
+			                 Options::keyBaseSelect8};
+		int key = action->getDetails()->key.keysym.sym;
+		for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+		{
+			if (key == baseKeys[i])
+			{
+				_base = _game->getSavedGame()->getBases()->at(i);
+				init();
+				break;
+			}
+		}
 	}
 }
 
@@ -507,12 +526,9 @@ void BasescapeState::miniClick(Action *)
  * Changes the Base name.
  * @param action Pointer to an action.
  */
-void BasescapeState::edtBaseKeyPress(Action *action)
+void BasescapeState::edtBaseChange(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
-		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		_base->setName(_edtBase->getText());
-	}
+	_base->setName(_edtBase->getText());
 }
+
 }

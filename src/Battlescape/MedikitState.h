@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #define OPENXCOM_MEDIKITSTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -30,15 +29,17 @@ class MedikitView;
 class Text;
 class BattleItem;
 class BattleUnit;
+struct BattleAction;
 
 /**
  * The Medikit User Interface. Medikit is an item for healing a soldier.
  */
 class MedikitState : public State
 {
-	InteractiveSurface *_surface;
+	Surface *_bg;
 	MedikitView *_medikitView;
 	Text *_pkText, *_stimulantTxt,  *_healTxt, *_partTxt, *_woundTxt;
+	InteractiveSurface *_endButton, *_stimulantButton, *_pkButton, *_healButton;
 	BattleUnit * _targetUnit, *_unit;
 	BattleItem *_item;
 	BattleAction *_action;

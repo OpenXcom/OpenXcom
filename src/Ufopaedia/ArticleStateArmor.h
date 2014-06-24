@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,6 +42,10 @@ namespace OpenXcom
 		virtual ~ArticleStateArmor();
 
 	protected:
+		void addStat(std::string label, int stat, bool plus = false);
+		void addStat(std::string label, std::wstring stat);
+
+		int _row;
 		Surface *_image;
 		Text *_txtTitle;
 		TextList *_lstInfo;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,6 +31,7 @@ class Globe;
 class Game;
 class SavedGame;
 class Ruleset;
+class RuleRegion;
 class RuleUfo;
 class UfoTrajectory;
 class AlienBase;
@@ -46,10 +47,10 @@ class AlienMission
 private:
 	const RuleAlienMission &_rule;
 	std::string _region, _race;
-	unsigned _nextWave;
-	unsigned _nextUfoCounter;
-	unsigned _spawnCountdown;
-	unsigned _liveUfos;
+	size_t _nextWave;
+	size_t _nextUfoCounter;
+	size_t _spawnCountdown;
+	size_t _liveUfos;
 	int _uniqueID;
 	const AlienBase *_base;
 public:
@@ -74,9 +75,9 @@ public:
 	/// Sets the mission's race.
 	void setRace(const std::string &race) { _race = race; }
 	/// Gets the minutes until next wave spawns.
-	unsigned getWaveCountdown() const { return _spawnCountdown; }
+	size_t getWaveCountdown() const { return _spawnCountdown; }
 	/// Sets the minutes until next wave spawns.
-	void setWaveCountdown(unsigned minutes);
+	void setWaveCountdown(size_t minutes);
 	/// Sets the unique ID for this mission.
 	void setId(int id);
 	/// Gets the unique ID for this mission.
@@ -93,7 +94,7 @@ public:
 	/// Handle UFO spawning for the mission.
 	void think(Game &engine, const Globe &globe);
 	/// Initialize with values from rules.
-	void start(unsigned initialCount = 0);
+	void start(size_t initialCount = 0);
 	/// Increase number of live UFOs.
 	void increaseLiveUfos() { ++_liveUfos; }
 	/// Decrease number of live UFOs.
@@ -111,6 +112,10 @@ private:
 	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
 	/// Spawn an alien base
 	void spawnAlienBase(const Globe &globe, Game &engine);
+	/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
+	std::pair<double, double> getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region);
+	/// Get a random landing point inside the given region zone.
+	std::pair<double, double> getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone);
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,6 +43,8 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitWalkBState.
+ * @param parent Pointer to the Battlescape.
+ * @param action Pointer to an action.
  */
 UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false), _beforeFirstStep(false), _numUnitsSpotted(0), _preMovementCost(0)
 {
@@ -68,7 +70,7 @@ void UnitWalkBState::init()
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
-	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition() << "," << " to " << _target;}
+	if (Options::traceAI) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition() << "," << " to " << _target;}
 	int dir = _pf->getStartDirection();
 	if (!_action.strafe && dir != -1 && dir != _unit->getDirection())
 	{
@@ -82,7 +84,7 @@ void UnitWalkBState::init()
 void UnitWalkBState::think()
 {
 	bool unitSpotted = false;
-	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
+	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true));
 	if (_unit->isKneeled())
 	{
 		if (_parent->kneel(_unit))
@@ -166,7 +168,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
+			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
@@ -243,7 +245,7 @@ void UnitWalkBState::think()
 		// check if we did spot new units
 		if (unitSpotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
 		{
-			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
+			if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 			_unit->_hidingForTurn = false; // clearly we're not hidden now
 			_parent->getMap()->cacheUnit(_unit);
 			postPathProcedures();
@@ -434,20 +436,19 @@ void UnitWalkBState::think()
 		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
-		if (onScreen)
-		{
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
-		}
-		if (unitSpotted && !(_action.desperate || _unit->getCharging()) && !_falling)
+		_unit->setCache(0);
+		_parent->getMap()->cacheUnit(_unit);
+
+		if (unitSpotted && !_action.desperate && !_unit->getCharging() && !_falling)
 		{
 			if (_beforeFirstStep)
 			{
 				_unit->spendTimeUnits(_preMovementCost);
 			}
-			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
+			if (Options::traceAI) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
+			_unit->abortTurn(); //revert to a standing state.
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->popState();
@@ -480,7 +481,7 @@ void UnitWalkBState::postPathProcedures()
 		if (_unit->getCharging() != 0)
 		{
 			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());
-			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
+			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), dir))
 			{
 				BattleAction action;
 				action.actor = _unit;
@@ -496,6 +497,8 @@ void UnitWalkBState::postPathProcedures()
 		else if (_unit->_hidingForTurn)
 		{
 			dir = _unit->getDirection() + 4;
+			_unit->_hidingForTurn = false;
+			_unit->dontReselect();
 		}
 		if (dir != -1)
 		{
@@ -509,9 +512,6 @@ void UnitWalkBState::postPathProcedures()
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
 			}
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
-
 		}
 	}
 	else if (!_parent->getPanicHandled())
@@ -534,9 +534,9 @@ void UnitWalkBState::postPathProcedures()
 void UnitWalkBState::setNormalWalkSpeed()
 {
 	if (_unit->getFaction() == FACTION_PLAYER)
-		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+		_parent->setStateInterval(Options::battleXcomSpeed);
 	else
-		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
+		_parent->setStateInterval(Options::battleAlienSpeed);
 }
 
 
@@ -545,7 +545,7 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) return;
+	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true)) return;
 
 	if (_unit->getMoveSound() != -1)
 	{

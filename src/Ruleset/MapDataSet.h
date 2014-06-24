@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,7 +56,7 @@ public:
 	/// Gets the dataset name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the dataset size.
-	int getSize() const;
+	size_t getSize() const;
 	/// Gets the objects in this dataset.
 	std::vector<MapData*> *getObjects();
 	/// Gets the surfaces in this dataset.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,8 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -68,8 +69,8 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PromotionsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&PromotionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&PromotionsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&PromotionsState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&PromotionsState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_PROMOTIONS"));

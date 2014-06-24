@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,9 +28,13 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
+#include "../Menu/SaveGameState.h"
+#include "DelayedSaveState.h"
+#include "Map.h"
 
 namespace OpenXcom
 {
@@ -44,11 +48,16 @@ namespace OpenXcom
 NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _timer(0)
 {
 	// Create objects
+	int y = state->getMap()->getMessageY();
+
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(320, 17, 0, 68);
 	_txtTurn = new Text(320, 17, 0, 92);
 	_txtSide = new Text(320, 17, 0, 108);
 	_txtMessage = new Text(320, 17, 0, 132);
+
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_window);
 	add(_txtTitle);
@@ -57,6 +66,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	add(_txtMessage);
 
 	centerAllSurfaces();
+
+	// make this screen line up with the hidden movement screen
+	_window->setY(y);
+	_txtTitle->setY(y + 68);
+	_txtTurn->setY(y + 92);
+	_txtSide->setY(y + 108);
+	_txtMessage->setY(y + 132);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
@@ -89,7 +105,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 
 	_state->clearMouseScrollingState();
 
-	if (Options::getBool("skipNextTurnScreen"))
+	if (Options::skipNextTurnScreen)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
 		_timer->onTimer((StateHandler)&NextTurnState::close);
@@ -135,6 +151,7 @@ void NextTurnState::think()
  */
 void NextTurnState::close()
 {
+	_battleGame->getBattleGame()->cleanupDeleted();
 	_game->popState();
 
 	int liveAliens = 0;
@@ -147,6 +164,19 @@ void NextTurnState::close()
 	else
 	{
 		_state->btnCenterClick(0);
+
+		// Autosave every set amount of turns
+		if (_battleGame->getTurn() % Options::autosaveFrequency == 0 && _battleGame->getSide() == FACTION_PLAYER)
+		{
+			if (_game->getSavedGame()->isIronman())
+			{
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_IRONMAN));
+			}
+			else if (Options::autosave)
+			{
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(_battleGame->getBattleGame(), _game, SAVE_AUTO_BATTLESCAPE));
+			}
+		}
 	}
 }
 

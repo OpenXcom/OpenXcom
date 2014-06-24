@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PathfindingNode.h"
-#include "Position.h"
 #include <math.h>
 
 namespace OpenXcom
@@ -27,7 +26,7 @@ namespace OpenXcom
  * Sets up a PathfindingNode.
  * @param pos Position.
  */
-PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _openentry(0)
+PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _checked(0), _tuCost(0), _prevNode(0), _prevDir(0), _tuGuess(0), _openentry(0)
 {
 
 }

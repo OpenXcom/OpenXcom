@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,7 +53,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 	_txtMessage = new Text(246, 110, 37, 35);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -69,7 +69,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, Options::keyCancel);
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	if (_endType != PROGRESS_CONSTRUCTION)
@@ -114,14 +114,6 @@ ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const s
 ProductionCompleteState::~ProductionCompleteState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void ProductionCompleteState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,251 +32,276 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "CrossPlatform.h"
+#include "Screen.h"
 
 namespace OpenXcom
 {
+
 namespace Options
 {
+#define OPT
+#include "Options.inc.h"
+#undef OPT
 
 std::string _dataFolder = "";
 std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-std::map<std::string, std::string> _options, _commandLineOptions;
-std::vector<std::string> _rulesets;
-std::vector<std::string> _purchaseexclusions;
+std::map<std::string, std::string> _commandLine;
+std::vector<OptionInfo> _info;
 
 /**
- * Creates a default set of options based on the system.
+ * Sets up the options by creating their OptionInfo metadata.
  */
-void createDefault()
+void create()
 {
-	_options.clear();
 #ifdef DINGOO
-	setInt("displayWidth", 320);
-	setInt("displayHeight", 200);
-	setBool("fullscreen", true);
-	setBool("asyncBlit", false);
-	setInt("keyboardMode", KEYBOARD_OFF);
+	_info.push_back(OptionInfo("displayWidth", &displayWidth, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("displayHeight", &displayHeight, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("fullscreen", &fullscreen, true));
+	_info.push_back(OptionInfo("asyncBlit", &asyncBlit, false));
+	_info.push_back(OptionInfo("keyboardMode", (int*)&keyboardMode, KEYBOARD_OFF));
 #else
-	setInt("displayWidth", 640);
-	setInt("displayHeight", 400);
-	setBool("fullscreen", false);
-	setBool("asyncBlit", true);
-	setInt("keyboardMode", KEYBOARD_ON);
+	_info.push_back(OptionInfo("displayWidth", &displayWidth, Screen::ORIGINAL_WIDTH*2));
+	_info.push_back(OptionInfo("displayHeight", &displayHeight, Screen::ORIGINAL_HEIGHT*2));
+	_info.push_back(OptionInfo("fullscreen", &fullscreen, false));
+	_info.push_back(OptionInfo("asyncBlit", &asyncBlit, true));
+	_info.push_back(OptionInfo("keyboardMode", (int*)&keyboardMode, KEYBOARD_ON));
 #endif
-	setBool("anytimePsiTraining", false);
-	setBool("playIntro", true);
-	setInt("maxFrameSkip", 0);
-	setBool("traceAI", false);
-	setBool("sneakyAI", false);
-	setBool("weaponSelfDestruction", false);
-	setBool("researchedItemsWillSpent", false);
-	setInt("baseXResolution", 320);
-	setInt("baseYResolution", 200);
-	setBool("useScaleFilter", false);
-	setBool("useHQXFilter", false);
-	setBool("useOpenGL", false);
-	setBool("checkOpenGLErrors", false);
-	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
-	setBool("vSyncForOpenGL", true);
-	setBool("useOpenGLSmoothing", true);
-	setBool("debug", false);
-	setBool("debugUi", false);
-	setBool("mute", false);
-	setInt("soundVolume", MIX_MAX_VOLUME);
-	setInt("musicVolume", MIX_MAX_VOLUME);
-	setString("language", "");
-	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
-	setInt("battleScrollType", SCROLL_AUTO);
-	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
-	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
-	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
-	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
-	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
-	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
-	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
-	setBool("battleRangeBasedAccuracy", false);
-	setBool("fpsCounter", false);
-	setBool("craftLaunchAlways", false);
-	setBool("globeSeasons", false);
-	setBool("globeAllRadarsOnBaseBuild", true);
-	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
-	setInt("autosave", 0);
-	setInt("changeValueByMouseWheel", 10);
-	setInt("audioSampleRate", 22050);
-	setInt("audioBitDepth", 16);
-	setInt("pauseMode", 0);
-	setBool("alienContainmentLimitEnforced", false);
-	setBool("canSellLiveAliens", false);
-	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
-	setBool("canManufactureMoreItemsPerHour", false);
-	setBool("customInitialBase", false);
-	setBool("aggressiveRetaliation", false);
-	setBool("strafe", false);
-	setBool("battleNotifyDeath", false);
-	setBool("allowBuildingQueue", false);
-	setBool("allowAutoSellProduction", false);
-	setBool("showFundsOnGeoscape", false);
-	setBool("showMoreStatsInInventoryView", false);
-	setBool("allowResize", false);
-	setInt("windowedModePositionX", -1);
-	setInt("windowedModePositionY", -1);
-	setBool("battleAutoEnd", false);
-	setBool("allowPsionicCapture", false);
-	setBool("psiStrengthEval", false);
-	setBool("borderless", false);
-	setBool("captureMouse", false);
-	setBool("battleTooltips", true);
-	setBool("battleHairBleach", true);
-    setBool("keepAspectRatio", false);
-    setBool("cursorInBlackBandsInFullscreen", false);
-    setBool("cursorInBlackBandsInWindow", true);
-    setBool("cursorInBlackBandsInBorderlessWindow", false);
-	setBool("newSeedOnLoad", false);
-	setBool("skipNextTurnScreen", false);
 
-	// new battle mode data
-	setInt("NewBattleMission", 0);
-	setInt("NewBattleTerrain", 0);
-	setInt("NewBattleItemLevel", 0);
-	setInt("NewBattleAlienRace", 0);
-	setInt("NewBattleDifficulty", 0);
-	setInt("NewBattleDarkness", 0);
-	setInt("NewBattleCraft", 0);
+	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
+	_info.push_back(OptionInfo("traceAI", &traceAI, false));
+	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
+	_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
+	_info.push_back(OptionInfo("geoscapeScale", &geoscapeScale, 0));
+	_info.push_back(OptionInfo("battlescapeScale", &battlescapeScale, 0));
+	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
+	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
+	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
+	_info.push_back(OptionInfo("checkOpenGLErrors", &checkOpenGLErrors, false));
+	_info.push_back(OptionInfo("useOpenGLShader", &useOpenGLShader, "Shaders/Openxcom.OpenGL.shader"));
+	_info.push_back(OptionInfo("vSyncForOpenGL", &vSyncForOpenGL, true));
+	_info.push_back(OptionInfo("useOpenGLSmoothing", &useOpenGLSmoothing, true));
+	_info.push_back(OptionInfo("debug", &debug, false));
+	_info.push_back(OptionInfo("debugUi", &debugUi, false));
+	_info.push_back(OptionInfo("soundVolume", &soundVolume, MIX_MAX_VOLUME));
+	_info.push_back(OptionInfo("musicVolume", &musicVolume, MIX_MAX_VOLUME));
+	_info.push_back(OptionInfo("uiVolume", &uiVolume, MIX_MAX_VOLUME/2));
+	_info.push_back(OptionInfo("language", &language, ""));
+	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 8));
+	_info.push_back(OptionInfo("battleEdgeScroll", (int*)&battleEdgeScroll, SCROLL_AUTO));
+	_info.push_back(OptionInfo("battleDragScrollButton", &battleDragScrollButton, SDL_BUTTON_MIDDLE));
+	_info.push_back(OptionInfo("dragScrollTimeTolerance", &dragScrollTimeTolerance, 300)); // miliSecond
+	_info.push_back(OptionInfo("dragScrollPixelTolerance", &dragScrollPixelTolerance, 10)); // count of pixels
+	_info.push_back(OptionInfo("battleFireSpeed", &battleFireSpeed, 6));
+	_info.push_back(OptionInfo("battleXcomSpeed", &battleXcomSpeed, 30));
+	_info.push_back(OptionInfo("battleAlienSpeed", &battleAlienSpeed, 30));
+	_info.push_back(OptionInfo("battleNewPreviewPath", (int*)&battleNewPreviewPath, PATH_NONE)); // requires double-click to confirm moves
+	_info.push_back(OptionInfo("fpsCounter", &fpsCounter, false));
+	_info.push_back(OptionInfo("globeDetail", &globeDetail, true));
+	_info.push_back(OptionInfo("globeRadarLines", &globeRadarLines, true));
+	_info.push_back(OptionInfo("globeFlightPaths", &globeFlightPaths, true));
+	_info.push_back(OptionInfo("globeAllRadarsOnBaseBuild", &globeAllRadarsOnBaseBuild, true));
+	_info.push_back(OptionInfo("audioSampleRate", &audioSampleRate, 22050));
+	_info.push_back(OptionInfo("audioBitDepth", &audioBitDepth, 16));
+	_info.push_back(OptionInfo("pauseMode", &pauseMode, 0));
+	_info.push_back(OptionInfo("battleNotifyDeath", &battleNotifyDeath, false));
+	_info.push_back(OptionInfo("showFundsOnGeoscape", &showFundsOnGeoscape, false));
+	_info.push_back(OptionInfo("allowResize", &allowResize, false));
+	_info.push_back(OptionInfo("windowedModePositionX", &windowedModePositionX, -1));
+	_info.push_back(OptionInfo("windowedModePositionY", &windowedModePositionY, -1));
+	_info.push_back(OptionInfo("borderless", &borderless, false));
+	_info.push_back(OptionInfo("captureMouse", (bool*)&captureMouse, false));
+	_info.push_back(OptionInfo("battleTooltips", &battleTooltips, true));
+	_info.push_back(OptionInfo("keepAspectRatio", &keepAspectRatio, true));
+	_info.push_back(OptionInfo("cursorInBlackBandsInFullscreen", &cursorInBlackBandsInFullscreen, false));
+	_info.push_back(OptionInfo("cursorInBlackBandsInWindow", &cursorInBlackBandsInWindow, true));
+	_info.push_back(OptionInfo("cursorInBlackBandsInBorderlessWindow", &cursorInBlackBandsInBorderlessWindow, false));
+	_info.push_back(OptionInfo("saveOrder", (int*)&saveOrder, SORT_DATE_DESC));
+	_info.push_back(OptionInfo("geoClockSpeed", &geoClockSpeed, 80));
+	_info.push_back(OptionInfo("dogfightSpeed", &dogfightSpeed, 20));
+	_info.push_back(OptionInfo("geoScrollSpeed", &geoScrollSpeed, 20));
+	_info.push_back(OptionInfo("geoDragScrollButton", &geoDragScrollButton, SDL_BUTTON_MIDDLE));
+	_info.push_back(OptionInfo("preferredMusic", (int*)&preferredMusic, MUSIC_AUTO));
+	_info.push_back(OptionInfo("preferredSound", (int*)&preferredSound, SOUND_AUTO));
+	_info.push_back(OptionInfo("musicAlwaysLoop", &musicAlwaysLoop, false));
 
-	// new battle loadout data
-	setInt("NewBattle_STR_AC_AP_AMMO", 0);
-	setInt("NewBattle_STR_AC_HE_AMMO", 0);
-	setInt("NewBattle_STR_AC_I_AMMO", 0);
-	setInt("NewBattle_STR_ALIEN_GRENADE", 0);
-	setInt("NewBattle_STR_AUTO_CANNON", 0);
-	setInt("NewBattle_STR_BLASTER_BOMB", 0);
-	setInt("NewBattle_STR_BLASTER_LAUNCHER", 0);
-	setInt("NewBattle_STR_ELECTRO_FLARE", 0);
-	setInt("NewBattle_STR_GRENADE", 0);
-	setInt("NewBattle_STR_HC_AP_AMMO", 0);
-	setInt("NewBattle_STR_HC_HE_AMMO", 0);
-	setInt("NewBattle_STR_HC_I_AMMO", 0);
-	setInt("NewBattle_STR_HEAVY_CANNON", 0);
-	setInt("NewBattle_STR_HEAVY_LASER", 0);
-	setInt("NewBattle_STR_HEAVY_PLASMA", 0);
-	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 0);
-	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 0);
-	setInt("NewBattle_STR_INCENDIARY_ROCKET", 0);
-	setInt("NewBattle_STR_LARGE_ROCKET", 0);
-	setInt("NewBattle_STR_LASER_PISTOL", 0);
-	setInt("NewBattle_STR_LASER_RIFLE", 0);
-	setInt("NewBattle_STR_MEDI_KIT", 0);
-	setInt("NewBattle_STR_MIND_PROBE", 0);
-	setInt("NewBattle_STR_MOTION_SCANNER", 0);
-	setInt("NewBattle_STR_PISTOL", 0);
-	setInt("NewBattle_STR_PISTOL_CLIP", 0);
-	setInt("NewBattle_STR_PLASMA_PISTOL", 0);
-	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 0);
-	setInt("NewBattle_STR_PLASMA_RIFLE", 0);
-	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 0);
-	setInt("NewBattle_STR_PROXIMITY_GRENADE", 0);
-	setInt("NewBattle_STR_PSI_AMP", 0);
-	setInt("NewBattle_STR_RIFLE", 0);
-	setInt("NewBattle_STR_RIFLE_CLIP", 0);
-	setInt("NewBattle_STR_ROCKET_LAUNCHER", 0);
-	setInt("NewBattle_STR_SMALL_LAUNCHER", 0);
-	setInt("NewBattle_STR_SMALL_ROCKET", 0);
-	setInt("NewBattle_STR_SMOKE_GRENADE", 0);
-	setInt("NewBattle_STR_STUN_BOMB", 0);
-	setInt("NewBattle_STR_STUN_ROD", 0);
+	// advanced options
+	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
+	_info.push_back(OptionInfo("autosave", &autosave, true, "STR_AUTOSAVE", "STR_GENERAL"));
+	_info.push_back(OptionInfo("autosaveFrequency", &autosaveFrequency, 5, "STR_AUTOSAVE_FREQUENCY", "STR_GENERAL"));
+	_info.push_back(OptionInfo("newSeedOnLoad", &newSeedOnLoad, false, "STR_NEWSEEDONLOAD", "STR_GENERAL"));
+	_info.push_back(OptionInfo("mousewheelSpeed", &mousewheelSpeed, 3, "STR_MOUSEWHEEL_SPEED", "STR_GENERAL"));
+	_info.push_back(OptionInfo("changeValueByMouseWheel", &changeValueByMouseWheel, 0, "STR_CHANGEVALUEBYMOUSEWHEEL", "STR_GENERAL"));
 
+// this should probably be any small screen touch-device, i don't know the defines for all of them so i'll cover android and IOS as i imagine they're more common
+#ifdef __ANDROID_API__
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+#elif __APPLE__
+	// todo: ask grussel how badly i messed this up.
+	#include "TargetConditionals.h"
+	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+	#else
+		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+	#endif
+#else
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+#endif
+
+	_info.push_back(OptionInfo("geoDragScrollInvert", &geoDragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_GEOSCAPE")); // true drags away from the cursor, false drags towards (like a grab)
+	_info.push_back(OptionInfo("aggressiveRetaliation", &aggressiveRetaliation, false, "STR_AGGRESSIVERETALIATION", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("customInitialBase", &customInitialBase, false, "STR_CUSTOMINITIALBASE", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("allowBuildingQueue", &allowBuildingQueue, false, "STR_ALLOWBUILDINGQUEUE", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("craftLaunchAlways", &craftLaunchAlways, false, "STR_CRAFTLAUNCHALWAYS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("storageLimitsEnforced", &storageLimitsEnforced, false, "STR_STORAGELIMITSENFORCED", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("canSellLiveAliens", &canSellLiveAliens, false, "STR_CANSELLLIVEALIENS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("anytimePsiTraining", &anytimePsiTraining, false, "STR_ANYTIMEPSITRAINING", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("globeSeasons", &globeSeasons, false, "STR_GLOBESEASONS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("psiStrengthEval", &psiStrengthEval, false, "STR_PSISTRENGTHEVAL", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("canTransferCraftsWhileAirborne", &canTransferCraftsWhileAirborne, false, "STR_CANTRANSFERCRAFTSWHILEAIRBORNE", "STR_GEOSCAPE")); // When the craft can reach the destination base with its fuel
+	_info.push_back(OptionInfo("canManufactureMoreItemsPerHour", &canManufactureMoreItemsPerHour, false, "STR_CANMANUFACTUREMOREITEMSPERHOUR", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false, "STR_SPENDRESEARCHEDITEMS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("fieldPromotions", &fieldPromotions, false, "STR_FIELDPROMOTIONS", "STR_GEOSCAPE"));
+	
+	_info.push_back(OptionInfo("battleDragScrollInvert", &battleDragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_BATTLESCAPE")); // true drags away from the cursor, false drags towards (like a grab)
+	_info.push_back(OptionInfo("sneakyAI", &sneakyAI, false, "STR_SNEAKYAI", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleUFOExtenderAccuracy", &battleUFOExtenderAccuracy, false, "STR_BATTLEUFOEXTENDERACCURACY", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("showMoreStatsInInventoryView", &showMoreStatsInInventoryView, false, "STR_SHOWMORESTATSININVENTORYVIEW", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleHairBleach", &battleHairBleach, true, "STR_BATTLEHAIRBLEACH", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleInstantGrenade", &battleInstantGrenade, false, "STR_BATTLEINSTANTGRENADE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("includePrimeStateInSavedLayout", &includePrimeStateInSavedLayout, false, "STR_INCLUDE_PRIMESTATE_IN_SAVED_LAYOUT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0, "STR_BATTLEEXPLOSIONHEIGHT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleAutoEnd", &battleAutoEnd, false, "STR_BATTLEAUTOEND", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false, "STR_BATTLESMOOTHCAMERA", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("disableAutoEquip", &disableAutoEquip, false, "STR_DISABLEAUTOEQUIP", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false, "STR_BATTLECONFIRMFIREMODE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("weaponSelfDestruction", &weaponSelfDestruction, false, "STR_WEAPONSELFDESTRUCTION", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("allowPsionicCapture", &allowPsionicCapture, false, "STR_ALLOWPSIONICCAPTURE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("allowPsiStrengthImprovement", &allowPsiStrengthImprovement, false, "STR_ALLOWPSISTRENGTHIMPROVEMENT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("strafe", &strafe, false, "STR_STRAFE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("forceFire", &forceFire, true, "STR_FORCE_FIRE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("skipNextTurnScreen", &skipNextTurnScreen, false, "STR_SKIPNEXTTURNSCREEN", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false, "STR_TFTDDAMAGE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("noAlienPanicMessages", &noAlienPanicMessages, false, "STR_NOALIENPANICMESSAGES", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("alienBleeding", &alienBleeding, false, "STR_ALIENBLEEDING", "STR_BATTLESCAPE"));
+	
 	// controls
-	setInt("keyOk", SDLK_RETURN);
-	setInt("keyCancel", SDLK_ESCAPE);
-	setInt("keyScreenshot", SDLK_F12);
-	setInt("keyFps", SDLK_F5);
-	setInt("keyGeoLeft", SDLK_LEFT);
-	setInt("keyGeoRight", SDLK_RIGHT);
-	setInt("keyGeoUp", SDLK_UP);
-	setInt("keyGeoDown", SDLK_DOWN);
-	setInt("keyGeoZoomIn", SDLK_PLUS);
-	setInt("keyGeoZoomOut", SDLK_MINUS);
-	setInt("keyGeoSpeed1", SDLK_1);
-	setInt("keyGeoSpeed2", SDLK_2);
-	setInt("keyGeoSpeed3", SDLK_3);
-	setInt("keyGeoSpeed4", SDLK_4);
-	setInt("keyGeoSpeed5", SDLK_5);
-	setInt("keyGeoSpeed6", SDLK_6);
-	setInt("keyGeoIntercept", SDLK_i);
-	setInt("keyGeoBases", SDLK_b);
-	setInt("keyGeoGraphs", SDLK_g);
-	setInt("keyGeoUfopedia", SDLK_u);
-	setInt("keyGeoOptions", SDLK_ESCAPE);
-	setInt("keyGeoFunding", SDLK_f);
-	setInt("keyGeoToggleDetail", SDLK_TAB);
-	setInt("keyGeoToggleRadar", SDLK_r);
-	setInt("keyQuickSave", SDLK_F6);
-	setInt("keyQuickLoad", SDLK_F9);
-	setInt("keyBattleLeft", SDLK_LEFT);
-	setInt("keyBattleRight", SDLK_RIGHT);
-	setInt("keyBattleUp", SDLK_UP);
-	setInt("keyBattleDown", SDLK_DOWN);
-	setInt("keyBattleLevelUp", SDLK_PAGEUP);
-	setInt("keyBattleLevelDown", SDLK_PAGEDOWN);
-	setInt("keyBattleCenterUnit", SDLK_HOME);
-	setInt("keyBattlePrevUnit", SDLK_LSHIFT);
-	setInt("keyBattleNextUnit", SDLK_TAB);
-	setInt("keyBattleDeselectUnit", SDLK_BACKSLASH);
-	setInt("keyBattleUseLeftHand", SDLK_q);
-	setInt("keyBattleUseRightHand", SDLK_e);
-	setInt("keyBattleInventory", SDLK_i);
-	setInt("keyBattleMap", SDLK_m);
-	setInt("keyBattleOptions", SDLK_ESCAPE);
-	setInt("keyBattleEndTurn", SDLK_BACKSPACE);
-	setInt("keyBattleAbort", SDLK_a);
-	setInt("keyBattleStats", SDLK_s);
-	setInt("keyBattleKneel", SDLK_k);
-	setInt("keyBattleReserveKneel", SDLK_j);
-	setInt("keyBattleReload", SDLK_r);
-	setInt("keyBattlePersonalLighting", SDLK_l);
-	setInt("keyBattleReserveNone", SDLK_F1);
-	setInt("keyBattleReserveSnap", SDLK_F2);
-	setInt("keyBattleReserveAimed", SDLK_F3);
-	setInt("keyBattleReserveAuto", SDLK_F4);
-	setInt("keyBattleCenterEnemy1", SDLK_1);
-	setInt("keyBattleCenterEnemy2", SDLK_2);
-	setInt("keyBattleCenterEnemy3", SDLK_3);
-	setInt("keyBattleCenterEnemy4", SDLK_4);
-	setInt("keyBattleCenterEnemy5", SDLK_5);
-	setInt("keyBattleCenterEnemy6", SDLK_6);
-	setInt("keyBattleCenterEnemy7", SDLK_7);
-	setInt("keyBattleCenterEnemy8", SDLK_8);
-	setInt("keyBattleCenterEnemy9", SDLK_9);
-	setInt("keyBattleCenterEnemy10", SDLK_0);
-	setInt("keyBattleVoxelView", SDLK_F10);
-
-	setInt("keyBattleZeroTUs", SDLK_DELETE);
+	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyCancel", &keyCancel, SDLK_ESCAPE, "STR_CANCEL", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyScreenshot", &keyScreenshot, SDLK_F12, "STR_SCREENSHOT", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyFps", &keyFps, SDLK_F7, "STR_FPS_COUNTER", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyQuickSave", &keyQuickSave, SDLK_F5, "STR_QUICK_SAVE", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyQuickLoad", &keyQuickLoad, SDLK_F9, "STR_QUICK_LOAD", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyGeoLeft", &keyGeoLeft, SDLK_LEFT, "STR_ROTATE_LEFT", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoRight", &keyGeoRight, SDLK_RIGHT, "STR_ROTATE_RIGHT", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoUp", &keyGeoUp, SDLK_UP, "STR_ROTATE_UP", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoDown", &keyGeoDown, SDLK_DOWN, "STR_ROTATE_DOWN", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoZoomIn", &keyGeoZoomIn, SDLK_PLUS, "STR_ZOOM_IN", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoZoomOut", &keyGeoZoomOut, SDLK_MINUS, "STR_ZOOM_OUT", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoSpeed1", &keyGeoSpeed1, SDLK_1, "STR_5_SECONDS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoSpeed2", &keyGeoSpeed2, SDLK_2, "STR_1_MINUTE", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoSpeed3", &keyGeoSpeed3, SDLK_3, "STR_5_MINUTES", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoSpeed4", &keyGeoSpeed4, SDLK_4, "STR_30_MINUTES", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoSpeed5", &keyGeoSpeed5, SDLK_5, "STR_1_HOUR", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoSpeed6", &keyGeoSpeed6, SDLK_6, "STR_1_DAY", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoIntercept", &keyGeoIntercept, SDLK_i, "STR_INTERCEPT", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoBases", &keyGeoBases, SDLK_b, "STR_BASES", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoGraphs", &keyGeoGraphs, SDLK_g, "STR_GRAPHS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoUfopedia", &keyGeoUfopedia, SDLK_u, "STR_UFOPAEDIA_UC", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoOptions", &keyGeoOptions, SDLK_ESCAPE, "STR_OPTIONS_UC", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoFunding", &keyGeoFunding, SDLK_f, "STR_FUNDING_UC", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoToggleDetail", &keyGeoToggleDetail, SDLK_TAB, "STR_TOGGLE_COUNTRY_DETAIL", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyGeoToggleRadar", &keyGeoToggleRadar, SDLK_r, "STR_TOGGLE_RADAR_RANGES", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect1", &keyBaseSelect1, SDLK_1, "STR_SELECT_BASE_1", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect2", &keyBaseSelect2, SDLK_2, "STR_SELECT_BASE_2", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect3", &keyBaseSelect3, SDLK_3, "STR_SELECT_BASE_3", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect4", &keyBaseSelect4, SDLK_4, "STR_SELECT_BASE_4", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect5", &keyBaseSelect5, SDLK_5, "STR_SELECT_BASE_5", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect6", &keyBaseSelect6, SDLK_6, "STR_SELECT_BASE_6", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect7", &keyBaseSelect7, SDLK_7, "STR_SELECT_BASE_7", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBaseSelect8", &keyBaseSelect8, SDLK_8, "STR_SELECT_BASE_8", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("keyBattleLeft", &keyBattleLeft, SDLK_LEFT, "STR_SCROLL_LEFT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleRight", &keyBattleRight, SDLK_RIGHT, "STR_SCROLL_RIGHT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleUp", &keyBattleUp, SDLK_UP, "STR_SCROLL_UP", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleDown", &keyBattleDown, SDLK_DOWN, "STR_SCROLL_DOWN", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleLevelUp", &keyBattleLevelUp, SDLK_PAGEUP, "STR_VIEW_LEVEL_ABOVE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleLevelDown", &keyBattleLevelDown, SDLK_PAGEDOWN, "STR_VIEW_LEVEL_BELOW", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterUnit", &keyBattleCenterUnit, SDLK_HOME, "STR_CENTER_SELECTED_UNIT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattlePrevUnit", &keyBattlePrevUnit, SDLK_LSHIFT, "STR_PREVIOUS_UNIT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleNextUnit", &keyBattleNextUnit, SDLK_TAB, "STR_NEXT_UNIT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleDeselectUnit", &keyBattleDeselectUnit, SDLK_BACKSLASH, "STR_DESELECT_UNIT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleUseLeftHand", &keyBattleUseLeftHand, SDLK_q, "STR_USE_LEFT_HAND", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleUseRightHand", &keyBattleUseRightHand, SDLK_e, "STR_USE_RIGHT_HAND", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleInventory", &keyBattleInventory, SDLK_i, "STR_INVENTORY", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleMap", &keyBattleMap, SDLK_m, "STR_MINIMAP", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleOptions", &keyBattleOptions, SDLK_ESCAPE, "STR_OPTIONS", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleEndTurn", &keyBattleEndTurn, SDLK_BACKSPACE, "STR_END_TURN", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleAbort", &keyBattleAbort, SDLK_a, "STR_ABORT_MISSION", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleStats", &keyBattleStats, SDLK_s, "STR_UNIT_STATS", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleKneel", &keyBattleKneel, SDLK_k, "STR_KNEEL", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleReload", &keyBattleReload, SDLK_r, "STR_RELOAD", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattlePersonalLighting", &keyBattlePersonalLighting, SDLK_l, "STR_TOGGLE_PERSONAL_LIGHTING", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleReserveNone", &keyBattleReserveNone, SDLK_F1, "STR_DONT_RESERVE_TIME_UNITS", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleReserveSnap", &keyBattleReserveSnap, SDLK_F2, "STR_RESERVE_TIME_UNITS_FOR_SNAP_SHOT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleReserveAimed", &keyBattleReserveAimed, SDLK_F3, "STR_RESERVE_TIME_UNITS_FOR_AIMED_SHOT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleReserveAuto", &keyBattleReserveAuto, SDLK_F4, "STR_RESERVE_TIME_UNITS_FOR_AUTO_SHOT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleReserveKneel", &keyBattleReserveKneel, SDLK_j, "STR_RESERVE_TIME_UNITS_FOR_KNEEL", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleZeroTUs", &keyBattleZeroTUs, SDLK_DELETE, "STR_EXPEND_ALL_TIME_UNITS", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy1", &keyBattleCenterEnemy1, SDLK_1, "STR_CENTER_ON_ENEMY_1", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy2", &keyBattleCenterEnemy2, SDLK_2, "STR_CENTER_ON_ENEMY_2", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy3", &keyBattleCenterEnemy3, SDLK_3, "STR_CENTER_ON_ENEMY_3", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy4", &keyBattleCenterEnemy4, SDLK_4, "STR_CENTER_ON_ENEMY_4", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy5", &keyBattleCenterEnemy5, SDLK_5, "STR_CENTER_ON_ENEMY_5", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy6", &keyBattleCenterEnemy6, SDLK_6, "STR_CENTER_ON_ENEMY_6", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy7", &keyBattleCenterEnemy7, SDLK_7, "STR_CENTER_ON_ENEMY_7", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy8", &keyBattleCenterEnemy8, SDLK_8, "STR_CENTER_ON_ENEMY_8", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy9", &keyBattleCenterEnemy9, SDLK_9, "STR_CENTER_ON_ENEMY_9", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleCenterEnemy10", &keyBattleCenterEnemy10, SDLK_0, "STR_CENTER_ON_ENEMY_10", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyBattleVoxelView", &keyBattleVoxelView, SDLK_F10, "STR_SAVE_VOXEL_VIEW", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyInvCreateTemplate", &keyInvCreateTemplate, SDLK_c, "STR_CREATE_INVENTORY_TEMPLATE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyInvApplyTemplate", &keyInvApplyTemplate, SDLK_v, "STR_APPLY_INVENTORY_TEMPLATE", "STR_BATTLESCAPE"));
 
 #ifdef __MORPHOS__
-	setInt("FPS", 15);
+	_info.push_back(OptionInfo("FPS", &FPS, 15));
+#else
+	_info.push_back(OptionInfo("FPS", &FPS, 60, "STR_FPS_LIMIT", "STR_GENERAL"));
 #endif
+}
 
-	_rulesets.clear();
-	_rulesets.push_back("Xcom1Ruleset");
+/**
+ * Resets the options back to their defaults.
+ */
+void resetDefault()
+{
+	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+	{
+		i->reset();
+	}
+	backupDisplay();
+
+	rulesets.clear();
+	rulesets.push_back("Xcom1Ruleset");
+
+	purchaseExclusions.clear();
 }
 
 /**
  * Loads options from a set of command line arguments,
  * in the format "-option value".
  * @param argc Number of arguments.
- * @param args Array of argument strings.
+ * @param argv Array of argument strings.
  */
-void loadArgs(int argc, char** args)
+void loadArgs(int argc, char *argv[])
 {
 	for (int i = 1; i < argc; ++i)
 	{
-		std::string arg = args[i];
+		std::string arg = argv[i];
 		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
 		{
 			std::string argname;
@@ -289,32 +314,20 @@ void loadArgs(int argc, char** args)
 			{
 				if (argname == "data")
 				{
-					_dataFolder = CrossPlatform::endPath(args[i+1]);
+					_dataFolder = CrossPlatform::endPath(argv[i+1]);
 				}
 				else if (argname == "user")
 				{
-					_userFolder = CrossPlatform::endPath(args[i+1]);
+					_userFolder = CrossPlatform::endPath(argv[i+1]);
+				}
+				else if (argname == "cfg")
+				{
+					_configFolder = CrossPlatform::endPath(argv[i+1]);
 				}
 				else
 				{
-					// case insensitive lookup of the argument
-					bool found = false;
-					for(std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
-					{
- 						std::string option = it->first;
-						std::transform(option.begin(), option.end(), option.begin(), ::tolower);
-						if (option == argname)
-						{
-							//save this command line option for now, we will apply it later
-							_commandLineOptions[it->first]= args[i+1];
-							found = true;
-							break;
-						}
-					}
-					if(!found)
-					{
-						Log(LOG_WARNING) << "Unknown option: " << argname;
-					}
+					//save this command line option for now, we will apply it later
+					_commandLine[argname] = argv[i+1];
 				}
 			}
 			else
@@ -328,9 +341,9 @@ void loadArgs(int argc, char** args)
 /*
  * Displays command-line help when appropriate.
  * @param argc Number of arguments.
- * @param args Array of argument strings.
+ * @param argv Array of argument strings.
  */
-bool showHelp(int argc, char** args)
+bool showHelp(int argc, char *argv[])
 {
 	std::ostringstream help;
 	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
@@ -339,6 +352,8 @@ bool showHelp(int argc, char** args)
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-user PATH" << std::endl;
 	help << "        use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "-cfg PATH" << std::endl;
+	help << "        use PATH as the default Config Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
 	help << "-help" << std::endl;
@@ -346,7 +361,7 @@ bool showHelp(int argc, char** args)
 	help << "        show command-line help" << std::endl;
 	for (int i = 1; i < argc; ++i)
 	{
-		std::string arg = args[i];
+		std::string arg = argv[i];
 		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
 		{
 			std::string argname;
@@ -369,15 +384,16 @@ bool showHelp(int argc, char** args)
  * Handles the initialization of setting up default options
  * and finding and loading any existing ones.
  * @param argc Number of arguments.
- * @param args Array of argument strings.
+ * @param argv Array of argument strings.
  * @return Was initialized.
  */
-bool init(int argc, char** args)
+bool init(int argc, char *argv[])
 {
-	if (showHelp(argc, args))
+	if (showHelp(argc, argv))
 		return false;
-	createDefault();
-	loadArgs(argc, args);
+	create();
+	resetDefault();
+	loadArgs(argc, argv);
 	setFolders();
 	updateOptions();
 
@@ -451,7 +467,7 @@ void setFolders()
 }
 
 /**
- * Updates the game's options with those in the configuation
+ * Updates the game's options with those in the configuration
  * file, if it exists yet, and any supplied on the command line.
  */
 void updateOptions()
@@ -459,13 +475,13 @@ void updateOptions()
 	// Load existing options
 	if (CrossPlatform::folderExists(_configFolder))
 	{
-		try
+		if (CrossPlatform::fileExists(_configFolder + "options.cfg"))
 		{
 			load();
 		}
-		catch (YAML::Exception &e)
+		else
 		{
-			Log(LOG_ERROR) << e.what();
+			save();
 		}
 	}
 	// Create config folder and save options
@@ -476,10 +492,11 @@ void updateOptions()
 	}
 
     // now apply options set on the command line, overriding defaults and those loaded from config file
-    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
-    {
-        _options[it->first] = it->second;
-    }
+	//if (!_commandLine.empty())
+    for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+	{
+		i->load(_commandLine);
+	}
 }
 
 /**
@@ -492,12 +509,17 @@ void load(const std::string &filename)
 	try
 	{
 		YAML::Node doc = YAML::LoadFile(s);
-		for (YAML::const_iterator i = doc["options"].begin(); i != doc["options"].end(); ++i)
+		// Ignore old options files
+		if (doc["options"]["NewBattleMission"])
 		{
-			_options[i->first.as<std::string>()] = i->second.as<std::string>();
+			return;
 		}
-		_purchaseexclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(_purchaseexclusions);
-		_rulesets = doc["rulesets"].as< std::vector<std::string> >(_rulesets);
+		for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+		{
+			i->load(doc["options"]);
+		}
+		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
+		rulesets = doc["rulesets"].as< std::vector<std::string> >(rulesets);
 	}
 	catch (YAML::Exception e)
 	{
@@ -518,15 +540,26 @@ void save(const std::string &filename)
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
 		return;
 	}
-	YAML::Emitter out;
+	try
+	{
+		YAML::Emitter out;
 
-	YAML::Node node;
-	node["options"] = _options;
-	node["purchaseexclusions"] = _purchaseexclusions;
-	node["rulesets"] = _rulesets;
-	out << node;
+		YAML::Node doc, node;
+		for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+		{
+			i->save(node);
+		}
+		doc["options"] = node;
+		doc["purchaseexclusions"] = purchaseExclusions;
+		doc["rulesets"] = rulesets;
+		out << doc;
 
-	sav << out.c_str();
+		sav << out.c_str();
+	}
+	catch (YAML::Exception e)
+	{
+		Log(LOG_WARNING) << e.what();
+	}
 	sav.close();
 }
 
@@ -554,14 +587,14 @@ void setDataFolder(const std::string &folder)
  * Returns the game's list of possible Data folders.
  * @return List of Data paths.
  */
-std::vector<std::string> *getDataList()
+const std::vector<std::string> &getDataList()
 {
-	return &_dataList;
+	return _dataList;
 }
 
 /**
- * Returns the game's User folder where settings
- * and saves are stored in.
+ * Returns the game's User folder where
+ * saves are stored in.
  * @return Full path to User folder.
  */
 std::string getUserFolder()
@@ -570,92 +603,55 @@ std::string getUserFolder()
 }
 
 /**
- * Returns an option in string format.
- * @param id Option ID.
- * @return Option value.
+ * Returns the game's Config folder where
+ * settings are stored in. Normally the same
+ * as the User folder.
+ * @return Full path to Config folder.
  */
-std::string getString(const std::string& id)
+std::string getConfigFolder()
 {
-	return _options[id];
+	return _configFolder;
 }
 
 /**
- * Returns an option in integer format.
- * @param id Option ID.
- * @return Option value.
+ * Returns the game's list of all available option information.
+ * @return List of OptionInfo's.
  */
-int getInt(const std::string& id)
+const std::vector<OptionInfo> &getOptionInfo()
 {
-	std::stringstream ss;
-	int value = 0;
-	if (_options.find(id) != _options.end())
-	{
-		ss << std::dec << _options[id];
-		ss >> std::dec >> value;
-	}
-	return value;
+	return _info;
 }
 
 /**
- * Returns an option in boolean format.
- * @param id Option ID.
- * @return Option value.
+ * Saves display settings temporarily to be able
+ * to revert to old ones.
  */
-bool getBool(const std::string& id)
+void backupDisplay()
 {
-	std::stringstream ss;
-	bool value;
-	ss << std::boolalpha << _options[id];
-	ss >> std::boolalpha >> value;
-	return value;
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+	Options::newBattlescapeScale = Options::battlescapeScale;
+	Options::newGeoscapeScale = Options::geoscapeScale;
+	Options::newOpenGL = Options::useOpenGL;
+	Options::newScaleFilter = Options::useScaleFilter;
+	Options::newHQXFilter = Options::useHQXFilter;
+	Options::newOpenGLShader = Options::useOpenGLShader;
 }
 
 /**
- * Changes an option in string format.
- * @param id Option ID.
- * @param value New option value.
+ * Switches old/new display options for temporarily
+ * testing a new display setup.
  */
-void setString(const std::string& id, const std::string& value)
-{
-	_options[id] = value;
-}
-
-/**
- * Changes an option in integer format.
- * @param id Option ID.
- * @param value New option value.
- */
-void setInt(const std::string& id, int value)
-{
-	std::ostringstream ss;
-	ss << std::dec << value;
-	_options[id] = ss.str();
-}
-
-/**
- * Changes an option in boolean format.
- * @param id Option ID.
- * @param value New option value.
- */
-void setBool(const std::string& id, bool value)
-{
-	std::ostringstream ss;
-	ss << std::boolalpha << value;
-	_options[id] = ss.str();
-}
-
-/**
- * Returns the list of rulesets to be used by the game.
- * @return Ruleset list.
- */
-std::vector<std::string> getRulesets()
-{
-	return _rulesets;
-}
-
-std::vector<std::string> getPurchaseExclusions()
-{
-	return _purchaseexclusions;
+void switchDisplay()
+{	
+	std::swap(displayWidth, newDisplayWidth);
+	std::swap(displayHeight, newDisplayHeight);
+	std::swap(useOpenGL, newOpenGL);
+	std::swap(useScaleFilter, newScaleFilter);
+	std::swap(battlescapeScale, newBattlescapeScale);
+	std::swap(geoscapeScale, newGeoscapeScale);
+	std::swap(useHQXFilter, newHQXFilter);
+	std::swap(useOpenGLShader, newOpenGLShader);
 }
 
 }

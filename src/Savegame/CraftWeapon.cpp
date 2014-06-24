@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -86,6 +86,7 @@ int CraftWeapon::getAmmo() const
 /**
  * Changes the ammo contained in this craft weapon.
  * @param ammo Weapon ammo.
+ * @return If the weapon ran out of ammo.
  */
 bool CraftWeapon::setAmmo(int ammo)
 {

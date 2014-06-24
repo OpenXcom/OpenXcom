@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,8 +47,6 @@ public:
 	AlienTerrorState(Game *game, TerrorSite *terror, const std::string &city, GeoscapeState *state);
 	/// Cleans up the Ufo Detected state.
 	~AlienTerrorState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the Intercept button.
 	void btnInterceptClick(Action *action);
 	/// Handler for clicking the Centre on UFO button.

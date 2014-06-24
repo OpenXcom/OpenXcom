@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,7 +55,7 @@ public:
 	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);
 	/// Cleans up the Build New Base state.
 	~BuildNewBaseState();
-	/// Updates the palette.
+	/// Resets globe.
 	void init();
 	/// Runs the timer.
 	void think();
@@ -93,6 +93,8 @@ public:
 	void btnZoomOutRightClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Let the state know the window has been resized.
+	void resize(int &dX, int &dY);
 };
 
 }

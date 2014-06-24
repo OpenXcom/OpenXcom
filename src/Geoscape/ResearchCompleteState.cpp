@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,6 +37,7 @@ namespace OpenXcom
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
  * @param research Pointer to the completed research.
+ * @param bonus Pointer to bonus unlocked research.
  */
 ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus): State (game), _research(research), _bonus(bonus)
 {
@@ -47,10 +48,10 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_btnOk = new TextButton(80, 16, 64, 146);
 	_btnReport = new TextButton(80, 16, 176, 146);
 	_txtTitle = new Text(230, 17, 45, 70);
-	_txtResearch = new Text(230, 17, 45, 96);
+	_txtResearch = new Text(230, 32, 45, 96);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -67,12 +68,12 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, Options::keyCancel);
 
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
-	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, (SDLKey)Options::getInt("keyOk"));
+	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -82,18 +83,11 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_txtResearch->setColor(Palette::blockOffset(8)+10);
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
+	_txtResearch->setWordWrap(true);
 	if (research)
 	{
 		_txtResearch->setText(tr(research->getName()));
 	}
-}
-
-/**
- * Resets the palette.
- */
-void ResearchCompleteState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 }
 
 /**
@@ -102,7 +96,7 @@ void ResearchCompleteState::init()
  */
 void ResearchCompleteState::btnOkClick(Action *)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**

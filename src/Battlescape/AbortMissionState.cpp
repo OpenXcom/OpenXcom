@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,6 +52,9 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_txtAbort = new Text(320, 17, 0, 75);
 	_btnOk = new TextButton(120, 16, 16, 110);
 	_btnCancel = new TextButton(120, 16, 184, 110);
+
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_window);
 	add(_txtInExit);
@@ -113,14 +116,14 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AbortMissionState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&AbortMissionState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(0)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyBattleAbort"));
+	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, Options::keyCancel);
+	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, Options::keyBattleAbort);
 }
 
 /**

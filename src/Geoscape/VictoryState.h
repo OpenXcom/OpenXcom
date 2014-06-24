@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,21 +34,20 @@ class Timer;
 class VictoryState : public State
 {
 private:
-	InteractiveSurface *_screen;
-	std::vector<Text*> _txtText;
-	int _screenNumber;
+	static const int SCREENS = 5;
+	InteractiveSurface *_bg[SCREENS];
+	Text *_text[SCREENS];
+	int _screen;
 	Timer *_timer;
 public:
 	/// Creates the Victory state.
 	VictoryState(Game *game);
 	/// Cleans up the Victory state.
 	~VictoryState();
-	void init();
 	/// Handle timers.
 	void think();
 	/// Handler for clicking the screen.
-	void windowClick(Action *action);
-	void nextScreen();
+	void screenClick(Action *action);
 };
 
 }

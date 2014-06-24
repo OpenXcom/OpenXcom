@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,12 +50,12 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
 	_txtName = new Text(114, 9, 16, 32);
-	_txtCraft = new Text(70, 9, 130, 32);
-	_txtArmor = new Text(100, 9, 210, 32);
+	_txtCraft = new Text(76, 9, 130, 32);
+	_txtArmor = new Text(100, 9, 204, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnOk);
@@ -74,7 +74,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftArmorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftArmorState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -90,7 +90,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setColumns(3, 114, 80, 86);
+	_lstSoldiers->setColumns(3, 114, 74, 92);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
@@ -100,7 +100,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	Craft *c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
+		_lstSoldiers->addRow(3, (*i)->getName(true).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
 
 		Uint8 color;
 		if ((*i)->getCraft() == c)
@@ -133,6 +133,7 @@ CraftArmorState::~CraftArmorState()
  */
 void CraftArmorState::init()
 {
+	State::init();
 	int row = 0;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -63,7 +63,7 @@ void PlaceStartFacilityState::viewClick(Action *)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else
 	{

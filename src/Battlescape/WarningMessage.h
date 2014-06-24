@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,8 +47,8 @@ public:
 	void setColor(Uint8 color);
 	/// Sets the text color for the warning message.
 	void setTextColor(Uint8 color);
-	/// Sets the warning message's various fonts.
-	void setFonts(Font *big, Font *small);
+	/// Initializes the warning message's resources.
+	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the warning message's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Shows the warning message.

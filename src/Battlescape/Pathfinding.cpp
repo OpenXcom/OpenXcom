@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,12 +22,12 @@
 #include "PathfindingOpenSet.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattlescapeState.h"
@@ -39,7 +39,7 @@ namespace OpenXcom
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
 {
 	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile
@@ -85,7 +85,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	// i'm DONE with these out of bounds errors.
 	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize() || endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize() || endPosition.x < 0 || endPosition.y < 0) return;
 
-	bool sneak = _save->getSneakySetting() && unit->getFaction() == FACTION_HOSTILE;
+	bool sneak = Options::sneakyAI && unit->getFaction() == FACTION_HOSTILE;
 
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
@@ -138,13 +138,19 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 						checkTile->getUnit()->getVisible() &&
 						checkTile->getUnit() != target))
 						return;
+					if (x && y)
+					{
+						if ((checkTile->getMapData(MapData::O_NORTHWALL) && checkTile->getMapData(MapData::O_NORTHWALL)->isDoor()) || 
+							(checkTile->getMapData(MapData::O_WESTWALL) && checkTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+							return;
+					}
 					++its;
 				}
 			}
 		}
 	}
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
+	_strafeMove = Options::strafe && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	// look for a possible fast and accurate bresenham path and skip A*
@@ -367,16 +373,27 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					return 255;
 			}
 
-			int wallcost = 0; // walking through rubble walls
-			if (direction == 7 || direction == 0 || direction == 1)
+			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally through doors (which is impossible),
+							// they're a special case unto themselves, if we can walk past them diagonally, it means we can go around,
+							// as there is no wall blocking us.
+			if (direction == 0 || direction == 7 || direction == 1)
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 1 || direction == 2 || direction == 3)
+			if (direction == 2 || direction == 1 || direction == 3)
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 3 || direction == 4 || direction == 5)
+			if (direction == 4 || direction == 3 || direction == 5)
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 5 || direction == 6 || direction == 7)
+			if (direction == 6 || direction == 5 || direction == 7)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
+			// don't let tanks phase through doors.
+			if (x && y)
+			{
+				if ((destinationTile->getMapData(MapData::O_NORTHWALL) && destinationTile->getMapData(MapData::O_NORTHWALL)->isDoor()) || 
+					(destinationTile->getMapData(MapData::O_WESTWALL) && destinationTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+				{
+					return 255;
+				}
+			}
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 			{
@@ -416,7 +433,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
-			if (_save->getStrafeSetting() && _strafeMove) {
+			if (Options::strafe && _strafeMove) {
 				if (size) {
 					// 4-tile units not supported.
 					// Turn off strafe move and continue
@@ -481,7 +498,7 @@ void Pathfinding::directionToVector(const int direction, Position *vector)
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
  * @param vector Pointer to a position (which acts as a vector).
- * @return Direction
+ * @param dir Resulting direction.
  */
 void Pathfinding::vectorToDirection(const Position &vector, int &dir)
 {
@@ -583,6 +600,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 			if (_unit && _unit->getFaction() == unit->getFaction()) return true;
+			if (_unit && _unit->getFaction() == FACTION_HOSTILE && 
+				std::find(_unit->getUnitsSpottedThisTurn().begin(), _unit->getUnitsSpottedThisTurn().end(), unit) != _unit->getUnitsSpottedThisTurn().end()) return true;
 		}
 		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
@@ -836,14 +855,15 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
-	int total = 0;
+	int total = _unit->isKneeled() ? 8 : 0;
 	bool switchBack = false;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
 		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
-	bool running = (SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
+	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
+	bool running = Options::strafe && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
@@ -852,10 +872,9 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			tu *= 0.75;
 		}
-		energy -= tu / 2;
-		if (dir >= Pathfinding::DIR_UP)
+		if (dir < Pathfinding::DIR_UP)
 		{
-			energy = 0;
+			energy -= tu / 2;
 		}
 
 		tus -= tu;
@@ -867,6 +886,7 @@ bool Pathfinding::previewPath(bool bRemove)
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *tile = _save->getTile(pos + Position(x,y,0));
+				Tile *tileAbove = _save->getTile(pos + Position(x,y,1));
 				if (!bRemove)
 				{
 					if (i == _path.rend() - 1)
@@ -878,12 +898,19 @@ bool Pathfinding::previewPath(bool bRemove)
 						int nextDir = *(i + 1);
 						tile->setPreview(nextDir);
 					}
-						tile->setTUMarker(tus);
+					if ((x && y) || size == 0)
+					{
+						tile->setTUMarker(std::max(0,tus));
+					}
+					if (tileAbove && tileAbove->getPreview() == 0 && tu == 0 && _movementType != MT_FLY) //unit fell down, retroactively make the tile above's direction marker to DOWN
+					{
+						tileAbove->setPreview(DIR_DOWN);
+					}
 				}
 				else
 				{
 					tile->setPreview(-1);
-					tile->setTUMarker(0);
+					tile->setTUMarker(-1);
 				}
 				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}
@@ -1050,7 +1077,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 {
 	const Position &start = unit->getPosition();
-
+	int energyMax = unit->getEnergy();
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 	{
 		it->reset();
@@ -1072,7 +1099,8 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
-			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs
+			if (currentNode->getTUCost(false) + tuCost > tuMax || 
+				(currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
@@ -1131,5 +1159,32 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	{
 		_movementType = MT_WALK;
 	}
-};
+}
+
+/**
+ * Checks whether a modifier key was used to enable strafing or running.
+ * @return True, if a modifier was used.
+ */
+bool Pathfinding::isModifierUsed() const
+{
+	return _modifierUsed;
+}
+
+/**
+ * Gets a reference to the current path.
+ * @return the actual path.
+ */
+const std::vector<int> &Pathfinding::getPath()
+{
+	return _path;
+}
+
+/**
+ * Makes a copy of the current path.
+ * @return a copy of the path.
+ */
+std::vector<int> Pathfinding::copyPath() const
+{
+	return _path;
+}
 }

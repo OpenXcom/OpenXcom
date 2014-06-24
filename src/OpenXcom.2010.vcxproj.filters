@@ -602,9 +602,6 @@
     <ClCompile Include="Battlescape\BriefingState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\OptionsState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\ErrorMessageState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -623,15 +620,6 @@
     </ClCompile>
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp">
       <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\LoadState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SaveState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SavedGameState.cpp">
-      <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp">
       <Filter>Basescape</Filter>
@@ -787,9 +775,6 @@
     <ClCompile Include="Menu\OptionsBaseState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\OptionsLanguageState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\AliensCrashState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -801,6 +786,75 @@
     </ClCompile>
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsVideoState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsModsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsAudioState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsGeoscapeState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OptionInfo.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\ComboBox.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsDefaultsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsConfirmState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\IntroState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ConfirmLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListGamesState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListSaveState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatString.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\SaveGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\LoadGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\adlplayer.cpp">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\AdlibMusic.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Adlib\fmopl.cpp">
+      <Filter>Engine\Adlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\ScrollBar.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsNoAudioState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\DelayedSaveState.cpp">
+      <Filter>Battlescape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1406,9 +1460,6 @@
     <ClInclude Include="Battlescape\BriefingState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\OptionsState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\ErrorMessageState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1427,15 +1478,6 @@
     </ClInclude>
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h">
       <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\LoadState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SaveState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SavedGameState.h">
-      <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Logger.h">
       <Filter>Engine</Filter>
@@ -1545,7 +1587,6 @@
     <ClInclude Include="Interface\ToggleTextButton.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="aresame.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Engine\ShaderDraw.h">
       <Filter>Engine</Filter>
@@ -1557,12 +1598,6 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ShaderRepeat.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ShaderRotate.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\FixedFloat.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphSubset.h">
@@ -1611,9 +1646,6 @@
     <ClInclude Include="Menu\OptionsBattlescapeState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\OptionsLanguageState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\AliensCrashState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1625,6 +1657,82 @@
     </ClInclude>
     <ClInclude Include="Basescape\SoldierMemorialState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsVideoState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsModsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsAudioState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsGeoscapeState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OptionInfo.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ComboBox.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsDefaultsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsConfirmState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\IntroState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Options.inc.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ConfirmLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListGamesState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListLoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListSaveState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatString.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\StatStringCondition.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SaveGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LoadGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\adlplayer.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adlib\fmopl.h">
+      <Filter>Engine\Adlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AdlibMusic.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ScrollBar.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsNoAudioState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="fmath.h" />
+    <ClInclude Include="Engine\DosFont.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\DelayedSaveState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1661,11 +1769,14 @@
     <Filter Include="Engine\Scalers">
       <UniqueIdentifier>{fef61e76-5d44-4389-a40c-12da6e590e2c}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <Filter Include="Engine\Adlib">
+      <UniqueIdentifier>{09464f19-4bce-449f-a27c-5cd7b9850dbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\windows\openxcom.ico" />
   </ItemGroup>
 </Project>

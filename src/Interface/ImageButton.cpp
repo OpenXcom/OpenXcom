@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -109,6 +109,19 @@ void ImageButton::mouseRelease(Action *action, State *state)
 		invert(_color + 3);
 	}
 	InteractiveSurface::mouseRelease(action, state);
+}
+
+/**
+ * Invert a button explicitly either ON or OFF and keep track of the state using our internal variables.
+ * @param press Set this button as pressed.
+ */
+void ImageButton::toggle(bool press)
+{
+	if (_inverted != press)
+	{
+		_inverted = !_inverted;
+		invert(_color + 3);
+	}
 }
 
 }

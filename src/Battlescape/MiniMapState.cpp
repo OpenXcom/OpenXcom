@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,42 +41,48 @@ namespace OpenXcom
  */
 MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State(game)
 {
-	_surface = new InteractiveSurface(320, 200);
-	_miniMapView = new MiniMapView(222, 150, 49, 15, game, camera, battleGame);
-	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
-	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
-	InteractiveSurface * btnOk = new InteractiveSurface(32, 32, 275, 145);
-	_txtLevel = new Text (20, 25, 281, 75);
-	add(_surface);
+	if (Options::maximizeInfoScreens)
+	{
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	}
+
+	_bg = new Surface(320, 200);
+	_miniMapView = new MiniMapView(221, 148, 48, 16, game, camera, battleGame);
+	_btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
+	_btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
+	_btnOk = new InteractiveSurface(32, 32, 275, 145);
+	_txtLevel = new Text(20, 25, 281, 75);
+	
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
+	add(_bg);
 	add(_miniMapView);
-	add(btnLvlUp);
-	add(btnLvlDwn);
-	add(btnOk);
+	add(_btnLvlUp);
+	add(_btnLvlDwn);
+	add(_btnOk);
 	add(_txtLevel);
 
 	centerAllSurfaces();
 
-	if (Screen::getDY() > 50)
+	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
-		SDL_Rect current;
-		current.w = 223;
-		current.h = 151;
-		current.x = 46;
-		current.y = 14;
-		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(46, 14, 223, 151, Palette::blockOffset(15)+15);
 	}
 
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
-	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
-	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
-	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
-	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyBattleMap"));
+	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
+	_btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
+	_btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
+	_btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyBattleMap);
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
-	std::wstringstream s;
+	std::wostringstream s;
 	s << camera->getViewLevel();
 	_txtLevel->setText(s.str());
 	_timerAnimate = new Timer(125);
@@ -119,6 +125,11 @@ void MiniMapState::handle(Action *action)
  */
 void MiniMapState::btnOkClick(Action *)
 {
+	if (Options::maximizeInfoScreens)
+	{
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		_game->getScreen()->resetDisplay(false);
+	}
 	_game->popState();
 }
 
@@ -128,7 +139,7 @@ void MiniMapState::btnOkClick(Action *)
  */
 void MiniMapState::btnLevelUpClick(Action *)
 {
-	std::wstringstream s;
+	std::wostringstream s;
 	s << _miniMapView->up();
 	_txtLevel->setText(s.str());
 }
@@ -139,7 +150,7 @@ void MiniMapState::btnLevelUpClick(Action *)
  */
 void MiniMapState::btnLevelDownClick(Action *)
 {
-	std::wstringstream s;
+	std::wostringstream s;
 	s << _miniMapView->down ();
 	_txtLevel->setText(s.str());
 }

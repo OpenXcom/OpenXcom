@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,7 +27,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
-#include "../Interface/TextList.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
@@ -43,6 +42,7 @@
 #include "ResearchProject.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
+#include "Transfer.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "TerrorSite.h"
@@ -53,6 +53,11 @@
 
 namespace OpenXcom
 {
+
+const std::string SavedGame::AUTOSAVE_GEOSCAPE = "_autogeo_.asav",
+   				  SavedGame::AUTOSAVE_BATTLESCAPE = "_autobattle_.asav",
+				  SavedGame::QUICKSAVE = "_quick_.asav";
+
 struct findRuleResearch : public std::unary_function<ResearchProject *,
 								bool>
 {
@@ -90,14 +95,15 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles("")
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles(""), _selectedBase(0)
 {
-	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 	_researchScores.push_back(0);
+	_incomes.push_back(0);
+	_expenditures.push_back(0);
 }
 
 /**
@@ -147,55 +153,43 @@ SavedGame::~SavedGame()
 }
 
 /**
- * Gets all the saves found in the user folder
- * and adds them to a text list.
- * @param list Text list.
+ * Gets all the info of the saves found in the user folder.
  * @param lang Loaded language.
- * @param details List of savegame details.
+ * @param autoquick Include autosaves and quicksaves.
+ * @return List of saves info.
  */
-std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std::vector<std::wstring> *details)
+std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 {
-	details->clear();
-	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
+	std::vector<SaveInfo> info;
 
+	if (autoquick)
+	{
+		std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "asav");
+		for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
+		{
+			try
+			{
+				info.push_back(getSaveInfo(*i, lang));
+			}
+			catch (Exception &e)
+			{
+				Log(LOG_ERROR) << e.what();
+				continue;
+			}
+			catch (YAML::Exception &e)
+			{
+				Log(LOG_ERROR) << e.what();
+				continue;
+			}
+		}
+	}
+
+	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 	for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
 	{
-		std::string file = (*i);
-		std::string fullname = Options::getUserFolder() + file;
 		try
 		{
-			YAML::Node doc = YAML::LoadFile(fullname);
-			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-			time.load(doc["time"]);
-			std::wstringstream saveTime, saveDay, saveMonth, saveYear;
-			saveTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
-			saveDay << time.getDayString(lang);
-			saveMonth << lang->getString(time.getMonthString());
-			saveYear << time.getYear();
-
-			std::wstringstream info;
-			if (doc["turn"])
-			{
-				info << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
-				info << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
-			}
-			else
-			{
-				info << lang->getString("STR_GEOSCAPE");
-			}
-			details->push_back(info.str());
-
-			std::wstring wstr;
-			if (doc["name"])
-			{
-				wstr = Language::utf8ToWstr(doc["name"].as<std::string>());
-			}
-			else
-			{
-				std::string s = CrossPlatform::noExt(file);
-				wstr = Language::fsToWstr(s);
-			}
-			list->addRow(5, wstr.c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+			info.push_back(getSaveInfo(*i, lang));
 		}
 		catch (Exception &e)
 		{
@@ -209,7 +203,81 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std:
 		}
 	}
 
-	return saves;
+	return info;
+}
+
+/**
+ * Gets the info of a specific save file.
+ * @param file Save filename.
+ * @param lang Loaded language.
+ */
+SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
+{
+	std::string fullname = Options::getUserFolder() + file;
+	YAML::Node doc = YAML::LoadFile(fullname);
+	SaveInfo save;
+
+	save.fileName = file;
+
+	if (save.fileName == QUICKSAVE)
+	{
+		save.displayName = lang->getString("STR_QUICK_SAVE_SLOT");
+		save.reserved = true;
+	}
+	else if (save.fileName == AUTOSAVE_GEOSCAPE)
+	{
+		save.displayName = lang->getString("STR_AUTO_SAVE_GEOSCAPE_SLOT");
+		save.reserved = true;
+	}
+	else if (save.fileName == AUTOSAVE_BATTLESCAPE)
+	{
+		save.displayName = lang->getString("STR_AUTO_SAVE_BATTLESCAPE_SLOT");
+		save.reserved = true;
+	}
+	else
+	{
+		if (doc["name"])
+		{
+			save.displayName = Language::utf8ToWstr(doc["name"].as<std::string>());
+		}
+		else
+		{
+			save.displayName = Language::fsToWstr(CrossPlatform::noExt(file));
+		}
+		save.reserved = false;
+	}
+
+	save.timestamp = CrossPlatform::getDateModified(fullname);
+	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
+	save.isoDate = str.first;
+	save.isoTime = str.second;
+
+	std::wostringstream details;
+	if (doc["turn"])
+	{
+		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+	}
+	else
+	{
+		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+		time.load(doc["time"]);
+		details << lang->getString("STR_GEOSCAPE") << L": ";
+		details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L", ";
+		details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+	}
+	if (doc["ironman"].as<bool>(false))
+	{
+		details << L" (" << lang->getString("STR_IRONMAN") << L")";
+	}
+	save.details = details.str();
+
+	if (doc["rulesets"])
+	{
+		save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
+	}
+
+	return save;
 }
 
 /**
@@ -220,7 +288,7 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std:
  */
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
-	std::string s = Options::getUserFolder() + filename + ".sav";
+	std::string s = Options::getUserFolder() + filename;
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
 	if (file.empty())
 	{
@@ -245,21 +313,22 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		_name = Language::fsToWstr(filename);
 	}
+	_ironman = brief["ironman"].as<bool>(_ironman);
 
 	// Get full save data
 	YAML::Node doc = file[1];
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
-	if (doc["rng"] && !Options::getBool("newSeedOnLoad"))
-		RNG::init(doc["rng"].as<int>());
+	if (doc["rng"] && (_ironman || !Options::newSeedOnLoad))
+		RNG::setSeed(doc["rng"].as<uint64_t>());
 	_monthsPassed = doc["monthsPassed"].as<int>(_monthsPassed);
-	_radarLines = doc["radarLines"].as<bool>(_radarLines);
-	_detail = doc["detail"].as<bool>(_detail);
 	_graphRegionToggles = doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles = doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles = doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
 	_funds = doc["funds"].as< std::vector<int> >(_funds);
 	_maintenance = doc["maintenance"].as< std::vector<int> >(_maintenance);
 	_researchScores = doc["researchScores"].as< std::vector<int> >(_researchScores);
+	_incomes = doc["incomes"].as< std::vector<int> >(_incomes);
+	_expenditures = doc["expenditures"].as< std::vector<int> >(_expenditures);
 	_warned = doc["warned"].as<bool>(_warned);
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
@@ -269,17 +338,23 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Country *c = new Country(rule->getCountry(type), false);
-		c->load(*i);
-		_countries.push_back(c);
+		if (rule->getCountry(type))
+		{
+			Country *c = new Country(rule->getCountry(type), false);
+			c->load(*i);
+			_countries.push_back(c);
+		}
 	}
 
 	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Region *r = new Region(rule->getRegion(type));
-		r->load(*i);
-		_regions.push_back(r);
+		if (rule->getRegion(type))
+		{
+			Region *r = new Region(rule->getRegion(type));
+			r->load(*i);
+			_regions.push_back(r);
+		}
 	}
 
 	// Alien bases must be loaded before alien missions
@@ -304,9 +379,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(*i, *rule, *this);
-		_ufos.push_back(u);
+		if (rule->getUfo(type))
+		{
+			Ufo *u = new Ufo(rule->getUfo(type));
+			u->load(*i, *rule, *this);
+			_ufos.push_back(u);
+		}
 	}
 
 	for (YAML::const_iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
@@ -333,21 +411,27 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for(YAML::const_iterator it = doc["discovered"].begin(); it != doc["discovered"].end(); ++it)
 	{
 		std::string research = it->as<std::string>();
-		_discovered.push_back(rule->getResearch(research));
+		if (rule->getResearch(research))
+		{
+			_discovered.push_back(rule->getResearch(research));
+		}
 	}
 	
 	const YAML::Node &research = doc["poppedResearch"];
 	for(YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
 		std::string research = it->as<std::string>();
-		_poppedResearch.push_back(rule->getResearch(research));
+		if (rule->getResearch(research))
+		{
+			_poppedResearch.push_back(rule->getResearch(research));
+		}
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
 	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		s->load(*i, rule);
+		s->load(*i, rule, this);
 		_deadSoldiers.push_back(s);
 	}
 
@@ -364,11 +448,11 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
  */
 void SavedGame::save(const std::string &filename) const
 {
-	std::string s = Options::getUserFolder() + filename + ".sav";
+	std::string s = Options::getUserFolder() + filename;
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		throw Exception("Failed to save " + filename + ".sav");
+		throw Exception("Failed to save " + filename);
 	}
 
 	YAML::Emitter out;
@@ -384,14 +468,15 @@ void SavedGame::save(const std::string &filename) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
+	brief["rulesets"] = Options::rulesets;
+	if (_ironman)
+		brief["ironman"] = _ironman;
 	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
 	YAML::Node node;
 	node["difficulty"] = (int)_difficulty;
 	node["monthsPassed"] = _monthsPassed;
-	node["radarLines"] = _radarLines;
-	node["detail"] = _detail;
 	node["graphRegionToggles"] = _graphRegionToggles;
 	node["graphCountryToggles"] = _graphCountryToggles;
 	node["graphFinanceToggles"] = _graphFinanceToggles;
@@ -399,6 +484,8 @@ void SavedGame::save(const std::string &filename) const
 	node["funds"] = _funds;
 	node["maintenance"] = _maintenance;
 	node["researchScores"] = _researchScores;
+	node["incomes"] = _incomes;
+	node["expenditures"] = _expenditures;
 	node["warned"] = _warned;
 	node["globeLon"] = _globeLon;
 	node["globeLat"] = _globeLat;
@@ -437,7 +524,7 @@ void SavedGame::save(const std::string &filename) const
 	// UFOs must be after missions
 	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
-		node["ufos"].push_back((*i)->save());
+		node["ufos"].push_back((*i)->save(getMonthsPassed() == -1));
 	}
 	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
 	{
@@ -463,7 +550,7 @@ void SavedGame::save(const std::string &filename) const
 
 /**
  * Returns the game's name shown in Save screens.
- * @return Difficulty level.
+ * @return Save name.
  */
 std::wstring SavedGame::getName() const
 {
@@ -472,7 +559,7 @@ std::wstring SavedGame::getName() const
 
 /**
  * Changes the game's name shown in Save screens.
- * @param difficulty New difficulty.
+ * @param name New name.
  */
 void SavedGame::setName(const std::wstring &name)
 {
@@ -495,6 +582,26 @@ GameDifficulty SavedGame::getDifficulty() const
 void SavedGame::setDifficulty(GameDifficulty difficulty)
 {
 	_difficulty = difficulty;
+}
+
+/**
+ * Returns if the game is set to ironman mode.
+ * Ironman games cannot be manually saved.
+ * @return Tony Stark
+ */
+bool SavedGame::isIronman() const
+{
+	return _ironman;
+}
+
+/**
+ * Changes if the game is set to ironman mode.
+ * Ironman games cannot be manually saved.
+ * @param ironman Tony Stark
+ */
+void SavedGame::setIronman(bool ironman)
+{
+	_ironman = ironman;
 }
 
 /**
@@ -521,6 +628,14 @@ const std::vector<int> &SavedGame::getFundsList() const
  */
 void SavedGame::setFunds(int funds)
 {
+	if (_funds.back() > funds)
+	{
+		_expenditures.back() += _funds.back() - funds;
+	}
+	else
+	{
+		_incomes.back() += funds - _funds.back();
+	}
 	_funds.back() = funds;
 }
 
@@ -588,11 +703,16 @@ void SavedGame::monthlyFunding()
 	_funds.push_back(_funds.back());
 	_maintenance.back() = getBaseMaintenance();
 	_maintenance.push_back(0);
-
+	_incomes.push_back(getCountryFunding());
+	_expenditures.push_back(getBaseMaintenance());
 	_researchScores.push_back(0);
+
+	if (_incomes.size() > 12)
+		_incomes.erase(_incomes.begin());
+	if (_expenditures.size() > 12)
+		_expenditures.erase(_expenditures.begin());
 	if (_researchScores.size() > 12)
 		_researchScores.erase(_researchScores.begin());
-
 	if(_funds.size() > 12)
 		_funds.erase(_funds.begin());
 	if(_maintenance.size() > 12)
@@ -679,6 +799,32 @@ std::vector<Base*> *SavedGame::getBases()
 }
 
 /**
+ * Returns the last selected player base.
+ * @return Pointer to base.
+ */
+Base *SavedGame::getSelectedBase()
+{
+	// in case a base was destroyed or something...
+	if (_selectedBase < _bases.size())
+	{
+		return _bases.at(_selectedBase);
+	}
+	else
+	{
+		return _bases.front();
+	}
+}
+
+/**
+ * Sets the last selected player base.
+ * @param base number of the base.
+ */
+void SavedGame::setSelectedBase(size_t base)
+{
+	_selectedBase = base;
+}
+
+/**
  * Returns an immutable list of player bases.
  * @return Pointer to base list.
  */
@@ -750,7 +896,8 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 /**
  * Add a ResearchProject to the list of already discovered ResearchProject
  * @param r The newly found ResearchProject
-*/
+ * @param ruleset the game Ruleset
+ */
 void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
@@ -790,20 +937,20 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 }
 
 /**
-   Returns the list of already discovered ResearchProject
+ *  Returns the list of already discovered ResearchProject
  * @return the list of already discovered ResearchProject
-*/
+ */
 const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() const
 {
 	return _discovered;
 }
 
 /**
-   Get the list of RuleResearch which can be researched in a Base.
-   * @param projects the list of ResearchProject which are available.
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of RuleResearch which can be researched in a Base.
+ * @param projects the list of ResearchProject which are available.
+ * @param ruleset the game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
@@ -901,11 +1048,11 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 }
 
 /**
-   Get the list of RuleManufacture which can be manufacture in a Base.
-   * @param productions the list of Productions which are available.
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of RuleManufacture which can be manufacture in a Base.
+ * @param productions the list of Productions which are available.
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<std::string> &items = ruleset->getManufactureList ();
@@ -929,17 +1076,22 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 }
 
 /**
-   Check whether a ResearchProject can be researched.
-   * @param r the RuleResearch to test.
-   * @param unlocked the list of currently unlocked RuleResearch
-   * @return true if the RuleResearch can be researched
-*/
+ * Check whether a ResearchProject can be researched.
+ * @param r the RuleResearch to test.
+ * @param unlocked the list of currently unlocked RuleResearch
+ * @param ruleset the current Ruleset
+ * @return true if the RuleResearch can be researched
+ */
 bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const
 {
+	if (r == 0)
+	{
+		return false;
+	}
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
-	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
+	if(_debug || std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
 	}
@@ -990,12 +1142,12 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 }
 
 /**
-   Get the list of newly available research projects once a ResearchProject has been completed. This function check for fake ResearchProject.
-   * @param dependables the list of RuleResearch which are now available.
-   * @param research The RuleResearch which has just been discovered
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of newly available research projects once a ResearchProject has been completed. This function check for fake ResearchProject.
+ * @param dependables the list of RuleResearch which are now available.
+ * @param research The RuleResearch which has just been discovered
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
@@ -1012,12 +1164,12 @@ void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables
 }
 
 /**
-   Get the list of newly available research projects once a ResearchProject has been completed. This function doesn't check for fake ResearchProject.
-   * @param dependables the list of RuleResearch which are now available.
-   * @param research The RuleResearch which has just been discovered
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of newly available research projects once a ResearchProject has been completed. This function doesn't check for fake ResearchProject.
+ * @param dependables the list of RuleResearch which are now available.
+ * @param research The RuleResearch which has just been discovered
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	std::vector<RuleResearch *> possibleProjects;
@@ -1037,12 +1189,12 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 }
 
 /**
-   Get the list of newly available manufacture projects once a ResearchProject has been completed. This function check for fake ResearchProject.
-   * @param dependables the list of RuleManufacture which are now available.
-   * @param research The RuleResearch which has just been discovered
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of newly available manufacture projects once a ResearchProject has been completed. This function check for fake ResearchProject.
+ * @param dependables the list of RuleManufacture which are now available.
+ * @param research The RuleResearch which has just been discovered
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base *) const
 {
 	const std::vector<std::string> &mans = ruleset->getManufactureList();
@@ -1124,9 +1276,10 @@ Soldier *SavedGame::getSoldier(int id) const
 
 /**
  * Handles the higher promotions (not the rookie-squaddie ones).
+ * @param participants a list of soldiers that were actually present at the battle.
  * @return Whether or not some promotions happened - to show the promotions screen.
  */
-bool SavedGame::handlePromotions()
+bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 {
 	size_t soldiersPromoted = 0, soldiersTotal = 0;
 
@@ -1140,9 +1293,14 @@ bool SavedGame::handlePromotions()
 	// and the soldier with the heighest promotion score of the rank below it
 
 	size_t filledPositions = 0, filledPositions2 = 0;
+	std::vector<Soldier*>::const_iterator soldier, stayedHome;
+	stayedHome = participants.end();
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COMMANDER);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
-	if (filledPositions < 1 && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < 1 && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		// only promote one colonel to commander
 		highestRanked->promoteRank();
@@ -1150,21 +1308,30 @@ bool SavedGame::handlePromotions()
 	}
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
-	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
-	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
-	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0)
+	soldier = std::find(participants.begin(), participants.end(), highestRanked);
+
+	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0 &&
+		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
@@ -1175,9 +1342,9 @@ bool SavedGame::handlePromotions()
 
 /**
  * Checks how many soldiers of a rank exist and which one has the highest score.
- * @param Pointer to an int to store the total in.
- * @param Rank to inspect.
- * @return The highest scoring soldier of that rank.
+ * @param highestRanked Pointer to store the highest-scoring soldier of that rank.
+ * @param total Pointer to an int to store the total in.
+ * @param rank Rank to inspect.
  */
 void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank)
 {
@@ -1191,12 +1358,7 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 			if ((*j)->getRank() == (SoldierRank)rank)
 			{
 				(*total)++;
-				UnitStats *s = (*j)->getCurrentStats();
-				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
-				int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
-				int v3 = v2 + s->melee + s->throwing + s->strength;
-				if (s->psiSkill > 0) v3 += s->psiStrength + 2 * s->psiSkill;
-				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
+				int score = getSoldierScore(*j);
 				if (score > highestScore)
 				{
 					highestScore = score;
@@ -1204,7 +1366,35 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 				}
 			}
 		}
+		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
+		{
+			if ((*j)->getType() == TRANSFER_SOLDIER && (*j)->getSoldier()->getRank() == (SoldierRank)rank)
+			{
+				(*total)++;
+				int score = getSoldierScore((*j)->getSoldier());
+				if (score > highestScore)
+				{
+					highestScore = score;
+					*highestRanked = (*j)->getSoldier();
+				}
+			}
+		}
 	}
+}
+
+/**
+ * Evaluate the score of a soldier based on all of his stats, missions and kills.
+ * @param soldier the soldier to get a score for.
+ * @return this soldier's score.
+ */
+int SavedGame::getSoldierScore(Soldier *soldier)
+{
+	UnitStats *s = soldier->getCurrentStats();
+	int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
+	int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
+	int v3 = v2 + s->melee + s->throwing + s->strength;
+	if (s->psiSkill > 0) v3 += s->psiStrength + 2 * s->psiSkill;
+	return v3 + 10 * ( soldier->getMissions() + soldier->getKills() );
 }
 
 /**
@@ -1288,11 +1478,28 @@ void SavedGame::addResearchScore(int score)
  * return the list of research scores
  * @return list of research scores.
  */
-std::vector<int> SavedGame::getResearchScores()
+std::vector<int> &SavedGame::getResearchScores()
 {
 	return _researchScores;
 }
 
+/**
+ * return the list of income scores
+ * @return list of income scores.
+ */
+std::vector<int> SavedGame::getIncomes()
+{
+	return _incomes;
+}
+
+/**
+ * return the list of expenditures scores
+ * @return list of expenditures scores.
+ */
+std::vector<int> SavedGame::getExpenditures()
+{
+	return _expenditures;
+}
 /**
  * return if the player has been 
  * warned about poor performance.
@@ -1417,38 +1624,6 @@ void SavedGame::setGraphFinanceToggles(const std::string &value)
 void SavedGame::addMonth()
 {
 	++_monthsPassed;
-}
-
-/*
- * Toggles the state of the radar line drawing.
- */
-void SavedGame::toggleRadarLines()
-{
-	_radarLines = !_radarLines;
-}
-
-/*
- * @return the state of the radar line drawing.
- */
-bool SavedGame::getRadarLines()
-{
-	return _radarLines;
-}
-
-/*
- * Toggles the state of the detail drawing.
- */
-void SavedGame::toggleDetail()
-{
-	_detail = !_detail;
-}
-
-/*
- * @return the state of the detail drawing.
- */
-bool SavedGame::getDetail()
-{
-	return _detail;
 }
 
 /*

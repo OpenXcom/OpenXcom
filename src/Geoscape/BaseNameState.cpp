@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,10 +50,10 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
 	_btnOk = new TextButton(162, 12, 47, 118);
 	_txtTitle = new Text(182, 17, 37, 70);
-	_edtName = new TextEdit(127, 16, 59, 94);
+	_edtName = new TextEdit(this, 127, 16, 59, 94);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -69,8 +69,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
-	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, Options::keyCancel);
 
 	//something must be in the name before it is acceptable
 	_btnOk->setVisible(false);
@@ -82,8 +82,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
-	_edtName->focus();
-	_edtName->onKeyboardPress((ActionHandler)&BaseNameState::edtNameKeyPress);
+	_edtName->setFocus(true, false);
+	_edtName->onChange((ActionHandler)&BaseNameState::edtNameChange);
 }
 
 /**
@@ -95,35 +95,19 @@ BaseNameState::~BaseNameState()
 }
 
 /**
- *
- */
-void BaseNameState::nameBase()
-{
-	_base->setName(_edtName->getText());
-	_game->popState();
-	_game->popState();
-	if (!_first)
-	{
-		_game->popState();
-	}
-	if (!_first || Options::getBool("customInitialBase"))
-	{
-		_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
-	}
-}
-
-/**
- * Returns to the previous screen.
+ * Updates the base name and disables the OK button
+ * if no name is entered.
  * @param action Pointer to an action.
  */
-void BaseNameState::edtNameKeyPress(Action *action)
+void BaseNameState::edtNameChange(Action *action)
 {
+	_base->setName(_edtName->getText());
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		if(!_edtName->getText().empty())
+		if (!_edtName->getText().empty())
 		{
-			nameBase();
+			btnOkClick(action);
 		}
 	}
 	else
@@ -138,7 +122,19 @@ void BaseNameState::edtNameKeyPress(Action *action)
  */
 void BaseNameState::btnOkClick(Action *)
 {
-	nameBase();
+	if (!_edtName->getText().empty())
+	{
+		_game->popState();
+		_game->popState();
+		if (!_first || Options::customInitialBase)
+		{
+			if (!_first)
+			{
+				_game->popState();
+			}
+			_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
+		}
+	}
 }
 
 }

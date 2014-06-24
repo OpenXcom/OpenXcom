@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,8 +48,6 @@ public:
 	LowFuelState(Game *game, Craft *craft, GeoscapeState *state);
 	/// Cleans up the Low Fuel state.
 	~LowFuelState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the Ok button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Ok - 5 Secs button.

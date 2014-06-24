@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #define OPENXCOM_ARTICLESTATE_H
 
 #include "../Engine/State.h"
+#include "../Ruleset/RuleItem.h"
 #include <string>
 
 namespace OpenXcom
@@ -49,6 +50,9 @@ namespace OpenXcom
 		std::string getId() const { return _id; }
 
 	protected:
+
+		/// converts damage type to string
+		std::string getDamageTypeText(ItemDamageType dt) const;
 
 		/// screen layout helpers
 		void initLayout();

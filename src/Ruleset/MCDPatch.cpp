@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -83,6 +83,36 @@ void MCDPatch::load(const YAML::Node &node)
 			int specialType = (*i)["specialType"].as<int>();
 			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
 		}
+		if ((*i)["explosive"])
+		{
+			int explosive = (*i)["explosive"].as<int>();
+			_explosives.push_back(std::make_pair(MCDIndex, explosive));
+		}
+		if ((*i)["armor"])
+		{
+			int armor = (*i)["armor"].as<int>();
+			_armors.push_back(std::make_pair(MCDIndex, armor));
+		}
+		if ((*i)["flammability"])
+		{
+			int flammability = (*i)["flammability"].as<int>();
+			_flammabilities.push_back(std::make_pair(MCDIndex, flammability));
+		}
+		if ((*i)["fuel"])
+		{
+			int fuel = (*i)["fuel"].as<int>();
+			_fuels.push_back(std::make_pair(MCDIndex, fuel));
+		}
+		if ((*i)["HEBlock"])
+		{
+			int HEBlock = (*i)["HEBlock"].as<int>();
+			_HEBlocks.push_back(std::make_pair(MCDIndex, HEBlock));
+		}
+		if ((*i)["noFloor"])
+		{
+			bool noFloor = (*i)["noFloor"].as<bool>();
+			_noFloors.push_back(std::make_pair(MCDIndex, noFloor));
+		}
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
@@ -124,6 +154,30 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _specialTypes.begin(); i != _specialTypes.end(); ++i)
 	{
 		dataSet->getObjects()->at(i->first)->setSpecialType(i->second, dataSet->getObjects()->at(i->first)->getObjectType());
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _explosives.begin(); i != _explosives.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setExplosive(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setArmor(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _flammabilities.begin(); i != _flammabilities.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setFlammable(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _fuels.begin(); i != _fuels.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setFuel(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _HEBlocks.begin(); i != _HEBlocks.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setHEBlock(i->second);
+	}
+	for (std::vector<std::pair<size_t, bool> >::const_iterator i = _noFloors.begin(); i != _noFloors.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setNoFloor(i->second);
 	}
 	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator i = _LOFTS.begin(); i != _LOFTS.end(); ++i)
 	{

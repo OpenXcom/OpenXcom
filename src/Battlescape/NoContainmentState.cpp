@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,7 +41,8 @@ NoContainmentState::NoContainmentState(Game *game) : State(game)
 	_txtTitle = new Text(220, 64, 50, 8);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -55,8 +56,8 @@ NoContainmentState::NoContainmentState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NoContainmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY"));

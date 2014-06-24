@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,6 +26,7 @@ namespace OpenXcom
  * Initializes a vehicle of the specified type.
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
+ * @param size Size in tiles.
  */
 Vehicle::Vehicle(RuleItem *rules, int ammo, int size) : _rules(rules), _ammo(ammo), _size(size)
 {
@@ -96,8 +97,9 @@ void Vehicle::setAmmo(int ammo)
 }
 
 /**
- * Returns the sizer of in this vehicle.
- * @return Weapon ammo.
+ * Returns the size occupied by this vehicle
+ * in a transport craft.
+ * @return Size in tiles.
  */
 int Vehicle::getSize() const
 {

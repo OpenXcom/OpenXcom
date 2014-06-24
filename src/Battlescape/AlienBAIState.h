@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,8 +20,8 @@
 #define OPENXCOM_ALIENBAISTATE_H
 
 #include "BattleAIState.h"
+#include "Position.h"
 #include <vector>
-
 
 namespace OpenXcom
 {
@@ -45,6 +45,7 @@ protected:
 	bool _traceAI, _wasHit, _didPsi;
 	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
+	std::vector<int> _reachable, _reachableWithAttack;
 public:
 	/// Creates a new AlienBAIState linked to the game and a certain unit.
 	AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node);
@@ -89,7 +90,7 @@ public:
 	/// Selects a suitable position from which to attack.
 	bool findFirePoint();
 	/// Decides if we should throw a grenade/launch a missile to this position.
-	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff) const;
+	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade = false) const;
 	/// Attempts to take a melee attack/charge an enemy we can see.
 	void meleeAction();
 	/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
@@ -104,6 +105,7 @@ public:
 	bool psiAction();
 	/// Performs a melee attack action.
 	void meleeAttack();
+	bool validTarget(BattleUnit* unit, bool assessDanger, bool includeCivs) const;
 };
 
 }

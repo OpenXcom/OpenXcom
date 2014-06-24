@@ -22,81 +22,25 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
- *
- * Version 1.13, Dec 12 2012, Toni Ronkko
- * Use traditional 8+3 file name if the name cannot be represented in the
- * default ANSI code page.  Now compiles again with MSVC 6.0.  Thanks to
- * Konstantin Khomoutov for testing.
- *
- * Version 1.12.1, Oct 1 2012, Toni Ronkko
- * Bug fix: renamed wide-character DIR structure _wDIR to _WDIR (with
- * capital W) in order to maintain compatibility with MingW.
- *
- * Version 1.12, Sep 30 2012, Toni Ronkko
- * Define PATH_MAX and NAME_MAX.  Added wide-character variants _wDIR, 
- * _wdirent, _wopendir(), _wreaddir(), _wclosedir() and _wrewinddir().
- * Thanks to Edgar Buerkle and Jan Nijtmans for ideas and code.
- *
- * Do not include windows.h.  This allows dirent.h to be integrated more
- * easily into programs using winsock.  Thanks to Fernando Azaldegui.
- *
- * Version 1.11, Mar 15, 2011, Toni Ronkko
- * Defined FILE_ATTRIBUTE_DEVICE for MSVC 6.0.
- *
- * Version 1.10, Aug 11, 2010, Toni Ronkko
- * Added d_type and d_namlen fields to dirent structure.  The former is
- * especially useful for determining whether directory entry represents a
- * file or a directory.  For more information, see
- * http://www.delorie.com/gnu/docs/glibc/libc_270.html
- *
- * Improved conformance to the standards.  For example, errno is now set
- * properly on failure and assert() is never used.  Thanks to Peter Brockam
- * for suggestions.
- *
- * Fixed a bug in rewinddir(): when using relative directory names, change
- * of working directory no longer causes rewinddir() to fail.
- *
- * Version 1.9, Dec 15, 2009, John Cunningham
- * Added rewinddir member function
- *
- * Version 1.8, Jan 18, 2008, Toni Ronkko
- * Using FindFirstFileA and WIN32_FIND_DATAA to avoid converting string
- * between multi-byte and unicode representations.  This makes the
- * code simpler and also allows the code to be compiled under MingW.  Thanks
- * to Azriel Fasten for the suggestion.
- *
- * Mar 4, 2007, Toni Ronkko
- * Bug fix: due to the strncpy_s() function this file only compiled in
- * Visual Studio 2005.  Using the new string functions only when the
- * compiler version allows.
- *
- * Nov  2, 2006, Toni Ronkko
- * Major update: removed support for Watcom C, MS-DOS and Turbo C to
- * simplify the file, updated the code to compile cleanly on Visual
- * Studio 2005 with both unicode and multi-byte character strings,
- * removed rewinddir() as it had a bug.
- *
- * Aug 20, 2006, Toni Ronkko
- * Removed all remarks about MSVC 1.0, which is antiqued now.  Simplified
- * comments by removing SGML tags.
- *
- * May 14 2002, Toni Ronkko
- * Embedded the function definitions directly to the header so that no
- * source modules need to be included in the Visual Studio project.  Removed
- * all the dependencies to other projects so that this header file can be
- * used independently.
- *
- * May 28 1998, Toni Ronkko
- * First version.
- *****************************************************************************/
+ * $Id: dirent.h,v 1.20 2014/03/19 17:52:23 tronkko Exp $
+ */
 #ifndef DIRENT_H
 #define DIRENT_H
 
 #if defined(_MSC_VER)
 
+/*
+ * Define architecture flags so we don't need to include windows.h.
+ * Avoiding windows.h makes it simpler to use windows sockets in conjunction
+ * with dirent.h.
+ */
 #if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_IX86)
 #   define _X86_
 #endif
+#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_AMD64)
+#define _AMD64_
+#endif
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <windef.h>
@@ -189,6 +133,7 @@
 #define DT_SOCK     S_IFSOCK
 #define DT_CHR      S_IFCHR
 #define DT_BLK      S_IFBLK
+#define DT_LNK      S_IFLNK
 
 /* Macros for converting between st_mode and d_type */
 #define IFTODT(mode) ((mode) & S_IFMT)
@@ -212,7 +157,7 @@
 #define _D_EXACT_NAMLEN(p) ((p)->d_namlen)
 
 /* Return number of bytes needed to store d_namlen */
-#define _D_ALLOC_NAMLEN(p) (PATH_MAX + 1)
+#define _D_ALLOC_NAMLEN(p) (PATH_MAX)
 
 
 #ifdef __cplusplus
@@ -226,7 +171,7 @@ struct _wdirent {
     unsigned short d_reclen;                    /* Structure size */
     size_t d_namlen;                            /* Length of name without \0 */
     int d_type;                                 /* File type */
-    wchar_t d_name[PATH_MAX + 1];               /* File name */
+    wchar_t d_name[PATH_MAX];                   /* File name */
 };
 typedef struct _wdirent _wdirent;
 
@@ -260,7 +205,7 @@ struct dirent {
     unsigned short d_reclen;                    /* Structure size */
     size_t d_namlen;                            /* Length of name without \0 */
     int d_type;                                 /* File type */
-    char d_name[PATH_MAX + 1];                  /* File name */
+    char d_name[PATH_MAX];                      /* File name */
 };
 typedef struct dirent dirent;
 
@@ -422,7 +367,7 @@ _wreaddir(
          * to PATH_MAX characters and zero-terminate the buffer.
          */
         n = 0;
-        while (n < PATH_MAX  &&  datap->cFileName[n] != 0) {
+        while (n + 1 < PATH_MAX  &&  datap->cFileName[n] != 0) {
             entp->d_name[n] = datap->cFileName[n];
             n++;
         }
@@ -591,12 +536,11 @@ opendir(
     /* Allocate memory for DIR structure */
     dirp = (DIR*) malloc (sizeof (struct DIR));
     if (dirp) {
-        wchar_t wname[PATH_MAX + 1];
+        wchar_t wname[PATH_MAX];
         size_t n;
 
         /* Convert directory name to wide-character string */
-        error = dirent_mbstowcs_s(
-            &n, wname, PATH_MAX + 1, dirname, PATH_MAX);
+        error = dirent_mbstowcs_s (&n, wname, PATH_MAX, dirname, PATH_MAX);
         if (!error) {
 
             /* Open directory stream using wide-character name */
@@ -661,7 +605,7 @@ readdir(
 
         /* Attempt to convert file name to multi-byte string */
         error = dirent_wcstombs_s(
-            &n, dirp->ent.d_name, MAX_PATH + 1, datap->cFileName, MAX_PATH);
+            &n, dirp->ent.d_name, PATH_MAX, datap->cFileName, PATH_MAX);
 
         /* 
          * If the file name cannot be represented by a multi-byte string,
@@ -675,9 +619,8 @@ readdir(
          */
         if (error  &&  datap->cAlternateFileName[0] != '\0') {
             error = dirent_wcstombs_s(
-                &n, dirp->ent.d_name, MAX_PATH + 1, datap->cAlternateFileName,
-                sizeof (datap->cAlternateFileName) / 
-                    sizeof (datap->cAlternateFileName[0]));
+                &n, dirp->ent.d_name, PATH_MAX, 
+                datap->cAlternateFileName, PATH_MAX);
         }
 
         if (!error) {
@@ -787,12 +730,15 @@ dirent_mbstowcs_s(
     /* Older Visual Studio or non-Microsoft compiler */
     size_t n;
 
-    /* Convert to wide-character string */
-    n = mbstowcs (wcstr, mbstr, count);
-    if (n < sizeInWords) {
+    /* Convert to wide-character string (or count characters) */
+    n = mbstowcs (wcstr, mbstr, sizeInWords);
+    if (!wcstr  ||  n < count) {
 
         /* Zero-terminate output buffer */
-        if (wcstr) {
+        if (wcstr  &&  sizeInWords) {
+            if (n >= sizeInWords) {
+                n = sizeInWords - 1;
+            }
             wcstr[n] = 0;
         }
 
@@ -822,7 +768,7 @@ static int
 dirent_wcstombs_s(
     size_t *pReturnValue,
     char *mbstr,
-    size_t sizeInBytes,
+    size_t sizeInBytes, /* max size of mbstr */
     const wchar_t *wcstr,
     size_t count)
 {
@@ -839,12 +785,15 @@ dirent_wcstombs_s(
     /* Older Visual Studio or non-Microsoft compiler */
     size_t n;
 
-    /* Convert to multi-byte string */
-    n = wcstombs (mbstr, wcstr, count);
-    if (n < sizeInBytes) {
+    /* Convert to multi-byte string (or count the number of bytes needed) */
+    n = wcstombs (mbstr, wcstr, sizeInBytes);
+    if (!mbstr  ||  n < count) {
 
         /* Zero-terminate output buffer */
-        if (mbstr) {
+        if (mbstr  &&  sizeInBytes) {
+            if (n >= sizeInBytes) {
+                n = sizeInBytes - 1;
+            }
             mbstr[n] = '\0';
         }
 
@@ -874,14 +823,14 @@ static void
 dirent_set_errno(
     int error)
 {
-#if defined(_MSC_VER)
+#if defined(_MSC_VER)  &&  _MSC_VER >= 1400
 
-    /* Microsoft Visual Studio */
+    /* Microsoft Visual Studio 2005 and later */
     _set_errno (error);
 
 #else
 
-    /* Non-Microsoft compiler */
+    /* Non-Microsoft compiler or older Microsoft compiler */
     errno = error;
 
 #endif

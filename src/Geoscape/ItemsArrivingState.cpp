@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,6 +18,7 @@
  */
 #include "ItemsArrivingState.h"
 #include <sstream>
+#include <algorithm>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -28,9 +29,11 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
+#include "../Savegame/Vehicle.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -61,7 +64,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_lstTransfers = new TextList(271, 112, 14, 50);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -81,12 +84,12 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOkClick, Options::keyCancel);
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)&ItemsArrivingState::btnGotoBaseClick);
-	_btnGotoBase->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnGotoBaseClick, (SDLKey)Options::getInt("keyOk"));
+	_btnGotoBase->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnGotoBaseClick, Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -117,27 +120,41 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 			{
 				_base = (*i);
 
-				// Check if it's ammo to reload a craft
-				if ((*j)->getType() == TRANSFER_ITEM && _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
+				// Check if we have an automated use for an item
+				if ((*j)->getType() == TRANSFER_ITEM)
 				{
+					RuleItem *item = _game->getRuleset()->getItem((*j)->getItems());
 					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 					{
-						if ((*c)->getStatus() != "STR_READY")
-							continue;
-						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						// Check if it's ammo to reload a craft
+						if ((*c)->getStatus() == "STR_READY")
 						{
-						
-							if ((*w) != 0 && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 							{
-								(*w)->setRearming(true);
-								(*c)->setStatus("STR_REARMING");
+								if ((*w) != 0 && (*w)->getRules()->getClipItem() == item->getType() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+								{
+									(*w)->setRearming(true);
+									(*c)->setStatus("STR_REARMING");
+								}
+							}
+						}
+						// Check if it's ammo to reload a vehicle
+						for (std::vector<Vehicle*>::iterator v = (*c)->getVehicles()->begin(); v != (*c)->getVehicles()->end(); ++v)
+						{
+							std::vector<std::string>::iterator ammo = std::find((*v)->getRules()->getCompatibleAmmo()->begin(), (*v)->getRules()->getCompatibleAmmo()->end(), item->getType());
+							if (ammo != (*v)->getRules()->getCompatibleAmmo()->end() && (*v)->getAmmo() < item->getClipSize())
+							{
+								int used = std::min((*j)->getQuantity(), item->getClipSize() - (*v)->getAmmo());
+								(*v)->setAmmo((*v)->getAmmo() + used);
+								// Note that the items have already been delivered, so we remove them from the base, not the transfer
+								_base->getItems()->removeItem(item->getType(), used);
 							}
 						}
 					}
 				}
 
 				// Remove transfer
-				std::wstringstream ss;
+				std::wostringstream ss;
 				ss << (*j)->getQuantity();
 				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
 				delete *j;
@@ -157,14 +174,6 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 ItemsArrivingState::~ItemsArrivingState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void ItemsArrivingState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 }
 
 /**

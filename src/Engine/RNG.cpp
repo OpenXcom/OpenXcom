@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,128 +17,63 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RNG.h"
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <ctime>
-#include <climits>
-
-/*Period parameters */
-#define CMATH_N 624
-#define CMATH_M 397
-#define CMATH_MATRIX_A 0x9908b0df   /*constant vector a */
-#define CMATH_UPPER_MASK 0x80000000 /*most significant w-r bits */
-#define CMATH_LOWER_MASK 0x7fffffff /*least significant r bits */
-
-/*Tempering parameters */
-#define CMATH_TEMPERING_MASK_B 0x9d2c5680
-#define CMATH_TEMPERING_MASK_C 0xefc60000
-#define CMATH_TEMPERING_SHIFT_U(y)  (y >> 11)
-#define CMATH_TEMPERING_SHIFT_S(y)  (y << 7)
-#define CMATH_TEMPERING_SHIFT_T(y)  (y << 15)
-#define CMATH_TEMPERING_SHIFT_L(y)  (y >> 18)
+#include <math.h>
+#include <time.h>
 
 namespace OpenXcom
 {
 namespace RNG
 {
 
-unsigned int rseed = 1;
-unsigned int mt[CMATH_N];    /*the array for the state vector */
-int mti = CMATH_N+1;    /*mti==N+1 means mt [N ] is not initialized **/
+/*  Written in 2014 by Sebastiano Vigna (vigna@acm.org)
+
+To the extent possible under law, the author has dedicated all copyright
+and related and neighboring rights to this software to the public domain
+worldwide. This software is distributed without any warranty.
+
+See <http://creativecommons.org/publicdomain/zero/1.0/>. */
+
+/* This is a good generator if you're short on memory, but otherwise we
+   rather suggest to use a xorshift128+ (for maximum speed) or
+   xorshift1024* (for speed and very long period) generator. */
+
+uint64_t x = time(0); /* The state must be seeded with a nonzero value. */
+
+uint64_t next()
+{
+	x ^= x >> 12; // a
+	x ^= x << 25; // b
+	x ^= x >> 27; // c
+	return x * 2685821657736338717LL;
+}
 
 /**
 * Returns the current seed in use by the generator.
 * @return Current seed.
 */
-unsigned int getSeed()
+uint64_t getSeed()
 {
-	return rseed;
+	return x;
 }
 
 /**
 * Changes the current seed in use by the generator.
 * @param n New seed.
 */
-void setSeed(unsigned int n)
+void setSeed(uint64_t n)
 {
-	/* setting initial seeds to mt[N] using         */
-	/* the generator Line 25 of Table 1 in          */
-	/* [KNUTH 1981, The Art of Computer Programming */
-	/*    Vol. 2 (2nd Ed.), pp102]                  */
-	mt[0]= n & 0xffffffff;
-	for (mti=1; mti<CMATH_N; mti++)
-		mt[mti] = (69069 * mt[mti-1]) & 0xffffffff;
-
-	rseed = n;
-}
-
-/**
- * Generates a number using a Mersenne Twister
- * pseudorandom number generator.
- * @return Random unsigned 32-bit number (0-LONG_MAX)
- */
-unsigned int random()
-{
-	unsigned int y;
-    static unsigned int mag01[2]={0x0, CMATH_MATRIX_A};
-
-    /* mag01[x] = x * MATRIX_A  for x=0,1 */
-
-    if (mti >= CMATH_N) { /* generate N words at one time */
-        int kk;
-
-        if (mti == CMATH_N+1)   /* if sgenrand() has not been called, */
-            setSeed(4357);      /* a default initial seed is used   */
-
-        for (kk=0;kk<CMATH_N-CMATH_M;kk++) {
-            y = (mt[kk]&CMATH_UPPER_MASK)|(mt[kk+1]&CMATH_LOWER_MASK);
-            mt[kk] = mt[kk+CMATH_M] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-        for (;kk<CMATH_N-1;kk++) {
-            y = (mt[kk]&CMATH_UPPER_MASK)|(mt[kk+1]&CMATH_LOWER_MASK);
-            mt[kk] = mt[kk+(CMATH_M-CMATH_N)] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-        y = (mt[CMATH_N-1]&CMATH_UPPER_MASK)|(mt[0]&CMATH_LOWER_MASK);
-        mt[CMATH_N-1] = mt[CMATH_M-1] ^ (y >> 1) ^ mag01[y & 0x1];
-
-        mti = 0;
-    }
-  
-    y = mt[mti++];
-    y ^= CMATH_TEMPERING_SHIFT_U(y);
-    y ^= CMATH_TEMPERING_SHIFT_S(y) & CMATH_TEMPERING_MASK_B;
-    y ^= CMATH_TEMPERING_SHIFT_T(y) & CMATH_TEMPERING_MASK_C;
-    y ^= CMATH_TEMPERING_SHIFT_L(y);
-
-	return y;
-}
-
-/**
-* Seeds the random generator with the current time.
-*/
-void init()
-{
-	setSeed((unsigned int)time(NULL));
-}
-
-/**
-* Seeds the random generator with a new number.
-* @param seed New seed.
-*/
-void init(unsigned int seed)
-{
-	setSeed(seed);
+	x = n;
 }
 
 /**
  * Generates a random integer number within a certain range.
- * @param min Minimum number.
- * @param max Maximum number.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
  * @return Generated number.
  */
 int generate(int min, int max)
 {
-	unsigned int num = random();
+	uint64_t num = next();
 	return (int)(num % (max - min + 1) + min);
 }
 
@@ -150,8 +85,8 @@ int generate(int min, int max)
  */
 double generate(double min, double max)
 {
-	double num = random();
-	return (double)(num / ((double)UINT_MAX / (max - min)) + min);
+	double num = next();
+	return (double)(num / ((double)UINT64_MAX / (max - min)) + min);
 }
 
 /**
@@ -198,6 +133,17 @@ double boxMuller(double m, double s)
 bool percent(int value)
 {
 	return (generate(0, 99) < value);
+}
+
+/**
+ * Generates a random positive integer up to a number.
+ * @param max Maximum number, exclusive.
+ * @return Generated number.
+ */
+int generateEx(int max)
+{
+	uint64_t num = next();
+	return (int)(num % max);
 }
 
 }

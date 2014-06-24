@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,7 +29,6 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class SavedGameState;
 
 /**
  * window used to confirm save game deletion.
@@ -40,12 +39,11 @@ private:
 	TextButton *_btnNo, *_btnYes;
 	Window *_window;
 	Text *_txtMessage;
-	SavedGameState *_parent;
 	std::string _filename;
 	OptionsOrigin _origin;
 public:
 	/// Creates the Confirm state.
-	DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent);
+	DeleteGameState(Game *game, OptionsOrigin origin, const std::string &save);
 	/// Cleans up the Confirm state.
 	~DeleteGameState();
 	/// Handler for clicking the confirm button.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,8 +44,6 @@ public:
 	ConfirmCydoniaState(Game *game, Craft *craft);
 	/// Cleans up the Select Destination state.
 	~ConfirmCydoniaState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the Cancel button.
 	void btnNoClick(Action *action);
 	/// Handler for clicking the Cydonia mission button.

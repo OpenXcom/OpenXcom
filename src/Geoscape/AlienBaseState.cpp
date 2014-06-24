@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,13 +51,14 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(308, 60, 6, 60);
 
+	setPalette("PAL_GEOSCAPE", 3);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
 
 	centerAllSurfaces();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
@@ -66,8 +67,8 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AlienBaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,11 +36,15 @@ public:
 	virtual ~LanguagePlurality() { /* Empty by design. */ }
 	/// Get dictionary key suffix for value of @a n.
 	/**
-	@param count The number controlling the plurality.
-	@return Pointer to the zero-terminated suffix string.
+	 * @param n The number controlling the plurality.
+	 * @return Pointer to the zero-terminated suffix string.
 	*/
 	virtual const char *getSuffix(unsigned n) const = 0;
 	/// Create a concrete instance for a given language.
+	/**
+	 * @param language Locale of the language.
+	 * @return Plurality rules for that language.
+	 */
 	static LanguagePlurality *create(const std::string &language);
 
 protected:

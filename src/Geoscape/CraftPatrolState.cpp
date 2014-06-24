@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,7 +51,7 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_txtPatrolling = new Text(224, 17, 16, 120);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnOk);
@@ -68,12 +68,12 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftPatrolState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftPatrolState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftPatrolState::btnOkClick, Options::keyCancel);
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)&CraftPatrolState::btnRedirectClick);
-	_btnRedirect->onKeyboardPress((ActionHandler)&CraftPatrolState::btnRedirectClick, (SDLKey)Options::getInt("keyOk"));
+	_btnRedirect->onKeyboardPress((ActionHandler)&CraftPatrolState::btnRedirectClick, Options::keyOk);
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
@@ -95,14 +95,6 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 CraftPatrolState::~CraftPatrolState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void CraftPatrolState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
 
 /**

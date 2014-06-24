@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,7 @@
  */
 #include "BuildNewBaseState.h"
 #include <cmath>
-#include "../aresame.h"
+#include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -49,13 +49,13 @@ namespace OpenXcom
  */
 BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
 {
-	int dx = Screen::getDX();
-	int dy = Screen::getDY();
+	int dx = _game->getScreen()->getDX();
+	int dy = _game->getScreen()->getDY();
 	_screen = false;
 
-	_oldshowradar = _globe->getShowRadar();
+	_oldshowradar = Options::globeRadarLines;
 	if (!_oldshowradar)
-		_globe->toggleRadarLines();
+		Options::globeRadarLines = true;
 	// Create objects
 	_btnRotateLeft = new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight = new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
@@ -64,7 +64,8 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnZoomIn = new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
 
-	_window = new Window(this, 256, 28, 0 + dx, 0);
+	_window = new Window(this, 256, 28, 0, 0);
+	_window->setX(dx);
 	_window->setDY(0);
 	_btnCancel = new TextButton(54, 12, 186 + dx, 8);
 	_txtTitle = new Text(180, 16, 8 + dx, 6);
@@ -74,7 +75,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_hoverTimer->start();
 	
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	setPalette("PAL_GEOSCAPE");
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -92,31 +93,31 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
-	_btnRotateLeft->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
-	_btnRotateLeft->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
+	_btnRotateLeft->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress, Options::keyGeoLeft);
+	_btnRotateLeft->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease, Options::keyGeoLeft);
 
 	_btnRotateRight->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateRightPress);
 	_btnRotateRight->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease);
-	_btnRotateRight->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateRightPress, (SDLKey)Options::getInt("keyGeoRight"));
-	_btnRotateRight->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease, (SDLKey)Options::getInt("keyGeoRight"));
+	_btnRotateRight->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateRightPress, Options::keyGeoRight);
+	_btnRotateRight->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease, Options::keyGeoRight);
 
 	_btnRotateUp->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateUpPress);
 	_btnRotateUp->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease);
-	_btnRotateUp->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateUpPress, (SDLKey)Options::getInt("keyGeoUp"));
-	_btnRotateUp->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease, (SDLKey)Options::getInt("keyGeoUp"));
+	_btnRotateUp->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateUpPress, Options::keyGeoUp);
+	_btnRotateUp->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease, Options::keyGeoUp);
 
 	_btnRotateDown->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease);
-	_btnRotateDown->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateDownPress, (SDLKey)Options::getInt("keyGeoDown"));
-	_btnRotateDown->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease, (SDLKey)Options::getInt("keyGeoDown"));
+	_btnRotateDown->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateDownPress, Options::keyGeoDown);
+	_btnRotateDown->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease, Options::keyGeoDown);
 
 	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomIn->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, (SDLKey)Options::getInt("keyGeoZoomIn"));
+	_btnZoomIn->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, Options::keyGeoZoomIn);
 
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
+	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
 	
 	// dirty hacks to get the rotate buttons to work in "classic" style
 	_btnRotateLeft->setListButton();
@@ -130,7 +131,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
@@ -148,19 +149,19 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-	if (!_game->isQuitting() && _globe->getShowRadar() != _oldshowradar)
+	if (Options::globeRadarLines != _oldshowradar)
 	{
-		_globe->toggleRadarLines();
+		Options::globeRadarLines = false;
 	}
 	delete _hoverTimer;
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
+ * Stops the globe and adds radar hover effect.
  */
 void BuildNewBaseState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	State::init();
 	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
 	_globe->rotateStop();
 	_globe->setNewBaseHover();
@@ -201,15 +202,16 @@ void BuildNewBaseState::hoverRedraw(void)
 {
 	double lon, lat;
 	_globe->cartToPolar(_mousex, _mousey, &lon, &lat);
-	_globe->setNewBaseHoverPos(lon,lat);
-
-	_globe->setNewBaseHover();
-	
-	if (_globe->getShowRadar() && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
+	if (lon == lon && lat == lat)
+	{
+		_globe->setNewBaseHoverPos(lon,lat);
+		_globe->setNewBaseHover();
+	}
+	if (Options::globeRadarLines && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
 	{
 		_oldlat=lat;
 		_oldlon=lon;
-		_globe->draw();
+		_globe->invalidate();
 	}
 }
 
@@ -372,4 +374,20 @@ void BuildNewBaseState::btnCancelClick(Action *)
 	_game->popState();
 }
 
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void BuildNewBaseState::resize(int &dX, int &dY)
+{
+	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setX((*i)->getX() + dX / 2);
+		if (*i != _window && *i != _btnCancel && *i != _txtTitle)
+		{
+			(*i)->setY((*i)->getY() + dY / 2);
+		}
+	}
+}
 }

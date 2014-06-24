@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,18 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AbandonGameState.h"
-#include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
 #include "MainMenuState.h"
-#include "../Engine/Options.h"
-#include "SaveState.h"
+#include "../Engine/Screen.h"
+#include "../Savegame/SavedGame.h"
+#include "SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -56,7 +56,17 @@ AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(gam
 	_window = new Window(this, 216, 160, x, 20, POPUP_BOTH);
 	_btnYes = new TextButton(50, 20, x+18, 140);
 	_btnNo = new TextButton(50, 20, x+148, 140);
-	_txtTitle = new Text(206, 15, x+5, 70);
+	_txtTitle = new Text(206, 17, x+5, 70);
+
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
 
 	add(_window);
 	add(_btnYes);
@@ -72,12 +82,12 @@ AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(gam
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -104,14 +114,18 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action *)
 {
-	if (Options::getInt("autosave") == 3)
+	if (!_game->getSavedGame()->isIronman())
 	{
-		SaveState *ss = new SaveState(_game, _origin, false);
-		delete ss;
-	}
+		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		_game->getScreen()->resetDisplay(false);
 
-	_game->setState(new MainMenuState(_game));
-	_game->setSavedGame(0);
+		_game->setState(new MainMenuState(_game));
+		_game->setSavedGame(0);
+	}
+	else
+	{
+		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN_END));
+	}
 }
 
 /**

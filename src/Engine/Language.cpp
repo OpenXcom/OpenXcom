@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,7 +25,6 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
-#include "LocalizedText.h"
 #include "LanguagePlurality.h"
 #include "../Ruleset/ExtraStrings.h"
 #include "../Interface/TextList.h"
@@ -41,11 +40,12 @@ namespace OpenXcom
 {
 
 std::map<std::string, std::wstring> Language::_names;
+std::vector<std::string> Language::_rtl, Language::_cjk;
 
 /**
  * Initializes an empty language file.
  */
-Language::Language() : _id(""), _strings(), _handler(0)
+Language::Language() : _id(""), _strings(), _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 {
 	// maps don't have initializers :(
 	if (_names.empty())
@@ -63,15 +63,32 @@ Language::Language() : _id(""), _strings(), _handler(0)
 		_names["grk"] = utf8ToWstr("Ελληνικά");
 		_names["hu-HU"] = utf8ToWstr("Magyar");
 		_names["it"] = utf8ToWstr("Italiano");
+		_names["ja-JP"] = utf8ToWstr("日本語");
+		_names["ko"] = utf8ToWstr("한국어");
 		_names["nl"] = utf8ToWstr("Nederlands");
 		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl-PL"] = utf8ToWstr("Polski");
+		_names["pt-BR"] = utf8ToWstr("Português (BR)");
 		_names["pt-PT"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
+		_names["sk-SK"] = utf8ToWstr("Slovenčina");
 		_names["sv"] = utf8ToWstr("Svenska");
 		_names["tr-TR"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
+		_names["zh-CN"] = utf8ToWstr("中文");
+		_names["zh-TW"] = utf8ToWstr("文言");
+	}
+	if (_rtl.empty())
+	{
+		_rtl.push_back("he");
+	}
+	if (_cjk.empty())
+	{
+		_cjk.push_back("ja-JP");
+		//_cjk.push_back("ko");  has spacing between words
+		_cjk.push_back("zh-CN");
+		_cjk.push_back("zh-TW");
 	}
 }
 
@@ -321,40 +338,36 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
 
 /**
  * Gets all the languages found in the
- * data folder and adds them to a text list.
- * @param list Text list.
- * @return List of language filenames.
+ * Data folder and returns their properties.
+ * @param files List of language filenames.
+ * @param names List of language human-readable names.
  */
-std::vector<std::string> Language::getList(TextList *list)
+void Language::getList(std::vector<std::string> &files, std::vector<std::wstring> &names)
 {
-	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
+	files = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
+	names.clear();
 
-	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
+	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
-		(*i) = CrossPlatform::noExt(*i);
-		if (list != 0)
+		*i = CrossPlatform::noExt(*i);
+		std::wstring name;
+		std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+		if (lang != _names.end())
 		{
-			std::wstring name;
-			std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
-			if (lang != _names.end())
-			{
-				name = lang->second;
-			}
-			else
-			{
-				name = Language::fsToWstr(*i);
-			}
-			list->addRow(1, name.c_str());
+			name = lang->second;
 		}
+		else
+		{
+			name = Language::fsToWstr(*i);
+		}
+		names.push_back(name);
 	}
-	return langs;
 }
 
 /**
  * Loads a language file in Ruby-on-Rails YAML format.
- * Not that his has anything to do with Ruby, but since it's
- * a widely-supported format and we already have YAML
- * it was convenient.
+ * Not that this has anything to do with Ruby, but since it's a
+ * widely-supported format and we already have YAML, it was convenient.
  * @param filename Filename of the YAML file.
  * @param extras Pointer to extra strings from ruleset.
  */
@@ -382,14 +395,30 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 			}
 		}
 	}
-	delete _handler;
-	_handler = LanguagePlurality::create(_id);
 	if (extras)
 	{
 		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
 		{
 			_strings[i->first] = loadString(i->second);
 		}
+	}
+	delete _handler;
+	_handler = LanguagePlurality::create(_id);
+	if (std::find(_rtl.begin(), _rtl.end(), _id) == _rtl.end())
+	{
+		_direction = DIRECTION_LTR;
+	}
+	else
+	{
+		_direction = DIRECTION_RTL;
+	}
+	if (std::find(_cjk.begin(), _cjk.end(), _id) == _cjk.end())
+	{
+		_wrap = WRAP_WORDS;
+	}
+	else
+	{
+		_wrap = WRAP_LETTERS;
 	}
 }
 
@@ -409,74 +438,9 @@ std::wstring Language::loadString(const std::string &string) const
 }
 
 /**
- * Loads pairs of strings separated by linebreaks contained
- * in a text file into the Language. Each pair is made of
- * an ID and a localized string.
- * @param filename Filename of the LNG file.
- * @param extras Pointer to extra strings from ruleset.
- * @sa @ref LanguageFiles
+ * Returns the language's locale.
+ * @return IANA language tag.
  */
-void Language::loadLng(const std::string &filename, ExtraStrings *extras)
-{
-	_strings.clear();
-
-	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
-	if (!txtFile)
-	{
-		throw Exception(filename + " not found");
-	}
-	txtFile.exceptions(std::ios::badbit);
-
-	try
-	{
-		std::string id, u8msg;
-		std::string language;
-		// Get language name
-		std::getline(txtFile, language);
-		_id = language;
-		//std::string yaml = "../../../" + language + ".yml";
-		//std::ofstream yamlFile(yaml, std::ios::out);
-		// Read lines in pairs.
-		while (!std::getline(txtFile, id).eof())
-		{
-			if (std::getline(txtFile, u8msg).fail())
-			{
-				throw Exception("Invalid language file");
-			}
-			//replace(u8msg, "\"", "\\\"");
-			//yamlFile << id << ": " << '"' << u8msg << '"' << std::endl;
-			//replace(u8msg, "\\\"", "\"");
-			replace(u8msg, "{NEWLINE}", "\n");
-			replace(u8msg, "{SMALLLINE}", "\x02");
-			replace(u8msg, "{ALT}", "\x01");
-			_strings[id] = utf8ToWstr(u8msg);
-		}
-		delete _handler;
-		_handler = LanguagePlurality::create(language);
-		//yamlFile.close();
-	}
-	catch (std::ifstream::failure e)
-	{
-		throw Exception("Invalid language file");
-	}
-	if (extras)
-	{
-		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
-		{
-			std::string s = i->second;
-			replace(s, "{NEWLINE}", "\n");
-			replace(s, "{SMALLLINE}", "\x02");
-			replace(s, "{ALT}", "\x01");
-			_strings[i->first] = utf8ToWstr(s);
-		}
-	}
-	txtFile.close();
-}
-
-/**
-* Returns the language's locale.
-* @return IANA language tag.
-*/
 std::string Language::getId() const
 {
 	return _id;
@@ -505,7 +469,7 @@ const LocalizedText &Language::getString(const std::string &id) const
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
+		Log(LOG_WARNING) << id << " not found in " << Options::language;
 		hack = LocalizedText(utf8ToWstr(id));
 		return hack;
 	}
@@ -539,10 +503,10 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	}
 	if (s == _strings.end())
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
+		Log(LOG_WARNING) << id << " not found in " << Options::language;
 		return LocalizedText(utf8ToWstr(id));
 	}
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << n;
 	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
 	replace(txt, marker, val);
@@ -553,6 +517,7 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
  * Returns the localized text with the specified ID, in the proper form for the gender.
  * If it's not found, just returns the ID.
  * @param id ID of the string.
+ * @param gender Current soldier gender.
  * @return String with the requested ID.
  */
 const LocalizedText &Language::getString(const std::string &id, SoldierGender gender) const
@@ -600,20 +565,40 @@ void Language::toHtml(const std::string &filename) const
 	htmlFile.close();
 }
 
+/**
+ * Returns the direction to use for rendering
+ * text in this language.
+ * @return Text direction.
+ */
+TextDirection Language::getTextDirection() const
+{
+	return _direction;
+}
+
+/**
+ * Returns the wrapping rules to use for rendering
+ * text in this language.
+ * @return Text wrapping.
+ */
+TextWrapping Language::getTextWrapping() const
+{
+	return _wrap;
+}
+
 }
 
 /** @page LanguageFiles Format of the language files.
 
-Language files (.lng) contain UTF-8 text.
-The first line in a language file is the language's name, in the language itself.
-The rest of the file is processed in line pairs. The first line of each pair
-contains the ID string (dictionary key), the next line contains the localized
-text for the given key.
+Language files are formatted as YAML (.yml) containing UTF-8 (no BOM) text.
+The first line in a language file is the language's identifier.
+The rest of the file are key-value pairs. The key of each pair
+contains the ID string (dictionary key), and the value contains the localized
+text for the given key in quotes.
 
 The localized text may contain the following special markers:
 <table>
 <tr>
- <td><tt>{</tt><i>1, 2, 3, ...</i> <tt>}</tt></td>
+ <td><tt>{</tt><i>0, 1, 2, ...</i> <tt>}</tt></td>
  <td>These markers will be replaced by programmer-supplied values before the
  message is displayed.</td></tr>
 <tr>
@@ -624,7 +609,7 @@ The localized text may contain the following special markers:
  <td><tt>{NEWLINE}</tt></td>
  <td>It will be replaced with a line break in the game.</td></tr>
 <tr>
- <td>{SMALLLINE}</td>
+ <td><tt>{SMALLLINE}</tt></td>
  <td>The rest of the text will be in a small font.</td></tr>
 </table>
 
@@ -632,36 +617,16 @@ There is an additional marker sequence, that should only appear in texts that
 depend on a number. This marker <tt>{N}</tt> will be replaced by the actual
 number used. The keys for texts that depend on numbers also have special
 suffixes, that depend on the language. For all languages, a suffix of
-<tt>_0</tt> is tried if the number is zero, before trying the actual key
-according to the language rules. The rest of the suffixes depend on the language.
-
-<table>
-<caption>Current rules</caption>
-<tr><th>Language</th><th>Suffixes</th></tr>
-<tr><td>English</td><td><tt>_1</tt> n == 1, <tt>_2</tt> otherwise</td></tr>
-<tr><td>French</td><td><tt>_1</tt> n < 2, <tt>_2</tt> otherwise</td></tr>
-<tr><td>Czech</td><td><tt>_1</tt> n % 100 == 1, <tt>_2</tt> 2 <= n % 100 <= 4, <tt>_3</tt> otherwise</td></tr>
-<tr><td>Polish</td><td><tt>_1</tt> n % 100 == 1,
- <tt>_2</tt> 2 <= n % 10 <= 4 && (n % 100 < 10 || n % 100 > 20),
- <tt>_3</tt> otherwise</td></tr>
-<tr><td>Romanian</td><td><tt>_1</tt> n % 100 == 1,
- <tt>_2</tt> n == 0 || 1 <= n % 100 <= 20,
- <tt>_3</tt> otherwise</td></tr>
-<tr><td>Russian</td><td><tt>_1</tt> n % 10 == 1 && n % 100 != 11,
- <tt>_2</tt> 2 <= n % 10 <= 4 && (n % 100 < 10 || n % 100 > 20),
- <tt>_3</tt> otherwise</td></tr>
-<tr><td>Hungarian</td><td><tt>_1</tt> for every case.</td></tr>
-<tr><td><i>Other languages</i></th><td><tt>_1</tt> n == 1, <tt>_2</tt> otherwise</td></tr>
-</table>
+<tt>_zero</tt> is tried if the number is zero, before trying the actual key
+according to the language rules. The rest of the suffixes depend on the language,
+as described <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">here</a>.
 
 So, you would write (for English):
 <pre>
-STR_ENEMIES_0
-There are no enemies left.
-STR_ENEMIES_1
-There is a single enemy left.
-STR_ENEMIES_2
-There are {N} enemies left.
+STR_ENEMIES:
+  zero:  "There are no enemies left."
+  one:   "There is a single enemy left."
+  other: "There are {N} enemies left."
 </pre>
 
 */

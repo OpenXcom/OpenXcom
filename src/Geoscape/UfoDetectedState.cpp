@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -96,11 +96,11 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	// Set palette
 	if (hyperwave)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 2);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 7);
 	}
 
 	add(_window);
@@ -124,13 +124,13 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_btnIntercept->onMouseClick((ActionHandler)&UfoDetectedState::btnInterceptClick);
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, Options::keyCancel);
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
@@ -188,21 +188,6 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 UfoDetectedState::~UfoDetectedState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void UfoDetectedState::init()
-{
-	if (_hyperwave)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-	}
-	else
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-	}
 }
 
 /**

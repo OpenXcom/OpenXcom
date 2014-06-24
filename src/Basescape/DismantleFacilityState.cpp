@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,7 +53,7 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_txtFacility = new Text(142, 9, 25, 85);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -70,12 +70,12 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -116,7 +116,7 @@ void DismantleFacilityState::btnOkClick(Action *)
 				_base->getFacilities()->erase(i);
 				_view->resetSelectedFacility();
 				delete _fac;
-				if (Options::getBool("allowBuildingQueue")) _view->reCalcQueuedBuildings();
+				if (Options::allowBuildingQueue) _view->reCalcQueuedBuildings();
 				break;
 			}
 		}

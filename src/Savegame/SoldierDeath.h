@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,7 @@ public:
 	/// Gets the death time.
 	const GameTime *getTime() const;
 	/// Sets the death time.
-	void setTime(GameTime *time);
+	void setTime(GameTime time);
 };
 
 }

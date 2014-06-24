@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -76,12 +76,24 @@ void Sound::load(const void *data, unsigned int size)
 
 /**
  * Plays the contained sound effect.
+ * @param channel Use specified channel, -1 to use any channel
  */
 void Sound::play(int channel) const
 {
-	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
+	if (!Options::mute && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
 	{
 		Log(LOG_WARNING) << Mix_GetError();
+	}
+}
+
+/**
+ * Stops all sounds playing.
+ */
+void Sound::stop()
+{
+	if (!Options::mute)
+	{
+		Mix_HaltChannel(-1);
 	}
 }
 

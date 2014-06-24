@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -78,7 +78,7 @@ inline void* NewAligned(int bpp, int width, int height)
 	buffer = calloc( total, 1 );
 	if (!buffer)
 	{
-		throw Exception("Where's the memory, Lebowski?");
+		throw Exception("Failed to allocate surface");
 	}
 
 	#else
@@ -95,7 +95,7 @@ inline void* NewAligned(int bpp, int width, int height)
 	buffer = _aligned_malloc(total, 16);
 	if (!buffer)
 	{
-		throw Exception("Where's the memory, Lebowski?");
+		throw Exception("Failed to allocate surface");
 	}
 
 #endif
@@ -134,7 +134,7 @@ inline void DeleteAligned(void* buffer)
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
-Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _alignedBuffer(0)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
@@ -150,8 +150,10 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 	_crop.h = 0;
 	_crop.x = 0;
 	_crop.y = 0;
-	_dx = Screen::getDX();
-	_dy = Screen::getDY();
+	_clear.x = 0;
+	_clear.y = 0;
+	_clear.w = getWidth();
+	_clear.h = getHeight();
 }
 
 /**
@@ -170,9 +172,8 @@ Surface::Surface(const Surface& other)
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
 		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
-		//cant call `SetPalette` because its vitual function and it dont work correctly in constructor
-		//additionally it use original colors, not temporarily ones.
-		SDL_SetColors(_surface, other._originalColors ? other._originalColors : other.getPalette(), 0, 255);
+		//cant call `setPalette` because its virtual function and it dont work correctly in constructor
+		SDL_SetColors(_surface, other.getPalette(), 0, 255);
 		memcpy(_alignedBuffer, other._alignedBuffer, height*pitch);
 	}
 	else
@@ -191,12 +192,13 @@ Surface::Surface(const Surface& other)
 	_crop.h = other._crop.h;
 	_crop.x = other._crop.x;
 	_crop.y = other._crop.y;
+	_clear.w = other._clear.w;
+	_clear.h = other._clear.h;
+	_clear.x = other._clear.x;
+	_clear.y = other._clear.y;
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
-	_originalColors = 0;
-	_dx = other._dx;
-	_dy = other._dy;
 }
 
 /**
@@ -292,12 +294,12 @@ void Surface::loadSpk(const std::string &filename)
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
 		flag = SDL_SwapLE16(flag);
-	
+
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			flag = SDL_SwapLE16(flag);
-			
+
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				setPixelIterative(&x, &y, 0);
@@ -307,7 +309,7 @@ void Surface::loadSpk(const std::string &filename)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			flag = SDL_SwapLE16(flag);
-			
+
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				imgFile.read((char*)&value, 1);
@@ -385,13 +387,8 @@ void Surface::loadBdy(const std::string &filename)
  */
 void Surface::clear()
 {
-	SDL_Rect square;
-	square.x = 0;
-	square.y = 0;
-	square.w = getWidth();
-	square.h = getHeight();
 	if (_surface->flags & SDL_SWSURFACE) memset(_surface->pixels, 0, _surface->h*_surface->pitch);
-	else SDL_FillRect(_surface, &square, 0);
+	else SDL_FillRect(_surface, &_clear, 0);
 }
 
 /**
@@ -552,6 +549,24 @@ void Surface::drawRect(SDL_Rect *rect, Uint8 color)
 }
 
 /**
+ * Draws a filled rectangle on the surface.
+ * @param x X position in pixels.
+ * @param y Y position in pixels.
+ * @param w Width in pixels.
+ * @param h Height in pixels.
+ * @param color Color of the rectangle.
+ */
+void Surface::drawRect(Sint16 x, Sint16 y, Sint16 w, Sint16 h, Uint8 color)
+{
+	SDL_Rect rect;
+	rect.w = w;
+	rect.h = h;
+	rect.x = x;
+	rect.y = y;
+	SDL_FillRect(_surface, &rect, color);
+}
+
+/**
  * Draws a line on the surface.
  * @param x1 Start x coordinate in pixels.
  * @param y1 Start y coordinate in pixels.
@@ -624,30 +639,12 @@ void Surface::setX(int x)
 }
 
 /**
- * Returns the position of the surface in the X axis.
- * @return X position in pixels.
- */
-int Surface::getX() const
-{
-	return _x;
-}
-
-/**
  * Changes the position of the surface in the Y axis.
  * @param y Y position in pixels.
  */
 void Surface::setY(int y)
 {
 	_y = y;
-}
-
-/**
- * Returns the position of the surface in the Y axis.
- * @return Y position in pixels.
- */
-int Surface::getY() const
-{
-	return _y;
 }
 
 /**
@@ -698,7 +695,8 @@ SDL_Rect *Surface::getCrop()
  */
 void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	SDL_SetColors(_surface, colors, firstcolor, ncolors);
+	if (_surface->format->BitsPerPixel == 8)
+		SDL_SetColors(_surface, colors, firstcolor, ncolors);
 }
 
 /**
@@ -735,65 +733,10 @@ void Surface::unlock()
 }
 
 /**
- * Shifts all the colors in the surface's palette by a set amount.
- * Optionally inverts the colors according to a middle point as well.
- * This is a common method in 8bpp games to simulate color
- * effects for cheap.
- * @param off Amount to shift.
- * @param mul Shift multiplier.
- * @param mid Optional middle point used to invert palette. If 0, palette is not inverted
- */
-void Surface::paletteShift(int off, int mul, int mid)
-{
-	int ncolors = _surface->format->palette->ncolors;
-
-	// store the original palette
-	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
-
-	// create a temporary new palette
-	SDL_Color *newColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
-
-	// do the color shift - while storing the original colors too
-	for (int i = 0; i < ncolors; i++)
-	{
-		int inverseOffset = mid ? 2 * (mid - i) : 0;
-		int j = (i * mul + off + inverseOffset + ncolors) % ncolors;
-
-		_originalColors[i].r = getPalette()[i].r;
-		_originalColors[i].g = getPalette()[i].g;
-		_originalColors[i].b = getPalette()[i].b;
-		newColors[i].r = getPalette()[j].r;
-		newColors[i].g = getPalette()[j].g;
-		newColors[i].b = getPalette()[j].b;
-	}
-
-	// assign it and free it
-	SDL_SetColors(_surface, newColors, 0, ncolors);
-	free(newColors);
-
-	return;
-}
-
-/**
- * Restores the previously shifted palette.
- * You have to call it after you've done blitting.
- */
-void Surface::paletteRestore()
-{
-	if (_originalColors)
-	{
-		SDL_SetColors(_surface, _originalColors, 0, 256);
-		free(_originalColors);
-		_originalColors = 0;
-	}
-}
-
-/**
  * help class used for Surface::blitNShade
  */
 struct ColorReplace
 {
-	
 	/**
 	* Function used by ShaderDraw in Surface::blitNShade
 	* set shade and replace color in that surface
@@ -814,7 +757,7 @@ struct ColorReplace
 				dest = newColor | newShade;
 		}
 	}
-	
+
 };
 
 /**
@@ -843,7 +786,7 @@ struct StandartShade
 				dest = (src&(15<<4)) | newShade;
 		}
 	}
-	
+
 };
 
 
@@ -876,7 +819,7 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 	}
 	else
 		ShaderDraw<StandartShade>(ShaderSurface(surface), src, ShaderScalar(off));
-		
+
 }
 
 /**
@@ -885,16 +828,6 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 void Surface::invalidate()
 {
 	_redraw = true;
-}
-
-void Surface::setDX(int dx)
-{
-	_dx = dx;
-}
-
-void Surface::setDY(int dy)
-{
-	_dy = dy;
 }
 
 /**
@@ -910,11 +843,70 @@ std::string Surface::getTooltip() const
 /**
 * Changes the help description of this surface,
 * for example for showing in tooltips.
-* @param str String ID.
+* @param tooltip String ID.
 */
 void Surface::setTooltip(const std::string &tooltip)
 {
 	_tooltip = tooltip;
+}
+
+/**
+ * Recreates the surface with a new size.
+ * Old contents will not be altered, and may be
+ * cropped to fit the new size.
+ * @param width Width in pixels.
+ * @param height Height in pixels.
+ */
+void Surface::resize(int width, int height)
+{
+	// Set up new surface
+	Uint8 bpp = _surface->format->BitsPerPixel;
+	int pitch = GetPitch(bpp, width);
+	void *alignedBuffer = NewAligned(bpp, width, height);
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
+	
+	if (surface == 0)
+	{
+		throw Exception(SDL_GetError());
+	}
+
+	// Copy old contents
+	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
+	SDL_SetColors(surface, getPalette(), 0, 255);
+	SDL_BlitSurface(_surface, 0, surface, 0);
+
+	// Delete old surface
+	DeleteAligned(_alignedBuffer);
+	SDL_FreeSurface(_surface);
+	_alignedBuffer = alignedBuffer;
+	_surface = surface;
+
+	_clear.w = getWidth();
+	_clear.h = getHeight();
+}
+
+/**
+ * Changes the width of the surface.
+ * @warning This is not a trivial setter!
+ * It will force the surface to be recreated for the new size.
+ * @param width New width in pixels.
+ */
+void Surface::setWidth(int width)
+{
+	resize(width, getHeight());
+	_redraw = true;
+}
+
+/**
+ * Changes the height of the surface.
+ * @warning This is not a trivial setter!
+ * It will force the surface to be recreated for the new size.
+ * @param height New height in pixels.
+ */
+void Surface::setHeight(int height)
+{
+	resize(getWidth(), height);
+	_redraw = true;
 }
 
 }
