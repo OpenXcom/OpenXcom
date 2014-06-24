@@ -456,7 +456,7 @@ void IntroState::init()
 	}
 	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
-    _game->setState(new MainMenuState);
+	_game->setState(new MainMenuState);
 }
 
 }

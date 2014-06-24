@@ -119,12 +119,12 @@ void AbandonGameState::btnYesClick(Action *)
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
 
-        _game->setState(new MainMenuState);
+		_game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 	else
 	{
-        _game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN_END));
+		_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN_END));
 	}
 }
 

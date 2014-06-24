@@ -158,10 +158,10 @@ void NewGameState::btnOkClick(Action *)
 	save->setIronman(_btnIronman->getPressed());
 	_game->setSavedGame(save);
 
-    GeoscapeState *gs = new GeoscapeState;
+	GeoscapeState *gs = new GeoscapeState;
 	_game->setState(gs);
 	gs->init();
-    _game->pushState(new BuildNewBaseState( _game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
+	_game->pushState(new BuildNewBaseState(_game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
 }
 
 /**

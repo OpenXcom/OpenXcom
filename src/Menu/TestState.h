@@ -59,7 +59,7 @@ private:
 	SDL_Surface *testSurface();
 public:
 	/// Creates the Test state.
-    TestState();
+	TestState();
 	/// Cleans up the Test state.
 	~TestState();
 	void think();

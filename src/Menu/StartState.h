@@ -51,7 +51,7 @@ public:
 	static std::string error;
 
 	/// Creates the Start state.
-    StartState();
+	StartState();
 	/// Cleans up the Start state.
 	~StartState();
 	/// Reset everything.

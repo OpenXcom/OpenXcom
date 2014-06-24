@@ -119,7 +119,7 @@ MainMenuState::~MainMenuState()
  */
 void MainMenuState::btnNewGameClick(Action *)
 {
-    _game->pushState(new NewGameState);
+	_game->pushState(new NewGameState);
 }
 
 /**
@@ -128,7 +128,7 @@ void MainMenuState::btnNewGameClick(Action *)
  */
 void MainMenuState::btnNewBattleClick(Action *)
 {
-    _game->pushState(new NewBattleState);
+	_game->pushState(new NewBattleState);
 }
 
 /**
@@ -137,7 +137,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-    _game->pushState(new ListLoadState(OPT_MENU));
+	_game->pushState(new ListLoadState(OPT_MENU));
 }
 
 /**
@@ -147,7 +147,7 @@ void MainMenuState::btnLoadClick(Action *)
 void MainMenuState::btnOptionsClick(Action *)
 {
 	Options::backupDisplay();
-    _game->pushState(new OptionsVideoState(OPT_MENU));
+	_game->pushState(new OptionsVideoState(OPT_MENU));
 }
 
 /**

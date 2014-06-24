@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBattlescapeState::OptionsBattlescapeState( OptionsOrigin origin) : OptionsBaseState(origin)
+OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	setCategory(_btnBattlescape);
 

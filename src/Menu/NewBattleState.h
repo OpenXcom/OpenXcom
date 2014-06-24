@@ -54,7 +54,7 @@ private:
 	Craft *_craft;
 public:
 	/// Creates the New Battle state.
-    NewBattleState();
+	NewBattleState();
 	/// Cleans up the New Battle state.
 	~NewBattleState();
 	/// Resets state.
