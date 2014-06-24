@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param missingItems List of items still needed for reequip.
  */
-CannotReequipState::CannotReequipState( std::vector<ReequipStat> missingItems)
+CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
