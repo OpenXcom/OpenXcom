@@ -2147,7 +2147,7 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 	else
 	{
 	    // Please garrison your bases in future
-        popup(new BaseDestroyedState(_base));
+        popup(new BaseDestroyedState(base));
 	}
 }
 
