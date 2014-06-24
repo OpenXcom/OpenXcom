@@ -53,7 +53,7 @@ protected:
 	SDL_Color _palette[256];
 public:
 	/// Creates a new state linked to a game.
-	State(Game* game);
+    State();
 	/// Cleans up the state.
 	virtual ~State();
 	/// Adds a child element to the state.
