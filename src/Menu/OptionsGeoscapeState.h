@@ -47,7 +47,7 @@ private:
 	ToggleTextButton *_btnShowFunds;
 public:
 	/// Creates the Geoscape Options state.
-	OptionsGeoscapeState(Game *game, OptionsOrigin origin);
+    OptionsGeoscapeState(OptionsOrigin origin);
 	/// Cleans up the Geoscape Options state.
 	~OptionsGeoscapeState();
     /// Handler for changing the Drag Scroll combobox.

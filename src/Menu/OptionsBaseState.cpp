@@ -157,22 +157,22 @@ OptionsBaseState::~OptionsBaseState()
 
 }
 
-void OptionsBaseState::restart(Game *game, OptionsOrigin origin)
+void OptionsBaseState::restart(OptionsOrigin origin)
 {
 	if (origin == OPT_MENU)
 	{
-		game->setState(new MainMenuState(game));
+        _game->setState(new MainMenuState);
 	}
 	else if (origin == OPT_GEOSCAPE)
 	{
-		game->setState(new GeoscapeState(game));
+        _game->setState(new GeoscapeState);
 	}
 	else if (origin == OPT_BATTLESCAPE)
 	{
-		game->setState(new GeoscapeState(game));
-		BattlescapeState *bs = new BattlescapeState(game);
-		game->pushState(bs);
-		game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+        _game->setState(new GeoscapeState);
+        BattlescapeState *bs = new BattlescapeState;
+        _game->pushState(bs);
+        _game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 	}
 }
 

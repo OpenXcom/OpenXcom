@@ -47,7 +47,7 @@ private:
 	std::string ucWords(std::string str);
 public:
 	/// Creates the Controls state.
-    OptionsControlsState( OptionsOrigin origin);
+    OptionsControlsState(OptionsOrigin origin);
 	/// Cleans up the Controls state.
 	~OptionsControlsState();
 	/// Fills controls list.
