@@ -39,17 +39,20 @@ class Craft;
 class CraftInfoState : public State
 {
 private:
+	static const int WeaponMax = 4;
+
 	Base *_base;
 	size_t _craftId;
 	Craft *_craft;
 	std::wstring _defaultName;
+	int _weaponNum;
 
-	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmor;
+	TextButton *_btnOk, *_btnW[WeaponMax], *_btnCrew, *_btnEquip, *_btnArmor;
 	Window *_window;
 	TextEdit *_edtCraft;
 	Text *_txtDamage, *_txtFuel;
-	Text *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo;
-	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
+	Text *_txtWName[WeaponMax], *_txtWAmmo[WeaponMax];
+	Surface *_sprite, *_weapon[WeaponMax], *_crew, *_equip;
 	/// Formats an amount of time.
 	std::wstring formatTime(int time);
 public:
@@ -61,10 +64,8 @@ public:
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the 1 button.
-	void btnW1Click(Action *action);
-	/// Handler for clicking the 2 button.
-	void btnW2Click(Action *action);
+	/// Handler for clicking the weapon button.
+	void btnWClick(Action *action);
 	/// Handler for clicking the Crew button.
 	void btnCrewClick(Action *action);
 	/// Handler for clicking the Equipment button.
