@@ -563,8 +563,8 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 
 void InventoryState::btnApplyTemplateClick(Action *action)
 {
-	// don't accept clicks when moving items
-	if (_inv->getSelectedItem() != 0)
+	// don't accept clicks when moving items or when the template is empty
+	if (_inv->getSelectedItem() != 0 || _curInventoryTemplate.empty())
 	{
 		return;
 	}
