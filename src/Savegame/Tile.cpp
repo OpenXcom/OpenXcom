@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Tile.h"
+#include <algorithm>
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
@@ -431,7 +432,7 @@ int Tile::getShade() const
 			light = _light[layer];
 	}
 
-	return 15 - light;
+	return std::max(0, 15 - light);
 }
 
 /**
