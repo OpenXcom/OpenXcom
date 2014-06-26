@@ -91,7 +91,7 @@ public:
 	void selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
-	BattlescapeState(Game *game);
+	BattlescapeState();
 	/// Cleans up the Battlescape state.
 	~BattlescapeState();
 	/// Initilizes the battlescapestate.

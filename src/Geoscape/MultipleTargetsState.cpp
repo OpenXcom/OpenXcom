@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param craft Pointer to craft to retarget (NULL if none).
  * @param state Pointer to the Geoscape state.
  */
-MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state) : State(game), _targets(targets), _craft(craft), _state(state)
+MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *craft, GeoscapeState *state) : _targets(targets), _craft(craft), _state(state)
 {
 	_screen = false;
 
@@ -126,24 +126,24 @@ void MultipleTargetsState::popupTarget(Target *target)
 		Ufo* u = dynamic_cast<Ufo*>(target);
 		if (b != 0)
 		{
-			_game->pushState(new InterceptState(_game, _state->getGlobe(), b));
+			_game->pushState(new InterceptState(_state->getGlobe(), b));
 		}
 		else if (c != 0)
 		{
-			_game->pushState(new GeoscapeCraftState(_game, c, _state->getGlobe(), 0));
+			_game->pushState(new GeoscapeCraftState(c, _state->getGlobe(), 0));
 		}
 		else if (u != 0)
 		{
-			_game->pushState(new UfoDetectedState(_game, u, _state, false, u->getHyperDetected()));
+			_game->pushState(new UfoDetectedState(u, _state, false, u->getHyperDetected()));
 		}
 		else
 		{
-			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
+			_game->pushState(new TargetInfoState(target, _state->getGlobe()));
 		}
 	}
 	else
 	{
-		_game->pushState(new ConfirmDestinationState(_game, _craft, target));
+		_game->pushState(new ConfirmDestinationState(_craft, target));
 	}
 }
 

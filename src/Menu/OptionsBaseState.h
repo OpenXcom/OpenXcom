@@ -52,11 +52,11 @@ protected:
 	TextButton *_group;
 public:
 	/// Creates the Options state.
-	OptionsBaseState(Game *game, OptionsOrigin origin);
+	OptionsBaseState(OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsBaseState();
 	/// Restarts the game states.
-	static void restart(Game *game, OptionsOrigin origin);
+	static void restart(OptionsOrigin origin);
 	/// Initializes palettes.
 	void init();
 	/// Presses a certain category button.

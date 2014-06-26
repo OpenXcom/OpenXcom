@@ -49,7 +49,7 @@ private:
 	std::vector<Armor*> _armors;
 public:
 	/// Creates the Soldier Armor state.
-	SoldierArmorState(Game *game, Base *base, size_t soldier);
+	SoldierArmorState(Base *base, size_t soldier);
 	/// Cleans up the Soldier Armor state.
 	~SoldierArmorState();
 	/// Handler for clicking the Cancel button.

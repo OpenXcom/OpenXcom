@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param item Pointer to the researched weapon.
  */
-ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State(game)
+ResearchRequiredState::ResearchRequiredState(RuleItem *item)
 {
 	_screen = false;
 

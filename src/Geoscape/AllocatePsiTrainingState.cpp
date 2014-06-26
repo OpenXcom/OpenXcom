@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to handle.
  */
-AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : State(game), _sel(0)
+AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 {
 	_base = base;
 	// Create objects

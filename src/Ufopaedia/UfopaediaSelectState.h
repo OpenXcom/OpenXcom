@@ -40,7 +40,7 @@ namespace OpenXcom
 	class UfopaediaSelectState : public State
 	{
 	public:
-		UfopaediaSelectState(Game *game, std::string section);
+		UfopaediaSelectState(std::string section);
 		virtual ~UfopaediaSelectState();
 
 	protected:

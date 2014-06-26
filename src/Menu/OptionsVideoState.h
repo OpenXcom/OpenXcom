@@ -61,7 +61,7 @@ private:
 	void updateDisplayResolution();
 public:
 	/// Creates the Options state.
-	OptionsVideoState(Game *game, OptionsOrigin origin);
+	OptionsVideoState(OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsVideoState();
 	/// Handler for clicking the Next Resolution button.
@@ -74,8 +74,8 @@ public:
 	void txtDisplayHeightChange(Action *action);
 	/// Handler for changing the Language combobox.
 	void cbxLanguageChange(Action *action);
-    /// Handler for changing the Filter combobox.
-    void cbxFilterChange(Action *action);
+	/// Handler for changing the Filter combobox.
+	void cbxFilterChange(Action *action);
 	/// Handler for clicking the Display Mode combobox.
 	void updateDisplayMode(Action *action);
 	/// Handler for clicking the Letterboxed button.

@@ -77,7 +77,7 @@ public:
 	static const int ICON_HEIGHT = 56;
 	static const int ICON_WIDTH = 320;
 	/// Creates a new map at the specified position and size.
-	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
+	Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
 	~Map();
 	/// Initializes the map.

@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft to display.
  * @param state Pointer to the Geoscape.
  */
-LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : State(game), _craft(craft), _state(state)
+LowFuelState::LowFuelState(Craft *craft, GeoscapeState *state) : _craft(craft), _state(state)
 {
 	_screen = false;
 

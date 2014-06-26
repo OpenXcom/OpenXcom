@@ -63,7 +63,8 @@ int main(int argc, char *argv[])
 		Options::baseXResolution = Options::displayWidth;
 		Options::baseYResolution = Options::displayHeight;
 		game = new Game(title.str());
-		game->setState(new StartState(game));
+		State::setGamePtr(game);
+		game->setState(new StartState);
 		game->run();
 #ifndef _DEBUG
 	}

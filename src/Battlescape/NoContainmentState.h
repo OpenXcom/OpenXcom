@@ -40,7 +40,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the No Containment state.
-	NoContainmentState(Game *game);
+	NoContainmentState();
 	/// Cleans up the No Containment state.
 	~NoContainmentState();
 	/// Handler for clicking the OK button.

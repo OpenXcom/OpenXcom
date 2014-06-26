@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : State(game), _origin(origin), _countdown(15)
+OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin), _countdown(15)
 {
 	_screen = false;
 
@@ -140,7 +140,7 @@ void OptionsConfirmState::countdown()
 void OptionsConfirmState::btnYesClick(Action *)
 {
 	_game->popState();
-	OptionsBaseState::restart(_game, _origin);
+	OptionsBaseState::restart(_origin);
 }
 
 /**
@@ -153,7 +153,7 @@ void OptionsConfirmState::btnNoClick(Action *)
 	Options::save();
 	_game->getScreen()->resetDisplay();
 	_game->popState();
-	OptionsBaseState::restart(_game, _origin);
+	OptionsBaseState::restart(_origin);
 }
 
 }

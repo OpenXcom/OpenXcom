@@ -44,7 +44,7 @@ private:
 	TextList *_lstItems;
 public:
 	/// Creates the Cannot Reequip state.
-	CannotReequipState(Game *game, std::vector<ReequipStat> missingItems);
+	CannotReequipState(std::vector<ReequipStat> missingItems);
 	/// Cleans up the Cannot Reequip state.
 	~CannotReequipState();
 	/// Handler for clicking the OK button.

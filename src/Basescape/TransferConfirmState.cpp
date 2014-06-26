@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param base Pointer to the destination base.
  * @param state Pointer to the Transfer state.
  */
-TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItemsState *state) : State(game), _base(base), _state(state)
+TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state) : _base(base), _state(state)
 {
 	_screen = false;
 

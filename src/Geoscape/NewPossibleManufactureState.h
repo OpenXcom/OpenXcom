@@ -40,11 +40,11 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 	TextList * _lstPossibilities;
-    TextButton *_btnManufacture, *_btnOk;
+	TextButton *_btnManufacture, *_btnOk;
 	Base * _base;
 public:
 	/// Creates the NewPossibleManufacture state.
-	NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities);
+	NewPossibleManufactureState(Base * base, const std::vector<RuleManufacture *> & possibilities);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Allocate Manufacture button.

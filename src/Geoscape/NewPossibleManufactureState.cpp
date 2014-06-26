@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ManufactureProject
  */
-NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities) : State (game), _base(base)
+NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std::vector<RuleManufacture *> & possibilities) : _base(base)
 {
 	_screen = false;
 
@@ -102,7 +102,7 @@ void NewPossibleManufactureState::btnOkClick(Action *)
 void NewPossibleManufactureState::btnManufactureClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new ManufactureState(_game, _base));
+	_game->pushState (new ManufactureState(_base));
 }
 
 }

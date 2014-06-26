@@ -43,7 +43,7 @@ private:
 	OptionsBaseState *_state;
 public:
 	/// Creates the Restore Defaults state.
-	OptionsDefaultsState(Game *game, OptionsOrigin origin, OptionsBaseState *state);
+	OptionsDefaultsState(OptionsOrigin origin, OptionsBaseState *state);
 	/// Cleans up the Restore Defaults state.
 	~OptionsDefaultsState();
 	/// Handler for clicking the Yes button.

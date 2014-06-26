@@ -53,7 +53,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -157,22 +157,22 @@ OptionsBaseState::~OptionsBaseState()
 
 }
 
-void OptionsBaseState::restart(Game *game, OptionsOrigin origin)
+void OptionsBaseState::restart(OptionsOrigin origin)
 {
 	if (origin == OPT_MENU)
 	{
-		game->setState(new MainMenuState(game));
+		_game->setState(new MainMenuState);
 	}
 	else if (origin == OPT_GEOSCAPE)
 	{
-		game->setState(new GeoscapeState(game));
+		_game->setState(new GeoscapeState);
 	}
 	else if (origin == OPT_BATTLESCAPE)
 	{
-		game->setState(new GeoscapeState(game));
-		BattlescapeState *bs = new BattlescapeState(game);
-		game->pushState(bs);
-		game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+		_game->setState(new GeoscapeState);
+		BattlescapeState *bs = new BattlescapeState;
+		_game->pushState(bs);
+		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 	}
 }
 
@@ -225,7 +225,7 @@ void OptionsBaseState::btnOkClick(Action *)
 	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	if (Options::reload && _origin == OPT_MENU)
 	{
-		_game->setState(new StartState(_game));
+		_game->setState(new StartState);
 	}
 	else
 	{
@@ -237,11 +237,11 @@ void OptionsBaseState::btnOkClick(Action *)
 			Options::useHQXFilter != Options::newHQXFilter ||
 			Options::useOpenGLShader != Options::newOpenGLShader)
 		{
-			_game->pushState(new OptionsConfirmState(_game, _origin));
+			_game->pushState(new OptionsConfirmState(_origin));
 		}
 		else
 		{
-			restart(_game, _origin);
+			restart(_origin);
 		}
 	}
 }
@@ -267,7 +267,7 @@ void OptionsBaseState::btnCancelClick(Action *)
  */
 void OptionsBaseState::btnDefaultClick(Action *action)
 {
-	_game->pushState(new OptionsDefaultsState(_game, _origin, this));
+	_game->pushState(new OptionsDefaultsState(_origin, this));
 }
 
 void OptionsBaseState::btnGroupPress(Action *action)
@@ -278,38 +278,38 @@ void OptionsBaseState::btnGroupPress(Action *action)
 		_game->popState();
 		if (sender == _btnVideo)
 		{
-			_game->pushState(new OptionsVideoState(_game, _origin));
+			_game->pushState(new OptionsVideoState(_origin));
 		}
 		else if (sender == _btnAudio)
 		{
 			if (!Options::mute)
 			{
-				_game->pushState(new OptionsAudioState(_game, _origin));
+				_game->pushState(new OptionsAudioState(_origin));
 			}
 			else
 			{
-				_game->pushState(new OptionsNoAudioState(_game, _origin));
+				_game->pushState(new OptionsNoAudioState(_origin));
 			}
 		}
 		else if (sender == _btnControls)
 		{
-			_game->pushState(new OptionsControlsState(_game, _origin));
+			_game->pushState(new OptionsControlsState(_origin));
 		}
 		else if (sender == _btnGeoscape)
 		{
-			_game->pushState(new OptionsGeoscapeState(_game, _origin));
+			_game->pushState(new OptionsGeoscapeState(_origin));
 		}
 		else if (sender == _btnBattlescape)
 		{
-			_game->pushState(new OptionsBattlescapeState(_game, _origin));
+			_game->pushState(new OptionsBattlescapeState(_origin));
 		}
 		else if (sender == _btnAdvanced)
 		{
-			_game->pushState(new OptionsAdvancedState(_game, _origin));
+			_game->pushState(new OptionsAdvancedState(_origin));
 		}
 		else if (sender == _btnMods)
 		{
-			_game->pushState(new OptionsModsState(_game, _origin));
+			_game->pushState(new OptionsModsState(_origin));
 		}
 	}
 }

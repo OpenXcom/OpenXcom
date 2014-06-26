@@ -46,7 +46,7 @@ private:
 
 public:
 	/// Creates the state.
-	NewManufactureListState(Game *game, Base *base);
+	NewManufactureListState(Base *base);
 	/// Initializes state.
 	void init();
 	/// Handler for clicking the OK button.

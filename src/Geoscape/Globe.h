@@ -103,7 +103,7 @@ private:
 	void drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2);
 public:
 	/// Creates a new globe at the specified position and size.
-	Globe(Game *game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
+	Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.
 	~Globe();
 	/// Loads a set of polygons from a DAT file.

@@ -45,7 +45,7 @@ private:
 	TextList *_lstTransfers;
 public:
 	/// Creates the Transfers state.
-	TransfersState(Game *game, Base *base);
+	TransfersState(Base *base);
 	/// Cleans up the Transfers state.
 	~TransfersState();
 	/// Handler for clicking the OK button.
