@@ -945,14 +945,7 @@ void DogfightState::move()
 				&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
 				wTimer->start();
-				if (i == 0)
-				{
-					fireWeapon1();
-				}
-				else
-				{
-					fireWeapon2();
-				}
+				fireWeapon(i);
 			}
 			else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || (w->getAmmo() == 0 && !projectileInFlight) || _mode == _btnStandoff
 				|| _mode == _btnDisengage || _ufo->isCrashed() || _craft->isDestroyed()))
