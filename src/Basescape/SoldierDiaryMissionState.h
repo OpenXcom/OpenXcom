@@ -52,7 +52,7 @@ private:
 	int _rowEntry;
 public:
 	/// Creates the Soldier Diary Mission state.
-	SoldierDiaryMissionState(Game *game, Base *base, size_t soldierId, int rowEntry);
+	SoldierDiaryMissionState(Base *base, size_t soldierId, int rowEntry);
 	/// Cleans up the Soldier Diary Mission state.
 	~SoldierDiaryMissionState();
 	/// Handler for clicking the Cancel button.

@@ -328,7 +328,7 @@ void DebriefingState::btnOkClick(Action *)
 	{
 		if (!_soldiersCommended.empty())
 		{
-			_game->pushState(new CommendationState(_game, _soldiersCommended));
+			_game->pushState(new CommendationState(_soldiersCommended));
 		}
 		if (_game->getSavedGame()->handlePromotions(participants))
 		{

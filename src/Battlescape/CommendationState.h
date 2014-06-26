@@ -43,7 +43,7 @@ private:
 	TextList *_lstSoldiers;
 public:
 	/// Creates the Medals state.
-	CommendationState(Game *game, std::vector<Soldier*> soldiers);
+	CommendationState(std::vector<Soldier*> soldiers);
 	/// Cleans up the Medals state.
 	~CommendationState();
 	/// Handler for clicking the OK button.

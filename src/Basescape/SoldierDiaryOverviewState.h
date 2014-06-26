@@ -52,7 +52,7 @@ private:
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryOverviewState(Game *game, Base *base, size_t soldierId, SoldierInfoState *soldierInfoState);
+	SoldierDiaryOverviewState(Base *base, size_t soldierId, SoldierInfoState *soldierInfoState);
 	/// Cleans up the Soldiers state.
 	~SoldierDiaryOverviewState();
 	/// Updates the soldier info.

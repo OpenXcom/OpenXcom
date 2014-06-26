@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryOverviewState::SoldierDiaryOverviewState(Game *game, Base *base, size_t soldierId, SoldierInfoState *soldierInfoState) : State(game), _base(base), _soldierId(soldierId), _soldierInfoState(soldierInfoState)
+SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierId, SoldierInfoState *soldierInfoState) : _base(base), _soldierId(soldierId), _soldierInfoState(soldierInfoState)
 {
 	if (_base == 0)
 	{
@@ -278,7 +278,7 @@ void SoldierDiaryOverviewState::btnOkClick(Action *)
 void SoldierDiaryOverviewState::btnKillsClick(Action *)
 {
 	int _display = 0;
-	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldierId, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, _display));
 }
 
 /**
@@ -288,7 +288,7 @@ void SoldierDiaryOverviewState::btnKillsClick(Action *)
 void SoldierDiaryOverviewState::btnMissionsClick(Action *)
 {
 	int _display = 1;
-	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldierId, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, _display));
 }
 
 /**
@@ -298,7 +298,7 @@ void SoldierDiaryOverviewState::btnMissionsClick(Action *)
 void SoldierDiaryOverviewState::btnCommendationsClick(Action *)
 {
 	int _display = 2;
-	_game->pushState(new SoldierDiaryPerformanceState(_game, _base, _soldierId, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, _display));
 }
 
 
@@ -334,7 +334,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action *)
 void SoldierDiaryOverviewState::lstDiaryInfoClick(Action *)
 {
     int absoluteRowEntry = _lstDiary->getSelectedRow();
-	_game->pushState(new SoldierDiaryMissionState(_game, _base, _soldierId, absoluteRowEntry));
+	_game->pushState(new SoldierDiaryMissionState(_base, _soldierId, absoluteRowEntry));
 }
 
 }

@@ -241,7 +241,7 @@ void MonthlyReportState::btnOkClick(Action *)
 		}
 		if (!_soldiersMedalled.empty())
 		{
-			_game->pushState(new CommendationState(_game, _soldiersMedalled));
+			_game->pushState(new CommendationState(_soldiersMedalled));
 		}
 		if (_psi)
 		{

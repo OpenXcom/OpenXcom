@@ -40,7 +40,7 @@ namespace OpenXcom
  * Initializes all the elements in the Medals screen.
  * @param game Pointer to the core game.
  */
-CommendationState::CommendationState(Game *game, std::vector<Soldier*> soldiersMedalled) : State(game)
+CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

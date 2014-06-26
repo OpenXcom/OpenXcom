@@ -686,7 +686,7 @@ void SoldierInfoState::btnSackClick(Action *)
  */
 void SoldierInfoState::btnDiaryClick(Action *)
 {
-	_game->pushState(new SoldierDiaryOverviewState(_game, _base, _soldierId, this));
+	_game->pushState(new SoldierDiaryOverviewState(_base, _soldierId, this));
 }
 
 }

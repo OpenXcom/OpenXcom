@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier ID of the selected soldier.
  * @param row number to get mission info from.
  */
-SoldierDiaryMissionState::SoldierDiaryMissionState(Game *game, Base *base, size_t soldierId, int rowEntry) : State(game), _base(base), _soldierId(soldierId), _rowEntry(rowEntry)
+SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId, int rowEntry) : _base(base), _soldierId(soldierId), _rowEntry(rowEntry)
 {
 	if (_base == 0)
 	{
