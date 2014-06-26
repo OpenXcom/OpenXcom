@@ -52,7 +52,7 @@ private:
 	int _mousex, _mousey;
 public:
 	/// Creates the Build New Base state.
-	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);
+	BuildNewBaseState(Base *base, Globe *globe, bool first);
 	/// Cleans up the Build New Base state.
 	~BuildNewBaseState();
 	/// Resets globe.

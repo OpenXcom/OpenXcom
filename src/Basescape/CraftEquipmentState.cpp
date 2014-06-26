@@ -59,11 +59,11 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _craft(craft), _base(base)
+CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _craft(craft), _base(base)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	bool craftHasACrew = c->getNumSoldiers() > 0;
-	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
+	bool isNewBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -566,7 +566,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-					_game->pushState(new ErrorMessageState(_game, msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
 			}
 			else
@@ -623,7 +623,7 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 		_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 		_game->getScreen()->clear();
-		_game->pushState(new InventoryState(_game, false, 0));
+		_game->pushState(new InventoryState(false, 0));
 	}
 }
 

@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _base(base)
+MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

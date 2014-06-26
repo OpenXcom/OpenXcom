@@ -55,7 +55,7 @@ private:
 	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barMelee, *_barStrength, *_barPsiStrength, *_barPsiSkill;
 public:
 	/// Creates the Soldier Info state.
-	SoldierInfoState(Game *game, Base *base, size_t soldierId);
+	SoldierInfoState(Base *base, size_t soldierId);
 	/// Cleans up the Soldier Info state.
 	~SoldierInfoState();
 	/// Updates the soldier info.

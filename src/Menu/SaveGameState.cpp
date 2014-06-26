@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
  */
-	SaveGameState::SaveGameState(Game *game, OptionsOrigin origin, const std::string &filename) : State(game), _origin(origin), _filename(filename), _type(SAVE_DEFAULT)
+	SaveGameState::SaveGameState(OptionsOrigin origin, const std::string &filename) : _origin(origin), _filename(filename), _type(SAVE_DEFAULT)
 {
 	buildUi();
 }
@@ -51,7 +51,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param type Type of auto-load being used.
  */
-SaveGameState::SaveGameState(Game *game, OptionsOrigin origin, SaveType type) : State(game), _origin(origin), _type(type)
+SaveGameState::SaveGameState(OptionsOrigin origin, SaveType type) : _origin(origin), _type(type)
 {
 	switch (type)
 	{
@@ -166,7 +166,7 @@ void SaveGameState::init()
 			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
 
-			_game->setState(new MainMenuState(_game));
+			_game->setState(new MainMenuState);
 			_game->setSavedGame(0);
 		}
 	}
@@ -176,9 +176,9 @@ void SaveGameState::init()
 		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 	catch (YAML::Exception &e)
 	{
@@ -186,9 +186,9 @@ void SaveGameState::init()
 		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

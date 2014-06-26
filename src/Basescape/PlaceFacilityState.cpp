@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule) : State(game), _base(base), _rule(rule)
+PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _base(base), _rule(rule)
 {
 	_screen = false;
 
@@ -140,12 +140,12 @@ void PlaceFacilityState::viewClick(Action *)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else
 	{

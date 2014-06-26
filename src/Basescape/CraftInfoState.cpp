@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craftId ID of the selected craft.
  */
-CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craftId) : State(game), _base(base), _craftId(craftId)
+CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craftId(craftId)
 {
 	// Create objects
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
@@ -331,7 +331,7 @@ void CraftInfoState::btnWClick(Action * act)
 	{
 		if(act->getSender() == _btnW[i])
 		{
-			_game->pushState(new CraftWeaponsState(_game, _base, _craftId, i));
+			_game->pushState(new CraftWeaponsState(_base, _craftId, i));
 			return;
 		}
 	}
@@ -343,7 +343,7 @@ void CraftInfoState::btnWClick(Action * act)
  */
 void CraftInfoState::btnCrewClick(Action *)
 {
-	_game->pushState(new CraftSoldiersState(_game, _base, _craftId));
+	_game->pushState(new CraftSoldiersState(_base, _craftId));
 }
 
 /**
@@ -352,7 +352,7 @@ void CraftInfoState::btnCrewClick(Action *)
  */
 void CraftInfoState::btnEquipClick(Action *)
 {
-	_game->pushState(new CraftEquipmentState(_game, _base, _craftId));
+	_game->pushState(new CraftEquipmentState(_base, _craftId));
 }
 
 /**
@@ -361,7 +361,7 @@ void CraftInfoState::btnEquipClick(Action *)
  */
 void CraftInfoState::btnArmorClick(Action *)
 {
-	_game->pushState(new CraftArmorState(_game, _base, _craftId));
+	_game->pushState(new CraftArmorState(_base, _craftId));
 }
 
 /**

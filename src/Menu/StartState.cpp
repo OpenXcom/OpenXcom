@@ -53,7 +53,7 @@ std::string StartState::error;
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
  */
-StartState::StartState(Game *game) : State(game), _anim(0)
+StartState::StartState() : _anim(0)
 {
 	//updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 	Options::newDisplayWidth = Options::displayWidth;
@@ -178,13 +178,13 @@ void StartState::think()
 			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 			_game->getScreen()->resetDisplay(false);
-			_game->setState(new IntroState(_game, letterbox));
+			_game->setState(new IntroState(letterbox));
 		}
 		else
 		{
 			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
-			State *state = new MainMenuState(_game);
+			State *state = new MainMenuState;
 			_game->setState(state);
 			// Check for mod loading errors
 			if (!Options::badMods.empty())
@@ -196,7 +196,7 @@ void StartState::think()
 					error << Language::fsToWstr(*i) << L'\n';
 				}
 				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(_game, error.str(), state->getPalette(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+				_game->pushState(new ErrorMessageState(error.str(), state->getPalette(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			}
 			Options::reload = false;
 		}

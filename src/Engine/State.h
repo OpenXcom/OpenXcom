@@ -46,14 +46,14 @@ class State
 	friend class Timer;
 
 protected:
-	Game *_game;
+	static Game *_game;
 	std::vector<Surface*> _surfaces;
 	bool _screen;
 	InteractiveSurface *_modal;
 	SDL_Color _palette[256];
 public:
 	/// Creates a new state linked to a game.
-	State(Game* game);
+	State();
 	/// Cleans up the state.
 	virtual ~State();
 	/// Adds a child element to the state.
@@ -88,6 +88,8 @@ public:
 	void lowerAllSurfaces();
 	/// switch the colours to use the battlescape palette.
 	void applyBattlescapeTheme();
+	/// Sets game object pointer
+	static void setGamePtr(Game* game);
 	/// Sets a modal surface.
 	void setModal(InteractiveSurface *surface);
 	/// Changes a set of colors on the state's 8bpp palette.

@@ -62,7 +62,7 @@ static const int _applyTemplateBtnY = 113;
  * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
-InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
+InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
@@ -508,7 +508,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent, true, false));
+	_game->pushState(new UnitInfoState(_battleGame->getSelectedUnit(), _parent, true, false));
 }
 
 void InventoryState::btnCreateTemplateClick(Action *action)
@@ -563,8 +563,8 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 
 void InventoryState::btnApplyTemplateClick(Action *action)
 {
-	// don't accept clicks when moving items
-	if (_inv->getSelectedItem() != 0)
+	// don't accept clicks when moving items or when the template is empty
+	if (_inv->getSelectedItem() != 0 || _curInventoryTemplate.empty())
 	{
 		return;
 	}

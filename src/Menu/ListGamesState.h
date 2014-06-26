@@ -56,7 +56,7 @@ protected:
 	void updateArrows();
 public:
 	/// Creates the Saved Game state.
-	ListGamesState(Game *game, OptionsOrigin origin, int firstValidRow, bool autoquick);
+	ListGamesState(OptionsOrigin origin, int firstValidRow, bool autoquick);
 	/// Cleans up the Saved Game state.
 	virtual ~ListGamesState();
 	/// Sets up the saves list.

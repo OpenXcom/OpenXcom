@@ -34,7 +34,7 @@
 
 namespace OpenXcom
 {
-	UfopaediaSelectState::UfopaediaSelectState(Game *game, std::string section) : State(game), _section(section)
+	UfopaediaSelectState::UfopaediaSelectState(std::string section) : _section(section)
 	{
 		_screen = false;
 

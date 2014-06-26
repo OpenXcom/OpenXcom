@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param texture Texture of the landing site.
  * @param shade Shade of the landing site.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade) : State(game), _craft(craft), _texture(texture), _shade(shade)
+ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) : _craft(craft), _texture(texture), _shade(shade)
 {
 	_screen = false;
 
@@ -135,7 +135,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	BattlescapeGenerator bgen(_game);
 	bgen.setWorldTexture(_texture);
 	bgen.setWorldShade(_shade);
 	bgen.setCraft(_craft);
@@ -165,7 +165,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		throw Exception("No mission available!");
 	}
 	bgen.run();
-	_game->pushState(new BriefingState(_game, _craft));
+	_game->pushState(new BriefingState(_craft));
 }
 
 /**

@@ -35,16 +35,16 @@
 namespace OpenXcom
 {
 	const std::string UfopaediaStartState::SECTIONS[] = {UFOPAEDIA_XCOM_CRAFT_ARMAMENT,
-	                                                     UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS,
-	                                                     UFOPAEDIA_WEAPONS_AND_EQUIPMENT,
-	                                                     UFOPAEDIA_ALIEN_ARTIFACTS,
-	                                                     UFOPAEDIA_BASE_FACILITIES,
-	                                                     UFOPAEDIA_ALIEN_LIFE_FORMS,
-	                                                     UFOPAEDIA_ALIEN_RESEARCH,
-	                                                     UFOPAEDIA_UFO_COMPONENTS,
-	                                                     UFOPAEDIA_UFOS};
+														 UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS,
+														 UFOPAEDIA_WEAPONS_AND_EQUIPMENT,
+														 UFOPAEDIA_ALIEN_ARTIFACTS,
+														 UFOPAEDIA_BASE_FACILITIES,
+														 UFOPAEDIA_ALIEN_LIFE_FORMS,
+														 UFOPAEDIA_ALIEN_RESEARCH,
+														 UFOPAEDIA_UFO_COMPONENTS,
+														 UFOPAEDIA_UFOS};
 	
-	UfopaediaStartState::UfopaediaStartState(Game *game) : State(game)
+	UfopaediaStartState::UfopaediaStartState()
 	{
 		_screen = false;
 
@@ -120,7 +120,7 @@ namespace OpenXcom
 		{
 			if (action->getSender() == _btnSection[i])
 			{
-				_game->pushState(new UfopaediaSelectState(_game, SECTIONS[i]));
+				_game->pushState(new UfopaediaSelectState(SECTIONS[i]));
 				break;
 			}
 		}

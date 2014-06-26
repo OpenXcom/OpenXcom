@@ -43,7 +43,7 @@ private:
 	bool _first;
 public:
 	/// Creates the Place Lift state.
-	PlaceLiftState(Game *game, Base *base, Globe *globe, bool first);
+	PlaceLiftState(Base *base, Globe *globe, bool first);
 	/// Cleans up the Place Lift state.
 	~PlaceLiftState();
 	/// Handler for clicking the base view.

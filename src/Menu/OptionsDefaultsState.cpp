@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param state Pointer to the base Options state.
  */
-OptionsDefaultsState::OptionsDefaultsState(Game *game, OptionsOrigin origin, OptionsBaseState *state) : State(game), _origin(origin), _state(state)
+OptionsDefaultsState::OptionsDefaultsState(OptionsOrigin origin, OptionsBaseState *state) : _origin(origin), _state(state)
 {
 	_screen = false;
 
