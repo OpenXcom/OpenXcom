@@ -941,7 +941,7 @@ void DogfightState::move()
 			Timer *wTimer = _wTimer[i];
 
 			// Handle weapon firing
-			if (!wTimer->isRunning() && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
+			if (!wTimer->isRunning() && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff
 				&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
 				wTimer->start();
@@ -1157,7 +1157,7 @@ void DogfightState::fireWeapon(int i)
 
 			CraftWeaponProjectile *p = w1->fire();
 			p->setDirection(D_UP);
-			p->setHorizontalPosition(HP_LEFT);
+			p->setHorizontalPosition((i % 2 ? HP_RIGHT : HP_LEFT) * (1 + 2 * (i / 2)));
 			_projectiles.push_back(p);
 
 			_game->getResourcePack()->getSound("GEO.CAT", w1->getRules()->getSound())->play();
@@ -1524,7 +1524,8 @@ void DogfightState::drawUfo()
  * shape will be different. Currently works for 
  * original sized blobs 3 x 6 pixels.
  */
-void DogfightState::drawProjectile(const CraftWeaponProjectile* p) {
+void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
+{
 	if(_minimized)
 	{
 		return;
