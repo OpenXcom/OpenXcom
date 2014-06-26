@@ -48,7 +48,7 @@ private:
 	std::wstring countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural);
 public:
 	/// Creates the Monthly Report state.
-	MonthlyReportState(Game *game, bool psi, Globe *globe);
+	MonthlyReportState(bool psi, Globe *globe);
 	/// Cleans up the Monthly Report state.
 	~MonthlyReportState();
 	/// Handler for clicking the OK button.

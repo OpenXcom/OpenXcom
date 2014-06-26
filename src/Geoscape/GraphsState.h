@@ -65,7 +65,7 @@ private:
 	void updateButton(GraphButInfo *from,ToggleTextButton *to);
 public:
 	/// Creates the Graphs state.
-	GraphsState(Game *game);
+	GraphsState();
 	/// Cleans up the Graphs state.
 	~GraphsState();
 	/// Handler for clicking the Geoscape icon.

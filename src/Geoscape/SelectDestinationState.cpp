@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft to target.
  * @param globe Pointer to the Geoscape globe.
  */
-SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
+SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _craft(craft), _globe(globe)
 {
 	int dx = _game->getScreen()->getDX();
 	int dy = _game->getScreen()->getDY();
@@ -208,7 +208,7 @@ void SelectDestinationState::globeClick(Action *action)
 			w->setLatitude(lat);
 			v.push_back(w);
 		}
-		_game->pushState(new MultipleTargetsState(_game, v, _craft, 0));
+		_game->pushState(new MultipleTargetsState(v, _craft, 0));
 	}
 }
 
@@ -333,7 +333,7 @@ void SelectDestinationState::btnCydoniaClick(Action *)
 {
 	if (_craft->getNumSoldiers() > 0 || _craft->getNumVehicles() > 0)
 	{
-		_game->pushState(new ConfirmCydoniaState(_game, _craft));
+		_game->pushState(new ConfirmCydoniaState(_craft));
 	}
 }
 

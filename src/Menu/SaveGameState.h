@@ -41,9 +41,9 @@ private:
 	SaveType _type;
 public:
 	/// Creates the Save Game state.
-	SaveGameState(Game *game, OptionsOrigin origin, const std::string &filename);
+	SaveGameState(OptionsOrigin origin, const std::string &filename);
 	/// Creates the Load Game state.
-	SaveGameState(Game *game, OptionsOrigin origin, SaveType type);
+	SaveGameState(OptionsOrigin origin, SaveType type);
 	/// Cleans up the Save Game state.
 	~SaveGameState();
 	/// Creates the interface.

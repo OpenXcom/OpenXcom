@@ -46,7 +46,7 @@ private:
 	std::vector<Base*> _bases;
 public:
 	/// Creates the Transfer Base state.
-	TransferBaseState(Game *game, Base *base);
+	TransferBaseState(Base *base);
 	/// Cleans up the Transfer Base state.
 	~TransferBaseState();
 	/// Handler for clicking the Cancel button.

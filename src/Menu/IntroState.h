@@ -35,7 +35,7 @@ private:
 	int _oldMusic, _oldSound;
 public:
 	/// Creates the Intro state.
-	IntroState(Game *game, bool wasLetterBoxed);
+	IntroState(bool wasLetterBoxed);
 	/// Cleans up the Intro state.
 	~IntroState();
 	/// Starts the intro.

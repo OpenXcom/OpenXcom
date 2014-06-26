@@ -35,7 +35,7 @@ private:
 	Text *_txtError;
 public:
 	/// Creates the Audio Options state.
-	OptionsNoAudioState(Game *game, OptionsOrigin origin);
+	OptionsNoAudioState(OptionsOrigin origin);
 	/// Cleans up the Audio Options state.
 	~OptionsNoAudioState();
 };

@@ -45,7 +45,7 @@ private:
 	int _countdown;
 public:
 	/// Creates the Confirm Display Options state.
-	OptionsConfirmState(Game *game, OptionsOrigin origin);
+	OptionsConfirmState(OptionsOrigin origin);
 	/// Cleans up the Confirm Display Options state.
 	~OptionsConfirmState();
 	/// Handle timers.

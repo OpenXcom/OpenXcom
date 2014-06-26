@@ -52,9 +52,10 @@ private:
 	SavedBattleGame *_battleGame;
 	const bool _tu;
 	BattlescapeState *_parent;
+	std::string _currentTooltip;
 public:
 	/// Creates the Inventory state.
-	InventoryState(Game *game, bool tu, BattlescapeState *parent);
+	InventoryState(bool tu, BattlescapeState *parent);
 	/// Cleans up the Inventory state.
 	~InventoryState();
 	/// Updates all soldier info.
@@ -87,6 +88,10 @@ public:
 	void invMouseOut(Action *action);
 	/// Handles keypresses.
 	void handle(Action *action);
+	/// Handler for showing tooltip.
+	void txtTooltipIn(Action *action);
+	/// Handler for hiding tooltip.
+	void txtTooltipOut(Action *action);
 };
 
 }

@@ -52,7 +52,7 @@ struct GraphButInfo
  * Initializes all the elements in the Graphs screen.
  * @param game Pointer to the core game.
  */
-GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCountriesOffset(0)
+GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 {
 	// Create objects
 	_bg = new InteractiveSurface(320, 200, 0, 0);
@@ -167,7 +167,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 	_countryToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), 22));
 	_btnCountryTotal->onMousePress((ActionHandler)&GraphsState::btnCountryListClick);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
-    _btnCountryTotal->setInvertColor(22);
+	_btnCountryTotal->setInvertColor(22);
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
 	_alienCountryLines.push_back(new Surface(320,200,0,0));
 	add(_alienCountryLines.at(offset));
@@ -184,7 +184,7 @@ GraphsState::GraphsState(Game *game) : State(game), _butRegionsOffset(0), _butCo
 		_btnFinances.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 		_financeToggles.push_back(false);
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
-        _btnFinances.at(offset)->setInvertColor(-42 + (4*offset));
+		_btnFinances.at(offset)->setInvertColor(-42 + (4*offset));
 		_btnFinances.at(offset)->onMousePress((ActionHandler)&GraphsState::btnFinanceListClick);
 		add(_btnFinances.at(offset));
 		_financeLines.push_back(new Surface(320,200,0,0));

@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape state.
  * @param endType What ended the production.
  */
-ProductionCompleteState::ProductionCompleteState(Game *game, Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType) : State(game), _base(base), _state(state), _endType(endType)
+ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType) : _base(base), _state(state), _endType(endType)
 {
 	_screen = false;
 
@@ -135,11 +135,11 @@ void ProductionCompleteState::btnGotoBaseClick(Action *)
 	_game->popState();
 	if (_endType != PROGRESS_CONSTRUCTION)
 	{
-		_game->pushState(new ManufactureState(_game, _base));
+		_game->pushState(new ManufactureState(_base));
 	}
 	else
 	{
-		_game->pushState(new BasescapeState(_game, _base, _state->getGlobe()));
+		_game->pushState(new BasescapeState(_base, _state->getGlobe()));
 	}
 }
 

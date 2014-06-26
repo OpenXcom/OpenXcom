@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+AbandonGameState::AbandonGameState(OptionsOrigin origin) : _origin(origin)
 {
 	_screen = false;
 
@@ -119,12 +119,12 @@ void AbandonGameState::btnYesClick(Action *)
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
 
-		_game->setState(new MainMenuState(_game));
+		_game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 	else
 	{
-		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN_END));
+		_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN_END));
 	}
 }
 

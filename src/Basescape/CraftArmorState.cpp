@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(game), _base(base), _craft(craft)
+CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft(craft)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -159,7 +159,7 @@ void CraftArmorState::lstSoldiersClick(Action *)
 {
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
-		_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
+		_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
 }
 
 }

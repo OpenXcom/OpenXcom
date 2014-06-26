@@ -39,11 +39,11 @@ namespace OpenXcom
  * Initializes all the elements in the Victory screen.
  * @param game Pointer to the core game.
  */
-VictoryState::VictoryState(Game *game) : State(game), _screen(-1)
+VictoryState::VictoryState() : _screen(-1)
 {
 	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	game->getScreen()->resetDisplay(false);
+	_game->getScreen()->resetDisplay(false);
 	const char *files[] = {"PICT1.LBM", "PICT2.LBM", "PICT3.LBM", "PICT6.LBM", "PICT7.LBM"};
 
 	_timer = new Timer(30000);
@@ -138,7 +138,7 @@ void VictoryState::screenClick(Action *)
 		_game->popState();
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
-		_game->setState(new MainMenuState(_game));
+		_game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 }

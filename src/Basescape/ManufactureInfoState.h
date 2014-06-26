@@ -108,9 +108,9 @@ private:
 	void exitState();
 public:
 	/// Creates the State (new production).
-	ManufactureInfoState (Game * game, Base * base, RuleManufacture * _item);
+	ManufactureInfoState(Base * base, RuleManufacture * _item);
 	/// Creates the State (modify production).
-	ManufactureInfoState (Game * game, Base * base, Production * production);
+	ManufactureInfoState(Base * base, Production * production);
 };
 }
 #endif

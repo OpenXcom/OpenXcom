@@ -46,7 +46,7 @@ private:
 	int _cost;
 public:
 	/// Creates the Confirm New Base state.
-	ConfirmNewBaseState(Game *game, Base *base, Globe *globe);
+	ConfirmNewBaseState(Base *base, Globe *globe);
 	/// Cleans up the Confirm New Base state.
 	~ConfirmNewBaseState();
 	/// Handler for clicking the OK button.

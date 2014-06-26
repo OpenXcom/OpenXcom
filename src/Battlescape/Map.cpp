@@ -1061,13 +1061,15 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 
-						if (_previewSetting & PATH_TU_COST)
+						if (_previewSetting & PATH_TU_COST && tile->getTUMarker() > -1)
 						{
-							int tuMarker = std::max(0, tile->getTUMarker());
-
-							_numWaypid->setValue(tuMarker);
+							_numWaypid->setValue(tile->getTUMarker());
 							_numWaypid->draw();
 							int off = tile->getTUMarker() > 9 ? 4 : 2;
+							if (_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							{
+								adjustment += 8;
+							}
 							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (30-adjustment), 0);
 						}
 					}

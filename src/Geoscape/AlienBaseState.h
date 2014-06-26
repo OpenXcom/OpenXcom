@@ -44,7 +44,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the Alien Base Detected state.
-	AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state);
+	AlienBaseState(AlienBase *base, GeoscapeState *state);
 	/// Cleans up the Alien Base Detected state.
 	~AlienBaseState();
 	/// Handler for clicking the OK button.

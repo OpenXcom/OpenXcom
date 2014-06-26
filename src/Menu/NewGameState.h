@@ -46,7 +46,7 @@ private:
 	Text *_txtTitle, *_txtIronman;
 public:
 	/// Creates the New Game state.
-	NewGameState(Game *game);
+	NewGameState();
 	/// Cleans up the New Game state.
 	~NewGameState();
 	/// Handler for clicking the Ok button.

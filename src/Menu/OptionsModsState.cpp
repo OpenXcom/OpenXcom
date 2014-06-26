@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsModsState::OptionsModsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	setCategory(_btnMods);
 

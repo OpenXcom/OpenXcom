@@ -40,7 +40,7 @@ class ResearchRequiredState : public State
 	TextButton *_btnOk;
 public:
 	/// Creates the ResearchRequired state.
-	ResearchRequiredState(Game *game, RuleItem *item);
+	ResearchRequiredState(RuleItem *item);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };

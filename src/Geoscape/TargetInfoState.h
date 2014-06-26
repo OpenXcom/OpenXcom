@@ -45,7 +45,7 @@ private:
 	Text *_txtTitle, *_txtTargetted, *_txtFollowers;
 public:
 	/// Creates the Target Info state.
-	TargetInfoState(Game *game, Target *target, Globe *globe);
+	TargetInfoState(Target *target, Globe *globe);
 	/// Cleans up the Target Info state.
 	~TargetInfoState();
 	/// Handler for clicking the Intercept button.

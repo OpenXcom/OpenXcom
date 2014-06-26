@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state), _facilities()
+BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(base), _state(state), _facilities()
 {
 	_screen = false;
 
@@ -138,7 +138,7 @@ void BuildFacilitiesState::btnOkClick(Action *)
  */
 void BuildFacilitiesState::lstFacilitiesClick(Action *)
 {
-	_game->pushState(new PlaceFacilityState(_game, _base, _facilities[_lstFacilities->getSelectedRow()]));
+	_game->pushState(new PlaceFacilityState(_base, _facilities[_lstFacilities->getSelectedRow()]));
 }
 
 }

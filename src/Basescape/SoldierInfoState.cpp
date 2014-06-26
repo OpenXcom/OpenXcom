@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from. NULL to use the dead soldiers list.
  * @param soldierId ID of the selected soldier.
  */
-SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldierId) : State(game), _base(base), _soldierId(soldierId)
+SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), _soldierId(soldierId)
 {
 	if (_base == 0)
 	{
@@ -612,8 +612,8 @@ void SoldierInfoState::btnOkClick(Action *)
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
 	{
-		_game->pushState(new SellState(_game, _base));
-		_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 0));
+		_game->pushState(new SellState(_base));
+		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 0));
 	}
 }
 
@@ -650,7 +650,7 @@ void SoldierInfoState::btnArmorClick(Action *)
 {
 	if (!_soldier->getCraft() || (_soldier->getCraft() && _soldier->getCraft()->getStatus() != "STR_OUT"))
 	{
-		_game->pushState(new SoldierArmorState(_game, _base, _soldierId));
+		_game->pushState(new SoldierArmorState(_base, _soldierId));
 	}
 }
 
@@ -660,7 +660,7 @@ void SoldierInfoState::btnArmorClick(Action *)
  */
 void SoldierInfoState::btnSackClick(Action *)
 {
-	_game->pushState(new SackSoldierState(_game, _base, _soldierId));
+	_game->pushState(new SackSoldierState(_base, _soldierId));
 }
 
 }

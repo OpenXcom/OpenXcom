@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft to retarget.
  * @param target Pointer to the selected target (NULL if it's just a point on the globe).
  */
-ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Target *target) : State(game), _craft(craft), _target(target)
+ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) : _craft(craft), _target(target)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	_screen = false;

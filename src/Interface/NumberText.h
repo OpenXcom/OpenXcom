@@ -33,6 +33,8 @@ class NumberText : public Surface
 private:
 	unsigned int _value;
 	Surface *_chars[10];
+	Surface *_borderedChars[10];
+	bool _bordered;
 	Uint8 _color;
 public:
 	/// Creates a new number text with the specified size and position.
@@ -51,6 +53,9 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Draws the number text.
 	void draw();
+	/// sets this numbertext to have a border or not
+	void setBordered(bool bordered);
+
 };
 
 }

@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
+ResearchState::ResearchState(Base *base) : _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -145,7 +145,7 @@ void ResearchState::btnOkClick(Action *)
  */
 void ResearchState::btnNewClick(Action *)
 {
-	_game->pushState(new NewResearchListState(_game, _base));
+	_game->pushState(new NewResearchListState(_base));
 }
 
 /**
@@ -155,7 +155,7 @@ void ResearchState::btnNewClick(Action *)
 void ResearchState::onSelectProject(Action *)
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
-	_game->pushState(new ResearchInfoState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
+	_game->pushState(new ResearchInfoState(_base, baseProjects[_lstResearch->getSelectedRow()]));
 }
 
 /**

@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
  */
-LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, const std::string &filename) : State(game), _origin(origin), _filename(filename)
+LoadGameState::LoadGameState(OptionsOrigin origin, const std::string &filename) : _origin(origin), _filename(filename)
 {
 	buildUi();
 }
@@ -53,7 +53,7 @@ LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, const std::string
  * @param origin Game section that originated this state.
  * @param type Type of auto-load being used.
  */
-LoadGameState::LoadGameState(Game *game, OptionsOrigin origin, SaveType type) : State(game), _origin(origin)
+LoadGameState::LoadGameState(OptionsOrigin origin, SaveType type) : _origin(origin)
 {
 	switch (type)
 	{
@@ -145,14 +145,14 @@ void LoadGameState::init()
 		Options::baseXResolution = Options::baseXGeoscape;
 		Options::baseYResolution = Options::baseYGeoscape;
 		_game->getScreen()->resetDisplay(false);
-		_game->setState(new GeoscapeState(_game));
+		_game->setState(new GeoscapeState);
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
 			Options::baseXResolution = Options::baseXBattlescape;
 			Options::baseYResolution = Options::baseYBattlescape;
 			_game->getScreen()->resetDisplay(false);
-			BattlescapeState *bs = new BattlescapeState(_game);
+			BattlescapeState *bs = new BattlescapeState;
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
@@ -163,9 +163,9 @@ void LoadGameState::init()
 		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);
@@ -178,9 +178,9 @@ void LoadGameState::init()
 		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);

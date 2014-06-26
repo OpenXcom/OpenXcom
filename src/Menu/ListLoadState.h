@@ -32,7 +32,7 @@ class ListLoadState : public ListGamesState
 {
 public:
 	/// Creates the Load Game state.
-	ListLoadState(Game *game, OptionsOrigin origin);
+	ListLoadState(OptionsOrigin origin);
 	/// Cleans up the Load Game state.
 	~ListLoadState();
 	/// Handler for clicking the Saves list.

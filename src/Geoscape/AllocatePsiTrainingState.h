@@ -49,7 +49,7 @@ private:
 	Base *_base;
 public:
 	/// Creates the Psi Training state.
-	AllocatePsiTrainingState(Game *game, Base *base);
+	AllocatePsiTrainingState(Base *base);
 	/// Cleans up the Psi Training state.
 	~AllocatePsiTrainingState();
 	/// Handler for clicking the OK button.

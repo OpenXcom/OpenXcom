@@ -41,7 +41,7 @@ private:
 	Timer *_timer;
 public:
 	/// Creates the Victory state.
-	VictoryState(Game *game);
+	VictoryState();
 	/// Cleans up the Victory state.
 	~VictoryState();
 	/// Handle timers.

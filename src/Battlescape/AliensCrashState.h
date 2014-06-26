@@ -40,7 +40,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the Aliens Crash state.
-	AliensCrashState(Game *game);
+	AliensCrashState();
 	/// Cleans up the Aliens Crash state.
 	~AliensCrashState();
 	/// Handler for clicking the OK button.

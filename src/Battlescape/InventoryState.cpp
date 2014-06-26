@@ -62,7 +62,7 @@ static const int _applyTemplateBtnY = 113;
  * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
-InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
+InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
@@ -170,17 +170,48 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, Options::keyCancel);
 	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, Options::keyBattleInventory);
+	_btnOk->setTooltip("STR_OK");
+	_btnOk->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnOk->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
 	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, Options::keyBattlePrevUnit);
+	_btnPrev->setTooltip("STR_PREVIOUS_UNIT");
+	_btnPrev->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnPrev->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
 	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, Options::keyBattleNextUnit);
+	_btnNext->setTooltip("STR_NEXT_UNIT");
+	_btnNext->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnNext->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
+	_btnUnload->setTooltip("STR_UNLOAD_CRAFT");
+	_btnUnload->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnUnload->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
+	_btnGround->setTooltip("STR_SCROLL_RIGHT");
+	_btnGround->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnGround->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
+	_btnRank->setTooltip("STR_UNIT_STATS");
+	_btnRank->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnRank->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnCreateTemplate->onMouseClick((ActionHandler)&InventoryState::btnCreateTemplateClick);
 	_btnCreateTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnCreateTemplateClick, Options::keyInvCreateTemplate);
+	_btnCreateTemplate->setTooltip("STR_CREATE_INVENTORY_TEMPLATE");
+	_btnCreateTemplate->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnCreateTemplate->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 	_btnApplyTemplate->onMouseClick((ActionHandler)&InventoryState::btnApplyTemplateClick);
 	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, Options::keyInvApplyTemplate);
+	_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
+	_btnApplyTemplate->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnApplyTemplate->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
 
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
@@ -202,6 +233,9 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+
+	
+	_currentTooltip = "";
 }
 
 static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*> &inventoryTemplate)
@@ -508,7 +542,7 @@ void InventoryState::btnGroundClick(Action *)
  */
 void InventoryState::btnRankClick(Action *)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent, true, false));
+	_game->pushState(new UnitInfoState(_battleGame->getSelectedUnit(), _parent, true, false));
 }
 
 void InventoryState::btnCreateTemplateClick(Action *action)
@@ -563,8 +597,8 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 
 void InventoryState::btnApplyTemplateClick(Action *action)
 {
-	// don't accept clicks when moving items
-	if (_inv->getSelectedItem() != 0)
+	// don't accept clicks when moving items or when the template is empty
+	if (_inv->getSelectedItem() != 0 || _curInventoryTemplate.empty())
 	{
 		return;
 	}
@@ -707,7 +741,10 @@ void InventoryState::invMouseOver(Action *)
 	}
 	else
 	{
-		_txtItem->setText(L"");
+		if (_currentTooltip == "")
+		{
+			_txtItem->setText(L"");
+		}
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
 		_btnCreateTemplate->setVisible(!_tu);
@@ -752,4 +789,32 @@ void InventoryState::handle(Action *action)
 #endif
 }
 
+/**
+* Shows a tooltip for the appropriate button.
+* @param action Pointer to an action.
+*/
+void InventoryState::txtTooltipIn(Action *action)
+{
+	if (_inv->getSelectedItem() == 0 && Options::battleTooltips)
+	{
+		_currentTooltip = action->getSender()->getTooltip();
+		_txtItem->setText(tr(_currentTooltip));
+	}
+}
+
+/**
+* Clears the tooltip text.
+* @param action Pointer to an action.
+*/
+void InventoryState::txtTooltipOut(Action *action)
+{
+	if (_inv->getSelectedItem() == 0 && Options::battleTooltips)
+	{
+		if (_currentTooltip == action->getSender()->getTooltip())
+		{
+			_currentTooltip = "";
+			_txtItem->setText(L"");
+		}
+	}
+}
 }

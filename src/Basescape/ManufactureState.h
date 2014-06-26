@@ -45,7 +45,7 @@ private:
 	void lstManufactureClick(Action * action);
 public:
 	/// Creates the Manufacture state.
-	ManufactureState(Game *game, Base *base);
+	ManufactureState(Base *base);
 	/// Cleans up the Manufacture state.
 	~ManufactureState();
 	/// Handler for clicking the OK button.

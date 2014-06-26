@@ -39,7 +39,7 @@ namespace OpenXcom
 	class UfopaediaStartState : public State
 	{
 	public:
-		UfopaediaStartState(Game *game);
+		UfopaediaStartState();
 		virtual ~UfopaediaStartState();
 
 	protected:

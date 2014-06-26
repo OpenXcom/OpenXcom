@@ -700,7 +700,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 	{
 		month =
 		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
-		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
+		_game->getRuleset()->getAlienItemLevels().size() - 1 : // then
 		_game->getSavedGame()->getMonthsPassed() ;  // else
 	}
 	else
@@ -1817,7 +1817,7 @@ void BattlescapeGenerator::deployCivilians(int max)
 	if (max)
 	{
 		// inevitably someone will point out that ufopaedia says 0-16 civilians.
-		// to that person:  i looked at the code and it says otherwise.
+		// to that person: i looked at the code and it says otherwise.
 		// 0 civilians would only be a possibility if there were already 80 units,
 		// or no spawn nodes for civilians.
 		int number = RNG::generate(max/2, max);

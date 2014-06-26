@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param view Pointer to the baseview to update.
  * @param fac Pointer to the facility to dismantle.
  */
-DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac) : State(game), _base(base), _view(view), _fac(fac)
+DismantleFacilityState::DismantleFacilityState(Base *base, BaseView *view, BaseFacility *fac) : _base(base), _view(view), _fac(fac)
 {
 	_screen = false;
 
