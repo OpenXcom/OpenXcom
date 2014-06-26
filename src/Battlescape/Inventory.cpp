@@ -59,6 +59,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base)
 	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
 	_warning = new WarningMessage(224, 24, 48, 176);
 	_stackNumber = new NumberText(15, 15, 0, 0);
+	_stackNumber->setBordered(true);
 
 	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 	_warning->setColor(Palette::blockOffset(2));
@@ -242,12 +243,12 @@ void Inventory::drawItems()
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
 			{
-				_stackNumber->setX(((*i)->getSlot()->getX() + (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset) * RuleInventory::SLOT_W)-3);
+				_stackNumber->setX(((*i)->getSlot()->getX() + (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset) * RuleInventory::SLOT_W)-4);
 				if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 9)
 				{
 					_stackNumber->setX(_stackNumber->getX()-4);
 				}
-				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-5);
+				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-6);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
 				_stackNumber->setColor(Palette::blockOffset(4)+2);
@@ -255,22 +256,6 @@ void Inventory::drawItems()
 			}
 		}
 
-		// give it a border
-		// this is the "darker" shade that goes in the corners.
-		for (int x = -1; x <= 1; x += 2)
-		{
-			for (int y = -1; y <= 1; y += 2)
-			{
-				stackLayer->blitNShade(_items, x, y, 11);
-			}
-		}
-		// this is the "slightly darker" version that goes in four cardinals.
-		for (int z = -1; z <= 1; z += 2)
-		{
-			stackLayer->blitNShade(_items, z, 0, 8);
-			stackLayer->blitNShade(_items, 0, z, 8);
-		}
-		// and finally the number itself
 		stackLayer->blit(_items);
 		delete stackLayer;
 	}
