@@ -54,8 +54,8 @@ private:
 	InteractiveSurface *_surfaceScientists;
 public:
 	/// Creates the ResearchProject state.
-	ResearchInfoState(Game *game, Base *base, RuleResearch * rule);
-	ResearchInfoState(Game *game, Base *base, ResearchProject * project);
+	ResearchInfoState(Base *base, RuleResearch * rule);
+	ResearchInfoState(Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

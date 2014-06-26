@@ -45,7 +45,7 @@ private:
 	TextList *_lstStores;
 public:
 	/// Creates the Stores state.
-	StoresState(Game *game, Base *base);
+	StoresState(Base *base);
 	/// Cleans up the Stores state.
 	~StoresState();
 	/// Handler for clicking the OK button.

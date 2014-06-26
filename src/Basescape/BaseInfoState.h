@@ -61,7 +61,7 @@ private:
 	Bar *_barDefense, *_barShortRange, *_barLongRange;
 public:
 	/// Creates the Base Info state.
-	BaseInfoState(Game *game, Base *base, BasescapeState *state);
+	BaseInfoState(Base *base, BasescapeState *state);
 	/// Cleans up the Base Info state.
 	~BaseInfoState();
 	/// Updates the base stats.

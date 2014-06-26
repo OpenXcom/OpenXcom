@@ -4,7 +4,7 @@ facilities:
   - delete: STR_MIND_SHIELD
 items:
   - delete: STR_PSI_AMP
-  - type: STR_ALIEN_PSI_WEAPON
+  - type: ALIEN_PSI_WEAPON
     tuUse: 999 # can't remove this weapon
 research:
   - delete: STR_MIND_SHIELD

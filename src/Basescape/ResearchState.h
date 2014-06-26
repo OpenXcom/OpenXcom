@@ -44,7 +44,7 @@ private:
 	TextList *_lstResearch;
 public:
 	/// Creates the Research state.
-	ResearchState(Game *game, Base *base);
+	ResearchState(Base *base);
 	/// Cleans up the Research state.
 	~ResearchState();
 	/// Handler for clicking the OK button.

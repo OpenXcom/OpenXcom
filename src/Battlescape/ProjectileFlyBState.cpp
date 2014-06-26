@@ -450,7 +450,7 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
-			if (!_unit->isOut())
+			if (!_unit->isOut() && _action.type != BA_HIT)
 			{
 				_unit->abortTurn();
 			}
@@ -749,6 +749,6 @@ void ProjectileFlyBState::performMeleeAttack()
 		_action.weapon->setAmmoItem(0);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
-	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor));
+	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor, 0, true));
 }
 }

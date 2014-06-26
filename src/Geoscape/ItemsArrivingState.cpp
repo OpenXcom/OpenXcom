@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
  */
-ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State(game), _state(state), _base(0)
+ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _base(0)
 {
 	_screen = false;
 
@@ -193,7 +193,7 @@ void ItemsArrivingState::btnGotoBaseClick(Action *)
 {
 	_state->timerReset();
 	_game->popState();
-	_game->pushState(new BasescapeState(_game, _base, _state->getGlobe()));
+	_game->pushState(new BasescapeState(_base, _state->getGlobe()));
 }
 
 }

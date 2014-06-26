@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
  */
-NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities) : State (game), _base(base)
+NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vector<RuleResearch *> & possibilities) : _base(base)
 {
 	_screen = false;
 
@@ -120,7 +120,7 @@ void NewPossibleResearchState::btnOkClick(Action *)
 void NewPossibleResearchState::btnResearchClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new ResearchState(_game, _base));
+	_game->pushState (new ResearchState(_base));
 }
 
 }

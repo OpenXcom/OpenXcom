@@ -49,7 +49,7 @@ private:
 	std::vector<RuleCraftWeapon*> _weapons;
 public:
 	/// Creates the Craft Weapons state.
-	CraftWeaponsState(Game *game, Base *base, size_t craft, size_t weapon);
+	CraftWeaponsState(Base *base, size_t craft, size_t weapon);
 	/// Cleans up the Craft Weapons state.
 	~CraftWeaponsState();
 	/// Handler for clicking the Cancel button.

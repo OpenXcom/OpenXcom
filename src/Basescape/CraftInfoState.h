@@ -54,7 +54,7 @@ private:
 	std::wstring formatTime(int time);
 public:
 	/// Creates the Craft Info state.
-	CraftInfoState(Game *game, Base *base, size_t craftId);
+	CraftInfoState(Base *base, size_t craftId);
 	/// Cleans up the Craft Info state.
 	~CraftInfoState();
 	/// Updates the craft info.

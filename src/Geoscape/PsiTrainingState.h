@@ -42,7 +42,7 @@ private:
 	std::vector<Base*> _bases;
 public:
 	/// Creates the Psi Training state.
-	PsiTrainingState(Game *game);
+	PsiTrainingState();
 	/// Cleans up the Psi Training state.
 	~PsiTrainingState();
 	/// Handler for clicking the OK button.

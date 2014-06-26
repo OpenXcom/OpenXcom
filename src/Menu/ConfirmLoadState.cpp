@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param fileName Name of the save file without extension.
  */
-ConfirmLoadState::ConfirmLoadState(Game *game, OptionsOrigin origin, std::string fileName) : State(game), _origin(origin), _fileName(fileName)
+ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, std::string fileName) : _origin(origin), _fileName(fileName)
 {
 	_screen = false;
 
@@ -101,7 +101,7 @@ ConfirmLoadState::~ConfirmLoadState()
 void ConfirmLoadState::btnYesClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new LoadGameState(_game, _origin, _fileName));
+	_game->pushState(new LoadGameState(_origin, _fileName));
 }
 
 /**

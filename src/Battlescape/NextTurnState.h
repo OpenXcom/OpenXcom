@@ -44,7 +44,7 @@ private:
 	Timer *_timer;
 public:
 	/// Creates the Next Turn state.
-	NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
+	NextTurnState(SavedBattleGame *battleGame, BattlescapeState *state);
 	/// Cleans up the Next Turn state.
 	~NextTurnState();
 	/// Handler for clicking anything.

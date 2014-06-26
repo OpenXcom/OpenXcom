@@ -41,7 +41,7 @@ private:
 	TextList *_lstSoldiers;
 public:
 	/// Creates the Promotions state.
-	PromotionsState(Game *game);
+	PromotionsState();
 	/// Cleans up the Promotions state.
 	~PromotionsState();
 	/// Handler for clicking the OK button.

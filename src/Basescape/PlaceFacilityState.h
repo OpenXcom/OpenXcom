@@ -47,7 +47,7 @@ protected:
 	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 public:
 	/// Creates the Place Facility state.
-	PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule);
+	PlaceFacilityState(Base *base, RuleBaseFacility *rule);
 	/// Cleans up the Place Facility state.
 	~PlaceFacilityState();
 	/// Handler for clicking the Cancel button.

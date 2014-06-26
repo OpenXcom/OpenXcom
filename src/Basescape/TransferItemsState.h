@@ -55,7 +55,7 @@ private:
 	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty, _aQty;
 	double _iQty;
-    int _hasSci, _hasEng;
+	int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	/// Gets selected cost.
@@ -70,7 +70,7 @@ private:
 	size_t getItemIndex(size_t selected) const;
 public:
 	/// Creates the Transfer Items state.
-	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);
+	TransferItemsState(Base *baseFrom, Base *baseTo);
 	/// Cleans up the Transfer Items state.
 	~TransferItemsState();
 	/// Runs the timers.

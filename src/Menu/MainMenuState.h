@@ -40,7 +40,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the Main Menu state.
-	MainMenuState(Game *game);
+	MainMenuState();
 	/// Cleans up the Main Menu state.
 	~MainMenuState();
 	/// Handler for clicking the New Game button.

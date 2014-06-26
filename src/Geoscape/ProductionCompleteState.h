@@ -48,7 +48,7 @@ private:
 	productionProgress_e _endType;
 public:
 	/// Creates the Production Complete state.
-	ProductionCompleteState(Game *game, Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType = PROGRESS_COMPLETE);
+	ProductionCompleteState(Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType = PROGRESS_COMPLETE);
 	/// Cleans up the Production Complete state.
 	~ProductionCompleteState();
 	/// Handler for clicking the OK button.

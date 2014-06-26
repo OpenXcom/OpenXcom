@@ -39,11 +39,11 @@ namespace OpenXcom
  * Initializes all the elements in the Defeat screen.
  * @param game Pointer to the core game.
  */
-DefeatState::DefeatState(Game *game) : State(game), _screen(-1)
+DefeatState::DefeatState() : _screen(-1)
 {
 	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	game->getScreen()->resetDisplay(false);
+	_game->getScreen()->resetDisplay(false);
 	const char *files[] = {"PICT4.LBM", "PICT5.LBM"};
 
 	_timer = new Timer(30000);
@@ -135,7 +135,7 @@ void DefeatState::screenClick(Action *)
 		_game->popState();
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
-		_game->setState(new MainMenuState(_game));
+		_game->setState(new MainMenuState);
 		_game->setSavedGame(0);
 	}
 }

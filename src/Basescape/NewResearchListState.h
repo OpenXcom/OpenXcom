@@ -47,7 +47,7 @@ private:
 	std::vector<RuleResearch *> _projects;
 public:
 	/// Creates the New research list state.
-	NewResearchListState(Game *game, Base *base);
+	NewResearchListState(Base *base);
 	/// Handler for clicking the OK button.
 	void btnOKClick(Action *action);
 	/// Fills the ResearchProject list with possible ResearchProjects.

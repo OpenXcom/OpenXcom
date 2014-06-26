@@ -41,7 +41,7 @@ private:
 	Base *_base;
 public:
 	/// Creates the Select Destination state.
-	BaseDestroyedState(Game *game, Base *base);
+	BaseDestroyedState(Base *base);
 	/// Cleans up the Select Destination state.
 	~BaseDestroyedState();
 	/// Handler for clicking the Cydonia mission button.

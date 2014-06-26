@@ -37,7 +37,7 @@ namespace OpenXcom
  * Initializes all the elements in the Difficulty window.
  * @param game Pointer to the core game.
  */
-NewGameState::NewGameState(Game *game) : State(game)
+NewGameState::NewGameState()
 {
 	// Create objects
 	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
@@ -158,10 +158,10 @@ void NewGameState::btnOkClick(Action *)
 	save->setIronman(_btnIronman->getPressed());
 	_game->setSavedGame(save);
 
-	GeoscapeState *gs = new GeoscapeState(_game);
+	GeoscapeState *gs = new GeoscapeState;
 	_game->setState(gs);
 	gs->init();
-	_game->pushState(new BuildNewBaseState(_game, _game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
+	_game->pushState(new BuildNewBaseState(_game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
 }
 
 /**

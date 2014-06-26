@@ -70,7 +70,7 @@ private:
 
 public:
 	/// Creates the Dogfight state.
-	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo);
+	DogfightState(Globe *globe, Craft *craft, Ufo *ufo);
 	/// Cleans up the Dogfight state.
 	~DogfightState();
 	/// Runs the timers.

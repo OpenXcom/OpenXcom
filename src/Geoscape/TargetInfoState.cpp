@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param target Pointer to the target to show info from.
  * @param globe Pointer to the Geoscape globe.
  */
-TargetInfoState::TargetInfoState(Game *game, Target *target, Globe *globe) : State(game), _target(target), _globe(globe)
+TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target), _globe(globe)
 {
 	_screen = false;
 
@@ -109,7 +109,7 @@ TargetInfoState::~TargetInfoState()
  */
 void TargetInfoState::btnInterceptClick(Action *)
 {
-	_game->pushState(new InterceptState(_game, _globe, 0, _target));
+	_game->pushState(new InterceptState(_globe, 0, _target));
 }
 
 /**

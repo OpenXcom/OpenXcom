@@ -47,7 +47,7 @@ private:
 	Text *_txtTitle, *_txtFacility;
 public:
 	/// Creates the Dismantle Facility state.
-	DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac);
+	DismantleFacilityState(Base *base, BaseView *view, BaseFacility *fac);
 	/// Cleans up the Dismantle Facility state.
 	~DismantleFacilityState();
 	/// Handler for clicking the OK button.

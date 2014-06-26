@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+BaseNameState::BaseNameState(Base *base, Globe *globe, bool first) : _base(base), _globe(globe), _first(first)
 {
 	_globe->onMouseOver(0);
 
@@ -132,7 +132,7 @@ void BaseNameState::btnOkClick(Action *)
 			{
 				_game->popState();
 			}
-			_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
+			_game->pushState(new PlaceLiftState(_base, _globe, _first));
 		}
 	}
 }

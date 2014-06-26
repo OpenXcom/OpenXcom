@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule A RuleResearch which will be used to create a new ResearchProject
  */
-ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule) : State(game), _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
+ResearchInfoState::ResearchInfoState(Base *base, RuleResearch * rule) : _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
 {
 	buildUi();
 }
@@ -57,7 +57,7 @@ ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule
  * @param base Pointer to the base to get info from.
  * @param project A ResearchProject to modify
  */
-ResearchInfoState::ResearchInfoState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
+ResearchInfoState::ResearchInfoState(Base *base, ResearchProject * project) : _base(base), _project(project), _rule(0)
 {
 	buildUi();
 }

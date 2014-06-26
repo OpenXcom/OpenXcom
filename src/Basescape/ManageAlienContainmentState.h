@@ -58,7 +58,7 @@ private:
 	int getQuantity();
 public:
 	/// Creates the ManageAlienContainment state.
-	ManageAlienContainmentState(Game *game, Base *base, OptionsOrigin origin);
+	ManageAlienContainmentState(Base *base, OptionsOrigin origin);
 	/// Cleans up the ManageAlienContainment state.
 	~ManageAlienContainmentState();
 	/// Runs the timers.

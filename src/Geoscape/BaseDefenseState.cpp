@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param ufo Pointer to the attacking ufo.
  * @param state Pointer to the Geoscape.
  */
-BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state) : State(game), _state(state)
+BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) : _state(state)
 {
 	_base = base;
 	_action = BDA_NONE;
@@ -212,7 +212,7 @@ void BaseDefenseState::btnOkClick(Action *)
 	{
 		// Whatever happens in the base defense, the UFO has finished its duty
 		_ufo->setStatus(Ufo::DESTROYED);
-        _state->handleBaseDefense(_base, _ufo);
+		_state->handleBaseDefense(_base, _ufo);
 	}
 }
 }

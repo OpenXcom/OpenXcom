@@ -5,6 +5,7 @@
 
 	!include "MUI2.nsh"
 	!include "x64.nsh"
+	!include "Sections.nsh"
 
 ;--------------------------------
 ;Defines
@@ -33,6 +34,7 @@
 ;Variables
 
 	Var StartMenuFolder
+	Var STEAMDIR
 	Var UFODIR
 
 ;--------------------------------
@@ -55,6 +57,7 @@
 	
 	!insertmacro MUI_PAGE_WELCOME
 	!insertmacro MUI_PAGE_COMPONENTS
+	!define MUI_PAGE_CUSTOMFUNCTION_PRE PreDirectory
 	!insertmacro MUI_PAGE_DIRECTORY
 	
 	; UFO Folder Page Configuration
@@ -64,6 +67,7 @@
 	!define MUI_DIRECTORYPAGE_TEXT_DESTINATION $(DEST_UfoFolder)
 	!define MUI_DIRECTORYPAGE_VARIABLE $UFODIR
 	!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
+	!define MUI_PAGE_CUSTOMFUNCTION_PRE PreUFO
 	!define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateUFO
 	
 	!insertmacro MUI_PAGE_DIRECTORY
@@ -120,55 +124,6 @@
 	!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ;--------------------------------
-;Installer functions
-
-Function .onInit
-${If} ${RunningX64}
-	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
-${Else}
-	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
-${EndIf}
-	StrCpy $StartMenuFolder "${GAME_NAME}"
-	
-	; Get UFO folder from Steam
-	StrCpy $UFODIR ""
-	ReadRegStr $R0 HKLM "Software\Valve\Steam" "InstallPath"
-	IfErrors ufo_no
-	StrCpy $R0 "$R0\steamapps\common\xcom ufo defense\XCOM"
-	IfFileExists "$R0\*.*" ufo_yes ufo_no
-	ufo_yes:
-	StrCpy $UFODIR $R0
-	ufo_no:
-	
-	!insertmacro MUI_LANGDLL_DISPLAY
-FunctionEnd
-
-;--------------------------------
-;Validate UFO folder
-
-Function ValidateUFO
-	StrCmp $UFODIR "" validate_yes
-	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
-	Goto validate_yes
-	confirm_ufo:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
-	confirm_xcu:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
-	validate_no:
-	Abort	
-	validate_yes:
-FunctionEnd
-
-;--------------------------------
 ;Installer Sections
 
 Section "$(NAME_SecMain)" SecMain
@@ -176,6 +131,16 @@ Section "$(NAME_SecMain)" SecMain
 	SectionIn RO
 
 	SetOutPath "$INSTDIR"
+	
+	IfFileExists "$INSTDIR\dosbox.exe" 0 no_steam
+	CreateDirectory "$INSTDIR\bak"
+	Rename "$INSTDIR\dosbox.exe"  "$INSTDIR\bak\dosbox.exe"
+	Rename "$INSTDIR\dosbox.conf" "$INSTDIR\bak\dosbox.conf"
+	Rename "$INSTDIR\readme.txt"  "$INSTDIR\bak\readme.txt"
+	Rename "$INSTDIR\SDL.dll"     "$INSTDIR\bak\SDL.dll"
+	Rename "$INSTDIR\SDL_net.dll" "$INSTDIR\bak\SDL_net.dll"
+	
+	no_steam:
 
 ${If} ${RunningX64}
 	File "..\..\bin\x64\Release\OpenXcom.exe"
@@ -273,6 +238,20 @@ Section "$(NAME_SecPatch)" SecPatch
 
 SectionEnd
 
+Section /o "$(NAME_SecPortable)" SecPortable
+
+	CreateDirectory "$INSTDIR\user"
+	
+SectionEnd
+
+Section /o "$(NAME_SecSteam)" SecSteam
+
+	SectionIn RO
+	
+	Rename "$INSTDIR\OpenXcom.exe" "$INSTDIR\dosbox.exe"
+	
+SectionEnd
+
 Section /o "$(NAME_SecDesktop)" SecDesktop
 
 	SetOutPath "$INSTDIR"
@@ -288,8 +267,78 @@ SectionEnd
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(DESC_SecPatch)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecPortable} $(DESC_SecPortable)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecSteam} $(DESC_SecSteam)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+;--------------------------------
+;Installer functions
+
+Function .onInit
+${If} ${RunningX64}
+	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
+${Else}
+	StrCpy $INSTDIR "$PROGRAMFILES32\${GAME_NAME}"
+${EndIf}
+	StrCpy $StartMenuFolder "${GAME_NAME}"
+	
+	; Get UFO folder from Steam
+	StrCpy $STEAMDIR ""
+	StrCpy $UFODIR ""
+	ReadRegStr $R1 HKLM "Software\Valve\Steam" "InstallPath"
+	IfErrors ufo_no
+	StrCpy $R0 "$R1\steamapps\common\xcom ufo defense\XCOM"
+	IfFileExists "$R0\*.*" ufo_yes ufo_no
+	ufo_yes:
+	StrCpy $STEAMDIR "$R1\steamapps\common\xcom ufo defense"
+	StrCpy $UFODIR $R0
+	SectionSetFlags ${SecSteam} 0
+	ufo_no:
+	
+	!insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
+
+;--------------------------------
+;Skip pages for Steam installation
+
+Function PreDirectory
+	${If} ${SectionIsSelected} ${SecSteam}
+		StrCpy $INSTDIR $STEAMDIR
+		Abort
+	${EndIf}
+FunctionEnd
+
+Function PreUFO
+	${If} ${SectionIsSelected} ${SecSteam}
+		Abort
+	${EndIf}
+FunctionEnd
+
+;--------------------------------
+;Validate UFO folder
+
+Function ValidateUFO
+	StrCmp $UFODIR "" validate_yes
+	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
+	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
+	Goto validate_yes
+	confirm_ufo:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
+	confirm_xcu:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
+	validate_no:
+	Abort	
+	validate_yes:
+FunctionEnd
 
 ;--------------------------------
 ;Uninstaller Functions
@@ -308,6 +357,7 @@ Section /o "un.$(NAME_UnData)" UnData
 SectionEnd
 
 Section /o "un.$(NAME_UnUser)" UnUser
+	RMDir /r "$INSTDIR\user"
 	RMDir /r "$DOCUMENTS\OpenXcom"
 SectionEnd
 
@@ -321,7 +371,7 @@ Section "-un.Main"
 	Delete "$INSTDIR\README.txt"
 	Delete "$INSTDIR\CHANGELOG.txt"
 	
-	Delete "$INSTDIR\data\README.txt"
+	Delete "$INSTDIR\data\*.*"
 	Delete "$INSTDIR\data\Language\*.*"
 	RMDir "$INSTDIR\data\Language"
 	Delete "$INSTDIR\data\Ruleset\Aliens_Pick_Up_Weapons.rul"
@@ -344,7 +394,14 @@ Section "-un.Main"
 	RMDir "$INSTDIR\data"
 
 	Delete "$INSTDIR\Uninstall.exe"
-	RMDir "$INSTDIR"
+	RMDir "$INSTDIR"	
+	
+	IfFileExists "$INSTDIR\bak\*.*" 0 no_backup
+	Delete "$INSTDIR\dosbox.exe"
+	CopyFiles "$INSTDIR\bak\*.*" "$INSTDIR"
+	RMDir "$INSTDIR\bak"
+	
+	no_backup:
 	
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
     
