@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
-ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManufacture * item) : State(game), _base(base), _item(item)
+ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item) :  _base(base), _item(item)
 {
 	_screen = false;
 
@@ -107,7 +107,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 
 	const std::map<std::string, int> & requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
-	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost ());
+	bool productionPossible = _game->getSavedGame()->getFunds() > _item->getManufactureCost();
 	productionPossible &= (availableWorkSpace > 0);
 
 	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
@@ -170,6 +170,6 @@ void ManufactureStartState::btnCancelClick(Action *)
  */
 void ManufactureStartState::btnStartClick(Action *)
 {
-	_game->pushState(new ManufactureInfoState(_game, _base, _item));
+	_game->pushState(new ManufactureInfoState(_base, _item));
 }
 }

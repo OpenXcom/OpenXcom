@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param select Pointer to the selection state.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(game, base, rule), _select(select)
+PlaceStartFacilityState::PlaceStartFacilityState(Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(base, rule), _select(select)
 {
 	_view->onMouseClick((ActionHandler)&PlaceStartFacilityState::viewClick);
 	_numCost->setText(tr("STR_NONE"));
@@ -63,7 +63,7 @@ void PlaceStartFacilityState::viewClick(Action *)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else
 	{

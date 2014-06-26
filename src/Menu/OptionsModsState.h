@@ -39,7 +39,7 @@ private:
 	std::vector<std::string> _mods;
 public:
 	/// Creates the Advanced state.
-	OptionsModsState(Game *game, OptionsOrigin origin);
+	OptionsModsState(OptionsOrigin origin);
 	/// Cleans up the Advanced state.
 	~OptionsModsState();
 	/// Handler for clicking an item on the menu.

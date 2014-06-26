@@ -48,7 +48,7 @@ private:
 	Globe *_globe;
 public:
 	/// Creates the Basescape state.
-	BasescapeState(Game *game, Base *base, Globe *globe);
+	BasescapeState(Base *base, Globe *globe);
 	/// Cleans up the Basescape state.
 	~BasescapeState();
 	/// Updates the base stats.

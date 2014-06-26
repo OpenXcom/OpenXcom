@@ -36,7 +36,7 @@ namespace OpenXcom
 	class ArticleStateCraftWeapon : public ArticleState
 	{
 	public:
-		ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *article_defs);
+		ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon *article_defs);
 		virtual ~ArticleStateCraftWeapon();
 
 	protected:

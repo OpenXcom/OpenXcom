@@ -53,7 +53,7 @@ private:
 	GeoscapeState *_state;
 public:
 	/// Creates the Base Defense state.
-	BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state);
+	BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state);
 	/// Cleans up the Base Defense state.
 	~BaseDefenseState();
 	/// Handle the Timer.

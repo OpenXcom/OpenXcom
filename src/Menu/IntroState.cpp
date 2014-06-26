@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param wasLetterBoxed Was the game letterboxed?
  */
-IntroState::IntroState(Game *game, bool wasLetterBoxed) : State(game), _wasLetterBoxed(wasLetterBoxed)
+IntroState::IntroState(bool wasLetterBoxed) : _wasLetterBoxed(wasLetterBoxed)
 {
 	_oldMusic = Options::musicVolume;
 	_oldSound = Options::soundVolume;
@@ -456,7 +456,7 @@ void IntroState::init()
 	}
 	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
-	_game->setState(new MainMenuState(_game));
+	_game->setState(new MainMenuState);
 }
 
 }

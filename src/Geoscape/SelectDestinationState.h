@@ -47,7 +47,7 @@ private:
 	TextButton *_btnCancel, *_btnCydonia;
 public:
 	/// Creates the Select Destination state.
-	SelectDestinationState(Game *game, Craft *craft, Globe *globe);
+	SelectDestinationState(Craft *craft, Globe *globe);
 	/// Cleans up the Select Destination state.
 	~SelectDestinationState();
 	/// Resets globe.

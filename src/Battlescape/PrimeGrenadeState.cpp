@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param inInventoryView Called from inventory?
  * @param grenadeInInventory Pointer to associated grenade.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
+PrimeGrenadeState::PrimeGrenadeState(BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 

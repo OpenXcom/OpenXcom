@@ -36,7 +36,7 @@ private:
 	Globe *_globe;
 public:
 	/// Creates the Build Facilities state.
-	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe);
+	SelectStartFacilityState(Base *base, State *state, Globe *globe);
 	/// Cleans up the Build Facilities state.
 	~SelectStartFacilityState();
 	/// Populates the build option list.

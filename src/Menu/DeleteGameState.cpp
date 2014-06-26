@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  * @param save Name of the save file to delete.
  */
-DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::string &save) : State(game), _origin(origin)
+DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) : _origin(origin)
 {
 	_filename = Options::getUserFolder() + save;
 	_screen = false;
@@ -69,7 +69,7 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::st
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+10);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
@@ -113,9 +113,9 @@ void DeleteGameState::btnYesClick(Action *)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error, _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error, _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error, _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error, _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

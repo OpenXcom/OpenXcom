@@ -99,7 +99,7 @@ private:
 	RuleTerrain *getTerrain(int tex, double lat);
 public:
 	/// Creates a new BattlescapeGenerator class
-	BattlescapeGenerator(Game *game);
+	BattlescapeGenerator(Game* game);
 	/// Cleans up the BattlescapeGenerator.
 	~BattlescapeGenerator();
 	/// Sets the XCom craft.

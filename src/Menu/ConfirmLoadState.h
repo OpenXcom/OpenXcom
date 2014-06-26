@@ -43,7 +43,7 @@ private:
 	Text *_txtText;
 public:
 	/// Creates a new confirmation state.
-	ConfirmLoadState(Game *game, OptionsOrigin origin, std::string fileName);
+	ConfirmLoadState(OptionsOrigin origin, std::string fileName);
 	/// Cleans up the confirmation state.
 	virtual ~ConfirmLoadState();
 	/// Handler for clicking the Yes button.

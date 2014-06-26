@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0), _hasSci(0), _hasEng(0), _distance(0.0)
+TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom(baseFrom), _baseTo(baseTo), _baseQty(), _transferQty(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0), _hasSci(0), _hasEng(0), _distance(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -235,7 +235,7 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action *)
 {
-	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
+	_game->pushState(new TransferConfirmState(_baseTo, this));
 }
 
 /**
@@ -554,7 +554,7 @@ void TransferItemsState::increaseByValue(int change)
 		&& _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_ACCOMODATION"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
 	if (TRANSFER_CRAFT == selType )
@@ -563,19 +563,19 @@ void TransferItemsState::increaseByValue(int change)
 		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+			_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_TRANSFER"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
 		if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+			_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_ACCOMODATION_CREW"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
 		if (Options::storageLimitsEnforced && _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+			_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
 	}
@@ -583,14 +583,14 @@ void TransferItemsState::increaseByValue(int change)
 		&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_STORE_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
 	if (TRANSFER_ITEM == selType && selItem->getAlien()
 		&& Options::storageLimitsEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::storageLimitsEnforced * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
 

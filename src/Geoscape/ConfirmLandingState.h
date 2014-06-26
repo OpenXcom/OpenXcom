@@ -43,7 +43,7 @@ private:
 	TextButton *_btnYes, *_btnNo;
 public:
 	/// Creates the Confirm Landing state.
-	ConfirmLandingState(Game *game, Craft *craft, int texture, int shade);
+	ConfirmLandingState(Craft *craft, int texture, int shade);
 	/// Cleans up the Confirm Landing state.
 	~ConfirmLandingState();
 	/// initialize the state, make a sanity check.

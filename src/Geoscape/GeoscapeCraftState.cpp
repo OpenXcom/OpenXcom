@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param waypoint Pointer to the last UFO position (if redirecting the craft).
  */
-GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint) : State(game), _craft(craft), _globe(globe), _waypoint(waypoint)
+GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *waypoint) : _craft(craft), _globe(globe), _waypoint(waypoint)
 {
 	_screen = false;
 
@@ -299,7 +299,7 @@ void GeoscapeCraftState::btnBaseClick(Action *)
 void GeoscapeCraftState::btnTargetClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
+	_game->pushState(new SelectDestinationState(_craft, _globe));
 	delete _waypoint;
 }
 

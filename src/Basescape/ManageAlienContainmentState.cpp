@@ -51,7 +51,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base, OptionsOrigin origin) : State(game), _base(base), _origin(origin), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
+ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrigin origin) : _base(base), _origin(origin), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
 {
 	_overCrowded = Options::storageLimitsEnforced && _base->getAvailableContainment() < _base->getUsedContainment();
 
@@ -238,11 +238,11 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 
 	if (Options::storageLimitsEnforced && _base->storesOverfull())
 	{
-		_game->pushState(new SellState(_game, _base, _origin));
+		_game->pushState(new SellState(_base, _origin));
 		if (_origin == OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		else
-			_game->pushState(new ErrorMessageState(_game, tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 6));
  	}
 }
 

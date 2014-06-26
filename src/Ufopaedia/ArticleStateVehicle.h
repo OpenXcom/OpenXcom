@@ -36,7 +36,7 @@ namespace OpenXcom
 	class ArticleStateVehicle : public ArticleState
 	{
 	public:
-		ArticleStateVehicle(Game *game, ArticleDefinitionVehicle *article_defs);
+		ArticleStateVehicle(ArticleDefinitionVehicle *article_defs);
 		virtual ~ArticleStateVehicle();
 
 	protected:

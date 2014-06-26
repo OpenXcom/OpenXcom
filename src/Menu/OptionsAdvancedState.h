@@ -45,7 +45,7 @@ private:
 	OptionInfo *getSetting(size_t sel);
 public:
 	/// Creates the Advanced state.
-	OptionsAdvancedState(Game *game, OptionsOrigin origin);
+	OptionsAdvancedState(OptionsOrigin origin);
 	/// Cleans up the Advanced state.
 	~OptionsAdvancedState();
 	/// Fills settings list.

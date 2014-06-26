@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 {
 	_screen = false;
 
@@ -148,7 +148,7 @@ PauseState::~PauseState()
  */
 void PauseState::btnLoadClick(Action *)
 {
-	_game->pushState(new ListLoadState(_game, _origin));
+	_game->pushState(new ListLoadState(_origin));
 }
 
 /**
@@ -157,7 +157,7 @@ void PauseState::btnLoadClick(Action *)
  */
 void PauseState::btnSaveClick(Action *)
 {
-	_game->pushState(new ListSaveState(_game, _origin));
+	_game->pushState(new ListSaveState(_origin));
 }
 
 /**
@@ -169,15 +169,15 @@ void PauseState::btnOptionsClick(Action *)
 	Options::backupDisplay();
 	if (_origin == OPT_GEOSCAPE)
 	{
-		_game->pushState(new OptionsGeoscapeState(_game, _origin));
+		_game->pushState(new OptionsGeoscapeState(_origin));
 	}
 	else if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->pushState(new OptionsBattlescapeState(_game, _origin));
+		_game->pushState(new OptionsBattlescapeState(_origin));
 	}
 	else
 	{
-		_game->pushState(new OptionsVideoState(_game, _origin));
+		_game->pushState(new OptionsVideoState(_origin));
 	}
 }
 
@@ -187,7 +187,7 @@ void PauseState::btnOptionsClick(Action *)
  */
 void PauseState::btnAbandonClick(Action *)
 {
-	_game->pushState(new AbandonGameState(_game, _origin));
+	_game->pushState(new AbandonGameState(_origin));
 }
 
 /**

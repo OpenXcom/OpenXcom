@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param x Position on the x-axis.
  * @param y position on the y-axis.
  */
-ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y) : State(game), _action(action)
+ActionMenuState::ActionMenuState(BattleAction *action, int x, int y) : _action(action)
 {
 	_screen = false;
 
@@ -221,7 +221,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			else
 			{
-				_game->pushState(new PrimeGrenadeState(_game, _action, false, 0));
+				_game->pushState(new PrimeGrenadeState(_action, false, 0));
 			}
 		}
 		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
@@ -254,7 +254,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			if (targetUnit)
 			{
 				_game->popState();
-				_game->pushState (new MedikitState (_game, targetUnit, _action));
+				_game->pushState (new MedikitState(targetUnit, _action));
 			}
 			else
 			{
@@ -268,7 +268,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			if (_action->actor->spendTimeUnits (_action->TU))
 			{
 				_game->popState();
-				_game->pushState (new ScannerState (_game, _action));
+				_game->pushState (new ScannerState(_action));
 			}
 			else
 			{

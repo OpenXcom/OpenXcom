@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft to display.
  * @param globe Pointer to the Geoscape globe.
  */
-CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
+CraftPatrolState::CraftPatrolState(Craft *craft, Globe *globe) : _craft(craft), _globe(globe)
 {
 	_screen = false;
 
@@ -113,7 +113,7 @@ void CraftPatrolState::btnOkClick(Action *)
 void CraftPatrolState::btnRedirectClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new GeoscapeCraftState(_game, _craft, _globe, 0));
+	_game->pushState(new GeoscapeCraftState(_craft, _globe, 0));
 }
 
 }

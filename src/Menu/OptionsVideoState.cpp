@@ -46,7 +46,7 @@ const std::string OptionsVideoState::GL_STRING = "*";
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(origin)
 {
 	setCategory(_btnVideo);
 
@@ -121,7 +121,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	add(_btnLockMouse);
 
 
-    add(_cbxFilter);
+	add(_cbxFilter);
 	add(_cbxDisplayMode);
 	
 	add(_txtBattleScale);
@@ -130,7 +130,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	add(_txtGeoScale);
 	add(_cbxGeoScale);
 
-    add(_cbxLanguage);
+	add(_cbxLanguage);
 	centerAllSurfaces();
 
 	// Set up objects
@@ -197,7 +197,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	
 	std::vector<std::wstring> names;
 	Language::getList(_langs, names);
-    _cbxLanguage->setColor(Palette::blockOffset(15)-1);
+	_cbxLanguage->setColor(Palette::blockOffset(15)-1);
 	_cbxLanguage->setOptions(names);
 	for (size_t i = 0; i < names.size(); ++i)
 	{
@@ -207,7 +207,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 			break;
 		}
 	}
-    _cbxLanguage->onChange((ActionHandler)&OptionsVideoState::cbxLanguageChange);
+	_cbxLanguage->onChange((ActionHandler)&OptionsVideoState::cbxLanguageChange);
 	_cbxLanguage->setTooltip("STR_DISPLAY_LANGUAGE_DESC");
 	_cbxLanguage->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxLanguage->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
@@ -258,7 +258,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_txtFilter->setColor(Palette::blockOffset(8)+10);
 	_txtFilter->setText(tr("STR_DISPLAY_FILTER"));
 
-    _cbxFilter->setColor(Palette::blockOffset(15)-1);
+	_cbxFilter->setColor(Palette::blockOffset(15)-1);
 	_cbxFilter->setOptions(filterNames);
 	_cbxFilter->setSelected(selFilter);
 	_cbxFilter->onChange((ActionHandler)&OptionsVideoState::cbxFilterChange);

@@ -48,7 +48,7 @@ namespace OpenXcom
  * @param psi Show psi training afterwards?
  * @param globe Pointer to the globe.
  */
-MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : State(game), _psi(psi), _gameOver(false), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
+MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gameOver(false), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
 {
 	_globe = globe;
 	// Create objects
@@ -246,16 +246,16 @@ void MonthlyReportState::btnOkClick(Action *)
 		_game->popState();
 		if (_psi)
 		{
-			_game->pushState(new PsiTrainingState(_game));
+			_game->pushState(new PsiTrainingState);
 		}
 		// Autosave
 		if (_game->getSavedGame()->isIronman())
 		{
-			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_IRONMAN));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN));
 		}
 		else if (Options::autosave)
 		{
-			_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
 		}
 	}
 	else
@@ -263,7 +263,7 @@ void MonthlyReportState::btnOkClick(Action *)
 		if (_txtFailure->getVisible())
 		{
 			_game->popState();
-			_game->pushState(new DefeatState(_game));
+			_game->pushState(new DefeatState);
 		}
 		else
 		{

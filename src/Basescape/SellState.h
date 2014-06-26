@@ -71,7 +71,7 @@ private:
 	size_t getCraftIndex(size_t selected) const;
 public:
 	/// Creates the Sell state.
-	SellState(Game *game, Base *base, OptionsOrigin origin = OPT_GEOSCAPE);
+	SellState(Base *base, OptionsOrigin origin = OPT_GEOSCAPE);
 	/// Cleans up the Sell state.
 	~SellState();
 	/// Runs the timers.

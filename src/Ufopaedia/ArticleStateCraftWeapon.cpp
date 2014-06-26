@@ -36,7 +36,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *defs) : ArticleState(game, defs->id)
+	ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon *defs) : ArticleState(defs->id)
 	{
 		RuleCraftWeapon *weapon = _game->getRuleset()->getCraftWeapon(defs->id);
 

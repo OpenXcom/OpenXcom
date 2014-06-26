@@ -176,17 +176,17 @@ void UnitDieBState::think()
 				{
 					if (_damageType == DT_NONE)
 					{
-						game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+						game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 					}
 					else if (Options::battleNotifyDeath)
 					{
-						game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+						game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 					}
 				}
 			}
 			else
 			{
-				game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+				game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 		// if all units from either faction are killed - auto-end the mission.

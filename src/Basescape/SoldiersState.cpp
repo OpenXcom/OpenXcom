@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
+SoldiersState::SoldiersState(Base *base) : _base(base)
 {
 	bool isPsiBtnVisible = Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0;
 
@@ -170,7 +170,7 @@ void SoldiersState::btnOkClick(Action *)
  */
 void SoldiersState::btnPsiTrainingClick(Action *)
 {
-	_game->pushState(new AllocatePsiTrainingState(_game, _base));
+	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
 /**
@@ -179,7 +179,7 @@ void SoldiersState::btnPsiTrainingClick(Action *)
  */
 void SoldiersState::btnMemorialClick(Action *)
 {
-	_game->pushState(new SoldierMemorialState(_game));
+	_game->pushState(new SoldierMemorialState);
 }
 
 /**
@@ -188,7 +188,7 @@ void SoldiersState::btnMemorialClick(Action *)
  */
 void SoldiersState::lstSoldiersClick(Action *)
 {
-	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+	_game->pushState(new SoldierInfoState(_base, _lstSoldiers->getSelectedRow()));
 }
 
 }

@@ -45,7 +45,7 @@ class ScannerState : public State
 	void animate();
 public:
 	/// Creates the ScannerState.
-	ScannerState (Game * game, BattleAction *action);
+	ScannerState(BattleAction *action);
 	~ScannerState();
 	/// Handler for right-clicking anything.
 	void handle(Action *action);

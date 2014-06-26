@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateTextImage::ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs) : ArticleState(game, defs->id)
+	ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage *defs) : ArticleState(defs->id)
 	{
 		// add screen elements
 		_txtTitle = new Text(defs->text_width, 48, 5, 22);

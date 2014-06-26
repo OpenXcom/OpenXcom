@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State(game), _base(base)
+NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 {
 	_screen = false;
 
@@ -115,20 +115,20 @@ void NewManufactureListState::btnOkClick(Action *)
  * Opens the Production settings screen.
  * @param action A pointer to an Action.
 */
-void NewManufactureListState::lstProdClick (Action *)
+void NewManufactureListState::lstProdClick(Action *)
 {
 	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
 	else if (rule->getRequiredSpace() > _base->getFreeWorkshops())
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_WORK_SPACE", _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_WORK_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
 	else
 	{
-		_game->pushState(new ManufactureStartState(_game, _base, rule));
+		_game->pushState(new ManufactureStartState(_base, rule));
 	}
 }
 

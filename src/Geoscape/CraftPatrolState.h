@@ -45,7 +45,7 @@ private:
 	Text *_txtDestination, *_txtPatrolling;
 public:
 	/// Creates the Geoscape Craft state.
-	CraftPatrolState(Game *game, Craft *craft, Globe *globe);
+	CraftPatrolState(Craft *craft, Globe *globe);
 	/// Cleans up the Geoscape Craft state.
 	~CraftPatrolState();
 	/// Handler for clicking the OK button.

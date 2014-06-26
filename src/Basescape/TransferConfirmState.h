@@ -43,7 +43,7 @@ private:
 	TransferItemsState *_state;
 public:
 	/// Creates the Transfer Confirm state.
-	TransferConfirmState(Game *game, Base *base, TransferItemsState *state);
+	TransferConfirmState(Base *base, TransferItemsState *state);
 	/// Cleans up the Transfer Confirm state.
 	~TransferConfirmState();
 	/// Handler for clicking the Cancel button.

@@ -44,7 +44,7 @@ private:
 	Text *_txtTitle, *_txtCity;
 public:
 	/// Creates the Ufo Detected state.
-	AlienTerrorState(Game *game, TerrorSite *terror, const std::string &city, GeoscapeState *state);
+	AlienTerrorState(TerrorSite *terror, const std::string &city, GeoscapeState *state);
 	/// Cleans up the Ufo Detected state.
 	~AlienTerrorState();
 	/// Handler for clicking the Intercept button.

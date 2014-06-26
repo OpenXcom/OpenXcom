@@ -49,7 +49,7 @@ private:
 	Surface *_bg;
 public:
 	/// Creates the Prime Grenade state.
-	PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
+	PrimeGrenadeState(BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
 	/// Cleans up the Prime Grenade state.
 	~PrimeGrenadeState();
 	/// Handler for right-clicking anything.
