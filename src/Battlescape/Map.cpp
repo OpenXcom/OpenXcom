@@ -1064,7 +1064,7 @@ void Map::drawTerrain(Surface *surface)
 						if (_previewSetting & PATH_TU_COST && tile->getTUMarker() > -1)
 						{
 							int off = tile->getTUMarker() > 9 ? 4 : 2;
-							if (!(_previewSetting & PATH_ARROWS) || _save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							if (!(_previewSetting & PATH_ARROWS) || (_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1))
 							{
 								_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
 								off += 1;
