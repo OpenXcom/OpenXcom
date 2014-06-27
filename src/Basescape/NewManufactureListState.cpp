@@ -184,6 +184,8 @@ void NewManufactureListState::cbxCategoryChange(Action *)
 void NewManufactureListState::fillProductionList()
 {
 	_lstManufacture->clearList();
+	_possibleProductions.clear();
+	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
 	_displayedStrings.clear();
 
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)

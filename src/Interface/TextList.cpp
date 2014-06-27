@@ -759,6 +759,7 @@ void TextList::clearList()
 		}
 		u->clear();
 	}
+	scrollUp(true, true);
 	_texts.clear();
 	_rows.clear();
 	_redraw = true;
