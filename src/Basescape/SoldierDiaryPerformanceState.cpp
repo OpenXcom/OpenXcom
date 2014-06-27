@@ -74,7 +74,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
         _displayMissions = false;
 		_displayCommendations = true;
     }
-
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnPrev = new TextButton(28, 14, 8, 8);
@@ -347,6 +346,10 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->setVisible(_displayMissions);
 	_lstMissionTotals->setVisible(_displayMissions);
 	// Set visibility for commendations
+	if (_game->getRuleset()->getCommendation().empty())
+	{
+		_displayCommendations = false;
+	}
     _txtMedalName->setVisible(_displayCommendations);
     _txtMedalLevel->setVisible(_displayCommendations);
 	_txtMedalInfo->setVisible(_displayCommendations);
@@ -354,7 +357,14 @@ void SoldierDiaryPerformanceState::init()
 	// Set visibility for buttons
 	_btnKills->setVisible(!_displayKills);
 	_btnMissions->setVisible(!_displayMissions);
-	_btnCommendations->setVisible(!_displayCommendations);
+	if (_game->getRuleset()->getCommendation().empty())
+	{
+		_btnCommendations->setVisible(false);
+	}
+	else
+	{
+		_btnCommendations->setVisible(!_displayCommendations);
+	}
 
 	if (_list->empty())
 	{
@@ -405,6 +415,10 @@ void SoldierDiaryPerformanceState::init()
     
     for (std::vector<SoldierCommendations*>::const_iterator i = _soldier->getDiary()->getSoldierCommendations()->begin() ; i != _soldier->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
+		if (_game->getRuleset()->getCommendation().empty())
+		{
+			break;
+		}
 		RuleCommendations* commendation = _game->getRuleset()->getCommendation()[(*i)->getType()];
 		std::wstringstream ss1, ss2, ss3;
 
