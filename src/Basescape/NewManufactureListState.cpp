@@ -54,7 +54,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 	_txtItem = new Text(156, 9, 10, 62);
 	_txtCategory = new Text(130, 9, 166, 62);
 	_lstManufacture = new TextList(288, 80, 8, 70);
-	_cbxCategory = new ComboBox(this, 152, 16, 160, 46);
+	_cbxCategory = new ComboBox(this, 146, 16, 166, 46);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);
