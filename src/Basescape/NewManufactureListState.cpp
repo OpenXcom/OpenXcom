@@ -48,7 +48,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 156, 0, 20, POPUP_BOTH);
+	_window = new Window(this, 320, 156, 0, 22, POPUP_BOTH);
 	_btnOk = new TextButton(304, 16, 8, 154);
 	_txtTitle = new Text(320, 17, 0, 30);
 	_txtItem = new Text(156, 9, 10, 62);
