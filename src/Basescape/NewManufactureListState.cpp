@@ -48,13 +48,13 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 140, 0, 30, POPUP_BOTH);
+	_window = new Window(this, 320, 156, 0, 14, POPUP_BOTH);
 	_btnOk = new TextButton(304, 16, 8, 146);
-	_txtTitle = new Text(156, 17, 10, 38);
+	_txtTitle = new Text(320, 17, 0, 22);
 	_txtItem = new Text(156, 9, 10, 54);
 	_txtCategory = new Text(130, 9, 166, 54);
 	_lstManufacture = new TextList(288, 80, 8, 62);
-	_cbxCategory = new ComboBox(this, 130, 16, 166, 38);
+	_cbxCategory = new ComboBox(this, 152, 16, 160, 38);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);
