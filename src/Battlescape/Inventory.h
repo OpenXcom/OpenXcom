@@ -32,6 +32,7 @@ class WarningMessage;
 class BattleItem;
 class BattleUnit;
 class NumberText;
+class Timer;
 
 /**
  * Interactive view of an inventory.

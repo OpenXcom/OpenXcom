@@ -941,7 +941,6 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  */
 bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip)
 {
-	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	RuleInventory *rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 	bool placed = false;
 	bool loaded = false;
