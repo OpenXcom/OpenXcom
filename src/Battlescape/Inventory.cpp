@@ -22,6 +22,7 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
+#include "../Engine/Timer.h"
 #include "../Interface/Text.h"
 #include "../Interface/NumberText.h"
 #include "../Engine/Font.h"
@@ -52,7 +53,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param base Is the inventory being called from the basescape?
  */
-Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _groundOffset(0)
+Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _groundOffset(0), _animFrame(0)
 {
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
@@ -64,6 +65,10 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base)
 	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1)-1);
+
+	_animTimer = new Timer(125);
+	_animTimer->onTimer((SurfaceHandler)&Inventory::drawPrimers);
+	_animTimer->start();
 }
 
 /**
@@ -76,6 +81,7 @@ Inventory::~Inventory()
 	delete _selection;
 	delete _warning;
 	delete _stackNumber;
+	delete _animTimer;
 }
 
 /**
@@ -207,6 +213,7 @@ void Inventory::drawGrid()
 void Inventory::drawItems()
 {
 	_items->clear();
+	_grenadeIndicators.clear();
 	if (_selUnit != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
@@ -228,6 +235,12 @@ void Inventory::drawItems()
 				frame->setY((*i)->getSlot()->getY() + (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
 			}
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+
+			// grenade primer indicators
+			if ((*i)->getFuseTimer() >= 0)
+			{
+				_grenadeIndicators.push_back(std::make_pair(frame->getX(), frame->getY()));
+			}
 		}
 		Surface *stackLayer = new Surface(getWidth(), getHeight(), 0, 0);
 		stackLayer->setPalette(getPalette());
@@ -241,6 +254,14 @@ void Inventory::drawItems()
 			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+
+			// grenade primer indicators
+			if ((*i)->getFuseTimer() >= 0)
+			{
+				_grenadeIndicators.push_back(std::make_pair(frame->getX(), frame->getY()));
+			}
+
+			// item stacking
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
 			{
 				_stackNumber->setX(((*i)->getSlot()->getX() + (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset) * RuleInventory::SLOT_W)-4);
@@ -422,6 +443,7 @@ void Inventory::setMouseOverItem(BattleItem *item)
 void Inventory::think()
 {
 	_warning->think();
+	_animTimer->think(0,this);
 }
 
 /**
@@ -981,6 +1003,24 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 void Inventory::showWarning(const std::wstring &msg)
 {
 	_warning->showMessage(msg);
+}
+
+/**
+ * Shows primer warnings on all live grenades.
+ */
+void Inventory::drawPrimers()
+{
+	const int Pulsate[4] = { 6, 7, 8, 7 };
+	_animFrame++;
+	if (_animFrame == 4)
+	{
+		_animFrame = 0;
+	}
+	Surface *tempSurface = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(Pulsate[_animFrame]);
+	for (std::vector<std::pair<int, int> >::const_iterator i = _grenadeIndicators.begin(); i != _grenadeIndicators.end(); ++i)
+	{
+		tempSurface->blitNShade(_items, (*i).first, (*i).second, 0);
+	}
 }
 
 }
