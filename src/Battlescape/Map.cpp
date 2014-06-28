@@ -1065,15 +1065,23 @@ void Map::drawTerrain(Surface *surface)
 						if (_previewSetting & PATH_TU_COST && tile->getTUMarker() > -1)
 						{
 							int off = tile->getTUMarker() > 9 ? 5 : 3;
+							if (_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							{
+								adjustment += 1;
+								if (!(_previewSetting & PATH_ARROWS))
+								{
+									adjustment += 7;
+								}
+							}
 							_numWaypid->setValue(tile->getTUMarker());
 							_numWaypid->draw();
 							if ( !(_previewSetting & PATH_ARROWS) )
 							{
-								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (28-adjustment), 0, false, tile->getMarkerColor() );
+								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (29-adjustment), 0, false, tile->getMarkerColor() );
 							}
 							else
 							{
-								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (21-adjustment), 0);
+								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (22-adjustment), 0);
 							}
 						}
 					}
