@@ -1010,17 +1010,17 @@ void Inventory::showWarning(const std::wstring &msg)
  */
 void Inventory::drawPrimers()
 {
-	const int Pulsate[4] = { 6, 7, 8, 7 };
-	_animFrame++;
-	if (_animFrame == 4)
+	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
+	if (_animFrame == 8)
 	{
 		_animFrame = 0;
 	}
-	Surface *tempSurface = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(Pulsate[_animFrame]);
+	Surface *tempSurface = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(6);
 	for (std::vector<std::pair<int, int> >::const_iterator i = _grenadeIndicators.begin(); i != _grenadeIndicators.end(); ++i)
 	{
-		tempSurface->blitNShade(_items, (*i).first, (*i).second, 0);
+		tempSurface->blitNShade(_items, (*i).first, (*i).second, Pulsate[_animFrame]);
 	}
+	_animFrame++;
 }
 
 }
