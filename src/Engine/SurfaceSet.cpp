@@ -43,7 +43,7 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
 {
 	_width = other._width;
 	_height = other._height;
-	
+
 	for (std::map<int, Surface*>::const_iterator f = other._frames.begin(); f != other._frames.end(); ++f)
 	{
 		_frames[f->first] = new Surface(*f->second);
@@ -274,8 +274,4 @@ void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 }
 
-std::map<int, Surface*> *SurfaceSet::getFrames()
-{
-	return &_frames;
-}
 }

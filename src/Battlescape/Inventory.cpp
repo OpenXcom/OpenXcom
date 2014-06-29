@@ -37,6 +37,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Action.h"
 #include "../Engine/Sound.h"
+#include "../Engine/Script.h"
 #include "WarningMessage.h"
 #include "../Savegame/Tile.h"
 #include "PrimeGrenadeState.h"
@@ -212,6 +213,7 @@ void Inventory::drawGrid()
  */
 void Inventory::drawItems()
 {
+	ScriptWorker scr;
 	_items->clear();
 	_grenadeIndicators.clear();
 	if (_selUnit != 0)
@@ -223,18 +225,24 @@ void Inventory::drawItems()
 			if ((*i) == _selItem)
 				continue;
 
+			int x, y;
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			if ((*i)->getSlot()->getType() == INV_SLOT)
 			{
-				frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
-				frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+				x = ((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+				y = ((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 			}
 			else if ((*i)->getSlot()->getType() == INV_HAND)
 			{
-				frame->setX((*i)->getSlot()->getX() + (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2);
-				frame->setY((*i)->getSlot()->getY() + (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2);
+				x = ((*i)->getSlot()->getX() + (*i)->getRules()->getHandSpriteOffX());
+				y = ((*i)->getSlot()->getY() + (*i)->getRules()->getHandSpriteOffY());
 			}
-			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+			else
+			{
+				continue;
+			}
+			BattleItem::ScriptFill(&scr, *i, true, 0, 0);
+			scr.executeBlit(frame, _items, x, y);
 
 			// grenade primer indicators
 			if ((*i)->getFuseTimer() >= 0)
@@ -242,18 +250,21 @@ void Inventory::drawItems()
 				_grenadeIndicators.push_back(std::make_pair(frame->getX(), frame->getY()));
 			}
 		}
-		Surface *stackLayer = new Surface(getWidth(), getHeight(), 0, 0);
-		stackLayer->setPalette(getPalette());
+		Surface stackLayer(getWidth(), getHeight(), 0, 0);
+		stackLayer.setPalette(getPalette());
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			// note that you can make items invisible by setting their width or height to 0 (for example used with tank corpse items)
 			if ((*i) == _selItem || (*i)->getSlotX() < _groundOffset || (*i)->getRules()->getInventoryHeight() == 0 || (*i)->getRules()->getInventoryWidth() == 0)
 				continue;
+
+			int x, y;
 			Surface *frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
-			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
-			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+			x = ((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
+			y = ((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+			BattleItem::ScriptFill(&scr, *i, true, 0, 0);
+			scr.executeBlit(frame, _items, x, y);
 
 			// grenade primer indicators
 			if ((*i)->getFuseTimer() >= 0)
@@ -273,12 +284,27 @@ void Inventory::drawItems()
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
 				_stackNumber->setColor(Palette::blockOffset(4)+2);
-				_stackNumber->blit(stackLayer);
+				_stackNumber->blit(&stackLayer);
 			}
 		}
 
-		stackLayer->blit(_items);
-		delete stackLayer;
+		// give it a border
+		// this is the "darker" shade that goes in the corners.
+		for (int x = -1; x <= 1; x += 2)
+		{
+			for (int y = -1; y <= 1; y += 2)
+			{
+				stackLayer.blitNShade(_items, x, y, 11);
+			}
+		}
+		// this is the "slightly darker" version that goes in four cardinals.
+		for (int z = -1; z <= 1; z += 2)
+		{
+			stackLayer.blitNShade(_items, z, 0, 8);
+			stackLayer.blitNShade(_items, 0, z, 8);
+		}
+		// and finally the number itself
+		stackLayer.blit(_items);
 	}
 }
 
@@ -414,7 +440,11 @@ void Inventory::setSelectedItem(BattleItem *item)
 		{
 			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
 		}
-		_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
+		ScriptWorker scr;
+		RuleItem* rule = _selItem->getRules();
+		Surface *frame = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK")->getFrame(rule->getBigSprite());
+		BattleItem::ScriptFill(&scr, item, true, 0, 0);
+		scr.executeBlit(frame, _selection, rule->getHandSpriteOffX(), rule->getHandSpriteOffY());
 	}
 	drawItems();
 }
@@ -993,7 +1023,6 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity() &&
 		itemA->getHealQuantity() == itemB->getHealQuantity() &&
 		itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
-
 }
 
 /**

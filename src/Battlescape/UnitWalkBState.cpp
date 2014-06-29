@@ -89,9 +89,7 @@ void UnitWalkBState::think()
 	{
 		if (_parent->kneel(_unit))
 		{
-			_unit->setCache(0);
 			_terrain->calculateFOV(_unit);
-			_parent->getMap()->cacheUnit(_unit);
 			return;
 		}
 		else
@@ -203,8 +201,6 @@ void UnitWalkBState::think()
 			}
 			if (unitSpotted)
 			{
-				_unit->setCache(0);
-				_parent->getMap()->cacheUnit(_unit);
 				_pf->abortPath();
 				_parent->popState();
 				return;
@@ -215,8 +211,6 @@ void UnitWalkBState::think()
 				if (_terrain->checkReactionFire(_unit))
 				{
 					// unit got fired upon - stop walking
-					_unit->setCache(0);
-					_parent->getMap()->cacheUnit(_unit);
 					_pf->abortPath();
 					_parent->popState();
 					return;
@@ -231,12 +225,8 @@ void UnitWalkBState::think()
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
 				int dirTemp = _unit->getDirection();
 				_unit->setDirection(_unit->getFaceDirection());
-				_parent->getMap()->cacheUnit(_unit);
+				//TODO fix moonwalk
 				_unit->setDirection(dirTemp);
-			}
-			else
-			{
-				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
 	}
@@ -249,7 +239,6 @@ void UnitWalkBState::think()
 		{
 			if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 			_unit->_hidingForTurn = false; // clearly we're not hidden now
-			_parent->getMap()->cacheUnit(_unit);
 			postPathProcedures();
 			return;
 		}
@@ -303,8 +292,6 @@ void UnitWalkBState::think()
 					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 				_pf->abortPath();
-				_unit->setCache(0);
-				_parent->getMap()->cacheUnit(_unit);
 				_parent->popState();
 				return;
 			}
@@ -316,8 +303,6 @@ void UnitWalkBState::think()
 					_action.result = "STR_NOT_ENOUGH_ENERGY";
 				}
 				_pf->abortPath();
-				_unit->setCache(0);
-				_parent->getMap()->cacheUnit(_unit);
 				_parent->popState();
 				return;
 			}
@@ -325,8 +310,6 @@ void UnitWalkBState::think()
 			if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 			{
 				_pf->abortPath();
-				_unit->setCache(0);
-				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
 
@@ -335,8 +318,6 @@ void UnitWalkBState::think()
 			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
 				_unit->lookAt(dir);
-				_unit->setCache(0);
-				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
 
@@ -378,8 +359,6 @@ void UnitWalkBState::think()
 					{
 						_action.TU = 0;
 						_pf->abortPath();
-						_unit->setCache(0);
-						_parent->getMap()->cacheUnit(_unit);
 						_parent->popState();
 						return;
 					}
@@ -411,7 +390,6 @@ void UnitWalkBState::think()
 					_unit->setDirection(_unit->getFaceDirection());
 					_unit->setDirection(dirTemp);
 				}
-				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
 		else
@@ -437,10 +415,6 @@ void UnitWalkBState::think()
 		_terrain->calculateFOV(_unit);
 		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
-		// make sure the unit sprites are up to date
-		_unit->setCache(0);
-		_parent->getMap()->cacheUnit(_unit);
-
 		if (unitSpotted && !_action.desperate && !_unit->getCharging() && !_falling)
 		{
 			if (_beforeFirstStep)
@@ -451,8 +425,6 @@ void UnitWalkBState::think()
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
 			_unit->abortTurn(); //revert to a standing state.
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
 			_parent->popState();
 		}
 	}
@@ -522,10 +494,8 @@ void UnitWalkBState::postPathProcedures()
 		_unit->setTimeUnits(0);
 	}
 
-	_unit->setCache(0);
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
-	_parent->getMap()->cacheUnit(_unit);
 	if (!_falling)
 		_parent->popState();
 }

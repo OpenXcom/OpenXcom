@@ -214,11 +214,9 @@ void ExplosionBState::explode()
 		if (_unit && !_unit->isOut())
 		{
 			_unit->aim(false);
-			_unit->setCache(0);
 		}
 		if (!RNG::percent(_unit->getFiringAccuracy(BA_HIT, _item)))
 		{
-			_parent->getMap()->cacheUnits();
 			_parent->popState();
 			return;
 		}
@@ -289,9 +287,7 @@ void ExplosionBState::explode()
 	if (_unit && !_unit->isOut() && _lowerWeapon)
 	{
 		_unit->aim(false);
-		_unit->setCache(0);
 	}
-	_parent->getMap()->cacheUnits();
 	_parent->popState();
 
 	// check for terrain explosions

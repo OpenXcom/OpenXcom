@@ -19,6 +19,9 @@
 #include "BattleItem.h"
 #include "BattleUnit.h"
 #include "Tile.h"
+#include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Engine/Script.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
 
@@ -528,6 +531,21 @@ void BattleItem::convertToCorpse(RuleItem *rules)
 	if (_unit && _rules->getBattleType() == BT_CORPSE && rules->getBattleType() == BT_CORPSE)
 	{
 		_rules = rules;
+	}
+}
+
+void BattleItem::ScriptFill(ScriptWorker* w, BattleItem* item, bool inventory, int anim_frame, int shade)
+{
+	w->proc = 0;
+	w->shade = shade;
+	if(item)
+	{
+		BattleUnit* itemUnit = item->getUnit();
+		if(itemUnit)
+		{
+			BattleUnit::ScriptFill(w, itemUnit);
+			BattleUnit::ScriptFillCustom(w, inventory ? BODYPART_ITEM : BODYPART_COLLAPSING, anim_frame, shade);
+		}
 	}
 }
 

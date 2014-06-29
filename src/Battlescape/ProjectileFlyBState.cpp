@@ -310,8 +310,6 @@ bool ProjectileFlyBState::createNewProjectile()
 				_projectileItem->setFuseTimer(0);
 			}
 			_projectileItem->moveToOwner(0);
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
 			_parent->getResourcePack()->getSound("BATTLE.CAT", 39)->play();
 			_unit->addThrowingExp();
 		}
@@ -333,8 +331,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
 			{
@@ -375,8 +371,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
 			{
@@ -585,8 +579,6 @@ void ProjectileFlyBState::think()
 				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
-					_unit->setCache(0);
-					_parent->getMap()->cacheUnits();
 				}
 			}
 
@@ -700,8 +692,6 @@ void ProjectileFlyBState::performMeleeAttack()
 	voxel = _action.target * Position(16, 16, 24) + Position(8,8,height - _parent->getSave()->getTile(_action.target)->getTerrainLevel()) - voxel;
 	// set the soldier in an aiming position
 	_unit->aim(true);
-	_unit->setCache(0);
-	_parent->getMap()->cacheUnit(_unit);
 	// and we have a lift-off
 	if (_ammo->getRules()->getMeleeAttackSound() != -1)
 	{

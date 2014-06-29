@@ -24,9 +24,12 @@
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
 #include "Unit.h"
+#include "../Engine/Script.h"
 
 namespace OpenXcom
 {
+
+class BattleUnit;
 
 /**
  * Represents a specific type of armor.
@@ -49,13 +52,14 @@ private:
 	int _deathFrames;
 	bool _constantAnimation;
 	bool _canHoldWeapon;
+	ScriptContainer<BattleUnit>* _recolorScript;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
 	/// Cleans up the armor ruleset.
 	~Armor();
 	/// Loads the armor data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, const ScriptParser<BattleUnit>& parser);
 	/// Gets the armor's type.
 	std::string getType() const;
 	/// Gets the unit's sprite sheet.
@@ -96,6 +100,8 @@ public:
 	bool getConstantAnimation();
 	/// Gets if armor can hold weapon.
 	bool getCanHoldWeapon();
+	/// Gets script used to recolor unit.
+	ScriptContainer<BattleUnit>* getRecolorScript();
 };
 
 }

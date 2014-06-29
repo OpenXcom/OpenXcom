@@ -63,7 +63,6 @@ public:
 	size_t getTotalFrames() const;
 	/// Sets the surface set's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	std::map<int, Surface*> *getFrames();
 };
 
 }

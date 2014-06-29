@@ -21,7 +21,7 @@
 #define	OPENXCOM_SHADERDRAW_H
 
 #include "ShaderDrawHelper.h"
-	
+
 namespace OpenXcom
 {
 
@@ -47,13 +47,13 @@ static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_f
 
 	//get basic draw range in 2d space
 	GraphSubset end_temp = dest.get_range();
-	
+
 	//intersections with src ranges
 	src0.mod_range(end_temp);
 	src1.mod_range(end_temp);
 	src2.mod_range(end_temp);
 	src3.mod_range(end_temp);
-	
+
 	const GraphSubset end = end_temp;
 	if(end.size_x() == 0 || end.size_y() == 0)
 		return;
@@ -99,16 +99,16 @@ static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_f
 		src1.set_x(begin_x, end_x);
 		src2.set_x(begin_x, end_x);
 		src3.set_x(begin_x, end_x);
-		
+
 		//iteration on x-axis
 		for(int x = end_x-begin_x; x>0; --x, dest.inc_x(), src0.inc_x(), src1.inc_x(), src2.inc_x(), src3.inc_x())
 		{
-			ColorFunc::func(dest.get_ref(), src0.get_ref(), src1.get_ref(), src2.get_ref(), src3.get_ref());				
+			ColorFunc::func(dest.get_ref(), src0.get_ref(), src1.get_ref(), src2.get_ref(), src3.get_ref());
 		}
 	}
 
 }
-	
+
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type>
 static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame)
 {
@@ -140,18 +140,80 @@ static inline helper::Scalar<const T> ShaderScalar(const T& t)
 {
 	return helper::Scalar<const T>(t);
 }
-	
+
+namespace
+{
+
+/**
+ * help class used for Surface::blitNShade
+ */
+struct ColorReplace
+{
+	/**
+	* Function used by ShaderDraw in Surface::blitNShade
+	* set shade and replace color in that surface
+	* @param dest destination pixel
+	* @param src source pixel
+	* @param shade value of shade of this surface
+	* @param newColor new color to set (it should be offseted by 4)
+	*/
+	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
+	{
+		if(src)
+		{
+			const int newShade = (src&15) + shade;
+			if (newShade > 15)
+				// so dark it would flip over to another color - make it black instead
+				dest = 15;
+			else
+				dest = newColor | newShade;
+		}
+	}
+
+};
+
+/**
+ * help class used for Surface::blitNShade
+ */
+struct StandartShade
+{
+	/**
+	* Function used by ShaderDraw in Surface::blitNShade
+	* set shade
+	* @param dest destination pixel
+	* @param src source pixel
+	* @param shade value of shade of this surface
+	* @param notused
+	* @param notused
+	*/
+	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
+	{
+		if(src)
+		{
+			const int newShade = (src&15) + shade;
+			if (newShade > 15)
+				// so dark it would flip over to another color - make it black instead
+				dest = 15;
+			else
+				dest = (src&(15<<4)) | newShade;
+		}
+	}
+
+};
+
+} //namespace
+
 namespace helper
 {
-	
+
 const Uint8 ColorGroup = 15<<4;
 const Uint8 ColorShade = 15;
 const Uint8 ColorShadeMax = 15;
 const Uint8 BLACK = 15;
 
-}//namespace helper
+} //namespace helper
 
-}//namespace OpenXcom
+} //namespace OpenXcom
 
 
 #endif	/* OPENXCOM_SHADERDRAW_H */

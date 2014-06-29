@@ -455,6 +455,23 @@ void Text::processText()
 	_redraw = true;
 }
 
+namespace
+{
+
+struct PaletteShift
+{
+	static inline void func(Uint8& dest, Uint8& src, int off, int mul, int mid)
+	{
+		if(src)
+		{
+			int inverseOffset = mid ? 2 * (mid - src) : 0;
+			dest = off + src * mul + inverseOffset;
+		}
+	}
+};
+
+} //namespace
+
 /**
  * Calculates the starting X position for a line of text.
  * @param line The line number (0 = first, etc).
@@ -495,23 +512,6 @@ int Text::getLineX(int line) const
 	}
 	return x;
 }
-
-namespace
-{
-
-struct PaletteShift
-{
-	static inline void func(Uint8& dest, Uint8& src, int off, int mul, int mid)
-	{
-		if(src)
-		{
-			int inverseOffset = mid ? 2 * (mid - src) : 0;
-			dest = off + src * mul + inverseOffset;
-		}
-	}
-};
-
-} //namespace
 
 /**
  * Draws all the characters in the text with a really
