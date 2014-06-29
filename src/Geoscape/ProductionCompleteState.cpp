@@ -123,6 +123,8 @@ ProductionCompleteState::~ProductionCompleteState()
 void ProductionCompleteState::btnOkClick(Action *)
 {
 	_game->popState();
+	if (Options::autoAssignBasePersonnel)
+		_base->assignFreeEngineers();
 }
 
 /**

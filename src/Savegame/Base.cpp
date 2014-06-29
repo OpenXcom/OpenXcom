@@ -825,6 +825,52 @@ int Base::getAllocatedEngineers() const
 }
 
 /**
+ * Evenly assigns idle scientists to any ongoing research.
+ */
+void Base::assignFreeScientists()
+{
+	if (getAvailableScientists() == 0 || getFreeLaboratories() == 0 || getResearch().empty())
+		return;
+
+	int scientists = std::min(getAvailableScientists(), getFreeLaboratories());
+	setScientists(getScientists() - scientists);
+
+	int projects = getResearch().size();
+	int scientistsPerProject = scientists / projects;
+	for (std::vector<ResearchProject*>::const_iterator r = getResearch().begin(); r != getResearch().end(); ++r)
+	{
+		(*r)->setAssigned((*r)->getAssigned() + scientistsPerProject);
+		scientists -= scientistsPerProject;
+	}
+	// Assign any left over
+	ResearchProject *p = getResearch().front();
+	p->setAssigned(p->getAssigned() + scientists);
+}
+
+/**
+ * Evenly assigns idle engineers to any ongoing productions.
+ */
+void Base::assignFreeEngineers()
+{
+	if (getAvailableEngineers() == 0 || getFreeWorkshops() == 0 || getProductions().empty())
+		return;
+
+	int engineers = std::min(getAvailableEngineers(), getFreeWorkshops());
+	setEngineers(getEngineers() - engineers);
+
+	int productions = getProductions().size();
+	int engineersPerProduction = engineers / productions;
+	for (std::vector<Production*>::const_iterator p = getProductions().begin(); p != getProductions().end(); ++p)
+	{
+		(*p)->setAssignedEngineers((*p)->getAssignedEngineers() + engineersPerProduction);
+		engineers -= engineersPerProduction;
+	}
+	// Assign any left over
+	Production *p =  getProductions().front();
+	p->setAssignedEngineers(p->getAssignedEngineers() + engineers);
+}
+
+/**
  * Returns the total defense value of all
  * the facilities in the base.
  * @return Defense value.
