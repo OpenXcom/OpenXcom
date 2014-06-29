@@ -236,10 +236,13 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 
 	// Add in custom reserve buttons
 	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
-	Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
-	tftdIcons->setX(48);
-	tftdIcons->setY(176);
-	tftdIcons->blit(icons);
+	if (_game->getResourcePack()->getSurface("TFTDReserve"))
+	{
+		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+		tftdIcons->setX(48);
+		tftdIcons->setY(176);
+		tftdIcons->blit(icons);
+	}
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	SDL_Rect *r = icons->getCrop();
