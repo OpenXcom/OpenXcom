@@ -59,7 +59,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _cheating(false),
-									 _tuReserved(BA_NONE), _kneelReserved(false)
+									 _tuReserved(BA_NONE), _kneelReserved(false), _depth(0)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -308,6 +308,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	}
 	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
+	_depth = node["depth"].as<int>(_depth);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 }
 
@@ -426,6 +427,7 @@ YAML::Node SavedBattleGame::save() const
 	}
 	node["tuReserved"] = (int)_tuReserved;
     node["kneelReserved"] = _kneelReserved;
+    node["depth"] = _depth;
 
 	return node;
 }
@@ -1760,5 +1762,10 @@ void SavedBattleGame::calculateModuleMap()
 SavedGame *SavedBattleGame::getGeoscapeSave()
 {
 	return _battleState->getGame()->getSavedGame();
+}
+
+int SavedBattleGame::getDepth()
+{
+	return _depth;
 }
 }
