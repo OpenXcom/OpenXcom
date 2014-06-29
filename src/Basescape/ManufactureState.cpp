@@ -201,7 +201,11 @@ void ManufactureState::fillProductionList()
 		std::wostringstream s3;
 		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wostringstream s4;
-		if ((*iter)->getAssignedEngineers() > 0)
+		if ((*iter)->getInfiniteAmount())
+		{
+			s4 << Language::utf8ToWstr("∞");
+		}
+		else if ((*iter)->getAssignedEngineers() > 0)
 		{
 			int timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			timeLeft /= (*iter)->getAssignedEngineers();
