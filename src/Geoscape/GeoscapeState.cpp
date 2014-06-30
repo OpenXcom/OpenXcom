@@ -2132,7 +2132,7 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 	// Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
 
-	if (base->getAvailableSoldiers(true) > 0)
+	if (base->getAvailableSoldiers(true) > 0 || !base->getVehicles()->empty())
 	{
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
