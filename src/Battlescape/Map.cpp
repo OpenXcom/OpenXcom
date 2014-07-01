@@ -99,7 +99,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
-	
+
 	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
@@ -242,7 +242,7 @@ void Map::drawTerrain(Surface *surface)
 	bool invalid;
 	int tileShade, wallShade, tileColor;
 	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
-	
+
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -1024,7 +1024,6 @@ void Map::drawTerrain(Surface *surface)
 	}
 	if (pathfinderTurnedOn)
 	{
-		_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
 		for (int itZ = beginZ; itZ <= endZ; itZ++)
 		{
 			for (int itX = beginX; itX <= endX; itX++)
@@ -1064,6 +1063,7 @@ void Map::drawTerrain(Surface *surface)
 
 						if (_previewSetting & PATH_TU_COST && tile->getTUMarker() > -1)
 						{
+							_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
 							int off = tile->getTUMarker() > 9 ? 5 : 3;
 							if (_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
@@ -1083,12 +1083,12 @@ void Map::drawTerrain(Surface *surface)
 							{
 								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (22-adjustment), 0);
 							}
+							_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 						}
 					}
 				}
 			}
 		}
-		_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 	}
 	unit = (BattleUnit*)_save->getSelectedUnit();
 	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewLevel())
