@@ -977,25 +977,25 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 
 		if (itDiscovered != discovered.end ())
 		{
-			if (!liveAlien)
+			bool cull = true;
+			if (research->getGetOneFree().size() != 0)
+			{
+				for (std::vector<std::string>::const_iterator ohBoy = research->getGetOneFree().begin(); ohBoy != research->getGetOneFree().end(); ++ohBoy)
+				{
+					std::vector<const RuleResearch *>::const_iterator more_iteration = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(*ohBoy));
+					if (more_iteration == discovered.end ())
+					{
+						cull = false;
+						break;
+					}
+				}
+			}
+			if (!liveAlien && cull)
 			{
 				continue;
 			}
 			else
 			{
-				bool cull = true;
-				if (research->getGetOneFree().size() != 0)
-				{
-					for (std::vector<std::string>::const_iterator ohBoy = research->getGetOneFree().begin(); ohBoy != research->getGetOneFree().end(); ++ohBoy)
-					{
-						std::vector<const RuleResearch *>::const_iterator more_iteration = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(*ohBoy));
-						if (more_iteration == discovered.end ())
-						{
-							cull = false;
-							break;
-						}
-					}
-				}
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
 				
@@ -1099,13 +1099,6 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 	{		
 		if (!r->getGetOneFree().empty())
 		{
-			for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
-			{
-				if(std::find(unlocked.begin (), unlocked.end (), ruleset->getResearch(*itFree)) == unlocked.end ())
-				{
-					return true;
-				}
-			}
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_COMMANDER_PLUS");
 				
@@ -1125,6 +1118,13 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 				if (found == discovered.end())
 					return true;
 			}
+		}
+	}
+	for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
+	{
+		if(std::find(unlocked.begin (), unlocked.end (), ruleset->getResearch(*itFree)) == unlocked.end ())
+		{
+			return true;
 		}
 	}
 
