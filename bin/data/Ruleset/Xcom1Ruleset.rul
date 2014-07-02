@@ -3546,6 +3546,9 @@ terrains:
       - name: UBASE_03
         width: 20
         length: 20
+        items:
+          STR_ELERIUM_115:
+            - [2, 14, 1]
       - name: UBASE_04
         width: 10
         length: 10

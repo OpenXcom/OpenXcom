@@ -62,7 +62,7 @@ private:
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
 	int _alienItemLevel;
-	bool _allowAutoLoadout, _baseInventory;
+	bool _allowAutoLoadout, _baseInventory, _generateFuel;
 	int _craftX, _craftY, _craftZ;
 
 	/// Generates a new battlescape map.
