@@ -328,4 +328,16 @@ void TextButton::setComboBox(ComboBox *comboBox)
 	}
 }
 
+void TextButton::setWidth(int width)
+{
+	Surface::setWidth(width);
+	_text->setWidth(width);
+}
+
+void TextButton::setHeight(int height)
+{
+	Surface::setHeight(height);
+	_text->setHeight(height);
+}
+
 }
