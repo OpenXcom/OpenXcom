@@ -1272,7 +1272,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						case DT_IN:
 							if (!dest->isVoid())
 							{
-								if (dest->getFire() == 0)
+								if (dest->getFire() == 0 && (dest->getMapData(MapData::O_FLOOR) || dest->getMapData(MapData::O_OBJECT)))
 								{
 									dest->setFire(dest->getFuel() + 1);
 									dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
