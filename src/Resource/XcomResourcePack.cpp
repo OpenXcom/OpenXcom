@@ -157,8 +157,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	{
 		std::string path = geograph + *i;
 		std::transform(i->begin(), i->end(), i->begin(), toupper);
-		*i = (*i).substr(0, (*i).length() - 3);
-		*i = *i + "PCK";
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadBdy(path);
 	}
