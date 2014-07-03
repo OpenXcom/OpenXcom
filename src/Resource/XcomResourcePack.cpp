@@ -858,7 +858,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << lbms[i];
-		if (CrossPlatform::getDataFile(s.str()) != s.str())
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 		{
 			if (!i)
 			{
@@ -884,7 +884,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];
-		if (CrossPlatform::getDataFile(s.str()) != s.str())
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 		{
 			_surfaces[spks[i]] = new Surface(320, 200);
 			_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
