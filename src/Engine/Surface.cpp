@@ -385,10 +385,10 @@ void Surface::loadBdy(const std::string &filename)
  * Clears the entire contents of the surface, resulting
  * in a blank image.
  */
-void Surface::clear()
+void Surface::clear(Uint32 color)
 {
-	if (_surface->flags & SDL_SWSURFACE) memset(_surface->pixels, 0, _surface->h*_surface->pitch);
-	else SDL_FillRect(_surface, &_clear, 0);
+	if (_surface->flags & SDL_SWSURFACE) memset(_surface->pixels, color, _surface->h*_surface->pitch);
+	else SDL_FillRect(_surface, &_clear, color);
 }
 
 /**

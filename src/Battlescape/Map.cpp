@@ -167,7 +167,13 @@ void Map::draw()
 	{
 		return;
 	}
-	Surface::draw();
+
+	// normally we'd call for a Surface::draw();
+	// but we don't want to clear the background with colour 0, which is transparent (aka black)
+	// we use colour 15 because that actually corresponds to the colour we DO want in all variations of the xcom and tftd palettes.
+	_redraw = false;
+	clear(Palette::blockOffset(0)+15);
+
 	Tile *t;
 
 	_projectileInFOV = _save->getDebugMode();
