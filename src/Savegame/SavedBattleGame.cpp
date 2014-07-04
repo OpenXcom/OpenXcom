@@ -1765,8 +1765,21 @@ SavedGame *SavedBattleGame::getGeoscapeSave()
 	return _battleState->getGame()->getSavedGame();
 }
 
-int SavedBattleGame::getDepth()
+/**
+ * check the depth of the battlescape.
+ * @return depth.
+ */
+const int SavedBattleGame::getDepth() const
 {
 	return _depth;
+}
+
+/**
+ * set the depth of the battlescape game.
+ * @param depth the intended depth 0-3.
+ */
+void SavedBattleGame::setDepth(int depth)
+{
+	_depth = depth;
 }
 }

@@ -248,7 +248,10 @@ public:
 	void calculateModuleMap();
 	/// a shortcut to the geoscape save.
 	SavedGame *getGeoscapeSave();
-	int getDepth();
+	/// get the depth of the battlescape game.
+	const int getDepth() const;
+	/// set the depth of the battlescape game.
+	void setDepth(int depth);
 
 };
 
