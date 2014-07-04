@@ -2250,6 +2250,12 @@ void GeoscapeState::resize(int &dX, int &dY)
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
 	int divisor = 1;
+	double pixelRatioY = 1.0;
+
+	if (Options::nonSquarePixelRatio)
+	{
+		pixelRatioY = 1.2;
+	}
 	switch (Options::geoscapeScale)
 	{
 	case SCALE_SCREEN_DIV_3:
@@ -2267,7 +2273,7 @@ void GeoscapeState::resize(int &dX, int &dY)
 	}
 	
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
-	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, (int)(Options::displayHeight / pixelRatioY / divisor));
 
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;
