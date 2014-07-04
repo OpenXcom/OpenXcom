@@ -1430,7 +1430,7 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit *unit)
 {
-	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0);
+	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0, _save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 	bool invalid, dummy;
 	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
