@@ -1078,7 +1078,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 				{
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
-					base->getItems()->addItem((*it)->getRules()->getName(), 1);
+					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
 				}
 				else if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{
