@@ -383,7 +383,8 @@ void Surface::loadBdy(const std::string &filename)
 
 /**
  * Clears the entire contents of the surface, resulting
- * in a blank image.
+ * in a blank image of the specified color. (0 for transparent)
+ * @param color the colour for the background of the surface.
  */
 void Surface::clear(Uint32 color)
 {
