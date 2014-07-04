@@ -1275,6 +1275,7 @@ void SavedBattleGame::prepareNewTurn()
 						}
 					}
 				}
+				getTileEngine()->applyGravity(*i);
 			}
 		}
 	}
