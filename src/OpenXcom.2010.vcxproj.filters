@@ -856,6 +856,9 @@
     <ClCompile Include="Battlescape\DelayedSaveState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1733,6 +1736,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\DelayedSaveState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
+      <Filter>Ufopaedia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -371,6 +371,7 @@ void Ruleset::loadFile(const std::string &filename)
 				case UFOPAEDIA_TYPE_ARMOR: rule = new ArticleDefinitionArmor(); break;
 				case UFOPAEDIA_TYPE_BASE_FACILITY: rule = new ArticleDefinitionBaseFacility(); break;
 				case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
+				case UFOPAEDIA_TYPE_TFTD: rule = new ArticleDefinitionTFTD(); break;
 				case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
 				case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
 				default: rule = 0; break;

@@ -599,6 +599,8 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateCraftWeapon.cpp
   Ufopaedia/ArticleStateTextImage.cpp
   Ufopaedia/ArticleStateTextImage.h
+  Ufopaedia/ArticleStateTFTD.cpp
+  Ufopaedia/ArticleStateTFTD.h
   Ufopaedia/ArticleStateArmor.cpp
   Ufopaedia/ArticleStateArmor.h
   Ufopaedia/ArticleStateVehicle.cpp
