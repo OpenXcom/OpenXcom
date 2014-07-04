@@ -639,7 +639,7 @@ double Base::getIgnoredStores()
 					if (clip != "" && available > 0)
 					{
 						int clipSize = _rule->getItem(clip)->getClipSize();
-						int needed;
+						int needed = 0;
 						if (clipSize > 0)
 						{
 							needed = ((*w)->getRules()->getAmmoMax() - (*w)->getAmmo()) / clipSize;

@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-NumberText::NumberText(int width, int height, int x, int y) : Surface(width, height, x, y), _value(0), _color(0), _bordered(false)
+NumberText::NumberText(int width, int height, int x, int y) : Surface(width, height, x, y), _value(0), _bordered(false), _color(0)
 {
 	_chars[0] = new Surface(3, 5);
 	_chars[0]->lock();

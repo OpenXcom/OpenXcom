@@ -171,7 +171,7 @@ int RuleCraft::getAcceleration() const
  * can be equipped onto the craft.
  * @return The weapon capacity.
  */
-int RuleCraft::getWeapons() const
+unsigned int RuleCraft::getWeapons() const
 {
 	return _weapons;
 }
