@@ -63,17 +63,7 @@ ScannerState::ScannerState (BattleAction *action) : _action(action)
 	}
 
 	// Set palette
-	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
-	}
-
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_scan);
 	add(_scannerView);

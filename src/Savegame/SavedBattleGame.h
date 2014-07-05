@@ -41,6 +41,7 @@ class Pathfinding;
 class TileEngine;
 class BattleItem;
 class Ruleset;
+class State;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -252,7 +253,7 @@ public:
 	const int getDepth() const;
 	/// set the depth of the battlescape game.
 	void setDepth(int depth);
-
+	void setPaletteByDepth(State *state);
 };
 
 }

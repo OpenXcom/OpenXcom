@@ -46,16 +46,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring &msg)
 	_txtTitle = new Text(255, 61, 33, 51);
 
 	// Set palette
-	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
-	}
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_frame);
 	add(_btnOk);

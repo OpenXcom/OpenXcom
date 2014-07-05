@@ -54,16 +54,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	_btnCancel = new TextButton(120, 16, 184, 110);
 
 	// Set palette
-	if (_battleGame->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _battleGame->getDepth();
-		setPalette(ss.str());
-	}
+	_battleGame->setPaletteByDepth(this);
 
 	add(_window);
 	add(_txtInExit);

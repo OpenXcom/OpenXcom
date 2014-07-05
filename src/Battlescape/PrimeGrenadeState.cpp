@@ -59,15 +59,13 @@ PrimeGrenadeState::PrimeGrenadeState(BattleAction *action, bool inInventoryView,
 	}
 
 	// Set palette
-	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0 || inInventoryView)
+	if (inInventoryView)
 	{
 		setPalette("PAL_BATTLESCAPE");
 	}
 	else
 	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	}
 
 	// Set up objects

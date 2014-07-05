@@ -68,16 +68,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
 	{
-		if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
-		{
-			setPalette("PAL_BATTLESCAPE");
-		}
-		else
-		{
-			std::stringstream ss;
-			ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-			setPalette(ss.str());
-		}
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	}
 	else
 	{

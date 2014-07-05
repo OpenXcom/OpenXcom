@@ -169,16 +169,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// Set palette
-	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
-	}
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));

@@ -58,16 +58,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	_txtLevel = new Text(20, 25, 281, 75);
 	
 	// Set palette
-	if (battleGame->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
-	}
+	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
 	add(_miniMapView);

@@ -59,16 +59,7 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	_bg = new Surface(_game->getScreen()->getWidth(), _game->getScreen()->getWidth(), 0, 0);
 
 	// Set palette
-	if (battleGame->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << battleGame->getDepth();
-		setPalette(ss.str());
-	}
+	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
 	add(_window);
