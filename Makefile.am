@@ -605,6 +605,8 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateText.h \
 	src/Ufopaedia/ArticleStateTextImage.cpp \
 	src/Ufopaedia/ArticleStateTextImage.h \
+	src/Ufopaedia/ArticleStateTFTD.cpp \
+	src/Ufopaedia/ArticleStateTFTD.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
 	src/Ufopaedia/ArticleStateVehicle.cpp \

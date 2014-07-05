@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MapBlock.h"
+#include "../Battlescape/Position.h"
 
 namespace OpenXcom
 {
@@ -51,6 +52,7 @@ void MapBlock::load(const YAML::Node &node)
 	_subType = (MapBlockType)node["subType"].as<int>(_subType);
 	_frequency = node["frequency"].as<int>(_frequency);
 	_maxCount = node["maxCount"].as<int>(_maxCount);
+	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
 }
 
 /**
@@ -153,6 +155,10 @@ void MapBlock::markUsed()
 void MapBlock::reset()
 {
 	_timesUsed = 0;
+}
+std::map<std::string, std::vector<Position> > *MapBlock::getItems()
+{
+	return &_items;
 }
 
 }

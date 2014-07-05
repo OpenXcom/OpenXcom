@@ -105,7 +105,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, Options::keyCancel);
 
 	_btnClear->setColor(Palette::blockOffset(15)+1);
-	_btnClear->setText(tr("STR_UNLOAD"));
+	_btnClear->setText(tr("STR_UNLOAD_CRAFT"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
 	_btnClear->setVisible(isNewBattle);
 

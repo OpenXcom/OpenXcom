@@ -105,7 +105,15 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 	_timeSpent += _engineers;
 	if (done < getAmountProduced ())
 	{
-		int produced = std::min(getAmountProduced(), _amount) - done; // std::min is required because we don't want to overproduce
+		int produced;
+		if (!getInfiniteAmount())
+		{
+			produced = std::min(getAmountProduced(), _amount) - done; // std::min is required because we don't want to overproduce
+		}
+		else
+		{
+			produced = getAmountProduced() - done;
+		}
 		int count = 0;
 		do
 		{

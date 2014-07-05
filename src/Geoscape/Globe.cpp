@@ -1618,7 +1618,7 @@ void Globe::drawPath(Surface *surface, double lon1, double lat1, double lon2, do
 {
 	double length;
 	Sint16 count;
-	Sint16 x1, y1, x2, y2;
+	double x1, y1, x2, y2;
 	CordPolar p1, p2;
 	Cord a(CordPolar(lon1, lat1));
 	Cord b(CordPolar(lon2, lat2));

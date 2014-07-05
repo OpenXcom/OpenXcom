@@ -169,7 +169,16 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		std::stringstream ss;
+		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
+		setPalette(ss.str());
+	}
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -236,10 +245,13 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 
 	// Add in custom reserve buttons
 	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
-	Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
-	tftdIcons->setX(48);
-	tftdIcons->setY(176);
-	tftdIcons->blit(icons);
+	if (_game->getResourcePack()->getSurface("TFTDReserve"))
+	{
+		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+		tftdIcons->setX(48);
+		tftdIcons->setY(176);
+		tftdIcons->blit(icons);
+	}
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	SDL_Rect *r = icons->getCrop();
@@ -1457,7 +1469,7 @@ void BattlescapeState::warning(const std::string &message)
  */
 inline void BattlescapeState::handle(Action *action)
 {
-	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (_game->getCursor()->getVisible() || ((action->getDetails()->type == SDL_MOUSEBUTTONDOWN || action->getDetails()->type == SDL_MOUSEBUTTONUP) && action->getDetails()->button.button == SDL_BUTTON_RIGHT))
 	{
 		State::handle(action);
 
@@ -2108,6 +2120,12 @@ void BattlescapeState::resize(int &dX, int &dY)
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
 	int divisor = 1;
+	double pixelRatioY = 1.0;
+
+	if (Options::nonSquarePixelRatio)
+	{
+		pixelRatioY = 1.2;
+	}
 	switch (Options::battlescapeScale)
 	{
 	case SCALE_SCREEN_DIV_3:
@@ -2125,7 +2143,7 @@ void BattlescapeState::resize(int &dX, int &dY)
 	}
 
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
-	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, (int)(Options::displayHeight / pixelRatioY / divisor));
 
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;

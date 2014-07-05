@@ -368,6 +368,13 @@ void Screen::resetDisplay(bool resetVideo)
 	_clear.w = getWidth();
 	_clear.h = getHeight();
 
+	double pixelRatioX = 1.0;
+	double pixelRatioY = 1.0;
+	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	{
+		pixelRatioX = 0.75;
+		pixelRatioY = 1.2;
+	}
 	bool cursorInBlackBands;
 	if (!Options::keepAspectRatio)
 	{
@@ -410,13 +417,17 @@ void Screen::resetDisplay(bool resetVideo)
 	}
 	else if (_scaleY > _scaleX && Options::keepAspectRatio)
 	{
-		int targetHeight = (int)floor(_scaleX * (double)_baseHeight);
+		int targetHeight = (int)floor(_scaleX * (double)_baseHeight * pixelRatioY);
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)
 		{
 			_topBlackBand = 0;
 		}
         _bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
+		if (_bottomBlackBand < 0)
+		{
+			_bottomBlackBand = 0;
+		}
 		_leftBlackBand = _rightBlackBand = 0;
 		_cursorLeftBlackBand = 0;
 
@@ -587,6 +598,13 @@ int Screen::getDY()
 */
 void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
 {
+	double pixelRatioY = 1.0;
+
+	if (Options::nonSquarePixelRatio)
+	{
+		pixelRatioY = 1.2;
+	}
+
 	type = selection;
 	switch (type)
 	{
@@ -599,16 +617,16 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		height = Screen::ORIGINAL_HEIGHT * 2;
 		break;
 	case SCALE_SCREEN_DIV_3:
-		width = Options::newDisplayWidth / 3;
-		height = Options::newDisplayHeight / 3;
+		width = Options::displayWidth / 3;
+		height = Options::displayHeight / pixelRatioY / 3;
 		break;
 	case SCALE_SCREEN_DIV_2:
-		width = Options::newDisplayWidth / 2;
-		height = Options::newDisplayHeight / 2;
+		width = Options::displayWidth / 2;
+		height = Options::displayHeight / pixelRatioY  / 2.0;
 		break;
 	case SCALE_SCREEN:
-		width = Options::newDisplayWidth;
-		height = Options::newDisplayHeight;
+		width = Options::displayWidth;
+		height = Options::displayHeight / pixelRatioY;
 		break;
 	case SCALE_ORIGINAL:
 	default:

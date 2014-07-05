@@ -135,4 +135,25 @@ void Palette::savePal(const std::string &file) const
 	out.close();
 }
 
+void Palette::setColors(SDL_Color* pal, int ncolors)
+{
+	if(_colors != 0)
+		throw Exception("setColors can be run only once");
+	_count = ncolors;
+	_colors = new SDL_Color[_count];
+	memset(_colors, 0, sizeof(SDL_Color) * _count);
+
+	Uint8 value[3];
+
+	for (int i = 0; i < _count; ++i)
+	{
+		// Correct X-Com colors to RGB colors
+		_colors[i].r = pal[i].r;
+		_colors[i].g = pal[i].g;
+		_colors[i].b = pal[i].b;
+		_colors[i].unused = 255;
+	}
+	_colors[0].unused = 0;
+	
+}
 }
