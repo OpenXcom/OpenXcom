@@ -75,6 +75,7 @@ private:
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
+	int _depth;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -247,6 +248,10 @@ public:
 	void calculateModuleMap();
 	/// a shortcut to the geoscape save.
 	SavedGame *getGeoscapeSave();
+	/// get the depth of the battlescape game.
+	const int getDepth() const;
+	/// set the depth of the battlescape game.
+	void setDepth(int depth);
 
 };
 

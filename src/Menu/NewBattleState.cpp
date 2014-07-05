@@ -85,6 +85,9 @@ NewBattleState::NewBattleState() : _craft(0)
 
 	_txtTerrain = new Text(120, 9, 22, 113);
 	_cbxTerrain = new ComboBox(this, 120, 16, 22, 123);
+
+	_txtDepth = new Text(120, 9, 22, 143);
+	_slrDepth = new Slider(120, 16, 22, 153);
 	
 	_txtDifficulty = new Text(120, 9, 178, 83);
 	_cbxDifficulty = new ComboBox(this, 120, 16, 178, 93);
@@ -115,6 +118,8 @@ NewBattleState::NewBattleState() : _craft(0)
 	
 	add(_txtDarkness);
 	add(_slrDarkness);
+	add(_txtDepth);
+	add(_slrDepth);
 	add(_txtTerrain);
 	add(_txtDifficulty);
 	add(_txtAlienRace);
@@ -162,6 +167,9 @@ NewBattleState::NewBattleState() : _craft(0)
 
 	_txtDarkness->setColor(Palette::blockOffset(8)+10);
 	_txtDarkness->setText(tr("STR_MAP_DARKNESS"));
+	
+	_txtDepth->setColor(Palette::blockOffset(8)+10);
+	_txtDepth->setText(tr("STR_MAP_DEPTH"));
 
 	_txtTerrain->setColor(Palette::blockOffset(8)+10);
 	_txtTerrain->setText(tr("STR_MAP_TERRAIN"));
@@ -218,9 +226,13 @@ NewBattleState::NewBattleState() : _craft(0)
 
 	_slrDarkness->setColor(Palette::blockOffset(15)-1);
 	_slrDarkness->setRange(0, 15);
+	
+	_slrDepth->setColor(Palette::blockOffset(15)-1);
+	_slrDepth->setRange(1, 3);
 
 	_cbxTerrain->setColor(Palette::blockOffset(15)-1);
 	_cbxTerrain->setOptions(terrainStrings);
+	_cbxTerrain->onChange((ActionHandler)&NewBattleState::cbxTerrainChange);
 
 	_cbxDifficulty->setColor(Palette::blockOffset(15)-1);
 	_cbxDifficulty->setOptions(difficulty);
@@ -542,6 +554,7 @@ void NewBattleState::btnOkClick(Action *)
 	bgen.setWorldShade(_slrDarkness->getValue());
 	bgen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 	bgen.setAlienItemlevel(_slrAlienTech->getValue());
+	bgame->setDepth(_slrDepth->getValue());
 
 	bgen.run();
 	//_game->pushState(new BattlescapeState);
@@ -583,6 +596,7 @@ void NewBattleState::btnRandomClick(Action *)
 	_slrAlienTech->setValue(RNG::generate(0, _game->getRuleset()->getAlienItemLevels().size()-1));
 	cbxMissionChange(0);
 	cbxCraftChange(0);
+	cbxTerrainChange(0);
 
 	initSave();
 }
@@ -608,6 +622,7 @@ void NewBattleState::cbxMissionChange(Action *)
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
 	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
+	cbxTerrainChange(0);
 }
 
 /**
@@ -630,6 +645,26 @@ void NewBattleState::cbxCraftChange(Action *)
 			}
 		}
 	}
+}
+
+/**
+ * Updates the depth slider accordingly when terrain selection changes.
+ * @param action Pointer to an action.
+ */
+void NewBattleState::cbxTerrainChange(Action *)
+{
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	int minDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth();
+	int maxDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
+	if (!ruleDeploy->getTerrains().empty())
+	{
+		minDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMinDepth();
+		maxDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMaxDepth();
+	}
+	_txtDepth->setVisible(minDepth != maxDepth && maxDepth != 0);
+	_slrDepth->setVisible(minDepth != maxDepth && maxDepth != 0);
+	_slrDepth->setRange(minDepth, maxDepth);
+	_slrDepth->setValue(minDepth);
 }
 
 }

@@ -53,7 +53,7 @@ void DelayedSaveState::init()
  */
 void DelayedSaveState::think()
 {
-	if (!_firstRun)
+	if (_firstRun)
 	{
 		_firstRun = false;
 	}
