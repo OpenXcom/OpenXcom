@@ -53,7 +53,7 @@ Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rule
 	{
 		_id = id;
 	}
-	for (int i = 0; i < _rules->getWeapons(); ++i)
+	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
@@ -274,7 +274,7 @@ void Craft::changeRules(RuleCraft *rules)
 {
 	_rules = rules;
 	_weapons.clear();
-	for (int i = 0; i < _rules->getWeapons(); ++i)
+	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}

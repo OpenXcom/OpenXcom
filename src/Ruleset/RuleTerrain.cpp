@@ -170,7 +170,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
  * @param mapDataSetID The id of the map data set.
  * @return Pointer to MapData object.
  */
-MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
+MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 {
 	MapDataSet* mdf = 0;
 

@@ -132,7 +132,7 @@ NewGameState::~NewGameState()
  */
 void NewGameState::btnOkClick(Action *)
 {
-	GameDifficulty diff;
+	GameDifficulty diff = DIFF_BEGINNER;
 	if (_difficulty == _btnBeginner)
 	{
 		diff = DIFF_BEGINNER;
