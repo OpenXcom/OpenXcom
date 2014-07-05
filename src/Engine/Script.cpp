@@ -18,7 +18,6 @@
  */
 
 #include <sstream>
-#include <intrin.h>
 
 #include "Logger.h"
 #include "Script.h"
@@ -129,19 +128,75 @@ inline void addShade_h(int& reg, const int& var)
 {
 	const int newShade = (reg & 0xF) + var;
 	if (newShade > 0xF)
+	{
 		// so dark it would flip over to another color - make it black instead
 		reg = 0xF;
-	else if(newShade >= 0)
+		return;
+	}
+	else if(newShade > 0)
+	{
 		reg = (reg & 0xF0) | newShade;
-	else
-		reg = (reg & 0xF0);
+		return;
+	}
+	reg &= 0xF0;
+	//prevent overflow to 0 or another color - make it white instead
+	if(!reg || newShade < 0)
+		reg = 0x01;
 }
 
-inline void mulAddMod_h(int& reg, const int& mul, const int& add, const int& mod)
+inline bool mulAddMod_h(int& reg, const int& mul, const int& add, const int& mod)
 {
 	const int a = reg * mul + add;
 	if(mod)
-		reg = (a % mod +  mod) % mod;
+		reg = (a % mod + mod) % mod;
+	return !mod;
+}
+
+inline bool wavegen_rect_h(int& reg, const int& period, const int& size, const int& max)
+{
+	if(period <= 0)
+		return true;
+	reg %= period;
+	if(reg < 0)
+		reg += reg;
+	if(reg > size)
+		reg = 0;
+	else
+		reg = max;
+	return false;
+}
+
+inline bool wavegen_saw_h(int& reg, const int& period, const int& size, const int& max)
+{
+	if(period <= 0)
+		return true;
+	reg %= period;
+	if(reg < 0)
+		reg += reg;
+	if(reg > size)
+		reg = 0;
+	else if(reg > max)
+		reg = max;
+	return false;
+}
+
+inline bool wavegen_tri_h(int& reg, const int& period, const int& size, const int& max)
+{
+	if(period <= 0)
+		return true;
+	reg %= period;
+	if(reg < 0)
+		reg += reg;
+	if(reg > size)
+		reg = 0;
+	else
+	{
+		if(reg > size/2)
+			reg = size - reg;
+		if(reg > max)
+			reg = max;
+	}
+	return false;
 }
 /**
  * Main macro defining all available operation in script engine.
@@ -177,13 +232,19 @@ inline void mulAddMod_h(int& reg, const int& mul, const int& add, const int& mod
 	IMPL(mul,		Reg, Data, None, None,		{ Reg0 *= Data1;						return false; }) \
 	\
 	IMPL(muladd,	Reg, Data, Data, None,		{ Reg0 = Reg0 * Data1 + Data2;			return false; }) \
-	IMPL(muladdmod,	Reg, Data, Data, Data,		{ mulAddMod_h(Reg0, Data1, Data2, Data3); return !Data3; }) \
+	IMPL(muladdmod,	Reg, Data, Data, Data,		{ return mulAddMod_h(Reg0, Data1, Data2, Data3);		}) \
 	\
 	IMPL(div,		Reg, Data, None, None,		{ if(Data1) Reg0 /= Data1;				return !Data1; }) \
 	IMPL(mod,		Reg, Data, None, None,		{ if(Data1) Reg0 %= Data1;				return !Data1; }) \
 	\
 	IMPL(shl,		Reg, Data, None, None,		{ Reg0 <<= Data1;						return false; }) \
 	IMPL(shr,		Reg, Data, None, None,		{ Reg0 >>= Data1;						return false; }) \
+	\
+	IMPL(abs,		Reg, None, None, None,		{ Reg0 = std::abs(Reg0);				return false; }) \
+	\
+	IMPL(wavegen_rect,	Reg, Data, Data, Data,	{ return wavegen_rect_h(Reg0, Data1, Data2, Data3);		}) \
+	IMPL(wavegen_saw,	Reg, Data, Data, Data,	{ return wavegen_saw_h(Reg0, Data1, Data2, Data3);		}) \
+	IMPL(wavegen_tri,	Reg, Data, Data, Data,	{ return wavegen_tri_h(Reg0, Data1, Data2, Data3);		}) \
 	\
 	IMPL(get_color,	Reg, Data, None, None,		{ Reg0 = Data1 >> 4;					return false; }) \
 	IMPL(set_color,	Reg, Data, None, None,		{ Reg0 = (Reg0 & 0xF) | (Data1 << 4);	return false; }) \
@@ -466,6 +527,15 @@ struct ParserHelper
 			{
 				return false;
 			}
+
+			//change named constant to unnamed one
+			if(pos->second.type == ArgConst)
+			{
+				std::stringstream ss;
+				ss << pos->second.value;
+				return getConst(ss.str(), index);
+			}
+
 			ScriptContainerData data = pos->second;
 			if(data.type != ArgReg)
 			{
@@ -488,7 +558,7 @@ struct ParserHelper
      */
 	bool getConst(const std::string& s, int& index)
 	{
-		ref_ite pos = refListCurr.find(s);
+		cref_ite pos = refListCurr.find(s);
 		if(pos == refListCurr.end())
 		{
 			int value = 0;
@@ -500,11 +570,22 @@ struct ParserHelper
 				ss >> std::hex;
 			if(!(ss >> value))
 				return false;
-			ScriptContainerData data = { ArgConst, refIndexUsed, value };
-			refListCurr.insert(std::make_pair(s, data));
-			++refIndexUsed;
-			index = data.index;
-			return true;
+
+			//normalize string value
+			ss.str("");
+			ss.clear();
+			ss << std::dec;
+			ss << value;
+			std::string newS = ss.str();
+			pos = refListCurr.find(newS);
+			if(pos == refListCurr.end())
+			{
+				ScriptContainerData data = { ArgConst, refIndexUsed, value };
+				refListCurr.insert(std::make_pair(newS, data));
+				++refIndexUsed;
+				index = data.index;
+				return true;
+			}
 		}
 		if(pos->second.type != ArgConst)
 			return false;
