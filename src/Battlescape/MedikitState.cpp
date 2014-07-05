@@ -33,6 +33,8 @@
 #include <iostream>
 #include <sstream>
 #include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -132,7 +134,16 @@ MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _tar
 	_bg = new Surface(320, 200);
 
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		std::stringstream ss;
+		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
+		setPalette(ss.str());
+	}
 
 	if (_game->getScreen()->getDY() > 50)
 	{

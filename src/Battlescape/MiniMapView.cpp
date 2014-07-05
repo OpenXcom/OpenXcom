@@ -88,23 +88,21 @@ void MiniMapView::draw()
 					px++;
 					continue;
 				}
-				int tileShade = 16;
 				if (t->isDiscovered(2))
 				{
-					tileShade = t->getShade();
-				}
-				for(int i = 0; i < 4; i++)
-				{
-					data = t->getMapData(i);
+					for(int i = 0; i < 4; i++)
+					{
+						data = t->getMapData(i);
 
-					Surface * s = 0;
-					if(data && data->getMiniMapIndex())
-					{
-						s = _set->getFrame (data->getMiniMapIndex()+35);
-					}
-					if(s)
-					{
-						s->blitNShade(this, x, y, tileShade);
+						Surface * s = 0;
+						if(data && data->getMiniMapIndex())
+						{
+							s = _set->getFrame (data->getMiniMapIndex()+35);
+						}
+						if(s)
+						{
+							s->blitNShade(this, x, y, t->getShade());
+						}
 					}
 				}
 				// alive units

@@ -30,6 +30,8 @@
 #include "../Interface/Text.h"
 #include "ErrorMessageState.h"
 #include "MainMenuState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -96,7 +98,16 @@ void SaveGameState::buildUi()
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
 	{
-		setPalette("PAL_BATTLESCAPE");
+		if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
+		{
+			setPalette("PAL_BATTLESCAPE");
+		}
+		else
+		{
+			std::stringstream ss;
+			ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
+			setPalette(ss.str());
+		}
 	}
 	else
 	{

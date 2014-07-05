@@ -25,6 +25,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -44,7 +46,16 @@ InfoboxOKState::InfoboxOKState(const std::wstring &msg)
 	_txtTitle = new Text(255, 61, 33, 51);
 
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		std::stringstream ss;
+		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
+		setPalette(ss.str());
+	}
 
 	add(_frame);
 	add(_btnOk);

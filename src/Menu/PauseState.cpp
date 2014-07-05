@@ -31,6 +31,8 @@
 #include "OptionsVideoState.h"
 #include "OptionsGeoscapeState.h"
 #include "OptionsBattlescapeState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -66,7 +68,16 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
 	{
-		setPalette("PAL_BATTLESCAPE");
+		if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
+		{
+			setPalette("PAL_BATTLESCAPE");
+		}
+		else
+		{
+			std::stringstream ss;
+			ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
+			setPalette(ss.str());
+		}
 	}
 	else
 	{
