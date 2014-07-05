@@ -1325,6 +1325,8 @@ en-US:
   STR_FULL_DISPLAY: "Full Display"
   STR_FPS_LIMIT: "FPS limit"
   STR_FPS_LIMIT_DESC: "Limits the number of screen updates per second, 0 for no limit. If OpenGL rendering is enabled, the game uses Vsync instead."
+  STR_FPS_INACTIVE_LIMIT: "FPS limit background"
+  STR_FPS_INACTIVE_LIMIT_DESC: "Limits the number of screen updates per second if OpenXcom is in the background."
   STR_NOALIENPANICMESSAGES: "Suppress panic messages for aliens"
   STR_NOALIENPANICMESSAGES_DESC: "Don't show panic messages for aliens unless they are visible to the player."
   STR_ALIENBLEEDING: "Alien bleeding"
