@@ -584,7 +584,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 	}
 	else
 	{
-		if (_totalItems + change > c->getRules()->getMaxItems())
+		if (c->getRules()->getMaxItems() > 0 && _totalItems + change > c->getRules()->getMaxItems())
 		{
 			_timerRight->stop();
 			LocalizedText msg(tr("STR_NO_MORE_EQUIPMENT_ALLOWED", c->getRules()->getMaxItems()));
