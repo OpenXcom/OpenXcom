@@ -41,10 +41,11 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
+ * @param palette Parent state palette.
  */
-LoadGameState::LoadGameState(OptionsOrigin origin, const std::string &filename) : _origin(origin), _filename(filename)
+LoadGameState::LoadGameState(OptionsOrigin origin, const std::string &filename, SDL_Color *palette) : _origin(origin), _filename(filename)
 {
-	buildUi();
+	buildUi(palette);
 }
 
 /**
@@ -52,8 +53,9 @@ LoadGameState::LoadGameState(OptionsOrigin origin, const std::string &filename) 
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param type Type of auto-load being used.
+ * @param palette Parent state palette.
  */
-LoadGameState::LoadGameState(OptionsOrigin origin, SaveType type) : _origin(origin)
+LoadGameState::LoadGameState(OptionsOrigin origin, SaveType type, SDL_Color *palette) : _origin(origin)
 {
 	switch (type)
 	{
@@ -71,7 +73,7 @@ LoadGameState::LoadGameState(OptionsOrigin origin, SaveType type) : _origin(orig
 		break;
 	}
 	
-	buildUi();
+	buildUi(palette);
 }
 
 /**
@@ -84,8 +86,9 @@ LoadGameState::~LoadGameState()
 
 /**
  * Builds the interface.
+ * @param palette Parent state palette.
  */
-void LoadGameState::buildUi()
+void LoadGameState::buildUi(SDL_Color *palette)
 {
 	_screen = false;
 
@@ -93,27 +96,22 @@ void LoadGameState::buildUi()
 	_txtStatus = new Text(320, 17, 0, 92);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", 6);
-	}
+	setPalette(palette);
 
 	add(_txtStatus);
 
 	centerAllSurfaces();
+
 	// Set up objects
-	_txtStatus->setColor(Palette::blockOffset(8) + 5);
+	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
 
 	if (_origin == OPT_BATTLESCAPE)
 	{
-		applyBattlescapeTheme();
+		_txtStatus->setColor(Palette::blockOffset(1)-1);
+		_txtStatus->setHighContrast(true);
 	}
 }
 

@@ -41,19 +41,21 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
+ * @param palette Parent state palette.
  */
-	SaveGameState::SaveGameState(OptionsOrigin origin, const std::string &filename) : _origin(origin), _filename(filename), _type(SAVE_DEFAULT)
+SaveGameState::SaveGameState(OptionsOrigin origin, const std::string &filename, SDL_Color *palette) : _origin(origin), _filename(filename), _type(SAVE_DEFAULT)
 {
-	buildUi();
+	buildUi(palette);
 }
 
 /**
  * Initializes all the elements in the Save Game screen.
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
- * @param type Type of auto-load being used.
+ * @param type Type of auto-save being used.
+ * @param palette Parent state palette.
  */
-SaveGameState::SaveGameState(OptionsOrigin origin, SaveType type) : _origin(origin), _type(type)
+SaveGameState::SaveGameState(OptionsOrigin origin, SaveType type, SDL_Color *palette) : _origin(origin), _type(type)
 {
 	switch (type)
 	{
@@ -74,7 +76,7 @@ SaveGameState::SaveGameState(OptionsOrigin origin, SaveType type) : _origin(orig
 		break;
 	}
 
-	buildUi();
+	buildUi(palette);
 }
 
 /**
@@ -87,8 +89,9 @@ SaveGameState::~SaveGameState()
 
 /**
  * Builds the interface.
+ * @param palette Parent state palette.
  */
-void SaveGameState::buildUi()
+void SaveGameState::buildUi(SDL_Color *palette)
 {
 	_screen = false;
 
@@ -96,27 +99,22 @@ void SaveGameState::buildUi()
 	_txtStatus = new Text(320, 17, 0, 92);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", 6);
-	}
+	setPalette(palette);
 
 	add(_txtStatus);
 
 	centerAllSurfaces();
+
 	// Set up objects
-	_txtStatus->setColor(Palette::blockOffset(8) + 5);
+	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_SAVING_GAME"));
 
 	if (_origin == OPT_BATTLESCAPE)
 	{
-		applyBattlescapeTheme();
+		_txtStatus->setColor(Palette::blockOffset(1)-1);
+		_txtStatus->setHighContrast(true);
 	}
 }
 
