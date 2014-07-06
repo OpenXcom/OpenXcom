@@ -220,9 +220,12 @@ void BattlescapeGenerator::nextStage()
 					selectedFirstSoldier = true;
 				}
 				Node* node = _save->getSpawnNode(NR_XCOM, (*j));
-				if (node)
+				if (node || placeUnitNearFriend(*j))
 				{
-					_save->setUnitPosition((*j), node->getPosition());
+					if (node)
+					{
+						_save->setUnitPosition((*j), node->getPosition());
+					}
 					if (!_craftInventoryTile)
 					{
 						_craftInventoryTile = (*j)->getTile();
@@ -233,15 +236,7 @@ void BattlescapeGenerator::nextStage()
 					{
 						highestSoldierID = (*j)->getId();
 					}
-				}
-				else if (placeUnitNearFriend(*j))
-				{
-					if ((*j)->getId() > highestSoldierID)
-					{
-						highestSoldierID = (*j)->getId();
-					}
-					_craftInventoryTile->setUnit(*j);
-					(*j)->setVisible(false);
+					(*j)->prepareNewTurn();
 				}
 			}
 		}
@@ -1620,7 +1615,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	unsigned char value[4];
 	std::ostringstream filename;
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
-	int terrainObjectID;
+	unsigned int terrainObjectID;
 
 	// Load file
 	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
@@ -1666,11 +1661,11 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	{
 		for (int part = 0; part < 4; part++)
 		{
-			terrainObjectID = (int)((unsigned char)value[part]);
+			terrainObjectID = ((unsigned char)value[part]);
 			if (terrainObjectID>0)
 			{
 				int mapDataSetID = mapDataSetOffset;
-				int mapDataID = terrainObjectID;
+				unsigned int mapDataID = terrainObjectID;
 				MapData *md = terrain->getMapData(&mapDataID, &mapDataSetID);
 				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
 			}

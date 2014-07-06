@@ -169,16 +169,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// Set palette
-	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
-	}
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -604,7 +595,7 @@ void BattlescapeState::mapOver(Action *action)
 		if ((SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			}
@@ -727,7 +718,7 @@ void BattlescapeState::mapClick(Action *action)
 		&& (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{   // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			}
@@ -750,7 +741,7 @@ void BattlescapeState::mapClick(Action *action)
 			return;
 		}
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+		if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 		{
 			_isMouseScrolled = false;
 			stopScrolling(action);
@@ -931,6 +922,7 @@ void BattlescapeState::btnCenterClick(Action *)
 	if (playableUnitSelected())
 	{
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		_map->refreshSelectorPosition();
 	}
 }
 
@@ -941,7 +933,10 @@ void BattlescapeState::btnCenterClick(Action *)
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
 	if (allowButtons())
+	{
 		selectNextPlayerUnit(true, false);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
@@ -961,7 +956,10 @@ void BattlescapeState::btnNextStopClick(Action *)
 void BattlescapeState::btnPrevSoldierClick(Action *)
 {
 	if (allowButtons())
+	{
 		selectPreviousPlayerUnit(true);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**

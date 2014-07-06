@@ -753,7 +753,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 {
 	OPL_CH *CH;
 	int slot;
-	int block_fnum;
+	unsigned int block_fnum;
 
 	switch(r&0xe0)
 	{

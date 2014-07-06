@@ -374,6 +374,11 @@ void Screen::resetDisplay(bool resetVideo)
 	_clear.w = getWidth();
 	_clear.h = getHeight();
 
+	double pixelRatioY = 1.0;
+	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	{
+		pixelRatioY = 1.2;
+	}
 	bool cursorInBlackBands;
 	if (!(Options::scalingMode == SCALINGMODE_LETTERBOX))
 	{

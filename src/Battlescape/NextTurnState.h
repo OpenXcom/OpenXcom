@@ -29,6 +29,7 @@ class Text;
 class SavedBattleGame;
 class BattlescapeState;
 class Timer;
+class Surface;
 
 /**
  * Screen which announces the next turn.
@@ -42,6 +43,7 @@ private:
 	SavedBattleGame *_battleGame;
 	BattlescapeState *_state;
 	Timer *_timer;
+	Surface *_bg;
 public:
 	/// Creates the Next Turn state.
 	NextTurnState(SavedBattleGame *battleGame, BattlescapeState *state);
@@ -53,6 +55,7 @@ public:
 	void think();
 	/// Closes the window.
 	void close();
+	void resize(int &dX, int &dY);
 };
 
 }

@@ -64,7 +64,7 @@ public:
 	/// Gets a mapblock given its name.
 	MapBlock *getMapBlock(const std::string &name);
 	/// Gets the mapdata object.
-	MapData *getMapData(int *id, int *mapDataSetID) const;
+	MapData *getMapData(unsigned int *id, int *mapDataSetID) const;
 	/// Gets the maximum amount of large blocks in this terrain.
 	int getLargeBlockLimit() const;
 	void resetMapBlocks();

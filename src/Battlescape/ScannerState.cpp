@@ -34,6 +34,8 @@
 #include "../Resource/ResourcePack.h"
 #include <iostream>
 #include <sstream>
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -61,7 +63,7 @@ ScannerState::ScannerState (BattleAction *action) : _action(action)
 	}
 
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_scan);
 	add(_scannerView);

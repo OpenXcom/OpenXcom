@@ -53,7 +53,7 @@ Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rule
 	{
 		_id = id;
 	}
-	for (int i = 0; i < _rules->getWeapons(); ++i)
+	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
@@ -89,6 +89,56 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	_fuel = node["fuel"].as<int>(_fuel);
 	_damage = node["damage"].as<int>(_damage);
 
+	size_t j = 0;
+	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
+	{
+		if (_rules->getWeapons() > j)
+		{
+			std::string type = (*i)["type"].as<std::string>();
+			if (type != "0" && rule->getCraftWeapon(type))
+			{
+				CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+				w->load(*i);
+				_weapons[j] = w;
+			}
+			else
+			{
+				_weapons[j] = 0;
+			}
+			j++;
+		}
+	}
+
+	_items->load(node["items"]);
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
+	{
+		if (std::find(rule->getItemsList().begin(), rule->getItemsList().end(), i->first) == rule->getItemsList().end())
+		{
+			_items->getContents()->erase(i++);
+		}
+		else
+		{
+			++i;
+		}
+	}
+	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		if (rule->getItem(type))
+		{
+			Vehicle *v = new Vehicle(rule->getItem(type), 0, 4);
+			v->load(*i);
+			_vehicles.push_back(v);
+		}
+	}
+	_status = node["status"].as<std::string>(_status);
+	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
+	_mission = node["mission"].as<bool>(_mission);
+	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
+	if (const YAML::Node name = node["name"])
+	{
+		_name = Language::utf8ToWstr(name.as<std::string>());
+	}
 	if (const YAML::Node &dest = node["dest"])
 	{
 		std::string type = dest["type"].as<std::string>();
@@ -142,59 +192,8 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 			}
 		}
 	}
-
-	size_t j = 0;
-	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
-	{
-		if (_rules->getWeapons() > j)
-		{
-			std::string type = (*i)["type"].as<std::string>();
-			if (type != "0" && rule->getCraftWeapon(type))
-			{
-				CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
-				w->load(*i);
-				_weapons[j] = w;
-			}
-			else
-			{
-				_weapons[j] = 0;
-			}
-			j++;
-		}
-	}
-
-	_items->load(node["items"]);
-	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
-	{
-		if (std::find(rule->getItemsList().begin(), rule->getItemsList().end(), i->first) == rule->getItemsList().end())
-		{
-			_items->getContents()->erase(i++);
-		}
-		else
-		{
-			++i;
-		}
-	}
-	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
-	{
-		std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type))
-		{
-			Vehicle *v = new Vehicle(rule->getItem(type), 0, 4);
-			v->load(*i);
-			_vehicles.push_back(v);
-		}
-	}
-	_status = node["status"].as<std::string>(_status);
-	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
-	_mission = node["mission"].as<bool>(_mission);
-	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
-	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
 	_takeoff = node["takeoff"].as<int>(_takeoff);
-	if (const YAML::Node name = node["name"])
-	{
-		_name = Language::utf8ToWstr(name.as<std::string>());
-	}
+	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 	if (_inBattlescape)
 		setSpeed(0);
 }
@@ -274,7 +273,7 @@ void Craft::changeRules(RuleCraft *rules)
 {
 	_rules = rules;
 	_weapons.clear();
-	for (int i = 0; i < _rules->getWeapons(); ++i)
+	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
@@ -370,6 +369,7 @@ std::string Craft::getAltitude() const
 		return "STR_VERY_LOW";
 	}
 }
+
 
 /**
  * Changes the destination the craft is heading to.
