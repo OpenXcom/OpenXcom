@@ -391,12 +391,34 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                             // Loop over the DETAILs of the AND vector
                             for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                             {
+								std::string battleTypeArray[] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",
+									"BT_PROXIMITYGRENADE", "BT_MEDIKIT", "BT_SCANNER", "BT_MINDPROBE", "BT_PSIAMP", "BT_FLARE", "BT_CORPSE", "BT_END" };
+								int battleType = 0;
+								for (; battleType != battleTypeArray->size(); ++battleType)
+								{
+									if ((*detail) == battleTypeArray[battleType])
+									{
+										break;
+									}
+								}
+
+								std::string damageTypeArray[] = { "DT_NONE", "DT_AP", "DT_IN", "DT_HE", "DT_LASER", "DT_PLASMA", 
+									"DT_STUN", "DT_MELEE", "DT_ACID", "DT_SMOKE", "DT_END"};
+								int damageType = 0;
+								for (; damageType != damageTypeArray->size(); ++damageType)
+								{
+									if ((*detail) == damageTypeArray[damageType])
+									{
+										break;
+									}
+								}
+
                                 // See if we find no matches with any criteria. If so, break and try the next kill.
-                                if ( (*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
-                                     (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
-                                     (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
-									 rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != atoi((*detail).c_str()) &&
-									 rules->getItem((*singleKill)->weapon)->getBattleType() != atoi((*detail).c_str()) )
+								if ( (*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
+									 (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
+									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
+									 rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType && 
+									 rules->getItem((*singleKill)->weapon)->getBattleType() != battleType )
                                 {
                                     foundMatch = false;
                                     break;

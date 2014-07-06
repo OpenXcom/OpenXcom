@@ -242,9 +242,8 @@ extraStrings:
 # The killCriteria can list any race, rank, weapon, ammo, 
 # or one of these statuses: STATUS_DEAD and STATUS_UNCONSCIOUS,
 # or one of these factions: FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER.
-# For weapon battleTypes and weapon ammo damageTypes, you have to use the number that represents the type.
-# So for battleType, 0 = BT_NONE, 1 = BT_FIREARM, 2 = BT_AMMO, 3 = BT_MELEE, 4 = BT_GRENADE, 5 = BT_PROXIMITYGRENADE, 6 = BT_MEDIKIT, 7 = BT_SCANNER, 8 = BT_MINDPROBE, 9 = BT_PSIAMP, 10 = BT_FLARE, 11 = BT_CORPSE,
-# and for damageType, 0 0 DT_NONE, 1 = DT_AP, 2 = DT_IN, 3 = DT_HE, 4 = DT_LASER, 5 = DT_PLASMA, 6 = DT_STUN, 7 = DT_MELEE, 8 = DT_ACID, 9 = DT_SMOKE.
+# or one of these battle types: BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE
+# or one of these damage types: DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE
 # Use the strings from the ruleset to define them (mods can be used too). 
 # For example, look at "STR_MEDAL_BOLTS_CROSS_NAME". It is awarded if a soldier
 # stuns one hostile commander or stuns one hostile leader.
