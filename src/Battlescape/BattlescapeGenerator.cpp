@@ -220,9 +220,12 @@ void BattlescapeGenerator::nextStage()
 					selectedFirstSoldier = true;
 				}
 				Node* node = _save->getSpawnNode(NR_XCOM, (*j));
-				if (node)
+				if (node || placeUnitNearFriend(*j))
 				{
-					_save->setUnitPosition((*j), node->getPosition());
+					if (node)
+					{
+						_save->setUnitPosition((*j), node->getPosition());
+					}
 					if (!_craftInventoryTile)
 					{
 						_craftInventoryTile = (*j)->getTile();
@@ -233,15 +236,7 @@ void BattlescapeGenerator::nextStage()
 					{
 						highestSoldierID = (*j)->getId();
 					}
-				}
-				else if (placeUnitNearFriend(*j))
-				{
-					if ((*j)->getId() > highestSoldierID)
-					{
-						highestSoldierID = (*j)->getId();
-					}
-					_craftInventoryTile->setUnit(*j);
-					(*j)->setVisible(false);
+					(*j)->prepareNewTurn();
 				}
 			}
 		}
