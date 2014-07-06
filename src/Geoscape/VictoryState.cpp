@@ -80,7 +80,7 @@ VictoryState::VictoryState() : _screen(-1)
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)&VictoryState::screenClick);
+	_timer->onTimer((StateHandler)&VictoryState::screenTimer);
 	_timer->start();
 
 	screenClick(0);
@@ -102,6 +102,14 @@ VictoryState::~VictoryState()
 }
 
 /**
+ * Shows the next screen on a timed basis.
+ */
+void VictoryState::screenTimer()
+{
+	screenClick(0);
+}
+
+/**
  * Handle timers.
  */
 void VictoryState::think()
@@ -116,6 +124,7 @@ void VictoryState::think()
  */
 void VictoryState::screenClick(Action *)
 {
+	_timer->start();
 	if (_screen >= 0)
 	{
 		_bg[_screen]->setVisible(false);
