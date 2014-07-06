@@ -135,7 +135,6 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
 	_mission = node["mission"].as<bool>(_mission);
 	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
-	_takeoff = node["takeoff"].as<int>(_takeoff);
 	if (const YAML::Node name = node["name"])
 	{
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -193,6 +192,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 			}
 		}
 	}
+	_takeoff = node["takeoff"].as<int>(_takeoff);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 	if (_inBattlescape)
 		setSpeed(0);
