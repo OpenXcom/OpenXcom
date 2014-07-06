@@ -75,7 +75,7 @@ private:
 	int _scoreTotal, _killTotal, _missionTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
-		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA;
+		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA, _trapKillTotal;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
 public:
@@ -90,7 +90,7 @@ public:
 	/// Save a diary.
 	YAML::Node save() const;
 	/// Update the diary statistics.
-	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics);
+	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Ruleset *rules);
 	/// Get the list of kills, mapped by rank.
 	std::map<std::string, int> getAlienRankTotal();
 	/// Get the list of kills, mapped by race.

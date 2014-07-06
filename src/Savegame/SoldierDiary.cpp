@@ -20,6 +20,7 @@
 #include "GameTime.h"
 #include "../Ruleset/RuleCommendations.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Engine/Game.h"
 namespace OpenXcom
 {
 /**
@@ -38,7 +39,7 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0)
+	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0)
 {
 }
 /**
@@ -104,6 +105,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
 	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
+	_trapKillTotal = node["trapKillTotal"].as<int>(_trapKillTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -149,6 +151,7 @@ YAML::Node SoldierDiary::save() const
 	if (_reactionFireTotal) node["reactionFireTotal"] = _reactionFireTotal;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
 	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
+	if (_trapKillTotal) node["trapKillTotal"] = _trapKillTotal;
 	return node;
 }
 /**
@@ -156,7 +159,7 @@ YAML::Node SoldierDiary::save() const
  * @param unitStatistics BattleUnitStatistics to get stats from.
  * @param missionStatistics MissionStatistics to get stats from.
  */
-void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics)
+void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Ruleset *rules)
 {
 	std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
@@ -168,7 +171,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             _stunTotal++;
 		_killList.push_back(*kill);
 		if ((*kill)->hostileTurn())
-			_reactionFireTotal++;
+			if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+				_trapKillTotal++;
+			else
+				_reactionFireTotal++;
     }
     _regionTotal[missionStatistics->region.c_str()]++;
     _countryTotal[missionStatistics->country.c_str()]++;
@@ -290,7 +296,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     ((*j).first == "totalTimesWounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
-					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) )					
+					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalTrapKills" && _trapKillTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )					
 			{
 				awardCommendationBool = false;
 				break;
@@ -380,13 +387,16 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                 continue;
                             }
                             bool foundMatch = true;
+							
                             // Loop over the DETAILs of the AND vector
                             for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                             {
                                 // See if we find no matches with any criteria. If so, break and try the next kill.
                                 if ( (*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
                                      (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
-                                     (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail) )
+                                     (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
+									 rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != atoi((*detail).c_str()) &&
+									 rules->getItem((*singleKill)->weapon)->getBattleType() != atoi((*detail).c_str()) )
                                 {
                                     foundMatch = false;
                                     break;

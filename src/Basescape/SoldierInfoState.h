@@ -18,10 +18,13 @@
  */
 #ifndef OPENXCOM_SOLDIERINFOSTATE_H
 #define OPENXCOM_SOLDIERINFOSTATE_H
+
 #include "../Engine/State.h"
 #include <vector>
+
 namespace OpenXcom
 {
+
 class Base;
 class Surface;
 class TextButton;
@@ -29,6 +32,7 @@ class Text;
 class TextEdit;
 class Bar;
 class Soldier;
+
 /**
  * Soldier Info screen that shows all the
  * info of a specific soldier.
@@ -40,6 +44,7 @@ private:
 	size_t _soldierId;
 	Soldier *_soldier;
 	std::vector<Soldier*> *_list;
+
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;
 	Text *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
@@ -75,5 +80,7 @@ public:
 	/// Handler for clicking the Diary button.
 	void btnDiaryClick(Action *action);
 };
+
 }
+
 #endif
