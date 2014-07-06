@@ -359,24 +359,23 @@ void Screen::resetDisplay(bool resetVideo)
 		clear();
 	}
 
+	double pixelRatioY = 1.0;
+	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	{
+		pixelRatioY = 1.2;
+	}
+
 	Options::displayWidth = getWidth();
 	Options::displayHeight = getHeight();
 	_scaleX = getWidth() / (double)_baseWidth;
-	_scaleY = getHeight() / (double)_baseHeight;
+	_scaleY = getHeight() / (double)_baseHeight / pixelRatioY;
 	_clear.x = 0;
 	_clear.y = 0;
 	_clear.w = getWidth();
 	_clear.h = getHeight();
 
-	double pixelRatioX = 1.0;
-	double pixelRatioY = 1.0;
-	if (Options::nonSquarePixelRatio && !Options::allowResize)
-	{
-		pixelRatioX = 0.75;
-		pixelRatioY = 1.2;
-	}
 	bool cursorInBlackBands;
-	if (!Options::keepAspectRatio)
+	if (!(Options::scalingMode == SCALINGMODE_LETTERBOX))
 	{
 		cursorInBlackBands = false;
 	}
@@ -393,7 +392,7 @@ void Screen::resetDisplay(bool resetVideo)
 		cursorInBlackBands = Options::cursorInBlackBandsInBorderlessWindow;
 	}
 
-	if (_scaleX > _scaleY && Options::keepAspectRatio)
+	if (_scaleX > _scaleY && Options::scalingMode == SCALINGMODE_LETTERBOX)
 	{
 		int targetWidth = (int)floor(_scaleY * (double)_baseWidth);
 		_topBlackBand = _bottomBlackBand = 0;
@@ -415,7 +414,7 @@ void Screen::resetDisplay(bool resetVideo)
 			_cursorLeftBlackBand = 0;
 		}		
 	}
-	else if (_scaleY > _scaleX && Options::keepAspectRatio)
+	else if (_scaleY > _scaleX && Options::scalingMode == SCALINGMODE_LETTERBOX)
 	{
 		int targetHeight = (int)floor(_scaleX * (double)_baseHeight * pixelRatioY);
 		_topBlackBand = (getHeight() - targetHeight) / 2;
@@ -599,12 +598,12 @@ int Screen::getDY()
 void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
 {
 	double pixelRatioY = 1.0;
-	double pixelRatioX = 1.0;
 	if (Options::nonSquarePixelRatio && !Options::allowResize)
 	{
-		pixelRatioX = 0.75;
 		pixelRatioY = 1.2;
 	}
+	double displayRatio = double(Options::newDisplayHeight) / double(Options::newDisplayWidth);
+	double originalRatio = double(Screen::ORIGINAL_HEIGHT) / double(Screen::ORIGINAL_WIDTH) * pixelRatioY;
 	type = selection;
 	switch (type)
 	{
@@ -619,20 +618,14 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 	case SCALE_SCREEN_DIV_3:
 		width = int(floor(Options::displayWidth / 3 * pixelRatioY));
 		height = int(floor(Options::displayHeight / 3));
-		width = std::max(width, int(floor(Screen::ORIGINAL_WIDTH / pixelRatioX  * pixelRatioY)));
-		height = std::max(height, int(floor(Screen::ORIGINAL_HEIGHT * pixelRatioY)));
 		break;
 	case SCALE_SCREEN_DIV_2:
 		width = int(floor(Options::displayWidth / 2 * pixelRatioY));
 		height = int(floor(Options::displayHeight / 2));
-		width = std::max(width, int(floor(Screen::ORIGINAL_WIDTH / pixelRatioX  * pixelRatioY)));
-		height = std::max(height, int(floor(Screen::ORIGINAL_HEIGHT * pixelRatioY)));
 		break;
 	case SCALE_SCREEN:
 		width = int(floor(Options::displayWidth * pixelRatioY));
 		height = int(floor(Options::displayHeight));
-		width = std::max(width, int(floor(Screen::ORIGINAL_WIDTH / pixelRatioX  * pixelRatioY)));
-		height = std::max(height, int(floor(Screen::ORIGINAL_HEIGHT * pixelRatioY)));
 		break;
 	case SCALE_ORIGINAL:
 	default:
@@ -641,6 +634,17 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		break;
 	}
 
+	if (Options::scalingMode == SCALINGMODE_EXPAND)
+	{
+		if (displayRatio < originalRatio)
+		{
+			width = int(floor((double(height) / double(Options::newDisplayHeight) * double(Options::newDisplayWidth))) * pixelRatioY);
+		}
+		else if (displayRatio > originalRatio)
+		{
+			height = int(floor(double(width) / double(Options::newDisplayWidth) * double(Options::newDisplayHeight)) / pixelRatioY);
+		}
+	}
 	// don't go under minimum resolution... it's bad, mmkay?
 	width = std::max(width, Screen::ORIGINAL_WIDTH);
 	height = std::max(height, Screen::ORIGINAL_HEIGHT);

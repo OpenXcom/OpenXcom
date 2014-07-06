@@ -75,7 +75,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxBattleScale = new ComboBox(this, 104, 16, 94, 122);
 
 	_txtOptions = new Text(114, 9, 206, 82);
-	_btnLetterbox = new ToggleTextButton(104, 16, 206, 92);
+	_cbxScalingMode = new ComboBox(this, 104, 16, 206, 92);
 	_btnLockMouse = new ToggleTextButton(104, 16, 206, 110);
 
 	// Get available fullscreen modes
@@ -117,9 +117,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_txtMode);
 
 	add(_txtOptions);
-	add(_btnLetterbox);
 	add(_btnLockMouse);
-
+	add(_cbxScalingMode);
 
 	add(_cbxFilter);
 	add(_cbxDisplayMode);
@@ -176,14 +175,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtOptions->setColor(Palette::blockOffset(8)+10);
 	_txtOptions->setText(tr("STR_DISPLAY_OPTIONS"));
 
-	_btnLetterbox->setColor(Palette::blockOffset(15)-1);
-	_btnLetterbox->setText(tr("STR_LETTERBOXED"));
-	_btnLetterbox->setPressed(Options::keepAspectRatio);
-	_btnLetterbox->onMouseClick((ActionHandler)&OptionsVideoState::btnLetterboxClick);
-	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
-	_btnLetterbox->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
 	_btnLockMouse->setColor(Palette::blockOffset(15)-1);
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
 	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
@@ -300,6 +291,11 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	scales.push_back("STR_HALF_DISPLAY");
 	scales.push_back("STR_FULL_DISPLAY");
 
+	std::vector<std::string> scalemodes;
+	scalemodes.push_back("STR_SCALINGMODE_EXPAND");
+	scalemodes.push_back("STR_SCALINGMODE_LETTERBOX");
+	scalemodes.push_back("STR_SCALINGMODE_STRETCH");
+
 	_cbxGeoScale->setColor(Palette::blockOffset(15)-1);
 	_cbxGeoScale->setOptions(scales);
 	_cbxGeoScale->setSelected(Options::geoscapeScale);
@@ -319,6 +315,13 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxBattleScale->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxBattleScale->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
+	_cbxScalingMode->setColor(Palette::blockOffset(15) - 1);
+	_cbxScalingMode->setOptions(scalemodes);
+	_cbxScalingMode->setSelected(Options::scalingMode);
+	_cbxScalingMode->setTooltip("STR_SCALE_MODE_DESC");
+	_cbxScalingMode->onChange((ActionHandler)&OptionsVideoState::updateScalingMode);
+	_cbxScalingMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_cbxScalingMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 }
 
 /**
@@ -510,12 +513,12 @@ void OptionsVideoState::updateDisplayMode(Action *)
 }
 
 /**
- * Changes the Letterboxing option.
+ * Updates scaling mode
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnLetterboxClick(Action *)
+void OptionsVideoState::updateScalingMode(Action *)
 {
-	Options::keepAspectRatio = _btnLetterbox->getPressed();
+	Options::scalingMode = _cbxScalingMode->getSelected();
 }
 
 /**

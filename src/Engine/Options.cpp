@@ -118,7 +118,7 @@ void create()
 	_info.push_back(OptionInfo("borderless", &borderless, false));
 	_info.push_back(OptionInfo("captureMouse", (bool*)&captureMouse, false));
 	_info.push_back(OptionInfo("battleTooltips", &battleTooltips, true));
-	_info.push_back(OptionInfo("keepAspectRatio", &keepAspectRatio, true));
+	_info.push_back(OptionInfo("scalingMode", (int*)&scalingMode, SCALINGMODE_LETTERBOX));
 	_info.push_back(OptionInfo("nonSquarePixelRatio", &nonSquarePixelRatio, false));	
 	_info.push_back(OptionInfo("cursorInBlackBandsInFullscreen", &cursorInBlackBandsInFullscreen, false));
 	_info.push_back(OptionInfo("cursorInBlackBandsInWindow", &cursorInBlackBandsInWindow, true));

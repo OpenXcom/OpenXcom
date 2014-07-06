@@ -54,6 +54,13 @@ enum ScaleType
 	SCALE_SCREEN_DIV_2,
 	SCALE_SCREEN
 };
+
+enum ScalingMode
+{
+	SCALINGMODE_EXPAND,
+	SCALINGMODE_LETTERBOX,
+	SCALINGMODE_STRETCH
+};
 /**
  * Container for all the various global game options
  * and customizable settings.

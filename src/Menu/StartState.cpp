@@ -173,8 +173,12 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
-			bool letterbox = Options::keepAspectRatio;
-			Options::keepAspectRatio = true;
+			bool letterbox;
+			if (Options::scalingMode == SCALINGMODE_LETTERBOX)
+			{
+				letterbox = true;
+			}
+			Options::scalingMode = SCALINGMODE_LETTERBOX;
 			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 			_game->getScreen()->resetDisplay(false);
