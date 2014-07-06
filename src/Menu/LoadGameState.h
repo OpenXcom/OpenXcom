@@ -36,6 +36,7 @@ class Text;
 class LoadGameState : public State
 {
 private:
+	int _firstRun;
 	OptionsOrigin _origin;
 	Text *_txtStatus;
 	std::string _filename;
@@ -48,8 +49,10 @@ public:
 	~LoadGameState();
 	/// Creates the interface.
 	void buildUi(SDL_Color *palette);
-	/// Loads the game.
+	/// Validates game.
 	void init();
+	/// Loads the game.
+	void think();
 };
 
 }

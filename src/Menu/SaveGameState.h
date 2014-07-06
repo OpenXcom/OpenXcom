@@ -36,6 +36,7 @@ class Text;
 class SaveGameState : public State
 {
 private:
+	int _firstRun;
 	OptionsOrigin _origin;
 	Text *_txtStatus;
 	std::string _filename;
@@ -50,7 +51,7 @@ public:
 	/// Creates the interface.
 	void buildUi(SDL_Color *palette);
 	/// Saves the game.
-	void init();
+	void think();
 };
 
 }
