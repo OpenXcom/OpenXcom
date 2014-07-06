@@ -1986,7 +1986,7 @@ int BattleUnit::improveStat(int exp)
 			tier = exp > 2 ? 2.0 : 1.0;
 		}
 	}
-	return (int)(tier/2.0 + RNG::generate(0.0, tier));
+	return (int)(tier/2.0 + RNG::generate(0, (int)(tier)));
 }
 
 /**

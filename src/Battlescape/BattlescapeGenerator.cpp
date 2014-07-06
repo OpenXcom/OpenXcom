@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _baseInventory(false), _craftX(0), _craftY(0), _craftZ(0)
+														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftX(0), _craftY(0), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -320,7 +320,10 @@ void BattlescapeGenerator::run()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
-	fuelPowerSources();
+	if (_generateFuel)
+	{
+		fuelPowerSources();
+	}
 
 	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
 	{
@@ -941,7 +944,6 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  */
 bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip)
 {
-	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	RuleInventory *rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 	bool placed = false;
 	bool loaded = false;
@@ -1708,7 +1710,22 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	}
 
 	mapFile.close();
-
+	
+	if (_generateFuel)
+	{
+		// if one of the mapBlocks has an items array defined, don't deploy fuel algorithmically
+		_generateFuel = mapblock->getItems()->empty();
+	}
+	for (std::map<std::string, std::vector<Position> >::const_iterator i = mapblock->getItems()->begin(); i != mapblock->getItems()->end(); ++i)
+	{
+		RuleItem *rule = _game->getRuleset()->getItem((*i).first);
+		for (std::vector<Position>::const_iterator j = (*i).second.begin(); j != (*i).second.end(); ++j)
+		{
+			BattleItem *item = new BattleItem(rule, _save->getCurrentItemId());
+			_save->getItems()->push_back(item);
+			_save->getTile((*j) + Position(xoff, yoff, 0))->addItem(item, _game->getRuleset()->getInventory("STR_GROUND"));
+		}
+	}
 	return sizez;
 }
 
@@ -1764,7 +1781,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 }
 
 /**
- * Fill power sources with an elerium-115 object.
+ * Fill power sources with an alien fuel object.
  */
 void BattlescapeGenerator::fuelPowerSources()
 {
@@ -1773,9 +1790,9 @@ void BattlescapeGenerator::fuelPowerSources()
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) 
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
-			BattleItem *elerium = new BattleItem(_game->getRuleset()->getItem("STR_ELERIUM_115"), _save->getCurrentItemId());
-			_save->getItems()->push_back(elerium);
-			_save->getTiles()[i]->addItem(elerium, _game->getRuleset()->getInventory("STR_GROUND"));
+			BattleItem *alienFuel = new BattleItem(_game->getRuleset()->getItem(_game->getRuleset()->getAlienFuel()), _save->getCurrentItemId());
+			_save->getItems()->push_back(alienFuel);
+			_save->getTiles()[i]->addItem(alienFuel, _game->getRuleset()->getInventory("STR_GROUND"));
 		}
 	}
 }

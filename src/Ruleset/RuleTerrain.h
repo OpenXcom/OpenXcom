@@ -47,7 +47,7 @@ private:
 	int _largeBlockLimit;
 	std::vector<int> _textures, _roadTypeOdds;
 	std::vector<std::string> _civilianTypes;
-	int _hemisphere;
+	int _hemisphere, _minDepth, _maxDepth;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -74,7 +74,8 @@ public:
 	std::vector<std::string> getCivilianTypes() const;
 	/// Gets road type odds.
 	std::vector<int> getRoadTypeOdds() const;
-
+	const int getMinDepth() const;
+	const int getMaxDepth() const;
 };
 
 }

@@ -608,24 +608,24 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 	switch (type)
 	{
 	case SCALE_15X:
-		width = int(floor(Screen::ORIGINAL_WIDTH * 1.5));
-		height = int(floor(Screen::ORIGINAL_HEIGHT * 1.5));
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
 		break;
 	case SCALE_2X:
-		width = int(floor(Screen::ORIGINAL_WIDTH * 2));
-		height = int(floor(Screen::ORIGINAL_HEIGHT * 2));
+		width = Screen::ORIGINAL_WIDTH * 2;
+		height = Screen::ORIGINAL_HEIGHT * 2;
 		break;
 	case SCALE_SCREEN_DIV_3:
-		width = int(floor(Options::displayWidth / 3 * pixelRatioY));
-		height = int(floor(Options::displayHeight / 3));
+		width = Options::displayWidth / 3;
+		height = Options::displayHeight / pixelRatioY / 3;
 		break;
 	case SCALE_SCREEN_DIV_2:
-		width = int(floor(Options::displayWidth / 2 * pixelRatioY));
-		height = int(floor(Options::displayHeight / 2));
+		width = Options::displayWidth / 2;
+		height = Options::displayHeight / pixelRatioY  / 2.0;
 		break;
 	case SCALE_SCREEN:
-		width = int(floor(Options::displayWidth * pixelRatioY));
-		height = int(floor(Options::displayHeight));
+		width = Options::displayWidth;
+		height = Options::displayHeight / pixelRatioY;
 		break;
 	case SCALE_ORIGINAL:
 	default:

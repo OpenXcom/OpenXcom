@@ -187,7 +187,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_btnNext->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
 
 	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
-	_btnUnload->setTooltip("STR_UNLOAD_CRAFT");
+	_btnUnload->setTooltip("STR_UNLOAD_WEAPON");
 	_btnUnload->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
 	_btnUnload->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
 

@@ -819,10 +819,10 @@ void DogfightState::move()
 			if(p->getDirection() == D_UP)
 			{
 				// Projectile reached the UFO - determine if it's been hit.
-				if(((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved())) && !_ufo->isCrashed())
+				if(((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved())) && !_ufo->isCrashed() && !p->getMissed())
 				{
 					// UFO hit.
-					if (RNG::percent(p->getAccuracy()))
+					if (RNG::percent((p->getAccuracy() * (100 + 300 / (5 - _ufoSize)) + 100) / 200))
 					{
 						// Formula delivered by Volutar
 						int damage = RNG::generate(p->getDamage() / 2, p->getDamage());
