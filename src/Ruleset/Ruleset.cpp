@@ -294,7 +294,7 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
-	ScriptParser<BattleUnit> unitScript;
+	ScriptParser<BattleUnit> unitScript("Armor");
  	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{
 		Armor *rule = loadRule(*i, &_armors, &_armorsIndex);

@@ -18,8 +18,10 @@
  */
 
 #include <sstream>
+#include <iomanip>
 
 #include "Logger.h"
+#include "Options.h"
 #include "Script.h"
 #include "Surface.h"
 #include "ShaderDraw.h"
@@ -241,6 +243,8 @@ inline bool wavegen_tri_h(int& reg, const int& period, const int& size, const in
 	IMPL(shr,		Reg, Data, None, None,		{ Reg0 >>= Data1;						return false; }) \
 	\
 	IMPL(abs,		Reg, None, None, None,		{ Reg0 = std::abs(Reg0);				return false; }) \
+	IMPL(min,		Reg, Data, None, None,		{ Reg0 = std::min(Reg0, Data1);			return false; }) \
+	IMPL(max,		Reg, Data, None, None,		{ Reg0 = std::max(Reg0, Data1);			return false; }) \
 	\
 	IMPL(wavegen_rect,	Reg, Data, Data, Data,	{ return wavegen_rect_h(Reg0, Data1, Data2, Data3);		}) \
 	IMPL(wavegen_saw,	Reg, Data, Data, Data,	{ return wavegen_saw_h(Reg0, Data1, Data2, Data3);		}) \
@@ -571,7 +575,7 @@ struct ParserHelper
 			if(!(ss >> value))
 				return false;
 
-			//normalize string value
+			//normalize string for constant value
 			ss.str("");
 			ss.clear();
 			ss << std::dec;
@@ -896,7 +900,7 @@ void ScriptWorker::executeBlit(Surface* src, Surface* dest, int x, int y)
 /**
  * Default constructor
  */
-ScriptParserBase::ScriptParserBase()
+ScriptParserBase::ScriptParserBase(const std::string& name) : _name(name), _procList(), _refList()
 {
 	//--------------------------------------------------
 	//					op_data init
@@ -1129,6 +1133,42 @@ bool ScriptParserBase::parseBase(ScriptContainerBase* destScript, const std::str
 				Log(LOG_ERROR) << "wrong arguments in line: '" << std::string(line_begin, line_end) << "'\n";
 				return false;
 			}
+		}
+	}
+}
+
+/**
+ * Print all metadata
+ */
+void ScriptParserBase::logScriptMetadata() const
+{
+	if (Options::debug)
+	{
+		const int tabSize = 8;
+		static bool printOp = true;
+		if(printOp)
+		{
+			printOp = false;
+			Logger opLog;
+			#define MACRO_ALL_LOG(NAME, A0, A1, A2, A3, Impl) \
+				opLog.get() \
+					<< "Op:    " << std::setw(tabSize*2) << #NAME \
+					<< "Args:  " << std::setw(tabSize) << #A0 "," << std::setw(tabSize) << #A1 "," << std::setw(tabSize) << #A2 "," << std::setw(tabSize + 5) << #A3 \
+					<< "Impl:  " #Impl "\n";
+
+			opLog.get() << "Available script operations:\n" << std::left;
+			MACRO_PROC_DEFINITION(MACRO_ALL_LOG)
+			#undef MACRO_ALL_LOG
+		}
+
+		Logger refLog;
+		refLog.get() << "Script data for: " << _name << "\n" << std::left;
+		for(cref_ite ite = _refList.begin(); ite != _refList.end(); ++ite)
+		{
+			if(ite->second.type == ArgConst)
+				refLog.get() << "Ref: " << std::setw(30) << ite->first << "Value: " << ite->second.value << "\n";
+			else
+				refLog.get() << "Ref: " << std::setw(30) << ite->first << "\n";
 		}
 	}
 }

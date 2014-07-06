@@ -22,7 +22,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <string.h>
 #include <SDL/SDL_stdinc.h>
 
 
@@ -125,6 +124,7 @@ struct ScriptParserData
  */
 class ScriptParserBase
 {
+	std::string _name;
 	std::map<std::string, ScriptParserData> _procList;
 	std::map<std::string, ScriptContainerData> _refList;
 
@@ -133,10 +133,12 @@ protected:
 	bool parseBase(ScriptContainerBase* scr, const std::string& code) const;
 	/// Common typeless part of adding new function
 	void addFunctionBase(const std::string& s, ScriptContainerData::voidFunc f);
+	/// Show all builtin script informations
+	void logScriptMetadata() const;
 
 public:
 	/// Default constructor
-	ScriptParserBase();
+	ScriptParserBase(const std::string& name);
 
 	/// Add name for custom parameter
 	void addCustom(int i, const std::string& s);
@@ -152,10 +154,11 @@ class ScriptParser : public ScriptParserBase
 {
 public:
 	/// Default constructor
-	ScriptParser()
+	ScriptParser(const std::string& name) : ScriptParserBase(name)
 	{
 		//ScriptParser require static function in T to initialize data!
 		T::ScriptRegister(this);
+		logScriptMetadata();
 	}
 
 	/// Prase string and return new script
