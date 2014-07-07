@@ -1361,3 +1361,5 @@ en-GB:
   STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE: "Not enough items to copy template!"
   STR_UNLOAD_WEAPON: "Unload weapon"
   STR_ALL_ITEMS: "All Items"
+  STR_MEETINGPOINT: "Matching craft trajectory"
+  STR_MEETINGPOINT_DESC: "Crafts will flying to the meeting point with UFO."
