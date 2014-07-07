@@ -35,7 +35,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
  * Initializes a new blank diary.
  */
 SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _missionIdList(), _commendations(), _scoreTotal(0),
-	_killTotal(0), _missionTotal(0), _winTotal(0), _stunTotal(0), _baseDefenseMissionTotal(0), _daysWoundedTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
+	_killTotal(0), _winTotal(0), _stunTotal(0), _baseDefenseMissionTotal(0), _daysWoundedTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0),
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
@@ -79,7 +79,6 @@ void SoldierDiary::load(const YAML::Node& node)
 	_UFOTotal = node["UFOTotal"].as<std::map<std::string, int> >(_UFOTotal);
 	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
 	_killTotal = node["killTotal"].as<int>(_killTotal);
-	_missionTotal = node["missionTotal"].as<int>(_missionTotal);
 	_winTotal = node["winTotal"].as<int>(_winTotal);
 	_stunTotal = node["stunTotal"].as<int>(_stunTotal);
 	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
@@ -125,7 +124,6 @@ YAML::Node SoldierDiary::save() const
     if (!_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
     if (_scoreTotal) node["scoreTotal"] = _scoreTotal;
     if (_killTotal) node["killTotal"] = _killTotal;
-    if (_missionTotal) node["missionTotal"] = _missionTotal;
     if (_winTotal) node["winTotal"] = _winTotal;
     if (_stunTotal) node["stunTotal"] = _stunTotal;
     if (_daysWoundedTotal) node["daysWoundedTotal"] = _daysWoundedTotal;
@@ -182,7 +180,15 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     _UFOTotal[missionStatistics->ufo.c_str()]++;
     _scoreTotal += missionStatistics->score;
     if (missionStatistics->success)
+    {
         _winTotal++;
+        if (missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
+            _importantMissionTotal++;
+        if (unitStatistics->loneSurvivor)
+            _loneSurvivorTotal++;
+        if (unitStatistics->ironMan)
+            _ironManTotal++;
+    }
     _daysWoundedTotal += unitStatistics->daysWounded;
     if (unitStatistics->daysWounded)
         _timesWoundedTotal++;
@@ -198,18 +204,12 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
         _nightMissionTotal++;
     if (unitStatistics->wasUnconcious)
         _unconciousTotal++;
-    if (missionStatistics->success && missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
-		_importantMissionTotal++;
 	_shotAtCounterTotal += unitStatistics->shotAtCounter;
     _shotAtCounter10in1Mission += (unitStatistics->shotAtCounter)/10;
 	_hitCounterTotal += unitStatistics->hitCounter;
     _hitCounter5in1Mission += (unitStatistics->hitCounter)/5;
 	_totalShotByFriendlyCounter += unitStatistics->shotByFriendlyCounter;
 	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
-	if (unitStatistics->loneSurvivor && missionStatistics->success)
-		_loneSurvivorTotal++;
-	if (unitStatistics->ironMan && missionStatistics->success)
-		_ironManTotal++;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
 	if (missionStatistics->valiantCrux)
@@ -217,7 +217,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	if (unitStatistics->KIA)
 		_KIA++;
     _missionIdList.push_back(missionStatistics->id);
-    _missionTotal = _missionIdList.size(); /// CAN GET RID OF MISSION TOTAL
 }
 /**
  * Get soldier commendations.
@@ -617,7 +616,7 @@ int SoldierDiary::getKillTotal() const
  */
 int SoldierDiary::getMissionTotal() const
 {
-	return _missionTotal;
+	return _missionIdList.size();
 }
 /**
  *
