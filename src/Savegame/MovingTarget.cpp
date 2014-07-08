@@ -263,7 +263,7 @@ void MovingTarget::calculateMeetPoint()
     // Correction overflowing angles
     while (abs(_meetPointLon) > M_PI) _meetPointLon -= copysign(2*M_PI, _meetPointLon);
     while (abs(_meetPointLat) > M_PI) _meetPointLat -= copysign(2*M_PI, _meetPointLat);
-    if (abs(_meetPointLat) > M_PI/2) _meetPointLat = copysign(2*M_PI - abs(_meetPointLat), _meetPointLat);
+    if (abs(_meetPointLat) > M_PI/2) {_meetPointLat = copysign(2*M_PI - abs(_meetPointLat), _meetPointLat); _meetPointLon -= copysign(M_PI, _meetPointLon);}
 }
 
 /**
