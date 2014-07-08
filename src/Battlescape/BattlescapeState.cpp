@@ -84,6 +84,7 @@
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 #include "../fmath.h"
+#include "../Engine/UIBuilder.h"
 
 namespace OpenXcom
 {
@@ -96,21 +97,96 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 
+
+	// Construct the action handlers map for UI builder
+	std::map<std::string, ActionHandler> handlers;
+	handlers["mouseInIcons"]				=	(ActionHandler) &BattlescapeState::mouseInIcons;
+	handlers["mouseOutIcons"]				=	(ActionHandler) &BattlescapeState::mouseOutIcons;
+	handlers["btnUnitUpClick"] 				=	(ActionHandler) &BattlescapeState::btnUnitUpClick;
+	handlers["btnUnitDownClick"] 			=	(ActionHandler) &BattlescapeState::btnUnitDownClick;
+	handlers["btnMapUpClick"] 				=	(ActionHandler) &BattlescapeState::btnMapUpClick;
+	handlers["btnDownClick"] 				=	(ActionHandler) &BattlescapeState::btnMapDownClick;
+	handlers["btnShowMapClick"] 			=	(ActionHandler) &BattlescapeState::btnShowMapClick;
+	handlers["btnKneelClick"] 				=	(ActionHandler) &BattlescapeState::btnKneelClick;
+	handlers["btnInventoryClick"] 			=	(ActionHandler) &BattlescapeState::btnInventoryClick;
+	handlers["btnCenterClick"] 				=	(ActionHandler) &BattlescapeState::btnCenterClick;
+	handlers["btnNextSoldierClick"]			=	(ActionHandler) &BattlescapeState::btnNextSoldierClick;
+	handlers["btnPrevSoldierClick"]			=	(ActionHandler) &BattlescapeState::btnPrevSoldierClick;
+	handlers["btnShowLayersClick"]			=	(ActionHandler) &BattlescapeState::btnShowLayersClick;
+	handlers["btnEndTurnClick"]				=	(ActionHandler) &BattlescapeState::btnEndTurnClick;
+	handlers["btnAbortClick"]				=	(ActionHandler) &BattlescapeState::btnAbortClick;
+	handlers["btnStatsClick"]				=	(ActionHandler) &BattlescapeState::btnStatsClick;
+	handlers["btnLeftHandItemClick"]		=	(ActionHandler) &BattlescapeState::btnLeftHandItemClick;
+	handlers["btnRightHandItemClick"]		=	(ActionHandler) &BattlescapeState::btnRightHandItemClick;
+	handlers["btnVisibleUnitClick"]			=	(ActionHandler) &BattlescapeState::btnVisibleUnitClick;
+	handlers["btnLaunchClick"]				=	(ActionHandler) &BattlescapeState::btnLaunchClick;
+	handlers["btnPsiClick"]					=	(ActionHandler) &BattlescapeState::btnPsiClick;
+	handlers["btnReserveClick"]				=	(ActionHandler) &BattlescapeState::btnReserveClick;
+	handlers["btnReloadClick"]				=	(ActionHandler) &BattlescapeState::btnReloadClick;
+	handlers["btnPersonalLightingClick"]	=	(ActionHandler) &BattlescapeState::btnPersonalLightingClick;
+	handlers["btnReserveKneelClick"]		=	(ActionHandler) &BattlescapeState::btnReserveKneelClick;
+	handlers["btnZeroTUsClick"]				=	(ActionHandler) &BattlescapeState::btnZeroTUsClick;
+	handlers["txtTooltipIn"]				=	(ActionHandler) &BattlescapeState::txtTooltipIn;
+	handlers["txtTooltipOut"]				=	(ActionHandler) &BattlescapeState::txtTooltipOut;
+	
+	// Likewise, construct a map for hotkeys
+	std::map<std::string, SDLKey> hotkeys;
+	hotkeys["keyBattleLevelUp"]				=	Options::keyBattleLevelUp;
+	hotkeys["keyBattleLevelDown"]			=	Options::keyBattleLevelDown;
+	hotkeys["keyBattleMap"]					=	Options::keyBattleMap;
+	hotkeys["keyBattleKneel"]				=	Options::keyBattleKneel;
+	hotkeys["keyBattleInventory"]			=	Options::keyBattleInventory;
+	hotkeys["keyBattleCenterUnit"]			=	Options::keyBattleCenterUnit;
+	hotkeys["keyBattleNextUnit"]			=	Options::keyBattleNextUnit;
+	hotkeys["keyBattlePrevUnit"]			=	Options::keyBattlePrevUnit;
+	hotkeys["keyBattleDeselectUnit"]		=	Options::keyBattleDeselectUnit;
+	hotkeys["keyBattleOptions"]				=	Options::keyBattleOptions;
+	hotkeys["keyBattleEndTurn"]				=	Options::keyBattleEndTurn;
+	hotkeys["keyBattleAbort"]				=	Options::keyBattleAbort;
+	hotkeys["keyBattleStats"]				=	Options::keyBattleStats;
+	hotkeys["keyBattleUseLeftHand"]			=	Options::keyBattleUseLeftHand;
+	hotkeys["keyBattleUseRightHand"]		=	Options::keyBattleUseRightHand;
+	hotkeys["keyBattleReserveNone"]			=	Options::keyBattleReserveNone;
+	hotkeys["keyBattleReserveSnap"]			=	Options::keyBattleReserveSnap;
+	hotkeys["keyBattleReserveAimed"]		=	Options::keyBattleReserveAimed;
+	hotkeys["keyBattleReserveAuto"]			=	Options::keyBattleReserveAuto;
+	hotkeys["keyBattleReserveKneel"]		=	Options::keyBattleReserveKneel;
+	hotkeys["keyBattleZeroTUs"]				=	Options::keyBattleZeroTUs;
+	hotkeys["keyBattleReload"]				=	Options::keyBattleReload;
+	hotkeys["keyBattlePersonalLighting"]	=	Options::keyBattlePersonalLighting;
+
+	// TODO: Unhardcode the XCom1Battle.layout?
+	
+
+	// After the call to buildUI all elements should be added to the state,
+	// but some UI elements should have their own pointers.
+
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;
 	int iconsWidth = Map::ICON_WIDTH;
 	int iconsHeight = Map::ICON_HEIGHT;
 	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
+	//_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
 	int visibleMapHeight = screenHeight - iconsHeight;
 	_map = new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
+	// Set palette
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	
+	add(_map);
+	_bUI = UIBuilder::buildUI(this, 
+				_game->getResourcePack(),
+				handlers,
+				hotkeys, 
+				CrossPlatform::getDataFile("Resources/UI/XCom1Battle.layout"));
+	_icons = dynamic_cast<InteractiveSurface*>(_bUI["icons"]);
+	_rank = _bUI["rank"];
 
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
-	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
+	//_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
 
 	// Create buttons
 	_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
@@ -138,6 +214,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
+
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
@@ -168,17 +245,15 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtDebug = new Text(300, 10, 20, 0);
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
-	// Set palette
-	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
-	add(_map);
-	add(_icons);
+	//add(_icons);
 	add(_numLayers);
-	add(_rank);
+	//add(_rank);
 	add(_btnUnitUp);
 	add(_btnUnitDown);
 	add(_btnMapUp);
@@ -235,7 +310,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
 
 	// Add in custom reserve buttons
-	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
+	/*Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
 	if (_game->getResourcePack()->getSurface("TFTDReserve"))
 	{
 		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
@@ -250,7 +325,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
-	icons->blit(_icons);
+	icons->blit(_icons);*/
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
@@ -261,8 +336,8 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
 
-	_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
-	_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
+	//_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
+	//_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
 
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitUp->setTooltip("STR_UNIT_LEVEL_ABOVE");
@@ -453,26 +528,32 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
-	_btnReserveNone->copy(_icons);
+	//_btnReserveNone->copy(_icons);
+	_btnReserveNone->copy(_bUI["TFTDIcons"]);
 	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
 
-	_btnReserveSnap->copy(_icons);
+	//_btnReserveSnap->copy(_icons);
+	_btnReserveSnap->copy(_bUI["TFTDIcons"]);
 	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
 
-	_btnReserveAimed->copy(_icons);
+	//_btnReserveAimed->copy(_icons);
+	_btnReserveAimed->copy(_bUI["TFTDIcons"]);
 	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
 
-	_btnReserveAuto->copy(_icons);
+	//_btnReserveAuto->copy(_icons);
+	_btnReserveAuto->copy(_bUI["TFTDIcons"]);
 	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
 
-	_btnReserveKneel->copy(_icons);
+	//_btnReserveKneel->copy(_icons);
+	_btnReserveKneel->copy(_bUI["TFTDIcons"]);
 	_btnReserveKneel->setColor(Palette::blockOffset(2)+3);
 
-	_btnZeroTUs->copy(_icons);
+	//_btnZeroTUs->copy(_icons);
+	_btnZeroTUs->copy(_bUI["TFTDIcons"]);
 	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
 
 	// Set music

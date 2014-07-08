@@ -1,0 +1,65 @@
+# To the poor soul that happens to think that messing with UI is a cool thing to do:
+# Run away while you still can. Run and never, ever think of coming back. You won't find
+# anything apart from desolation and despair here. Everything you touch will hurt and kill you.
+# Also, this file is generated automatically. Go away.
+# 
+# Still there? Okay, fine, you've asked for it.
+# First off, the text here is case-sensitive. Don't ask.
+# Second, some fields are required, others are not.
+# Third, this file is generated from BattlescapeState source code. You shouldn't mess with
+# the things like names or event handlers. Seriously, just don't.
+layout:
+  - name: icons
+    order: 1
+    type: InteractiveSurface
+    palette:
+      name: PAL_BATTLESCAPE
+    width: 320
+    height: 56
+    hAlign: center
+    vAlign: bottom
+    relX: -160
+    relY: -56
+#    crop:
+#      x: 0
+#      y: 144
+#      w: 320
+#      h: 56
+    graphic:
+      name: ICONS.PCK
+      crop:
+        x: 0
+        y: 144
+        w: 320
+        h: 56
+    hidden: false
+    handlers:
+      onMouseIn: mouseInIcons
+      onMouseOut: mouseOutIcons
+  - name: TFTDIcons
+    order: 2
+    type: Surface
+    palette:
+      name: PAL_BATTLESCAPE
+    width: 59
+    height: 24
+    hAlign: center
+    vAlign: bottom
+    relX: -112
+    relY: -24
+    graphic:
+      name: TFTDReserve
+    hidden: false
+  - name: rank
+    order: 3
+    type: Surface
+    width: 26
+    height: 23
+    hAlign: center
+    vAlign: bottom
+    relX: -53
+    relY: -23
+    hidden: false
+
+
+
