@@ -608,23 +608,23 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 	switch (type)
 	{
 	case SCALE_15X:
-		width = int(floor(Screen::ORIGINAL_WIDTH * 1.5));
-		height = int(floor(Screen::ORIGINAL_HEIGHT * 1.5));
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
 		break;
 	case SCALE_2X:
 		width = Screen::ORIGINAL_WIDTH * 2;
 		height = Screen::ORIGINAL_HEIGHT * 2;
 		break;
 	case SCALE_SCREEN_DIV_3:
-		width = int(floor(Options::displayWidth / 3 * pixelRatioY));
+		width = Options::displayWidth * pixelRatioY / 3;
 		height = Options::displayHeight / 3;
 		break;
 	case SCALE_SCREEN_DIV_2:
-		width = int(floor(Options::displayWidth / 2 * pixelRatioY));
+		width = Options::displayWidth * pixelRatioY / 2;
 		height = Options::displayHeight / 2;
 		break;
 	case SCALE_SCREEN:
-		width = int(floor(Options::displayWidth * pixelRatioY));
+		width = Options::displayWidth * pixelRatioY;
 		height = Options::displayHeight;
 		break;
 	case SCALE_ORIGINAL:
@@ -638,11 +638,11 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 	{
 		if (displayRatio < originalRatio)
 		{
-			width = int(floor((double(height) / double(Options::newDisplayHeight) * double(Options::newDisplayWidth))) * pixelRatioY);
+			width = double(height) / double(Options::newDisplayHeight) * double(Options::newDisplayWidth) * pixelRatioY;
 		}
 		else if (displayRatio > originalRatio)
 		{
-			height = int(floor(double(width) / double(Options::newDisplayWidth) * double(Options::newDisplayHeight)) / pixelRatioY);
+			height = double(width) / double(Options::newDisplayWidth) * double(Options::newDisplayHeight) / pixelRatioY;
 		}
 	}
 	// don't go under minimum resolution... it's bad, mmkay?
