@@ -375,6 +375,7 @@ void InventoryState::init()
 	}
 
 	updateStats();
+	_refreshMouse();
 }
 
 /**
@@ -495,6 +496,7 @@ void InventoryState::btnPrevClick(Action *)
 	{
 		return;
 	}
+
 	if (_parent)
 	{
 		_parent->selectPreviousPlayerUnit(false, false, true);
@@ -596,8 +598,6 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 				(*j)->getFuseTimer()));
 	}
 
-	_updateTemplateButtons(true);
-
 	// give audio feedback
 	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 }
@@ -674,9 +674,21 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 	// refresh ui
 	_inv->arrangeGround(false);
 	updateStats();
+	_refreshMouse();
 
 	// give audio feedback
 	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+}
+
+void InventoryState::_refreshMouse()
+{
+	// send a mouse motion event to refresh any hover actions
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	SDL_WarpMouse(x+1, y);
+	
+	// move the mouse back to avoid cursor creep
+	SDL_WarpMouse(x, y);
 }
 
 void InventoryState::btnClearInventoryClick(Action *action)
@@ -696,6 +708,7 @@ void InventoryState::btnClearInventoryClick(Action *action)
 	// refresh ui
 	_inv->arrangeGround(false);
 	updateStats();
+	_refreshMouse();
 
 	// give audio feedback
 	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();

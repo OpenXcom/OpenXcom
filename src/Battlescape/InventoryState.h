@@ -98,6 +98,8 @@ public:
 private:
 	/// Update the visibility and icons for the template buttons
 	void _updateTemplateButtons(bool isVisible);
+	/// Refresh the hover status of the mouse
+	void _refreshMouse();
 };
 
 }
