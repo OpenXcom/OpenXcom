@@ -101,7 +101,7 @@ ConfirmLoadState::~ConfirmLoadState()
 void ConfirmLoadState::btnYesClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new LoadGameState(_origin, _fileName));
+	_game->pushState(new LoadGameState(_origin, _fileName, _palette));
 }
 
 /**

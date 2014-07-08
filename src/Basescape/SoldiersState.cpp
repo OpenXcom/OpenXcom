@@ -138,7 +138,7 @@ SoldiersState::~SoldiersState()
 void SoldiersState::init()
 {
 	State::init();
-	int row = 0;
+	unsigned int row = 0;
 	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{

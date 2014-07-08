@@ -143,8 +143,6 @@ openxcom_SOURCES = \
 	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
-	src/Battlescape/DelayedSaveState.cpp \
-	src/Battlescape/DelayedSaveState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \

@@ -46,6 +46,8 @@ public:
 	~VictoryState();
 	/// Handle timers.
 	void think();
+	/// Handler for waiting the screen.
+	void screenTimer();
 	/// Handler for clicking the screen.
 	void screenClick(Action *action);
 };
