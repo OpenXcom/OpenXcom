@@ -626,24 +626,75 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 	{
 		// search for template item in ground inventory
 		std::vector<BattleItem*>::iterator groundItem;
+		const bool needsAmmo = !_game->getRuleset()->getItem((*templateIt)->getItemType())->getCompatibleAmmo()->empty();
 		bool found = false;
-		for (groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
+		bool rescan = true;
+		while (rescan)
 		{
-			if ((*templateIt)->getItemType() == (*groundItem)->getRules()->getType())
+			rescan = false;
+
+			const std::string targetAmmo = (*templateIt)->getAmmoItem();
+			BattleItem *matchedWeapon = NULL;
+			BattleItem *matchedAmmo   = NULL;
+			for (groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
 			{
-				// move matched item from ground to the appropriate inv slot
-				// note that this doesn't attempt to match the isLoaded status
-				// of ammo-bearing weapons.  presumably as many weapons as
-				// possible were already loaded when the battlescape was
-				// generated
-				(*groundItem)->setOwner(unit);
-				(*groundItem)->setSlot(_game->getRuleset()->getInventory((*templateIt)->getSlot()));
-				(*groundItem)->setSlotX((*templateIt)->getSlotX());
-				(*groundItem)->setSlotY((*templateIt)->getSlotY());
-				unitInv->push_back(*groundItem);
-				groundInv->erase(groundItem);
-				found = true;
-				break;
+				// if we find the appropriate ammo, remember it for later for if we find
+				// the right weapon but with the wrong ammo
+				const std::string groundItemName = (*groundItem)->getRules()->getType();
+				if (needsAmmo && targetAmmo == groundItemName)
+				{
+					matchedAmmo = *groundItem;
+				}
+
+				if ((*templateIt)->getItemType() == groundItemName)
+				{
+					// if the loaded ammo doesn't match the template item's,
+					// remember the weapon for later and continue scanning
+					BattleItem *loadedAmmo = (*groundItem)->getAmmoItem();
+					if ((needsAmmo && loadedAmmo && targetAmmo != loadedAmmo->getRules()->getType())
+					 || (needsAmmo && !loadedAmmo))
+					{
+						// remember the last matched weapon for simplicity (but prefer empty weapons if any are found)
+						if (!matchedWeapon || matchedWeapon->getAmmoItem())
+						{
+							matchedWeapon = *groundItem;
+						}
+						continue;
+					}
+
+					// move matched item from ground to the appropriate inv slot
+					(*groundItem)->setOwner(unit);
+					(*groundItem)->setSlot(_game->getRuleset()->getInventory((*templateIt)->getSlot()));
+					(*groundItem)->setSlotX((*templateIt)->getSlotX());
+					(*groundItem)->setSlotY((*templateIt)->getSlotY());
+					unitInv->push_back(*groundItem);
+					groundInv->erase(groundItem);
+					found = true;
+					break;
+				}
+			}
+
+			// if we failed to find an exact match, but found unloaded ammo and
+			// the right weapon, unload the target weapon, load the right ammo, and use it
+			if (!found && matchedWeapon && (!needsAmmo || matchedAmmo))
+			{
+				// unload the existing ammo (if any) from the weapon
+				BattleItem *loadedAmmo = matchedWeapon->getAmmoItem();
+				if (loadedAmmo)
+				{
+					groundTile->addItem(loadedAmmo, groundRuleInv);
+					matchedWeapon->setAmmoItem(NULL);
+				}
+
+				// load the correct ammo into the weapon
+				if (matchedAmmo)
+				{
+					matchedWeapon->setAmmoItem(matchedAmmo);
+					groundTile->removeItem(matchedAmmo);
+				}
+
+				// rescan and pick up the newly-loaded/unloaded weapon
+				rescan = true;
 			}
 		}
 
