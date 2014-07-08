@@ -53,8 +53,9 @@ namespace OpenXcom
 {
 
 static const int _templateBtnX = 288;
-static const int _createTemplateBtnY = 90;
-static const int _applyTemplateBtnY = 113;
+static const int _createTemplateBtnY = 67;
+static const int _applyTemplateBtnY  = 90;
+static const int _clearInventoryBtnY  = 113;
 
 /**
  * Initializes all the elements in the Inventory screen.
@@ -98,6 +99,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
 	_btnCreateTemplate = new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
 	_btnApplyTemplate = new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
+	_btnClearInventory = new InteractiveSurface(32, 22, _templateBtnX, _clearInventoryBtnY);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
 
@@ -123,6 +125,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	add(_btnRank);
 	add(_btnCreateTemplate);
 	add(_btnApplyTemplate);
+	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
 
@@ -213,12 +216,18 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_btnApplyTemplate->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
 	_btnApplyTemplate->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
 
+	_btnClearInventory->onMouseClick((ActionHandler)&InventoryState::btnClearInventoryClick);
+	_btnClearInventory->onKeyboardPress((ActionHandler)&InventoryState::btnClearInventoryClick, Options::keyInvClear);
+	_btnClearInventory->setTooltip("STR_CLEAR_INVENTORY");
+	_btnClearInventory->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
+	_btnClearInventory->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
+
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
 	_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
 	_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
-	_btnCreateTemplate->setVisible(!_tu);
-	_btnApplyTemplate->setVisible(!_tu);
+	_game->getResourcePack()->getSurface("InvClear")->blit(_btnClearInventory);
+	_updateTemplateButtons(!_tu);
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -593,6 +602,22 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 		_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
 		_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
 	}
+
+	// give audio feedback
+	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+}
+
+static void _clearInventory(Game *game, std::vector<BattleItem*> *unitInv, Tile *groundTile)
+{
+	RuleInventory *groundRuleInv = game->getRuleset()->getInventory("STR_GROUND");
+
+	// clear unit's inventory (i.e. move everything to the ground)
+	for (std::vector<BattleItem*>::iterator i = unitInv->begin(); i != unitInv->end(); )
+	{
+		(*i)->setOwner(NULL);
+		groundTile->addItem(*i, groundRuleInv);
+		i = unitInv->erase(i);
+	}
 }
 
 void InventoryState::btnApplyTemplateClick(Action *action)
@@ -603,19 +628,12 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 		return;
 	}
 
-	BattleUnit               *unit          = _battleGame->getSelectedUnit();
-	std::vector<BattleItem*> *unitInv       = unit->getInventory();
-	Tile                     *groundTile    = unit->getTile();
-	std::vector<BattleItem*> *groundInv     = groundTile->getInventory();
-	RuleInventory            *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
+	BattleUnit               *unit       = _battleGame->getSelectedUnit();
+	std::vector<BattleItem*> *unitInv    = unit->getInventory();
+	Tile                     *groundTile = unit->getTile();
+	std::vector<BattleItem*> *groundInv  = groundTile->getInventory();
 
-	// clear unit's inventory (i.e. move everything to the ground)
-	for (std::vector<BattleItem*>::iterator i = unitInv->begin(); i != unitInv->end(); )
-	{
-		(*i)->setOwner(NULL);
-		groundTile->addItem(*i, groundRuleInv);
-		i = unitInv->erase(i);
-	}
+	_clearInventory(_game, unitInv, groundTile);
 
 	// attempt to replicate inventory template by grabbing corresponding items
 	// from the ground.  if any item is not found on the ground, display warning
@@ -657,6 +675,28 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 	{
 		_inv->showWarning(tr("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
 	}
+
+	// refresh ui
+	_inv->arrangeGround(false);
+	updateStats();
+
+	// give audio feedback
+	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+}
+
+void InventoryState::btnClearInventoryClick(Action *action)
+{
+	// don't accept clicks when moving items
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
+	BattleUnit               *unit       = _battleGame->getSelectedUnit();
+	std::vector<BattleItem*> *unitInv    = unit->getInventory();
+	Tile                     *groundTile = unit->getTile();
+
+	_clearInventory(_game, unitInv, groundTile);
 
 	// refresh ui
 	_inv->arrangeGround(false);
@@ -720,14 +760,12 @@ void InventoryState::invMouseOver(Action *)
 			r.h -= 2;
 			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
-			_btnCreateTemplate->setVisible(false);
-			_btnApplyTemplate->setVisible(false);
+			_updateTemplateButtons(false);
 		}
 		else
 		{
 			_selAmmo->clear();
-			_btnCreateTemplate->setVisible(!_tu);
-			_btnApplyTemplate->setVisible(!_tu);
+			_updateTemplateButtons(!_tu);
 		}
 		if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
@@ -747,8 +785,7 @@ void InventoryState::invMouseOver(Action *)
 		}
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
-		_btnCreateTemplate->setVisible(!_tu);
-		_btnApplyTemplate->setVisible(!_tu);
+		_updateTemplateButtons(!_tu);
 	}
 }
 
@@ -761,8 +798,7 @@ void InventoryState::invMouseOut(Action *)
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
 	_selAmmo->clear();
-	_btnCreateTemplate->setVisible(!_tu);
-	_btnApplyTemplate->setVisible(!_tu);
+	_updateTemplateButtons(!_tu);
 }
 
 /**
@@ -816,5 +852,12 @@ void InventoryState::txtTooltipOut(Action *action)
 			_txtItem->setText(L"");
 		}
 	}
+}
+
+void InventoryState::_updateTemplateButtons(bool isVisible)
+{
+	_btnCreateTemplate->setVisible(isVisible);
+	_btnApplyTemplate->setVisible(isVisible);
+	_btnClearInventory->setVisible(isVisible);
 }
 }

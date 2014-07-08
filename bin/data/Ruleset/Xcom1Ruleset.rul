@@ -9447,6 +9447,12 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/invpaste_empty.png
+  - type: InvClear
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invclear.png
   - type: BIGOBS.PCK
     width: 64
     height: 96
