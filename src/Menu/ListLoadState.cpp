@@ -73,7 +73,7 @@ void ListLoadState::lstSavesPress(Action *action)
 		}
 		else
 		{
-			_game->pushState(new LoadGameState(_origin, _saves[_lstSaves->getSelectedRow()].fileName));
+			_game->pushState(new LoadGameState(_origin, _saves[_lstSaves->getSelectedRow()].fileName, _palette));
 		}
 	}
 }

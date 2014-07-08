@@ -93,16 +93,16 @@ public:
 	void setStatus(const std::string &status);
 	/// Handler for clicking the Minimize button.
 	void btnMinimizeClick(Action *action);
-	/// Handler for clicking the Standoff button.
-	void btnStandoffClick(Action *action);
-	/// Handler for clicking the Cautious Attack button.
-	void btnCautiousClick(Action *action);
-	/// Handler for clicking the Standard Attack button.
-	void btnStandardClick(Action *action);
-	/// Handler for clicking the Aggressive Attack button.
-	void btnAggressiveClick(Action *action);
-	/// Handler for clicking the Disengage button.
-	void btnDisengageClick(Action *action);
+	/// Handler for pressing the Standoff button.
+	void btnStandoffPress(Action *action);
+	/// Handler for pressing the Cautious Attack button.
+	void btnCautiousPress(Action *action);
+	/// Handler for pressing the Standard Attack button.
+	void btnStandardPress(Action *action);
+	/// Handler for pressing the Aggressive Attack button.
+	void btnAggressivePress(Action *action);
+	/// Handler for pressing the Disengage button.
+	void btnDisengagePress(Action *action);
 	/// Handler for clicking the Ufo button.
 	void btnUfoClick(Action *action);
 	/// Handler for clicking the Preview graphic.

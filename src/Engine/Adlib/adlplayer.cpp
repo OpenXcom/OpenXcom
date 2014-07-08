@@ -146,8 +146,8 @@ int adl_gv_tempo_run = 60;
 int adl_gv_tempo_inc = 70;
 unsigned char* adl_gv_samples_addr = 0;
 unsigned char* adl_gv_subtracks[128];
-int adl_gv_instruments_count = 0;
-int adl_gv_subtracks_count = 0;
+unsigned int adl_gv_instruments_count = 0;
+unsigned int adl_gv_subtracks_count = 0;
 int adl_gv_polyphony_level = 0;
 unsigned char adl_gv_chorus_instruments[16];
 int adl_gv_FORMAT = 0;//0 = without title, 1=with title
@@ -401,7 +401,7 @@ void adlib_set_instrument_pitch(int instrument, int pitch)
 int adlib_get_unused_channel(int sample_id, bool* same_sample)
 {
 	int maxchan=0, maxdur=0, i;
-	bool empty=false;
+	//bool empty=false;
 
 	for (i=0; i<12; ++i)
 		++adlib_channels[i].duration;
@@ -416,7 +416,7 @@ int adlib_get_unused_channel(int sample_id, bool* same_sample)
 		if (adlib_channels[i].cur_note == 0) //empty channel
 		{
 			maxchan = i;
-			empty = true;
+			//empty = true;
 			break;
 		}
 	}

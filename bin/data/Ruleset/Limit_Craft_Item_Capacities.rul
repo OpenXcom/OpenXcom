@@ -1,0 +1,13 @@
+# Enforce the old 80 item limit on crafts.
+# includes the interceptor and firestorm in this list in case people are using the interceptor/firestorm maps
+crafts:
+  - type: STR_SKYRANGER
+    maxItems: 80
+  - type: STR_INTERCEPTOR
+    maxItems: 80
+  - type: STR_FIRESTORM
+    maxItems: 80
+  - type: STR_LIGHTNING
+    maxItems: 80
+  - type: STR_AVENGER
+    maxItems: 80

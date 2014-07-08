@@ -130,7 +130,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	std::vector<std::wstring> samplesText;
 
 	int samples[] = {8000, 11025, 16000, 22050, 32000, 44100, 48000};
-	for (int i = 0; i < sizeof(samples) / sizeof(samples[0]); ++i)
+	for (unsigned int i = 0; i < sizeof(samples) / sizeof(samples[0]); ++i)
 	{
 		_sampleRates.push_back(samples[i]);
 		ss << samples[i] << L" Hz";

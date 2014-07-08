@@ -31,7 +31,7 @@ RuleCraft::RuleCraft(const std::string &type) :
     _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0),
     _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
 	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0),
-	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
+	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0), _maxItems(0)
 {
 
 }
@@ -95,6 +95,7 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 	{
 		_listOrder = listOrder;
 	}
+	_maxItems = node["maxItems"].as<int>(_maxItems);
 }
 
 /**
@@ -171,7 +172,7 @@ int RuleCraft::getAcceleration() const
  * can be equipped onto the craft.
  * @return The weapon capacity.
  */
-int RuleCraft::getWeapons() const
+unsigned int RuleCraft::getWeapons() const
 {
 	return _weapons;
 }
@@ -312,7 +313,6 @@ int RuleCraft::getListOrder() const
 	 return _listOrder;
 }
 
-
 /**
  * Gets the deployment layout for this craft.
  * @return The deployment layout.
@@ -321,5 +321,15 @@ std::vector<std::vector<int> > &RuleCraft::getDeployment()
 {
 	return _deployment;
 }
+
+/**
+ * Gets the item limit for this craft.
+ * @return the item limit.
+ */
+const int RuleCraft::getMaxItems() const
+{
+	return _maxItems;
+}
+
 }
 

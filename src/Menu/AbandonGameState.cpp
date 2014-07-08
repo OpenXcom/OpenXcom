@@ -124,7 +124,7 @@ void AbandonGameState::btnYesClick(Action *)
 	}
 	else
 	{
-		_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN_END));
+		_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN_END, _palette));
 	}
 }
 

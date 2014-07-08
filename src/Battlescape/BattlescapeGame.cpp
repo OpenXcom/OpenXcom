@@ -1570,6 +1570,10 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	getSave()->getItems()->push_back(bi);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
 	getTileEngine()->applyGravity(newUnit->getTile());
+	if (unit->getFaction() == FACTION_PLAYER)
+	{
+		newUnit->setVisible(true);
+	}
 	//newUnit->getCurrentAIState()->think();
 	return newUnit;
 
