@@ -224,10 +224,16 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
-	_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
-	_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
-	_game->getResourcePack()->getSurface("InvClear")->blit(_btnClearInventory);
-	_updateTemplateButtons(!_tu);
+	if (_tu)
+	{
+		_btnCreateTemplate->setVisible(false);
+		_btnApplyTemplate->setVisible(false);
+		_btnClearInventory->setVisible(false);
+	}
+	else
+	{
+		_updateTemplateButtons(true);
+	}
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -590,18 +596,7 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 				(*j)->getFuseTimer()));
 	}
 
-	if (_curInventoryTemplate.empty())
-	{
-		// use "empty template" icons
-		_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
-		_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
-	}
-	else
-	{
-		// use "active template" icons
-		_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
-		_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
-	}
+	_updateTemplateButtons(true);
 
 	// give audio feedback
 	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
@@ -856,8 +851,28 @@ void InventoryState::txtTooltipOut(Action *action)
 
 void InventoryState::_updateTemplateButtons(bool isVisible)
 {
-	_btnCreateTemplate->setVisible(isVisible);
-	_btnApplyTemplate->setVisible(isVisible);
-	_btnClearInventory->setVisible(isVisible);
+	if (isVisible)
+	{
+		_game->getResourcePack()->getSurface("InvClear")->blit(_btnClearInventory);
+
+		if (_curInventoryTemplate.empty())
+		{
+			// use "empty template" icons
+			_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
+			_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
+		}
+		else
+		{
+			// use "active template" icons
+			_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
+			_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
+		}
+	}
+	else
+	{
+		_btnCreateTemplate->clear();
+		_btnApplyTemplate->clear();
+		_btnClearInventory->clear();
+	}
 }
 }
