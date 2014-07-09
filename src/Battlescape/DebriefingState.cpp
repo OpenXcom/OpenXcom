@@ -163,6 +163,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 
 	int total = 0, statsY = 0, recoveryY = 0;
 	int civiliansSaved = 0, civiliansDead = 0;
+    int aliensKilled = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
@@ -190,6 +191,10 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		{
 			civiliansDead += (*i)->qty;
 		}
+        if ((*i)->item == "STR_ALIENS_KILLED")
+        {
+            aliensKilled += (*i)->qty;
+        }
 	}
 	if (civiliansSaved && !civiliansDead)
 	{
@@ -262,6 +267,10 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
+			if (aliensKilled == (*j)->getStatistics()->kills.size())
+			{
+				(*j)->getStatistics()->nikeCross = true;
+			}
 			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 			if ((*j)->getStatus() == STATUS_DEAD)

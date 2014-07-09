@@ -39,7 +39,7 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0)
+	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0)
 {
 }
 /**
@@ -105,6 +105,8 @@ void SoldierDiary::load(const YAML::Node& node)
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
 	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 	_trapKillTotal = node["trapKillTotal"].as<int>(_trapKillTotal);
+	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
+	_allAliensKilledTotal ] node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -150,6 +152,8 @@ YAML::Node SoldierDiary::save() const
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
 	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
 	if (_trapKillTotal) node["trapKillTotal"] = _trapKillTotal;
+	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
+	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
 	return node;
 }
 /**
@@ -184,6 +188,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
         _winTotal++;
         if (missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
             _importantMissionTotal++;
+		if (missionStatistics->type == "STR_ALIEN_BASE_ASSAULT")
+			_alienBaseAssaultTotal++;
         if (unitStatistics->loneSurvivor)
             _loneSurvivorTotal++;
         if (unitStatistics->ironMan)
@@ -216,6 +222,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_valiantCruxTotal++;
 	if (unitStatistics->KIA)
 		_KIA++;
+	if (unitStatistics->nikeCross)
+		_allAliensKilledTotal++;
     _missionIdList.push_back(missionStatistics->id);
 }
 /**
@@ -291,7 +299,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalTrapKills" && _trapKillTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )					
+					((*j).first == "totalTrapKills" && _trapKillTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
 			{
 				awardCommendationBool = false;
 				break;
