@@ -602,8 +602,7 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 	{
 		pixelRatioY = 1.2;
 	}
-	double displayRatio = double(Options::newDisplayHeight) / double(Options::newDisplayWidth);
-	double originalRatio = double(Screen::ORIGINAL_HEIGHT) / double(Screen::ORIGINAL_WIDTH) * pixelRatioY;
+
 	type = selection;
 	switch (type)
 	{
@@ -634,17 +633,35 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		break;
 	}
 
+	//Check if resolution changed
+	double currentDisplayWidth;
+	double currentDisplayHeight;
+	if (Options::newDisplayHeight != Options::displayHeight)
+	{
+		currentDisplayWidth = Options::newDisplayWidth;
+		currentDisplayHeight = Options::newDisplayHeight;
+	}
+	else
+	{
+		currentDisplayWidth = Options::displayWidth;
+		currentDisplayHeight = Options::displayHeight;
+	}
+
+	// Calculate if expand  should be vertical or horizontal
+	double displayRatio = currentDisplayHeight / currentDisplayWidth;
+	double originalRatio = double(Screen::ORIGINAL_HEIGHT) / double(Screen::ORIGINAL_WIDTH) * pixelRatioY;
 	if (Options::scalingMode == SCALINGMODE_EXPAND)
 	{
 		if (displayRatio < originalRatio)
 		{
-			width = double(height) / double(Options::newDisplayHeight) * double(Options::newDisplayWidth) * pixelRatioY;
+			width = double(height) / currentDisplayHeight * currentDisplayWidth * pixelRatioY;
 		}
 		else if (displayRatio > originalRatio)
 		{
-			height = double(width) / double(Options::newDisplayWidth) * double(Options::newDisplayHeight) / pixelRatioY;
+			height = double(width) / currentDisplayWidth * currentDisplayHeight / pixelRatioY;
 		}
 	}
+
 	// don't go under minimum resolution... it's bad, mmkay?
 	width = std::max(width, Screen::ORIGINAL_WIDTH);
 	height = std::max(height, Screen::ORIGINAL_HEIGHT);
