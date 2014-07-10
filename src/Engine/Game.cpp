@@ -204,8 +204,13 @@ void Game::run()
 					{
 						if (!startupEvent)
 						{
-							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
-							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
+							double pixelRatioY = 1.0;
+							if (Options::nonSquarePixelRatio)
+							{
+								pixelRatioY = 1.2;
+							}
+							Options::newDisplayWidth = Options::displayWidth = std::max(Options::baseXResolution, _event.resize.w);
+							Options::newDisplayHeight = Options::displayHeight = std::max(int(Options::baseYResolution * pixelRatioY), _event.resize.h);
 							int dX = 0, dY = 0;
 							Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
 							Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);

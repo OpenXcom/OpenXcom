@@ -360,7 +360,7 @@ void Screen::resetDisplay(bool resetVideo)
 	}
 
 	double pixelRatioY = 1.0;
-	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	if (Options::nonSquarePixelRatio)
 	{
 		pixelRatioY = 1.2;
 	}
@@ -598,7 +598,7 @@ int Screen::getDY()
 void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
 {
 	double pixelRatioY = 1.0;
-	if (Options::nonSquarePixelRatio && !Options::allowResize)
+	if (Options::nonSquarePixelRatio)
 	{
 		pixelRatioY = 1.2;
 	}
@@ -636,7 +636,7 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 	//Check if resolution changed
 	double currentDisplayWidth;
 	double currentDisplayHeight;
-	if (Options::newDisplayHeight != Options::displayHeight)
+	if (Options::newDisplayWidth != Options::displayWidth || Options::newDisplayHeight != Options::displayHeight)
 	{
 		currentDisplayWidth = Options::newDisplayWidth;
 		currentDisplayHeight = Options::newDisplayHeight;
@@ -649,7 +649,7 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 
 	// Calculate if expand  should be vertical or horizontal
 	double displayRatio = currentDisplayHeight / currentDisplayWidth;
-	double originalRatio = double(Screen::ORIGINAL_HEIGHT) / double(Screen::ORIGINAL_WIDTH) * pixelRatioY;
+	double originalRatio = double(Screen::ORIGINAL_HEIGHT) * pixelRatioY / double(Screen::ORIGINAL_WIDTH);
 	if (Options::scalingMode == SCALINGMODE_EXPAND)
 	{
 		if (displayRatio < originalRatio)
