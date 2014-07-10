@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0), _unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0), _drawingRoutine(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y, bool helmet) : Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0), _unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0), _drawingRoutine(0), _helmet(helmet)
 {
 }
 
@@ -193,7 +193,7 @@ void UnitSprite::drawRoutine0()
 	}
 	else if (_drawingRoutine == 13)
 	{
-/*		if (_depth > 0)
+		if (_helmet)
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
@@ -210,8 +210,8 @@ void UnitSprite::drawRoutine0()
 			larm2H = 232;
 			rarm2H = rarmShoot = 240;
 			legsFloat = 294;
-		}*/
-//		else
+		}
+		else
 		{
 			die = 256; // aquanaut land death frame
 			// aquanaut land torso
@@ -518,7 +518,7 @@ void UnitSprite::drawRoutine0()
 	Surface *newLegs = new Surface(*legs);
 	Surface *newLeftArm = new Surface(*leftArm);
 	Surface *newRightArm = new Surface(*rightArm);
-	if (_unit->getGeoscapeSoldier() && Options::battleHairBleach)
+	if (_unit->getGeoscapeSoldier() && Options::battleHairBleach && _drawingRoutine == 0)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
@@ -1382,14 +1382,10 @@ void UnitSprite::drawRoutine11()
 		s->blit(this);
 	}
 
-	int turretOffsetX;
-	int turretOffsetY;
+	int turretOffsetX = 0;
+	int turretOffsetY = 0;
 	switch (_part)
 	{
-		case 0:
-			turretOffsetX = 0;
-			turretOffsetY = 0;
-			break;
 		case 1:
 			turretOffsetX = -16;
 			turretOffsetY = -8;

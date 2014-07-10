@@ -73,7 +73,7 @@ void Armor::load(const YAML::Node &node)
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
-		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
+		for (int i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
 		{
 			_damageModifier[i] = dmg[i].as<float>();
 		}

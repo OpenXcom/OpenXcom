@@ -96,6 +96,7 @@ protected:
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	std::vector<StatString*> _statStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
+	std::string _alienFuel;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
@@ -228,7 +229,7 @@ public:
 	const std::vector<std::string> &getInvsList () const;
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
-
+	const std::string getAlienFuel() const;
 };
 
 }

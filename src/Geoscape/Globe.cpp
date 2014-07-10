@@ -1618,7 +1618,7 @@ void Globe::drawPath(Surface *surface, double lon1, double lat1, double lon2, do
 {
 	double length;
 	Sint16 count;
-	Sint16 x1, y1, x2, y2;
+	double x1, y1, x2, y2;
 	CordPolar p1, p2;
 	Cord a(CordPolar(lon1, lat1));
 	Cord b(CordPolar(lon2, lat2));
@@ -1830,7 +1830,7 @@ void Globe::mouseOver(Action *action, State *state)
 		if (0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::geoDragScrollButton)))
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 			{
 				center(_lonBeforeMouseScrolling, _latBeforeMouseScrolling);
 			}
@@ -1965,7 +1965,7 @@ void Globe::mouseClick(Action *action, State *state)
 			&& 0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::geoDragScrollButton)))
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 			{
 				center(_lonBeforeMouseScrolling, _latBeforeMouseScrolling);
 			}
@@ -1988,7 +1988,7 @@ void Globe::mouseClick(Action *action, State *state)
 			return;
 		}
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+		if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 		{
 			_isMouseScrolled = false;
 			stopScrolling(action);

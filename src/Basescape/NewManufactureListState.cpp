@@ -22,6 +22,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/ComboBox.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -47,12 +48,13 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 140, 0, 30, POPUP_BOTH);
-	_btnOk = new TextButton(304, 16, 8, 146);
-	_txtTitle = new Text(320, 17, 0, 38);
-	_txtItem = new Text(156, 9, 10, 54);
-	_txtCategory = new Text(130, 9, 166, 54);
-	_lstManufacture = new TextList(288, 80, 8, 62);
+	_window = new Window(this, 320, 156, 0, 22, POPUP_BOTH);
+	_btnOk = new TextButton(304, 16, 8, 154);
+	_txtTitle = new Text(320, 17, 0, 30);
+	_txtItem = new Text(156, 9, 10, 62);
+	_txtCategory = new Text(130, 9, 166, 62);
+	_lstManufacture = new TextList(288, 80, 8, 70);
+	_cbxCategory = new ComboBox(this, 146, 16, 166, 46);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);
@@ -63,6 +65,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 	add(_txtItem);
 	add(_txtCategory);
 	add(_lstManufacture);
+	add(_cbxCategory);
 
 	centerAllSurfaces();
 
@@ -91,6 +94,32 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewManufactureListState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewManufactureListState::btnOkClick, Options::keyCancel);
+
+	_possibleProductions.clear();
+	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
+	_catStrings.push_back("STR_ALL_ITEMS");
+
+	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
+	{
+		bool addCategory = true;
+		for (size_t x = 0; x < _catStrings.size(); ++x)
+		{
+			if ((*it)->getCategory().c_str() == _catStrings[x])
+			{
+				addCategory = false;
+				break;
+			}
+		}
+		if (addCategory)
+		{
+			_catStrings.push_back((*it)->getCategory().c_str());
+		}
+	}
+
+	_cbxCategory->setColor(Palette::blockOffset(15)+1);
+	_cbxCategory->setOptions(_catStrings);
+	_cbxCategory->onChange((ActionHandler)&NewManufactureListState::cbxCategoryChange);
+
 }
 
 /**
@@ -117,7 +146,15 @@ void NewManufactureListState::btnOkClick(Action *)
 */
 void NewManufactureListState::lstProdClick(Action *)
 {
-	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
+	RuleManufacture *rule = 0;
+	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
+	{
+		if ((*it)->getName().c_str() == _displayedStrings[_lstManufacture->getSelectedRow()])
+		{
+			rule = (*it);
+			break;
+		}
+	}
 	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
@@ -132,6 +169,14 @@ void NewManufactureListState::lstProdClick(Action *)
 	}
 }
 
+/**
+ * Updates the production list to match the category filter
+ */
+
+void NewManufactureListState::cbxCategoryChange(Action *)
+{
+	fillProductionList();
+}
 
 /**
  * Fills the list of possible productions.
@@ -141,10 +186,15 @@ void NewManufactureListState::fillProductionList()
 	_lstManufacture->clearList();
 	_possibleProductions.clear();
 	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
+	_displayedStrings.clear();
 
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
 	{
-		_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory ()).c_str());
+		if (((*it)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]) || (_catStrings[_cbxCategory->getSelected()] == "STR_ALL_ITEMS"))
+		{
+			_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory ()).c_str());
+			_displayedStrings.push_back((*it)->getName().c_str());
+		}
 	}
 }
 

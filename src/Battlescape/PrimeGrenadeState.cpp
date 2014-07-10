@@ -59,7 +59,14 @@ PrimeGrenadeState::PrimeGrenadeState(BattleAction *action, bool inInventoryView,
 	}
 
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	if (inInventoryView)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	}
 
 	// Set up objects
 	add(_bg);

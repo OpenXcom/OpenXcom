@@ -46,7 +46,7 @@ private:
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
-	int _listOrder;
+	int _listOrder, _maxItems;
 	std::vector<std::vector <int> > _deployment;
 public:
 	/// Creates a blank craft ruleset.
@@ -101,6 +101,7 @@ public:
 	int getListOrder() const;
 	/// Gets the deployment priority for the craft.
 	std::vector<std::vector<int> > &getDeployment();
+	const int getMaxItems() const;
 };
 
 }

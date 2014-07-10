@@ -167,7 +167,13 @@ void Map::draw()
 	{
 		return;
 	}
-	Surface::draw();
+
+	// normally we'd call for a Surface::draw();
+	// but we don't want to clear the background with colour 0, which is transparent (aka black)
+	// we use colour 15 because that actually corresponds to the colour we DO want in all variations of the xcom and tftd palettes.
+	_redraw = false;
+	clear(Palette::blockOffset(0)+15);
+
 	Tile *t;
 
 	_projectileInFOV = _save->getDebugMode();
@@ -1024,6 +1030,10 @@ void Map::drawTerrain(Surface *surface)
 	}
 	if (pathfinderTurnedOn)
 	{
+		if (_numWaypid)
+		{
+			_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+		}
 		for (int itZ = beginZ; itZ <= endZ; itZ++)
 		{
 			for (int itX = beginX; itX <= endX; itX++)
@@ -1063,18 +1073,33 @@ void Map::drawTerrain(Surface *surface)
 
 						if (_previewSetting & PATH_TU_COST && tile->getTUMarker() > -1)
 						{
-							_numWaypid->setValue(tile->getTUMarker());
-							_numWaypid->draw();
-							int off = tile->getTUMarker() > 9 ? 4 : 2;
+							int off = tile->getTUMarker() > 9 ? 5 : 3;
 							if (_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
-								adjustment += 8;
+								adjustment += 1;
+								if (!(_previewSetting & PATH_ARROWS))
+								{
+									adjustment += 7;
+								}
 							}
-							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (30-adjustment), 0);
+							_numWaypid->setValue(tile->getTUMarker());
+							_numWaypid->draw();
+							if ( !(_previewSetting & PATH_ARROWS) )
+							{
+								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (29-adjustment), 0, false, tile->getMarkerColor() );
+							}
+							else
+							{
+								_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (22-adjustment), 0);
+							}
 						}
 					}
 				}
 			}
+		}
+		if (_numWaypid)
+		{
+			_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 		}
 	}
 	unit = (BattleUnit*)_save->getSelectedUnit();
@@ -1405,7 +1430,7 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit *unit)
 {
-	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0);
+	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0, _save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 	bool invalid, dummy;
 	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;

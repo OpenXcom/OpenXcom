@@ -62,8 +62,8 @@ public:
 	void loadBdy(const std::string &filename);
 	/// Loads a general image file.
 	void loadImage(const std::string &filename);
-	/// Clears the surface's contents.
-	void clear();
+	/// Clears the surface's contents eith a specified colour.
+	void clear(Uint32 color = 0);
 	/// Offsets the surface's colors by a set amount.
 	void offset(int off, int min = -1, int max = -1, int mul = 1);
 	/// Inverts the surface's colors.

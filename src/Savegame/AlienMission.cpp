@@ -426,7 +426,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 				error << "Mission number: " << getId() << " in region: " << getRegion() << " trying to land at lon: " << ufo.getLongitude() << " lat: " << ufo.getLatitude() << " ufo is on flightpath: " << ufo.getTrajectory().getID() << " at point: " << ufo.getTrajectoryPoint() << ", no city found.";
 				Log(LOG_FATAL) << error.str();
 				std::vector<MissionArea> cityZones = rules.getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
-				for (int i = 0; i != cityZones.size(); ++i)
+				for (unsigned int i = 0; i != cityZones.size(); ++i)
 				{
 					error.str("");
 					error << "Zone " << i  << ": Longitudes: " << cityZones.at(i).lonMin * M_PI / 180 << " to " << cityZones.at(i).lonMax * M_PI / 180 << " Latitudes: " << cityZones.at(i).latMin * M_PI / 180 << " to " << cityZones.at(i).latMax * M_PI / 180;

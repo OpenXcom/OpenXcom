@@ -190,6 +190,10 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 			r->load(*i);
 			_research.push_back(r);
 		}
+		else
+		{
+			_scientists += (*i)["assigned"].as<int>(0);
+		}
 	}
 
 	for (YAML::const_iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
@@ -200,6 +204,10 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 			Production *p = new Production(_rule->getManufacture(item), 0);
 			p->load(*i);
 			_productions.push_back(p);
+		}
+		else
+		{
+			_engineers += (*i)["assigned"].as<int>(0);
 		}
 	}
 
@@ -639,7 +647,7 @@ double Base::getIgnoredStores()
 					if (clip != "" && available > 0)
 					{
 						int clipSize = _rule->getItem(clip)->getClipSize();
-						int needed;
+						int needed = 0;
 						if (clipSize > 0)
 						{
 							needed = ((*w)->getRules()->getAmmoMax() - (*w)->getAmmo()) / clipSize;

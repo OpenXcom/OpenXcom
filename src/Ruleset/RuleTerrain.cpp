@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0)
 {
 }
 
@@ -84,6 +84,8 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_civilianTypes.push_back("MALE_CIVILIAN");
 		_civilianTypes.push_back("FEMALE_CIVILIAN");
 	}
+	_minDepth = node["minDepth"].as<int>(_minDepth);
+	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 }
 
 /**
@@ -168,7 +170,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
  * @param mapDataSetID The id of the map data set.
  * @return Pointer to MapData object.
  */
-MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
+MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 {
 	MapDataSet* mdf = 0;
 
@@ -242,4 +244,15 @@ std::vector<int> RuleTerrain::getRoadTypeOdds() const
 {
 	return _roadTypeOdds;
 }
+
+const int RuleTerrain::getMinDepth() const
+{
+	return _minDepth;
+}
+
+const int RuleTerrain::getMaxDepth() const
+{
+	return _maxDepth;
+}
+
 }

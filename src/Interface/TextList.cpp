@@ -285,7 +285,7 @@ void TextList::addRow(int cols, ...)
 		if (_dot && i < cols - 1)
 		{
 			std::wstring buf = txt->getText();
-			int w = txt->getTextWidth();
+			unsigned int w = txt->getTextWidth();
 			while (w < _columns[i])
 			{
 				w += _font->getChar('.')->getCrop()->w + _font->getSpacing();
@@ -603,7 +603,7 @@ void TextList::setCondensed(bool condensed)
  * list is selectable.
  * @return Selected row, -1 if none.
  */
-int TextList::getSelectedRow() const
+unsigned int TextList::getSelectedRow() const
 {
 	if (_rows.empty() || _selRow >= _rows.size())
 	{
@@ -759,6 +759,7 @@ void TextList::clearList()
 		}
 		u->clear();
 	}
+	scrollUp(true, false);
 	_texts.clear();
 	_rows.clear();
 	_redraw = true;

@@ -479,11 +479,11 @@ void GeoscapeState::handle(Action *action)
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
-				popup(new SaveGameState(OPT_GEOSCAPE, SAVE_QUICK));
+				popup(new SaveGameState(OPT_GEOSCAPE, SAVE_QUICK, _palette));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
-				popup(new LoadGameState(OPT_GEOSCAPE, SAVE_QUICK));
+				popup(new LoadGameState(OPT_GEOSCAPE, SAVE_QUICK, _palette));
 			}
 		}
 	}
@@ -1642,11 +1642,11 @@ void GeoscapeState::time1Day()
 	{
 		if (_game->getSavedGame()->isIronman())
 		{
-			popup(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN));
+			popup(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
 		}
 		else if (Options::autosave)
 		{
-			popup(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
+			popup(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE, _palette));
 		}
 	}
 }
@@ -2132,7 +2132,7 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 	// Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
 
-	if (base->getAvailableSoldiers(true) > 0)
+	if (base->getAvailableSoldiers(true) > 0 || !base->getVehicles()->empty())
 	{
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
@@ -2250,6 +2250,12 @@ void GeoscapeState::resize(int &dX, int &dY)
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
 	int divisor = 1;
+	double pixelRatioY = 1.0;
+
+	if (Options::nonSquarePixelRatio)
+	{
+		pixelRatioY = 1.2;
+	}
 	switch (Options::geoscapeScale)
 	{
 	case SCALE_SCREEN_DIV_3:
@@ -2267,7 +2273,7 @@ void GeoscapeState::resize(int &dX, int &dY)
 	}
 	
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
-	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, (int)(Options::displayHeight / pixelRatioY / divisor));
 
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;

@@ -143,8 +143,6 @@ openxcom_SOURCES = \
 	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
-	src/Battlescape/DelayedSaveState.cpp \
-	src/Battlescape/DelayedSaveState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
@@ -605,6 +603,8 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateText.h \
 	src/Ufopaedia/ArticleStateTextImage.cpp \
 	src/Ufopaedia/ArticleStateTextImage.h \
+	src/Ufopaedia/ArticleStateTFTD.cpp \
+	src/Ufopaedia/ArticleStateTFTD.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
 	src/Ufopaedia/ArticleStateVehicle.cpp \

@@ -30,6 +30,8 @@
 #include "../Engine/Timer.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -56,7 +58,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	_txtLevel = new Text(20, 25, 281, 75);
 	
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
 	add(_miniMapView);

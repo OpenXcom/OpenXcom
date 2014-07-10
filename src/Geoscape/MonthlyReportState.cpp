@@ -251,11 +251,11 @@ void MonthlyReportState::btnOkClick(Action *)
 		// Autosave
 		if (_game->getSavedGame()->isIronman())
 		{
-			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
 		}
 		else if (Options::autosave)
 		{
-			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE, _palette));
 		}
 	}
 	else

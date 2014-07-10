@@ -48,6 +48,7 @@ private:
 	size_t _sel, _craft;
 	Base *_base;
 	std::vector<std::string> _items;
+	int _totalItems;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
