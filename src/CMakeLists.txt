@@ -244,6 +244,8 @@ set ( engine_src
   Engine/ShaderDrawHelper.h
   Engine/ShaderMove.h
   Engine/ShaderRepeat.h
+  Engine/UIBuilder.cpp
+  Engine/UIBuilder.h
   Engine/Scalers/scale2x.cpp
   Engine/Scalers/scale2x.h
   Engine/Scalers/scale3x.cpp
