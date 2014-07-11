@@ -14,8 +14,6 @@ layout:
   - name: icons
     order: 1
     type: InteractiveSurface
-    palette:
-      name: PAL_BATTLESCAPE
     width: 320
     height: 56
     hAlign: center
@@ -38,8 +36,6 @@ layout:
   - name: TFTDIcons
     order: 2
     type: Surface
-    palette:
-      name: PAL_BATTLESCAPE
     width: 59
     height: 24
     hAlign: center
@@ -378,8 +374,8 @@ layout:
     height: 48
     hAlign: center
     vAlign: bottom
-    relX: 120
-    relY: -53
+    relX: -152
+    relY: -51
     hidden: false
     handlers:
       onMouseClick: btnLeftHandItemClick
@@ -396,8 +392,8 @@ layout:
     height: 48
     hAlign: center
     vAlign: bottom
-    relX: -152
-    relY: -53
+    relX: 120
+    relY: -51
     hidden: false
     handlers:
       onMouseClick: btnRightHandItemClick
@@ -576,6 +572,207 @@ layout:
       keyKeyboardPress: keyBattleZeroTUs
     tooltip: STR_EXPEND_ALL_TIME_UNITS
 
+  - name: btnLaunch
+    order: 30
+    type: InteractiveSurface
+    width: 32
+    height: 24
+    hAlign: left
+    vAlign: top
+    relX: -32
+    relY: 0
+    visible: false
+    hidden: false
+    graphic:
+      name: SPICONS.DAT
+      frame: 0
+    handlers:
+      onMouseClick: btnLaunchClick
 
-  
-  
+  - name: btnPsi
+    order: 31
+    type: InteractiveSurface
+    width: 32
+    height: 24
+    hAlign: left
+    vAlign: top
+    relX: -32
+    relY: 25
+    visible: false
+    hidden: false
+    graphic:
+      name: SPICONS.DAT
+      frame: 1
+    handlers:
+      onMouseClick: btnPsiClick
+# There's also an array of "center view on enemy" touch surfaces, but I'm not doing them right now.
+# That's that on touch surfaces; on to some less interactive elements!
+  - name: numLayers
+    type: NumberText
+    order: 32
+    width: 3
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: 72
+    relY: -50
+    hidden: false
+    palColor:
+      blockOffset: 1
+      colorOffset: -2
+    value: 1
+
+  - name: numAmmoLeft
+    type: NumberText
+    order: 55
+    width: 30
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -152
+    relY: -51
+    hidden: false
+    palColor:
+      blockOffset: 0
+      colorOffset: 2
+    value: 999
+
+  - name: numAmmoRight
+    type: NumberText
+    order: 65
+    width: 30
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: 120
+    relY: -51
+    hidden: false
+    palColor:
+      blockOffset: 0
+      colorOffset: 2
+    value: 999
+
+  - name: numTimeUnits
+    type: NumberText
+    order: 40
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -24
+    relY: -14
+    hidden: false
+    palColor:
+      blockOffset: 4
+      colorOffset: 0
+    value: 99
+
+  - name: numEnergy
+    type: NumberText
+    order: 41
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -6
+    relY: -14
+    hidden: false
+    palColor:
+      blockOffset: 1
+      colorOffset: 0
+    value: 99
+
+  - name: numHealth
+    type: NumberText
+    order: 42
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -24
+    relY: -6
+    hidden: false
+    palColor:
+      blockOffset: 2
+      colorOffset: 0
+    value: 99
+
+  - name: numMorale
+    type: NumberText
+    order: 43
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -6
+    relY: -6
+    hidden: false
+    palColor:
+      blockOffset: 12
+      colorOffset: 0
+    value: 99
+
+  - name: barTimeUnits
+    type: Bar
+    order: 44
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -15
+    hidden: false
+    palColor:
+      blockOffset: 4
+      colorOffset: 0
+    scale: 1.0
+
+  - name: barEnergy
+    type: Bar
+    order: 45
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -11
+    hidden: false
+    palColor:
+      blockOffset: 1
+      colorOffset: 0
+    scale: 1.0
+
+  - name: barHealth
+    type: Bar
+    order: 46
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -7
+    hidden: false
+    palColor:
+      blockOffset: 2
+      colorOffset: 0
+    palColor2:
+      blockOffset: 5
+      colorOffset: 2
+    scale: 1.0
+
+  - name: barMorale
+    type: Bar
+    order: 47
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -3
+    hidden: false
+    palColor:
+      blockOffset: 12
+      colorOffset: 0
+    scale: 1.0
+
+

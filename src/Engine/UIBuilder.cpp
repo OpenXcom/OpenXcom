@@ -95,24 +95,6 @@ namespace UIBuilder
 			bool visible = node["visible"].as<bool>();
 			out->setVisible(visible);
 		}
-		/*
-		if (node["palette"])
-		{
-			std::string palName = node["palette"]["name"].as<std::string>();
-			if(node["palette"]["backpals"])
-			{
-				int backpals = node["palette"]["backpals"].as<int>();
-				_currentState->setPalette(palName, backpals);
-				out->setPalette(_currentState->getPalette());
-			}
-			else
-			{
-				//_currentState->setPalette(palName);
-				out->setPalette(_currentState->getPalette());
-			}
-
-		}
-		*/
 		// Always set a palette for the surfaces!
 		out->setPalette(_currentState->getPalette());
 		// A surface might be cropped; we must handle this too.
@@ -310,7 +292,7 @@ namespace UIBuilder
 		const YAML::Node color = ibtnNode["palColor"];
 		int blockOffset = color["blockOffset"].as<int>();
 		int colorOffset = color["colorOffset"].as<int>();
-		out->setColor(Palette::blockOffset(blockOffset)+colorOffset);
+		out->setColor(Palette::blockOffset(blockOffset) + colorOffset);
 		return out;
 	}
 
@@ -327,6 +309,15 @@ namespace UIBuilder
 		NumberText *out = new NumberText(width, height);
 		setCommonParams(ntxtNode, out);
 
+		const YAML::Node &color = ntxtNode["palColor"];
+		int blockOffset = color["blockOffset"].as<int>();
+		int colorOffset = color["colorOffset"].as<int>();
+
+		unsigned int value = ntxtNode["value"].as<unsigned int>();
+
+		out->setColor(Palette::blockOffset(blockOffset) + colorOffset);
+		out->setValue(value);
+
 		return out;
 	}
 
@@ -342,6 +333,23 @@ namespace UIBuilder
 		int height = barNode["height"].as<int>();
 		Bar *out = new Bar(width, height);
 		setCommonParams(barNode, out);
+		// Load the bar's colors
+		const YAML::Node &color1 = barNode["palColor"];
+		
+		int blockOffset1 = color1["blockOffset"].as<int>();
+		int colorOffset1 = color1["colorOffset"].as<int>();
+		out->setColor(Palette::blockOffset(blockOffset1) + colorOffset1);
+		if (barNode["palColor2"])
+		{
+			const YAML::Node &color2 = barNode["palColor2"];
+			int blockOffset2 = color2["blockOffset"].as<int>();
+			int colorOffset2 = color2["colorOffset"].as<int>();
+			out->setColor2(Palette::blockOffset(blockOffset2) + colorOffset2);
+		}
+		
+		// Load the bar's scale
+		double scale = barNode["scale"].as<double>();
+		out->setScale(scale);
 
 		return out;
 	}

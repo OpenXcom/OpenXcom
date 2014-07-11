@@ -200,8 +200,23 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnReserveKneel = dynamic_cast<ImageButton*>(_bUI["btnReserveKneel"]);
 	_btnZeroTUs = dynamic_cast<ImageButton*>(_bUI["btnZeroTUs"]);
 
+	_btnLaunch = dynamic_cast<InteractiveSurface*>(_bUI["btnLaunch"]);
+	_btnPsi = dynamic_cast<InteractiveSurface*>(_bUI["btnPsi"]);
 
-	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
+	_numLayers = dynamic_cast<NumberText*>(_bUI["numLayers"]);
+	_numAmmoLeft = dynamic_cast<NumberText*>(_bUI["numAmmoLeft"]);
+	_numAmmoRight = dynamic_cast<NumberText*>(_bUI["numAmmoRight"]);
+	_numTimeUnits = dynamic_cast<NumberText*>(_bUI["numTimeUnits"]);
+	_numEnergy = dynamic_cast<NumberText*>(_bUI["numEnergy"]);
+	_numHealth = dynamic_cast<NumberText*>(_bUI["numHealth"]);
+	_numMorale = dynamic_cast<NumberText*>(_bUI["numMorale"]);
+
+	_barTimeUnits = dynamic_cast<Bar*>(_bUI["barTimeUnits"]);
+	_barEnergy = dynamic_cast<Bar*>(_bUI["barEnergy"]);
+	_barHealth = dynamic_cast<Bar*>(_bUI["barHealth"]);
+	_barMorale = dynamic_cast<Bar*>(_bUI["barMorale"]);
+
+	//_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	//_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
 
 	// Create buttons
@@ -227,9 +242,9 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	//_btnReserveKneel = new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
 	//_btnZeroTUs = new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33);
 	//_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
-	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
+	//_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
 	//_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
-	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
+	//_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
@@ -238,25 +253,25 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	}
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
-	_btnLaunch = new InteractiveSurface(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
-	_btnLaunch->setVisible(false);
-	_btnPsi = new InteractiveSurface(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
-	_btnPsi->setVisible(false);
+	//_btnLaunch = new InteractiveSurface(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
+	//_btnLaunch->setVisible(false);
+	//_btnPsi = new InteractiveSurface(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
+	//_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
 	_txtName = new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
 
-	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
-	_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
+	//_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
+	//_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
 
-	_numEnergy = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 42);
-	_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
+	//_numEnergy = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 42);
+	//_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
 
-	_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 50);
-	_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
+	//_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 50);
+	//_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
 
-	_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 50);
-	_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
+	//_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 50);
+	//_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
 
 	_txtDebug = new Text(300, 10, 20, 0);
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
@@ -268,7 +283,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	//add(_icons);
-	add(_numLayers);
+	//add(_numLayers);
 	//add(_rank);
 	//add(_btnUnitUp);
 	//add(_btnUnitDown);
@@ -286,14 +301,14 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	//add(_btnAbort);
 	//add(_btnStats);
 	add(_txtName);
-	add(_numTimeUnits);
-	add(_numEnergy);
-	add(_numHealth);
-	add(_numMorale);
-	add(_barTimeUnits);
-	add(_barEnergy);
-	add(_barHealth);
-	add(_barMorale);
+	//add(_numTimeUnits);
+	//add(_numEnergy);
+	//add(_numHealth);
+	//add(_numMorale);
+	//add(_barTimeUnits);
+	//add(_barEnergy);
+	//add(_barHealth);
+	//add(_barMorale);
 	//add(_btnReserveNone);
 	//add(_btnReserveSnap);
 	//add(_btnReserveAimed);
@@ -301,9 +316,9 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	//add(_btnReserveKneel);
 	//add(_btnZeroTUs);
 	//add(_btnLeftHandItem);
-	add(_numAmmoLeft);
+	//add(_numAmmoLeft);
 	//add(_btnRightHandItem);
-	add(_numAmmoRight);
+	//add(_numAmmoRight);
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		add(_btnVisibleUnit[i]);
@@ -312,10 +327,10 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	add(_warning);
 	add(_txtDebug);
 	add(_txtTooltip);
-	add(_btnLaunch);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
-	add(_btnPsi);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
+	//add(_btnLaunch);
+	//_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
+	//add(_btnPsi);
+	//_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
 	// Set up objects
 	_save = _game->getSavedGame()->getSavedBattle();
@@ -343,14 +358,14 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	r->h = iconsHeight;
 	icons->blit(_icons);*/
 
-	_numLayers->setColor(Palette::blockOffset(1)-2);
-	_numLayers->setValue(1);
+	//_numLayers->setColor(Palette::blockOffset(1)-2);
+	//_numLayers->setValue(1);
 
-	_numAmmoLeft->setColor(2);
-	_numAmmoLeft->setValue(999);
+	//_numAmmoLeft->setColor(2);
+	//_numAmmoLeft->setValue(999);
 
-	_numAmmoRight->setColor(2);
-	_numAmmoRight->setValue(999);
+	//_numAmmoRight->setColor(2);
+	//_numAmmoRight->setValue(999);
 
 	//_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
 	//_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
@@ -519,24 +534,24 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	}
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1));
-	_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
-	_btnPsi->onMouseClick((ActionHandler)&BattlescapeState::btnPsiClick);
+	//_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
+	//_btnPsi->onMouseClick((ActionHandler)&BattlescapeState::btnPsiClick);
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
-	_numTimeUnits->setColor(Palette::blockOffset(4));
-	_numEnergy->setColor(Palette::blockOffset(1));
-	_numHealth->setColor(Palette::blockOffset(2));
-	_numMorale->setColor(Palette::blockOffset(12));
-	_barTimeUnits->setColor(Palette::blockOffset(4));
-	_barTimeUnits->setScale(1.0);
-	_barEnergy->setColor(Palette::blockOffset(1));
-	_barEnergy->setScale(1.0);
-	_barHealth->setColor(Palette::blockOffset(2));
-	_barHealth->setColor2(Palette::blockOffset(5)+2);
-	_barHealth->setScale(1.0);
-	_barMorale->setColor(Palette::blockOffset(12));
-	_barMorale->setScale(1.0);
+	//_numTimeUnits->setColor(Palette::blockOffset(4));
+	//_numEnergy->setColor(Palette::blockOffset(1));
+	//_numHealth->setColor(Palette::blockOffset(2));
+	//_numMorale->setColor(Palette::blockOffset(12));
+	//_barTimeUnits->setColor(Palette::blockOffset(4));
+	//_barTimeUnits->setScale(1.0);
+	//_barEnergy->setColor(Palette::blockOffset(1));
+	//_barEnergy->setScale(1.0);
+	//_barHealth->setColor(Palette::blockOffset(2));
+	//_barHealth->setColor2(Palette::blockOffset(5)+2);
+	//_barHealth->setScale(1.0);
+	//_barMorale->setColor(Palette::blockOffset(12));
+	//_barMorale->setScale(1.0);
 
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
