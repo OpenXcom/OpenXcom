@@ -566,7 +566,7 @@ struct ParserHelper
 		if(pos == refListCurr.end())
 		{
 			int value = 0;
-			int offset = 0;
+			size_t offset = 0;
 			std::stringstream ss(s);
 			if(s[0] == '-' || s[0] == '+')
 				offset = 1;
@@ -677,15 +677,15 @@ struct ParserHelper
 	SelectedToken getToken(ite& pos, const ite& end, TokenEnum excepted = TokenNone)
 	{
 		//groups of different types of ASCII characters
-		const int none = 1;
-		const int spec = 2;
-		const int digit = 3;
-		const int charHex = 4;
-		const int charRest = 5;
-		const int digitSign = 6;
+		const Uint8 none = 1;
+		const Uint8 spec = 2;
+		const Uint8 digit = 3;
+		const Uint8 charHex = 4;
+		const Uint8 charRest = 5;
+		const Uint8 digitSign = 6;
 
 		//array storing data about every ASCII character
-		static short charDecoder[256] = { 0 };
+		static Uint8 charDecoder[256] = { 0 };
 		static bool init = true;
 		if(init)
 		{
@@ -716,8 +716,8 @@ struct ParserHelper
 
 		for(; pos != end; ++pos, ++off)
 		{
-			const char c = *pos;
-			const short decode = charDecoder[c];
+			const Uint8 c = *pos;
+			const Uint8 decode = charDecoder[c];
 
 			//end of string
 			if(decode == none)
@@ -803,6 +803,8 @@ struct ParserHelper
 					continue;
 				}
 				break;
+			default:
+				break;
 			}
 			//when decode == 0 or we find unexpected char we should end there
 			token.type = TokenInvaild;
@@ -847,7 +849,7 @@ namespace
 {
 
 /**
- * struct used to bliting using script
+ * struct used to bliting script
  */
 struct ScriptReplace
 {
@@ -857,20 +859,6 @@ struct ScriptReplace
 		{
 			const int s = scriptExe(src, ref);
 			if (s) dest = s;
-		}
-	}
-};
-
-/**
- * struct used to bliting using script
- */
-struct ScriptReplaceSelf
-{
-	static inline void func(Uint8& src, ScriptWorker& ref, int, int, int)
-	{
-		if(src)
-		{
-			src = scriptExe(src, ref);
 		}
 	}
 };
@@ -910,16 +898,20 @@ ScriptParserBase::ScriptParserBase(const std::string& name) : _name(name), _proc
 		ScriptParserData temp_var_##NAME = \
 		{ \
 			MACRO_PROC_ID(NAME), \
-			/* types */\
-			Arg##A0, \
-			Arg##A1, \
-			Arg##A2, \
-			Arg##A3, \
+			{ \
+				/* types */\
+				Arg##A0, \
+				Arg##A1, \
+				Arg##A2, \
+				Arg##A3, \
+			}, \
+			{ \
 			/* args offsets */\
-			MACRO_ARG_OFFSET(0, A0, A1, A2, A3), \
-			MACRO_ARG_OFFSET(1, A0, A1, A2, A3), \
-			MACRO_ARG_OFFSET(2, A0, A1, A2, A3), \
-			MACRO_ARG_OFFSET(3, A0, A1, A2, A3), \
+				MACRO_ARG_OFFSET(0, A0, A1, A2, A3), \
+				MACRO_ARG_OFFSET(1, A0, A1, A2, A3), \
+				MACRO_ARG_OFFSET(2, A0, A1, A2, A3), \
+				MACRO_ARG_OFFSET(3, A0, A1, A2, A3), \
+			}, \
 		}; \
 		_procList[#NAME] = temp_var_##NAME; \
 	}
@@ -957,7 +949,7 @@ void ScriptParserBase::addCustom(int i, const std::string& s)
 {
 	if(i >= 0 && i < ScriptMaxRefCustom)
 	{
-		ScriptContainerData data = { ArgReg, RegCustom + i };
+		ScriptContainerData data = { ArgReg, (Uint8)(RegCustom + i) };
 		_refList.insert(std::make_pair(s, data));
 	}
 }
@@ -1053,7 +1045,7 @@ bool ScriptParserBase::parseBase(ScriptContainerBase* destScript, const std::str
 		}
 		else
 		{
-			int temp;
+			int temp = 0;
 			std::string op_str(op.begin, op.end);
 			std::string label_str(label.begin, label.end);
 			cop_ite op_curr = _procList.find(op_str);
