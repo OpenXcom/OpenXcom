@@ -105,7 +105,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	handlers["btnUnitUpClick"] 				=	(ActionHandler) &BattlescapeState::btnUnitUpClick;
 	handlers["btnUnitDownClick"] 			=	(ActionHandler) &BattlescapeState::btnUnitDownClick;
 	handlers["btnMapUpClick"] 				=	(ActionHandler) &BattlescapeState::btnMapUpClick;
-	handlers["btnDownClick"] 				=	(ActionHandler) &BattlescapeState::btnMapDownClick;
+	handlers["btnMapDownClick"] 			=	(ActionHandler) &BattlescapeState::btnMapDownClick;
 	handlers["btnShowMapClick"] 			=	(ActionHandler) &BattlescapeState::btnShowMapClick;
 	handlers["btnKneelClick"] 				=	(ActionHandler) &BattlescapeState::btnKneelClick;
 	handlers["btnInventoryClick"] 			=	(ActionHandler) &BattlescapeState::btnInventoryClick;
@@ -113,6 +113,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	handlers["btnNextSoldierClick"]			=	(ActionHandler) &BattlescapeState::btnNextSoldierClick;
 	handlers["btnPrevSoldierClick"]			=	(ActionHandler) &BattlescapeState::btnPrevSoldierClick;
 	handlers["btnShowLayersClick"]			=	(ActionHandler) &BattlescapeState::btnShowLayersClick;
+	handlers["btnHelpClick"]				=   (ActionHandler) &BattlescapeState::btnHelpClick;
 	handlers["btnEndTurnClick"]				=	(ActionHandler) &BattlescapeState::btnEndTurnClick;
 	handlers["btnAbortClick"]				=	(ActionHandler) &BattlescapeState::btnAbortClick;
 	handlers["btnStatsClick"]				=	(ActionHandler) &BattlescapeState::btnStatsClick;
@@ -184,35 +185,50 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 				CrossPlatform::getDataFile("Resources/UI/XCom1Battle.layout"));
 	_icons = dynamic_cast<InteractiveSurface*>(_bUI["icons"]);
 	_rank = _bUI["rank"];
+	_btnUnitUp = dynamic_cast<InteractiveSurface*>(_bUI["btnUnitUp"]);
+	_btnUnitDown = dynamic_cast<InteractiveSurface*>(_bUI["btnUnitDown"]);
+	_btnMapUp = dynamic_cast<InteractiveSurface*>(_bUI["btnMapUp"]);
+	_btnMapDown = dynamic_cast<InteractiveSurface*>(_bUI["btnMapDown"]);
+	// Do we really need to add all these _btns?
+	_btnLeftHandItem = dynamic_cast<InteractiveSurface*>(_bUI["btnLeftHandItem"]);
+	_btnRightHandItem = dynamic_cast<InteractiveSurface*>(_bUI["btnRightHandItem"]);
+
+	_btnReserveNone = dynamic_cast<ImageButton*>(_bUI["btnReserveNone"]);
+	_btnReserveSnap = dynamic_cast<ImageButton*>(_bUI["btnReserveSnap"]);
+	_btnReserveAimed = dynamic_cast<ImageButton*>(_bUI["btnReserveAimed"]);
+	_btnReserveAuto = dynamic_cast<ImageButton*>(_bUI["btnReserveAuto"]);
+	_btnReserveKneel = dynamic_cast<ImageButton*>(_bUI["btnReserveKneel"]);
+	_btnZeroTUs = dynamic_cast<ImageButton*>(_bUI["btnZeroTUs"]);
+
 
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	//_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
 
 	// Create buttons
-	_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
-	_btnUnitDown = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 16);
-	_btnMapUp = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY());
-	_btnMapDown = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 16);
-	_btnShowMap = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY());
-	_btnKneel = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 16);
-	_btnInventory = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY());
-	_btnCenter = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 16);
-	_btnNextSoldier = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
-	_btnNextStop = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
-	_btnShowLayers = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
-	_btnHelp = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
-	_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
-	_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
-	_btnStats = new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
-	_btnReserveNone = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 33);
-	_btnReserveSnap = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 33);
-	_btnReserveAimed = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 45);
-	_btnReserveAuto = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 45);
-	_btnReserveKneel = new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
-	_btnZeroTUs = new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33);
-	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
+	//_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
+	//_btnUnitDown = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 16);
+	//_btnMapUp = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY());
+	//_btnMapDown = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 16);
+	//_btnShowMap = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY());
+	//_btnKneel = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 16);
+	//_btnInventory = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY());
+	//_btnCenter = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 16);
+	//_btnNextSoldier = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
+	//_btnNextStop = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
+	//_btnShowLayers = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
+	//_btnHelp = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
+	//_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
+	//_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
+	//_btnStats = new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
+	//_btnReserveNone = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 33);
+	//_btnReserveSnap = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 33);
+	//_btnReserveAimed = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 45);
+	//_btnReserveAuto = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 45);
+	//_btnReserveKneel = new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
+	//_btnZeroTUs = new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33);
+	//_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
-	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
+	//_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
@@ -254,21 +270,21 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	//add(_icons);
 	add(_numLayers);
 	//add(_rank);
-	add(_btnUnitUp);
-	add(_btnUnitDown);
-	add(_btnMapUp);
-	add(_btnMapDown);
-	add(_btnShowMap);
-	add(_btnKneel);
-	add(_btnInventory);
-	add(_btnCenter);
-	add(_btnNextSoldier);
-	add(_btnNextStop);
-	add(_btnShowLayers);
-	add(_btnHelp);
-	add(_btnEndTurn);
-	add(_btnAbort);
-	add(_btnStats);
+	//add(_btnUnitUp);
+	//add(_btnUnitDown);
+	//add(_btnMapUp);
+	//add(_btnMapDown);
+	//add(_btnShowMap);
+	//add(_btnKneel);
+	//add(_btnInventory);
+	//add(_btnCenter);
+	//add(_btnNextSoldier);
+	//add(_btnNextStop);
+	//add(_btnShowLayers);
+	//add(_btnHelp);
+	//add(_btnEndTurn);
+	//add(_btnAbort);
+	//add(_btnStats);
 	add(_txtName);
 	add(_numTimeUnits);
 	add(_numEnergy);
@@ -278,15 +294,15 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	add(_barEnergy);
 	add(_barHealth);
 	add(_barMorale);
-	add(_btnReserveNone);
-	add(_btnReserveSnap);
-	add(_btnReserveAimed);
-	add(_btnReserveAuto);
-	add(_btnReserveKneel);
-	add(_btnZeroTUs);
-	add(_btnLeftHandItem);
+	//add(_btnReserveNone);
+	//add(_btnReserveSnap);
+	//add(_btnReserveAimed);
+	//add(_btnReserveAuto);
+	//add(_btnReserveKneel);
+	//add(_btnZeroTUs);
+	//add(_btnLeftHandItem);
 	add(_numAmmoLeft);
-	add(_btnRightHandItem);
+	//add(_btnRightHandItem);
 	add(_numAmmoRight);
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
@@ -338,12 +354,12 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 
 	//_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
 	//_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
-
+	/*
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitUp->setTooltip("STR_UNIT_LEVEL_ABOVE");
 	_btnUnitUp->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnUnitUp->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
+	
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
 	_btnUnitDown->setTooltip("STR_UNIT_LEVEL_BELOW");
 	_btnUnitDown->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
@@ -360,7 +376,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnMapDown->setTooltip("STR_VIEW_LEVEL_BELOW");
 	_btnMapDown->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnMapDown->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
+	
 	_btnShowMap->onMouseClick((ActionHandler)&BattlescapeState::btnShowMapClick);
 	_btnShowMap->onKeyboardPress((ActionHandler)&BattlescapeState::btnShowMapClick, Options::keyBattleMap);
 	_btnShowMap->setTooltip("STR_MINIMAP");
@@ -384,7 +400,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnCenter->setTooltip("STR_CENTER_SELECTED_UNIT");
 	_btnCenter->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnCenter->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
+	
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
 	_btnNextSoldier->onKeyboardPress((ActionHandler)&BattlescapeState::btnNextSoldierClick, Options::keyBattleNextUnit);
 	_btnNextSoldier->onKeyboardPress((ActionHandler)&BattlescapeState::btnPrevSoldierClick, Options::keyBattlePrevUnit);
@@ -397,7 +413,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnNextStop->setTooltip("STR_DESELECT_UNIT");
 	_btnNextStop->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnNextStop->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
+	
 	_btnShowLayers->onMouseClick((ActionHandler)&BattlescapeState::btnShowLayersClick);
 	_btnShowLayers->setTooltip("STR_MULTI_LEVEL_VIEW");
 	_btnShowLayers->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
@@ -438,7 +454,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnRightHandItem->setTooltip("STR_USE_RIGHT_HAND");
 	_btnRightHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnRightHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
+	
 	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveNone->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, Options::keyBattleReserveNone);
 	_btnReserveNone->setTooltip("STR_DONT_RESERVE_TIME_UNITS");
@@ -474,11 +490,11 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
 	_btnZeroTUs->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnZeroTUs->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-
+	
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, Options::keyBattleReload);
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, Options::keyBattlePersonalLighting);
-
+	*/
 	SDLKey buttons[] = {Options::keyBattleCenterEnemy1,
 						Options::keyBattleCenterEnemy2,
 						Options::keyBattleCenterEnemy3,
@@ -529,32 +545,32 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtTooltip->setHighContrast(true);
 
 	//_btnReserveNone->copy(_icons);
-	_btnReserveNone->copy(_bUI["TFTDIcons"]);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
+	//_btnReserveNone->copy(_bUI["TFTDIcons"]);
+	//_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
 
 	//_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->copy(_bUI["TFTDIcons"]);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
+	//_btnReserveSnap->copy(_bUI["TFTDIcons"]);
+	//_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
 
 	//_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->copy(_bUI["TFTDIcons"]);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
+	//_btnReserveAimed->copy(_bUI["TFTDIcons"]);
+	//_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
 
 	//_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->copy(_bUI["TFTDIcons"]);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
+	//_btnReserveAuto->copy(_bUI["TFTDIcons"]);
+	//_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
 
 	//_btnReserveKneel->copy(_icons);
-	_btnReserveKneel->copy(_bUI["TFTDIcons"]);
-	_btnReserveKneel->setColor(Palette::blockOffset(2)+3);
+	//_btnReserveKneel->copy(_bUI["TFTDIcons"]);
+	//_btnReserveKneel->setColor(Palette::blockOffset(2)+3);
 
 	//_btnZeroTUs->copy(_icons);
-	_btnZeroTUs->copy(_bUI["TFTDIcons"]);
-	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
+	//_btnZeroTUs->copy(_bUI["TFTDIcons"]);
+	//_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMTACTIC");

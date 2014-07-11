@@ -38,7 +38,7 @@ namespace UIBuilder
 				ResourcePack* resourcePack,
 				std::map<std::string, ActionHandler> &handlers,
 				std::map<std::string, SDLKey> &kbShortcuts, 
-				std::string file);
+				std::string &file);
 
 }
 

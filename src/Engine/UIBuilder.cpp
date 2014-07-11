@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include "Logger.h"
+#include "Palette.h"
 
 
 namespace OpenXcom
@@ -84,10 +85,17 @@ namespace UIBuilder
 		absX += node["relX"].as<int>();
 		absY += node["relY"].as<int>();
 		out->setX(absX); out->setY(absY);
-		
-		bool hidden = node["hidden"].as<bool>();
-		out->setHidden(hidden);
-		Log(LOG_DEBUG) << "Setting hidden to: " << hidden << " for " << node["name"];
+		if (node["hidden"])
+		{
+			bool hidden = node["hidden"].as<bool>();
+			out->setHidden(hidden);
+		}
+		if (node["visible"])
+		{
+			bool visible = node["visible"].as<bool>();
+			out->setVisible(visible);
+		}
+		/*
 		if (node["palette"])
 		{
 			std::string palName = node["palette"]["name"].as<std::string>();
@@ -99,12 +107,14 @@ namespace UIBuilder
 			}
 			else
 			{
-				_currentState->setPalette(palName);
+				//_currentState->setPalette(palName);
 				out->setPalette(_currentState->getPalette());
 			}
 
 		}
-
+		*/
+		// Always set a palette for the surfaces!
+		out->setPalette(_currentState->getPalette());
 		// A surface might be cropped; we must handle this too.
 		if (node["crop"])
 		{
@@ -185,7 +195,12 @@ namespace UIBuilder
 		if(node["onMouseClick"])
 		{
 			hndlName = node["onMouseClick"].as<std::string>();
-			out->onMouseClick(_handlers[hndlName]);
+			Uint8 button = SDL_BUTTON_LEFT;
+			if(node["mouseClickRight"])
+			{
+				button = SDL_BUTTON_RIGHT;
+			}
+			out->onMouseClick(_handlers[hndlName], button);
 		}
 		if(node["onMousePress"])
 		{
@@ -240,6 +255,12 @@ namespace UIBuilder
 		}
 
 	}
+
+	/**
+	 * Create a new Surface object, set the required properties and return the corresponding pointer.
+	 * @param surfNode A YAML::Node object containing the required data.
+	 * @return The pointer to a newly created Surface object.
+	 */
 	static inline Surface* createSurface(const YAML::Node &surfNode)
 	{
 		int width = surfNode["width"].as<int>();
@@ -250,6 +271,12 @@ namespace UIBuilder
 		return out;
 	}
 
+	/**
+	 * Create a new InteractiveSurface object, set the required properties and return
+	 * the corresponding pointer.
+	 * @param isurfNode A YAML::Node object containing the required data.
+	 * @return The pointer to a newly created InteractiveSurface object.
+	 */
 	static inline InteractiveSurface* createISurface(const YAML::Node &isurfNode)
 	{
 		int width = isurfNode["width"].as<int>();
@@ -260,25 +287,39 @@ namespace UIBuilder
 		{
 			setHandlers(isurfNode["handlers"], out);
 		}
-
 		return out;
 	}
 
+	/**
+	 * Create a new ImageButton object, set the required properties and return
+	 * the corresponding pointer.
+	 * @param isurfNode A YAML::Node object containing the required data.
+	 * @return The pointer to a newly created InteractiveSurface object.
+	 */
 	static inline ImageButton* createIButton(const YAML::Node &ibtnNode)
 	{
 		int width = ibtnNode["width"].as<int>();
 		int height = ibtnNode["height"].as<int>();
 		ImageButton *out = new ImageButton(width, height);
 		setCommonParams(ibtnNode, out);
-
 		if(ibtnNode["handlers"])
 		{
 			setHandlers(ibtnNode["handlers"], out);
 		}
-
+		// The image button needs a color from the palette.
+		const YAML::Node color = ibtnNode["palColor"];
+		int blockOffset = color["blockOffset"].as<int>();
+		int colorOffset = color["colorOffset"].as<int>();
+		out->setColor(Palette::blockOffset(blockOffset)+colorOffset);
 		return out;
 	}
 
+	/**
+	 * Create a new NumberText object, set the required properties and return
+	 * the corresponding pointer.
+	 * @param ntxtNode A YAML::Node object containing the required data.
+	 * @return The pointer to a newly created NumberText object.
+	 */
 	static inline NumberText* createNumText(const YAML::Node &ntxtNode)
 	{
 		int width = ntxtNode["width"].as<int>();
@@ -289,7 +330,12 @@ namespace UIBuilder
 		return out;
 	}
 
-	/// Because sometimes all you need is a good drink!
+	/**
+	 * Create a new Bar object, set the required properties and return
+	 * the corresponding pointer.
+	 * @param barfNode A YAML::Node object containing the required data.
+	 * @return The pointer to a newly created Bar object.
+	 */
 	static inline Bar* createBar(const YAML::Node &barNode)
 	{
 		int width = barNode["width"].as<int>();
@@ -309,13 +355,24 @@ namespace UIBuilder
 
 
 	/**
-	 * Loads the layout from a yaml file, then 
+	 * Loads the layout from a yaml file and returns a map of UI element names and corresponding pointers.
+	 * All elements are also added to the current state and will be deleted in the state's destructor.
+	 * All pointers are Surfaces* by default, so you'll have to dynamic_cast<> them to whatever type
+	 * you're expecting.
+	 * @note You NEED to set the state's palette before calling this function!
+	 * @note DON'T ADD THE ELEMENTS TO THE STATE, IT'S DONE AUTOMATICALLY!
+	 * @param currentState A pointer to the current state.
+	 * @param resourcePack A pointer to the ResourcePack object (Is it actually needed, though?).
+	 * @param handlers A reference to a map of ActionHandlers. See BattlescapeState.cpp for details.
+	 * @param kbShortcuts A reference to a map of SDLKeys for keyboard shortcut assignment.
+	 * @param file A reference to a filename string. Should point to a .layout document.
+	 * @return A map of UI element names to corresponding UI elements.
 	 */
 	std::map<std::string, Surface*> buildUI(State *currentState,
 				ResourcePack *resourcePack,
 				std::map<std::string, ActionHandler> &handlers,
 				std::map<std::string, SDLKey> &kbShortcuts, 
-				std::string file)
+				std::string &file)
 	{
 		// The thing we'll be returning - a map of UI element names to the corresponding surfaces.
 		// There may be more elements within the map than is needed, but they'll be added to the
@@ -325,6 +382,8 @@ namespace UIBuilder
 		// we make a vector that takes desired element order into account.
 		std::vector<std::pair<int, Surface*> > uiElements;
 
+		// Palette must be loaded beforehand!
+		assert(currentState->getPalette() != 0);
 		Log(LOG_DEBUG) << "Reading UI from " << file;
 		_handlers = handlers;
 		_kbShortcuts = kbShortcuts;
