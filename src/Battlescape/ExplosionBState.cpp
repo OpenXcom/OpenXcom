@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param tile Tile the explosion is on.
  * @param lowerWeapon Whether the unit causing this explosion should now lower their weapon.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _pistolWhip(false)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _pistolWhip(false), _hit(false)
 {
 
 }
@@ -72,6 +72,7 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
 		_pistolWhip = (_item->getRules()->getBattleType() != BT_MELEE &&
 			_parent->getCurrentAction()->type == BA_HIT);
 		if (_pistolWhip)
@@ -143,10 +144,10 @@ void ExplosionBState::init()
 	// create a bullet hit
 	{
 		_parent->setStateInterval(std::max(1, ((BattlescapeState::DEFAULT_ANIM_SPEED/2) - (10 * _item->getRules()->getExplosionSpeed()))));
-		bool hit = _pistolWhip || _item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP;
+		_hit = _pistolWhip || _item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP;
 		int anim = _item->getRules()->getHitAnimation();
 		int sound = _item->getRules()->getHitSound();
-		if (hit)
+		if (_hit)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 		}
@@ -155,12 +156,12 @@ void ExplosionBState::init()
 			// bullet hit sound
 			_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
 		}
-		Explosion *explosion = new Explosion(_center, anim, false, hit);
+		Explosion *explosion = new Explosion(_center, anim, false, _hit);
 		_parent->getMap()->getExplosions()->push_back(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = t->getUnit();
-		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
+		if (_hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
@@ -207,7 +208,7 @@ void ExplosionBState::explode()
 	bool terrainExplosion = false;
 	SavedBattleGame *save = _parent->getSave();
 	// last minute adjustment: determine if we actually 
-	if (_parent->getCurrentAction()->type == BA_HIT || _parent->getCurrentAction()->type == BA_STUN)
+	if (_hit)
 	{
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 		BattleUnit *targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();

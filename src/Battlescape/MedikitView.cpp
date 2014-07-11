@@ -70,7 +70,7 @@ void MedikitView::draw()
 	int red = 3;
 
 	this->lock();
-	for (int i = 0; i < set->getTotalFrames(); i++)
+	for (unsigned int i = 0; i < set->getTotalFrames(); i++)
 	{
 		int wound = _unit->getFatalWound(i);
 		Surface * surface = set->getFrame (i);
@@ -100,7 +100,7 @@ void MedikitView::mouseClick (Action *action, State *)
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 	int x = action->getRelativeXMouse() / action->getXScale();
 	int y = action->getRelativeYMouse() / action->getYScale();
-	for (int i = 0; i < set->getTotalFrames(); i++)
+	for (unsigned int i = 0; i < set->getTotalFrames(); i++)
 	{
 		Surface * surface = set->getFrame (i);
 		if (surface->getPixel(x, y))

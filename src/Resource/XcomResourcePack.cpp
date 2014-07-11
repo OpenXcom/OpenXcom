@@ -152,6 +152,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadScr(path);
 	}
+	std::vector<std::string> bdys = CrossPlatform::getFolderContents(geograph, "BDY");
+	for (std::vector<std::string>::iterator i = bdys.begin(); i != bdys.end(); ++i)
+	{
+		std::string path = geograph + *i;
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i]->loadBdy(path);
+	}
 
 	// bigger geoscape background
 	int newWidth = 320 - 64, newHeight = 200;
@@ -808,7 +816,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		_sets[*i]->loadPck(path, tab);
 	}
 	// incomplete chryssalid set: 1.0 data: stop loading.
-	if (!_sets["CHRYS.PCK"]->getFrame(225))
+	if (_sets.find("CHRYS.PCK") != _sets.end() && !_sets["CHRYS.PCK"]->getFrame(225))
 	{
 		Log(LOG_FATAL) << "Version 1.0 data detected";
 		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version");
@@ -826,6 +834,34 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
+	
+
+	std::string lbms[] = {"D0.LBM",
+						  "D1.LBM",
+						  "D2.LBM",
+						  "D2.LBM"};
+	std::string pals[] = {"PAL_BATTLESCAPE",
+						  "PAL_BATTLESCAPE_1",
+						  "PAL_BATTLESCAPE_2",
+						  "PAL_BATTLESCAPE_3"};
+
+	for (size_t i = 0; i < sizeof(lbms)/sizeof(lbms[0]); ++i)
+	{
+		std::ostringstream s;
+		s << "UFOGRAPH/" << lbms[i];
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+		{
+			if (!i)
+			{
+				delete _palettes["PAL_BATTLESCAPE"];
+			}
+			Surface *tempSurface = new Surface(1, 1);
+			tempSurface->loadImage(CrossPlatform::getDataFile(s.str()));
+			_palettes[pals[i]] = new Palette();
+			_palettes[pals[i]]->setColors(tempSurface->getPalette(), 256);
+			delete tempSurface;
+		}
+	}
 
 	std::string spks[] = {"TAC01.SCR",
 						  "DETBORD.PCK",
@@ -839,12 +875,38 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];
-		_surfaces[spks[i]] = new Surface(320, 200);
-		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+		{
+			_surfaces[spks[i]] = new Surface(320, 200);
+			_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
+		}
+	}
+
+	
+	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
+	std::vector<std::string> bdys = CrossPlatform::getFolderContents(ufograph, "BDY");
+	for (std::vector<std::string>::iterator i = bdys.begin(); i != bdys.end(); ++i)
+	{
+		std::string path = ufograph + *i;
+		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		*i = (*i).substr(0, (*i).length() - 3);
+		if ((*i).substr(0, 3) == "MAN")
+		{
+			*i = *i + "SPK";
+		}
+		else if (*i == "TAC01.")
+		{
+			*i = *i + "SCR";
+		}
+		else
+		{
+			*i = *i + "PCK";
+		}
+		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i]->loadBdy(path);
 	}
 
 	// Load Battlescape inventory
-	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
 	std::vector<std::string> invs = CrossPlatform::getFolderContents(ufograph, "SPK");
 	for (std::vector<std::string>::iterator i = invs.begin(); i != invs.end(); ++i)
 	{

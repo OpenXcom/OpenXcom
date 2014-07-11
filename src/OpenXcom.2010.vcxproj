@@ -283,7 +283,6 @@
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
     <ClCompile Include="Battlescape\PromotionsState.cpp" />
-    <ClCompile Include="Battlescape\DelayedSaveState.cpp" />
     <ClCompile Include="Battlescape\ScannerState.cpp" />
     <ClCompile Include="Battlescape\ScannerView.cpp" />
     <ClCompile Include="Battlescape\UnitFallBState.cpp" />
@@ -495,6 +494,7 @@
     <ClCompile Include="Ufopaedia\ArticleStateItem.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateText.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateTextImage.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateUfo.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateVehicle.cpp" />
     <ClCompile Include="Ufopaedia\Ufopaedia.cpp" />
@@ -576,7 +576,6 @@
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
     <ClInclude Include="Battlescape\PromotionsState.h" />
-    <ClInclude Include="Battlescape\DelayedSaveState.h" />
     <ClInclude Include="Battlescape\ScannerState.h" />
     <ClInclude Include="Battlescape\ScannerView.h" />
     <ClInclude Include="Battlescape\UnitFallBState.h" />
@@ -792,6 +791,7 @@
     <ClInclude Include="Ufopaedia\ArticleStateItem.h" />
     <ClInclude Include="Ufopaedia\ArticleStateText.h" />
     <ClInclude Include="Ufopaedia\ArticleStateTextImage.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTD.h" />
     <ClInclude Include="Ufopaedia\ArticleStateUfo.h" />
     <ClInclude Include="Ufopaedia\ArticleStateVehicle.h" />
     <ClInclude Include="Ufopaedia\Ufopaedia.h" />

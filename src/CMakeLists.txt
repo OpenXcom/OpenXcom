@@ -153,8 +153,6 @@ set ( battlescape_src
   Battlescape/AbortMissionState.h
   Battlescape/DebriefingState.cpp
   Battlescape/DebriefingState.h
-  Battlescape/DelayedSaveState.cpp
-  Battlescape/DelayedSaveState.h
   Battlescape/InfoboxState.cpp
   Battlescape/InfoboxState.h
   Battlescape/InfoboxOKState.cpp
@@ -602,6 +600,8 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateCraftWeapon.cpp
   Ufopaedia/ArticleStateTextImage.cpp
   Ufopaedia/ArticleStateTextImage.h
+  Ufopaedia/ArticleStateTFTD.cpp
+  Ufopaedia/ArticleStateTFTD.h
   Ufopaedia/ArticleStateArmor.cpp
   Ufopaedia/ArticleStateArmor.h
   Ufopaedia/ArticleStateVehicle.cpp

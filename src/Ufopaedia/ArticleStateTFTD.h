@@ -16,35 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_DELAYEDSAVESTATE_H
-#define OPENXCOM_DELAYEDSAVESTATE_H
 
-#include "BattleState.h"
-#include "../Savegame/SavedGame.h"
+#ifndef OPENXCOM_ARTICLESTATETFTD_H
+#define OPENXCOM_ARTICLESTATETFTD_H
+
+#include "ArticleState.h"
 
 namespace OpenXcom
 {
+	class Game;
+	class Text;
+	class TextButton;
+	class ArticleStateTextImage;
+	class ArticleDefinitionTFTD;
 
-class BattlescapeGame;
-class Game;
+	/**
+	 * ArticleStateTextImage has a title, text block and a background image.
+	 */
 
-class DelayedSaveState : public BattleState
-{
-private:
-	Game *_game;
-	SaveType _type;
-	bool _firstRun;
-public:
-	/// Constructor for the delayed save state.
-	DelayedSaveState(BattlescapeGame *parent, Game *game, SaveType type);
-	/// Deletes the state.
-	~DelayedSaveState();
-	/// Initializes the state.
-	void init();
-	/// Runs state functionality every cycle.
-	void think();
-};
+	class ArticleStateTFTD : public ArticleState
+	{
+	public:
+		ArticleStateTFTD(ArticleDefinitionTFTD *defs);
+		virtual ~ArticleStateTFTD();
 
+	protected:
+		Text *_txtTitle;
+		Text *_txtInfo;
+		TextButton *_btnTitle;
+	};
 }
 
 #endif

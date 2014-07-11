@@ -32,6 +32,7 @@
 #include "ArticleStateTextImage.h"
 #include "ArticleStateUfo.h"
 #include "ArticleStateVehicle.h"
+#include "ArticleStateTFTD.h"
 #include "../Engine/Game.h"
 
 namespace OpenXcom
@@ -120,6 +121,9 @@ namespace OpenXcom
 				break;
 			case UFOPAEDIA_TYPE_UFO:
 				return new ArticleStateUfo(dynamic_cast<ArticleDefinitionUfo *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD:
+				return new ArticleStateTFTD(dynamic_cast<ArticleDefinitionTFTD *> (article));
 				break;
 			default: break;
 		}

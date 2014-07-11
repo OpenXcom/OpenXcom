@@ -234,7 +234,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _interceptionsCount(0), _interceptionNumber(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
+DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
 {
 	_screen = false;
 
@@ -340,26 +340,26 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_btnStandoff->copy(_window);
 	_btnStandoff->setColor(Palette::blockOffset(5)+1);
 	_btnStandoff->setGroup(&_mode);
-	_btnStandoff->onMouseClick((ActionHandler)&DogfightState::btnStandoffClick);
+	_btnStandoff->onMousePress((ActionHandler)&DogfightState::btnStandoffPress);
 
 	_btnCautious->copy(_window);
 	_btnCautious->setColor(Palette::blockOffset(5)+1);
 	_btnCautious->setGroup(&_mode);
-	_btnCautious->onMouseClick((ActionHandler)&DogfightState::btnCautiousClick);
+	_btnCautious->onMousePress((ActionHandler)&DogfightState::btnCautiousPress);
 
 	_btnStandard->copy(_window);
 	_btnStandard->setColor(Palette::blockOffset(5)+1);
 	_btnStandard->setGroup(&_mode);
-	_btnStandard->onMouseClick((ActionHandler)&DogfightState::btnStandardClick);
+	_btnStandard->onMousePress((ActionHandler)&DogfightState::btnStandardPress);
 
 	_btnAggressive->copy(_window);
 	_btnAggressive->setColor(Palette::blockOffset(5)+1);
 	_btnAggressive->setGroup(&_mode);
-	_btnAggressive->onMouseClick((ActionHandler)&DogfightState::btnAggressiveClick);
+	_btnAggressive->onMousePress((ActionHandler)&DogfightState::btnAggressivePress);
 
 	_btnDisengage->copy(_window);
 	_btnDisengage->setColor(Palette::blockOffset(5)+1);
-	_btnDisengage->onMouseClick((ActionHandler)&DogfightState::btnDisengageClick);
+	_btnDisengage->onMousePress((ActionHandler)&DogfightState::btnDisengagePress);
 	_btnDisengage->setGroup(&_mode);
 
 	_btnUfo->copy(_window);
@@ -393,7 +393,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
-	for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
+	for (unsigned int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
 		CraftWeapon *w = _craft->getWeapons()->at(i);
 		if (w == 0)
@@ -910,7 +910,7 @@ void DogfightState::move()
 		}
 
 		// Handle weapons and craft distance.
-		for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
+		for (unsigned int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 		{
 			CraftWeapon *w = _craft->getWeapons()->at(i);
 			if (w == 0)
@@ -1317,7 +1317,7 @@ void DogfightState::btnMinimizeClick(Action *)
  * Switches to Standoff mode (maximum range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnStandoffClick(Action *)
+void DogfightState::btnStandoffPress(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
@@ -1331,7 +1331,7 @@ void DogfightState::btnStandoffClick(Action *)
  * Switches to Cautious mode (maximum weapon range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnCautiousClick(Action *)
+void DogfightState::btnCautiousPress(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
@@ -1354,7 +1354,7 @@ void DogfightState::btnCautiousClick(Action *)
  * Switches to Standard mode (minimum weapon range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnStandardClick(Action *)
+void DogfightState::btnStandardPress(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
@@ -1377,7 +1377,7 @@ void DogfightState::btnStandardClick(Action *)
  * Switches to Aggressive mode (minimum range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnAggressiveClick(Action *)
+void DogfightState::btnAggressivePress(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
@@ -1400,7 +1400,7 @@ void DogfightState::btnAggressiveClick(Action *)
  * Disengages from the UFO.
  * @param action Pointer to an action.
  */
-void DogfightState::btnDisengageClick(Action *)
+void DogfightState::btnDisengagePress(Action *)
 {
 	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{

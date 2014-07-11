@@ -557,7 +557,7 @@ void Tile::ignite(int power)
 		{
 			power = 0;
 		}
-		if (RNG::percent(power))
+		if (RNG::percent(power) && getFuel())
 		{
 			if (_fire == 0)
 			{

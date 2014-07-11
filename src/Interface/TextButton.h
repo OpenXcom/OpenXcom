@@ -85,6 +85,8 @@ public:
 	void mouseRelease(Action *action, State *state);
 	/// Attaches this button to a combobox.
 	void setComboBox(ComboBox *comboBox);
+	void setWidth(int width);
+	void setHeight(int height);
 };
 
 }

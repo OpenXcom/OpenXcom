@@ -42,6 +42,7 @@ private:
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB, *_fireSurface;
 	ResourcePack *_res;
 	int _part, _animationFrame, _drawingRoutine;
+	bool _helmet;
 	Surface *_dest;
 	int _x, _y, _shade;
 	ScriptWorker _scriptWorkRef;
@@ -88,7 +89,7 @@ private:
 	void blitBody(Surface* body, int part);
 public:
 	/// Creates a new UnitSprite at the specified position and size.
-	UnitSprite(Surface* dest, ResourcePack* res, int frame);
+	UnitSprite(Surface* dest, ResourcePack* res, int frame, bool helmet);
 	/// Cleans up the UnitSprite.
 	~UnitSprite();
 	/// Draws the unit.

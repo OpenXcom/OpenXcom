@@ -856,8 +856,8 @@
     <ClCompile Include="Menu\OptionsNoAudioState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\DelayedSaveState.cpp">
-      <Filter>Battlescape</Filter>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp">
+      <Filter>Ufopaedia</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1740,8 +1740,8 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\DelayedSaveState.h">
-      <Filter>Battlescape</Filter>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
+      <Filter>Ufopaedia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

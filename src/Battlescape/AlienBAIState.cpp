@@ -1114,7 +1114,7 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 	int size = _unit->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
 	bool returnValue = false;
-	int distance = 1000;
+	unsigned int distance = 1000;
 	for (int z = -1; z <= 1; ++z)
 	{
 		for (int x = -size; x <= targetsize; ++x)
@@ -1317,7 +1317,7 @@ void AlienBAIState::evaluateAIMode()
 	}
 
 	// generate a random number to represent our decision.
-	int decision = RNG::generate(1, patrolOdds + ambushOdds + escapeOdds + combatOdds);
+	int decision = RNG::generate(1, std::max(1, patrolOdds + ambushOdds + escapeOdds + combatOdds));
 
 	if (decision > escapeOdds)
 	{

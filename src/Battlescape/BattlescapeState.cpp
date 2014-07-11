@@ -170,7 +170,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// Set palette
-	setPalette("PAL_BATTLESCAPE");
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -237,10 +237,13 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 
 	// Add in custom reserve buttons
 	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
-	Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
-	tftdIcons->setX(48);
-	tftdIcons->setY(176);
-	tftdIcons->blit(icons);
+	if (_game->getResourcePack()->getSurface("TFTDReserve"))
+	{
+		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+		tftdIcons->setX(48);
+		tftdIcons->setY(176);
+		tftdIcons->blit(icons);
+	}
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	SDL_Rect *r = icons->getCrop();
@@ -592,7 +595,7 @@ void BattlescapeState::mapOver(Action *action)
 		if ((SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			}
@@ -715,7 +718,7 @@ void BattlescapeState::mapClick(Action *action)
 		&& (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{   // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			}
@@ -738,7 +741,7 @@ void BattlescapeState::mapClick(Action *action)
 			return;
 		}
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!_mouseMovedOverThreshold) && (SDL_GetTicks() - _mouseScrollingStartTime <= (Options::dragScrollTimeTolerance)))
+		if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
 		{
 			_isMouseScrolled = false;
 			stopScrolling(action);
@@ -919,6 +922,7 @@ void BattlescapeState::btnCenterClick(Action *)
 	if (playableUnitSelected())
 	{
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		_map->refreshSelectorPosition();
 	}
 }
 
@@ -929,7 +933,10 @@ void BattlescapeState::btnCenterClick(Action *)
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
 	if (allowButtons())
+	{
 		selectNextPlayerUnit(true, false);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
@@ -949,7 +956,10 @@ void BattlescapeState::btnNextStopClick(Action *)
 void BattlescapeState::btnPrevSoldierClick(Action *)
 {
 	if (allowButtons())
+	{
 		selectPreviousPlayerUnit(true);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
@@ -1453,7 +1463,7 @@ void BattlescapeState::warning(const std::string &message)
  */
 inline void BattlescapeState::handle(Action *action)
 {
-	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (_game->getCursor()->getVisible() || ((action->getDetails()->type == SDL_MOUSEBUTTONDOWN || action->getDetails()->type == SDL_MOUSEBUTTONUP) && action->getDetails()->button.button == SDL_BUTTON_RIGHT))
 	{
 		State::handle(action);
 
@@ -1523,11 +1533,11 @@ inline void BattlescapeState::handle(Action *action)
 			{
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 				{
-					_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK));
+					_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK, _palette));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
-					_game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK));
+					_game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK, _palette));
 				}
 			}
 
@@ -2104,6 +2114,12 @@ void BattlescapeState::resize(int &dX, int &dY)
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
 	int divisor = 1;
+	double pixelRatioY = 1.0;
+
+	if (Options::nonSquarePixelRatio)
+	{
+		pixelRatioY = 1.2;
+	}
 	switch (Options::battlescapeScale)
 	{
 	case SCALE_SCREEN_DIV_3:
@@ -2121,7 +2137,7 @@ void BattlescapeState::resize(int &dX, int &dY)
 	}
 
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
-	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, Options::displayHeight / divisor);
+	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, (int)(Options::displayHeight / pixelRatioY / divisor));
 
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;

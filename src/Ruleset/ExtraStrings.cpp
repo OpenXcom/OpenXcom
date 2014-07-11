@@ -44,7 +44,20 @@ void ExtraStrings::load(const YAML::Node &node)
 {
 	for (YAML::const_iterator i = node["strings"].begin(); i != node["strings"].end(); ++i)
 	{
-		_strings[i->first.as<std::string>()] = i->second.as<std::string>();
+		// Regular strings
+		if (i->second.IsScalar())
+		{
+			_strings[i->first.as<std::string>()] = i->second.as<std::string>();
+		}
+		// Strings with plurality
+		else if (i->second.IsMap())
+		{
+			for (YAML::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
+			{
+				std::string s = i->first.as<std::string>() + "_" + j->first.as<std::string>();
+				_strings[s] = j->second.as<std::string>();
+			}
+		}
 	}
 }
 

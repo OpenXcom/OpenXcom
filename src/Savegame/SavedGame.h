@@ -138,7 +138,7 @@ public:
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Gets the list of funds from previous months.
-	const std::vector<int> &getFundsList() const;
+	std::vector<int> &getFundsList();
 	/// Sets new funds.
 	void setFunds(int funds);
 	/// Gets the current globe longitude.
@@ -214,15 +214,15 @@ public:
 	/// Gets debug mode.
 	bool getDebugMode() const;
 	/// return a list of maintenance costs
-	std::vector<int> getMaintenances();
+	std::vector<int> &getMaintenances();
 	/// sets the research score for the month
 	void addResearchScore(int score);
 	/// gets the list of research scores
 	std::vector<int> &getResearchScores();
 	/// gets the list of incomes.
-	std::vector<int> getIncomes();
+	std::vector<int> &getIncomes();
 	/// gets the list of expenditures.
-	std::vector<int> getExpenditures();
+	std::vector<int> &getExpenditures();
 	/// gets whether or not the player has been warned
 	bool getWarned() const;
 	/// sets whether or not the player has been warned

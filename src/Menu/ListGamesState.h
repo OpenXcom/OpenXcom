@@ -50,7 +50,7 @@ protected:
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
 	std::vector<SaveInfo> _saves;
-	int _firstValidRow;
+	unsigned int _firstValidRow;
 	bool _autoquick, _sortable;
 
 	void updateArrows();

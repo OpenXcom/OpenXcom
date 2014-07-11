@@ -175,7 +175,7 @@ void CraftSoldiersState::init()
  */
 void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 {
-	int row = _lstSoldiers->getSelectedRow();
+	unsigned int row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -195,7 +195,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
  * @param row Selected soldier row.
  * @param max Move the soldier to the top?
  */
-void CraftSoldiersState::moveSoldierUp(Action *action, int row, bool max)
+void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool max)
 {
 	Soldier *s = _base->getSoldiers()->at(row);
 	if (max)
@@ -225,9 +225,9 @@ void CraftSoldiersState::moveSoldierUp(Action *action, int row, bool max)
  */
 void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 {
-	int row = _lstSoldiers->getSelectedRow();
+	unsigned int row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
-	if (0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
+	if (0 < numSoldiers && INT_MAX >= numSoldiers && row < numSoldiers - 1)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -246,7 +246,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
  * @param row Selected soldier row.
  * @param max Move the soldier to the bottom?
  */
-void CraftSoldiersState::moveSoldierDown(Action *action, int row, bool max)
+void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool max)
 {
 	Soldier *s = _base->getSoldiers()->at(row);
 	if (max)
@@ -322,7 +322,7 @@ void CraftSoldiersState::lstSoldiersMousePress(Action *action)
 {
 	if (Options::changeValueByMouseWheel == 0)
 		return;
-	int row = _lstSoldiers->getSelectedRow();
+	unsigned int row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP &&
 		row > 0)
@@ -334,7 +334,7 @@ void CraftSoldiersState::lstSoldiersMousePress(Action *action)
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN &&
-			 0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
+			 0 < numSoldiers && INT_MAX >= numSoldiers && row < numSoldiers - 1)
 	{
 		if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge() &&
 			action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())

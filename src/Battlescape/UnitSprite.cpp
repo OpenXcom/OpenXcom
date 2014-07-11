@@ -42,13 +42,14 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(Surface* dest, ResourcePack* res, int frame) :
+UnitSprite::UnitSprite(Surface* dest, ResourcePack* res, int frame, bool helmet) :
 	_unit(0), _itemA(0), _itemB(0),
 	_unitSurface(0),
 	_itemSurfaceA(res->getSurfaceSet("HANDOB.PCK")), _itemSurfaceB(res->getSurfaceSet("HANDOB2.PCK")),
 	_fireSurface(res->getSurfaceSet("SMOKE.PCK")),
 	_res(res),
 	_part(0), _animationFrame(frame), _drawingRoutine(0),
+	_helmet(helmet),
 	_dest(dest), _x(0), _y(0), _shade(0),
 	_scriptWorkRef()
 {
@@ -172,11 +173,11 @@ void UnitSprite::drawRoutine0()
 	}
 	else if (_drawingRoutine == 13)
 	{
-/*		if (_depth > 0)
+		if (_helmet)
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
-            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") || 
+            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") ||
 			     (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
@@ -189,8 +190,8 @@ void UnitSprite::drawRoutine0()
 			larm2H = 232;
 			rarm2H = rarmShoot = 240;
 			legsFloat = 294;
-		}*/
-//		else
+		}
+		else
 		{
 			die = 256; // aquanaut land death frame
 			// aquanaut land torso
@@ -1286,14 +1287,10 @@ void UnitSprite::drawRoutine11()
 		blitBody(s, 0);
 	}
 
-	int turretOffsetX;
-	int turretOffsetY;
+	int turretOffsetX = 0;
+	int turretOffsetY = 0;
 	switch (_part)
 	{
-		case 0:
-			turretOffsetX = 0;
-			turretOffsetY = 0;
-			break;
 		case 1:
 			turretOffsetX = -16;
 			turretOffsetY = -8;

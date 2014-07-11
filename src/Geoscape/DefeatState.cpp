@@ -77,7 +77,7 @@ DefeatState::DefeatState() : _screen(-1)
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)&DefeatState::screenClick);
+	_timer->onTimer((StateHandler)&DefeatState::screenTimer);
 	_timer->start();
 
 	screenClick(0);
@@ -107,12 +107,21 @@ void DefeatState::think()
 }
 
 /**
+ * Shows the next screen on a timed basis.
+ */
+void DefeatState::screenTimer()
+{
+	screenClick(0);
+}
+
+/**
  * Shows the next screen in the slideshow
  * or goes back to the Main Menu.
  * @param action Pointer to an action.
  */
 void DefeatState::screenClick(Action *)
 {
+	_timer->start();
 	if (_screen >= 0)
 	{
 		_bg[_screen]->setVisible(false);

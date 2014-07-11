@@ -20,6 +20,7 @@
 #define OPENXCOM__SAVEGAMESTATE
 
 #include "../Engine/State.h"
+#include <SDL.h>
 #include <string>
 #include "OptionsBaseState.h"
 #include "../Savegame/SavedGame.h"
@@ -35,21 +36,22 @@ class Text;
 class SaveGameState : public State
 {
 private:
+	int _firstRun;
 	OptionsOrigin _origin;
 	Text *_txtStatus;
 	std::string _filename;
 	SaveType _type;
 public:
 	/// Creates the Save Game state.
-	SaveGameState(OptionsOrigin origin, const std::string &filename);
+	SaveGameState(OptionsOrigin origin, const std::string &filename, SDL_Color *palette);
 	/// Creates the Load Game state.
-	SaveGameState(OptionsOrigin origin, SaveType type);
+	SaveGameState(OptionsOrigin origin, SaveType type, SDL_Color *palette);
 	/// Cleans up the Save Game state.
 	~SaveGameState();
 	/// Creates the interface.
-	void buildUi();
+	void buildUi(SDL_Color *palette);
 	/// Saves the game.
-	void init();
+	void think();
 };
 
 }

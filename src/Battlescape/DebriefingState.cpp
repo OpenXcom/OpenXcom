@@ -63,6 +63,7 @@
 #include "../Basescape/ManageAlienContainmentState.h"
 #include "../Engine/Screen.h"
 #include "../Basescape/SellState.h"
+#include "../Menu/SaveGameState.h"
 
 namespace OpenXcom
 {
@@ -261,7 +262,9 @@ void DebriefingState::btnOkClick(Action *)
 		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
 	{
 		if ((*i)->getGeoscapeSoldier())
+		{
 			participants.push_back((*i)->getGeoscapeSoldier());
+		}
 	}
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
@@ -269,29 +272,42 @@ void DebriefingState::btnOkClick(Action *)
 	{
 		_game->setState(new MainMenuState);
 	}
-	else if (!_destroyBase)
+	else
 	{
-		if (_game->getSavedGame()->handlePromotions(participants))
+		if (!_destroyBase)
 		{
-			_game->pushState(new PromotionsState);
+			if (_game->getSavedGame()->handlePromotions(participants))
+			{
+				_game->pushState(new PromotionsState);
+			}
+			if (!_missingItems.empty())
+			{
+				_game->pushState(new CannotReequipState(_missingItems));
+			}
+			if (_noContainment)
+			{
+				_game->pushState(new NoContainmentState);
+			}
+			else if (_manageContainment)
+			{
+				_game->pushState(new ManageAlienContainmentState(_base, OPT_BATTLESCAPE));
+				_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8) + 5, "BACK01.SCR", 0));
+			}
+			if (!_manageContainment && Options::storageLimitsEnforced && _base->storesOverfull())
+			{
+				_game->pushState(new SellState(_base, OPT_BATTLESCAPE));
+				_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8) + 5, "BACK01.SCR", 0));
+			}
 		}
-		if (!_missingItems.empty())
+
+		// Autosave after mission
+		if (_game->getSavedGame()->isIronman())
 		{
-			_game->pushState(new CannotReequipState(_missingItems));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
 		}
-		if (_noContainment)
+		else if (Options::autosave)
 		{
-			_game->pushState(new NoContainmentState);
-		}
-		else if (_manageContainment)
-		{
-			_game->pushState(new ManageAlienContainmentState(_base, OPT_BATTLESCAPE));
-			_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
-		}
-		if (!_manageContainment && Options::storageLimitsEnforced && _base->storesOverfull())
-		{
-			_game->pushState(new SellState(_base, OPT_BATTLESCAPE));
-			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE, _palette));
 		}
 	}
 }
@@ -372,7 +388,7 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
 	_stats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
-	_stats.push_back(new DebriefingStat("STR_ELERIUM_115", true));
+	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
@@ -1066,10 +1082,10 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
+		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
 		{
 			// special case of an item counted as a stat
-			addStat("STR_ELERIUM_115", 50, 5);
+			addStat(_game->getRuleset()->getAlienFuel(), 50, 5);
 		}
 		else
 		{
@@ -1078,7 +1094,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 				{
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
-					base->getItems()->addItem((*it)->getRules()->getName(), 1);
+					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
 				}
 				else if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{

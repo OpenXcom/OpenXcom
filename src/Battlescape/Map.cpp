@@ -168,7 +168,13 @@ void Map::draw()
 	{
 		return;
 	}
-	Surface::draw();
+
+	// normally we'd call for a Surface::draw();
+	// but we don't want to clear the background with colour 0, which is transparent (aka black)
+	// we use colour 15 because that actually corresponds to the colour we DO want in all variations of the xcom and tftd palettes.
+	_redraw = false;
+	clear(Palette::blockOffset(0)+15);
+
 	Tile *t;
 
 	_projectileInFOV = _save->getDebugMode();
@@ -241,7 +247,7 @@ void Map::drawTerrain(Surface *surface)
 	int dummy;
 	BattleUnit *unit = 0;
 	int tileShade, wallShade, tileColor;
-	UnitSprite unitSprite(surface, _res, _animFrame);
+	UnitSprite unitSprite(surface, _res, _animFrame, _save->getDepth() != 0);
 	ItemSprite itemSprite(surface, _res, _animFrame);
 
 	const int halfAnimFrame = (_animFrame / 2) % 4;
@@ -1020,7 +1026,10 @@ void Map::drawTerrain(Surface *surface)
 	}
 	if (pathfinderTurnedOn)
 	{
-		_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+		if (_numWaypid)
+		{
+			_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+		}
 		for (int itZ = beginZ; itZ <= endZ; itZ++)
 		{
 			for (int itX = beginX; itX <= endX; itX++)
@@ -1084,7 +1093,10 @@ void Map::drawTerrain(Surface *surface)
 				}
 			}
 		}
-		_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
+		if (_numWaypid)
+		{
+			_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
+		}
 	}
 	unit = _save->getSelectedUnit();
 	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewLevel())
