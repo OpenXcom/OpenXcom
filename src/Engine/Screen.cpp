@@ -603,36 +603,6 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		pixelRatioY = 1.2;
 	}
 
-	type = selection;
-	switch (type)
-	{
-	case SCALE_15X:
-		width = Screen::ORIGINAL_WIDTH * 1.5;
-		height = Screen::ORIGINAL_HEIGHT * 1.5;
-		break;
-	case SCALE_2X:
-		width = Screen::ORIGINAL_WIDTH * 2;
-		height = Screen::ORIGINAL_HEIGHT * 2;
-		break;
-	case SCALE_SCREEN_DIV_3:
-		width = Options::displayWidth * pixelRatioY / 3;
-		height = Options::displayHeight / 3;
-		break;
-	case SCALE_SCREEN_DIV_2:
-		width = Options::displayWidth * pixelRatioY / 2;
-		height = Options::displayHeight / 2;
-		break;
-	case SCALE_SCREEN:
-		width = Options::displayWidth * pixelRatioY;
-		height = Options::displayHeight;
-		break;
-	case SCALE_ORIGINAL:
-	default:
-		width = Screen::ORIGINAL_WIDTH;
-		height = Screen::ORIGINAL_HEIGHT;
-		break;
-	}
-
 	//Check if resolution changed
 	double currentDisplayWidth;
 	double currentDisplayHeight;
@@ -647,6 +617,52 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		currentDisplayHeight = Options::displayHeight;
 	}
 
+	type = selection;
+	switch (type)
+	{
+	case SCALE_15X:
+		width = Screen::ORIGINAL_WIDTH * 1.5;
+		height = Screen::ORIGINAL_HEIGHT * 1.5;
+		break;
+	case SCALE_2X:
+		width = Screen::ORIGINAL_WIDTH * 2;
+		height = Screen::ORIGINAL_HEIGHT * 2;
+		break;
+	case SCALE_25X:
+		width = Screen::ORIGINAL_WIDTH * 2.5;
+		height = Screen::ORIGINAL_HEIGHT * 2.5;
+		break;
+	case SCALE_3X:
+		width = Screen::ORIGINAL_WIDTH * 3;
+		height = Screen::ORIGINAL_HEIGHT * 3;
+		break;
+	case SCALE_35X:
+		width = Screen::ORIGINAL_WIDTH * 3.5;
+		height = Screen::ORIGINAL_HEIGHT * 3.5;
+		break;
+	case SCALE_4X:
+		width = Screen::ORIGINAL_WIDTH * 4;
+		height = Screen::ORIGINAL_HEIGHT * 4;
+		break;
+	case SCALE_SCREEN_DIV_3:
+		width = currentDisplayWidth / 3;
+		height = currentDisplayHeight / pixelRatioY / 3;
+		break;
+	case SCALE_SCREEN_DIV_2:
+		width = currentDisplayWidth / 2;
+		height = currentDisplayHeight / pixelRatioY / 2;
+		break;
+	case SCALE_SCREEN:
+		width = currentDisplayWidth;
+		height = currentDisplayHeight / pixelRatioY;
+		break;
+	case SCALE_ORIGINAL:
+	default:
+		width = Screen::ORIGINAL_WIDTH;
+		height = Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
 	// Calculate if expand  should be vertical or horizontal
 	double displayRatio = currentDisplayHeight / currentDisplayWidth;
 	double originalRatio = double(Screen::ORIGINAL_HEIGHT) * pixelRatioY / double(Screen::ORIGINAL_WIDTH);
@@ -655,6 +671,12 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		if (displayRatio < originalRatio)
 		{
 			width = double(height) / currentDisplayHeight * currentDisplayWidth * pixelRatioY;
+			// If width > display resolution, let there be less height instead (for better scaling)
+			if (width > currentDisplayWidth)
+			{
+				width = currentDisplayWidth;
+				height = height / pixelRatioY;
+			}
 		}
 		else if (displayRatio > originalRatio)
 		{

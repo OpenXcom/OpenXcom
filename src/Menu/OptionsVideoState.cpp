@@ -287,6 +287,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	scales.push_back("STR_ORIGINAL");
 	scales.push_back("STR_1.5X");
 	scales.push_back("STR_2X");
+	scales.push_back("STR_2.5X");
+	scales.push_back("STR_3X");
+	scales.push_back("STR_3.5X");
+	scales.push_back("STR_4X");
 	scales.push_back("STR_THIRD_DISPLAY");
 	scales.push_back("STR_HALF_DISPLAY");
 	scales.push_back("STR_FULL_DISPLAY");
