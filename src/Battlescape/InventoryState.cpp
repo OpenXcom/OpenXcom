@@ -691,6 +691,8 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 			// the right weapon, unload the target weapon, load the right ammo, and use it
 			if (!found && matchedWeapon && (!needsAmmo || matchedAmmo))
 			{
+				RuleInventory *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
+
 				// unload the existing ammo (if any) from the weapon
 				BattleItem *loadedAmmo = matchedWeapon->getAmmoItem();
 				if (loadedAmmo)
