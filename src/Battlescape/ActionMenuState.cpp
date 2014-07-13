@@ -240,7 +240,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 					_action->actor->getPosition(),
-					_action->actor->getDirection(),
+					Pathfinding::horizontalDirection(_action->actor->getDirection()),
 					_action->actor,
 					0, &_action->target))
 				{
@@ -297,7 +297,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		{
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
-				_action->actor->getDirection(),
+				Pathfinding::horizontalDirection(_action->actor->getDirection()),
 				_action->actor,
 				0, &_action->target))
 			{
