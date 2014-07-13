@@ -617,7 +617,7 @@ int SavedGame::getFunds() const
  * Returns the player's funds for the last 12 months.
  * @return funds.
  */
-const std::vector<int> &SavedGame::getFundsList() const
+std::vector<int> &SavedGame::getFundsList()
 {
 	return _funds;
 }
@@ -1460,7 +1460,7 @@ AlienMission *SavedGame::getAlienMission(const std::string &region, const std::s
  * return the list of monthly maintenance costs
  * @return list of maintenances.
  */
-std::vector<int> SavedGame::getMaintenances()
+std::vector<int> &SavedGame::getMaintenances()
 {
 	return _maintenance;
 }
@@ -1487,7 +1487,7 @@ std::vector<int> &SavedGame::getResearchScores()
  * return the list of income scores
  * @return list of income scores.
  */
-std::vector<int> SavedGame::getIncomes()
+std::vector<int> &SavedGame::getIncomes()
 {
 	return _incomes;
 }
@@ -1496,7 +1496,7 @@ std::vector<int> SavedGame::getIncomes()
  * return the list of expenditures scores
  * @return list of expenditures scores.
  */
-std::vector<int> SavedGame::getExpenditures()
+std::vector<int> &SavedGame::getExpenditures()
 {
 	return _expenditures;
 }
