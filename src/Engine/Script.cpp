@@ -594,7 +594,7 @@ struct ParserHelper
 		if(pos->second.type != ArgConst)
 			return false;
 		index = pos->second.index;
-		return false;
+		return true;
 	}
 
 	/**
