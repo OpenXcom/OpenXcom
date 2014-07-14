@@ -117,7 +117,7 @@ namespace OpenXcom
 			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
 			
 			std::wostringstream ss9;
-			ss9 << ammo->getClipSize();
+			ss9 << item->getClipSize();
 			_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
 			
 			_txtInfo->setY(138);

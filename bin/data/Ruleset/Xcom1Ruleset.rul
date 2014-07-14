@@ -1404,6 +1404,7 @@ items:
     tuAimed: 80
     battleType: 1
     fixedWeapon: true
+    clipSize: 30
     invWidth: 2
     invHeight: 3
     turretType: 0
@@ -1419,7 +1420,7 @@ items:
     hitAnimation: 26
     power: 60
     damageType: 1
-    clipSize: 30
+    clipSize: 1
     battleType: 2
     invWidth: 2
     invHeight: 1
@@ -1442,6 +1443,7 @@ items:
     tuAimed: 75
     battleType: 1
     fixedWeapon: true
+    clipSize: 8
     invWidth: 2
     invHeight: 3
     turretType: 1
@@ -1457,7 +1459,7 @@ items:
     hitAnimation: 0
     power: 85
     damageType: 3
-    clipSize: 8
+    clipSize: 1
     battleType: 2
     invWidth: 1
     invHeight: 3
@@ -1526,6 +1528,7 @@ items:
     battleType: 1
     fixedWeapon: true
     waypoint: true
+    clipSize: 8
     invWidth: 2
     invHeight: 3
     turretType: 4
@@ -1540,7 +1543,7 @@ items:
     hitAnimation: 0
     power: 140
     damageType: 3
-    clipSize: 8
+    clipSize: 1
     battleType: 2
     invWidth: 1
     invHeight: 1

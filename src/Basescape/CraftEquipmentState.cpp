@@ -456,7 +456,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			{
 				if ((*i)->getRules() == item)
 				{
-					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo() / ammo->getClipSize());
 					delete (*i);
 					i = c->getVehicles()->erase(i);
 				}
@@ -546,7 +546,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			{
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-				int ammoPerVehicle = ammo->getClipSize();
+				int ammoPerVehicle = item->getClipSize() / ammo->getClipSize();
 				int baseQty = _base->getItems()->getItem(ammo->getType()) / ammoPerVehicle;
 				if (_game->getSavedGame()->getMonthsPassed() == -1)
 					baseQty = 1;
@@ -560,7 +560,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 							_base->getItems()->removeItem(ammo->getType(), ammoPerVehicle);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
-						c->getVehicles()->push_back(new Vehicle(item, ammoPerVehicle, size));
+						c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 					}
 				}
 				else

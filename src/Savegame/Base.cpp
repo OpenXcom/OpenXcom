@@ -1288,7 +1288,7 @@ void Base::setupDefenses()
 			else // so this vehicle needs ammo
 			{
 				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
-				int ammoPerVehicle = ammo->getClipSize();
+				int ammoPerVehicle = rule->getClipSize() / ammo->getClipSize();
 				int baseQty = _items->getItem(ammo->getType()) / ammoPerVehicle;
 				if (!baseQty)
 				{
@@ -1298,7 +1298,7 @@ void Base::setupDefenses()
 				int canBeAdded = std::min(itemQty, baseQty);
 				for (int j=0; j<canBeAdded; ++j)
 				{
-					_vehicles.push_back(new Vehicle(rule, ammoPerVehicle, size));
+					_vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
 					_items->removeItem(ammo->getType(), ammoPerVehicle);
 				}
 				_items->removeItem(itemId, canBeAdded);
