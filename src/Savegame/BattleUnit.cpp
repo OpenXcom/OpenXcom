@@ -1977,16 +1977,11 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
  */
 int BattleUnit::improveStat(int exp)
 {
-	double tier = 4.0;
-	if (exp <= 10)
-	{
-		tier = 3.0;
-		if (exp <= 5)
-		{
-			tier = exp > 2 ? 2.0 : 1.0;
-		}
-	}
-	return (int)(tier/2.0 + RNG::generate(0, (int)(tier)));
+	if      (exp > 10) return RNG::generate(2, 6);
+	else if (exp > 5)  return RNG::generate(1, 4);
+	else if (exp > 2)  return RNG::generate(1, 3);
+	else if (exp > 0)  return RNG::generate(0, 1);
+	else               return 0;
 }
 
 /**
