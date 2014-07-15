@@ -615,10 +615,11 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 		return;
 	}
 
-	BattleUnit               *unit       = _battleGame->getSelectedUnit();
-	std::vector<BattleItem*> *unitInv    = unit->getInventory();
-	Tile                     *groundTile = unit->getTile();
-	std::vector<BattleItem*> *groundInv  = groundTile->getInventory();
+	BattleUnit               *unit          = _battleGame->getSelectedUnit();
+	std::vector<BattleItem*> *unitInv       = unit->getInventory();
+	Tile                     *groundTile    = unit->getTile();
+	std::vector<BattleItem*> *groundInv     = groundTile->getInventory();
+	RuleInventory            *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
 
 	_clearInventory(_game, unitInv, groundTile);
 
@@ -672,6 +673,7 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 					(*groundItem)->setSlot(_game->getRuleset()->getInventory((*templateIt)->getSlot()));
 					(*groundItem)->setSlotX((*templateIt)->getSlotX());
 					(*groundItem)->setSlotY((*templateIt)->getSlotY());
+					(*groundItem)->setFuseTimer((*templateIt)->getFuseTimer());
 					unitInv->push_back(*groundItem);
 					groundInv->erase(groundItem);
 					found = true;
@@ -683,8 +685,6 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 			// the right weapon, unload the target weapon, load the right ammo, and use it
 			if (!found && matchedWeapon && (!needsAmmo || matchedAmmo))
 			{
-				RuleInventory *groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
-
 				// unload the existing ammo (if any) from the weapon
 				BattleItem *loadedAmmo = matchedWeapon->getAmmoItem();
 				if (loadedAmmo)
