@@ -53,9 +53,8 @@ namespace OpenXcom
 {
 
 static const int _templateBtnX = 288;
-static const int _createTemplateBtnY = 67;
-static const int _applyTemplateBtnY  = 90;
-static const int _clearInventoryBtnY  = 113;
+static const int _createTemplateBtnY = 90;
+static const int _applyTemplateBtnY  = 113;
 
 /**
  * Initializes all the elements in the Inventory screen.
@@ -99,7 +98,6 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_btnRank = new InteractiveSurface(26, 23, 0, 0);
 	_btnCreateTemplate = new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
 	_btnApplyTemplate = new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
-	_btnClearInventory = new InteractiveSurface(32, 22, _templateBtnX, _clearInventoryBtnY);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
 
@@ -125,7 +123,6 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	add(_btnRank);
 	add(_btnCreateTemplate);
 	add(_btnApplyTemplate);
-	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
 
@@ -212,15 +209,10 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 
 	_btnApplyTemplate->onMouseClick((ActionHandler)&InventoryState::btnApplyTemplateClick);
 	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, Options::keyInvApplyTemplate);
+	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::onClearInventory, Options::keyInvClear);
 	_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
 	_btnApplyTemplate->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
 	_btnApplyTemplate->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
-
-	_btnClearInventory->onMouseClick((ActionHandler)&InventoryState::btnClearInventoryClick);
-	_btnClearInventory->onKeyboardPress((ActionHandler)&InventoryState::btnClearInventoryClick, Options::keyInvClear);
-	_btnClearInventory->setTooltip("STR_CLEAR_INVENTORY");
-	_btnClearInventory->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
-	_btnClearInventory->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
 
 
 	// only use copy/paste buttons in setup (i.e. non-tu) mode
@@ -228,7 +220,6 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	{
 		_btnCreateTemplate->setVisible(false);
 		_btnApplyTemplate->setVisible(false);
-		_btnClearInventory->setVisible(false);
 	}
 	else
 	{
@@ -600,6 +591,7 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 
 	// give audio feedback
 	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+	_refreshMouse();
 }
 
 static void _clearInventory(Game *game, std::vector<BattleItem*> *unitInv, Tile *groundTile)
@@ -744,7 +736,7 @@ void InventoryState::_refreshMouse()
 	SDL_WarpMouse(x, y);
 }
 
-void InventoryState::btnClearInventoryClick(Action *action)
+void InventoryState::onClearInventory(Action *action)
 {
 	// don't accept clicks when moving items
 	if (_inv->getSelectedItem() != 0)
@@ -919,8 +911,6 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 {
 	if (isVisible)
 	{
-		_game->getResourcePack()->getSurface("InvClear")->blit(_btnClearInventory);
-
 		if (_curInventoryTemplate.empty())
 		{
 			// use "empty template" icons
@@ -938,7 +928,6 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 	{
 		_btnCreateTemplate->clear();
 		_btnApplyTemplate->clear();
-		_btnClearInventory->clear();
 	}
 }
 }
