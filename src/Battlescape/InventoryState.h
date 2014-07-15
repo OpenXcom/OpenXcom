@@ -45,7 +45,7 @@ private:
 	Surface *_bg, *_soldier;
 	Text *_txtName, *_txtItem, *_txtAmmo, *_txtWeight, *_txtTus, *_txtFAcc, *_txtReact, *_txtPSkill, *_txtPStr;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
-	InteractiveSurface *_btnCreateTemplate, *_btnApplyTemplate, *_btnClearInventory;
+	InteractiveSurface *_btnCreateTemplate, *_btnApplyTemplate;
 	Surface *_selAmmo;
 	Inventory *_inv;
 	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
@@ -80,8 +80,8 @@ public:
 	void btnCreateTemplateClick(Action *action);
 	/// Handler for clicking the Apply Template button.
 	void btnApplyTemplateClick(Action *action);
-	/// Handler for clicking the Clear Inventory button.
-	void btnClearInventoryClick(Action *action);
+	/// Handler for hitting the Clear Inventory hotkey.
+	void onClearInventory(Action *action);
 	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 	/// Handler for showing item info.
