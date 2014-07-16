@@ -474,6 +474,17 @@ void InventoryState::btnOkClick(Action *)
 				_battleGame->setSelectedUnit(inventoryTile->getUnit());
 			}
 		}
+
+		// initialize xcom units for battle
+		for (std::vector<BattleUnit*>::iterator j = _battleGame->getUnits()->begin(); j != _battleGame->getUnits()->end(); ++j)
+		{
+			if ((*j)->getOriginalFaction() != FACTION_PLAYER || (*j)->isOut())
+			{
+				continue;
+			}
+
+			(*j)->prepareNewTurn();
+		}
 	}
 }
 
