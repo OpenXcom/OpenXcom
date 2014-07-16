@@ -50,9 +50,20 @@ enum ScaleType
 	SCALE_ORIGINAL,
 	SCALE_15X,
 	SCALE_2X,
+	SCALE_25X,
+	SCALE_3X,
+	SCALE_35X,
+	SCALE_4X,
 	SCALE_SCREEN_DIV_3,
 	SCALE_SCREEN_DIV_2,
 	SCALE_SCREEN
+};
+
+enum ScalingMode
+{
+	SCALINGMODE_EXPAND,
+	SCALINGMODE_LETTERBOX,
+	SCALINGMODE_STRETCH
 };
 /**
  * Container for all the various global game options

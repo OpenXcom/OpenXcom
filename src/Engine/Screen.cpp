@@ -359,22 +359,23 @@ void Screen::resetDisplay(bool resetVideo)
 		clear();
 	}
 
+	double pixelRatioY = 1.0;
+	if (Options::nonSquarePixelRatio)
+	{
+		pixelRatioY = 1.2;
+	}
+
 	Options::displayWidth = getWidth();
 	Options::displayHeight = getHeight();
 	_scaleX = getWidth() / (double)_baseWidth;
-	_scaleY = getHeight() / (double)_baseHeight;
+	_scaleY = getHeight() / (double)_baseHeight / pixelRatioY;
 	_clear.x = 0;
 	_clear.y = 0;
 	_clear.w = getWidth();
 	_clear.h = getHeight();
 
-	double pixelRatioY = 1.0;
-	if (Options::nonSquarePixelRatio && !Options::allowResize)
-	{
-		pixelRatioY = 1.2;
-	}
 	bool cursorInBlackBands;
-	if (!Options::keepAspectRatio)
+	if (!(Options::scalingMode == SCALINGMODE_LETTERBOX))
 	{
 		cursorInBlackBands = false;
 	}
@@ -391,7 +392,7 @@ void Screen::resetDisplay(bool resetVideo)
 		cursorInBlackBands = Options::cursorInBlackBandsInBorderlessWindow;
 	}
 
-	if (_scaleX > _scaleY && Options::keepAspectRatio)
+	if (_scaleX > _scaleY && Options::scalingMode == SCALINGMODE_LETTERBOX)
 	{
 		int targetWidth = (int)floor(_scaleY * (double)_baseWidth);
 		_topBlackBand = _bottomBlackBand = 0;
@@ -413,7 +414,7 @@ void Screen::resetDisplay(bool resetVideo)
 			_cursorLeftBlackBand = 0;
 		}		
 	}
-	else if (_scaleY > _scaleX && Options::keepAspectRatio)
+	else if (_scaleY > _scaleX && Options::scalingMode == SCALINGMODE_LETTERBOX)
 	{
 		int targetHeight = (int)floor(_scaleX * (double)_baseHeight * pixelRatioY);
 		_topBlackBand = (getHeight() - targetHeight) / 2;
@@ -597,10 +598,23 @@ int Screen::getDY()
 void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
 {
 	double pixelRatioY = 1.0;
-
 	if (Options::nonSquarePixelRatio)
 	{
 		pixelRatioY = 1.2;
+	}
+
+	//Check if resolution changed
+	double currentDisplayWidth;
+	double currentDisplayHeight;
+	if (Options::newDisplayWidth != Options::displayWidth || Options::newDisplayHeight != Options::displayHeight)
+	{
+		currentDisplayWidth = Options::newDisplayWidth;
+		currentDisplayHeight = Options::newDisplayHeight;
+	}
+	else
+	{
+		currentDisplayWidth = Options::displayWidth;
+		currentDisplayHeight = Options::displayHeight;
 	}
 
 	type = selection;
@@ -614,23 +628,60 @@ void Screen::updateScale(int &type, int selection, int &width, int &height, bool
 		width = Screen::ORIGINAL_WIDTH * 2;
 		height = Screen::ORIGINAL_HEIGHT * 2;
 		break;
+	case SCALE_25X:
+		width = Screen::ORIGINAL_WIDTH * 2.5;
+		height = Screen::ORIGINAL_HEIGHT * 2.5;
+		break;
+	case SCALE_3X:
+		width = Screen::ORIGINAL_WIDTH * 3;
+		height = Screen::ORIGINAL_HEIGHT * 3;
+		break;
+	case SCALE_35X:
+		width = Screen::ORIGINAL_WIDTH * 3.5;
+		height = Screen::ORIGINAL_HEIGHT * 3.5;
+		break;
+	case SCALE_4X:
+		width = Screen::ORIGINAL_WIDTH * 4;
+		height = Screen::ORIGINAL_HEIGHT * 4;
+		break;
 	case SCALE_SCREEN_DIV_3:
-		width = Options::displayWidth / 3;
-		height = Options::displayHeight / pixelRatioY / 3;
+		width = currentDisplayWidth / 3;
+		height = currentDisplayHeight / pixelRatioY / 3;
 		break;
 	case SCALE_SCREEN_DIV_2:
-		width = Options::displayWidth / 2;
-		height = Options::displayHeight / pixelRatioY  / 2.0;
+		width = currentDisplayWidth / 2;
+		height = currentDisplayHeight / pixelRatioY / 2;
 		break;
 	case SCALE_SCREEN:
-		width = Options::displayWidth;
-		height = Options::displayHeight / pixelRatioY;
+		width = currentDisplayWidth;
+		height = currentDisplayHeight / pixelRatioY;
 		break;
 	case SCALE_ORIGINAL:
 	default:
 		width = Screen::ORIGINAL_WIDTH;
 		height = Screen::ORIGINAL_HEIGHT;
 		break;
+	}
+
+	// Calculate if expand  should be vertical or horizontal
+	double displayRatio = currentDisplayHeight / currentDisplayWidth;
+	double originalRatio = double(Screen::ORIGINAL_HEIGHT) * pixelRatioY / double(Screen::ORIGINAL_WIDTH);
+	if (Options::scalingMode == SCALINGMODE_EXPAND)
+	{
+		if (displayRatio < originalRatio)
+		{
+			width = double(height) / currentDisplayHeight * currentDisplayWidth * pixelRatioY;
+			// If width > display resolution, let there be less height instead (for better scaling)
+			if (width > currentDisplayWidth)
+			{
+				width = currentDisplayWidth;
+				height = height / pixelRatioY;
+			}
+		}
+		else if (displayRatio > originalRatio)
+		{
+			height = double(width) / currentDisplayWidth * currentDisplayHeight / pixelRatioY;
+		}
 	}
 
 	// don't go under minimum resolution... it's bad, mmkay?

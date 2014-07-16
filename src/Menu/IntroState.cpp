@@ -404,7 +404,14 @@ static void audioHandler()
 void IntroState::init()
 {
 	State::init();
-	Options::keepAspectRatio = _wasLetterBoxed;
+	if (_wasLetterBoxed)
+	{
+		Options::scalingMode = SCALINGMODE_LETTERBOX;
+	}
+	else
+	{
+		Options::scalingMode = SCALINGMODE_STRETCH;
+	}
 	if (CrossPlatform::fileExists(_introFile) && (CrossPlatform::fileExists(_introSoundFileDOS) || CrossPlatform::fileExists(_introSoundFileWin)))
 	{
 		audioSequence = new AudioSequence(_game->getResourcePack());
