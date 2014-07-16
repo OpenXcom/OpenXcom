@@ -235,13 +235,8 @@
 					"$(inherited)",
 					/usr/local/include,
 					/usr/local/include/sdl,
-					/opt/local/include/SDL,
-					/opt/local/include,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -279,13 +274,8 @@
 					"$(inherited)",
 					/usr/local/include,
 					/usr/local/include/sdl,
-					/opt/local/include/SDL,
-					/opt/local/include,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
