@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <algorithm>
+#include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
@@ -31,7 +32,10 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
@@ -55,13 +59,11 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _base(base), _craft(craft)
+CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _craft(craft), _base(base), _totalItems(0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	Craft *c = _base->getCrafts()->at(_craft);
 	bool craftHasACrew = c->getNumSoldiers() > 0;
-	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
+	bool isNewBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -77,8 +79,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -101,10 +102,10 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, Options::keyCancel);
 
 	_btnClear->setColor(Palette::blockOffset(15)+1);
-	_btnClear->setText(tr("STR_UNLOAD"));
+	_btnClear->setText(tr("STR_UNLOAD_CRAFT"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
 	_btnClear->setVisible(isNewBattle);
 
@@ -133,18 +134,17 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << tr("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
 	_txtCrew->setText(ss3.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
-	_lstEquipment->setColumns(3, 154, 85, 41);
+	_lstEquipment->setColumns(3, 156, 83, 41);
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
-	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstEquipment->onLeftArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowPress);
 	_lstEquipment->onLeftArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowRelease);
 	_lstEquipment->onLeftArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowClick);
@@ -157,10 +157,6 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		// CHEAP HACK TO HIDE HWP AMMO
-		if ((*i).substr(0, 8) == "STR_HWP_")
-			continue;
-
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		int cQty = 0;
 		if (rule->isFixed())
@@ -170,13 +166,14 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 		else
 		{
 			cQty = c->getItems()->getItem(*i);
+			_totalItems += cQty;
 		}
 		if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE &&
 			_game->getSavedGame()->isResearched(rule->getRequirements()) &&
 			(_base->getItems()->getItem(*i) > 0 || cQty > 0))
 		{
 			_items.push_back(*i);
-			std::wstringstream ss, ss2;
+			std::wostringstream ss, ss2;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				ss << _base->getItems()->getItem(*i);
@@ -236,14 +233,16 @@ CraftEquipmentState::~CraftEquipmentState()
 */
 void CraftEquipmentState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	State::init();
 
 	_game->getSavedGame()->setBattleGame(0);
 
 	Craft *c = _base->getCrafts()->at(_craft);
 	c->setInBattlescape(false);
+
+	// Restore system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
 
 /**
@@ -352,22 +351,20 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 		{
-			moveRightByValue(_changeValueByMouseWheel);
+			moveRightByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
+			action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 		{
-			moveLeftByValue(_changeValueByMouseWheel);
+			moveLeftByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -389,7 +386,7 @@ void CraftEquipmentState::updateQuantity()
 	{
 		cQty = c->getItems()->getItem(_items[_sel]);
 	}
-	std::wstringstream ss, ss2;
+	std::wostringstream ss, ss2;
 	if (_game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		ss << _base->getItems()->getItem(_items[_sel]);
@@ -493,11 +490,8 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	else
 	{
 		c->getItems()->removeItem(_items[_sel], change);
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
-		{
-			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
-		}
-		else
+		_totalItems -= change;
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
 		{
 			_base->getItems()->addItem(_items[_sel], change);
 		}
@@ -537,53 +531,50 @@ void CraftEquipmentState::moveRightByValue(int change)
 	// Do we need to convert item to vehicle?
 	if (item->isFixed())
 	{
+		int size = 4;
+		if (_game->getRuleset()->getUnit(item->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(item->getType())->getArmor())->getSize();
+			size *= size;
+		}
 		// Check if there's enough room
-		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
+		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / size);
 		if (room > 0)
 		{
 			change = std::min(room, change);
 			if(!item->getCompatibleAmmo()->empty())
 			{
-				// We want to redistribute all the available ammo among the vehicles,
-				// so first we note the total number of vehicles we want in the craft
-				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
-				int newVehiclesCount = oldVehiclesCount + change;
-				// ...and we move back all of this vehicle-type to the base.
-				if (0 < oldVehiclesCount) moveLeftByValue(INT_MAX);
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-				int canBeAdded = std::min(newVehiclesCount, baqty);
+				int ammoPerVehicle = ammo->getClipSize();
+				int baseQty = _base->getItems()->getItem(ammo->getType()) / ammoPerVehicle;
+				if (_game->getSavedGame()->getMonthsPassed() == -1)
+					baseQty = 1;
+				int canBeAdded = std::min(change, baseQty);
 				if (canBeAdded > 0)
 				{
-					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
-					int remainder = 0;
-					if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
-					int newAmmo;
 					for (int i=0; i < canBeAdded; ++i)
 					{
-						newAmmo = newAmmoPerVehicle;
-						if (i<remainder) ++newAmmo;
-						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
-							_base->getItems()->removeItem(ammo->getType(), newAmmo);
+							_base->getItems()->removeItem(ammo->getType(), ammoPerVehicle);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
+						c->getVehicles()->push_back(new Vehicle(item, ammoPerVehicle, size));
 					}
 				}
-				if (oldVehiclesCount >= canBeAdded)
+				else
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-					_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
 			}
 			else
 				for (int i=0; i < change; ++i)
 				{
-					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize()));
+					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 					{
 						_base->getItems()->removeItem(_items[_sel]);
@@ -593,12 +584,16 @@ void CraftEquipmentState::moveRightByValue(int change)
 	}
 	else
 	{
-		c->getItems()->addItem(_items[_sel],change);
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
+		if (c->getRules()->getMaxItems() > 0 && _totalItems + change > c->getRules()->getMaxItems())
 		{
-				Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
+			_timerRight->stop();
+			LocalizedText msg(tr("STR_NO_MORE_EQUIPMENT_ALLOWED", c->getRules()->getMaxItems()));
+			_game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+			change = c->getRules()->getMaxItems() - _totalItems;
 		}
-		else
+		c->getItems()->addItem(_items[_sel],change);
+		_totalItems += change;
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
 		{
 			_base->getItems()->removeItem(_items[_sel],change);
 		}
@@ -627,15 +622,18 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 	Craft *craft = _base->getCrafts()->at(_craft);
 	if (craft->getNumSoldiers() != 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.runInventory(craft);
 
-		_game->pushState(new InventoryState(_game, false, 0));
+		// Fix system colors
+		_game->getCursor()->setColor(Palette::blockOffset(9));
+		_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+
+		_game->getScreen()->clear();
+		_game->pushState(new InventoryState(false, 0));
 	}
 }
 

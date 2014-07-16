@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,12 +51,11 @@ private:
 	RuleResearch * _rule;
 	void buildUi ();
 	Timer *_timerMore, *_timerLess;
-	InteractiveSurface *_surface;
-	int _changeValueByMouseWheel;
+	InteractiveSurface *_surfaceScientists;
 public:
 	/// Creates the ResearchProject state.
-	ResearchInfoState(Game *game, Base *base, RuleResearch * rule);
-	ResearchInfoState(Game *game, Base *base, ResearchProject * project);
+	ResearchInfoState(Base *base, RuleResearch * rule);
+	ResearchInfoState(Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

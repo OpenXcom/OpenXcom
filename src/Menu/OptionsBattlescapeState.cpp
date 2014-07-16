@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,12 +23,13 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/ToggleTextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Interface/Slider.h"
+#include "../Interface/ComboBox.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Menu/LoadState.h"
-#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
@@ -38,296 +39,180 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin) : OptionsBaseState(origin)
 {
-	_screen = false;
+	setCategory(_btnBattlescape);
 
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 17, 0, 10);
+	_txtEdgeScroll = new Text(114, 9, 94, 8);
+	_cbxEdgeScroll = new ComboBox(this, 104, 16, 94, 18);
 
-	_txtScrollSpeed = new Text(130, 9, 16, 32);
-	_btnScrollSpeed1 = new TextButton(22, 14, 16, 42);
-	_btnScrollSpeed2 = new TextButton(22, 18, 40, 42);
-	_btnScrollSpeed3 = new TextButton(22, 22, 64, 42);
-	_btnScrollSpeed4 = new TextButton(22, 26, 88, 42);
-	_btnScrollSpeed5 = new TextButton(22, 30, 112, 42);
+	_txtDragScroll = new Text(114, 9, 206, 8);
+	_cbxDragScroll = new ComboBox(this, 104, 16, 206, 18);
 
-	_txtScrollType = new Text(160, 9, 150, 32);
-	_txtTriggerScroll = new Text(130, 9, 182, 44);
-	_txtAutoScroll = new Text(130, 9, 182, 58);
-	_txtDragScroll = new Text(130, 9, 182, 72);
-	_btnScrollType1 = new TextButton(30, 12, 150, 42);
-	_btnScrollType2 = new TextButton(30, 12, 150, 56);
-	_btnScrollType3 = new TextButton(30, 12, 150, 70);
+	_txtScrollSpeed = new Text(114, 9, 94, 40);
+	_slrScrollSpeed = new Slider(104, 16, 94, 50);
 
-	_txtFireSpeed = new Text(200, 9, 16, 84);
-	_btnFireSpeed1 = new TextButton(22, 12, 16, 94);
-	_btnFireSpeed2 = new TextButton(28, 12, 40, 94);
-	_btnFireSpeed3 = new TextButton(36, 12, 70, 94);
-	_btnFireSpeed4 = new TextButton(45, 12, 108, 94);
-	_btnFireSpeed5 = new TextButton(56, 12, 155, 94);
-	_btnFireSpeed6 = new TextButton(69, 12, 213, 94);
+	_txtFireSpeed = new Text(114, 9, 206, 40);
+	_slrFireSpeed = new Slider(104, 16, 206, 50);
 
-	_txtXcomSpeed = new Text(200, 9, 16, 114);
-	_btnXcomSpeed1 = new TextButton(22, 12, 16, 124);
-	_btnXcomSpeed2 = new TextButton(28, 12, 40, 124);
-	_btnXcomSpeed3 = new TextButton(36, 12, 70, 124);
-	_btnXcomSpeed4 = new TextButton(45, 12, 108, 124);
-	_btnXcomSpeed5 = new TextButton(56, 12, 155, 124);
-	_btnXcomSpeed6 = new TextButton(69, 12, 213, 124);
+	_txtXcomSpeed = new Text(114, 9, 94, 72);
+	_slrXcomSpeed = new Slider(104, 16, 94, 82);
 
-	_txtAlienSpeed = new Text(200, 9, 16, 144);
-	_btnAlienSpeed1 = new TextButton(22, 12, 16, 154);
-	_btnAlienSpeed2 = new TextButton(28, 12, 40, 154);
-	_btnAlienSpeed3 = new TextButton(36, 12, 70, 154);
-	_btnAlienSpeed4 = new TextButton(45, 12, 108, 154);
-	_btnAlienSpeed5 = new TextButton(56, 12, 155, 154);
-	_btnAlienSpeed6 = new TextButton(69, 12, 213, 154);
+	_txtAlienSpeed = new Text(114, 9, 206, 72);
+	_slrAlienSpeed = new Slider(104, 16, 206, 82);
 
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
+	_txtPathPreview = new Text(114, 9, 94, 100);
+	_btnArrows = new ToggleTextButton(104, 16, 94, 110);
+	_btnTuCost = new ToggleTextButton(104, 16, 94, 128);
 
-	switch (Options::getInt("battleScrollSpeed"))
-	{
-	case 4: _scrollSpeed = _btnScrollSpeed1; break;
-	case 8: _scrollSpeed = _btnScrollSpeed2; break;
-	case 12: _scrollSpeed = _btnScrollSpeed3; break;
-	case 16: _scrollSpeed = _btnScrollSpeed4; break;
-	case 20: _scrollSpeed = _btnScrollSpeed5; break;
-	default: _scrollSpeed = 0; break;
-	}
-	switch (Options::getInt("battleScrollType"))
-	{
-	case SCROLL_TRIGGER: _scrollType = _btnScrollType1; break;
-	case SCROLL_AUTO: _scrollType = _btnScrollType2; break;
-	case SCROLL_DRAG: _scrollType = _btnScrollType3; break;
-	default: _scrollSpeed = 0; break;
-	}
-	switch (Options::getInt("battleFireSpeed"))
-	{
-	case 2: _fireSpeed = _btnFireSpeed1; break;
-	case 4: _fireSpeed = _btnFireSpeed2; break;
-	case 6: _fireSpeed = _btnFireSpeed3; break;
-	case 8: _fireSpeed = _btnFireSpeed4; break;
-	case 10: _fireSpeed = _btnFireSpeed5; break;
-	case 12: _fireSpeed = _btnFireSpeed6; break;
-	default: _fireSpeed = 0; break;
-	}
-	switch (Options::getInt("battleXcomSpeed"))
-	{
-	case 40: _xcomSpeed = _btnXcomSpeed1; break;
-	case 30: _xcomSpeed = _btnXcomSpeed2; break;
-	case 20: _xcomSpeed = _btnXcomSpeed3; break;
-	case 10: _xcomSpeed = _btnXcomSpeed4; break;
-	case 5: _xcomSpeed = _btnXcomSpeed5; break;
-	case 1: _xcomSpeed = _btnXcomSpeed6; break;
-	default: _xcomSpeed = 0; break;
-	}
-	switch (Options::getInt("battleAlienSpeed"))
-	{
-	case 40: _alienSpeed = _btnAlienSpeed1; break;
-	case 30: _alienSpeed = _btnAlienSpeed2; break;
-	case 20: _alienSpeed = _btnAlienSpeed3; break;
-	case 10: _alienSpeed = _btnAlienSpeed4; break;
-	case 5: _alienSpeed = _btnAlienSpeed5; break;
-	case 1: _alienSpeed = _btnAlienSpeed6; break;
-	default: _alienSpeed = 0; break;
-	}
+	_txtOptions = new Text(114, 9, 206, 100);
+	_btnTooltips = new ToggleTextButton(104, 16, 206, 110);
+	_btnDeaths = new ToggleTextButton(104, 16, 206, 128);
 
-	add(_window);
-	add(_txtTitle);
+	add(_txtEdgeScroll);
+	add(_txtDragScroll);
 
 	add(_txtScrollSpeed);
-	add(_btnScrollSpeed1);
-	add(_btnScrollSpeed2);
-	add(_btnScrollSpeed3);
-	add(_btnScrollSpeed4);
-	add(_btnScrollSpeed5);
-
-	add(_txtScrollType);
-	add(_txtTriggerScroll);
-	add(_txtAutoScroll);
-	add(_txtDragScroll);
-	add(_btnScrollType1);
-	add(_btnScrollType2);
-	add(_btnScrollType3);
+	add(_slrScrollSpeed);
 
 	add(_txtFireSpeed);
-	add(_btnFireSpeed1);
-	add(_btnFireSpeed2);
-	add(_btnFireSpeed3);
-	add(_btnFireSpeed4);
-	add(_btnFireSpeed5);
-	add(_btnFireSpeed6);
+	add(_slrFireSpeed);
 
 	add(_txtXcomSpeed);
-	add(_btnXcomSpeed1);
-	add(_btnXcomSpeed2);
-	add(_btnXcomSpeed3);
-	add(_btnXcomSpeed4);
-	add(_btnXcomSpeed5);
-	add(_btnXcomSpeed6);
+	add(_slrXcomSpeed);
 
 	add(_txtAlienSpeed);
-	add(_btnAlienSpeed1);
-	add(_btnAlienSpeed2);
-	add(_btnAlienSpeed3);
-	add(_btnAlienSpeed4);
-	add(_btnAlienSpeed5);
-	add(_btnAlienSpeed6);
+	add(_slrAlienSpeed);
 
-	add(_btnOk);
-	add(_btnCancel);
+	add(_txtPathPreview);
+	add(_btnArrows);
+	add(_btnTuCost);
+
+	add(_txtOptions);
+	add(_btnTooltips);
+	add(_btnDeaths);
+
+	add(_cbxEdgeScroll);
+	add(_cbxDragScroll);
 
 	centerAllSurfaces();
 
-	// Set up objects
-	_window->setColor(Palette::blockOffset(8) + 5);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	// Set up objects	
+	_txtEdgeScroll->setColor(Palette::blockOffset(8)+10);
+	_txtEdgeScroll->setText(tr("STR_EDGE_SCROLL"));
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_BATTLESCAPE"));
+	std::vector<std::string> edgeScrolls;
+	edgeScrolls.push_back("STR_DISABLED");
+	edgeScrolls.push_back("STR_TRIGGER_SCROLL");
+	edgeScrolls.push_back("STR_AUTO_SCROLL");
 
-	_txtScrollSpeed->setColor(Palette::blockOffset(8) + 10);
+	_cbxEdgeScroll->setColor(Palette::blockOffset(15)-1);
+	_cbxEdgeScroll->setOptions(edgeScrolls);
+	_cbxEdgeScroll->setSelected(Options::battleEdgeScroll);
+	_cbxEdgeScroll->onChange((ActionHandler)&OptionsBattlescapeState::cbxEdgeScrollChange);
+	_cbxEdgeScroll->setTooltip("STR_EDGE_SCROLL_DESC");
+	_cbxEdgeScroll->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_cbxEdgeScroll->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
+
+	_txtDragScroll->setColor(Palette::blockOffset(8)+10);
+	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
+	
+	std::vector<std::string> dragScrolls;
+	dragScrolls.push_back("STR_DISABLED");
+	dragScrolls.push_back("STR_LEFT_MOUSE_BUTTON");
+	dragScrolls.push_back("STR_MIDDLE_MOUSE_BUTTON");
+	dragScrolls.push_back("STR_RIGHT_MOUSE_BUTTON");
+
+	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
+	_cbxDragScroll->setOptions(dragScrolls);
+	_cbxDragScroll->setSelected(Options::battleDragScrollButton);
+	_cbxDragScroll->onChange((ActionHandler)&OptionsBattlescapeState::cbxDragScrollChange);
+	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
+	_cbxDragScroll->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_cbxDragScroll->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
+
+	_txtScrollSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
-	_btnScrollSpeed1->setColor(Palette::blockOffset(15)-1);
-	_btnScrollSpeed1->setText(L"1");
-	_btnScrollSpeed1->setGroup(&_scrollSpeed);
+	_slrScrollSpeed->setColor(Palette::blockOffset(15)-1);
+	_slrScrollSpeed->setRange(2, 20);
+	_slrScrollSpeed->setValue(Options::battleScrollSpeed);
+	_slrScrollSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrScrollSpeedChange);
+	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_BATTLE_DESC");
+	_slrScrollSpeed->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_slrScrollSpeed->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnScrollSpeed2->setColor(Palette::blockOffset(15)-1);
-	_btnScrollSpeed2->setText(L"2");
-	_btnScrollSpeed2->setGroup(&_scrollSpeed);
-
-	_btnScrollSpeed3->setColor(Palette::blockOffset(15)-1);
-	_btnScrollSpeed3->setText(L"3");
-	_btnScrollSpeed3->setGroup(&_scrollSpeed);
-
-	_btnScrollSpeed4->setColor(Palette::blockOffset(15)-1);
-	_btnScrollSpeed4->setText(L"4");
-	_btnScrollSpeed4->setGroup(&_scrollSpeed);
-
-	_btnScrollSpeed5->setColor(Palette::blockOffset(15)-1);
-	_btnScrollSpeed5->setText(L"5");
-	_btnScrollSpeed5->setGroup(&_scrollSpeed);
-
-	_txtScrollType->setColor(Palette::blockOffset(8) + 10);
-	_txtScrollType->setText(tr("STR_SCROLL_TYPE"));
-
-	_txtTriggerScroll->setColor(Palette::blockOffset(15) - 1);
-	_txtTriggerScroll->setText(tr("STR_TRIGGER_SCROLL"));
-
-	_txtAutoScroll->setColor(Palette::blockOffset(15) - 1);
-	_txtAutoScroll->setText(tr("STR_AUTO_SCROLL"));
-
-	_txtDragScroll->setColor(Palette::blockOffset(15) - 1);
-	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
-
-	_btnScrollType1->setColor(Palette::blockOffset(15)-1);
-	_btnScrollType1->setText(L"1");
-	_btnScrollType1->setGroup(&_scrollType);
-
-	_btnScrollType2->setColor(Palette::blockOffset(15)-1);
-	_btnScrollType2->setText(L"2");
-	_btnScrollType2->setGroup(&_scrollType);
-
-	_btnScrollType3->setColor(Palette::blockOffset(15)-1);
-	_btnScrollType3->setText(L"3");
-	_btnScrollType3->setGroup(&_scrollType);
-
-	_txtFireSpeed->setColor(Palette::blockOffset(8) + 10);
+	_txtFireSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtFireSpeed->setText(tr("STR_FIRE_SPEED"));
 
-	_btnFireSpeed1->setColor(Palette::blockOffset(15)-1);
-	_btnFireSpeed1->setText(L"1");
-	_btnFireSpeed1->setGroup(&_fireSpeed);
+	_slrFireSpeed->setColor(Palette::blockOffset(15)-1);
+	_slrFireSpeed->setRange(1, 20);
+	_slrFireSpeed->setValue(Options::battleFireSpeed);
+	_slrFireSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrFireSpeedChange);
+	_slrFireSpeed->setTooltip("STR_FIRE_SPEED_DESC");
+	_slrFireSpeed->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_slrFireSpeed->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnFireSpeed2->setColor(Palette::blockOffset(15)-1);
-	_btnFireSpeed2->setText(L"2");
-	_btnFireSpeed2->setGroup(&_fireSpeed);
+	_txtXcomSpeed->setColor(Palette::blockOffset(8)+10);
+	_txtXcomSpeed->setText(tr("STR_PLAYER_MOVEMENT_SPEED"));
 
-	_btnFireSpeed3->setColor(Palette::blockOffset(15)-1);
-	_btnFireSpeed3->setText(L"3");
-	_btnFireSpeed3->setGroup(&_fireSpeed);
+	_slrXcomSpeed->setColor(Palette::blockOffset(15)-1);
+	_slrXcomSpeed->setRange(40, 1);
+	_slrXcomSpeed->setValue(Options::battleXcomSpeed);
+	_slrXcomSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrXcomSpeedChange);
+	_slrXcomSpeed->setTooltip("STR_PLAYER_MOVEMENT_SPEED_DESC");
+	_slrXcomSpeed->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_slrXcomSpeed->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnFireSpeed4->setColor(Palette::blockOffset(15)-1);
-	_btnFireSpeed4->setText(L"4");
-	_btnFireSpeed4->setGroup(&_fireSpeed);
+	_txtAlienSpeed->setColor(Palette::blockOffset(8)+10);
+	_txtAlienSpeed->setText(tr("STR_COMPUTER_MOVEMENT_SPEED"));
 
-	_btnFireSpeed5->setColor(Palette::blockOffset(15)-1);
-	_btnFireSpeed5->setText(L"5");
-	_btnFireSpeed5->setGroup(&_fireSpeed);
+	_slrAlienSpeed->setColor(Palette::blockOffset(15)-1);
+	_slrAlienSpeed->setRange(40, 1);
+	_slrAlienSpeed->setValue(Options::battleAlienSpeed);
+	_slrAlienSpeed->onChange((ActionHandler)&OptionsBattlescapeState::slrAlienSpeedChange);
+	_slrAlienSpeed->setTooltip("STR_COMPUTER_MOVEMENT_SPEED_DESC");
+	_slrAlienSpeed->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_slrAlienSpeed->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnFireSpeed6->setColor(Palette::blockOffset(15)-1);
-	_btnFireSpeed6->setText(L"6");
-	_btnFireSpeed6->setGroup(&_fireSpeed);
+	_txtPathPreview->setColor(Palette::blockOffset(8)+10);
+	_txtPathPreview->setText(tr("STR_PATH_PREVIEW"));
 
-	_txtXcomSpeed->setColor(Palette::blockOffset(8) + 10);
-	_txtXcomSpeed->setText(tr("STR_XCOM_MOVEMENT_SPEED"));
+	_btnArrows->setColor(Palette::blockOffset(15)-1);
+	_btnArrows->setText(tr("STR_PATH_ARROWS"));
+	_btnArrows->setPressed((Options::battleNewPreviewPath & PATH_ARROWS) != 0);
+	_btnArrows->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnPathPreviewClick);
+	_btnArrows->setTooltip("STR_PATH_ARROWS_DESC");
+	_btnArrows->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_btnArrows->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnXcomSpeed1->setColor(Palette::blockOffset(15)-1);
-	_btnXcomSpeed1->setText(L"1");
-	_btnXcomSpeed1->setGroup(&_xcomSpeed);
+	_btnTuCost->setColor(Palette::blockOffset(15)-1);
+	_btnTuCost->setText(tr("STR_PATH_TIME_UNIT_COST"));
+	_btnTuCost->setPressed((Options::battleNewPreviewPath & PATH_TU_COST) != 0);
+	_btnTuCost->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnPathPreviewClick);
+	_btnTuCost->setTooltip("STR_PATH_TIME_UNIT_COST_DESC");
+	_btnTuCost->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_btnTuCost->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnXcomSpeed2->setColor(Palette::blockOffset(15)-1);
-	_btnXcomSpeed2->setText(L"2");
-	_btnXcomSpeed2->setGroup(&_xcomSpeed);
+	_txtOptions->setColor(Palette::blockOffset(8)+10);
+	_txtOptions->setText(tr("STR_USER_INTERFACE_OPTIONS"));
+	
+	_btnTooltips->setColor(Palette::blockOffset(15)-1);
+	_btnTooltips->setText(tr("STR_TOOLTIPS"));
+	_btnTooltips->setPressed(Options::battleTooltips);
+	_btnTooltips->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnTooltipsClick);
+	_btnTooltips->setTooltip("STR_TOOLTIPS_DESC");
+	_btnTooltips->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_btnTooltips->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
-	_btnXcomSpeed3->setColor(Palette::blockOffset(15)-1);
-	_btnXcomSpeed3->setText(L"3");
-	_btnXcomSpeed3->setGroup(&_xcomSpeed);
-
-	_btnXcomSpeed4->setColor(Palette::blockOffset(15)-1);
-	_btnXcomSpeed4->setText(L"4");
-	_btnXcomSpeed4->setGroup(&_xcomSpeed);
-
-	_btnXcomSpeed5->setColor(Palette::blockOffset(15)-1);
-	_btnXcomSpeed5->setText(L"5");
-	_btnXcomSpeed5->setGroup(&_xcomSpeed);
-
-	_btnXcomSpeed6->setColor(Palette::blockOffset(15)-1);
-	_btnXcomSpeed6->setText(L"6");
-	_btnXcomSpeed6->setGroup(&_xcomSpeed);
-
-	_txtAlienSpeed->setColor(Palette::blockOffset(8) + 10);
-	_txtAlienSpeed->setText(tr("STR_ALIEN_MOVEMENT_SPEED"));
-
-	_btnAlienSpeed1->setColor(Palette::blockOffset(15)-1);
-	_btnAlienSpeed1->setText(L"1");
-	_btnAlienSpeed1->setGroup(&_alienSpeed);
-
-	_btnAlienSpeed2->setColor(Palette::blockOffset(15)-1);
-	_btnAlienSpeed2->setText(L"2");
-	_btnAlienSpeed2->setGroup(&_alienSpeed);
-
-	_btnAlienSpeed3->setColor(Palette::blockOffset(15)-1);
-	_btnAlienSpeed3->setText(L"3");
-	_btnAlienSpeed3->setGroup(&_alienSpeed);
-
-	_btnAlienSpeed4->setColor(Palette::blockOffset(15)-1);
-	_btnAlienSpeed4->setText(L"4");
-	_btnAlienSpeed4->setGroup(&_alienSpeed);
-
-	_btnAlienSpeed5->setColor(Palette::blockOffset(15)-1);
-	_btnAlienSpeed5->setText(L"5");
-	_btnAlienSpeed5->setGroup(&_alienSpeed);
-
-	_btnAlienSpeed6->setColor(Palette::blockOffset(15)-1);
-	_btnAlienSpeed6->setText(L"6");
-	_btnAlienSpeed6->setGroup(&_alienSpeed);
-
-	_btnOk->setColor(Palette::blockOffset(8) + 5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&OptionsBattlescapeState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-
-	_btnCancel->setColor(Palette::blockOffset(8) + 5);
-	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler) &OptionsBattlescapeState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler) &OptionsBattlescapeState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
+	_btnDeaths->setColor(Palette::blockOffset(15)-1);
+	_btnDeaths->setText(tr("STR_DEATH_NOTIFICATIONS"));
+	_btnDeaths->setPressed(Options::battleNotifyDeath);
+	_btnDeaths->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnDeathsClick);
+	_btnDeaths->setTooltip("STR_DEATH_NOTIFICATIONS_DESC");
+	_btnDeaths->onMouseIn((ActionHandler)&OptionsBattlescapeState::txtTooltipIn);
+	_btnDeaths->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 }
 
 /**
@@ -339,78 +224,94 @@ OptionsBattlescapeState::~OptionsBattlescapeState()
 }
 
 /**
- * Saves options and returns to the previous screen.
+ * Changes the Edge Scroll option.
  * @param action Pointer to an action.
  */
-void OptionsBattlescapeState::btnOkClick(Action *)
+void OptionsBattlescapeState::cbxEdgeScrollChange(Action *)
 {
-	if (_scrollSpeed == _btnScrollSpeed1)
-		Options::setInt("battleScrollSpeed", 4);
-	else if (_scrollSpeed == _btnScrollSpeed2)
-		Options::setInt("battleScrollSpeed", 8);
-	else if (_scrollSpeed == _btnScrollSpeed3)
-		Options::setInt("battleScrollSpeed", 12);
-	else if (_scrollSpeed == _btnScrollSpeed4)
-		Options::setInt("battleScrollSpeed", 16);
-	else if (_scrollSpeed == _btnScrollSpeed5)
-		Options::setInt("battleScrollSpeed", 20);
-
-	if (_scrollType == _btnScrollType1)
-		Options::setInt("battleScrollType", SCROLL_TRIGGER);
-	else if (_scrollType == _btnScrollType2)
-		Options::setInt("battleScrollType", SCROLL_AUTO);
-	else if (_scrollType == _btnScrollType3)
-		Options::setInt("battleScrollType", SCROLL_DRAG);
-
-	if (_fireSpeed == _btnFireSpeed1)
-		Options::setInt("battleFireSpeed", 2);
-	else if (_fireSpeed == _btnFireSpeed2)
-		Options::setInt("battleFireSpeed", 4);
-	else if (_fireSpeed == _btnFireSpeed3)
-		Options::setInt("battleFireSpeed", 6);
-	else if (_fireSpeed == _btnFireSpeed4)
-		Options::setInt("battleFireSpeed", 8);
-	else if (_fireSpeed == _btnFireSpeed5)
-		Options::setInt("battleFireSpeed", 10);
-	else if (_fireSpeed == _btnFireSpeed6)
-		Options::setInt("battleFireSpeed", 12);
-
-	if (_xcomSpeed == _btnXcomSpeed1)
-		Options::setInt("battleXcomSpeed", 40);
-	else if (_xcomSpeed == _btnXcomSpeed2)
-		Options::setInt("battleXcomSpeed", 30);
-	else if (_xcomSpeed == _btnXcomSpeed3)
-		Options::setInt("battleXcomSpeed", 20);
-	else if (_xcomSpeed == _btnXcomSpeed4)
-		Options::setInt("battleXcomSpeed", 10);
-	else if (_xcomSpeed == _btnXcomSpeed5)
-		Options::setInt("battleXcomSpeed", 5);
-	else if (_xcomSpeed == _btnXcomSpeed6)
-		Options::setInt("battleXcomSpeed", 1);
-
-	if (_alienSpeed == _btnAlienSpeed1)
-		Options::setInt("battleAlienSpeed", 40);
-	else if (_alienSpeed == _btnAlienSpeed2)
-		Options::setInt("battleAlienSpeed", 30);
-	else if (_alienSpeed == _btnAlienSpeed3)
-		Options::setInt("battleAlienSpeed", 20);
-	else if (_alienSpeed == _btnAlienSpeed4)
-		Options::setInt("battleAlienSpeed", 10);
-	else if (_alienSpeed == _btnAlienSpeed5)
-		Options::setInt("battleAlienSpeed", 5);
-	else if (_alienSpeed == _btnAlienSpeed6)
-		Options::setInt("battleAlienSpeed", 1);
-
-	_game->popState();
+	Options::battleEdgeScroll = (ScrollType)_cbxEdgeScroll->getSelected();
 }
 
 /**
-* Returns to the previous screen.
-* @param action Pointer to an action.
-*/
-void OptionsBattlescapeState::btnCancelClick(Action *)
+ * Changes the Drag Scroll option.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::cbxDragScrollChange(Action *)
 {
-	_game->popState();
+	Options::battleDragScrollButton = _cbxDragScroll->getSelected();
 }
+
+/**
+ * Updates the scroll speed.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::slrScrollSpeedChange(Action *)
+{
+	Options::battleScrollSpeed = _slrScrollSpeed->getValue();
+}
+
+/**
+ * Updates the fire speed.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::slrFireSpeedChange(Action *)
+{
+	Options::battleFireSpeed = _slrFireSpeed->getValue();
+}
+
+/**
+ * Updates the X-COM movement speed.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::slrXcomSpeedChange(Action *)
+{
+	Options::battleXcomSpeed = _slrXcomSpeed->getValue();
+}
+
+/**
+ * Updates the alien movement speed.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::slrAlienSpeedChange(Action *)
+{
+	Options::battleAlienSpeed = _slrAlienSpeed->getValue();
+}
+
+/**
+ * Updates the path preview options.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::btnPathPreviewClick(Action *)
+{
+	int mode = PATH_NONE;
+	if (_btnArrows->getPressed())
+	{
+		mode |= PATH_ARROWS;
+	}
+	if (_btnTuCost->getPressed())
+	{
+		mode |= PATH_TU_COST;
+	}
+	Options::battleNewPreviewPath = (PathPreview)mode;
+}
+
+/**
+ * Updates the Tooltips option.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::btnTooltipsClick(Action *)
+{
+	Options::battleTooltips = _btnTooltips->getPressed();
+}
+
+/**
+ * Updates the Death Notifications option.
+ * @param action Pointer to an action.
+ */
+void OptionsBattlescapeState::btnDeathsClick(Action *)
+{
+	Options::battleNotifyDeath = _btnDeaths->getPressed();
+}
+
 
 }

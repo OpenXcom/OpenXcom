@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,15 +49,13 @@ private:
 	bool _first;
 public:
 	/// Creates the Base Name state.
-	BaseNameState(Game *game, Base *base, Globe *globe, bool first);
+	BaseNameState(Base *base, Globe *globe, bool first);
 	/// Cleans up the Base Name state.
 	~BaseNameState();
-	/// Names the base.
-	void nameBase();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for pressing a key on the Name edit.
-	void edtNameKeyPress(Action *action);
+	/// Handler for changing text on the Name edit.
+	void edtNameChange(Action *action);
 };
 
 }

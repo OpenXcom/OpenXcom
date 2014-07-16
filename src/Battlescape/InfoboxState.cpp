@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,6 +24,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/Frame.h"
 #include "../Engine/Action.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -33,13 +35,16 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param msg Message string.
  */
-InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
+InfoboxState::InfoboxState(const std::wstring &msg)
 {
 	_screen = false;
 
 	// Create objects
 	_frame = new Frame(261, 122, 34, 10);
 	_text = new Text(251, 112, 39, 15);
+
+	// Set palette
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_frame);
 	add(_text);

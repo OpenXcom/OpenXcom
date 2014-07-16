@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -72,7 +72,7 @@ class BattlescapeGame
 private:
 	SavedBattleGame *_save;
 	BattlescapeState *_parentState;
-	std::list<BattleState*> _states;
+	std::list<BattleState*> _states, _deleted;
 	BattleActionType _tuReserved, _playerTUReserved;
 	bool _playerPanicHandled;
 	int _AIActionCounter;
@@ -187,6 +187,7 @@ public:
 	bool getKneelReserved();
 	/// Checks for and triggers proximity grenades.
 	bool checkForProximityGrenades(BattleUnit *unit);
+	void cleanupDeleted();
 };
 
 }

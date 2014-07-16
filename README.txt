@@ -1,10 +1,11 @@
-#################
-# OpenXcom v0.9 #
-#################
+################
+# OpenXcom 1.0 #
+################
 
 OpenXcom is an open-source clone of the popular
 UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
 Microprose, licensed under the GPL and written in C++ / SDL.
+
 See more info at the website: http://openxcom.org
 And the wiki: http://ufopaedia.org/index.php?title=OpenXcom
 
@@ -60,8 +61,6 @@ OpenXcom requires the following libraries:
 http://www.libsdl.org
 - SDL_mixer (libsdl-mixer1.2):
 http://www.libsdl.org/projects/SDL_mixer/
-- TiMidity++ (timidity):
-http://timidity.sourceforge.net/
 - SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later:
 http://www.ferzkopp.net/joomla/content/view/19/14/
 - SDL_image (libsdl-image1.2)
@@ -87,7 +86,7 @@ Or if those variables aren't available:
 Choose whichever you prefer.
 
 
-2. Customization
+2. Configuration
 =================
 
 OpenXcom has a variety of game settings and extras that can be
@@ -95,7 +94,7 @@ customized, both in-game and out-game. These options are global
 and affect any old or new savegame.
 
 For more details please check the wiki:
-http://ufopaedia.org/index.php?title=Customizing_(OpenXcom)
+http://ufopaedia.org/index.php?title=Options_(OpenXcom)
 
 2.1. User Folder
 -----------------
@@ -118,6 +117,7 @@ argument "-user <user path>" when running OpenXcom.
 ===============
 
 OpenXcom requires the following developer libraries:
+
 - SDL (libsdl1.2):
 http://www.libsdl.org
 - SDL_mixer (libsdl-mixer1.2):
@@ -130,8 +130,9 @@ http://www.libsdl.org/projects/SDL_image/
 http://code.google.com/p/yaml-cpp/
 
 The source code includes files for the following tools:
-- Microsoft Visual C++ 2010.
-- XCode (check the forum).
+
+- Microsoft Visual C++ 2010 or newer.
+- Xcode.
 - Makefile.
 - CMake.
 - Autotools.

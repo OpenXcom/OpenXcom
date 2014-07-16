@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,14 +37,18 @@
 namespace OpenXcom
 {
 
-ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game), _craft(craft)
+ConfirmCydoniaState::ConfirmCydoniaState(Craft *craft) : _craft(craft)
 {
 	_screen = false;
+
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
 	_btnYes = new TextButton(80, 20, 70, 142);
 	_btnNo = new TextButton(80, 20, 170, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
+
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 5);
 
 	add(_window);
 	add(_btnYes);
@@ -60,12 +64,12 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, Options::keyCancel);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
@@ -78,13 +82,6 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
  *
  */
 ConfirmCydoniaState::~ConfirmCydoniaState()
-{
-}
-
-/**
- *
- */
-void ConfirmCydoniaState::init()
 {
 }
 
@@ -106,7 +103,7 @@ void ConfirmCydoniaState::btnYesClick(Action *)
 	bgen.setWorldShade(15);
 	bgen.run();
 
-	_game->pushState(new BriefingState(_game, _craft));
+	_game->pushState(new BriefingState(_craft));
 
 }
 
@@ -116,7 +113,6 @@ void ConfirmCydoniaState::btnYesClick(Action *)
  */
 void ConfirmCydoniaState::btnNoClick(Action *)
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	_game->popState();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,6 +26,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Target.h"
 #include "../Engine/Options.h"
+#include "InterceptState.h"
 
 namespace OpenXcom
 {
@@ -34,22 +35,25 @@ namespace OpenXcom
  * Initializes all the elements in the Target Info window.
  * @param game Pointer to the core game.
  * @param target Pointer to the target to show info from.
+ * @param globe Pointer to the Geoscape globe.
  */
-TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _target(target)
+TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target), _globe(globe)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-	_btnOk = new TextButton(160, 16, 48, 135);
+	_btnIntercept = new TextButton(160, 12, 48, 124);
+	_btnOk = new TextButton(160, 12, 48, 140);
 	_txtTitle = new Text(182, 32, 37, 46);
 	_txtTargetted = new Text(182, 9, 37, 78);
 	_txtFollowers = new Text(182, 40, 37, 88);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
+	add(_btnIntercept);
 	add(_btnOk);
 	add(_txtTitle);
 	add(_txtTargetted);
@@ -61,11 +65,14 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
+	_btnIntercept->setColor(Palette::blockOffset(8)+5);
+	_btnIntercept->setText(tr("STR_INTERCEPT"));
+	_btnIntercept->onMouseClick((ActionHandler)&TargetInfoState::btnInterceptClick);
+
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
@@ -80,13 +87,12 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);
-	std::wstring s = L"";
+	std::wostringstream ss;
 	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
-		s += (*i)->getName(_game->getLanguage());
-		s += L'\n';
+		ss << (*i)->getName(_game->getLanguage()) << L'\n';
 	}
-	_txtFollowers->setText(s);
+	_txtFollowers->setText(ss.str());
 }
 
 /**
@@ -95,6 +101,15 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 TargetInfoState::~TargetInfoState()
 {
 
+}
+
+/**
+ * Picks a craft to intercept the UFO.
+ * @param action Pointer to an action.
+ */
+void TargetInfoState::btnInterceptClick(Action *)
+{
+	_game->pushState(new InterceptState(_globe, 0, _target));
 }
 
 /**

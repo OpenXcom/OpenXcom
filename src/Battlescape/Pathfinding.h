@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,13 +21,13 @@
 
 #include <vector>
 #include "Position.h"
+#include "PathfindingNode.h"
 #include "../Ruleset/MapData.h"
 
 namespace OpenXcom
 {
 
 class SavedBattleGame;
-class PathfindingNode;
 class Tile;
 class BattleUnit;
 
@@ -40,6 +40,11 @@ private:
 	SavedBattleGame *_save;
 	std::vector<PathfindingNode> _nodes;
 	int _size;
+	BattleUnit *_unit;
+	bool _pathPreviewed;
+	bool _strafeMove;
+	int _totalTUCost;
+	bool _modifierUsed;
 	MovementType _movementType;
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
@@ -53,14 +58,8 @@ private:
 	bool canFallDown(Tile *destinationTile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile *destinationTile, int size);
-	/// Determines the additional TU cost of going one step from start to destination if going through a closed UFO door.
-	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
-	BattleUnit *_unit;
-	bool _pathPreviewed;
-	bool _strafeMove;
-	int _totalTUCost;
-public:
 	std::vector<int> _path;
+public:
 	/// Determines whether the unit is going up a stairs.
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	/// Determines whether or not movement between starttile and endtile is possible in the direction.
@@ -103,6 +102,12 @@ public:
 	int getTotalTUCost() const { return _totalTUCost; }
 	/// Gets the path preview setting.
 	bool isPathPreviewed() const;
+	/// Gets the modifier setting.
+	bool isModifierUsed() const;
+	/// Gets a reference to the path.
+	const std::vector<int> &getPath();
+	/// Makes a copy to the path.
+	std::vector<int> copyPath() const;
 };
 
 }

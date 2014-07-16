@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ private:
 	TextList *_lstItems;
 public:
 	/// Creates the Cannot Reequip state.
-	CannotReequipState(Game *game, std::vector<ReequipStat> missingItems);
+	CannotReequipState(std::vector<ReequipStat> missingItems);
 	/// Cleans up the Cannot Reequip state.
 	~CannotReequipState();
 	/// Handler for clicking the OK button.

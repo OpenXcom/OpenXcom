@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,6 +36,7 @@
 #include "../Savegame/Ufo.h"
 #include <sstream>
 #include "../Engine/Options.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -46,9 +47,9 @@ namespace OpenXcom
  * @param craft Pointer to the craft in the mission.
  * @param base Pointer to the base in the mission.
  */
-BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
+BriefingState::BriefingState(Craft *craft, Base *base)
 {
-	_screen = false;
+	_screen = true;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
@@ -59,23 +60,21 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
 	// Set palette
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMENBASE")->play();
+		setPalette("PAL_GEOSCAPE", 2);
+		_game->getResourcePack()->playMusic("GMENBASE");
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+		setPalette("PAL_GEOSCAPE", 6);
+		_game->getResourcePack()->playMusic("GMNEWMAR");
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMDEFEND")->play();
+		setPalette("PAL_GEOSCAPE", 0);
+		_game->getResourcePack()->playMusic("GMDEFEND");
 	}
 
 	add(_window);
@@ -103,8 +102,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -170,20 +169,26 @@ BriefingState::~BriefingState()
 void BriefingState::btnOkClick(Action *)
 {
 	_game->popState();
-	BattlescapeState *bs = new BattlescapeState(_game);
+	Options::baseXResolution = Options::baseXBattlescape;
+	Options::baseYResolution = Options::baseYBattlescape;
+	_game->getScreen()->resetDisplay(false);
+	BattlescapeState *bs = new BattlescapeState;
 	int liveAliens = 0, liveSoldiers = 0;
 	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);
 		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-		_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
-		_game->pushState(new InventoryState(_game, false, bs));
+		_game->pushState(new NextTurnState(_game->getSavedGame()->getSavedBattle(), bs));
+		_game->pushState(new InventoryState(false, bs));
 	}
 	else
 	{
+		Options::baseXResolution = Options::baseXGeoscape;
+		Options::baseYResolution = Options::baseYGeoscape;
+		_game->getScreen()->resetDisplay(false);;
 		delete bs;
-		_game->pushState(new AliensCrashState(_game));
+		_game->pushState(new AliensCrashState);
 	}
 }
 

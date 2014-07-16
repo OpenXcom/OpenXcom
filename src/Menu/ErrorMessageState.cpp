@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,26 +33,28 @@ namespace OpenXcom
  * Initializes all the elements in an error window.
  * @param game Pointer to the core game.
  * @param id Language ID for the message to display.
+ * @param palette Parent state palette.
  * @param color Color of the UI controls.
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game *game, const std::string &id, Uint8 color, std::string bg, Uint8 bgColor) : State(game)
+ErrorMessageState::ErrorMessageState(const std::string &id, SDL_Color *palette, Uint8 color, std::string bg, int bgColor)
 {
-	create(id, L"", color, bg, bgColor);
+	create(id, L"", palette, color, bg, bgColor);
 }
 
 /**
  * Initializes all the elements in an error window.
  * @param game Pointer to the core game.
  * @param msg Text string for the message to display.
+ * @param palette Parent state palette.
  * @param color Color of the UI controls.
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game *game, const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor) : State(game)
+ErrorMessageState::ErrorMessageState(const std::wstring &msg, SDL_Color *palette, Uint8 color, std::string bg, int bgColor)
 {
-	create("", msg, color, bg, bgColor);
+	create("", msg, palette, color, bg, bgColor);
 }
 
 /**
@@ -63,7 +65,16 @@ ErrorMessageState::~ErrorMessageState()
 
 }
 
-void ErrorMessageState::create(const std::string &str, const std::wstring &wstr, Uint8 color, std::string bg, Uint8 bgColor)
+/**
+ * Creates the elements in an error window.
+ * @param msg Language ID for the message to display.
+ * @param wmsg Text string for the message to display.
+ * @param palette Parent state palette.
+ * @param color Color of the UI controls.
+ * @param bg Background image.
+ * @param bgColor Background color (-1 for Battlescape).
+ */
+void ErrorMessageState::create(const std::string &str, const std::wstring &wstr, SDL_Color *palette, Uint8 color, std::string bg, int bgColor)
 {
 	_screen = false;
 
@@ -73,8 +84,9 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_txtMessage = new Text(246, 80, 37, 50);
 
 	// Set palette
-	if (bgColor != ((Uint8)-1))
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
+	setPalette(palette);
+	if (bgColor != -1)
+		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -89,8 +101,8 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_btnOk->setColor(color);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ErrorMessageState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, Options::keyCancel);
 
 	_txtMessage->setColor(color);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -102,7 +114,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	else
 		_txtMessage->setText(tr(str));
 
-	if (bgColor == ((Uint8)-1))
+	if (bgColor == -1)
 	{
 		_window->setHighContrast(true);
 		_btnOk->setHighContrast(true);

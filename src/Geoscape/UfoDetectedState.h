@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,17 +41,17 @@ private:
 	GeoscapeState *_state;
 	bool _hyperwave;
 
-	TextButton *_btnCentre, *_btnCancel;
+	TextButton *_btnIntercept, *_btnCentre, *_btnCancel;
 	Window *_window;
 	Text *_txtUfo, *_txtDetected, *_txtHyperwave;
 	TextList *_lstInfo, *_lstInfo2;
 public:
 	/// Creates the Ufo Detected state.
-	UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected, bool hyper);
+	UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected, bool hyper);
 	/// Cleans up the Ufo Detected state.
 	~UfoDetectedState();
-	/// Updates the palette.
-	void init();
+	/// Handler for clicking the Intercept button.
+	void btnInterceptClick(Action *action);
 	/// Handler for clicking the Centre on UFO button.
 	void btnCentreClick(Action *action);
 	/// Handler for clicking the Cancel button.

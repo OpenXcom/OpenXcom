@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,11 +47,9 @@ private:
 	Text *_txtTitle, *_txtStatus, *_txtBase, *_txtSpeed, *_txtMaxSpeed, *_txtAltitude, *_txtFuel, *_txtDamage, *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo, *_txtRedirect, *_txtSoldier, *_txtHWP;
 public:
 	/// Creates the Geoscape Craft state.
-	GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint);
+	GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *waypoint);
 	/// Cleans up the Geoscape Craft state.
 	~GeoscapeCraftState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the Return To Base button.
 	void btnBaseClick(Action *action);
 	/// Handler for clicking the Select New Target button.

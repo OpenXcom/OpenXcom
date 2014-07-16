@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,6 +30,7 @@ class Window;
 class Text;
 class TextList;
 class RuleManufacture;
+class ComboBox;
 
 /**
  * Screen which list possible productions.
@@ -42,17 +43,22 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtCategory;
 	TextList *_lstManufacture;
+	ComboBox *_cbxCategory;
 	std::vector<RuleManufacture *> _possibleProductions;
+	std::vector<std::string> _catStrings;
+	std::vector<std::string> _displayedStrings;
 
 public:
 	/// Creates the state.
-	NewManufactureListState(Game *game, Base *base);
+	NewManufactureListState(Base *base);
 	/// Initializes state.
-	void init ();
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action * action);
 	/// Handler for clicking on the list.
 	void lstProdClick (Action * action);
+	/// Handler for changing the category filter
+	void cbxCategoryChange (Action * action);
 	/// Fills the list of possible productions.
 	void fillProductionList();
 };

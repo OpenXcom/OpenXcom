@@ -8,6 +8,8 @@
   license: public domain
 */
 
+#ifndef __NO_OPENGL
+
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <yaml-cpp/yaml.h>
@@ -17,6 +19,7 @@
 
 #include "OpenGL.h"
 #include "Logger.h"
+#include "Surface.h"
 
 namespace OpenXcom 
 {
@@ -58,9 +61,21 @@ std::string strGLError(GLenum glErr)
 	return err;
 }
 
-#ifndef __NO_SHADERS
+/* Helper types to convert between object pointers and function pointers.
+   Although ignored by some compilers, this conversion is an extension
+   and not guaranteed to be sane for every architecture.
+ */
+typedef void (*GenericFunctionPointer)();
+typedef union {
+    GenericFunctionPointer FunctionPointer;
+    void *ObjectPointer;
+} UnsafePointerContainer;
 
-#define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
+inline static GenericFunctionPointer glGetProcAddress(const char *name) {
+    UnsafePointerContainer pc;
+    pc.ObjectPointer = SDL_GL_GetProcAddress(name);
+    return pc.FunctionPointer;
+}
 
 #ifndef __APPLE__
 PFNGLCREATEPROGRAMPROC glCreateProgram = 0;
@@ -77,7 +92,6 @@ PFNGLUNIFORM1IPROC glUniform1i = 0;
 PFNGLUNIFORM2FVPROC glUniform2fv = 0;
 PFNGLUNIFORM4FVPROC glUniform4fv = 0;
 #endif
-#endif
 
 void * (APIENTRYP glXGetCurrentDisplay)() = 0;
 Uint32 (APIENTRYP glXGetCurrentDrawable)() = 0;
@@ -91,8 +105,8 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     if(gltexture == 0) glGenTextures(1, &gltexture);
 	glErrorCheck();
 	
-    iwidth  = SDL_max(width,  iwidth );
-    iheight = SDL_max(height, iheight);
+	iwidth = width;
+	iheight = height;
     if(buffer_surface) delete buffer_surface;
     buffer_surface = new Surface(iwidth, iheight, 0, 0, ibpp); // use OpenXcom's Surface class to get an aligned buffer with bonus SDL_Surface
 	buffer = (uint32_t*) buffer_surface->getSurface()->pixels;
@@ -115,15 +129,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   }
 
   void OpenGL::clear() {
-    memset(buffer, 0, iwidth * iheight * ibpp);
+    //memset(buffer, 0, iwidth * iheight * ibpp);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
+	glErrorCheck();
   }
 
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
-#ifndef __NO_SHADERS
+	clear();
     if(shader_support && (fragmentshader || vertexshader)) {    
       glUseProgram(glprogram);
       GLint location;
@@ -140,7 +155,6 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
       location = glGetUniformLocation(glprogram, "rubyTextureSize");
       glUniform2fv(location, 1, textureSize);
     }
-#endif
 
 	glErrorCheck();
 
@@ -192,16 +206,12 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glFlush();
 	glErrorCheck();
 
-	#ifndef __NO_SHADERS
     if(shader_support) {
       glUseProgram(0);
     }
-    #endif
   }
 
   void OpenGL::set_shader(const char *source_yaml_filename) {
-#ifndef __NO_SHADERS
-
     if(!shader_support) return;
 
     if(fragmentshader) {
@@ -235,27 +245,20 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     }
 
     glLinkProgram(glprogram);
-#endif
   }
 
   void OpenGL::set_fragment_shader(const char *source) {
-  #ifndef __NO_SHADERS
-
     fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentshader, 1, &source, 0);
     glCompileShader(fragmentshader);
     glAttachShader(glprogram, fragmentshader);
-    #endif
   }
 
   void OpenGL::set_vertex_shader(const char *source) {
-  #ifndef __NO_SHADERS
-
     vertexshader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexshader, 1, &source, 0);
     glCompileShader(vertexshader);
     glAttachShader(glprogram, vertexshader);
-	#endif
   }
 
   void OpenGL::init(int w, int h) {
@@ -270,7 +273,6 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glEnable(GL_DITHER);
     glEnable(GL_TEXTURE_2D);
 
-	#ifndef __NO_SHADERS
     //bind shader functions
 #ifndef __APPLE__
     glCreateProgram = (PFNGLCREATEPROGRAMPROC)glGetProcAddress("glCreateProgram");
@@ -301,7 +303,6 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     && glUniform1i && glUniform2fv && glUniform4fv;
 	
     if(shader_support) glprogram = glCreateProgram();
-    #endif
 
     //create surface texture
     resize(w, h);
@@ -309,7 +310,6 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
 	void OpenGL::setVSync(bool sync)
 	{
-	#ifndef __NO_SHADERS
 		const int interval = sync ? 1 : 0;
 		if (glXGetCurrentDisplay && glXGetCurrentDrawable && glXSwapIntervalEXT)
 		{
@@ -325,7 +325,6 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 			wglSwapIntervalEXT(interval);
 			// Log(LOG_INFO) << "Made an attempt to set vsync via WGL.";
 		}
-		#endif
 	}
 
   void OpenGL::term() {
@@ -353,3 +352,5 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     term();
   }
 }
+
+#endif

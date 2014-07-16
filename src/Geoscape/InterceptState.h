@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,7 +41,7 @@ class Target;
 class InterceptState : public State
 {
 private:
-	TextButton *_btnCancel;
+	TextButton *_btnCancel, *_btnGotoBase;
 	Window *_window;
 	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
 	TextList *_lstCrafts;
@@ -51,11 +51,13 @@ private:
 	std::vector<Craft*> _crafts;
 public:
 	/// Creates the Intercept state.
-	InterceptState(Game *game, Globe *globe, Base *base = 0, Target *target = 0);
+	InterceptState(Globe *globe, Base *base = 0, Target *target = 0);
 	/// Cleans up the Intercept state.
 	~InterceptState();
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Go To Base button.
+	void btnGotoBaseClick(Action *action);
 	/// Handler for clicking the Crafts list.
 	void lstCraftsLeftClick(Action *action);
 	/// Handler for right clicking the Crafts list.

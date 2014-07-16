@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_MAPBLOCK_H
 
 #include <string>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -27,6 +28,7 @@ namespace OpenXcom
 
 enum MapBlockType {MT_UNDEFINED = -1, MT_DEFAULT, MT_LANDINGZONE, MT_EWROAD, MT_NSROAD, MT_CROSSING, MT_DIRT, MT_XCOMSPAWN, MT_UBASECOMM, MT_FINALCOMM };
 class RuleTerrain;
+class Position;
 
 /**
  * Represents a Terrain Map Block.
@@ -37,13 +39,13 @@ class RuleTerrain;
 class MapBlock
 {
 private:
-	RuleTerrain *_terrain;
 	std::string _name;
 	int _size_x, _size_y, _size_z;
 	MapBlockType _type, _subType;
 	int _frequency, _timesUsed, _maxCount;
+	std::map<std::string, std::vector<Position> > _items;
 public:
-	MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type);
+	MapBlock(std::string name, int size_x, int size_y, MapBlockType type);
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);
@@ -67,6 +69,7 @@ public:
 	void markUsed();
 	/// Resets remaining uses.
 	void reset();
+	std::map<std::string, std::vector<Position> > *getItems();
 
 };
 

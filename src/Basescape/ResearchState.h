@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #define OPENXCOM_RESEARCHSTATE_H
 
 #include "../Engine/State.h"
-#include <SDL.h>
 
 namespace OpenXcom
 {
@@ -43,10 +42,9 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
 	TextList *_lstResearch;
-	SDL_Color _oldPalette[256];
 public:
 	/// Creates the Research state.
-	ResearchState(Game *game, Base *base);
+	ResearchState(Base *base);
 	/// Cleans up the Research state.
 	~ResearchState();
 	/// Handler for clicking the OK button.
@@ -58,7 +56,7 @@ public:
 	/// Fills the ResearchProject list with Base ResearchProjects.
 	void fillProjectList();
 	/// Updates the research list.
-	void init ();
+	void init();
 };
 
 }

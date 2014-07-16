@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,7 +42,7 @@ private:
 	TextList *_lstCountries;
 public:
 	/// Creates the Funding state.
-	FundingState(Game *game);
+	FundingState();
 	/// Cleans up the Funding state.
 	~FundingState();
 	/// Handler for clicking the OK button.

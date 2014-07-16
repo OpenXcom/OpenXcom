@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,6 +41,7 @@ class Pathfinding;
 class TileEngine;
 class BattleItem;
 class Ruleset;
+class State;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -57,7 +58,7 @@ private:
 	BattleUnit *_selectedUnit, *_lastSelectedUnit;
 	std::vector<Node*> _nodes;
 	std::vector<BattleUnit*> _units;
-	std::vector<BattleItem*> _items;
+	std::vector<BattleItem*> _items, _deleted;
 	Pathfinding *_pathfinding;
 	TileEngine *_tileEngine;
 	std::string _missionType;
@@ -67,15 +68,15 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	Uint8 _dragButton;  // this is a cache for Options::getString("battleScrollDragButton")
-	bool _dragInvert;  // this is a cache for Options::getString("battleScrollDragInvert")
-	int _dragTimeTolerance;  // this is a cache for Options::getInt("battleScrollDragTimeTolerance")
-	int _dragPixelTolerance;  // this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::list<BattleUnit*> _fallingUnits;
-	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
-	std::vector<Position> _tileSearch;
+	bool _unitsFalling, _cheating;
+	std::vector<Position> _tileSearch, _storageSpace;
+	BattleActionType _tuReserved;
+	bool _kneelReserved;
+	std::vector< std::vector<std::pair<int, int> > > _baseModules;
+	int _depth;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -200,14 +201,6 @@ public:
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Sets or tries to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-	/// Gets DragButton.
-	Uint8 getDragButton() const;
-	/// Gets DragInverted.
-	bool isDragInverted() const;
-	/// Gets DragTimeTolerance.
-	int getDragTimeTolerance() const;
-	/// Gets DragPixelTolerance.
-	int getDragPixelTolerance() const;
 	/// Adds this unit to the vector of falling units.
 	bool addFallingUnit(BattleUnit* unit);
 	/// Gets the vector of falling units.
@@ -216,14 +209,10 @@ public:
 	void setUnitsFalling(bool fall);
 	/// Checks the status of the switch that says "there are units falling".
 	bool getUnitsFalling() const;
-	/// Checks the strafe setting.
-	bool getStrafeSetting() const;
-	/// Checks the sneaky AI setting.
-	bool getSneakySetting() const;
-	/// Checks the traceAI setting.
-	bool getTraceSetting() const;
 	/// Gets a pointer to the BattlescapeState.
 	BattlescapeState *getBattleState();
+	/// Gets a pointer to the BattlescapeGame.
+	BattlescapeGame *getBattleGame();
 	/// Sets the pointer to the BattlescapeState.
 	void setBattleState(BattlescapeState *bs);
 	/// Gets the highest ranked, living XCom unit.
@@ -242,6 +231,29 @@ public:
 	const std::vector<Position> getTileSearch();
 	/// check if the AI has engaged cheat mode.
 	bool isCheating();
+	/// get the reserved fire mode.
+	BattleActionType getTUReserved() const;
+	/// set the reserved fire mode.
+	void setTUReserved(BattleActionType reserved);
+	/// get whether we are reserving TUs to kneel.
+	bool getKneelReserved() const;
+	/// set whether we are reserving TUs to kneel.
+	void setKneelReserved(bool reserved);
+	/// give me access to the storage tiles vector.
+	std::vector<Position> &getStorageSpace();
+	/// move all the leftover items to random locations in the storage tiles vector.
+	void randomizeItemLocations(Tile *t);
+	/// get a reference to the baseModules map.
+	std::vector< std::vector<std::pair<int, int> > > &getModuleMap();
+	/// calculate the number of map modules remaining
+	void calculateModuleMap();
+	/// a shortcut to the geoscape save.
+	SavedGame *getGeoscapeSave();
+	/// get the depth of the battlescape game.
+	const int getDepth() const;
+	/// set the depth of the battlescape game.
+	void setDepth(int depth);
+	void setPaletteByDepth(State *state);
 };
 
 }

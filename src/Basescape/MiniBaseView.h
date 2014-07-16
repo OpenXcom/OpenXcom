@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,13 +36,13 @@ class SurfaceSet;
 class MiniBaseView : public InteractiveSurface
 {
 private:
-	static const unsigned int MAX_BASES = 8;
 	static const int MINI_SIZE = 14;
 
 	std::vector<Base*> *_bases;
 	SurfaceSet *_texture;
-	unsigned int _base, _hoverBase;
+	size_t _base, _hoverBase;
 public:
+	static const size_t MAX_BASES = 8;
 	/// Creates a new mini base view at the specified position and size.
 	MiniBaseView(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the mini base view.
@@ -52,9 +52,9 @@ public:
 	/// Sets the texture for the mini base view.
 	void setTexture(SurfaceSet *texture);
 	/// Gets the base the mouse is over.
-	unsigned int getHoveredBase() const;
+	size_t getHoveredBase() const;
 	/// Sets the selected base for the mini base view.
-	void setSelectedBase(unsigned int base);
+	void setSelectedBase(size_t base);
 	/// Draws the mini base view.
 	void draw();
 	/// Special handling for mouse hovers.

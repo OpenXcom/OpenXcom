@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,7 +37,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ManufactureProject
  */
-NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities) : State (game), _base(base)
+NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std::vector<RuleManufacture *> & possibilities) : _base(base)
 {
 	_screen = false;
 
@@ -49,7 +49,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -66,11 +66,11 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, Options::keyCancel);
 	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnManufactureClick);
-	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, (SDLKey)Options::getInt("keyOk"));
+	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, Options::keyOk);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -87,21 +87,12 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 }
 
 /**
- * Resets the palette.
- */
-void NewPossibleManufactureState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-}
-
-/**
  * return to the previous screen
  * @param action Pointer to an action.
  */
 void NewPossibleManufactureState::btnOkClick(Action *)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**
@@ -111,6 +102,7 @@ void NewPossibleManufactureState::btnOkClick(Action *)
 void NewPossibleManufactureState::btnManufactureClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new ManufactureState(_game, _base));
+	_game->pushState (new ManufactureState(_base));
 }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,8 +45,9 @@ private:
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name;
 	int _largeBlockLimit;
-	std::vector<int> _textures;
-	int _hemisphere;
+	std::vector<int> _textures, _roadTypeOdds;
+	std::vector<std::string> _civilianTypes;
+	int _hemisphere, _minDepth, _maxDepth;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -63,13 +64,18 @@ public:
 	/// Gets a mapblock given its name.
 	MapBlock *getMapBlock(const std::string &name);
 	/// Gets the mapdata object.
-	MapData *getMapData(int *id, int *mapDataSetID) const;
+	MapData *getMapData(unsigned int *id, int *mapDataSetID) const;
 	/// Gets the maximum amount of large blocks in this terrain.
 	int getLargeBlockLimit() const;
 	void resetMapBlocks();
 	std::vector<int> *getTextures();
 	int getHemisphere() const;
-
+	/// Gets teh civilian types to use.
+	std::vector<std::string> getCivilianTypes() const;
+	/// Gets road type odds.
+	std::vector<int> getRoadTypeOdds() const;
+	const int getMinDepth() const;
+	const int getMaxDepth() const;
 };
 
 }

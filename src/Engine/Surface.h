@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Font;
+class Language;
 
 /**
  * Element that is blit (rendered) onto the screen.
@@ -40,12 +41,12 @@ class Surface
 protected:
 	SDL_Surface *_surface;
 	int _x, _y;
-	SDL_Rect _crop;
+	SDL_Rect _crop, _clear;
 	bool _visible, _hidden, _redraw;
-	SDL_Color *_originalColors;
 	void *_alignedBuffer;
-	int _dx, _dy;
 	std::string _tooltip;
+
+	void resize(int width, int height);
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
@@ -61,8 +62,8 @@ public:
 	void loadBdy(const std::string &filename);
 	/// Loads a general image file.
 	void loadImage(const std::string &filename);
-	/// Clears the surface's contents.
-	void clear();
+	/// Clears the surface's contents eith a specified colour.
+	void clear(Uint32 color = 0);
 	/// Offsets the surface's colors by a set amount.
 	void offset(int off, int min = -1, int max = -1, int mul = 1);
 	/// Inverts the surface's colors.
@@ -73,12 +74,14 @@ public:
 	virtual void draw();
 	/// Blits this surface onto another one.
 	virtual void blit(Surface *surface);
-	/// Sets the surface's various fonts.
-	virtual void setFonts(Font *, Font *) {};
+	/// Initializes the surface's various text resources.
+	virtual void initText(Font *, Font *, Language *) {};
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
     /// Draws a filled rectangle on the surface.
     void drawRect(SDL_Rect *rect, Uint8 color);
+	/// Draws a filled rectangle on the surface.
+	void drawRect(Sint16 x, Sint16 y, Sint16 w, Sint16 h, Uint8 color);
     /// Draws a line on the surface.
     void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
     /// Draws a filled circle on the surface.
@@ -101,12 +104,24 @@ public:
 	}
 	/// Sets the X position of the surface.
 	virtual void setX(int x);
-	/// Gets the X position of the surface.
-	int getX() const;
+	/**
+	 * Returns the position of the surface in the X axis.
+	 * @return X position in pixels.
+	 */
+	int getX() const
+	{
+		return _x;
+	}
 	/// Sets the Y position of the surface.
 	virtual void setY(int y);
-	/// Gets the Y position of the surface.
-	int getY() const;
+	/**
+	 * Returns the position of the surface in the Y axis.
+	 * @return Y position in pixels.
+	 */
+	int getY() const
+	{
+		return _y;
+	}
 	/// Sets the surface's visibility.
 	void setVisible(bool visible);
 	/// Gets the surface's visibility.
@@ -178,6 +193,8 @@ public:
 	{
 		return _surface->w;
 	}
+	/// Sets the width of the surface.
+	virtual void setWidth(int width);
 	/**
 	 * Returns the height of the surface.
 	 * @return Height in pixels
@@ -186,27 +203,23 @@ public:
 	{
 		return _surface->h;
 	}
+	/// Sets the height of the surface.
+	virtual void setHeight(int height);
 	/// Sets the surface's special hidden flag.
 	void setHidden(bool hidden);
 	/// Locks the surface.
 	void lock();
 	/// Unlocks the surface.
 	void unlock();
-	/// Offsets and optionally inverts the surface palette's colors by a set amount.
-	void paletteShift(int off, int mul, int mid = 0);
-	/// Restores the original palette.
-	void paletteRestore();
 	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
 	/// Invalidate the surface: force it to be redrawn
 	void invalidate();
-	void setDX(int dx);
-	void setDY(int dy);
 	/// Gets the tooltip of the surface.
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.
 	void setTooltip(const std::string &tooltip);
-	
+
 };
 
 }

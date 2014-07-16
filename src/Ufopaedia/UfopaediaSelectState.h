@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,7 +40,7 @@ namespace OpenXcom
 	class UfopaediaSelectState : public State
 	{
 	public:
-		UfopaediaSelectState(Game *game, std::string section);
+		UfopaediaSelectState(std::string section);
 		virtual ~UfopaediaSelectState();
 
 	protected:
@@ -57,8 +57,6 @@ namespace OpenXcom
 		void lstSelectionClick(Action *action);
 		/// load available articles into the selection list
 		void loadSelectionList();
-		/// Initializes the state.
-		virtual void init();
 	};
 }
 

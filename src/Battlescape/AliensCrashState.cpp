@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,7 +34,7 @@ namespace OpenXcom
  * Initializes all the elements in the Aliens Crash screen.
  * @param game Pointer to the core game.
  */
-AliensCrashState::AliensCrashState(Game *game) : State(game)
+AliensCrashState::AliensCrashState()
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
@@ -42,6 +42,8 @@ AliensCrashState::AliensCrashState(Game *game) : State(game)
 	_txtTitle = new Text(246, 80, 37, 50);
 
 	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -57,8 +59,8 @@ AliensCrashState::AliensCrashState(Game *game) : State(game)
 	_btnOk->setHighContrast(true);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AliensCrashState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(0)-1);
 	_txtTitle->setHighContrast(true);
@@ -83,7 +85,7 @@ AliensCrashState::~AliensCrashState()
 void AliensCrashState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new DebriefingState(_game));
+	_game->pushState(new DebriefingState);
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #define OPENXCOM_PRIMEGRENADESTATE_H
 
 #include "../Engine/State.h"
-#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -30,6 +29,8 @@ class Text;
 class InteractiveSurface;
 class Frame;
 class Surface;
+class BattleItem;
+struct BattleAction;
 
 /**
  * Window that allows the player
@@ -48,7 +49,7 @@ private:
 	Surface *_bg;
 public:
 	/// Creates the Prime Grenade state.
-	PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
+	PrimeGrenadeState(BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
 	/// Cleans up the Prime Grenade state.
 	~PrimeGrenadeState();
 	/// Handler for right-clicking anything.

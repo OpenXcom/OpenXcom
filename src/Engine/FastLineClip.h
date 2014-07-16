@@ -39,7 +39,7 @@ private:
 public:
 	double Wxlef, Wxrig, Wytop, Wybot;
 	/// Creates a fastlineclip.
-	FastLineClip(double Wxl, double Wxr, double Wyt, double Wyb)
+	FastLineClip(double Wxl, double Wxr, double Wyt, double Wyb) : FC_xn(0), FC_yn(0), FC_xk(0), FC_yk(0)
 	{
 		Wxlef = Wxl;
 		Wxrig = Wxr;

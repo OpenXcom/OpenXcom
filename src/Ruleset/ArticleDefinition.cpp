@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -84,7 +84,7 @@ namespace OpenXcom
 		section = node["section"].as<std::string>(section);
 		requires = node["requires"].as< std::vector<std::string> >(requires);
 		title = node["title"].as<std::string>(title);
-		_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);
+		//_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);
 		_listOrder = node["listOrder"].as<int>(_listOrder);
 		if (!_listOrder)
 		{
@@ -194,6 +194,25 @@ namespace OpenXcom
 		text = node["text"].as<std::string>(text);
 		text_width = node["text_width"].as<int>(text_width);
 	}
+	
+	/**
+	 * Constructor (only setting type of base class).
+	 */
+	ArticleDefinitionTFTD::ArticleDefinitionTFTD() : ArticleDefinition(UFOPAEDIA_TYPE_TFTD), text_width(0)
+	{}
+
+	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 * @param listOrder The list weight for this article.
+	 */
+	void ArticleDefinitionTFTD::load(const YAML::Node &node, int listOrder)
+	{
+		ArticleDefinition::load(node, listOrder);
+		image_id = node["image_id"].as<std::string>(image_id);
+		text = node["text"].as<std::string>(text);
+		text_width = node["text_width"].as<int>(text_width);
+	}
 
 	/**
 	 * Constructor (only setting type of base class).
@@ -280,5 +299,4 @@ namespace OpenXcom
 		weapon = node["weapon"].as<std::string>(weapon);
 		text = node["text"].as<std::string>(text);
 	}
-
 }

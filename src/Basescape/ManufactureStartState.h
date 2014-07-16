@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ private:
 	TextList * _lstRequiredItems;
 public:
 	/// Creates the State.
-	ManufactureStartState(Game * game, Base * base, RuleManufacture * item);
+	ManufactureStartState(Base * base, RuleManufacture * item);
 	/// Handler for the Cancel button.
 	void btnCancelClick(Action * action);
 	/// Handler for the start button.

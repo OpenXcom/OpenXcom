@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,7 +30,10 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Base.h"
+#include "../Menu/ErrorMessageState.h"
 #include "CraftInfoState.h"
+#include "SellState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -40,7 +43,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
+CraftsState::CraftsState(Base *base) : _base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -55,7 +58,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts = new TextList(288, 118, 8, 58);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 3);
 
 	add(_window);
 	add(_btnOk);
@@ -77,7 +80,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CraftsState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -105,7 +108,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);
+	_lstCrafts->setColumns(5, 94, 68, 44, 46, 28);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);
@@ -126,10 +129,11 @@ CraftsState::~CraftsState()
  */
 void CraftsState::init()
 {
+	State::init();
 	_lstCrafts->clearList();
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
-		std::wstringstream ss, ss2, ss3;
+		std::wostringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumVehicles();
@@ -144,6 +148,12 @@ void CraftsState::init()
 void CraftsState::btnOkClick(Action *)
 {
 	_game->popState();
+
+	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base->storesOverfull())
+	{
+		_game->pushState(new SellState(_base));
+		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 0));
+	}
 }
 
 /**
@@ -154,7 +164,7 @@ void CraftsState::lstCraftsClick(Action *)
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{
-		_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));
+		_game->pushState(new CraftInfoState(_base, _lstCrafts->getSelectedRow()));
 	}
 }
 

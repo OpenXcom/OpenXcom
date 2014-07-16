@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,6 +19,9 @@
 #include "NextTurnState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/Timer.h"
+#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -26,9 +29,12 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
+#include "../Menu/SaveGameState.h"
+#include "Map.h"
 
 namespace OpenXcom
 {
@@ -39,15 +45,22 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state)
+NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *state) : _battleGame(battleGame), _state(state), _timer(0)
 {
 	// Create objects
+	int y = state->getMap()->getMessageY();
+
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(320, 17, 0, 68);
 	_txtTurn = new Text(320, 17, 0, 92);
 	_txtSide = new Text(320, 17, 0, 108);
 	_txtMessage = new Text(320, 17, 0, 132);
+	_bg = new Surface(_game->getScreen()->getWidth(), _game->getScreen()->getWidth(), 0, 0);
 
+	// Set palette
+	battleGame->setPaletteByDepth(this);
+
+	add(_bg);
 	add(_window);
 	add(_txtTitle);
 	add(_txtTurn);
@@ -55,6 +68,21 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	add(_txtMessage);
 
 	centerAllSurfaces();
+
+	_bg->setX(0);
+	_bg->setY(0);
+	SDL_Rect rect;
+	rect.h = _bg->getHeight();
+	rect.w = _bg->getWidth();
+	rect.x = rect.y = 0;
+
+	_bg->drawRect(&rect, Palette::blockOffset(0) + 15);
+	// make this screen line up with the hidden movement screen
+	_window->setY(y);
+	_txtTitle->setY(y + 68);
+	_txtTurn->setY(y + 92);
+	_txtSide->setY(y + 108);
+	_txtMessage->setY(y + 132);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
@@ -86,6 +114,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
+
+	if (Options::skipNextTurnScreen)
+	{
+		_timer = new Timer(NEXT_TURN_DELAY);
+		_timer->onTimer((StateHandler)&NextTurnState::close);
+		_timer->start();
+	}
 }
 
 /**
@@ -93,7 +128,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-
+	delete _timer;
 }
 
 /**
@@ -106,20 +141,59 @@ void NextTurnState::handle(Action *action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		_game->popState();
+		close();
+	}
+}
 
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-		if (liveAliens == 0 || liveSoldiers == 0)
+/**
+ * Keeps the timer running.
+ */
+void NextTurnState::think()
+{
+	if (_timer)
+	{
+		_timer->think(this, 0);
+	}
+}
+
+/**
+ * Closes the window.
+ */
+void NextTurnState::close()
+{
+	_battleGame->getBattleGame()->cleanupDeleted();
+	_game->popState();
+
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	if (liveAliens == 0 || liveSoldiers == 0)
+	{
+		_state->finishBattle(false, liveSoldiers);
+	}
+	else
+	{
+		_state->btnCenterClick(0);
+
+		// Autosave every set amount of turns
+		if ((_battleGame->getTurn() == 1 || _battleGame->getTurn() % Options::autosaveFrequency == 0) && _battleGame->getSide() == FACTION_PLAYER)
 		{
-			_state->finishBattle(false, liveSoldiers);
-		}
-		else
-		{
-			_state->btnCenterClick(0);
+			if (_game->getSavedGame()->isIronman())
+			{
+				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_IRONMAN, _palette));
+			}
+			else if (Options::autosave)
+			{
+				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_AUTO_BATTLESCAPE, _palette));
+			}
 		}
 	}
 }
 
+void NextTurnState::resize(int &dX, int &dY)
+{
+	State::resize(dX, dY);
+	_bg->setX(0);
+	_bg->setY(0);
+}
 }

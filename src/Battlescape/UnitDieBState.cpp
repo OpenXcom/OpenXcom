@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -65,11 +65,15 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	else
 	{
 		if (_unit->getFaction() == FACTION_PLAYER)
+		{
 			_parent->getMap()->setUnitDying(true);
-		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
-		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
+		if (_originalDir != 3)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
+		}
 	}
 
 	_unit->clearVisibleTiles();
@@ -108,9 +112,19 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	if (_unit->getStatus() == STATUS_TURNING)
+	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	{
+		int dir = _unit->getDirection() + 1;
+		if (dir == 8)
+		{
+			dir = 0;
+		}
+		_unit->lookAt(dir);
 		_unit->turn();
+		if (dir == 3)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		}
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -137,9 +151,9 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 		_parent->getMap()->setUnitDying(false);
-		if (_unit->getTurnsExposed())
+		if (_unit->getTurnsSinceSpotted() < 255)
 		{
-			_unit->setTurnsExposed(255);
+			_unit->setTurnsSinceSpotted(255);
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{
@@ -158,22 +172,25 @@ void UnitDieBState::think()
 			Game *game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_damageType == DT_NONE && _unit->getArmor()->getSize() == 1)
+				if (_unit->getArmor()->getSize() == 1)
 				{
-					game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
-				}
-				else if (Options::getBool("battleNotifyDeath"))
-				{
-					game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+					if (_damageType == DT_NONE)
+					{
+						game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+					}
+					else if (Options::battleNotifyDeath)
+					{
+						game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+					}
 				}
 			}
 			else
 			{
-				game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+				game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 		// if all units from either faction are killed - auto-end the mission.
-		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd"))
+		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::battleAutoEnd)
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
@@ -182,7 +199,8 @@ void UnitDieBState::think()
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
 				_parent->getSave()->setSelectedUnit(0);
-				_parent->statePushBack(0);
+				_parent->cancelCurrentAction(true);
+				_parent->requestEndTurn();
 			}
 		}
 	}
@@ -202,18 +220,21 @@ void UnitDieBState::cancel()
 void UnitDieBState::convertUnitToCorpse()
 {
 	_parent->getSave()->getBattleState()->showPsiButton(false);
-	// in case the unit was unconscious
-	_parent->getSave()->removeUnconsciousBodyItem(_unit);
 	Position lastPosition = _unit->getPosition();
-	int size = _unit->getArmor()->getSize() - 1;
+	// remove the unconscious body item corresponding to this unit, and if it was being carried, keep track of what slot it was in
+	if (lastPosition != Position(-1,-1,-1))
+	{
+		_parent->getSave()->removeUnconsciousBodyItem(_unit);
+	}
+	int size = _unit->getArmor()->getSize();
 	BattleItem *itemToKeep = 0;
-	bool dropItems = !Options::getBool("weaponSelfDestruction") || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
+	bool dropItems = !Options::weaponSelfDestruction || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
 	// move inventory from unit to the ground for non-large units
-	if (size == 0 && dropItems)
+	if (size == 1 && dropItems)
 	{
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
-			_parent->dropItem(_unit->getPosition(), (*i));
+			_parent->dropItem(lastPosition, (*i));
 			if (!(*i)->getRules()->isFixed())
 			{
 				(*i)->setOwner(0);
@@ -234,26 +255,28 @@ void UnitDieBState::convertUnitToCorpse()
 	// remove unit-tile link
 	_unit->setTile(0);
 
-	if (size == 0)
+	if (lastPosition == Position(-1,-1,-1)) // we're being carried
 	{
-		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
-		corpse->setUnit(_unit);
-		_parent->dropItem(_unit->getPosition(), corpse, true);
-		if (_parent->getSave()->getTile(lastPosition)->getUnit() == _unit)	// check in case unit was displaced by another unit
+		// replace the unconscious body item with a corpse in the carrying unit's inventory
+		for (std::vector<BattleItem*>::iterator it = _parent->getSave()->getItems()->begin(); it != _parent->getSave()->getItems()->end(); )
 		{
-			_parent->getSave()->getTile(lastPosition)->setUnit(0);
+			if ((*it)->getUnit() == _unit)
+			{
+				RuleItem *corpseRules = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]); // we're in an inventory, so we must be a 1x1 unit
+				(*it)->convertToCorpse(corpseRules);
+				break;
+			}
+			++it;
 		}
 	}
 	else
 	{
-		int i = 1;
-		for (int y = 0; y <= size; y++)
+		int i = 0;
+		for (int y = 0; y < size; y++)
 		{
-			for (int x = 0; x <= size; x++)
+			for (int x = 0; x < size; x++)
 			{
-				std::ostringstream ss;
-				ss << _unit->getArmor()->getCorpseItem() << i;
-				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
+				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
 				{
@@ -264,7 +287,6 @@ void UnitDieBState::convertUnitToCorpse()
 			}
 		}
 	}
-
 }
 
 /**

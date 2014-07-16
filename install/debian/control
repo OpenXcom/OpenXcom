@@ -3,14 +3,13 @@ Section: games
 Priority: optional
 Maintainer: Krzysztof Knapik <knapsu@gmail.com>
 Build-Depends:
-	debhelper (>= 8.0.0),
-	cmake,
+	debhelper (>=9),
 	libsdl1.2-dev,
 	libsdl-mixer1.2-dev,
 	libsdl-gfx1.2-dev (>= 2.0.22),
 	libsdl-image1.2-dev,
-	libyaml-cpp-dev (>= 0.5.0),
-	libboost-dev (>= 1.49.0)
+	libyaml-cpp-dev (>= 0.5.1),
+	libboost-dev
 Standards-Version: 3.9.4
 Homepage: http://openxcom.org/
 Vcs-Git: git://github.com/SupSuper/OpenXcom.git
@@ -18,7 +17,7 @@ Vcs-Browser: https://github.com/SupSuper/OpenXcom
 
 Package: openxcom
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, timidity
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: openxcom-data
 Description: Open-source clone of UFO: Enemy Unknown
  OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA)

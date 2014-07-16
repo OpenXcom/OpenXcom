@@ -1,5 +1,5 @@
 /*
-* Copyright 2010-2013 OpenXcom Developers.
+* Copyright 2010-2014 OpenXcom Developers.
 *
 * This file is part of OpenXcom.
 *
@@ -32,10 +32,11 @@
 namespace OpenXcom
 {
 /**
- * Initializes all the elements in the EndResearch screen.
+ * Initializes all the elements in the Research Required screen.
  * @param game Pointer to the core game.
+ * @param item Pointer to the researched weapon.
  */
-ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State(game)
+ResearchRequiredState::ResearchRequiredState(RuleItem *item)
 {
 	_screen = false;
 
@@ -45,7 +46,7 @@ ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State
 	_txtTitle = new Text(288, 80, 16, 50);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -63,8 +64,8 @@ ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchRequiredState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyCancel);
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -76,19 +77,12 @@ ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State
 }
 
 /**
-* Resets the palette.
-*/
-void ResearchRequiredState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-}
-
-/**
-* return to the previous screen
-* @param action Pointer to an action.
-*/
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
 void ResearchRequiredState::btnOkClick(Action *)
 {
 	_game->popState();
 }
+
 }

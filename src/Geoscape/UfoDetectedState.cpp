@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,6 +33,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 #include "../Savegame/AlienMission.h"
+#include "InterceptState.h"
 
 namespace OpenXcom
 {
@@ -45,7 +46,7 @@ namespace OpenXcom
  * @param detected Was the UFO detected?
  * @param hyperwave Was it a hyperwave radar?
  */
-UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected, bool hyperwave) : State(game), _ufo(ufo), _state(state), _hyperwave(hyperwave)
+UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected, bool hyperwave) : _ufo(ufo), _state(state), _hyperwave(hyperwave)
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
@@ -66,20 +67,22 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	}
 	else
 	{
-		_window = new Window(this, 224, 120, 16, 48, POPUP_BOTH);
+		_window = new Window(this, 224, 128, 16, 44, POPUP_BOTH);
 	}
-	_btnCentre = new TextButton(200, 12, 28, 128);
-	_btnCancel = new TextButton(200, 12, 28, 144);
-	_txtUfo = new Text(207, 17, 28, 56);
-	_txtDetected = new Text(100, 9, 28, 72);
+	_btnIntercept = new TextButton(200, 12, 28, 118);
+	_btnCentre = new TextButton(200, 12, 28, 134);
+	_btnCancel = new TextButton(200, 12, 28, 150);
+	_txtUfo = new Text(207, 17, 28, 53);
+	_txtDetected = new Text(100, 9, 28, 69);
 	_txtHyperwave = new Text(214, 17, 21, 44);
-	_lstInfo = new TextList(207, 32, 28, 82);
+	_lstInfo = new TextList(207, 32, 28, 80);
 	_lstInfo2 = new TextList(207, 32, 28, 96);
 
 	if (hyperwave)
 	{
-		_btnCentre->setY(144);
-		_btnCancel->setY(160);
+		_btnIntercept->setY(136);
+		_btnCentre->setY(152);
+		_btnCancel->setY(168);
 		_txtUfo->setY(20);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
@@ -93,14 +96,15 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	// Set palette
 	if (hyperwave)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 2);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		setPalette("PAL_GEOSCAPE", 7);
 	}
 
 	add(_window);
+	add(_btnIntercept);
 	add(_btnCentre);
 	add(_btnCancel);
 	add(_txtUfo);
@@ -115,15 +119,18 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 
 	centerAllSurfaces();
 
+	_btnIntercept->setColor(Palette::blockOffset(8)+5);
+	_btnIntercept->setText(tr("STR_INTERCEPT"));
+	_btnIntercept->onMouseClick((ActionHandler)&UfoDetectedState::btnInterceptClick);
+
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
-	_btnCentre->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, Options::keyCancel);
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
@@ -184,18 +191,14 @@ UfoDetectedState::~UfoDetectedState()
 }
 
 /**
- * Resets the palette.
+ * Picks a craft to intercept the UFO.
+ * @param action Pointer to an action.
  */
-void UfoDetectedState::init()
+void UfoDetectedState::btnInterceptClick(Action *)
 {
-	if (_hyperwave)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-	}
-	else
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
-	}
+	_state->timerReset();
+	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
+	_game->pushState(new InterceptState(_state->getGlobe(), 0, _ufo));
 }
 
 /**

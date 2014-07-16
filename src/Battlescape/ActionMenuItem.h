@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,8 +25,9 @@
 namespace OpenXcom
 {
 
-class State;
+class Game;
 class Font;
+class Language;
 class Text;
 class Frame;
 
@@ -38,7 +39,6 @@ class Frame;
 class ActionMenuItem : public InteractiveSurface
 {
 private:
-	int _id;
 	bool _highlighted;
 	BattleActionType _action;
 	int _tu;
@@ -46,7 +46,7 @@ private:
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
 	/// Creates a new ActionMenuItem.
-	ActionMenuItem(int id, Font *big, Font *small, int x, int y);
+	ActionMenuItem(int id, Game *game, int x, int y);
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assigns an action to it.

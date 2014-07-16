@@ -29,11 +29,14 @@ namespace OpenXcom
  * Each time this is called, the returned value can be different.
  * @return The key of the selected choice.
  */
-const std::string &WeightedOptions::choose() const
+const std::string WeightedOptions::choose() const
 {
-	assert(0 != _totalWeight);
-	unsigned var = RNG::generate(0, _totalWeight);
-	std::map<std::string, unsigned>::const_iterator ii = _choices.begin();
+	if (_totalWeight == 0)
+	{
+		return "";
+	}
+	size_t var = RNG::generate(0, _totalWeight);
+	std::map<std::string, size_t>::const_iterator ii = _choices.begin();
 	for (; ii != _choices.end(); ++ii)
 	{
 		if (var <= ii->second)
@@ -45,6 +48,31 @@ const std::string &WeightedOptions::choose() const
 }
 
 /**
+ * Select the most likely option.
+ * This MUST be called on non-empty objects.
+ * @return The key of the selected choice.
+ */
+const std::string WeightedOptions::top() const
+{
+	if (_totalWeight == 0)
+	{
+		return "";
+	}
+	size_t max = 0;
+	std::map<std::string, size_t>::const_iterator i = _choices.begin();
+	for (std::map<std::string, size_t>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
+	{
+		if (ii->second >= max)
+		{
+			max = ii->second;
+			i = ii;
+		}
+	}
+	// We always have a valid iterator here.
+	return i->first;
+}
+
+/**
  * Set an option's weight.
  * If @a weight is set to 0, the option is removed from the list of choices.
  * If @a id already exists, the new weight replaces the old one, otherwise
@@ -52,9 +80,9 @@ const std::string &WeightedOptions::choose() const
  * @param id The option name.
  * @param weight The option's new weight.
  */
-void WeightedOptions::set(const std::string &id, unsigned weight)
+void WeightedOptions::set(const std::string &id, size_t weight)
 {
-	std::map<std::string, unsigned>::iterator option = _choices.find(id);
+	std::map<std::string, size_t>::iterator option = _choices.find(id);
 	if (option != _choices.end())
 	{
 		_totalWeight -= option->second;
@@ -86,19 +114,19 @@ void WeightedOptions::load(const YAML::Node &nd)
 	for (YAML::const_iterator val = nd.begin(); val != nd.end(); ++val)
 	{
 		std::string id = val->first.as<std::string>();
-		unsigned w = val->second.as<unsigned>();
+		size_t w = val->second.as<size_t>();
 		set(id, w);
 	}
 }
 
 /**
  * Send the WeightedOption contents to a YAML::Emitter.
- * @param out The YAML emitter.
+ * @return YAML node.
  */
 YAML::Node WeightedOptions::save() const
 {
 	YAML::Node node;
-	for (std::map<std::string, unsigned>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
+	for (std::map<std::string, size_t>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
 	{
 		node[ii->first] = ii->second;
 	}

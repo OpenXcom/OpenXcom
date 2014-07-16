@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,6 +35,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Slider.h"
+#include "../Interface/ComboBox.h"
 
 namespace OpenXcom
 {
@@ -43,7 +44,7 @@ namespace OpenXcom
  * Initializes all the elements in the test screen.
  * @param game Pointer to the core game.
  */
-TestState::TestState(Game *game) : State(game)
+TestState::TestState()
 {
 	// Create objects
 	_window = new Window(this, 300, 180, 10, 10);
@@ -54,10 +55,9 @@ TestState::TestState(Game *game) : State(game)
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
 	_slider = new Slider(100, 15, 50, 50);
-
+	_comboBox = new ComboBox(this, 80, 16, 98, 100);
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_button);
@@ -65,6 +65,7 @@ TestState::TestState(Game *game) : State(game)
 	add(_list);
 	add(_number);
 	add(_slider);
+	add(_comboBox);
 
 	centerAllSurfaces();
 
@@ -93,12 +94,25 @@ TestState::TestState(Game *game) : State(game)
 
 	_slider->setColor(Palette::blockOffset(15)+1);
 
+	std::vector<std::string> difficulty;
+	for (int i = 0; i != 3; ++i)
+	{
+		difficulty.push_back("STR_1_BEGINNER");
+		difficulty.push_back("STR_2_EXPERIENCED");
+		difficulty.push_back("STR_3_VETERAN");
+		difficulty.push_back("STR_4_GENIUS");
+		difficulty.push_back("STR_5_SUPERHUMAN");
+	}
+
+	_comboBox->setColor(Palette::blockOffset(15)+1);
+	_comboBox->setOptions(difficulty);
+
 	_i = 0;
 
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_0")->savePal("../../../Geoscape.pal");
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_1")->savePal("../../../Basescape.pal");
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_3")->savePal("../../../Ufopaedia.pal");
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_4")->savePal("../../../Battlescape.pal");
+	//_game->getResourcePack()->getPalette("PAL_GEOSCAPE")->savePal("../../../Geoscape.pal");
+	//_game->getResourcePack()->getPalette("PAL_BASESCAPE")->savePal("../../../Basescape.pal");
+	//_game->getResourcePack()->getPalette("PAL_UFOPAEDIA")->savePal("../../../Ufopaedia.pal");
+	//_game->getResourcePack()->getPalette("PAL_BATTLESCAPE")->savePal("../../../Battlescape.pal");
 
 	//_game->getResourcePack()->getFont("FONT_BIG")->fix("../../../Big.bmp", 256);
 	//_game->getResourcePack()->getFont("FONT_SMALL")->fix("../../../Small.bmp", 128);

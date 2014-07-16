@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,7 +45,7 @@ private:
 	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;
 public:
 	/// Creates the Monthly Costs state.
-	MonthlyCostsState(Game *game, Base *base);
+	MonthlyCostsState(Base *base);
 	/// Cleans up the Monthly Costs state.
 	~MonthlyCostsState();
 	/// Handler for clicking the OK button.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param waypoint Pointer to the last UFO position (if redirecting the craft).
  */
-GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, Waypoint *waypoint) : State(game), _craft(craft), _globe(globe), _waypoint(waypoint)
+GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *waypoint) : _craft(craft), _globe(globe), _waypoint(waypoint)
 {
 	_screen = false;
 
@@ -57,24 +57,24 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnTarget = new TextButton(192, 12, 32, 140);
 	_btnPatrol = new TextButton(192, 12, 32, 156);
 	_btnCancel = new TextButton(192, 12, 32, 172);
-	_txtTitle = new Text(200, 17, 32, 20);
+	_txtTitle = new Text(210, 17, 32, 20);
 	_txtStatus = new Text(210, 17, 32, 36);
-	_txtBase = new Text(200, 9, 32, 52);
-	_txtSpeed = new Text(200, 9, 32, 60);
-	_txtMaxSpeed = new Text(200, 9, 32, 68);
-	_txtAltitude = new Text(200, 9, 32, 76);
-	_txtFuel = new Text(120, 9, 32, 84);
-	_txtDamage = new Text(75, 9, 164, 84);
-	_txtW1Name = new Text(120, 9, 32, 92);
-	_txtW1Ammo = new Text(60, 9, 164, 92);
-	_txtW2Name = new Text(120, 9, 32, 100);
-	_txtW2Ammo = new Text(60, 9, 164, 100);
+	_txtBase = new Text(210, 9, 32, 52);
+	_txtSpeed = new Text(210, 9, 32, 60);
+	_txtMaxSpeed = new Text(210, 9, 32, 68);
+	_txtAltitude = new Text(210, 9, 32, 76);
+	_txtFuel = new Text(130, 9, 32, 84);
+	_txtDamage = new Text(80, 9, 164, 84);
+	_txtW1Name = new Text(130, 9, 32, 92);
+	_txtW1Ammo = new Text(80, 9, 164, 92);
+	_txtW2Name = new Text(130, 9, 32, 100);
+	_txtW2Ammo = new Text(80, 9, 164, 100);
 	_txtRedirect = new Text(230, 17, 13, 108);
 	_txtSoldier = new Text(60, 9, 164, 68);
-	_txtHWP = new Text(60, 9, 164, 76);
+	_txtHWP = new Text(80, 9, 164, 76);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_btnBase);
@@ -118,7 +118,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeCraftState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeCraftState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeCraftState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -135,6 +135,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	else if (_craft->getLowFuel())
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
+	}
+	else if (_craft->getMissionComplete())
+	{
+		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
 	}
 	else if (_craft->getDestination() == 0)
 	{
@@ -237,13 +241,13 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtSoldier->setColor(Palette::blockOffset(15)-1);
 	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss11;
+	std::wostringstream ss11;
 	ss11 << tr("STR_SOLDIERS_UC") << ">" << L'\x01' << _craft->getNumSoldiers();
 	_txtSoldier->setText(ss11.str());
 
 	_txtHWP->setColor(Palette::blockOffset(15)-1);
 	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss12;
+	std::wostringstream ss12;
 	ss12 << tr("STR_HWPS") << ">" << L'\x01' << _craft->getNumVehicles();
 	_txtHWP->setText(ss12.str());
 
@@ -256,7 +260,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
 
-	if (_craft->getLowFuel())
+	if (_craft->getLowFuel() || _craft->getMissionComplete())
 	{
 		_btnBase->setVisible(false);
 		_btnTarget->setVisible(false);
@@ -278,14 +282,6 @@ GeoscapeCraftState::~GeoscapeCraftState()
 }
 
 /**
- * Resets the palette.
- */
-void GeoscapeCraftState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
-}
-
-/**
  * Returns the craft back to its base.
  * @param action Pointer to an action.
  */
@@ -303,7 +299,7 @@ void GeoscapeCraftState::btnBaseClick(Action *)
 void GeoscapeCraftState::btnTargetClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
+	_game->pushState(new SelectDestinationState(_craft, _globe));
 	delete _waypoint;
 }
 

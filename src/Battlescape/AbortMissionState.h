@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ private:
 	int _inExitArea, _outExitArea;
 public:
 	/// Creates the Abort Mission state.
-	AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
+	AbortMissionState(SavedBattleGame *battleGame, BattlescapeState *state);
 	/// Cleans up the Abort Mission state.
 	~AbortMissionState();
 	/// Handler for clicking the OK button.

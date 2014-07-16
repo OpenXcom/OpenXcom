@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ private:
 	Base *_base;
 public:
 	/// Creates the Crafts state.
-	CraftsState(Game *game, Base *base);
+	CraftsState(Base *base);
 	/// Cleans up the Crafts state.
 	~CraftsState();
 	/// Updates the craft info.

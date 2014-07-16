@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,13 +41,15 @@ private:
 	void addItem(BattleActionType ba, const std::string &name, int *id);
 public:
 	/// Creates the Action Menu state.
-	ActionMenuState(Game *game, BattleAction *action, int x, int y);
+	ActionMenuState(BattleAction *action, int x, int y);
 	/// Cleans up the Action Menu state.
 	~ActionMenuState();
 	/// Handler for right-clicking anything.
 	void handle(Action *action);
 	/// Handler for clicking a action menu item.
 	void btnActionMenuItemClick(Action *action);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }

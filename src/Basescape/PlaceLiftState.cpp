@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,6 +32,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -43,14 +44,14 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this a custom starting base?
  */
-PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(base), _globe(globe), _first(first)
 {
 	// Create objects
 	_view = new BaseView(192, 192, 0, 8);
 	_txtTitle = new Text(320, 9, 0, 0);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_txtTitle);
@@ -86,11 +87,12 @@ void PlaceLiftState::viewClick(Action *)
 	fac->setY(_view->getGridY());
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
-	BasescapeState *bState = new BasescapeState(_game, _base, _globe);
+	BasescapeState *bState = new BasescapeState(_base, _globe);
+	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
 	_game->pushState(bState);
 	if (_first)
 	{
-		_game->pushState(new SelectStartFacilityState(_game, _base, bState, _globe));
+		_game->pushState(new SelectStartFacilityState(_base, bState, _globe));
 	}
 }
 

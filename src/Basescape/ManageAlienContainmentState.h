@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
 
 #include "../Engine/State.h"
+#include "../Menu/OptionsBaseState.h"
 #include <vector>
 #include <string>
 
@@ -41,22 +42,23 @@ class ManageAlienContainmentState : public State
 {
 private:
 	Base *_base;
+	OptionsOrigin _origin;
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtUsed, *_txtAvailable, *_txtItem, *_txtQuantity, *_txtFate;
+	Text *_txtTitle, *_txtUsed, *_txtAvailable, *_txtItem, *_txtLiveAliens, *_txtDeadAliens;
 	TextList *_lstAliens;
+	Timer *_timerInc, *_timerDec;
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
-	unsigned int _sel;
+	size_t _sel;
 	int _aliensSold, _researchedAliens;
-	Timer *_timerInc, *_timerDec;
-	int _changeValueByMouseWheel, _containmentLimit;
-	bool _allowChangeListValuesByMouseWheel, _overCrowded;
+	bool _overCrowded;
+	Uint8 _color, _color2;
 	/// Gets selected quantity.
 	int getQuantity();
 public:
 	/// Creates the ManageAlienContainment state.
-	ManageAlienContainmentState(Game *game, Base *base);
+	ManageAlienContainmentState(Base *base, OptionsOrigin origin);
 	/// Cleans up the ManageAlienContainment state.
 	~ManageAlienContainmentState();
 	/// Runs the timers.

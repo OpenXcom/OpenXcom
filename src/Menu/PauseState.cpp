@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,10 +25,14 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
-#include "LoadState.h"
-#include "SaveState.h"
+#include "ListLoadState.h"
+#include "ListSaveState.h"
 #include "../Engine/Options.h"
-#include "OptionsState.h"
+#include "OptionsVideoState.h"
+#include "OptionsGeoscapeState.h"
+#include "OptionsBattlescapeState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -38,7 +42,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 {
 	_screen = false;
 
@@ -59,12 +63,16 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_btnAbandon = new TextButton(180, 18, x+18, 96);
 	_btnOptions = new TextButton(180, 18, x+18, 122);
 	_btnCancel = new TextButton(180, 18, x+18, 150);
-	_txtTitle = new Text(206, 15, x+5, 32);
+	_txtTitle = new Text(206, 17, x+5, 32);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
 	}
 
 	add(_window);
@@ -100,22 +108,31 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyCancel);
+	if (origin == OPT_GEOSCAPE)
+	{
+		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyGeoOptions);
+	}
+	else if (origin == OPT_BATTLESCAPE)
+	{
+		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyBattleOptions);
+	}
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
-	if (Options::getInt("autosave") >= 2)
-	{
-		_btnSave->setVisible(false);
-		_btnLoad->setVisible(false);
-	}
-
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();
+	}
+
+	if (_game->getSavedGame()->isIronman())
+	{
+		_btnLoad->setVisible(false);
+		_btnSave->setVisible(false);
+		_btnAbandon->setText(tr("STR_SAVE_AND_ABANDON_GAME"));
 	}
 }
 
@@ -128,25 +145,12 @@ PauseState::~PauseState()
 }
 
 /**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void PauseState::init()
-{
-	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	}
-}
-
-/**
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
 void PauseState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, _origin));
+	_game->pushState(new ListLoadState(_origin));
 }
 
 /**
@@ -155,7 +159,7 @@ void PauseState::btnLoadClick(Action *)
  */
 void PauseState::btnSaveClick(Action *)
 {
-	_game->pushState(new SaveState(_game, _origin));
+	_game->pushState(new ListSaveState(_origin));
 }
 
 /**
@@ -164,7 +168,19 @@ void PauseState::btnSaveClick(Action *)
 */
 void PauseState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game, _origin));
+	Options::backupDisplay();
+	if (_origin == OPT_GEOSCAPE)
+	{
+		_game->pushState(new OptionsGeoscapeState(_origin));
+	}
+	else if (_origin == OPT_BATTLESCAPE)
+	{
+		_game->pushState(new OptionsBattlescapeState(_origin));
+	}
+	else
+	{
+		_game->pushState(new OptionsVideoState(_origin));
+	}
 }
 
 /**
@@ -173,7 +189,7 @@ void PauseState::btnOptionsClick(Action *)
  */
 void PauseState::btnAbandonClick(Action *)
 {
-	_game->pushState(new AbandonGameState(_game, _origin));
+	_game->pushState(new AbandonGameState(_origin));
 }
 
 /**

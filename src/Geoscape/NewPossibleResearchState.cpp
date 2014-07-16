@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
  */
-NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities) : State (game), _base(base)
+NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vector<RuleResearch *> & possibilities) : _base(base)
 {
 	_screen = false;
 
@@ -52,7 +52,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 1);
 
 	add(_window);
 	add(_btnOk);
@@ -69,11 +69,11 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnOkClick, Options::keyCancel);
 	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
-	_btnResearch->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnResearchClick, (SDLKey)Options::getInt("keyOk"));
+	_btnResearch->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnResearchClick, Options::keyOk);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -105,20 +105,12 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 }
 
 /**
- * Resets the palette.
- */
-void NewPossibleResearchState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
-}
-
-/**
  * return to the previous screen
  * @param action Pointer to an action.
  */
 void NewPossibleResearchState::btnOkClick(Action *)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**
@@ -128,6 +120,7 @@ void NewPossibleResearchState::btnOkClick(Action *)
 void NewPossibleResearchState::btnResearchClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new ResearchState(_game, _base));
+	_game->pushState (new ResearchState(_base));
 }
+
 }

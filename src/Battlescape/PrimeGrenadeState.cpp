@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,9 +37,11 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Prime Grenade window.
  * @param game Pointer to the core game.
- * @param action Pointer to  the action.
+ * @param action Pointer to the action.
+ * @param inInventoryView Called from inventory?
+ * @param grenadeInInventory Pointer to associated grenade.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
+PrimeGrenadeState::PrimeGrenadeState(BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 
@@ -56,14 +58,19 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		_number[i] = new Text(20, 20, x+((i%8)*24), y-1+((i/8)*25));
 	}
 
+	// Set palette
+	if (inInventoryView)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	}
+
 	// Set up objects
-	SDL_Rect square;
-	square.x = 0;
-	square.y = 0;
-	square.w = _bg->getWidth();
-	square.h = _bg->getHeight();
 	add(_bg);
-	_bg->drawRect(&square, Palette::blockOffset(6)+9);
+	_bg->drawRect(0, 0, _bg->getWidth(), _bg->getHeight(), Palette::blockOffset(6)+9);
 
 	add(_frame);
 	_frame->setColor(Palette::blockOffset(6)+3);
@@ -80,6 +87,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 
 	for (int i = 0; i < 24; ++i)
 	{
+		SDL_Rect square;
 		add(_button[i]);
 		_button[i]->onMouseClick((ActionHandler)&PrimeGrenadeState::btnClick);
 		square.x = 0;
@@ -87,13 +95,13 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		square.w = _button[i]->getWidth();
 		square.h = _button[i]->getHeight();
 		_button[i]->drawRect(&square, Palette::blockOffset(0)+15);
-		square.x = 1;
-		square.y = 1;
-		square.w = _button[i]->getWidth()-2;
-		square.h = _button[i]->getHeight()-2;
+		square.x++;
+		square.y++;
+		square.w -= 2;
+		square.h -= 2;
 		_button[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << i;
 		add(_number[i]);
 		_number[i]->setBig();
@@ -157,7 +165,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (btnID != -1)
 	{
-		if (_inInventoryView) _grenadeInInventory->setExplodeTurn(0 + btnID);
+		if (_inInventoryView) _grenadeInInventory->setFuseTimer(0 + btnID);
 		else _action->value = btnID;
 		_game->popState();
 		if (!_inInventoryView) _game->popState();

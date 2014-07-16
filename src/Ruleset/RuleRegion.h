@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include "../fmath.h"
 #include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
@@ -34,6 +35,11 @@ namespace OpenXcom
 struct MissionArea
 {
 	double lonMin, lonMax, latMin, latMax;
+
+    bool operator== (const MissionArea& ma) const
+	{
+		return AreSame(lonMax, ma.lonMax) && AreSame(lonMin, ma.lonMin) && AreSame(latMax, ma.latMax) && AreSame(latMin, ma.latMin);
+	}
 };
 
 /**
@@ -66,12 +72,14 @@ private:
 	/// Weighted list of the different mission types for this region.
 	WeightedOptions _missionWeights;
 	/// Weight of this region when selecting regions for alien missions.
-	unsigned _regionWeight;
+	size_t _regionWeight;
 	/// All the mission zones in this region.
 	std::vector<MissionZone> _missionZones;
 	/// Do missions in the region defined by this string instead.
 	std::string _missionRegion;
 public:
+	static const int CITY_MISSION_ZONE = 3;
+	static const int ALIEN_BASE_ZONE = 4;
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
 	/// Cleans up the region ruleset.
@@ -87,13 +95,13 @@ public:
 	/// Gets the cities in this region.
 	std::vector<City*> *getCities();
 	/// Gets the weight of this region for mission selection.
-	unsigned getWeight() const;
+	size_t getWeight() const;
 	/// Gets the weighted list of missions for this region.
 	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
 	/// Gets the substitute mission region.
 	const std::string &getMissionRegion() const { return _missionRegion; }
 	/// Gets a random point inside a mission site.
-	std::pair<double, double> getRandomPoint(unsigned site) const;
+	std::pair<double, double> getRandomPoint(size_t site) const;
 	/// Gets the maximum longitude.
 	const std::vector<double> &getLonMax() const { return _lonMax; }
 	/// Gets the minimum longitude.

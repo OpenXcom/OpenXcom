@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,7 @@
 #define OPENXCOM_CIVILIANBAISTATE_H
 
 #include "BattleAIState.h"
-#include "BattlescapeGame.h"
+#include "Position.h"
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -29,6 +29,7 @@ namespace OpenXcom
 class BattleUnit;
 class SavedBattleGame;
 class Node;
+struct BattleAction;
 
 /**
  * This is the intial AI state of units, walking around and looking for intruders.
@@ -44,7 +45,7 @@ protected:
 	Node *_fromNode, *_toNode;
 public:
 	/// Creates a new BattleAIState linked to the game and a certain unit.
-	CivilianBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node);
+	CivilianBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node);
 	/// Cleans up the BattleAIState.
 	~CivilianBAIState();
 	/// Loads the AI state from YAML.

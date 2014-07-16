@@ -1,0 +1,8 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+items:
+  - type: STR_HEAVY_LASER
+    power: 120
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuSnap: 33
+    tuAimed: 60

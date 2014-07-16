@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
+#include <SDL_mixer.h>
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
@@ -26,7 +27,6 @@
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom
@@ -35,7 +35,7 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -140,7 +140,7 @@ std::list<Polyline*> *ResourcePack::getPolylines()
  */
 Music *ResourcePack::getMusic(const std::string &name) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteMusic;
 	}
@@ -158,7 +158,7 @@ Music *ResourcePack::getMusic(const std::string &name) const
  */
 Music *ResourcePack::getRandomMusic(const std::string &name) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteMusic;
 	}
@@ -175,7 +175,36 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[RNG::generate(0, music.size()-1)];
+			return music[SDL_GetTicks() % music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
+	}
+}
+
+/**
+ * Plays the specified track if it's not already playing.
+ * @param name Name of the music.
+ * @param random Pick a random track?
+ */
+void ResourcePack::playMusic(const std::string &name, bool random)
+{
+	if (!Options::mute && _playingMusic != name)
+	{
+		int loop = -1;
+		_playingMusic = name;
+
+		// hacks
+		if (name == "GMGEO1")
+			_playingMusic = "GMGEO";
+		else if (!Options::musicAlwaysLoop && (name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+			loop = 0;
+
+		if (random)
+		{
+			getRandomMusic(name)->play(loop);
+		}
+		else
+		{
+			getMusic(name)->play(loop);
+		}
 	}
 }
 
@@ -187,7 +216,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
  */
 Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 	{
 		return _muteSound;
 	}

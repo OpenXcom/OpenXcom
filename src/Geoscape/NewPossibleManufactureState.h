@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,25 +31,25 @@ class TextList;
 class RuleManufacture;
 
 /**
-   Window which inform the player of new possible manufacture projects.
-   Also allow to go to the ManufactureState to dispatch available engineers.
+ * Window which inform the player of new possible manufacture projects.
+ * Also allow to go to the ManufactureState to dispatch available engineers.
  */
 class NewPossibleManufactureState : public State
 {
+private:
 	Window *_window;
 	Text *_txtTitle;
 	TextList * _lstPossibilities;
-    TextButton *_btnManufacture, *_btnOk;
+	TextButton *_btnManufacture, *_btnOk;
 	Base * _base;
 public:
 	/// Creates the NewPossibleManufacture state.
-	NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities);
-	/// Updates the palette.
-	void init();
+	NewPossibleManufactureState(Base * base, const std::vector<RuleManufacture *> & possibilities);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Allocate Manufacture button.
 	void btnManufactureClick(Action *action);
 };
+
 }
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,21 +17,23 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainMenuState.h"
+#include <sstream>
 #include "../version.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Music.h"
-#include "NewGameState.h"
-#include "NewBattleState.h"
-#include "LoadState.h"
-#include "OptionsState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "NewGameState.h"
+#include "NewBattleState.h"
+#include "ListLoadState.h"
+#include "OptionsVideoState.h"
 
 namespace OpenXcom
 {
@@ -40,7 +42,7 @@ namespace OpenXcom
  * Initializes all the elements in the Main Menu window.
  * @param game Pointer to the core game.
  */
-MainMenuState::MainMenuState(Game *game) : State(game)
+MainMenuState::MainMenuState()
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
@@ -52,8 +54,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle = new Text(256, 30, 32, 45);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnNewGame);
@@ -92,13 +93,13 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wstringstream title;
+	std::wostringstream title;
 	title << tr("STR_OPENXCOM") << L"\x02";
 	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
 	_txtTitle->setText(title.str());
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMSTORY")->play();
+	_game->getResourcePack()->playMusic("GMSTORY");
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
@@ -113,22 +114,12 @@ MainMenuState::~MainMenuState()
 }
 
 /**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void MainMenuState::init()
-{
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-}
-
-/**
  * Opens the New Game window.
  * @param action Pointer to an action.
  */
 void MainMenuState::btnNewGameClick(Action *)
 {
-	_game->pushState(new NewGameState(_game));
+	_game->pushState(new NewGameState);
 }
 
 /**
@@ -137,7 +128,7 @@ void MainMenuState::btnNewGameClick(Action *)
  */
 void MainMenuState::btnNewBattleClick(Action *)
 {
-	_game->pushState(new NewBattleState(_game));
+	_game->pushState(new NewBattleState);
 }
 
 /**
@@ -146,7 +137,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, OPT_MENU));
+	_game->pushState(new ListLoadState(OPT_MENU));
 }
 
 /**
@@ -155,7 +146,8 @@ void MainMenuState::btnLoadClick(Action *)
  */
 void MainMenuState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game, OPT_MENU));
+	Options::backupDisplay();
+	_game->pushState(new OptionsVideoState(OPT_MENU));
 }
 
 /**
@@ -167,4 +159,18 @@ void MainMenuState::btnQuitClick(Action *)
 	_game->quit();
 }
 
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void MainMenuState::resize(int &dX, int &dY)
+{
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+	State::resize(dX, dY);
+}
 }

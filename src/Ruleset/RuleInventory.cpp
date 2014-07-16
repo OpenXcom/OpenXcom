@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,7 +53,7 @@ namespace OpenXcom
  * type of inventory section.
  * @param id String defining the id.
  */
-RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs()
+RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs(), _listOrder(0)
 {
 }
 
@@ -64,8 +64,9 @@ RuleInventory::~RuleInventory()
 /**
  * Loads the inventory from a YAML file.
  * @param node YAML node.
+ * @param listOrder The list weight for this inventory.
  */
-void RuleInventory::load(const YAML::Node &node)
+void RuleInventory::load(const YAML::Node &node, int listOrder)
 {
 	_id = node["id"].as<std::string>(_id);
 	_x = node["x"].as<int>(_x);
@@ -73,6 +74,7 @@ void RuleInventory::load(const YAML::Node &node)
 	_type = (InventoryType)node["type"].as<int>(_type);
 	_slots = node["slots"].as< std::vector<RuleSlot> >(_slots);
 	_costs = node["costs"].as< std::map<std::string, int> >(_costs);
+	_listOrder = node["listOrder"].as<int>(listOrder);
 }
 
 /**
@@ -233,4 +235,8 @@ int RuleInventory::getCost(RuleInventory* slot) const
 	return _costs.find(slot->getId())->second;
 }
 
+int RuleInventory::getListOrder() const
+{
+	return _listOrder;
+}
 }

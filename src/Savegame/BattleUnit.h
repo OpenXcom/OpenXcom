@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -82,7 +82,7 @@ private:
 	bool _visible;
 	Surface *_cache[5];
 	bool _cacheInvalid;
-	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
+	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expPsiStrength, _expMelee;
 	int improveStat(int exp);
 	int _motionPoints;
 	int _kills;
@@ -91,8 +91,8 @@ private:
 	int _moraleRestored;
 	int _coverReserve;
 	BattleUnit *_charging;
-	int _turnsExposed;
-	std::string _zombieUnit, _spawnUnit;
+	int _turnsSinceSpotted;
+	std::string _spawnUnit;
 	std::string _activeHand;
 
 	// static data
@@ -228,9 +228,9 @@ public:
 	/// Clear visible tiles.
 	void clearVisibleTiles();
 	/// Calculate firing accuracy.
-	double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
+	int getFiringAccuracy(BattleActionType actionType, BattleItem *item);
 	/// Calculate accuracy modifier.
-	double getAccuracyModifier();
+	int getAccuracyModifier(BattleItem *item = 0);
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy();
 	/// Set armor value.
@@ -293,8 +293,10 @@ public:
 	void addFiringExp();
 	/// Adds one to the throwing exp counter.
 	void addThrowingExp();
-	/// Adds one to the psi exp counter.
-	void addPsiExp();
+	/// Adds one to the psi skill exp counter.
+	void addPsiSkillExp();
+	/// Adds one to the psi strength exp counter.
+	void addPsiStrengthExp();
 	/// Adds one to the melee exp counter.
 	void addMeleeExp();
 	/// Updates the stats of a Geoscape soldier.
@@ -363,8 +365,6 @@ public:
 	void convertToFaction(UnitFaction f);
 	/// Set health to 0 and set status dead
 	void instaKill();
-	/// Gets the unit's zombie unit.
-	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Sets the unit's spawn unit.
@@ -386,9 +386,9 @@ public:
 	/// Get the carried weight in strength units.
 	int getCarriedWeight(BattleItem *draggingItem = 0) const;
 	/// Set how many turns this unit will be exposed for.
-	void setTurnsExposed (int turns);
+	void setTurnsSinceSpotted (int turns);
 	/// Set how many turns this unit will be exposed for.
-	int getTurnsExposed () const;
+	int getTurnsSinceSpotted () const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
 	/// call this after the default copy constructor deletes the cache?
@@ -400,7 +400,7 @@ public:
 	bool _hidingForTurn; // don't zone out and start patrolling again
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
-	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+	std::vector<BattleUnit *> &getUnitsSpottedThisTurn();
 	/// set the rank integer
 	void setRankInt(int rank);
 	/// get the rank integer

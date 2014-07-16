@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,10 +21,8 @@
 
 #include <vector>
 #include "Position.h"
-#include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleItem.h"
 #include <SDL.h>
-#include "BattlescapeGame.h"
-#include "../Savegame/BattleUnit.h"
 
 namespace OpenXcom
 {
@@ -33,6 +31,7 @@ class SavedBattleGame;
 class BattleUnit;
 class BattleItem;
 class Tile;
+struct BattleAction;
 
 /**
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
@@ -49,7 +48,7 @@ private:
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
+	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 	inline int getMaxViewDistance() const {return _maxViewDistance;}
 	inline int getMaxViewDistanceAtDark() const {return _maxViewDistanceAtDark;}
@@ -87,7 +86,7 @@ public:
 	/// Calculates a line trajectory.
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Calculates a parabola trajectory.
-	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
+	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta);
 	/// Gets the origin voxel of a unit's eyesight.
 	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	/// Checks visibility of a unit on this tile.
@@ -109,7 +108,7 @@ public:
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.
-	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target);
+	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest);
 	/// Gets the AI to look through a window.
 	int faceWindow(const Position &position);
 	/// Checks a unit's % exposure on a tile.
@@ -127,7 +126,7 @@ public:
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
-	bool validateThrow(BattleAction *action);
+	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0);
 	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
 	/// Creates a vector of units that can spot this unit.
@@ -142,6 +141,11 @@ public:
 	void recalculateFOV();
 	/// Get direction to a certain point
 	int getDirectionTo(const Position &origin, const Position &target) const;
+	/// determine the origin voxel of a given action.
+	Position getOriginVoxel(BattleAction &action, Tile *tile);
+	/// mark a region of the map as "dangerous" for a turn.
+	void setDangerZone(Position pos, int radius, BattleUnit *unit);
+
 };
 
 }

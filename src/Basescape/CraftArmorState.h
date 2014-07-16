@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,7 @@ private:
 	size_t _craft;
 public:
 	/// Creates the Craft Armor state.
-	CraftArmorState(Game *game, Base *base, size_t craft);
+	CraftArmorState(Base *base, size_t craft);
 	/// Cleans up the Craft Armor state.
 	~CraftArmorState();
 	/// Updates the soldier armors.

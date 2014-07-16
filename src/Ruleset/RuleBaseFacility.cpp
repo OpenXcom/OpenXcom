@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,11 +47,20 @@ void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_spriteShape = node["spriteShape"].as<int>(_spriteShape);
-	_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
-	// BASEBITS.PCK: 34 entries
-	if (_spriteFacility > 33)
-		_spriteFacility += modIndex;
+	if (node["spriteShape"])
+	{
+		_spriteShape = node["spriteShape"].as<int>(_spriteShape);
+		// BASEBITS.PCK: 34 entries
+		if (_spriteShape > 33)
+			_spriteShape += modIndex;
+	}
+	if (node["spriteFacility"])
+	{
+		_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
+		// BASEBITS.PCK: 34 entries
+		if (_spriteFacility > 33)
+			_spriteFacility += modIndex;
+	}
 	_lift = node["lift"].as<bool>(_lift);
 	_hyper = node["hyper"].as<bool>(_hyper);
 	_mind = node["mind"].as<bool>(_mind);
@@ -71,14 +80,20 @@ void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 	_radarChance = node["radarChance"].as<int>(_radarChance);
 	_defense = node["defense"].as<int>(_defense);
 	_hitRatio = node["hitRatio"].as<int>(_hitRatio);
-	_fireSound = node["fireSound"].as<int>(_fireSound);
-	// GEO.CAT: 14 entries
-	if (_fireSound > 13)
-		_fireSound += modIndex;
-	_hitSound = node["hitSound"].as<int>(_hitSound);
-	// GEO.CAT: 14 entries
-	if (_hitSound > 13)
-		_hitSound += modIndex;
+	if (node["fireSound"])
+	{
+		_fireSound = node["fireSound"].as<int>(_fireSound);
+		// GEO.CAT: 14 entries
+		if (_fireSound > 13)
+			_fireSound += modIndex;
+	}
+	if (node["hitSound"])
+	{		
+		_hitSound = node["hitSound"].as<int>(_hitSound);
+		// GEO.CAT: 14 entries
+		if (_hitSound > 13)
+			_hitSound += modIndex;
+	}
 	_mapName = node["mapName"].as<std::string>(_mapName);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)

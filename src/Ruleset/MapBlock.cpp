@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MapBlock.h"
+#include "../Battlescape/Position.h"
 
 namespace OpenXcom
 {
@@ -24,7 +25,7 @@ namespace OpenXcom
 /**
  * MapBlock construction.
  */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type):_terrain(terrain), _name(name), _size_x(size_x), _size_y(size_y), _size_z(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
+MapBlock::MapBlock(std::string name, int size_x, int size_y, MapBlockType type):_name(name), _size_x(size_x), _size_y(size_y), _size_z(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
 {
 }
 
@@ -51,6 +52,7 @@ void MapBlock::load(const YAML::Node &node)
 	_subType = (MapBlockType)node["subType"].as<int>(_subType);
 	_frequency = node["frequency"].as<int>(_frequency);
 	_maxCount = node["maxCount"].as<int>(_maxCount);
+	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
 }
 
 /**
@@ -153,6 +155,10 @@ void MapBlock::markUsed()
 void MapBlock::reset()
 {
 	_timesUsed = 0;
+}
+std::map<std::string, std::vector<Position> > *MapBlock::getItems()
+{
+	return &_items;
 }
 
 }

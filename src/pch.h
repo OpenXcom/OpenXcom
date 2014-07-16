@@ -5,12 +5,15 @@
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
 //#include <crtdbg.h>
+
+#ifndef __NO_OPENGL
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
-
+#endif
+#include <SDL_opengl.h>
 #endif
 #include <algorithm>
 #include <cassert>
@@ -42,7 +45,6 @@
 #include <SDL_image.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
-#include <SDL_opengl.h>
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_types.h>
@@ -56,16 +58,7 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-//#include <shlobj.h>
-//#include <shlwapi.h>
-#include <direct.h>
-#else
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/param.h>
 #include <pwd.h>
@@ -77,15 +70,13 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "./aresame.h"
+#include "./fmath.h"
 #include "./version.h"
 
 // uncomment to check memory leaks in VS
-//#ifdef _DEBUG
 //#ifndef DBG_NEW
 //#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 //#define new DBG_NEW
-//#endif
 //#endif
 
 #include "./Engine/State.h"
@@ -121,9 +112,7 @@
 #include "./Engine/Timer.h"
 #include "./Engine/Zoom.h"
 #include "./Engine/Font.h"
-#include "./Engine/FixedFloat.h"
 #include "./Engine/RNG.h"
-#include "./Engine/ShaderRotate.h"
 #include "./Engine/Palette.h"
 #include "./Engine/Music.h"
 #include "./Engine/Language.h"
@@ -141,7 +130,6 @@
 #include "./Battlescape/WarningMessage.h"
 #include "./Battlescape/PathfindingOpenSet.h"
 #include "./Battlescape/TileEngine.h"
-#include "./Menu/OptionsBattlescapeState.h"
 #include "./Battlescape/ScannerView.h"
 #include "./Battlescape/Inventory.h"
 #include "./Battlescape/BattlescapeGame.h"
@@ -303,21 +291,29 @@
 #include "./Interface/Slider.h"
 #include "./Interface/Frame.h"
 #include "./lodepng.h"
-#include "./Menu/SaveState.h"
+#include "./Menu/ListSaveState.h"
 #include "./Menu/DeleteGameState.h"
 #include "./Menu/ErrorMessageState.h"
 #include "./Menu/NewBattleState.h"
 #include "./Menu/StartState.h"
+#include "./Menu/IntroState.h"
 #include "./Menu/TestState.h"
-#include "./Menu/OptionsControlsState.h"
-#include "./Menu/LoadState.h"
-#include "./Menu/SavedGameState.h"
-#include "./Menu/OptionsState.h"
-#include "./Menu/OptionsLanguageState.h"
+#include "./Menu/ConfirmLoadState.h"
+#include "./Menu/ListLoadState.h"
+#include "./Menu/ListGamesState.h"
+#include "./Menu/LoadGameState.h"
+#include "./Menu/SaveGameState.h"
 #include "./Menu/NewGameState.h"
 #include "./Menu/MainMenuState.h"
 #include "./Menu/AbandonGameState.h"
 #include "./Menu/PauseState.h"
+#include "./Menu/OptionsVideoState.h"
+#include "./Menu/OptionsAudioState.h"
+#include "./Menu/OptionsAdvancedState.h"
+#include "./Menu/OptionsControlsState.h"
+#include "./Menu/OptionsGeoscapeState.h"
+#include "./Menu/OptionsBattlescapeState.h"
+#include "./Menu/OptionsModsState.h"
 #include "./Resource/ResourcePack.h"
 #include "./Resource/XcomResourcePack.h"
 #include "./Savegame/MovingTarget.h"
@@ -351,6 +347,5 @@
 #include "./Savegame/Soldier.h"
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
-#include "./Menu/OptionsAdvancedState.h"
 
 #endif

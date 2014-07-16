@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,7 +56,7 @@ public:
 	const std::vector<int> &getActivityXcom() const;
 	/// get xcom activity to this region
 	const std::vector<int> &getActivityAlien() const;
-	/// store last month's counters, start new counters.
+	/// start new month of activity
 	void newMonth();
 };
 

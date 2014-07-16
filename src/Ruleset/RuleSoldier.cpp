@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,9 +26,8 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _statCaps(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0)
 {
-
 }
 
 /**
@@ -46,9 +45,9 @@ RuleSoldier::~RuleSoldier()
 void RuleSoldier::load(const YAML::Node &node)
 {
 	_type = node["type"].as<std::string>(_type);
-	_minStats = node["minStats"].as<UnitStats>(_minStats);
-	_maxStats = node["maxStats"].as<UnitStats>(_maxStats);
-	_statCaps = node["statCaps"].as<UnitStats>(_statCaps);
+	_minStats.merge(node["minStats"].as<UnitStats>(_minStats));
+	_maxStats.merge(node["maxStats"].as<UnitStats>(_maxStats));
+	_statCaps.merge(node["statCaps"].as<UnitStats>(_statCaps));
 	_armor = node["armor"].as<std::string>(_armor);
 	_standHeight = node["standHeight"].as<int>(_standHeight);
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);

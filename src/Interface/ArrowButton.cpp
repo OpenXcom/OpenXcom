@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0), _listButton(false)
+ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
 {
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
@@ -46,6 +46,18 @@ ArrowButton::~ArrowButton()
 	delete _timer;
 }
 
+bool ArrowButton::isButtonHandled(Uint8 button)
+{
+	if (_list != 0)
+	{
+		return (button == SDL_BUTTON_LEFT || button == SDL_BUTTON_RIGHT);
+	}
+	else
+	{
+		return ImageButton::isButtonHandled(button);
+	}
+}
+
 /**
  * Changes the color for the image button.
  * @param color Color value.
@@ -57,7 +69,17 @@ void ArrowButton::setColor(Uint8 color)
 }
 
 /**
- * Changes the text associated with the arrow button.
+ * Changes the shape for the arrow button.
+ * @param shape Shape of the arrow.
+ */
+void ArrowButton::setShape(ArrowShape shape)
+{
+	_shape = shape;
+	_redraw = true;
+}
+
+/**
+ * Changes the list associated with the arrow button.
  * This makes the button scroll that list.
  * @param list Pointer to text list.
  */
@@ -311,9 +333,14 @@ void ArrowButton::scroll()
 void ArrowButton::mousePress(Action *action, State *state)
 {
 	ImageButton::mousePress(action, state);
-	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_list != 0)
 	{
-		_timer->start();
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_timer->start();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) _list->scrollUp(false, true);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) _list->scrollDown(false, true);
 	}
 }
 
@@ -339,7 +366,7 @@ void ArrowButton::mouseRelease(Action *action, State *state)
 void ArrowButton::mouseClick(Action *action, State *state)
 {
 	ImageButton::mouseClick(action, state);
-	if (0 != _list && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
+	if (_list != 0 && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
 		if (_shape == ARROW_BIG_UP) _list->scrollUp(true);
 		else if (_shape == ARROW_BIG_DOWN) _list->scrollDown(true);
 	}

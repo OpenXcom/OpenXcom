@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,12 +44,12 @@ private:
 
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtSoldier, *_txtType, *_txtQuantity;
+	Text *_txtTitle, *_txtType, *_txtQuantity;
 	TextList *_lstArmor;
 	std::vector<Armor*> _armors;
 public:
 	/// Creates the Soldier Armor state.
-	SoldierArmorState(Game *game, Base *base, size_t soldier);
+	SoldierArmorState(Base *base, size_t soldier);
 	/// Cleans up the Soldier Armor state.
 	~SoldierArmorState();
 	/// Handler for clicking the Cancel button.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
  * Default plurality rules.
  * Provide rules for languages where 1 is singular and everything else is plural.
- * @langsuffixes one = 1; other = ...
+ * @note one = 1; other = ...
  */
 class OneSingular: public LanguagePlurality
 {
@@ -45,7 +45,7 @@ const char *OneSingular::getSuffix(unsigned n) const
 /**
  * Plurality rules where 0 is also singular.
  * Provide rules for languages where 0 and 1 are singular and everything else is plural.
- * @langsuffixes one = 0-1; other = ...
+ * @note one = 0-1; other = ...
  */
 class ZeroOneSingular : public LanguagePlurality
 {
@@ -64,10 +64,10 @@ const char *ZeroOneSingular::getSuffix(unsigned n) const
 }
 
 /**
-* Plurality rules where there is no singular.
-* Provide rules for languages where everything is plural.
-* @langsuffixes other = ...
-*/
+ * Plurality rules where there is no singular.
+ * Provide rules for languages where everything is plural.
+ * @note other = ...
+ */
 class NoSingular : public LanguagePlurality
 {
 public:
@@ -82,8 +82,8 @@ const char *NoSingular::getSuffix(unsigned) const
 
 /**
  * Plurality rules for Cyrillic languages (Russian, Ukranian, etc.)
- * @langsuffixes one = 1, 21, 31...; few = 2-4, 22-24, 32-34...; many = 0, 5-20, 25-30, 35-40...; other = ...
-*/
+ * @note one = 1, 21, 31...; few = 2-4, 22-24, 32-34...; many = 0, 5-20, 25-30, 35-40...; other = ...
+ */
 class CyrillicPlurality : public LanguagePlurality
 {
 public:
@@ -113,8 +113,8 @@ const char *CyrillicPlurality::getSuffix(unsigned n) const
 
 /**
  * Plurality rules for Czech and Slovak languages.
- * @langsuffixes one = 1; few = 2-4; other = ...
-*/
+ * @note one = 1; few = 2-4; other = ...
+ */
 class CzechPlurality : public LanguagePlurality
 {
 public:
@@ -136,9 +136,9 @@ const char *CzechPlurality::getSuffix(unsigned n) const
 }
 
 /**
-* Plurality rules for the Polish language.
-* @langsuffixes one = 1; few = 2-4, 22-24, 32-34...; many = 0, 5-21, 25-31, 35-41, ...; other = ...
-*/
+ * Plurality rules for the Polish language.
+ * @note one = 1; few = 2-4, 22-24, 32-34...; many = 0, 5-21, 25-31, 35-41, ...; other = ...
+ */
 class PolishPlurality : public LanguagePlurality
 {
 public:
@@ -167,9 +167,9 @@ const char *PolishPlurality::getSuffix(unsigned n) const
 }
 
 /**
-* Plurality rules for Romanian and Moldavian languages.
-* @langsuffixes one = 1; few = 0, 2-19, 101-119...; other = ...
-*/
+ * Plurality rules for Romanian and Moldavian languages.
+ * @note one = 1; few = 0, 2-19, 101-119...; other = ...
+ */
 class RomanianPlurality : public LanguagePlurality
 {
 public:
@@ -191,7 +191,6 @@ const char *RomanianPlurality::getSuffix(unsigned n) const
 	return "_other";
 }
 
-
 /** A mapping of language to plurality rules.
  * It is populated the first time plurality rules are requested.
  * @see LanguagePlurality::create
@@ -203,8 +202,6 @@ std::map<std::string, LanguagePlurality::PFCreate> LanguagePlurality::s_factoryF
  * If the language was not found, a default with the same rules as English is returned.
  * @param language The target language.
  * @return A newly created LanguagePlurality instance for the given language.
- * @todo Make sure the rest of the languages we support in OpenXcom are ok with
- * the English rules for plurality.
  * @internal The first time this is called, we populate the language => rules mapping.
  */
 LanguagePlurality *LanguagePlurality::create(const std::string &language)
@@ -219,7 +216,12 @@ LanguagePlurality *LanguagePlurality::create(const std::string &language)
 		s_factoryFunctions.insert(std::make_pair("pl-PL", &PolishPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("ro", &RomanianPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("ru", &CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("sk-SK", &CzechPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("uk", &CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ja-JP", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("ko", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-CN", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-TW", &NoSingular::create));
 	}
 	PFCreate creator = &OneSingular::create;
 	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);

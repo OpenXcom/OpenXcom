@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@ namespace OpenXcom
 
 class RuleCraftWeapon;
 class CraftWeaponProjectile;
+class Ruleset;
 
 /**
  * Represents a craft weapon equipped by a craft.
@@ -59,9 +60,12 @@ public:
 	/// Sets the craft weapon's rearming status
 	void setRearming(bool rearming);
 	/// Rearms the craft weapon.
-	void rearm();
+	int rearm(const int available, const int clipSize);
 	/// Fires the craft weapon. Used during dogfights.
 	CraftWeaponProjectile* fire() const;
+	/// get how many clips are loaded into this weapon.
+	int getClipsLoaded(Ruleset* ruleset);
+
 };
 
 }

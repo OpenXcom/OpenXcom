@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,9 +46,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the Basescape state.
  */
-BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : State(game), _base(base), _state(state)
+BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _state(state)
 {
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_mini = new MiniBaseView(128, 16, 182, 8);
@@ -56,7 +55,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_btnTransfers = new TextButton(80, 14, 46, 180);
 	_btnStores = new TextButton(80, 14, 132, 180);
 	_btnMonthlyCosts = new TextButton(92, 14, 218, 180);
-	_edtBase = new TextEdit(127, 16, 8, 8);
+	_edtBase = new TextEdit(this, 127, 16, 8, 8);
 
 	_txtPersonnel = new Text(300, 9, 8, 30);
 	_txtSoldiers = new Text(114, 9, 8, 41);
@@ -82,25 +81,28 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtWorkshops = new Text(114, 9, 8, 113);
 	_numWorkshops = new Text(40, 9, 126, 113);
 	_barWorkshops = new Bar(150, 5, 166, 115);
-	if (_containmentLimit)
+	if (Options::storageLimitsEnforced)
 	{
 		_txtContainment = new Text(114, 9, 8, 123);
 		_numContainment = new Text(40, 9, 126, 123);
 		_barContainment = new Bar(150, 5, 166, 125);
 	}
-	_txtHangars = new Text(114, 9, 8, _containmentLimit ? 133 : 123);
-	_numHangars = new Text(40, 9, 126, _containmentLimit ? 133 : 123);
-	_barHangars = new Bar(150, 5, 166, _containmentLimit ? 135 : 125);
+	_txtHangars = new Text(114, 9, 8, Options::storageLimitsEnforced ? 133 : 123);
+	_numHangars = new Text(40, 9, 126, Options::storageLimitsEnforced ? 133 : 123);
+	_barHangars = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 135 : 125);
 
-	_txtDefense = new Text(114, 9, 8, _containmentLimit ? 147 : 138);
-	_numDefense = new Text(40, 9, 126, _containmentLimit ? 147 : 138);
-	_barDefense = new Bar(150, 5, 166, _containmentLimit ? 149 : 140);
-	_txtShortRange = new Text(114, 9, 8, _containmentLimit ? 157 : 153);
-	_numShortRange = new Text(40, 9, 126, _containmentLimit ? 157 : 153);
-	_barShortRange = new Bar(150, 5, 166, _containmentLimit ? 159 : 155);
-	_txtLongRange = new Text(114, 9, 8, _containmentLimit ? 167 : 163);
-	_numLongRange = new Text(40, 9, 126, _containmentLimit ? 167 : 163);
-	_barLongRange = new Bar(150, 5, 166, _containmentLimit ? 169 : 165);
+	_txtDefense = new Text(114, 9, 8, Options::storageLimitsEnforced ? 147 : 138);
+	_numDefense = new Text(40, 9, 126, Options::storageLimitsEnforced ? 147 : 138);
+	_barDefense = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 149 : 140);
+	_txtShortRange = new Text(114, 9, 8, Options::storageLimitsEnforced ? 157 : 153);
+	_numShortRange = new Text(40, 9, 126, Options::storageLimitsEnforced ? 157 : 153);
+	_barShortRange = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 159 : 155);
+	_txtLongRange = new Text(114, 9, 8, Options::storageLimitsEnforced ? 167 : 163);
+	_numLongRange = new Text(40, 9, 126, Options::storageLimitsEnforced ? 167 : 163);
+	_barLongRange = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 169 : 165);
+
+	// Set palette
+	setPalette("PAL_BASESCAPE");
 
 	add(_bg);
 	add(_mini);
@@ -134,7 +136,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_txtWorkshops);
 	add(_numWorkshops);
 	add(_barWorkshops);
-	if (_containmentLimit)
+	if (Options::storageLimitsEnforced)
 	{
 		add(_txtContainment);
 		add(_numContainment);
@@ -158,7 +160,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	// Set up objects
 	std::ostringstream ss;
-	if (_containmentLimit)
+	if (Options::storageLimitsEnforced)
 	{
 		ss << "ALT";
 	}
@@ -167,7 +169,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -176,11 +178,12 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 		}
 	}
 	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
+	_mini->onKeyboardPress((ActionHandler)&BaseInfoState::handleKeyPress);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseInfoState::btnOkClick, Options::keyCancel);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
@@ -196,9 +199,8 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)&BaseInfoState::edtBaseKeyPress);
-
-
+	_edtBase->onChange((ActionHandler)&BaseInfoState::edtBaseChange);
+	
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
@@ -262,7 +264,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
-	if (_containmentLimit)
+	if (Options::storageLimitsEnforced)
 	{
 		_txtContainment->setColor(Palette::blockOffset(13)+5);
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
@@ -320,23 +322,24 @@ BaseInfoState::~BaseInfoState()
  */
 void BaseInfoState::init()
 {
+	State::init();
 	_edtBase->setText(_base->getName());
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
 	_numSoldiers->setText(ss.str());
 
 	_barSoldiers->setMax(_base->getTotalSoldiers());
 	_barSoldiers->setValue(_base->getAvailableSoldiers());
 
-	std::wstringstream ss2;
+	std::wostringstream ss2;
 	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
 	_numEngineers->setText(ss2.str());
 
 	_barEngineers->setMax(_base->getTotalEngineers());
 	_barEngineers->setValue(_base->getAvailableEngineers());
 
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
 	_numScientists->setText(ss3.str());
 
@@ -344,37 +347,37 @@ void BaseInfoState::init()
 	_barScientists->setValue(_base->getAvailableScientists());
 
 
-	std::wstringstream ss4;
+	std::wostringstream ss4;
 	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
 	_numQuarters->setText(ss4.str());
 
 	_barQuarters->setMax(_base->getAvailableQuarters());
 	_barQuarters->setValue(_base->getUsedQuarters());
 
-	std::wstringstream ss5;
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	std::wostringstream ss5;
+	ss5 << (int)floor(_base->getUsedStores() + 0.05) << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
 
 	_barStores->setMax(_base->getAvailableStores());
-	_barStores->setValue(_base->getUsedStores());
+	_barStores->setValue((int)floor(_base->getUsedStores() + 0.05));
 
-	std::wstringstream ss6;
+	std::wostringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
 	_numLaboratories->setText(ss6.str());
 
 	_barLaboratories->setMax(_base->getAvailableLaboratories());
 	_barLaboratories->setValue(_base->getUsedLaboratories());
 
-	std::wstringstream ss7;
+	std::wostringstream ss7;
 	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
 	_numWorkshops->setText(ss7.str());
 
 	_barWorkshops->setMax(_base->getAvailableWorkshops());
 	_barWorkshops->setValue(_base->getUsedWorkshops());
 
-	if (_containmentLimit)
+	if (Options::storageLimitsEnforced)
 	{
-		std::wstringstream ss72;
+		std::wostringstream ss72;
 		ss72 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
 		_numContainment->setText(ss72.str());
 
@@ -382,7 +385,7 @@ void BaseInfoState::init()
 		_barContainment->setValue(_base->getUsedContainment());
 	}
 
-	std::wstringstream ss8;
+	std::wostringstream ss8;
 	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
 	_numHangars->setText(ss8.str());
 
@@ -390,21 +393,21 @@ void BaseInfoState::init()
 	_barHangars->setValue(_base->getUsedHangars());
 
 
-	std::wstringstream ss9;
+	std::wostringstream ss9;
 	ss9 << _base->getDefenseValue();
 	_numDefense->setText(ss9.str());
 
 	_barDefense->setMax(_base->getDefenseValue());
 	_barDefense->setValue(_base->getDefenseValue());
 
-	std::wstringstream ss10;
+	std::wostringstream ss10;
 	ss10 << _base->getShortRangeDetection();
 	_numShortRange->setText(ss10.str());
 
 	_barShortRange->setMax(_base->getShortRangeDetection());
 	_barShortRange->setValue(_base->getShortRangeDetection());
 
-	std::wstringstream ss11;
+	std::wostringstream ss11;
 	ss11 << _base->getLongRangeDetection();
 	_numLongRange->setText(ss11.str());
 
@@ -416,13 +419,9 @@ void BaseInfoState::init()
  * Changes the base name.
  * @param action Pointer to an action.
  */
-void BaseInfoState::edtBaseKeyPress(Action *action)
+void BaseInfoState::edtBaseChange(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
-		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		_base->setName(_edtBase->getText());
-	}
+	_base->setName(_edtBase->getText());
 }
 
 /**
@@ -431,7 +430,7 @@ void BaseInfoState::edtBaseKeyPress(Action *action)
  */
 void BaseInfoState::miniClick(Action *)
 {
-	unsigned int base = _mini->getHoveredBase();
+	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_mini->setSelectedBase(base);
@@ -442,12 +441,42 @@ void BaseInfoState::miniClick(Action *)
 }
 
 /**
+ * Selects a new base to display.
+ * @param action Pointer to an action.
+ */
+void BaseInfoState::handleKeyPress(Action *action)
+{
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		SDLKey baseKeys[] = {Options::keyBaseSelect1,
+			                 Options::keyBaseSelect2,
+			                 Options::keyBaseSelect3,
+			                 Options::keyBaseSelect4,
+			                 Options::keyBaseSelect5,
+			                 Options::keyBaseSelect6,
+			                 Options::keyBaseSelect7,
+			                 Options::keyBaseSelect8};
+		int key = action->getDetails()->key.keysym.sym;
+		for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+		{
+			if (key == baseKeys[i])
+			{
+				_mini->setSelectedBase(i);
+				_base = _game->getSavedGame()->getBases()->at(i);
+				_state->setBase(_base);
+				init();
+				break;
+			}
+		}
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void BaseInfoState::btnOkClick(Action *)
 {
-	_base->setName(_edtBase->getText());
 	_game->popState();
 }
 
@@ -457,7 +486,7 @@ void BaseInfoState::btnOkClick(Action *)
  */
 void BaseInfoState::btnTransfersClick(Action *)
 {
-	_game->pushState(new TransfersState(_game, _base));
+	_game->pushState(new TransfersState(_base));
 }
 
 /**
@@ -466,7 +495,7 @@ void BaseInfoState::btnTransfersClick(Action *)
  */
 void BaseInfoState::btnStoresClick(Action *)
 {
-	_game->pushState(new StoresState(_game, _base));
+	_game->pushState(new StoresState(_base));
 }
 
 /**
@@ -475,7 +504,7 @@ void BaseInfoState::btnStoresClick(Action *)
  */
 void BaseInfoState::btnMonthlyCostsClick(Action *)
 {
-	_game->pushState(new MonthlyCostsState(_game, _base));
+	_game->pushState(new MonthlyCostsState(_base));
 }
 
 }

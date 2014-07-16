@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,13 +55,14 @@ private:
 	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval, _ufoHitFrame;
-	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled, _minimized, _endDogfight;
+	int _timeout, _currentDist, _targetDist, _ufoFireInterval;
+	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled, _minimized, _endDogfight, _animatingHit;
 	std::vector<CraftWeaponProjectile*> _projectiles;
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
-	static const int _timeScale;
-	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
+	int _timeScale;
+	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionNumber;
+	size_t _interceptionsCount;
 	int _x, _y, _minimizedIconX, _minimizedIconY;
 
 	// Ends the dogfight.
@@ -69,7 +70,7 @@ private:
 
 public:
 	/// Creates the Dogfight state.
-	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo);
+	DogfightState(Globe *globe, Craft *craft, Ufo *ufo);
 	/// Cleans up the Dogfight state.
 	~DogfightState();
 	/// Runs the timers.
@@ -92,16 +93,16 @@ public:
 	void setStatus(const std::string &status);
 	/// Handler for clicking the Minimize button.
 	void btnMinimizeClick(Action *action);
-	/// Handler for clicking the Standoff button.
-	void btnStandoffClick(Action *action);
-	/// Handler for clicking the Cautious Attack button.
-	void btnCautiousClick(Action *action);
-	/// Handler for clicking the Standard Attack button.
-	void btnStandardClick(Action *action);
-	/// Handler for clicking the Aggressive Attack button.
-	void btnAggressiveClick(Action *action);
-	/// Handler for clicking the Disengage button.
-	void btnDisengageClick(Action *action);
+	/// Handler for pressing the Standoff button.
+	void btnStandoffPress(Action *action);
+	/// Handler for pressing the Cautious Attack button.
+	void btnCautiousPress(Action *action);
+	/// Handler for pressing the Standard Attack button.
+	void btnStandardPress(Action *action);
+	/// Handler for pressing the Aggressive Attack button.
+	void btnAggressivePress(Action *action);
+	/// Handler for pressing the Disengage button.
+	void btnDisengagePress(Action *action);
 	/// Handler for clicking the Ufo button.
 	void btnUfoClick(Action *action);
 	/// Handler for clicking the Preview graphic.
@@ -133,7 +134,7 @@ public:
 	/// Sets interception number.
 	void setInterceptionNumber(const int number);
 	/// Sets interceptions count.
-	void setInterceptionsCount(const int count);
+	void setInterceptionsCount(const size_t count);
 	/// Calculates window position according to opened interception windows.
 	void calculateWindowPosition();
 	/// Moves window to new position.

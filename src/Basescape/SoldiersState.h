@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,12 +39,12 @@ class SoldiersState : public State
 private:
 	TextButton *_btnOk, *_btnPsiTraining, *_btnMemorial;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtRecruited, *_txtLost;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft;
 	TextList *_lstSoldiers;
 	Base *_base;
 public:
 	/// Creates the Soldiers state.
-	SoldiersState(Game *game, Base *base);
+	SoldiersState(Base *base);
 	/// Cleans up the Soldiers state.
 	~SoldiersState();
 	/// Updates the soldier names.

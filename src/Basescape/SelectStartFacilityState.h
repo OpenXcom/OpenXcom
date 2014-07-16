@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,7 @@ private:
 	Globe *_globe;
 public:
 	/// Creates the Build Facilities state.
-	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe);
+	SelectStartFacilityState(Base *base, State *state, Globe *globe);
 	/// Cleans up the Build Facilities state.
 	~SelectStartFacilityState();
 	/// Populates the build option list.

@@ -1,48 +1,200 @@
 lookWeights:
-  - 2
-  - 2
-  - 2
-  - 2
+  - 30
+  - 30
+  - 20
+  - 20
 maleFirst:
+  - Aaron
+  - Adam
+  - Adrian
+  - Alfredo
   - Austin
+  - Brandon
+  - Brian
   - Calvin
   - Carl
+  - Chance
+  - Charlie
   - Clarence
+  - Cody
+  - Connor
+  - Damian
   - Donald
   - Dwight
+  - Dylan
   - Ed
+  - Eduardo
+  - Elliott
+  - Ethan
+  - Evan
+  - Ezekiel
+  - Garrett
+  - George
+  - Giovanni
+  - Grayson
+  - James
+  - Jason
+  - Jay
+  - Jeremy
+  - Joel
+  - John
+  - Joshua
+  - Keith
   - Kevin
   - Lester
+  - Liam
   - Mark
+  - Omar
   - Oscar
+  - Owen
+  - Parker
+  - Pete
+  - Rick
+  - Robert
   - Samuel
+  - Santiago
+  - Saul
+  - Scott
+  - Seth
+  - Shawn
+  - Simon
   - Spencer
+  - Steven
+  - Timothy
   - Tom
+  - Tucker
+  - Victor
+  - Vincent
   - Virgil
 femaleFirst:
+  - Adriana
+  - Alexandra
+  - Alexis
+  - Allison
+  - Angela
+  - Anna
+  - Audrey
   - Barbara
+  - Bethany
+  - Brianna
+  - Cadence
   - Catherine
+  - Chelsea
+  - Chloe
+  - Cora
+  - Denise
+  - Esperanza
+  - Esther
   - Evelyn
+  - Faith
+  - Gabrielle
+  - Georgia
+  - Guadalupe
+  - Isabel
+  - Jasmine
+  - Jillian
+  - Julia
+  - Kaitlyn
+  - Kara
+  - Karen
+  - Kelly
+  - Layla
+  - Lily
+  - Lucy
+  - Madeline
+  - Madison
+  - Margaret
+  - Maria
+  - Melanie
+  - Melissa
+  - Mia
+  - Michelle
+  - Miranda
+  - Olivia
+  - Paige
   - Patricia
+  - Reese
+  - Riley
+  - Sarah
+  - Savannah
+  - Selena
   - Sigourney
+  - Taylor
+  - Tiffany
+  - Vanessa
+  - Violet
+  - Zoey
 maleLast:
+  - Becker
+  - Benedict
+  - Bowers
   - Bradley
+  - Brewster
   - Bryant
+  - Burroughs
+  - Carlton
   - Carr
+  - Carter
+  - Chase
+  - Childers
+  - Colby
+  - Crawley
   - Crossett
+  - Daley
+  - Davies
   - Dodge
+  - Evans
   - Gallagher
-  - Homburger
+  - Gates
+  - Goddard
+  - Grady
+  - Griffith
+  - Gutierrez
+  - Harding
+  - Harper
+  - Hicks
   - Horton
   - Hudson
+  - Hunt
   - Johnson
+  - Kay
+  - Kellogg
   - Kemp
+  - Kendrick
   - King
+  - Kirk
+  - Lawson
+  - Machado
   - McNeil
+  - Meador
   - Miller
   - Mitchell
+  - Morris
   - Nash
+  - North
+  - O'Connell
+  - Ortiz
+  - Palacios
+  - Partridge
+  - Patrick
+  - Perkins
+  - Porter
+  - Prewitt
+  - Rapp
+  - Ritchie
+  - Rooney
+  - Rossi
+  - Salomon
+  - Scroggins
+  - Shelley
+  - Smiley
+  - Sorensen
+  - Stein
   - Stephens
   - Stoddard
   - Thompson
+  - Tirado
+  - Underwood
+  - Wade
+  - Wagner
   - Webb

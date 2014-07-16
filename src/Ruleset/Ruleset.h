@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class SavedGame;
 class SoldierNamePool;
+class Soldier;
 class RuleCountry;
 class RuleRegion;
 class RuleBaseFacility;
@@ -57,6 +58,7 @@ class MCDPatch;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
+class StatString;
 
 /**
  * Set of rules and stats for a game.
@@ -92,29 +94,34 @@ protected:
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
+	std::vector<StatString*> _statStrings;
 	int _maxViewDistance, _maxViewDistanceAtDark, _maxDarknessToSeeUnits;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
+	std::string _alienFuel;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
-	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
+	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
-	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder;
+	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
 	void loadFiles(const std::string &dirname);
+	/// Loads a ruleset element.
+	template <typename T>
+	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
 	/// Cleans up the ruleset.
-	virtual ~Ruleset();
+	~Ruleset();
 	/// Loads a ruleset from the given source.
 	void load(const std::string &source);
 	/// Generates the starting saved game.
-	virtual SavedGame *newSave() const;
+	SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
 	const std::vector<SoldierNamePool*> &getPools() const;
 	/// Gets the ruleset for a country type.
@@ -213,16 +220,23 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
+	/// Gets the list of StatStrings.
+    std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets max view distance in BattleScape.
-	inline unsigned int getMaxViewDistance() const {return _maxViewDistance;}
+	inline int getMaxViewDistance() const {return _maxViewDistance;}
 	/// Gets max view distance at dark in BattleScape.
-	inline unsigned int getMaxViewDistanceAtDark() const {return _maxViewDistanceAtDark;}
+	inline int getMaxViewDistanceAtDark() const {return _maxViewDistanceAtDark;}
 	/// Gets max darkness to see units in BattleScape.
-	inline unsigned int getMaxDarknessToSeeUnits() const {return _maxDarknessToSeeUnits;}
-	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval).
-	std::vector<std::string> getPsiRequirements();
+	inline int getMaxDarknessToSeeUnits() const {return _maxDarknessToSeeUnits;}
+	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+	std::vector<std::string> getPsiRequirements() const;
+	/// Returns the sorted list of inventories.
+	const std::vector<std::string> &getInvsList () const;
+	/// Generates a new soldier.
+	Soldier *genSoldier(SavedGame *save) const;
+	const std::string getAlienFuel() const;
 };
 
 }

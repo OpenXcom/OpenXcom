@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0)
 {
 }
 
@@ -64,7 +64,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_mapBlocks.clear();
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
-			MapBlock *map = new MapBlock(this, (*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
+			MapBlock *map = new MapBlock((*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
 			map->load(*i);
 			_mapBlocks.push_back(map);
 		}
@@ -73,6 +73,19 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	_largeBlockLimit = node["largeBlockLimit"].as<int>(_largeBlockLimit);
 	_textures = node["textures"].as< std::vector<int> >(_textures);
 	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
+	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
+
+	if (const YAML::Node &civs = node["civilianTypes"])
+	{
+		_civilianTypes = civs.as<std::vector<std::string> >(_civilianTypes);
+	}
+	else
+	{
+		_civilianTypes.push_back("MALE_CIVILIAN");
+		_civilianTypes.push_back("FEMALE_CIVILIAN");
+	}
+	_minDepth = node["minDepth"].as<int>(_minDepth);
+	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 }
 
 /**
@@ -128,7 +141,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
 
 	if (compliantMapBlocks.empty()) return 0;
 
-	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
+	size_t n = RNG::generate(0, compliantMapBlocks.size() - 1);
 
 	if (type == MT_DEFAULT)
 		compliantMapBlocks[n]->markUsed();
@@ -157,14 +170,14 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
  * @param mapDataSetID The id of the map data set.
  * @return Pointer to MapData object.
  */
-MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
+MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 {
 	MapDataSet* mdf = 0;
 
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		mdf = *i;
-		if (*id - mdf->getSize() < 0)
+		if (*id < mdf->getSize())
 		{
 			break;
 		}
@@ -212,6 +225,34 @@ std::vector<int> *RuleTerrain::getTextures()
 int RuleTerrain::getHemisphere() const
 {
 	return _hemisphere;
+}
+
+/**
+ * Gets the list of civilian types to use on this terrain (default MALE_CIVILIAN and FEMALE_CIVILIAN)
+ * @return list of civilian types to use.
+ */
+std::vector<std::string> RuleTerrain::getCivilianTypes() const
+{
+	return _civilianTypes;
+}
+
+/**
+ * Gets the road type odds.
+ * @return The road type odds.
+ */
+std::vector<int> RuleTerrain::getRoadTypeOdds() const
+{
+	return _roadTypeOdds;
+}
+
+const int RuleTerrain::getMinDepth() const
+{
+	return _minDepth;
+}
+
+const int RuleTerrain::getMaxDepth() const
+{
+	return _maxDepth;
 }
 
 }

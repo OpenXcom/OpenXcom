@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,7 +31,7 @@ RuleCraft::RuleCraft(const std::string &type) :
     _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0),
     _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
 	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0),
-	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
+	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0), _maxItems(0)
 {
 
 }
@@ -55,10 +55,13 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_sprite = node["sprite"].as<int>(_sprite);
-	// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
-	if (_sprite > 4)
-		_sprite += modIndex;
+	if (node["sprite"])
+	{
+		_sprite = node["sprite"].as<int>(_sprite);
+		// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
+		if (_sprite > 4)
+			_sprite += modIndex;
+	}
 	_fuelMax = node["fuelMax"].as<int>(_fuelMax);
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);
@@ -80,6 +83,11 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
+		
+		if (const YAML::Node &deployment = node["deployment"])
+		{
+			_deployment = deployment.as<std::vector<std::vector<int> > >(_deployment);
+		}
 	}
 	_spacecraft = node["spacecraft"].as<bool>(_spacecraft);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
@@ -87,6 +95,7 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 	{
 		_listOrder = listOrder;
 	}
+	_maxItems = node["maxItems"].as<int>(_maxItems);
 }
 
 /**
@@ -163,7 +172,7 @@ int RuleCraft::getAcceleration() const
  * can be equipped onto the craft.
  * @return The weapon capacity.
  */
-int RuleCraft::getWeapons() const
+unsigned int RuleCraft::getWeapons() const
 {
 	return _weapons;
 }
@@ -303,5 +312,24 @@ int RuleCraft::getListOrder() const
 {
 	 return _listOrder;
 }
+
+/**
+ * Gets the deployment layout for this craft.
+ * @return The deployment layout.
+ */
+std::vector<std::vector<int> > &RuleCraft::getDeployment()
+{
+	return _deployment;
+}
+
+/**
+ * Gets the item limit for this craft.
+ * @return the item limit.
+ */
+const int RuleCraft::getMaxItems() const
+{
+	return _maxItems;
+}
+
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param missingItems List of items still needed for reequip.
  */
-CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> missingItems) : State(game)
+CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -51,7 +51,8 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 	_lstItems = new TextList(288, 112, 8, 58);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -69,8 +70,8 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CannotReequipState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
@@ -95,7 +96,7 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 
 	for (std::vector<ReequipStat>::iterator i = missingItems.begin(); i != missingItems.end(); ++i)
 	{
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << i->qty;
 		_lstItems->addRow(3, tr(i->item).c_str(), ss.str().c_str(), i->craft.c_str());
 	}

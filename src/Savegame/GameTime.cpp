@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -193,9 +193,10 @@ int GameTime::getDay() const
 }
 
 /**
- * Returns a localizable-string representation of
- * the cardinal operator for the current ingame day.
- * @return Day string ID.
+ * Returns the localized representation of the current
+ * ingame day with the cardinal operator.
+ * @param lang Pointer to current language.
+ * @return Localized day string.
  */
 std::wstring GameTime::getDayString(Language *lang) const
 {
@@ -205,18 +206,18 @@ std::wstring GameTime::getDayString(Language *lang) const
 	case 1:
 	case 21:
 	case 31:
-		s = "STR_ST";
+		s = "STR_DATE_FIRST";
 		break;
 	case 2:
 	case 22:
-		s = "STR_ND";
+		s = "STR_DATE_SECOND";
 		break;
 	case 3:
 	case 23:
-		s = "STR_RD";
+		s = "STR_DATE_THIRD";
 		break;
 	default:
-		s = "STR_TH";
+		s = "STR_DATE_FOURTH";
 	}
 	return lang->getString(s).arg(_day);
 }

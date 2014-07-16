@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,9 +43,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
+SoldiersState::SoldiersState(Base *base) : _base(base)
 {
-	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
+	bool isPsiBtnVisible = Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -68,7 +68,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -89,7 +89,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, Options::keyCancel);
 
 	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));
@@ -137,16 +137,21 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
-	int row = 0;
+	State::init();
+	unsigned int row = 0;
 	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+		_lstSoldiers->addRow(3, (*i)->getName(true).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 		if ((*i)->getCraft() == 0)
 		{
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
 		}
 		row++;
+	}
+	if (row > 0 && _lstSoldiers->getScroll() >= row)
+	{
+		_lstSoldiers->scrollTo(0);
 	}
 }
 
@@ -165,7 +170,7 @@ void SoldiersState::btnOkClick(Action *)
  */
 void SoldiersState::btnPsiTrainingClick(Action *)
 {
-	_game->pushState(new AllocatePsiTrainingState(_game, _base));
+	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
 /**
@@ -174,7 +179,7 @@ void SoldiersState::btnPsiTrainingClick(Action *)
  */
 void SoldiersState::btnMemorialClick(Action *)
 {
-	_game->pushState(new SoldierMemorialState(_game));
+	_game->pushState(new SoldierMemorialState);
 }
 
 /**
@@ -183,7 +188,7 @@ void SoldiersState::btnMemorialClick(Action *)
  */
 void SoldiersState::lstSoldiersClick(Action *)
 {
-	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+	_game->pushState(new SoldierInfoState(_base, _lstSoldiers->getSelectedRow()));
 }
 
 }

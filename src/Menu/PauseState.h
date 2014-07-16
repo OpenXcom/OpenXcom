@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,11 +43,9 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the Pause state.
-	PauseState(Game *game, OptionsOrigin origin);
+	PauseState(OptionsOrigin origin);
 	/// Cleans up the Pause state.
 	~PauseState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the Load Game button.
 	void btnLoadClick(Action *action);
 	/// Handler for clicking the Save Game button.

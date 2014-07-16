@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,6 +40,7 @@ class InteractiveSurface : public Surface
 {
 private:
 	static const int NUM_BUTTONS = 7;
+	static const SDLKey SDLK_ANY;
 	Uint8 _buttonsPressed;
 protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
@@ -47,8 +48,10 @@ protected:
 	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
 	bool _isHovered, _isFocused, _listButton;
 
-	/// Is any mouse button pressed?
+	/// Is this mouse button pressed?
 	bool isButtonPressed(Uint8 button = 0);
+	/// Is this mouse button event handled?
+	virtual bool isButtonHandled(Uint8 button = 0);
 	/// Set a mouse button's internal state.
 	void setButtonPressed(Uint8 button, bool pressed);
 public:
@@ -60,10 +63,10 @@ public:
 	void setVisible(bool visible);
 	/// Processes any pending events.
 	virtual void handle(Action *action, State *state);
-	/// Sets focus on this surface.
-	virtual void focus();
-	/// Removes focus from this surface.
-	virtual void deFocus();
+	/// Sets the focus of this surface.
+	virtual void setFocus(bool focus);
+	/// Gets the focus of this surface.
+	bool isFocused() const;
 	/// Unpresses the surface.
 	virtual void unpress(State *state);
 	/// Hooks an action handler to a mouse click on the surface.
@@ -79,9 +82,9 @@ public:
 	/// Hooks an action handler to moving the mouse out of the surface.
 	void onMouseOut(ActionHandler handler);
 	/// Hooks an action handler to pressing a key when the surface is focused.
-	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_ANY);
 	/// Hooks an action handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_ANY);
 	/// Processes a mouse button press event.
 	virtual void mousePress(Action *action, State *state);
 	/// Processes a mouse button release event.

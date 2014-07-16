@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,7 +25,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Resource/ResourcePack.h"
-#include "SavedGameState.h"
+#include "ListGamesState.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "ErrorMessageState.h"
@@ -38,28 +38,26 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param save Name of the save file to delete.
- * @param parent Pointer to SavedGameState.
  */
-DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent) : State(game), _parent(parent), _origin(origin)
+DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) : _origin(origin)
 {
-#ifdef _WIN32
-	std::string file = Language::wstrToCp(save);
-#else
-	std::string file = Language::wstrToUtf8(save);
-#endif
-	_filename = Options::getUserFolder() + file + ".sav";
+	_filename = Options::getUserFolder() + save;
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 256, 120, 32, 40, POPUP_BOTH);
-	_btnYes = new TextButton(60, 18, 90, 112);
-	_btnNo = new TextButton(60, 18, 170, 112);
+	_window = new Window(this, 256, 100, 32, 50, POPUP_BOTH);
+	_btnYes = new TextButton(60, 18, 60, 122);
+	_btnNo = new TextButton(60, 18, 200, 122);
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	if (_origin != OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 6);
 	}
 
 	add(_window);
@@ -71,17 +69,17 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::ws
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+10);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, Options::keyCancel);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -115,11 +113,10 @@ void DeleteGameState::btnYesClick(Action *)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error, _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error, _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
-	_parent->updateList();
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #define OPENXCOM_ALIENSDIEDSTATE_H
 
 #include "../Engine/State.h"
-#include "DebriefingState.h"
 
 namespace OpenXcom
 {
@@ -41,7 +40,7 @@ private:
 	Text *_txtTitle;
 public:
 	/// Creates the Aliens Crash state.
-	AliensCrashState(Game *game);
+	AliensCrashState();
 	/// Cleans up the Aliens Crash state.
 	~AliensCrashState();
 	/// Handler for clicking the OK button.

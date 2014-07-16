@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,25 +52,46 @@ Transfer::~Transfer()
  * @param node YAML node.
  * @param base Destination base.
  * @param rule Game ruleset.
+ * @param save Pointer to savegame.
+ * @return Was the transfer content valid?
  */
-void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
+bool Transfer::load(const YAML::Node& node, Base *base, const Ruleset *rule, SavedGame *save)
 {
 	_hours = node["hours"].as<int>(_hours);
 	if (const YAML::Node &soldier = node["soldier"])
 	{
 		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(soldier, rule);
+		_soldier->load(soldier, rule, save);
 	}
 	if (const YAML::Node &craft = node["craft"])
 	{
-		_craft = new Craft(rule->getCraft(craft["type"].as<std::string>()), base);
-		_craft->load(craft, rule, 0);
+		std::string type = craft["type"].as<std::string>();
+		if (rule->getCraft(type) != 0)
+		{
+			_craft = new Craft(rule->getCraft(type), base);
+			_craft->load(craft, rule, 0);
+		}
+		else
+		{
+			delete this;
+			return false;
+		}
+
 	}
-	_itemId = node["itemId"].as<std::string>(_itemId);
+	if (const YAML::Node &item = node["itemId"])
+	{
+		_itemId = item.as<std::string>(_itemId);
+		if (rule->getItem(_itemId) == 0)
+		{
+			delete this;
+			return false;
+		}
+	}
 	_itemQty = node["itemQty"].as<int>(_itemQty);
 	_scientists = node["scientists"].as<int>(_scientists);
 	_engineers = node["engineers"].as<int>(_engineers);
 	_delivered = node["delivered"].as<bool>(_delivered);
+	return true;
 }
 
 /**
@@ -125,6 +146,15 @@ void Transfer::setSoldier(Soldier *soldier)
 void Transfer::setCraft(Craft *craft)
 {
 	_craft = craft;
+}
+
+/**
+ * Gets the craft being transferred.
+ * @return a Pointer to craft.
+ */
+Craft *Transfer::getCraft()
+{
+	return _craft;
 }
 
 /**
@@ -281,6 +311,15 @@ void Transfer::advance(Base *base)
 		}
 		_delivered = true;
 	}
+}
+
+/**
+ * Get a pointer to the soldier being transferred.
+ * @return a pointer to the soldier being moved.
+ */
+Soldier *Transfer::getSoldier()
+{
+	return _soldier;
 }
 
 }

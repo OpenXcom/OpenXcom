@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,14 +46,12 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage, _interceptionOrder;
+	int _id, _fuel, _damage, _interceptionOrder, _takeoff;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
 	std::string _status;
-	bool _lowFuel;
-	bool _inBattlescape;
-	bool _inDogfight;
+	bool _lowFuel, _mission, _inBattlescape, _inDogfight;
 	std::wstring _name;
 public:
 	/// Creates a craft of the specified type.
@@ -69,7 +67,7 @@ public:
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.
-	void setRules(RuleCraft *rules);
+	void changeRules(RuleCraft *rules);
 	/// Gets the craft's ID.
 	int getId() const;
 	/// Gets the craft's name.
@@ -79,9 +77,7 @@ public:
 	/// Gets the craft's base.
 	Base *getBase() const;
 	/// Sets the craft's base.
-	void setBase(Base *base);
-	/// Sets the craft's base. (without setting the craft's coordinates)
-	void setBaseOnly(Base *base);
+	void setBase(Base *base, bool move = true);
 	/// Gets the craft's status.
 	std::string getStatus() const;
 	/// Sets the craft's status.
@@ -120,6 +116,10 @@ public:
 	bool getLowFuel() const;
 	/// Sets whether the craft is running out of fuel.
 	void setLowFuel(bool low);
+	/// Gets whether the craft has just finished a mission.
+	bool getMissionComplete() const;
+	/// Sets whether the craft has just finished a mission.
+	void setMissionComplete(bool mission);
 	/// Gets the craft's distance from its base.
 	double getDistanceFromBase() const;
 	/// Gets the craft's fuel consumption.
@@ -143,7 +143,7 @@ public:
 	/// Refuels the craft.
 	void refuel();
 	/// Rearms the craft.
-	std::string rearm();
+	std::string rearm(Ruleset *rules);
 	/// Sets the craft's battlescape status.
 	void setInBattlescape(bool inbattle);
 	/// Gets if the craft is in battlescape.

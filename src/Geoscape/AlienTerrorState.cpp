@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,8 +28,9 @@
 #include "GeoscapeState.h"
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/City.h"
+#include "../Savegame/TerrorSite.h"
 #include "../Engine/Options.h"
+#include "InterceptState.h"
 
 namespace OpenXcom
 {
@@ -37,24 +38,27 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Aliens Terrorise window.
  * @param game Pointer to the core game.
- * @param city Pointer to the city to get info from.
+ * @param terror Pointer to the respective Terror Site.
+ * @param city Terrorized city name.
  * @param state Pointer to the Geoscape.
  */
-AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *state) : State(game), _city(city), _state(state)
+AlienTerrorState::AlienTerrorState(TerrorSite *terror, const std::string &city, GeoscapeState *state) : _terror(terror), _state(state)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 256, 200, 0, 0, POPUP_BOTH);
-	_btnCentre = new TextButton(200, 16, 28, 140);
-	_btnCancel = new TextButton(200, 16, 28, 160);
+	_btnIntercept = new TextButton(200, 16, 28, 130);
+	_btnCentre = new TextButton(200, 16, 28, 150);
+	_btnCancel = new TextButton(200, 16, 28, 170);
 	_txtTitle = new Text(246, 32, 5, 48);
 	_txtCity = new Text(246, 17, 5, 80);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
+	add(_btnIntercept);
 	add(_btnCentre);
 	add(_btnCancel);
 	add(_txtTitle);
@@ -66,15 +70,18 @@ AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
 
+	_btnIntercept->setColor(Palette::blockOffset(8)+5);
+	_btnIntercept->setText(tr("STR_INTERCEPT"));
+	_btnIntercept->onMouseClick((ActionHandler)&AlienTerrorState::btnInterceptClick);
+
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)&AlienTerrorState::btnCentreClick);
-	_btnCentre->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&AlienTerrorState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -85,7 +92,7 @@ AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *
 	_txtCity->setColor(Palette::blockOffset(8)+5);
 	_txtCity->setBig();
 	_txtCity->setAlign(ALIGN_CENTER);
-	_txtCity->setText(tr(_city->getName()));
+	_txtCity->setText(tr(city));
 }
 
 /**
@@ -97,11 +104,14 @@ AlienTerrorState::~AlienTerrorState()
 }
 
 /**
- * Resets the palette.
+ * Picks a craft to intercept the UFO.
+ * @param action Pointer to an action.
  */
-void AlienTerrorState::init()
+void AlienTerrorState::btnInterceptClick(Action *)
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_state->timerReset();
+	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
+	_game->pushState(new InterceptState(_state->getGlobe(), 0, _terror));
 }
 
 /**
@@ -111,7 +121,7 @@ void AlienTerrorState::init()
 void AlienTerrorState::btnCentreClick(Action *)
 {
 	_state->timerReset();
-	_state->getGlobe()->center(_city->getLongitude(), _city->getLatitude());
+	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
 	_game->popState();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,12 +58,12 @@ void UnitTurnBState::init()
 	_unit = _action.actor;
 	_action.TU = 0;
 	if (_unit->getFaction() == FACTION_PLAYER)
-		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+		_parent->setStateInterval(Options::battleXcomSpeed);
 	else
-		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
+		_parent->setStateInterval(Options::battleAlienSpeed);
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
-	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
+	_turret = _unit->getTurretType() != -1 && (_action.targeting || _action.strafe);
 
 	_unit->lookAt(_action.target, _turret);
 

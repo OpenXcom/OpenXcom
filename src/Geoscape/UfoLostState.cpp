@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,17 +34,17 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param id Name of the UFO.
  */
-UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
+UfoLostState::UfoLostState(std::wstring id) : _id(id)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 192, 104, 32, 48, POPUP_BOTH);
 	_btnOk = new TextButton(60, 12, 98, 112);
-	_txtTitle = new Text(160, 30, 48, 72);
+	_txtTitle = new Text(160, 32, 48, 72);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	setPalette("PAL_GEOSCAPE", 7);
 
 	add(_window);
 	add(_btnOk);
@@ -59,8 +59,8 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&UfoLostState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -77,14 +77,6 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 UfoLostState::~UfoLostState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void UfoLostState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 }
 
 /**

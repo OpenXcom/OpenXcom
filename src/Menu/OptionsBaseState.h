@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_OPTIONSBASESTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -31,6 +32,10 @@ enum OptionsOrigin
 	OPT_BATTLESCAPE
 };
 
+class Window;
+class TextButton;
+class Text;
+
 /**
  * Options base state for common stuff
  * across Options windows.
@@ -39,15 +44,37 @@ class OptionsBaseState : public State
 {
 protected:
 	OptionsOrigin _origin;
+	Window *_window;
+	TextButton *_btnVideo, *_btnAudio, *_btnControls, *_btnGeoscape, *_btnBattlescape, *_btnAdvanced, *_btnMods;
+	TextButton *_btnOk, *_btnCancel, *_btnDefault;
+	Text *_txtTooltip;
+	std::string _currentTooltip;
+	TextButton *_group;
 public:
 	/// Creates the Options state.
-	OptionsBaseState(Game *game, OptionsOrigin origin);
+	OptionsBaseState(OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsBaseState();
+	/// Restarts the game states.
+	static void restart(OptionsOrigin origin);
 	/// Initializes palettes.
 	void init();
-	/// Saves the game options.
-	void saveOptions();
+	/// Presses a certain category button.
+	void setCategory(TextButton *button);
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
+	/// Handler for clicking the Restore Defaults button.
+	void btnDefaultClick(Action *action);
+	/// Handler for clicking one of the grouping buttons.
+	void btnGroupPress(Action *action);
+	/// Handler for showing tooltip.
+	void txtTooltipIn(Action *action);
+	/// Handler for hiding tooltip.
+	void txtTooltipOut(Action *action);
+	/// Update the resolution settings, we just resized the window.
+	void resize(int &dX, int &dY);
 };
 
 }
