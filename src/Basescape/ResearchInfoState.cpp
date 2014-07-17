@@ -78,7 +78,7 @@ void ResearchInfoState::buildUi()
 	_txtMore = new Text(110, 17, 85, 100);
 	_txtLess = new Text(110, 17, 85, 120);
 	_btnCancel = new TextButton(90, 16, 61, 145);
-	_btnOk = new TextButton(83, 16, 169, 145);
+	_btnOk = new TextButton(90, 16, 169, 145);
 
 	_btnMore = new ArrowButton(ARROW_BIG_UP, 13, 14, 195, 100);
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 195, 120);

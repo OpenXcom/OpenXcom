@@ -70,92 +70,92 @@ UnitInfoState::UnitInfoState(BattleUnit *unit, BattlescapeState *parent, bool fr
 
 	_txtTimeUnits = new Text(140, 9, 8, yPos);
 	_numTimeUnits = new Text(18, 9, 150, yPos);
-	_barTimeUnits = new Bar(170, 5, 170, yPos + 1);
+	_barTimeUnits = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtEnergy = new Text(140, 9, 8, yPos);
 	_numEnergy = new Text(18, 9, 150, yPos);
-	_barEnergy = new Bar(170, 5, 170, yPos + 1);
+	_barEnergy = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtHealth = new Text(140, 9, 8, yPos);
 	_numHealth = new Text(18, 9, 150, yPos);
-	_barHealth = new Bar(170, 5, 170, yPos + 1);
+	_barHealth = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtFatalWounds = new Text(140, 9, 8, yPos);
 	_numFatalWounds = new Text(18, 9, 150, yPos);
-	_barFatalWounds = new Bar(170, 5, 170, yPos + 1);
+	_barFatalWounds = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtBravery = new Text(140, 9, 8, yPos);
 	_numBravery = new Text(18, 9, 150, yPos);
-	_barBravery = new Bar(170, 5, 170, yPos + 1);
+	_barBravery = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtMorale = new Text(140, 9, 8, yPos);
 	_numMorale = new Text(18, 9, 150, yPos);
-	_barMorale = new Bar(170, 5, 170, yPos + 1);
+	_barMorale = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtReactions = new Text(140, 9, 8, yPos);
 	_numReactions = new Text(18, 9, 150, yPos);
-	_barReactions = new Bar(170, 5, 170, yPos + 1);
+	_barReactions = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtFiring = new Text(140, 9, 8, yPos);
 	_numFiring = new Text(18, 9, 150, yPos);
-	_barFiring = new Bar(170, 5, 170, yPos + 1);
+	_barFiring = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtThrowing = new Text(140, 9, 8, yPos);
 	_numThrowing = new Text(18, 9, 150, yPos);
-	_barThrowing = new Bar(170, 5, 170, yPos + 1);
+	_barThrowing = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtMelee = new Text(140, 9, 8, yPos);
 	_numMelee = new Text(18, 9, 150, yPos);
-	_barMelee = new Bar(170, 5, 170, yPos + 1);
+	_barMelee = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtStrength = new Text(140, 9, 8, yPos);
 	_numStrength = new Text(18, 9, 150, yPos);
-	_barStrength = new Bar(170, 5, 170, yPos + 1);
+	_barStrength = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtPsiStrength = new Text(140, 9, 8, yPos);
 	_numPsiStrength = new Text(18, 9, 150, yPos);
-	_barPsiStrength = new Bar(170, 5, 170, yPos + 1);
+	_barPsiStrength = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtPsiSkill = new Text(140, 9, 8, yPos);
 	_numPsiSkill = new Text(18, 9, 150, yPos);
-	_barPsiSkill = new Bar(170, 5, 170, yPos + 1);
+	_barPsiSkill = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtFrontArmor = new Text(140, 9, 8, yPos);
 	_numFrontArmor= new Text(18, 9, 150, yPos);
-	_barFrontArmor = new Bar(170, 5, 170, yPos + 1);
+	_barFrontArmor = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtLeftArmor = new Text(140, 9, 8, yPos);
 	_numLeftArmor = new Text(18, 9, 150, yPos);
-	_barLeftArmor = new Bar(170, 5, 170, yPos + 1);
+	_barLeftArmor = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtRightArmor = new Text(140, 9, 8, yPos);
 	_numRightArmor = new Text(18, 9, 150, yPos);
-	_barRightArmor = new Bar(170, 5, 170, yPos + 1);
+	_barRightArmor = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtRearArmor = new Text(140, 9, 8, yPos);
 	_numRearArmor = new Text(18, 9, 150, yPos);
-	_barRearArmor = new Bar(170, 5, 170, yPos + 1);
+	_barRearArmor = new Bar(150, 5, 170, yPos + 1);
 	yPos += step;
 
 	_txtUnderArmor = new Text(140, 9, 8, yPos);
 	_numUnderArmor = new Text(18, 9, 150, yPos);
-	_barUnderArmor = new Bar(170, 5, 170, yPos + 1);
+	_barUnderArmor = new Bar(150, 5, 170, yPos + 1);
 
 	if (!_mindProbe)
 	{
