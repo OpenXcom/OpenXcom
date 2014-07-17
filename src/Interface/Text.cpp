@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0), _nonInlineThaiVowelCount(0)
 {
 }
 
@@ -177,6 +177,15 @@ void Text::setText(const std::wstring &text)
 std::wstring Text::getText() const
 {
 	return _text;
+}
+
+/**
+ * Returns non-inline Thai vowel count, this can be used to calculate actual string width.
+ * @return Number of non-inline Thai vowel in text.
+ */
+int Text::getNonInlineThaiVowelCount()
+{
+	return _nonInlineThaiVowelCount;
 }
 
 /**
@@ -367,10 +376,14 @@ void Text::processText()
 	size_t space = 0;
 	bool start = true;
 	Font *font = _font;
+	_nonInlineThaiVowelCount = 0;
 
 	// Go through the text character by character
 	for (size_t c = 0; c <= str->size(); ++c)
 	{
+		// Count non-inline Thai vowel
+		if(isUpperThaiVowel((*str)[c]) || isLowerThaiVowel((*str)[c]))
+			_nonInlineThaiVowelCount++;
 		// End of the line
 		if (c == str->size() || Font::isLinebreak((*str)[c]))
 		{
@@ -614,11 +627,31 @@ void Text::draw()
 			if (dir < 0)
 				x += dir * font->getCharSize(*c).w;
 			Surface* chr = font->getChar(*c);
-			chr->setX(x);
-			chr->setY(y);
+			
+			// Shift Lower & Upper Thai vowels down & up accordingly.
+			if(isUpperThaiVowel(*c))
+			{
+				chr->setX(x - font->getCharSize(*c).w);		
+				chr->setY(y - 2);
+			}
+			else if(isLowerThaiVowel(*c))
+			{
+				chr->setX(x - font->getCharSize(*c).w);		
+				chr->setY(y + 2);
+			}			
+			else
+			{
+				chr->setX(x);
+				chr->setY(y);
+			}
+			
 			ShaderDraw<PaletteShift>(ShaderSurface(this, 0, 0), ShaderCrop(chr), ShaderScalar(color), ShaderScalar(mul), ShaderScalar(mid));
 			if (dir > 0)
-				x += dir * font->getCharSize(*c).w;
+			{
+				// Do not apply character with if it is Upper & Lower Thai vowels.
+				if(!isLowerThaiVowel(*c) && !isUpperThaiVowel(*c))
+					x += dir * font->getCharSize(*c).w;
+			}
 		}
 	}
 }

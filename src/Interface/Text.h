@@ -49,6 +49,7 @@ private:
 	TextHAlign _align;
 	TextVAlign _valign;
 	Uint8 _color, _color2;
+	int _nonInlineThaiVowelCount;
 
 	/// Processes the contained text.
 	void processText();
@@ -65,6 +66,10 @@ public:
 	static std::wstring formatFunding(int funds);
 	/// Formats an integer value as percentage.
 	static std::wstring formatPercentage(int value);
+	/// Check if a character is upper Thai vowels.
+	static inline bool isUpperThaiVowel(wchar_t c) { return (c == L'\u0E31' || c == L'\u0E34' || c == L'\u0E35' || c == L'\u0E36' || c == L'\u0E37' || c == L'\u0E47' || c == L'\u0E48' || c == L'\u0E49' || c == L'\u0E4A' || c == L'\u0E4B' || c == L'\u0E4C' || c == L'\u0E4D'); }
+	/// Check if a character is lower Thai vowels.
+	static inline bool isLowerThaiVowel(wchar_t c) { return (c == L'\u0E38' || c == L'\u0E39' || c == L'\u0E3A'); }	
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -77,6 +82,8 @@ public:
 	void setText(const std::wstring &text);
 	/// Gets the text's string.
 	std::wstring getText() const;
+	/// Gets non-inline Thai Vowel count
+	int getNonInlineThaiVowelCount();	
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap, bool indent = false);
 	/// Sets the text's color invert setting.
