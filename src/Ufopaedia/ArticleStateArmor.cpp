@@ -120,6 +120,7 @@ namespace OpenXcom
 		addStat("STR_REACTIONS", armor->getStats()->reactions, true);
 		addStat("STR_FIRING_ACCURACY", armor->getStats()->firing, true);
 		addStat("STR_THROWING_ACCURACY", armor->getStats()->throwing, true);
+		addStat("STR_MELEE_ACCURACY", armor->getStats()->melee, true);
 		addStat("STR_STRENGTH", armor->getStats()->strength, true);
 		addStat("STR_PSIONIC_STRENGTH", armor->getStats()->psiStrength, true);
 		addStat("STR_PSIONIC_SKILL", armor->getStats()->psiSkill, true);
