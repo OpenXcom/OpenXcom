@@ -609,8 +609,10 @@ static void _clearInventory(Game *game, std::vector<BattleItem*> *unitInv, Tile 
 
 void InventoryState::btnApplyTemplateClick(Action *action)
 {
-	// don't accept clicks when moving items or when the template is empty
-	if (_inv->getSelectedItem() != 0 || _curInventoryTemplate.empty())
+	// don't accept clicks when moving items
+	// it's ok if the template is empty -- it will just result in clearing the
+	// unit's inventory
+	if (_inv->getSelectedItem() != 0)
 	{
 		return;
 	}
