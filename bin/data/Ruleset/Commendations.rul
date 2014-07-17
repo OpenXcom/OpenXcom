@@ -459,5 +459,5 @@ commendations:
   - type: STR_MEDAL_NIKE_CROSS_NAME
     description: STR_MEDAL_NIKE_CROSS_DESCRIPTION
     sprite: 32
-    criteira:
+    criteria:
       totalAllAliensKilled: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]

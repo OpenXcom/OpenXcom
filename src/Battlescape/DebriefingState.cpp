@@ -267,7 +267,15 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	{
 		if ((*j)->getGeoscapeSoldier())
 		{
-			if (aliensKilled == (*j)->getStatistics()->kills.size())
+			int soldierAlienKills = 0;
+			for (std::vector<BattleUnitKills*>::const_iterator k = (*j)->getStatistics()->kills.begin(); k != (*j)->getStatistics()->kills.end(); ++k)
+			{
+				if ((*k)->faction == FACTION_HOSTILE)
+				{
+					soldierAlienKills++;
+				}
+			}
+			if (aliensKilled && aliensKilled == soldierAlienKills)
 			{
 				(*j)->getStatistics()->nikeCross = true;
 			}

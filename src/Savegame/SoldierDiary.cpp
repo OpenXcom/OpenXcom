@@ -106,7 +106,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 	_trapKillTotal = node["trapKillTotal"].as<int>(_trapKillTotal);
 	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
-	_allAliensKilledTotal ] node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
+	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
 }
 /**
  * Saves the diary to a YAML file.
