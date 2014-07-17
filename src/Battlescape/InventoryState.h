@@ -80,6 +80,8 @@ public:
 	void btnCreateTemplateClick(Action *action);
 	/// Handler for clicking the Apply Template button.
 	void btnApplyTemplateClick(Action *action);
+	/// Handler for hitting the Clear Inventory hotkey.
+	void onClearInventory(Action *action);
 	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 	/// Handler for showing item info.
@@ -92,6 +94,12 @@ public:
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
+
+private:
+	/// Update the visibility and icons for the template buttons
+	void _updateTemplateButtons(bool isVisible);
+	/// Refresh the hover status of the mouse
+	void _refreshMouse();
 };
 
 }

@@ -1113,6 +1113,7 @@ en-GB:
   STR_CENTER_ON_ENEMY_10: "Centre on Enemy 10"
   STR_CREATE_INVENTORY_TEMPLATE: "Create inventory template"
   STR_APPLY_INVENTORY_TEMPLATE: "Apply inventory template"
+  STR_CLEAR_INVENTORY: "Clear inventory"
   STR_GROUNDED: "GROUND"
   STR_LIVING_QUARTERS_PLURAL: "Living Quarters"
   STR_LIST_ITEM: "ITEM"
