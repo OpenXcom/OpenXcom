@@ -473,7 +473,7 @@ void SoldierInfoState::init()
 	_barThrowing->setValue2(std::min(withArmor.throwing, initial->throwing));
 
 	std::wostringstream ss8;
-	ss8 << current->melee;
+	ss8 << withArmor.melee;
 	_numMelee->setText(ss8.str());
 	_barMelee->setMax(current->melee);
 	_barMelee->setValue(withArmor.melee);
