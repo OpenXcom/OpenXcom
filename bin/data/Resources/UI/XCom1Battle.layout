@@ -577,7 +577,7 @@ layout:
     type: InteractiveSurface
     width: 32
     height: 24
-    hAlign: left
+    hAlign: right
     vAlign: top
     relX: -32
     relY: 0
@@ -594,7 +594,7 @@ layout:
     type: InteractiveSurface
     width: 32
     height: 24
-    hAlign: left
+    hAlign: right
     vAlign: top
     relX: -32
     relY: 25

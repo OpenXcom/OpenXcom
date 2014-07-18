@@ -193,6 +193,9 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnLaunch = dynamic_cast<InteractiveSurface*>(_bUI["btnLaunch"]);
 	_btnPsi = dynamic_cast<InteractiveSurface*>(_bUI["btnPsi"]);
 
+	showLaunchButton(false);
+	showPsiButton(false);
+
 	_btnReserveNone = dynamic_cast<ImageButton*>(_bUI["btnReserveNone"]);
 	_btnReserveSnap = dynamic_cast<ImageButton*>(_bUI["btnReserveSnap"]);
 	_btnReserveAimed = dynamic_cast<ImageButton*>(_bUI["btnReserveAimed"]);
