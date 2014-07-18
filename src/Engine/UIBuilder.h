@@ -21,19 +21,6 @@ namespace OpenXcom
 
 namespace UIBuilder
 {
-	// Array of event names. Please add new events 
-	/*static const std::string _events[] = {
-		"onMouseClick",
-		"onMousePress",
-		"onMouseRelease",
-		"onMouseIn",
-		"onMouseOver",
-		"onMouseOut",
-		"onKeyboardPress",
-		"onKeyboardRelease"
-	};*/
-
-
 	std::map<std::string, Surface*> buildUI(State *currentState,
 				ResourcePack* resourcePack,
 				std::map<std::string, ActionHandler> &handlers,
