@@ -564,8 +564,7 @@ layout:
       blockOffset: 2
       colorOffset: 3
     handlers:
-      onMouseClick: btnZeroTUsClick
-      mouseClickRight: true
+      onMouseRightClick: btnZeroTUsClick
       onMouseIn: txtTooltipIn
       onMouseOut: txtTooltipOut
       onKeyboardPress: btnReserveClick
