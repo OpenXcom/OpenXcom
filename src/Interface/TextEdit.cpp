@@ -331,7 +331,7 @@ void TextEdit::draw()
 			for (size_t i = 0; i < _caretPos; ++i)
 			{
 				// Do not include non-inline Thai vowels
-				if(!Text::isLowerThaiVowel(_value[i]) && !Text::isUpperThaiVowel(_value[i]))
+				if(!Text::isNonInlineThai(_value[i]))
 					x += _text->getFont()->getCharSize(_value[i]).w;
 			}
 			_caret->setX(x);
