@@ -112,6 +112,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	handlers["btnCenterClick"] 				=	(ActionHandler) &BattlescapeState::btnCenterClick;
 	handlers["btnNextSoldierClick"]			=	(ActionHandler) &BattlescapeState::btnNextSoldierClick;
 	handlers["btnPrevSoldierClick"]			=	(ActionHandler) &BattlescapeState::btnPrevSoldierClick;
+	handlers["btnNextStopClick"]			=   (ActionHandler) &BattlescapeState::btnNextStopClick;
 	handlers["btnShowLayersClick"]			=	(ActionHandler) &BattlescapeState::btnShowLayersClick;
 	handlers["btnHelpClick"]				=   (ActionHandler) &BattlescapeState::btnHelpClick;
 	handlers["btnEndTurnClick"]				=	(ActionHandler) &BattlescapeState::btnEndTurnClick;
