@@ -774,4 +774,47 @@ layout:
       colorOffset: 0
     scale: 1.0
 
+  - name: txtName
+    type: Text
+    order: 200
+    width: 136
+    height: 10
+    hAlign: center
+    vAlign: bottom
+    relX: -25
+    relY: -24
+    hidden: false
+    palColor: 
+      blockOffset: 8
+      colorOffset: 0
+    highContrast: true
 
+  - name: txtDebug
+    type: Text
+    order: 201
+    width: 300
+    height: 10
+    hAlign: left
+    vAlign: top
+    relX: 20
+    relY: 0
+    hidden: false
+    palColor: 
+      blockOffset: 8
+      colorOffset: 0
+    highContrast: true
+
+  - name: txtTooltip
+    type: Text
+    order: 202
+    width: 300
+    height: 10
+    hAlign: center
+    vAlign: bottom
+    relX: -158
+    relY: -66
+    hidden: false
+    palColor: 
+      blockOffset: 0
+      colorOffset: -1
+    highContrast: true

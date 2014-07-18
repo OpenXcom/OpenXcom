@@ -9,6 +9,7 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Bar.h"
+#include "../Interface/Text.h"
 #include <vector>
 #include <algorithm>
 #include "Logger.h"
@@ -153,8 +154,6 @@ namespace UIBuilder
 		// Finally, some surfaces are actually helpful! We just need to load the tooltip.
 		std::string tooltip = node["tooltip"].as<std::string>("");
 		out->setTooltip(tooltip);
-
-
 	}
 	/**
 	 * Set handlers for InteractiveSurface or InteractiveSurface-derived
@@ -264,8 +263,8 @@ namespace UIBuilder
 		}
 		// The image button needs a color from the palette.
 		const YAML::Node color = ibtnNode["palColor"];
-		int blockOffset = color["blockOffset"].as<int>();
-		int colorOffset = color["colorOffset"].as<int>();
+		int blockOffset = color["blockOffset"].as<int>(0);
+		int colorOffset = color["colorOffset"].as<int>(0);
 		out->setColor(Palette::blockOffset(blockOffset) + colorOffset);
 		return out;
 	}
@@ -284,10 +283,10 @@ namespace UIBuilder
 		setCommonParams(ntxtNode, out);
 
 		const YAML::Node &color = ntxtNode["palColor"];
-		int blockOffset = color["blockOffset"].as<int>();
-		int colorOffset = color["colorOffset"].as<int>();
+		int blockOffset = color["blockOffset"].as<int>(0);
+		int colorOffset = color["colorOffset"].as<int>(0);
 
-		unsigned int value = ntxtNode["value"].as<unsigned int>();
+		unsigned int value = ntxtNode["value"].as<unsigned int>(0);
 
 		out->setColor(Palette::blockOffset(blockOffset) + colorOffset);
 		out->setValue(value);
@@ -310,20 +309,38 @@ namespace UIBuilder
 		// Load the bar's colors
 		const YAML::Node &color1 = barNode["palColor"];
 		
-		int blockOffset1 = color1["blockOffset"].as<int>();
-		int colorOffset1 = color1["colorOffset"].as<int>();
+		int blockOffset1 = color1["blockOffset"].as<int>(0);
+		int colorOffset1 = color1["colorOffset"].as<int>(0);
 		out->setColor(Palette::blockOffset(blockOffset1) + colorOffset1);
 		if (barNode["palColor2"])
 		{
 			const YAML::Node &color2 = barNode["palColor2"];
-			int blockOffset2 = color2["blockOffset"].as<int>();
-			int colorOffset2 = color2["colorOffset"].as<int>();
+			int blockOffset2 = color2["blockOffset"].as<int>(0);
+			int colorOffset2 = color2["colorOffset"].as<int>(0);
 			out->setColor2(Palette::blockOffset(blockOffset2) + colorOffset2);
 		}
 		
 		// Load the bar's scale
 		double scale = barNode["scale"].as<double>();
 		out->setScale(scale);
+
+		return out;
+	}
+
+	static inline Text* createText(const YAML::Node &txtNode)
+	{
+		int width = txtNode["width"].as<int>();
+		int height = txtNode["height"].as<int>();
+		Text *out = new Text(width, height);
+		setCommonParams(txtNode, out);
+
+		const YAML::Node &color = txtNode["palColor"];
+		int blockOffset = color["blockOffset"].as<int>(0);
+		int colorOffset = color["colorOffset"].as<int>(0);
+		out->setColor(Palette::blockOffset(blockOffset) + colorOffset);
+
+		bool highContrast = txtNode["highContrast"].as<bool>(false);
+		out->setHighContrast(highContrast);
 
 		return out;
 	}
@@ -399,6 +416,10 @@ namespace UIBuilder
 			else if (typeString == "Bar")
 			{
 				sfc = createBar(*i);
+			}
+			else if (typeString == "Text")
+			{
+				sfc = createText(*i);
 			}
 
 			out[elementName] = sfc;

@@ -225,6 +225,11 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_barHealth = dynamic_cast<Bar*>(_bUI["barHealth"]);
 	_barMorale = dynamic_cast<Bar*>(_bUI["barMorale"]);
 
+	_txtName = dynamic_cast<Text*>(_bUI["txtName"]);
+	_txtDebug = dynamic_cast<Text*>(_bUI["txtDebug"]);
+	_txtTooltip = dynamic_cast<Text*>(_bUI["txtTooltip"]);
+
+
 	// Buttons for visible units are still created here. That might or might not change in the future.
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
@@ -235,24 +240,22 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
 
 	// Create soldier stats summary
+	/*
 	_txtName = new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
 
 	_txtDebug = new Text(300, 10, 20, 0);
 	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
-
+	*/
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
-	add(_txtName);
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
 	}
 	add(_warning);
-	add(_txtDebug);
-	add(_txtTooltip);
 
 	// Set up objects
 	_save = _game->getSavedGame()->getSavedBattle();
@@ -286,15 +289,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	}
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1));
-
-	_txtName->setColor(Palette::blockOffset(8));
-	_txtName->setHighContrast(true);
-
-	_txtDebug->setColor(Palette::blockOffset(8));
-	_txtDebug->setHighContrast(true);
-
-	_txtTooltip->setColor(Palette::blockOffset(0)-1);
-	_txtTooltip->setHighContrast(true);
 
 	_btnReserveNone->setGroup(&_reserve);
 	_btnReserveSnap->setGroup(&_reserve);
