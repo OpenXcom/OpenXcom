@@ -49,7 +49,6 @@ private:
 	TextHAlign _align;
 	TextVAlign _valign;
 	Uint8 _color, _color2;
-	int _nonInlineThaiVowelCount;
 
 	/// Processes the contained text.
 	void processText();
@@ -82,8 +81,6 @@ public:
 	void setText(const std::wstring &text);
 	/// Gets the text's string.
 	std::wstring getText() const;
-	/// Gets non-inline Thai Vowel count
-	int getNonInlineThaiVowelCount();	
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap, bool indent = false);
 	/// Sets the text's color invert setting.
