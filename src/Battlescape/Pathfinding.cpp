@@ -48,7 +48,7 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0
 	for (int i = 0; i < _size; ++i)
 	{
 		_save->getTileCoords(i, &p.x, &p.y, &p.z);
-		_nodes.push_back(P athfindingNode(p));
+		_nodes.push_back(PathfindingNode(p));
 	}
 }
 
