@@ -322,7 +322,7 @@ void UnitWalkBState::think()
 				return;
 			}
 
-			if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
+			if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu, BA_TURN) == false)
 			{
 				_pf->abortPath();
 				_unit->setCache(0);
