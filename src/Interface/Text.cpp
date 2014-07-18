@@ -417,8 +417,11 @@ void Text::processText()
 			}
 			int charWidth = font->getCharSize((*str)[c]).w;
 
-			width += charWidth;
-			word += charWidth;
+			if(!isLowerThaiVowel((*str)[c]) && !isUpperThaiVowel((*str)[c]))
+			{
+				width += charWidth;
+				word += charWidth;
+			}
 
 			// Wordwrap if the last word doesn't fit the line
 			if (_wrap && width >= getWidth() && !start)
