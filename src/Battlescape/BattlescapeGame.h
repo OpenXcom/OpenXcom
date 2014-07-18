@@ -40,7 +40,7 @@ class Pathfinding;
 class Ruleset;
 class InfoboxOKState;
 
-enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC, BA_RETHINK };
+enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_KNEEL, BA_RAISE, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC, BA_RETHINK };
 
 struct BattleAction
 {
@@ -121,7 +121,7 @@ public:
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
 	/// Checks reserved tu.
-	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
+	bool checkReservedTU(BattleUnit *bu, int tu, BattleActionType act, bool justChecking = false);
 	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
 	/// Drops an item and affects it with gravity.
