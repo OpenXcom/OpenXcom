@@ -208,10 +208,16 @@ void ManufactureState::fillProductionList()
 		else if ((*iter)->getAssignedEngineers() > 0)
 		{
 			int timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
-			timeLeft /= (*iter)->getAssignedEngineers();
-			float dayLeft = timeLeft / 24.0f;
-			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
-			s4 << static_cast<int>(dayLeft) << "/" << hours;
+			int numEffectiveEngineers = (*iter)->getAssignedEngineers();
+			if (!Options::canManufactureMoreItemsPerHour)
+			{
+				numEffectiveEngineers = std::min(numEffectiveEngineers, (*iter)->getRules()->getManufactureTime());
+			}
+			// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
+			int hoursLeft = (timeLeft + numEffectiveEngineers - 1) / numEffectiveEngineers;
+			int daysLeft = hoursLeft / 24;
+			int hours = hoursLeft % 24;
+			s4 << daysLeft << "/" << hours;
 		}
 		else
 		{

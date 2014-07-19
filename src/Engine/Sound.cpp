@@ -78,11 +78,22 @@ void Sound::load(const void *data, unsigned int size)
  * Plays the contained sound effect.
  * @param channel Use specified channel, -1 to use any channel
  */
-void Sound::play(int channel) const
-{
-	if (!Options::mute && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
-	{
-		Log(LOG_WARNING) << Mix_GetError();
+void Sound::play(int channel, int angle, int distance) const
+ {
+	if (!Options::mute && _sound != 0)
+ 	{
+		int chan = Mix_PlayChannel(channel, _sound, 0);
+		if (chan == -1)
+		{
+			Log(LOG_WARNING) << Mix_GetError();
+		}
+		else if (Options::StereoSound)
+		{
+			if(!Mix_SetPosition(chan, angle, distance))
+			{
+				Log(LOG_WARNING) << Mix_GetError();
+			}
+		}
 	}
 }
 
