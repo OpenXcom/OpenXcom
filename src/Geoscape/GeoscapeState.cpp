@@ -1041,12 +1041,11 @@ void GeoscapeState::time10Minutes()
 
 				if ((*j)->getDestination() == 0)
 				{
+					double range = ((*j)->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180));
 					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
-						double range = ((*j)->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180));
 						if ((*j)->getDistance(*b) <= range)
 						{
-							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
 							if (RNG::percent(50-((*j)->getDistance(*b) / range) * 50) && !(*b)->isDiscovered())
 							{
 								(*b)->setDiscovered(true);
