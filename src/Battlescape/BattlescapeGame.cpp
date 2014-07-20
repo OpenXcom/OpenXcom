@@ -63,6 +63,8 @@ namespace OpenXcom
 {
 
 bool BattlescapeGame::_debugPlay = false;
+const int TU_KNEEL=4;
+const int TU_RAISE=8;
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -341,8 +343,9 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
  */
 bool BattlescapeGame::kneel(BattleUnit *bu)
 {
-	int tu = bu->isKneeled()?8:4;
-	if (bu->getType() == "SOLDIER" && !bu->isFloating() && ((!bu->isKneeled() && _kneelReserved) || checkReservedTU(bu, tu)))
+	//proper TU's and actions passed to checkReservedTU
+	int tu = bu->isKneeled()?TU_RAISE:TU_KNEEL;
+	if (bu->getType() == "SOLDIER" && !bu->isFloating() && checkReservedTU(bu, tu, bu->isKneeled()?BA_RAISE:BA_KNEEL))
 	{
 		if (bu->spendTimeUnits(tu))
 		{
@@ -947,7 +950,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param justChecking True to suppress error messages, false otherwise.
  * @return bool Whether or not we got enough time units.
  */
-bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
+bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, BattleActionType act, bool justChecking)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
@@ -978,10 +981,12 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 	{
 		effectiveTuReserved = BA_AIMEDSHOT;
 	}
-	const int tuKneel = (_kneelReserved && bu->getType() == "SOLDIER") ? 4 : 0;
+	//ignore reserve for kneeling if actually kneeling or already kneeled and not raising
+	const int tuKneel= (_kneelReserved && bu->getType() == "SOLDIER" && ((bu->isKneeled() && act == BA_RAISE) || (!bu->isKneeled() && act != BA_KNEEL))) ? TU_KNEEL : 0;
+	//ignore tuKneel in underflow check if already kneeled
 	if ((effectiveTuReserved != BA_NONE || _kneelReserved) &&
 		tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
-		(tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits() || justChecking))
+		((bu->isKneeled()?0:tuKneel) + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits() || justChecking))
 	{
 		if (!justChecking)
 		{

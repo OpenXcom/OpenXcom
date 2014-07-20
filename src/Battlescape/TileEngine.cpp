@@ -1924,7 +1924,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 
 	if (TUCost != 0)
 	{
-		if (_save->getBattleGame()->checkReservedTU(unit, TUCost))
+		if (_save->getBattleGame()->checkReservedTU(unit, TUCost, BA_WALK))
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
