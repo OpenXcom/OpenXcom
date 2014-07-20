@@ -988,7 +988,7 @@ facilities:
     buildCost: 500000
     buildTime: 12
     monthlyCost: 10000
-    radarRange: 1500
+    radarRange: 1695
     radarChance: 10
     mapName: XBASE_04
   - type: STR_LARGE_RADAR_SYSTEM
@@ -997,7 +997,7 @@ facilities:
     buildCost: 800000
     buildTime: 25
     monthlyCost: 15000
-    radarRange: 2250
+    radarRange: 2577
     radarChance: 20
     mapName: XBASE_05
   - type: STR_MISSILE_DEFENSES
@@ -1105,7 +1105,7 @@ facilities:
     buildCost: 1400000
     buildTime: 26
     monthlyCost: 30000
-    radarRange: 2400
+    radarRange: 2759
     radarChance: 100
     mapName: XBASE_15
   - type: STR_HANGAR
