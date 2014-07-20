@@ -505,6 +505,7 @@ void Inventory::mouseClick(Action *action, State *state)
 	{
 		if (_selUnit == 0)
 			return;
+		SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
 		// Pickup item
 		if (_selItem == 0)
 		{
@@ -577,16 +578,17 @@ void Inventory::mouseClick(Action *action, State *state)
 						}
 						else
 						{
-							if (!_tu || _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
+							int cost = item->getSlot()->getCost(newSlot);
+							if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, cost, BA_RETHINK))
+								warning = "STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING";
+							else if(_tu && !_selUnit->spendTimeUnits(cost))
+								warning = "STR_NOT_ENOUGH_TIME_UNITS";
+							else
 							{
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
 								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 								arrangeGround(false);
-							}
-							else
-							{
-								warning = "STR_NOT_ENOUGH_TIME_UNITS";
 							}
 						}
 
@@ -627,7 +629,12 @@ void Inventory::mouseClick(Action *action, State *state)
 				{
 					if (!overlapItems(_selUnit, _selItem, slot, x, y) && slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
-						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						int cost = _selItem->getSlot()->getCost(slot);
+						if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, cost, BA_RETHINK))
+							_warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING"));
+						else if(_tu && !_selUnit->spendTimeUnits(cost))
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						else
 						{
 							moveItem(_selItem, slot, x, y);
 							if (slot->getType() == INV_GROUND)
@@ -637,23 +644,20 @@ void Inventory::mouseClick(Action *action, State *state)
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
-						else
-						{
-							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-						}
 					}
 					else if (canStack)
 					{
-						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						int cost = _selItem->getSlot()->getCost(slot);
+						if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, cost, BA_RETHINK))
+							_warning->showMessage(_game->getLanguage()->getString( "STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING"));
+						else if(_tu && !_selUnit->spendTimeUnits(cost))
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						else
 						{
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
-						}
-						else
-						{
-							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 						}
 					}
 				}
@@ -679,7 +683,11 @@ void Inventory::mouseClick(Action *action, State *state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
 						}
-						else if (!_tu || _selUnit->spendTimeUnits(15))
+						else if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, 15, BA_RETHINK))
+							_warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING"));
+						else if(_tu && !_selUnit->spendTimeUnits(15))
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						else
 						{
 							moveItem(_selItem, 0, 0, 0);
 							item->setAmmoItem(_selItem);
@@ -690,10 +698,6 @@ void Inventory::mouseClick(Action *action, State *state)
 							{
 								arrangeGround(false);
 							}
-						}
-						else
-						{
-							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 						}
 					}
 				}
@@ -711,16 +715,18 @@ void Inventory::mouseClick(Action *action, State *state)
 					BattleItem *item = _selUnit->getItem(slot, x, y);
 					if (canBeStacked(item, _selItem))
 					{
-						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						int cost = _selItem->getSlot()->getCost(slot);
+						SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
+						if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, cost, BA_RETHINK))
+							_warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING"));
+						else if(_tu && !_selUnit->spendTimeUnits(cost))
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						else
 						{
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
-						}
-						else
-						{
-							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 						}
 					}
 				}
@@ -757,7 +763,6 @@ void Inventory::mouseClick(Action *action, State *state)
 									{
 										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 										item->setFuseTimer(0);
-										arrangeGround(false);
 									}
 									else _game->pushState(new PrimeGrenadeState(0, true, item));
 								}
@@ -765,7 +770,6 @@ void Inventory::mouseClick(Action *action, State *state)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1);  // Unprime the grenade
-									arrangeGround(false);
 								}
 							}
 						}
@@ -823,7 +827,18 @@ bool Inventory::unload()
 		}
 	}
 
-	if (!_tu || _selUnit->spendTimeUnits(8))
+	SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
+	if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, 8, BA_RETHINK))
+	{
+		_warning->showMessage(_game->getLanguage()->getString("STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING"));
+		return false;
+	}
+	else if(_tu && !_selUnit->spendTimeUnits(8))
+	{
+		_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+		return false;
+	}
+	else
 	{
 		moveItem(_selItem->getAmmoItem(), _game->getRuleset()->getInventory("STR_LEFT_HAND"), 0, 0);
 		_selItem->getAmmoItem()->moveToOwner(_selUnit);
@@ -832,12 +847,6 @@ bool Inventory::unload()
 		_selItem->setAmmoItem(0);
 		setSelectedItem(0);
 	}
-	else
-	{
-		_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-		return false;
-	}
-
 	return true;
 }
 
@@ -950,16 +959,18 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 		{
 			if (!overlapItems(_selUnit, item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{
-				if (!_tu || _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
+				int cost = item->getSlot()->getCost(newSlot);
+				SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
+				if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, cost, BA_RETHINK))
+					warning = "STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING";
+				else if(_tu && !_selUnit->spendTimeUnits(cost))
+					warning = "STR_NOT_ENOUGH_TIME_UNITS";
+				else
 				{
 					placed = true;
 					moveItem(item, newSlot, x2, y2);
 					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 					drawItems();
-				}
-				else
-				{
-					warning = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 			}
 		}
