@@ -67,6 +67,8 @@ public:
 	int getWeaponPower() const;
 	/// Gets the UFO's weapon range.
 	int getWeaponRange() const;
+	/// Gets the UFO's radar range.
+	int getRadarRange() const;
 	/// Gets the UFO's score.
 	int getScore() const;
 	/// Sets the battlescape terrain data ruleset for this UFO

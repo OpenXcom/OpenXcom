@@ -177,6 +177,15 @@ int RuleUfo::getWeaponRange() const
 }
 
 /**
+ * Gets the UFO's radar range
+ * @return The radar range.
+ */
+int RuleUfo::getWeaponRange() const
+{
+	return _radarRange;
+}
+
+/**
  * Gets the amount of points the player
  * gets for shooting down the UFO.
  * @return The score.
