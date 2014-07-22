@@ -382,7 +382,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
 			if (direction == DIR_HSE || direction == DIR_HS || direction == DIR_HSW)
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == DIR_HSE || direction == DIR_HS || direction == DIR_HSW)
+			if (direction == DIR_HSW || direction == DIR_HW || direction == DIR_HNW)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
 			// don't let tanks phase through doors.
