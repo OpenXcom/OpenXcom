@@ -1719,7 +1719,6 @@ void BattlescapeState::saveVoxelView()
 			targetVoxel.y=originVoxel.y + (int)(cos(ang_x)*1024*sin(ang_y));
 			targetVoxel.z=originVoxel.z + (int)(cos(ang_y)*1024);
 
-			_trajectory.clear();
 			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, !_debug) +1;
 			black = true;
 			if (test!=0 && test!=6)

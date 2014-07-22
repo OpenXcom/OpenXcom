@@ -63,6 +63,7 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
  */
 TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
 {
+	_trajectory.reserve(16 * 30);
 }
 
 /**
@@ -231,7 +232,6 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	Position test;
 	int direction;
 	bool swap;
-	std::vector<Position> _trajectory;
 	if (Options::strafe && (unit->getTurretType() > -1)) {
 		direction = unit->getTurretDirection();
 	}
@@ -310,7 +310,6 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								for (int yo = 0; yo < size; yo++)
 								{
 									Position poso = pos + Position(xo,yo,0);
-									_trajectory.clear();
 									int tst = calculateLine(poso, test, true, &_trajectory, unit, false);
 									size_t tsize = _trajectory.size();
 									if (tst>127) --tsize; //last tile is blocked thus must be cropped
@@ -409,7 +408,6 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	// for large units origin voxel is in the middle
 
 	Position scanVoxel;
-	std::vector<Position> _trajectory;
 	unitSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
 
 	if (unitSeen)
@@ -419,7 +417,6 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		// we do density/3 to get the decay of visibility
 		// so in fresh smoke we should only have 4 tiles of visibility
 		// this is traced in voxel space, with smoke affecting visibility every step of the way
-		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		Tile *t = _save->getTile(currentUnit->getPosition());
 		size_t visibleDistance = _trajectory.size();
@@ -455,7 +452,6 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position scanVoxel;
-	std::vector<Position> _trajectory;
 	BattleUnit *otherUnit = tile->getUnit();
 	if (otherUnit == 0) return 0; //no unit in this tile, even if it elevated and appearing in it.
 	if (otherUnit == excludeUnit) return 0; //skip self
@@ -502,7 +498,6 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 		{
 			scanVoxel.x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel.y=targetVoxel.y + sliceTargets[j*2+1];
-			_trajectory.clear();
 			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, excludeAllBut);
 			if (test == V_UNIT)
 			{
@@ -532,7 +527,6 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
-	std::vector<Position> _trajectory;
 	bool hypothetical = potentialUnit != 0;
 	if (potentialUnit == 0)
 	{
@@ -590,7 +584,6 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 			if (i < (heightRange-1) && j>2) break; //skip unnecessary checks
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
-			_trajectory.clear();
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false);
 			if (test == V_UNIT)
 			{
@@ -636,7 +629,6 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 	static int northWallSpiral[14] = {7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0};
 
 	Position targetVoxel = Position((tile->getPosition().x * 16), (tile->getPosition().y * 16), tile->getPosition().z * 24);
-	std::vector<Position> _trajectory;
 
 	int *spiralArray;
 	int spiralCount;
@@ -734,7 +726,6 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 		{
 			scanVoxel->x = targetVoxel.x + spiralArray[i*2];
 			scanVoxel->y = targetVoxel.y + spiralArray[i*2+1];
-			_trajectory.clear();
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true);
 			if (test == part) //bingo
 			{
@@ -2028,6 +2019,8 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 	Position lastPoint(origin);
 	int result;
 
+	if (trajectory) trajectory->clear();
+
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
 	y0 = origin.y;	 y1 = target.y;
@@ -2188,6 +2181,8 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
 
 	if (AreSame(ro, 0.0)) return V_EMPTY;//just in case
+
+	if (trajectory) trajectory->clear();
 
 	double fi = acos((double)(target.z - origin.z) / ro);
 	double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
@@ -2706,9 +2701,8 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 	int test = V_OUTOFBOUNDS;
 	while (!foundCurve && curvature < 5.0)
 	{
-		std::vector<Position> trajectory;
-		test = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action.actor, curvature, Position(0,0,0));
-		if (test != V_OUTOFBOUNDS && (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
+		test = calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action.actor, curvature, Position(0,0,0));
+		if (test != V_OUTOFBOUNDS && (_trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
 			if (voxelType)
 			{
@@ -2903,14 +2897,13 @@ void TileEngine::setDangerZone(Position pos, int radius, BattleUnit *unit)
 					if (tile)
 					{
 						targetVoxel = ((pos + Position(x,y,0)) * Position(16,16,24)) + Position(8,8,12 + -tile->getTerrainLevel());
-						std::vector<Position> trajectory;
 						// we'll trace a line here, ignoring all units, to check if the explosion will reach this point
 						// granted this won't properly account for explosions tearing through walls, but then we can't really
 						// know that kind of information before the fact, so let's have the AI assume that the wall (or tree)
 						// is enough to protect them.
-						if (calculateLine(originVoxel, targetVoxel, false, &trajectory, unit, true, false, unit) == V_EMPTY)
+						if (calculateLine(originVoxel, targetVoxel, false, &_trajectory, unit, true, false, unit) == V_EMPTY)
 						{
-							if (trajectory.size() && (trajectory.back() / Position(16,16,24)) == pos + Position(x,y,0))
+							if (_trajectory.size() && (_trajectory.back() / Position(16,16,24)) == pos + Position(x,y,0))
 							{
 								tile->setDangerous();
 							}

@@ -45,6 +45,7 @@ private:
 	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
+	std::vector<Position> _trajectory;
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
