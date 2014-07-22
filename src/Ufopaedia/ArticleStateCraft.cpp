@@ -40,7 +40,7 @@ namespace OpenXcom
 		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(155, 32, 5, 24);
+		_txtTitle = new Text(210, 32, 5, 24);
 
 		// Set palette
 		setPalette("PAL_UFOPAEDIA");
