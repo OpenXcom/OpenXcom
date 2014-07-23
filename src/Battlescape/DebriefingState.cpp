@@ -644,7 +644,7 @@ void DebriefingState::prepareDebriefing()
 				break;
 			}
 			// if only one soldier survived AND none have died, means only one soldier went on the mission...
-			else if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && deadSoldiers != 0)
+			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && deadSoldiers == 0)
 			{
 				(*j)->getStatistics()->ironMan = true;
 			}
