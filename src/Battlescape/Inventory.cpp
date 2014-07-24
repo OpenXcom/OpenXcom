@@ -955,14 +955,14 @@ void Inventory::arrangeGround(bool alterOffset)
 bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning)
 {
 	bool placed = false;
+	int cost item->getSlot()->getCost(newSlot);
+	SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
 	for (int y2 = 0; y2 <= newSlot->getY() / RuleInventory::SLOT_H && !placed; ++y2)
 	{
 		for (int x2 = 0; x2 <= newSlot->getX() / RuleInventory::SLOT_W && !placed; ++x2)
 		{
 			if (!overlapItems(_selUnit, item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{
-				int cost = _selItem->getSlot()->getCost(newSlot);
-				SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
 				if(_tu && savbat && !savbat->getBattleGame()->checkReservedTU(_selUnit, cost, BA_RETHINK))
 					warning = "STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING";
 				else if(_tu && !_selUnit->spendTimeUnits(cost))
