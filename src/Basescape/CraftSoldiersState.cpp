@@ -133,15 +133,12 @@ void CraftSoldiersState::btnOkClick(Action *)
 }
 
 /**
- * Shows the soldiers in a list.
+ * Shows the soldiers in a list at specified offset/scroll.
  */
-void CraftSoldiersState::init()
+void CraftSoldiersState::initList(Craft *c, size_t scrl)
 {
-	State::init();
-	Craft *c = _base->getCrafts()->at(_craft);
-	_lstSoldiers->clearList();
-
 	int row = 0;
+	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName(true, 19).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
@@ -162,10 +159,20 @@ void CraftSoldiersState::init()
 		_lstSoldiers->setRowColor(row, color);
 		row++;
 	}
+	if(scrl)
+		_lstSoldiers->scrollTo(scrl);
 	_lstSoldiers->draw();
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
+}
+/**
+ * Shows the soldiers in a list.
+ */
+void CraftSoldiersState::init()
+{
+	State::init();
+	initList(_base->getCrafts()->at(_craft), 0);
 
 }
 
@@ -202,6 +209,7 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
+		initList(_base->getCrafts()->at(_craft), 0);
 	}
 	else
 	{
@@ -215,8 +223,8 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 		{
 			_lstSoldiers->scrollUp(false);
 		}
+		initList(_base->getCrafts()->at(_craft), _lstSoldiers->getScroll());
 	}
-	init();
 }
 
 /**
@@ -253,6 +261,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
+		initList(_base->getCrafts()->at(_craft), _lstSoldiers->getRows());
 	}
 	else
 	{
@@ -266,8 +275,8 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 		{
 			_lstSoldiers->scrollDown(false);
 		}
+		initList(_base->getCrafts()->at(_craft), _lstSoldiers->getScroll());
 	}
-	init();
 }
 
 /**
