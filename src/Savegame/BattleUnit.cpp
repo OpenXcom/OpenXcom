@@ -2699,7 +2699,19 @@ void BattleUnit::ScriptRegister(ScriptParser<BattleUnit>* parser)
 	parser->addFunction("stun", &geter<bBU, &BU::_stunlevel>);
 	parser->addFunction("stun_max", &geter<bBU, &BU::_health>);
 	parser->addFunction("morale", &geter<bBU, &BU::_morale>);
-	parser->addFunction("morale_max", &geter<bBU, &BU::_morale>);
+	parser->addConst("morale_max", 100);
+
+	parser->addFunction("stat_tu", &geter<bUS, &US::stamina>);
+	parser->addFunction("stat_stamina", &geter<bUS, &US::stamina>);
+	parser->addFunction("stat_health", &geter<bUS, &US::health>);
+	parser->addFunction("stat_bravery", &geter<bUS, &US::bravery>);
+	parser->addFunction("stat_reactions", &geter<bUS, &US::reactions>);
+	parser->addFunction("stat_firing", &geter<bUS, &US::firing>);
+	parser->addFunction("stat_throwing", &geter<bUS, &US::throwing>);
+	parser->addFunction("stat_strength", &geter<bUS, &US::strength>);
+	parser->addFunction("stat_psistrength", &geter<bUS, &US::psiStrength>);
+	parser->addFunction("stat_psiskill", &geter<bUS, &US::psiSkill>);
+	parser->addFunction("stat_melee", &geter<bUS, &US::melee>);
 
 	parser->addFunction("fatalwounds", &geter<bBU, &BU::getFatalWounds>);
 	parser->addFunction("fatalwounds_head", &geter<bBU, &BU::getFatalWound, BODYPART_HEAD>);
@@ -2719,6 +2731,13 @@ void BattleUnit::ScriptRegister(ScriptParser<BattleUnit>* parser)
 	parser->addFunction("unit_rank", &geter<bBU, &BU::_rankInt>);
 	parser->addFunction("unit_float", &geter_cast<bBU, bool, &BU::_floating>);
 	parser->addFunction("unit_kneel", &geter_cast<bBU, bool, &BU::_kneeled>);
+
+	parser->addConst("unit_rank_rookie", 0);
+	parser->addConst("unit_rank_squaddie", 1);
+	parser->addConst("unit_rank_sergeant", 2);
+	parser->addConst("unit_rank_captain", 3);
+	parser->addConst("unit_rank_colonel", 4);
+	parser->addConst("unit_rank_commander", 5);
 
 	parser->addFunction("soldier_hair", &geter_cast<bBU, Uint8, &BU::_hairColor>);
 	parser->addFunction("soldier_face", &geter_cast<bBU, Uint8, &BU::_faceColor>);

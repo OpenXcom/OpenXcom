@@ -40,9 +40,8 @@ private:
 	SurfaceSet *_itemSurface;
 	ResourcePack *_res;
 	int _animationFrame;
-	ScriptWorker _scriptWorkRef;
-
 	Surface *_dest;
+	ScriptWorker _scriptWorkRef;
 
 public:
 	/// Creates a new ItemSprite at the specified position and size.
