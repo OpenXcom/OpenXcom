@@ -49,10 +49,10 @@ private:
 	ArrowButton *_btnDisplayResolutionUp, *_btnDisplayResolutionDown;
 
 	Text *_txtLanguage, *_txtFilter, *_txtGeoScale, *_txtBattleScale;
-	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale;
+	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale, *_cbxScalingMode;
 	Text *_txtMode;
 	Text *_txtOptions;
-	ToggleTextButton *_btnLetterbox, *_btnLockMouse;
+	ToggleTextButton *_btnLockMouse;
 
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
@@ -78,8 +78,8 @@ public:
 	void cbxFilterChange(Action *action);
 	/// Handler for clicking the Display Mode combobox.
 	void updateDisplayMode(Action *action);
-	/// Handler for clicking the Letterboxed button.
-	void btnLetterboxClick(Action *action);
+	/// Handler for choosing scaling mode.
+	void updateScalingMode(Action *action);
 	/// Handler for clicking the Lock Mouse button.
 	void btnLockMouseClick(Action *action);
 	/// Handler for updating the selected battlescape scale.
