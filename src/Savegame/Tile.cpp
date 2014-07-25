@@ -518,37 +518,47 @@ int Tile::getFlammability() const
 {
 	int flam = 255;
 
-	if (_objects[3])
-	{
-		flam = _objects[3]->getFlammable();
-	}
-	else if (_objects[0])
-	{
-		flam = _objects[0]->getFlammable();
-	}
+	for (int i=0; i<4; ++i)
+		if (_objects[i] && (_objects[i]->getFlammable() < flam))
+			flam = _objects[i]->getFlammable();
 
 	return flam;
 }
 
 /*
- * Fuel of a tile is the lowest flammability of its objects.
+ * Fuel of a tile is the highest fuel of it's objects.
  * @return how long to burn.
  */
 int Tile::getFuel() const
 {
 	int fuel = 0;
 
-	if (_objects[3])
-	{
-		fuel = _objects[3]->getFuel();
-	}
-	else if (_objects[0])
-	{
-		fuel = _objects[0]->getFuel();
-	}
+	for (int i=0; i<4; ++i)
+		if (_objects[i] && (_objects[i]->getFuel() < fuel))
+			fuel = _objects[i]->getFuel();
 
 	return fuel;
 }
+
+
+/*
+ * Flammability of the particular part of the tile
+ * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
+ */
+int Tile::getFlammability(int part) const
+{
+	return _objects[part]->getFlammable();
+}
+
+/*
+ * Fuel of particular part of the tile
+ * @return how long to burn.
+ */
+int Tile::getFuel(int part) const
+{
+	return _objects[part]->getFuel();
+}
+
 /*
  * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of its objects.
  * NOT the sum of the fuel of the objects!
