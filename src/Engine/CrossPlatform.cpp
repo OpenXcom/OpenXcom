@@ -116,14 +116,14 @@ std::vector<std::string> findDataFolders()
 	list.push_back("PROGDIR:data/");
 	return list;
 #endif
-	
+
 #ifdef _WIN32
 	char path[MAX_PATH];
 
-	// Get Documents folder
-	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+	// Get working directory
+	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendA(path, "OpenXcom\\data\\");
+		PathAppendA(path, "data\\");
 		list.push_back(path);
 	}
 
@@ -135,10 +135,10 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 
-	// Get working directory
-	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
+	// Get Documents folder
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendA(path, "data\\");
+		PathAppendA(path, "OpenXcom\\data\\");
 		list.push_back(path);
 	}
 #else
@@ -188,7 +188,7 @@ std::vector<std::string> findDataFolders()
 #endif
 
 #endif
-	
+
 	// Get working directory
 	list.push_back("./data/");
 #endif
@@ -204,20 +204,20 @@ std::vector<std::string> findDataFolders()
 std::vector<std::string> findUserFolders()
 {
 	std::vector<std::string> list;
-	
+
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:");
 	return list;
 #endif
 
-	
+
 #ifdef _WIN32
 	char path[MAX_PATH];
 
-	// Get Documents folder
-	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+	// Get working directory
+	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendA(path, "OpenXcom\\");
+		PathAppendA(path, "user\\");
 		list.push_back(path);
 	}
 
@@ -229,10 +229,10 @@ std::vector<std::string> findUserFolders()
 		list.push_back(path);
 	}
 
-	// Get working directory
-	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
+	// Get Documents folder
+	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendA(path, "user\\");
+		PathAppendA(path, "OpenXcom\\");
 		list.push_back(path);
 	}
 #else
@@ -241,7 +241,7 @@ std::vector<std::string> findUserFolders()
 #endif
 	char const *home = getHome();
 	char path[MAXPATHLEN];
-	
+
 	// Get user folders
 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
@@ -630,7 +630,7 @@ bool fileExists(const std::string &path)
 		return 1;
 	}
 	return 0;
-#else 
+#else
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
 #endif
@@ -688,7 +688,7 @@ std::string sanitizeFilename(const std::string &filename)
 		if ((*i) == '<' ||
 			(*i) == '>' ||
 			(*i) == ':' ||
-			(*i) == '"' || 
+			(*i) == '"' ||
 			(*i) == '/' ||
 			(*i) == '?' ||
 			(*i) == '\\')
