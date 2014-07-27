@@ -1146,7 +1146,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			Tile *dest = origin;
 			double l = 0;
 			int tileX, tileY, tileZ;
-			int blockage = 0;
 			power_ = power;
 			while (power_ > 0 && l <= maxRadius)
 			{

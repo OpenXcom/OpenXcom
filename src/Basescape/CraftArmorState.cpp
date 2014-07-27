@@ -23,6 +23,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Action.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -158,21 +159,24 @@ void CraftArmorState::btnOkClick(Action *)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstSoldiersClick(Action *)
 void CraftArmorState::lstSoldiersClick(Action *action)
 {	
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
-	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT")){
+	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
+	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
 			_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
-		}else{
+		}
+		else
+		{
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
 			{
 				SavedGame *_save;
 				_save = _game->getSavedGame();
 				Armor *a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
-				if (_base->getItems()->getItem(a->getStoreItem())>0 || a->getStoreItem() == "STR_NONE"){
+				if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
+				{
 					if (s->getArmor()->getStoreItem() != "STR_NONE")
 					{
 						_base->getItems()->addItem(s->getArmor()->getStoreItem());
@@ -181,7 +185,7 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 					{
 						_base->getItems()->removeItem(a->getStoreItem());
 					}
-			
+					
 					s->setArmor(a);
 					_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 				}
