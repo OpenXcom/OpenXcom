@@ -66,7 +66,7 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_btnCrew = new TextButton(64, 16, 14, 96);
 	_btnEquip = new TextButton(64, 16, 14, 120);
 	_btnArmor = new TextButton(64, 16, 14, 144);
-	_edtCraft = new TextEdit(this, 140, 16, 80, 8);
+	_edtCraft = new TextEdit(this, 260, 16, 20, 8);
 	_txtDamage = new Text(100, 17, 14, 24);
 	_txtFuel = new Text(82, 17, 228, 24);
 	_txtW1Name = new Text(75, 16, 46, 48);
@@ -316,7 +316,7 @@ void CraftInfoState::init()
 /**
  * Turns an amount of time into a
  * day/hour string.
- * @param total 
+ * @param total
  */
 std::wstring CraftInfoState::formatTime(int total)
 {
