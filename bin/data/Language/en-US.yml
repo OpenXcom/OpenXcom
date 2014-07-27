@@ -1368,3 +1368,5 @@ en-US:
     few: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
     many: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
     other: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
+  STR_3DFLIGHT: "Flying units full 3D flight"
+  STR_3DFLIGHT_DESC: "Enables full 3D flight (vertical + horizontal simultaneously) for flying units"
