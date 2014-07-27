@@ -791,7 +791,7 @@ std::string Craft::rearm(Ruleset *rules)
 			{
 				int used = (*i)->rearm(available, rules->getItem(clip)->getClipSize());
 
-				if (used > available)
+				if (used == available && (*i)->isRearming())
 				{
 					ammo = clip;
 					(*i)->setRearming(false);
