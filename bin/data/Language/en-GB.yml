@@ -1144,6 +1144,7 @@ en-GB:
   STR_CUSTOMINITIALBASE_DESC: "When starting a new game, you can manually place your starting facilities instead of using the default layout."
   STR_GLOBESEASONS: "Realistic globe lighting"
   STR_GLOBESEASONS_DESC: "Uses more realistic projection of sunlight on the Geoscape according to Earth's axial tilt."
+  STR_NONSQUAREPIXELS: "Use 1:1.2 pixel ratio"
   STR_PLAYINTRO: "Play intro"
   STR_PLAYINTRO_DESC: "Show the intro cinematic on startup."
   STR_SHOWMORESTATSININVENTORYVIEW: "Inventory Stats"
