@@ -65,6 +65,14 @@ public:
 	static std::wstring formatFunding(int funds);
 	/// Formats an integer value as percentage.
 	static std::wstring formatPercentage(int value);
+	/// Check if a character is Thai Toner.
+	static inline bool isThaiToner(wchar_t c) { return (c == L'\u0E47' || c == L'\u0E48' || c == L'\u0E49' || c == L'\u0E4A' || c == L'\u0E4B' || c == L'\u0E4C' || c == L'\u0E4D'); }	
+	/// Check if a character is upper Thai vowels.
+	static inline bool isUpperThaiVowel(wchar_t c) { return (c == L'\u0E31' || c == L'\u0E34' || c == L'\u0E35' || c == L'\u0E36' || c == L'\u0E37'); }
+	/// Check if a character is lower Thai vowels.
+	static inline bool isLowerThaiVowel(wchar_t c) { return (c == L'\u0E38' || c == L'\u0E39' || c == L'\u0E3A'); }	
+	/// Check if a character is non-inline Thai character
+	static inline bool isNonInlineThai(wchar_t c) { return (isThaiToner(c) || isUpperThaiVowel(c) || isLowerThaiVowel(c)); }		
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.

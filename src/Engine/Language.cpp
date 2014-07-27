@@ -74,10 +74,11 @@ Language::Language() : _id(""), _strings(), _handler(0), _direction(DIRECTION_LT
 		_names["ru"] = utf8ToWstr("Русский");
 		_names["sk-SK"] = utf8ToWstr("Slovenčina");
 		_names["sv"] = utf8ToWstr("Svenska");
+		_names["th"] = utf8ToWstr("ไทย");
 		_names["tr-TR"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
 		_names["zh-CN"] = utf8ToWstr("中文");
-		_names["zh-TW"] = utf8ToWstr("文言");
+		_names["zh-TW"] = utf8ToWstr("文言");		
 	}
 	if (_rtl.empty())
 	{

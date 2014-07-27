@@ -330,7 +330,9 @@ void TextEdit::draw()
 			}
 			for (size_t i = 0; i < _caretPos; ++i)
 			{
-				x += _text->getFont()->getCharSize(_value[i]).w;
+				// Do not include non-inline Thai vowels
+				if(!Text::isNonInlineThai(_value[i]))
+					x += _text->getFont()->getCharSize(_value[i]).w;
 			}
 			_caret->setX(x);
 			_caret->blit(this);
