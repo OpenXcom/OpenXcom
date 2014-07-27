@@ -1,0 +1,820 @@
+# To the poor soul that happens to think that messing with UI is a cool thing to do:
+# Run away while you still can. Run and never, ever think of coming back. You won't find
+# anything apart from desolation and despair here. Everything you touch will hurt and kill you.
+# Also, this file is generated automatically. Go away.
+# 
+# Still there? Okay, fine, you've asked for it.
+# First off, the text here is case-sensitive. Don't ask.
+# Second, some fields are required, others are not.
+# Third, this file is generated from BattlescapeState source code. You shouldn't mess with
+# the things like names or event handlers. Seriously, just don't.
+layout:
+# Underlying surface with all the graphics.
+# Note that if you want it displayed, you'll have to specify the palette!
+  - name: icons
+    order: 1
+    type: InteractiveSurface
+    width: 320
+    height: 56
+    hAlign: center
+    vAlign: bottom
+    relX: -160
+    relY: -56
+    graphic:
+      name: ICONS.PCK
+      crop:
+        x: 0
+        y: 144
+        w: 320
+        h: 56
+    hidden: false
+    handlers:
+      onMouseIn: mouseInIcons
+      onMouseOut: mouseOutIcons
+# TFTD-style time reserve buttons. Remark: do we even need it? Maybe just blit the graphic directly to
+# the buttons?
+  - name: TFTDIcons
+    order: 2
+    type: Surface
+    width: 59
+    height: 24
+    hAlign: center
+    vAlign: bottom
+    relX: -112
+    relY: -24
+    graphic:
+      name: TFTDReserve
+    hidden: false
+# Surface for displaying a solier's rank. Empty by default, gets painted during the battle.
+  - name: rank
+    order: 3
+    type: Surface
+    width: 26
+    height: 23
+    hAlign: center
+    vAlign: bottom
+    relX: -53
+    relY: -23
+    hidden: false
+# Touch surfaces for the battlescape buttons. Note that they don't hold any graphics!
+# In the original code some of the surfaces could have multiple key handlers. That's not the case there:
+# each surface can respond to a single key only. This requires some workarounds.
+  - name: btnUnitUp
+    order: 4
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -112
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnUnitUpClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+    tooltip: STR_UNIT_LEVEL_ABOVE
+
+  - name: btnUnitDown
+    order: 5
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -112
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnUnitDownClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+    tooltip: STR_UNIT_LEVEL_BELOW
+
+  - name: btnMapUp
+    order: 6
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -80
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnMapUpClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnMapUpClick
+      keyKeyboardPress: keyBattleLevelUp
+    tooltip: STR_VIEW_LEVEL_ABOVE
+
+  - name: btnMapDown
+    order: 7
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -80
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnMapDownClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnMapDownClick
+      keyKeyboardPress: keyBattleLevelDown
+    tooltip: STR_VIEW_LEVEL_BELOW
+
+  - name: btnShowMap
+    order: 8
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -48
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnShowMapClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnShowMapClick
+      keyKeyboardPress: keyBattleMap
+    tooltip: STR_MINIMAP
+
+  - name: btnKneel
+    order: 9
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -48
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnKneelClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnKneelClick
+      keyKeyboardPress: keyBattleKneel
+    tooltip: STR_KNEEL
+
+  - name: btnInventory
+    order: 10
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -16
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnInventoryClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnInventoryClick
+      keyKeyboardPress: keyBattleInventory
+    tooltip: STR_INVENTORY
+
+  - name: btnCenter
+    order: 11
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: -16
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnCenterClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnCenterClick
+      keyKeyboardPress: keyBatteCenter
+    tooltip: STR_CENTER_SELECTED_UNIT
+
+  - name: btnNextSoldier
+    order: 12
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: 16
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnNextSoldierClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnNextSoldierClick
+      keyKeyboardPress: keyBattleNextUnit
+    tooltip: STR_NEXT_UNIT
+# This button is not present in the original code. It reacts to keyboard events only and is a workaround
+# for the single key handler problem.
+  - name: btnPrevSoldier
+    order: 1000
+    type: InteractiveSurface
+    width: 1
+    height: 1
+    hAlign: left
+    vAlign: top
+    relX: 0
+    relY: 0
+    hidden: false
+    handlers:
+      onKeyboardPress: btnPrevSoldierClick
+      keyKeyboardPress: keyBattlePrevUnit
+
+  - name: btnReload
+    order: 1001
+    type: InteractiveSurface
+    width: 1
+    height: 1
+    hAlign: left
+    vAlign: top
+    relX: 0
+    relY: 0
+    hidden: false
+    handlers:
+      onKeyboardPress: btnReloadClick
+      keyKeyboardPress: keyBattleReload
+
+  - name: btnPersonalLighting
+    order: 1002
+    type: InteractiveSurface
+    width: 1
+    height: 1
+    hAlign: left
+    vAlign: top
+    relX: 0
+    relY: 0
+    hidden: false
+    handlers:
+      onKeyboardPress: btnPersonalLightingClick
+      keyKeyboardPress: keyBattlePersonalLighting
+    
+  - name: btnNextStop
+    order: 13
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: 16
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnNextStopClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnNextStopClick
+      keyKeyboardPress: keyBattleDeselectUnit
+    tooltip: STR_DESELECT_UNIT
+
+  - name: btnShowLayers
+    order: 14
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: 48
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnShowLayersClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+    tooltip: STR_MULTI_LEVEL_VIEW
+
+  - name: btnHelp
+    order: 15
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: 48
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnHelpClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnHelpClick
+      keyKeyboardPress: keyBattleOptions
+    tooltip: STR_OPTIONS
+
+  - name: btnEndTurn
+    order: 16
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: 80
+    relY: -56
+    hidden: false
+    handlers:
+      onMouseClick: btnEndTurnClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnEndTurnClick
+      keyKeyboardPress: keyBattleEndTurn
+    tooltip: STR_END_TURN
+
+  - name: btnAbort
+    order: 17
+    type: InteractiveSurface
+    width: 32
+    height: 16
+    hAlign: center
+    vAlign: bottom
+    relX: 80
+    relY: -40
+    hidden: false
+    handlers:
+      onMouseClick: btnAbortClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnAbortClick
+      keyKeyboardPress: keyBattleAbort
+    tooltip: STR_ABORT_MISSION
+# Other touch surfaces: weapons, unit stats, etc.
+  - name: btnStats
+    order: 18
+    type: InteractiveSurface
+    width: 164
+    height: 23
+    hAlign: center
+    vAlign: bottom
+    relX: -53
+    relY: -23
+    hidden: false
+    handlers:
+      onMouseClick: btnStatsClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnStatsClick
+      keyKeyboardPress: keyBattleStats
+    tooltip: STR_UNIT_STATS
+# Order is nudged here a bit, because there'll be something else
+# in the mobile version. Also, there are some numbers that should be above these items.
+  - name: btnLeftHandItem
+    order: 50
+    type: InteractiveSurface
+    width: 32
+    height: 48
+    hAlign: center
+    vAlign: bottom
+    relX: -152
+    relY: -51
+    hidden: false
+    handlers:
+      onMouseClick: btnLeftHandItemClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnLeftHandItemClick
+      keyKeyboardPress: keyBattleUseLeftHand
+    tooltip: STR_USE_LEFT_HAND
+
+  - name: btnRightHandItem
+    order: 60
+    type: InteractiveSurface
+    width: 32
+    height: 48
+    hAlign: center
+    vAlign: bottom
+    relX: 120
+    relY: -51
+    hidden: false
+    handlers:
+      onMouseClick: btnRightHandItemClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnRightHandItemClick
+      keyKeyboardPress: keyBattleUseRightHand
+    tooltip: STR_USE_RIGHT_HAND
+
+  - name: btnReserveNone
+    order: 20
+    type: ImageButton
+    width: 17
+    height: 11
+    hAlign: center
+    vAlign: bottom
+    relX: -100
+    relY: -23
+    hidden: false
+    graphic:
+      name: TFTDReserve
+      crop:
+        x: 12
+        y: 1
+        w: 17
+        h: 11
+    palColor:
+      blockOffset: 4
+      colorOffset: 3
+    handlers:
+      onMouseClick: btnReserveClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnReserveClick
+      keyKeyboardPress: keyBattleReserveNone
+    tooltip: STR_DONT_RESERVE_TIME_UNITS
+
+  - name: btnReserveSnap
+    order: 21
+    type: ImageButton
+    width: 17
+    height: 11
+    hAlign: center
+    vAlign: bottom
+    relX: -82
+    relY: -23
+    hidden: false
+    graphic:
+      name: TFTDReserve
+      crop:
+        x: 30
+        y: 1
+        w: 17
+        h: 11
+    palColor:
+      blockOffset: 2
+      colorOffset: 3
+    handlers:
+      onMouseClick: btnReserveClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnReserveClick
+      keyKeyboardPress: keyBattleReserveSnap
+    tooltip: STR_RESERVE_TIME_UNITS_FOR_SNAP_SHOT
+
+  - name: btnReserveAimed
+    order: 22
+    type: ImageButton
+    width: 17
+    height: 11
+    hAlign: center
+    vAlign: bottom
+    relX: -100
+    relY: -11
+    hidden: false
+    graphic:
+      name: TFTDReserve
+      crop:
+        x: 12
+        y: 13
+        w: 17
+        h: 11
+    palColor:
+      blockOffset: 2
+      colorOffset: 3
+    handlers:
+      onMouseClick: btnReserveClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnReserveClick
+      keyKeyboardPress: keyBattleReserveAimed
+    tooltip: STR_RESERVE_TIME_UNITS_FOR_AIMED_SHOT
+
+  - name: btnReserveAuto
+    order: 23
+    type: ImageButton
+    width: 17
+    height: 11
+    hAlign: center
+    vAlign: bottom
+    relX: -82
+    relY: -11
+    hidden: false
+    graphic:
+      name: TFTDReserve
+      crop:
+        x: 30
+        y: 13
+        w: 17
+        h: 11
+    palColor:
+      blockOffset: 2
+      colorOffset: 3
+    handlers:
+      onMouseClick: btnReserveClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnReserveClick
+      keyKeyboardPress: keyBattleReserveAuto
+    tooltip: STR_RESERVE_TIME_UNITS_FOR_AUTO_SHOT
+
+  - name: btnReserveKneel
+    order: 70
+    type: ImageButton
+    width: 10
+    height: 23
+    hAlign: center
+    vAlign: bottom
+    relX: -64
+    relY: -23
+    hidden: false
+    graphic:
+      name: TFTDReserve
+      crop:
+        x: 48
+        y: 1
+        w: 10
+        h: 23
+    palColor:
+      blockOffset: 2
+      colorOffset: 3
+    handlers:
+      onMouseClick: btnReserveKneelClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnReserveClick
+      keyKeyboardPress: keyBattleReserveKneel
+    tooltip: STR_RESERVE_TIME_UNITS_FOR_KNEEL
+# This button is a "special snowflake": it reacts to the right mouse button, but not to the left one.
+  - name: btnZeroTUs
+    order: 24
+    type: ImageButton
+    width: 10
+    height: 23
+    hAlign: center
+    vAlign: bottom
+    relX: -111
+    relY: -23
+    hidden: false
+    graphic:
+      name: TFTDReserve
+      crop:
+        x: 1
+        y: 1
+        w: 10
+        h: 23
+    palColor:
+      blockOffset: 2
+      colorOffset: 3
+    handlers:
+      onMouseRightClick: btnZeroTUsClick
+      onMouseIn: txtTooltipIn
+      onMouseOut: txtTooltipOut
+      onKeyboardPress: btnReserveClick
+      keyKeyboardPress: keyBattleZeroTUs
+    tooltip: STR_EXPEND_ALL_TIME_UNITS
+
+  - name: btnLaunch
+    order: 30
+    type: InteractiveSurface
+    width: 32
+    height: 24
+    hAlign: right
+    vAlign: top
+    relX: -32
+    relY: 0
+    visible: false
+    hidden: false
+    graphic:
+      name: SPICONS.DAT
+      frame: 0
+    handlers:
+      onMouseClick: btnLaunchClick
+
+  - name: btnPsi
+    order: 31
+    type: InteractiveSurface
+    width: 32
+    height: 24
+    hAlign: right
+    vAlign: top
+    relX: -32
+    relY: 25
+    visible: false
+    hidden: false
+    graphic:
+      name: SPICONS.DAT
+      frame: 1
+    handlers:
+      onMouseClick: btnPsiClick
+# There's also an array of "center view on enemy" touch surfaces, but I'm not doing them right now.
+# That's that on touch surfaces; on to some less interactive elements!
+  - name: numLayers
+    type: NumberText
+    order: 32
+    width: 3
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: 72
+    relY: -50
+    hidden: false
+    palColor:
+      blockOffset: 1
+      colorOffset: -2
+    value: 1
+
+  - name: numAmmoLeft
+    type: NumberText
+    order: 55
+    width: 30
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -152
+    relY: -51
+    hidden: false
+    palColor:
+      blockOffset: 0
+      colorOffset: 2
+    value: 999
+
+  - name: numAmmoRight
+    type: NumberText
+    order: 65
+    width: 30
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: 120
+    relY: -51
+    hidden: false
+    palColor:
+      blockOffset: 0
+      colorOffset: 2
+    value: 999
+
+  - name: numTimeUnits
+    type: NumberText
+    order: 40
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -24
+    relY: -14
+    hidden: false
+    palColor:
+      blockOffset: 4
+      colorOffset: 0
+    value: 99
+
+  - name: numEnergy
+    type: NumberText
+    order: 41
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -6
+    relY: -14
+    hidden: false
+    palColor:
+      blockOffset: 1
+      colorOffset: 0
+    value: 99
+
+  - name: numHealth
+    type: NumberText
+    order: 42
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -24
+    relY: -6
+    hidden: false
+    palColor:
+      blockOffset: 2
+      colorOffset: 0
+    value: 99
+
+  - name: numMorale
+    type: NumberText
+    order: 43
+    width: 15
+    height: 5
+    hAlign: center
+    vAlign: bottom
+    relX: -6
+    relY: -6
+    hidden: false
+    palColor:
+      blockOffset: 12
+      colorOffset: 0
+    value: 99
+
+  - name: barTimeUnits
+    type: Bar
+    order: 44
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -15
+    hidden: false
+    palColor:
+      blockOffset: 4
+      colorOffset: 0
+    scale: 1.0
+
+  - name: barEnergy
+    type: Bar
+    order: 45
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -11
+    hidden: false
+    palColor:
+      blockOffset: 1
+      colorOffset: 0
+    scale: 1.0
+
+  - name: barHealth
+    type: Bar
+    order: 46
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -7
+    hidden: false
+    palColor:
+      blockOffset: 2
+      colorOffset: 0
+    palColor2:
+      blockOffset: 5
+      colorOffset: 2
+    scale: 1.0
+
+  - name: barMorale
+    type: Bar
+    order: 47
+    width: 102
+    height: 3
+    hAlign: center
+    vAlign: bottom
+    relX: 10
+    relY: -3
+    hidden: false
+    palColor:
+      blockOffset: 12
+      colorOffset: 0
+    scale: 1.0
+
+  - name: txtName
+    type: Text
+    order: 200
+    width: 136
+    height: 10
+    hAlign: center
+    vAlign: bottom
+    relX: -25
+    relY: -24
+    hidden: false
+    palColor: 
+      blockOffset: 8
+      colorOffset: 0
+    highContrast: true
+
+  - name: txtDebug
+    type: Text
+    order: 201
+    width: 300
+    height: 10
+    hAlign: left
+    vAlign: top
+    relX: 20
+    relY: 0
+    hidden: false
+    palColor: 
+      blockOffset: 8
+      colorOffset: 0
+    highContrast: true
+
+  - name: txtTooltip
+    type: Text
+    order: 202
+    width: 300
+    height: 10
+    hAlign: center
+    vAlign: bottom
+    relX: -158
+    relY: -66
+    hidden: false
+    palColor: 
+      blockOffset: 0
+      colorOffset: -1
+    highContrast: true
