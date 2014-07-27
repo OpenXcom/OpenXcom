@@ -135,10 +135,11 @@ void CraftSoldiersState::btnOkClick(Action *)
 /**
  * Shows the soldiers in a list at specified offset/scroll.
  */
-void CraftSoldiersState::initList(Craft *c, size_t scrl)
+void CraftSoldiersState::initList(size_t scrl)
 {
 	int row = 0;
 	_lstSoldiers->clearList();
+	Craft *c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName(true, 19).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
@@ -172,7 +173,7 @@ void CraftSoldiersState::initList(Craft *c, size_t scrl)
 void CraftSoldiersState::init()
 {
 	State::init();
-	initList(_base->getCrafts()->at(_craft), 0);
+	initList(0);
 
 }
 
@@ -209,7 +210,7 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
-		initList(_base->getCrafts()->at(_craft), 0);
+		initList(0);
 	}
 	else
 	{
@@ -223,7 +224,7 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 		{
 			_lstSoldiers->scrollUp(false);
 		}
-		initList(_base->getCrafts()->at(_craft), _lstSoldiers->getScroll());
+		initList(_lstSoldiers->getScroll());
 	}
 }
 
@@ -261,7 +262,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-		initList(_base->getCrafts()->at(_craft), _lstSoldiers->getRows());
+		initList(_lstSoldiers->getRows());
 	}
 	else
 	{
@@ -275,7 +276,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 		{
 			_lstSoldiers->scrollDown(false);
 		}
-		initList(_base->getCrafts()->at(_craft), _lstSoldiers->getScroll());
+		initList(_lstSoldiers->getScroll());
 	}
 }
 
