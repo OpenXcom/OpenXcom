@@ -144,10 +144,11 @@ void ExplosionBState::init()
 	// create a bullet hit
 	{
 		_parent->setStateInterval(std::max(1, ((BattlescapeState::DEFAULT_ANIM_SPEED/2) - (10 * _item->getRules()->getExplosionSpeed()))));
-		_hit = _pistolWhip || _item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP;
+		_hit = _pistolWhip || _item->getRules()->getBattleType() == BT_MELEE;
+		bool psi = _item->getRules()->getBattleType() == BT_PSIAMP;
 		int anim = _item->getRules()->getHitAnimation();
 		int sound = _item->getRules()->getHitSound();
-		if (_hit)
+		if (_hit || psi) // Play melee animation on hitting and psiing
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 		}
@@ -156,7 +157,7 @@ void ExplosionBState::init()
 			// bullet hit sound
 			_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
 		}
-		Explosion *explosion = new Explosion(_center, anim, false, _hit);
+		Explosion *explosion = new Explosion(_center, anim, false, _hit || psi); // Don't burn the tile
 		_parent->getMap()->getExplosions()->push_back(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
