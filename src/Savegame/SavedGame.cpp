@@ -104,6 +104,7 @@ SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(
 	_researchScores.push_back(0);
 	_incomes.push_back(0);
 	_expenditures.push_back(0);
+	_lastselectedArmor="STR_NONE_UC";
 }
 
 /**
@@ -1666,6 +1667,25 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 std::vector<Soldier*> *SavedGame::getDeadSoldiers()
 {
 	return &_deadSoldiers;
+}
+
+/**
+ * Sets the the last selected armour.
+ * @param value The new value for last selected armor - Armor type string.
+ */
+
+void SavedGame::setLastSelectedArmor(const std::string &value)
+{
+	_lastselectedArmor = value;
+}
+
+/**
+ * Gets the the last selected armour
+ * @return last used armor type string 
+ */
+std::string SavedGame::getLastSelectedArmor()
+{
+	return _lastselectedArmor;
 }
 
 }
