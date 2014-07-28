@@ -955,7 +955,7 @@ void Inventory::arrangeGround(bool alterOffset)
 bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning)
 {
 	bool placed = false;
-	int cost item->getSlot()->getCost(newSlot);
+	int cost = item->getSlot()->getCost(newSlot);
 	SavedBattleGame *savbat = _game->getSavedGame()->getSavedBattle();
 	for (int y2 = 0; y2 <= newSlot->getY() / RuleInventory::SLOT_H && !placed; ++y2)
 	{
