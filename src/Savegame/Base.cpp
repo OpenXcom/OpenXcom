@@ -439,7 +439,7 @@ int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 		{
 			total++;
 		}
-		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
+		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") ||
 			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
@@ -857,10 +857,10 @@ int Base::getDefenseValue() const
  */
 int Base::getShortRangeDetection() const
 {
-	int total = 0;
+	int total = 0, radarThreshold=_rule->getMinRadarRange();
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > 0 && (*i)->getRules()->getRadarRange() <= 1700)
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > 0 && (*i)->getRules()->getRadarRange() <= radarThreshold)
 		{
 			total++;
 		}
@@ -875,10 +875,10 @@ int Base::getShortRangeDetection() const
  */
 int Base::getLongRangeDetection() const
 {
-	int total = 0;
+	int total = 0, radarThreshold=_rule->getMinRadarRange();
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > 1700)
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > radarThreshold)
 		{
 			total++;
 		}
@@ -1040,7 +1040,7 @@ bool Base::getHyperDetection() const
 		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
 		{
 			return true;
-		}		
+		}
 	}
 	return false;
 }
@@ -1082,7 +1082,7 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
- * Returns the total amount of used 
+ * Returns the total amount of used
  * Containment Space in the base.
  * @return Containment Lab space.
  */

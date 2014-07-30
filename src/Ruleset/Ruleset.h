@@ -220,7 +220,7 @@ public:
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Gets the list of StatStrings.
-    std::vector<StatString *> getStatStrings() const;    
+    std::vector<StatString *> getStatStrings() const;
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
@@ -230,6 +230,8 @@ public:
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	const std::string getAlienFuel() const;
+	/// Gets the minimum building radar's rannge
+	int getMinRadarRange() const;
 };
 
 }
