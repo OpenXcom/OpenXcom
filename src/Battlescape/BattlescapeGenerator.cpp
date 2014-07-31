@@ -257,12 +257,12 @@ void BattlescapeGenerator::nextStage()
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
-			(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
-			(_save->getTiles()[i]->getPosition().z == 1 &&
-			_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
-			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
-				_save->getTiles()[i]->setDiscovered(true, 2);
+		if (_save->getTile(i)->getMapData(MapData::O_FLOOR) &&
+				(_save->getTile(i)->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
+				(_save->getTile(i)->getPosition().z == 1 &&
+				_save->getTile(i)->getMapData(MapData::O_FLOOR)->isGravLift() &&
+				_save->getTile(i)->getMapData(MapData::O_OBJECT))))
+			_save->getTile(i)->setDiscovered(true, 2);
 	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
@@ -329,7 +329,7 @@ void BattlescapeGenerator::run()
 	{
 		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 		{
-			_save->getTiles()[i]->setDiscovered(true, 2);
+			_save->getTile(i)->setDiscovered(true, 2);
 		}
 
 		_save->calculateModuleMap();
@@ -339,12 +339,12 @@ void BattlescapeGenerator::run()
 	{
 		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 		{
-			if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
-				(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
-				(_save->getTiles()[i]->getPosition().z == 1 &&
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
-				_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
-				_save->getTiles()[i]->setDiscovered(true, 2);
+			if (_save->getTile(i)->getMapData(MapData::O_FLOOR) &&
+					(_save->getTile(i)->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
+					(_save->getTile(i)->getPosition().z == 1 &&
+					_save->getTile(i)->getMapData(MapData::O_FLOOR)->isGravLift() &&
+					_save->getTile(i)->getMapData(MapData::O_OBJECT))))
+				_save->getTile(i)->setDiscovered(true, 2);
 		}
 	}
 
@@ -649,9 +649,9 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 	{
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
 		{
-			if (canPlaceXCOMUnit(_save->getTiles()[i]))
+			if (canPlaceXCOMUnit(_save->getTile(i)))
 			{
-				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
+				if (_save->setUnitPosition(unit, _save->getTile(i)->getPosition()))
 				{
 					_save->getUnits()->push_back(unit);
 					unit->deriveRank();
@@ -1782,12 +1782,12 @@ void BattlescapeGenerator::fuelPowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) 
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
+		if (_save->getTile(i)->getMapData(MapData::O_OBJECT)
+			&& _save->getTile(i)->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem *alienFuel = new BattleItem(_game->getRuleset()->getItem(_game->getRuleset()->getAlienFuel()), _save->getCurrentItemId());
 			_save->getItems()->push_back(alienFuel);
-			_save->getTiles()[i]->addItem(alienFuel, _game->getRuleset()->getInventory("STR_GROUND"));
+			_save->getTile(i)->addItem(alienFuel, _game->getRuleset()->getInventory("STR_GROUND"));
 		}
 	}
 }
@@ -1800,13 +1800,13 @@ void BattlescapeGenerator::explodePowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
+		if (_save->getTile(i)->getMapData(MapData::O_OBJECT)
+			&& _save->getTile(i)->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
 		{
 			Position pos;
-			pos.x = _save->getTiles()[i]->getPosition().x*16;
-			pos.y = _save->getTiles()[i]->getPosition().y*16;
-			pos.z = (_save->getTiles()[i]->getPosition().z*24) +12;
+			pos.x = _save->getTile(i)->getPosition().x*16;
+			pos.y = _save->getTile(i)->getPosition().y*16;
+			pos.z = (_save->getTile(i)->getPosition().z*24) +12;
 			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
 		}
 	}
@@ -1925,7 +1925,7 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	MapData *data = new MapData(set);
 	for (int i = 0; i < soldiers; ++i)
 	{
-		Tile *tile = _save->getTiles()[i];
+		Tile *tile = _save->getTile(i);
 		tile->setMapData(data, 0, 0, MapData::O_FLOOR);
 		tile->getMapData(MapData::O_FLOOR)->setSpecialType(START_POINT, 0);
 		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);

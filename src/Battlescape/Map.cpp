@@ -1237,7 +1237,7 @@ void Map::animate(bool redraw)
 	// animate tiles
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		_save->getTiles()[i]->animate();
+		_save->getTile(i)->animate();
 	}
 
 	if (redraw) _redraw = true;

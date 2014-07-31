@@ -48,7 +48,7 @@ private:
 	static const int NUM_LANDSHADES = 48;
 	static const int NUM_SEASHADES = 72;
 	static const int NEAR_RADIUS = 25;
-	static const int DOGFIGHT_ZOOM = 3;
+	static const size_t DOGFIGHT_ZOOM = 3;
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 

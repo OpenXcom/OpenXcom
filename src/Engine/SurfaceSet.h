@@ -20,7 +20,6 @@
 #define OPENXCOM_SURFACESET_H
 
 #include <vector>
-#include <map>
 #include <string>
 #include <SDL.h>
 
@@ -38,8 +37,8 @@ class Surface;
 class SurfaceSet
 {
 private:
-	int _width, _height;
-	std::map<int, Surface*> _frames;
+	int _width, _height, _offset;
+	std::vector<Surface*> _frames;
 public:
 	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);

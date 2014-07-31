@@ -82,8 +82,8 @@ void TileEngine::calculateSunShading()
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		_save->getTiles()[i]->resetLight(layer);
-		calculateSunShading(_save->getTiles()[i]);
+		_save->getTile(i)->resetLight(layer);
+		calculateSunShading(_save->getTile(i));
 	}
 }
 
@@ -120,35 +120,35 @@ void TileEngine::calculateTerrainLighting()
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		_save->getTiles()[i]->resetLight(layer);
+		_save->getTile(i)->resetLight(layer);
 	}
 
 	// add lighting of terrain
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		// only floors and objects can light up
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR)
-			&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
+		if (_save->getTile(i)->getMapData(MapData::O_FLOOR)
+			&& _save->getTile(i)->getMapData(MapData::O_FLOOR)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(), layer);
+			addLight(_save->getTile(i)->getPosition(), _save->getTile(i)->getMapData(MapData::O_FLOOR)->getLightSource(), layer);
 		}
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
+		if (_save->getTile(i)->getMapData(MapData::O_OBJECT)
+			&& _save->getTile(i)->getMapData(MapData::O_OBJECT)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(), layer);
+			addLight(_save->getTile(i)->getPosition(), _save->getTile(i)->getMapData(MapData::O_OBJECT)->getLightSource(), layer);
 		}
 
 		// fires
-		if (_save->getTiles()[i]->getFire())
+		if (_save->getTile(i)->getFire())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), fireLightPower, layer);
+			addLight(_save->getTile(i)->getPosition(), fireLightPower, layer);
 		}
 
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator it = _save->getTile(i)->getInventory()->begin(); it != _save->getTile(i)->getInventory()->end(); ++it)
 		{
 			if ((*it)->getRules()->getBattleType() == BT_FLARE)
 			{
-				addLight(_save->getTiles()[i]->getPosition(), (*it)->getRules()->getPower(), layer);
+				addLight(_save->getTile(i)->getPosition(), (*it)->getRules()->getPower(), layer);
 			}
 		}
 
@@ -168,7 +168,7 @@ void TileEngine::calculateUnitLighting()
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		_save->getTiles()[i]->resetLight(layer);
+		_save->getTile(i)->resetLight(layer);
 	}
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -1427,9 +1427,9 @@ Tile *TileEngine::checkForTerrainExplosions()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getExplosive())
+		if (_save->getTile(i)->getExplosive())
 		{
-			return _save->getTiles()[i];
+			return _save->getTile(i);
 		}
 	}
 	return 0;
@@ -1987,10 +1987,10 @@ int TileEngine::closeUfoDoors()
 	// prepare a list of tiles on fire/smoke & close any ufo doors
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getUnit() && _save->getTiles()[i]->getUnit()->getArmor()->getSize() > 1)
+		if (_save->getTile(i)->getUnit() && _save->getTile(i)->getUnit()->getArmor()->getSize() > 1)
 		{
-			BattleUnit *bu = _save->getTiles()[i]->getUnit();
-			Tile *tile = _save->getTiles()[i];
+			BattleUnit *bu = _save->getTile(i)->getUnit();
+			Tile *tile = _save->getTile(i);
 			Tile *oneTileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
 			Tile *oneTileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
 			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL) && oneTileNorth && oneTileNorth->getUnit() && oneTileNorth->getUnit() == bu) ||
@@ -1999,7 +1999,7 @@ int TileEngine::closeUfoDoors()
 				continue;
 			}
 		}
-		doorsclosed += _save->getTiles()[i]->closeUfoDoor();
+		doorsclosed += _save->getTile(i)->closeUfoDoor();
 	}
 
 	return doorsclosed;

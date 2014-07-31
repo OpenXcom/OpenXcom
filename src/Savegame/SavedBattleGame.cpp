@@ -65,7 +65,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
 	for (int i = 0; i < 121; ++i)
 	{
 		_tileSearch[i].x = ((i%11) - 5);
-		_tileSearch[i].y = ((i/11) - 5); 
+		_tileSearch[i].y = ((i/11) - 5);
 	}
 }
 
@@ -74,12 +74,6 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
-	{
-		delete _tiles[i];
-	}
-	delete[] _tiles;
-
 	for (std::vector<MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->unloadData();
@@ -142,7 +136,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			getTile(pos)->load((*i));
 		}
 	}
-	else 
+	else
 	{
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
@@ -157,7 +151,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		serKey._mapDataSetID = node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields = node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
-		// load binary tile data! 
+		// load binary tile data!
 		YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8 *r = (Uint8*)binTiles.data();
@@ -167,7 +161,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			int index = unserializeInt(&r, serKey.index);
 			assert (index >= 0 && index < _mapsize_x * _mapsize_z * _mapsize_y);
-			_tiles[index]->loadBinary(r, serKey); // loadBinary's privileges to advance *r have been revoked
+			_tiles[index].loadBinary(r, serKey); // loadBinary's privileges to advance *r have been revoked
 			r += serKey.totalBytes-serKey.index; // r is now incremented strictly by totalBytes in case there are obsolete fields present in the data
 		}
 	}
@@ -214,7 +208,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
-			
+
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
@@ -334,10 +328,10 @@ void SavedBattleGame::loadMapResources(Game *game)
 	{
 		for (int part = 0; part < 4; part++)
 		{
-			_tiles[i]->getMapData(&mdID, &mdsID, part);
+			_tiles[i].getMapData(&mdID, &mdsID, part);
 			if (mdID != -1 && mdsID != -1)
 			{
-				_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
+				_tiles[i].setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
 			}
 		}
 	}
@@ -374,9 +368,9 @@ YAML::Node SavedBattleGame::save() const
 #if 0
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		if (!_tiles[i]->isVoid())
+		if (!_tiles[i].isVoid())
 		{
-			node["tiles"].push_back(_tiles[i]->save());
+			node["tiles"].push_back(_tiles[i].save());
 		}
 	}
 #else
@@ -395,10 +389,10 @@ YAML::Node SavedBattleGame::save() const
 
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		if (!_tiles[i]->isVoid())
+		if (!_tiles[i].isVoid())
 		{
 			serializeInt(&w, Tile::serializationKey.index, i);
-			_tiles[i]->saveBinary(&w);
+			_tiles[i].saveBinary(&w);
 		}
 		else
 		{
@@ -433,15 +427,6 @@ YAML::Node SavedBattleGame::save() const
 }
 
 /**
- * Gets the array of tiles.
- * @return A pointer to the Tile array.
- */
-Tile **SavedBattleGame::getTiles() const
-{
-	return _tiles;
-}
-
-/**
  * Initializes the array of tiles and creates a pathfinding object.
  * @param mapsize_x
  * @param mapsize_y
@@ -451,11 +436,7 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 {
 	if (!_nodes.empty())
 	{
-		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
-		{
-			delete _tiles[i];
-		}
-		delete[] _tiles;
+		_tiles.clear();
 
 		for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -468,13 +449,13 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
-	_tiles = new Tile*[_mapsize_z * _mapsize_y * _mapsize_x];
+	_tiles.reserve(_mapsize_z * _mapsize_y * _mapsize_x);
 	/* create tile objects */
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		Position pos;
 		getTileCoords(i, &pos.x, &pos.y, &pos.z);
-		_tiles[i] = new Tile(pos);
+		_tiles.push_back(Tile(pos));
 	}
 
 }
@@ -870,7 +851,7 @@ void SavedBattleGame::setDebugMode()
 {
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		_tiles[i]->setDiscovered(true, 2);
+		_tiles[i].setDiscovered(true, 2);
 	}
 
 	_debugMode = true;
@@ -1214,9 +1195,9 @@ void SavedBattleGame::prepareNewTurn()
 	// prepare a list of tiles on fire
 	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
-		if (getTiles()[i]->getFire() > 0)
+		if (getTile(i)->getFire() > 0)
 		{
-			tilesOnFire.push_back(getTiles()[i]);
+			tilesOnFire.push_back(getTile(i));
 		}
 	}
 
@@ -1283,9 +1264,9 @@ void SavedBattleGame::prepareNewTurn()
 	// prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
 	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
-		if (getTiles()[i]->getSmoke() > 0)
+		if (getTile(i)->getSmoke() > 0)
 		{
-			tilesOnSmoke.push_back(getTiles()[i]);
+			tilesOnSmoke.push_back(getTile(i));
 		}
 	}
 
@@ -1346,8 +1327,8 @@ void SavedBattleGame::prepareNewTurn()
 		// do damage to units, average out the smoke, etc.
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 		{
-			if (getTiles()[i]->getSmoke() != 0)
-				getTiles()[i]->prepareNewTurn();
+			if (getTile(i)->getSmoke() != 0)
+				getTile(i)->prepareNewTurn();
 		}
 		// fires could have been started, stopped or smoke could reveal/conceal units.
 		getTileEngine()->calculateTerrainLighting();
@@ -1662,9 +1643,9 @@ void SavedBattleGame::resetTiles()
 {
 	for (int i = 0; i != getMapSizeXYZ(); ++i)
 	{
-		_tiles[i]->setDiscovered(false, 0);
-		_tiles[i]->setDiscovered(false, 1);
-		_tiles[i]->setDiscovered(false, 2);
+		_tiles[i].setDiscovered(false, 0);
+		_tiles[i].setDiscovered(false, 1);
+		_tiles[i].setDiscovered(false, 2);
 	}
 }
 

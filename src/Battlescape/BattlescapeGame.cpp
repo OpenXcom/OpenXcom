@@ -386,13 +386,13 @@ void BattlescapeGame::endTurn()
 	// check for hot grenades on the ground
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
+		for (std::vector<BattleItem*>::iterator it = _save->getTile(i)->getInventory()->begin(); it != _save->getTile(i)->getInventory()->end(); )
 		{
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getFuseTimer() == 0)  // it's a grenade to explode now
 			{
-				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
-				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
-				p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
+				p.x = _save->getTile(i)->getPosition().x*16 + 8;
+				p.y = _save->getTile(i)->getPosition().y*16 + 8;
+				p.z = _save->getTile(i)->getPosition().z*24 - _save->getTile(i)->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
 				statePushBack(0);

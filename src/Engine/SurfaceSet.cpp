@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param width Frame width in pixels.
  * @param height Frame height in pixels.
  */
-SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _frames()
+SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _offset(), _frames()
 {
 
 }
@@ -43,10 +43,13 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
 {
 	_width = other._width;
 	_height = other._height;
+	_offset = other._offset;
 
-	for (std::map<int, Surface*>::const_iterator f = other._frames.begin(); f != other._frames.end(); ++f)
+	_frames.resize(other._frames.size());
+	for (size_t i = 0; i < _frames.size(); ++i)
 	{
-		_frames[f->first] = new Surface(*f->second);
+		if(other._frames[i])
+			_frames[i] = new Surface(*other._frames[i]);
 	}
 }
 
@@ -55,9 +58,9 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
  */
 SurfaceSet::~SurfaceSet()
 {
-	for (std::map<int, Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
+	for (size_t i = 0; i < _frames.size(); ++i)
 	{
-		delete i->second;
+		delete _frames[i];
 	}
 }
 
@@ -86,8 +89,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 		while (offsetFile.read((char*) &off, sizeof(off)))
 		{
 			off = SDL_SwapLE16(off);
-			Surface *surface = new Surface(_width, _height);
-			_frames[nframes] = surface;
+			_frames.push_back(new Surface(_width, _height));
 			nframes++;
 		}
 		offsetFile.close();
@@ -95,8 +97,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	else
 	{
 		nframes = 1;
-		Surface *surface = new Surface(_width, _height);
-		_frames[0] = surface;
+		_frames.push_back(new Surface(_width, _height));
 	}
 
 	// Load PCX and put pixels in surfaces
@@ -172,10 +173,10 @@ void SurfaceSet::loadDat(const std::string &filename)
 
 	nframes = (int)size / (_width * _height);
 
+	_frames.resize(nframes);
 	for (int i = 0; i < nframes; ++i)
 	{
-		Surface *surface = new Surface(_width, _height);
-		_frames[i] = surface;
+		_frames[i] = new Surface(_width, _height);
 	}
 
 	Uint8 value;
@@ -214,7 +215,8 @@ void SurfaceSet::loadDat(const std::string &filename)
  */
 Surface *SurfaceSet::getFrame(int i)
 {
-	if (_frames.find(i) != _frames.end())
+	i += _offset;
+	if ((size_t)i < _frames.size())
 	{
 		return _frames[i];
 	}
@@ -228,6 +230,21 @@ Surface *SurfaceSet::getFrame(int i)
  */
 Surface *SurfaceSet::addFrame(int i)
 {
+	i += _offset;
+	if ((size_t)i < _frames.size())
+	{
+		delete _frames[i];
+	}
+	else if (i >= 0)
+	{
+		_frames.resize(i + 1);
+	}
+	else
+	{
+		_offset -= i;
+		_frames.insert(_frames.begin(), (size_t)-i, 0);
+		i = 0;
+	}
 	_frames[i] = new Surface(_width, _height);
 	return _frames[i];
 }
@@ -268,9 +285,10 @@ size_t SurfaceSet::getTotalFrames() const
  */
 void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (std::map<int, Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
+	for (size_t i = 0; i < _frames.size(); ++i)
 	{
-		(*i).second->setPalette(colors, firstcolor, ncolors);
+		if (_frames[i])
+			_frames[i]->setPalette(colors, firstcolor, ncolors);
 	}
 }
 
