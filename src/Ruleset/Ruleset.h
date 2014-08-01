@@ -95,7 +95,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	std::vector<StatString*> _statStrings;
-	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
+	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding, _radarThreshold;
 	std::string _alienFuel;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
@@ -230,8 +230,8 @@ public:
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	const std::string getAlienFuel() const;
-	/// Gets the minimum building radar's rannge
-	int getMinRadarRange() const;
+	/// Gets the short radar range threshold
+	int getRadarThreshold() const;
 };
 
 }

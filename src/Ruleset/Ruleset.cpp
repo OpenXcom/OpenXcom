@@ -70,7 +70,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _radarThreshold(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -412,6 +412,7 @@ void Ruleset::loadFile(const std::string &filename)
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
  	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
  	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
+ 	_radarThreshold = doc["radarThreshold"].as<int>(_radarThreshold);
 	_alienFuel = doc["alienFuel"].as<std::string>(_alienFuel);
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
@@ -1373,21 +1374,12 @@ const std::string Ruleset::getAlienFuel() const
 }
 
 /**
- * Returns the minimum facilitie's radar range.
- * @return the minimum range.
+ * Returns the short radar range threshold.
+ * @return the short radar range threshold.
  */
-int Ruleset::getMinRadarRange() const
+int Ruleset::getRadarThreshold() const
 {
-	int radarThreshold=0;
-	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
-	{
-		RuleBaseFacility *p=getBaseFacility(*i);
-		if(!p) continue;
-		int radarRange=p->getRadarRange();
-		if(radarRange > 0 && (radarThreshold <= 0 || radarRange < radarThreshold))
-			radarThreshold = radarRange;
-	}
-	return radarThreshold;
+	return _radarThreshold;
 }
 
 }
