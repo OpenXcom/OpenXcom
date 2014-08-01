@@ -1384,8 +1384,7 @@ int Ruleset::getMinRadarRange() const
 		RuleBaseFacility *p=getBaseFacility(*i);
 		if(!p) continue;
 		int radarRange=p->getRadarRange();
-		if( (radarThreshold <= 0 && radarRange > 0) ||
-				(radarThreshold > 0 && radarRange > 0 && radarRange < radarThreshold))
+		if(radarRange > 0 && (radarThreshold <= 0 || radarRange < radarThreshold))
 			radarThreshold = radarRange;
 	}
 	return radarThreshold;

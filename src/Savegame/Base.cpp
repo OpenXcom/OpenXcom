@@ -858,6 +858,7 @@ int Base::getDefenseValue() const
 int Base::getShortRangeDetection() const
 {
 	int total = 0, radarThreshold=_rule->getMinRadarRange();
+	if (radarThreshold == 0) return 0;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() > 0 && (*i)->getRules()->getRadarRange() <= radarThreshold)
