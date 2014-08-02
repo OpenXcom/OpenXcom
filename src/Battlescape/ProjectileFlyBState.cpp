@@ -703,9 +703,18 @@ void ProjectileFlyBState::performMeleeAttack()
 	_unit->setCache(0);
 	_parent->getMap()->cacheUnit(_unit);
 	// and we have a lift-off
-	if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
+	if (_ammo && _ammo->getRules()->getMeleeAttackSound() != -1)
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getMeleeAttackSound())->play();
+	}
+	else if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
 	{
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getMeleeAttackSound())->play();
+	}
+	if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _action.type != BA_HIT && _ammo && _ammo->spendBullet() == false)
+	{
+		_parent->getSave()->removeItem(_ammo);
+		_action.weapon->setAmmoItem(0);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
 	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor, 0, true));
