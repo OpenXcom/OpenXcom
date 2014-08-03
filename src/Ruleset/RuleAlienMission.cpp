@@ -156,4 +156,21 @@ int RuleAlienMission::getPoints() const
 	return _points;
 }
 
+/**
+ * Determines the lowest available month for this missiontype.
+ * that way missions with month >0 can only start later.
+ * @return The lowest int number of month for this mission.
+ */
+const int RuleAlienMission::determineLowestMonth() const
+{
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rc = _raceDistribution.rbegin();
+	int _minmonth = std::numeric_limits<int>::max();
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
+	{
+		_minmonth = (_minmonth > ii->first) ? ii->first : _minmonth;
+	}
+	return _minmonth;
+}
+
+;
 }

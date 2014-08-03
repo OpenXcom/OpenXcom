@@ -2163,19 +2163,28 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// One randomly selected mission.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		const std::string &targetRegion = strategy.chooseRandomRegion(_game->getRuleset());
-		const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
-		// Choose race for this mission.
-		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
-		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
-		AlienMission *otherMission = new AlienMission(missionRules);
-		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-		otherMission->setRegion(targetRegion, *_game->getRuleset());
-		otherMission->setRace(missionRace);
-		otherMission->start();
-		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
-		// Make sure this combination never comes up again.
-		strategy.removeMission(targetRegion, targetMission);
+		int _monthcounter = 0;
+		while (true){
+			const std::string &targetRegion = strategy.chooseRandomRegion(_game->getRuleset());
+			const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
+			// Choose race for this mission.
+			const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
+			if (_game->getSavedGame()->getMonthsPassed() >= missionRules.determineLowestMonth())
+			{
+				const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
+				AlienMission *otherMission = new AlienMission(missionRules);
+				otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+				otherMission->setRegion(targetRegion, *_game->getRuleset());
+				otherMission->setRace(missionRace);
+				otherMission->start();
+				_game->getSavedGame()->getAlienMissions().push_back(otherMission);
+				// Make sure this combination never comes up again.
+				strategy.removeMission(targetRegion, targetMission);
+				break;
+			}
+			else if ( _monthcounter > 1000 ) strategy.removeMission(targetRegion, targetMission);			
+			_monthcounter++;
+		}
 	}
 	else
 	{
