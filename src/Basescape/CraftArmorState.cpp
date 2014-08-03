@@ -170,11 +170,11 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 		}
 		else
 		{
+			SavedGame *_save;
+			_save = _game->getSavedGame();
+			Armor *a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
 			{
-				SavedGame *_save;
-				_save = _game->getSavedGame();
-				Armor *a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
 				if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
 				{
 					if (s->getArmor()->getStoreItem() != "STR_NONE")
@@ -189,6 +189,10 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 					s->setArmor(a);
 					_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 				}
+			}else
+			{
+				s->setArmor(a);
+				_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 			}
 		}
 	}
