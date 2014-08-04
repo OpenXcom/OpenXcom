@@ -1372,4 +1372,31 @@ const std::string Ruleset::getAlienFuel() const
 	return _alienFuel;
 }
 
+/**
+* Returns the minimum facilitie's radar range.
+* @return the minimum range.
+*/
+ int Ruleset::getMinRadarRange() const
+ {
+	static int minRadarRange = -1;
+
+	if (minRadarRange < 0)
+	{
+		minRadarRange = 0;
+		for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+		{
+			RuleBaseFacility *f = getBaseFacility(*i);
+			if (f == 0) continue;
+
+			int radarRange = f->getRadarRange();
+			if (radarRange > 0 && (minRadarRange == 0 || minRadarRange > radarRange))
+			{
+				minRadarRange = radarRange;
+			}
+		}
+	}
+
+	return minRadarRange;
+ }
+
 }

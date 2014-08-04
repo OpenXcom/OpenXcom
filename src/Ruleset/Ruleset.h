@@ -230,6 +230,8 @@ public:
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	const std::string getAlienFuel() const;
+	/// Gets the minimum radar's range
+	int getMinRadarRange() const;
 };
 
 }
