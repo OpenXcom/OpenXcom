@@ -372,24 +372,26 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 /**
  * Updates the displayed quantities of the
  * selected item on the list.
+ * @param index of _items (_sel will be chosen by default)
  */
-void CraftEquipmentState::updateQuantity()
+void CraftEquipmentState::updateQuantity(int selIdx)
 {
+	size_t sel = (selIdx >= 0)? selIdx : _sel;
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem *item = _game->getRuleset()->getItem(_items[sel]);
 	int cQty = 0;
 	if (item->isFixed())
 	{
-		cQty = c->getVehicleCount(_items[_sel]);
+		cQty = c->getVehicleCount(_items[sel]);
 	}
 	else
 	{
-		cQty = c->getItems()->getItem(_items[_sel]);
+		cQty = c->getItems()->getItem(_items[sel]);
 	}
 	std::wostringstream ss, ss2;
 	if (_game->getSavedGame()->getMonthsPassed() > -1)
 	{
-		ss << _base->getItems()->getItem(_items[_sel]);
+		ss << _base->getItems()->getItem(_items[sel]);
 	}
 	else
 	{
@@ -400,7 +402,7 @@ void CraftEquipmentState::updateQuantity()
 	Uint8 color;
 	if (cQty == 0)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(_items[_sel]);
+		RuleItem *rule = _game->getRuleset()->getItem(_items[sel]);
 		if (rule->getBattleType() == BT_AMMO)
 		{
 			color = Palette::blockOffset(15)+6;
@@ -414,9 +416,9 @@ void CraftEquipmentState::updateQuantity()
 	{
 		color = Palette::blockOffset(13);
 	}
-	_lstEquipment->setRowColor(_sel, color);
-	_lstEquipment->setCellText(_sel, 1, ss.str());
-	_lstEquipment->setCellText(_sel, 2, ss2.str());
+	_lstEquipment->setRowColor(sel, color);
+	_lstEquipment->setCellText(sel, 1, ss.str());
+	_lstEquipment->setCellText(sel, 2, ss2.str());
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
@@ -441,6 +443,8 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
 	int cQty = 0;
+	int ammoIdx = -1;
+
 	if (item->isFixed()) cQty = c->getVehicleCount(_items[_sel]);
 	else cQty = c->getItems()->getItem(_items[_sel]);
 	if (0 >= change || 0 >= cQty) return;
@@ -465,6 +469,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
 			{
 				_base->getItems()->addItem(_items[_sel], cQty);
+				ammoIdx = getIdxItems(ammo->getType());
 			}
 			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
 			if (cQty > change) moveRightByValue(cQty - change);
@@ -496,7 +501,9 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			_base->getItems()->addItem(_items[_sel], change);
 		}
 	}
+
 	updateQuantity();
+	if (ammoIdx != -1) updateQuantity(ammoIdx);
 }
 
 /**
@@ -518,6 +525,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
 	int bqty = _base->getItems()->getItem(_items[_sel]);
+	int ammoIdx = -1;
+
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
 		if (change == INT_MAX)
@@ -559,6 +568,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 						{
 							_base->getItems()->removeItem(ammo->getType(), ammoPerVehicle);
 							_base->getItems()->removeItem(_items[_sel]);
+							ammoIdx = getIdxItems(ammo->getType());
 						}
 						c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 					}
@@ -598,7 +608,9 @@ void CraftEquipmentState::moveRightByValue(int change)
 			_base->getItems()->removeItem(_items[_sel],change);
 		}
 	}
+
 	updateQuantity();
+	if (ammoIdx != -1) updateQuantity(ammoIdx);
 }
 
 /**
@@ -635,6 +647,17 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 		_game->getScreen()->clear();
 		_game->pushState(new InventoryState(false, 0));
 	}
+}
+
+/**
+ * Gets index of item in _items list
+ * @param string for search
+ * @return index of string in _items or -1
+ */
+int CraftEquipmentState::getIdxItems(const std::string &id)
+{
+	std::vector<std::string>::iterator i = std::find(_items.begin(), _items.end(), id);
+	return (i != _items.end())? std::distance(_items.begin(), i) : -1;
 }
 
 }

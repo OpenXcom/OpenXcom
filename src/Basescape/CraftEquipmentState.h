@@ -50,7 +50,9 @@ private:
 	std::vector<std::string> _items;
 	int _totalItems;
 	/// Updates quantities of item.
-	void updateQuantity();
+	void updateQuantity(int selIdx = -1);
+	/// Gets index of item in items list.
+	int getIdxItems(const std::string &id);
 public:
 	/// Creates the Craft Equipment state.
 	CraftEquipmentState(Base *base, size_t craft);
