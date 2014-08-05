@@ -328,13 +328,13 @@ void InventoryState::init()
 	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
-	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
+	Soldier *s = unit->getGeoscapeSoldier();
 	if (s)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(s->getRankSprite())->setX(0);
-		texture->getFrame(s->getRankSprite())->setY(0);
-		texture->getFrame(s->getRankSprite())->blit(_btnRank);
+		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		texture->getFrame(20 + s->getRank())->setX(0);
+		texture->getFrame(20 + s->getRank())->setY(0);
+		texture->getFrame(20 + s->getRank())->blit(_btnRank);
 
 		std::string look = s->getArmor()->getSpriteInventory();
 		if (s->getGender() == GENDER_MALE)

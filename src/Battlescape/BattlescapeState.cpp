@@ -1283,11 +1283,11 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
-	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
+	Soldier *soldier = battleUnit->getGeoscapeSoldier();
 	if (soldier != 0)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(soldier->getRankSprite())->blit(_rank);
+		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 	}
 	else
 	{
