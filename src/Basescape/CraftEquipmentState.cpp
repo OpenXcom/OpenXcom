@@ -650,14 +650,17 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 }
 
 /**
- * Gets index of item in _items list
- * @param string for search
- * @return index of string in _items or -1
+ * Gets an index of item in _items list
+ * @param a string for search
+ * @return the index of the string in _items or -1 if not found
  */
-int CraftEquipmentState::getIdxItems(const std::string &id)
+int CraftEquipmentState::getIdxItems(const std::string &id) const
 {
-	std::vector<std::string>::iterator i = std::find(_items.begin(), _items.end(), id);
-	return (i != _items.end())? std::distance(_items.begin(), i) : -1;
+	std::vector<std::string>::const_iterator i = std::find(_items.begin(), _items.end(), id);
+	if (i != _items.end())
+		return std::distance(_items.begin(), i);
+	else
+		return -1;
 }
 
 }

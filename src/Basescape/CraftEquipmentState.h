@@ -51,8 +51,8 @@ private:
 	int _totalItems;
 	/// Updates quantities of item.
 	void updateQuantity(int selIdx = -1);
-	/// Gets index of item in items list.
-	int getIdxItems(const std::string &id);
+	/// Gets an index of item in _items list.
+	int getIdxItems(const std::string &id) const;
 public:
 	/// Creates the Craft Equipment state.
 	CraftEquipmentState(Base *base, size_t craft);
