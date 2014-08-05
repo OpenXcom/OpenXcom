@@ -1097,8 +1097,6 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	return bu;
 }
 
-static unsigned char expmap[14400];
-
 /**
  * Handles explosions.
  *
@@ -1320,8 +1318,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 	if (type == DT_HE)
 	{
-		for (int i=0;i<14400;i++) expmap[i]=0;
-
 		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
 			if (detonate(*i))
@@ -1331,11 +1327,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			if (j)
 				applyGravity(j);
 		}
-
-		FILE *ptr_fp;
-		ptr_fp = fopen("test.txt", "wb");
-		fwrite(expmap, 14400, 1, ptr_fp);
-		fclose(ptr_fp);
 	}
 
 	calculateSunShading(); // roofs could have been destroyed
@@ -1358,7 +1349,6 @@ bool TileEngine::detonate(Tile* tile)
 	Tile* tiles[9];
 	static const int parts[9]={0,1,2,0,1,2,3,3,3}; //6th is the object of current
 	Position pos = tile->getPosition();
-	expmap[pos.z*60*60+pos.y*60+pos.x] = explosive;
 
 	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z+1)); //ceiling
 	tiles[1] = _save->getTile(Position(pos.x+1, pos.y, pos.z)); //east wall
