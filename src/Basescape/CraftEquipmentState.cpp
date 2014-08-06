@@ -372,11 +372,10 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 /**
  * Updates the displayed quantities of the
  * selected item on the list.
- * @param index of _items (_sel will be chosen by default)
+ * @param the index of _items
  */
-void CraftEquipmentState::updateQuantity(int selIdx)
+void CraftEquipmentState::updateQuantity(size_t sel)
 {
-	size_t sel = (selIdx >= 0)? selIdx : _sel;
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[sel]);
 	int cQty = 0;
@@ -502,8 +501,8 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		}
 	}
 
-	updateQuantity();
-	if (ammoIdx != -1) updateQuantity(ammoIdx);
+	updateQuantity(_sel);
+	if (ammoIdx >= 0) updateQuantity(ammoIdx);
 }
 
 /**
@@ -609,8 +608,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 		}
 	}
 
-	updateQuantity();
-	if (ammoIdx != -1) updateQuantity(ammoIdx);
+	updateQuantity(_sel);
+	if (ammoIdx >= 0) updateQuantity(ammoIdx);
 }
 
 /**

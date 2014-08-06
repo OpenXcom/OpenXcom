@@ -50,7 +50,7 @@ private:
 	std::vector<std::string> _items;
 	int _totalItems;
 	/// Updates quantities of item.
-	void updateQuantity(int selIdx = -1);
+	void updateQuantity(size_t sel);
 	/// Gets an index of item in _items list.
 	int getIdxItems(const std::string &id) const;
 public:
