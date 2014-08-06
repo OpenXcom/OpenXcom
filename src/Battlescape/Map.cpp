@@ -638,9 +638,11 @@ void Map::drawTerrain(Surface *surface)
 								if (tileWest->getSmoke() && tileWest->isDiscovered(2))
 								{
 									frameNumber = 0;
+									int shade = 0;
 									if (!tileWest->getFire())
 									{
 										frameNumber = 8 + int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+										shade = tileWestShade;
 									}
 
 									if ((_animFrame / 2) + tileWest->getAnimationOffset() > 3)
@@ -652,7 +654,7 @@ void Map::drawTerrain(Surface *surface)
 										frameNumber += (_animFrame / 2) + tileWest->getAnimationOffset();
 									}
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, 0, true);
+									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, shade, true);
 								}
 								// Draw object
 								if (tileWest->getMapData(MapData::O_OBJECT) && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
@@ -860,9 +862,11 @@ void Map::drawTerrain(Surface *surface)
 					if (tile->getSmoke() && tile->isDiscovered(2))
 					{
 						frameNumber = 0;
+						int shade = 0;
 						if (!tile->getFire())
 						{
 							frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+							shade = tileShade;
 						}
 
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
@@ -874,7 +878,7 @@ void Map::drawTerrain(Surface *surface)
 							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
 						}
 						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, shade);
 					}
 
 					// Draw Path Preview
