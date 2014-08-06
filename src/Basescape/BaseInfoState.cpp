@@ -200,7 +200,7 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)&BaseInfoState::edtBaseChange);
-	
+
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
@@ -326,93 +326,94 @@ void BaseInfoState::init()
 	_edtBase->setText(_base->getName());
 
 	std::wostringstream ss;
-	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
+	int var1 = _base->getAvailableSoldiers(), var2 = _base->getTotalSoldiers();
+	ss << var1 << ":" << var2;
 	_numSoldiers->setText(ss.str());
 
-	_barSoldiers->setMax(_base->getTotalSoldiers());
-	_barSoldiers->setValue(_base->getAvailableSoldiers());
+	_barSoldiers->setMax(var2);
+	_barSoldiers->setValue(var1);
 
 	std::wostringstream ss2;
-	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
+	ss2 << (var1 = _base->getAvailableEngineers()) << ":" << (var2 = _base->getTotalEngineers());
 	_numEngineers->setText(ss2.str());
 
-	_barEngineers->setMax(_base->getTotalEngineers());
-	_barEngineers->setValue(_base->getAvailableEngineers());
+	_barEngineers->setMax(var2);
+	_barEngineers->setValue(var1);
 
 	std::wostringstream ss3;
-	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
+	ss3 << (var1 = _base->getAvailableScientists()) << ":" << (var2 = _base->getTotalScientists());
 	_numScientists->setText(ss3.str());
 
-	_barScientists->setMax(_base->getTotalScientists());
-	_barScientists->setValue(_base->getAvailableScientists());
+	_barScientists->setMax(var2);
+	_barScientists->setValue(var1);
 
 
 	std::wostringstream ss4;
-	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
+	ss4 << (var1 = _base->getUsedQuarters()) << ":" << (var2 = _base->getAvailableQuarters());
 	_numQuarters->setText(ss4.str());
 
-	_barQuarters->setMax(_base->getAvailableQuarters());
-	_barQuarters->setValue(_base->getUsedQuarters());
+	_barQuarters->setMax(var2);
+	_barQuarters->setValue(var1);
 
 	std::wostringstream ss5;
-	ss5 << (int)floor(_base->getUsedStores() + 0.05) << ":" << _base->getAvailableStores();
+	ss5 << (var1 = (int)floor(_base->getUsedStores() + 0.05)) << ":" << (var2 = _base->getAvailableStores());
 	_numStores->setText(ss5.str());
 
-	_barStores->setMax(_base->getAvailableStores());
-	_barStores->setValue((int)floor(_base->getUsedStores() + 0.05));
+	_barStores->setMax(var2);
+	_barStores->setValue(var1);
 
 	std::wostringstream ss6;
-	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
+	ss6 << (var1 = _base->getUsedLaboratories()) << ":" << (var2 = _base->getAvailableLaboratories());
 	_numLaboratories->setText(ss6.str());
 
-	_barLaboratories->setMax(_base->getAvailableLaboratories());
-	_barLaboratories->setValue(_base->getUsedLaboratories());
+	_barLaboratories->setMax(var2);
+	_barLaboratories->setValue(var1);
 
 	std::wostringstream ss7;
-	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
+	ss7 << (var1 = _base->getUsedWorkshops()) << ":" << (var2 = _base->getAvailableWorkshops());
 	_numWorkshops->setText(ss7.str());
 
-	_barWorkshops->setMax(_base->getAvailableWorkshops());
-	_barWorkshops->setValue(_base->getUsedWorkshops());
+	_barWorkshops->setMax(var2);
+	_barWorkshops->setValue(var1);
 
 	if (Options::storageLimitsEnforced)
 	{
 		std::wostringstream ss72;
-		ss72 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
+		ss72 << (var1 = _base->getUsedContainment()) << ":" << (var2 = _base->getAvailableContainment());
 		_numContainment->setText(ss72.str());
 
-		_barContainment->setMax(_base->getAvailableContainment());
-		_barContainment->setValue(_base->getUsedContainment());
+		_barContainment->setMax(var2);
+		_barContainment->setValue(var1);
 	}
 
 	std::wostringstream ss8;
-	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
+	ss8 << (var1 = _base->getUsedHangars()) << ":" << (var2 = _base->getAvailableHangars());
 	_numHangars->setText(ss8.str());
 
-	_barHangars->setMax(_base->getAvailableHangars());
-	_barHangars->setValue(_base->getUsedHangars());
+	_barHangars->setMax(var2);
+	_barHangars->setValue(var1);
 
 
 	std::wostringstream ss9;
-	ss9 << _base->getDefenseValue();
+	ss9 << (var1 = _base->getDefenseValue());
 	_numDefense->setText(ss9.str());
 
-	_barDefense->setMax(_base->getDefenseValue());
-	_barDefense->setValue(_base->getDefenseValue());
+	_barDefense->setMax(var1);
+	_barDefense->setValue(var1);
 
 	std::wostringstream ss10;
-	ss10 << _base->getShortRangeDetection();
+	ss10 << (var1 =_base->getShortRangeDetection());
 	_numShortRange->setText(ss10.str());
 
-	_barShortRange->setMax(_base->getShortRangeDetection());
-	_barShortRange->setValue(_base->getShortRangeDetection());
+	_barShortRange->setMax(var1);
+	_barShortRange->setValue(var1);
 
 	std::wostringstream ss11;
-	ss11 << _base->getLongRangeDetection();
+	ss11 << (var1 = _base->getLongRangeDetection());
 	_numLongRange->setText(ss11.str());
 
-	_barLongRange->setMax(_base->getLongRangeDetection());
-	_barLongRange->setValue(_base->getLongRangeDetection());
+	_barLongRange->setMax(var1);
+	_barLongRange->setValue(var1);
 }
 
 /**
