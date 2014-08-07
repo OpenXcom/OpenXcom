@@ -9454,3 +9454,135 @@ extraSprites:
     subY: 48
     files:
       -4: Resources/Weapons/Terror.png
+interfaces:
+  - type: battlescape
+    elements:
+      - id: textName
+        color: 128
+      - id: numTUs
+        color: 64
+      - id: numEnergy
+        color: 16
+      - id: numHealth
+        color: 32
+      - id: numMorale
+        color: 192
+      - id: barTUs
+        color: 64
+      - id: barEnergy
+        color: 16
+      - id: barHealth
+        color: 32
+        color2: 82
+      - id: barMorale
+        color: 192
+      - id: numAmmoLeft
+        color: 2
+      - id: numAmmoRight
+        color: 2
+      - id: textTooltip
+        color: 128
+      # The usage of the following is hard-coded, these ones MUST be defined
+      - id: visibleUnits
+        pos: [300, -16]
+        color: 16
+      - id: icons
+        size: [320, 56]
+      - id: numLayers
+        color: 15
+  - type: inventory
+    elements:
+      - id: textName
+        color: 64
+      - id: textTUs
+        color: 64
+        color2: 16
+      - id: textWeight
+        color: 64
+        color2: 16
+      - id: textFiring
+        color: 64
+        color2: 16
+      - id: textReaction
+        color: 64
+        color2: 16
+      - id: textPsiSkill
+        color: 64
+        color2: 16
+      - id: textPsiStrength
+        color: 64
+        color2: 16
+      - id: textItem
+        color: 48
+      - id: textAmmo
+        color: 64
+        color2: 16
+      # required
+      - id: textSlots
+        color: 63
+      - id: grid
+        color: 8
+      - id: numStack
+        color: 66
+  - type: stats
+    elements:
+      - id: textName
+        color: 64
+      - id: barTUs
+        color: 64
+      - id: barEnergy
+        color: 144
+      - id: barHealth
+        color: 32
+        color2: 82
+      - id: barWounds
+        color: 32
+      - id: barBravery
+        color: 192
+      - id: barMorale
+        color: 192
+      - id: barReactions
+        color: 144
+      - id: barFiring
+        color: 128
+      - id: barThrowing
+        color: 96
+      - id: barMelee
+        color: 224
+      - id: barStrength
+        color: 48
+      - id: barPsiStrength
+        color: 192
+      - id: barPsiSkill
+        color: 192
+      - id: barFrontArmor
+        color: 80
+      - id: barLeftArmor
+        color: 80
+      - id: barRightArmor
+        color: 80
+      - id: barRearArmor
+        color: 80
+      - id: barUnderArmor
+        color: 80
+      # required
+      - id: text
+        color: 48
+        color2: 144
+  - type: minimap
+    elements:
+      # required
+      - id: textLevel
+        color: 64
+  - type: medikit
+    elements:
+      - id: numPK
+        color: 16
+      - id: numStim
+        color: 16
+      - id: numHeal
+        color: 16
+      - id: textPart
+        color: 32
+      - id: numWounds
+        color: 32
