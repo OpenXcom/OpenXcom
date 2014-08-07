@@ -879,7 +879,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		tus -= tu;
 		total += tu;
-		bool reserve = _save->getBattleGame()->checkReservedTU(_unit, total, true);
+		bool reserve = _save->getBattleGame()->checkReservedTU(_unit, total, BA_WALK, true);
 		pos = destination;
 		for (int x = size; x >= 0; x--)
 		{

@@ -1368,3 +1368,4 @@ en-GB:
     few: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
     many: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
     other: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
+  STR_TIME_UNITS_RESERVED_FOR_KNEELING_OR_FIRING: "TUs reserved for Kneeling or Firing"
