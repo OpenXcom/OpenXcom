@@ -381,11 +381,18 @@ int Base::detect(Target *target) const
 	{
 		if ((*i)->getRules()->getRadarRange() >= distance && (*i)->getBuildTime() == 0)
 		{
+			int radarChance = (*i)->getRules()->getRadarChance();
 			if ((*i)->getRules()->isHyperwave())
 			{
-				return 2;
+				if (radarChance == 100 || RNG::percent(radarChance))
+				{
+					return 2;
+				}
 			}
-			chance += (*i)->getRules()->getRadarChance();
+			else
+			{
+				chance += radarChance;
+			}
 		}
 	}
 	if (chance == 0) return 0;
