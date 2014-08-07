@@ -1312,7 +1312,7 @@ void GeoscapeState::time30Minutes()
 					}
 					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
 					{
-						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
+						if ((*c)->getStatus() == "STR_OUT" && (*c)->insideRadarRange(*u))
 						{
 							detected = true;
 							hyperdetected = (*u)->getHyperDetected();

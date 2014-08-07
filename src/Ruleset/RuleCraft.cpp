@@ -30,9 +30,9 @@ namespace OpenXcom
 RuleCraft::RuleCraft(const std::string &type) :
     _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0),
     _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
-	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(672), _sightRange(1696),
-	_transferTime(0), _score(0), _battlescapeTerrainData(0), _spacecraft(false),
-	_listOrder(0), _maxItems(0)
+	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(672), _radarChance(100),
+	_sightRange(1696), _transferTime(0), _score(0), _battlescapeTerrainData(0),
+	_spacecraft(false), _listOrder(0), _maxItems(0)
 {
 
 }
@@ -77,6 +77,7 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 	_repairRate = node["repairRate"].as<int>(_repairRate);
 	_refuelRate = node["refuelRate"].as<int>(_refuelRate);
 	_radarRange = node["radarRange"].as<int>(_radarRange);
+	_radarChance = node["radarChance"].as<int>(_radarChance);
 	_sightRange = node["sightRange"].as<int>(_sightRange);
 	_transferTime = node["transferTime"].as<int>(_transferTime);
 	_score = node["score"].as<int>(_score);
