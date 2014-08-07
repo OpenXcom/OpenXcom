@@ -18,6 +18,7 @@
  */
 
 #include "RuleInterface.h"
+#include <climits>
 
 namespace OpenXcom
 {
