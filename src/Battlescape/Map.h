@@ -73,9 +73,8 @@ private:
 
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);
+	int _iconHeight, _iconWidth;
 public:
-	static const int ICON_HEIGHT = 56;
-	static const int ICON_WIDTH = 320;
 	/// Creates a new map at the specified position and size.
 	Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);
 	/// Cleans up the map.
@@ -139,7 +138,11 @@ public:
 	/// Special handling for updating map width.
 	void setWidth(int width);
 	/// Get the vertical position of the hidden movement screen.
-	int getMessageY();
+	const int getMessageY();
+	/// Get the icon height.
+	const int getIconHeight();
+	/// Get the icon width.
+	const int getIconWidth();
 };
 
 }

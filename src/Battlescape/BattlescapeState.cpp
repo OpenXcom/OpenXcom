@@ -66,6 +66,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
@@ -96,17 +97,17 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 
-	int screenWidth = Options::baseXResolution;
-	int screenHeight = Options::baseYResolution;
-	int iconsWidth = Map::ICON_WIDTH;
-	int iconsHeight = Map::ICON_HEIGHT;
+	const int screenWidth = Options::baseXResolution;
+	const int screenHeight = Options::baseYResolution;
+	const int iconsWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
+	const int iconsHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+	const int visibleMapHeight = screenHeight - iconsHeight;
 	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
-	int visibleMapHeight = screenHeight - iconsHeight;
 	_map = new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
 
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
@@ -608,7 +609,7 @@ void BattlescapeState::mapOver(Action *action)
 
 		// Set the mouse cursor back
 		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - Map::ICON_HEIGHT / 2);
+		SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - _map->getIconHeight() / 2);
 		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 		// Check the threshold

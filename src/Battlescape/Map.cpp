@@ -41,7 +41,9 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
@@ -79,6 +81,9 @@ namespace OpenXcom
  */
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
 {
+	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
+
 	_previewSetting = Options::battleNewPreviewPath;
 	_smoothCamera = Options::battleSmoothCamera;
 	if (Options::traceAI)
@@ -1575,18 +1580,18 @@ void Map::refreshSelectorPosition()
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
-/*
+/**
  * Special handling for setting the height of the map viewport.
  * @param height the new base screen height.
  */
 void Map::setHeight(int height)
 {
 	Surface::setHeight(height);
-	_visibleMapHeight = height - ICON_HEIGHT;
+	_visibleMapHeight = height - _iconHeight;
 	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight : 200);
 	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
 }
-/*
+/**
  * Special handling for setting the width of the map viewport.
  * @param width the new base screen width.
  */
@@ -1597,12 +1602,29 @@ void Map::setWidth(int width)
 	_message->setX(_message->getX() + dX / 2);
 }
 
-/*
+/**
  * Get the hidden movement screen's vertical position.
  * @return the vertical position of the hidden movement window.
  */
-int Map::getMessageY()
+const int Map::getMessageY()
 {
 	return _message->getY();
 }
+
+/**
+ * Get the icon height.
+ */
+const int Map::getIconHeight()
+{
+	return _iconWidth;
+}
+
+/**
+ * Get the icon width.
+ */
+const int Map::getIconWidth()
+{
+	return _iconHeight;
+}
+
 }
