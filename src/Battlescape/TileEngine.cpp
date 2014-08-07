@@ -100,12 +100,19 @@ void TileEngine::calculateSunShading(Tile *tile)
 	// At night/dusk sun isn't dropping shades blocked by roofs
 	if (_save->getGlobalShade() <= 4)
 	{
-		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getMapSizeZ() - 1)), tile, DT_NONE))
+		int block = 0;
+		int x = tile->getPosition().x;
+		int y = tile->getPosition().y;
+		for (int z = _save->getMapSizeZ()-1; z > tile->getPosition().z ; z--)
+		{
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, DT_NONE);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, DT_NONE, Pathfinding::DIR_DOWN);
+		}
+		if (block>0)
 		{
 			power -= 2;
 		}
 	}
-
 	tile->addLight(power, layer);
 }
 
@@ -1293,14 +1300,17 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 				// blockage by terrain is deducted from the explosion power
 				power_ -= 10; // explosive damage decreases by 10 per tile
-				if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
+				if (origin->getPosition().z != tileZ)
+					power_ -= vertdec; //3d explosion factor
+
 				if (type == DT_IN)
 				{
 					int dir;
 					Pathfinding::vectorToDirection(origin->getPosition() - dest->getPosition(), dir);
 					if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
 				}
-				if (l>1.1) power_-= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
+				if (l>0.5) power_-= horizontalBlockage(origin, dest, type, l<1.5) * 2;
+				if (l>0.5) power_-= verticalBlockage(origin, dest, type, l<1.5) * 2;
 			}
 		}
 	}
@@ -1334,7 +1344,6 @@ bool TileEngine::detonate(Tile* tile)
 {
 	int explosive = tile->getExplosive();
 	if (explosive == 0) return false; // no damage applied for this tile
-
 	tile->setExplosive(0,true);
 	bool objective = false;
 	Tile* tiles[9];
@@ -1352,7 +1361,7 @@ bool TileEngine::detonate(Tile* tile)
 //	tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
 
 	int remainingPower, fireProof, fuel;
-	bool destroyed, bigwalldestroyed = true;
+	bool destroyed, bigwalldestroyed = true, skipnorthwest = false;
 	for (int i = 8; i >=0; --i)
 	{
 		if (!tiles[i] || !tiles[i]->getMapData(parts[i]))
@@ -1360,8 +1369,10 @@ bool TileEngine::detonate(Tile* tile)
 		int bigwall = tiles[i]->getMapData(parts[i])->getBigWall();
 		if (i > 6 && !( (bigwall==1) || (bigwall==8) || (i==8 && bigwall==6) || (i==7 && bigwall==7)))
 			continue;
-		if (!bigwalldestroyed && parts[i]==0) //when ground shouldn't be destroyed
+		if ((bigwall!=0)) skipnorthwest = true;
+		if (!bigwalldestroyed && i<6) //when ground shouldn't be destroyed
 			continue;
+		if (skipnorthwest && (i == 2 || i == 1)) continue;
 		remainingPower = explosive;
 		destroyed = false;
 		int volume = 0;
@@ -1454,13 +1465,12 @@ Tile *TileEngine::checkForTerrainExplosions()
 
 /**
  * Calculates the amount of power that is blocked going from one tile to another on a different level.
- * Can cross more than one level. Only floor tiles are taken into account.
  * @param startTile The tile where the power starts.
  * @param endTile The adjacent tile where the power ends.
  * @param type The type of power/damage.
  * @return Amount of blockage of this power.
  */
-int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
+int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject)
 {
 	int block = 0;
 
@@ -1472,45 +1482,38 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 
 	int x = startTile->getPosition().x;
 	int y = startTile->getPosition().y;
+	int z = startTile->getPosition().z;
 
 	if (direction < 0) // down
 	{
-		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
-		{
-			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+		block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+		if (!skipObject)
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_DOWN);
-		}
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
 			int z = startTile->getPosition().z;
-			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type);
-			for (; z > endTile->getPosition().z; z--)
-			{
-				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			if (!skipObject)
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
-			}
 		}
 	}
 	else if (direction > 0) // up
 	{
-		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
-		{
-			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
-			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_UP);
-		}
+		block += blockage(_save->getTile(Position(x, y, z+1)), MapData::O_FLOOR, type);
+		if (!skipObject)
+			block += blockage(_save->getTile(Position(x, y, z+1)), MapData::O_OBJECT, type, Pathfinding::DIR_UP);
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			int z = startTile->getPosition().z;
-			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type);
-			for (z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
-			{
-				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			int z = startTile->getPosition().z+1;
+			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			if (!skipObject)
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
-			}
 		}
 	}
 
@@ -1524,7 +1527,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
  * @param type The type of power/damage.
  * @return Amount of blockage.
  */
-int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
+int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject)
 {
 	static const Position oneTileNorth = Position(0, -1, 0);
 	static const Position oneTileEast = Position(1, 0, 0);
@@ -1635,6 +1638,8 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		}
 		break;
 	}
+
+	if (skipObject) return block; //
 
     block += blockage(startTile,MapData::O_OBJECT, type, direction);
 	if (type != DT_NONE)

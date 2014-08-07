@@ -102,6 +102,8 @@ private:
 	/// Draw flight path.
 	void drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2);
 public:
+	static Uint8 oceanColor1;
+	static Uint8 oceanColor2;
 	/// Creates a new globe at the specified position and size.
 	Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.

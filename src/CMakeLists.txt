@@ -457,6 +457,8 @@ set ( ruleset_src
   Ruleset/RuleItem.cpp
   Ruleset/RuleCraftWeapon.cpp
   Ruleset/RuleCraftWeapon.h
+  Ruleset/RuleInterface.h
+  Ruleset/RuleInterface.cpp
   Ruleset/RuleInventory.h
   Ruleset/RuleInventory.cpp
   Ruleset/MapBlock.h

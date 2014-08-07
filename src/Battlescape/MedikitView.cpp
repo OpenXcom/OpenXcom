@@ -18,6 +18,8 @@
  */
 #include "MedikitView.h"
 #include "../Engine/Game.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
@@ -67,14 +69,19 @@ void MedikitView::draw()
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 	int fatal_wound = _unit->getFatalWound(_selectedPart);
 	std::wostringstream ss, ss1;
+	int green = 0;
 	int red = 3;
-
+	if (_game->getRuleset()->getInterface("medikit") && _game->getRuleset()->getInterface("medikit")->getElement("body"))
+	{
+		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
+		red = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2;
+	}
 	this->lock();
 	for (unsigned int i = 0; i < set->getTotalFrames(); i++)
 	{
 		int wound = _unit->getFatalWound(i);
 		Surface * surface = set->getFrame (i);
-		int baseColor = wound ? red : 0;
+		int baseColor = wound ? red : green;
 		surface->blitNShade(this, Surface::getX(), Surface::getY(), 0, false, baseColor);
 	}
 	this->unlock();
