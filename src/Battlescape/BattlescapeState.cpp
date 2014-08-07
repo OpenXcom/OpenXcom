@@ -147,7 +147,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, x + visibleUnitX, y + visibleUnitY - (i * 13));
-		_numVisibleUnit[i] = new NumberText(15, 12, _btnVisibleUnit[i]->getX() + 6 , _btnVisibleUnit[i]->getY() + 4 - (i * 13));
+		_numVisibleUnit[i] = new NumberText(15, 12, _btnVisibleUnit[i]->getX() + 6 , _btnVisibleUnit[i]->getY() + 4);
 	}
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 	_warning = new WarningMessage(224, 24, x + 48, y + 32);
