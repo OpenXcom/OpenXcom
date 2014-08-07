@@ -436,6 +436,7 @@
     <ClCompile Include="Ruleset\AlienRace.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
+    <ClCompile Include="Ruleset\RuleInterface.cpp" />
     <ClCompile Include="Ruleset\Unit.cpp" />
     <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -730,6 +731,7 @@
     <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
+    <ClInclude Include="Ruleset\RuleInterface.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />

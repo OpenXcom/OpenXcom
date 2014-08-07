@@ -59,6 +59,7 @@ class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
 class StatString;
+class RuleInterface;
 
 /**
  * Set of rules and stats for a game.
@@ -90,6 +91,7 @@ protected:
 	std::map<std::string, RuleManufacture *> _manufacture;
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
+	std::map<std::string, RuleInterface *> _interfaces;
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
@@ -229,7 +231,11 @@ public:
 	const std::vector<std::string> &getInvsList () const;
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
+	/// Gets the item to be used as fuel for ships.
 	const std::string getAlienFuel() const;
+	/// Gets information on an interface element.
+	RuleInterface *getInterface(const std::string id) const;
+
 };
 
 }

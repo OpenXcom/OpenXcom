@@ -45,6 +45,7 @@
 #include "ExtraSprites.h"
 #include "ExtraSounds.h"
 #include "ExtraStrings.h"
+#include "RuleInterface.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -188,6 +189,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin (); i != _interfaces.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -484,11 +489,20 @@ void Ruleset::loadFile(const std::string &filename)
 		_statStrings.push_back(statString);
 	}
 
+	for (YAML::const_iterator i = doc["interfaces"].begin(); i != doc["interfaces"].end(); ++i)
+	{
+		RuleInterface *rule = loadRule(*i, &_interfaces);
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
+
   // refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		RuleBaseFacility *rule = getBaseFacility(*i);
-		if (0 < rule->getPsiLaboratories())
+		if (rule->getPsiLaboratories() > 0)
 		{
 			_psiRequirements = rule->getRequirements();
 			break;
@@ -1367,9 +1381,23 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
 	return soldier;
 }
 
+/**
+ * Gets the name of the item to be used as alien fuel.
+ * @return the name of the fuel.
+ */
 const std::string Ruleset::getAlienFuel() const
 {
 	return _alienFuel;
 }
 
+/**
+ * Gets information on an interface.
+ * @param id the interface we want info on.
+ * @return the interface.
+ */
+RuleInterface *Ruleset::getInterface(const std::string id) const
+{
+	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
+	if (_interfaces.end() != i) return i->second; else return 0;
+}
 }
