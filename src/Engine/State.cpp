@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "State.h"
+#include <climits>
 #include "InteractiveSurface.h"
 #include "Game.h"
 #include "Screen.h"
@@ -25,9 +26,13 @@
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Interface/NumberText.h"
+#include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
@@ -87,6 +92,65 @@ void State::add(Surface *surface)
 	_surfaces.push_back(surface);
 }
 
+/**
+ * As above, except this adds a surface based on an
+ * interface element defined in the ruleset.
+ * @note that this function REQUIRES the ruleset to have been loaded prior to use.
+ * @param surface Child surface.
+ * @param id the ID of the element defined in the ruleset, if any.
+ * @param category the category of elements this interface is associated with.
+ * @param parent the surface to base the coordinates of this element off.
+ * @note if no parent is defined the element will not be moved.
+ */
+void State::add(Surface *surface, const std::string id, const std::string category, Surface *parent)
+{
+	// Set palette
+	surface->setPalette(_palette);
+
+	if (_game->getRuleset()->getInterface(category) && _game->getRuleset()->getInterface(category)->getElement(id))
+	{
+		Element *element = _game->getRuleset()->getInterface(category)->getElement(id);
+		if (parent && element->w != INT_MAX && element->h != INT_MAX)
+		{
+			surface->setWidth(element->w);
+			surface->setHeight(element->h);
+		}
+		if (parent && element->x != INT_MAX && element->y != INT_MAX)
+		{
+			surface->setX(parent->getX() + element->x);
+			surface->setY(parent->getY() + element->y);
+		}
+
+		if (element->color)
+		{
+			NumberText *numText = dynamic_cast<NumberText*>(surface);
+			Text *text = dynamic_cast<Text*>(surface);
+			Bar *bar = dynamic_cast<Bar*>(surface);
+			if (numText)
+			{
+				numText->setColor(element->color);
+			}
+			else if (text)
+			{
+				text->setColor(element->color);
+				text->setSecondaryColor(element->color2);
+			}
+			else if (bar)
+			{
+				bar->setColor(element->color);
+				bar->setColor2(element->color2);
+				bar->setBorderColor(element->border);
+			}
+		}
+		surface->invalidate(false);
+	}
+
+	// Set default text resources
+	if (_game->getLanguage() && _game->getResourcePack())
+		surface->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+
+	_surfaces.push_back(surface);
+}
 /**
  * Returns whether this is a full-screen state.
  * This is used to optimize the state machine since full-screen

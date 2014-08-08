@@ -20,6 +20,7 @@
 #include <cmath>
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
@@ -141,10 +142,14 @@ void Inventory::drawGrid()
 	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
 	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	text.setColor(Palette::blockOffset(4)-1);
+
+	RuleInterface *rule = _game->getRuleset()->getInterface("inventory");
+
+	text.setColor(rule->getElement("textSlots")->color);
 	text.setHighContrast(true);
 
-	Uint8 color = Palette::blockOffset(0)+8;
+	Uint8 color = rule->getElement("grid")->color;
+
 	for (std::map<std::string, RuleInventory*>::iterator i = _game->getRuleset()->getInventories()->begin(); i != _game->getRuleset()->getInventories()->end(); ++i)
 	{
 		// Draw grid
@@ -216,6 +221,7 @@ void Inventory::drawItems()
 	ScriptWorker scr;
 	_items->clear();
 	_grenadeIndicators.clear();
+	Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
 	if (_selUnit != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
@@ -283,7 +289,7 @@ void Inventory::drawItems()
 				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-6);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
-				_stackNumber->setColor(Palette::blockOffset(4)+2);
+				_stackNumber->setColor(color);
 				_stackNumber->blit(&stackLayer);
 			}
 		}
@@ -787,6 +793,7 @@ void Inventory::mouseClick(Action *action, State *state)
 									{
 										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 										item->setFuseTimer(0);
+										arrangeGround(false);
 									}
 									else _game->pushState(new PrimeGrenadeState(0, true, item));
 								}
@@ -794,6 +801,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1);  // Unprime the grenade
+									arrangeGround(false);
 								}
 							}
 						}

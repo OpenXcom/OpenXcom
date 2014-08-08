@@ -103,6 +103,13 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 {
 	int done = getAmountProduced ();
 	_timeSpent += _engineers;
+
+	if (!Options::canManufactureMoreItemsPerHour && done < getAmountProduced())
+	{
+		// enforce pre-TFTD manufacturing rules: extra hours are wasted
+		_timeSpent = (done + 1) * _rules->getManufactureTime();
+	}
+
 	if (done < getAmountProduced ())
 	{
 		int produced;
@@ -162,7 +169,6 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 						b->getItems()->addItem(i->first, i->second);
 				}
 			}
-			if (!Options::canManufactureMoreItemsPerHour) break;
 			count++;
 			if (count < produced)
 			{

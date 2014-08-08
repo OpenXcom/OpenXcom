@@ -23,6 +23,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Action.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -33,6 +34,9 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -94,7 +98,7 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler)&CraftArmorState::lstSoldiersClick);
+	_lstSoldiers->onMousePress((ActionHandler)&CraftArmorState::lstSoldiersClick);
 
 	int row = 0;
 	Craft *c = _base->getCrafts()->at(_craft);
@@ -155,11 +159,39 @@ void CraftArmorState::btnOkClick(Action *)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstSoldiersClick(Action *)
-{
+void CraftArmorState::lstSoldiersClick(Action *action)
+{	
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
-		_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
+	{
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
+		}
+		else
+		{
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				SavedGame *_save;
+				_save = _game->getSavedGame();
+				Armor *a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
+				if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
+				{
+					if (s->getArmor()->getStoreItem() != "STR_NONE")
+					{
+						_base->getItems()->addItem(s->getArmor()->getStoreItem());
+					}
+					if (a->getStoreItem() != "STR_NONE")
+					{
+						_base->getItems()->removeItem(a->getStoreItem());
+					}
+					
+					s->setArmor(a);
+					_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
+				}
+			}
+		}
+	}
 }
 
 }

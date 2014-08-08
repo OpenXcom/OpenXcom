@@ -39,7 +39,7 @@ class RuleUfo
 private:
 	std::string _type, _size;
 	int _sprite;
-	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime;
+	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime, _sightRange;
 	RuleTerrain *_battlescapeTerrainData;
 	std::string _modSprite;
 public:
@@ -77,6 +77,8 @@ public:
 	int getBreakOffTime() const;
 	/// Gets the name of the surface that represents this UFO.
 	std::string getModSprite() const;
+	/// Gets the UFO's radar range.
+	int getSightRange() const;
 };
 
 }

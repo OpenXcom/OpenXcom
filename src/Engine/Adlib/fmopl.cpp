@@ -1351,9 +1351,13 @@ unsigned char OPLRead(FM_OPL *OPL,int a)
 		if(OPL->type&OPL_TYPE_KEYBOARD)
 		{
 			if(OPL->keyboardhandler_r)
+			{
 				return OPL->keyboardhandler_r(OPL->keyboard_param);
+			}
 			else
+			{
 				LOG(LOG_WAR,("OPL:read unmapped KEYBOARD port\n"));
+			}
 		}
 		return 0;
 #if 0
@@ -1364,9 +1368,13 @@ unsigned char OPLRead(FM_OPL *OPL,int a)
 		if(OPL->type&OPL_TYPE_IO)
 		{
 			if(OPL->porthandler_r)
+			{
 				return OPL->porthandler_r(OPL->port_param);
+			}
 			else
+			{
 				LOG(LOG_WAR,("OPL:read unmapped I/O port\n"));
+			}
 		}
 		return 0;
 	case 0x1a: /* PCM-DATA    */

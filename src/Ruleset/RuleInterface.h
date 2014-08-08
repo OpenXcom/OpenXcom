@@ -16,38 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SOUND_H
-#define OPENXCOM_SOUND_H
+#ifndef OPENXCOM_RULEINTERFACE_H
+#define OPENXCOM_RULEINTERFACE_H
 
-#include <SDL_mixer.h>
 #include <string>
+#include <map>
+#include <SDL.h>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
-/**
- * Container for sound effects.
- * Handles loading and playing various formats through SDL_mixer.
- */
-class Sound
+struct Element
+{
+	/// basic rect info, and 3 colors.
+	int x, y, w, h, color, color2, border;
+	/// defines inversion behaviour
+	bool TFTDMode;
+};
+
+class RuleInterface
 {
 private:
-	Mix_Chunk *_sound;
+	std::string _type;
+	std::map <std::string, Element> _elements;
 public:
-	/// Creates a blank sound effect.
-	Sound();
-	/// Cleans up the sound effect.
-	~Sound();
-	/// Loads sound from the specified file.
-	void load(const std::string &filename);
-	/// Loads sound from a chunk of memory.
-	void load(const void *data, unsigned int size);
-	/// Plays the sound.
-	void play(int channel = -1, int angle = 0, int distance = 0) const;
-	/// Stops all sounds.
-	static void stop();
+	/// Consructor.
+	RuleInterface(const std::string & type);
+	/// Destructor.
+	~RuleInterface();
+	/// Load from YAML.
+	void load(const YAML::Node& node);
+	/// Get an element.
+	Element *getElement(const std::string id);
 };
 
 }
-
 #endif

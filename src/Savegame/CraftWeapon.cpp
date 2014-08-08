@@ -130,30 +130,20 @@ void CraftWeapon::setRearming(bool rearming)
  */
 int CraftWeapon::rearm(const int available, const int clipSize)
 {
-	int used = 0;
+	int needed = 0;
 
 	if (clipSize > 0)
-	{
-		const int needed = std::max(1, (_rules->getAmmoMax() - _ammo) / clipSize);
-		used = std::min(_rules->getRearmRate() / clipSize, needed);
+	{	// +(clipSize - 1) for correct rounding up
+		needed = std::min(_rules->getRearmRate(), _rules->getAmmoMax() - _ammo + clipSize - 1) / clipSize;
 	}
 
-	if (available >= used)
-	{
-		setAmmo(_ammo + _rules->getRearmRate());
-	}
-	else
-	{
-		setAmmo(_ammo + (clipSize * available));
-	}
+	int ammoUsed = (available >= needed)? _rules->getRearmRate() : available * clipSize;
 
-	if (_ammo >= _rules->getAmmoMax())
-	{
-		_ammo = _rules->getAmmoMax();
-		_rearming = false;
-	}
+	setAmmo(_ammo + ammoUsed);
 
-	return used;
+	_rearming = _ammo < _rules->getAmmoMax();
+
+	return (clipSize <= 0)? 0 : ammoUsed / clipSize;
 }
 
 /*

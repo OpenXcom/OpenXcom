@@ -495,6 +495,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleCraft.h \
 	src/Ruleset/RuleCraftWeapon.cpp \
 	src/Ruleset/RuleCraftWeapon.h \
+	src/Ruleset/RuleInterface.cpp \
+	src/Ruleset/RuleInterface.h \
 	src/Ruleset/RuleInventory.cpp \
 	src/Ruleset/RuleInventory.h \
 	src/Ruleset/RuleItem.cpp \

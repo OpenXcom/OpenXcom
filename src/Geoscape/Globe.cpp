@@ -57,6 +57,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Screen.h"
 
@@ -65,6 +66,9 @@ namespace OpenXcom
 
 const double Globe::ROTATE_LONGITUDE = 0.10;
 const double Globe::ROTATE_LATITUDE = 0.06;
+
+Uint8 Globe::oceanColor1 = Palette::blockOffset(12);
+Uint8 Globe::oceanColor2 = Palette::blockOffset(13);
 
 namespace
 {
@@ -166,7 +170,7 @@ struct Ocean
 {
 	static inline void func(Uint8& dest, const int&, const int&, const int&, const int&)
 	{
-		dest = Palette::blockOffset(12) + 0;
+		dest = Globe::oceanColor1;
 	}
 };
 
@@ -200,10 +204,10 @@ struct CreateShadow
 		{
 			const Sint16 val = (temp.x> 31)? 31 : (Sint16)temp.x;
 			const int d = dest & helper::ColorGroup;
-			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			if(d ==  Globe::oceanColor1 || d == Globe::oceanColor2)
 			{
 				//this pixel is ocean
-				return Palette::blockOffset(12) + val;
+				return Globe::oceanColor1 + val;
 			}
 			else
 			{
@@ -219,10 +223,10 @@ struct CreateShadow
 		else
 		{
 			const int d = dest & helper::ColorGroup;
-			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			if(d ==  Globe::oceanColor1 || d ==  Globe::oceanColor2)
 			{
 				//this pixel is ocean
-				return Palette::blockOffset(12);
+				return Globe::oceanColor1;
 			}
 			else
 			{
@@ -266,6 +270,11 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_mouseScrollingStartTime(0), _totalMouseMoveX(0),
 	_totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
+	if (game->getRuleset()->getInterface("geoscape") && game->getRuleset()->getInterface("geoscape")->getElement("globe"))
+	{
+		Globe::oceanColor1 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color;
+		Globe::oceanColor2 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color2;
+	}
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
 	_countries = new Surface(width, height, x, y);
@@ -1086,7 +1095,7 @@ void Globe::draw()
 void Globe::drawOcean()
 {
 	lock();
-	drawCircle(_cenX+1, _cenY, _radius+20, Palette::blockOffset(12)+0);
+	drawCircle(_cenX+1, _cenY, _radius+20, oceanColor1);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1234,10 +1243,10 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		if (tcol)
 		{
 			const int d = tcol & helper::ColorGroup;
-			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			if(d ==  oceanColor1 || d ==  oceanColor2)
 			{
 				//this pixel is ocean
-				tcol = Palette::blockOffset(12) + shade + 8;
+				tcol = oceanColor1 + shade + 8;
 			}
 			else
 			{

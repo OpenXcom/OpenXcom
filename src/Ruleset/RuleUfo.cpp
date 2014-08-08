@@ -27,7 +27,10 @@ namespace OpenXcom
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _battlescapeTerrainData(0), _modSprite("")
+RuleUfo::RuleUfo(const std::string &type) :
+	_type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0),
+	_accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _sightRange(268),
+	_battlescapeTerrainData(0), _modSprite("")
 {
 }
 
@@ -57,6 +60,7 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 	_score = node["score"].as<int>(_score);
 	_reload = node["reload"].as<int>(_reload);
 	_breakOffTime = node["breakOffTime"].as<int>(_breakOffTime);
+	_sightRange = node["sightRange"].as<int>(_sightRange);
 	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
@@ -221,4 +225,13 @@ std::string RuleUfo::getModSprite() const
 	return _modSprite;
 }
 
+/**
+ * Gets the UFO's radar range
+ * for detecting bases.
+ * @return The range in nautical miles.
+ */
+int RuleUfo::getSightRange() const
+{
+	return _sightRange;
+}
 }
