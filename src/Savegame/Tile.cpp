@@ -534,7 +534,7 @@ int Tile::getFuel() const
 	int fuel = 0;
 
 	for (int i=0; i<4; ++i)
-		if (_objects[i] && (_objects[i]->getFuel() < fuel))
+		if (_objects[i] && (_objects[i]->getFuel() > fuel))
 			fuel = _objects[i]->getFuel();
 
 	return fuel;
