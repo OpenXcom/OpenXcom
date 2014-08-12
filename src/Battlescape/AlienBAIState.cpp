@@ -342,7 +342,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->weapon = _attackAction->weapon;
 		if (action->weapon && action->type == BA_THROW && action->weapon->getRules()->getBattleType() == BT_GRENADE)
 		{
-			_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
+			_unit->spendTimeUnits(4 + _unit->getActionTUs(BA_PRIME, action->weapon));
 		}
 		// if this is a firepoint action, set our facing.
 		action->finalFacing = _attackAction->finalFacing;
