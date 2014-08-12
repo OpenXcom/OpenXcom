@@ -34,6 +34,7 @@ class AlienBase : public Target
 private:
 	int _id;
 	std::string _race;
+	std::wstring _name;
 	bool _inBattlescape, _discovered;
 public:
 	/// Creates an alien base.
@@ -52,6 +53,8 @@ public:
 	void setId(int id);
 	/// Gets the alien base's name.
 	std::wstring getName(Language *lang) const;
+	/// Sets the alien base's name.
+	void setName(const std::wstring &name);
 	/// Gets the alien base's amount of active hours..
 	std::string getAlienRace() const;
 	/// Sets the alien base's alien race.

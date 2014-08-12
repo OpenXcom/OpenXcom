@@ -46,6 +46,7 @@ void AlienBase::load(const YAML::Node &node)
 	Target::load(node);
 	_id = node["id"].as<int>(_id);
 	_race = node["race"].as<std::string>(_race);
+	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 	_discovered = node["discovered"].as<bool>(_discovered);
 }
@@ -59,6 +60,7 @@ YAML::Node AlienBase::save() const
 	YAML::Node node = Target::save();
 	node["id"] = _id;
 	node["race"] = _race;
+	node["name"] = Language::wstrToUtf8(_name);
 	if (_inBattlescape)
 		node["inBattlescape"] = _inBattlescape;
 	if (_discovered)
@@ -103,7 +105,19 @@ void AlienBase::setId(int id)
  */
 std::wstring AlienBase::getName(Language *lang) const
 {
-	return lang->getString("STR_ALIEN_BASE_").arg(_id);
+	if (_name == L"" )
+		return lang->getString("STR_ALIEN_BASE_").arg(_id);
+	else
+		return _name;
+}
+
+/**
+ * Saves the alien base's unique identifying name.
+ * @param new Name String.
+ */
+void AlienBase::setName(const std::wstring &name)
+{
+	_name = name;
 }
 
 /**
@@ -159,5 +173,4 @@ void AlienBase::setDiscovered(bool discovered)
 {
 	_discovered = discovered;
 }
-
 }

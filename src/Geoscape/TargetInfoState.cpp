@@ -27,6 +27,8 @@
 #include "../Savegame/Target.h"
 #include "../Engine/Options.h"
 #include "InterceptState.h"
+#include "../Savegame/AlienBase.h"
+#include "../Interface/TextEdit.h"
 
 namespace OpenXcom
 {
@@ -41,11 +43,15 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 {
 	_screen = false;
 
+
+	AlienBase* b = dynamic_cast<AlienBase*>(_target);
+	_editName = (b != 0);
+
 	// Create objects
 	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_btnIntercept = new TextButton(160, 12, 48, 124);
 	_btnOk = new TextButton(160, 12, 48, 140);
-	_txtTitle = new Text(182, 32, 37, 46);
+	_txtTitle = new TextEdit(this,182, 32, 37, 46);
 	_txtTargetted = new Text(182, 9, 37, 78);
 	_txtFollowers = new Text(182, 40, 37, 88);
 
@@ -80,7 +86,10 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
-
+	if (_editName)
+	{
+		_txtTitle->onChange((ActionHandler)&TargetInfoState::edtNameChange);
+	}
 	_txtTargetted->setColor(Palette::blockOffset(15)-1);
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
@@ -121,4 +130,17 @@ void TargetInfoState::btnOkClick(Action *)
 	_game->popState();
 }
 
+/**
+* Updates the alienbase.
+* @param action Pointer to an action.
+*/
+void TargetInfoState::edtNameChange(Action *action)
+{
+	if (_editName)
+	{
+		AlienBase* b = dynamic_cast<AlienBase*>(_target);
+		b->setName(_txtTitle->getText());
+	}
+
+}
 }
