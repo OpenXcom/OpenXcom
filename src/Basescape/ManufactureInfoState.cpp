@@ -259,7 +259,7 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAllocated->setText(s3.str());
 	std::wostringstream s4;
 	s4 << L">\x01";
-	if (_production->getInfiniteAmount()) s4 << Language::utf8ToWstr("âˆž");
+	if (_production->getInfiniteAmount()) s4 << L'\u221E'; /* Language::utf8ToWstr("¡Ä"); */
 	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
 }

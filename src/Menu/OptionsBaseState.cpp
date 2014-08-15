@@ -59,18 +59,18 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	_window = new Window(this, 320, 200, 0, 0);
 
 	_btnVideo = new TextButton(80, 16, 8, 8);
-	_btnAudio = new TextButton(80, 16, 8, 28);
-	_btnControls = new TextButton(80, 16, 8, 48);
-	_btnGeoscape = new TextButton(80, 16, 8, 68);
-	_btnBattlescape = new TextButton(80, 16, 8, 88);
-	_btnAdvanced = new TextButton(80, 16, 8, 108);
-	_btnMods = new TextButton(80, 16, 8, 128);
+	_btnAudio = new TextButton(80, 16, 8, _game->getLanguage()->getWindowValue(28, "OptionsVideoY"));
+	_btnControls = new TextButton(80, 16, 8, _game->getLanguage()->getWindowValue(48, "OptionsControlsY"));
+	_btnGeoscape = new TextButton(80, 16, 8, _game->getLanguage()->getWindowValue(68, "OptionsGeoscapeY"));
+	_btnBattlescape = new TextButton(80, 16, 8, _game->getLanguage()->getWindowValue(88, "OptionsBattlescapeY"));
+	_btnAdvanced = new TextButton(80, 16, 8, _game->getLanguage()->getWindowValue(108, "OptionsAdvancedY"));
+	_btnMods = new TextButton(80, 16, 8, _game->getLanguage()->getWindowValue(128, "OptionsModsY"));
 	
 	_btnOk = new TextButton(100, 16, 8, 176);
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
 
-	_txtTooltip = new Text(305, 25, 8, 148);
+	_txtTooltip = new Text(305, _game->getLanguage()->getWindowValue(25, "OptionsTooltipH"), 8, _game->getLanguage()->getWindowValue(148, "OptionsTooltipY"));
 
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)

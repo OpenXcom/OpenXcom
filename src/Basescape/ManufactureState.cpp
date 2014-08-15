@@ -194,16 +194,16 @@ void ManufactureState::fillProductionList()
 		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
 		std::wostringstream s2;
-		if ((*iter)->getSellItems()) s2 << "$";
-		s2 << (*iter)->getAmountProduced() << "/";
-		if ((*iter)->getInfiniteAmount()) s2 << Language::utf8ToWstr("∞");
+		if ((*iter)->getSellItems()) s2 << L'$';
+		s2 << (*iter)->getAmountProduced() << L'/';
+		if ((*iter)->getInfiniteAmount()) s2 << L'\u221E'; /* Language::utf8ToWstr("∞"); */
 		else s2 << (*iter)->getAmountTotal();
 		std::wostringstream s3;
 		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wostringstream s4;
 		if ((*iter)->getInfiniteAmount())
 		{
-			s4 << Language::utf8ToWstr("∞");
+			s4 << L'\u221E'; /* Language::utf8ToWstr("∞"); */
 		}
 		else if ((*iter)->getAssignedEngineers() > 0)
 		{
@@ -217,12 +217,12 @@ void ManufactureState::fillProductionList()
 			int hoursLeft = (timeLeft + numEffectiveEngineers - 1) / numEffectiveEngineers;
 			int daysLeft = hoursLeft / 24;
 			int hours = hoursLeft % 24;
-			s4 << daysLeft << "/" << hours;
+			s4 << daysLeft << L'/' << hours;
 		}
 		else
 		{
 
-			s4 << L"-";
+			s4 << L'-';
 		}
 		_lstManufacture->addRow(5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}

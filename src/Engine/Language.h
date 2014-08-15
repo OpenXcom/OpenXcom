@@ -94,6 +94,8 @@ public:
 	TextDirection getTextDirection() const;
 	/// Gets the wrapping of text in this language.
 	TextWrapping getTextWrapping() const;
+	/// Gets localized window value.
+	int getWindowValue(int value, const std::string &id);
 };
 
 }

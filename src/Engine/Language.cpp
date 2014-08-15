@@ -42,6 +42,9 @@ namespace OpenXcom
 std::map<std::string, std::wstring> Language::_names;
 std::vector<std::string> Language::_rtl, Language::_cjk;
 
+/// To adjust window elements for CJK localization
+static std::map<std::string, int> _localizedWindows;
+
 /**
  * Initializes an empty language file.
  */
@@ -50,34 +53,13 @@ Language::Language() : _id(""), _strings(), _handler(0), _direction(DIRECTION_LT
 	// maps don't have initializers :(
 	if (_names.empty())
 	{
-		_names["en-US"] = utf8ToWstr("English (US)");
-		_names["en-GB"] = utf8ToWstr("English (UK)");
-		_names["bg-BG"] = utf8ToWstr("Български");
-		_names["cs-CZ"] = utf8ToWstr("Česky");
-		_names["da"] = utf8ToWstr("Dansk");
-		_names["de"] = utf8ToWstr("Deutsch");
-		_names["es"] = utf8ToWstr("Español (ES)");
-		_names["es-419"] = utf8ToWstr("Español (AL)");
-		_names["fr"] = utf8ToWstr("Français");
-		_names["fi"] = utf8ToWstr("Suomi");
-		_names["grk"] = utf8ToWstr("Ελληνικά");
-		_names["hu-HU"] = utf8ToWstr("Magyar");
-		_names["it"] = utf8ToWstr("Italiano");
-		_names["ja-JP"] = utf8ToWstr("日本語");
-		_names["ko"] = utf8ToWstr("한국어");
-		_names["nl"] = utf8ToWstr("Nederlands");
-		_names["no"] = utf8ToWstr("Norsk");
-		_names["pl-PL"] = utf8ToWstr("Polski");
-		_names["pt-BR"] = utf8ToWstr("Português (BR)");
-		_names["pt-PT"] = utf8ToWstr("Português (PT)");
-		_names["ro"] = utf8ToWstr("Română");
-		_names["ru"] = utf8ToWstr("Русский");
-		_names["sk-SK"] = utf8ToWstr("Slovenčina");
-		_names["sv"] = utf8ToWstr("Svenska");
-		_names["tr-TR"] = utf8ToWstr("Türkçe");
-		_names["uk"] = utf8ToWstr("Українська");
-		_names["zh-CN"] = utf8ToWstr("中文");
-		_names["zh-TW"] = utf8ToWstr("文言");
+		// _names["en-US"] = L"English (US)" ...
+		std::string languageFile = CrossPlatform::getDataFile("Language/language.yml");
+		YAML::Node doc = YAML::LoadFile(languageFile);
+		for (YAML::const_iterator i = doc.begin(); i != doc.end(); ++i)
+		{
+			_names[i->first.as<std::string>()] = utf8ToWstr(i->second.as<std::string>());
+		}
 	}
 	if (_rtl.empty())
 	{
@@ -420,6 +402,17 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 	{
 		_wrap = WRAP_LETTERS;
 	}
+
+	// localizing text window for CJK
+	_localizedWindows.clear();
+	std::string window_yml = CrossPlatform::getDataFile("Language/" + _id + "/window.yml");
+	if (CrossPlatform::fileExists(window_yml)) {
+		doc = YAML::LoadFile(window_yml);
+		for (YAML::const_iterator i = doc.begin(); i != doc.end(); ++i)
+		{
+			_localizedWindows[i->first.as<std::string>()] = std::atoi(i->second.as<std::string>().c_str());
+		}
+	}
 }
 
 /**
@@ -583,6 +576,16 @@ TextDirection Language::getTextDirection() const
 TextWrapping Language::getTextWrapping() const
 {
 	return _wrap;
+}
+
+/**
+ * Gets localized window value.
+ * @param value default value
+ */
+int Language::getWindowValue(int value, const std::string &id)
+{
+	std::map<std::string, int>::const_iterator i = _localizedWindows.find(id);
+	return (_localizedWindows.end() == i || id.empty()) ? value : i->second;
 }
 
 }
