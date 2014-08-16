@@ -56,6 +56,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node
 {
 	_traceAI = Options::traceAI;
 
+	_reserve = BA_NONE;
 	_intelligence = _unit->getIntelligence();
 	_escapeAction = new BattleAction();
 	_ambushAction = new BattleAction();
@@ -301,6 +302,8 @@ void AlienBAIState::think(BattleAction *action)
 		}
 	}
 
+	_reserve = BA_NONE;
+
 	switch (_AIMode)
 	{
 	case AI_ESCAPE:
@@ -321,13 +324,13 @@ void AlienBAIState::think(BattleAction *action)
 			switch (_unit->getAggression())
 			{
 			case 0:
-				_save->getBattleGame()->setTUReserved(BA_AIMEDSHOT, false);
+				_reserve = BA_AIMEDSHOT;
 				break;
 			case 1:
-				_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+				_reserve = BA_AUTOSHOT;
 				break;
 			case 2:
-				_save->getBattleGame()->setTUReserved(BA_SNAPSHOT, false);
+				_reserve = BA_SNAPSHOT;
 			default:
 				break;
 			}
@@ -347,8 +350,6 @@ void AlienBAIState::think(BattleAction *action)
 		// if this is a firepoint action, set our facing.
 		action->finalFacing = _attackAction->finalFacing;
 		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
-		// don't worry about reserving TUs, we've factored that in already.
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
 		if (action->type == BA_WALK && _rifle
 			// so long as we can take a shot afterwards.
@@ -1934,4 +1935,10 @@ bool AlienBAIState::validTarget(BattleUnit *unit, bool assessDanger, bool includ
 
 	return unit->getFaction() == FACTION_PLAYER;
 }
+
+BattleActionType AlienBAIState::getReserveMode()
+{
+	return _reserve;
+}
+
 }

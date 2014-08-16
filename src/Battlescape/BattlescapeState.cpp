@@ -511,8 +511,7 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
-	// Update reserve settings
-	_battleGame->setTUReserved(_save->getTUReserved(), true);
+
 	switch (_save->getTUReserved())
 	{
 	case BA_SNAPSHOT:
@@ -1188,13 +1187,13 @@ void BattlescapeState::btnReserveClick(Action *action)
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
-			_battleGame->setTUReserved(BA_NONE, true);
+			_battleGame->setTUReserved(BA_NONE);
 		else if (_reserve == _btnReserveSnap)
-			_battleGame->setTUReserved(BA_SNAPSHOT, true);
+			_battleGame->setTUReserved(BA_SNAPSHOT);
 		else if (_reserve == _btnReserveAimed)
-			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
+			_battleGame->setTUReserved(BA_AIMEDSHOT);
 		else if (_reserve == _btnReserveAuto)
-			_battleGame->setTUReserved(BA_AUTOSHOT, true);
+			_battleGame->setTUReserved(BA_AUTOSHOT);
 
 		// update any path preview
 		if (_battleGame->getPathfinding()->isPathPreviewed())
