@@ -1,0 +1,108 @@
+#
+# localize window element's offset, width, height.
+#
+# _game->getLanguage()->getWindowValue(DEFAULT, "NAME")
+
+# Save / Load
+ListGameDeleteY: 23 # 23
+ListGameDeleteH: 10 # 9
+ListGameNameY: 33 # 32
+ListGameNameH: 10 # 9
+ListGameSortNameY: 34 # 32
+ListGameDateY: 33 # 32
+ListGameDateH: 10 # 9
+ListGameSortDateY: 34 # 32
+ListGameListY: 44 # 42
+ListGameListH: 110 # 112
+ListGameDetailY: 156 # 156
+ListGameDetailH: 16 # 16
+
+# Options
+OptionsVideoY: 27 # 28
+OptionsControlsY: 46 # 48
+OptionsGeoscapeY: 65 # 68
+OptionsBattlescapeY: 84 # 88
+OptionsAdvancedY: 103 # 108
+OptionsModsY: 122 # 128
+OptionsGeoCountriesH: 15 # 16
+OptionsGeoRadarsY: 108 # 110
+OptionsGeoRadarsH: 15 # 16
+OptionsGeoPathsY: 124 # 128
+OptionsGeoPathsH: 15 # 16
+OptionsGeoFundsH: 15 # 16
+OptionsBattleArrowsH: 15 # 16
+OptionsBattleTuCostY: 126 # 128
+OptionsBattleTuCostH: 15 # 16
+OptionsBattleTooltipsH: 15 # 16
+OptionsBattleDeathsY: 126 # 128
+OptionsBattleDeathsH: 15 # 16
+OptionsControlsListH: 130 # 136
+OptionsAdvancedListH: 130 # 136
+OptionsModsListH: 130 # 136
+OptionsTooltipY: 144 # 148
+OptionsTooltipH: 30 # 25
+
+# Geoscape
+GeoscapeHourX: -61 # -61
+GeoscapeHourY: -25 # -26
+GeoscapeHourSepX: -41 # -41
+GeoscapeHourSepY: -25 # -26
+GeoscapeMinX: -37 # -37
+GeoscapeMinY: -25 # -26
+GeoscapeMinSepX: -17 # -17
+GeoscapeMinSepY: -25 # -26
+GeoscapeSecX: -13 # -13
+GeoscapeSecY: -19 # -20
+GeoscapeSecH: 10 # 8
+GeoscapeWeekdayX: -61 # -61
+GeoscapeWeekdayY: -10 # -13
+GeoscapeWeekdayH: 10 # 8
+GeoscapeDayX: -61 # -61
+GeoscapeDayY: -1 # -6
+GeoscapeDayW: 18 # 29
+GeoscapeDayH: 10 # 8
+GeoscapeMonthX: -43 # -32
+GeoscapeMonthY: -1 # -6
+GeoscapeMonthW: 18 # 29
+GeoscapeMonthH: 10 # 8
+GeoscapeYearX: -25 # -61
+GeoscapeYearY: -1 # 1
+GeoscapeYearW: 25 # 59
+GeoscapeYearH: 10 # 8
+GeoscapeFundsX: -61 # -61
+GeoscapeFundsY: -27 # -27
+GeoscapeFundsH: 10 # 8
+
+# UfoDetected
+UfoDetectedInfoY: 80 # 80
+UfoDetectedInfoH: 40 # 32
+UfoDetectedHyperwaveInfoY: 60 # 60
+UfoDetectedInfo2Y: 96 # 96
+UfoDetectedInfo2H: 40 # 32
+UfoDetectedInterceptY: 122 # 118
+UfoDetectedCentreY: 136 # 134
+UfoDetectedCancelY: 150 # 150
+
+# Inventory
+InvenTusX: 243 # 245
+InvenTusH: 10 # 9
+InvenWeightX: 243 # 245
+InvenWeightH: 10 # 9
+InvenFAccX: 243 # 245
+InvenFAccY: 34 # 32
+InvenFAccH: 10 # 9
+InvenReactX: 243 # 245
+InvenReactY: 44 # 40
+InvenReactH: 10 # 9
+InvenPSkillX: 243 # 245
+InvenPSkillY: 54 # 48
+InvenPSkillH: 10 # 9
+InvenPStrX: 243 # 245
+InvenPStrY: 64 # 56
+InvenPStrH: 10 # 9
+InvenAmmoX: 280 # 254
+InvenAmmoY: 64 # 64
+InvenAmmoW: 40 # 66
+InvenAmmoH: 20 # 24
+InvenItemY: 140 # 140
+InvenItemH: 10 # 9

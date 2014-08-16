@@ -92,13 +92,13 @@ ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool aut
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnCancel = new TextButton(80, 16, 120, 172);
 	_txtTitle = new Text(310, 17, 5, 7);
-	_txtDelete = new Text(310, _game->getLanguage()->getWindowValue(9, "ListGameDeleteH"), 5, _game->getLanguage()->getWindowValue(23, "ListGameDeleteY"));
-	_txtName = new Text(150, _game->getLanguage()->getWindowValue(9, "ListGameNameH"), 16, _game->getLanguage()->getWindowValue(32, "ListGameNameY"));
-	_txtDate = new Text(110, _game->getLanguage()->getWindowValue(9, "ListGameDateH"), 204, _game->getLanguage()->getWindowValue(32, "ListGameDateY"));
-	_lstSaves = new TextList(288, _game->getLanguage()->getWindowValue(112, "ListGameListH"), 8, _game->getLanguage()->getWindowValue(42, "ListGameListY"));
-	_txtDetails = new Text(288, _game->getLanguage()->getWindowValue(16, "ListGameDetailH"), 16, _game->getLanguage()->getWindowValue(156, "ListGameDetailY"));
-	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, _game->getLanguage()->getWindowValue(32, "ListGameSortNameY"));
-	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, _game->getLanguage()->getWindowValue(32, "ListGameSortDateY"));
+	_txtDelete = new Text(310, tr(9, "ListGameDeleteH"), 5, tr(23, "ListGameDeleteY"));
+	_txtName = new Text(150, tr(9, "ListGameNameH"), 16, tr(32, "ListGameNameY"));
+	_txtDate = new Text(110, tr(9, "ListGameDateH"), 204, tr(32, "ListGameDateY"));
+	_lstSaves = new TextList(288, tr(112, "ListGameListH"), 8, tr(42, "ListGameListY"));
+	_txtDetails = new Text(288, tr(16, "ListGameDetailH"), 16, tr(156, "ListGameDetailY"));
+	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, tr(32, "ListGameSortNameY"));
+	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, tr(32, "ListGameSortDateY"));
 
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)

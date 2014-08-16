@@ -486,4 +486,13 @@ void State::setGamePtr(Game* game)
     _game = game;
 }
 
+/**
+ * Get the localized window value.
+ * @param value default value
+ */
+int State::tr(int value, const std::string& id) const
+{
+	return _game->getLanguage()->getWindowValue(value, id);
+}
+
 }

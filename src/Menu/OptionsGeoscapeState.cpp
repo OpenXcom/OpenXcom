@@ -58,12 +58,12 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin) : OptionsBaseSt
 	_slrClockSpeed = new Slider(104, 16, 94, 50);
 
 	_txtGlobeDetails = new Text(114, 9, 94, 82);
-	_btnGlobeCountries = new ToggleTextButton(104, _game->getLanguage()->getWindowValue(16, "OptionsGeoCountriesH"), 94, 92);
-	_btnGlobeRadars = new ToggleTextButton(104, _game->getLanguage()->getWindowValue(16, "OptionsGeoRadarsH"), 94, _game->getLanguage()->getWindowValue(110, "OptionsGeoRadarsY"));
-	_btnGlobePaths = new ToggleTextButton(104, _game->getLanguage()->getWindowValue(16, "OptionsGeoPathsH"), 94, _game->getLanguage()->getWindowValue(128, "OptionsGeoPathsY"));
+	_btnGlobeCountries = new ToggleTextButton(104, tr(16, "OptionsGeoCountriesH"), 94, 92);
+	_btnGlobeRadars = new ToggleTextButton(104, tr(16, "OptionsGeoRadarsH"), 94, tr(110, "OptionsGeoRadarsY"));
+	_btnGlobePaths = new ToggleTextButton(104, tr(16, "OptionsGeoPathsH"), 94, tr(128, "OptionsGeoPathsY"));
 
 	_txtOptions = new Text(114, 9, 206, 82);
-	_btnShowFunds = new ToggleTextButton(104, _game->getLanguage()->getWindowValue(16, "OptionsGeoFundsH"), 206, 92);
+	_btnShowFunds = new ToggleTextButton(104, tr(16, "OptionsGeoFundsH"), 206, 92);
 
 	add(_txtScrollSpeed);
 	add(_slrScrollSpeed);

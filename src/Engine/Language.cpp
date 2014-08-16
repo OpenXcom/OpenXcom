@@ -331,6 +331,7 @@ void Language::getList(std::vector<std::string> &files, std::vector<std::wstring
 
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
+		if (i->compare("language.yml") == 0) continue;
 		*i = CrossPlatform::noExt(*i);
 		std::wstring name;
 		std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
@@ -403,6 +404,17 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 		_wrap = WRAP_LETTERS;
 	}
 
+	// language localized list
+	std::string languageFile = CrossPlatform::getDataFile("Language/" + _id + "/language.yml");
+	if (!CrossPlatform::fileExists(languageFile)) {
+		languageFile = CrossPlatform::getDataFile("Language/language.yml");
+	}
+	doc = YAML::LoadFile(languageFile);
+	for (YAML::const_iterator i = doc.begin(); i != doc.end(); ++i)
+	{
+		_names[i->first.as<std::string>()] = utf8ToWstr(i->second.as<std::string>());
+	}
+
 	// localizing text window for CJK
 	_localizedWindows.clear();
 	std::string window_yml = CrossPlatform::getDataFile("Language/" + _id + "/window.yml");
@@ -410,7 +422,7 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 		doc = YAML::LoadFile(window_yml);
 		for (YAML::const_iterator i = doc.begin(); i != doc.end(); ++i)
 		{
-			_localizedWindows[i->first.as<std::string>()] = std::atoi(i->second.as<std::string>().c_str());
+			_localizedWindows[i->first.as<std::string>()] = i->second.as<int>();
 		}
 	}
 }
@@ -579,11 +591,11 @@ TextWrapping Language::getTextWrapping() const
 }
 
 /**
- * Gets localized window value.
+ * Gets the localized window value.
  * @param value default value
  */
-int Language::getWindowValue(int value, const std::string &id)
-{
+int Language::getWindowValue(int value, const std::string &id) const
+{ 
 	std::map<std::string, int>::const_iterator i = _localizedWindows.find(id);
 	return (_localizedWindows.end() == i || id.empty()) ? value : i->second;
 }

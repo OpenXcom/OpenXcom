@@ -43,7 +43,7 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin) : OptionsBaseSt
 	setCategory(_btnAdvanced);
 
 	// Create objects
-	_lstOptions = new TextList(200, _game->getLanguage()->getWindowValue(136, "OptionsAdvancedListH"), 94, 8);
+	_lstOptions = new TextList(200, tr(136, "OptionsAdvancedListH"), 94, 8);
 	
 	add(_lstOptions);
 

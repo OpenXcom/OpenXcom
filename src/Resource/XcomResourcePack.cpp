@@ -1081,4 +1081,27 @@ Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int
 	return music;
 }
 
+/**
+ * Loads localized Font.dat
+ * @param langid language id
+ */
+void XcomResourcePack::loadFonts(const std::string& langid)
+{
+	std::string filename = CrossPlatform::getDataFile("Language/" + langid + "/Font.dat");
+	if (!CrossPlatform::fileExists(filename))
+		filename = CrossPlatform::getDataFile("Language/Font.dat");
+	YAML::Node doc = YAML::LoadFile(filename);
+	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
+	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
+	{
+		std::string id = (*i)["id"].as<std::string>();
+		Font *font = new Font();
+		font->load(*i);
+		std::map<std::string, Font*>::const_iterator ifont = _fonts.find(id);
+		if (ifont != _fonts.end())
+			delete ifont->second;
+		_fonts[id] = font;
+	}
+}
+
 }
