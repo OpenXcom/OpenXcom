@@ -9490,6 +9490,8 @@ interfaces:
         size: [320, 56]
       - id: numLayers
         color: 15
+      - id: messageWindows
+        color: -1
   - type: inventory
     elements:
       - id: textName

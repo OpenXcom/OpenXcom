@@ -126,6 +126,7 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 			NumberText *numText = dynamic_cast<NumberText*>(surface);
 			Text *text = dynamic_cast<Text*>(surface);
 			Bar *bar = dynamic_cast<Bar*>(surface);
+			TextButton *tb = dynamic_cast<TextButton*>(surface);
 			if (numText)
 			{
 				numText->setColor(element->color);
@@ -140,6 +141,10 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 				bar->setColor(element->color);
 				bar->setColor2(element->color2);
 				bar->setBorderColor(element->border);
+			}
+			else if (tb)
+			{
+				tb->setColor(element->color);
 			}
 		}
 		surface->invalidate(false);
