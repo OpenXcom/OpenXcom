@@ -57,6 +57,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
+#include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -117,27 +118,27 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_rank = new Surface(26, 23, x + 107, y + 33);
 
 	// Create buttons
-	_btnUnitUp = new InteractiveSurface(32, 16, x + 48, y);
-	_btnUnitDown = new InteractiveSurface(32, 16, x + 48, y + 16);
-	_btnMapUp = new InteractiveSurface(32, 16, x + 80, y);
-	_btnMapDown = new InteractiveSurface(32, 16, x + 80, y + 16);
-	_btnShowMap = new InteractiveSurface(32, 16, x + 112, y);
-	_btnKneel = new InteractiveSurface(32, 16, x + 112, y + 16);
-	_btnInventory = new InteractiveSurface(32, 16, x + 144, y);
-	_btnCenter = new InteractiveSurface(32, 16, x + 144, y + 16);
-	_btnNextSoldier = new InteractiveSurface(32, 16, x + 176, y);
-	_btnNextStop = new InteractiveSurface(32, 16, x + 176, y + 16);
-	_btnShowLayers = new InteractiveSurface(32, 16, x + 208, y);
-	_btnHelp = new InteractiveSurface(32, 16, x + 208, y + 16);
-	_btnEndTurn = new InteractiveSurface(32, 16, x + 240, y);
-	_btnAbort = new InteractiveSurface(32, 16, x + 240, y + 16);
+	_btnUnitUp = new BattlescapeButton(32, 16, x + 48, y);
+	_btnUnitDown = new BattlescapeButton(32, 16, x + 48, y + 16);
+	_btnMapUp = new BattlescapeButton(32, 16, x + 80, y);
+	_btnMapDown = new BattlescapeButton(32, 16, x + 80, y + 16);
+	_btnShowMap = new BattlescapeButton(32, 16, x + 112, y);
+	_btnKneel = new BattlescapeButton(32, 16, x + 112, y + 16);
+	_btnInventory = new BattlescapeButton(32, 16, x + 144, y);
+	_btnCenter = new BattlescapeButton(32, 16, x + 144, y + 16);
+	_btnNextSoldier = new BattlescapeButton(32, 16, x + 176, y);
+	_btnNextStop = new BattlescapeButton(32, 16, x + 176, y + 16);
+	_btnShowLayers = new BattlescapeButton(32, 16, x + 208, y);
+	_btnHelp = new BattlescapeButton(32, 16, x + 208, y + 16);
+	_btnEndTurn = new BattlescapeButton(32, 16, x + 240, y);
+	_btnAbort = new BattlescapeButton(32, 16, x + 240, y + 16);
 	_btnStats = new InteractiveSurface(164, 23, x + 107, y + 33);
-	_btnReserveNone = new ImageButton(17, 11, x + 60, y + 33);
-	_btnReserveSnap = new ImageButton(17, 11, x + 78, y + 33);
-	_btnReserveAimed = new ImageButton(17, 11, x + 60, y + 45);
-	_btnReserveAuto = new ImageButton(17, 11, x + 78, y + 45);
-	_btnReserveKneel = new ImageButton(10, 23, x + 96, y + 33);
-	_btnZeroTUs = new ImageButton(10, 23, x + 49, y + 33);
+	_btnReserveNone = new BattlescapeButton(17, 11, x + 60, y + 33);
+	_btnReserveSnap = new BattlescapeButton(17, 11, x + 78, y + 33);
+	_btnReserveAimed = new BattlescapeButton(17, 11, x + 60, y + 45);
+	_btnReserveAuto = new BattlescapeButton(17, 11, x + 78, y + 45);
+	_btnReserveKneel = new BattlescapeButton(10, 23, x + 96, y + 33);
+	_btnZeroTUs = new BattlescapeButton(10, 23, x + 49, y + 33);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, x + 8, y + 5);
 	_numAmmoLeft = new NumberText(30, 5, x + 8, y + 4);
 	_btnRightHandItem = new InteractiveSurface(32, 48, x + 280, y + 5);
@@ -151,9 +152,9 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	}
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 	_warning = new WarningMessage(224, 24, x + 48, y + 32);
-	_btnLaunch = new InteractiveSurface(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
+	_btnLaunch = new BattlescapeButton(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnLaunch->setVisible(false);
-	_btnPsi = new InteractiveSurface(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
+	_btnPsi = new BattlescapeButton(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
@@ -183,7 +184,32 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 
 	add(_map);
 	add(_icons);
-	add(_numLayers, "numLayers", "battlescape", _icons);
+	
+	// Add in custom reserve buttons
+	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
+	if (_game->getResourcePack()->getSurface("TFTDReserve"))
+	{
+		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+		tftdIcons->setX(48);
+		tftdIcons->setY(176);
+		tftdIcons->blit(icons);
+	}
+
+	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
+	SDL_Rect *r = icons->getCrop();
+	r->x = 0;
+	r->y = 200 - iconsHeight;
+	r->w = iconsWidth;
+	r->h = iconsHeight;
+	// we need to blit the icons before we add the battlescape buttons, as they copy the underlying parent surface.
+	icons->blit(_icons);
+
+	// this is a hack to fix the single transparent pixel on TFTD's icon panel.
+	if (_game->getRuleset()->getInterface("battlescape")->getElement("icons")->TFTDMode)
+	{
+		_icons->setPixel(46, 44, 8);
+	}
+
 	add(_rank, "rank", "battlescape", _icons);
 	add(_btnUnitUp, "buttonUnitUp", "battlescape", _icons);
 	add(_btnUnitDown, "buttonUnitDown", "battlescape", _icons);
@@ -196,6 +222,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	add(_btnNextSoldier, "buttonNextSoldier", "battlescape", _icons);
 	add(_btnNextStop, "buttonNextStop", "battlescape", _icons);
 	add(_btnShowLayers, "buttonShowLayers", "battlescape", _icons);
+	add(_numLayers, "numLayers", "battlescape", _icons);
 	add(_btnHelp, "buttonHelp", "battlescape", _icons);
 	add(_btnEndTurn, "buttonEndTurn", "battlescape", _icons);
 	add(_btnAbort, "buttonAbort", "battlescape", _icons);
@@ -239,24 +266,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
 	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
-
-	// Add in custom reserve buttons
-	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
-	if (_game->getResourcePack()->getSurface("TFTDReserve"))
-	{
-		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
-		tftdIcons->setX(48);
-		tftdIcons->setY(176);
-		tftdIcons->blit(icons);
-	}
-
-	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
-	SDL_Rect *r = icons->getCrop();
-	r->x = 0;
-	r->y = 200 - iconsHeight;
-	r->w = iconsWidth;
-	r->h = iconsHeight;
-	icons->blit(_icons);
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
@@ -397,12 +406,14 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnReserveKneel->setTooltip("STR_RESERVE_TIME_UNITS_FOR_KNEEL");
 	_btnReserveKneel->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnReserveKneel->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+	_btnReserveKneel->allowToggleInversion();
 
 	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick, SDL_BUTTON_RIGHT);
 	_btnZeroTUs->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, Options::keyBattleZeroTUs);
 	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
 	_btnZeroTUs->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnZeroTUs->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+	_btnZeroTUs->allowClickInversion();
 
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, Options::keyBattleReload);
@@ -448,28 +459,11 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 
 	_txtTooltip->setHighContrast(true);
 
-	_btnReserveNone->copy(_icons);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
-
-	_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
-
-	_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
-
-	_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
-
-	_btnReserveKneel->copy(_icons);
-	_btnReserveKneel->setColor(Palette::blockOffset(2)+3);
-
-	_btnZeroTUs->copy(_icons);
-	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
-
+	
 	// Set music
 	_game->getResourcePack()->playMusic("GMTACTIC");
 

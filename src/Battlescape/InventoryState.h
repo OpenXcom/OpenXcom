@@ -35,6 +35,7 @@ class Inventory;
 class SavedBattleGame;
 class BattlescapeState;
 class BattleUnit;
+class BattlescapeButton;
 
 /**
  * Screen which displays soldier's inventory.
@@ -44,8 +45,8 @@ class InventoryState : public State
 private:
 	Surface *_bg, *_soldier;
 	Text *_txtName, *_txtItem, *_txtAmmo, *_txtWeight, *_txtTus, *_txtFAcc, *_txtReact, *_txtPSkill, *_txtPStr;
-	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
-	InteractiveSurface *_btnCreateTemplate, *_btnApplyTemplate;
+	BattlescapeButton *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
+	BattlescapeButton *_btnCreateTemplate, *_btnApplyTemplate;
 	Surface *_selAmmo;
 	Inventory *_inv;
 	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
