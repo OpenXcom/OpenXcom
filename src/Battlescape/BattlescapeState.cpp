@@ -139,9 +139,9 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnReserveAuto = new BattlescapeButton(17, 11, x + 78, y + 45);
 	_btnReserveKneel = new BattlescapeButton(10, 23, x + 96, y + 33);
 	_btnZeroTUs = new BattlescapeButton(10, 23, x + 49, y + 33);
-	_btnLeftHandItem = new InteractiveSurface(32, 48, x + 8, y + 5);
+	_btnLeftHandItem = new InteractiveSurface(32, 48, x + 8, y + 4);
 	_numAmmoLeft = new NumberText(30, 5, x + 8, y + 4);
-	_btnRightHandItem = new InteractiveSurface(32, 48, x + 280, y + 5);
+	_btnRightHandItem = new InteractiveSurface(32, 48, x + 280, y + 4);
 	_numAmmoRight = new NumberText(30, 5, x + 280, y + 4);
 	const int visibleUnitX = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->x;
 	const int visibleUnitY = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->y;
