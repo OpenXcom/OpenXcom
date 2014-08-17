@@ -531,12 +531,31 @@ void Surface::blit(Surface *surface)
  */
 void Surface::copy(Surface *surface)
 {
+	/*
+	SDL_BlitSurface uses colour matching,
+	and is therefor unreliable as a means
+	to copy the contents of one surface to another
+	instead we have to do this manually 
+
 	SDL_Rect from;
 	from.x = getX() - surface->getX();
 	from.y = getY() - surface->getY();
 	from.w = getWidth();
 	from.h = getHeight();
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
+	*/
+	const int from_x = getX() - surface->getX();
+	const int from_y = getY() - surface->getY();
+
+	lock();
+
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	{
+		Uint8 pixel = surface->getPixel(from_x + x, from_y + y);
+		setPixelIterative(&x, &y, pixel);
+	}
+
+	unlock();
 }
 
 /**
