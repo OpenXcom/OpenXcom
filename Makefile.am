@@ -367,6 +367,8 @@ openxcom_SOURCES = \
 	src/Geoscape/VictoryState.h \
 	src/Interface/ArrowButton.cpp \
 	src/Interface/ArrowButton.h \
+	src/Interface/BattlescapeButton.cpp \
+	src/Interface/BattlescapeButton.h \
 	src/Interface/Bar.cpp \
 	src/Interface/Bar.h \
 	src/Interface/ComboBox.cpp \

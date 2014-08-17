@@ -859,6 +859,9 @@
     <ClCompile Include="Ruleset\RuleInterface.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\BattlescapeButton.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1739,6 +1742,9 @@
     </ClInclude>
     <ClInclude Include="Ruleset\RuleInterface.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\BattlescapeButton.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
