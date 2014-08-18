@@ -181,6 +181,15 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+	
+	if (_game->getRuleset()->getInterface("battlescape")->getElement("pathfinding"))
+	{
+		Element *pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
+		
+		Pathfinding::green = pathing->color;
+		Pathfinding::yellow = pathing->color2;
+		Pathfinding::red = pathing->border;
+	}
 
 	add(_map);
 	add(_icons);

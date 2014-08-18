@@ -73,7 +73,7 @@ private:
 
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);
-	int _iconHeight, _iconWidth;
+	int _iconHeight, _iconWidth, _messageColor;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);

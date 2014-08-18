@@ -83,6 +83,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 {
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
+	_messageColor = _game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color;
 
 	_previewSetting = Options::battleNewPreviewPath;
 	_smoothCamera = Options::battleSmoothCamera;
@@ -98,7 +99,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, 0, 0);
 	_message->setX(_game->getScreen()->getDX());
 	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
-	_message->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
+	_message->setTextColor(_messageColor);
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
@@ -379,7 +380,7 @@ void Map::drawTerrain(Surface *surface)
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
+		_numWaypid->setColor(pathfinderTurnedOn ? _messageColor : Palette::blockOffset(1));
 	}
 
 	surface->lock();

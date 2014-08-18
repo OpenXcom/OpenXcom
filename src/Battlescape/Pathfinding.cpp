@@ -35,6 +35,10 @@
 namespace OpenXcom
 {
 
+int Pathfinding::red = 3;
+int Pathfinding::yellow = 10;
+int Pathfinding::green = 4;
+
 /**
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
@@ -912,7 +916,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					tile->setPreview(-1);
 					tile->setTUMarker(-1);
 				}
-				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
+				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?Pathfinding::green : Pathfinding::yellow) : Pathfinding::red));
 			}
 		}
 	}
