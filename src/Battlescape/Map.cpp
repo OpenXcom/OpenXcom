@@ -380,7 +380,7 @@ void Map::drawTerrain(Surface *surface)
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-		_numWaypid->setColor(pathfinderTurnedOn ? _messageColor : Palette::blockOffset(1));
+		_numWaypid->setColor(pathfinderTurnedOn ? _messageColor + 1 : Palette::blockOffset(1));
 	}
 
 	surface->lock();
