@@ -23,8 +23,6 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Music.h"
-#include "../Geoscape/Polygon.h"
-#include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
@@ -35,7 +33,7 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _musics()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -59,14 +57,6 @@ ResourcePack::~ResourcePack()
 	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
 	{
 		delete i->second;
-	}
-	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
-	{
-		delete *i;
-	}
-	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
-	{
-		delete *i;
 	}
 	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); ++i)
 	{
@@ -113,24 +103,6 @@ SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
 {
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 	if (_sets.end() != i) return i->second; else return 0;
-}
-
-/**
- * Returns the list of polygons in the resource set.
- * @return Pointer to the list of polygons.
- */
-std::list<Polygon*> *ResourcePack::getPolygons()
-{
-	return &_polygons;
-}
-
-/**
- * Returns the list of polylines in the resource set.
- * @return Pointer to the list of polylines.
- */
-std::list<Polyline*> *ResourcePack::getPolylines()
-{
-	return &_polylines;
 }
 
 /**

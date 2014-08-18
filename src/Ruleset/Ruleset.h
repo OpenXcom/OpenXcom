@@ -60,6 +60,7 @@ class ExtraSounds;
 class ExtraStrings;
 class StatString;
 class RuleInterface;
+class RuleGlobe;
 
 /**
  * Set of rules and stats for a game.
@@ -97,6 +98,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	std::vector<StatString*> _statStrings;
+	RuleGlobe *_globe;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	std::string _alienFuel;
 	YAML::Node _startingBase;
@@ -235,7 +237,8 @@ public:
 	const std::string getAlienFuel() const;
 	/// Gets information on an interface element.
 	RuleInterface *getInterface(const std::string id) const;
-
+	/// Gets the ruleset for the globe
+	RuleGlobe *getGlobe() const;
 };
 
 }

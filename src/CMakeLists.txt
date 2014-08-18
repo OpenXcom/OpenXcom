@@ -271,8 +271,6 @@ set ( geoscape_src
   Geoscape/UfoDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
-  Geoscape/Polyline.h
-  Geoscape/Polyline.cpp
   Geoscape/ConfirmNewBaseState.h
   Geoscape/ConfirmNewBaseState.cpp
   Geoscape/ConfirmDestinationState.h
@@ -297,8 +295,6 @@ set ( geoscape_src
   Geoscape/LowFuelState.cpp
   Geoscape/CraftPatrolState.cpp
   Geoscape/CraftPatrolState.h
-  Geoscape/Polygon.h
-  Geoscape/Polygon.cpp
   Geoscape/UfoLostState.cpp
   Geoscape/UfoLostState.h
   Geoscape/GraphsState.cpp
@@ -509,6 +505,12 @@ set ( ruleset_src
   Ruleset/StatString.cpp
   Ruleset/StatStringCondition.h
   Ruleset/StatStringCondition.cpp
+  Ruleset/Polygon.h
+  Ruleset/Polygon.cpp
+  Ruleset/Polyline.h
+  Ruleset/Polyline.cpp
+  Ruleset/RuleGlobe.h
+  Ruleset/RuleGlobe.cpp
 )
 
 set ( savegame_src

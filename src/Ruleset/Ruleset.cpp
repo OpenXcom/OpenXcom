@@ -61,9 +61,9 @@
 #include "City.h"
 #include "MCDPatch.h"
 #include "../Engine/Logger.h"
-#include <algorithm>
 #include "../Ufopaedia/Ufopaedia.h"
 #include "StatString.h"
+#include "RuleGlobe.h"
 
 namespace OpenXcom
 {
@@ -73,6 +73,8 @@ namespace OpenXcom
  */
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
+	_globe = new RuleGlobe();
+
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
 	// Add soldier names
@@ -92,6 +94,7 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
  */
 Ruleset::~Ruleset()
 {
+	delete _globe;
 	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); ++i)
 	{
 		delete *i;
@@ -411,7 +414,10 @@ void Ruleset::loadFile(const std::string &filename)
 			_startingBase[i->first.as<std::string>()] = YAML::Node(i->second);
 		}
 	}
- 	_startingTime.load(doc["startingTime"]);
+	if (doc["startingTime"])
+	{
+		_startingTime.load(doc["startingTime"]);
+	}
  	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
  	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
@@ -497,8 +503,12 @@ void Ruleset::loadFile(const std::string &filename)
 			rule->load(*i);
 		}
 	}
+	if (doc["globe"])
+	{
+		_globe->load(doc["globe"]);
+	}
 
-  // refresh _psiRequirements for psiStrengthEval
+	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		RuleBaseFacility *rule = getBaseFacility(*i);
@@ -1400,4 +1410,14 @@ RuleInterface *Ruleset::getInterface(const std::string id) const
 	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
 	if (_interfaces.end() != i) return i->second; else return 0;
 }
+
+/**
+ * Gets the rules for the Geoscape globe.
+ * @return Pointer to globe rules.
+ */
+RuleGlobe *Ruleset::getGlobe() const
+{
+	return _globe;
+}
+
 }

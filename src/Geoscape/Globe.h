@@ -34,6 +34,7 @@ class SurfaceSet;
 class Timer;
 class Target;
 class LocalizedText;
+class RuleGlobe;
 
 /**
  * Interactive globe view of the world.
@@ -44,7 +45,6 @@ class LocalizedText;
 class Globe : public InteractiveSurface
 {
 private:
-	static const int NUM_TEXTURES = 13;
 	static const int NUM_LANDSHADES = 48;
 	static const int NUM_SEASHADES = 72;
 	static const int NEAR_RADIUS = 25;
@@ -52,9 +52,10 @@ private:
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
+	RuleGlobe *_rules;
 	double _cenLon, _cenLat, _rotLon, _rotLat, _hoverLon, _hoverLat;
 	Sint16 _cenX, _cenY;
-	size_t _zoom, _zoomOld;
+	size_t _zoom, _zoomOld, _zoomTexture;
 	SurfaceSet *_texture;
 	Game *_game;
 	Surface *_markers, *_countries, *_radars;
@@ -108,8 +109,6 @@ public:
 	Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.
 	~Globe();
-	/// Loads a set of polygons from a DAT file.
-	static void loadDat(const std::string &filename, std::list<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const;
 	/// Converts polar coordinates to cartesian coordinates.
