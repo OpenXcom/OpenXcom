@@ -22,6 +22,8 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -33,35 +35,39 @@ namespace OpenXcom
  * @param x Position on the x-axis.
  * @param y Position on the y-asis.
  */
-ActionMenuItem::ActionMenuItem(int id, Game *game, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _highlighted(false), _action(BA_NONE), _tu(0)
+ActionMenuItem::ActionMenuItem(int id, Game *game, int x, int y) : InteractiveSurface(272, 40, x + 24, y - (id*40)), _highlighted(false), _action(BA_NONE), _tu(0)
 {
 	Font *big = game->getResourcePack()->getFont("FONT_BIG"), *small = game->getResourcePack()->getFont("FONT_SMALL");
 	Language *lang = game->getLanguage();
 
+	Element *actionMenu = game->getRuleset()->getInterface("battlescape")->getElement("actionMenu");
+
+	_highlightModifier = actionMenu->TFTDMode ? 12 : 3;
+
 	_frame = new Frame(getWidth(), getHeight(), 0, 0);
 	_frame->setHighContrast(true);
-	_frame->setColor(Palette::blockOffset(0)+7);
-	_frame->setBackground(Palette::blockOffset(0)+14);
-	_frame->setThickness(9);
+	_frame->setColor(actionMenu->border);
+	_frame->setBackground(actionMenu->color2);
+	_frame->setThickness(8);
 
 	_txtDescription = new Text(200, 20, 10, 13);
 	_txtDescription->initText(big, small, lang);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
-	_txtDescription->setColor(Palette::blockOffset(0)-1);
+	_txtDescription->setColor(actionMenu->color);
 	_txtDescription->setVisible(true);
 
 	_txtAcc = new Text(100, 20, 140, 13);
 	_txtAcc->initText(big, small, lang);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
-	_txtAcc->setColor(Palette::blockOffset(0)-1);
+	_txtAcc->setColor(actionMenu->color);
 
 	_txtTU = new Text(80, 20, 210, 13);
 	_txtTU->initText(big, small, lang);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
-	_txtTU->setColor(Palette::blockOffset(0)-1);
+	_txtTU->setColor(actionMenu->color);
 }
 
 /**
@@ -145,7 +151,7 @@ void ActionMenuItem::draw()
 void ActionMenuItem::mouseIn(Action *action, State *state)
 {
 	_highlighted = true;
-	_frame->setBackground(Palette::blockOffset(0) + 11);
+	_frame->setBackground(_frame->getBackground() - _highlightModifier);
 	draw();
 	InteractiveSurface::mouseIn(action, state);
 }
@@ -159,7 +165,7 @@ void ActionMenuItem::mouseIn(Action *action, State *state)
 void ActionMenuItem::mouseOut(Action *action, State *state)
 {
 	_highlighted = false;
-	_frame->setBackground(Palette::blockOffset(0) + 14);
+	_frame->setBackground(_frame->getBackground() + _highlightModifier);
 	draw();
 	InteractiveSurface::mouseOut(action, state);
 }

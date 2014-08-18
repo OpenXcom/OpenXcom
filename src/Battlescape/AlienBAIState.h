@@ -20,6 +20,7 @@
 #define OPENXCOM_ALIENBAISTATE_H
 
 #include "BattleAIState.h"
+#include "../Battlescape/BattlescapeGame.h"
 #include "Position.h"
 #include <vector>
 
@@ -46,6 +47,7 @@ protected:
 	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
 	std::vector<int> _reachable, _reachableWithAttack;
+	BattleActionType _reserve;
 public:
 	/// Creates a new AlienBAIState linked to the game and a certain unit.
 	AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node);
@@ -106,6 +108,7 @@ public:
 	/// Performs a melee attack action.
 	void meleeAttack();
 	bool validTarget(BattleUnit* unit, bool assessDanger, bool includeCivs) const;
+	BattleActionType getReserveMode();
 };
 
 }

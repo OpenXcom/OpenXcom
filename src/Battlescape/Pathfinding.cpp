@@ -860,7 +860,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
-		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT);
 	}
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool running = Options::strafe && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
@@ -918,7 +918,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 	if (switchBack)
 	{
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE);
 	}
 	return true;
 }

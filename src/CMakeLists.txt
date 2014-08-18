@@ -350,6 +350,8 @@ set ( interface_src
   Interface/NumberText.h
   Interface/ArrowButton.cpp
   Interface/ArrowButton.h
+  Interface/BattlescapeButton.cpp
+  Interface/BattlescapeButton.h
   Interface/TextButton.cpp
   Interface/TextButton.h
   Interface/ToggleTextButton.cpp

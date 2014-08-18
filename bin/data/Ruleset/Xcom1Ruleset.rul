@@ -9482,6 +9482,18 @@ interfaces:
         color: 2
       - id: textTooltip
         color: 128
+      - id: buttonReserveNone
+        color: 67
+      - id: buttonReserveSnap
+        color: 35
+      - id: buttonReserveAimed
+        color: 35
+      - id: buttonReserveAuto
+        color: 35
+      - id: buttonReserveKneel
+        color: 35
+      - id: buttonZeroTUs
+        color: 35
       # The usage of the following is hard-coded, these ones MUST be defined
       - id: visibleUnits
         pos: [300, -16]
@@ -9490,6 +9502,12 @@ interfaces:
         size: [320, 56]
       - id: numLayers
         color: 15
+      - id: messageWindows
+        color: -1
+      - id: actionMenu
+        color: -1
+        color2: 14
+        border: 3
   - type: inventory
     elements:
       - id: textName
