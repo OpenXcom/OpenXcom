@@ -109,8 +109,8 @@ GeoscapeCraftSoldierY: 64 #68
 GeoscapeCraftHWPY: 73 #76
 GeoscapeCraftRedirectY: 111 #108
 GeoscapeCraftReturnBaseY: 127 #124
-GeoscapeCraftTargetY: 158 #156
-GeoscapeCraftPatrolY: 173 #172
+GeoscapeCraftTargetY: 138 #140
+GeoscapeCraftPatrolY: 153 #156
 GeoscapeCraftRightX: 164 #164
 
 # ItemArriving
@@ -165,6 +165,9 @@ MemorialSoldiersY: 46 # 44
 SoldierInfoCraftY: 58 #56
 SoldierInfoRecoveryY: 58 #56
 SoldierInfoPsionicY: 68 #66
+
+# SoldierArmor
+SoldierArmorTitleH: 20 #16
 
 # CraftSoldiers
 CraftSoldiersNameY: 34 #32
@@ -249,12 +252,18 @@ PurchaseItemsH: 120 #112
 # Sell
 SellItemsH: 120 #112
 
+# TransferItems
+TransferItemsListH: 130 #120
+
 # UfopaediaSelect
 UfopaediaSelectListH: 110 #104
 
 # ArticleBaseFacility
 ArticleBaseFacilityListY: 40 #42
 ArticleBaseFacilityListH: 50 #42
+
+# ArticleArmor
+ArticleArmorListH: 100 #96
 
 # ArticleVehicle
 ArticleVehicleListX: 7 #10
