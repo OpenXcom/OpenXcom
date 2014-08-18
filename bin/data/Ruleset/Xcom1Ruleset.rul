@@ -3764,6 +3764,25 @@ terrains:
         width: 10
         length: 10
         type: 5
+armors_script:
+  test: &STD_COLORS |
+    get_color r0 in;
+    get_shade r1 in;
+    test r0 color_hair;
+    skip_eq hair;
+    test r0 color_face;
+    skip_eq face;
+    ret in;
+    
+    hair:
+    add r1 soldier_hair;
+    add_shade r1 shade;
+    ret r1;
+    
+    face:
+    add r1 soldier_face;
+    add_shade r1 shade;
+    ret r1;
 armors:
   - type: STR_NONE_UC
     spriteSheet: XCOM_0.PCK
@@ -3787,8 +3806,9 @@ armors:
       - 1.6
       - 1.0
     loftempsSet: [ 3 ]
+    recolorScript: *STD_COLORS
   - type: STR_PERSONAL_ARMOR_UC
-    spriteSheet: XCOM_1.PCK
+    spriteSheet: XCOM_1.PCK_FIXHAIR #remove _FIXHAIR to get orginal sprite
     spriteInv: MAN_1
     corpseBattle:
       - STR_CORPSE_ARMOR
@@ -3809,6 +3829,7 @@ armors:
       - 1.1
       - 1.0
     loftempsSet: [ 3 ]
+    recolorScript: *STD_COLORS
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2

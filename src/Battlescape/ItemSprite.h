@@ -16,38 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PROMOTIONSSTATE_H
-#define OPENXCOM_PROMOTIONSSTATE_H
+#ifndef OPENXCOM_ITEMSPRITE_H
+#define OPENXCOM_ITEMSPRITE_H
 
-#include "../Engine/State.h"
+#include "../Engine/Surface.h"
+#include "../Engine/Script.h"
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
+class BattleUnit;
+class BattleItem;
+class SurfaceSet;
+class ResourcePack;
 
 /**
- * Promotions screen that displays new soldier ranks.
+ * A class that renders a specific unit, given its render rules
+ * combining the right frames from the surfaceset.
  */
-class PromotionsState : public State
+class ItemSprite
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtBase;
-	TextList *_lstSoldiers;
+	SurfaceSet *_itemSurface;
+	ResourcePack *_res;
+	int _animationFrame;
+	Surface *_dest;
+	ScriptWorker _scriptWorkRef;
+
 public:
-	/// Creates the Promotions state.
-	PromotionsState();
-	/// Cleans up the Promotions state.
-	~PromotionsState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	/// Creates a new ItemSprite at the specified position and size.
+	ItemSprite(Surface* dest, ResourcePack* res, int frame);
+	/// Cleans up the ItemSprite.
+	~ItemSprite();
+	/// Draws the unit.
+	void draw(BattleItem* item, int x, int y, int shade);
 };
 
-}
+} //namespace OpenXcom
 
 #endif

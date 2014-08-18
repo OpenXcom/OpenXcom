@@ -48,7 +48,7 @@ namespace OpenXcom
 
 namespace
 {
-	
+
 struct HairBleach
 {
 	static const Uint8 ColorGroup = 15<<4;
@@ -66,7 +66,7 @@ struct HairBleach
 };
 
 }
-	
+
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
@@ -592,17 +592,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		}
 	}
 
-	// copy constructor doesn't like doing this directly, so let's make a second handobs file the old fashioned way.
 	// handob2 is used for all the left handed sprites.
-	_sets["HANDOB2.PCK"] = new SurfaceSet(_sets["HANDOB.PCK"]->getWidth(), _sets["HANDOB.PCK"]->getHeight());
-	std::map<int, Surface*> *handob = _sets["HANDOB.PCK"]->getFrames();
-	for (std::map<int, Surface*>::const_iterator i = handob->begin(); i != handob->end(); ++i)
-	{
-		Surface *surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first);
-		Surface *surface2 = i->second;
-		surface1->setPalette(surface2->getPalette());
-		surface2->blit(surface1);
-	}
+	_sets["HANDOB2.PCK"] = new SurfaceSet(*_sets["HANDOB.PCK"]);
 
 	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
@@ -853,47 +844,42 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 
 	//"fix" of hair color of male personal armor
-	if (Options::battleHairBleach)
+	SurfaceSet *xcom_1 = new SurfaceSet(*_sets["XCOM_1.PCK"]);
+
+	for (int i = 0; i < 16; ++i)
 	{
-		if (_sets.find("XCOM_1.PCK") != _sets.end())
-		{
-			SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
-
-			for (int i = 0; i < 16; ++i)
-			{
-				//chest frame
-				Surface *surf = xcom_1->getFrame(4 * 8 + i);
-				ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-				GraphSubset dim = head.getBaseDomain();
-				surf->lock();
-				dim.beg_y = 6;
-				dim.end_y = 9;
-				head.setDomain(dim);
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 5));
-				dim.beg_y = 9;
-				dim.end_y = 10;
-				head.setDomain(dim);
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
-				surf->unlock();
-			}
-
-			for (int i = 0; i < 3; ++i)
-			{
-				//fall frame
-				Surface *surf = xcom_1->getFrame(264 + i);
-				ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-				GraphSubset dim = head.getBaseDomain();
-				dim.beg_y = 0;
-				dim.end_y = 24;
-				dim.beg_x = 11;
-				dim.end_x = 20;
-				head.setDomain(dim);
-				surf->lock();
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
-				surf->unlock();
-			}
-		}
+		//chest frame
+		Surface *surf = xcom_1->getFrame(4 * 8 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+		GraphSubset dim = head.getBaseDomain();
+		surf->lock();
+		dim.beg_y = 6;
+		dim.end_y = 9;
+		head.setDomain(dim);
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 5));
+		dim.beg_y = 9;
+		dim.end_y = 10;
+		head.setDomain(dim);
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+		surf->unlock();
 	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		//fall frame
+		Surface *surf = xcom_1->getFrame(264 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+		GraphSubset dim = head.getBaseDomain();
+		dim.beg_y = 0;
+		dim.end_y = 24;
+		dim.beg_x = 11;
+		dim.end_x = 20;
+		head.setDomain(dim);
+		surf->lock();
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+		surf->unlock();
+	}
+	_sets["XCOM_1.PCK_FIXHAIR"] = xcom_1;
 }
 
 /**

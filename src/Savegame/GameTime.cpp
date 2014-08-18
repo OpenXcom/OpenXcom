@@ -254,7 +254,7 @@ int GameTime::getYear() const
 /**
  * Returns the current position of the daylight emitted on the globe
  * according to the current ingame time, so the value is 0 when the light
- * starts at 0º longitude (6h) and 1 when the light ends at 0º longitude (18h).
+ * starts at 0 longitude (6h) and 1 when the light ends at 0 longitude (18h).
  * @return Daylight position (0-1).
  */
 double GameTime::getDaylight() const

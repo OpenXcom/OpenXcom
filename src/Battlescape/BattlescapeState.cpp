@@ -51,6 +51,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
+#include "../Engine/Script.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -510,7 +511,6 @@ void BattlescapeState::init()
 	_animTimer->start();
 	_gameTimer->start();
 	_map->setFocus(true);
-	_map->cacheUnits();
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
@@ -1096,7 +1096,6 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
 		_battleGame->cancelCurrentAction();
 
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
-		_map->cacheUnits();
 		_map->draw();
 		BattleItem *leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
@@ -1123,7 +1122,6 @@ void BattlescapeState::btnRightHandItemClick(Action *)
 		_battleGame->cancelCurrentAction();
 
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
-		_map->cacheUnits();
 		_map->draw();
 		BattleItem *rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
@@ -1240,6 +1238,32 @@ bool BattlescapeState::playableUnitSelected()
 	return _save->getSelectedUnit() != 0 && allowButtons();
 }
 
+void BattlescapeState::drawItem(BattleItem* item, Surface* hand, NumberText* ammo)
+{
+	BattleItem *leftHandItem = item;
+	hand->clear();
+	ammo->setVisible(false);
+	if (leftHandItem)
+	{
+		ScriptWorker scr;
+		RuleItem *rule = leftHandItem->getRules();
+		Surface *frame = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK")->getFrame(rule->getBigSprite());
+		if(frame)
+		{
+			BattleItem::ScriptFill(&scr, leftHandItem, true, 0, 0);
+			scr.executeBlit(frame, hand, rule->getHandSpriteOffX(), rule->getHandSpriteOffY());
+		}
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
+		{
+			ammo->setVisible(true);
+			if (leftHandItem->getAmmoItem())
+				ammo->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
+			else
+				ammo->setValue(0);
+		}
+	}
+}
+
 /**
  * Updates a soldier's name/rank/tu/energy/health/morale.
  */
@@ -1304,36 +1328,8 @@ void BattlescapeState::updateSoldierInfo()
 	_barMorale->setMax(100);
 	_barMorale->setValue(battleUnit->getMorale());
 
-	BattleItem *leftHandItem = battleUnit->getItem("STR_LEFT_HAND");
-	_btnLeftHandItem->clear();
-	_numAmmoLeft->setVisible(false);
-	if (leftHandItem)
-	{
-		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
-		{
-			_numAmmoLeft->setVisible(true);
-			if (leftHandItem->getAmmoItem())
-				_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
-			else
-				_numAmmoLeft->setValue(0);
-		}
-	}
-	BattleItem *rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
-	_btnRightHandItem->clear();
-	_numAmmoRight->setVisible(false);
-	if (rightHandItem)
-	{
-		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
-		{
-			_numAmmoRight->setVisible(true);
-			if (rightHandItem->getAmmoItem())
-				_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
-			else
-				_numAmmoRight->setValue(0);
-		}
-	}
+	drawItem(battleUnit->getItem("STR_LEFT_HAND"), _btnLeftHandItem, _numAmmoLeft);
+	drawItem(battleUnit->getItem("STR_RIGHT_HAND"), _btnRightHandItem, _numAmmoRight);
 
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 	int j = 0;

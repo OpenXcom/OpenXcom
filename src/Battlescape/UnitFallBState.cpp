@@ -135,7 +135,6 @@ void UnitFallBState::think()
 		if ((*unit)->getStatus() == STATUS_WALKING || (*unit)->getStatus() == STATUS_FLYING)
 		{
 			(*unit)->keepWalking(tileBelow, true); 	// advances the phase
-			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
 		}
 
 		falling = largeCheck
@@ -260,8 +259,6 @@ void UnitFallBState::think()
 				Position destination = (*unit)->getPosition() + Position(0,0,-1);
 				Tile *tileBelow = _parent->getSave()->getTile(destination);
 				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, onScreen);
-				(*unit)->setCache(0);
-				_parent->getMap()->cacheUnit(*unit);
 				++unit;
 			}
 			else
@@ -275,8 +272,6 @@ void UnitFallBState::think()
 				}
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();
-				_parent->getMap()->cacheUnit(*unit);
-				(*unit)->setCache(0);
 				_terrain->calculateFOV(*unit);
 				_parent->checkForProximityGrenades(*unit);
 				if (_parent->getTileEngine()->checkReactionFire(*unit))

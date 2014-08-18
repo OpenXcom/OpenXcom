@@ -23,6 +23,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Script.h"
 #include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
@@ -51,6 +52,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/BattleUnit.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Transfer.h"
 #include "../Ufopaedia/Ufopaedia.h"
@@ -299,12 +301,14 @@ void Ruleset::loadFile(const std::string &filename)
 			rule->load(*i, this);
 		}
 	}
+
+	ScriptParser<BattleUnit> unitScript("Armor");
  	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{
 		Armor *rule = loadRule(*i, &_armors, &_armorsIndex);
 		if (rule != 0)
 		{
-			rule->load(*i);
+			rule->load(*i, unitScript);
 		}
 	}
  	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)

@@ -204,7 +204,6 @@ void UnitDieBState::think()
 			}
 		}
 	}
-	_parent->getMap()->cacheUnit(_unit);
 }
 
 /**

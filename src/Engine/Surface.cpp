@@ -753,65 +753,6 @@ void Surface::unlock()
 }
 
 /**
- * help class used for Surface::blitNShade
- */
-struct ColorReplace
-{
-	/**
-	* Function used by ShaderDraw in Surface::blitNShade
-	* set shade and replace color in that surface
-	* @param dest destination pixel
-	* @param src source pixel
-	* @param shade value of shade of this surface
-	* @param newColor new color to set (it should be offseted by 4)
-	*/
-	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
-	{
-		if(src)
-		{
-			const int newShade = (src&15) + shade;
-			if (newShade > 15)
-				// so dark it would flip over to another color - make it black instead
-				dest = 15;
-			else
-				dest = newColor | newShade;
-		}
-	}
-
-};
-
-/**
- * help class used for Surface::blitNShade
- */
-struct StandartShade
-{
-	/**
-	* Function used by ShaderDraw in Surface::blitNShade
-	* set shade
-	* @param dest destination pixel
-	* @param src source pixel
-	* @param shade value of shade of this surface
-	* @param notused
-	* @param notused
-	*/
-	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
-	{
-		if(src)
-		{
-			const int newShade = (src&15) + shade;
-			if (newShade > 15)
-				// so dark it would flip over to another color - make it black instead
-				dest = 15;
-			else
-				dest = (src&(15<<4)) | newShade;
-		}
-	}
-
-};
-
-
-
-/**
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
  * Notice there is no surface locking here - you have to make sure you lock the surface yourself
  * at the start of blitting and unlock it when done.
@@ -839,7 +780,6 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 	}
 	else
 		ShaderDraw<StandartShade>(ShaderSurface(surface), src, ShaderScalar(off));
-
 }
 
 /**

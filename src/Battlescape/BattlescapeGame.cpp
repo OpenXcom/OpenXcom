@@ -346,7 +346,6 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
 			bu->kneel(!bu->isKneeled());
 			// kneeling or standing up can reveal new terrain or units. I guess.
 			getTileEngine()->calculateFOV(bu);
-			getMap()->cacheUnits();
 			_parentState->updateSoldierInfo();
 			getTileEngine()->checkReactionFire(bu);
 			return true;
@@ -383,13 +382,13 @@ void BattlescapeGame::endTurn()
 	// check for hot grenades on the ground
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
+		for (std::vector<BattleItem*>::iterator it = _save->getTile(i)->getInventory()->begin(); it != _save->getTile(i)->getInventory()->end(); )
 		{
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getFuseTimer() == 0)  // it's a grenade to explode now
 			{
-				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
-				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
-				p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
+				p.x = _save->getTile(i)->getPosition().x*16 + 8;
+				p.y = _save->getTile(i)->getPosition().y*16 + 8;
+				p.z = _save->getTile(i)->getPosition().z*24 - _save->getTile(i)->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
 				statePushBack(0);
@@ -839,11 +838,6 @@ void BattlescapeGame::popState()
 				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
-					if (_save->getSelectedUnit())
-					{
-						_save->getSelectedUnit()->setCache(0);
-						getMap()->cacheUnit(_save->getSelectedUnit());
-					}
 					_AIActionCounter = 0;
 					if (_states.empty() && _save->selectNextPlayerUnit(true) == 0)
 					{
@@ -1074,7 +1068,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			{
 				dropItem(unit->getPosition(), item, false, true);
 			}
-			unit->setCache(0);
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			if (_save->getTile(ba.target)) // only walk towards it when the place exists
 			{
@@ -1556,10 +1549,8 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(3);
-	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
 	getSave()->getUnits()->push_back(newUnit);
-	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new AlienBAIState(getSave(), newUnit, 0));
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(newUnit);
@@ -2040,8 +2031,6 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
 								p.z = t->getPosition().z*24 + t->getTerrainLevel();
 								statePushNext(new ExplosionBState(this, p, (*i), (*i)->getPreviousOwner()));
 								getSave()->removeItem(*i);
-								unit->setCache(0);
-								getMap()->cacheUnit(unit);
 								return true;
 							}
 						}

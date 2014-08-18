@@ -85,6 +85,8 @@ private:
 	void handleItemClick(BattleItem *item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
+	/// Draw hand item with ammo number
+	void drawItem(BattleItem *item, Surface *hand, NumberText *ammo);
 public:
 	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);

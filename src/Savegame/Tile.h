@@ -24,6 +24,7 @@
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapData.h"
 #include "BattleUnit.h"
+#include "BattleItem.h"
 
 #include <SDL_types.h> // for Uint8
 
@@ -207,7 +208,7 @@ public:
 	/// Remove item
 	void removeItem(BattleItem *item);
 	/// Get top-most item
-	int getTopItemSprite();
+	BattleItem* getTopItem();
 	/// New turn preparations.
 	void prepareNewTurn();
 	/// Get inventory on this tile.

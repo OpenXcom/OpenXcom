@@ -29,6 +29,9 @@ class RuleItem;
 class RuleInventory;
 class BattleUnit;
 class Tile;
+class SurfaceSet;
+class Surface;
+class ScriptWorker;
 
 /**
  * Represents a single item in the battlescape.
@@ -51,6 +54,10 @@ private:
 	int _painKiller, _heal, _stimulant;
 	bool _XCOMProperty, _droppedOnAlienTurn;
 public:
+
+	/// Init all required data in script using object data
+	static void ScriptFill(ScriptWorker* w, BattleItem* item, bool inventory, int anim_frame, int shade);
+
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules, int *id);
 	/// Cleans up the item.
@@ -131,7 +138,6 @@ public:
 	void setTurnFlag(bool flag);
 	/// Sets the item's ruleset.
 	void convertToCorpse(RuleItem *rules);
-
 };
 
 }

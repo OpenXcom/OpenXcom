@@ -20,6 +20,7 @@
 #define OPENXCOM_UNITSPRITE_H
 
 #include "../Engine/Surface.h"
+#include "../Engine/Script.h"
 
 namespace OpenXcom
 {
@@ -27,19 +28,25 @@ namespace OpenXcom
 class BattleUnit;
 class BattleItem;
 class SurfaceSet;
+class ResourcePack;
 
 /**
  * A class that renders a specific unit, given its render rules
  * combining the right frames from the surfaceset.
  */
-class UnitSprite : public Surface
+class UnitSprite
 {
 private:
 	BattleUnit *_unit;
 	BattleItem *_itemA, *_itemB;
-	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
+	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB, *_fireSurface;
+	ResourcePack *_res;
 	int _part, _animationFrame, _drawingRoutine;
 	bool _helmet;
+	Surface *_dest;
+	int _x, _y, _shade;
+	ScriptWorker _scriptWorkRef;
+
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
 	/// mutons (routine 10),
 	/// aquanauts (routine 13),
@@ -76,23 +83,19 @@ private:
 	void drawRoutine20();
 	/// sort two handed sprites out.
 	void sortRifles();
+	/// blit weapon sprite
+	void blitItem(Surface* item);
+	/// blit body sprite
+	void blitBody(Surface* body, int part);
 public:
 	/// Creates a new UnitSprite at the specified position and size.
-	UnitSprite(int width, int height, int x, int y, bool helmet);
+	UnitSprite(Surface* dest, ResourcePack* res, int frame, bool helmet);
 	/// Cleans up the UnitSprite.
 	~UnitSprite();
-	/// Sets surfacesets for rendering.
-	void setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, SurfaceSet *itemSurfaceB);
-	/// Sets the battleunit to be rendered.
-	void setBattleUnit(BattleUnit *unit, int part = 0);
-	/// Sets the battleitem to be rendered.
-	void setBattleItem(BattleItem *item);
-	/// Sets the animation frame.
-	void setAnimationFrame(int frame);
 	/// Draws the unit.
-	void draw();
+	void draw(BattleUnit* unit, int part, int x, int y, int shade);
 };
 
-}
+} //namespace OpenXcom
 
 #endif

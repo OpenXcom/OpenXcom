@@ -377,11 +377,6 @@ void Tile::setDiscovered(bool flag, int part)
 			_discovered[0] = true;
 			_discovered[1] = true;
 		}
-		// if light on tile changes, units and objects on it change light too
-		if (_unit != 0)
-		{
-			_unit->setCache(0);
-		}
 	}
 }
 
@@ -745,16 +740,17 @@ void Tile::removeItem(BattleItem *item)
  * Get the topmost item sprite to draw on the battlescape.
  * @return item sprite ID in floorob, or -1 when no item
  */
-int Tile::getTopItemSprite()
+BattleItem* Tile::getTopItem()
 {
 	int biggestWeight = -1;
-	int biggestItem = -1;
+	BattleItem* biggestItem = 0;
 	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
-		if ((*i)->getRules()->getWeight() > biggestWeight)
+		int temp = (*i)->getRules()->getWeight();
+		if (temp > biggestWeight)
 		{
-			biggestWeight = (*i)->getRules()->getWeight();
-			biggestItem = (*i)->getRules()->getFloorSprite();
+			biggestWeight = temp;
+			biggestItem = *i;
 		}
 	}
 	return biggestItem;

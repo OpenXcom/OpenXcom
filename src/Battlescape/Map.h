@@ -109,10 +109,6 @@ public:
 	void setCursorType(CursorType type, int size = 1);
 	/// Gets the 3D cursor type.
 	CursorType getCursorType() const;
-	/// Caches units.
-	void cacheUnits();
-	/// Caches the unit.
-	void cacheUnit(BattleUnit *unit);
 	/// Sets projectile.
 	void setProjectile(Projectile *projectile);
 	/// Gets projectile.

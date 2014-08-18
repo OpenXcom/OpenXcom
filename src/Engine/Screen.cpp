@@ -109,7 +109,7 @@ void Screen::makeVideoFlags()
  */
 Screen::Screen() : _baseWidth(ORIGINAL_WIDTH), _baseHeight(ORIGINAL_HEIGHT), _scaleX(1.0), _scaleY(1.0), _flags(0), _numColors(0), _firstColor(0), _pushPalette(false), _surface(0)
 {
-	resetDisplay();	
+	resetDisplay();
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
 }
 
@@ -148,10 +148,10 @@ void Screen::handle(Action *action)
 				case 1: Timer::gameSlowSpeed = 5; break;
 				case 5: Timer::gameSlowSpeed = 15; break;
 				default: Timer::gameSlowSpeed = 1; break;
-			}				
+			}
 		}
 	}
-	
+
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && (SDL_GetModState() & KMOD_ALT) != 0)
 	{
 		Options::fullscreen = !Options::fullscreen;

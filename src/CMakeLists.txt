@@ -231,6 +231,9 @@ set ( engine_src
   Engine/SurfaceSet.h
   Engine/Screen.cpp
   Engine/Screen.h
+  Engine/Script.cpp
+  Engine/Script.h
+  Engine/ScriptBind.h
   Engine/Logger.h
   Engine/LocalizedText.cpp
   Engine/LocalizedText.h

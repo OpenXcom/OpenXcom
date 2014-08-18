@@ -552,7 +552,7 @@ void DebriefingState::prepareDebriefing()
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
-				if (battle->getTiles()[i]->getMapData(3) && battle->getTiles()[i]->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
+				if (battle->getTile(i)->getMapData(3) && battle->getTile(i)->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
 				{
 					destroyAlienBase = false;
 					break;
@@ -826,9 +826,9 @@ void DebriefingState::prepareDebriefing()
 				// get recoverable map data objects from the battlescape map
 				for (int part = 0; part < 4; part++)
 				{
-					if (battle->getTiles()[i]->getMapData(part))
+					if (battle->getTile(i)->getMapData(part))
 					{
-						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+						switch (battle->getTile(i)->getMapData(part)->getSpecialType())
 						{
 						case UFO_POWER_SOURCE:
 							addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
@@ -857,15 +857,15 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 				// recover items from the floor
-				recoverItems(battle->getTiles()[i]->getInventory(), base);
+				recoverItems(battle->getTile(i)->getInventory(), base);
 			}
 		}
 		else
 		{
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
-					recoverItems(battle->getTiles()[i]->getInventory(), base);
+				if (battle->getTile(i)->getMapData(MapData::O_FLOOR) && (battle->getTile(i)->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+					recoverItems(battle->getTile(i)->getInventory(), base);
 			}
 		}
 	}
@@ -896,8 +896,8 @@ void DebriefingState::prepareDebriefing()
 			// recover items from the craft floor
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
-					recoverItems(battle->getTiles()[i]->getInventory(), base);
+				if (battle->getTile(i)->getMapData(MapData::O_FLOOR) && (battle->getTile(i)->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+					recoverItems(battle->getTile(i)->getInventory(), base);
 			}
 		}
 	}

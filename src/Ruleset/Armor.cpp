@@ -26,7 +26,12 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  */
-Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false)
+Armor::Armor(const std::string &type) :
+	_type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(),
+	_frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
+	_drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0),
+	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false),
+	_recolorScript(0)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -37,14 +42,14 @@ Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteIn
  */
 Armor::~Armor()
 {
-
+	delete _recolorScript;
 }
 
 /**
  * Loads the armor from a YAML file.
  * @param node YAML node.
  */
-void Armor::load(const YAML::Node &node)
+void Armor::load(const YAML::Node &node, const ScriptParser<BattleUnit>& parser)
 {
 	_type = node["type"].as<std::string>(_type);
 	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
@@ -81,6 +86,7 @@ void Armor::load(const YAML::Node &node)
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
 		_loftempsSet.push_back(node["loftemps"].as<int>());
+
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
 	if (_drawingRoutine == 0 ||
@@ -98,6 +104,14 @@ void Armor::load(const YAML::Node &node)
 	else
 	{
 		_canHoldWeapon = false;
+	}
+
+	if(const YAML::Node &scr = node["recolorScript"])
+	{
+		std::string script;
+		script = scr.as<std::string>(script);
+		delete _recolorScript;
+		_recolorScript = parser.parse(script);
 	}
 }
 
@@ -284,4 +298,10 @@ bool Armor::getCanHoldWeapon()
 {
 	return _canHoldWeapon;
 }
+
+ScriptContainer<BattleUnit>* Armor::getRecolorScript()
+{
+	return _recolorScript;
+}
+
 }
