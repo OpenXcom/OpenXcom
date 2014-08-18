@@ -848,7 +848,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			originVoxel.z -= 2;
 			Position targetVoxel;
 			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
-			bool gotHit = (aggro != 0 && aggro->getWasHit());
+			bool gotHit = (aggro != 0 && aggro->getWasHitBy(unit->getId()));
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually target the unit
