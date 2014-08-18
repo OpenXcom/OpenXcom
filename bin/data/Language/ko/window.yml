@@ -173,6 +173,19 @@ CraftSoldiersCraftY: 34 #32
 CraftSoldiersListY: 44 #40
 CraftSoldiersListH: 130 #128
 
+# CraftEquipment
+CraftEquipmentItemY: 34 #32
+CraftEquipmentStoresY: 34 #32
+CraftEquipmentListY: 44 #40
+CraftEquipmentListH: 130 #128
+
+# CraftArmor
+CraftArmorNameY: 24 #32
+CraftArmorCraftY: 24 #32
+CraftArmorArmorY: 24 #32
+CraftArmorListY: 34 #40
+CraftArmorListH: 140 #128
+
 # CraftInfo
 CraftInfoDamageH: 20 #17
 CraftInfoFuelH: 20 #17

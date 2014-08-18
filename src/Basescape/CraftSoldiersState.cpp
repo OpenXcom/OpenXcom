@@ -57,7 +57,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 	_txtCraft = new Text(84, tr(9,"TextSmallH"), 224, tr(32,"CraftSoldiersCraftY"));
 	_txtAvailable = new Text(110, tr(9,"TextSmallH"), 16, 24);
 	_txtUsed = new Text(110, tr(9,"TextSmallH"), 122, 24);
-	_lstSoldiers = new TextList(288, tr(128,"CraftSoldiersListY"), 8, tr(40,"CraftSoldiersListY"));
+	_lstSoldiers = new TextList(288, tr(128,"CraftSoldiersListH"), 8, tr(40,"CraftSoldiersListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 2);

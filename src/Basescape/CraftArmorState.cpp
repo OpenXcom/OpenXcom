@@ -53,10 +53,10 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtCraft = new Text(76, 9, 130, 32);
-	_txtArmor = new Text(100, 9, 204, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtName = new Text(114, tr(9,"TextSmallH"), 16, tr(32,"CraftArmorNameY"));
+	_txtCraft = new Text(76, tr(9,"TextSmallH"), 130, tr(32,"CraftArmorCraftY"));
+	_txtArmor = new Text(100, tr(9,"TextSmallH"), 204, tr(32,"CraftArmorArmorY"));
+	_lstSoldiers = new TextList(288, tr(128,"CraftArmorListH"), 8, tr(40,"CraftArmorListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 4);
