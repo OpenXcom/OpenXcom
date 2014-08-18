@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "Polyline.h"
+#include <cmath>
 
 namespace OpenXcom
 {
@@ -38,6 +40,28 @@ Polyline::~Polyline()
 {
 	delete[] _lat;
 	delete[] _lon;
+}
+
+/**
+ * Loads the polyline from a YAML file.
+ * @param node YAML node.
+ */
+void Polyline::load(const YAML::Node &node)
+{
+	delete[] _lat;
+	delete[] _lon;
+
+	std::vector<double> coords = node.as< std::vector<double> >();
+	_points = coords.size() / 2;
+	_lat = new double[_points];
+	_lon = new double[_points];
+
+	for (size_t i = 0; i < coords.size(); i += 2)
+	{
+		size_t j = i / 2;
+		_lon[j] = coords[i] * M_PI / 180;
+		_lat[j] = coords[i+1] * M_PI / 180;
+	}
 }
 
 /**

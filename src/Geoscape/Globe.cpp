@@ -19,15 +19,14 @@
 #define _USE_MATH_DEFINES
 #include "Globe.h"
 #include <cmath>
-#include <fstream>
 #include <algorithm>
 #include "../fmath.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 #include "../Resource/ResourcePack.h"
-#include "Polygon.h"
-#include "Polyline.h"
+#include "../Ruleset/Polygon.h"
+#include "../Ruleset/Polyline.h"
 #include "../Engine/FastLineClip.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
@@ -39,7 +38,6 @@
 #include "../Interface/Text.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
-#include "../Engine/Exception.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/Region.h"
 #include "../Ruleset/City.h"
@@ -58,6 +56,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/RuleGlobe.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Screen.h"
 
@@ -270,6 +269,7 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_mouseScrollingStartTime(0), _totalMouseMoveX(0),
 	_totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
+	_rules = game->getRuleset()->getGlobe();
 	if (game->getRuleset()->getInterface("geoscape") && game->getRuleset()->getInterface("geoscape")->getElement("globe"))
 	{
 		Globe::oceanColor1 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color;
@@ -386,6 +386,7 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_zoomOld = _zoom;
 	
 	setupRadii(width, height);
+	setZoom(_zoom);
 
 	//filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
@@ -548,66 +549,6 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 }
 
 /**
- * Loads a series of map polar coordinates in X-Com format,
- * converts them and stores them in a set of polygons.
- * @param filename Filename of the DAT file.
- * @param polygons Pointer to the polygon set.
- * @sa http://www.ufopaedia.org/index.php?title=WORLD.DAT
- */
-void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
-{
-	// Load file
-	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
-	if (!mapFile)
-	{
-		throw Exception(filename + " not found");
-	}
-
-	short value[10];
-
-	while (mapFile.read((char*)&value, sizeof(value)))
-	{
-		Polygon* poly;
-		int points;
-		
-		for (int i = 0; i < 10; ++i)
-		{
-			value[i] = SDL_SwapLE16(value[i]);
-		}
-
-		if (value[6] != -1)
-		{
-			points = 4;
-		}
-		else
-		{
-			points = 3;
-		}
-		poly = new Polygon(points);
-
-		for (int i = 0, j = 0; i < points; ++i)
-		{
-			// Correct X-Com degrees and convert to radians
-			double lonRad = value[j++] * 0.125f * M_PI / 180;
-			double latRad = value[j++] * 0.125f * M_PI / 180;
-
-			poly->setLongitude(i, lonRad);
-			poly->setLatitude(i, latRad);
-		}
-		poly->setTexture(value[8]);
-
-		polygons->push_back(poly);
-	}
-
-	if (!mapFile.eof())
-	{
-		throw Exception("Invalid globe map");
-	}
-
-	mapFile.close();
-}
-
-/**
  * Sets a leftwards rotation speed and starts the timer.
  */
 void Globe::rotateLeft()
@@ -684,6 +625,7 @@ void Globe::rotateStopLat()
 void Globe::setZoom(size_t zoom)
 {
 	_zoom = std::min(std::max(zoom, (size_t)0u), _zoomRadius.size() - 1);
+	_zoomTexture = (2 - (int)floor(_zoom / 2.0)) * (_texture->getTotalFrames() / 3);
 	_radius = _zoomRadius[_zoom];
 	_game->getSavedGame()->setGlobeZoom(_zoom);
 	if (_isMouseScrolling)
@@ -826,7 +768,7 @@ bool Globe::insideLand(double lon, double lat) const
 	double oldLon = _cenLon, oldLat = _cenLat;
 	globe->_cenLon = lon;
 	globe->_cenLat = lat;
-	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; ++i)
+	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end() && !inside; ++i)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
@@ -945,7 +887,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
  */
 void Globe::cachePolygons()
 {
-	cache(_game->getResourcePack()->getPolygons(), &_cacheLand);
+	cache(_rules->getPolygons(), &_cacheLand);
 }
 
 /**
@@ -1121,8 +1063,7 @@ void Globe::drawLand()
 		}
 
 		// Apply textures according to zoom and shade
-		int zoom = (2 - (int)floor(_zoom / 2.0)) * NUM_TEXTURES;
-		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + zoom), 0, 0);
+		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + _zoomTexture), 0, 0);
 	}
 }
 
@@ -1445,7 +1386,7 @@ void Globe::drawDetail()
 		// Lock the surface
 		_countries->lock();
 
-		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); ++i)
+		for (std::list<Polyline*>::iterator i = _rules->getPolylines()->begin(); i != _rules->getPolylines()->end(); ++i)
 		{
 			Sint16 x[2], y[2];
 			for (int j = 0; j < (*i)->getPoints() - 1; ++j)
@@ -2058,7 +1999,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 	double oldLon = _cenLon, oldLat = _cenLat;
 	globe->_cenLon = lon;
 	globe->_cenLat = lat;
-	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
+	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end(); ++i)
 	{
 		if (insidePolygon(lon, lat, *i))
 		{

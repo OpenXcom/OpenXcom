@@ -363,8 +363,6 @@
     <ClCompile Include="Geoscape\LowFuelState.cpp" />
     <ClCompile Include="Geoscape\MonthlyReportState.cpp" />
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp" />
-    <ClCompile Include="Geoscape\Polygon.cpp" />
-    <ClCompile Include="Geoscape\Polyline.cpp" />
     <ClCompile Include="Geoscape\SelectDestinationState.cpp" />
     <ClCompile Include="Geoscape\TargetInfoState.cpp" />
     <ClCompile Include="Geoscape\UfoDetectedState.cpp" />
@@ -427,6 +425,8 @@
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
+    <ClCompile Include="Ruleset\Polygon.cpp" />
+    <ClCompile Include="Ruleset\Polyline.cpp" />
     <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
@@ -435,6 +435,7 @@
     <ClCompile Include="Ruleset\MapData.cpp" />
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
+    <ClCompile Include="Ruleset\RuleGlobe.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleInterface.cpp" />
@@ -663,8 +664,6 @@
     <ClInclude Include="Geoscape\LowFuelState.h" />
     <ClInclude Include="Geoscape\MonthlyReportState.h" />
     <ClInclude Include="Geoscape\MultipleTargetsState.h" />
-    <ClInclude Include="Geoscape\Polygon.h" />
-    <ClInclude Include="Geoscape\Polyline.h" />
     <ClInclude Include="Geoscape\PsiTrainingState.h" />
     <ClInclude Include="Geoscape\ResearchCompleteState.h" />
     <ClInclude Include="Geoscape\SelectDestinationState.h" />
@@ -731,6 +730,9 @@
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
+    <ClInclude Include="Ruleset\Polygon.h" />
+    <ClInclude Include="Ruleset\Polyline.h" />
+    <ClInclude Include="Ruleset\RuleGlobe.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\RuleInterface.h" />

@@ -245,12 +245,6 @@
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\Polygon.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\Polyline.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\SelectDestinationState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -862,6 +856,15 @@
     <ClCompile Include="Interface\BattlescapeButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleGlobe.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Polygon.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Polyline.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1112,12 +1115,6 @@
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\MultipleTargetsState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\Polygon.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\Polyline.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\SelectDestinationState.h">
@@ -1745,6 +1742,15 @@
     </ClInclude>
     <ClInclude Include="Interface\BattlescapeButton.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleGlobe.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Polygon.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Polyline.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
