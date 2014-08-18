@@ -64,8 +64,8 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base)
 	_stackNumber->setBordered(true);
 
 	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1)-1);
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2);
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color);
 
 	_animTimer = new Timer(125);
 	_animTimer->onTimer((SurfaceHandler)&Inventory::drawPrimers);

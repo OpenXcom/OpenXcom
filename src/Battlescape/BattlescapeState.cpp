@@ -442,8 +442,8 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 		_numVisibleUnit[i]->setColor(color);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1));
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2);
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color);
 	_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
 	_btnPsi->onMouseClick((ActionHandler)&BattlescapeState::btnPsiClick);
 

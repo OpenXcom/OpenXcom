@@ -9524,6 +9524,14 @@ interfaces:
         color: 35
       - id: buttonZeroTUs
         color: 35
+      - id: infoBoxOK
+        color: 15
+        color2: 27
+        border: 20
+      - id: grenadeMenu
+        color: 15
+        color2: 27
+        border: 20
       # The usage of the following is hard-coded, these ones MUST be defined
       - id: visibleUnits
         pos: [300, -16]
@@ -9532,12 +9540,21 @@ interfaces:
         size: [320, 56]
       - id: numLayers
         color: 15
+      - id: warning
+        color: 16
+        color2: 32
       - id: messageWindows
         color: -1
+        color2: 14
+        border: 7
       - id: actionMenu
         color: -1
         color2: 14
         border: 3
+      - id: grenadeBackground
+        color: 24
+        color2: 28
+        border: 15
   - type: inventory
     elements:
       - id: textName
