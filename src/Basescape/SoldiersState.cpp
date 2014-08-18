@@ -62,10 +62,10 @@ SoldiersState::SoldiersState(Base *base) : _base(base)
 		_btnMemorial = new TextButton(148, 16, 8, 176);
 	}
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 130, 32);
-	_txtCraft = new Text(82, 9, 222, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtName = new Text(114, tr(9,"TextSmallH"), 16, tr(32,"SoldersNameY"));
+	_txtRank = new Text(102, tr(9,"TextSmallH"), 130, tr(32,"SoldersRankY"));
+	_txtCraft = new Text(82, tr(9,"TextSmallH"), 222, tr(32,"SoldersCraftY"));
+	_lstSoldiers = new TextList(288, tr(128,"SoldersSoldersH"), 8, 40);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 2);

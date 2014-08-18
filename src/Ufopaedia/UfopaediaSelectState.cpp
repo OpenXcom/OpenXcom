@@ -46,7 +46,7 @@ namespace OpenXcom
 
 		// set buttons
 		_btnOk = new TextButton(224, 16, 48, 166);
-		_lstSelection = new TextList(224, 104, 40, 50);
+		_lstSelection = new TextList(224, tr(104,"UfopaediaSelectListH"), 40, 50);
 
 		// Set palette
 		setPalette("PAL_GEOSCAPE", 0);

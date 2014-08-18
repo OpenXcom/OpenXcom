@@ -156,16 +156,16 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_sideTop = new TextButton(63, height, screenWidth-63, _sidebar->getY() - height - 1);
 	_sideBottom = new TextButton(63, height, screenWidth-63, _sidebar->getY() + _sidebar->getHeight() + 1);
 
-	_txtHour = new Text(20, 16, screenWidth + tr(-61, "GeoscapeHourX"), screenHeight / 2 + tr(-26, "GeoscapeHourY"));
-	_txtHourSep = new Text(4, 16, screenWidth + tr(-41, "GeoscapeHourSepX"), screenHeight / 2 + tr(-26, "GeoscapeHourSepY"));
-	_txtMin = new Text(20, 16, screenWidth + tr(-37, "GeoscapeMinX"), screenHeight / 2 + tr(-26, "GeoscapeMinY"));
-	_txtMinSep = new Text(4, 16, screenWidth + tr(-17, "GeoscapeMinSepX"), screenHeight / 2 + tr(-26, "GeoscapeMinSepY"));
-	_txtSec = new Text(11, tr(8, "GeoscapeSecH"), screenWidth + tr(-13, "GeoscapeSecX"), screenHeight / 2 + tr(-20, "GeoscapeSecY"));
-	_txtWeekday = new Text(59, tr(8, "GeoscapeWeekdayH"), screenWidth + tr(-61, "GeoscapeWeekdayX"), screenHeight / 2 + tr(-13, "GeoscapeWeekdayY"));
-	_txtDay = new Text(tr(29, "GeoscapeDayW"), tr(8, "GeoscapeDayH"), screenWidth + tr(-61, "GeoscapeDayX"), screenHeight / 2 + tr(-1, "GeoscapeDayY"));
-	_txtMonth = new Text(tr(29, "GeoscapeMonthW"), tr(8, "GeoscapeMonthH"), screenWidth + tr(-32, "GeoscapeMonthX"), screenHeight / 2 + tr(-6, "GeoscapeMonthY"));
-	_txtYear = new Text(tr(59, "GeoscapeYearW"), tr(8, "GeoscapeYearH"), screenWidth + tr(-61, "GeoscapeYearX"), screenHeight / 2 + tr(1, "GeoscapeYearY"));
-	_txtFunds = new Text(59, tr(8, "GeoscapeFundsH"), screenWidth + tr(-61, "GeoscapeFundsX"), screenHeight / 2 + tr(-27, "GeoscapeFundsY"));
+	_txtHour = new Text(20, 16, screenWidth + tr(-61,"GeoscapeHourX"), screenHeight / 2 + tr(-26,"GeoscapeHourY"));
+	_txtHourSep = new Text(4, 16, screenWidth + tr(-41,"GeoscapeHourSepX"), screenHeight / 2 + tr(-26,"GeoscapeHourSepY"));
+	_txtMin = new Text(20, 16, screenWidth + tr(-37,"GeoscapeMinX"), screenHeight / 2 + tr(-26,"GeoscapeMinY"));
+	_txtMinSep = new Text(4, 16, screenWidth + tr(-17,"GeoscapeMinSepX"), screenHeight / 2 + tr(-26,"GeoscapeMinSepY"));
+	_txtSec = new Text(11, tr(8,"GeoscapeSecH"), screenWidth + tr(-13,"GeoscapeSecX"), screenHeight / 2 + tr(-20,"GeoscapeSecY"));
+	_txtWeekday = new Text(59, tr(8,"GeoscapeWeekdayH"), screenWidth + tr(-61,"GeoscapeWeekdayX"), screenHeight / 2 + tr(-13,"GeoscapeWeekdayY"));
+	_txtDay = new Text(tr(29,"GeoscapeDayW"), tr(8,"GeoscapeDayH"), screenWidth + tr(-61,"GeoscapeDayX"), screenHeight / 2 + tr(-6,"GeoscapeDayY"));
+	_txtMonth = new Text(tr(29,"GeoscapeMonthW"), tr(8,"GeoscapeMonthH"), screenWidth + tr(-32,"GeoscapeMonthX"), screenHeight / 2 + tr(-6,"GeoscapeMonthY"));
+	_txtYear = new Text(tr(59,"GeoscapeYearW"), tr(8,"GeoscapeYearH"), screenWidth + tr(-61,"GeoscapeYearX"), screenHeight / 2 + tr(1,"GeoscapeYearY"));
+	_txtFunds = new Text(59, tr(8,"GeoscapeFundsH"), screenWidth + tr(-61,"GeoscapeFundsX"), screenHeight / 2 + tr(-27,"GeoscapeFundsY"));
 
 	_timeSpeed = _btn5Secs;
 	_gameTimer = new Timer(Options::geoClockSpeed);

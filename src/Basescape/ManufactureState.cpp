@@ -52,16 +52,16 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	_btnNew = new TextButton(148, 16, 8, 176);
 	_btnOk = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtAvailable = new Text(150, 9, 8, 24);
-	_txtAllocated = new Text(150, 9, 160, 24);
-	_txtSpace = new Text(150, 9, 8, 34);
-	_txtFunds = new Text(150, 9, 160, 34);
-	_txtItem = new Text(80, 9, 10, 52);
-	_txtEngineers = new Text(56, 18, 112, 44);
-	_txtProduced = new Text(56, 18, 168, 44);
-	_txtCost = new Text(44, 27, 222, 44);
-	_txtTimeLeft = new Text(60, 27, 260, 44);
-	_lstManufacture = new TextList(288, 90, 8, 80);
+	_txtAvailable = new Text(150, tr(9,"TextSmallH"), 8, 24);
+	_txtAllocated = new Text(150, tr(9,"TextSmallH"), 160, 24);
+	_txtSpace = new Text(150, tr(9,"TextSmallH"), 8, 34);
+	_txtFunds = new Text(150, tr(9,"TextSmallH"), 160, 34);
+	_txtItem = new Text(80, tr(9,"TextSmallH"), 10, 52);
+	_txtEngineers = new Text(56, tr(9,"TextSmallH")*2, 112, tr(44,"ManufactureEngineersY"));
+	_txtProduced = new Text(56, tr(9,"TextSmallH")*2, 168, tr(44,"ManufactureProducedY"));
+	_txtCost = new Text(44, tr(9,"TextSmallH")*3, 222, tr(44,"ManufactureCostY"));
+	_txtTimeLeft = new Text(60, tr(9,"TextSmallH")*3, 260, tr(44,"ManufactureTimeLeftY"));
+	_lstManufacture = new TextList(288, tr(90,"ManufactureListH"), 8, tr(80,"ManufactureListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);

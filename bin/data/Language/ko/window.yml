@@ -2,15 +2,16 @@
 # localize window element's offset, width, height.
 #
 # _game->getLanguage()->getWindowValue(DEFAULT, "NAME")
+#  short form = tr(DEFAULT,"NAME")
+
+# Common
+TextSmallH: 10 # 9
 
 # Save / Load
 ListGameDeleteY: 23 # 23
-ListGameDeleteH: 10 # 9
 ListGameNameY: 33 # 32
-ListGameNameH: 10 # 9
 ListGameSortNameY: 34 # 32
 ListGameDateY: 33 # 32
-ListGameDateH: 10 # 9
 ListGameSortDateY: 34 # 32
 ListGameListY: 44 # 42
 ListGameListH: 110 # 112
@@ -83,26 +84,176 @@ UfoDetectedInterceptY: 122 # 118
 UfoDetectedCentreY: 136 # 134
 UfoDetectedCancelY: 150 # 150
 
+# Intercept
+InterceptCraftY: 62 #70
+InterceptStatusY: 62 #70
+InterceptBaseY: 62 #70
+InterceptWeaponsY: 62 #62
+InterceptListY: 73 #78
+InterceptListH: 70 #64
+
+# GeoscapeCraft
+GeoscapeCraftTitleY: 18 #20
+GeoscapeCraftStatusY: 34 #36
+GeoscapeCraftBaseY: 46 #52
+GeoscapeCraftSpeedY: 55 #60
+GeoscapeCraftMaxSpeedY: 64 #68
+GeoscapeCraftAltitudeY: 73 #76
+GeoscapeCraftFuelY: 82 #84
+GeoscapeCraftDamageY: 82 #84
+GeoscapeCraftW1NameY: 91 #92
+GeoscapeCraftW1AmmoY: 91 #92
+GeoscapeCraftW2NameY: 100 #100
+GeoscapeCraftW2AmmoY: 100 #100
+GeoscapeCraftSoldierY: 64 #68
+GeoscapeCraftHWPY: 73 #76
+GeoscapeCraftRedirectY: 111 #108
+GeoscapeCraftReturnBaseY: 127 #124
+GeoscapeCraftTargetY: 158 #156
+GeoscapeCraftPatrolY: 173 #172
+GeoscapeCraftRightX: 164 #164
+
+# ItemArriving
+ItemArrivingListY: 45 #50
+ItemArrivingListH: 120 #112
+ItemArrivingBtnY: 167 #166
+
+# Funding
+FundingCountryY: 26 #30
+FundingFundingY: 26 #30
+FundingChangeY: 26 #30
+FundingListY: 37 #40
+FundingListW: 260 #260
+FundingListH: 140 #136
+
 # Inventory
 InvenTusX: 243 # 245
-InvenTusH: 10 # 9
 InvenWeightX: 243 # 245
-InvenWeightH: 10 # 9
 InvenFAccX: 243 # 245
 InvenFAccY: 34 # 32
-InvenFAccH: 10 # 9
 InvenReactX: 243 # 245
 InvenReactY: 44 # 40
-InvenReactH: 10 # 9
 InvenPSkillX: 243 # 245
 InvenPSkillY: 54 # 48
-InvenPSkillH: 10 # 9
 InvenPStrX: 243 # 245
 InvenPStrY: 64 # 56
-InvenPStrH: 10 # 9
 InvenAmmoX: 280 # 254
 InvenAmmoY: 64 # 64
 InvenAmmoW: 40 # 66
 InvenAmmoH: 20 # 24
 InvenItemY: 140 # 140
-InvenItemH: 10 # 9
+
+# Basescape
+BaseLocationY: 16 # 16
+BaseFundsY: 26 # 24
+
+# PlaceFacility
+PlaceFacilityCostY: 72 #70
+PlaceFacilityTimeY: 100 #98
+PlaceFacilityMaintenanceY: 128 #126
+
+# Solders
+SoldersNameY: 30 #32
+SoldersRankY: 30 #32
+SoldersCraftY: 30 #32
+SoldersSoldersH: 130 #128
+
+# Memorial
+MemorialSoldiersY: 46 # 44
+
+# SoldierInfo
+SoldierInfoCraftY: 58 #56
+SoldierInfoRecoveryY: 58 #56
+SoldierInfoPsionicY: 68 #66
+
+# CraftSoldiers
+CraftSoldiersNameY: 34 #32
+CraftSoldiersRankY: 34 #32
+CraftSoldiersCraftY: 34 #32
+CraftSoldiersListY: 44 #40
+CraftSoldiersListH: 130 #128
+
+# CraftInfo
+CraftInfoDamageH: 20 #17
+CraftInfoFuelH: 20 #17
+CraftInfoW1AmmoY: 63 #64
+CraftInfoW1AmmoH: 30 #24
+CraftInfoW1AmmoY: 63 #64
+CraftInfoW2AmmoH: 30 #16
+
+# Stores
+StoreItemY: 30 # 32
+StoreQantityY: 30 # 32
+StoreSpaceUsedY: 30 # 32
+StoreStoresH: 130 # 128
+
+# MonthlyCosts
+MonthlyCoststQuantityH: 10 # 9
+MonthlyCoststRentalY: 46 # 48
+MonthlyCostslRentalY: 56 # 56
+MonthlyCostslRentalH: 30 # 24
+MonthlyCoststSalariesY: 88 # 80
+MonthlyCostslSalariesY: 98 # 88
+MonthlyCostslSalariesH: 30 # 30
+MonthlyCostsMaintenanceY: 130 # 120
+MonthlyCostsIncomingY: 144 # 136
+MonthlyCostsTotalY: 144 # 136
+
+# Manufacture
+ManufactureEngineersY: 45 # 44
+ManufactureProducedY: 45 # 44
+ManufactureCostY: 45 # 44
+ManufactureTimeLeftY: 45 # 44
+ManufactureListY: 70 #80
+ManufactureListH: 100 #90
+
+# NewManufacture
+NewManufactureListY: 72 #70
+
+# ManufactureInfo
+ManufactureInfoEngineerUpY: 112 #113
+ManufactureInfoEngineerDownY: 132 #133
+ManufactureInfoUnitUpY: 112 #113
+ManufactureInfoUnitDownY: 132 #133
+
+# ManufactureStart
+ManufactureStartItemNameY: 94 #92
+ManufactureStartUnitRequiredY: 94 #92
+ManufactureStartUnitAvailableY: 94 #92
+ManufactureStartRequiredItemsY: 110 #108
+
+# Research
+ResearchListY: 60 #62
+ResearchListH: 110 #112
+
+# NewResearch
+NewResearchListY: 53 #54
+NewResearchListH: 90 #88
+
+# Purchase
+PurchaseItemsH: 120 #112
+
+# Sell
+SellItemsH: 120 #112
+
+# UfopaediaSelect
+UfopaediaSelectListH: 110 #104
+
+# ArticleBaseFacility
+ArticleBaseFacilityListY: 40 #42
+ArticleBaseFacilityListH: 50 #42
+
+# ArticleVehicle
+ArticleVehicleListX: 7 #10
+ArticleVehicleListY: 45 #48
+ArticleVehicleListW: 290 #300
+ArticleVehicleListH: 90 #89
+ArticleVehicleInfoX: 7 #10
+ArticleVehicleInfoY: 138 #122
+ArticleVehicleInfoW: 300 #300
+ArticleVehicleInfoH: 50 #150
+
+# Debriefing
+DebriefingStatsY: 34 #32
+DebriefingRatingY: 181 #180
+

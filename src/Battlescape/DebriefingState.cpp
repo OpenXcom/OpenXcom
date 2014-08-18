@@ -86,14 +86,14 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
 	_txtTitle = new Text(300, 17, 16, 8);
-	_txtItem = new Text(180, 9, 16, 24);
-	_txtQuantity = new Text(60, 9, 200, 24);
-	_txtScore = new Text(55, 9, 270, 24);
-	_txtRecovery = new Text(180, 9, 16, 60);
-	_txtRating = new Text(200, 9, 64, 180);
-	_lstStats = new TextList(290, 80, 16, 32);
+	_txtItem = new Text(180, tr(9,"TextSmallH"), 16, 24);
+	_txtQuantity = new Text(60, tr(9,"TextSmallH"), 200, 24);
+	_txtScore = new Text(55, tr(9,"TextSmallH"), 270, 24);
+	_txtRecovery = new Text(180, tr(9,"TextSmallH"), 16, 60);
+	_txtRating = new Text(200, tr(9,"TextSmallH"), 64, tr(180,"DebriefingRatingY"));
+	_lstStats = new TextList(290, 80, 16, tr(32,"DebriefingStatsY"));
 	_lstRecovery = new TextList(290, 80, 16, 32);
-	_lstTotal = new TextList(290, 9, 16, 12);
+	_lstTotal = new TextList(290, tr(9,"TextSmallH"), 16, 12);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
@@ -169,12 +169,12 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		if ((*i)->recovery)
 		{
 			_lstRecovery->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
-			recoveryY += 8;
+			recoveryY += tr(8,"TextSmallH");
 		}
 		else
 		{
 			_lstStats->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
-			statsY += 8;
+			statsY += tr(8,"TextSmallH");
 		}
 	}
 	std::wostringstream ss3;
@@ -194,7 +194,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	if (recoveryY > 0)
 	{
 		_txtRecovery->setY(_lstStats->getY() + statsY + 5);
-		_lstRecovery->setY(_txtRecovery->getY() + 8);
+		_lstRecovery->setY(_txtRecovery->getY() + tr(8,"TextSmallH"));
 		_lstTotal->setY(_lstRecovery->getY() + recoveryY + 5);
 	}
 	else

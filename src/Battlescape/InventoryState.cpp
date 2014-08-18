@@ -83,13 +83,13 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(210, 17, 28, 6);
-	_txtTus = new Text(40, tr(9, "InvenTusH"), tr(245, "InvenTusX"), tr(24, "InvenTusY"));
-	_txtWeight = new Text(70, tr(9, "InvenWeightH"), tr(245, "InvenWeightX"), tr(24, "InvenWeightY"));
-	_txtFAcc = new Text(40, tr(9, "InvenFAccY"), tr(245, "InvenFAccX"), tr(32, "InvenFAccY"));
-	_txtReact = new Text(40, tr(9, "InvenReactH"), tr(245, "InvenReactX"), tr(40, "InvenReactY"));
-	_txtPSkill = new Text(40, tr(9, "InvenPSkillH"), tr(245, "InvenPSkillX"), tr(48, "InvenPSkillY"));
-	_txtPStr = new Text(40, tr(9, "InvenPStrH"), tr(245, "InvenPStrX"), tr(56, "InvenPStrY"));
-	_txtItem = new Text(160, tr(9, "InvenItemH"), 128, tr(140, "InvenItemY"));
+	_txtTus = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenTusX"), tr(24, "InvenTusY"));
+	_txtWeight = new Text(70, tr(9,"TextSmallH"), tr(245, "InvenWeightX"), tr(24, "InvenWeightY"));
+	_txtFAcc = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenFAccX"), tr(32, "InvenFAccY"));
+	_txtReact = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenReactX"), tr(40, "InvenReactY"));
+	_txtPSkill = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenPSkillX"), tr(48, "InvenPSkillY"));
+	_txtPStr = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenPStrX"), tr(56, "InvenPStrY"));
+	_txtItem = new Text(160, tr(9,"TextSmallH"), 128, tr(140, "InvenItemY"));
 	_txtAmmo = new Text(tr(66, "InvenAmmoW"), tr(24, "InvenAmmoH"), tr(254, "InvenAmmoX"), tr(64, "InvenAmmoY"));
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
@@ -130,7 +130,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView)
 	{
-		_txtTus->setY(_txtTus->getY() + tr(8, "InvenWeightH"));
+		_txtTus->setY(_txtTus->getY() + tr(8,"TextSmallH"));
 	}
 
 	centerAllSurfaces();

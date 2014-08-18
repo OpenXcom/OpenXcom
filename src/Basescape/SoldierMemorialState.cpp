@@ -49,12 +49,12 @@ SoldierMemorialState::SoldierMemorialState()
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtName = new Text(114, 9, 16, 36);
-	_txtRank = new Text(102, 9, 130, 36);
-	_txtDate = new Text(90, 9, 218, 36);
-	_txtRecruited = new Text(150, 9, 16, 24);
-	_txtLost = new Text(150, 9, 160, 24);
-	_lstSoldiers = new TextList(288, 120, 8, 44);
+	_txtName = new Text(114, tr(9,"TextSmallH"), 16, 36);
+	_txtRank = new Text(102, tr(9,"TextSmallH"), 130, 36);
+	_txtDate = new Text(90, tr(9,"TextSmallH"), 218, 36);
+	_txtRecruited = new Text(150, tr(9,"TextSmallH"), 16, 24);
+	_txtLost = new Text(150, tr(9,"TextSmallH"), 160, 24);
+	_lstSoldiers = new TextList(288, 120, 8, tr(44,"MemorialSoldiersY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 7);

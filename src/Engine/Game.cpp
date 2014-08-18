@@ -39,7 +39,7 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "../Menu/TestState.h"
-#include "../Resource//XcomResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 namespace OpenXcom
 {

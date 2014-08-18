@@ -47,10 +47,10 @@ StoresState::StoresState(Base *base) : _base(base)
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(300, 16, 10, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtItem = new Text(142, 9, 10, 32);
-	_txtQuantity = new Text(88, 9, 152, 32);
-	_txtSpaceUsed = new Text(74, 9, 240, 32);
-	_lstStores = new TextList(288, 128, 8, 40);
+	_txtItem = new Text(142, tr(9,"TextSmallH"), 10, tr(32,"StoreItemY"));
+	_txtQuantity = new Text(88, tr(9,"TextSmallH"), 152, tr(32,"StoreQantityY"));
+	_txtSpaceUsed = new Text(74, tr(9,"TextSmallH"), 240, tr(32,"StoreQantityY"));
+	_lstStores = new TextList(288, tr(128,"StoreStoresH"), 8, tr(40,"StoreStoresY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 0);

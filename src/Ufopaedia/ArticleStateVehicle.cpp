@@ -45,8 +45,8 @@ namespace OpenXcom
 
 		// add screen elements
 		_txtTitle = new Text(310, 17, 5, 23);
-		_txtInfo = new Text(300, 150, 10, 122);
-		_lstStats = new TextList(300, 89, 10, 48);
+		_txtInfo = new Text(tr(300,"ArticleVehicleInfoW"), tr(150,"ArticleVehicleInfoH"), tr(10,"ArticleVehicleInfoX"), tr(122,"ArticleVehicleInfoY"));
+		_lstStats = new TextList(tr(300,"ArticleVehicleListW"), tr(89,"ArticleVehicleListH"), tr(10,"ArticleVehicleListX"), tr(48,"ArticleVehicleListY"));
 
 		// Set palette
 		setPalette("PAL_UFOPAEDIA");
@@ -120,7 +120,7 @@ namespace OpenXcom
 			ss9 << ammo->getClipSize();
 			_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
 			
-			_txtInfo->setY(138);
+			_txtInfo->setY(tr(138,"ArticleVehicleInfoY"));
 		}
 		else
 		{

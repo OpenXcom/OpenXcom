@@ -115,7 +115,7 @@ namespace OpenXcom
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(tr(defs->text));
 
-		_lstInfo = new TextList(200, 42, 10, 42);
+		_lstInfo = new TextList(200, tr(42,"ArticleBaseFacilityListH"), 10, tr(42,"ArticleBaseFacilityListY"));
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(13)+10);

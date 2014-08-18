@@ -46,11 +46,11 @@ FundingState::FundingState()
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(320, 17, 0, 8);
-	_txtCountry = new Text(100, 9, 32, 30);
-	_txtFunding = new Text(100, 9, 140, 30);
-	_txtChange = new Text(72, 9, 240, 30);
-	_lstCountries = new TextList(260, 136, 32, 40);
-
+	_txtCountry = new Text(100, 9, 32, tr(30,"FundingCountryY"));
+	_txtFunding = new Text(100, 9, 140, tr(30,"FundingFundingY"));
+	_txtChange = new Text(72, 9, 240, tr(30,"FundingChangeY"));
+	_lstCountries = new TextList(tr(260,"FundingListW"), tr(136,"FundingListH"), 32, tr(40,"FundingListY"));
+		
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
 
