@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BattlescapeButton::BattlescapeButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _inverted(false), _toggleMode(INVERT_NONE), _tftdMode(false), _altSurface(0)
+BattlescapeButton::BattlescapeButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _inverted(false), _tftdMode(false), _toggleMode(INVERT_NONE), _altSurface(0)
 {
 }
 
