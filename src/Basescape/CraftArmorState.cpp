@@ -168,7 +168,7 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 		{
 			_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
 		}
-		else
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
 			SavedGame *save;
 			save = _game->getSavedGame();
