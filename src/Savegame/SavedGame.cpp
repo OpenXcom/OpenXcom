@@ -402,13 +402,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::const_iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
-	{
-		Base *b = new Base(rule);
-		b->load(*i, this, false);
-		_bases.push_back(b);
-	}
-
+	// Discovered Techs Should be loaded before Bases (e.g. for PSI evaluation)
 	for(YAML::const_iterator it = doc["discovered"].begin(); it != doc["discovered"].end(); ++it)
 	{
 		std::string research = it->as<std::string>();
@@ -416,6 +410,13 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		{
 			_discovered.push_back(rule->getResearch(research));
 		}
+	}
+
+	for (YAML::const_iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
+	{
+		Base *b = new Base(rule);
+		b->load(*i, this, false);
+		_bases.push_back(b);
 	}
 	
 	const YAML::Node &research = doc["poppedResearch"];
