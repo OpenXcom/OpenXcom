@@ -43,7 +43,7 @@ namespace OpenXcom
 Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
-  , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
+  , _inBattlescape(false), _shotDownByCraft(NULL), _mission(0), _trajectory(0)
   , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
 {
 }
@@ -536,14 +536,14 @@ const std::string &Ufo::getAlienRace() const
 	return _mission->getRace();
 }
 
-void Ufo::setShotDownByCraftId(const int id)
+void Ufo::setShotDownByCraft(Craft *craft)
 {
-	_shotDownByCraftId = id;
+	_shotDownByCraft = craft;
 }
 
-int Ufo::getShotDownByCraftId() const
+Craft *Ufo::getShotDownByCraft() const
 {
-	return _shotDownByCraftId;
+	return _shotDownByCraft;
 }
 
 /**

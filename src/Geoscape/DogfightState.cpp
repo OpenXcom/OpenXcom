@@ -829,7 +829,7 @@ void DogfightState::move()
 						_ufo->setDamage(_ufo->getDamage() + damage);
 						if(_ufo->isCrashed())
 						{
-							_ufo->setShotDownByCraftId(_craft->getId());
+							_ufo->setShotDownByCraft(_craft);
 							_ufoBreakingOff = false;
 							_ufo->setSpeed(0);
 						}
@@ -1047,7 +1047,7 @@ void DogfightState::move()
 		_ufoEscapeTimer->stop();
 		if (_ufo->isDestroyed())
 		{
-			if(_ufo->getShotDownByCraftId() == _craft->getId())
+			if(_ufo->getShotDownByCraft() == _craft)
 			{
 				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
@@ -1072,7 +1072,7 @@ void DogfightState::move()
 		}
 		else
 		{
-			if(_ufo->getShotDownByCraftId() == _craft->getId())
+			if(_ufo->getShotDownByCraft() == _craft)
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
 				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
@@ -1109,7 +1109,7 @@ void DogfightState::move()
 			}
 		}
 		_timeout += 30;
-		if(_ufo->getShotDownByCraftId() != _craft->getId())
+		if(_ufo->getShotDownByCraft() != _craft)
 		{
 			_timeout += 50;
 			_ufo->setHitFrame(3);
