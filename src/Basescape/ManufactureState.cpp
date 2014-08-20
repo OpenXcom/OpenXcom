@@ -52,16 +52,16 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	_btnNew = new TextButton(148, 16, 8, 176);
 	_btnOk = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtAvailable = new Text(150, 9, 8, 24);
-	_txtAllocated = new Text(150, 9, 160, 24);
-	_txtSpace = new Text(150, 9, 8, 34);
-	_txtFunds = new Text(150, 9, 160, 34);
-	_txtItem = new Text(80, 9, 10, 52);
-	_txtEngineers = new Text(56, 18, 112, 44);
-	_txtProduced = new Text(56, 18, 168, 44);
-	_txtCost = new Text(44, 27, 222, 44);
-	_txtTimeLeft = new Text(60, 27, 260, 44);
-	_lstManufacture = new TextList(288, 90, 8, 80);
+	_txtAvailable = new Text(150, tr(9,"TextSmallH"), 8, 24);
+	_txtAllocated = new Text(150, tr(9,"TextSmallH"), 160, 24);
+	_txtSpace = new Text(150, tr(9,"TextSmallH"), 8, 34);
+	_txtFunds = new Text(150, tr(9,"TextSmallH"), 160, 34);
+	_txtItem = new Text(80, tr(9,"TextSmallH"), 10, 52);
+	_txtEngineers = new Text(56, tr(9,"TextSmallH")*2, 112, tr(44,"ManufactureEngineersY"));
+	_txtProduced = new Text(56, tr(9,"TextSmallH")*2, 168, tr(44,"ManufactureProducedY"));
+	_txtCost = new Text(44, tr(9,"TextSmallH")*3, 222, tr(44,"ManufactureCostY"));
+	_txtTimeLeft = new Text(60, tr(9,"TextSmallH")*3, 260, tr(44,"ManufactureTimeLeftY"));
+	_lstManufacture = new TextList(288, tr(90,"ManufactureListH"), 8, tr(80,"ManufactureListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);
@@ -194,16 +194,16 @@ void ManufactureState::fillProductionList()
 		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
 		std::wostringstream s2;
-		if ((*iter)->getSellItems()) s2 << "$";
-		s2 << (*iter)->getAmountProduced() << "/";
-		if ((*iter)->getInfiniteAmount()) s2 << Language::utf8ToWstr("∞");
+		if ((*iter)->getSellItems()) s2 << L'$';
+		s2 << (*iter)->getAmountProduced() << L'/';
+		if ((*iter)->getInfiniteAmount()) s2 << L'\u221E'; /* Language::utf8ToWstr("∞"); */
 		else s2 << (*iter)->getAmountTotal();
 		std::wostringstream s3;
 		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wostringstream s4;
 		if ((*iter)->getInfiniteAmount())
 		{
-			s4 << Language::utf8ToWstr("∞");
+			s4 << L'\u221E'; /* Language::utf8ToWstr("∞"); */
 		}
 		else if ((*iter)->getAssignedEngineers() > 0)
 		{
@@ -217,12 +217,12 @@ void ManufactureState::fillProductionList()
 			int hoursLeft = (timeLeft + numEffectiveEngineers - 1) / numEffectiveEngineers;
 			int daysLeft = hoursLeft / 24;
 			int hours = hoursLeft % 24;
-			s4 << daysLeft << "/" << hours;
+			s4 << daysLeft << L'/' << hours;
 		}
 		else
 		{
 
-			s4 << L"-";
+			s4 << L'-';
 		}
 		_lstManufacture->addRow(5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}

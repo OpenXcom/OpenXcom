@@ -45,10 +45,10 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(220, 32, 50, 8);
-	_txtItem = new Text(142, 9, 10, 50);
-	_txtQuantity = new Text(88, 9, 152, 50);
-	_txtCraft = new Text(74, 9, 218, 50);
-	_lstItems = new TextList(288, 112, 8, 58);
+	_txtItem = new Text(142, tr(9,"TextSmallH"), 10, 50);
+	_txtQuantity = new Text(88, tr(9,"TextSmallH"), 152, 50);
+	_txtCraft = new Text(74, tr(9,"TextSmallH"), 218, 50);
+	_lstItems = new TextList(288, tr(112,"CannotReequipListH"), 8, tr(58,"CannotReequipListY"));
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);

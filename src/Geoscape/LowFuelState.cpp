@@ -47,7 +47,7 @@ LowFuelState::LowFuelState(Craft *craft, GeoscapeState *state) : _craft(craft), 
 	_btnOk = new TextButton(90, 18, 30, 120);
 	_btnOk5Secs = new TextButton(90, 18, 136, 120);
 	_txtTitle = new Text(214, 17, 21, 60);
-	_txtMessage = new Text(214, 17, 21, 90);
+	_txtMessage = new Text(214, tr(17,"LowFuelMsgH"), 21, tr(90,"LowFuelMsgY"));
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);

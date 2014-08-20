@@ -62,11 +62,11 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtItem = new Text(130, 9, 10, 24);
-	_txtQuantity = new Text(50, 9, 150, 24);
-	_txtAmountTransfer = new Text(60, 17, 200, 24);
-	_txtAmountDestination = new Text(60, 17, 260, 24);
-	_lstItems = new TextList(287, 120, 8, 44);
+	_txtItem = new Text(130, tr(9,"TextSmallH"), 10, 24);
+	_txtQuantity = new Text(50, tr(9, "TextSmallH"), 150, 24);
+	_txtAmountTransfer = new Text(60, tr(9, "TextSmallH")*2, 200, 24);
+	_txtAmountDestination = new Text(60, tr(9, "TextSmallH")*2, 260, 24);
+	_lstItems = new TextList(287, tr(120,"TransferItemsListH"), 8, 44);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 0);

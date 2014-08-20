@@ -73,7 +73,7 @@ namespace OpenXcom
 		_game->getResourcePack()->getSurface(look)->blit(_image);
 
 
-		_lstInfo = new TextList(150, 96, 150, 46);
+		_lstInfo = new TextList(150, tr(96,"ArticleArmorListH"), 150, 46);
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(14)+15);

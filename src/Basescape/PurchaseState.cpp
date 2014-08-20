@@ -61,13 +61,13 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _crafts(), _items(), _qt
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtFunds = new Text(150, 9, 10, 24);
-	_txtPurchases = new Text(150, 9, 160, 24);
-	_txtSpaceUsed = new Text(150, 9, 160, 34);
-	_txtItem = new Text(140, 9, 10, Options::storageLimitsEnforced? 44:33);
-	_txtCost = new Text(102, 9, 152, Options::storageLimitsEnforced? 44:33);
-	_txtQuantity = new Text(60, 9, 256, Options::storageLimitsEnforced? 44:33);
-	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44);
+	_txtFunds = new Text(150, tr(9,"TextSmallH"), 10, 24);
+	_txtPurchases = new Text(150, tr(9,"TextSmallH"), 160, 24);
+	_txtSpaceUsed = new Text(150, tr(9,"TextSmallH"), 160, 34);
+	_txtItem = new Text(140, tr(9,"TextSmallH"), 10, Options::storageLimitsEnforced? 44:34);
+	_txtCost = new Text(102, tr(9,"TextSmallH"), 152, Options::storageLimitsEnforced? 44:34);
+	_txtQuantity = new Text(60, tr(9,"TextSmallH"), 256, Options::storageLimitsEnforced? 44:34);
+	_lstItems = new TextList(287, Options::storageLimitsEnforced? tr(112,"PurchaseItemsH"):120, 8, Options::storageLimitsEnforced? 54:44);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 0);

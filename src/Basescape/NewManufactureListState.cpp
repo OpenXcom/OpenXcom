@@ -51,9 +51,9 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 	_window = new Window(this, 320, 156, 0, 22, POPUP_BOTH);
 	_btnOk = new TextButton(304, 16, 8, 154);
 	_txtTitle = new Text(320, 17, 0, 30);
-	_txtItem = new Text(156, 9, 10, 62);
-	_txtCategory = new Text(130, 9, 166, 62);
-	_lstManufacture = new TextList(288, 80, 8, 70);
+	_txtItem = new Text(156, tr(9,"TextSmallH"), 10, 62);
+	_txtCategory = new Text(130, tr(9,"TextSmallH"), 166, 62);
+	_lstManufacture = new TextList(288, 80, 8, tr(70,"NewManufactureListY"));
 	_cbxCategory = new ComboBox(this, 146, 16, 166, 46);
 
 	// Set palette

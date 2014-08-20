@@ -47,6 +47,8 @@ public:
 	bool isImageFile(std::string extension);
 	/// Loads a specified music file.
 	Music *loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat);
+	/// Loads localized Font.dat
+	void loadFonts(const std::string& langid);
 };
 
 }

@@ -51,13 +51,13 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_window = new Window(this, 128, 160, 192, 40);
 	_view = new BaseView(192, 192, 0, 8);
 	_btnCancel = new TextButton(112, 16, 200, 176);
-	_txtFacility = new Text(110, 9, 202, 50);
-	_txtCost = new Text(110, 9, 202, 62);
-	_numCost = new Text(110, 17, 202, 70);
-	_txtTime = new Text(110, 9, 202, 90);
-	_numTime = new Text(110, 17, 202, 98);
-	_txtMaintenance = new Text(110, 9, 202, 118);
-	_numMaintenance = new Text(110, 17, 202, 126);
+	_txtFacility = new Text(110, tr(9,"TextSmallH"), 202, 50);
+	_txtCost = new Text(110, tr(9,"TextSmallH"), 202, 62);
+	_numCost = new Text(110, 17, 202, tr(70,"PlaceFacilityCostY"));
+	_txtTime = new Text(110, tr(9,"TextSmallH"), 202, 90);
+	_numTime = new Text(110, 17, 202, tr(98,"PlaceFacilityTimeY"));
+	_txtMaintenance = new Text(110, tr(9,"TextSmallH"), 202, 118);
+	_numMaintenance = new Text(110, 17, 202, tr(126,"PlaceFacilityMaintenanceY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);

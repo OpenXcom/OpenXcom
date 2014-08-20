@@ -104,6 +104,8 @@ public:
 	virtual void resize(int &dX, int &dY);
 	/// Re-orients all the surfaces in the state.
 	virtual void recenter(int dX, int dY);
+	/// Get the localized window value.
+	int tr(int value, const std::string& id) const;
 };
 
 }

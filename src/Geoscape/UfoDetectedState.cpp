@@ -69,14 +69,14 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	{
 		_window = new Window(this, 224, 128, 16, 44, POPUP_BOTH);
 	}
-	_btnIntercept = new TextButton(200, 12, 28, 118);
-	_btnCentre = new TextButton(200, 12, 28, 134);
-	_btnCancel = new TextButton(200, 12, 28, 150);
+	_btnIntercept = new TextButton(200, 12, 28, tr(118, "UfoDetectedInterceptY"));
+	_btnCentre = new TextButton(200, 12, 28, tr(134, "UfoDetectedCentreY"));
+	_btnCancel = new TextButton(200, 12, 28, tr(150, "UfoDetectedCancelY"));
 	_txtUfo = new Text(207, 17, 28, 53);
 	_txtDetected = new Text(100, 9, 28, 69);
 	_txtHyperwave = new Text(214, 17, 21, 44);
-	_lstInfo = new TextList(207, 32, 28, 80);
-	_lstInfo2 = new TextList(207, 32, 28, 96);
+	_lstInfo = new TextList(207, tr(32, "UfoDetectedInfoH"), 28, 80);
+	_lstInfo2 = new TextList(207, tr(32, "UfoDetectedInfo2H"), 28, 96);
 
 	if (hyperwave)
 	{

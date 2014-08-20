@@ -1528,7 +1528,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 			_save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
 				// don't count people who were already grenaded this turn
-			if ((*i)->getTile()->getDangerous() ||
+			if (((*i)->getTile() && (*i)->getTile()->getDangerous()) ||
 				// don't count units we don't know about
 				((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsSinceSpotted() > _intelligence))
 				continue;

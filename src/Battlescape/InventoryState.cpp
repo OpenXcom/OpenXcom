@@ -84,14 +84,16 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(210, 17, 28, 6);
-	_txtTus = new Text(40, 9, 245, 24);
-	_txtWeight = new Text(70, 9, 245, 24);
-	_txtFAcc = new Text(40, 9, 245, 32);
-	_txtReact = new Text(40, 9, 245, 40);
-	_txtPSkill = new Text(40, 9, 245, 48);
-	_txtPStr = new Text(40, 9, 245, 56);
-	_txtItem = new Text(160, 9, 128, 140);
-	_txtAmmo = new Text(66, 24, 254, 64);
+
+	_txtTus = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenTusX"), tr(24, "InvenTusY"));
+	_txtWeight = new Text(70, tr(9,"TextSmallH"), tr(245, "InvenWeightX"), tr(24, "InvenWeightY"));
+	_txtFAcc = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenFAccX"), tr(32, "InvenFAccY"));
+	_txtReact = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenReactX"), tr(40, "InvenReactY"));
+	_txtPSkill = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenPSkillX"), tr(48, "InvenPSkillY"));
+	_txtPStr = new Text(40, tr(9,"TextSmallH"), tr(245, "InvenPStrX"), tr(56, "InvenPStrY"));
+	_txtItem = new Text(160, tr(9,"TextSmallH"), 128, tr(140, "InvenItemY"));
+	_txtAmmo = new Text(tr(66, "InvenAmmoW"), tr(24, "InvenAmmoH"), tr(254, "InvenAmmoX"), tr(64, "InvenAmmoY"));
+
 	_btnOk = new BattlescapeButton(35, 22, 237, 1);
 	_btnPrev = new BattlescapeButton(23, 22, 273, 1);
 	_btnNext = new BattlescapeButton(23, 22, 297, 1);
@@ -135,7 +137,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView)
 	{
-		_txtTus->setY(_txtTus->getY() + 8);
+		_txtTus->setY(_txtTus->getY() + tr(8,"TextSmallH"));
 	}
 
 	centerAllSurfaces();

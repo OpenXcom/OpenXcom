@@ -53,25 +53,25 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 
 	// Create objects
 	_window = new Window(this, 240, 184, 8, 8, POPUP_BOTH);
-	_btnBase = new TextButton(192, 12, 32, 124);
-	_btnTarget = new TextButton(192, 12, 32, 140);
-	_btnPatrol = new TextButton(192, 12, 32, 156);
+	_btnBase = new TextButton(192, 12, 32, tr(124,"GeoscapeCraftReturnBaseY"));
+	_btnTarget = new TextButton(192, 12, 32, tr(140,"GeoscapeCraftTargetY"));
+	_btnPatrol = new TextButton(192, 12, 32, tr(156,"GeoscapeCraftPatrolY"));
 	_btnCancel = new TextButton(192, 12, 32, 172);
-	_txtTitle = new Text(210, 17, 32, 20);
-	_txtStatus = new Text(210, 17, 32, 36);
-	_txtBase = new Text(210, 9, 32, 52);
-	_txtSpeed = new Text(210, 9, 32, 60);
-	_txtMaxSpeed = new Text(210, 9, 32, 68);
-	_txtAltitude = new Text(210, 9, 32, 76);
-	_txtFuel = new Text(130, 9, 32, 84);
-	_txtDamage = new Text(80, 9, 164, 84);
-	_txtW1Name = new Text(130, 9, 32, 92);
-	_txtW1Ammo = new Text(80, 9, 164, 92);
-	_txtW2Name = new Text(130, 9, 32, 100);
-	_txtW2Ammo = new Text(80, 9, 164, 100);
-	_txtRedirect = new Text(230, 17, 13, 108);
-	_txtSoldier = new Text(60, 9, 164, 68);
-	_txtHWP = new Text(80, 9, 164, 76);
+	_txtTitle = new Text(210, 17, 32, tr(20,"GeoscapeCraftTitleY"));
+	_txtStatus = new Text(210, 17, 32, tr(36,"GeoscapeCraftStatusY"));
+	_txtBase = new Text(210, 9, 32, tr(52,"GeoscapeCraftBaseY"));
+	_txtSpeed = new Text(210, 9, 32, tr(60,"GeoscapeCraftSpeedY"));
+	_txtMaxSpeed = new Text(210, 9, 32, tr(68,"GeoscapeCraftMaxSpeedY"));
+	_txtAltitude = new Text(210, 9, 32, tr(76,"GeoscapeCraftAltitudeY"));
+	_txtFuel = new Text(130, 9, 32, tr(84,"GeoscapeCraftFuelY"));
+	_txtDamage = new Text(80, 9, tr(164,"GeoscapeCraftRightX"), tr(84,"GeoscapeCraftDamageY"));
+	_txtW1Name = new Text(130, 9, 32, tr(92,"GeoscapeCraftW1NameY"));
+	_txtW1Ammo = new Text(80, 9, tr(164,"GeoscapeCraftRightX"), tr(92,"GeoscapeCraftW1AmmoY"));
+	_txtW2Name = new Text(130, 9, 32, tr(100,"GeoscapeCraftW2NameY"));
+	_txtW2Ammo = new Text(80, 9, tr(164,"GeoscapeCraftRightX"), tr(100,"GeoscapeCraftW2AmmoY"));
+	_txtRedirect = new Text(230, 17, 13, tr(108,"GeoscapeCraftRedirectY"));
+	_txtSoldier = new Text(60, 9, tr(164,"GeoscapeCraftRightX"), tr(68,"GeoscapeCraftSoldierY"));
+	_txtHWP = new Text(80, 9, tr(164,"GeoscapeCraftRightX"), tr(76,"GeoscapeCraftHWPY"));
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);

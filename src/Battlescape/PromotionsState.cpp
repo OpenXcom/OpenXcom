@@ -44,10 +44,10 @@ PromotionsState::PromotionsState()
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 17, 10, 8);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(90, 9, 130, 32);
-	_txtBase = new Text(80, 9, 220, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtName = new Text(114, tr(9,"TextSmallH"), 16, 32);
+	_txtRank = new Text(90, tr(9,"TextSmallH"), 130, 32);
+	_txtBase = new Text(80, tr(9,"TextSmallH"), 220, 32);
+	_lstSoldiers = new TextList(288, tr(128,"PromotionsListH"), 8, tr(40, "PromotionsListY"));
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);

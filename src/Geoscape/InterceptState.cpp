@@ -55,11 +55,11 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 146);
 	_btnGotoBase = new TextButton(142, 16, 162, 146);
 	_txtTitle = new Text(300, 17, 10, 46);
-	_txtCraft = new Text(86, 9, 14, 70);
-	_txtStatus = new Text(70, 9, 100, 70);
-	_txtBase = new Text(80, 9, 170, 70);
-	_txtWeapons = new Text(80, 17, 238, 62);
-	_lstCrafts = new TextList(288, 64, 8, 78);
+	_txtCraft = new Text(86, tr(9,"TextSmallH"), 14, tr(70,"InterceptCraftY"));
+	_txtStatus = new Text(70, tr(9,"TextSmallH"), 100, tr(70,"InterceptStatusY"));
+	_txtBase = new Text(80, tr(9,"TextSmallH"), 170, tr(70,"InterceptBaseY"));
+	_txtWeapons = new Text(80, 17, 238, tr(62,"InterceptWeaponsY"));
+	_lstCrafts = new TextList(288, tr(64,"InterceptListH"), 8, tr(78,"InterceptListY"));
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);
