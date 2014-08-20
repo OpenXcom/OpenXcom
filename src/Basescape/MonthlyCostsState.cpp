@@ -46,16 +46,16 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(300, 20, 10, 170);
 	_txtTitle = new Text(310, 17, 5, 12);
-	_txtCost = new Text(80, 9, 115, 32);
-	_txtQuantity = new Text(55, 9, 195, 32);
-	_txtTotal = new Text(60, 9, 249, 32);
-	_txtRental = new Text(150, 9, 10, 48);
-	_txtSalaries = new Text(150, 9, 10, 80);
-	_txtIncome = new Text(150, 9, 10, 136);
-	_lstCrafts = new TextList(288, 24, 10, 56);
-	_lstSalaries = new TextList(300, 30, 10, 88);
-	_lstMaintenance = new TextList(300, 9, 10, 120);
-	_lstTotal = new TextList(100, 9, 205, 136);
+	_txtCost = new Text(80, tr(9,"TextSmallH"), 115, 32);
+	_txtQuantity = new Text(55, tr(9,"TextSmallH"), 195, 32);
+	_txtTotal = new Text(60, tr(9,"TextSmallH"), 249, 32);
+	_txtRental = new Text(150, tr(9,"TextSmallH"), 10, tr(48,"MonthlyCoststRentalY"));
+	_txtSalaries = new Text(150, tr(9,"TextSmallH"), 10, tr(80,"MonthlyCoststSalariesY"));
+	_txtIncome = new Text(150, tr(9,"TextSmallH"), 10, tr(136,"MonthlyCostsIncomingY"));
+	_lstCrafts = new TextList(288, tr(24,"MonthlyCostslRentalH"), 10, tr(56,"MonthlyCostslRentalY"));
+	_lstSalaries = new TextList(300, tr(30,"MonthlyCostslSalariesH"), 10, tr(88,"MonthlyCostslSalariesY"));
+	_lstMaintenance = new TextList(300, tr(9,"TextSmallH"), 10, tr(120,"MonthlyCostsMaintenanceY"));
+	_lstTotal = new TextList(100, tr(9,"TextSmallH"), 205, tr(136,"MonthlyCostsTotalY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);

@@ -80,12 +80,12 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_btnArmor = new TextButton(110, 14, 130, 33);
 	_edtSoldier = new TextEdit(this, 210, 16, 40, 9);
 	_btnSack = new TextButton(60, 14, 260, 33);
-	_txtRank = new Text(130, 9, 0, 48);
-	_txtMissions = new Text(100, 9, 130, 48);
-	_txtKills = new Text(100, 9, 230, 48);
-	_txtCraft = new Text(130, 9, 0, 56);
-	_txtRecovery = new Text(180, 9, 130, 56);
-	_txtPsionic = new Text(150, 9, 0, 66);
+	_txtRank = new Text(130, tr(9,"TextSmallH"), 0, 48);
+	_txtMissions = new Text(100, tr(9,"TextSmallH"), 130, 48);
+	_txtKills = new Text(100, tr(9,"TextSmallH"), 230, 48);
+	_txtCraft = new Text(130, tr(9,"TextSmallH"), 0, tr(56,"SoldierInfoCraftY"));
+	_txtRecovery = new Text(180, tr(9,"TextSmallH"), 130, tr(56,"SoldierInfoRecoveryY"));
+	_txtPsionic = new Text(150, tr(9,"TextSmallH"), 0, tr(66,"SoldierInfoPsionicY"));
 
 	int yPos = 80;
 	int step = 11;

@@ -1,7 +1,7 @@
 # Based on XcomUtil by Scott Jones and BladeFireLight
 # See http://ufopaedia.org/index.php?title=Statstrings
 # These are the default statStrings from XcomUtil.
-  statStrings:
+statStrings:
   - string: "x"
     psiStrength: [~, 30]
   - string: "P"

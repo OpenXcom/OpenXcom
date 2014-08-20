@@ -50,9 +50,9 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	// Create objects
 	_window = new Window(this, 192, 120, 64, 40, POPUP_BOTH);
 	_btnCancel = new TextButton(140, 16, 90, 136);
-	_txtTitle = new Text(182, 16, 69, 48);
-	_txtType = new Text(90, 9, 80, 72);
-	_txtQuantity = new Text(70, 9, 177, 72);
+	_txtTitle = new Text(182, tr(16,"SoldierArmorTitleH"), 69, 48);
+	_txtType = new Text(90, tr(9,"TextSmallH"), 80, 72);
+	_txtQuantity = new Text(70, tr(9,"TextSmallH"), 177, 72);
 	_lstArmor = new TextList(160, 40, 73, 88);
 
 	// Set palette

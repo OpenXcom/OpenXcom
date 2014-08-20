@@ -49,15 +49,15 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_window = new Window(this, 320, 160, 0, 20);
 	_btnCancel = new TextButton(136, 16, 16, 155);
 	_txtTitle = new Text(320, 17, 0, 30);
-	_txtManHour = new Text(290, 9, 16, 50);
-	_txtCost = new Text(290, 9, 16, 60);
-	_txtWorkSpace = new Text(290, 9, 16, 70);
+	_txtManHour = new Text(290, tr(9,"TextSmallH"), 16, 50);
+	_txtCost = new Text(290, tr(9,"TextSmallH"), 16, 60);
+	_txtWorkSpace = new Text(290, tr(9,"TextSmallH"), 16, 70);
 
-	_txtRequiredItemsTitle = new Text(290, 9, 16, 84);
-	_txtItemNameColumn = new Text(60, 16, 30, 92);
-	_txtUnitRequiredColumn = new Text(60, 16, 155, 92);
-	_txtUnitAvailableColumn = new Text(60, 16, 230, 92);
-	_lstRequiredItems = new TextList(270, 40, 30, 108);
+	_txtRequiredItemsTitle = new Text(290, tr(9,"TextSmallH"), 16, 84);
+	_txtItemNameColumn = new Text(60, 16, 30, tr(92,"ManufactureStartItemNameY"));
+	_txtUnitRequiredColumn = new Text(60, 16, 155, tr(92,"ManufactureStartUnitRequiredY"));
+	_txtUnitAvailableColumn = new Text(60, 16, 230, tr(92,"ManufactureStartUnitAvailableY"));
+	_lstRequiredItems = new TextList(270, 40, 30, tr(108,"ManufactureStartRequiredItemsY"));
 
 	_btnStart = new TextButton(136, 16, 168, 155);
 

@@ -71,12 +71,12 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_btnClear = new TextButton(148, 16, 8, 176);
 	_btnInventory = new TextButton(148, 16, 8, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
-	_txtItem = new Text(144, 9, 16, 32);
-	_txtStores = new Text(150, 9, 160, 32);
-	_txtAvailable = new Text(110, 9, 16, 24);
-	_txtUsed = new Text(110, 9, 130, 24);
-	_txtCrew = new Text(71, 9, 244, 24);
-	_lstEquipment = new TextList(288, 128, 8, 40);
+	_txtItem = new Text(144, tr(9,"TextSmallH"), 16, tr(32,"CraftEquipmentItemY"));
+	_txtStores = new Text(150, tr(9,"TextSmallH"), 160, tr(32,"CraftEquipmentStoresY"));
+	_txtAvailable = new Text(110, tr(9,"TextSmallH"), 16, 24);
+	_txtUsed = new Text(110, tr(9,"TextSmallH"), 130, 24);
+	_txtCrew = new Text(71, tr(9,"TextSmallH"), 244, 24);
+	_lstEquipment = new TextList(288, tr(128,"CraftEquipmentListH"), 8, tr(40,"CraftEquipmentListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 2);

@@ -49,8 +49,8 @@ DismantleFacilityState::DismantleFacilityState(Base *base, BaseView *view, BaseF
 	_window = new Window(this, 152, 80, 20, 60);
 	_btnOk = new TextButton(44, 16, 36, 115);
 	_btnCancel = new TextButton(44, 16, 112, 115);
-	_txtTitle = new Text(142, 9, 25, 75);
-	_txtFacility = new Text(142, 9, 25, 85);
+	_txtTitle = new Text(142, tr(9,"TextSmallH"), 25, 75);
+	_txtFacility = new Text(142, tr(9,"TextSmallH"), 25, tr(85,"DismantleFacilityFacilityY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 6);

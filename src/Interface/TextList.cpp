@@ -842,11 +842,9 @@ void TextList::updateArrows()
  */
 void TextList::updateVisible()
 {
-	_visibleRows = 0;
-	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
-	{
-		_visibleRows++;
-	}
+	// count only whole line visible
+	_visibleRows = getHeight() / (_font->getHeight() + _font->getSpacing());
+
 	updateArrows();
 }
 

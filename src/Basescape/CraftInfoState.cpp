@@ -67,12 +67,12 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_btnEquip = new TextButton(64, 16, 14, 120);
 	_btnArmor = new TextButton(64, 16, 14, 144);
 	_edtCraft = new TextEdit(this, 140, 16, 80, 8);
-	_txtDamage = new Text(100, 17, 14, 24);
-	_txtFuel = new Text(82, 17, 228, 24);
+	_txtDamage = new Text(100, tr(17,"CraftInfoDamageH"), 14, 24);
+	_txtFuel = new Text(82, tr(17,"CraftInfoFuelH"), 228, 24);
 	_txtW1Name = new Text(75, 16, 46, 48);
-	_txtW1Ammo = new Text(75, 24, 46, 64);
+	_txtW1Ammo = new Text(75, tr(24,"CraftInfoW1AmmoH"), 46, tr(64,"CraftInfoW1AmmoY"));
 	_txtW2Name = new Text(75, 16, 204, 48);
-	_txtW2Ammo = new Text(75, 24, 204, 64);
+	_txtW2Ammo = new Text(75, tr(24,"CraftInfoW2AmmoH"), 204, tr(64,"CraftInfoW1AmmoY"));
 	_sprite = new Surface(32, 40, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);

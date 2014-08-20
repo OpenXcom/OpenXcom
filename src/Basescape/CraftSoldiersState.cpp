@@ -52,12 +52,12 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 122, 32);
-	_txtCraft = new Text(84, 9, 224, 32);
-	_txtAvailable = new Text(110, 9, 16, 24);
-	_txtUsed = new Text(110, 9, 122, 24);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtName = new Text(114, tr(9,"TextSmallH"), 16, tr(32,"CraftSoldiersNameY"));
+	_txtRank = new Text(102, tr(9,"TextSmallH"), 122, tr(32,"CraftSoldiersRankY"));
+	_txtCraft = new Text(84, tr(9,"TextSmallH"), 224, tr(32,"CraftSoldiersCraftY"));
+	_txtAvailable = new Text(110, tr(9,"TextSmallH"), 16, 24);
+	_txtUsed = new Text(110, tr(9,"TextSmallH"), 122, 24);
+	_lstSoldiers = new TextList(288, tr(128,"CraftSoldiersListH"), 8, tr(40,"CraftSoldiersListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 2);

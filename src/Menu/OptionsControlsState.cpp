@@ -43,7 +43,7 @@ OptionsControlsState::OptionsControlsState(OptionsOrigin origin) : OptionsBaseSt
 	setCategory(_btnControls);
 
 	// Create objects
-	_lstControls = new TextList(200, 136, 94, 8);	
+	_lstControls = new TextList(200, tr(136, "OptionsControlsListH"), 94, 8);
 
 	add(_lstControls);
 

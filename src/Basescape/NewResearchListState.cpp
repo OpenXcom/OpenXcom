@@ -48,7 +48,7 @@ NewResearchListState::NewResearchListState(Base *base) : _base(base)
 	_window = new Window(this, 230, 140, 45, 30, POPUP_BOTH);
 	_btnOK = new TextButton(214, 16, 53, 146);
 	_txtTitle = new Text(214, 16, 53, 38);
-	_lstResearch = new TextList(198, 88, 53, 54);
+	_lstResearch = new TextList(198, tr(88,"NewResearchListH"), 53, tr(54,"NewResearchListY"));
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 1);

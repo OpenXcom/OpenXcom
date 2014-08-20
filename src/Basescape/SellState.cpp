@@ -64,14 +64,14 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _qtys(), _
 	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
-	_txtSales = new Text(150, 9, 10, 24);
-	_txtFunds = new Text(150, 9, 160, 24);
-	_txtSpaceUsed = new Text(150, 9, 160, 34);
-	_txtItem = new Text(130, 9, 10, Options::storageLimitsEnforced? 44:33);
-	_txtQuantity = new Text(54, 9, 126, Options::storageLimitsEnforced? 44:33);
-	_txtSell = new Text(96, 9, 180, Options::storageLimitsEnforced? 44:33);
-	_txtValue = new Text(40, 9, 260, Options::storageLimitsEnforced? 44:33);
-	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44);
+	_txtSales = new Text(150, tr(9,"TextSmallH"), 10, 24);
+	_txtFunds = new Text(150, tr(9,"TextSmallH"), 160, 24);
+	_txtSpaceUsed = new Text(150, tr(9,"TextSmallH"), 160, 34);
+	_txtItem = new Text(130, tr(9,"TextSmallH"), 10, Options::storageLimitsEnforced? 44:34);
+	_txtQuantity = new Text(54, tr(9,"TextSmallH"), 126, Options::storageLimitsEnforced? 44:34);
+	_txtSell = new Text(96, tr(9,"TextSmallH"), 180, Options::storageLimitsEnforced? 44:34);
+	_txtValue = new Text(40, tr(9,"TextSmallH"), 260, Options::storageLimitsEnforced? 44:34);
+	_lstItems = new TextList(287, Options::storageLimitsEnforced? tr(112,"SellItemsH"):120, 8, Options::storageLimitsEnforced? 54:44);
 
 	// Set palette
 	if (origin == OPT_BATTLESCAPE)

@@ -55,13 +55,13 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 
 	// Create objects
 	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
-	_btnOk = new TextButton(142, 16, 16, 166);
-	_btnGotoBase = new TextButton(142, 16, 162, 166);
+	_btnOk = new TextButton(142, 16, 16, tr(166,"ItemArrivingBtnY"));
+	_btnGotoBase = new TextButton(142, 16, 162, tr(166,"ItemArrivingBtnY"));
 	_txtTitle = new Text(310, 17, 5, 18);
-	_txtItem = new Text(114, 9, 16, 34);
-	_txtQuantity = new Text(54, 9, 152, 34);
-	_txtDestination = new Text(112, 9, 212, 34);
-	_lstTransfers = new TextList(271, 112, 14, 50);
+	_txtItem = new Text(114, tr(9,"TextSmallH"), 16, 34);
+	_txtQuantity = new Text(54, tr(9,"TextSmallH"), 152, 34);
+	_txtDestination = new Text(112, tr(9,"TextSmallH"), 212, 34);
+	_lstTransfers = new TextList(271, tr(112,"ItemArrivingListH"), 14, tr(50,"ItemArrivingListY"));
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 6);

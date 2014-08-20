@@ -43,7 +43,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	setCategory(_btnMods);
 
 	// Create objects
-	_lstMods = new TextList(200, 136, 94, 8);
+	_lstMods = new TextList(200, tr(136, "OptionsModsListH"), 94, 8);
 	
 	add(_lstMods);
 

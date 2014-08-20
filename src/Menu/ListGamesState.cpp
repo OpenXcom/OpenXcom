@@ -92,13 +92,13 @@ ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool aut
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnCancel = new TextButton(80, 16, 120, 172);
 	_txtTitle = new Text(310, 17, 5, 7);
-	_txtDelete = new Text(310, 9, 5, 23);
-	_txtName = new Text(150, 9, 16, 32);
-	_txtDate = new Text(110, 9, 204, 32);
-	_lstSaves = new TextList(288, 112, 8, 42);
-	_txtDetails = new Text(288, 16, 16, 156);
-	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
-	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
+	_txtDelete = new Text(310, tr(9,"TextSmallH"), 5, tr(23, "ListGameDeleteY"));
+	_txtName = new Text(150, tr(9,"TextSmallH"), 16, tr(32, "ListGameNameY"));
+	_txtDate = new Text(110, tr(9,"TextSmallH"), 204, tr(32, "ListGameDateY"));
+	_lstSaves = new TextList(288, tr(112, "ListGameListH"), 8, tr(42, "ListGameListY"));
+	_txtDetails = new Text(288, tr(16, "ListGameDetailH"), 16, tr(156, "ListGameDetailY"));
+	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, tr(32, "ListGameSortNameY"));
+	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, tr(32, "ListGameSortDateY"));
 
 	// Set palette
 	if (_origin == OPT_BATTLESCAPE)

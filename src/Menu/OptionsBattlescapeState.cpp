@@ -63,12 +63,12 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin) : Options
 	_slrAlienSpeed = new Slider(104, 16, 206, 82);
 
 	_txtPathPreview = new Text(114, 9, 94, 100);
-	_btnArrows = new ToggleTextButton(104, 16, 94, 110);
-	_btnTuCost = new ToggleTextButton(104, 16, 94, 128);
+	_btnArrows = new ToggleTextButton(104, tr(16, "OptionsBattleArrowsH"), 94, 110);
+	_btnTuCost = new ToggleTextButton(104, tr(16, "OptionsBattleTuCostH"), 94, tr(128, "OptionsBattleTuCostY"));
 
 	_txtOptions = new Text(114, 9, 206, 100);
-	_btnTooltips = new ToggleTextButton(104, 16, 206, 110);
-	_btnDeaths = new ToggleTextButton(104, 16, 206, 128);
+	_btnTooltips = new ToggleTextButton(104, tr(16, "OptionsBattleTooltipsH"), 206, 110);
+	_btnDeaths = new ToggleTextButton(104, tr(16, "OptionsBattleDeathsH"), 206, tr(128, "OptionsBattleDeathsY"));
 
 	add(_txtEdgeScroll);
 	add(_txtDragScroll);
