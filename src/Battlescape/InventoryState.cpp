@@ -137,7 +137,6 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView)
 	{
-
 		_txtTus->setY(_txtTus->getY() + tr(8,"TextSmallH"));
 	}
 

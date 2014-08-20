@@ -71,7 +71,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _qtys(), _
 	_txtQuantity = new Text(54, tr(9,"TextSmallH"), 126, Options::storageLimitsEnforced? 44:34);
 	_txtSell = new Text(96, tr(9,"TextSmallH"), 180, Options::storageLimitsEnforced? 44:34);
 	_txtValue = new Text(40, tr(9,"TextSmallH"), 260, Options::storageLimitsEnforced? 44:34);
-	_lstItems = new TextList(287, Options::storageLimitsEnforced? tr(112,"PurchaseItemsH"):120, 8, Options::storageLimitsEnforced? 54:44);
+	_lstItems = new TextList(287, Options::storageLimitsEnforced? tr(112,"SellItemsH"):120, 8, Options::storageLimitsEnforced? 54:44);
 
 	// Set palette
 	if (origin == OPT_BATTLESCAPE)

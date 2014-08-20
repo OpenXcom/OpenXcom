@@ -475,6 +475,7 @@ void Game::loadLanguage(const std::string &filename)
 
 	_lang->load(CrossPlatform::getDataFile(ss.str()), strings);
 	((XcomResourcePack*)_res)->loadFonts(filename);
+
 	Options::language = filename;
 }
 

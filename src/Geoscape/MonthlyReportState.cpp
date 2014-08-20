@@ -56,10 +56,10 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_btnBigOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(300, 17, 16, 8);
-	_txtMonth = new Text(110, 9, 16, 24);
-	_txtRating = new Text(180, 9, 125, 24);
-	_txtChange = new Text(300, 9, 16, 32);
-	_txtDesc = new Text(280, 140, 16, 40);
+	_txtMonth = new Text(110, tr(9,"TextSmallH"), 16, 24);
+	_txtRating = new Text(180, tr(9,"TextSmallH"), 125, 24);
+	_txtChange = new Text(300, tr(9,"TextSmallH"), 16, tr(32,"MonthlyReportChangeY"));
+	_txtDesc = new Text(280, 140, 16, tr(40,"MonthlyReportDescY"));
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette

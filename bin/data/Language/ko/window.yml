@@ -109,8 +109,8 @@ GeoscapeCraftSoldierY: 64 #68
 GeoscapeCraftHWPY: 73 #76
 GeoscapeCraftRedirectY: 111 #108
 GeoscapeCraftReturnBaseY: 127 #124
-GeoscapeCraftTargetY: 138 #140
-GeoscapeCraftPatrolY: 153 #156
+GeoscapeCraftTargetY: 142 #140
+GeoscapeCraftPatrolY: 157 #156
 GeoscapeCraftRightX: 164 #164
 
 # ItemArriving
@@ -125,6 +125,10 @@ FundingChangeY: 26 #30
 FundingListY: 37 #40
 FundingListW: 260 #260
 FundingListH: 140 #136
+
+# LowFuel
+LowFuelMsgY: 88 #90
+LowFuelMsgH: 20 #17
 
 # Inventory
 InvenTusX: 243 # 245
@@ -151,6 +155,9 @@ BaseFundsY: 26 # 24
 PlaceFacilityCostY: 72 #70
 PlaceFacilityTimeY: 100 #98
 PlaceFacilityMaintenanceY: 128 #126
+
+# DismantleFacility
+DismantleFacilityFacilityY: 86 #85
 
 # Solders
 SoldersNameY: 30 #32
