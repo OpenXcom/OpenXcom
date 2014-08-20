@@ -126,6 +126,10 @@ FundingListY: 37 #40
 FundingListW: 260 #260
 FundingListH: 140 #136
 
+# MonthlyReport
+MonthlyReportChangeY: 34 #32
+MonthlyReportDescY: 44 #40
+
 # LowFuel
 LowFuelMsgY: 88 #90
 LowFuelMsgH: 20 #17
@@ -146,6 +150,14 @@ InvenAmmoY: 64 # 64
 InvenAmmoW: 40 # 66
 InvenAmmoH: 20 # 24
 InvenItemY: 140 # 140
+
+# CannotReequip
+CannotReequipListY: 60 #58
+CannotReequipListH: 110 #112
+
+# Promotions
+PromotionsListY: 42 #40
+PromotionsListH: 130 #128
 
 # Basescape
 BaseLocationY: 16 # 16
