@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Frame.h"
+#include "../Engine/Palette.h"
 
 namespace OpenXcom
 {
@@ -123,7 +124,7 @@ void Frame::draw()
 	// _color denotes our middle line color, so we start (half the thickness times the multiplier) steps darker and build up
 	Uint8 color = _color + ((1 + _thickness) * mul) / 2;
 	// we want the darkest version of this colour to outline any thick borders
-	Uint8 darkest = _color / 16 + 15;
+	Uint8 darkest = Palette::blockOffset(_color / 16) + 15;
 	for (int i = 0; i < _thickness; ++i)
 	{
 		if (_thickness > 5 && (!i || i == _thickness -1))

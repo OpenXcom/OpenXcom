@@ -52,7 +52,7 @@ namespace OpenXcom
  */
 AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node) : BattleAIState(save, unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
 																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
-																				_wasHit(false), _didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
+																				_didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
 	_traceAI = Options::traceAI;
 
@@ -87,7 +87,7 @@ void AlienBAIState::load(const YAML::Node &node)
 	fromNodeID = node["fromNode"].as<int>(-1);
 	toNodeID = node["toNode"].as<int>(-1);
 	_AIMode = node["AIMode"].as<int>(0);
-	_wasHit = node["wasHit"].as<bool>(false);
+	_wasHitBy = node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 	if (fromNodeID != -1)
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);
@@ -114,7 +114,7 @@ YAML::Node AlienBAIState::save() const
 	node["fromNode"] = fromNodeID;
 	node["toNode"] = toNodeID;
 	node["AIMode"] = _AIMode;
-	node["wasHit"] = _wasHit;
+	node["wasHitBy"] = _wasHitBy;
 	return node;
 }
 
@@ -157,6 +157,8 @@ void AlienBAIState::think(BattleAction *action)
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
+	_wasHitBy.clear();
+
 	if(_unit->getCharging() && _unit->getCharging()->isOut())
 	{
 		_unit->setCharging(0);
@@ -390,21 +392,23 @@ void AlienBAIState::think(BattleAction *action)
 	}
 }
 
+
 /*
  * sets the "was hit" flag to true.
  */
-void AlienBAIState::setWasHit()
+void AlienBAIState::setWasHitBy(BattleUnit *attacker)
 {
-	_wasHit = true; 
+	if (attacker->getFaction() != _unit->getFaction() && !getWasHitBy(attacker->getId()))
+		_wasHitBy.push_back(attacker->getId());
 }
 
 /*
  * Gets whether the unit was hit.
  * @return if it was hit.
  */
-bool AlienBAIState::getWasHit() const
+bool AlienBAIState::getWasHitBy(int attacker) const
 {
-	return _wasHit;
+	return std::find(_wasHitBy.begin(), _wasHitBy.end(), attacker) != _wasHitBy.end();
 }
 /*
  * Sets up a patrol action.

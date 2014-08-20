@@ -576,7 +576,7 @@ void ProjectileFlyBState::think()
 							AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
 							if (aggro != 0)
 							{
-								aggro->setWasHit();
+								aggro->setWasHitBy(_unit);
 								_unit->setTurnsSinceSpotted(0);
 							}
 						}
