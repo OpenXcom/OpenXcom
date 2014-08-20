@@ -187,7 +187,13 @@ void BaseDefenseState::nextStep()
 			{
 				_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
 				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
-				_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
+
+				int dmgRng = Options::TFTDDamage ? 50 : 100;
+				int power = (def)->getRules()->getDefenseValue();
+				int min = power * (100 - dmgRng) / 100;
+				int max = power * (100 + dmgRng) / 100;
+				const int rndPower = RNG::generate(min, max);
+				_ufo->setDamage(_ufo->getDamage() + rndPower);
 			}
 			if (_ufo->getStatus() == Ufo::DESTROYED)
 				_action = BDA_DESTROY;
