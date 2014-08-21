@@ -74,6 +74,9 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
+	_breathFrame = 0;
+	_breathFrameUpdated = false;
+	_breathing = false;
 
 	int rankbonus = 0;
 
@@ -145,6 +148,15 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
 	_stats += *_armor->getStats();	// armors may modify effective stats
+	
+	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
+	if (armor->getDrawingRoutine() == 14)
+	{
+		_breathFrame = 0;
+	}
+	_breathFrameUpdated = false;
+	_breathing = false;
+
 	if (faction == FACTION_HOSTILE)
 	{
 		adjustStats(diff);
@@ -2658,4 +2670,45 @@ bool BattleUnit::hasInventory() const
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
 
+int BattleUnit::getBreathFrame() const
+{
+	return _breathFrame;
+}
+
+bool BattleUnit::breathe()
+{
+	// _breathFrame of -1 means this unit doesn't produce bubbles
+	if (_breathFrame < 0)
+	{
+		return false;
+	}
+
+	if (!_breathing)
+	{
+		// 10% chance per animation frame to start breathing
+		_breathing = (_status != STATUS_WALKING && RNG::percent(10));
+		_breathFrameUpdated = false;
+	}
+
+	if (_breathing)
+	{
+		// only update the sprite every second animation cycle
+		_breathFrameUpdated = !_breathFrameUpdated;
+
+		if (_breathFrameUpdated)
+		{
+			// advance the bubble frame
+			_breathFrame++;
+
+			// we've reached the end of the cycle, but we still need to update the sprite to get rid of the bubbles
+			if (_breathFrame >= 17)
+			{
+				_breathFrame = 0;
+				_breathing = false;
+			}
+		}
+	}
+
+	return _breathFrameUpdated;
+}
 }

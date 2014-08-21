@@ -112,6 +112,9 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	int _breathFrame;
+	bool _breathing;
+	bool _breathFrameUpdated;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -421,6 +424,9 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	int getBreathFrame() const;
+	bool breathe();
+
 };
 
 }
