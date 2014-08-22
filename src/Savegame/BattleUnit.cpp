@@ -2683,10 +2683,10 @@ void BattleUnit::breathe()
 		return;
 	}
 
-	if (!_breathing || _status == STATUS_WALKING)
+	if (!_breathing || _status == STATUS_WALKING || isOut())
 	{
 		// 10% chance per animation frame to start breathing
-		_breathing = (_status != STATUS_WALKING && RNG::percent(10));
+		_breathing = (_status != STATUS_WALKING && !isOut() && RNG::percent(10));
 		_breathFrame = 0;
 		_breathFrameUpdated = false;
 	}
