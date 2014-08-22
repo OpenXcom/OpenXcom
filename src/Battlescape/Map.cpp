@@ -830,6 +830,14 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
 							}
+							if (unit->getBreathFrame() > 0)
+							{
+								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
+								if (tmpSurface)
+								{
+									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y - 30, tileShade);
+								}
+							}
 						}
 					}
 					// if we can see through the floor, draw the soldier below it if it is on stairs

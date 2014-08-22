@@ -2675,18 +2675,19 @@ int BattleUnit::getBreathFrame() const
 	return _breathFrame;
 }
 
-bool BattleUnit::breathe()
+void BattleUnit::breathe()
 {
 	// _breathFrame of -1 means this unit doesn't produce bubbles
 	if (_breathFrame < 0)
 	{
-		return false;
+		return;
 	}
 
-	if (!_breathing)
+	if (!_breathing || _status == STATUS_WALKING)
 	{
 		// 10% chance per animation frame to start breathing
 		_breathing = (_status != STATUS_WALKING && RNG::percent(10));
+		_breathFrame = 0;
 		_breathFrameUpdated = false;
 	}
 
@@ -2708,7 +2709,5 @@ bool BattleUnit::breathe()
 			}
 		}
 	}
-
-	return _breathFrameUpdated;
 }
 }

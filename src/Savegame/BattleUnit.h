@@ -425,7 +425,7 @@ public:
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
 	int getBreathFrame() const;
-	bool breathe();
+	void breathe();
 
 };
 
