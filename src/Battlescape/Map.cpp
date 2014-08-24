@@ -1269,7 +1269,23 @@ void Map::animate(bool redraw)
 	{
 		if (_save->getDepth() > 0)
 		{
-			(*i)->breathe();
+			(*i)->setFloorAbove(false);
+			Position pos = (*i)->getPosition();
+			if ((*i)->getTile() && _camera->getViewLevel() > pos.z)
+			{
+				for (int z = _camera->getViewLevel(); z != pos.z; --z)
+				{
+					if (!_save->getTile(Position(pos.x, pos.y, z))->hasNoFloor(0))
+					{
+						(*i)->setFloorAbove(true);
+						break;
+					}
+				}
+			}
+			if (!(*i)->getFloorAbove())
+			{
+				(*i)->breathe();
+			}
 		}
 		if ((*i)->getArmor()->getConstantAnimation())
 		{

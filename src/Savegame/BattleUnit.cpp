@@ -75,7 +75,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_gender = soldier->getGender();
 	_faceDirection = -1;
 	_breathFrame = 0;
-	_breathFrameUpdated = false;
+	_floorAbove = false;
 	_breathing = false;
 
 	int rankbonus = 0;
@@ -154,7 +154,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	{
 		_breathFrame = 0;
 	}
-	_breathFrameUpdated = false;
+	_floorAbove = false;
 	_breathing = false;
 
 	if (faction == FACTION_HOSTILE)
@@ -2672,6 +2672,8 @@ bool BattleUnit::hasInventory() const
 
 int BattleUnit::getBreathFrame() const
 {
+	if (_floorAbove)
+		return 0;
 	return _breathFrame;
 }
 
@@ -2689,26 +2691,29 @@ void BattleUnit::breathe()
 		// 10% chance per animation frame to start breathing
 		_breathing = RNG::percent(10);
 		_breathFrame = 0;
-		_breathFrameUpdated = false;
 	}
 
 	if (_breathing)
 	{
-		// only update the sprite every second animation cycle
-		_breathFrameUpdated = !_breathFrameUpdated;
+		// advance the bubble frame
+		_breathFrame++;
 
-		if (_breathFrameUpdated)
+		// we've reached the end of the cycle, get rid of the bubbles
+		if (_breathFrame >= 17)
 		{
-			// advance the bubble frame
-			_breathFrame++;
-
-			// we've reached the end of the cycle, but we still need to update the sprite to get rid of the bubbles
-			if (_breathFrame >= 17)
-			{
-				_breathFrame = 0;
-				_breathing = false;
-			}
+			_breathFrame = 0;
+			_breathing = false;
 		}
 	}
+}
+
+void BattleUnit::setFloorAbove(bool floor)
+{
+	_floorAbove = floor;
+}
+
+bool BattleUnit::getFloorAbove()
+{
+	return _floorAbove;
 }
 }

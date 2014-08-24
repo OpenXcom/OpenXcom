@@ -114,7 +114,7 @@ private:
 	int _turretType;
 	int _breathFrame;
 	bool _breathing;
-	bool _breathFrameUpdated;
+	bool _floorAbove;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -426,6 +426,8 @@ public:
 	bool hasInventory() const;
 	int getBreathFrame() const;
 	void breathe();
+	void setFloorAbove(bool floor);
+	bool getFloorAbove();
 
 };
 
