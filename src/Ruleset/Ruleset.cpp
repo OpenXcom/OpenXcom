@@ -80,6 +80,93 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 	// Add soldier names
 	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam");
 
+	//load base damage types
+	RuleDamageType *dmg;
+	_damageTypes.resize(DAMAGE_TYPES);
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_NONE;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_AP;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 1.0;
+	dmg->ToStun = 0.25;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_ACID;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 1.0;
+	dmg->ToStun = 0.25;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_LASER;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 1.0;
+	dmg->ToStun = 0.25;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_PLASMA;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 1.0;
+	dmg->ToStun = 0.25;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_MELEE;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 1.0;
+	dmg->ToStun = 0.25;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_STUN;
+	dmg->FixRadius = -1;
+	dmg->ToRadius = 0.05;
+	dmg->ToUnit = 0.0;
+	dmg->ToTile = 0.0;
+	dmg->ToStun = 1.0;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_HE;
+	dmg->FixRadius = -1;
+	dmg->ToRadius = 0.05;
+	dmg->ToItem = 1.0;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 0.5;
+	dmg->ToStun = 0.25;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_SMOKE;
+	dmg->FixRadius = -1;
+	dmg->RandomType = DRT_NONE;
+	dmg->IgnoreArmor = true;
+	dmg->ToRadius = 0.05;
+	dmg->ToUnit = 0.0;
+	dmg->ToTile = 0.0;
+	dmg->ToStun = 0.0;
+	dmg->SmokeChance = 1.0;
+	_damageTypes[dmg->ResistType] = dmg;
+
+	dmg = new RuleDamageType();
+	dmg->ResistType = DT_IN;
+	dmg->FixRadius = -1;
+	dmg->RandomType = DRT_FIRE;
+	dmg->FireBlastCalc = true;
+	dmg->IgnoreArmor = true;
+	dmg->ToRadius = 0.03;
+	dmg->ToUnit = 1.0;
+	dmg->ToTile = 0.0;
+	dmg->ToStun = 0.0;
+	dmg->FireChance = 1.0;
+	_damageTypes[dmg->ResistType] = dmg;
+
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
 		std::string file = CrossPlatform::noExt(*i);
@@ -96,6 +183,10 @@ Ruleset::~Ruleset()
 {
 	delete _globe;
 	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<RuleDamageType*>::iterator i = _damageTypes.begin(); i != _damageTypes.end(); ++i)
 	{
 		delete *i;
 	}
@@ -271,7 +362,7 @@ void Ruleset::loadFile(const std::string &filename)
 		if (rule != 0)
 		{
 			_itemListOrder += 100;
-			rule->load(*i, _modIndex, _itemListOrder);
+			rule->load(*i, _modIndex, _itemListOrder, _damageTypes);
 		}
 	}
  	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
@@ -1008,6 +1099,16 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
 {
 	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
 	if (_invs.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns basic damage type.
+ * @param type damage type.
+ * @return basic damage ruleset.
+ */
+const RuleDamageType *Ruleset::getDamageType(ItemDamageType type) const
+{
+	return _damageTypes.at(type);
 }
 
 /**

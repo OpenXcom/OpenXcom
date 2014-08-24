@@ -532,7 +532,7 @@ void ProjectileFlyBState::think()
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
 
 					// special shotgun behaviour: trace extra projectile paths, and add bullet hits at their termination points.
-					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
+					if (_ammo && _ammo->getRules()->getShotgunPellets() != 0 && _ammo->getRules()->getDamageType()->isDirect())
 					{
 						int i = 1;
 						int bulletSprite = _ammo->getRules()->getBulletSprite();
@@ -550,7 +550,7 @@ void ProjectileFlyBState::think()
 							{
 								// as above: skip the shot to the end of it's path
 								proj->skipTrajectory();
-								// insert an explosion and hit 
+								// insert an explosion and hit
 								if (_projectileImpact != V_OUTOFBOUNDS)
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation(), false, false);

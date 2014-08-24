@@ -28,6 +28,7 @@
 #include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 #include "SerializationHelper.h"
 
 namespace OpenXcom
@@ -765,7 +766,7 @@ int Tile::getTopItemSprite()
  * average out any smoke added by the number of overlaps.
  * apply fire/smoke damage to units as applicable.
  */
-void Tile::prepareNewTurn()
+void Tile::prepareNewTurn(Ruleset *ruleset)
 {
 	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
@@ -784,7 +785,7 @@ void Tile::prepareNewTurn()
 				{
 					_unit->toggleFireDamage();
 					// _smoke becomes our damage value
-					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true);
+					_unit->damage(Position(0, 0, 0), _smoke, ruleset->getDamageType(DT_IN));
 					// try to set the unit on fire.
 					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN)))
 					{
@@ -805,7 +806,7 @@ void Tile::prepareNewTurn()
 					// try to knock this guy out.
 					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
 					{
-						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
+						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, ruleset->getDamageType(DT_SMOKE));
 					}
 				}
 			}

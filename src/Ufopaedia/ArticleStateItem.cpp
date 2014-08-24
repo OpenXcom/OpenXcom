@@ -200,7 +200,7 @@ namespace OpenXcom
 
 				if (ammo_data->empty())
 				{
-					_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
+					_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType()->ResistType)));
 
 					ss.str(L"");ss.clear();
 					ss << item->getPower();
@@ -218,7 +218,7 @@ namespace OpenXcom
 						if (Ufopaedia::isArticleAvailable(_game->getSavedGame(), ammo_article))
 						{
 							RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
-							_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
+							_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType()->ResistType)));
 
 							ss.str(L"");ss.clear();
 							ss << ammo_rule->getPower();
@@ -243,7 +243,7 @@ namespace OpenXcom
 				_txtDamage->setAlign(ALIGN_CENTER);
 				_txtDamage->setText(tr("STR_DAMAGE_UC"));
 
-				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
+				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType()->ResistType)));
 
 				ss.str(L"");ss.clear();
 				ss << item->getPower();

@@ -50,10 +50,10 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, const RuleDamageType* damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
-	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
+	if (!_damageType->isDirect() || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
 
@@ -112,7 +112,7 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	if (_unit->getDirection() != 3 && _damageType != DT_HE)
+	if (_unit->getDirection() != 3 && _damageType->isDirect())
 	{
 		int dir = _unit->getDirection() + 1;
 		if (dir == 8)
@@ -142,7 +142,7 @@ void UnitDieBState::think()
 
 	if (_unit->isOut())
 	{
-		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
+		if (!_noSound && !_damageType->isDirect() && _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();
 		}
@@ -167,21 +167,18 @@ void UnitDieBState::think()
 		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
-		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
+		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty() && _unit->getArmor()->getSize() == 1)
 		{
 			Game *game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_unit->getArmor()->getSize() == 1)
+				if (_damageType->ResistType == DT_NONE)
 				{
-					if (_damageType == DT_NONE)
-					{
-						game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
-					}
-					else if (Options::battleNotifyDeath)
-					{
-						game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
-					}
+					game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+				}
+				else if (Options::battleNotifyDeath)
+				{
+					game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 			}
 			else

@@ -107,7 +107,7 @@ ActionMenuState::ActionMenuState(BattleAction *action, int x, int y) : _action(a
 	if (weapon->getTUMelee())
 	{
 		// stun rod
-		if (weapon->getBattleType() == BT_MELEE && weapon->getDamageType() == DT_STUN)
+		if (weapon->getBattleType() == BT_MELEE && weapon->getDamageType()->ResistType == DT_STUN)
 		{
 			addItem(BA_HIT, "STR_STUN", &id);
 		}

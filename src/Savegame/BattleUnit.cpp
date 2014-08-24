@@ -879,7 +879,7 @@ int BattleUnit::getMorale() const
  * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position &relative, int power, const RuleDamageType *type)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -889,11 +889,9 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 		return 0;
 	}
 
-	power = (int)floor(power * _armor->getDamageModifier(type));
+	power = (int)floor(power * _armor->getDamageModifier(type->ResistType));
 
-	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
-
-	if (!ignoreArmor)
+	if (!type->IgnoreArmor)
 	{
 		if (relative == Position(0, 0, 0))
 		{
@@ -966,38 +964,33 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 
 	if (power > 0)
 	{
-		if (type == DT_STUN)
+		if (_armor->getSize() == 1 || type->ResistType == DT_STUN)
 		{
-			_stunlevel += power;
+			// conventional weapons can cause additional stun damage
+			_stunlevel += RNG::generate(0, int(power * type->ToStun));
 		}
-		else
+
+		// health damage
+		int dmg = power * type->ToUnit;
+		_health -= dmg;
+		if (_health < 0)
 		{
-			// health damage
-			_health -= power;
-			if (_health < 0)
-			{
-				_health = 0;
-			}
+			_health = 0;
+		}
 
-			if (type != DT_IN)
+		if (!type->IgnoreArmor)
+		{
+			// fatal wounds
+			if (isWoundable())
 			{
-				if (_armor->getSize() == 1)
-				{
-					// conventional weapons can cause additional stun damage
-					_stunlevel += RNG::generate(0, power / 4);
-				}
-				// fatal wounds
-				if (isWoundable())
-				{
-					if (RNG::generate(0, 10) < power)
-						_fatalWounds[bodypart] += RNG::generate(1,3);
+				if (RNG::generate(0, 10) < dmg)
+					_fatalWounds[bodypart] += RNG::generate(1,3);
 
-					if (_fatalWounds[bodypart])
-						moraleChange(-_fatalWounds[bodypart]);
-				}
-				// armor damage
-				setArmor(getArmor(side) - (power/10) - 1, side);
+				if (_fatalWounds[bodypart])
+					moraleChange(-_fatalWounds[bodypart]);
 			}
+			// armor damage
+			setArmor(getArmor(side) - (dmg/10) - 1, side);
 		}
 	}
 

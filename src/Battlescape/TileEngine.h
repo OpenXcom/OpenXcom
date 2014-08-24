@@ -68,10 +68,14 @@ public:
 	void calculateTerrainLighting();
 	/// Recalculates lighting of the battlescape for units.
 	void calculateUnitLighting();
+	/// Handles tile hit.
+	void hitTile(Tile *tile, const RuleDamageType* type);
+	/// Handles unit hit.
+	bool hitUnit(BattleUnit *unit, BattleUnit *target, const Position &relative, int power, const RuleDamageType* type);
 	/// Handles bullet/weapon hits.
-	BattleUnit *hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
+	BattleUnit *hit(const Position &center, int power, const RuleDamageType *type, BattleUnit *unit);
 	/// Handles explosions.
-	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
+	void explode(const Position &center, int power, const RuleDamageType *type, int maxRadius, BattleUnit *unit = 0);
 	/// Checks if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
@@ -119,7 +123,7 @@ public:
 	/// Checks what type of voxel occupies this space.
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Blows this tile up.
-	bool detonate(Tile* tile);
+	bool detonate(Tile* tile, int power);
 	/// Validates a throwing action.
 	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0);
 	/// Opens any doors this door is connected to.
