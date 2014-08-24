@@ -2670,6 +2670,10 @@ bool BattleUnit::hasInventory() const
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
 
+/**
+ * If this unit is breathing, what frame should be displayed?
+ * @return frame number.
+ */
 int BattleUnit::getBreathFrame() const
 {
 	if (_floorAbove)
@@ -2677,6 +2681,9 @@ int BattleUnit::getBreathFrame() const
 	return _breathFrame;
 }
 
+/**
+ * Decides if we should start producing bubbles, and/or updates which bubble frame we are on.
+ */
 void BattleUnit::breathe()
 {
 	// _breathFrame of -1 means this unit doesn't produce bubbles
@@ -2707,11 +2714,19 @@ void BattleUnit::breathe()
 	}
 }
 
+/**
+ * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
+ * @param floor is there a floor.
+ */
 void BattleUnit::setFloorAbove(bool floor)
 {
 	_floorAbove = floor;
 }
 
+/**
+ * Checks if the floor above flag has been set.
+ * @return if we're under cover.
+ */
 bool BattleUnit::getFloorAbove()
 {
 	return _floorAbove;

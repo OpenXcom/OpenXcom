@@ -424,9 +424,13 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Is this unit breathing and if so what frame?
 	int getBreathFrame() const;
+	/// Start breathing and/or update the breathing frame.
 	void breathe();
+	/// Set the flag for "floor above me" meaning stop rendering bubbles.
 	void setFloorAbove(bool floor);
+	/// Get the flag for "floor above me".
 	bool getFloorAbove();
 
 };

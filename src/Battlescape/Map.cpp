@@ -1271,6 +1271,8 @@ void Map::animate(bool redraw)
 		{
 			(*i)->setFloorAbove(false);
 			Position pos = (*i)->getPosition();
+
+			// make sure this unit isn't obscured by the floor above him, otherwise it looks weird.
 			if ((*i)->getTile() && _camera->getViewLevel() > pos.z)
 			{
 				for (int z = _camera->getViewLevel(); z != pos.z; --z)
@@ -1282,6 +1284,7 @@ void Map::animate(bool redraw)
 					}
 				}
 			}
+
 			if (!(*i)->getFloorAbove())
 			{
 				(*i)->breathe();
