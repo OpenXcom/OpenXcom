@@ -24,23 +24,36 @@ namespace OpenXcom
 {
 
 /**
+ * Default constructor
+ */
+RuleDamageType::RuleDamageType() :
+	FixRadius(0), RandomType(DRT_DEFAULT), ResistType(DT_AP), FireBlastCalc(false), IgnoreDirection(false),
+	ArmorEffectiveness(1.0f), RadiusEffectiveness(0.0f),
+	ToHealth(1.0f), ToArmor(0.1f), ToWound(1.0f), ToItem(0.0f), ToTile(1.0f), ToStun(0.25f)
+{
+
+}
+/**
  * Function converting power to damage.
  * @param power Input power.
- * @return Final damage.
+ * @return Random damage based on power.
  */
 int RuleDamageType::getRandomDamage(int power) const
 {
 	int dmgRng = 0;
-	int randType = RandomType;
-	if(randType == DRT_DEFAULT)
+	ItemDamageRandomType randType = RandomType;
+	if (randType == DRT_DEFAULT)
 	{
-		if(ResistType == DT_IN)
-			randType = DRT_FIRE;
-		else
-			randType = (ResistType == DT_HE || Options::TFTDDamage) ? DRT_TFTD : DRT_UFO;
+		switch (ResistType)
+		{
+		case DT_IN: randType = DRT_FIRE; break;
+		case DT_HE: randType = DRT_TFTD; break;
+		case DT_SMOKE: randType = DRT_NONE; break;
+		default: randType = Options::TFTDDamage ? DRT_TFTD : DRT_UFO; break;
+		}
 	}
 
-	switch(randType)
+	switch (randType)
 	{
 	case DRT_UFO: dmgRng = 100; break;
 	case DRT_TFTD: dmgRng = 50; break;
@@ -71,19 +84,19 @@ bool RuleDamageType::isDirect() const
 void RuleDamageType::load(const YAML::Node& node)
 {
 	FixRadius = node["FixRadius"].as<int>(FixRadius);
-	RandomType = node["RandomType"].as<int>(RandomType);
+	RandomType = (ItemDamageRandomType)node["RandomType"].as<int>(RandomType);
 	ResistType = (ItemDamageType)node["ResistType"].as<int>(ResistType);
 	FireBlastCalc = node["FireBlastCalc"].as<bool>(FireBlastCalc);
-	IgnoreArmor = node["IgnoreArmor"].as<bool>(IgnoreArmor);
+	IgnoreDirection = node["IgnoreDirection"].as<bool>(IgnoreDirection);
+	ArmorEffectiveness = node["ArmorEffectiveness"].as<float>(ArmorEffectiveness);
+	RadiusEffectiveness = node["RadiusEffectiveness"].as<float>(RadiusEffectiveness);
 
-	ToUnit = node["ToUnit"].as<double>(ToUnit);
-	ToItem = node["ToItem"].as<double>(ToItem);
-	ToTile = node["ToTile"].as<double>(ToTile);
-	ToStun = node["ToStun"].as<double>(ToStun);
-	ToRadius = node["ToRadius"].as<double>(ToRadius);
-
-	FireChance = node["FireChance"].as<double>(FireChance);
-	SmokeChance = node["SmokeChance"].as<double>(SmokeChance);
+	ToHealth = node["ToHealth"].as<float>(ToHealth);
+	ToArmor = node["ToArmor"].as<float>(ToArmor);
+	ToWound = node["ToWound"].as<float>(ToWound);
+	ToItem = node["ToItem"].as<float>(ToItem);
+	ToTile = node["ToTile"].as<float>(ToTile);
+	ToStun = node["ToStun"].as<float>(ToStun);
 }
 
 } //namespace OpenXcom

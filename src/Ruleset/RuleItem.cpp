@@ -598,7 +598,7 @@ int RuleItem::getExplosionRadius() const
 
 	if (_damageType.FixRadius == -1)
 	{
-		radius = _power * _damageType.ToRadius;
+		radius = _power * _damageType.RadiusEffectiveness;
 		if(_damageType.FireBlastCalc)
 		{
 			radius += 1;

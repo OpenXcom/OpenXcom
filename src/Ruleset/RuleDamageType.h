@@ -37,30 +37,33 @@ struct RuleDamageType
 	/// Set fixed arena of effect radius.
 	int FixRadius;
 	/// Set what random range use when calculating damage.
-	int RandomType;
+	ItemDamageRandomType RandomType;
 	/// Set what resistance on armor is used.
 	ItemDamageType ResistType;
 	/// Use fire calculation of radius and power
 	bool FireBlastCalc;
-	/// Damage type ignore armor
-	bool IgnoreArmor;
+	/// Damage type ignore direction of attack
+	bool IgnoreDirection;
+	/// How much of armor is ignored
+	float ArmorEffectiveness;
+	/// Conversion form power to radius.
+	float RadiusEffectiveness;
 
 	/// Conversion form power to unit damage.
-	double ToUnit;
+	float ToHealth;
+	/// Conversion form power to unit armor damage.
+	float ToArmor;
+	/// Conversion form power to wound chance.
+	float ToWound;
 	/// Conversion form power to item damage.
-	double ToItem;
+	float ToItem;
 	/// Conversion form power to tile damage.
-	double ToTile;
+	float ToTile;
 	/// Conversion form power to stun level.
-	double ToStun;
-	/// Conversion form power to radius.
-	double ToRadius;
+	float ToStun;
 
-	/// Chance to spawn fire on tile or unit.
-	double FireChance;
-	/// Chance to spawn smoke on tile.
-	double SmokeChance;
-
+	/// Default constructor
+	RuleDamageType();
 	/// Calculate random value of damage.
 	int getRandomDamage(int power) const;
 	/// Do this damage type affect only one target

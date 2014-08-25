@@ -876,7 +876,6 @@ int BattleUnit::getMorale() const
  * @param relative The relative position of which part of armor and/or bodypart is hit.
  * @param power The amount of damage to inflict.
  * @param type The type of damage being inflicted.
- * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
 int BattleUnit::damage(const Position &relative, int power, const RuleDamageType *type)
@@ -884,14 +883,14 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	if (power <= 0)
+	if (power <= 0 || !_health)
 	{
 		return 0;
 	}
 
 	power = (int)floor(power * _armor->getDamageModifier(type->ResistType));
 
-	if (!type->IgnoreArmor)
+	if (!type->IgnoreDirection)
 	{
 		if (relative == Position(0, 0, 0))
 		{
@@ -959,8 +958,9 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 				}
 			}
 		}
-		power -= getArmor(side);
 	}
+
+	power -= getArmor(side) * type->ArmorEffectiveness;
 
 	if (power > 0)
 	{
@@ -971,30 +971,31 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 		}
 
 		// health damage
-		int dmg = power * type->ToUnit;
-		_health -= dmg;
+		_health -= power * type->ToHealth;
 		if (_health < 0)
 		{
 			_health = 0;
 		}
-
-		if (!type->IgnoreArmor)
+		else if (_health > _stats.health)
 		{
-			// fatal wounds
-			if (isWoundable())
-			{
-				if (RNG::generate(0, 10) < dmg)
-					_fatalWounds[bodypart] += RNG::generate(1,3);
-
-				if (_fatalWounds[bodypart])
-					moraleChange(-_fatalWounds[bodypart]);
-			}
-			// armor damage
-			setArmor(getArmor(side) - (dmg/10) - 1, side);
+			_health = _stats.health;
 		}
+
+		// fatal wounds
+		if (isWoundable())
+		{
+			if (RNG::generate(0, 10) < int(power * type->ToWound))
+			{
+				const int wound = RNG::generate(1,3);
+				_fatalWounds[bodypart] += wound;
+				moraleChange(-wound);
+			}
+		}
+		// armor damage
+		setArmor(getArmor(side) - int(std::ceil(power * type->ToArmor)), side);
 	}
 
-	return power < 0 ? 0:power;
+	return power < 0 ? 0 : power * type->ToHealth;
 }
 
 /**
@@ -2103,7 +2104,7 @@ int BattleUnit::getMotionPoints() const
  */
 Armor *BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
 /**
  * Get unit's name.

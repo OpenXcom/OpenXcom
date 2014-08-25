@@ -1001,7 +1001,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
  */
 void TileEngine::hitTile(Tile* tile, const RuleDamageType* type)
 {
-	if(RNG::percent(100*type->SmokeChance))
+	if(type->ResistType == DT_SMOKE)
 	{
 		// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 		if (tile->getSmoke() < 10 && tile->getTerrainLevel() > -24)
@@ -1010,7 +1010,7 @@ void TileEngine::hitTile(Tile* tile, const RuleDamageType* type)
 			tile->setSmoke(RNG::generate(7, 15));
 		}
 	}
-	if(RNG::percent(100*type->FireChance))
+	if(type->ResistType == DT_IN)
 	{
 		if (!tile->isVoid())
 		{
@@ -1034,7 +1034,7 @@ void TileEngine::hitTile(Tile* tile, const RuleDamageType* type)
  */
 bool TileEngine::hitUnit(BattleUnit* unit, BattleUnit* target, const Position& relative, int power, const RuleDamageType* type)
 {
-	if(!target)
+	if(!target || !target->getHealth())
 	{
 		return false;
 	}
@@ -1062,7 +1062,7 @@ bool TileEngine::hitUnit(BattleUnit* unit, BattleUnit* target, const Position& r
 		}
 	}
 
-	if (RNG::percent(100*type->FireChance))
+	if (adjustedDamage && type->ResistType == DT_IN)
 	{
 		float resistance = target->getArmor()->getDamageModifier(type->ResistType);
 		if (resistance > 0.0)
@@ -1245,9 +1245,16 @@ void TileEngine::explode(const Position &center, int power, const RuleDamageType
 						toRemove.clear();
 						for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 						{
-							if(hitUnit(unit, (*it)->getUnit(), Position(0, 0, 0), rndPower, type))
+							if((*it)->getUnit())
 							{
-								continue;
+								if(hitUnit(unit, (*it)->getUnit(), Position(0, 0, 0), rndPower, type))
+								{
+									continue;
+								}
+								else
+								{
+									(*it)->getUnit()->instaKill();
+								}
 							}
 							if (power_ * type->ToItem > (*it)->getRules()->getArmor())
 							{

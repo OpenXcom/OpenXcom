@@ -86,85 +86,82 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_NONE;
+	dmg->RandomType = DRT_NONE;
+	dmg->ToHealth = 0.0f;
+	dmg->ToArmor = 0.0f;
+	dmg->ToWound = 0.0f;
+	dmg->ToItem = 0.0f;
+	dmg->ToTile = 0.0f;
+	dmg->ToStun = 0.0f;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_AP;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 1.0;
-	dmg->ToStun = 0.25;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_ACID;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 1.0;
-	dmg->ToStun = 0.25;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_LASER;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 1.0;
-	dmg->ToStun = 0.25;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_PLASMA;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 1.0;
-	dmg->ToStun = 0.25;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_MELEE;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 1.0;
-	dmg->ToStun = 0.25;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_STUN;
 	dmg->FixRadius = -1;
-	dmg->ToRadius = 0.05;
-	dmg->ToUnit = 0.0;
-	dmg->ToTile = 0.0;
-	dmg->ToStun = 1.0;
+	dmg->RadiusEffectiveness = 0.05f;
+	dmg->ToHealth = 0.0f;
+	dmg->ToArmor = 0.0f;
+	dmg->ToWound = 0.0f;
+	dmg->ToItem = 0.0f;
+	dmg->ToTile = 0.0f;
+	dmg->ToStun = 1.0f;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_HE;
 	dmg->FixRadius = -1;
-	dmg->ToRadius = 0.05;
-	dmg->ToItem = 1.0;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 0.5;
-	dmg->ToStun = 0.25;
+	dmg->RadiusEffectiveness = 0.05f;
+	dmg->ToItem = 1.0f;
+	dmg->ToTile = 0.5f;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_SMOKE;
 	dmg->FixRadius = -1;
-	dmg->RandomType = DRT_NONE;
-	dmg->IgnoreArmor = true;
-	dmg->ToRadius = 0.05;
-	dmg->ToUnit = 0.0;
-	dmg->ToTile = 0.0;
-	dmg->ToStun = 0.0;
-	dmg->SmokeChance = 1.0;
+	dmg->IgnoreDirection = true;
+	dmg->ArmorEffectiveness = 0.0f;
+	dmg->RadiusEffectiveness = 0.05f;
+	dmg->ToHealth = 0.0f;
+	dmg->ToArmor = 0.0f;
+	dmg->ToWound = 0.0f;
+	dmg->ToItem = 0.0f;
+	dmg->ToTile = 0.0f;
+	dmg->ToStun = 1.0f;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_IN;
 	dmg->FixRadius = -1;
-	dmg->RandomType = DRT_FIRE;
 	dmg->FireBlastCalc = true;
-	dmg->IgnoreArmor = true;
-	dmg->ToRadius = 0.03;
-	dmg->ToUnit = 1.0;
-	dmg->ToTile = 0.0;
-	dmg->ToStun = 0.0;
-	dmg->FireChance = 1.0;
+	dmg->IgnoreDirection = true;
+	dmg->ArmorEffectiveness = 0.0f;
+	dmg->RadiusEffectiveness = 0.03f;
+	dmg->ToHealth = 1.0f;
+	dmg->ToArmor = 0.0f;
+	dmg->ToWound = 0.0f;
+	dmg->ToItem = 0.0f;
+	dmg->ToTile = 0.0f;
+	dmg->ToStun = 0.0f;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
