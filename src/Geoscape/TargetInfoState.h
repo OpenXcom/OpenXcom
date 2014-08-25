@@ -29,6 +29,7 @@ class Window;
 class Text;
 class Target;
 class Globe;
+class TextEdit;
 
 /**
  * Generic window used to display all the
@@ -42,7 +43,9 @@ private:
 
 	TextButton *_btnIntercept, *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtTargetted, *_txtFollowers;
+	Text *_txtTargetted, *_txtFollowers;
+	bool _editName;
+	TextEdit *_txtTitle;
 public:
 	/// Creates the Target Info state.
 	TargetInfoState(Target *target, Globe *globe);
@@ -52,6 +55,8 @@ public:
 	void btnInterceptClick(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for changing the alienbase name.
+	void edtNameChange(Action *action);
 };
 
 }
