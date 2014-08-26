@@ -1299,7 +1299,7 @@ void TileEngine::explode(const Position &center, int power, const RuleDamageType
 	}
 
 	// now detonate the tiles affected by explosion
-	if (type->ToTile > 0.0)
+	if (type->ToTile > 0.0f)
 	{
 		for (std::map<Tile*, int>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{

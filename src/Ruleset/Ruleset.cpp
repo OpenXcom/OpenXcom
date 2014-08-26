@@ -132,7 +132,6 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 	dmg->FixRadius = -1;
 	dmg->RadiusEffectiveness = 0.05f;
 	dmg->ToItem = 1.0f;
-	dmg->ToTile = 0.5f;
 	_damageTypes[dmg->ResistType] = dmg;
 
 	dmg = new RuleDamageType();

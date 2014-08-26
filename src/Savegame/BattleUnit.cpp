@@ -960,7 +960,10 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 		}
 	}
 
-	power -= getArmor(side) * type->ArmorEffectiveness;
+	if (type->ArmorEffectiveness > 0.0f)
+	{
+		power -= getArmor(side) * type->ArmorEffectiveness;
+	}
 
 	if (power > 0)
 	{
@@ -971,7 +974,7 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 		}
 
 		// health damage
-		_health -= power * type->ToHealth;
+		_health -= int(power * type->ToHealth);
 		if (_health < 0)
 		{
 			_health = 0;
@@ -992,7 +995,10 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 			}
 		}
 		// armor damage
-		setArmor(getArmor(side) - int(std::ceil(power * type->ToArmor)), side);
+		if(type->ToArmor > 0.0f)
+		{
+			setArmor(getArmor(side) - int(power * type->ToArmor) - 1, side);
+		}
 	}
 
 	return power < 0 ? 0 : power * type->ToHealth;

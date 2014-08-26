@@ -29,7 +29,7 @@ namespace OpenXcom
 RuleDamageType::RuleDamageType() :
 	FixRadius(0), RandomType(DRT_DEFAULT), ResistType(DT_AP), FireBlastCalc(false), IgnoreDirection(false),
 	ArmorEffectiveness(1.0f), RadiusEffectiveness(0.0f),
-	ToHealth(1.0f), ToArmor(0.1f), ToWound(1.0f), ToItem(0.0f), ToTile(1.0f), ToStun(0.25f)
+	ToHealth(1.0f), ToArmor(0.1f), ToWound(1.0f), ToItem(0.0f), ToTile(0.5f), ToStun(0.25f)
 {
 
 }
