@@ -1215,7 +1215,7 @@ void BattlescapeState::btnReloadClick(Action *)
 {
 	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo())
 	{
-		_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_RELOAD)->play();
 		updateSoldierInfo();
 	}
 }

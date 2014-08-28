@@ -390,10 +390,10 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		}
 	}
 
-	TextButton::soundPress = getSound("GEO.CAT", 0);
-	Window::soundPopup[0] = getSound("GEO.CAT", 1);
-	Window::soundPopup[1] = getSound("GEO.CAT", 2);
-	Window::soundPopup[2] = getSound("GEO.CAT", 3);
+	TextButton::soundPress = getSound("GEO.CAT", ResourcePack::BUTTON_PRESS);
+	Window::soundPopup[0] = getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);
+	Window::soundPopup[1] = getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[1]);
+	Window::soundPopup[2] = getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 	

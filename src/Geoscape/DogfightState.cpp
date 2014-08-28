@@ -840,7 +840,7 @@ void DogfightState::move()
 						}
 
 						setStatus("STR_UFO_HIT");
-						_game->getResourcePack()->getSound("GEO.CAT", 12)->play(); //12
+						_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_HIT)->play();
 						p->remove();
 					}
 					// Missed.
@@ -883,7 +883,7 @@ void DogfightState::move()
 							_craft->setDamage(_craft->getDamage() + damage);
 							drawCraftDamage();
 							setStatus("STR_INTERCEPTOR_DAMAGED");
-							_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
+							_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::INTERCEPTOR_HIT)->play(); //10
 							if (_mode == _btnCautious && _craft->getDamagePercentage() >= 50)
 							{
 								_targetDist = STANDOFF_DIST;
@@ -1002,7 +1002,7 @@ void DogfightState::move()
 	{
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 		_timeout += 30;
-		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
+		_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::INTERCEPTOR_EXPLODE)->play();
 		finalRun = true;
 		_destroyCraft = true;
 		_ufo->setShootingAt(0);
@@ -1066,7 +1066,7 @@ void DogfightState::move()
 					}
 				}
 				setStatus("STR_UFO_DESTROYED");
-				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //11
+				_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play(); //11
 			}
 			_destroyUfo = true;
 		}
@@ -1075,7 +1075,7 @@ void DogfightState::move()
 			if(_ufo->getShotDownByCraft() == _craft)
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
-				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
+				_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_CRASH)->play(); //10
 				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
@@ -1205,7 +1205,7 @@ void DogfightState::ufoFireWeapon()
 	p->setHorizontalPosition(HP_CENTER);
 	p->setPosition(_currentDist - (_ufo->getRules()->getRadius() / 2));
 	_projectiles.push_back(p);
-	_game->getResourcePack()->getSound("GEO.CAT", 8)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_FIRE)->play();
 }
 
 /**

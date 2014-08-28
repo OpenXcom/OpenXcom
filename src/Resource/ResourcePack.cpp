@@ -30,6 +30,26 @@
 namespace OpenXcom
 {
 
+int ResourcePack::DOOR_OPEN = 3;
+int ResourcePack::SLIDING_DOOR_OPEN = 20;
+int ResourcePack::SLIDING_DOOR_CLOSE = 21;
+int ResourcePack::SMALL_EXPLOSION = 2;
+int ResourcePack::LARGE_EXPLOSION = 5;
+int ResourcePack::ITEM_DROP = 38;
+int ResourcePack::ITEM_THROW = 39;
+int ResourcePack::ITEM_RELOAD = 17;
+int ResourcePack::WALK_OFFSET = 22;
+int ResourcePack::FLYING_SOUND = 15;
+int ResourcePack::MALE_SCREAM[3] = {41, 42, 43};
+int ResourcePack::FEMALE_SCREAM[3] = {44, 45, 46};
+int ResourcePack::BUTTON_PRESS = 0;
+int ResourcePack::WINDOW_POPUP[3] = {1, 2, 3};
+int ResourcePack::UFO_FIRE = 8;
+int ResourcePack::UFO_HIT = 12;
+int ResourcePack::UFO_CRASH = 10;
+int ResourcePack::UFO_EXPLODE = 11;
+int ResourcePack::INTERCEPTOR_HIT = 10;
+int ResourcePack::INTERCEPTOR_EXPLODE = 13;
 /**
  * Initializes a blank resource set pointing to a folder.
  */

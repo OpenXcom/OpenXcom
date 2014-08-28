@@ -138,16 +138,16 @@ void BaseDefenseState::nextStep()
 		{
 		case BDA_DESTROY:
 			_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(),L" ",L" ");
-			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
 			_timer->setInterval(100);
 			_action = BDA_EXPLODING1;
 			return;
 		case BDA_EXPLODING1:
-			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
 			_action = BDA_EXPLODING2;
 			return;
 		case BDA_EXPLODING2:
-			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
 			_timer->setInterval(250);
 			_action = BDA_END;
 			return;

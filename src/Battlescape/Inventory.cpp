@@ -587,7 +587,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							{
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
-								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+								_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 								arrangeGround(false);
 							}
 							else
@@ -641,7 +641,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								_stackLevel[x][y] += 1;
 							}
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -655,7 +655,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -691,7 +691,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+							_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_RELOAD)->play();
 							if (item->getSlot()->getType() == INV_GROUND)
 							{
 								arrangeGround(false);
@@ -722,7 +722,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -960,7 +960,7 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 				{
 					placed = true;
 					moveItem(item, newSlot, x2, y2);
-					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+					_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 					drawItems();
 				}
 				else
