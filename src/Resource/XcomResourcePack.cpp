@@ -39,6 +39,7 @@
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Logger.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/ExtraSounds.h"
 #include "../Engine/AdlibMusic.h"
@@ -73,7 +74,7 @@ struct HairBleach
  * @param extraSprites List of mod extra sprites.
  * @param extraSounds List of mod extra sounds.
  */
-XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds) : ResourcePack()
+XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 {
 	// Load palettes
 	const char *pal[] = {"PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA"};
@@ -436,6 +437,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 	std::ostringstream s;
+	std::vector< std::pair<std::string, ExtraSprites *> >extraSprites = rules->getExtraSprites();
 	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
 	{
 		std::string sheetName = i->first;
@@ -603,7 +605,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		surface1->setPalette(surface2->getPalette());
 		surface2->blit(surface1);
 	}
-
+	
+	std::vector< std::pair<std::string, ExtraSounds *> >extraSounds = rules->getExtraSounds();
 	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
 		std::string setName = i->first;
