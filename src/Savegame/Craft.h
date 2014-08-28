@@ -74,6 +74,8 @@ public:
 	std::wstring getName(Language *lang) const;
 	/// Sets the craft's name.
 	void setName(const std::wstring &newName);
+	/// Gets the craft's marker.
+	int getMarker() const;
 	/// Gets the craft's base.
 	Base *getBase() const;
 	/// Sets the craft's base.

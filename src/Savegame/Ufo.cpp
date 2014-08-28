@@ -270,6 +270,27 @@ std::wstring Ufo::getName(Language *lang) const
 }
 
 /**
+ * Returns the globe marker for the UFO.
+ * @return Marker sprite, -1 if none.
+ */
+int Ufo::getMarker() const
+{
+	if (!_detected)
+		return -1;
+	switch (_status)
+	{
+	case Ufo::FLYING:
+		return 2;
+	case Ufo::LANDED:
+		return 3;
+	case Ufo::CRASHED:
+		return 4;
+	default:
+		return -1;
+	}
+}
+
+/**
  * Returns the amount of damage this UFO has taken.
  * @return Amount of damage.
  */

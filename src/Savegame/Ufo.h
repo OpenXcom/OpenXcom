@@ -77,6 +77,8 @@ public:
 	void setId(int id);
 	/// Gets the UFO's name.
 	std::wstring getName(Language *lang) const;
+	/// Gets the UFO's marker.
+	int getMarker() const;
 	/// Gets the UFO's amount of damage.
 	int getDamage() const;
 	/// Sets the UFO's amount of damage.

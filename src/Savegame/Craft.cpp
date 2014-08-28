@@ -312,6 +312,17 @@ void Craft::setName(const std::wstring &newName)
 }
 
 /**
+ * Returns the globe marker for the craft.
+ * @return Marker sprite, -1 if none.
+ */
+int Craft::getMarker() const
+{
+	if (_status != "STR_OUT")
+		return -1;
+	return 1;
+}
+
+/**
  * Returns the base the craft belongs to.
  * @return Pointer to base.
  */

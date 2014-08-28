@@ -9484,6 +9484,14 @@ extraSprites:
     subY: 48
     files:
       -4: Resources/Weapons/Terror.png
+  - type: GlobeMarkers
+    width: 27
+    height: 3
+    subX: 3
+    subY: 3
+    files:
+      0: Resources/UI/globe_ufo.png
+  
 interfaces:
   - type: battlescape
     elements:

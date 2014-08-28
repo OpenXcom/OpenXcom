@@ -79,6 +79,8 @@ public:
 	std::wstring getName(Language* lang = 0) const;
 	/// Sets the base's name.
 	void setName(const std::wstring &name);
+	/// Gets the base's marker.
+	int getMarker() const;
 	/// Gets the base's facilities.
 	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.

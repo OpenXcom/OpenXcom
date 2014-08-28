@@ -49,6 +49,7 @@ private:
 	static const int NUM_SEASHADES = 72;
 	static const int NEAR_RADIUS = 25;
 	static const int DOGFIGHT_ZOOM = 3;
+	static const int CITY_MARKER = 8;
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
@@ -56,14 +57,13 @@ private:
 	double _cenLon, _cenLat, _rotLon, _rotLat, _hoverLon, _hoverLat;
 	Sint16 _cenX, _cenY;
 	size_t _zoom, _zoomOld, _zoomTexture;
-	SurfaceSet *_texture;
+	SurfaceSet *_texture, *_markerSet;
 	Game *_game;
 	Surface *_markers, *_countries, *_radars;
-	bool _blink, _hover;
+	bool _hover;
+	int _blink;
 	Timer *_blinkTimer, *_rotTimer;
 	std::list<Polygon*> _cacheLand;
-	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
-	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 	FastLineClip *_clipper;
 	double _radius, _radiusStep;
 	///normal of each pixel in earth globe per zoom level
@@ -102,6 +102,8 @@ private:
 	void drawVHLine(Surface *surface, double lon1, double lat1, double lon2, double lat2, Uint8 color);
 	/// Draw flight path.
 	void drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2);
+	/// Draw target marker.
+	void drawTarget(Target *target);
 public:
 	static Uint8 oceanColor1;
 	static Uint8 oceanColor2;

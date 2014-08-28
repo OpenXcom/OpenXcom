@@ -53,6 +53,8 @@ public:
 	void setId(int id);
 	/// Gets the terror site's name.
 	std::wstring getName(Language *lang) const;
+	/// Gets the terror site's marker.
+	int getMarker() const;
 	/// Gets the seconds until this terror site expires.
 	size_t getSecondsRemaining() const;
 	/// Sets the seconds until this terror site expires.
