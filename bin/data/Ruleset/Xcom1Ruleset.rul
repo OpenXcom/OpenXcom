@@ -9536,6 +9536,10 @@ interfaces:
         color: 15
         color2: 27
         border: 20
+      - id: infoBox
+        color: -1
+        color2: 10
+        border: 2
       - id: grenadeMenu
         color: 15
         color2: 27
