@@ -983,6 +983,10 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 		{
 			// conventional weapons can cause additional stun damage
 			_stunlevel += int(RNG::generate(0, power) * type->ToStun);
+			if(_stunlevel < 0)
+			{
+				_stunlevel = 0;
+			}
 		}
 
 		// health damage
