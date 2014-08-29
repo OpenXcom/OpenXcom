@@ -103,6 +103,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets list of voxel data.
 	std::vector<Uint16> *getVoxelData();
+	/// Returns a specific sound from either the land or underwater resource set.
+	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
 };
 
 }

@@ -312,7 +312,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-			_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_THROW)->play();
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::ITEM_THROW)->play();
 			_unit->addThrowingExp();
 		}
 		else
@@ -338,11 +338,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getFireSound())->play();
 			}
 			else if (_action.weapon->getRules()->getFireSound() != -1)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getFireSound())->play();
 			}
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
@@ -380,11 +380,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getFireSound())->play();
 			}
 			else if (_action.weapon->getRules()->getFireSound() != -1)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getFireSound())->play();
 			}
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
@@ -482,7 +482,7 @@ void ProjectileFlyBState::think()
 					pos.x--;
 				}
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::ITEM_DROP)->play();
 
 				if (Options::battleInstantGrenade && item->getRules()->getBattleType() == BT_GRENADE && item->getFuseTimer() == 0)
 				{
@@ -705,11 +705,11 @@ void ProjectileFlyBState::performMeleeAttack()
 	// and we have a lift-off
 	if (_ammo && _ammo->getRules()->getMeleeAttackSound() != -1)
 	{
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _ammo->getRules()->getMeleeAttackSound())->play();
+		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getMeleeAttackSound())->play();
 	}
 	else if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
 	{
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getMeleeAttackSound())->play();
+		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeAttackSound())->play();
 	}
 	if (!_parent->getSave()->getDebugMode() && _action.weapon->getRules()->getBattleType() == BT_MELEE && _ammo && _ammo->spendBullet() == false)
 	{

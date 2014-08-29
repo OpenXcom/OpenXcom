@@ -75,11 +75,11 @@ void UnitTurnBState::init()
 			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::DOOR_OPEN)->play(); // normal door
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::DOOR_OPEN)->play(); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_OPEN)->play(); // ufo door
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::SLIDING_DOOR_OPEN)->play(); // ufo door
 			}
 			if (door == 4)
 			{

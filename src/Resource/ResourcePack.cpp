@@ -262,4 +262,18 @@ std::vector<Uint16> *ResourcePack::getVoxelData()
 	return &_voxelData;
 }
 
+/**
+ * Returns a specific sound from either the land or underwater resource set.
+ * @param depth the depth of the battlescape.
+ * @param sound ID of the sound.
+ * @return Pointer to the sound.
+ */
+Sound *ResourcePack::getSoundByDepth(unsigned int depth, unsigned int sound) const
+{
+	if (depth == 0)
+		return getSound("BATTLE.CAT", sound);
+	else
+		return getSound("BATTLE2.CAT", sound);
+}
+
 }

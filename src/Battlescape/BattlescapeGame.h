@@ -186,7 +186,10 @@ public:
 	bool getKneelReserved();
 	/// Checks for and triggers proximity grenades.
 	bool checkForProximityGrenades(BattleUnit *unit);
+	/// Cleans up all the deleted states.
 	void cleanupDeleted();
+	/// Get the depth of the saved game.
+	const int getDepth() const;
 };
 
 }
