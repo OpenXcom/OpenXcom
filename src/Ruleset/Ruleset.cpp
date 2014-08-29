@@ -118,6 +118,8 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_STUN;
 	dmg->FixRadius = -1;
+	dmg->IgnoreSelfDestruct = true;
+	dmg->IgnorePainImmunity = true;
 	dmg->RadiusEffectiveness = 0.05f;
 	dmg->ToHealth = 0.0f;
 	dmg->ToArmor = 0.0f;
@@ -130,6 +132,7 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 	dmg = new RuleDamageType();
 	dmg->ResistType = DT_HE;
 	dmg->FixRadius = -1;
+	dmg->IgnoreSelfDestruct = true;
 	dmg->RadiusEffectiveness = 0.05f;
 	dmg->ToItem = 1.0f;
 	_damageTypes[dmg->ResistType] = dmg;

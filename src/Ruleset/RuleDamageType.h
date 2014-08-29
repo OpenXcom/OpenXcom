@@ -40,11 +40,15 @@ struct RuleDamageType
 	ItemDamageRandomType RandomType;
 	/// Set what resistance on armor is used.
 	ItemDamageType ResistType;
-	/// Use fire calculation of radius and power
+	/// Use fire calculation of radius and power.
 	bool FireBlastCalc;
-	/// Damage type ignore direction of attack
+	/// Damage type ignore direction of attack.
 	bool IgnoreDirection;
-	/// How much of armor is ignored
+	/// Damage type do not cause self destruct explosion.
+	bool IgnoreSelfDestruct;
+	/// Damage type can do stun damage to big units.
+	bool IgnorePainImmunity;
+	/// How much of armor is ignored.
 	float ArmorEffectiveness;
 	/// Conversion form power to radius.
 	float RadiusEffectiveness;
@@ -62,7 +66,7 @@ struct RuleDamageType
 	/// Conversion form power to stun level.
 	float ToStun;
 
-	/// Default constructor
+	/// Default constructor.
 	RuleDamageType();
 	/// Calculate random value of damage.
 	int getRandomDamage(int power) const;

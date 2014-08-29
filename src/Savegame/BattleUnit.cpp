@@ -967,7 +967,7 @@ int BattleUnit::damage(const Position &relative, int power, const RuleDamageType
 
 	if (power > 0)
 	{
-		if (_armor->getSize() == 1 || type->ResistType == DT_STUN)
+		if (_armor->getSize() == 1 || type->IgnorePainImmunity)
 		{
 			// conventional weapons can cause additional stun damage
 			_stunlevel += RNG::generate(0, int(power * type->ToStun));

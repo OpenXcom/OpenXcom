@@ -1055,7 +1055,7 @@ bool TileEngine::hitUnit(BattleUnit* unit, BattleUnit* target, const Position& r
 
 	if (target->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !target->isOut() && (target->getHealth() == 0 || target->getStunlevel() >= target->getHealth()))
 	{
-		if (type->ResistType != DT_STUN && type->ResistType != DT_HE)
+		if (type->IgnoreSelfDestruct == false)
 		{
 			Position p = Position(target->getPosition().x * 16, target->getPosition().y * 16, target->getPosition().z * 24);
 			_save->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleGame(), p, 0, target, 0));

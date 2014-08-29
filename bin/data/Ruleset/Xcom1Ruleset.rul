@@ -2435,6 +2435,7 @@ items:
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
+    damageType: 3
     battleType: 11
     power: 120
     blastRadius: 6
