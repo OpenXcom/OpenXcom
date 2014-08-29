@@ -20,6 +20,7 @@
 #include "CatFile.h"
 #include "Sound.h"
 #include "Exception.h"
+#include <sstream>
 namespace OpenXcom
 {
 
@@ -206,6 +207,12 @@ void SoundSet::loadCatbyIndex(const std::string &filename, int index)
 	if (!sndFile)
 	{
 		throw Exception(filename + " not found");
+	}
+	if (index >= sndFile.getAmount())
+	{
+		std::stringstream err;
+		err << filename << " does not contain " << index << " sound files.";
+		throw Exception(err.str());
 	}
 
 	// Read WAV chunk

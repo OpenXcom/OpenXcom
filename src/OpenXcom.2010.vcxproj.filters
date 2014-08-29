@@ -865,6 +865,9 @@
     <ClCompile Include="Ruleset\Polyline.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\SoundDefinition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1750,6 +1753,9 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\Polyline.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\SoundDefinition.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>

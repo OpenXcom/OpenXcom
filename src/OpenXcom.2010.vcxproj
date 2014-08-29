@@ -436,6 +436,7 @@
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
     <ClCompile Include="Ruleset\RuleGlobe.cpp" />
+    <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleInterface.cpp" />
@@ -733,6 +734,7 @@
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />
     <ClInclude Include="Ruleset\RuleGlobe.h" />
+    <ClInclude Include="Ruleset\SoundDefinition.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\RuleInterface.h" />

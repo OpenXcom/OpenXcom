@@ -505,6 +505,8 @@ set ( ruleset_src
   Ruleset/StatString.cpp
   Ruleset/StatStringCondition.h
   Ruleset/StatStringCondition.cpp
+  Ruleset/SoundDefinition.h
+  Ruleset/SoundDefinition.cpp
   Ruleset/Polygon.h
   Ruleset/Polygon.cpp
   Ruleset/Polyline.h

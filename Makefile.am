@@ -525,6 +525,8 @@ openxcom_SOURCES = \
 	src/Ruleset/StatString.cpp \
 	src/Ruleset/StatStringCondition.h \
 	src/Ruleset/StatStringCondition.cpp \
+	src/Ruleset/SoundDefinition.h \
+	src/Ruleset/SoundDefinition.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \

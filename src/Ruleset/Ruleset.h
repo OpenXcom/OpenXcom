@@ -61,6 +61,7 @@ class ExtraStrings;
 class StatString;
 class RuleInterface;
 class RuleGlobe;
+class SoundDefinition;
 
 /**
  * Set of rules and stats for a game.
@@ -93,6 +94,7 @@ protected:
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, RuleInterface *> _interfaces;
+	std::map<std::string, SoundDefinition *> _soundDefs;
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
@@ -239,6 +241,8 @@ public:
 	RuleInterface *getInterface(const std::string id) const;
 	/// Gets the ruleset for the globe
 	RuleGlobe *getGlobe() const;
+	/// Gets the list of selective files for insertion into our cat files.
+	const std::map<std::string, SoundDefinition *> *getSoundDefinitions() const;
 };
 
 }
