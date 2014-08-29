@@ -375,9 +375,9 @@ void BattlescapeGame::endTurn()
 	_currentAction.targeting = false;
 	_AISecondMove = false;
 
-	if (_save->getTileEngine()->closeUfoDoors())
+	if (_save->getTileEngine()->closeUfoDoors() && ResourcePack::SLIDING_DOOR_CLOSE != -1)
 	{
-		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
+		getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
 	}
 
 	// check for hot grenades on the ground

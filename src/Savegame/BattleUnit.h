@@ -112,6 +112,9 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	int _breathFrame;
+	bool _breathing;
+	bool _floorAbove;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -421,6 +424,15 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Is this unit breathing and if so what frame?
+	int getBreathFrame() const;
+	/// Start breathing and/or update the breathing frame.
+	void breathe();
+	/// Set the flag for "floor above me" meaning stop rendering bubbles.
+	void setFloorAbove(bool floor);
+	/// Get the flag for "floor above me".
+	bool getFloorAbove();
+
 };
 
 }

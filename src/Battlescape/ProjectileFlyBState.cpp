@@ -312,7 +312,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 39)->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_THROW)->play();
 			_unit->addThrowingExp();
 		}
 		else
@@ -482,7 +482,7 @@ void ProjectileFlyBState::think()
 					pos.x--;
 				}
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 
 				if (Options::battleInstantGrenade && item->getRules()->getBattleType() == BT_GRENADE && item->getFuseTimer() == 0)
 				{

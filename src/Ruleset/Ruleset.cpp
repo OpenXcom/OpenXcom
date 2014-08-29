@@ -64,6 +64,7 @@
 #include "../Ufopaedia/Ufopaedia.h"
 #include "StatString.h"
 #include "RuleGlobe.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -550,7 +551,11 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
-		extraSprites->load(*i, _modIndex);
+		// doesn't support modIndex
+		if (type != "TEXTURE.DAT")
+			extraSprites->load(*i, _modIndex);
+		else
+			extraSprites->load(*i, 0);
 		_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
 		_extraSpritesIndex.push_back(type);
 	}
@@ -597,7 +602,50 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		_globe->load(doc["globe"]);
 	}
-
+	for (YAML::const_iterator i = doc["soundRefs"].begin(); i != doc["soundRefs"].end(); ++i)
+	{
+		ResourcePack::DOOR_OPEN = (*i)["doorSound"].as<int>(ResourcePack::DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(ResourcePack::SLIDING_DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
+		ResourcePack::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
+		ResourcePack::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
+		ResourcePack::ITEM_DROP = (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
+		ResourcePack::ITEM_THROW = (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
+		ResourcePack::ITEM_RELOAD = (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
+		ResourcePack::WALK_OFFSET = (*i)["walkOffset"].as<int>(ResourcePack::WALK_OFFSET);
+		ResourcePack::FLYING_SOUND = (*i)["flyingSound"].as<int>(ResourcePack::FLYING_SOUND);
+		if ((*i)["maleScream"])
+		{
+			int k = 0;
+			for (YAML::const_iterator j = (*i)["maleScream"].begin(); j != (*i)["maleScream"].end() && k < 3; ++j, ++k)
+			{
+				ResourcePack::MALE_SCREAM[k] = (*j).as<int>(ResourcePack::MALE_SCREAM[k]);
+			}
+		}
+		if ((*i)["femaleScream"])
+		{
+			int k = 0;
+			for (YAML::const_iterator j = (*i)["femaleScream"].begin(); j != (*i)["femaleScream"].end() && k < 3; ++j, ++k)
+			{
+				ResourcePack::FEMALE_SCREAM[k] = (*j).as<int>(ResourcePack::FEMALE_SCREAM[k]);
+			}
+		}
+		ResourcePack::BUTTON_PRESS = (*i)["buttonPress"].as<int>(ResourcePack::BUTTON_PRESS);
+		if ((*i)["windowPopup"])
+		{
+			int k = 0;
+			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
+			{
+				ResourcePack::WINDOW_POPUP[k] = (*j).as<int>(ResourcePack::WINDOW_POPUP[k]);
+			}
+		}
+		ResourcePack::UFO_FIRE = (*i)["ufoFire"].as<int>(ResourcePack::UFO_FIRE);
+		ResourcePack::UFO_HIT = (*i)["ufoHit"].as<int>(ResourcePack::UFO_HIT);
+		ResourcePack::UFO_CRASH = (*i)["ufoCrash"].as<int>(ResourcePack::UFO_CRASH);
+		ResourcePack::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(ResourcePack::UFO_EXPLODE);
+		ResourcePack::INTERCEPTOR_HIT = (*i)["intterceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
+		ResourcePack::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
+	}
 	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{

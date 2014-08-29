@@ -74,6 +74,9 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
+	_breathFrame = 0;
+	_floorAbove = false;
+	_breathing = false;
 
 	int rankbonus = 0;
 
@@ -145,6 +148,15 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
 	_stats += *_armor->getStats();	// armors may modify effective stats
+	
+	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
+	if (armor->getDrawingRoutine() == 14)
+	{
+		_breathFrame = 0;
+	}
+	_floorAbove = false;
+	_breathing = false;
+
 	if (faction == FACTION_HOSTILE)
 	{
 		adjustStats(diff);
@@ -2658,4 +2670,66 @@ bool BattleUnit::hasInventory() const
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
 }
 
+/**
+ * If this unit is breathing, what frame should be displayed?
+ * @return frame number.
+ */
+int BattleUnit::getBreathFrame() const
+{
+	if (_floorAbove)
+		return 0;
+	return _breathFrame;
+}
+
+/**
+ * Decides if we should start producing bubbles, and/or updates which bubble frame we are on.
+ */
+void BattleUnit::breathe()
+{
+	// _breathFrame of -1 means this unit doesn't produce bubbles
+	if (_breathFrame < 0 || isOut())
+	{
+		_breathing = false;
+		return;
+	}
+
+	if (!_breathing || _status == STATUS_WALKING)
+	{
+		// deviation from original: TFTD used a static 10% chance for every animation frame,
+		// instead let's use 5%, but allow morale to affect it.
+		_breathing = (_status != STATUS_WALKING && RNG::percent(105 - _morale));
+		_breathFrame = 0;
+	}
+
+	if (_breathing)
+	{
+		// advance the bubble frame
+		_breathFrame++;
+
+		// we've reached the end of the cycle, get rid of the bubbles
+		if (_breathFrame >= 17)
+		{
+			_breathFrame = 0;
+			_breathing = false;
+		}
+	}
+}
+
+/**
+ * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
+ * @param floor is there a floor.
+ */
+void BattleUnit::setFloorAbove(bool floor)
+{
+	_floorAbove = floor;
+}
+
+/**
+ * Checks if the floor above flag has been set.
+ * @return if we're under cover.
+ */
+bool BattleUnit::getFloorAbove()
+{
+	return _floorAbove;
+}
 }
