@@ -271,6 +271,7 @@
 #include "./Ruleset/RuleBaseFacility.h"
 #include "./Ruleset/RuleRegion.h"
 #include "./Ruleset/RuleItem.h"
+#include "./Ruleset/RuleDamageType.h"
 #include "./Ruleset/RuleManufacture.h"
 #include "./Ruleset/AlienRace.h"
 #include "./Ruleset/City.h"

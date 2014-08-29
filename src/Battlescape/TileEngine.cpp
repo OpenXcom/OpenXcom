@@ -1368,20 +1368,20 @@ bool TileEngine::detonate(Tile* tile, int explosive)
 		}
 		if ( i == 6 &&
 			(bigwall == 2 || bigwall == 3) && //diagonals
-			(2 * tiles[i]->getMapData(currentpart)->getArmor()) > remainingPower) //not enough to destroy
+			tiles[i]->getMapData(currentpart)->getArmor() > remainingPower) //not enough to destroy
 		{
 			bigwalldestroyed = false;
 		}
 		// iterate through tile armor and destroy if can
 		while (	tiles[i]->getMapData(currentpart) &&
-				(2 * tiles[i]->getMapData(currentpart)->getArmor()) <= remainingPower &&
+				tiles[i]->getMapData(currentpart)->getArmor() <= remainingPower &&
 				tiles[i]->getMapData(currentpart)->getArmor() != 255)
 		{
 			if ( i == 6 && (bigwall == 2 || bigwall == 3)) //diagonals for the current tile
 			{
 				bigwalldestroyed = true;
 			}
-			remainingPower -= 2 * tiles[i]->getMapData(currentpart)->getArmor();
+			remainingPower -= tiles[i]->getMapData(currentpart)->getArmor();
 			destroyed = true;
 			if (_save->getMissionType() == "STR_BASE_DEFENSE" &&
 				tiles[i]->getMapData(currentpart)->isBaseModule())
@@ -1404,7 +1404,7 @@ bool TileEngine::detonate(Tile* tile, int explosive)
 			}
 		}
 		// set tile on fire
-		if ((2 * fireProof) < remainingPower)
+		if (fireProof < remainingPower)
 		{
 			if (tiles[i]->getMapData(MapData::O_FLOOR) || tiles[i]->getMapData(MapData::O_OBJECT))
 			{
