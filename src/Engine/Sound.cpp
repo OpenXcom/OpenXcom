@@ -108,4 +108,30 @@ void Sound::stop()
 	}
 }
 
+/**
+ * Plays the contained sound effect repeatedly on the reserved ambience channel.
+ */
+void Sound::loop()
+{
+	if (!Options::mute && _sound != 0 && Mix_Playing(3) == 0)
+	{
+		int chan = Mix_PlayChannel(3, _sound, -1);
+		if (chan == -1)
+		{
+			Log(LOG_WARNING) << Mix_GetError();
+		}
+	}
+}
+
+/**
+ * Stops the contained sound from looping.
+ */
+void Sound::stopLoop()
+{
+	if (!Options::mute)
+	{
+		Mix_HaltChannel(3);
+	}
+}
+
 }

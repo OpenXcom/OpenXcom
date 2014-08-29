@@ -506,6 +506,11 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	if (_save->getAmbientSound() != -1)
+	{
+		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->loop();
+	}
+
 	State::init();
 	_animTimer->start();
 	_gameTimer->start();
@@ -1900,6 +1905,10 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->popState();
 	}
 	_game->getCursor()->setVisible(true);
+	if (_save->getAmbientSound() != -1)
+	{
+		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
+	}
 	std::string nextStage = "";
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{

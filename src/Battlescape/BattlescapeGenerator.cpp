@@ -1079,6 +1079,8 @@ void BattlescapeGenerator::generateMap()
 	int mapDataSetIDOffset = 0;
 	int craftDataSetIDOffset = 0;
 
+	_save->setAmbientSound(_terrain->getAmbience());
+
 	blocks.resize((_mapsize_x / 10), std::vector<MapBlock*>((_mapsize_y / 10)));
 	landingzone.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));
 	storageBlocks.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));

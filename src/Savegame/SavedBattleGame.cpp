@@ -59,7 +59,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _cheating(false),
-									 _tuReserved(BA_NONE), _kneelReserved(false), _depth(0)
+									 _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -1783,6 +1783,10 @@ void SavedBattleGame::setDepth(int depth)
 	_depth = depth;
 }
 
+/**
+ * uses the depth variable to choose a palette.
+ * @param state the state to set the palette for.
+ */
 void SavedBattleGame::setPaletteByDepth(State *state)
 {
 	if (_depth == 0)
@@ -1796,4 +1800,23 @@ void SavedBattleGame::setPaletteByDepth(State *state)
 		state->setPalette(ss.str());
 	}
 }
+
+/**
+ * set the ambient battlescape sound effect.
+ * @param sound the intended sound.
+ */
+void SavedBattleGame::setAmbientSound(int sound)
+{
+	_ambience = sound;
+}
+
+/**
+ * get the ambient battlescape sound effect.
+ * @return the intended sound.
+ */
+const int SavedBattleGame::getAmbientSound() const
+{
+	return _ambience;
+}
+
 }

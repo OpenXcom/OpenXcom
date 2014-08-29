@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0), _ambience(-1)
 {
 }
 
@@ -86,6 +86,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	}
 	_minDepth = node["minDepth"].as<int>(_minDepth);
 	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
+	_ambience = node["ambience"].as<int>(_ambience);
 }
 
 /**
@@ -245,14 +246,31 @@ std::vector<int> RuleTerrain::getRoadTypeOdds() const
 	return _roadTypeOdds;
 }
 
+/**
+ * Gets the min depth.
+ * @return The min depth.
+ */
 const int RuleTerrain::getMinDepth() const
 {
 	return _minDepth;
 }
 
+/**
+ * Gets the max depth.
+ * @return max depth.
+ */
 const int RuleTerrain::getMaxDepth() const
 {
 	return _maxDepth;
+}
+
+/**
+ * Gets The ambient sound effect.
+ * @return The ambient sound effect.
+ */
+const int RuleTerrain::getAmbience() const
+{
+	return _ambience;
 }
 
 }
