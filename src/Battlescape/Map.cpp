@@ -833,6 +833,11 @@ void Map::drawTerrain(Surface *surface)
 							if (unit->getBreathFrame() > 0)
 							{
 								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
+								// we enlarge the unit sprite when aiming to accomodate the weapon. so adjust as necessary.
+								if (unit->getStatus() == STATUS_AIMING)
+								{
+									offset.x = 0;
+								}
 								if (tmpSurface)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y - 30, tileShade);
