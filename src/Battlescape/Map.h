@@ -31,6 +31,7 @@ namespace OpenXcom
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
+class SurfaceSet;
 class BattleUnit;
 class Projectile;
 class Explosion;
@@ -70,6 +71,7 @@ private:
 	bool _unitDying, _smoothCamera, _smoothingEngaged;
 	PathPreview _previewSetting;
 	Text *_txtAccuracy;
+	SurfaceSet *_projectileSet;
 
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);

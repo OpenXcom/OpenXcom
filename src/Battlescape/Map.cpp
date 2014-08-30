@@ -154,6 +154,14 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
+	if (_save->getDepth() == 0)
+	{
+		_projectileSet = _res->getSurfaceSet("Projectiles");
+	}
+	else
+	{
+		_projectileSet = _res->getSurfaceSet("UnderwaterProjectiles");
+	}
 }
 
 /**
@@ -776,7 +784,7 @@ void Map::drawTerrain(Surface *surface)
 
 								for (int i = begin; i != end; i += direction)
 								{
-									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
+									tmpSurface = _projectileSet->getFrame(_projectile->getParticle(i));
 									if (tmpSurface)
 									{
 										Position voxelPos = _projectile->getPosition(1-i);
