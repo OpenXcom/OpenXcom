@@ -262,7 +262,7 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_rotLon(0.0), _rotLat(0.0),
 	_hoverLon(0.0), _hoverLat(0.0),
 	_cenX(cenX), _cenY(cenY), _game(game),
-	_blink(-1), _hover(false), _cacheLand(),
+	_hover(false), _blink(-1), _cacheLand(),
 	_isMouseScrolling(false), _isMouseScrolled(false),
 	_xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0),
 	_lonBeforeMouseScrolling(0.0), _latBeforeMouseScrolling(0.0),
@@ -1546,7 +1546,6 @@ void Globe::drawTarget(Target *target)
  */
 void Globe::drawMarkers()
 {
-	Sint16 x, y;
 	_markers->clear();
 
 	// Draw the base markers
