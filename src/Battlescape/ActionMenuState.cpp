@@ -219,7 +219,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
 			_game->popState();
 		}
-		if (_action->type == BA_PRIME)
+		else if (_action->type == BA_PRIME)
 		{
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
