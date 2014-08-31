@@ -928,7 +928,8 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		weapon->getAmmoItem() &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
-		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())))
+		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&
+		(_save->getDepth() != 0 || weapon->getRules()->isWaterOnly() == false))
 	{
 		return true;
 	}

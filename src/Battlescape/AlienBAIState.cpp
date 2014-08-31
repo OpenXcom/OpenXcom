@@ -189,23 +189,30 @@ void AlienBAIState::think(BattleAction *action)
 	if (action->weapon)
 	{
 		RuleItem *rule = action->weapon->getRules();
-		if (rule->getBattleType() == BT_FIREARM)
+		if (!rule->isWaterOnly() || _save->getDepth() != 0)
 		{
-			if (!rule->isWaypoint())
+			if (rule->getBattleType() == BT_FIREARM)
 			{
-				_rifle = true;
-				_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
+				if (!rule->isWaypoint())
+				{
+					_rifle = true;
+					_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
+				}
+				else
+				{
+					_blaster = true;
+					_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_AIMEDSHOT, action->weapon));
+				}
 			}
-			else
+			else if (rule->getBattleType() == BT_MELEE)
 			{
-				_blaster = true;
-				_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_AIMEDSHOT, action->weapon));
+				_melee = true;
+				_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, action->weapon));
 			}
 		}
-		else if (rule->getBattleType() == BT_MELEE)
+		else
 		{
-			_melee = true;
-			_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, action->weapon));
+			action->weapon = 0;
 		}
 	}
 
