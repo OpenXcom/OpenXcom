@@ -15,6 +15,7 @@
 
 #include "xbrz.h"
 #include <cassert>
+#include <cmath>
 #include <algorithm>
 
 namespace
@@ -26,12 +27,12 @@ inline unsigned char getRed  (uint32_t val) { return getByte<2>(val); }
 inline unsigned char getGreen(uint32_t val) { return getByte<1>(val); }
 inline unsigned char getBlue (uint32_t val) { return getByte<0>(val); }
 
-template <class T> inline
+/*template <class T> inline
 T abs(T value)
 {
     static_assert(std::is_signed<T>::value, "");
     return value < 0 ? -value : value;
-}
+}*/
 
 const uint32_t redMask   = 0xff0000;
 const uint32_t greenMask = 0x00ff00;
@@ -40,9 +41,9 @@ const uint32_t blueMask  = 0x0000ff;
 template <unsigned int N, unsigned int M> inline
 void alphaBlend(uint32_t& dst, uint32_t col) //blend color over destination with opacity N / M
 {
-    static_assert(N < 256, "possible overflow of (col & redMask) * N");
-    static_assert(M < 256, "possible overflow of (col & redMask  ) * N + (dst & redMask  ) * (M - N)");
-    static_assert(0 < N && N < M, "");
+    //static_assert(N < 256, "possible overflow of (col & redMask) * N");
+    //static_assert(M < 256, "possible overflow of (col & redMask  ) * N + (dst & redMask  ) * (M - N)");
+    //static_assert(0 < N && N < M, "");
     dst = (redMask   & ((col & redMask  ) * N + (dst & redMask  ) * (M - N)) / M) | //this works because 8 upper bits are free
           (greenMask & ((col & greenMask) * N + (dst & greenMask) * (M - N)) / M) |
           (blueMask  & ((col & blueMask ) * N + (dst & blueMask ) * (M - N)) / M);
@@ -423,9 +424,9 @@ double distYUV(uint32_t pix1, uint32_t pix2, double luminanceWeight)
 #ifndef NDEBUG
     const double eps = 0.5;
 #endif
-    assert(std::abs(y) <= 255 + eps);
-    assert(std::abs(u) <= 255 * 2 * u_max + eps);
-    assert(std::abs(v) <= 255 * 2 * v_max + eps);
+    //assert(std::abs(y) <= 255 + eps);
+    //assert(std::abs(u) <= 255 * 2 * u_max + eps);
+    //assert(std::abs(v) <= 255 * 2 * v_max + eps);
 
     return std::sqrt(square(luminanceWeight * y) + square(u) +  square(v));
 }
@@ -472,6 +473,12 @@ struct Kernel_4x4 //kernel for preprocessing step
     /**/m, n, o, p;
 };
 
+inline
+double dist(uint32_t col1, uint32_t col2, const xbrz::ScalerCfg& cfg) { return colorDist(col1, col2, cfg.luminanceWeight_); };
+
+inline
+bool eq(uint32_t col1, uint32_t col2, const xbrz::ScalerCfg& cfg) { return colorDist(col1, col2, cfg.luminanceWeight_) < cfg.equalColorTolerance_; };
+
 /*
 input kernel area naming convention:
 -----------------
@@ -495,11 +502,9 @@ BlendResult preProcessCorners(const Kernel_4x4& ker, const xbrz::ScalerCfg& cfg)
          ker.g == ker.k))
         return result;
 
-    auto dist = [&](uint32_t col1, uint32_t col2) { return colorDist(col1, col2, cfg.luminanceWeight_); };
-
     const int weight = 4;
-    double jg = dist(ker.i, ker.f) + dist(ker.f, ker.c) + dist(ker.n, ker.k) + dist(ker.k, ker.h) + weight * dist(ker.j, ker.g);
-    double fk = dist(ker.e, ker.j) + dist(ker.j, ker.o) + dist(ker.b, ker.g) + dist(ker.g, ker.l) + weight * dist(ker.f, ker.k);
+    double jg = dist(ker.i, ker.f, cfg) + dist(ker.f, ker.c, cfg) + dist(ker.n, ker.k, cfg) + dist(ker.k, ker.h, cfg) + weight * dist(ker.j, ker.g, cfg);
+    double fk = dist(ker.e, ker.j, cfg) + dist(ker.j, ker.o, cfg) + dist(ker.b, ker.g, cfg) + dist(ker.g, ker.l, cfg) + weight * dist(ker.f, ker.k, cfg);
 
     if (jg < fk) //test sample: 70% of values max(jg, fk) / min(jg, fk) are between 1.1 and 3.7 with median being 1.8
     {
@@ -619,35 +624,23 @@ void scalePixel(const Kernel_3x3& ker,
 
     if (getBottomR(blend) >= BLEND_NORMAL)
     {
-        auto eq   = [&](uint32_t col1, uint32_t col2) { return colorDist(col1, col2, cfg.luminanceWeight_) < cfg.equalColorTolerance_; };
-        auto dist = [&](uint32_t col1, uint32_t col2) { return colorDist(col1, col2, cfg.luminanceWeight_); };
+		const bool doLineBlend = (
+			(getBottomR(blend) >= BLEND_DOMINANT) || !(
+			//make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
+			(getTopR(blend) != BLEND_NONE && !eq(e, g, cfg)) || //but support double-blending for 90° corners
+			(getBottomL(blend) != BLEND_NONE && !eq(e, c, cfg)) ||
+			//no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
+			(eq(g, h, cfg) && eq(h, i, cfg) && eq(i, f, cfg) && eq(f, c, cfg) && !eq(e, i, cfg))
+			));
 
-        const bool doLineBlend = [&]() -> bool
-        {
-            if (getBottomR(blend) >= BLEND_DOMINANT)
-                return true;
-
-            //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            if (getTopR(blend) != BLEND_NONE && !eq(e, g)) //but support double-blending for 90° corners
-                return false;
-            if (getBottomL(blend) != BLEND_NONE && !eq(e, c))
-                return false;
-
-            //no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
-            if (eq(g, h) &&  eq(h , i) && eq(i, f) && eq(f, c) && !eq(e, i))
-                return false;
-
-            return true;
-        }();
-
-        const uint32_t px = dist(e, f) <= dist(e, h) ? f : h; //choose most similar color
+        const uint32_t px = dist(e, f, cfg) <= dist(e, h, cfg) ? f : h; //choose most similar color
 
         OutputMatrix<Scaler::scale, rotDeg> out(target, trgWidth);
 
         if (doLineBlend)
         {
-            const double fg = dist(f, g); //test sample: 70% of values max(fg, hc) / min(fg, hc) are between 1.1 and 3.7 with median being 1.9
-            const double hc = dist(h, c); //
+            const double fg = dist(f, g, cfg); //test sample: 70% of values max(fg, hc) / min(fg, hc) are between 1.1 and 3.7 with median being 1.9
+            const double hc = dist(h, c, cfg); //
 
             const bool haveShallowLine = cfg.steepDirectionThreshold * fg <= hc && e != g && d != g;
             const bool haveSteepLine   = cfg.steepDirectionThreshold * hc <= fg && e != c && b != c;
@@ -698,7 +691,7 @@ void scaleImage(const uint32_t* src, uint32_t* trg, int srcWidth, int srcHeight,
     const int bufferSize = srcWidth;
     unsigned char* preProcBuffer = reinterpret_cast<unsigned char*>(trg + yLast * Scaler::scale * trgWidth) - bufferSize;
     std::fill(preProcBuffer, preProcBuffer + bufferSize, 0);
-    static_assert(BLEND_NONE == 0, "");
+    //static_assert(BLEND_NONE == 0, "");
 
     //initialize preprocessing buffer for first row: detect upper left and right corner blending
     //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
