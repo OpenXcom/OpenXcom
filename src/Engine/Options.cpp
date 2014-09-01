@@ -83,6 +83,7 @@ void create()
 	_info.push_back(OptionInfo("battlescapeScale", &battlescapeScale, 0));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
 	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
+	_info.push_back(OptionInfo("useXBRZFilter", &useXBRZFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
 	_info.push_back(OptionInfo("checkOpenGLErrors", &checkOpenGLErrors, false));
 	_info.push_back(OptionInfo("useOpenGLShader", &useOpenGLShader, "Shaders/Openxcom.OpenGL.shader"));
@@ -641,6 +642,7 @@ void backupDisplay()
 	Options::newScaleFilter = Options::useScaleFilter;
 	Options::newHQXFilter = Options::useHQXFilter;
 	Options::newOpenGLShader = Options::useOpenGLShader;
+	Options::newXBRZFilter = Options::useXBRZFilter;
 }
 
 /**
@@ -657,6 +659,7 @@ void switchDisplay()
 	std::swap(geoscapeScale, newGeoscapeScale);
 	std::swap(useHQXFilter, newHQXFilter);
 	std::swap(useOpenGLShader, newOpenGLShader);
+	std::swap(useXBRZFilter, newXBRZFilter);
 }
 
 }

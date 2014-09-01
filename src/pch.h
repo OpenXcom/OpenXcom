@@ -102,6 +102,7 @@
 #include "./Engine/Scalers/common.h"
 #include "./Engine/Scalers/scale2x.h"
 #include "./Engine/Scalers/scale3x.h"
+#include "./Engine/Scalers/xbrz.h"
 #include "./Engine/ShaderRepeat.h"
 #include "./Engine/SoundSet.h"
 #include "./Engine/Action.h"

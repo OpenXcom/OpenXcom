@@ -323,6 +323,7 @@
     <ClCompile Include="Engine\Scalers\scale2x.cpp" />
     <ClCompile Include="Engine\Scalers\scale3x.cpp" />
     <ClCompile Include="Engine\Scalers\scalebit.cpp" />
+    <ClCompile Include="Engine\Scalers\xbrz.cpp" />
     <ClCompile Include="Engine\Screen.cpp" />
     <ClCompile Include="Engine\Sound.cpp" />
     <ClCompile Include="Engine\SoundSet.cpp" />
@@ -618,10 +619,12 @@
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
     <ClInclude Include="Engine\Scalers\common.h" />
+    <ClInclude Include="Engine\Scalers\config.h" />
     <ClInclude Include="Engine\Scalers\hqx.h" />
     <ClInclude Include="Engine\Scalers\scale2x.h" />
     <ClInclude Include="Engine\Scalers\scale3x.h" />
     <ClInclude Include="Engine\Scalers\scalebit.h" />
+    <ClInclude Include="Engine\Scalers\xbrz.h" />
     <ClInclude Include="Engine\Screen.h" />
     <ClInclude Include="Engine\ShaderDraw.h" />
     <ClInclude Include="Engine\ShaderDrawHelper.h" />
