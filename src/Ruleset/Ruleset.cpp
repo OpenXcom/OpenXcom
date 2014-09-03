@@ -67,6 +67,7 @@
 #include "StatString.h"
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"
+#include "RuleVideo.h"
 
 namespace OpenXcom
 {
@@ -209,6 +210,10 @@ Ruleset::~Ruleset()
 			delete *j;
 			j = (*i).second.erase(j);
 		}
+	}
+	for (std::map<std::string, RuleVideo *>::const_iterator i = _videos.begin(); i != _videos.end(); ++i)
+	{
+		delete i->second;
 	}
 }
 
@@ -618,7 +623,7 @@ void Ruleset::loadFile(const std::string &filename)
 			_mapScripts[type].push_back(mapScript.release());
 		}
 	}
-
+	
 	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
@@ -631,6 +636,15 @@ void Ruleset::loadFile(const std::string &filename)
 	}
 
 	_modIndex += 1000;
+	
+	for (YAML::const_iterator i = doc["cutscenes"].begin(); i != doc["cutscenes"].end(); ++i)
+	{
+		RuleVideo *rule = loadRule(*i, &_videos, 0, "id");
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
 }
 
 /**
@@ -1581,6 +1595,11 @@ const std::vector<MapScript*> *Ruleset::getMapScript(std::string id) const
 {
 	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
 	if (_mapScripts.end() != i) return &i->second; else return 0;
+}
+
+const std::map<std::string, RuleVideo *> *Ruleset::getVideos() const
+{
+	return &_videos;
 }
 
 }

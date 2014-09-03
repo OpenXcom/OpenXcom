@@ -75,6 +75,7 @@ deps/
 docs/html/
 build/
 Dependencies/
+*.*.user
 #Ignore Vim swap files
 *.swp
 #Ignore NetBeans project directory

@@ -64,6 +64,7 @@ class RuleInterface;
 class RuleGlobe;
 class SoundDefinition;
 class MapScript;
+class RuleVideo;
 
 /**
  * Set of rules and stats for a game.
@@ -97,6 +98,7 @@ protected:
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, RuleInterface *> _interfaces;
 	std::map<std::string, SoundDefinition *> _soundDefs;
+	std::map<std::string, RuleVideo *>_videos;
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::map<std::string, std::vector<MapScript *> > _mapScripts;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
@@ -232,7 +234,7 @@ public:
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Gets the list of StatStrings.
-    std::vector<StatString *> getStatStrings() const;    
+	std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
@@ -254,6 +256,8 @@ public:
 	/// Gets the list of transparency colors, 
 	const std::vector<SDL_Color> *getTransparencies() const;
 	const std::vector<MapScript*> *getMapScript(std::string id) const;
+	/// Gets the list videos for intro/outro etc.
+	const std::map<std::string, RuleVideo *> *getVideos() const;
 };
 
 }
