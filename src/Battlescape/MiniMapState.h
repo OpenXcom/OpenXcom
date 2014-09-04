@@ -25,7 +25,7 @@ namespace OpenXcom
 {
 
 class Camera;
-class InteractiveSurface;
+class BattlescapeButton;
 class Text;
 class MiniMapView;
 class Timer;
@@ -38,7 +38,7 @@ class MiniMapState : public State
 {
 	Surface * _bg;
 	MiniMapView *_miniMapView;
-	InteractiveSurface *_btnLvlUp, *_btnLvlDwn, *_btnOk;
+	BattlescapeButton *_btnLvlUp, *_btnLvlDwn, *_btnOk;
 	Text *_txtLevel;
 	Timer *_timerAnimate;
 	/// Handles Minimap animation.

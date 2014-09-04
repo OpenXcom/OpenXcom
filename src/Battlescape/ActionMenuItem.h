@@ -41,7 +41,7 @@ class ActionMenuItem : public InteractiveSurface
 private:
 	bool _highlighted;
 	BattleActionType _action;
-	int _tu;
+	int _tu, _highlightModifier;
 	Frame *_frame;
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:

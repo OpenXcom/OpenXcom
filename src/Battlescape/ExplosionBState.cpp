@@ -129,9 +129,9 @@ void ExplosionBState::init()
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
 			// explosion sound
 			if (_power <= 80)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 2)->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::SMALL_EXPLOSION)->play();
 			else
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::LARGE_EXPLOSION)->play();
 
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
@@ -155,7 +155,7 @@ void ExplosionBState::init()
 		if (sound != -1)
 		{
 			// bullet hit sound
-			_parent->getResourcePack()->getSound("BATTLE.CAT", sound)->play();
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play();
 		}
 		Explosion *explosion = new Explosion(_center, anim, false, _hit || psi); // Don't burn the tile
 		_parent->getMap()->getExplosions()->push_back(explosion);
@@ -231,7 +231,7 @@ void ExplosionBState::explode()
 		}
 		if (_item->getRules()->getMeleeHitSound() != -1)
 		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getMeleeHitSound())->play();
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getMeleeHitSound())->play();
 		}
 	}
 	// after the animation is done, the real explosion/hit takes place

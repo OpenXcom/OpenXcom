@@ -56,6 +56,7 @@ namespace OpenXcom
  */
 Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _groundOffset(0), _animFrame(0)
 {
+	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
 	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
@@ -64,8 +65,8 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base)
 	_stackNumber->setBordered(true);
 
 	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1)-1);
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2);
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color);
 
 	_animTimer = new Timer(125);
 	_animTimer->onTimer((SurfaceHandler)&Inventory::drawPrimers);
@@ -587,7 +588,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							{
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
-								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+								_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 								arrangeGround(false);
 							}
 							else
@@ -641,7 +642,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								_stackLevel[x][y] += 1;
 							}
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -655,7 +656,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -691,7 +692,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_RELOAD)->play();
 							if (item->getSlot()->getType() == INV_GROUND)
 							{
 								arrangeGround(false);
@@ -722,7 +723,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -960,7 +961,7 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 				{
 					placed = true;
 					moveItem(item, newSlot, x2, y2);
-					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+					_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 					drawItems();
 				}
 				else

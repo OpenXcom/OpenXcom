@@ -257,6 +257,7 @@ openxcom_SOURCES = \
 	src/Engine/RNG.cpp \
 	src/Engine/RNG.h \
 	src/Engine/Scalers/common.h \
+	src/Engine/Scalers/config.h \
 	src/Engine/Scalers/hqx.h \
 	src/Engine/Scalers/hq2x.cpp \
 	src/Engine/Scalers/hq3x.cpp \
@@ -268,6 +269,8 @@ openxcom_SOURCES = \
 	src/Engine/Scalers/scale2x.h \
 	src/Engine/Scalers/scale3x.cpp \
 	src/Engine/Scalers/scale3x.h \
+	src/Engine/Scalers/xbrz.cpp \
+	src/Engine/Scalers/xbrz.h \
 	src/Engine/Screen.cpp \
 	src/Engine/Screen.h \
 	src/Engine/ShaderDraw.h \
@@ -343,10 +346,6 @@ openxcom_SOURCES = \
 	src/Geoscape/NewPossibleManufactureState.h \
 	src/Geoscape/NewPossibleResearchState.cpp \
 	src/Geoscape/NewPossibleResearchState.h \
-	src/Geoscape/Polygon.cpp \
-	src/Geoscape/Polygon.h \
-	src/Geoscape/Polyline.cpp \
-	src/Geoscape/Polyline.h \
 	src/Geoscape/ProductionCompleteState.cpp \
 	src/Geoscape/ProductionCompleteState.h \
 	src/Geoscape/PsiTrainingState.cpp \
@@ -367,6 +366,8 @@ openxcom_SOURCES = \
 	src/Geoscape/VictoryState.h \
 	src/Interface/ArrowButton.cpp \
 	src/Interface/ArrowButton.h \
+	src/Interface/BattlescapeButton.cpp \
+	src/Interface/BattlescapeButton.h \
 	src/Interface/Bar.cpp \
 	src/Interface/Bar.h \
 	src/Interface/ComboBox.cpp \
@@ -477,6 +478,10 @@ openxcom_SOURCES = \
 	src/Ruleset/ExtraSounds.h \
 	src/Ruleset/ExtraStrings.cpp \
 	src/Ruleset/ExtraStrings.h \
+	src/Ruleset/Polygon.cpp \
+	src/Ruleset/Polygon.h \
+	src/Ruleset/Polyline.cpp \
+	src/Ruleset/Polyline.h \
 	src/Ruleset/MapBlock.cpp \
 	src/Ruleset/MapBlock.h \
 	src/Ruleset/MapData.cpp \
@@ -495,6 +500,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleCraft.h \
 	src/Ruleset/RuleCraftWeapon.cpp \
 	src/Ruleset/RuleCraftWeapon.h \
+	src/Ruleset/RuleGlobe.cpp \
+	src/Ruleset/RuleGlobe.h \
 	src/Ruleset/RuleInterface.cpp \
 	src/Ruleset/RuleInterface.h \
 	src/Ruleset/RuleInventory.cpp \
@@ -521,6 +528,8 @@ openxcom_SOURCES = \
 	src/Ruleset/StatString.cpp \
 	src/Ruleset/StatStringCondition.h \
 	src/Ruleset/StatStringCondition.cpp \
+	src/Ruleset/SoundDefinition.h \
+	src/Ruleset/SoundDefinition.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \

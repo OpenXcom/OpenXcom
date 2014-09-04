@@ -21,7 +21,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
-#include "../Engine/InteractiveSurface.h"
+#include "../Interface/BattlescapeButton.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInterface.h"
@@ -55,15 +55,16 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 
 	_bg = new Surface(320, 200);
 	_miniMapView = new MiniMapView(221, 148, 48, 16, _game, camera, battleGame);
-	_btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
-	_btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
-	_btnOk = new InteractiveSurface(32, 32, 275, 145);
+	_btnLvlUp = new BattlescapeButton(18, 20, 24, 62);
+	_btnLvlDwn = new BattlescapeButton(18, 20, 24, 88);
+	_btnOk = new BattlescapeButton(32, 32, 275, 145);
 	_txtLevel = new Text(28, 16, 281, 75);
 	
 	// Set palette
 	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
+	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
 	add(_miniMapView);
 	add(_btnLvlUp, "buttonUp", "minimap", _bg);
 	add(_btnLvlDwn, "buttonDown", "minimap", _bg);
@@ -78,7 +79,6 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 		_bg->drawRect(46, 14, 223, 151, Palette::blockOffset(15)+15);
 	}
 
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
 	_btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
 	_btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
 	_btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);

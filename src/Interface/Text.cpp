@@ -54,7 +54,7 @@ Text::~Text()
  * @param currency Currency symbol.
  * @return The formatted string.
  */
-std::wstring Text::formatNumber(int value, std::wstring currency)
+std::wstring Text::formatNumber(int64_t value, std::wstring currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -92,7 +92,7 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
  * @param funds The funding value.
  * @return The formatted string.
  */
-std::wstring Text::formatFunding(int funds)
+std::wstring Text::formatFunding(int64_t funds)
 {
 	return formatNumber(funds, L"$");
 }

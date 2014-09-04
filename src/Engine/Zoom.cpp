@@ -19,8 +19,6 @@
 
 #include "Zoom.h"
 
-//#include "Scalers/hq2x.hpp"
-
 #include "Exception.h"
 #include "Surface.h"
 #include "Logger.h"
@@ -37,6 +35,9 @@
 #include "Scalers/common.h"
 #include "Scalers/hqx.h"
 
+// xBRZ
+
+#include "Scalers/xbrz.h"
 
 #if (_MSC_VER >= 1400) || (defined(__MINGW32__) && defined(__SSE2__))
 
@@ -718,7 +719,20 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	int dgap;
 	static bool proclaimed = false;
 
-	if (Screen::isHQXEnabled())
+	if (Options::useXBRZFilter)
+	{
+		// check the resolution to see which scale we need
+		for (size_t factor = 2; factor <= 5; factor++)
+		{
+			if (dst->w == src->w * factor && dst->h == src->h * factor)
+			{
+				xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h);
+				return 0;
+			}
+		}
+	}
+
+	if (Options::useHQXFilter)
 	{
 		static bool initDone = false;
 
@@ -747,31 +761,19 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 			hq4x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
 			return 0;
 		}
-
 	}
 
 	if (Options::useScaleFilter)
 	{
 		// check the resolution to see which of scale2x, scale3x, etc. we need
-
-		if (dst->w == src->w * 2 && dst->h == src->h *2 && !scale_precondition(2, src->format->BytesPerPixel, src->w, src->h))
+		for (size_t factor = 2; factor <= 4; factor++)
 		{
-			scale(2, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
-			return 0;
+			if (dst->w == src->w * factor && dst->h == src->h * factor && !scale_precondition(factor, src->format->BytesPerPixel, src->w, src->h))
+			{
+				scale(factor, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
+				return 0;
+			}
 		}
-
-		if (dst->w == src->w * 3 && dst->h == src->h *3 && !scale_precondition(3, src->format->BytesPerPixel, src->w, src->h))
-		{
-			scale(3, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
-			return 0;
-		}
-
-		if (dst->w == src->w * 4 && dst->h == src->h *4 && !scale_precondition(4, src->format->BytesPerPixel, src->w, src->h))
-		{
-			scale(4, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
-			return 0;
-		}
-
 	}
 
 	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	

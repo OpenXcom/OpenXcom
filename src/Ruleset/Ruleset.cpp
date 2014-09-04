@@ -46,6 +46,7 @@
 #include "ExtraSounds.h"
 #include "ExtraStrings.h"
 #include "RuleInterface.h"
+#include "SoundDefinition.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -61,9 +62,10 @@
 #include "City.h"
 #include "MCDPatch.h"
 #include "../Engine/Logger.h"
-#include <algorithm>
 #include "../Ufopaedia/Ufopaedia.h"
 #include "StatString.h"
+#include "RuleGlobe.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -73,6 +75,8 @@ namespace OpenXcom
  */
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
+	_globe = new RuleGlobe();
+
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
 	// Add soldier names
@@ -92,6 +96,7 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
  */
 Ruleset::~Ruleset()
 {
+	delete _globe;
 	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); ++i)
 	{
 		delete *i;
@@ -411,7 +416,10 @@ void Ruleset::loadFile(const std::string &filename)
 			_startingBase[i->first.as<std::string>()] = YAML::Node(i->second);
 		}
 	}
- 	_startingTime.load(doc["startingTime"]);
+	if (doc["startingTime"])
+	{
+		_startingTime.load(doc["startingTime"]);
+	}
  	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
  	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
@@ -454,7 +462,11 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
-		extraSprites->load(*i, _modIndex);
+		// doesn't support modIndex
+		if (type != "TEXTURE.DAT")
+			extraSprites->load(*i, _modIndex);
+		else
+			extraSprites->load(*i, 0);
 		_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
 		_extraSpritesIndex.push_back(type);
 	}
@@ -497,8 +509,63 @@ void Ruleset::loadFile(const std::string &filename)
 			rule->load(*i);
 		}
 	}
-
-  // refresh _psiRequirements for psiStrengthEval
+	for (YAML::const_iterator i = doc["soundDefs"].begin(); i != doc["soundDefs"].end(); ++i)
+	{
+		SoundDefinition *rule = loadRule(*i, &_soundDefs);
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
+	if (doc["globe"])
+	{
+		_globe->load(doc["globe"]);
+	}
+	for (YAML::const_iterator i = doc["soundRefs"].begin(); i != doc["soundRefs"].end(); ++i)
+	{
+		ResourcePack::DOOR_OPEN = (*i)["doorSound"].as<int>(ResourcePack::DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(ResourcePack::SLIDING_DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
+		ResourcePack::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
+		ResourcePack::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
+		ResourcePack::ITEM_DROP = (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
+		ResourcePack::ITEM_THROW = (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
+		ResourcePack::ITEM_RELOAD = (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
+		ResourcePack::WALK_OFFSET = (*i)["walkOffset"].as<int>(ResourcePack::WALK_OFFSET);
+		ResourcePack::FLYING_SOUND = (*i)["flyingSound"].as<int>(ResourcePack::FLYING_SOUND);
+		if ((*i)["maleScream"])
+		{
+			int k = 0;
+			for (YAML::const_iterator j = (*i)["maleScream"].begin(); j != (*i)["maleScream"].end() && k < 3; ++j, ++k)
+			{
+				ResourcePack::MALE_SCREAM[k] = (*j).as<int>(ResourcePack::MALE_SCREAM[k]);
+			}
+		}
+		if ((*i)["femaleScream"])
+		{
+			int k = 0;
+			for (YAML::const_iterator j = (*i)["femaleScream"].begin(); j != (*i)["femaleScream"].end() && k < 3; ++j, ++k)
+			{
+				ResourcePack::FEMALE_SCREAM[k] = (*j).as<int>(ResourcePack::FEMALE_SCREAM[k]);
+			}
+		}
+		ResourcePack::BUTTON_PRESS = (*i)["buttonPress"].as<int>(ResourcePack::BUTTON_PRESS);
+		if ((*i)["windowPopup"])
+		{
+			int k = 0;
+			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
+			{
+				ResourcePack::WINDOW_POPUP[k] = (*j).as<int>(ResourcePack::WINDOW_POPUP[k]);
+			}
+		}
+		ResourcePack::UFO_FIRE = (*i)["ufoFire"].as<int>(ResourcePack::UFO_FIRE);
+		ResourcePack::UFO_HIT = (*i)["ufoHit"].as<int>(ResourcePack::UFO_HIT);
+		ResourcePack::UFO_CRASH = (*i)["ufoCrash"].as<int>(ResourcePack::UFO_CRASH);
+		ResourcePack::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(ResourcePack::UFO_EXPLODE);
+		ResourcePack::INTERCEPTOR_HIT = (*i)["intterceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
+		ResourcePack::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
+	}
+	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		RuleBaseFacility *rule = getBaseFacility(*i);
@@ -1426,6 +1493,20 @@ RuleInterface *Ruleset::getInterface(const std::string id) const
 {
 	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
 	if (_interfaces.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Gets the rules for the Geoscape globe.
+ * @return Pointer to globe rules.
+ */
+RuleGlobe *Ruleset::getGlobe() const
+{
+	return _globe;
+}
+
+const std::map<std::string, SoundDefinition *> *Ruleset::getSoundDefinitions() const
+{
+	return &_soundDefs;
 }
 
 }

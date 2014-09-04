@@ -98,4 +98,13 @@ std::wstring Waypoint::getName(Language *lang) const
 	return lang->getString("STR_WAY_POINT_").arg(_id);
 }
 
+/**
+ * Returns the globe marker for the waypoint.
+ * @return Marker sprite, -1 if none.
+ */
+int Waypoint::getMarker() const
+{
+	return 6;
+}
+
 }
