@@ -30,7 +30,6 @@
 #include "PromotionsState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleInventory.h"
@@ -54,7 +53,6 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Geoscape/NewPossibleResearchState.h"
 #include <sstream>
 #include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
@@ -66,7 +64,6 @@
 #include "../Engine/Screen.h"
 #include "../Basescape/SellState.h"
 #include "../Menu/SaveGameState.h"
-#include "../Ruleset/RuleScriptedEvent.h"
 
 namespace OpenXcom
 {
@@ -75,7 +72,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false), _playerInExitArea(0), _playersSurvived(0), _playersUnconscious(0)
+DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
@@ -84,32 +81,6 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 	_limitsEnforced = Options::storageLimitsEnforced ? 1 : 0;
-
-	// Calculate the number of surviving players.
-	calculateSurvivingPlayers();
-	bool success = _playersSurvived > 0 && !_game->getSavedGame()->getSavedBattle()->isAborted();
-
-	// Get the scripted event information, if one exists
-	_scriptedEvent = _game->getRuleset()->getScriptedEvent(_game->getSavedGame()->getSavedBattle()->getScriptedEventType());
-	std::string music = "GMMARS", background = "BACK01.SCR", recovery="STR_UFO_RECOVERY";
-	int palette = 0;
-
-	if (_scriptedEvent && success)
-	{
-		music = _scriptedEvent->getSuccessDebriefingScreen().music_id;
-		palette = _scriptedEvent->getSuccessDebriefingScreen().palette;
-		background = _scriptedEvent->getSuccessDebriefingScreen().background_id;
-		_titleText = _scriptedEvent->getSuccessDebriefingScreen().title_id;
-		recovery = _scriptedEvent->getSuccessDebriefingScreen().mainText_id;
-	}
-	else if (_scriptedEvent && !success)
-	{
-		music = _scriptedEvent->getFailureDebriefingScreen().music_id;
-		palette = _scriptedEvent->getFailureDebriefingScreen().palette;
-		background = _scriptedEvent->getFailureDebriefingScreen().background_id;
-		_titleText = _scriptedEvent->getFailureDebriefingScreen().title_id;
-		recovery = _scriptedEvent->getFailureDebriefingScreen().mainText_id;
-	}
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -125,7 +96,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_lstTotal = new TextList(290, 9, 16, 12);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", palette);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_btnOk);
@@ -143,7 +114,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
-	_window->setBackground(_game->getResourcePack()->getSurface(background));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
@@ -165,7 +136,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_txtScore->setText(tr("STR_SCORE"));
 
 	_txtRecovery->setColor(Palette::blockOffset(8)+5);
-	_txtRecovery->setText(tr(recovery));
+	_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 
 	_txtRating->setColor(Palette::blockOffset(8)+5);
 
@@ -184,19 +155,6 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_lstTotal->setDot(true);
 
 	prepareDebriefing();
-
-	// For scripted events, add the additional score line if applicable
-	if (_scriptedEvent)
-	{
-		if (success && _scriptedEvent->getSuccessScoreText() != "")
-		{
-			addStat(_scriptedEvent->getSuccessScoreText(), 1, _scriptedEvent->getSuccessScore());
-		}
-		else if (!success && _scriptedEvent->getFailScoreText() != "")
-		{
-			addStat(_scriptedEvent->getFailScoreText(), 1, _scriptedEvent->getFailScore());
-		}
-	}
 
 	int total = 0, statsY = 0, recoveryY = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
@@ -270,7 +228,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
-	_game->getResourcePack()->playMusic(music);
+	_game->getResourcePack()->playMusic("GMMARS");
 
 	// Restore system colors
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
@@ -401,40 +359,6 @@ void ClearAlienBase::operator()(AlienMission *am) const
 }
 
 /**
- * Determines the surviving player units
- */
-void DebriefingState::calculateSurvivingPlayers()
-{
-	SavedBattleGame *battle = _game->getSavedGame()->getSavedBattle();
-
-	// first, we evaluate how many surviving XCom units there are, and how many are conscious
-	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
-	{
-		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
-		{
-			if ((*j)->getStatus() == STATUS_UNCONSCIOUS || (*j)->getFaction() == FACTION_HOSTILE)
-			{
-				_playersUnconscious++;
-			}
-			_playersSurvived++;
-		}
-	}
-
-	// if all our men are unconscious, the aliens get to have their way with them.
-	if (_playersUnconscious == _playersSurvived)
-	{
-		_playersSurvived = 0;
-		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
-		{
-			if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
-			{
-				(*j)->instaKill();
-			}
-		}
-	}
-}
-
-/**
  * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
  * Adds the items to the craft.
  * Also calculates the soldiers experience, and possible promotions.
@@ -473,15 +397,10 @@ void DebriefingState::prepareDebriefing()
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
-	
-	if (_scriptedEvent)
-	{
-		if (success && _scriptedEvent->getSuccessScoreText() != "")
-			_stats.push_back(new DebriefingStat(_scriptedEvent->getSuccessScoreText(), false));
 
-		if (!success && _scriptedEvent->getFailScoreText() != "")
-			_stats.push_back(new DebriefingStat(_scriptedEvent->getFailScoreText(), false));
-	}
+	int playerInExitArea = 0; // if this stays 0 the craft is lost...
+	int playersSurvived = 0; // if this stays 0 the craft is lost...
+	int playersUnconscious = 0;
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -572,13 +491,11 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape())
 		{
 			(*i)->setInBattlescape(false);
-			// Landed UFOs take off imminently after unsuccessful ground attacks.
-			// Crashed UFOs are always cleaned up, except for event UFOs
 			if ((*i)->getStatus() == Ufo::LANDED && aborted)
 			{
 				 (*i)->setSecondsRemaining(5);
 			}
-			else if ((!(*i)->getScriptedEvent() && (*i)->getStatus() == Ufo::CRASHED) || !aborted)
+			else if ((*i)->getStatus() == Ufo::CRASHED || !aborted)
 			{
 				delete *i;
 				save->getUfos()->erase(i);
@@ -598,12 +515,39 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+	// lets see what happens with units
+
+	// first, we evaluate how many surviving XCom units there are, and how many are conscious
+	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+	{
+		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
+		{
+			if ((*j)->getStatus() == STATUS_UNCONSCIOUS || (*j)->getFaction() == FACTION_HOSTILE)
+			{
+				playersUnconscious++;
+			}
+			playersSurvived++;
+		}
+	}
+	// if all our men are unconscious, the aliens get to have their way with them.
+	if (playersUnconscious == playersSurvived)
+	{
+		playersSurvived = 0;
+		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+		{
+			if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
+			{
+				(*j)->instaKill();
+			}
+		}
+	}
+
 	// alien base disappears (if you didn't abort)
 	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
 		_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 		bool destroyAlienBase = true;
-		if (aborted || _playersSurvived == 0)
+		if (aborted || playersSurvived == 0)
 		{
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
@@ -721,7 +665,7 @@ void DebriefingState::prepareDebriefing()
 				if (((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted)
 				{ // so game is not aborted or aborted and unit is on exit area
 					(*j)->postMissionProcedures(save);
-					_playerInExitArea++;
+					playerInExitArea++;
 					if (soldier != 0)
 					{
 						recoverItems((*j)->getInventory(), base);
@@ -811,7 +755,7 @@ void DebriefingState::prepareDebriefing()
 			else if (oldFaction == FACTION_NEUTRAL)
 			{
 				// if mission fails, all civilians die
-				if (aborted || _playersSurvived == 0)
+				if (aborted || playersSurvived == 0)
 				{
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
 				}
@@ -823,7 +767,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (((_playerInExitArea == 0 && aborted) || (_playersSurvived == 0)) && craft != 0)
+	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0)) && craft != 0)
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
 		for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end();)
@@ -854,13 +798,9 @@ void DebriefingState::prepareDebriefing()
 			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
 		}
 	}
-	if ((!aborted || success) && _playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
+	if ((!aborted || success) && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
-		if (_scriptedEvent && _titleText != "")
-		{
-			_txtTitle->setText(tr(_titleText));
-		}
-		else if (battle->getMissionType() == "STR_BASE_DEFENSE")
+		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
 		}
@@ -868,7 +808,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ||
+				 battle->getMissionType() == "STR_MARS_CYDONIA_LANDING" ||
+				 battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
@@ -914,7 +856,6 @@ void DebriefingState::prepareDebriefing()
 
 					}
 				}
-
 				// recover items from the floor
 				recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
@@ -930,11 +871,7 @@ void DebriefingState::prepareDebriefing()
 	}
 	else
 	{
-		if (_scriptedEvent && _titleText != "")
-		{
-			_txtTitle->setText(tr(_titleText));
-		}
-		else if (battle->getMissionType() == "STR_BASE_DEFENSE")
+		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyBase = true;
@@ -943,7 +880,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ||
+				 battle->getMissionType() == "STR_MARS_CYDONIA_LANDING" ||
+				 battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}
@@ -952,7 +891,7 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED"));
 		}
 
-		if (_playersSurvived > 0 && !_destroyBase)
+		if (playersSurvived > 0 && !_destroyBase)
 		{
 			// recover items from the craft floor
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
@@ -972,9 +911,9 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// recover all our goodies
-	if (_playersSurvived > 0)
+	if (playersSurvived > 0)
 	{
-		int aadivider = battle->getTerrainType()=="UBASE"?150:10;
+		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
@@ -989,13 +928,6 @@ void DebriefingState::prepareDebriefing()
 			{
 				base->getItems()->addItem((*i)->item, (*i)->qty);
 			}
-		}
-			
-		// reward bonus items from scripted event
-		if (_scriptedEvent && success)
-		{
-			rewardItems(_scriptedEvent->getRewardItems(), base);
-			rewardResearch(_scriptedEvent->getRewardResearch(), base);
 		}
 	}
 
@@ -1233,97 +1165,6 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						base->getItems()->addItem((*it)->getRules()->getType(), 1);
 				}
 			}
-		}
-	}
-}
-
-/**
- * Reward specific items from a list
- *
- * Converts the battlescape inventory into a geoscape itemcontainer.
- * @param from Items recovered from the battlescape.
- * @param base Base to add items to.
- */
-void DebriefingState::rewardItems(const std::map<std::string, int> &items, Base *base)
-{
-	for(std::map<std::string, int>::const_iterator i = items.begin ();
-		i != items.end ();
-		++i)
-	{
-		if ((*i).first == _game->getRuleset()->getAlienFuel())
-		{
-			// special case of an item counted as a stat
-			addStat(_game->getRuleset()->getAlienFuel(), (*i).second, (*i).second / 10);
-		}
-		else
-		{
-			// Add points for specific UFO components.
-			int score = getScoreForItem((*i).first);
-
-			if (score > 0)
-			{
-				addStat((*i).first, (*i).second, score * (*i).second); 
-			}
-			else if (!_game->getSavedGame()->isResearched((*i).first))
-			{			
-				// Add points for unresearched artifacts.
-				score = _game->getRuleset()->getItem((*i).first)->getRecoveryPoints();
-
-				if (score > 0) addStat("STR_ALIEN_ARTIFACTS_RECOVERED", (*i).second, score * (*i).second);
-			}
-
-			// now just add the item
-			base->getItems()->addItem((*i).first, (*i).second);
-		}
-	}
-}
-
-/**
- * Look up specific items to see if they would have carried rewards
- * if they were part of the map
- *
- * @param item ID for this item
- * @return score for this item
- */
-int DebriefingState::getScoreForItem(std::string item)
-{
-	if (item == "STR_UFO_POWER_SOURCE") return 20;
-	if (item == "STR_UFO_NAVIGATION") return 5;
-	if (item == "STR_UFO_CONSTRUCTION") return 2;
-	if (item == "STR_ALIEN_FOOD") return 2;
-	if (item == "STR_ALIEN_REPRODUCTION") return 2;
-	if (item == "STR_ALIEN_ENTERTAINMENT") return 2;
-	if (item == "STR_ALIEN_SURGERY") return 2;
-	if (item == "STR_EXAMINATION_ROOM") return 2;
-	if (item == "STR_ALIEN_ALLOYS") return 1;
-	if (item == "STR_ALIEN_HABITAT") return 1;
-
-	return 0;
-}
-
-/**
- * Reward specific technology, bring up a popup for new research
- * at the base the craft is from.
- *
- * @param research
- */
-void DebriefingState::rewardResearch(std::string research, Base *base)
-{
-	// If the technology is not already researched, add it immediately
-	if (research != "" && !_game->getSavedGame()->isResearched(research))
-	{
-		RuleResearch *rr = _game->getRuleset()->getResearch(research);
-		if (rr)
-		{
-			// Immediately finish the research
-			_game->getSavedGame()->addFinishedResearch(rr, _game->getRuleset());
-
-			// Check if this enables research on anything else
-			std::vector<RuleResearch *> newPossibleResearch;
-
-			_game->getSavedGame()->getDependableResearch (newPossibleResearch, rr, _game->getRuleset(), base);
-
-			if (newPossibleResearch.size() > 0) _game->pushState(new NewPossibleResearchState(base, newPossibleResearch));
 		}
 	}
 }

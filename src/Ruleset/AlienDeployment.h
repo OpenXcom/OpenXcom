@@ -22,14 +22,12 @@
 #include <vector>
 #include <string>
 #include <yaml-cpp/yaml.h>
-#include "MapBlock.h"
 
 namespace OpenXcom
 {
 
 class RuleTerrain;
 class Ruleset;
-class MapBlock;
 
 struct ItemSet
 {
@@ -42,18 +40,6 @@ struct DeploymentData
 	int lowQty, highQty, dQty;
 	int percentageOutsideUfo;
 	std::vector<ItemSet> itemSets;
-};
-
-struct TerrainDefault
-{
-	MapBlockType type;
-	int width, length, weight;
-};
-
-struct TerrainFeature
-{
-	MapBlockType type;
-	int width, length;
 };
 
 /**
@@ -73,9 +59,6 @@ private:
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
 	std::vector<std::string> _terrains;
-	bool _showCraft;
-	std::vector<TerrainFeature> _terrainFeature;
-	std::vector<TerrainDefault> _terrainDefault;
 	int _shade;
 	std::string _nextStage;
 public:
@@ -89,12 +72,6 @@ public:
 	std::string getType() const;
 	/// Gets a pointer to the data.
 	std::vector<DeploymentData>* getDeploymentData();
-	/// Gets whether or not to show craft on the terrain
-	bool getShowCraft() const;
-	/// Gets a pointer to the terrain defaults.
-	std::vector<TerrainDefault>* getTerrainDefault();
-	/// Gets a pointer to the terrain features.
-	std::vector<TerrainFeature>* getTerrainFeature();
 	/// Gets dimensions.
 	void getDimensions(int *width, int *length, int *height);
 	/// Gets civilians.
@@ -105,6 +82,7 @@ public:
 	int getShade() const;
 	/// Gets the next stage of the mission.
 	std::string getNextStage() const;
+
 };
 
 }

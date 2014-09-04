@@ -34,7 +34,6 @@
 #include "UfoDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "TargetInfoState.h"
-#include "ScriptedEventState.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
 
@@ -125,7 +124,6 @@ void MultipleTargetsState::popupTarget(Target *target)
 		Base* b = dynamic_cast<Base*>(target);
 		Craft* c = dynamic_cast<Craft*>(target);
 		Ufo* u = dynamic_cast<Ufo*>(target);
-		ScriptedEventLocation* se = dynamic_cast<ScriptedEventLocation*>(target);
 		if (b != 0)
 		{
 			_game->pushState(new InterceptState(_state->getGlobe(), b));
@@ -136,18 +134,7 @@ void MultipleTargetsState::popupTarget(Target *target)
 		}
 		else if (u != 0)
 		{
-			if (u->getScriptedEvent())
-			{
-				_game->pushState(new ScriptedEventState(u, u->getScriptedEvent(), SS_DETECTED, _state));
-			}
-			else
-			{
-				_game->pushState(new UfoDetectedState(u, _state, false, u->getHyperDetected()));
-			}
-		}
-		else if (se != 0)
-		{
-			_game->pushState(new ScriptedEventState(se, se->getScriptedEvent(), SS_DETECTED, _state));
+			_game->pushState(new UfoDetectedState(u, _state, false, u->getHyperDetected()));
 		}
 		else
 		{

@@ -29,8 +29,6 @@
 #include "InventoryState.h"
 #include "NextTurnState.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../RuleSet/RuleMissionSequence.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -61,71 +59,38 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	std::string missionSequenceId = _game->getSavedGame()->getSavedBattle()->getMissionSequenceType();
-
-	std::string background;
-	std::string titleText;
-	std::string mainText;
 
 	// Set palette
-	if (missionSequenceId != "")
+	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
 	{
-		// Use screen values from the mission sequence data	
-		RuleMissionSequence *missionSequence = _game->getRuleset()->getMissionSequence(missionSequenceId);
-		MissionData missionData = missionSequence->getMission(_game->getSavedGame()->getSavedBattle()->getMissionNumber());
-
-		setPalette("PAL_GEOSCAPE", missionData.briefingScreen.palette);
-
-		_game->getResourcePack()->playMusic(missionData.briefingScreen.music_id);
-		background = missionData.briefingScreen.background_id;
-
-		if (_game->getSavedGame()->getSavedBattle()->getMissionNumber() > 0)
-		{
-			_txtCraft->setVisible(false);
-		}
-
-		titleText = missionData.briefingScreen.title_id;
-		mainText = missionData.briefingScreen.mainText_id;
-
-		_txtCraft->setY(40);
-		_txtBriefing->setY(56);
-		_txtTarget->setVisible(false);
+		setPalette("PAL_GEOSCAPE", 2);
+		_game->getResourcePack()->playMusic("GMENBASE");
+	}
+	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		setPalette("PAL_GEOSCAPE", 6);
+		_game->getResourcePack()->playMusic("GMNEWMAR");
 	}
 	else
 	{
-		// Use hardcoded values for mission type
-		if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
-		{
-			setPalette("PAL_GEOSCAPE", 2);
-			_game->getResourcePack()->playMusic("GMENBASE");
-			background = "BACK16.SCR";
-		}
-		else if (mission == "STR_ALIEN_BASE_ASSAULT")
-		{
-			setPalette("PAL_GEOSCAPE", 0);
-			background = "BACK01.SCR";
-
-			_txtCraft->setY(40);
-			_txtBriefing->setY(56);
-			_txtTarget->setVisible(false);
-		}
-		else
-		{
-			setPalette("PAL_GEOSCAPE", 0);
-			_game->getResourcePack()->playMusic("GMDEFEND");
-			background = "BACK16.SCR";
-		}
-		titleText = mission;
-		std::ostringstream briefingtext;
-		briefingtext << mission.c_str() << "_BRIEFING";
-		mainText = briefingtext.str();
+		setPalette("PAL_GEOSCAPE", 0);
+		_game->getResourcePack()->playMusic("GMDEFEND");
 	}
 
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
+	{
+		_txtCraft->setY(40);
+		_txtBriefing->setY(56);
+		_txtTarget->setVisible(false);
+	}
 	add(_txtTarget);
-
+	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		_txtCraft->setVisible(false);
+	}
 	add(_txtCraft);
 	add(_txtBriefing);
 
@@ -168,10 +133,19 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	_txtBriefing->setWordWrap(true);
 
 	// Show respective mission briefing
-	_window->setBackground(_game->getResourcePack()->getSurface(background));
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	}
+	else
+	{
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
+	}
 
-	_txtTitle->setText(tr(titleText));
-	_txtBriefing->setText(tr(mainText));
+	_txtTitle->setText(tr(mission));
+	std::ostringstream briefingtext;
+	briefingtext << mission.c_str() << "_BRIEFING";
+	_txtBriefing->setText(tr(briefingtext.str()));
 
 	if (mission == "STR_BASE_DEFENSE")
 	{

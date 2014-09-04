@@ -25,7 +25,6 @@
 #include "../fmath.h"
 #include "Craft.h"
 #include "AlienMission.h"
-#include "ScriptedEvent.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/Ruleset.h"
@@ -44,7 +43,7 @@ namespace OpenXcom
 Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
-  , _inBattlescape(false), _shotDownByCraft(NULL), _mission(0), _scriptedEvent(0), _trajectory(0)
+  , _inBattlescape(false), _shotDownByCraft(NULL), _mission(0), _trajectory(0)
   , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
 {
 }
@@ -151,41 +150,18 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	}
 	if (game.getMonthsPassed() != -1)
 	{
-		int missionID = node["mission"].as<int>(-1);
-
-		if (missionID > 0)
+		int missionID = node["mission"].as<int>();
+		std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+		if (found == game.getAlienMissions().end())
 		{
-			std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
-			if (found == game.getAlienMissions().end())
-			{
-				// Corrupt save file.
-				throw Exception("Unknown mission event " + std::to_string((long double)missionID) + " for UFO " + std::to_string((long double)_id));
-			}
-			_mission = *found;
+			// Corrupt save file.
+			throw Exception("Unknown mission, save file is corrupt.");
 		}
+		_mission = *found;
 
-		std::string scriptedEvent = node["scriptedEvent"].as<std::string>("");
-
-		if (scriptedEvent != "")
-		{
-			_scriptedEvent = game.getScriptedEvent(scriptedEvent);
-
-			if (!_scriptedEvent) 
-			{
-				// Corrupt save (or more likely, event config is incompatible with the save)
-				throw Exception("Unknown scripted event " + scriptedEvent + " for UFO " + std::to_string((long double)_id));
-			}
-
-			_scriptedEvent->setUfo(this);
-		}
-
-		std::string tid = node["trajectory"].as<std::string>("");
-
-		if (tid != "")
-		{
-			_trajectory = ruleset.getUfoTrajectory(tid);
-			_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
-		}
+		std::string tid = node["trajectory"].as<std::string>();
+		_trajectory = ruleset.getUfoTrajectory(tid);
+		_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
 	}
 	if (_inBattlescape)
 		setSpeed(0);
@@ -222,14 +198,9 @@ YAML::Node Ufo::save(bool newBattle) const
 		node["inBattlescape"] = _inBattlescape;
 	if (!newBattle)
 	{
-		if (_mission) node["mission"] = _mission->getId();
-		if (_scriptedEvent) node["scriptedEvent"] = _scriptedEvent->getType();
-
-		if (_trajectory)
-		{
-			node["trajectory"] = _trajectory->getID();
-			node["trajectoryPoint"] = _trajectoryPoint;
-		}
+		node["mission"] = _mission->getId();
+		node["trajectory"] = _trajectory->getID();
+		node["trajectoryPoint"] = _trajectoryPoint;
 	}
 	return node;
 }
@@ -281,8 +252,6 @@ void Ufo::setId(int id)
  */
 std::wstring Ufo::getName(Language *lang) const
 {
-	if (_scriptedEvent) return lang->getString(_scriptedEvent->getRules().getUfoEvent().name_id);
-
 	switch (_status)
 	{
 	case FLYING:
@@ -341,12 +310,11 @@ void Ufo::setDamage(int damage)
 	{
 		_damage = 0;
 	}
-
-	if (isDestroyed())
+	if (_damage >= _rules->getMaxDamage())
 	{
 		_status = DESTROYED;
 	}
-	else if (isCrashed())
+	else if (_damage >= _rules->getMaxDamage() / 2)
 	{
 		_status = CRASHED;
 	}
@@ -385,14 +353,11 @@ size_t Ufo::getSecondsRemaining() const
  * Changes the amount of remaining seconds the UFO has left on the ground.
  * After this many seconds thet UFO will take off, if landed, or disappear, if
  * crashed.
- *
- * Scripted event UFOs do not land or disappear.
- *
  * @param seconds Amount of seconds.
  */
 void Ufo::setSecondsRemaining(size_t seconds)
 {
-	if (!_scriptedEvent) _secondsRemaining = seconds;
+	_secondsRemaining = seconds;
 }
 
 /**
@@ -442,13 +407,12 @@ bool Ufo::isCrashed() const
 
 /**
  * Returns if this UFO took enough damage
- * to destroy it completely.
- * Scripted UFOs always crash instead.
+ * to cause it to crash.
  * @return Crashed status.
  */
 bool Ufo::isDestroyed() const
 {
-	return (!_scriptedEvent && _damage >= _rules->getMaxDamage());
+	return (_damage >= _rules->getMaxDamage());
 }
 
 /**
@@ -586,7 +550,6 @@ void Ufo::setInBattlescape(bool inbattle)
 
 /**
  * Returns the alien race currently residing in the UFO.
- * Not valid for scripted missions.
  * @return Alien race.
  */
 const std::string &Ufo::getAlienRace() const
@@ -647,7 +610,7 @@ int Ufo::getVisibility() const
  */
 const std::string &Ufo::getMissionType() const
 {
-	return _mission ? _mission->getType() : _scriptedEvent->getType();
+	return _mission->getType();
 }
 
 /**
@@ -660,24 +623,11 @@ const std::string &Ufo::getMissionType() const
  */
 void Ufo::setMissionInfo(AlienMission *mission, const UfoTrajectory *trajectory)
 {
-	assert(!_mission && !_scriptedEvent && mission && trajectory);
+	assert(!_mission && mission && trajectory);
 	_mission = mission;
 	_mission->increaseLiveUfos();
 	_trajectoryPoint = 0;
 	_trajectory = trajectory;
-}
-
-/**
- * Sets the scripted event information of the UFO.
- * The UFO will start at the first point of the trajectory. The actual UFO
- * information is not changed here, this only sets the information kept on
- * behalf of the mission.
- * @param mission Pointer to the scripted event object
- */
-void Ufo::setScriptedEventInfo(ScriptedEvent *scriptedEvent)
-{
-	assert(!_mission && !_scriptedEvent && scriptedEvent);
-	_scriptedEvent = scriptedEvent;
 }
 
 /**
