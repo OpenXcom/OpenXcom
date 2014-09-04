@@ -37,6 +37,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInterface.h"
@@ -45,6 +46,7 @@
 #include "../Engine/Options.h"
 #include "UnitInfoState.h"
 #include "BattlescapeState.h"
+#include "BattlescapeGenerator.h"
 #include "TileEngine.h"
 #include "Map.h"
 #include "Camera.h"
@@ -202,6 +204,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_btnApplyTemplate->onMouseClick((ActionHandler)&InventoryState::btnApplyTemplateClick);
 	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::btnApplyTemplateClick, Options::keyInvApplyTemplate);
 	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::onClearInventory, Options::keyInvClear);
+	_btnApplyTemplate->onKeyboardPress((ActionHandler)&InventoryState::onAutoequip, Options::keyInvAutoEquip);
 	_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
 	_btnApplyTemplate->onMouseIn((ActionHandler)&InventoryState::txtTooltipIn);
 	_btnApplyTemplate->onMouseOut((ActionHandler)&InventoryState::txtTooltipOut);
@@ -743,7 +746,7 @@ void InventoryState::_refreshMouse()
 
 void InventoryState::onClearInventory(Action *action)
 {
-	// don't accept clicks when moving items
+	// don't act when moving items
 	if (_inv->getSelectedItem() != 0)
 	{
 		return;
@@ -754,6 +757,38 @@ void InventoryState::onClearInventory(Action *action)
 	Tile                     *groundTile = unit->getTile();
 
 	_clearInventory(_game, unitInv, groundTile);
+
+	// refresh ui
+	_inv->arrangeGround(false);
+	updateStats();
+	_refreshMouse();
+
+	// give audio feedback
+	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+}
+
+void InventoryState::onAutoequip(Action *action)
+{
+	// don't act when moving items
+	if (_inv->getSelectedItem() != 0)
+	{
+		return;
+	}
+
+	BattleUnit               *unit       = _battleGame->getSelectedUnit();
+	Tile                     *groundTile = unit->getTile();
+	std::vector<BattleItem*> *groundInv  = groundTile->getInventory();
+	
+	Ruleset       *gameRuleset   = _game->getRuleset();
+	RuleInventory *groundRuleInv = gameRuleset->getInventory("STR_GROUND");
+
+	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	AlienDeployment *ruleDeploy = gameRuleset->getDeployment(missionType);
+	int worldShade = ruleDeploy->getShade();
+
+	std::vector<BattleUnit*> units;
+	units.push_back(unit);
+	BattlescapeGenerator::autoEquip(units, _game->getRuleset(), NULL, groundInv, groundRuleInv, worldShade, true, true);
 
 	// refresh ui
 	_inv->arrangeGround(false);

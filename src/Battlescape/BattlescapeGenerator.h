@@ -19,6 +19,8 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
+#include <vector>
+
 namespace OpenXcom
 {
 
@@ -31,6 +33,8 @@ class BattleItem;
 class MapBlock;
 class Vehicle;
 class Tile;
+class Ruleset;
+class RuleInventory;
 class RuleItem;
 class Unit;
 class AlienRace;
@@ -130,6 +134,9 @@ public:
 	void runInventory(Craft *craft);
 	/// Load all Xcom weapons.
 	void loadWeapons();
+	// Autoequip a set of units
+	static void autoEquip(std::vector<BattleUnit*> units, Ruleset *gameRuleset, SavedBattleGame *addToSave, std::vector<BattleItem*> *craftInv,
+		RuleInventory *groundRuleInv, int worldShade, bool allowAutoLoadout, bool overrideEquipmentLayout);
 };
 
 }
