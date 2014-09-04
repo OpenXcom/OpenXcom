@@ -73,7 +73,6 @@ private:
 	SavedBattleGame *_save;
 	BattlescapeState *_parentState;
 	std::list<BattleState*> _states, _deleted;
-	BattleActionType _tuReserved, _playerTUReserved;
 	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
@@ -90,7 +89,7 @@ private:
 	std::vector<InfoboxOKState*> _infoboxQueue;
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
-	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
+	bool _playedAggroSound, _endTurnRequested;
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
@@ -149,7 +148,7 @@ public:
 	/// Requests the end of the turn (wait for explosions etc to really end the turn).
 	void requestEndTurn();
 	/// Sets the TU reserved type.
-	void setTUReserved(BattleActionType tur, bool player);
+	void setTUReserved(BattleActionType tur);
 	/// Sets up the cursor taking into account the action.
 	void setupCursor();
 	/// Gets the map.
@@ -187,7 +186,10 @@ public:
 	bool getKneelReserved();
 	/// Checks for and triggers proximity grenades.
 	bool checkForProximityGrenades(BattleUnit *unit);
+	/// Cleans up all the deleted states.
 	void cleanupDeleted();
+	/// Get the depth of the saved game.
+	const int getDepth() const;
 };
 
 }

@@ -102,7 +102,7 @@ BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) :
 	_lstDefenses->setColumns(3, 134, 70, 50);
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
-	_timer = new Timer(750);
+	_timer = new Timer(250);
 	_timer->onTimer((StateHandler)&BaseDefenseState::nextStep);
 	_timer->start();
 }
@@ -138,7 +138,17 @@ void BaseDefenseState::nextStep()
 		{
 		case BDA_DESTROY:
 			_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(),L" ",L" ");
-			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
+			_timer->setInterval(100);
+			_action = BDA_EXPLODING1;
+			return;
+		case BDA_EXPLODING1:
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
+			_action = BDA_EXPLODING2;
+			return;
+		case BDA_EXPLODING2:
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
+			_timer->setInterval(250);
 			_action = BDA_END;
 			return;
 		case BDA_END:
@@ -187,7 +197,8 @@ void BaseDefenseState::nextStep()
 			{
 				_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
 				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
-				_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
+				int dmg = (def)->getRules()->getDefenseValue();
+				_ufo->setDamage(_ufo->getDamage() + (dmg / 2 + RNG::generate(0, dmg)));
 			}
 			if (_ufo->getStatus() == Ufo::DESTROYED)
 				_action = BDA_DESTROY;

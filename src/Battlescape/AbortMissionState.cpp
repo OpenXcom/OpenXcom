@@ -57,11 +57,11 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	_battleGame->setPaletteByDepth(this);
 
 	add(_window);
-	add(_txtInExit);
-	add(_txtOutsideExit);
-	add(_txtAbort);
-	add(_btnOk);
-	add(_btnCancel);
+	add(_txtInExit, "messageWindows", "battlescape");
+	add(_txtOutsideExit, "messageWindows", "battlescape");
+	add(_txtAbort, "messageWindows", "battlescape");
+	add(_btnOk, "messageWindows", "battlescape");
+	add(_btnCancel, "messageWindows", "battlescape");
 
 	centerAllSurfaces();
 
@@ -92,13 +92,13 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtInExit->setColor(Palette::blockOffset(0)-1);
 	_txtInExit->setBig();
+	_txtInExit->setAlign(ALIGN_CENTER);
 	_txtInExit->setHighContrast(true);
 	_txtInExit->setText(tr("STR_UNITS_IN_EXIT_AREA", _inExitArea));
 
-	_txtOutsideExit->setColor(Palette::blockOffset(0)-1);
 	_txtOutsideExit->setBig();
+	_txtOutsideExit->setAlign(ALIGN_CENTER);
 	_txtOutsideExit->setHighContrast(true);
 	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
 	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
@@ -106,19 +106,19 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 		_txtInExit->setVisible(false);
 		_txtOutsideExit->setVisible(false);
 	}
-	_txtAbort->setColor(Palette::blockOffset(0)-1);
+
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
 	_txtAbort->setHighContrast(true);
 	_txtAbort->setText(tr("STR_ABORT_MISSION_QUESTION"));
 
-	_btnOk->setColor(Palette::blockOffset(0)-1);
+
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AbortMissionState::btnOkClick, Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(0)-1);
+
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);

@@ -62,10 +62,10 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 
 	add(_bg);
 	add(_window);
-	add(_txtTitle);
-	add(_txtTurn);
-	add(_txtSide);
-	add(_txtMessage);
+	add(_txtTitle, "messageWindows", "battlescape");
+	add(_txtTurn, "messageWindows", "battlescape");
+	add(_txtSide, "messageWindows", "battlescape");
+	add(_txtMessage, "messageWindows", "battlescape");
 
 	centerAllSurfaces();
 
@@ -89,25 +89,25 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(0)-1);
+
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
 	_txtTitle->setText(tr("STR_OPENXCOM"));
 
-	_txtTurn->setColor(Palette::blockOffset(0)-1);
+
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
 
-	_txtSide->setColor(Palette::blockOffset(0)-1);
+
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
 	_txtSide->setText(tr("STR_SIDE").arg(tr((_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"))));
 
-	_txtMessage->setColor(Palette::blockOffset(0)-1);
+
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast(true);

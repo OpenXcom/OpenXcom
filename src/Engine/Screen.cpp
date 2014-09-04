@@ -97,7 +97,7 @@ void Screen::makeVideoFlags()
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 	}
 
-	_bpp = (isHQXEnabled() || isOpenGLEnabled()) ? 32 : 8;
+	_bpp = (is32bitEnabled() || isOpenGLEnabled()) ? 32 : 8;
 	_baseWidth = Options::baseXResolution;
 	_baseHeight = Options::baseYResolution;
 }
@@ -317,7 +317,7 @@ void Screen::resetDisplay(bool resetVideo)
 		_surface->getSurface()->h != _baseHeight))) // don't reallocate _surface if not necessary, it's a waste of CPU cycles
 	{
 		if (_surface) delete _surface;
-		_surface = new Surface(_baseWidth, _baseHeight, 0, 0, Screen::isHQXEnabled() ? 32 : 8); // only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
+		_surface = new Surface(_baseWidth, _baseHeight, 0, 0, Screen::is32bitEnabled() ? 32 : 8); // only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
 		if (_surface->getSurface()->format->BitsPerPixel == 8) _surface->setPalette(deferredPalette);
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
@@ -533,21 +533,21 @@ void Screen::screenshot(const std::string &filename) const
 
 
 /** 
- * Check whether useHQXFilter is set in Options and a compatible resolution
- * has been selected.
- * @return if it is enabled.
+ * Check whether a 32bpp scaler has been selected.
+ * @return if it is enabled with a compatible resolution.
  */
-bool Screen::isHQXEnabled()
+bool Screen::is32bitEnabled()
 {
 	int w = Options::displayWidth;
 	int h = Options::displayHeight;
 	int baseW = Options::baseXResolution;
 	int baseH = Options::baseYResolution;
 
-	if (Options::useHQXFilter && (
+	if ((Options::useHQXFilter || Options::useXBRZFilter) && (
 		(w == baseW * 2 && h == baseH * 2) || 
 		(w == baseW * 3 && h == baseH * 3) || 
-		(w == baseW * 4 && h == baseH * 4)))
+		(w == baseW * 4 && h == baseH * 4) || 
+		(w == baseW * 5 && h == baseH * 5 && Options::useXBRZFilter)))
 	{
 		return true;
 	}

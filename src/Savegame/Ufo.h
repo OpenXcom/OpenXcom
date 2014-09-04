@@ -31,6 +31,7 @@ class AlienMission;
 class UfoTrajectory;
 class SavedGame;
 class Ruleset;
+class Craft;
 
 /**
  * Represents an alien UFO on the map.
@@ -49,7 +50,7 @@ private:
 	enum UfoStatus _status;
 	size_t _secondsRemaining;
 	bool _inBattlescape;
-	int _shotDownByCraftId;
+	Craft *_shotDownByCraft;
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;
@@ -76,6 +77,8 @@ public:
 	void setId(int id);
 	/// Gets the UFO's name.
 	std::wstring getName(Language *lang) const;
+	/// Gets the UFO's marker.
+	int getMarker() const;
 	/// Gets the UFO's amount of damage.
 	int getDamage() const;
 	/// Sets the UFO's amount of damage.
@@ -111,9 +114,9 @@ public:
 	/// Gets the UFO's alien race.
 	const std::string &getAlienRace() const;
 	/// Sets the ID of craft which shot down the UFO.
-	void setShotDownByCraftId(const int id);
+	void setShotDownByCraft(Craft *craft);
 	/// Gets the ID of craft which shot down the UFO.
-	int getShotDownByCraftId() const;
+	Craft *getShotDownByCraft() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
 	/// Gets the UFO's Mission type.

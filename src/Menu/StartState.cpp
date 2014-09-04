@@ -308,7 +308,7 @@ int StartState::load(void *game_ptr)
 		game->loadRuleset();
 		Log(LOG_INFO) << "Ruleset loaded successfully.";
 		Log(LOG_INFO) << "Loading resources...";
-		game->setResourcePack(new XcomResourcePack(game->getRuleset()->getExtraSprites(), game->getRuleset()->getExtraSounds()));
+		game->setResourcePack(new XcomResourcePack(game->getRuleset()));
 		Log(LOG_INFO) << "Resources loaded successfully.";
 		Log(LOG_INFO) << "Loading language...";
 		game->defaultLanguage();

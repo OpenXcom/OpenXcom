@@ -49,6 +49,8 @@ public:
 	Sound *addSound(unsigned int i);
 	/// Gets the total sounds in the set.
 	size_t getTotalSounds() const;
+	/// Loads a specific entry from a CAT file into the soundset.
+	void loadCatbyIndex(const std::string &filename, int index);
 };
 
 }

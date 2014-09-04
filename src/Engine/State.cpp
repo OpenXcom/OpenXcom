@@ -36,10 +36,12 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
+#include "../Interface/BattlescapeButton.h"
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Slider.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
+#include "../Interface/Frame.h"
 #include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
@@ -106,19 +108,28 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 {
 	// Set palette
 	surface->setPalette(_palette);
+	
+	// this only works if we're dealing with a battlescape button
+	BattlescapeButton *bsbtn = dynamic_cast<BattlescapeButton*>(surface);
 
 	if (_game->getRuleset()->getInterface(category) && _game->getRuleset()->getInterface(category)->getElement(id))
 	{
 		Element *element = _game->getRuleset()->getInterface(category)->getElement(id);
+
 		if (parent && element->w != INT_MAX && element->h != INT_MAX)
 		{
 			surface->setWidth(element->w);
 			surface->setHeight(element->h);
 		}
+
 		if (parent && element->x != INT_MAX && element->y != INT_MAX)
 		{
 			surface->setX(parent->getX() + element->x);
 			surface->setY(parent->getY() + element->y);
+		}
+		if (bsbtn)
+		{
+			bsbtn->setTftdMode(element->TFTDMode);
 		}
 
 		if (element->color)
@@ -126,6 +137,12 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 			NumberText *numText = dynamic_cast<NumberText*>(surface);
 			Text *text = dynamic_cast<Text*>(surface);
 			Bar *bar = dynamic_cast<Bar*>(surface);
+			TextButton *tb = dynamic_cast<TextButton*>(surface);
+			Frame *frame = dynamic_cast<Frame*>(surface);
+			if (bsbtn)
+			{
+				bsbtn->setColor(element->color);
+			}
 			if (numText)
 			{
 				numText->setColor(element->color);
@@ -141,8 +158,24 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 				bar->setColor2(element->color2);
 				bar->setBorderColor(element->border);
 			}
+			else if (tb)
+			{
+				tb->setColor(element->color);
+			}
+			else if (frame)
+			{
+				frame->setColor(element->border);
+				frame->setBackground(element->color2);
+			}
 		}
 		surface->invalidate(false);
+	}
+
+	if (bsbtn)
+	{
+		// this will initialize the graphics and settings of the battlescape button.
+		bsbtn->copy(parent);
+		bsbtn->initSurfaces();
 	}
 
 	// Set default text resources
