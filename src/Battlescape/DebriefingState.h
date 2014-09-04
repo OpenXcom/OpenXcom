@@ -37,6 +37,7 @@ class Base;
 class Region;
 class Country;
 class RuleItem;
+class RuleScriptedEvent;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -55,10 +56,15 @@ private:
 	std::vector<DebriefingStat*> _stats;
 	TextButton *_btnOk;
 	Window *_window;
+	RuleScriptedEvent *_scriptedEvent;
+	std::string _titleText;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtRecovery, *_txtRating;
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
+	int _playerInExitArea; // if this stays 0 the craft is lost...
+	int _playersSurvived; // if this stays 0 the craft is lost...
+	int _playersUnconscious;
 	/// Adds to the debriefing stats.
 	void addStat(const std::string &name, int quantity, int score);
 	/// Prepares debriefing.
@@ -69,6 +75,13 @@ private:
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _manageContainment, _destroyBase;
 	int _limitsEnforced;
+	/// Calculate the number of player units surviving
+	void calculateSurvivingPlayers();
+	/// Add items from a scripted event to the rewards
+	void rewardItems(const std::map<std::string, int> &items, Base *base);
+	/// Immediate research following a scripted event
+	void rewardResearch(std::string research, Base *base);
+	int getScoreForItem(std::string item);
 public:
 	/// Creates the Debriefing state.
 	DebriefingState();

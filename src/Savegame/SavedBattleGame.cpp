@@ -59,7 +59,9 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _cheating(false),
-									 _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
+									 _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1),
+									 _scriptedEventType(""), _missionSequenceType(""), _missionNumber(0), 
+									 _terrainType("")
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -120,6 +122,10 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_mapsize_y = node["length"].as<int>(_mapsize_y);
 	_mapsize_z = node["height"].as<int>(_mapsize_z);
 	_missionType = node["missionType"].as<std::string>(_missionType);
+	_scriptedEventType = node["scriptedEventType"].as<std::string>(_scriptedEventType);
+	_missionSequenceType = node["missionSequenceType"].as<std::string>(_missionSequenceType);
+	_missionNumber = node["missionNumber"].as<int>(_missionNumber);
+	_terrainType = node["terrainType"].as<std::string>(_terrainType);
 	_globalShade = node["globalshade"].as<int>(_globalShade);
 	_turn = node["turn"].as<int>(_turn);
 	int selectedUnit = node["selectedUnit"].as<int>();
@@ -364,6 +370,10 @@ YAML::Node SavedBattleGame::save() const
 	node["length"] = _mapsize_y;
 	node["height"] = _mapsize_z;
 	node["missionType"] = _missionType;
+	node["scriptedEventType"] = _scriptedEventType;	
+	node["missionSequenceType"] = _missionSequenceType;	
+	node["terrainType"] = _terrainType;
+	node["missionNumber"] = _missionNumber;
 	node["globalshade"] = _globalShade;
 	node["turn"] = _turn;
 	node["selectedUnit"] = (_selectedUnit?_selectedUnit->getId():-1);
@@ -1800,7 +1810,6 @@ void SavedBattleGame::setPaletteByDepth(State *state)
 		state->setPalette(ss.str());
 	}
 }
-
 /**
  * set the ambient battlescape sound effect.
  * @param sound the intended sound.
@@ -1817,6 +1826,79 @@ void SavedBattleGame::setAmbientSound(int sound)
 const int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
+}
+
+/**
+ * retrieve the scripted event (if any) used to generate this battlescape
+ * @return ID code for scripted event
+ */
+const std::string SavedBattleGame::getScriptedEventType() const
+{
+	return _scriptedEventType;
+}
+
+/**
+ * set the scripted event for the battlescape
+ * @param scriptedEventType ID code for scripted event rule
+ */
+void SavedBattleGame::setScriptedEventType(std::string scriptedEventType)
+{
+	_scriptedEventType = scriptedEventType;
+}
+
+/**
+ * retrieve the mission sequence used to generate this battlescape
+ * @return ID code for mission sequence
+ */
+const std::string SavedBattleGame::getMissionSequenceType() const
+{
+	return _missionSequenceType;
+}
+
+/**
+ * set the mission sequence for the battlescape
+ * @param scriptedEventType ID code for scripted event rule
+ */
+void SavedBattleGame::setMissionSequenceType(std::string missionSequenceType)
+{
+	_missionSequenceType = missionSequenceType;
+}
+
+/**
+ * check the mission number of the battlescape (for multi-stage missions)
+ * @return depth.
+ */
+const int SavedBattleGame::getMissionNumber() const
+{
+	return _missionNumber;
+}
+
+/**
+ * set the mission number of the battlescape (for multi-stage missions)
+ * @param depth the
+ */
+void SavedBattleGame::setMissionNumber(int missionNumber)
+{
+	_missionNumber = missionNumber;
+}
+
+
+/**
+ * retrieve the terrain code used to generate this battlescape
+ * @return ID code for terrain
+ */
+const std::string SavedBattleGame::getTerrainType() const
+{
+	return _terrainType;
+}
+
+/**
+ * set the terrain code for the battlescape
+ * @param scriptedEventType ID code for terrain
+ */
+void SavedBattleGame::setTerrainType(std::string terrainType)
+{
+	_terrainType = terrainType;
 }
 
 }

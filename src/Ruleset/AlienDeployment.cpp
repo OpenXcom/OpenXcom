@@ -18,6 +18,7 @@
  */
 #include "AlienDeployment.h"
 #include "../Engine/RNG.h"
+#include "MapBlock.h"
 
 namespace YAML
 {
@@ -50,6 +51,30 @@ namespace YAML
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<OpenXcom::TerrainFeature>
+	{
+		static Node encode(const OpenXcom::TerrainFeature& rhs)
+		{
+			Node node;
+			node["type"] = (int)rhs.type;
+			node["width"] = rhs.width;
+			node["length"] = rhs.length;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::TerrainFeature& rhs)
+		{
+			if (!node.IsMap())
+				return false;
+
+			rhs.type = (OpenXcom::MapBlockType)node["type"].as<int>(rhs.type);
+			rhs.width = node["width"].as<int>(rhs.width);
+			rhs.length = node["length"].as<int>(rhs.length);
+			return true;
+		}
+	};
 }
 
 namespace OpenXcom
@@ -60,7 +85,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _nextStage("")
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _showCraft(true), _terrainFeature(), _terrainDefault(), _civilians(0), _shade(-1), _nextStage("")
 {
 }
 
@@ -86,6 +111,8 @@ void AlienDeployment::load(const YAML::Node &node)
 	_terrains = node["terrains"].as<std::vector<std::string> >(_terrains);
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
+	_showCraft = node["showCraft"].as<bool>(_showCraft);
+	_terrainFeature = node["terrainFeature"].as< std::vector<TerrainFeature> >(_terrainFeature);	
 }
 
 /**
@@ -105,6 +132,15 @@ std::string AlienDeployment::getType() const
 std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
 	return &_data;
+}
+
+/**
+ * Gets a pointer to the terrain feature list
+ * @return Pointer to the data.
+ */
+std::vector<TerrainFeature>* AlienDeployment::getTerrainFeature()
+{
+	return &_terrainFeature;
 }
 
 /**
@@ -154,6 +190,15 @@ int AlienDeployment::getShade() const
 std::string AlienDeployment::getNextStage() const
 {
 	return _nextStage;
+}
+
+/**
+ * Gets the flag on whether to show the XCom craft
+ * @return The flag
+ */
+bool AlienDeployment::getShowCraft() const
+{
+	return _showCraft;
 }
 
 }

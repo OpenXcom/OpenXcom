@@ -45,6 +45,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Waypoint.h"
+#include "../Savegame/ScriptedEventLocation.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/ShaderRepeat.h"
 #include "../Engine/Options.h"
@@ -772,6 +773,17 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
  	{
 		if (!(*i)->isDiscovered())
+		{
+			continue;
+		}
+		if (targetNear((*i), x, y))
+		{
+			v.push_back(*i);
+		}
+	}
+	for (std::vector<ScriptedEventLocation*>::iterator i = _game->getSavedGame()->getScriptedEventLocations()->begin(); i != _game->getSavedGame()->getScriptedEventLocations()->end(); ++i)
+ 	{
+		if (!(*i)->getDetected())
 		{
 			continue;
 		}
@@ -1585,6 +1597,12 @@ void Globe::drawMarkers()
 		{
 			drawTarget(*j);
 		}
+	}
+
+	// Draw the scripted event markers
+	for (std::vector<ScriptedEventLocation*>::iterator i = _game->getSavedGame()->getScriptedEventLocations()->begin(); i != _game->getSavedGame()->getScriptedEventLocations()->end(); ++i)
+	{
+		drawTarget(*i);
 	}
 }
 

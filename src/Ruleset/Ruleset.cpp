@@ -42,6 +42,8 @@
 #include "RuleInventory.h"
 #include "RuleResearch.h"
 #include "RuleManufacture.h"
+#include "RuleScriptedEvent.h"
+#include "RuleMissionSequence.h"
 #include "ExtraSprites.h"
 #include "ExtraSounds.h"
 #include "ExtraStrings.h"
@@ -130,6 +132,14 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleTerrain*>::iterator i = _terrains.begin(); i != _terrains.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleScriptedEvent*>::iterator i = _scriptedEvents.begin(); i != _scriptedEvents.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleMissionSequence*>::iterator i = _missionSequences.begin(); i != _missionSequences.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -301,7 +311,23 @@ void Ruleset::loadFile(const std::string &filename)
 			rule->load(*i, this);
 		}
 	}
- 	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
+ 	for (YAML::const_iterator i = doc["scriptedEvents"].begin(); i != doc["scriptedEvents"].end(); ++i)
+	{
+		RuleScriptedEvent *rule = loadRule(*i, &_scriptedEvents, &_scriptedEventsIndex);
+		if (rule != 0)
+		{
+			rule->load(*i, this);
+		}
+	}
+ 	for (YAML::const_iterator i = doc["missionSequences"].begin(); i != doc["missionSequences"].end(); ++i)
+	{
+		RuleMissionSequence *rule = loadRule(*i, &_missionSequences, &_missionSequencesIndex);
+		if (rule != 0)
+		{
+			rule->load(*i, this);
+		}
+	}
+	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{
 		Armor *rule = loadRule(*i, &_armors, &_armorsIndex);
 		if (rule != 0)
@@ -879,6 +905,46 @@ RuleTerrain *Ruleset::getTerrain(const std::string &name) const
 {
 	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
 	if (_terrains.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the rules for the specified scripted event
+ * @param name Event name.
+ * @return Rules for this scripted event
+ */
+RuleScriptedEvent *Ruleset::getScriptedEvent(const std::string &name) const
+{
+	std::map<std::string, RuleScriptedEvent*>::const_iterator i = _scriptedEvents.find(name);
+	if (_scriptedEvents.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the enitre list of rules for scripted events
+ * @return List of rules for all scripted events 
+ */
+const std::vector<std::string> Ruleset::getScriptedEventList() const
+{
+	return _scriptedEventsIndex;
+}
+
+/**
+ * Returns the rules for the specified mission sequence
+ * @param name Sequence name
+ * @return Rules for display screens for this scripted 
+ */
+RuleMissionSequence *Ruleset::getMissionSequence(const std::string &name) const
+{
+	std::map<std::string, RuleMissionSequence*>::const_iterator i = _missionSequences.find(name);
+	if (_missionSequences.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the enitre list of rules for scripted events
+ * @return List of rules for all scripted events 
+ */
+const std::vector<std::string> Ruleset::getMissionSequenceList() const
+{
+	return _missionSequencesIndex;
 }
 
 /**

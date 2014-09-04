@@ -339,7 +339,7 @@
     <ClCompile Include="Geoscape\BaseDestroyedState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
-    <ClCompile Include="Geoscape\ConfirmCydoniaState.cpp" />
+    <ClCompile Include="Geoscape\ConfirmEventDestinationState.cpp" />
     <ClCompile Include="Geoscape\CraftErrorState.cpp" />
     <ClCompile Include="Geoscape\ConfirmDestinationState.cpp" />
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
@@ -348,6 +348,7 @@
     <ClCompile Include="Geoscape\DefeatState.cpp" />
     <ClCompile Include="Geoscape\DogfightState.cpp" />
     <ClCompile Include="Geoscape\ResearchRequiredState.cpp" />
+    <ClCompile Include="Geoscape\ScriptedEventState.cpp" />
     <ClCompile Include="Geoscape\VictoryState.cpp" />
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp" />
     <ClCompile Include="Geoscape\PsiTrainingState.cpp" />
@@ -437,6 +438,8 @@
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
     <ClCompile Include="Ruleset\RuleGlobe.cpp" />
+    <ClCompile Include="Ruleset\RuleMissionSequence.cpp" />
+    <ClCompile Include="Ruleset\RuleScriptedEvent.cpp" />
     <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
@@ -478,6 +481,8 @@
     <ClCompile Include="Savegame\ResearchProject.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
+    <ClCompile Include="Savegame\ScriptedEvent.cpp" />
+    <ClCompile Include="Savegame\ScriptedEventLocation.cpp" />
     <ClCompile Include="Savegame\SerializationHelper.cpp" />
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
@@ -645,7 +650,7 @@
     <ClInclude Include="Geoscape\BaseDestroyedState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
-    <ClInclude Include="Geoscape\ConfirmCydoniaState.h" />
+    <ClInclude Include="Geoscape\ConfirmEventDestinationState.h" />
     <ClInclude Include="Geoscape\CraftErrorState.h" />
     <ClInclude Include="Geoscape\ConfirmDestinationState.h" />
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />
@@ -655,6 +660,7 @@
     <ClInclude Include="Geoscape\DogfightState.h" />
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\ResearchRequiredState.h" />
+    <ClInclude Include="Geoscape\ScriptedEventState.h" />
     <ClInclude Include="Geoscape\VictoryState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h" />
@@ -737,6 +743,8 @@
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />
     <ClInclude Include="Ruleset\RuleGlobe.h" />
+    <ClInclude Include="Ruleset\RuleMissionSequence.h" />
+    <ClInclude Include="Ruleset\RuleScriptedEvent.h" />
     <ClInclude Include="Ruleset\SoundDefinition.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
@@ -779,6 +787,8 @@
     <ClInclude Include="Savegame\ResearchProject.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
+    <ClInclude Include="Savegame\ScriptedEvent.h" />
+    <ClInclude Include="Savegame\ScriptedEventLocation.h" />
     <ClInclude Include="Savegame\SerializationHelper.h" />
     <ClInclude Include="Savegame\Soldier.h" />
     <ClInclude Include="Savegame\Node.h" />
@@ -809,9 +819,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\windows\openxcom.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -61,7 +61,11 @@ private:
 	std::vector<BattleItem*> _items, _deleted;
 	Pathfinding *_pathfinding;
 	TileEngine *_tileEngine;
+	std::string _terrainType;
 	std::string _missionType;
+	std::string _missionSequenceType;
+	std::string _scriptedEventType;
+	int _missionNumber;
 	int _globalShade;
 	UnitFaction _side;
 	int _turn;
@@ -255,11 +259,27 @@ public:
 	void setDepth(int depth);
 	/// uses the depth variable to set a palette.
 	void setPaletteByDepth(State *state);
+	/// Set the scripted event for the battlescape
+	void SavedBattleGame::setScriptedEventType(std::string scriptedEventType);
+	/// Get the scripted event for the battlescape
+	const std::string getScriptedEventType() const;
+	/// Sets the mission sequence type.
 	/// sets the ambient sound effect;
 	void setAmbientSound(int sound);
 	/// gets the ambient sound effect;
 	const int getAmbientSound() const;
 
+	void setMissionSequenceType(const std::string missionSequenceType);
+	/// Gets the mission sequence type.
+	const std::string getMissionSequenceType() const;
+	/// Get the mission number for multi stage missions
+	const int getMissionNumber() const;
+	/// Set the mission number for multi stage missions
+	void setMissionNumber(int missionNumber);
+	/// Sets the terrain type.
+	void setTerrainType(const std::string terrainType);
+	/// Gets the terrain type.
+	const std::string getTerrainType() const;
 };
 
 }

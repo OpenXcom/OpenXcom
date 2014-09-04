@@ -34,6 +34,7 @@
 #include "TerrorSite.h"
 #include "AlienBase.h"
 #include "Vehicle.h"
+#include "ScriptedEventLocation.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
@@ -183,6 +184,17 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		else if (type == "STR_ALIEN_BASE")
 		{
 			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+			{
+				if ((*i)->getId() == id)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		}
+		else if (type == "STR_SCRIPTED_EVENT_LOCATION")
+		{
+			for (std::vector<ScriptedEventLocation*>::iterator i = save->getScriptedEventLocations()->begin(); i != save->getScriptedEventLocations()->end(); ++i)
 			{
 				if ((*i)->getId() == id)
 				{

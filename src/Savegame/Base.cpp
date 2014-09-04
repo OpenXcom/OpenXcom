@@ -1152,6 +1152,24 @@ int Base::getAvailableContainment() const
 }
 
 /**
+ * Returns the number of a particular facility
+ * available in the base.
+ * @return total count of completed facilities
+ */
+int Base::countAvailableFacilities(const std::string &facility) const
+{
+	int total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			if ((*i)->getRules()->getType() == facility) ++total;
+		}
+	}
+	return total;
+}
+
+/**
  * Returns the base's battlescape status.
  * @return Is the craft on the battlescape?
  */

@@ -1015,33 +1015,37 @@ void DogfightState::move()
 	if (!_end && _ufo->isCrashed())
 	{
 		AlienMission *mission = _ufo->getMission();
-		mission->ufoShotDown(*_ufo, *_game, *_globe);
-		// Check for retaliation trigger.
-		if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
+
+		if (mission)
 		{
-			// Spawn retaliation mission.
-			std::string targetRegion;
-			if (RNG::percent(50 - 6 * (int)(_game->getSavedGame()->getDifficulty())))
+			mission->ufoShotDown(*_ufo, *_game, *_globe);
+			// Check for retaliation trigger.
+			if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
 			{
-				// Attack on UFO's mission region
-				targetRegion = _ufo->getMission()->getRegion();
-			}
-			else
-			{
-				// Try to find and attack the originating base.
-				targetRegion = _game->getSavedGame()->locateRegion(*_craft->getBase())->getRules()->getType();
-				// TODO: If the base is removed, the mission is canceled.
-			}
-			// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
-			if (!_game->getSavedGame()->getAlienMission(targetRegion, "STR_ALIEN_RETALIATION"))
-			{
-				const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
-				AlienMission *mission = new AlienMission(rule);
-				mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-				mission->setRegion(targetRegion, *_game->getRuleset());
-				mission->setRace(_ufo->getAlienRace());
-				mission->start();
-				_game->getSavedGame()->getAlienMissions().push_back(mission);
+				// Spawn retaliation mission.
+				std::string targetRegion;
+				if (RNG::percent(50 - 6 * (int)(_game->getSavedGame()->getDifficulty())))
+				{
+					// Attack on UFO's mission region
+					targetRegion = _ufo->getMission()->getRegion();
+				}
+				else
+				{
+					// Try to find and attack the originating base.
+					targetRegion = _game->getSavedGame()->locateRegion(*_craft->getBase())->getRules()->getType();
+					// TODO: If the base is removed, the mission is canceled.
+				}
+				// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
+				if (!_game->getSavedGame()->getAlienMission(targetRegion, "STR_ALIEN_RETALIATION"))
+				{
+					const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+					AlienMission *mission = new AlienMission(rule);
+					mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+					mission->setRegion(targetRegion, *_game->getRuleset());
+					mission->setRace(_ufo->getAlienRace());
+					mission->start();
+					_game->getSavedGame()->getAlienMissions().push_back(mission);
+				}
 			}
 		}
 		_ufoEscapeTimer->stop();

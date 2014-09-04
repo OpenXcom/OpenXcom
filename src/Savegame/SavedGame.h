@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <time.h>
+#include "../Ruleset/RuleScriptedEvent.h"
 #include <stdint.h>
 
 namespace OpenXcom
@@ -42,12 +43,17 @@ class RuleResearch;
 class ResearchProject;
 class Soldier;
 class RuleManufacture;
+class Craft;
 class TerrorSite;
 class AlienBase;
 class AlienStrategy;
 class AlienMission;
+class ScriptedEvent;
+class ScriptedEventLocation;
+class RuleScriptedEvent;
 class Target;
 class Soldier;
+class Globe;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -101,6 +107,8 @@ private:
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	std::vector<AlienMission*> _activeMissions;
+	std::vector<ScriptedEvent*> _scriptedEvents;
+	std::vector<ScriptedEventLocation*> _scriptedEventLocations;
 	bool _debug, _warned;
 	int _monthsPassed;
 	std::string _graphRegionToggles;
@@ -182,6 +190,8 @@ public:
 	std::vector<Waypoint*> *getWaypoints();
 	/// Gets the list of terror sites.
 	std::vector<TerrorSite*> *getTerrorSites();
+	/// Scripted event Locations
+	std::vector<ScriptedEventLocation*> *getScriptedEventLocations() { return &_scriptedEventLocations; }	
 	/// Gets the current battle game.
 	SavedBattleGame *getSavedBattle();
 	/// Sets the current battle game.
@@ -274,10 +284,23 @@ public:
 	void setSelectedBase(size_t base);
 	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 	int getSoldierScore(Soldier *soldier);
+	/// Scripted Events
+	std::vector<ScriptedEvent*> &getScriptedEvents() { return _scriptedEvents; }	
+	/// Get a particular Scripted event
+	ScriptedEvent *getScriptedEvent(const std::string &type);
 	//Sets the the last selected armour
 	void setLastSelectedArmor(const std::string &value);
 	//Gets the the last selected armour
 	std::string getLastSelectedArmor();
+	/// Check through rules and spawn new events if required
+	void checkEventsToSpawn(const Ruleset * ruleset, SCRIPTED_EVENT_TYPE eventType, Globe *globe);
+	/// Create a new scripted event
+	ScriptedEvent *spawnScriptedEvent(const Ruleset * ruleset, RuleScriptedEvent *rules, Globe *globe);
+	/// Flag an event as completed
+	void completeScriptedEvent(const std::string &type);
+	/// Destination for scripted event button (e.g. Cydonia)
+	ScriptedEvent *findScriptedEventDestination(const Ruleset * ruleset, Craft *craft);
+
 };
 
 }

@@ -297,6 +297,25 @@ int Screen::getHeight() const
 	return _screen->h;
 }
 
+
+/**
+ * Returns the pixel width of the game screen being rendered.
+ * @return Width in pixels.
+ */
+int Screen::getBaseWidth() const
+{
+	return _baseWidth;
+}
+
+/**
+ * Returns the pixel height of the game screen being rendered.
+ * @return Height in pixels
+ */
+int Screen::getBaseHeight() const
+{
+	return _baseHeight;
+}
+
 /**
  * Resets the screen surfaces based on the current display options,
  * as they don't automatically take effect.

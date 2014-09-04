@@ -65,8 +65,10 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleItem.h"
+#include "../Savegame/ScriptedEvent.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleMissionSequence.h"
 #include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
@@ -1905,22 +1907,42 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->popState();
 	}
 	_game->getCursor()->setVisible(true);
+
+	RuleMissionSequence *missionSequence;
+
+	bool nextStage = false;
 	if (_save->getAmbientSound() != -1)
 	{
 		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
 	}
-	std::string nextStage = "";
-	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	int missionNumber = _save->getMissionNumber();
+
+	if (_save->getMissionSequenceType() != "")
 	{
-		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+		missionSequence = _game->getRuleset()->getMissionSequence(_save->getMissionSequenceType());
+
+		if (missionNumber < missionSequence->getNumMissions() - 1)
+		{
+			// Set up the next stage
+			nextStage = true;
+		}
 	}
-	if (nextStage != "" && inExitArea)
+
+	if (nextStage && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
-		_save->setMissionType(nextStage);
+
+		++missionNumber;
+		MissionData mission = missionSequence->getMission(missionNumber);
+		_save->setMissionType(mission.deployment_id);
+		_save->setMissionNumber(missionNumber);
+
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setAlienRace("STR_MIXED");
+
+		if (mission.race_id != "") bgen.setAlienRace(mission.race_id);
+		if (mission.shade > 0) bgen.setWorldShade(mission.shade);
+
 		bgen.nextStage();
 		_game->popState();
 		_game->pushState(new BriefingState(0, 0));
@@ -1931,11 +1953,15 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_animTimer->stop();
 		_gameTimer->stop();
 		_game->popState();
+
+		// Look up the scripted event, if there was one
+		RuleScriptedEvent *se = _game->getRuleset()->getScriptedEvent(_save->getScriptedEventType());
+
 		if (abort || (!abort  && inExitArea == 0))
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
+			if ((se && se->getLoseOnFail()) && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new DefeatState);
 			}
@@ -1948,7 +1974,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
+			if (se)
+			{
+				// Mark the current event as complete
+				_game->getSavedGame()->completeScriptedEvent(se->getType());
+			}
+
+			if ((se && se->getWinOnSuccess()) && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new VictoryState);
 			}

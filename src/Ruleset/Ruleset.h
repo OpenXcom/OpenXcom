@@ -48,6 +48,8 @@ class ArticleDefinition;
 class RuleInventory;
 class RuleResearch;
 class RuleManufacture;
+class RuleScriptedEvent;
+class RuleMissionSequence;
 class AlienRace;
 class AlienDeployment;
 class UfoTrajectory;
@@ -91,6 +93,8 @@ protected:
 	std::map<std::string, RuleInventory*> _invs;
 	std::map<std::string, RuleResearch *> _research;
 	std::map<std::string, RuleManufacture *> _manufacture;
+	std::map<std::string, RuleScriptedEvent *> _scriptedEvents;
+	std::map<std::string, RuleMissionSequence *> _missionSequences;
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, RuleInterface *> _interfaces;
@@ -108,6 +112,7 @@ protected:
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
+	std::vector<std::string> _scriptedEventsIndex, _missionSequencesIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
@@ -165,6 +170,14 @@ public:
 	MapDataSet *getMapDataSet(const std::string &name);
 	/// Gets soldier unit rules.
 	RuleSoldier *getSoldier(const std::string &name) const;
+	/// Gets the scripted events
+	RuleScriptedEvent *getScriptedEvent(const std::string &name) const;
+	/// Gets the scripted event list
+	const std::vector<std::string> getScriptedEventList() const;
+	/// Gets a mission sequences
+	RuleMissionSequence *getMissionSequence(const std::string &name) const;
+	/// Gets the mission sequences list
+	const std::vector<std::string> getMissionSequenceList() const;
 	/// Gets generated unit rules.
 	Unit *getUnit(const std::string &name) const;
 	/// Gets alien race rules.

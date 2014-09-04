@@ -34,8 +34,11 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleMissionSequence.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
+#include "../Savegame/ScriptedEvent.h"
+#include "../Savegame/ScriptedEventLocation.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Geoscape/GeoscapeState.h"
@@ -132,21 +135,38 @@ void ConfirmLandingState::btnYesClick(Action *)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
+	ScriptedEventLocation *se = dynamic_cast<ScriptedEventLocation*>(_craft->getDestination());
 
 	SavedBattleGame *bgame = new SavedBattleGame();
+	RuleMissionSequence *sequenceRules = 0;
 	_game->getSavedGame()->setBattleGame(bgame);
 	BattlescapeGenerator bgen(_game);
 	bgen.setWorldTexture(_texture);
 	bgen.setWorldShade(_shade);
 	bgen.setCraft(_craft);
+
 	if (u != 0)
 	{
 		if(u->getStatus() == Ufo::CRASHED)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+
+		if (u->getScriptedEvent())
+		{
+			// For a scripted event, the briefing screens, alien race and alien deployment rules
+			// should come from a missionSequence.
+			bgame->setScriptedEventType(u->getScriptedEvent()->getType());
+			sequenceRules = _game->getRuleset()->getMissionSequence(u->getScriptedEvent()->getType());
+		}
+		else
+		{
+			// For normal UFOs, the UFO has the race and the alien deployment rules use
+			// the UFO type.
+			bgen.setAlienRace(u->getAlienRace());
+		}
+
 		bgen.setUfo(u);
-		bgen.setAlienRace(u->getAlienRace());
 	}
 	else if (t != 0)
 	{
@@ -160,10 +180,26 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setAlienBase(b);
 		bgen.setAlienRace(b->getAlienRace());
 	}
+	else if (se != 0)
+	{
+		bgame->setScriptedEventType(se->getScriptedEvent()->getType());
+		sequenceRules = _game->getRuleset()->getMissionSequence(se->getScriptedEvent()->getType());
+	}
 	else
 	{
 		throw Exception("No mission available!");
 	}
+
+	// Look up any multi-mission code for this type of event.
+	if (sequenceRules)
+	{
+		bgame->setMissionSequenceType(sequenceRules->getType());
+		bgame->setMissionType(sequenceRules->getMission(0).deployment_id);
+
+		if (sequenceRules->getMission(0).race_id != "") bgen.setAlienRace(sequenceRules->getMission(0).race_id);
+		if (sequenceRules->getMission(0).shade > 0) bgen.setWorldShade(sequenceRules->getMission(0).shade);
+	}
+
 	bgen.run();
 	_game->pushState(new BriefingState(_craft));
 }

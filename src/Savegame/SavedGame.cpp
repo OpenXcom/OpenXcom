@@ -38,12 +38,18 @@
 #include "Region.h"
 #include "Ufo.h"
 #include "Waypoint.h"
+#include "ScriptedEvent.h"
+#include "ScriptedEventLocation.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/UfoTrajectory.h"
 #include "ResearchProject.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "Transfer.h"
 #include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/RuleScriptedEvent.h"
+#include "../Ruleset/RuleCraft.h"
 #include "Production.h"
 #include "TerrorSite.h"
 #include "AlienBase.h"
@@ -143,6 +149,14 @@ SavedGame::~SavedGame()
 	}
 	delete _alienStrategy;
 	for (std::vector<AlienMission*>::iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<ScriptedEvent*>::iterator i = _scriptedEvents.begin(); i != _scriptedEvents.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<ScriptedEventLocation*>::iterator i = _scriptedEventLocations.begin(); i != _scriptedEventLocations.end(); ++i)
 	{
 		delete *i;
 	}
@@ -358,6 +372,29 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		}
 	}
 
+	// Load Scripted Events before UFOs, bases and scripted event locations
+	const YAML::Node &scriptedEvents = doc["scriptedEvents"];
+	for (YAML::const_iterator it = scriptedEvents.begin(); it != scriptedEvents.end(); ++it)
+	{
+		std::string eventType = (*it)["type"].as<std::string>();
+		const RuleScriptedEvent &eRule = *rule->getScriptedEvent(eventType);
+		std::auto_ptr<ScriptedEvent> scriptedEvent(new ScriptedEvent(eRule));
+		scriptedEvent->load(*it, *this);
+		_scriptedEvents.push_back(scriptedEvent.release());
+	}
+
+	// Load Scripted Event locations
+	const YAML::Node &scriptedEventLocations = doc["scriptedEventLocations"];
+	for (YAML::const_iterator it = scriptedEventLocations.begin(); it != scriptedEventLocations.end(); ++it)
+	{
+		std::string scriptedEventId = (*it)["id"].as<std::string>();
+		ScriptedEvent *scriptedEvent = getScriptedEvent(scriptedEventId);
+
+		ScriptedEventLocation *e = new ScriptedEventLocation(scriptedEvent);
+		e->load(*it, *this);
+		_scriptedEventLocations.push_back(e);
+	}
+
 	// Alien bases must be loaded before alien missions
 	for (YAML::const_iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
 	{
@@ -513,6 +550,16 @@ void SavedGame::save(const std::string &filename) const
 	{
 		node["terrorSites"].push_back((*i)->save());
 	}
+	// Scripted Events must be saved before UFOs and alien bases
+	for (std::vector<ScriptedEvent *>::const_iterator i = _scriptedEvents.begin(); i != _scriptedEvents.end(); ++i)
+	{
+		node["scriptedEvents"].push_back((*i)->save());
+	}
+	for (std::vector<ScriptedEventLocation *>::const_iterator i = _scriptedEventLocations.begin(); i != _scriptedEventLocations.end(); ++i)
+	{
+		node["scriptedEventLocations"].push_back((*i)->save());
+	}
+
 	// Alien bases must be saved before alien missions.
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
 	{
@@ -1688,5 +1735,166 @@ std::string SavedGame::getLastSelectedArmor()
 {
 	return _lastselectedArmor;
 }
+
+/**
+ * Returns an event, if one exists
+ * @param type string ID for this event
+ * @return the event state
+ */
+ScriptedEvent *SavedGame::getScriptedEvent(const std::string &type)
+{
+	// Check if we have already got an entry for this mission type
+	for (std::vector<ScriptedEvent *>::const_iterator j = _scriptedEvents.begin(); j != _scriptedEvents.end(); j++)
+	{
+		if (type == (*j)->getType()) return (*j);
+	}
+
+	return 0;
+}
+
+/**
+ * Spawns a new scripted event instance from the event rules, adds it to the list
+ * and returns it.
+ * @return Scripted event rules
+ */
+ScriptedEvent *SavedGame::spawnScriptedEvent(const Ruleset * ruleset, RuleScriptedEvent *rules, Globe *globe)
+{
+	ScriptedEvent *se = new ScriptedEvent(*rules);
+
+	if (rules->getScriptedEventType() == SE_LOCATION)
+	{
+		// Spawn a new event location
+		ScriptedEventLocation *eventLocation = new ScriptedEventLocation(se);
+
+		// Choose a location from those given
+		int locId = RNG::generate(0, rules->getLocationEvent().locations.size() - 1);
+		Location loc = rules->getLocationEvent().locations.at(locId);
+		eventLocation->setLongitude(loc.lon);
+		eventLocation->setLatitude(loc.lat);
+		eventLocation->setId(getId("STR_SCRIPTED_EVENT_LOCATION"));
+
+		// Set the scripted event location in the event
+		se->setScriptedEventLocation(eventLocation);
+		_scriptedEventLocations.push_back(eventLocation);
+	}
+	else if (rules->getScriptedEventType() == SE_UFO)
+	{
+		// Extract the UFO class and spawn it
+		RuleUfo* ufoRule = ruleset->getUfo(rules->getUfoEvent().ufoType_id);
+
+		Ufo *ufo = new Ufo(ufoRule);
+		ufo->setScriptedEventInfo(se);
+		ufo->setId(getId("STR_UFO"));
+
+		se->setUfo(ufo);
+		se->initUfo();
+		se->newUfoDestination();
+
+		getUfos()->push_back(ufo);
+	}
+
+	_scriptedEvents.push_back(se);
+
+	return se;
+}
+
+/**
+ * Flag an event as complete, if it exists
+ * @param type string ID for this event
+ */
+void SavedGame::completeScriptedEvent(const std::string &type)
+{
+	// look for an entry of this type, and flag it as complete
+	for (std::vector<ScriptedEvent *>::const_iterator j = _scriptedEvents.begin(); j != _scriptedEvents.end(); j++)
+	{
+		if (type == (*j)->getType())
+		{
+			(*j)->setIsOver(true);
+
+			// If we had a geoscape presence, clean it up
+			if ((*j)->getScriptedEventLocation())
+			{
+				delete ((*j)->getScriptedEventLocation());
+
+				// Ugly erase-remove idiom to take the event location out of the list.
+				// Required as we are not holding an iterator for the event locations.
+				_scriptedEventLocations.erase( std::remove( std::begin(_scriptedEventLocations), std::end(_scriptedEventLocations), (*j)->getScriptedEventLocation()), std::end(_scriptedEventLocations) );
+
+				(*j)->setScriptedEventLocation(0);
+			}
+		}
+	}
+}
+
+
+/**
+ * Returns a suitable scripted event to use in the destination button.
+ * OR spawns a new one if available.
+ * 
+ * This checks against static rule data for events as well as running events
+ * so cannot live in ScriptedEvent.
+ *
+ * @param ruleset full rules data set
+ * @param craft craft in use
+ * @return Scripted event rules
+ */
+ScriptedEvent *SavedGame::findScriptedEventDestination(const Ruleset * ruleset, Craft *craft)
+{
+	ScriptedEvent *scriptedEvent = NULL;
+	std::vector<std::string> eventRuleList = ruleset->getScriptedEventList();
+
+	// First, spawn new events if required - this ensures that we dont have to wait for 
+	// the geoscape timer to add an event after e.g. research complete or adding event config 
+	// and reloading.
+	checkEventsToSpawn(ruleset, SE_DESTINATION, 0);
+
+	// Now, iterate through the rules and see if there are any events that we can display 
+	// in the destination button.
+	//
+	// If the rules are awkward enough to allow 2 different events simultaneously on
+	// the same craft, only one will display.  This will be the first one that was 
+	// spawned.
+	for (std::vector<ScriptedEvent *>::const_iterator i = _scriptedEvents.begin(); i != _scriptedEvents.end(); i++)
+	{
+		if ((*i)->getRules().getScriptedEventType() == SE_DESTINATION &&
+			!(*i)->isOver() &&
+			(*i)->checkEngagementRestrictions(this, craft->getBase(), craft) )
+		{
+			return *i;
+		}
+	}
+
+	return 0;
+}
+
+/**
+ * Check through scripted event rules and see if any are ready to be started.
+ *
+ * @param eventType whether to restrict to spawning certain types of event
+ * @param ruleset Main copy of all rules configuration
+ */
+void SavedGame::checkEventsToSpawn(const Ruleset* ruleset, SCRIPTED_EVENT_TYPE eventType, Globe* globe)
+{
+	ScriptedEvent *scriptedEvent = NULL;
+	std::vector<std::string> eventRuleList = ruleset->getScriptedEventList();
+
+	// Now, iterate through the rules and see if there are any events that could be started.
+	for (std::vector<std::string>::const_iterator i = eventRuleList.begin(); i != eventRuleList.end(); i++)
+	{
+		// Check if we have already set up an entry for this event.
+		if (getScriptedEvent(*i)) continue;
+
+		// Check if the event type matches
+		if (eventType != SE_NONE && ruleset->getScriptedEvent(*i)->getScriptedEventType() != eventType) continue;
+
+		// Check the technology requirement.
+		EventRestrictions &eventRestrictions = ruleset->getScriptedEvent(*i)->getSpawnRestrictions();
+		bool hasTech = (eventRestrictions.research_id) == "" ? true : isResearched(eventRestrictions.research_id);
+
+		// Spawn new event.
+		if (hasTech) spawnScriptedEvent(ruleset, ruleset->getScriptedEvent(*i), globe);
+	}
+}
+
 
 }

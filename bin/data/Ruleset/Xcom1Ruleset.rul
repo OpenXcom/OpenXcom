@@ -6557,9 +6557,13 @@ alienDeployments:
     width: 60
     length: 60
     height: 4
+    terrainFeature:
+      - type: 6
+        width: 10
+        length: 10
+    shade: 15    
     terrains:
       - MARS
-    shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
@@ -6709,6 +6713,17 @@ alienDeployments:
     height: 2
     terrains:
       - UBASE
+    showCraft: false
+    terrainFeature:
+      - type: 8
+        width: 20
+        length: 20
+      - type: 6
+        width: 10
+        length: 10
+      - type: 6
+        width: 10
+        length: 10      
     shade: 5
 research:
   - name: STR_LASER_WEAPONS
@@ -9160,6 +9175,51 @@ alienItemLevels:
   - [1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
   - [1, 1, 2, 2, 2, 2, 2, 2, 2, 2]
   - [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+scriptedEvents:
+  - type: STR_MARS_CYDONIA_EVENT
+    scriptedEventType: 1
+    engagementRestrictions:
+      research: STR_CYDONIA_OR_BUST
+      craft: 
+      - STR_AVENGER
+    destinationEvent:
+      buttonText: STR_CYDONIA
+    winOnSuccess: true
+    loseOnFail: true   
+    confirmScreen:
+      background: "BACK12.SCR"
+      mainText: STR_ARE_YOU_SURE_CYDONIA 
+      palette: 5       
+    successDebriefingScreen:
+      background: "BACK01.SCR"
+      music: "GMMARS"
+      title: STR_ALIEN_BASE_DESTROYED
+      mainText: STR_ALIEN_BASE_RECOVERY
+      palette: 0
+    failureDebriefingScreen:
+      background: "BACK01.SCR"
+      music: "GMMARS"  
+      title: STR_ALIEN_BASE_STILL_INTACT
+      palette: 0      
+missionSequences:
+  - type: STR_MARS_CYDONIA_EVENT
+    missionSequence:
+    - deployment: STR_MARS_CYDONIA_LANDING
+      race: STR_SECTOID
+      briefingScreen:
+          background: "BACK01.SCR"
+          music: "GMNEWMAR"
+          title: STR_MARS_CYDONIA_LANDING
+          mainText: STR_MARS_CYDONIA_LANDING_BRIEFING  
+          palette: 6     
+    - deployment: STR_MARS_THE_FINAL_ASSAULT    
+      race: STR_MIXED
+      briefingScreen:
+          background: "BACK01.SCR"
+          music: "GMNEWMAR"
+          title: STR_MARS_THE_FINAL_ASSAULT
+          mainText: STR_MARS_THE_FINAL_ASSAULT_BRIEFING
+          palette: 7  
 MCDPatches:
 # pathFinding Hacks.
 # bigWall 1 = regular bigwall, no movement allowed.

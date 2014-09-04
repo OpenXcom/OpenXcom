@@ -32,9 +32,12 @@
 #include "../Savegame/Waypoint.h"
 #include "MultipleTargetsState.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/ScriptedEvent.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
-#include "ConfirmCydoniaState.h"
+#include "../Ruleset/RuleSet.h"
+#include "../Ruleset/RuleScriptedEvent.h"
+#include "ConfirmEventDestinationState.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom
@@ -64,7 +67,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_window->setX(dx);
 	_window->setDY(0);
 	_btnCancel = new TextButton(60, 12, 110 + dx, 8);
-	_btnCydonia = new TextButton(60, 12, 180 + dx, 8);
+	_btnEventDestination = new TextButton(60, 12, 180 + dx, 8);
 	_txtTitle = new Text(100, 16, 10 + dx, 6);
 
 	// Set palette
@@ -79,7 +82,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 
 	add(_window);
 	add(_btnCancel);
-	add(_btnCydonia);
+	add(_btnEventDestination);
 	add(_txtTitle);
 
 	// Set up objects
@@ -132,15 +135,17 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
 
-	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
+	_scriptedEvent = _game->getSavedGame()->findScriptedEventDestination(_game->getRuleset(), _craft);
+
+	if (!_scriptedEvent)
 	{
-		_btnCydonia->setVisible(false);
+		_btnEventDestination->setVisible(false);
 	}
 	else
 	{
-		_btnCydonia->setColor(Palette::blockOffset(8)+5);
-		_btnCydonia->setText(tr("STR_CYDONIA"));
-		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
+		_btnEventDestination->setColor(Palette::blockOffset(8)+5);
+		_btnEventDestination->setText(tr(_scriptedEvent->getRules().getDestinationEvent().buttonText_id));
+		_btnEventDestination->onMouseClick((ActionHandler)&SelectDestinationState::btnEventDestinationClick);
 	}
 }
 
@@ -329,11 +334,11 @@ void SelectDestinationState::btnCancelClick(Action *)
 	_game->popState();
 }
 
-void SelectDestinationState::btnCydoniaClick(Action *)
+void SelectDestinationState::btnEventDestinationClick(Action *)
 {
 	if (_craft->getNumSoldiers() > 0 || _craft->getNumVehicles() > 0)
 	{
-		_game->pushState(new ConfirmCydoniaState(_craft));
+		_game->pushState(new ConfirmEventDestinationState(_game, _craft, _scriptedEvent));
 	}
 }
 
@@ -347,10 +352,11 @@ void SelectDestinationState::resize(int &dX, int &dY)
 	for (std::vector<Surface*>::const_iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		(*i)->setX((*i)->getX() + dX / 2);
-		if (*i != _window && *i != _btnCancel && *i != _txtTitle && *i != _btnCydonia)
+		if (*i != _window && *i != _btnCancel && *i != _txtTitle && *i != _btnEventDestination)
 		{
 			(*i)->setY((*i)->getY() + dY / 2);
 		}
 	}
 }
+
 }

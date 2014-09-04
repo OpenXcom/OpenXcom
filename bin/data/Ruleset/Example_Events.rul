@@ -1,0 +1,389 @@
+research:
+  - name: STR_LASER_WEAPONS_BLOCK
+    cost: 50
+    points: 10
+    needItem: true
+  - name: STR_LASER_WEAPONS
+    cost: 50
+    points: 10
+    dependencies:
+     - STR_LASER_WEAPONS_BLOCK    
+scriptedEvents:  
+  - type: STR_ATTACK_EVENT1
+    scriptedEventType: 2
+    engagementRestrictions:
+      research: STR_MEDI_KIT
+    locationEvent:
+      name: STR_ATTACK_EVENT1
+      locations:
+        - lon: 359.875
+          lat: -51.5
+      automaticDetection: true
+    winOnSuccess: false
+    loseOnDefeat: false   
+    detectedScreen:
+      background: "BACK03.SCR"
+      music: "GMMARS"
+      title: STR_ATTACK_EVENT1
+      mainText: STR_ATTACK_EVENT1_MAIN
+      palette: 3
+    failedToEngageScreen:
+      background: "BACK03.SCR"
+      music: "GMMARS"
+      title: STR_ATTACK_EVENT1_NOENGAGE
+      mainText:  STR_ATTACK_EVENT1_NOENGAGE_MAIN
+      palette: 3  
+    successDebriefingScreen:
+      background: "BACK01.SCR"
+      music: "GMMARS"
+      title: STR_ALIENS_DEFEATED    
+      palette: 0
+    failureDebriefingScreen:
+      background: "BACK01.SCR"
+      music: "GMMARS"  
+      title: STR_TERROR_CONTINUES
+      palette: 0      
+    successScoreText: STR_ATTACK_EVENT1_SUCCESS_MAIN
+    successScore: 1000     
+    rewardResearch:
+      STR_LASER_WEAPONS_BLOCK    
+  - type: STR_SUPER_UFO
+    scriptedEventType: 3
+    engagementRestrictions:
+      facility: STR_LARGE_RADAR_SYSTEM
+    ufoEvent:
+      name: STR_SUPER_UFO
+      ufoType: STR_SUPPLY_SHIP
+      locations:
+        - lon: 65
+          lat: -59
+        - lon: 111
+          lat: -42
+        - lon: 89
+          lat: -67                   
+    winOnSuccess: false
+    loseOnDefeat: false   
+    detectedScreen:
+      background: "BACK04.SCR"
+      music: "GMMARS"
+      title: STR_SUPER_UFO
+      mainText: STR_SUPER_UFO_MAIN
+      palette: 3
+    failedToEngageScreen:
+      background: "BACK03.SCR"
+      music: "GMMARS"
+      title: STR_SUPER_UFO_NOENGAGE
+      mainText: STR_SUPER_UFO_NOENGAGE_MAIN
+      palette: 3  
+    successDebriefingScreen:
+      background: "BACK01.SCR"
+      music: "GMMARS"
+      title: STR_SUPER_UFO_SUCCESS
+      mainText: STR_SUPER_UFO_SUCCESS_MAIN       
+      palette: 0
+    failureDebriefingScreen:
+      background: "BACK01.SCR"
+      music: "GMMARS"  
+      title: STR_SUPER_UFO_FAIL
+      palette: 0      
+    successScoreText: STR_SUPER_UFO_SUCCESS
+    successScore: 1000  
+    rewardItems:
+      STR_ALIEN_ALLOYS: 1000
+      STR_ELERIUM_115: 250
+      STR_PLASMA_RIFLE: 100                
+missionSequences:        
+  - type: STR_ATTACK_EVENT1
+    missionSequence:
+    - deployment: STR_ATTACK_EVENT1
+      race: STR_MUTON
+      briefingScreen:
+          background: "BACK01.SCR"
+          music: "GMNEWMAR"
+          title: STR_ATTACK_EVENT1
+          mainText: STR_ATTACK_EVENT1_BRIEFING 
+          palette: 6        
+  - type: STR_SUPER_UFO
+    missionSequence:
+    - deployment: STR_SUPER_UFO
+      race: STR_ETHEREAL
+      briefingScreen:
+          background: "BACK01.SCR"
+          music: "GMNEWMAR"
+          title: STR_SUPER_UFO
+          mainText: STR_SUPER_UFO_BRIEFING
+          palette: 6
+alienDeployments:
+  - type: STR_ATTACK_EVENT1
+    data:
+      - alienRank: 5
+        lowQty: 14
+        highQty: 16
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 1
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_SMALL_LAUNCHER
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 6
+        lowQty: 5
+        highQty: 7
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 5
+        highQty: 8
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 100
+    length: 100
+    height: 4
+    terrains:
+      - URBAN      
+  - type: STR_SUPER_UFO
+    data:
+      - alienRank: 5
+        lowQty: 14
+        highQty: 16
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 1
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_SMALL_LAUNCHER
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
+      - alienRank: 6
+        lowQty: 5
+        highQty: 7
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 5
+        highQty: 8
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 50
+    length: 50
+    height: 4          
+extraStrings:
+  - type: en-GB
+    strings:
+      STR_ATTACK_EVENT1: "ATTACK ON LONDON"
+      STR_ATTACK_EVENT1_MAIN: "Aliens have launched a massive attack on London, deploying a huge number of terror troops.  We have lost all contact, fearing the worst for all inhabitants."
+      STR_ATTACK_EVENT1_NOENGAGE: "Failed to engage"
+      STR_ATTACK_EVENT1_NOENGAGE_MAIN: "The local govornment is refusing to allow entry to our craft unless we are able to provide medical support to survivors.  Further research is required to land our craft inside the city - our craft is forced to return to base for now."
+      STR_ATTACK_EVENT1_BRIEFING: "A massive alien attack is underway in London.  The UK has agreed to hand over proprietary technology if we are able to repel the alien attack.  As with all urban sites, avoid collateral damage to civilians."
+      STR_ATTACK_EVENT1_SUCCESS_MAIN: "Laser Weapons blueprint received from UK"
+      STR_SUPER_UFO: "SUPER UFO"
+      STR_SUPER_UFO_MAIN: "Our large radar system has detected a massive UFO patrolling the skies above Russia."
+      STR_SUPER_UFO_NOENGAGE: "Failed to engage"  
+      STR_SUPER_UFO_NOENGAGE_MAIN: "The UFO is eluding our interceptors, and preventing them from getting within combat range.  Upgrading our radar systems would likely enable us to track the UFO and engage it in flight."    
+      STR_SUPER_UFO_SUCCESS: "Super UFO Captured"
+      STR_SUPER_UFO_SUCCESS_MAIN: "Super UFO Recovered"
+      STR_SUPER_UFO_FAIL: "Super UFO Not Captured"
+      STR_SUPER_UFO_BRIEFING: "The massive supply UFO has been brought down but is no doubt carrying a formidable payload of Ethereals and Sectopods.  If we are able to defeat the aliens, we will be able to recover their cargo."
+
+      

@@ -195,10 +195,12 @@ void BattlescapeGenerator::nextStage()
 	}
 	_save->resetTurnCounter();
 
-	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
 	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+	_game->getSavedGame()->getSavedBattle()->setTerrainType(_terrain->getName());
 	_worldShade = ruleDeploy->getShade();
 
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
@@ -247,7 +249,14 @@ void BattlescapeGenerator::nextStage()
 	{
 		if (!(*j)->getOwner() || (*j)->getOwner()->getId() > highestSoldierID)
 		{
-			(*j)->setTile(0);
+			if (_game->getSavedGame()->getSavedBattle()->isAborted())
+			{
+				(*j)->setTile(0);
+			}
+			else if (_craftInventoryTile && (*j)->getRules()->isRecoverable() && !(*j)->getRules()->isFixed())
+			{
+				_craftInventoryTile->addItem((*j), _game->getRuleset()->getInventory("STR_GROUND"));
+			}
 		}
 	}
 	_unitSequence = _save->getUnits()->back()->getId() + 1;
@@ -276,7 +285,7 @@ void BattlescapeGenerator::nextStage()
  */
 void BattlescapeGenerator::run()
 {
-	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo && !_ufo->getScriptedEvent() ?_ufo->getRules()->getType():_save->getMissionType());
 
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 
@@ -300,6 +309,7 @@ void BattlescapeGenerator::run()
 	}
 
 	// creates the tile objects
+	_save->setTerrainType(_terrain->getName());
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	_save->initUtilities(_res);
 
@@ -320,7 +330,7 @@ void BattlescapeGenerator::run()
 		fuelPowerSources();
 	}
 
-	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
+	if (_ufo && _ufo->getStatus() == Ufo::CRASHED)
 	{
 		explodePowerSources();
 	}
@@ -335,7 +345,7 @@ void BattlescapeGenerator::run()
 		_save->calculateModuleMap();
 	}
 
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+	if (_terrain->getName() == "UBASE")
 	{
 		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 		{
@@ -600,7 +610,9 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 {
 //	unit->setId(_unitCount++);
 
-	if (_craft == 0 || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+
+	if (_craft == 0 || !ruleDeploy->getShowCraft())
 	{
 		Node* node = _save->getSpawnNode(NR_XCOM, unit);
 		if (node)
@@ -1086,6 +1098,9 @@ void BattlescapeGenerator::generateMap()
 	storageBlocks.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));
 	segments.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),0));
 
+	// The AlienDeployment rules hold terrain data for each mission type.
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+
 	blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 
 	/* Determine UFO landingzone (do this first because ufo is generally bigger) */
@@ -1110,7 +1125,7 @@ void BattlescapeGenerator::generateMap()
 
 	/* Determine Craft landingzone */
 	/* alien base assault has no craft landing zone */
-	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT") && ( _save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
+	if (_craft != 0 && ruleDeploy->getShowCraft())
 	{
 		// pick a random craft mapblock, can have all kinds of sizes
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
@@ -1147,7 +1162,7 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* determine positioning of the urban terrain roads */
-	if (_save->getMissionType() == "STR_TERROR_MISSION")
+	if (_terrain->getName() == "URBAN")
 	{
 		int roadStyle = RNG::generate(0,99);
 		std::vector<int> roadChances = _terrain->getRoadTypeOdds();
@@ -1195,8 +1210,9 @@ void BattlescapeGenerator::generateMap()
 			}
 		}
 	}
+
 	/* determine positioning of base modules */
-	else if (_save->getMissionType() == "STR_BASE_DEFENSE")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		for (std::vector<BaseFacility*>::const_iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
@@ -1237,47 +1253,65 @@ void BattlescapeGenerator::generateMap()
 
 		blocksToDo = 0;
 	}
+
 	/* determine positioning of base modules */
-	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+
+	// Iterate through the guaranteed terrain features on this map.
+	for (std::vector<TerrainFeature>::iterator f = ruleDeploy->getTerrainFeature()->begin(); f != ruleDeploy->getTerrainFeature()->end(); ++f)
 	{
-		int randX = RNG::generate(0, (_mapsize_x/10)- 2);
-		int randY = RNG::generate(0, (_mapsize_y/10)- 2);
-		// add the command center
-		blocks[randX][randY] = _terrain->getRandomMapBlock(20, (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")?MT_FINALCOMM:MT_UBASECOMM);
-		blocksToDo--;
-		// mark mapblocks as used
-		blocks[randX + 1][randY] = dummy;
-		blocksToDo--;
-		blocks[randX + 1][randY + 1] = dummy;
-		blocksToDo--;
-		blocks[randX][randY + 1] = dummy;
-		blocksToDo--;
-		// add two lifts (not on top of the command center)
-		for (int i = 0; i < 2; i++)
+		// Try to find a suitable location for each location in turn.
+		// Each try is done by selecting a random X/Y and then checking that the map
+		// has a suitable gap at that location.
+		//
+		// If the AlienDeployment has a small map with too many features this will give up,
+		// and we'll get a map missing features.  
+		int tries = 0;
+		bool done = false;
+
+		// Determine the size of the feature in terms of our 10x10 mapblocks.  
+		int sizeX = ((*f).width + 9) / 10;
+		int sizeY = ((*f).length + 9) / 10;
+
+		while (!done && tries < 50)
 		{
-			while (blocks[randX][randY] != NULL)
+			// Get a random X/Y block, allowing size for our feature.
+			int randX = RNG::generate(0, (_mapsize_x/10) - sizeX);
+			int randY = RNG::generate(0, (_mapsize_y/10) - sizeY);
+
+			// Check each mapblock that would be affected by our feature
+			bool free = true;
+			for (int i = 0; i < sizeX; ++i)
 			{
-				randX = RNG::generate(0, (_mapsize_x/10)- 1);
-				randY = RNG::generate(0, (_mapsize_y/10)- 1);
+				for (int j = 0; j < sizeY; ++j)
+				{
+					if (blocks[randX + i][randY + j] != NULL ||
+						landingzone[randX + i][randY + j])
+					{
+						free = false;
+					}
+				}
 			}
-			// add the lift
-			blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
-			blocksToDo--;
+
+			if (free)
+			{
+				// Mark off used space on the map
+				for (int i = 0; i < sizeX; i++)
+				{
+					for (int j = 0; j < sizeY; j++)
+					{
+						blocks[randX + i][randY + j] = dummy;
+						--blocksToDo;					
+					}
+				}
+
+				// Set a terrain feature at the free block we found
+				blocks[randX][randY] = _terrain->getRandomMapBlock((*f).width, (*f).type);
+				done = true;
+			}
+
+			++tries;
 		}
-	}
-	else if (_save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
-	{
-		int randX = RNG::generate(0, (_mapsize_x/10)- 2);
-		int randY = RNG::generate(0, (_mapsize_y/10)- 2);
-		// add one lift
-		while (blocks[randX][randY] != NULL || landingzone[randX][randY])
-		{
-			randX = RNG::generate(0, (_mapsize_x/10)- 1);
-			randY = RNG::generate(0, (_mapsize_y/10)- 1);
-		}
-		// add the lift
-		blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
-		blocksToDo--;
+
 	}
 
 	x = 0;
@@ -1310,9 +1344,11 @@ void BattlescapeGenerator::generateMap()
 	{
 		if (blocks[x][y] == 0)
 		{
-			if ((_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT") && RNG::generate(0,100) > 60)
+			// Alien bases use special MT_CROSSING mapblocks as padding in 60% of blocks
+			// others use MT_DEFAULT.
+			if ((_terrain->getName() == "UBASE") && RNG::generate(0,100) > 60)
 			{
-				blocks[x][y] = _terrain->getRandomMapBlock(10, MT_CROSSING);
+				blocks[x][y] = _terrain->getRandomMapBlock(10, landingzone[x][y]?MT_LANDINGZONE:MT_CROSSING);
 			}
 			else
 			{
@@ -1366,13 +1402,13 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* making passages between blocks in a base map */
-	if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE" || _terrain->getName() == "UBASE")
 	{
 		int ewallfix = 14;
 		int swallfix = 13;
 		int ewallfixSet = 1;
 		int swallfixSet = 1;
-		if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+		if (_terrain->getName() == "UBASE")
 		{
 			ewallfix = 17; //  north wall
 			swallfix = 18; // west wall
@@ -1436,7 +1472,7 @@ void BattlescapeGenerator::generateMap()
 						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL);
 						_save->getTile(Position((i*10)+9,(j*10)+6,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL);
 					}
-					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+					if (_terrain->getName() == "UBASE")
 					{
 						//wallcornerfix
 						if (!_save->getTile(Position((i*10)+10,(j*10)+3,0))->getMapData(MapData::O_NORTHWALL))
@@ -1474,7 +1510,7 @@ void BattlescapeGenerator::generateMap()
 						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL);
 						_save->getTile(Position((i*10)+6,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL);
 					}
-					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+					if (_terrain->getName() == "UBASE")
 					{
 						// wallcornerfix
 						if (!_save->getTile(Position((i*10)+3,(j*10)+10,0))->getMapData(MapData::O_WESTWALL))
@@ -1519,7 +1555,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT") && (_save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
+	if (_craft != 0 && ruleDeploy->getShowCraft())
 	{
 		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{

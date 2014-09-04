@@ -47,6 +47,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleScriptedEvent.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Ufo.h"
@@ -108,6 +109,8 @@
 #include "../Menu/SaveGameState.h"
 #include "../Menu/ListSaveState.h"
 #include "../Ruleset/AlienRace.h"
+#include "../Savegame/ScriptedEventLocation.h"
+#include "ScriptedEventState.h"
 
 namespace OpenXcom
 {
@@ -697,40 +700,49 @@ void GeoscapeState::time5Seconds()
 				(*i)->think();
 				if ((*i)->reachedDestination())
 				{
-					size_t terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
-					AlienMission *mission = (*i)->getMission();
-					bool detected = (*i)->getDetected();
-					mission->ufoReachedWaypoint(**i, *_game, *_globe);
-					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
+					if ((*i)->getMission())
 					{
-						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
-							popup(new UfoLostState((*i)->getName(_game->getLanguage())));
-					}
-					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
-					{
-						TerrorSite *ts = _game->getSavedGame()->getTerrorSites()->back();
-						const City *city = _game->getRuleset()->locateCity(ts->getLongitude(), ts->getLatitude());
-						assert(city);
-						popup(new AlienTerrorState(ts, city->getName(), this));
-					}
-					// If UFO was destroyed, don't spawn missions
-					if ((*i)->getStatus() == Ufo::DESTROYED)
-						return;
-					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
-					{
-						mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
-						(*i)->setDestination(0);
-						base->setupDefenses();
-						timerReset();
-						if (!base->getDefenses()->empty())
+						size_t terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
+						AlienMission *mission = (*i)->getMission();
+						bool detected = (*i)->getDetected();
+						mission->ufoReachedWaypoint(**i, *_game, *_globe);
+						if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 						{
-							popup(new BaseDefenseState(base, *i, this));
+							if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+								popup(new UfoLostState((*i)->getName(_game->getLanguage())));
 						}
-						else
+						if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 						{
-							handleBaseDefense(base, *i);
+							TerrorSite *ts = _game->getSavedGame()->getTerrorSites()->back();
+							const City *city = _game->getRuleset()->locateCity(ts->getLongitude(), ts->getLatitude());
+							assert(city);
+							popup(new AlienTerrorState(ts, city->getName(), this));
+						}
+						// If UFO was destroyed, don't spawn missions
+						if ((*i)->getStatus() == Ufo::DESTROYED)
 							return;
+						if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
+						{
+							mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
+							(*i)->setDestination(0);
+							base->setupDefenses();
+							timerReset();
+							if (!base->getDefenses()->empty())
+							{
+								popup(new BaseDefenseState(base, *i, this));
+							}
+							else
+							{
+								handleBaseDefense(base, *i);
+								return;
+							}
 						}
+					}
+					else if ((*i)->getScriptedEvent())
+					{
+						// Scripted Event UFOs simply move around between a series of 
+						// locations set in the rules.
+						(*i)->getScriptedEvent()->newUfoDestination();
 					}
 				}
 			}
@@ -750,7 +762,7 @@ void GeoscapeState::time5Seconds()
 			break;
 		case Ufo::CRASHED:
 			(*i)->think();
-			if ((*i)->getSecondsRemaining() == 0)
+			if (!(*i)->getScriptedEvent() && (*i)->getSecondsRemaining() == 0)
 			{
 				(*i)->setDetected(false);
 				(*i)->setStatus(Ufo::DESTROYED);
@@ -842,11 +854,20 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
 				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
+				ScriptedEventLocation* se = dynamic_cast<ScriptedEventLocation*>((*j)->getDestination());
 				if (u != 0)
 				{
 					switch (u->getStatus())
 					{
 					case Ufo::FLYING:
+						// Check scripted event requirements
+						if (u->getScriptedEvent() && !u->getScriptedEvent()->checkEngagementRestrictions(_game->getSavedGame(), (*j)->getBase(), (*j)))
+						{
+							// did not meet requirements, so pop up a message and limp home to base
+							popup(new ScriptedEventState(u, u->getScriptedEvent(), SS_FAILED_ENGAGE, this));
+							(*j)->returnToBase();
+							continue;
+						}
 						// Not more than 4 interceptions at a time.
 						if (_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
@@ -907,6 +928,34 @@ void GeoscapeState::time5Seconds()
 					else
 					{
 						(*j)->returnToBase();
+					}
+				}
+				else if (se != 0)
+				{
+					if (se->getDetected())
+					{
+						if ((*j)->getNumSoldiers() > 0)
+						{
+							// Check whether the craft meets the engagement requirements for this event
+							if (se->getScriptedEvent()->checkEngagementRestrictions(_game->getSavedGame(), (*j)->getBase(), (*j)))
+							{
+								// look up polygons texture
+								int texture, shade;
+								_globe->getPolygonTextureAndShade(se->getLongitude(), se->getLatitude(), &texture, &shade);
+								timerReset();
+								popup(new ConfirmLandingState(*j, texture, shade));
+							}
+							else
+							{
+								// did not meet requirements, so pop up a message and limp home to base
+								popup(new ScriptedEventState(se, se->getScriptedEvent(), SS_FAILED_ENGAGE, this));
+								(*j)->returnToBase();
+							}
+						}
+						else
+						{
+							(*j)->returnToBase();
+						}
 					}
 				}
 				else if (b != 0)
@@ -1170,6 +1219,9 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
  */
 void GeoscapeState::time30Minutes()
 {
+	// Check to see if any new scripted events should be spawned
+	_game->getSavedGame()->checkEventsToSpawn(_game->getRuleset(), SE_NONE, _globe);
+
 	// Decrease mission countdowns
 	std::for_each(_game->getSavedGame()->getAlienMissions().begin(),
 			  _game->getSavedGame()->getAlienMissions().end(),
@@ -1266,35 +1318,58 @@ void GeoscapeState::time30Minutes()
 					break;
 				}
 			}
+
+			// UFO detection - scripted event UFOs are handled differently (they are spotted immediately if 
+			// a base meets the requirements), and are never 'lost'.
 			if (!(*u)->getDetected())
 			{
 				bool detected = false, hyperdetected = false;
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
+
+				if ((*u)->getScriptedEvent())
 				{
-					switch ((*b)->detect(*u))
+					bool detected = false;
+
+					if ((*u)->getScriptedEvent()->getRules().getLocationEvent().automaticDetection) detected = true;
+
+					for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !detected && b != _game->getSavedGame()->getBases()->end(); ++b)
 					{
-					case 2:	// hyper-wave decoder
-						(*u)->setHyperDetected(true);
-						hyperdetected = true;
-					case 1: // conventional radar
-						detected = true;
+						detected = (*u)->getScriptedEvent()->checkDetectionRestrictions(_game->getSavedGame(), (*b), 0);
 					}
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
+					if (detected)
 					{
-						if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
+						(*u)->setDetected(true);
+						popup(new ScriptedEventState((*u), (*u)->getScriptedEvent(), SS_DETECTED, this));
+					}
+				}
+				else
+				{
+					for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
+					{
+						switch ((*b)->detect(*u))
 						{
+						case 2:	// hyper-wave decoder
+							(*u)->setHyperDetected(true);
+							hyperdetected = true;
+						case 1: // conventional radar
 							detected = true;
-							break;
+						}
+						for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); !detected && c != (*b)->getCrafts()->end(); ++c)
+						{
+							if ((*c)->getStatus() == "STR_OUT" && (*c)->detect(*u))
+							{
+								detected = true;
+								break;
+							}
 						}
 					}
-				}
-				if (detected)
-				{
-					(*u)->setDetected(true);
-					popup(new UfoDetectedState((*u), this, true, (*u)->getHyperDetected()));
+					if (detected)
+					{
+						(*u)->setDetected(true);
+						popup(new UfoDetectedState((*u), this, true, (*u)->getHyperDetected()));
+					}
 				}
 			}
-			else
+			else if (!(*u)->getScriptedEvent())
 			{
 				bool detected = false, hyperdetected = false;
 				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !hyperdetected && b != _game->getSavedGame()->getBases()->end(); ++b)
@@ -1348,6 +1423,29 @@ void GeoscapeState::time30Minutes()
 		else
 		{
 			++ts;
+		}
+	}
+
+	// Processes Scripted Event Locations.  These are automatically detected if there
+	// is a base (anywhere) meeting the requirements to detect it.
+	for (std::vector<ScriptedEventLocation*>::iterator se = _game->getSavedGame()->getScriptedEventLocations()->begin();
+		se != _game->getSavedGame()->getScriptedEventLocations()->end();++se)
+	{
+		if (!(*se)->getDetected())
+		{
+			bool detected = false;
+
+			if ((*se)->getScriptedEvent()->getRules().getLocationEvent().automaticDetection) detected = true;
+
+			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); !detected && b != _game->getSavedGame()->getBases()->end(); ++b)
+			{
+				detected = (*se)->getScriptedEvent()->checkDetectionRestrictions(_game->getSavedGame(), (*b), 0);
+			}
+			if (detected)
+			{
+				(*se)->setDetected(true);
+				popup(new ScriptedEventState((*se), (*se)->getScriptedEvent(), SS_DETECTED, this));
+			}
 		}
 	}
 }

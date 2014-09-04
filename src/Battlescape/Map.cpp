@@ -413,6 +413,9 @@ void Map::drawTerrain(Surface *surface)
 					if (tile->isDiscovered(2))
 					{
 						tileShade = tile->getShade();
+
+						// In debug mode, let there be light
+						if(_save->getDebugMode()) tileShade = 0;
 					}
 					else
 					{

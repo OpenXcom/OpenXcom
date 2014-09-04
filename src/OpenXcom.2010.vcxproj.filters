@@ -669,9 +669,6 @@
     <ClCompile Include="Geoscape\BaseDestroyedState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\ConfirmCydoniaState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\UnitFallBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -870,6 +867,24 @@
     </ClCompile>
     <ClCompile Include="Engine\Scalers\xbrz.cpp">
       <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleMissionSequence.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleScriptedEvent.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\ScriptedEventLocation.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ConfirmEventDestinationState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ScriptedEventState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\ScriptedEvent.cpp">
+      <Filter>Savegame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1542,9 +1557,6 @@
     <ClInclude Include="Menu\DeleteGameState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\ConfirmCydoniaState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\BaseDestroyedState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -1767,6 +1779,24 @@
     <ClInclude Include="Engine\Scalers\config.h">
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
+    <ClInclude Include="Ruleset\RuleMissionSequence.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleScriptedEvent.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\ScriptedEventLocation.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ConfirmEventDestinationState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ScriptedEventState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\ScriptedEvent.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1805,9 +1835,6 @@
     <Filter Include="Engine\Adlib">
       <UniqueIdentifier>{09464f19-4bce-449f-a27c-5cd7b9850dbe}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\windows\openxcom.ico" />

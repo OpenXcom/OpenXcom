@@ -20,6 +20,8 @@
 #define OPENXCOM_SELECTDESTINATIONSTATE_H
 
 #include "../Engine/State.h"
+#include "../Savegame/ScriptedEvent.h"
+#include "../Ruleset/RuleScriptedEvent.h"
 
 namespace OpenXcom
 {
@@ -41,10 +43,11 @@ class SelectDestinationState : public State
 private:
 	Craft *_craft;
 	Globe *_globe;
+	ScriptedEvent *_scriptedEvent;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Window *_window;
 	Text *_txtTitle;
-	TextButton *_btnCancel, *_btnCydonia;
+	TextButton *_btnCancel, *_btnEventDestination;
 public:
 	/// Creates the Select Destination state.
 	SelectDestinationState(Craft *craft, Globe *globe);
@@ -85,7 +88,7 @@ public:
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Cydonia mission button.
-	void btnCydoniaClick(Action *action);
+	void btnEventDestinationClick(Action *action);
 	/// Let the state know the window has been resized.
 	void resize(int &dX, int &dY);
 

@@ -83,6 +83,10 @@ public:
 	int getWidth() const;
 	/// Gets the screen's height.
 	int getHeight() const;
+	/// Gets the virtual screen's width
+	int getBaseWidth() const;
+	/// Gets the virtual screen's height
+	int getBaseHeight() const;
 	/// Resets the screen display.
 	void resetDisplay(bool resetVideo = true);
 	/// Gets the screen's X scale.
