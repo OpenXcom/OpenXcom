@@ -21,6 +21,7 @@
 
 #include "MovingTarget.h"
 #include <string>
+#include <utility>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -50,7 +51,7 @@ private:
 	enum UfoStatus _status;
 	size_t _secondsRemaining;
 	bool _inBattlescape;
-	Craft *_shotDownByCraft;
+    std::pair<std::string, int> _shotDownByCraftId;
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;
@@ -114,9 +115,9 @@ public:
 	/// Gets the UFO's alien race.
 	const std::string &getAlienRace() const;
 	/// Sets the ID of craft which shot down the UFO.
-	void setShotDownByCraft(Craft *craft);
+	void setShotDownByCraftId(std::pair<std::string, int> && craftId);
 	/// Gets the ID of craft which shot down the UFO.
-	Craft *getShotDownByCraft() const;
+	std::pair<std::string, int> getShotDownByCraftId() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
 	/// Gets the UFO's Mission type.

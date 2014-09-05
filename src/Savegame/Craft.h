@@ -166,6 +166,8 @@ public:
 	void setInterceptionOrder(const int order);
 	/// Gets interception number.
 	int getInterceptionOrder() const;
+    /// Gets the craft's unique id.
+    std::pair<std::string, int> getUniqueId() const;
 };
 
 }
