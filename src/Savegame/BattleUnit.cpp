@@ -1115,6 +1115,15 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 	{
 		return 0;
 	}
+	return getActionTUs(actionType, item->getRules());
+}
+
+int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
+{
+	if (item == 0)
+	{
+		return 0;
+	}
 
 	int cost = 0;
 	switch (actionType)
@@ -1126,30 +1135,30 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 			cost = 25;
 			break;
 		case BA_AUTOSHOT:
-			cost = item->getRules()->getTUAuto();
+			cost = item->getTUAuto();
 			break;
 		case BA_SNAPSHOT:
-			cost = item->getRules()->getTUSnap();
+			cost = item->getTUSnap();
 			break;
 		case BA_STUN:
 		case BA_HIT:
-			cost = item->getRules()->getTUMelee();
+			cost = item->getTUMelee();
 			break;
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
-			cost = item->getRules()->getTUAimed();
+			cost = item->getTUAimed();
 			break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			cost = item->getRules()->getTUUse();
+			cost = item->getTUUse();
 			break;
 		default:
 			cost = 0;
 	}
 
 	// if it's a percentage, apply it to unit TUs
-	if (!item->getRules()->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
+	if (!item->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
 	{
 		cost = (int)floor(getStats()->tu * cost / 100.0f);
 	}
@@ -2732,4 +2741,22 @@ bool BattleUnit::getFloorAbove()
 {
 	return _floorAbove;
 }
+
+/**
+ * Get the name of any melee weapon we may be carrying, or a built in one.
+ * @return the name .
+ */
+std::string BattleUnit::getMeleeWeapon()
+{
+	if (getItem("STR_RIGHT_HAND") && getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_RIGHT_HAND")->getRules()->getType();
+	}
+	if (getItem("STR_LEFT_HAND") && getItem("STR_LEFT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_LEFT_HAND")->getRules()->getType();
+	}
+	return _unitRules->getMeleeWeapon();
+}
+
 }

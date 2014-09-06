@@ -212,6 +212,7 @@ public:
 	bool isOut() const;
 	/// Get the number of time units a certain action takes.
 	int getActionTUs(BattleActionType actionType, BattleItem *item);
+	int getActionTUs(BattleActionType actionType, RuleItem *item);
 	/// Spend time units if it can.
 	bool spendTimeUnits(int tu);
 	/// Spend energy if it can.
@@ -432,6 +433,8 @@ public:
 	void setFloorAbove(bool floor);
 	/// Get the flag for "floor above me".
 	bool getFloorAbove();
+	/// Get the name of any melee weapon we may be carrying, or a built in one.
+	std::string getMeleeWeapon();
 
 };
 

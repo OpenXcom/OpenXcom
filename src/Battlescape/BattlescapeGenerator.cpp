@@ -728,6 +728,27 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9));
 			if (unit)
 			{
+				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
+				if (!rule->getBuiltInWeapons().empty())
+				{
+					for (std::vector<std::string>::const_iterator j = rule->getBuiltInWeapons().begin(); j != rule->getBuiltInWeapons().end(); ++j)
+					{
+						RuleItem *ruleItem = _game->getRuleset()->getItem(*j);
+						if (ruleItem)
+						{
+							BattleItem *item = new BattleItem(ruleItem, _save->getCurrentItemId());
+							if (!addItem(item, unit))
+							{
+								delete item;
+							}
+							else
+							{
+								unit->setTurretType(item->getRules()->getTurretType());
+							}
+						}
+					}
+				}
+
 				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
 				if (rule->isLivingWeapon())
 				{
@@ -940,9 +961,11 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip)
 {
 	RuleInventory *rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+	RuleInventory *leftHand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 	bool placed = false;
 	bool loaded = false;
-	BattleItem *weapon = unit->getItem("STR_RIGHT_HAND");
+	BattleItem *rightWeapon = unit->getItem("STR_RIGHT_HAND");
+	BattleItem *leftWeapon = unit->getItem("STR_RIGHT_HAND");
 	int weight = 0;
 
 	// tanks and aliens don't care about weight or multiple items,
@@ -992,31 +1015,42 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 
 		if (loaded && (unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
-			if (!unit->getItem("STR_RIGHT_HAND") && unit->getStats()->strength * 0.66 >= weight) // weight is always considered 0 for aliens
+			if (!rightWeapon && unit->getStats()->strength * 0.66 >= weight) // weight is always considered 0 for aliens
 			{
 				item->moveToOwner(unit);
 				item->setSlot(rightHand);
 				placed = true;
 			}
+			if (!placed && !leftWeapon && (unit->getFaction() != FACTION_PLAYER || item->getRules()->isFixed()))
+			{
+				item->moveToOwner(unit);
+				item->setSlot(leftHand);
+				placed = true;
+			}
 		}
 		break;
 	case BT_AMMO:
-		// no weapon, or our weapon takes no ammo, or this ammo isn't compatible.
+		// no weapon, or our weapon takes no ammo.
 		// we won't be needing this. move on.
-		if (!weapon || weapon->getRules()->getCompatibleAmmo()->empty() ||
-			std::find(weapon->getRules()->getCompatibleAmmo()->begin(),
-			weapon->getRules()->getCompatibleAmmo()->end(),
-			item->getRules()->getType()) == weapon->getRules()->getCompatibleAmmo()->end())
+		if (!rightWeapon || rightWeapon->getRules()->getCompatibleAmmo()->empty())
 		{
 			break;
 		}
 		// xcom weapons will already be loaded, aliens and tanks, however, get their ammo added afterwards.
 		// so let's try to load them here.
-		if ((weapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
-			!weapon->getAmmoItem() &&
-			weapon->setAmmoItem(item) == 0)
+		if ((rightWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!rightWeapon->getAmmoItem() &&
+			rightWeapon->setAmmoItem(item) == 0)
 		{
 			item->setSlot(rightHand);
+			placed = true;
+			break;
+		}
+		if (leftWeapon && (leftWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!leftWeapon->getAmmoItem() &&
+			leftWeapon->setAmmoItem(item))
+		{
+			item->setSlot(leftHand);
 			placed = true;
 			break;
 		}
