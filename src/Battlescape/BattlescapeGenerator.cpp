@@ -965,7 +965,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 	bool placed = false;
 	bool loaded = false;
 	BattleItem *rightWeapon = unit->getItem("STR_RIGHT_HAND");
-	BattleItem *leftWeapon = unit->getItem("STR_RIGHT_HAND");
+	BattleItem *leftWeapon = unit->getItem("STR_LEFT_HAND");
 	int weight = 0;
 
 	// tanks and aliens don't care about weight or multiple items,
