@@ -153,7 +153,7 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = false;
+	_melee = (_unit->getMeleeWeapon() != "");
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
@@ -713,6 +713,12 @@ void AlienBAIState::setupAttack()
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
 	if (selectNearestTarget())
 	{
+		// if we have both types of weapon, make a determination on which to use.
+		if (_melee && _rifle)
+		{
+			selectMeleeOrRanged();
+		}
+
 		if (_unit->getGrenadeFromBelt())
 		{
 			grenadeAction();
@@ -1925,6 +1931,13 @@ void AlienBAIState::meleeAttack()
 	_attackAction->type = BA_HIT;
 }
 
+/**
+ * Validates a target.
+ * @param unit the target we want to validate.
+ * @param assessDanger do we care if this unit was previously targetted with a grenade?
+ * @param includeCivs do we include civilians in the threat assessment?
+ * @return whether this target is someone we would like to kill.
+ */
 bool AlienBAIState::validTarget(BattleUnit *unit, bool assessDanger, bool includeCivs) const
 {
 		// ignore units that are dead/unconscious
@@ -1947,9 +1960,66 @@ bool AlienBAIState::validTarget(BattleUnit *unit, bool assessDanger, bool includ
 	return unit->getFaction() == FACTION_PLAYER;
 }
 
+/**
+ * Checks the alien's reservation setting.
+ * @return the reserve setting.
+ */
 BattleActionType AlienBAIState::getReserveMode()
 {
 	return _reserve;
+}
+
+/**
+ * We have a dichotomy on our hands: we have a ranged weapon and melee capability.
+ * let's make a determination on which one we'll be using this round.
+ */
+void AlienBAIState::selectMeleeOrRanged()
+{
+	RuleItem *rangedWeapon = _unit->getMainHandWeapon()->getRules();
+	RuleItem *meleeWeapon = _save->getBattleGame()->getRuleset()->getItem(_unit->getMeleeWeapon());
+
+	if (!meleeWeapon)
+	{
+		// no idea how we got here, but melee is definitely out of the question.
+		_melee = false;
+		return;
+	}
+	if (!rangedWeapon || _unit->getMainHandWeapon()->getAmmoItem() == 0)
+	{
+		_rifle = false;
+		return;
+	}
+
+	int meleeOdds = 10;
+	int dmg = meleeWeapon->getPower() * _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType());
+	if (dmg > 50)
+	{
+		meleeOdds += (dmg - 50) / 2;
+	}
+	if ( _visibleEnemies > 1 )
+	{
+		meleeOdds -= 5 * (_visibleEnemies - 1);
+	}
+
+	if (meleeOdds > 0 && _unit->getHealth() >= 2 * _unit->getStats()->health / 3)
+	{
+		if (_unit->getAggression() == 0)
+		{
+			meleeOdds -= 20;
+		}
+		else if (_unit->getAggression() > 1)
+		{
+			meleeOdds += 10 * _unit->getAggression();
+		}
+
+		if (RNG::percent(meleeOdds))
+		{
+			_rifle = false;
+			_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, meleeWeapon));
+			return;
+		}
+	}
+	_melee = false;
 }
 
 }
