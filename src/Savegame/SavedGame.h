@@ -280,8 +280,8 @@ public:
 	void setLastSelectedArmor(const std::string &value);
 	//Gets the the last selected armour
 	std::string getLastSelectedArmor();
-    /// Returns the craft corresponding to the specified unique id.
-    Craft *findCraftByUniqueId(const CraftId& craftId) const;
+	/// Returns the craft corresponding to the specified unique id.
+	Craft *findCraftByUniqueId(const CraftId& craftId) const;
 };
 
 }

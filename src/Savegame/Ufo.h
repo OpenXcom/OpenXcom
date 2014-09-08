@@ -51,7 +51,7 @@ private:
 	enum UfoStatus _status;
 	size_t _secondsRemaining;
 	bool _inBattlescape;
-    CraftId _shotDownByCraftId;
+	CraftId _shotDownByCraftId;
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;

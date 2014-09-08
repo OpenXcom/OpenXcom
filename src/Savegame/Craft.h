@@ -167,8 +167,8 @@ public:
 	void setInterceptionOrder(const int order);
 	/// Gets interception number.
 	int getInterceptionOrder() const;
-    /// Gets the craft's unique id.
-    CraftId getUniqueId() const;
+	/// Gets the craft's unique id.
+	CraftId getUniqueId() const;
 };
 
 }
