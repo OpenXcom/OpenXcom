@@ -993,6 +993,19 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		effectiveTuReserved = BA_AIMEDSHOT;
 	}
 	const int tuKneel = (_save->getKneelReserved() && !bu->isKneeled()  && bu->getType() == "SOLDIER") ? 4 : 0;
+
+	if (slowestWeapon == 0)
+	{
+		if (tuKneel > 0)
+		{
+			effectiveTuReserved = BA_NONE;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 	if ((effectiveTuReserved != BA_NONE || _save->getKneelReserved()) &&
 		tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		(tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits() || justChecking))
