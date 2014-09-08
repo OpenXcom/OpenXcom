@@ -799,14 +799,10 @@ void Tile::prepareNewTurn()
 			// no fire: must be smoke
 			else
 			{
-				// aliens don't breathe
-				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0)
+				// try to knock this guy out.
+				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
 				{
-					// try to knock this guy out.
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
-					{
-						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
-					}
+					_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
 				}
 			}
 		}
