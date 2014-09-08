@@ -2700,6 +2700,13 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 	{
 		curvature = std::max(0.48, 1.73 / sqrt(sqrt((double)(action.actor->getStats()->strength) / (double)(action.weapon->getRules()->getWeight()))) + (action.actor->isKneeled()? 0.1 : 0.0));
 	}
+	else
+	{
+		// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
+		// curvature should be approximately 1.06358350461 at this point.
+		curvature = 1.73 / sqrt(sqrt(70.0 / 10.0)) + (action.actor->isKneeled()? 0.1 : 0.0);
+	}
+
 	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
 	if ((action.type == BA_THROW
