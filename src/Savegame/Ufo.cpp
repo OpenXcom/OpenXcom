@@ -557,12 +557,12 @@ const std::string &Ufo::getAlienRace() const
 	return _mission->getRace();
 }
 
-void Ufo::setShotDownByCraftId(std::pair<std::string, int> && craft)
+void Ufo::setShotDownByCraftId(const CraftId& craft)
 {
 	_shotDownByCraftId = craft;
 }
 
-std::pair<std::string, int> Ufo::getShotDownByCraftId() const
+CraftId Ufo::getShotDownByCraftId() const
 {
 	return _shotDownByCraftId;
 }

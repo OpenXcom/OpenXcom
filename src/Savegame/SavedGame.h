@@ -24,6 +24,7 @@
 #include <string>
 #include <time.h>
 #include <stdint.h>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -280,7 +281,7 @@ public:
 	//Gets the the last selected armour
 	std::string getLastSelectedArmor();
     /// Returns the craft corresponding to the specified unique id.
-    Craft *findCraftByUniqueId(const std::pair<std::string, int>& craftId) const;
+    Craft *findCraftByUniqueId(const CraftId& craftId) const;
 };
 
 }

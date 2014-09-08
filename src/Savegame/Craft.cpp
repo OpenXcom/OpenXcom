@@ -937,7 +937,7 @@ int Craft::getInterceptionOrder() const
  * Gets the craft's unique id.
  * @return A tuple of the craft's type and per-type id.
  */
-std::pair<std::string, int> Craft::getUniqueId() const
+CraftId Craft::getUniqueId() const
 {
     return std::make_pair(_rules->getType(), _id);
 }

@@ -22,6 +22,7 @@
 #include "MovingTarget.h"
 #include <vector>
 #include <string>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -167,7 +168,7 @@ public:
 	/// Gets interception number.
 	int getInterceptionOrder() const;
     /// Gets the craft's unique id.
-    std::pair<std::string, int> getUniqueId() const;
+    CraftId getUniqueId() const;
 };
 
 }

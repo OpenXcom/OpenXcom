@@ -23,6 +23,7 @@
 #include <string>
 #include <utility>
 #include <yaml-cpp/yaml.h>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -32,7 +33,6 @@ class AlienMission;
 class UfoTrajectory;
 class SavedGame;
 class Ruleset;
-class Craft;
 
 /**
  * Represents an alien UFO on the map.
@@ -51,7 +51,7 @@ private:
 	enum UfoStatus _status;
 	size_t _secondsRemaining;
 	bool _inBattlescape;
-    std::pair<std::string, int> _shotDownByCraftId;
+    CraftId _shotDownByCraftId;
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;
@@ -115,9 +115,9 @@ public:
 	/// Gets the UFO's alien race.
 	const std::string &getAlienRace() const;
 	/// Sets the ID of craft which shot down the UFO.
-	void setShotDownByCraftId(std::pair<std::string, int> && craftId);
+	void setShotDownByCraftId(const CraftId& craftId);
 	/// Gets the ID of craft which shot down the UFO.
-	std::pair<std::string, int> getShotDownByCraftId() const;
+	CraftId getShotDownByCraftId() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
 	/// Gets the UFO's Mission type.
