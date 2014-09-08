@@ -458,8 +458,8 @@ void AlienBAIState::setupPatrol()
 		{
 			node = *i;
 			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-			if (_unit->getPosition().z == node->getPosition().z 
-				&& d < closest 
+			if (_unit->getPosition().z == node->getPosition().z
+				&& d < closest
 				&& (!(node->getType() & Node::TYPE_SMALL) || _unit->getArmor()->getSize() == 1))
 			{
 				_fromNode = node;
@@ -478,7 +478,7 @@ void AlienBAIState::setupPatrol()
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
 			// also anyone standing in fire should also probably move
-			if (_save->isCheating() || !_fromNode || _fromNode->getRank() == 0 || 
+			if (_save->isCheating() || !_fromNode || _fromNode->getRank() == 0 ||
 				(_save->getTile(_unit->getPosition()) && _save->getTile(_unit->getPosition())->getFire()))
 			{
 				scout = true;
@@ -495,7 +495,7 @@ void AlienBAIState::setupPatrol()
 			// can i shoot an object?
 			if (_fromNode->isTarget() &&
 				_unit->getMainHandWeapon() &&
-				_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
+				_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType()->isDirect() &&
 				_save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
 				// scan this room for objects to destroy

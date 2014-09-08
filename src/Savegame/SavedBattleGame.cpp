@@ -1341,13 +1341,14 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
+	Ruleset *ruleset = getBattleState()->getGame()->getRuleset();
 	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
 	{
 		// do damage to units, average out the smoke, etc.
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
-				getTiles()[i]->prepareNewTurn();
+				getTiles()[i]->prepareNewTurn(ruleset);
 		}
 		// fires could have been started, stopped or smoke could reveal/conceal units.
 		getTileEngine()->calculateTerrainLighting();

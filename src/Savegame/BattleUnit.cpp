@@ -888,24 +888,21 @@ int BattleUnit::getMorale() const
  * @param relative The relative position of which part of armor and/or bodypart is hit.
  * @param power The amount of damage to inflict.
  * @param type The type of damage being inflicted.
- * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position &relative, int power, const RuleDamageType *type)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	if (power <= 0)
+	if (power <= 0 || !_health)
 	{
 		return 0;
 	}
 
-	power = (int)floor(power * _armor->getDamageModifier(type));
+	power = (int)floor(power * _armor->getDamageModifier(type->ResistType));
 
-	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
-
-	if (!ignoreArmor)
+	if (!type->IgnoreDirection)
 	{
 		if (relative == Position(0, 0, 0))
 		{
@@ -973,47 +970,54 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				}
 			}
 		}
-		power -= getArmor(side);
+	}
+
+	if (type->ArmorEffectiveness > 0.0f)
+	{
+		power -= getArmor(side) * type->ArmorEffectiveness;
 	}
 
 	if (power > 0)
 	{
-		if (type == DT_STUN)
+		if (_armor->getSize() == 1 || type->IgnorePainImmunity)
 		{
-			_stunlevel += power;
+			// conventional weapons can cause additional stun damage
+			_stunlevel += int(RNG::generate(0, power) * type->ToStun);
+			if(_stunlevel < 0)
+			{
+				_stunlevel = 0;
+			}
 		}
-		else
+
+		// health damage
+		_health -= int(power * type->ToHealth);
+		if (_health < 0)
 		{
-			// health damage
-			_health -= power;
-			if (_health < 0)
-			{
-				_health = 0;
-			}
+			_health = 0;
+		}
+		else if (_health > _stats.health)
+		{
+			_health = _stats.health;
+		}
 
-			if (type != DT_IN)
+		// fatal wounds
+		if (isWoundable())
+		{
+			if (RNG::generate(0, 10) < int(power * type->ToWound))
 			{
-				if (_armor->getSize() == 1)
-				{
-					// conventional weapons can cause additional stun damage
-					_stunlevel += RNG::generate(0, power / 4);
-				}
-				// fatal wounds
-				if (isWoundable())
-				{
-					if (RNG::generate(0, 10) < power)
-						_fatalWounds[bodypart] += RNG::generate(1,3);
-
-					if (_fatalWounds[bodypart])
-						moraleChange(-_fatalWounds[bodypart]);
-				}
-				// armor damage
-				setArmor(getArmor(side) - (power/10) - 1, side);
+				const int wound = RNG::generate(1,3);
+				_fatalWounds[bodypart] += wound;
+				moraleChange(-wound);
 			}
+		}
+		// armor damage
+		if(type->ToArmor > 0.0f)
+		{
+			setArmor(getArmor(side) - int(power * type->ToArmor) - 1, side);
 		}
 	}
 
-	return power < 0 ? 0:power;
+	return power < 0 ? 0 : power * type->ToHealth;
 }
 
 /**
@@ -2131,7 +2135,7 @@ int BattleUnit::getMotionPoints() const
  */
 Armor *BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
 /**
  * Get unit's name.

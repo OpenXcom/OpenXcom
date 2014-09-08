@@ -24,6 +24,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Savegame/GameTime.h"
+#include "RuleDamageType.h"
 
 namespace OpenXcom
 {
@@ -37,6 +38,7 @@ class RuleBaseFacility;
 class RuleCraft;
 class RuleCraftWeapon;
 class RuleItem;
+class RuleDamageType;
 class RuleUfo;
 class RuleTerrain;
 class MapDataSet;
@@ -100,6 +102,7 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	std::vector<StatString*> _statStrings;
+	std::vector<RuleDamageType*> _damageTypes;
 	RuleGlobe *_globe;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	std::string _alienFuel;
@@ -187,6 +190,8 @@ public:
 	std::map<std::string, RuleInventory*> *getInventories();
 	/// Gets the ruleset for a specific inventory.
 	RuleInventory *getInventory(const std::string &id) const;
+	/// Get basic damage type
+	const RuleDamageType *getDamageType(ItemDamageType type) const;
 	/// Gets the cost of a soldier.
 	int getSoldierCost() const;
 	/// Gets the cost of an engineer.

@@ -36,6 +36,7 @@
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Logger.h"
+#include "../Ruleset/Ruleset.h"
 #include "UnitFallBState.h"
 
 namespace OpenXcom
@@ -184,7 +185,7 @@ void UnitWalkBState::think()
 			{
 				_unit->getTile()->ignite(1);
 				Position here = (_unit->getPosition() * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
-				_parent->getTileEngine()->hit(here, _unit->getStats()->strength, DT_IN, _unit);
+				_parent->getTileEngine()->hit(here, _unit->getStats()->strength, _parent->getRuleset()->getDamageType(DT_IN), _unit);
 			}
 
 			// move our personal lighting with us

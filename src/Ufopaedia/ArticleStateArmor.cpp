@@ -98,7 +98,7 @@ namespace OpenXcom
 		++_row;
 
 		// Add damage modifiers
-		for (int i = 0; i < Armor::DAMAGE_TYPES; ++i)
+		for (int i = 0; i < DAMAGE_TYPES; ++i)
 		{
 			ItemDamageType dt = (ItemDamageType)i;
 			int percentage = (int)Round(armor->getDamageModifier(dt) * 100.0f);

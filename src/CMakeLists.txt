@@ -456,6 +456,8 @@ set ( ruleset_src
   Ruleset/RuleRegion.h
   Ruleset/RuleItem.h
   Ruleset/RuleItem.cpp
+  Ruleset/RuleDamageType.h
+  Ruleset/RuleDamageType.cpp
   Ruleset/RuleCraftWeapon.cpp
   Ruleset/RuleCraftWeapon.h
   Ruleset/RuleInterface.h

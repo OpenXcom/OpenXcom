@@ -22,11 +22,11 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include "RuleDamageType.h"
 
 namespace OpenXcom
 {
 
-enum ItemDamageType { DT_NONE, DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE };
 enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE };
 
 class SurfaceSet;
@@ -49,7 +49,7 @@ private:
 	int _fireSound, _hitSound, _hitAnimation;
 	int _power;
 	std::vector<std::string> _compatibleAmmo;
-	ItemDamageType _damageType;
+	RuleDamageType _damageType;
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
 	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
@@ -62,7 +62,7 @@ private:
 	int _armor;
 	int _turretType;
 	bool _recover, _liveAlien;
-	int _blastRadius, _attraction;
+	int _attraction;
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
@@ -74,7 +74,7 @@ public:
 	/// Cleans up the item ruleset.
 	~RuleItem();
 	/// Loads item data from YAML.
-	void load(const YAML::Node& node, int modIndex, int listIndex);
+	void load(const YAML::Node& node, int modIndex, int listIndex, const std::vector<RuleDamageType*> &damageTypes);
 	/// Gets the item's type.
 	std::string getType() const;
 	/// Gets the item's name.
@@ -132,7 +132,7 @@ public:
 	/// Gets list of compatible ammo.
 	std::vector<std::string> *getCompatibleAmmo();
 	/// Gets the item's damage type.
-	ItemDamageType getDamageType() const;
+	const RuleDamageType *getDamageType() const;
 	/// Gets the item's type.
 	BattleType getBattleType() const;
 	/// Gets the item's inventory width.

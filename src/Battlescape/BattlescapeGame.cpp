@@ -567,26 +567,26 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (hiddenExplosion)
 				{
 					// this is instant death from UFO powersources, without screaming sounds
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
+					statePushNext(new UnitDieBState(this, (*j), getRuleset()->getDamageType(DT_HE), true));
 				}
 				else
 				{
 					if (terrainExplosion)
 					{
 						// terrain explosion
-						statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
+						statePushNext(new UnitDieBState(this, (*j), getRuleset()->getDamageType(DT_HE), false));
 					}
 					else
 					{
 						// no murderer, and no terrain explosion, must be fatal wounds
-						statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+						statePushNext(new UnitDieBState(this, (*j), getRuleset()->getDamageType(DT_NONE), false)); // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 					}
 				}
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
-			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
+			statePushNext(new UnitDieBState(this, (*j), getRuleset()->getDamageType(DT_NONE), true)); // no damage type used there
 		}
 	}
 	BattleUnit *bu = _save->getSelectedUnit();

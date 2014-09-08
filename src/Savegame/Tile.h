@@ -209,7 +209,7 @@ public:
 	/// Get top-most item
 	int getTopItemSprite();
 	/// New turn preparations.
-	void prepareNewTurn();
+	void prepareNewTurn(Ruleset *ruleset);
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
 	/// Set the tile marker color.

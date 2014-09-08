@@ -447,6 +447,7 @@
     <ClCompile Include="Ruleset\RuleCountry.cpp" />
     <ClCompile Include="Ruleset\RuleCraft.cpp" />
     <ClCompile Include="Ruleset\RuleCraftWeapon.cpp" />
+    <ClCompile Include="Ruleset\RuleDamageType.cpp" />
     <ClCompile Include="Ruleset\RuleInventory.cpp" />
     <ClCompile Include="Ruleset\RuleItem.cpp" />
     <ClCompile Include="Ruleset\RuleManufacture.cpp" />
@@ -748,6 +749,7 @@
     <ClInclude Include="Ruleset\RuleCountry.h" />
     <ClInclude Include="Ruleset\RuleCraft.h" />
     <ClInclude Include="Ruleset\RuleCraftWeapon.h" />
+    <ClInclude Include="Ruleset\RuleDamageType.h" />
     <ClInclude Include="Ruleset\RuleInventory.h" />
     <ClInclude Include="Ruleset\RuleItem.h" />
     <ClInclude Include="Ruleset\RuleManufacture.h" />

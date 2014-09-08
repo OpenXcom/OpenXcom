@@ -173,6 +173,11 @@ int MapData::getBlock(ItemDamageType type) const
 		return _block[1];
 	case DT_SMOKE:
 		return _block[3];
+	case DT_ACID:
+	case DT_AP:
+	case DT_LASER:
+	case DT_PLASMA:
+	case DT_MELEE:
 	case DT_HE:
 	case DT_IN:
 	case DT_STUN:

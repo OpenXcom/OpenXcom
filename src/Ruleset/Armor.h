@@ -24,6 +24,7 @@
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
 #include "Unit.h"
+#include "RuleDamageType.h"
 
 namespace OpenXcom
 {
@@ -35,8 +36,6 @@ namespace OpenXcom
  */
 class Armor
 {
-public:	
-	static const int DAMAGE_TYPES = 10;
 private:
 	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem;
 	std::vector<std::string> _corpseBattle;

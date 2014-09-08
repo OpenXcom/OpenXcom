@@ -29,11 +29,11 @@ namespace OpenXcom
  * @param type String defining the type.
  */
 RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(3), _bigSprite(0), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
-											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(DT_NONE),
+											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(),
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
+											_recover(true), _liveAlien(false), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
 											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit(""),
 											_strengthApplied(false), _skillApplied(true), _LOSRequired(false), _underwaterOnly(false), _meleeSound(39), _meleePower(0), _meleeAnimation(0), _meleeHitSound(-1)
 {
@@ -52,7 +52,7 @@ RuleItem::~RuleItem()
  * @param modIndex Offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this item.
  */
-void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
+void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder, const std::vector<RuleDamageType*> &damageTypes)
 {
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
@@ -98,7 +98,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 			_fireSound += modIndex;
 	}
 	if (node["hitSound"])
-	{		
+	{
 		_hitSound = node["hitSound"].as<int>(_hitSound);
 		// BATTLE.CAT: 55 entries
 		if (_hitSound > 54)
@@ -112,7 +112,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 			_meleeSound += modIndex;
 	}
 	if (node["hitAnimation"])
-	{		
+	{
 		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
 		// SMOKE.PCK: 56 entries
 		if (_hitAnimation > 55)
@@ -132,9 +132,18 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		if (_meleeHitSound > 54)
 			_meleeHitSound += modIndex;
 	}
+	if (node["damageType"])
+	{
+		//load predefined damage type
+		_damageType = *damageTypes.at(node["damageType"].as<int>(DT_NONE));
+	}
+	_damageType.FixRadius = node["blastRadius"].as<int>(_damageType.FixRadius);
+	if (node["damageAlter"])
+	{
+		_damageType.load(node["damageAlter"]);
+	}
 	_power = node["power"].as<int>(_power);
 	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
-	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
 	_accuracyAuto = node["accuracyAuto"].as<int>(_accuracyAuto);
 	_accuracySnap = node["accuracySnap"].as<int>(_accuracySnap);
 	_accuracyAimed = node["accuracyAimed"].as<int>(_accuracyAimed);
@@ -163,7 +172,6 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_turretType = node["turretType"].as<int>(_turretType);
 	_recover = node["recover"].as<bool>(_recover);
 	_liveAlien = node["liveAlien"].as<bool>(_liveAlien);
-	_blastRadius = node["blastRadius"].as<int>(_blastRadius);
 	_attraction = node["attraction"].as<int>(_attraction);
 	_flatRate = node["flatRate"].as<bool>(_flatRate);
 	_arcingShot = node["arcingShot"].as<bool>(_arcingShot);
@@ -454,9 +462,9 @@ std::vector<std::string> *RuleItem::getCompatibleAmmo()
  * Gets the item's damage type.
  * @return The damage type.
  */
-ItemDamageType RuleItem::getDamageType() const
+const RuleDamageType *RuleItem::getDamageType() const
 {
-	return _damageType;
+	return &_damageType;
 }
 
 /**
@@ -590,18 +598,12 @@ int RuleItem::getExplosionRadius() const
 {
 	int radius = 0;
 
-	if (_blastRadius == -1)
+	if (_damageType.FixRadius == -1)
 	{
-		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
-		// all the rest hits one point:
-		// AP, melee (stun or AP), laser, plasma, acid
-		if (_damageType == DT_IN)
+		radius = _power * _damageType.RadiusEffectiveness;
+		if(_damageType.FireBlastCalc)
 		{
-			radius = (_power / 30) + 1;
-		}
-		else if (_damageType == DT_HE || _damageType == DT_STUN || _damageType == DT_SMOKE)
-		{
-			radius = _power / 20;
+			radius += 1;
 		}
 		// cap the formula to 11
 		if (radius > 11)
@@ -612,7 +614,7 @@ int RuleItem::getExplosionRadius() const
 	else
 	{
 		// unless a blast radius is actually defined.
-		radius = _blastRadius;
+		radius = _damageType.FixRadius;
 	}
 
 	return radius;
@@ -700,7 +702,7 @@ int RuleItem::getAttraction() const
  */
 int RuleItem::getListOrder() const
 {
-	 return _listOrder;
+	return _listOrder;
 }
 
 /**

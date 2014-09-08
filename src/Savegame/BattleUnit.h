@@ -195,7 +195,7 @@ public:
 	/// Gets the unit's bravery.
 	int getMorale() const;
 	/// Do damage to the unit.
-	int damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor = false);
+	int damage(const Position &relative, int power, const RuleDamageType *type);
 	/// Heal stun level of the unit.
 	void healStun(int power);
 	/// Gets the unit's stun level.

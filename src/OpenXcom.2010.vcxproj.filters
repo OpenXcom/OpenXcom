@@ -164,6 +164,9 @@
     <ClCompile Include="Ruleset\RuleCraftWeapon.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleDamageType.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\RuleItem.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -1040,6 +1043,9 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleCraftWeapon.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleDamageType.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleItem.h">

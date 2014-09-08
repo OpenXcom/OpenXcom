@@ -30,6 +30,7 @@ class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
 class Tile;
+class RuleDamageType;
 
 /**
  * Explosion state not only handles explosions, but also bullet impacts!
@@ -41,8 +42,10 @@ private:
 	BattleUnit *_unit;
 	Position _center;
 	BattleItem *_item;
+	const RuleDamageType *_damageType;
 	Tile *_tile;
 	int _power;
+	int _radius;
 	bool _areaOfEffect, _lowerWeapon, _pistolWhip, _hit;
 	/// Calculates the effects of the explosion.
 	void explode();
