@@ -800,7 +800,7 @@ void Tile::prepareNewTurn()
 			else
 			{
 				// aliens don't breathe
-				if (_unit->getOriginalFaction() != FACTION_HOSTILE)
+				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0)
 				{
 					// try to knock this guy out.
 					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
