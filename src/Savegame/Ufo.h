@@ -21,7 +21,6 @@
 
 #include "MovingTarget.h"
 #include <string>
-#include <utility>
 #include <yaml-cpp/yaml.h>
 #include "CraftId.h"
 
