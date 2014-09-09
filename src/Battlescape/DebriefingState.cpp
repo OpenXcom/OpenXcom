@@ -388,6 +388,7 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
 	_stats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
+	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true));
 	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
 
 	SavedGame *save = _game->getSavedGame();
