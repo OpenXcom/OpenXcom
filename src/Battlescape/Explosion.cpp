@@ -28,9 +28,16 @@ namespace OpenXcom
  * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
  * @param hit True for melee and psi attacks.
  */
-Explosion::Explosion(Position position, int startFrame, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big), _hit(hit)
+Explosion::Explosion(Position position, int startFrame, bool big, bool hit, int endFrame, std::string spriteSheet) : 
+	_position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big), _hit(hit), _endFrame(endFrame),
+	_spriteSheet(spriteSheet)
 {
-
+	if (_endFrame == 0)
+	{
+		if (hit) _endFrame = 4;
+		else if (!big) _endFrame = _startFrame + 10;
+		else _endFrame = 8;	
+	}
 }
 
 /**
@@ -48,7 +55,7 @@ Explosion::~Explosion()
 bool Explosion::animate()
 {
 	_currentFrame++;
-	if ((_hit && _currentFrame == 4) || (_big && _currentFrame == 8) || (!_big && _currentFrame == _startFrame+10))
+	if (_currentFrame >= _endFrame)
 	{
 		return false;
 	}
@@ -68,12 +75,21 @@ Position Explosion::getPosition() const
 }
 
 /**
+ * Sets the current frame.  If this is set to less than the start frame,
+ * the start frame will show.
+ */
+void Explosion::setCurrentFrame(int currentFrame)
+{
+	_currentFrame = currentFrame;
+}
+
+/**
  * Gets the current frame in the animation.
  * @return frame number.
  */
 int Explosion::getCurrentFrame() const
 {
-	return _currentFrame;
+	return _currentFrame < _startFrame ? _startFrame : _currentFrame;
 }
 
 /**

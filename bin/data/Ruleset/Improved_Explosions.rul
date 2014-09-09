@@ -1,0 +1,40 @@
+extraSprites:
+  - type: NEW_EXPLOSIONS
+    width: 510
+    height: 510
+    subX: 85
+    subY: 85
+    files:
+      0: Resources/ExplosionSprites/conventional.gif
+      36: Resources/ExplosionSprites/plasmagreen.gif
+      72: Resources/ExplosionSprites/stun.gif            
+explosions:
+  - type: STR_DEFAULT
+    spriteSheet: NEW_EXPLOSIONS
+    start: 0
+    end: 35
+    animSpeed: 50
+    density: 100
+    xOffset: 42
+    yOffset: 42
+  - type: STR_PLASMA
+    spriteSheet: NEW_EXPLOSIONS
+    start: 36
+    end: 72
+    animSpeed: 25
+    density: 300
+    xOffset: 42
+    yOffset: 42    
+  - type: STR_STUN
+    spriteSheet: NEW_EXPLOSIONS
+    start: 72
+    end: 108
+    animSpeed: 25
+    density: 300
+    xOffset: 42
+    yOffset: 42      
+items:
+  - type: STR_STUN_BOMB
+    explosion: STR_STUN
+  - type: STR_ALIEN_GRENADE
+    explosion: STR_PLASMA

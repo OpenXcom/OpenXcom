@@ -35,7 +35,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
 											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0),
 											_maxRange(200), _aimRange(200), _snapRange(15), _autoRange(7), _minRange(0), _dropoff(2), _bulletSpeed(0), _explosionSpeed(0), _autoShots(3), _shotgunPellets(0), _zombieUnit(""),
-											_strengthApplied(false), _skillApplied(true), _LOSRequired(false), _underwaterOnly(false), _meleeSound(39), _meleePower(0), _meleeAnimation(0), _meleeHitSound(-1)
+											_strengthApplied(false), _skillApplied(true), _LOSRequired(false), _underwaterOnly(false), _meleeSound(39), _meleePower(0), _meleeAnimation(0), _meleeHitSound(-1), _explosion("")
 {
 }
 
@@ -184,6 +184,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_LOSRequired = node["LOSRequired"].as<bool>(_LOSRequired);
 	_meleePower = node["meleePower"].as<int>(_meleePower);
 	_underwaterOnly = node["underwaterOnly"].as<bool>(_underwaterOnly);
+	_explosion = node["explosion"].as<std::string>(_explosion);
 
 	if (!_listOrder)
 	{
@@ -893,4 +894,12 @@ const bool RuleItem::isWaterOnly() const
 	return _underwaterOnly;
 }
 
+/**
+ * Explosion ID for high explosive/stun/incendiary items
+ * @return ID of explosion
+ */
+const std::string RuleItem::getExplosion() const
+{
+	return _explosion;
+}
 }

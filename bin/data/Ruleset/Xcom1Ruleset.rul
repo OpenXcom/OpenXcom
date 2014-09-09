@@ -9491,7 +9491,15 @@ extraSprites:
     subY: 3
     files:
       0: Resources/UI/globe_ufo.png
-  
+explosions:
+  - type: STR_DEFAULT
+    spriteSheet: "X1.PCK"
+    start: 0
+    end: 8
+    animSpeed: 100
+    density: 100
+    xOffset: 64
+    yOffset: 32  
 interfaces:
   - type: battlescape
     elements:

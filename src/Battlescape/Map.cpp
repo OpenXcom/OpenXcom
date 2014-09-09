@@ -1167,8 +1167,9 @@ void Map::drawTerrain(Surface *surface)
 			{
 				if ((*i)->getCurrentFrame() >= 0)
 				{
-					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+					SurfaceSet *explosion = _res->getSurfaceSet((*i)->getSpriteSheet());
+					tmpSurface = explosion->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(surface, bulletPositionScreen.x - (explosion->getWidth() / 2), bulletPositionScreen.y - (explosion->getHeight() / 2), 0);
 				}
 			}
 			else if ((*i)->isHit())

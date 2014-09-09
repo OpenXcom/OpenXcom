@@ -63,6 +63,7 @@ private:
 	int _turretType;
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
+	std::string _explosion;
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
@@ -221,6 +222,8 @@ public:
 	bool isLOSRequired() const;
 	/// Is this item restricted to use underwater?
 	const bool isWaterOnly() const;
+	/// Get the ID for the explosion graphic
+	const std::string getExplosion() const;
 
 };
 

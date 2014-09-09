@@ -32,6 +32,7 @@
 #include "RuleItem.h"
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
+#include "RuleExplosion.h"
 #include "MapDataSet.h"
 #include "RuleSoldier.h"
 #include "Unit.h"
@@ -138,6 +139,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleExplosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -282,6 +287,14 @@ void Ruleset::loadFile(const std::string &filename)
 		if (rule != 0)
 		{
 			rule->load(*i, this);
+		}
+	}
+ 	for (YAML::const_iterator i = doc["explosions"].begin(); i != doc["explosions"].end(); ++i)
+	{
+		RuleExplosion *rule = loadRule(*i, &_explosions, &_explosionsIndex);
+		if (rule != 0)
+		{
+			rule->load(*i, this, _modIndex);
 		}
 	}
  	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
@@ -848,6 +861,17 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
 {
 	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
 	if (_ufos.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the rules for the specified explosion
+ * @param id explosion ID string
+ * @return Rules for the explosion
+ */
+RuleExplosion *Ruleset::getExplosion(const std::string &id) const
+{
+	std::map<std::string, RuleExplosion*>::const_iterator i = _explosions.find(id);
+	if (_explosions.end() != i) return i->second; else return 0;
 }
 
 /**

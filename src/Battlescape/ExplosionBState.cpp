@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _USE_MATH_DEFINES
 #include "ExplosionBState.h"
 #include "BattlescapeState.h"
 #include "Explosion.h"
@@ -35,6 +36,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleExplosion.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
@@ -69,6 +71,7 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
+	std::string _areaExplosionType = "STR_DEFAULT";
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
@@ -88,6 +91,7 @@ void ExplosionBState::init()
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE &&
 						_item->getRules()->getExplosionRadius() != 0 &&
 						!_pistolWhip;
+		_areaExplosionType = _item->getRules()->getExplosion() == "" ? "STR_DEFAULT" : _item->getRules()->getExplosion();
 	}
 	else if (_tile)
 	{
@@ -110,15 +114,26 @@ void ExplosionBState::init()
 	{
 		if (_power)
 		{
+			RuleExplosion *ruleExplosion = _parent->getRuleset()->getExplosion(_areaExplosionType);
+
 			int frame = 0;
 			int counter = std::max(1, (_power/5) / 5);
-			for (int i = 0; i < _power/5; i++)
+			for (int i = 0; i < (_power * ruleExplosion->getDensity()) / (3 * 100); i++)
 			{
-				int X = RNG::generate(-_power/2,_power/2);
-				int Y = RNG::generate(-_power/2,_power/2);
+				int rmax = _power;
+				int theta = RNG::generate(0,359);
+				// Generate a random point within the radius of the explosion
+				// taking the sqrt evenly distributes points within the explosion
+				// (uniform distribution on radius would concentrate points at center)
+				int u = RNG::generate(0,rmax);
+				float r = sqrt((float) u / rmax) * rmax;				
+
+				int X = int(r * cos((float) theta * M_PI / 180));
+				int Y = int(r * sin((float) theta * M_PI / 180));
 				Position p = _center;
 				p.x += X; p.y += Y;
-				Explosion *explosion = new Explosion(p, frame, true);
+				Explosion *explosion = new Explosion(p, ruleExplosion->getStart(), true, false, ruleExplosion->getEnd(), ruleExplosion->getSpriteSheet());
+				explosion->setCurrentFrame(ruleExplosion->getStart() + frame);
 				// add the explosion on the map
 				_parent->getMap()->getExplosions()->push_back(explosion);
 				if (i > 0 && i % counter == 0)
@@ -126,7 +141,8 @@ void ExplosionBState::init()
 					--frame;
 				}
 			}
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
+			_parent->setStateInterval((BattlescapeState::DEFAULT_ANIM_SPEED * ruleExplosion->getAnimSpeed()) / (2 * 100));
+
 			// explosion sound
 			if (_power <= 80)
 				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::SMALL_EXPLOSION)->play();
