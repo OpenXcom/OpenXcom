@@ -1796,6 +1796,10 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 				{
 					connectID += nodeOffset;
 				}
+				else
+				{
+					connectID = -1;
+				}
 				node->getNodeLinks()->push_back(connectID);
 			}
 			_save->getNodes()->push_back(node);
