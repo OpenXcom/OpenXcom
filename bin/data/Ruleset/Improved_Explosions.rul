@@ -15,24 +15,18 @@ explosions:
     end: 35
     animSpeed: 50
     density: 100
-    xOffset: 42
-    yOffset: 42
   - type: STR_PLASMA
     spriteSheet: NEW_EXPLOSIONS
     start: 36
     end: 72
     animSpeed: 25
-    density: 300
-    xOffset: 42
-    yOffset: 42    
+    density: 300   
   - type: STR_STUN
     spriteSheet: NEW_EXPLOSIONS
     start: 72
     end: 108
     animSpeed: 25
-    density: 300
-    xOffset: 42
-    yOffset: 42      
+    density: 300     
 items:
   - type: STR_STUN_BOMB
     explosion: STR_STUN

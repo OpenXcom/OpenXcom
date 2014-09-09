@@ -9498,8 +9498,6 @@ explosions:
     end: 8
     animSpeed: 100
     density: 100
-    xOffset: 64
-    yOffset: 32  
 interfaces:
   - type: battlescape
     elements:
