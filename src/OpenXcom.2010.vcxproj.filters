@@ -871,6 +871,9 @@
     <ClCompile Include="Engine\Scalers\xbrz.cpp">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleExplosion.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1767,6 +1770,9 @@
     <ClInclude Include="Engine\Scalers\config.h">
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
+    <ClInclude Include="Ruleset\RuleExplosion.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1805,9 +1811,6 @@
     <Filter Include="Engine\Adlib">
       <UniqueIdentifier>{09464f19-4bce-449f-a27c-5cd7b9850dbe}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\windows\openxcom.ico" />
