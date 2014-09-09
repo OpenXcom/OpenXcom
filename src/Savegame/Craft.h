@@ -65,6 +65,8 @@ public:
 	YAML::Node save() const;
 	/// Saves the craft's ID to YAML.
 	YAML::Node saveId() const;
+	/// Loads a craft ID from YAML.
+	static CraftId loadId(const YAML::Node &node);
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.
