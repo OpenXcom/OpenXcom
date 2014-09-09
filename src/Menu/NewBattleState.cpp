@@ -343,7 +343,7 @@ void NewBattleState::load(const std::string &filename)
 				if (base->getCrafts()->empty())
 				{
 					std::string craftType = _crafts[_cbxCraft->getSelected()];
-					_craft = new Craft(_game->getRuleset()->getCraft(craftType), base, save->getId(craftType));
+					_craft = new Craft(_game->getRuleset()->getCraft(craftType), base, save->getId("STR_CRAFT"), save->getId(craftType));
 					base->getCrafts()->push_back(_craft);
 				}
 				else
@@ -424,7 +424,7 @@ void NewBattleState::initSave()
 	base->getCrafts()->clear();
 	base->getItems()->getContents()->clear();
 
-	_craft = new Craft(rule->getCraft(_crafts[_cbxCraft->getSelected()]), base, 1);
+	_craft = new Craft(rule->getCraft(_crafts[_cbxCraft->getSelected()]), base, 1, 1);
 	base->getCrafts()->push_back(_craft);
 
 	// Generate soldiers

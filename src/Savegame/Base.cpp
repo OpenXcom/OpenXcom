@@ -140,14 +140,30 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 		s->setCraft(0);
 		if (const YAML::Node &craft = (*i)["craft"])
 		{
-			std::string type = craft["type"].as<std::string>();
-			int id = craft["id"].as<int>();
-			for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
+			if (craft["uniqueId"])
 			{
-				if ((*j)->getRules()->getType() == type && (*j)->getId() == id)
+				int id = craft["uniqueId"].as<int>();
+
+				for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
 				{
-					s->setCraft(*j);
-					break;
+					if ((*j)->getId() == id)
+					{
+						s->setCraft(*j);
+						break;
+					}
+				}
+			}
+			else
+			{
+				std::string type = craft["type"].as<std::string>();
+				int number = craft["id"].as<int>();
+				for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
+				{
+					if ((*j)->getRules()->getType() == type && (*j)->getNumber() == number)
+					{
+						s->setCraft(*j);
+						break;
+					}
 				}
 			}
 		}

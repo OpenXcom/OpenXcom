@@ -46,12 +46,16 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param id ID to assign to the craft (0 to not assign).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _weapons(), _status("STR_READY"), _lowFuel(false), _mission(false), _inBattlescape(false), _inDogfight(false), _name(L"")
+Craft::Craft(RuleCraft *rules, Base *base, int id, int number) : MovingTarget(), _rules(rules), _base(base), _id(0), _number(0), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _weapons(), _status("STR_READY"), _lowFuel(false), _mission(false), _inBattlescape(false), _inDogfight(false), _name(L"")
 {
 	_items = new ItemContainer();
 	if (id != 0)
 	{
 		_id = id;
+	}
+	if (number != 0)
+	{
+		_number = number;
 	}
 	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
@@ -85,7 +89,19 @@ Craft::~Craft()
 void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 {
 	MovingTarget::load(node);
-	_id = node["id"].as<int>(_id);
+
+	if (node["uniqueId"])
+	{
+		_id = node["uniqueId"].as<int>();
+	}
+	else
+	{
+		_id = save->getId("STR_CRAFT");
+	}
+	
+	assert(_id);
+
+	_number = node["id"].as<int>(_number);
 	_fuel = node["fuel"].as<int>(_fuel);
 	_damage = node["damage"].as<int>(_damage);
 
@@ -206,7 +222,8 @@ YAML::Node Craft::save() const
 {
 	YAML::Node node = MovingTarget::save();
 	node["type"] = _rules->getType();
-	node["id"] = _id;
+	node["uniqueId"] = _id;
+	node["id"] = _number;
 	node["fuel"] = _fuel;
 	node["damage"] = _damage;
 	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
@@ -250,8 +267,13 @@ YAML::Node Craft::save() const
 YAML::Node Craft::saveId() const
 {
 	YAML::Node node = MovingTarget::saveId();
+	assert(_id);
+	node["uniqueId"] = _id;
+	
+	// For backwards compatibility
 	node["type"] = _rules->getType();
-	node["id"] = _id;
+	node["id"] = _number;
+
 	return node;
 }
 
@@ -278,15 +300,23 @@ void Craft::changeRules(RuleCraft *rules)
 		_weapons.push_back(0);
 	}
 }
-
+	
 /**
- * Returns the craft's unique ID. Each craft
- * can be identified by its type and ID.
+ * Returns the craft's unique ID.
  * @return Unique ID.
  */
 int Craft::getId() const
 {
 	return _id;
+}
+
+/**
+ * Returns the craft's number.
+ * @return Craft number.
+ */
+int Craft::getNumber() const
+{
+	return _number;
 }
 
 /**
@@ -298,7 +328,7 @@ int Craft::getId() const
 std::wstring Craft::getName(Language *lang) const
 {
 	if (_name.empty())
-		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
+		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_number);
 	return _name;
 }
 
