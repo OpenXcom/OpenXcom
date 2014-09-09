@@ -1789,10 +1789,10 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 		if( (int)value[0] < mapblock->getSizeY() && (int)value[1] < mapblock->getSizeX() && (int)value[2] < _mapsize_z )
 		{
 			Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (int)value[0], mapblock->getSizeZ() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
-			for (int j=0;j<5;++j)
+			for (int j = 0; j < 5; ++j)
 			{
-				int connectID = (int)((signed char)value[4 + j*3]);
-				if (connectID > -1)
+				int connectID = (int)((unsigned char)value[4 + j * 3]);
+				if (connectID != 255)
 				{
 					connectID += nodeOffset;
 				}
