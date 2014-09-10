@@ -248,6 +248,11 @@ DebriefingState::~DebriefingState()
 	{
 		delete *i;
 	}
+	for (std::map<int, RecoveryItem*>::iterator i = _recoveryStats.begin(); i != _recoveryStats.end();)
+	{
+		delete i->second;
+		i = _recoveryStats.erase(i);
+	}
 	_rounds.clear();
 }
 
@@ -366,6 +371,18 @@ void ClearAlienBase::operator()(AlienMission *am) const
  */
 void DebriefingState::prepareDebriefing()
 {
+
+	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getItemsList().begin(); i != _game->getRuleset()->getItemsList().end(); ++i)
+	{
+		if (_game->getRuleset()->getItem(*i)->getSpecialType() > 1)
+		{
+			RecoveryItem *item = new RecoveryItem();
+			item->name = *i;
+			item->value = _game->getRuleset()->getItem(*i)->getRecoveryPoints();
+			_recoveryStats[_game->getRuleset()->getItem(*i)->getSpecialType()] = item;
+		}
+	}
+
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
@@ -379,16 +396,12 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", false));
 	_stats.push_back(new DebriefingStat("STR_TANKS_DESTROYED", false));
 	_stats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST", false));
-	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
-	_stats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
-	_stats.push_back(new DebriefingStat("STR_UFO_CONSTRUCTION", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_FOOD", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_REPRODUCTION", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_ENTERTAINMENT", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
-	_stats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true));
+
+	for (std::map<int, RecoveryItem*>::const_iterator i = _recoveryStats.begin(); i != _recoveryStats.end(); ++i)
+	{
+		_stats.push_back(new DebriefingStat((*i).second->name, true));
+	}
+
 	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
 
 	SavedGame *save = _game->getSavedGame();
@@ -829,32 +842,11 @@ void DebriefingState::prepareDebriefing()
 				{
 					if (battle->getTiles()[i]->getMapData(part))
 					{
-						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+						size_t specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
+						if (_recoveryStats.find(specialType) != _recoveryStats.end())
 						{
-						case UFO_POWER_SOURCE:
-							addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
-						case UFO_NAVIGATION:
-							addStat("STR_UFO_NAVIGATION", 1, 5); break;
-						case UFO_CONSTRUCTION:
-							addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
-						case ALIEN_FOOD:
-							addStat("STR_ALIEN_FOOD", 1, 2); break;
-						case ALIEN_REPRODUCTION:
-							addStat("STR_ALIEN_REPRODUCTION", 1, 2); break;
-						case ALIEN_ENTERTAINMENT:
-							addStat("STR_ALIEN_ENTERTAINMENT", 1, 2); break;
-						case ALIEN_SURGERY:
-							addStat("STR_ALIEN_SURGERY", 1, 2); break;
-						case EXAM_ROOM:
-							addStat("STR_EXAMINATION_ROOM", 1, 2); break;
-						case ALIEN_ALLOYS:
-							addStat("STR_ALIEN_ALLOYS", 1, 1); break;
-						case ALIEN_HABITAT:
-							addStat("STR_ALIEN_HABITAT", 1, 1); break;
-						case MUST_DESTROY: break; // this is the brain
-						default: break;
+							addStat(_recoveryStats[specialType]->name, 1, _recoveryStats[specialType]->value);
 						}
-
 					}
 				}
 				// recover items from the floor

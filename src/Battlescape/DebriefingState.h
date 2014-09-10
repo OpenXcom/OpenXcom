@@ -42,6 +42,8 @@ struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(
 
 struct ReequipStat { std::string item; int qty; std::wstring craft; };
 
+struct RecoveryItem { std::string name; int value; };
+
 /**
  * Debriefing screen shown after a Battlescape
  * mission that displays the results.
@@ -59,6 +61,7 @@ private:
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
+	std::map<int, RecoveryItem*> _recoveryStats;
 	/// Adds to the debriefing stats.
 	void addStat(const std::string &name, int quantity, int score);
 	/// Prepares debriefing.

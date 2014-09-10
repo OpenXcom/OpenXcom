@@ -67,7 +67,7 @@ private:
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
 	bool _strengthApplied, _skillApplied, _LOSRequired, _underwaterOnly;
-	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound;
+	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound, _specialType;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -221,6 +221,8 @@ public:
 	bool isLOSRequired() const;
 	/// Is this item restricted to use underwater?
 	const bool isWaterOnly() const;
+	/// Get the associated special type of this item.
+	const int getSpecialType() const;
 
 };
 
