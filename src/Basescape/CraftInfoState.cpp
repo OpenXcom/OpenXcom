@@ -60,45 +60,68 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	{
 		_window = new Window(this, 320, 200, 0, 0, POPUP_NONE);
 	}
-	_btnOk = new TextButton(64, 24, 128, 168);
-	_btnW1 = new TextButton(24, 32, 14, 48);
-	_btnW2 = new TextButton(24, 32, 282, 48);
-	_btnCrew = new TextButton(64, 16, 14, 96);
-	_btnEquip = new TextButton(64, 16, 14, 120);
-	_btnArmor = new TextButton(64, 16, 14, 144);
+
+	_craft = _base->getCrafts()->at(_craftId);
+	_weaponNum = _craft->getRules()->getWeapons();
+	if(_weaponNum > WeaponMax)
+		_weaponNum = WeaponMax;
+
+	const int top = _weaponNum > 2 ? 42 : 64;
+	const int top_row = 41;
+	const int bottom = 125;
+	const int bottom_row = 17;
+	_btnOk = new TextButton(288, 16, 16, 176);
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		const int x = i % 2 ? 282 : 14;
+		const int y = top + (i / 2) * top_row;
+		_btnW[i] = new TextButton(24, 32, x, y);
+	}
+	_btnCrew = new TextButton(64, 16, 16, bottom);
+	_btnEquip = new TextButton(64, 16, 16, bottom + bottom_row);
+	_btnArmor = new TextButton(64, 16, 16, bottom + 2 * bottom_row);
 	_edtCraft = new TextEdit(this, 140, 16, 80, 8);
 	_txtDamage = new Text(100, 17, 14, 24);
 	_txtFuel = new Text(82, 17, 228, 24);
-	_txtW1Name = new Text(75, 16, 46, 48);
-	_txtW1Ammo = new Text(75, 24, 46, 64);
-	_txtW2Name = new Text(75, 16, 204, 48);
-	_txtW2Ammo = new Text(75, 24, 204, 64);
-	_sprite = new Surface(32, 40, 144, 52);
-	_weapon1 = new Surface(15, 17, 121, 63);
-	_weapon2 = new Surface(15, 17, 184, 63);
-	_crew = new Surface(220, 18, 85, 96);
-	_equip = new Surface(220, 18, 85, 121);
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		const int x = i % 2 ? 204 : 46;
+		const int y = top + (i / 2) * top_row;
+		_txtWName[i] = new Text(75, 16, x, y);
+		_txtWAmmo[i] = new Text(75, 24, x, y + 16);
+	}
+	_sprite = new Surface(32, 40, 144, 56);
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		const int x = i % 2 ? 184 : 121;
+		const int y = top + (i / 2) * top_row;
+		_weapon[i] = new Surface(15, 17, x, y);
+	}
+	_crew = new Surface(220, 18, 85, bottom - 1);
+	_equip = new Surface(220, 18, 85, bottom + bottom_row);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", 3);
 
 	add(_window);
 	add(_btnOk);
-	add(_btnW1);
-	add(_btnW2);
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		add(_btnW[i]);
+	}
 	add(_btnCrew);
 	add(_btnEquip);
 	add(_btnArmor);
 	add(_edtCraft);
 	add(_txtDamage);
 	add(_txtFuel);
-	add(_txtW1Name);
-	add(_txtW1Ammo);
-	add(_txtW2Name);
-	add(_txtW2Ammo);
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		add(_txtWName[i]);
+		add(_txtWAmmo[i]);
+		add(_weapon[i]);
+	}
 	add(_sprite);
-	add(_weapon1);
-	add(_weapon2);
 	add(_crew);
 	add(_equip);
 
@@ -113,13 +136,13 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, Options::keyCancel);
 
-	_btnW1->setColor(Palette::blockOffset(13)+10);
-	_btnW1->setText(L"1");
-	_btnW1->onMouseClick((ActionHandler)&CraftInfoState::btnW1Click);
-
-	_btnW2->setColor(Palette::blockOffset(13)+10);
-	_btnW2->setText(L"2");
-	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		const wchar_t num[] = { L'1' + i, 0 };
+		_btnW[i]->setColor(Palette::blockOffset(13)+10);
+		_btnW[i]->setText(num);
+		_btnW[i]->onMouseClick((ActionHandler)&CraftInfoState::btnWClick);
+	}
 
 	_btnCrew->setColor(Palette::blockOffset(13)+10);
 	_btnCrew->setText(tr("STR_CREW"));
@@ -144,17 +167,14 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_txtFuel->setColor(Palette::blockOffset(13)+10);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtW1Name->setColor(Palette::blockOffset(13)+5);
-	_txtW1Name->setWordWrap(true);
+	for(int i =0; i < _weaponNum; ++i)
+	{
+		_txtWName[i]->setColor(Palette::blockOffset(13)+5);
+		_txtWName[i]->setWordWrap(true);
 
-	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
-	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-	_txtW2Name->setColor(Palette::blockOffset(13)+5);
-	_txtW2Name->setWordWrap(true);
-
-	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
-	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
+		_txtWAmmo[i]->setColor(Palette::blockOffset(13)+10);
+		_txtWAmmo[i]->setSecondaryColor(Palette::blockOffset(13)+5);
+	}
 }
 
 /**
@@ -172,8 +192,6 @@ CraftInfoState::~CraftInfoState()
 void CraftInfoState::init()
 {
 	State::init();
-
-	_craft = _base->getCrafts()->at(_craftId);
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 
@@ -237,18 +255,18 @@ void CraftInfoState::init()
 		_btnArmor->setVisible(false);
 	}
 
-	if (_craft->getRules()->getWeapons() > 0)
+	for(int i = 0; i < _weaponNum; ++i)
 	{
-		CraftWeapon *w1 = _craft->getWeapons()->at(0);
+		CraftWeapon *w1 = _craft->getWeapons()->at(i);
 
 		if (w1 != 0)
 		{
 			Surface *frame = texture->getFrame(w1->getRules()->getSprite() + 48);
 			frame->setX(0);
 			frame->setY(0);
-			frame->blit(_weapon1);
+			frame->blit(_weapon[i]);
 
-			_txtW1Name->setText(tr(w1->getRules()->getType()));
+			_txtWName[i]->setText(tr(w1->getRules()->getType()));
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
@@ -257,66 +275,23 @@ void CraftInfoState::init()
 				int rearmHours = (int)ceil((double)(w1->getRules()->getAmmoMax() - w1->getAmmo()) / w1->getRules()->getRearmRate());
 				ss << formatTime(rearmHours);
 			}
-			_txtW1Ammo->setText(ss.str());
+			_txtWAmmo[i]->setText(ss.str());
 		}
 		else
 		{
-			_weapon1->clear();
-			_txtW1Name->setText(L"");
-			_txtW1Ammo->setText(L"");
+			_weapon[i]->clear();
+			_txtWName[i]->setText(L"");
+			_txtWAmmo[i]->setText(L"");
 		}
 	}
-	else
-	{
-		_weapon1->setVisible(false);
-		_btnW1->setVisible(false);
-		_txtW1Name->setVisible(false);
-		_txtW1Ammo->setVisible(false);
-	}
 
-	if (_craft->getRules()->getWeapons() > 1)
-	{
-		CraftWeapon *w2 = _craft->getWeapons()->at(1);
-
-		if (w2 != 0)
-		{
-			Surface *frame = texture->getFrame(w2->getRules()->getSprite() + 48);
-			frame->setX(0);
-			frame->setY(0);
-			frame->blit(_weapon2);
-
-			_txtW2Name->setText(tr(w2->getRules()->getType()));
-			std::wostringstream ss;
-			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
-			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
-			if (_craft->getStatus() == "STR_REARMING" && w2->getAmmo() < w2->getRules()->getAmmoMax())
-			{
-				int rearmHours = (int)ceil((double)(w2->getRules()->getAmmoMax() - w2->getAmmo()) / w2->getRules()->getRearmRate());
-				ss << formatTime(rearmHours);
-			}
-			_txtW2Ammo->setText(ss.str());
-		}
-		else
-		{
-			_weapon2->clear();
-			_txtW2Name->setText(L"");
-			_txtW2Ammo->setText(L"");
-		}
-	}
-	else
-	{
-		_weapon2->setVisible(false);
-		_btnW2->setVisible(false);
-		_txtW2Name->setVisible(false);
-		_txtW2Ammo->setVisible(false);
-	}
 	_defaultName = tr("STR_CRAFTNAME").arg(tr(_craft->getRules()->getType())).arg(_craft->getId());
 }
 
 /**
  * Turns an amount of time into a
  * day/hour string.
- * @param total 
+ * @param total
  */
 std::wstring CraftInfoState::formatTime(int total)
 {
@@ -346,23 +321,20 @@ void CraftInfoState::btnOkClick(Action *)
 }
 
 /**
- * Goes to the Select Armament window for
- * the first weapon.
+ * Goes to the Select Armament window
+ * for the weapons.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnW1Click(Action *)
+void CraftInfoState::btnWClick(Action * act)
 {
-	_game->pushState(new CraftWeaponsState(_base, _craftId, 0));
-}
-
-/**
- * Goes to the Select Armament window for
- * the second weapon.
- * @param action Pointer to an action.
- */
-void CraftInfoState::btnW2Click(Action *)
-{
-	_game->pushState(new CraftWeaponsState(_base, _craftId, 1));
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		if(act->getSender() == _btnW[i])
+		{
+			_game->pushState(new CraftWeaponsState(_base, _craftId, i));
+			return;
+		}
+	}
 }
 
 /**

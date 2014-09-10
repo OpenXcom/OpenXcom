@@ -70,7 +70,7 @@ public:
 	/// Gets the craft's acceleration.
 	int getAcceleration() const;
 	/// Gets the craft's weapon capacity.
-	unsigned int getWeapons() const;
+	int getWeapons() const;
 	/// Gets the craft's soldier capacity.
 	int getSoldiers() const;
 	/// Gets the craft's vehicle capacity.

@@ -53,7 +53,7 @@ Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rule
 	{
 		_id = id;
 	}
-	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
+	for (int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
@@ -89,7 +89,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	_fuel = node["fuel"].as<int>(_fuel);
 	_damage = node["damage"].as<int>(_damage);
 
-	size_t j = 0;
+	int j = 0;
 	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
 		if (_rules->getWeapons() > j)
@@ -273,7 +273,7 @@ void Craft::changeRules(RuleCraft *rules)
 {
 	_rules = rules;
 	_weapons.clear();
-	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
+	for (int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
