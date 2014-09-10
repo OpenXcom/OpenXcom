@@ -248,11 +248,11 @@ DebriefingState::~DebriefingState()
 	{
 		delete *i;
 	}
-	for (std::map<int, RecoveryItem*>::iterator i = _recoveryStats.begin(); i != _recoveryStats.end();)
+	for (std::map<int, RecoveryItem*>::iterator i = _recoveryStats.begin(); i != _recoveryStats.end(); ++i)
 	{
 		delete i->second;
-		i = _recoveryStats.erase(i);
 	}
+	_recoveryStats.clear();
 	_rounds.clear();
 }
 
@@ -910,7 +910,7 @@ void DebriefingState::prepareDebriefing()
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			if ((*i)->item == "STR_ALIEN_ALLOYS")
+			if ((*i)->item == _recoveryStats[ALIEN_ALLOYS]->name)
 			{
 				(*i)->qty = (*i)->qty / aadivider;
 				(*i)->score = (*i)->score / aadivider;
