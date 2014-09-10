@@ -724,7 +724,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		// check the resolution to see which scale we need
 		for (size_t factor = 2; factor <= 5; factor++)
 		{
-			if (dst->w == src->w * factor && dst->h == src->h * factor)
+			if ((Uint32)dst->w == src->w * factor && (Uint32)dst->h == src->h * factor)
 			{
 				xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h);
 				return 0;
@@ -768,7 +768,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		// check the resolution to see which of scale2x, scale3x, etc. we need
 		for (size_t factor = 2; factor <= 4; factor++)
 		{
-			if (dst->w == src->w * factor && dst->h == src->h * factor && !scale_precondition(factor, src->format->BytesPerPixel, src->w, src->h))
+			if ((Uint32)dst->w == src->w * factor && (Uint32)dst->h == src->h * factor && !scale_precondition(factor, src->format->BytesPerPixel, src->w, src->h))
 			{
 				scale(factor, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
 				return 0;
