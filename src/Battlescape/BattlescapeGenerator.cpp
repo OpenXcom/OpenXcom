@@ -1800,15 +1800,15 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 			for (int j = 0; j < 5; ++j)
 			{
 				int connectID = (int)((unsigned char)value[4 + j * 3]);
-				// ignore special values
-				// 255/FF = unused, 254/FE = north, 253/FD = east, 252/FC = south, 251/FB = west
+				// don't touch special values
 				if (connectID <= 250)
 				{
 					connectID += nodeOffset;
 				}
+				// 255/-1 = unused, 254/-2 = north, 253/-3 = east, 252/-4 = south, 251/-5 = west
 				else
 				{
-					connectID = -1;
+					connectID -= 256;
 				}
 				node->getNodeLinks()->push_back(connectID);
 			}
