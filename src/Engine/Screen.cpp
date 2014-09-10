@@ -543,16 +543,11 @@ bool Screen::is32bitEnabled()
 	int baseW = Options::baseXResolution;
 	int baseH = Options::baseYResolution;
 
-	if ((Options::useHQXFilter || Options::useXBRZFilter) && (
-		(w == baseW * 2 && h == baseH * 2) || 
-		(w == baseW * 3 && h == baseH * 3) || 
-		(w == baseW * 4 && h == baseH * 4) || 
-		(w == baseW * 5 && h == baseH * 5 && Options::useXBRZFilter)))
-	{
-		return true;
-	}
-
-	return false;
+	return ((Options::useHQXFilter || Options::useXBRZFilter) && (
+			(w == baseW * 2 && h == baseH * 2) ||
+			(w == baseW * 3 && h == baseH * 3) ||
+			(w == baseW * 4 && h == baseH * 4) ||
+			(w == baseW * 5 && h == baseH * 5 && Options::useXBRZFilter)));
 }
 
 /**

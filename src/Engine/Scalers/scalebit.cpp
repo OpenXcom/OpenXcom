@@ -12,10 +12,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 /*
@@ -25,19 +21,22 @@
  * You can find an high level description of the effect at :
  *
  * http://scale2x.sourceforge.net/
- *
- * Alternatively at the previous license terms, you are allowed to use this
- * code in your program with these conditions:
- * - the program is not used in commercial activities.
- * - the whole source code of the program is released with the binary.
- * - derivative works of the program are allowed.
  */
+
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "scale2x.h"
 #include "scale3x.h"
 
+#if HAVE_ALLOCA_H
+#include <alloca.h>
+#endif
+
 #include <assert.h>
 #include <stdlib.h>
+#include <malloc.h>
 
 #define SSDST(bits, num) (scale2x_uint##bits *)dst##num
 #define SSSRC(bits, num) (const scale2x_uint##bits *)src##num
