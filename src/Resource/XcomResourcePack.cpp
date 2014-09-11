@@ -815,6 +815,11 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "PAL_BATTLESCAPE_2",
 						  "PAL_BATTLESCAPE_3"};
 
+	SDL_Color backPal[] =  {{0, 5, 4, 255},
+							{0, 10, 34, 255},
+							{2, 9, 24, 255},
+							{2, 0, 24, 255}};
+
 	for (size_t i = 0; i < sizeof(lbms)/sizeof(lbms[0]); ++i)
 	{
 		std::ostringstream s;
@@ -828,7 +833,9 @@ void XcomResourcePack::loadBattlescapeResources()
 			Surface *tempSurface = new Surface(1, 1);
 			tempSurface->loadImage(CrossPlatform::getDataFile(s.str()));
 			_palettes[pals[i]] = new Palette();
-			_palettes[pals[i]]->setColors(tempSurface->getPalette(), 256);
+			SDL_Color *colors = tempSurface->getPalette();
+			colors[255] = backPal[i];
+			_palettes[pals[i]]->setColors(colors, 256);
 			delete tempSurface;
 		}
 	}
