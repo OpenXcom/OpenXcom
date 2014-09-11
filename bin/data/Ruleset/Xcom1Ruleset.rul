@@ -9509,7 +9509,6 @@ extraSprites:
     subY: 3
     files:
       0: Resources/UI/globe_ufo.png
-  
 interfaces:
   - type: battlescape
     elements:

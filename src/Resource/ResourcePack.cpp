@@ -35,6 +35,7 @@ int ResourcePack::SLIDING_DOOR_OPEN = 20;
 int ResourcePack::SLIDING_DOOR_CLOSE = 21;
 int ResourcePack::SMALL_EXPLOSION = 2;
 int ResourcePack::LARGE_EXPLOSION = 5;
+int ResourcePack::EXPLOSION_OFFSET = 0;
 int ResourcePack::ITEM_DROP = 38;
 int ResourcePack::ITEM_THROW = 39;
 int ResourcePack::ITEM_RELOAD = 17;

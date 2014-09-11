@@ -110,7 +110,16 @@ void ExplosionBState::init()
 	{
 		if (_power)
 		{
-			int frame = 0;
+			int frame = ResourcePack::EXPLOSION_OFFSET;
+			if (_item)
+			{
+				frame = _item->getRules()->getHitAnimation();
+			}
+			if (_parent->getDepth() > 0)
+			{
+				frame -= Explosion::EXPLODE_FRAMES;
+			}
+			int frameDelay = 0;
 			int counter = std::max(1, (_power/5) / 5);
 			for (int i = 0; i < _power/5; i++)
 			{
@@ -118,12 +127,12 @@ void ExplosionBState::init()
 				int Y = RNG::generate(-_power/2,_power/2);
 				Position p = _center;
 				p.x += X; p.y += Y;
-				Explosion *explosion = new Explosion(p, frame, true);
+				Explosion *explosion = new Explosion(p, frame, frameDelay, true);
 				// add the explosion on the map
 				_parent->getMap()->getExplosions()->push_back(explosion);
 				if (i > 0 && i % counter == 0)
 				{
-					--frame;
+					frameDelay++;
 				}
 			}
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
@@ -157,7 +166,7 @@ void ExplosionBState::init()
 			// bullet hit sound
 			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play();
 		}
-		Explosion *explosion = new Explosion(_center, anim, false, _hit || psi); // Don't burn the tile
+		Explosion *explosion = new Explosion(_center, anim, 0, false, (_hit || psi)); // Don't burn the tile
 		_parent->getMap()->getExplosions()->push_back(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
