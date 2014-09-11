@@ -846,6 +846,9 @@ void Map::drawTerrain(Surface *surface)
 								{
 									offset.x = 0;
 								}
+
+								// lower the bubbles for shorter or kneeling units.
+								offset.y += (22 - unit->getHeight());
 								if (tmpSurface)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y - 30, tileShade);
