@@ -266,6 +266,12 @@ set ( engine_src
   Engine/AdlibMusic.h
   Engine/AdlibMusic.cpp
 )
+if (APPLE)
+  list(APPEND engine_src
+    Engine/BundlePath.mm
+    Engine/BundlePath.h
+  )
+endif (APPLE)
 
 set ( geoscape_src
   Geoscape/GeoscapeCraftState.cpp
