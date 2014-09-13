@@ -128,7 +128,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 			{
 				if (_rules->getCategory() == "STR_CRAFT")
 				{
-					Craft *craft = new Craft(r->getCraft(i->first), b, g->getId(i->first));
+					Craft *craft = new Craft(r->getCraft(i->first), b, g->getId("STR_CRAFT"), g->getId(i->first));
 					craft->setStatus("STR_REFUELLING");
 					b->getCrafts()->push_back(craft);
 					break;

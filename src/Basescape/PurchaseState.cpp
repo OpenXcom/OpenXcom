@@ -287,7 +287,7 @@ void PurchaseState::btnOkClick(Action *)
 				{
 					RuleCraft *rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
 					Transfer *t = new Transfer(rc->getTransferTime());
-					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
+					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId("STR_CRAFT"), _game->getSavedGame()->getId(_crafts[i - 3]));
 					craft->setStatus("STR_REFUELLING");
 					t->setCraft(craft);
 					_base->getTransfers()->push_back(t);

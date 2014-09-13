@@ -46,7 +46,7 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage, _interceptionOrder, _takeoff;
+	int _id, _number, _fuel, _damage, _interceptionOrder, _takeoff;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
@@ -55,7 +55,7 @@ private:
 	std::wstring _name;
 public:
 	/// Creates a craft of the specified type.
-	Craft(RuleCraft *rules, Base *base, int id = 0);
+	Craft(RuleCraft *rules, Base *base, int id = 0, int number = 0);
 	/// Cleans up the craft.
 	~Craft();
 	/// Loads the craft from YAML.
@@ -70,6 +70,8 @@ public:
 	void changeRules(RuleCraft *rules);
 	/// Gets the craft's ID.
 	int getId() const;
+	/// Gets the craft's number.
+	int getNumber() const;
 	/// Gets the craft's name.
 	std::wstring getName(Language *lang) const;
 	/// Sets the craft's name.

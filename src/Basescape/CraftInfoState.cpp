@@ -310,7 +310,7 @@ void CraftInfoState::init()
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
-	_defaultName = tr("STR_CRAFTNAME").arg(tr(_craft->getRules()->getType())).arg(_craft->getId());
+	_defaultName = tr("STR_CRAFTNAME").arg(tr(_craft->getRules()->getType())).arg(_craft->getNumber());
 }
 
 /**
