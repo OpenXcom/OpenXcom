@@ -34,7 +34,7 @@ namespace OpenXcom
 {
 
 /// How many bytes various fields use in a serialized tile. See header.
-Tile::SerializationKey Tile::serializationKey = 
+Tile::SerializationKey Tile::serializationKey =
 {4, // index
  2, // _mapDataSetID, four of these
  2, // _mapDataID, four of these
@@ -228,16 +228,16 @@ bool Tile::isVoid() const
 }
 
 /**
- * Get the TU cost to walk over a certain part of the tile.
- * @param part
- * @param movementType
- * @return TU cost
+ * Gets the TU cost to walk over a certain part of the tile.
+ * @param part The part number.
+ * @param movementType The movement type.
+ * @return TU cost.
  */
 int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
 	{
-		if (_objects[part]->isUFODoor() && _currentFrame[part] == 7)
+		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;

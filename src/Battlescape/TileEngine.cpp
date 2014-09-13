@@ -323,9 +323,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 									if (tst>127) --tsize; //last tile is blocked thus must be cropped
 									for (size_t i = 0; i < tsize; i++)
 									{
-										Position posi = _trajectory.at(i); 
+										Position posi = _trajectory.at(i);
 										//mark every tile of line as visible (as in original)
-										//this is needed because of bresenham narrow stroke. 
+										//this is needed because of bresenham narrow stroke.
 										_save->getTile(posi)->setVisible(+1);
 										_save->getTile(posi)->setDiscovered(true, 2);
 										// walls to the east or south of a visible tile, we see that too
@@ -1653,7 +1653,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	}
 	else
 	{
-        if ( block <= 127 ) 
+        if ( block <= 127 )
         {
             direction += 4;
             if (direction > 7)
@@ -1815,12 +1815,13 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 	{
 		dir = unit->getDirection();
 	}
+	Tile *tile;
 	for (int x = 0; x < size && door == -1; x++)
 	{
 		for (int y = 0; y < size && door == -1; y++)
 		{
 			std::vector<std::pair<Position, int> > checkPositions;
-			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,z));
+			tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
 			switch (dir)
@@ -1937,6 +1938,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
+				tile->animate();	// ensures frame advances for ufo doors to update TU cost
 				calculateFOV(unit->getPosition());
 				// look from the other side (may be need check reaction fire?)
 				std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
@@ -2212,7 +2214,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	int z = origin.z;
 	int i = 8;
 	Position lastPosition = Position(x,y,z);
-	while (z > 0) 
+	while (z > 0)
 	{
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
 		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
@@ -2821,7 +2823,7 @@ int TileEngine::getDirectionTo(const Position &origin, const Position &target) c
  */
 Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 {
-	
+
 	const int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	const int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	if (!tile)
@@ -2840,7 +2842,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 		originVoxel.z += -tile->getTerrainLevel();
 
 		originVoxel.z += action.actor->getHeight() + action.actor->getFloatHeight();
-		
+
 		if (action.type == BA_THROW)
 		{
 			originVoxel.z -= 3;
