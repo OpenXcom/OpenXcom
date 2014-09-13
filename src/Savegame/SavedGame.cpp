@@ -1689,4 +1689,24 @@ std::string SavedGame::getLastSelectedArmor()
 	return _lastselectedArmor;
 }
 
+/**
+ * Returns the craft corresponding to the specified unique id.
+ * @param craftId The unique craft id to look up.
+ * @return The craft with the specified id, or NULL.
+ */
+Craft *SavedGame::findCraftByUniqueId(const CraftId& craftId) const
+{
+	for (std::vector<Base*>::const_iterator base = _bases.begin(); base != _bases.end(); ++base)
+	{
+		for (std::vector<Craft*>::const_iterator craft = (*base)->getCrafts()->begin(); craft != (*base)->getCrafts()->end(); ++craft)
+		{
+			if ((*craft)->getUniqueId() == craftId)
+				return *craft;
+		}
+	}
+
+	return NULL;
+}
+
+    
 }

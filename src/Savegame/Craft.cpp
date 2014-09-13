@@ -244,14 +244,25 @@ YAML::Node Craft::save() const
 }
 
 /**
+ * Loads a craft unique identifier from a YAML file.
+ * @param node YAML node.
+ * @return Unique craft id.
+ */
+CraftId Craft::loadId(const YAML::Node &node)
+{
+	return std::make_pair(node["type"].as<std::string>(), node["id"].as<int>());
+}
+
+/**
  * Saves the craft's unique identifiers to a YAML file.
  * @return YAML node.
  */
 YAML::Node Craft::saveId() const
 {
 	YAML::Node node = MovingTarget::saveId();
-	node["type"] = _rules->getType();
-	node["id"] = _id;
+	CraftId uniqueId = getUniqueId();
+	node["type"] = uniqueId.first;
+	node["id"] = uniqueId.second;
 	return node;
 }
 
@@ -931,6 +942,15 @@ void Craft::setInterceptionOrder(const int order)
 int Craft::getInterceptionOrder() const
 {
 	return _interceptionOrder;
+}
+
+/**
+ * Gets the craft's unique id.
+ * @return A tuple of the craft's type and per-type id.
+ */
+CraftId Craft::getUniqueId() const
+{
+	return std::make_pair(_rules->getType(), _id);
 }
 
 }

@@ -24,6 +24,7 @@
 #include <string>
 #include <time.h>
 #include <stdint.h>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -48,6 +49,7 @@ class AlienStrategy;
 class AlienMission;
 class Target;
 class Soldier;
+class Craft;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -278,6 +280,8 @@ public:
 	void setLastSelectedArmor(const std::string &value);
 	//Gets the the last selected armour
 	std::string getLastSelectedArmor();
+	/// Returns the craft corresponding to the specified unique id.
+	Craft *findCraftByUniqueId(const CraftId& craftId) const;
 };
 
 }
