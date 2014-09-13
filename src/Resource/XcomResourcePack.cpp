@@ -53,7 +53,6 @@ namespace
 	
 struct HairBleach
 {
-	static const Uint8 ColorGroup = 15<<4;
 	static const Uint8 ColorShade = 15;
 
 	static const Uint8 Hair = 9 << 4;
