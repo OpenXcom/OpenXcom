@@ -237,6 +237,8 @@ public:
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
 	const std::string getAlienFuel() const;
+	/// Gets the minimum radar's range.
+	int getMinRadarRange() const;
 	/// Gets information on an interface element.
 	RuleInterface *getInterface(const std::string id) const;
 	/// Gets the ruleset for the globe
