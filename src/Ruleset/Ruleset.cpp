@@ -70,7 +70,10 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Ruleset::Ruleset() :
+	_costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _maxViewDistance(20), _maxDarknessToSeeUnits(9),
+	_alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0),
+	_researchListOrder(0), _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -407,14 +410,13 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
  	_startingTime.load(doc["startingTime"]);
-	_maxViewDistance = doc["maxViewDistance"].as<int>(_maxViewDistance);
-	_maxViewDistanceAtDark = doc["maxViewDistanceAtDark"].as<int>(_maxViewDistanceAtDark);
-	_maxDarknessToSeeUnits = doc["maxDarknessToSeeUnits"].as<int>(_maxDarknessToSeeUnits);
  	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
  	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
  	_costScientist = doc["costScientist"].as<int>(_costScientist);
  	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
  	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
+	_maxViewDistance = doc["maxViewDistance"].as<int>(_maxViewDistance);
+	_maxDarknessToSeeUnits = doc["maxDarknessToSeeUnits"].as<int>(_maxDarknessToSeeUnits);
 	_alienFuel = doc["alienFuel"].as<std::string>(_alienFuel);
  	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{

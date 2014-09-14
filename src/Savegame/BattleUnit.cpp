@@ -71,6 +71,9 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_specab = SPECAB_NONE;
 	_armor = soldier->getArmor();
 	_stats += *_armor->getStats();	// armors may modify effective stats
+	// max view distance at dark is 9 tiles for humans by default, but can be overridden
+	_maxViewDistanceAtDarkSq = (_armor->getVisibilityAtDark() > 0) ? _armor->getVisibilityAtDark() : 9;
+	_maxViewDistanceAtDarkSq *= _maxViewDistanceAtDarkSq;
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
@@ -149,6 +152,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	{
 		adjustStats(diff);
 	}
+	// defaults of max view distance at dark is 9 tiles for humans and 20 tiles for aliens, but can be overridden
+	_maxViewDistanceAtDarkSq = (_armor->getVisibilityAtDark() > 0) ? _armor->getVisibilityAtDark() : (faction == FACTION_HOSTILE) ? 20 : 9;
+	_maxViewDistanceAtDarkSq *= _maxViewDistanceAtDarkSq;
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;

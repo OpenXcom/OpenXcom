@@ -42,7 +42,7 @@ private:
 	std::vector<std::string> _corpseBattle;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
-	int _size, _weight;
+	int _size, _weight, _visibilityAtDark;
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
@@ -96,6 +96,8 @@ public:
 	bool getConstantAnimation();
 	/// Gets if armor can hold weapon.
 	bool getCanHoldWeapon();
+	/// Gets max view distance at dark in BattleScape.
+	int getVisibilityAtDark() const;
 };
 
 }

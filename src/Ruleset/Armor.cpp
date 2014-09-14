@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  */
-Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false)
+Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseGeo(""), _storeItem(""), _corpseBattle(), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _visibilityAtDark(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -70,6 +70,7 @@ void Armor::load(const YAML::Node &node)
 	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
 	_size = node["size"].as<int>(_size);
 	_weight = node["weight"].as<int>(_weight);
+	_visibilityAtDark = node["visibilityAtDark"].as<int>(_visibilityAtDark);
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
@@ -284,4 +285,14 @@ bool Armor::getCanHoldWeapon()
 {
 	return _canHoldWeapon;
 }
+
+/**
+ * Gets max view distance at dark in BattleScape.
+ * @return The distance to see at dark.
+ */
+int Armor::getVisibilityAtDark() const
+{
+	return _visibilityAtDark;
+}
+
 }
