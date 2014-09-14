@@ -1220,7 +1220,7 @@ void BattlescapeState::btnReloadClick(Action *)
 {
 	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo())
 	{
-		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::ITEM_RELOAD)->play();
+		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::ITEM_RELOAD)->play(-1, getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
 		updateSoldierInfo();
 	}
 }

@@ -164,7 +164,7 @@ void ExplosionBState::init()
 		if (sound != -1)
 		{
 			// bullet hit sound
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play();
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
 		}
 		Explosion *explosion = new Explosion(_center, anim, 0, false, (_hit || psi)); // Don't burn the tile
 		_parent->getMap()->getExplosions()->push_back(explosion);
@@ -240,7 +240,7 @@ void ExplosionBState::explode()
 		}
 		if (_item->getRules()->getMeleeHitSound() != -1)
 		{
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getMeleeHitSound())->play();
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
 		}
 	}
 	// after the animation is done, the real explosion/hit takes place
