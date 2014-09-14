@@ -380,11 +380,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
 			{
-				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getFireSound())->play(-1, _parent->getMap()->getSoundAngle(_originVoxel / Position(16,16,24)));
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getFireSound())->play(-1, _parent->getMap()->getSoundAngle(projectile->getOrigin()));
 			}
 			else if (_action.weapon->getRules()->getFireSound() != -1)
 			{
-				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getFireSound())->play(-1, _parent->getMap()->getSoundAngle(_originVoxel / Position(16,16,24)));
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getFireSound())->play(-1, _parent->getMap()->getSoundAngle(projectile->getOrigin()));
 			}
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
