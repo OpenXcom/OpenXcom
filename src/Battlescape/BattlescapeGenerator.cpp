@@ -575,6 +575,21 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor()), 0));
 	if (unit)
 	{
+		if (!rule->getBuiltInWeapons().empty())
+		{
+			for (std::vector<std::string>::const_iterator i = rule->getBuiltInWeapons().begin(); i != rule->getBuiltInWeapons().end(); ++i)
+			{
+				RuleItem *ruleItem = _game->getRuleset()->getItem(*i);
+				if (ruleItem)
+				{
+					BattleItem *item = new BattleItem(ruleItem, _save->getCurrentItemId());
+					if (!addItem(item, unit))
+					{
+						delete item;
+					}
+				}
+			}
+		}
 		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
 		addItem(item, unit);
 		if(!v->getRules()->getCompatibleAmmo()->empty())
@@ -740,10 +755,6 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 							if (!addItem(item, unit))
 							{
 								delete item;
-							}
-							else
-							{
-								unit->setTurretType(item->getRules()->getTurretType());
 							}
 						}
 					}
