@@ -161,11 +161,6 @@ void ExplosionBState::init()
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 		}
-		if (sound != -1)
-		{
-			// bullet hit sound
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
-		}
 		Explosion *explosion = new Explosion(_center, anim, 0, false, (_hit || psi)); // Don't burn the tile
 		_parent->getMap()->getExplosions()->push_back(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
@@ -174,6 +169,11 @@ void ExplosionBState::init()
 		if ((_hit || psi) && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+		}
+		if (sound != -1)
+		{
+			// bullet hit sound
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
 		}
 	}
 }
