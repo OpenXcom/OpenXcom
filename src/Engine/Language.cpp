@@ -52,32 +52,32 @@ Language::Language() : _id(""), _strings(), _handler(0), _direction(DIRECTION_LT
 	{
 		_names["en-US"] = utf8ToWstr("English (US)");
 		_names["en-GB"] = utf8ToWstr("English (UK)");
-		_names["bg-BG"] = utf8ToWstr("Български");
-		_names["cs-CZ"] = utf8ToWstr("Česky");
+		_names["bg-BG"] = L"\u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438"; // utf8ToWstr("Български");
+		_names["cs-CZ"] = L"\u010cesky"; // utf8ToWstr("Česky");
 		_names["da"] = utf8ToWstr("Dansk");
 		_names["de"] = utf8ToWstr("Deutsch");
 		_names["es"] = utf8ToWstr("Español (ES)");
 		_names["es-419"] = utf8ToWstr("Español (AL)");
 		_names["fr"] = utf8ToWstr("Français");
 		_names["fi"] = utf8ToWstr("Suomi");
-		_names["grk"] = utf8ToWstr("Ελληνικά");
+		_names["grk"] = L"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"; // utf8ToWstr("Ελληνικά");
 		_names["hu-HU"] = utf8ToWstr("Magyar");
 		_names["it"] = utf8ToWstr("Italiano");
-		_names["ja-JP"] = utf8ToWstr("日本語");
-		_names["ko"] = utf8ToWstr("한국어");
+		_names["ja-JP"] = L"\u65e5\u672c\u8a9e"; // utf8ToWstr("日本語");
+		_names["ko"] = L"\ud55c\uad6d\uc5b4"; // utf8ToWstr("한국어");
 		_names["nl"] = utf8ToWstr("Nederlands");
 		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl-PL"] = utf8ToWstr("Polski");
 		_names["pt-BR"] = utf8ToWstr("Português (BR)");
 		_names["pt-PT"] = utf8ToWstr("Português (PT)");
-		_names["ro"] = utf8ToWstr("Română");
-		_names["ru"] = utf8ToWstr("Русский");
-		_names["sk-SK"] = utf8ToWstr("Slovenčina");
+		_names["ro"] = L"Român\u0103"; // utf8ToWstr("Română");
+		_names["ru"] = L"\u0420\u0443\u0441\u0441\u043a\u0438\u0439"; // utf8ToWstr("Русский");
+		_names["sk-SK"] = L"Sloven\u010dina"; // utf8ToWstr("Slovenčina");
 		_names["sv"] = utf8ToWstr("Svenska");
 		_names["tr-TR"] = utf8ToWstr("Türkçe");
-		_names["uk"] = utf8ToWstr("Українська");
-		_names["zh-CN"] = utf8ToWstr("中文");
-		_names["zh-TW"] = utf8ToWstr("文言");
+		_names["uk"] = L"\u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430"; // utf8ToWstr("Українська");
+		_names["zh-CN"] = L"\u4e2d\u6587"; // utf8ToWstr("中文");
+		_names["zh-TW"] = L"\u6587\u8a00"; // utf8ToWstr("文言");
 	}
 	if (_rtl.empty())
 	{
