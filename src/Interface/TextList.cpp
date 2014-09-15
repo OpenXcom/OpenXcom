@@ -325,7 +325,7 @@ void TextList::addRow(int cols, ...)
 			shape1 = ARROW_SMALL_LEFT;
 			shape2 = ARROW_SMALL_RIGHT;
 		}
-		ArrowButton *a1 = new ArrowButton(shape1, 11, 8, getX() + _arrowPos, getY());
+		ArrowButton *a1 = new ArrowButton(shape1, 11, _font->getHeight() + _font->getSpacing(), getX() + _arrowPos, getY());
 		a1->setListButton();
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
@@ -333,7 +333,7 @@ void TextList::addRow(int cols, ...)
 		a1->onMousePress(_leftPress);
 		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
-		ArrowButton *a2 = new ArrowButton(shape2, 11, 8, getX() + _arrowPos + 12, getY());
+		ArrowButton *a2 = new ArrowButton(shape2, 11, _font->getHeight() + _font->getSpacing(), getX() + _arrowPos + 12, getY());
 		a2->setListButton();
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
@@ -527,7 +527,7 @@ void TextList::setAlign(TextHAlign align, int col)
 {
 	if (col == -1)
 	{
-		for (size_t i = 0; i <= _columns.size() - 1; ++i)
+		for (size_t i = 0; i < _columns.size(); ++i)
 		{
 			_align[i] = align;
 		}
@@ -842,11 +842,8 @@ void TextList::updateArrows()
  */
 void TextList::updateVisible()
 {
-	_visibleRows = 0;
-	for (int y = 0; y < getHeight(); y += _font->getHeight() + _font->getSpacing())
-	{
-		_visibleRows++;
-	}
+	// counts only whole line visible
+	_visibleRows = getHeight() / (_font->getHeight() + _font->getSpacing());
 	updateArrows();
 }
 
@@ -1132,7 +1129,11 @@ void TextList::scrollTo(size_t scroll)
 {
 	if (!_scrolling)
 		return;
-	_scroll = std::max((size_t)(0), std::min(_rows.size() - _visibleRows, scroll));
+#if __cplusplus  < 199711L
+	_scroll = (size_t) std::max(0, std::min((int)(_rows.size() - _visibleRows), (int)scroll));
+#else
+	_scroll = (size_t) std::max<int>(0, std::min<int>(_rows.size() - _visibleRows, scroll));
+#endif
 	draw(); // can't just set _redraw here because reasons
 	updateArrows();
 }
