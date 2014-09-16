@@ -437,7 +437,7 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
-			if (_action.cameraPosition.z != -1)
+			if (_action.cameraPosition.z != -1 && _action.waypoints.size() <= 1)
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->invalidate();
