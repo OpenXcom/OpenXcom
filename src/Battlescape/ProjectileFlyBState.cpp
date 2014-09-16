@@ -469,6 +469,7 @@ void ProjectileFlyBState::think()
 			// impact !
 			if (_action.type == BA_THROW)
 			{
+				_parent->getMap()->resetCameraSmoothing();
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
 				pos.y /= 16;
@@ -515,6 +516,7 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
+				_parent->getMap()->resetCameraSmoothing();
 				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);

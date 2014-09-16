@@ -365,10 +365,6 @@ void Map::drawTerrain(Surface *surface)
 			}
 		}
 	}
-	else
-	{
-		_smoothingEngaged = false;
-	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
@@ -1697,4 +1693,11 @@ const int Map::getSoundAngle(Position pos)
 	return 360 + (relativePosition.x / (double)(midPoint / 80.0));
 }
 
+/**
+ * Reset the camera smoothing bool.
+ */
+void Map::resetCameraSmoothing()
+{
+	_smoothingEngaged = false;
+}
 }
