@@ -1489,7 +1489,8 @@ void BattleUnit::prepareNewTurn()
 	}
 
 	// recover stun 1pt/turn
-	if (_stunlevel > 0)
+	if (_stunlevel > 0 &&
+		(_armor->getSize() == 1 || !isOut()))
 		healStun(1);
 
 	if (!isOut())
