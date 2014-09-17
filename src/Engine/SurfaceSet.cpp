@@ -82,24 +82,36 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 		{
 			throw Exception(tab + " not found");
 		}
-		Uint16 off;
-		while (offsetFile.read((char*) &off, sizeof(off)))
+		std::streampos begin, end;
+		begin = offsetFile.tellg();
+		int off;
+		offsetFile.read((char*)&off, sizeof(off));
+		offsetFile.seekg(0, std::ios::end);
+		end = offsetFile.tellg();
+		int size = end - begin;
+		// 16-bit offsets
+		if (off != 0)
 		{
-			off = SDL_SwapLE16(off);
-			Surface *surface = new Surface(_width, _height);
-			_frames[nframes] = surface;
-			nframes++;
+			nframes = size / 2;
+		}
+		// 32-bit offsets
+		else
+		{
+			nframes = size / 4;
 		}
 		offsetFile.close();
+		for (int frame = 0; frame < nframes; ++frame)
+		{
+			_frames[frame] = new Surface(_width, _height);
+		}
 	}
 	else
 	{
 		nframes = 1;
-		Surface *surface = new Surface(_width, _height);
-		_frames[0] = surface;
+		_frames[0] = new Surface(_width, _height);
 	}
 
-	// Load PCX and put pixels in surfaces
+	// Load PCK and put pixels in surfaces
 	std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
@@ -108,7 +120,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 
 	Uint8 value;
 
-	for (int frame = 0; frame < nframes; frame++)
+	for (int frame = 0; frame < nframes; ++frame)
 	{
 		int x = 0, y = 0;
 

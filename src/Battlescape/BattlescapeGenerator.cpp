@@ -1781,7 +1781,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
  */
 void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment)
 {
-	char value[24];
+	unsigned char value[24];
 	std::ostringstream filename;
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
@@ -1810,7 +1810,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 			Node *node = new Node(_save->getNodes()->size(), pos, segment, type, rank, flags, reserved, priority);
 			for (int j = 0; j < 5; ++j)
 			{
-				int connectID = (int)((unsigned char)value[4 + j * 3]);
+				int connectID = value[4 + j * 3];
 				// don't touch special values
 				if (connectID <= 250)
 				{
