@@ -262,7 +262,8 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-		initList(_lstSoldiers->getRows());
+		initList(0);
+		_lstSoldiers->scrollDown(true);
 	}
 	else
 	{
