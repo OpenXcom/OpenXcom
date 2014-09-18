@@ -56,6 +56,11 @@ UnitTurnBState::~UnitTurnBState()
 void UnitTurnBState::init()
 {
 	_unit = _action.actor;
+	if (_unit->isOut())
+	{
+		_parent->popState();
+		return;
+	}
 	_action.TU = 0;
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::battleXcomSpeed);
