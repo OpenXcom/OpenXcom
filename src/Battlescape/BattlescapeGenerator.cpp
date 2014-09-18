@@ -1139,8 +1139,34 @@ void BattlescapeGenerator::generateMap()
 		// pick a random ufo mapblock, can have all kinds of sizes
 		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 
-		ufoX = RNG::generate(0, (_mapsize_x / 10) - ufoMap->getSizeX() / 10);
-		ufoY = RNG::generate(0, (_mapsize_y / 10) - ufoMap->getSizeY() / 10);
+		int minX = 0, minY = 0;
+		int maxX = (_mapsize_x / 10) - (ufoMap->getSizeX() / 10);
+		int maxY = (_mapsize_y / 10) - (ufoMap->getSizeY() / 10);
+
+		if (!_terrain->getUfoPositions()->empty())
+		{
+			std::vector<LandingSite*> possibleSites;
+			for (std::vector<LandingSite*>::const_iterator i = _terrain->getUfoPositions()->begin(); i != _terrain->getUfoPositions()->end(); ++i)
+			{
+				if ((*i)->sizeX >= ufoMap->getSizeX() / 10 && (*i)->sizeY >= ufoMap->getSizeY() / 10)
+				{
+					possibleSites.push_back(*i);
+				}
+			}
+			if (possibleSites.empty())
+			{
+				throw Exception("no suitable landing site found for a UFO of that size");
+			}
+			size_t pick = RNG::generate(0, possibleSites.size() - 1);
+			LandingSite *landingSite = possibleSites.at(pick);
+			minX = landingSite->x;
+			minY = landingSite->y;
+			maxX = minX + landingSite->sizeX - (ufoMap->getSizeX() / 10);
+			maxY = minY + landingSite->sizeY - (ufoMap->getSizeY() / 10);
+		}
+
+		ufoX = RNG::generate(minX, maxX);
+		ufoY = RNG::generate(minY, maxY);
 
 		for (int i = 0; i < ufoMap->getSizeX() / 10; ++i)
 		{
@@ -1161,8 +1187,34 @@ void BattlescapeGenerator::generateMap()
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 		while (!placed)
 		{
-			_craftX = RNG::generate(0, (_mapsize_x/10)- craftMap->getSizeX() / 10);
-			_craftY = RNG::generate(0, (_mapsize_y/10)- craftMap->getSizeY() / 10);
+			int minX = 0, minY = 0;
+			int maxX = (_mapsize_x / 10) - (craftMap->getSizeX() / 10);
+			int maxY = (_mapsize_y / 10) - (craftMap->getSizeY() / 10);
+
+			if (!_terrain->getCraftPositions()->empty())
+			{
+				std::vector<LandingSite*> possibleSites;
+				for (std::vector<LandingSite*>::const_iterator i = _terrain->getCraftPositions()->begin(); i != _terrain->getCraftPositions()->end(); ++i)
+				{
+					if ((*i)->sizeX >= craftMap->getSizeX() / 10 && (*i)->sizeY >= craftMap->getSizeY() / 10)
+					{
+						possibleSites.push_back(*i);
+					}
+				}
+				if (possibleSites.empty())
+				{
+					throw Exception("no suitable landing site found for a craft of that size");
+				}
+				size_t pick = RNG::generate(0, possibleSites.size() - 1);
+				LandingSite *landingSite = possibleSites.at(pick);
+				minX = landingSite->x;
+				minY = landingSite->y;
+				maxX = minX + landingSite->sizeX - (craftMap->getSizeX() / 10);
+				maxY = minY + landingSite->sizeY - (craftMap->getSizeY() / 10);
+			}
+
+			_craftX = RNG::generate(minX, maxX);
+			_craftY = RNG::generate(minY, maxY);
 			placed = true;
 			// check if this place is ok
 			for (int i = 0; i < craftMap->getSizeX() / 10; ++i)

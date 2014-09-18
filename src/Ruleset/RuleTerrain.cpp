@@ -42,6 +42,14 @@ RuleTerrain::~RuleTerrain()
 	{
 		delete *i;
 	}
+	for (std::vector<LandingSite*>::iterator i = _ufoPositions.begin(); i != _ufoPositions.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<LandingSite*>::iterator i = _craftPositions.begin(); i != _craftPositions.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -74,6 +82,30 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	_textures = node["textures"].as< std::vector<int> >(_textures);
 	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
 	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
+	if (const YAML::Node &map = node["ufoPositions"])
+	{
+		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+		{
+			LandingSite *site = new LandingSite();
+			site->x = (*i)[0].as<int>();
+			site->y = (*i)[1].as<int>();
+			site->sizeX = (*i)[2].as<int>();
+			site->sizeY = (*i)[3].as<int>();
+			_ufoPositions.push_back(site);
+		}
+	}
+	if (const YAML::Node &map = node["craftPositions"])
+	{
+		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+		{
+			LandingSite *site = new LandingSite();
+			site->x = (*i)[0].as<int>();
+			site->y = (*i)[1].as<int>();
+			site->sizeX = (*i)[2].as<int>();
+			site->sizeY = (*i)[3].as<int>();
+			_craftPositions.push_back(site);
+		}
+	}
 
 	if (const YAML::Node &civs = node["civilianTypes"])
 	{
@@ -273,4 +305,21 @@ const int RuleTerrain::getAmbience() const
 	return _ambience;
 }
 
+/**
+ * Gets a list of potential UFO landing sites.
+ * @return a list of potential UFO landing sites.
+ */
+const std::vector<LandingSite*> *RuleTerrain::getUfoPositions()
+{
+	return &_ufoPositions;
+}
+
+/**
+ * Gets a list of potential xcom craft landing sites.
+ * @return a list of potential xcom craft landing sites.
+ */
+const std::vector<LandingSite*> *RuleTerrain::getCraftPositions()
+{
+	return &_craftPositions;
+}
 }
