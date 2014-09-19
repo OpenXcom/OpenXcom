@@ -270,7 +270,7 @@ void ManufactureInfoState::setAssignedEngineer()
  */
 void ManufactureInfoState::moreEngineer(int change)
 {
-	if (0 >= change) return;
+	if (change <= 0) return;
 	int availableEngineer = _base->getAvailableEngineers();
 	int availableWorkSpace = _base->getFreeWorkshops();
 	if (availableEngineer > 0 && availableWorkSpace > 0)
@@ -320,7 +320,7 @@ void ManufactureInfoState::moreEngineerClick(Action *action)
  */
 void ManufactureInfoState::lessEngineer(int change)
 {
-	if (0 >= change) return;
+	if (change <= 0) return;
 	int assigned = _production->getAssignedEngineers();
 	if(assigned > 0)
 	{
@@ -369,8 +369,8 @@ void ManufactureInfoState::lessEngineerClick(Action *action)
  */
 void ManufactureInfoState::moreUnit(int change)
 {
-	if (0 >= change) return;
-	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+	if (change <= 0) return;
+	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() <= 0)
 	{
 		_timerMoreUnit->stop();
 		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
@@ -418,8 +418,15 @@ void ManufactureInfoState::moreUnitClick(Action *action)
 	if (_production->getInfiniteAmount()) return; // We can't increase over infinite :)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_production->setInfiniteAmount(true);
-		setAssignedEngineer();
+		if (_production->getRules()->getCategory() == "STR_CRAFT")
+		{
+			moreUnit(std::numeric_limits<int>::max());
+		}
+		else
+		{
+			_production->setInfiniteAmount(true);
+			setAssignedEngineer();
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -433,7 +440,7 @@ void ManufactureInfoState::moreUnitClick(Action *action)
  */
 void ManufactureInfoState::lessUnit(int change)
 {
-	if (0 >= change) return;
+	if (change <= 0) return;
 	int units = _production->getAmountTotal();
 	change = std::min(units-(_production->getAmountProduced()+1), change);
 	_production->setAmountTotal(units-change);

@@ -155,7 +155,7 @@ void NewManufactureListState::lstProdClick(Action *)
 			break;
 		}
 	}
-	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() <= 0)
 	{
 		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}
