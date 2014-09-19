@@ -59,19 +59,40 @@ void RuleGlobe::load(const YAML::Node &node)
 {
 	if (node["data"])
 	{
+		for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
+		{
+			delete *i;
+		}
+		_polygons.clear();
 		loadDat(CrossPlatform::getDataFile(node["data"].as<std::string>()));
 	}
-	for (YAML::const_iterator i = node["polygons"].begin(); i != node["polygons"].end(); ++i)
+	if (node["polygons"])
 	{
-		Polygon *polygon = new Polygon(3);
-		polygon->load(*i);
-		_polygons.push_back(polygon);
+		for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
+		{
+			delete *i;
+		}
+		_polygons.clear();
+		for (YAML::const_iterator i = node["polygons"].begin(); i != node["polygons"].end(); ++i)
+		{
+			Polygon *polygon = new Polygon(3);
+			polygon->load(*i);
+			_polygons.push_back(polygon);
+		}
 	}
-	for (YAML::const_iterator i = node["polylines"].begin(); i != node["polylines"].end(); ++i)
+	if (node["polylines"])
 	{
-		Polyline *polyline = new Polyline(3);
-		polyline->load(*i);
-		_polylines.push_back(polyline);
+		for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
+		{
+			delete *i;
+		}
+		_polylines.clear();
+		for (YAML::const_iterator i = node["polylines"].begin(); i != node["polylines"].end(); ++i)
+		{
+			Polyline *polyline = new Polyline(3);
+			polyline->load(*i);
+			_polylines.push_back(polyline);
+		}
 	}
 }
 
