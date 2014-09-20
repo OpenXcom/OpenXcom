@@ -443,7 +443,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	int cQty = 0;
 	if (item->isFixed()) cQty = c->getVehicleCount(_items[_sel]);
 	else cQty = c->getItems()->getItem(_items[_sel]);
-	if (0 >= change || 0 >= cQty) return;
+	if (change <= 0 || cQty <= 0) return;
 	change = std::min(cQty, change);
 	// Convert vehicle to item
 	if (item->isFixed())

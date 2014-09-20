@@ -415,7 +415,7 @@ void InventoryState::saveEquipmentLayout()
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		// we need X-Com soldiers only
-		if (0 == (*i)->getGeoscapeSoldier()) continue;
+		if ((*i)->getGeoscapeSoldier() == 0) continue;
 
 		std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 

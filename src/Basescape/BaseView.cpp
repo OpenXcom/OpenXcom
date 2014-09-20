@@ -291,7 +291,7 @@ void BaseView::reCalcQueuedBuildings()
  */
 void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor)
 {
-	if (0 != facility && 0 != neighbor
+	if (facility != 0 && neighbor != 0
 	&& neighbor->getBuildTime() > neighbor->getRules()->getBuildTime()
 	&& facility->getBuildTime() + neighbor->getRules()->getBuildTime() < neighbor->getBuildTime())
 		neighbor->setBuildTime(facility->getBuildTime() + neighbor->getRules()->getBuildTime());
