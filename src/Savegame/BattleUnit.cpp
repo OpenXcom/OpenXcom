@@ -2762,7 +2762,11 @@ std::string BattleUnit::getMeleeWeapon()
 	{
 		return getItem("STR_LEFT_HAND")->getRules()->getType();
 	}
-	return _unitRules->getMeleeWeapon();
+	if (_unitRules != 0)
+	{
+		return _unitRules->getMeleeWeapon();
+	}
+	return "";
 }
 
 }
