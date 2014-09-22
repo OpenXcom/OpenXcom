@@ -262,7 +262,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-		initList(_lstSoldiers->getRows());
+		initList(std::max(0, (int)(_lstSoldiers->getRows() - _lstSoldiers->getVisibleRows())));
 	}
 	else
 	{
