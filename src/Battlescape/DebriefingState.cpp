@@ -930,29 +930,32 @@ void DebriefingState::prepareDebriefing()
 		reequipCraft(base, craft, true);
 	}
 
-	// reequip crafts (only which is on the base) after a base defense mission
-	if (battle->getMissionType() == "STR_BASE_DEFENSE" && !_destroyBase) // we MUST check the missionType here, to avoid non-base-defense missions case
+	if (battle->getMissionType() == "STR_BASE_DEFENSE")
 	{
-		for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
+		if (!_destroyBase)
 		{
-			if ((*c)->getStatus() != "STR_OUT")
-				reequipCraft(base, *c, false);
-		}
-		// Clearing base->getVehicles() objects, they don't needed anymore.
-		for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
-			delete (*i);
-		base->getVehicles()->clear();
-	}
-	if (_destroyBase && _game->getSavedGame()->getMonthsPassed() != -1)
-	{
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
-		{
-			if ((*i) == base)
+			// reequip crafts (only those on the base) after a base defense mission
+			for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
 			{
-
+				if ((*c)->getStatus() != "STR_OUT")
+					reequipCraft(base, *c, false);
+			}
+			// Clear base->getVehicles() objects, they aren't needed anymore.
+			for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
 				delete (*i);
-				_game->getSavedGame()->getBases()->erase(i);
-				break;
+			base->getVehicles()->clear();
+		}
+		else if (_game->getSavedGame()->getMonthsPassed() != -1)
+		{
+			for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+			{
+				if ((*i) == base)
+				{
+
+					delete (*i);
+					_game->getSavedGame()->getBases()->erase(i);
+					break;
+				}
 			}
 		}
 
