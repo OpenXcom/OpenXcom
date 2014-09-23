@@ -260,7 +260,11 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	if ((unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24 + 4)
 	{
-		++pos.z;
+		Tile *tileAbove = _save->getTile(pos + Position(0,0,1));
+		if (tileAbove && tileAbove->hasNoFloor(0))
+		{
+			++pos.z;
+		}
 	}
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
