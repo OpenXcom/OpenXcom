@@ -1659,7 +1659,7 @@ const int Map::getMessageY()
  */
 const int Map::getIconHeight()
 {
-	return _iconWidth;
+	return _iconHeight;
 }
 
 /**
@@ -1667,7 +1667,7 @@ const int Map::getIconHeight()
  */
 const int Map::getIconWidth()
 {
-	return _iconHeight;
+	return _iconWidth;
 }
 
 /**
