@@ -21,7 +21,7 @@
 
 #include <algorithm>
 #define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 namespace OpenXcom
 {

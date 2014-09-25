@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RNG.h"
-#include <math.h>
-#include <time.h>
+#include <cmath>
+#include <ctime>
 
 namespace OpenXcom
 {
@@ -86,7 +86,7 @@ int generate(int min, int max)
 double generate(double min, double max)
 {
 	double num = next();
-	return (double)(num / ((double)UINT64_MAX / (max - min)) + min);
+	return (double)(num / ((double)std::numeric_limits<uint64_t>::max() / (max - min)) + min);
 }
 
 /**
