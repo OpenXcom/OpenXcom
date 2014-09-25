@@ -1113,12 +1113,12 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		for (int i= 0; i < 4; i++)
 		{
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
-			statePushBack(new UnitTurnBState(this, ba));
+			statePushBack(new UnitTurnBState(this, ba, false));
 		}
 		for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
 		{
 			ba.target = (*j)->getPosition();
-			statePushBack(new UnitTurnBState(this, ba));
+			statePushBack(new UnitTurnBState(this, ba, false));
 		}
 		if (_save->getTile(ba.target) != 0)
 		{
