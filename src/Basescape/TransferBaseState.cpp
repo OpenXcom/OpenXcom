@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransferBaseState::TransferBaseState(Base *base) : _base(base), _bases()
+TransferBaseState::TransferBaseState(Base *base) : _base(base)
 {
 	// Create objects
 	_window = new Window(this, 280, 140, 20, 30);
@@ -105,7 +105,7 @@ TransferBaseState::TransferBaseState(Base *base) : _base(base), _bases()
 		if ((*i) != _base)
 		{
 			// Get area
-			std::wstring area = L"";
+			std::wstring area;
 			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))

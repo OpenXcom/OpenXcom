@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Creates a blank ruleset for globe contents.
  */
-RuleGlobe::RuleGlobe() : _polygons(), _polylines()
+RuleGlobe::RuleGlobe()
 {
 }
 

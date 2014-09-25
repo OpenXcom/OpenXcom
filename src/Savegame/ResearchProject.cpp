@@ -55,7 +55,7 @@ void ResearchProject::setAssigned (int nb)
 	_assigned = nb;
 }
 
-const RuleResearch * ResearchProject::getRules () const
+const RuleResearch * ResearchProject::getRules() const
 {
 	return _project;
 }
@@ -64,7 +64,7 @@ const RuleResearch * ResearchProject::getRules () const
  * Returns the number of scientist assigned to this project
  * @return Number of assigned scientist.
  */
-int ResearchProject::getAssigned () const
+int ResearchProject::getAssigned() const
 {
 	return _assigned;
 }
@@ -73,7 +73,7 @@ int ResearchProject::getAssigned () const
  * Returns the time already spent on this project
  * @return the time already spent on this ResearchProject(in man/day)
  */
-int ResearchProject::getSpent () const
+int ResearchProject::getSpent() const
 {
 	return _spent;
 }
@@ -123,10 +123,10 @@ void ResearchProject::load(const YAML::Node& node)
 YAML::Node ResearchProject::save() const
 {
 	YAML::Node node;
-	node["project"] = getRules ()->getName ();
-	node["assigned"] = getAssigned ();
-	node["spent"] = getSpent ();
-	node["cost"] = getCost ();
+	node["project"] = getRules()->getName();
+	node["assigned"] = getAssigned();
+	node["spent"] = getSpent();
+	node["cost"] = getCost();
 	return node;
 }
 
@@ -134,10 +134,10 @@ YAML::Node ResearchProject::save() const
  * Return a string describing Research progress.
  * @return a string describing Research progress.
 */
-std::string ResearchProject::getResearchProgress () const
+std::string ResearchProject::getResearchProgress() const
 {
-	float progress = (float)getSpent () / getRules ()->getCost();
-	if (getAssigned () == 0)
+	float progress = (float)getSpent() / getRules()->getCost();
+	if (getAssigned() == 0)
 	{
 		return "STR_NONE";
 	}
@@ -147,8 +147,8 @@ std::string ResearchProject::getResearchProgress () const
 	}
 	else
 	{
-		float rating = (float)getAssigned ();
-		rating /= getRules ()->getCost();
+		float rating = (float)getAssigned();
+		rating /= getRules()->getCost();
 		if (rating < PROGRESS_LIMIT_POOR)
 		{
 			return "STR_POOR";

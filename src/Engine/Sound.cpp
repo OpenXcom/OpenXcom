@@ -89,7 +89,7 @@ void Sound::play(int channel, int angle, int distance) const
 		}
 		else if (Options::StereoSound)
 		{
-			if(!Mix_SetPosition(chan, angle, distance))
+			if (!Mix_SetPosition(chan, angle, distance))
 			{
 				Log(LOG_WARNING) << Mix_GetError();
 			}

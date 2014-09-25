@@ -186,7 +186,7 @@ void ExplosionBState::think()
 {
 	for (std::list<Explosion*>::iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end();)
 	{
-		if(!(*i)->animate())
+		if (!(*i)->animate())
 		{
 			delete (*i);
 			i = _parent->getMap()->getExplosions()->erase(i);

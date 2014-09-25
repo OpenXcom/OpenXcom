@@ -191,7 +191,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 {
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if((*i)->getName() == name)
+		if ((*i)->getName() == name)
 			return (*i);
 	}
 	return 0;

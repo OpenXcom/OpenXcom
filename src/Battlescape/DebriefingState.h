@@ -38,7 +38,7 @@ class Region;
 class Country;
 class RuleItem;
 
-struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
+struct DebriefingStat { DebriefingStat(const std::string &_item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
 struct ReequipStat { std::string item; int qty; std::wstring craft; };
 

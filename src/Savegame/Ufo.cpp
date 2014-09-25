@@ -151,7 +151,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	if (game.getMonthsPassed() != -1)
 	{
 		int missionID = node["mission"].as<int>();
-		std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+		std::vector<AlienMission *>::const_iterator found = std::find_if (game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
 		if (found == game.getAlienMissions().end())
 		{
 			// Corrupt save file.

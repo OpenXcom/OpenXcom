@@ -1012,7 +1012,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
-	if(!tile)
+	if (!tile)
 	{
 		return 0;
 	}
@@ -2876,7 +2876,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 		{
 			offset = 16;
 		}
-		else if(action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !action.weapon->getRules()->isTwoHanded())
+		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !action.weapon->getRules()->isTwoHanded())
 		{
 			offset = 8;
 		}

@@ -1515,7 +1515,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				unitSprite->setBattleItem(lhandItem);
 			}
 
-			if(!lhandItem && !rhandItem)
+			if (!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}

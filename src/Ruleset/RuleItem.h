@@ -144,19 +144,19 @@ public:
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
 	/// Gets the medikit heal quantity.
-	int getHealQuantity () const;
+	int getHealQuantity() const;
 	/// Gets the medikit pain killer quantity.
-	int getPainKillerQuantity () const;
+	int getPainKillerQuantity() const;
 	/// Gets the medikit stimulant quantity.
-	int getStimulantQuantity () const;
+	int getStimulantQuantity() const;
 	/// Gets the medikit wound healed per shot.
-	int getWoundRecovery () const;
+	int getWoundRecovery() const;
 	/// Gets the medikit health recovered per shot.
-	int getHealthRecovery () const;
+	int getHealthRecovery() const;
 	/// Gets the medikit energy recovered per shot.
-	int getEnergyRecovery () const;
+	int getEnergyRecovery() const;
 	/// Gets the medikit stun recovered per shot.
-	int getStunRecovery () const;
+	int getStunRecovery() const;
 	/// Gets the Time Unit use.
 	int getTUUse() const;
 	/// Gets the max explosion radius.

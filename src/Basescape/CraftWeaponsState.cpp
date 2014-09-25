@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param craft ID of the selected craft.
  * @param weapon ID of the selected weapon.
  */
-CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : _base(base), _craft(craft), _weapon(weapon), _weapons()
+CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : _base(base), _craft(craft), _weapon(weapon)
 {
 	_screen = false;
 
@@ -114,7 +114,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 			_weapons.push_back(w);
 			std::wostringstream ss, ss2;
 			ss << _base->getItems()->getItem(w->getLauncherItem());
-			if (w->getClipItem() != "")
+			if (!w->getClipItem().empty())
 			{
 				ss2 << _base->getItems()->getItem(w->getClipItem());
 			}

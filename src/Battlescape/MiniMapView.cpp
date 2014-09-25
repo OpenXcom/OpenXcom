@@ -64,7 +64,7 @@ void MiniMapView::draw()
 	int _startY = _camera->getCenterPosition().y - ((getHeight() / CELL_HEIGHT) / 2);
 
 	InteractiveSurface::draw();
-	if(!_set)
+	if (!_set)
 	{
 		return;
 	}
@@ -73,10 +73,10 @@ void MiniMapView::draw()
 	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
 	{
 		int py = _startY;
-		for (int y = Surface::getY(); y < getHeight () + Surface::getY(); y += CELL_HEIGHT)
+		for (int y = Surface::getY(); y < getHeight() + Surface::getY(); y += CELL_HEIGHT)
 		{
 			int px = _startX;
-			for (int x = Surface::getX(); x < getWidth () + Surface::getX(); x += CELL_WIDTH)
+			for (int x = Surface::getX(); x < getWidth() + Surface::getX(); x += CELL_WIDTH)
 			{
 				MapData * data = 0;
 				Tile * t = 0;
@@ -89,16 +89,16 @@ void MiniMapView::draw()
 				}
 				if (t->isDiscovered(2))
 				{
-					for(int i = 0; i < 4; i++)
+					for (int i = 0; i < 4; i++)
 					{
 						data = t->getMapData(i);
 
 						Surface * s = 0;
-						if(data && data->getMiniMapIndex())
+						if (data && data->getMiniMapIndex())
 						{
 							s = _set->getFrame (data->getMiniMapIndex()+35);
 						}
-						if(s)
+						if (s)
 						{
 							s->blitNShade(this, x, y, t->getShade());
 						}
@@ -385,7 +385,7 @@ void MiniMapView::mouseIn(Action *action, State *state)
 void MiniMapView::animate()
 {
 	_frame++;
-	if(_frame > MAX_FRAME)
+	if (_frame > MAX_FRAME)
 	{
 		_frame = 0;
 	}

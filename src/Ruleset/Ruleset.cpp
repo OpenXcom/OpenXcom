@@ -73,7 +73,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_globe = new RuleGlobe();
 
@@ -165,39 +165,39 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin (); i != _research.end (); ++i)
+	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin(); i != _manufacture.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
+	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin(); i != _ufoTrajectories.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
+	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin(); i != _MCDPatches.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
+	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin(); i != _extraStrings.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin (); i != _interfaces.end (); ++i)
+	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin(); i != _interfaces.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -1072,7 +1072,7 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
  * Returns the list of inventories.
  * @return The list of inventories.
  */
-const std::vector<std::string> &Ruleset::getInvsList () const
+const std::vector<std::string> &Ruleset::getInvsList() const
 {
 	return _invsIndex;
 }
@@ -1092,7 +1092,7 @@ RuleResearch *Ruleset::getResearch (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::vector<std::string> &Ruleset::getResearchList () const
+const std::vector<std::string> &Ruleset::getResearchList() const
 {
 	return _researchIndex;
 }
@@ -1112,7 +1112,7 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::vector<std::string> &Ruleset::getManufactureList () const
+const std::vector<std::string> &Ruleset::getManufactureList() const
 {
 	return _manufactureIndex;
 }
@@ -1201,7 +1201,7 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
 	{
 		const std::vector<City*> &cities = *rr->second->getCities();
-		std::vector<City *>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
+		std::vector<City *>::const_iterator citer = std::find_if (cities.begin(), cities.end(), EqualCoordinates(lon, lat));
 		if (citer != cities.end())
 		{
 			return *citer;

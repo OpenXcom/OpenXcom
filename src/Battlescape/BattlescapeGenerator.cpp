@@ -71,7 +71,7 @@ namespace OpenXcom
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftX(0), _craftY(0), _craftZ(0)
+														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftX(0), _craftY(0), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -592,7 +592,7 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 		}
 		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
 		addItem(item, unit);
-		if(!v->getRules()->getCompatibleAmmo()->empty())
+		if (!v->getRules()->getCompatibleAmmo()->empty())
 		{
 			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
 			BattleItem *ammoItem = new BattleItem(_game->getRuleset()->getItem(ammo), _save->getCurrentItemId());

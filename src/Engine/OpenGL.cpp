@@ -102,12 +102,12 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
 
   void OpenGL::resize(unsigned width, unsigned height) {
-    if(gltexture == 0) glGenTextures(1, &gltexture);
+    if (gltexture == 0) glGenTextures(1, &gltexture);
 	glErrorCheck();
 	
 	iwidth = width;
 	iheight = height;
-    if(buffer_surface) delete buffer_surface;
+    if (buffer_surface) delete buffer_surface;
     buffer_surface = new Surface(iwidth, iheight, 0, 0, ibpp); // use OpenXcom's Surface class to get an aligned buffer with bonus SDL_Surface
 	buffer = (uint32_t*) buffer_surface->getSurface()->pixels;
 
@@ -139,7 +139,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
 	clear();
-    if(shader_support && (fragmentshader || vertexshader)) {    
+    if (shader_support && (fragmentshader || vertexshader)) {    
       glUseProgram(glprogram);
       GLint location;
 
@@ -206,27 +206,27 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glFlush();
 	glErrorCheck();
 
-    if(shader_support) {
+    if (shader_support) {
       glUseProgram(0);
     }
   }
 
   void OpenGL::set_shader(const char *source_yaml_filename) {
-    if(!shader_support) return;
+    if (!shader_support) return;
 
-    if(fragmentshader) {
+    if (fragmentshader) {
       glDetachShader(glprogram, fragmentshader);
       glDeleteShader(fragmentshader);
       fragmentshader = 0;
     }
 
-    if(vertexshader) {
+    if (vertexshader) {
       glDetachShader(glprogram, vertexshader);
       glDeleteShader(vertexshader);
       vertexshader = 0;
     }
 
-    if(source_yaml_filename && strlen(source_yaml_filename)) {
+    if (source_yaml_filename && strlen(source_yaml_filename)) {
       YAML::Node document = YAML::LoadFile(source_yaml_filename);
 
       bool is_glsl;
@@ -238,9 +238,9 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
       std::string fragment_source = document["fragment"].as<std::string>("");
 	  std::string vertex_source = document["vertex"].as<std::string>("");
 
-      if(is_glsl) {
-        if(fragment_source != "") set_fragment_shader(fragment_source.c_str());
-        if(vertex_source != "") set_vertex_shader(vertex_source.c_str());
+      if (is_glsl) {
+        if (!fragment_source.empty()) set_fragment_shader(fragment_source.c_str());
+        if (!vertex_source.empty()) set_vertex_shader(vertex_source.c_str());
       }
     }
 
@@ -302,7 +302,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     && glDetachShader && glLinkProgram && glGetUniformLocation
     && glUniform1i && glUniform2fv && glUniform4fv;
 	
-    if(shader_support) glprogram = glCreateProgram();
+    if (shader_support) glprogram = glCreateProgram();
 
     //create surface texture
     resize(w, h);
@@ -328,12 +328,12 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 	}
 
   void OpenGL::term() {
-    if(gltexture) {
+    if (gltexture) {
       glDeleteTextures(1, &gltexture);
       gltexture = 0;
     }
 
-    if(buffer) {
+    if (buffer) {
       buffer = 0;
       iwidth = 0;
       iheight = 0;

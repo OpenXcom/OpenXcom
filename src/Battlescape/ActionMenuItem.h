@@ -50,7 +50,7 @@ public:
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assigns an action to it.
-	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
+	void setAction(BattleActionType action, const std::wstring &description, const std::wstring &accuracy, const std::wstring &timeunits, int tu);
 	/// Gets the assigned action.
 	BattleActionType getAction() const;
 	/// Gets the assigned action TUs.

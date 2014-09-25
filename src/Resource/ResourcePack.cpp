@@ -54,7 +54,7 @@ int ResourcePack::INTERCEPTOR_EXPLODE = 13;
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _musics()
+ResourcePack::ResourcePack()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -245,7 +245,7 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		if(i->first.substr(i->first.length()-3, i->first.length()) != "LBM")
+		if (i->first.substr(i->first.length()-3, i->first.length()) != "LBM")
 			i->second->setPalette(colors, firstcolor, ncolors);
 	}
 	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)

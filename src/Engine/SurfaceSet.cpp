@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param width Frame width in pixels.
  * @param height Frame height in pixels.
  */
-SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _frames()
+SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height)
 {
 
 }

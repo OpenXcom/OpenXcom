@@ -42,8 +42,8 @@ namespace OpenXcom
 		virtual ~ArticleStateArmor();
 
 	protected:
-		void addStat(std::string label, int stat, bool plus = false);
-		void addStat(std::string label, std::wstring stat);
+		void addStat(const std::string &label, int stat, bool plus = false);
+		void addStat(const std::string &label, const std::wstring &stat);
 
 		int _row;
 		Surface *_image;

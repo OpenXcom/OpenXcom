@@ -57,7 +57,7 @@ public:
 	/// Handler for right-clicking anything.
 	void handle(Action *action);
 	/// Handles timers.
-	void think ();
+	void think();
 };
 }
 

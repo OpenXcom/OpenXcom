@@ -167,7 +167,7 @@ void MiniMapState::btnLevelDownClick(Action *)
 	{
 		s << tr("STR_LEVEL_SHORT");
 	}
-	s << _miniMapView->down ();
+	s << _miniMapView->down();
 	_txtLevel->setText(s.str());
 }
 
@@ -182,7 +182,7 @@ void MiniMapState::animate()
 /**
  * Handles timers.
 */
-void MiniMapState::think ()
+void MiniMapState::think()
 {
 	State::think();
 	_timerAnimate->think(this, 0);

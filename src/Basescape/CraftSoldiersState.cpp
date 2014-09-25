@@ -160,7 +160,7 @@ void CraftSoldiersState::initList(size_t scrl)
 		_lstSoldiers->setRowColor(row, color);
 		row++;
 	}
-	if(scrl)
+	if (scrl)
 		_lstSoldiers->scrollTo(scrl);
 	_lstSoldiers->draw();
 

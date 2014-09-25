@@ -43,10 +43,10 @@ namespace Options
 #include "Options.inc.h"
 #undef OPT
 
-std::string _dataFolder = "";
+std::string _dataFolder;
 std::vector<std::string> _dataList;
-std::string _userFolder = "";
-std::string _configFolder = "";
+std::string _userFolder;
+std::string _configFolder;
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _commandLine;
 std::vector<OptionInfo> _info;
@@ -433,11 +433,11 @@ bool init(int argc, char *argv[])
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-    if (_dataFolder != "")
+    if (!_dataFolder.empty())
     {
 		_dataList.insert(_dataList.begin(), _dataFolder);
     }
-    if (_userFolder == "")
+    if (_userFolder.empty())
     {
         std::vector<std::string> user = CrossPlatform::findUserFolders();
         _configFolder = CrossPlatform::findConfigFolder();
@@ -453,7 +453,7 @@ void setFolders()
 		}
 
 		// Set up folders
-		if (_userFolder == "")
+		if (_userFolder.empty())
 		{
 			for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
 			{
@@ -466,7 +466,7 @@ void setFolders()
 		}
 	}
 
-	if (_configFolder == "")
+	if (_configFolder.empty())
 	{
 		_configFolder = _userFolder;
 	}

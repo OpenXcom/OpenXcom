@@ -60,7 +60,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _nextStage("")
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1)
 {
 }
 

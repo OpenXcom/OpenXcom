@@ -27,10 +27,7 @@ namespace OpenXcom
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) :
-	_type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0),
-	_accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _sightRange(268),
-	_battlescapeTerrainData(0), _modSprite("")
+RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _sightRange(268), _battlescapeTerrainData(0)
 {
 }
 

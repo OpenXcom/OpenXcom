@@ -264,7 +264,7 @@ void ProjectileFlyBState::init()
 			_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
 	}
-	if(createNewProjectile())
+	if (createNewProjectile())
 	{
 		_parent->getMap()->setCursorType(CT_NONE);
 		_parent->getMap()->getCamera()->stopMouseScrolling();
@@ -464,7 +464,7 @@ void ProjectileFlyBState::think()
 			// shotgun pellets move to their terminal location instantly as fast as possible
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
-		if(!_parent->getMap()->getProjectile()->move())
+		if (!_parent->getMap()->getProjectile()->move())
 		{
 			// impact !
 			if (_action.type == BA_THROW)

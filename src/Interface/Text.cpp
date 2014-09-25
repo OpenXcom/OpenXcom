@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
 {
 }
 
@@ -54,7 +54,7 @@ Text::~Text()
  * @param currency Currency symbol.
  * @return The formatted string.
  */
-std::wstring Text::formatNumber(int64_t value, std::wstring currency)
+std::wstring Text::formatNumber(int64_t value, const std::wstring &currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -503,7 +503,7 @@ struct PaletteShift
 {
 	static inline void func(Uint8& dest, Uint8& src, int off, int mul, int mid)
 	{
-		if(src)
+		if (src)
 		{
 			int inverseOffset = mid ? 2 * (mid - src) : 0;
 			dest = off + src * mul + inverseOffset;

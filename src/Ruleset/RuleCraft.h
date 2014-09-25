@@ -58,7 +58,7 @@ public:
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.
-	const std::vector<std::string> &getRequirements () const;
+	const std::vector<std::string> &getRequirements() const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
 	/// Gets the craft's maximum fuel.

@@ -153,13 +153,13 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = (_unit->getMeleeWeapon() != "");
+	_melee = (!_unit->getMeleeWeapon().empty());
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
 	_wasHitBy.clear();
 
-	if(_unit->getCharging() && _unit->getCharging()->isOut())
+	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
 		_unit->setCharging(0);
 	}

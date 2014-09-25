@@ -163,7 +163,7 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 Surface::Surface(const Surface& other)
 {
 	//if is native OpenXcom aligned surface
-	if(other._alignedBuffer)
+	if (other._alignedBuffer)
 	{
 		Uint8 bpp = other._surface->format->BitsPerPixel;
 		int width = other.getWidth();
@@ -767,7 +767,7 @@ struct ColorReplace
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
 	{
-		if(src)
+		if (src)
 		{
 			const int newShade = (src&15) + shade;
 			if (newShade > 15)
@@ -796,7 +796,7 @@ struct StandartShade
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
 	{
-		if(src)
+		if (src)
 		{
 			const int newShade = (src&15) + shade;
 			if (newShade > 15)
@@ -825,13 +825,13 @@ struct StandartShade
 void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int newBaseColor)
 {
 	ShaderMove<Uint8> src(this, x, y);
-	if(half)
+	if (half)
 	{
 		GraphSubset g = src.getDomain();
 		g.beg_x = g.end_x/2;
 		src.setDomain(g);
 	}
-	if(newBaseColor)
+	if (newBaseColor)
 	{
 		--newBaseColor;
 		newBaseColor <<= 4;

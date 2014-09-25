@@ -1043,7 +1043,7 @@ void BattleUnit::knockOut(BattlescapeGame *battle)
 	{
 		_health = 0;
 	}
-	else if (_spawnUnit != "")
+	else if (!_spawnUnit.empty())
 	{
 		setSpecialAbility(SPECAB_NONE);
 		BattleUnit *newUnit = battle->convertUnit(this, _spawnUnit);
@@ -2015,7 +2015,7 @@ int BattleUnit::improveStat(int exp)
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
  * @return the unit minimap index
  */
-int BattleUnit::getMiniMapSpriteIndex () const
+int BattleUnit::getMiniMapSpriteIndex() const
 {
 	//minimap sprite index:
 	// * 0-2   : Xcom soldier
@@ -2085,7 +2085,7 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 {
 	if (part < 0 || part > 5)
 		return;
-	if(!_fatalWounds[part])
+	if (!_fatalWounds[part])
 		return;
 	_fatalWounds[part] -= woundAmount;
 	_health += healthAmount;
@@ -2096,7 +2096,7 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 /**
  * Restore soldier morale
  */
-void BattleUnit::painKillers ()
+void BattleUnit::painKillers()
 {
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
@@ -2312,7 +2312,7 @@ std::string BattleUnit::getSpawnUnit() const
  * Set the unit that is spawned when this one dies.
  * @param spawnUnit unit.
  */
-void BattleUnit::setSpawnUnit(std::string spawnUnit)
+void BattleUnit::setSpawnUnit(const std::string &spawnUnit)
 {
 	_spawnUnit = spawnUnit;
 }
@@ -2486,7 +2486,7 @@ void BattleUnit::setTurnsSinceSpotted (int turns)
  * Get how long since this unit was exposed.
  * @return number of turns
  */
-int BattleUnit::getTurnsSinceSpotted () const
+int BattleUnit::getTurnsSinceSpotted() const
 {
 	return _turnsSinceSpotted;
 }

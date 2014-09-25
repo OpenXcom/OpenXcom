@@ -188,11 +188,11 @@ void NewManufactureListState::fillProductionList()
 	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
 	_displayedStrings.clear();
 
-	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
+	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
 	{
 		if (((*it)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]) || (_catStrings[_cbxCategory->getSelected()] == "STR_ALL_ITEMS"))
 		{
-			_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory ()).c_str());
+			_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory()).c_str());
 			_displayedStrings.push_back((*it)->getName().c_str());
 		}
 	}

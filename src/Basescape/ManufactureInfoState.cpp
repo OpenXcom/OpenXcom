@@ -193,7 +193,7 @@ void ManufactureInfoState::buildUi()
 	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)&ManufactureInfoState::btnStopClick);
-	if(!_production)
+	if (!_production)
 	{
 		_production = new Production (_item, 1);
 		_base->addProduction(_production);
@@ -227,7 +227,7 @@ void ManufactureInfoState::btnStopClick(Action *)
  */
 void ManufactureInfoState::btnOkClick(Action *)
 {
-	if(_item)
+	if (_item)
 	{
 		_production->startItem(_base, _game->getSavedGame());
 	}
@@ -241,7 +241,7 @@ void ManufactureInfoState::btnOkClick(Action *)
 void ManufactureInfoState::exitState()
 {
 	_game->popState();
-	if(_item)
+	if (_item)
 	{
 		_game->popState();
 	}
@@ -322,7 +322,7 @@ void ManufactureInfoState::lessEngineer(int change)
 {
 	if (change <= 0) return;
 	int assigned = _production->getAssignedEngineers();
-	if(assigned > 0)
+	if (assigned > 0)
 	{
 		change = std::min(assigned, change);
 		_production->setAssignedEngineers(assigned-change);

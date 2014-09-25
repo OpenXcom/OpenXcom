@@ -54,7 +54,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Base *base) : _base(base), _crafts(), _items(), _qtys(), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0)
+PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -233,7 +233,7 @@ void PurchaseState::think()
  * @param item Item to look up.
  * @return True if the item is excluded in the options file.
  */
-bool PurchaseState::isExcluded(std::string item)
+bool PurchaseState::isExcluded(const std::string &item)
 {
 	for (std::vector<std::string>::const_iterator s = Options::purchaseExclusions.begin(); s != Options::purchaseExclusions.end(); ++s)
 	{

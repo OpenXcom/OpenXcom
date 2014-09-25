@@ -35,7 +35,7 @@ namespace YAML
 
 		static bool decode(const Node& node, OpenXcom::RuleSlot& rhs)
 		{
-			if(!node.IsSequence() || node.size() != 2)
+			if (!node.IsSequence() || node.size() != 2)
 				return false;
 
 			rhs.x = node[0].as<int>();
@@ -53,7 +53,7 @@ namespace OpenXcom
  * type of inventory section.
  * @param id String defining the id.
  */
-RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs(), _listOrder(0)
+RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _type(INV_SLOT), _listOrder(0)
 {
 }
 

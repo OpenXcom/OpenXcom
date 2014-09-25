@@ -59,7 +59,7 @@ struct HairBleach
 	static const Uint8 Face = 6 << 4;
 	static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
 	{
-		if(src > cutoff && src <= Face + 15)
+		if (src > cutoff && src <= Face + 15)
 		{
 			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
 		}

@@ -606,7 +606,7 @@ void DebriefingState::prepareDebriefing()
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
-		if ((*j)->getSpawnUnit() != "")
+		if (!(*j)->getSpawnUnit().empty())
 		{
 			type = (*j)->getSpawnUnit();
 		}
@@ -729,7 +729,7 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
-				if ((*j)->getSpawnUnit() != "")
+				if (!(*j)->getSpawnUnit().empty())
 				{
 					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseGeoscape();
 				}
@@ -807,7 +807,7 @@ void DebriefingState::prepareDebriefing()
 	}
 	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && !base->getCrafts()->empty())
 	{
-		for(std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
+		for (std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
 		{
 			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
 		}
