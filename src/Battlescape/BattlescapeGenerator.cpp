@@ -708,6 +708,15 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
+	if (_save->getDepth() > 0 && _alienRace.find("_UNDERWATER") == std::string::npos)
+	{
+		std::stringstream ss;
+		ss << _alienRace << "_UNDERWATER";
+		if (_game->getRuleset()->getAlienRace(ss.str()))
+		{
+			race = _game->getRuleset()->getAlienRace(ss.str());
+		}
+	}
 	int month;
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
