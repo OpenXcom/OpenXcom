@@ -57,6 +57,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
+#include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -66,6 +67,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
@@ -92,81 +94,86 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
+BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 
-	int screenWidth = Options::baseXResolution;
-	int screenHeight = Options::baseYResolution;
-	int iconsWidth = Map::ICON_WIDTH;
-	int iconsHeight = Map::ICON_HEIGHT;
+	const int screenWidth = Options::baseXResolution;
+	const int screenHeight = Options::baseYResolution;
+	const int iconsWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
+	const int iconsHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+	const int visibleMapHeight = screenHeight - iconsHeight;
 	_mouseOverIcons = false;
+	const int x = screenWidth/2 - iconsWidth/2;
+	const int y = screenHeight - iconsHeight;
+
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
+	_icons = new InteractiveSurface(iconsWidth, iconsHeight, x, y);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
-	int visibleMapHeight = screenHeight - iconsHeight;
 	_map = new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
 
-	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
-	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
+	_numLayers = new NumberText(3, 5, x + 232, y + 6);
+	_rank = new Surface(26, 23, x + 107, y + 33);
 
 	// Create buttons
-	_btnUnitUp = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
-	_btnUnitDown = new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 16);
-	_btnMapUp = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY());
-	_btnMapDown = new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 16);
-	_btnShowMap = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY());
-	_btnKneel = new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 16);
-	_btnInventory = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY());
-	_btnCenter = new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 16);
-	_btnNextSoldier = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
-	_btnNextStop = new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
-	_btnShowLayers = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
-	_btnHelp = new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
-	_btnEndTurn = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
-	_btnAbort = new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
-	_btnStats = new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
-	_btnReserveNone = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 33);
-	_btnReserveSnap = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 33);
-	_btnReserveAimed = new ImageButton(17, 11, _icons->getX() + 60, _icons->getY() + 45);
-	_btnReserveAuto = new ImageButton(17, 11, _icons->getX() + 78, _icons->getY() + 45);
-	_btnReserveKneel = new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
-	_btnZeroTUs = new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33);
-	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
-	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
-	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
-	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
+	_btnUnitUp = new BattlescapeButton(32, 16, x + 48, y);
+	_btnUnitDown = new BattlescapeButton(32, 16, x + 48, y + 16);
+	_btnMapUp = new BattlescapeButton(32, 16, x + 80, y);
+	_btnMapDown = new BattlescapeButton(32, 16, x + 80, y + 16);
+	_btnShowMap = new BattlescapeButton(32, 16, x + 112, y);
+	_btnKneel = new BattlescapeButton(32, 16, x + 112, y + 16);
+	_btnInventory = new BattlescapeButton(32, 16, x + 144, y);
+	_btnCenter = new BattlescapeButton(32, 16, x + 144, y + 16);
+	_btnNextSoldier = new BattlescapeButton(32, 16, x + 176, y);
+	_btnNextStop = new BattlescapeButton(32, 16, x + 176, y + 16);
+	_btnShowLayers = new BattlescapeButton(32, 16, x + 208, y);
+	_btnHelp = new BattlescapeButton(32, 16, x + 208, y + 16);
+	_btnEndTurn = new BattlescapeButton(32, 16, x + 240, y);
+	_btnAbort = new BattlescapeButton(32, 16, x + 240, y + 16);
+	_btnStats = new InteractiveSurface(164, 23, x + 107, y + 33);
+	_btnReserveNone = new BattlescapeButton(17, 11, x + 60, y + 33);
+	_btnReserveSnap = new BattlescapeButton(17, 11, x + 78, y + 33);
+	_btnReserveAimed = new BattlescapeButton(17, 11, x + 60, y + 45);
+	_btnReserveAuto = new BattlescapeButton(17, 11, x + 78, y + 45);
+	_btnReserveKneel = new BattlescapeButton(10, 23, x + 96, y + 33);
+	_btnZeroTUs = new BattlescapeButton(10, 23, x + 49, y + 33);
+	_btnLeftHandItem = new InteractiveSurface(32, 48, x + 8, y + 4);
+	_numAmmoLeft = new NumberText(30, 5, x + 8, y + 4);
+	_btnRightHandItem = new InteractiveSurface(32, 48, x + 280, y + 4);
+	_numAmmoRight = new NumberText(30, 5, x + 280, y + 4);
+	const int visibleUnitX = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->x;
+	const int visibleUnitY = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->y;
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
-		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
-		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
+		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, x + visibleUnitX, y + visibleUnitY - (i * 13));
+		_numVisibleUnit[i] = new NumberText(15, 12, _btnVisibleUnit[i]->getX() + 6 , _btnVisibleUnit[i]->getY() + 4);
 	}
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
-	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
-	_btnLaunch = new InteractiveSurface(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
+	_warning = new WarningMessage(224, 24, x + 48, y + 32);
+	_btnLaunch = new BattlescapeButton(32, 24, screenWidth - 32, 0); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnLaunch->setVisible(false);
-	_btnPsi = new InteractiveSurface(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
+	_btnPsi = new BattlescapeButton(32, 24, screenWidth - 32, 25); // we need screenWidth, because that is independent of the black bars on the screen
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
-	_txtName = new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
+	_txtName = new Text(136, 10, x + 135, y + 32);
 
-	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
-	_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
+	_numTimeUnits = new NumberText(15, 5, x + 136, y + 42);
+	_barTimeUnits = new Bar(102, 3, x + 170, y + 41);
 
-	_numEnergy = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 42);
-	_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
+	_numEnergy = new NumberText(15, 5, x + 154, y + 42);
+	_barEnergy = new Bar(102, 3, x + 170, y + 45);
 
-	_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 50);
-	_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
+	_numHealth = new NumberText(15, 5, x + 136, y + 50);
+	_barHealth= new Bar(102, 3, x + 170, y + 49);
 
-	_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 50);
-	_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
+	_numMorale = new NumberText(15, 5, x + 154, y + 50);
+	_barMorale = new Bar(102, 3, x + 170, y + 53);
 
 	_txtDebug = new Text(300, 10, 20, 0);
-	_txtTooltip = new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
+	_txtTooltip = new Text(300, 10, x + 2, y - 10);
 
 	// Set palette
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
@@ -174,66 +181,19 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+	
+	if (_game->getRuleset()->getInterface("battlescape")->getElement("pathfinding"))
+	{
+		Element *pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
+		
+		Pathfinding::green = pathing->color;
+		Pathfinding::yellow = pathing->color2;
+		Pathfinding::red = pathing->border;
+	}
 
 	add(_map);
 	add(_icons);
-	add(_numLayers);
-	add(_rank);
-	add(_btnUnitUp);
-	add(_btnUnitDown);
-	add(_btnMapUp);
-	add(_btnMapDown);
-	add(_btnShowMap);
-	add(_btnKneel);
-	add(_btnInventory);
-	add(_btnCenter);
-	add(_btnNextSoldier);
-	add(_btnNextStop);
-	add(_btnShowLayers);
-	add(_btnHelp);
-	add(_btnEndTurn);
-	add(_btnAbort);
-	add(_btnStats);
-	add(_txtName);
-	add(_numTimeUnits);
-	add(_numEnergy);
-	add(_numHealth);
-	add(_numMorale);
-	add(_barTimeUnits);
-	add(_barEnergy);
-	add(_barHealth);
-	add(_barMorale);
-	add(_btnReserveNone);
-	add(_btnReserveSnap);
-	add(_btnReserveAimed);
-	add(_btnReserveAuto);
-	add(_btnReserveKneel);
-	add(_btnZeroTUs);
-	add(_btnLeftHandItem);
-	add(_numAmmoLeft);
-	add(_btnRightHandItem);
-	add(_numAmmoRight);
-	for (int i = 0; i < VISIBLE_MAX; ++i)
-	{
-		add(_btnVisibleUnit[i]);
-		add(_numVisibleUnit[i]);
-	}
-	add(_warning);
-	add(_txtDebug);
-	add(_txtTooltip);
-	add(_btnLaunch);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
-	add(_btnPsi);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
-
-	// Set up objects
-	_save = _game->getSavedGame()->getSavedBattle();
-	_map->init();
-	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
-	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
-	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
-	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
-
+	
 	// Add in custom reserve buttons
 	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
 	if (_game->getResourcePack()->getSurface("TFTDReserve"))
@@ -250,15 +210,77 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
+	// we need to blit the icons before we add the battlescape buttons, as they copy the underlying parent surface.
 	icons->blit(_icons);
+
+	// this is a hack to fix the single transparent pixel on TFTD's icon panel.
+	if (_game->getRuleset()->getInterface("battlescape")->getElement("icons")->TFTDMode)
+	{
+		_icons->setPixel(46, 44, 8);
+	}
+
+	add(_rank, "rank", "battlescape", _icons);
+	add(_btnUnitUp, "buttonUnitUp", "battlescape", _icons);
+	add(_btnUnitDown, "buttonUnitDown", "battlescape", _icons);
+	add(_btnMapUp, "buttonMapUp", "battlescape", _icons);
+	add(_btnMapDown, "buttonMapDown", "battlescape", _icons);
+	add(_btnShowMap, "buttonShowMap", "battlescape", _icons);
+	add(_btnKneel, "buttonKneel", "battlescape", _icons);
+	add(_btnInventory, "buttonInventory", "battlescape", _icons);
+	add(_btnCenter, "buttonCenter", "battlescape", _icons);
+	add(_btnNextSoldier, "buttonNextSoldier", "battlescape", _icons);
+	add(_btnNextStop, "buttonNextStop", "battlescape", _icons);
+	add(_btnShowLayers, "buttonShowLayers", "battlescape", _icons);
+	add(_numLayers, "numLayers", "battlescape", _icons);
+	add(_btnHelp, "buttonHelp", "battlescape", _icons);
+	add(_btnEndTurn, "buttonEndTurn", "battlescape", _icons);
+	add(_btnAbort, "buttonAbort", "battlescape", _icons);
+	add(_btnStats, "buttonStats", "battlescape", _icons);
+	add(_txtName, "textName", "battlescape", _icons);
+	add(_numTimeUnits, "numTUs", "battlescape", _icons);
+	add(_numEnergy, "numEnergy", "battlescape", _icons);
+	add(_numHealth, "numHealth", "battlescape", _icons);
+	add(_numMorale, "numMorale", "battlescape", _icons);
+	add(_barTimeUnits, "barTUs", "battlescape", _icons);
+	add(_barEnergy, "barEnergy", "battlescape", _icons);
+	add(_barHealth, "barHealth", "battlescape", _icons);
+	add(_barMorale, "barMorale", "battlescape", _icons);
+	add(_btnReserveNone, "buttonReserveNone", "battlescape", _icons);
+	add(_btnReserveSnap, "buttonReserveSnap", "battlescape", _icons);
+	add(_btnReserveAimed, "buttonReserveAimed", "battlescape", _icons);
+	add(_btnReserveAuto, "buttonReserveAuto", "battlescape", _icons);
+	add(_btnReserveKneel, "buttonReserveKneel", "battlescape", _icons);
+	add(_btnZeroTUs, "buttonZeroTUs", "battlescape", _icons);
+	add(_btnLeftHandItem, "buttonLeftHand", "battlescape", _icons);
+	add(_numAmmoLeft, "numAmmoLeft", "battlescape", _icons);
+	add(_btnRightHandItem, "buttonRightHand", "battlescape", _icons);
+	add(_numAmmoRight, "numAmmoRight", "battlescape", _icons);
+	for (int i = 0; i < VISIBLE_MAX; ++i)
+	{
+		add(_btnVisibleUnit[i]);
+		add(_numVisibleUnit[i]);
+	}
+	add(_warning, "warning", "battlescape", _icons);
+	add(_txtDebug);
+	add(_txtTooltip, "textTooltip", "battlescape", _icons);
+	add(_btnLaunch);
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
+	add(_btnPsi);
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
+
+	// Set up objects
+	_save = _game->getSavedGame()->getSavedBattle();
+	_map->init();
+	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
+	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
+	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
+	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
 
 	_numLayers->setColor(Palette::blockOffset(1)-2);
 	_numLayers->setValue(1);
 
-	_numAmmoLeft->setColor(2);
 	_numAmmoLeft->setValue(999);
 
-	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
 
 	_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
@@ -393,12 +415,14 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_btnReserveKneel->setTooltip("STR_RESERVE_TIME_UNITS_FOR_KNEEL");
 	_btnReserveKneel->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnReserveKneel->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+	_btnReserveKneel->allowToggleInversion();
 
 	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick, SDL_BUTTON_RIGHT);
 	_btnZeroTUs->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, Options::keyBattleZeroTUs);
 	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
 	_btnZeroTUs->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnZeroTUs->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+	_btnZeroTUs->allowClickInversion();
 
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, Options::keyBattleReload);
@@ -414,6 +438,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 						Options::keyBattleCenterEnemy8,
 						Options::keyBattleCenterEnemy9,
 						Options::keyBattleCenterEnemy10};
+	Uint8 color = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->color;
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		std::ostringstream tooltip;
@@ -423,58 +448,31 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 		_btnVisibleUnit[i]->setTooltip(tooltip.str());
 		_btnVisibleUnit[i]->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 		_btnVisibleUnit[i]->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
-		_numVisibleUnit[i]->setColor(16);
+		_numVisibleUnit[i]->setColor(color);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1));
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2);
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color);
 	_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
 	_btnPsi->onMouseClick((ActionHandler)&BattlescapeState::btnPsiClick);
 
-	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
-	_numTimeUnits->setColor(Palette::blockOffset(4));
-	_numEnergy->setColor(Palette::blockOffset(1));
-	_numHealth->setColor(Palette::blockOffset(2));
-	_numMorale->setColor(Palette::blockOffset(12));
-	_barTimeUnits->setColor(Palette::blockOffset(4));
+
 	_barTimeUnits->setScale(1.0);
-	_barEnergy->setColor(Palette::blockOffset(1));
 	_barEnergy->setScale(1.0);
-	_barHealth->setColor(Palette::blockOffset(2));
-	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale(1.0);
-	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
 
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
-	_btnReserveNone->copy(_icons);
-	_btnReserveNone->setColor(Palette::blockOffset(4)+3);
 	_btnReserveNone->setGroup(&_reserve);
-
-	_btnReserveSnap->copy(_icons);
-	_btnReserveSnap->setColor(Palette::blockOffset(2)+3);
 	_btnReserveSnap->setGroup(&_reserve);
-
-	_btnReserveAimed->copy(_icons);
-	_btnReserveAimed->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAimed->setGroup(&_reserve);
-
-	_btnReserveAuto->copy(_icons);
-	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
-
-	_btnReserveKneel->copy(_icons);
-	_btnReserveKneel->setColor(Palette::blockOffset(2)+3);
-
-	_btnZeroTUs->copy(_icons);
-	_btnZeroTUs->setColor(Palette::blockOffset(2)+3);
-
+	
 	// Set music
 	_game->getResourcePack()->playMusic("GMTACTIC");
 
@@ -489,7 +487,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _popups(), _xBeforeMouseScro
 	_firstInit = true;
 	_isMouseScrolling = false;
 	_isMouseScrolled = false;
-	_currentTooltip = "";
 }
 
 
@@ -508,6 +505,11 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+	if (_save->getAmbientSound() != -1)
+	{
+		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->loop();
+	}
+
 	State::init();
 	_animTimer->start();
 	_gameTimer->start();
@@ -516,8 +518,7 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 	updateSoldierInfo();
-	// Update reserve settings
-	_battleGame->setTUReserved(_save->getTUReserved(), true);
+
 	switch (_save->getTUReserved())
 	{
 	case BA_SNAPSHOT:
@@ -608,7 +609,7 @@ void BattlescapeState::mapOver(Action *action)
 
 		// Set the mouse cursor back
 		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - Map::ICON_HEIGHT / 2);
+		SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - _map->getIconHeight() / 2);
 		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 		// Check the threshold
@@ -830,7 +831,7 @@ void BattlescapeState::btnUnitDownClick(Action *)
  */
 void BattlescapeState::btnMapUpClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_map->getCamera()->up();
 }
 
@@ -840,7 +841,7 @@ void BattlescapeState::btnMapUpClick(Action *)
  */
 void BattlescapeState::btnMapDownClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_map->getCamera()->down();
 }
 
@@ -1193,13 +1194,13 @@ void BattlescapeState::btnReserveClick(Action *action)
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
-			_battleGame->setTUReserved(BA_NONE, true);
+			_battleGame->setTUReserved(BA_NONE);
 		else if (_reserve == _btnReserveSnap)
-			_battleGame->setTUReserved(BA_SNAPSHOT, true);
+			_battleGame->setTUReserved(BA_SNAPSHOT);
 		else if (_reserve == _btnReserveAimed)
-			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
+			_battleGame->setTUReserved(BA_AIMEDSHOT);
 		else if (_reserve == _btnReserveAuto)
-			_battleGame->setTUReserved(BA_AUTOSHOT, true);
+			_battleGame->setTUReserved(BA_AUTOSHOT);
 
 		// update any path preview
 		if (_battleGame->getPathfinding()->isPathPreviewed())
@@ -1218,7 +1219,7 @@ void BattlescapeState::btnReloadClick(Action *)
 {
 	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo())
 	{
-		_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::ITEM_RELOAD)->play(-1, getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
 		updateSoldierInfo();
 	}
 }
@@ -1283,11 +1284,11 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
-	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
+	Soldier *soldier = battleUnit->getGeoscapeSoldier();
 	if (soldier != 0)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(soldier->getRankSprite())->blit(_rank);
+		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 	}
 	else
 	{
@@ -1903,12 +1904,16 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->popState();
 	}
 	_game->getCursor()->setVisible(true);
-	std::string nextStage = "";
+	if (_save->getAmbientSound() != -1)
+	{
+		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
+	}
+	std::string nextStage;
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
 	}
-	if (nextStage != "" && inExitArea)
+	if (!nextStage.empty() && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();

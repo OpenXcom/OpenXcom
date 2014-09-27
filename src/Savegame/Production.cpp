@@ -36,7 +36,7 @@ Production::Production(const RuleManufacture * rules, int amount) : _rules(rules
 {
 }
 
-int Production::getAmountTotal () const
+int Production::getAmountTotal() const
 {
 	return _amount;
 }
@@ -46,7 +46,7 @@ void Production::setAmountTotal (int amount)
 	_amount = amount;
 }
 
-bool Production::getInfiniteAmount () const
+bool Production::getInfiniteAmount() const
 {
 	return _infinite;
 }
@@ -56,7 +56,7 @@ void Production::setInfiniteAmount (bool inf)
 	_infinite = inf;
 }
 
-int Production::getTimeSpent () const
+int Production::getTimeSpent() const
 {
 	return _timeSpent;
 }
@@ -88,7 +88,7 @@ void Production::setSellItems (bool sell)
 
 bool Production::haveEnoughMoneyForOneMoreUnit(SavedGame * g)
 {
-	return (g->getFunds() >= _rules->getManufactureCost ());
+	return (g->getFunds() >= _rules->getManufactureCost());
 }
 
 bool Production::haveEnoughMaterialsForOneMoreUnit(Base * b)
@@ -101,7 +101,7 @@ bool Production::haveEnoughMaterialsForOneMoreUnit(Base * b)
 
 productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 {
-	int done = getAmountProduced ();
+	int done = getAmountProduced();
 	_timeSpent += _engineers;
 
 	if (!Options::canManufactureMoreItemsPerHour && done < getAmountProduced())
@@ -110,7 +110,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		_timeSpent = (done + 1) * _rules->getManufactureTime();
 	}
 
-	if (done < getAmountProduced ())
+	if (done < getAmountProduced())
 	{
 		int produced;
 		if (!getInfiniteAmount())
@@ -180,8 +180,8 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		}
 		while (count < produced);
 	}
-	if (getAmountProduced () >= _amount && !getInfiniteAmount()) return PROGRESS_COMPLETE;
-	if (done < getAmountProduced ())
+	if (getAmountProduced() >= _amount && !getInfiniteAmount()) return PROGRESS_COMPLETE;
+	if (done < getAmountProduced())
 	{
 		// We need to ensure that player has enough cash/item to produce a new unit
 		if (!haveEnoughMoneyForOneMoreUnit(g)) return PROGRESS_NOT_ENOUGH_MONEY;
@@ -191,9 +191,9 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 	return PROGRESS_NOT_COMPLETE;
 }
 
-int Production::getAmountProduced () const
+int Production::getAmountProduced() const
 {
-	return _timeSpent / _rules->getManufactureTime ();
+	return _timeSpent / _rules->getManufactureTime();
 }
 
 const RuleManufacture * Production::getRules() const
@@ -203,23 +203,23 @@ const RuleManufacture * Production::getRules() const
 
 void Production::startItem(Base * b, SavedGame * g)
 {
-	g->setFunds(g->getFunds() - _rules->getManufactureCost ());
-	for(std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems ().begin (); iter != _rules->getRequiredItems ().end (); ++iter)
+	g->setFunds(g->getFunds() - _rules->getManufactureCost());
+	for (std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
 	{
-		b->getItems ()->removeItem(iter->first, iter->second);
+		b->getItems()->removeItem(iter->first, iter->second);
 	}
 }
 
 YAML::Node Production::save() const
 {
 	YAML::Node node;
-	node["item"] = getRules ()->getName ();
-	node["assigned"] = getAssignedEngineers ();
-	node["spent"] = getTimeSpent ();
-	node["amount"] = getAmountTotal ();
-	node["infinite"] = getInfiniteAmount ();
+	node["item"] = getRules()->getName();
+	node["assigned"] = getAssignedEngineers();
+	node["spent"] = getTimeSpent();
+	node["amount"] = getAmountTotal();
+	node["infinite"] = getInfiniteAmount();
 	if (getSellItems())
-		node["sell"] = getSellItems ();
+		node["sell"] = getSellItems();
 	return node;
 }
 

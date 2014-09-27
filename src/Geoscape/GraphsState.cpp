@@ -99,7 +99,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		// always save in toggles all the regions
 		_regionToggles.push_back(new GraphButInfo(tr((*iter)->getRules()->getType()) , -42 + (4*offset)));
 		// initially add the GRAPH_MAX_BUTTONS having the first regions information
-		if(offset < GRAPH_MAX_BUTTONS)
+		if (offset < GRAPH_MAX_BUTTONS)
 		{
 			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 			_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
@@ -118,7 +118,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		++offset;
 	}
 
-	if(_regionToggles.size() < GRAPH_MAX_BUTTONS)
+	if (_regionToggles.size() < GRAPH_MAX_BUTTONS)
 		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size()*11);
 	else
 		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
@@ -139,7 +139,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		// always save in toggles all the countries
 		_countryToggles.push_back(new GraphButInfo(tr((*iter)->getRules()->getType()) , -42 + (4*offset)));
 		// initially add the GRAPH_MAX_BUTTONS having the first countries information
-		if(offset < GRAPH_MAX_BUTTONS)
+		if (offset < GRAPH_MAX_BUTTONS)
 		{
 			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
@@ -160,7 +160,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		++offset;
 	}
 	
-	if(_countryToggles.size() < GRAPH_MAX_BUTTONS)
+	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
 		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size()*11);
 	else
 		_btnCountryTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
@@ -209,7 +209,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		_regionToggles[i]->_pushed = ('0'==graphRegionToggles[i]) ? false : true;
 		if (_regionToggles.size()-1 == i)
 			_btnRegionTotal->setPressed(_regionToggles[i]->_pushed);
-		else if(i < GRAPH_MAX_BUTTONS) 
+		else if (i < GRAPH_MAX_BUTTONS) 
 			_btnRegions.at(i)->setPressed(_regionToggles[i]->_pushed);
 	}
 	for (size_t i = 0; i < _countryToggles.size(); ++i)
@@ -217,7 +217,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		_countryToggles[i]->_pushed = ('0'==graphCountryToggles[i]) ? false : true;
 		if (_countryToggles.size()-1 == i)
 			_btnCountryTotal->setPressed(_countryToggles[i]->_pushed);
-		else if(i < GRAPH_MAX_BUTTONS)
+		else if (i < GRAPH_MAX_BUTTONS)
 			_btnCountries.at(i)->setPressed(_countryToggles[i]->_pushed);
 	}
 	for (size_t i = 0; i < _financeToggles.size(); ++i)
@@ -311,9 +311,9 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
  */
 GraphsState::~GraphsState()
 {
-	std::string graphRegionToggles = "";
-	std::string graphCountryToggles = "";
-	std::string graphFinanceToggles = "";
+	std::string graphRegionToggles;
+	std::string graphCountryToggles;
+	std::string graphFinanceToggles;
 	for (size_t i = 0; i < _regionToggles.size(); ++i)
 	{
 		graphRegionToggles.push_back(_regionToggles[i]->_pushed ? '1' : '0');
@@ -1099,13 +1099,13 @@ void GraphsState::drawFinanceLines()
 void GraphsState::shiftButtons(Action *action)
 {
 	// only if active 'screen' is other than finance
-	if(_finance)
+	if (_finance)
 		return;
 	// select the data's we'll processing - regions or countries
-	if(_country)
+	if (_country)
 	{
 		// too few countries? - return
-		if(_countryToggles.size() <= GRAPH_MAX_BUTTONS)
+		if (_countryToggles.size() <= GRAPH_MAX_BUTTONS)
 			return;
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 			scrollButtons(_countryToggles, _btnCountries, _butCountriesOffset, -1);
@@ -1115,7 +1115,7 @@ void GraphsState::shiftButtons(Action *action)
 	else
 	{
 		// too few regions? - return
-		if(_regionToggles.size() <= GRAPH_MAX_BUTTONS)
+		if (_regionToggles.size() <= GRAPH_MAX_BUTTONS)
 			return;
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 			scrollButtons(_regionToggles, _btnRegions, _butRegionsOffset, -1);
@@ -1126,16 +1126,16 @@ void GraphsState::shiftButtons(Action *action)
 void GraphsState::scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, size_t &offset, int step)
 {
 	// minus one, 'cause we'll already added the TOTAL button to toggles
-	if( int(step + (int)offset) < 0 || offset + step + GRAPH_MAX_BUTTONS >= toggles.size()-1)
+	if ( int(step + (int)offset) < 0 || offset + step + GRAPH_MAX_BUTTONS >= toggles.size()-1)
 		return;
 	// set the next offset - cheaper to do it from starters
 	offset+=step;
 	size_t i=0;
 	std::vector<ToggleTextButton *>::iterator iterb=buttons.begin();
-	for(std::vector<GraphButInfo *>::iterator itert=toggles.begin(); itert != toggles.end();++itert,++i)
-		if(i < offset)
+	for (std::vector<GraphButInfo *>::iterator itert=toggles.begin(); itert != toggles.end();++itert,++i)
+		if (i < offset)
 			continue;
-		else if(i < offset+GRAPH_MAX_BUTTONS)
+		else if (i < offset+GRAPH_MAX_BUTTONS)
 			updateButton(*itert,*iterb++);
 		else
 			return;

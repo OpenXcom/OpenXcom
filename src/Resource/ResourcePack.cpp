@@ -23,8 +23,6 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Music.h"
-#include "../Geoscape/Polygon.h"
-#include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
@@ -32,10 +30,31 @@
 namespace OpenXcom
 {
 
+int ResourcePack::DOOR_OPEN = 3;
+int ResourcePack::SLIDING_DOOR_OPEN = 20;
+int ResourcePack::SLIDING_DOOR_CLOSE = 21;
+int ResourcePack::SMALL_EXPLOSION = 2;
+int ResourcePack::LARGE_EXPLOSION = 5;
+int ResourcePack::EXPLOSION_OFFSET = 0;
+int ResourcePack::ITEM_DROP = 38;
+int ResourcePack::ITEM_THROW = 39;
+int ResourcePack::ITEM_RELOAD = 17;
+int ResourcePack::WALK_OFFSET = 22;
+int ResourcePack::FLYING_SOUND = 15;
+int ResourcePack::MALE_SCREAM[3] = {41, 42, 43};
+int ResourcePack::FEMALE_SCREAM[3] = {44, 45, 46};
+int ResourcePack::BUTTON_PRESS = 0;
+int ResourcePack::WINDOW_POPUP[3] = {1, 2, 3};
+int ResourcePack::UFO_FIRE = 8;
+int ResourcePack::UFO_HIT = 12;
+int ResourcePack::UFO_CRASH = 10;
+int ResourcePack::UFO_EXPLODE = 11;
+int ResourcePack::INTERCEPTOR_HIT = 10;
+int ResourcePack::INTERCEPTOR_EXPLODE = 13;
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _playingMusic(""), _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -59,14 +78,6 @@ ResourcePack::~ResourcePack()
 	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
 	{
 		delete i->second;
-	}
-	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
-	{
-		delete *i;
-	}
-	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
-	{
-		delete *i;
 	}
 	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); ++i)
 	{
@@ -113,24 +124,6 @@ SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
 {
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 	if (_sets.end() != i) return i->second; else return 0;
-}
-
-/**
- * Returns the list of polygons in the resource set.
- * @return Pointer to the list of polygons.
- */
-std::list<Polygon*> *ResourcePack::getPolygons()
-{
-	return &_polygons;
-}
-
-/**
- * Returns the list of polylines in the resource set.
- * @return Pointer to the list of polylines.
- */
-std::list<Polyline*> *ResourcePack::getPolylines()
-{
-	return &_polylines;
 }
 
 /**
@@ -252,7 +245,7 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		if(i->first.substr(i->first.length()-3, i->first.length()) != "LBM")
+		if (i->first.substr(i->first.length()-3, i->first.length()) != "LBM")
 			i->second->setPalette(colors, firstcolor, ncolors);
 	}
 	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
@@ -268,6 +261,20 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 std::vector<Uint16> *ResourcePack::getVoxelData()
 {
 	return &_voxelData;
+}
+
+/**
+ * Returns a specific sound from either the land or underwater resource set.
+ * @param depth the depth of the battlescape.
+ * @param sound ID of the sound.
+ * @return Pointer to the sound.
+ */
+Sound *ResourcePack::getSoundByDepth(unsigned int depth, unsigned int sound) const
+{
+	if (depth == 0)
+		return getSound("BATTLE.CAT", sound);
+	else
+		return getSound("BATTLE2.CAT", sound);
 }
 
 }

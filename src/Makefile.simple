@@ -25,9 +25,11 @@ endif
 
 # Compiler settings
 ifeq ($(TARGET),OSX)
-CXXFLAGS ?= -Wall -Wextra -O2
+CXXFLAGS ?= -O2
+CXXFLAGS += -Wall -Wextra
 else
-CXXFLAGS ?= -Wall -Wextra -O2 -rdynamic
+CXXFLAGS ?= -O2
+CXXFLAGS += -Wall -Wextra -rdynamic
 endif
 
 CXXFLAGS += $(addprefix -D,$(TARGET))

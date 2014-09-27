@@ -43,7 +43,7 @@ private:
 	int _sprite;
 	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
-	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
+	int _repairRate, _refuelRate, _radarRange, _sightRange, _transferTime, _score;
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
 	int _listOrder, _maxItems;
@@ -58,7 +58,7 @@ public:
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.
-	const std::vector<std::string> &getRequirements () const;
+	const std::vector<std::string> &getRequirements() const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
 	/// Gets the craft's maximum fuel.
@@ -89,6 +89,8 @@ public:
 	int getRefuelRate() const;
 	/// Gets the craft's radar range.
 	int getRadarRange() const;
+	/// Gets the craft's sight range.
+	int getSightRange() const;
 	/// Gets the craft's transfer time.
 	int getTransferTime() const;
 	/// Gets the craft's score.

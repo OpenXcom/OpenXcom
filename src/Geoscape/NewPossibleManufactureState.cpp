@@ -80,9 +80,9 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
-	for(std::vector<RuleManufacture *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+	for (std::vector<RuleManufacture *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
-		_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
+		_lstPossibilities->addRow (1, tr((*iter)->getName()).c_str());
 	}
 }
 

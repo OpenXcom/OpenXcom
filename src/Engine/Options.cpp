@@ -43,10 +43,10 @@ namespace Options
 #include "Options.inc.h"
 #undef OPT
 
-std::string _dataFolder = "";
+std::string _dataFolder;
 std::vector<std::string> _dataList;
-std::string _userFolder = "";
-std::string _configFolder = "";
+std::string _userFolder;
+std::string _configFolder;
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _commandLine;
 std::vector<OptionInfo> _info;
@@ -72,6 +72,7 @@ void create()
 
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
+	_info.push_back(OptionInfo("StereoSound", &StereoSound, true));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
 	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
 	_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
@@ -82,6 +83,7 @@ void create()
 	_info.push_back(OptionInfo("battlescapeScale", &battlescapeScale, 0));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
 	_info.push_back(OptionInfo("useHQXFilter", &useHQXFilter, false));
+	_info.push_back(OptionInfo("useXBRZFilter", &useXBRZFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
 	_info.push_back(OptionInfo("checkOpenGLErrors", &checkOpenGLErrors, false));
 	_info.push_back(OptionInfo("useOpenGLShader", &useOpenGLShader, "Shaders/Openxcom.OpenGL.shader"));
@@ -431,11 +433,11 @@ bool init(int argc, char *argv[])
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-    if (_dataFolder != "")
+    if (!_dataFolder.empty())
     {
 		_dataList.insert(_dataList.begin(), _dataFolder);
     }
-    if (_userFolder == "")
+    if (_userFolder.empty())
     {
         std::vector<std::string> user = CrossPlatform::findUserFolders();
         _configFolder = CrossPlatform::findConfigFolder();
@@ -451,7 +453,7 @@ void setFolders()
 		}
 
 		// Set up folders
-		if (_userFolder == "")
+		if (_userFolder.empty())
 		{
 			for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
 			{
@@ -464,7 +466,7 @@ void setFolders()
 		}
 	}
 
-	if (_configFolder == "")
+	if (_configFolder.empty())
 	{
 		_configFolder = _userFolder;
 	}
@@ -640,6 +642,7 @@ void backupDisplay()
 	Options::newScaleFilter = Options::useScaleFilter;
 	Options::newHQXFilter = Options::useHQXFilter;
 	Options::newOpenGLShader = Options::useOpenGLShader;
+	Options::newXBRZFilter = Options::useXBRZFilter;
 }
 
 /**
@@ -656,6 +659,7 @@ void switchDisplay()
 	std::swap(geoscapeScale, newGeoscapeScale);
 	std::swap(useHQXFilter, newHQXFilter);
 	std::swap(useOpenGLShader, newOpenGLShader);
+	std::swap(useXBRZFilter, newXBRZFilter);
 }
 
 }

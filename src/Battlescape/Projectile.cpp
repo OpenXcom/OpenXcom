@@ -118,7 +118,7 @@ int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
 			hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 		}
 
-		if (hitPos != _action.target && _action.result == "")
+		if (hitPos != _action.target && _action.result.empty())
 		{
 			if (test == V_NORTHWALL)
 			{
@@ -195,7 +195,7 @@ int Projectile::calculateThrow(double accuracy)
 	if (_action.type != BA_THROW)
 	{
 		BattleUnit *tu = targetTile->getUnit();
-		if(!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
+		if (!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
 			tu = _save->getTile(_action.target - Position(0, 0, 1))->getUnit();
 		if (tu)
 		{

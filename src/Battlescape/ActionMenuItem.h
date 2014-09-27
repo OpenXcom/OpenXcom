@@ -41,7 +41,7 @@ class ActionMenuItem : public InteractiveSurface
 private:
 	bool _highlighted;
 	BattleActionType _action;
-	int _tu;
+	int _tu, _highlightModifier;
 	Frame *_frame;
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
@@ -50,7 +50,7 @@ public:
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assigns an action to it.
-	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
+	void setAction(BattleActionType action, const std::wstring &description, const std::wstring &accuracy, const std::wstring &timeunits, int tu);
 	/// Gets the assigned action.
 	BattleActionType getAction() const;
 	/// Gets the assigned action TUs.

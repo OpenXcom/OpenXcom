@@ -32,6 +32,10 @@ class MapDataSet;
 class MapData;
 class Ruleset;
 
+struct LandingSite
+{
+	int x, y, sizeX, sizeY;
+};
 /**
  * Represents a specific type of Battlescape Terrain.
  * - the names of the objectsets needed in this specific terrain.
@@ -47,7 +51,8 @@ private:
 	int _largeBlockLimit;
 	std::vector<int> _textures, _roadTypeOdds;
 	std::vector<std::string> _civilianTypes;
-	int _hemisphere, _minDepth, _maxDepth;
+	int _hemisphere, _minDepth, _maxDepth, _ambience;
+	std::vector<LandingSite*> _ufoPositions, _craftPositions;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -74,8 +79,16 @@ public:
 	std::vector<std::string> getCivilianTypes() const;
 	/// Gets road type odds.
 	std::vector<int> getRoadTypeOdds() const;
+	/// get the minimum depth.
 	const int getMinDepth() const;
+	/// get the maximum depth.
 	const int getMaxDepth() const;
+	/// get the ambient sound effect.
+	const int getAmbience() const;
+	/// get a list of potential UFO landing zones for this map.
+	const std::vector<LandingSite*> *getUfoPositions();
+	/// get a list of potential xcom craft landing zones for this map.
+	const std::vector<LandingSite*> *getCraftPositions();
 };
 
 }

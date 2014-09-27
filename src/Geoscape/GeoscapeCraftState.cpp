@@ -179,7 +179,16 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
+	int speed = _craft->getSpeed();
+	if (_craft->isInDogfight())
+	{
+		Ufo *ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+		if (ufo)
+		{
+			speed = ufo->getSpeed();
+		}
+	}
+	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(speed)));
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);

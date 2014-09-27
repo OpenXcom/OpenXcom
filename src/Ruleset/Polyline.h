@@ -19,24 +19,28 @@
 #ifndef OPENXCOM_POLYLINE_H
 #define OPENXCOM_POLYLINE_H
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 
 /**
  * Represents a polyline in the world map.
- * Polylines constitute the textured land portions
- * of the X-Com globe and typically have 3-4 points.
+ * Polylines constitute the detail portions of the
+ * X-Com globe and typically represent borders and rivers.
  */
 class Polyline
 {
 private:
 	double *_lat, *_lon;
-	const int _points;
+	int _points;
 public:
 	/// Creates a polyline with a number of points.
 	Polyline(int points);
 	/// Cleans up the polyline.
 	~Polyline();
+	/// Loads the polyline from YAML.
+	void load(const YAML::Node& node);
 	/// Gets the latitude of a point.
 	double getLatitude(int i) const;
 	/// Sets the latitude of a point.

@@ -120,6 +120,7 @@ namespace OpenXcom
 		addStat("STR_REACTIONS", armor->getStats()->reactions, true);
 		addStat("STR_FIRING_ACCURACY", armor->getStats()->firing, true);
 		addStat("STR_THROWING_ACCURACY", armor->getStats()->throwing, true);
+		addStat("STR_MELEE_ACCURACY", armor->getStats()->melee, true);
 		addStat("STR_STRENGTH", armor->getStats()->strength, true);
 		addStat("STR_PSIONIC_STRENGTH", armor->getStats()->psiStrength, true);
 		addStat("STR_PSIONIC_SKILL", armor->getStats()->psiSkill, true);
@@ -130,7 +131,7 @@ namespace OpenXcom
 	ArticleStateArmor::~ArticleStateArmor()
 	{}
 
-	void ArticleStateArmor::addStat(std::string label, int stat, bool plus)
+	void ArticleStateArmor::addStat(const std::string &label, int stat, bool plus)
 	{
 		if (stat != 0)
 		{
@@ -144,7 +145,7 @@ namespace OpenXcom
 		}
 	}
 
-	void ArticleStateArmor::addStat(std::string label, std::wstring stat)
+	void ArticleStateArmor::addStat(const std::string &label, const std::wstring &stat)
 	{
 		_lstInfo->addRow(2, tr(label).c_str(), stat.c_str());
 		_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);

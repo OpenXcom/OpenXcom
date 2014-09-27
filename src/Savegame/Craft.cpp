@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param id ID to assign to the craft (0 to not assign).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _weapons(), _status("STR_READY"), _lowFuel(false), _mission(false), _inBattlescape(false), _inDogfight(false), _name(L"")
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _status("STR_READY"), _lowFuel(false), _mission(false), _inBattlescape(false), _inDogfight(false)
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -244,14 +244,25 @@ YAML::Node Craft::save() const
 }
 
 /**
+ * Loads a craft unique identifier from a YAML file.
+ * @param node YAML node.
+ * @return Unique craft id.
+ */
+CraftId Craft::loadId(const YAML::Node &node)
+{
+	return std::make_pair(node["type"].as<std::string>(), node["id"].as<int>());
+}
+
+/**
  * Saves the craft's unique identifiers to a YAML file.
  * @return YAML node.
  */
 YAML::Node Craft::saveId() const
 {
 	YAML::Node node = MovingTarget::saveId();
-	node["type"] = _rules->getType();
-	node["id"] = _id;
+	CraftId uniqueId = getUniqueId();
+	node["type"] = uniqueId.first;
+	node["id"] = uniqueId.second;
 	return node;
 }
 
@@ -309,6 +320,17 @@ std::wstring Craft::getName(Language *lang) const
 void Craft::setName(const std::wstring &newName)
 {
 	_name = newName;
+}
+
+/**
+ * Returns the globe marker for the craft.
+ * @return Marker sprite, -1 if none.
+ */
+int Craft::getMarker() const
+{
+	if (_status != "STR_OUT")
+		return -1;
+	return 1;
 }
 
 /**
@@ -611,7 +633,7 @@ double Craft::getDistanceFromBase() const
  */
 int Craft::getFuelConsumption() const
 {
-	if (_rules->getRefuelItem() != "")
+	if (!_rules->getRefuelItem().empty())
 		return 1;
 	return (int)floor(_speed / 100.0);
 }
@@ -771,7 +793,7 @@ void Craft::refuel()
  */
 std::string Craft::rearm(Ruleset *rules)
 {
-	std::string ammo = "";
+	std::string ammo;
 	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; ++i)
 	{
 		if (i == _weapons.end())
@@ -783,7 +805,7 @@ std::string Craft::rearm(Ruleset *rules)
 		{
 			std::string clip = (*i)->getRules()->getClipItem();
 			int available = _base->getItems()->getItem(clip);
-			if (clip == "")
+			if (clip.empty())
 			{
 				(*i)->rearm(0, 0);
 			}
@@ -791,7 +813,7 @@ std::string Craft::rearm(Ruleset *rules)
 			{
 				int used = (*i)->rearm(available, rules->getItem(clip)->getClipSize());
 
-				if (used > available)
+				if (used == available && (*i)->isRearming())
 				{
 					ammo = clip;
 					(*i)->setRearming(false);
@@ -920,6 +942,15 @@ void Craft::setInterceptionOrder(const int order)
 int Craft::getInterceptionOrder() const
 {
 	return _interceptionOrder;
+}
+
+/**
+ * Gets the craft's unique id.
+ * @return A tuple of the craft's type and per-type id.
+ */
+CraftId Craft::getUniqueId() const
+{
+	return std::make_pair(_rules->getType(), _id);
 }
 
 }

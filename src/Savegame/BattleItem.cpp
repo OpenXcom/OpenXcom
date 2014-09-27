@@ -37,9 +37,9 @@ BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _own
 		setAmmoQuantity(_rules->getClipSize());
 	} else if (_rules && _rules->getBattleType() == BT_MEDIKIT)
 	{
-		setHealQuantity (_rules->getHealQuantity ());
-		setPainKillerQuantity (_rules->getPainKillerQuantity ());
-		setStimulantQuantity (_rules->getStimulantQuantity ());
+		setHealQuantity (_rules->getHealQuantity());
+		setPainKillerQuantity (_rules->getPainKillerQuantity());
+		setStimulantQuantity (_rules->getStimulantQuantity());
 	}
 	(*id)++;
 
@@ -441,7 +441,7 @@ void BattleItem::setHealQuantity (int heal)
  * Gets the heal quantity of the item.
  * @return The new heal quantity.
  */
-int BattleItem::getHealQuantity () const
+int BattleItem::getHealQuantity() const
 {
 	return _heal;
 }
@@ -459,7 +459,7 @@ void BattleItem::setPainKillerQuantity (int pk)
  * Gets the pain killer quantity of the item.
  * @return The new pain killer quantity.
  */
-int BattleItem::getPainKillerQuantity () const
+int BattleItem::getPainKillerQuantity() const
 {
 	return _painKiller;
 }
@@ -477,7 +477,7 @@ void BattleItem::setStimulantQuantity (int stimulant)
  * Gets the stimulant quantity of the item.
  * @return The new stimulant quantity.
  */
-int BattleItem::getStimulantQuantity () const
+int BattleItem::getStimulantQuantity() const
 {
 	return _stimulant;
 }
@@ -494,7 +494,7 @@ void BattleItem::setXCOMProperty (bool flag)
  * Gets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
  * @return True if it's XCom property.
  */
-bool BattleItem::getXCOMProperty () const
+bool BattleItem::getXCOMProperty() const
 {
 	return _XCOMProperty;
 }

@@ -112,6 +112,9 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	int _turretType;
+	int _breathFrame;
+	bool _breathing;
+	bool _floorAbove;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -209,6 +212,7 @@ public:
 	bool isOut() const;
 	/// Get the number of time units a certain action takes.
 	int getActionTUs(BattleActionType actionType, BattleItem *item);
+	int getActionTUs(BattleActionType actionType, RuleItem *item);
 	/// Spend time units if it can.
 	bool spendTimeUnits(int tu);
 	/// Spend energy if it can.
@@ -304,7 +308,7 @@ public:
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap
-	int getMiniMapSpriteIndex () const;
+	int getMiniMapSpriteIndex() const;
 	/// Set the turret type. -1 is no turret.
 	void setTurretType(int turretType);
 	/// Get the turret type. -1 is no turret.
@@ -314,7 +318,7 @@ public:
 	/// Heal one fatal wound
 	void heal(int part, int woundAmount, int healthAmount);
 	/// Give pain killers to this unit
-	void painKillers ();
+	void painKillers();
 	/// Give stimulant to this unit
 	void stimulant (int energy, int stun);
 	/// Get motion points for the motion scanner.
@@ -370,7 +374,7 @@ public:
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
 	/// Sets the unit's spawn unit.
-	void setSpawnUnit(std::string spawnUnit);
+	void setSpawnUnit(const std::string &spawnUnit);
 	/// Gets the unit's aggro sound.
 	int getAggroSound() const;
 	/// Sets the unit's energy level.
@@ -390,7 +394,7 @@ public:
 	/// Set how many turns this unit will be exposed for.
 	void setTurnsSinceSpotted (int turns);
 	/// Set how many turns this unit will be exposed for.
-	int getTurnsSinceSpotted () const;
+	int getTurnsSinceSpotted() const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
 	/// call this after the default copy constructor deletes the cache?
@@ -423,6 +427,17 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// Is this unit breathing and if so what frame?
+	int getBreathFrame() const;
+	/// Start breathing and/or update the breathing frame.
+	void breathe();
+	/// Set the flag for "floor above me" meaning stop rendering bubbles.
+	void setFloorAbove(bool floor);
+	/// Get the flag for "floor above me".
+	bool getFloorAbove();
+	/// Get the name of any melee weapon we may be carrying, or a built in one.
+	std::string getMeleeWeapon();
+
 };
 
 }

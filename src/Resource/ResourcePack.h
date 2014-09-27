@@ -21,7 +21,6 @@
 
 #include <map>
 #include <string>
-#include <list>
 #include <vector>
 #include <SDL.h>
 
@@ -32,8 +31,6 @@ class Surface;
 class SurfaceSet;
 class Font;
 class Palette;
-class Polygon;
-class Polyline;
 class Music;
 class SoundSet;
 class Sound;
@@ -59,11 +56,30 @@ protected:
 	std::map<std::string, Surface*> _surfaces;
 	std::map<std::string, SurfaceSet*> _sets;
 	std::map<std::string, SoundSet*> _sounds;
-	std::list<Polygon*> _polygons;
-	std::list<Polyline*> _polylines;
 	std::map<std::string, Music*> _musics;
 	std::vector<Uint16> _voxelData;
 public:
+	static int DOOR_OPEN;
+	static int SLIDING_DOOR_OPEN;
+	static int SLIDING_DOOR_CLOSE;
+	static int SMALL_EXPLOSION;
+	static int LARGE_EXPLOSION;
+	static int EXPLOSION_OFFSET;
+	static int ITEM_DROP;
+	static int ITEM_THROW;
+	static int ITEM_RELOAD;
+	static int WALK_OFFSET;
+	static int FLYING_SOUND;
+	static int MALE_SCREAM[3];
+	static int FEMALE_SCREAM[3];
+	static int BUTTON_PRESS;
+	static int WINDOW_POPUP[3];
+	static int UFO_FIRE;
+	static int UFO_HIT;
+	static int UFO_CRASH;
+	static int UFO_EXPLODE;
+	static int INTERCEPTOR_HIT;
+	static int INTERCEPTOR_EXPLODE;
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack();
 	/// Cleans up the resource pack.
@@ -74,10 +90,6 @@ public:
 	Surface *getSurface(const std::string &name) const;
 	/// Gets a particular surface set.
 	SurfaceSet *getSurfaceSet(const std::string &name) const;
-	/// Gets the list of world polygons.
-	std::list<Polygon*> *getPolygons();
-	/// Gets the list of world polylines.
-	std::list<Polyline*> *getPolylines();
 	/// Gets a particular music.
 	Music *getMusic(const std::string &name) const;
 	/// Gets a random music.
@@ -92,6 +104,8 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets list of voxel data.
 	std::vector<Uint16> *getVoxelData();
+	/// Returns a specific sound from either the land or underwater resource set.
+	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
 };
 
 }

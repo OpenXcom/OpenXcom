@@ -77,6 +77,9 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
+	_breathFrame = 0;
+	_floorAbove = false;
+	_breathing = false;
 
 	int rankbonus = 0;
 
@@ -148,6 +151,15 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
 	_stats += *_armor->getStats();	// armors may modify effective stats
+	
+	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
+	if (armor->getDrawingRoutine() == 14)
+	{
+		_breathFrame = 0;
+	}
+	_floorAbove = false;
+	_breathing = false;
+
 	if (faction == FACTION_HOSTILE)
 	{
 		adjustStats(diff);
@@ -195,7 +207,7 @@ BattleUnit::~BattleUnit()
 void BattleUnit::load(const YAML::Node &node)
 {
 	_id = node["id"].as<int>(_id);
-	_faction = _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
+	_faction = (UnitFaction)node["faction"].as<int>(_faction);
 	_status = (UnitStatus)node["status"].as<int>(_status);
 	_pos = node["position"].as<Position>(_pos);
 	_direction = _toDirection = node["direction"].as<int>(_direction);
@@ -1037,7 +1049,7 @@ void BattleUnit::knockOut(BattlescapeGame *battle)
 	{
 		_health = 0;
 	}
-	else if (_spawnUnit != "")
+	else if (!_spawnUnit.empty())
 	{
 		setSpecialAbility(SPECAB_NONE);
 		BattleUnit *newUnit = battle->convertUnit(this, _spawnUnit);
@@ -1109,6 +1121,15 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 	{
 		return 0;
 	}
+	return getActionTUs(actionType, item->getRules());
+}
+
+int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
+{
+	if (item == 0)
+	{
+		return 0;
+	}
 
 	int cost = 0;
 	switch (actionType)
@@ -1120,32 +1141,32 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 			cost = 25;
 			break;
 		case BA_AUTOSHOT:
-			cost = item->getRules()->getTUAuto();
+			cost = item->getTUAuto();
 			break;
 		case BA_SNAPSHOT:
-			cost = item->getRules()->getTUSnap();
+			cost = item->getTUSnap();
 			break;
 		case BA_STUN:
 		case BA_HIT:
-			cost = item->getRules()->getTUMelee();
+			cost = item->getTUMelee();
 			break;
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
-			cost = item->getRules()->getTUAimed();
+			cost = item->getTUAimed();
 			break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			cost = item->getRules()->getTUUse();
+			cost = item->getTUUse();
 			break;
 		default:
 			cost = 0;
 	}
 
 	// if it's a percentage, apply it to unit TUs
-	if (!item->getRules()->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
+	if (!item->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
 	{
-		cost = (int)floor(getStats()->tu * cost / 100.0f);
+		cost = std::max(1, (int)floor(getStats()->tu * cost / 100.0f));
 	}
 
 	return cost;
@@ -1474,7 +1495,8 @@ void BattleUnit::prepareNewTurn()
 	}
 
 	// recover stun 1pt/turn
-	if (_stunlevel > 0)
+	if (_stunlevel > 0 &&
+		(_armor->getSize() == 1 || !isOut()))
 		healStun(1);
 
 	if (!isOut())
@@ -1764,13 +1786,18 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
 	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
-	if (tuLeftHand >= tuRightHand)
-	{
-		return quickest?weaponRightHand:weaponLeftHand;
-	}
+	// if only one weapon has snapshot, pick that one
+	if (tuLeftHand <= 0 && tuRightHand > 0)
+		return weaponRightHand;
+	else if (tuRightHand <= 0 && tuLeftHand > 0)
+		return weaponLeftHand;
+	// else pick the better one
 	else
 	{
-		return quickest?weaponLeftHand:weaponRightHand;
+		if (tuLeftHand >= tuRightHand)
+			return quickest ? weaponRightHand : weaponLeftHand;
+		else
+			return quickest ? weaponLeftHand : weaponRightHand;
 	}
 }
 
@@ -1847,7 +1874,7 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
  */
 int BattleUnit::getHeight() const
 {
-	return isKneeled()?getKneelHeight():getStandHeight();
+	return std::min(24, isKneeled()?getKneelHeight():getStandHeight());
 }
 
 /**
@@ -1983,23 +2010,18 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
  */
 int BattleUnit::improveStat(int exp)
 {
-	double tier = 4.0;
-	if (exp <= 10)
-	{
-		tier = 3.0;
-		if (exp <= 5)
-		{
-			tier = exp > 2 ? 2.0 : 1.0;
-		}
-	}
-	return (int)(tier/2.0 + RNG::generate(0, (int)(tier)));
+	if      (exp > 10) return RNG::generate(2, 6);
+	else if (exp > 5)  return RNG::generate(1, 4);
+	else if (exp > 2)  return RNG::generate(1, 3);
+	else if (exp > 0)  return RNG::generate(0, 1);
+	else               return 0;
 }
 
 /**
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
  * @return the unit minimap index
  */
-int BattleUnit::getMiniMapSpriteIndex () const
+int BattleUnit::getMiniMapSpriteIndex() const
 {
 	//minimap sprite index:
 	// * 0-2   : Xcom soldier
@@ -2069,7 +2091,7 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 {
 	if (part < 0 || part > 5)
 		return;
-	if(!_fatalWounds[part])
+	if (!_fatalWounds[part])
 		return;
 	_fatalWounds[part] -= woundAmount;
 	_health += healthAmount;
@@ -2080,7 +2102,7 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 /**
  * Restore soldier morale
  */
-void BattleUnit::painKillers ()
+void BattleUnit::painKillers()
 {
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
@@ -2296,7 +2318,7 @@ std::string BattleUnit::getSpawnUnit() const
  * Set the unit that is spawned when this one dies.
  * @param spawnUnit unit.
  */
-void BattleUnit::setSpawnUnit(std::string spawnUnit)
+void BattleUnit::setSpawnUnit(const std::string &spawnUnit)
 {
 	_spawnUnit = spawnUnit;
 }
@@ -2470,7 +2492,7 @@ void BattleUnit::setTurnsSinceSpotted (int turns)
  * Get how long since this unit was exposed.
  * @return number of turns
  */
-int BattleUnit::getTurnsSinceSpotted () const
+int BattleUnit::getTurnsSinceSpotted() const
 {
 	return _turnsSinceSpotted;
 }
@@ -2667,6 +2689,90 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
 bool BattleUnit::hasInventory() const
 {
 	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
+
+/**
+ * If this unit is breathing, what frame should be displayed?
+ * @return frame number.
+ */
+int BattleUnit::getBreathFrame() const
+{
+	if (_floorAbove)
+		return 0;
+	return _breathFrame;
+}
+
+/**
+ * Decides if we should start producing bubbles, and/or updates which bubble frame we are on.
+ */
+void BattleUnit::breathe()
+{
+	// _breathFrame of -1 means this unit doesn't produce bubbles
+	if (_breathFrame < 0 || isOut())
+	{
+		_breathing = false;
+		return;
+	}
+
+	if (!_breathing || _status == STATUS_WALKING)
+	{
+		// deviation from original: TFTD used a static 10% chance for every animation frame,
+		// instead let's use 5%, but allow morale to affect it.
+		_breathing = (_status != STATUS_WALKING && RNG::percent(105 - _morale));
+		_breathFrame = 0;
+	}
+
+	if (_breathing)
+	{
+		// advance the bubble frame
+		_breathFrame++;
+
+		// we've reached the end of the cycle, get rid of the bubbles
+		if (_breathFrame >= 17)
+		{
+			_breathFrame = 0;
+			_breathing = false;
+		}
+	}
+}
+
+/**
+ * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
+ * @param floor is there a floor.
+ */
+void BattleUnit::setFloorAbove(bool floor)
+{
+	_floorAbove = floor;
+}
+
+/**
+ * Checks if the floor above flag has been set.
+ * @return if we're under cover.
+ */
+bool BattleUnit::getFloorAbove()
+{
+	return _floorAbove;
+}
+
+/**
+ * Get the name of any melee weapon we may be carrying, or a built in one.
+ * @return the name .
+ */
+std::string BattleUnit::getMeleeWeapon()
+{
+	if (getItem("STR_RIGHT_HAND") && getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_RIGHT_HAND")->getRules()->getType();
+	}
+	if (getItem("STR_LEFT_HAND") && getItem("STR_LEFT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_LEFT_HAND")->getRules()->getType();
+	}
+	if (_unitRules != 0)
+	{
+		return _unitRules->getMeleeWeapon();
+	}
+	return "";
 }
 
 }

@@ -198,6 +198,17 @@ NewBattleState::NewBattleState() : _craft(0)
 	}
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
+	for (std::vector<std::string>::iterator i = _alienRaces.begin(); i != _alienRaces.end();)
+	{
+		if ((*i).find("_UNDERWATER") != std::string::npos)
+		{
+			i = _alienRaces.erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
 
 	std::vector<std::string> difficulty;
 	difficulty.push_back("STR_1_BEGINNER");

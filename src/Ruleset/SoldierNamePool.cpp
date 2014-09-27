@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Initializes a new pool with blank lists of names.
  */
-SoldierNamePool::SoldierNamePool() : _maleFirst(), _femaleFirst(), _maleLast(), _femaleLast(), _totalWeight(0)
+SoldierNamePool::SoldierNamePool() : _totalWeight(0)
 {
 }
 
