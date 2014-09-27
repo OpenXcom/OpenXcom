@@ -925,11 +925,13 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		// has a melee weapon and is in melee range
 		((weapon->getRules()->getBattleType() == BT_MELEE &&
 		validMeleeRange(unit, target, unit->getDirection()) &&
+		unit->getActionTUs(BA_HIT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon)) ||
 		// has a gun capable of snap shot with ammo
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
 		weapon->getAmmoItem() &&
+		unit->getActionTUs(BA_SNAPSHOT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
 		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&

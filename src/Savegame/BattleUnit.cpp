@@ -1160,7 +1160,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 	// if it's a percentage, apply it to unit TUs
 	if (!item->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
 	{
-		cost = std::max(1, (int)floor(getStats()->tu * cost / 100.0f));
+		cost = (int)floor(getStats()->tu * cost / 100.0f);
 	}
 
 	return cost;
