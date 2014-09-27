@@ -110,7 +110,7 @@ void ResearchInfoState::buildUi()
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 
-	_txtTitle->setText(_rule ? tr(_rule->getName()) : tr(_project->getRules ()->getName()));
+	_txtTitle->setText(_rule ? tr(_rule->getName()) : tr(_project->getRules()->getName()));
 
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
@@ -263,7 +263,7 @@ void ResearchInfoState::moreClick(Action *action)
  */
 void ResearchInfoState::lessPress(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLess->start ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLess->start();
 }
 
 /**
@@ -275,7 +275,7 @@ void ResearchInfoState::lessRelease(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timerLess->setInterval(250);
-		_timerLess->stop ();
+		_timerLess->stop();
 	}
 }
 

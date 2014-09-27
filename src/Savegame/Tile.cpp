@@ -34,7 +34,7 @@ namespace OpenXcom
 {
 
 /// How many bytes various fields use in a serialized tile. See header.
-Tile::SerializationKey Tile::serializationKey = 
+Tile::SerializationKey Tile::serializationKey =
 {4, // index
  2, // _mapDataSetID, four of these
  2, // _mapDataID, four of these
@@ -228,16 +228,16 @@ bool Tile::isVoid() const
 }
 
 /**
- * Get the TU cost to walk over a certain part of the tile.
- * @param part
- * @param movementType
- * @return TU cost
+ * Gets the TU cost to walk over a certain part of the tile.
+ * @param part The part number.
+ * @param movementType The movement type.
+ * @return TU cost.
  */
 int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
 	{
-		if (_objects[part]->isUFODoor() && _currentFrame[part] == 7)
+		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;
@@ -534,7 +534,7 @@ int Tile::getFuel() const
 	int fuel = 0;
 
 	for (int i=0; i<4; ++i)
-		if (_objects[i] && (_objects[i]->getFuel() < fuel))
+		if (_objects[i] && (_objects[i]->getFuel() > fuel))
 			fuel = _objects[i]->getFuel();
 
 	return fuel;
@@ -799,14 +799,10 @@ void Tile::prepareNewTurn()
 			// no fire: must be smoke
 			else
 			{
-				// aliens don't breathe
-				if (_unit->getOriginalFaction() != FACTION_HOSTILE)
+				// try to knock this guy out.
+				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
 				{
-					// try to knock this guy out.
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
-					{
-						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
-					}
+					_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
 				}
 			}
 		}

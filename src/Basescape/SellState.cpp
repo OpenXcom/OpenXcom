@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _itemOffset(0), _total(0), _hasSci(0), _hasEng(0), _spaceChange(0), _origin(origin)
+SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _itemOffset(0), _total(0), _hasSci(0), _hasEng(0), _spaceChange(0), _origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
@@ -305,7 +305,7 @@ void SellState::btnOkClick(Action *)
 				{
 					if (*s == _soldiers[i])
 					{
-						if((*s)->getArmor()->getStoreItem() != "STR_NONE")
+						if ((*s)->getArmor()->getStoreItem() != "STR_NONE")
 						{
 							_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
 						}

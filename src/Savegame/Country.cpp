@@ -113,7 +113,7 @@ void Country::setFunding(int funding)
  */
 int Country::getSatisfaction()
 {
-	if(_pact)
+	if (_pact)
 		return 0;
 	return _satisfaction;
 }
@@ -199,7 +199,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	}
 
 	// about to be in cahoots
-	if(_newPact && !_pact)
+	if (_newPact && !_pact)
 	{
 		_newPact = false;
 		_pact = true;
@@ -209,7 +209,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 
 
 	// set the new funding and reset the activity meters
-	if(_pact)
+	if (_pact)
 		_funding.push_back(0);
 	else if (_satisfaction != 2)
 		_funding.push_back(funding + newFunding);
@@ -218,11 +218,11 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
-	if(_activityAlien.size() > 12)
+	if (_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());
-	if(_activityXcom.size() > 12)
+	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
-	if(_funding.size() > 12)
+	if (_funding.size() > 12)
 		_funding.erase(_funding.begin());
 }
 

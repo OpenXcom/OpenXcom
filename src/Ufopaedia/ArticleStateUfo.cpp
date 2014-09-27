@@ -82,7 +82,7 @@ namespace OpenXcom
 		graphic->getCrop()->h = 29;
 		graphic->blit(_image);
 */
-		if (ufo->getModSprite() == "")
+		if (ufo->getModSprite().empty())
 		{
 			graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
 			graphic->getCrop()->h = 52;

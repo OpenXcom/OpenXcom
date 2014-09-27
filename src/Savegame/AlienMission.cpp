@@ -85,7 +85,7 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 	if (const YAML::Node &base = node["alienBase"])
 	{
 		int id = base.as<int>();
-		std::vector<AlienBase*>::const_iterator found = std::find_if(game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
+		std::vector<AlienBase*>::const_iterator found = std::find_if (game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
 		if (found == game.getAlienBases()->end())
 		{
 			throw Exception("Corrupted save: Invalid base for mission.");
@@ -220,7 +220,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	{
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
 		std::vector<Base *>::const_iterator found =
-		    std::find_if(game.getBases()->begin(), game.getBases()->end(),
+		    std::find_if (game.getBases()->begin(), game.getBases()->end(),
 				 FindMarkedXCOMBase(regionRules));
 		if (found != game.getBases()->end())
 		{
@@ -382,7 +382,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	// http://openxcom.org/bugs/openxcom/issues/615#comment_3292
 	if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(nextWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 	{
-		while(!rules.locateCity(pos.first, pos.second))
+		while (!rules.locateCity(pos.first, pos.second))
 		{
 			Log(LOG_DEBUG) << "Longitude: " << pos.first << "Lattitude: " << pos.second << " invalid";
 			size_t city = RNG::generate(0, rules.getRegion(_region)->getCities()->size() - 1);
@@ -461,7 +461,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			// Remove UFO, replace with Base defense.
 			ufo.setDetected(false);
 			std::vector<Base *>::const_iterator found =
-			    std::find_if(game.getBases()->begin(), game.getBases()->end(),
+			    std::find_if (game.getBases()->begin(), game.getBases()->end(),
 					 MatchBaseCoordinates(ufo.getLongitude(), ufo.getLatitude()));
 			if (found == game.getBases()->end())
 			{
@@ -662,7 +662,7 @@ void AlienMission::spawnAlienBase(const Globe &globe, Game &engine)
  */
 void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
 {
-	if (rules.getRegion(region)->getMissionRegion() != "")
+	if (!rules.getRegion(region)->getMissionRegion().empty())
 	{
 		_region = rules.getRegion(region)->getMissionRegion();
 	}

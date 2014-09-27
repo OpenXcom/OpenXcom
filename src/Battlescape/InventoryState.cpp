@@ -27,6 +27,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Interface/Text.h"
+#include "../Interface/BattlescapeButton.h"
 #include "../Engine/Action.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Sound.h"
@@ -39,6 +40,7 @@
 #include "../Savegame/Tile.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
@@ -82,7 +84,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(210, 17, 28, 6);
-	_txtTus = new Text(40, 9, 245, Options::showMoreStatsInInventoryView ? 32 : 24);
+	_txtTus = new Text(40, 9, 245, 24);
 	_txtWeight = new Text(70, 9, 245, 24);
 	_txtFAcc = new Text(40, 9, 245, 32);
 	_txtReact = new Text(40, 9, 245, 40);
@@ -90,14 +92,14 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_txtPStr = new Text(40, 9, 245, 56);
 	_txtItem = new Text(160, 9, 128, 140);
 	_txtAmmo = new Text(66, 24, 254, 64);
-	_btnOk = new InteractiveSurface(35, 22, 237, 1);
-	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
-	_btnNext = new InteractiveSurface(23, 22, 297, 1);
-	_btnUnload = new InteractiveSurface(32, 25, 288, 32);
-	_btnGround = new InteractiveSurface(32, 15, 289, 137);
-	_btnRank = new InteractiveSurface(26, 23, 0, 0);
-	_btnCreateTemplate = new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
-	_btnApplyTemplate = new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
+	_btnOk = new BattlescapeButton(35, 22, 237, 1);
+	_btnPrev = new BattlescapeButton(23, 22, 273, 1);
+	_btnNext = new BattlescapeButton(23, 22, 297, 1);
+	_btnUnload = new BattlescapeButton(32, 25, 288, 32);
+	_btnGround = new BattlescapeButton(32, 15, 289, 137);
+	_btnRank = new BattlescapeButton(26, 23, 0, 0);
+	_btnCreateTemplate = new BattlescapeButton(32, 22, _templateBtnX, _createTemplateBtnY);
+	_btnApplyTemplate = new BattlescapeButton(32, 22, _templateBtnX, _applyTemplateBtnY);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
 	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
 
@@ -105,65 +107,58 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
-	add(_soldier);
-	add(_txtName);
-	add(_txtTus);
-	add(_txtWeight);
-	add(_txtFAcc);
-	add(_txtReact);
-	add(_txtPSkill);
-	add(_txtPStr);
-	add(_txtItem);
-	add(_txtAmmo);
-	add(_btnOk);
-	add(_btnPrev);
-	add(_btnNext);
-	add(_btnUnload);
-	add(_btnGround);
-	add(_btnRank);
-	add(_btnCreateTemplate);
-	add(_btnApplyTemplate);
-	add(_selAmmo);
-	add(_inv);
-
-	centerAllSurfaces();
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
-	_txtName->setColor(Palette::blockOffset(4));
+	add(_soldier);
+	add(_txtName, "textName", "inventory", _bg);
+	add(_txtTus, "textTUs", "inventory", _bg);
+	add(_txtWeight, "textWeight", "inventory", _bg);
+	add(_txtFAcc, "textFiring", "inventory", _bg);
+	add(_txtReact, "textReaction", "inventory", _bg);
+	add(_txtPSkill, "textPsiSkill", "inventory", _bg);
+	add(_txtPStr, "textPsiStrength", "inventory", _bg);
+	add(_txtItem, "textItem", "inventory", _bg);
+	add(_txtAmmo, "textAmmo", "inventory", _bg);
+	add(_btnOk, "buttonOK", "inventory", _bg);
+	add(_btnPrev, "buttonPrev", "inventory", _bg);
+	add(_btnNext, "buttonNext", "inventory", _bg);
+	add(_btnUnload, "buttonUnload", "inventory", _bg);
+	add(_btnGround, "buttonGround", "inventory", _bg);
+	add(_btnRank, "rank", "inventory", _bg);
+	add(_btnCreateTemplate, "buttonCreate", "inventory", _bg);
+	add(_btnApplyTemplate, "buttonApply", "inventory", _bg);
+	add(_selAmmo);
+	add(_inv);
+
+	// move the TU display down to make room for the weight display
+	if (Options::showMoreStatsInInventoryView)
+	{
+		_txtTus->setY(_txtTus->getY() + 8);
+	}
+
+	centerAllSurfaces();
+
+
+	
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
-	_txtTus->setColor(Palette::blockOffset(4));
-	_txtTus->setSecondaryColor(Palette::blockOffset(1));
 	_txtTus->setHighContrast(true);
 
-	_txtWeight->setColor(Palette::blockOffset(4));
-	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	_txtWeight->setHighContrast(true);
 
-	_txtFAcc->setColor(Palette::blockOffset(4));
-	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
 	_txtFAcc->setHighContrast(true);
 
-	_txtReact->setColor(Palette::blockOffset(4));
-	_txtReact->setSecondaryColor(Palette::blockOffset(1));
 	_txtReact->setHighContrast(true);
 
-	_txtPSkill->setColor(Palette::blockOffset(4));
-	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast(true);
 
-	_txtPStr->setColor(Palette::blockOffset(4));
-	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
 	_txtPStr->setHighContrast(true);
 
-	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
 
-	_txtAmmo->setColor(Palette::blockOffset(4));
-	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
 	_txtAmmo->setAlign(ALIGN_CENTER);
 	_txtAmmo->setHighContrast(true);
 
@@ -239,9 +234,6 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
 	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-
-	
-	_currentTooltip = "";
 }
 
 static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*> &inventoryTemplate)
@@ -420,7 +412,7 @@ void InventoryState::saveEquipmentLayout()
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		// we need X-Com soldiers only
-		if (0 == (*i)->getGeoscapeSoldier()) continue;
+		if ((*i)->getGeoscapeSoldier() == 0) continue;
 
 		std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 
@@ -601,7 +593,7 @@ void InventoryState::btnCreateTemplateClick(Action *action)
 	}
 
 	// give audio feedback
-	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+	_game->getResourcePack()->getSoundByDepth(_battleGame->getDepth(), ResourcePack::ITEM_DROP)->play();
 	_refreshMouse();
 }
 
@@ -735,7 +727,7 @@ void InventoryState::btnApplyTemplateClick(Action *action)
 	_refreshMouse();
 
 	// give audio feedback
-	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+	_game->getResourcePack()->getSoundByDepth(_battleGame->getDepth(), ResourcePack::ITEM_DROP)->play();
 }
 
 void InventoryState::_refreshMouse()
@@ -769,7 +761,7 @@ void InventoryState::onClearInventory(Action *action)
 	_refreshMouse();
 
 	// give audio feedback
-	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+	_game->getResourcePack()->getSoundByDepth(_battleGame->getDepth(), ResourcePack::ITEM_DROP)->play();
 }
 
 /**
@@ -819,7 +811,7 @@ void InventoryState::invMouseOver(Action *)
 			r.y = 0;
 			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
 			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+			_selAmmo->drawRect(&r, _game->getRuleset()->getInterface("inventory")->getElement("grid")->color);
 			r.x++;
 			r.y++;
 			r.w -= 2;
@@ -845,7 +837,7 @@ void InventoryState::invMouseOver(Action *)
 	}
 	else
 	{
-		if (_currentTooltip == "")
+		if (_currentTooltip.empty())
 		{
 			_txtItem->setText(L"");
 		}
@@ -936,6 +928,8 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 			_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
 			_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
 		}
+		_btnCreateTemplate->initSurfaces();
+		_btnApplyTemplate->initSurfaces();
 	}
 	else
 	{

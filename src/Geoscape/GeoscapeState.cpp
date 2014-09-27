@@ -116,7 +116,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
 {
 	int screenWidth = Options::baseXGeoscape;
 	int screenHeight = Options::baseYGeoscape;
@@ -425,12 +425,12 @@ GeoscapeState::~GeoscapeState()
 	delete _dogfightStartTimer;
 	
 	std::list<DogfightState*>::iterator it = _dogfights.begin();
-	for(; it != _dogfights.end();)
+	for (; it != _dogfights.end();)
 	{
 		delete *it;
 		it = _dogfights.erase(it);
 	}
-	for(it = _dogfightsToBeStarted.begin(); it != _dogfightsToBeStarted.end();)
+	for (it = _dogfightsToBeStarted.begin(); it != _dogfightsToBeStarted.end();)
 	{
 		delete *it;
 		it = _dogfightsToBeStarted.erase(it);
@@ -443,7 +443,7 @@ GeoscapeState::~GeoscapeState()
 void GeoscapeState::blit()
 {
 	State::blit();
-	for(std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
+	for (std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 	{
 		(*it)->blit();
 	}
@@ -489,7 +489,7 @@ void GeoscapeState::handle(Action *action)
 	}
 	if (!_dogfights.empty())
 	{
-		for(std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
+		for (std::list<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 		{
 			(*it)->handle(action);
 		}
@@ -769,7 +769,7 @@ void GeoscapeState::time5Seconds()
 		{
 			if ((*j)->isDestroyed())
 			{
-				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if ((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
@@ -777,7 +777,7 @@ void GeoscapeState::time5Seconds()
 						break;
 					}
 				}
-				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
 				{
 					if ((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
@@ -939,7 +939,7 @@ void GeoscapeState::time5Seconds()
 			if (!(*i)->getFollowers()->empty())
 			{
 				// Remove all dogfights with this UFO.
-				for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
+				for (std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
 				{
 					if ((*d)->getUfo() == (*i))
 					{
@@ -1042,7 +1042,7 @@ void GeoscapeState::time10Minutes()
 				if ((*j)->getDestination() == 0)
 				{
 					double range = ((*j)->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180));
-					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
 						if ((*j)->getDistance(*b) <= range)
 						{
@@ -1203,7 +1203,7 @@ void GeoscapeState::time30Minutes()
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
-				if (item == "")
+				if (item.empty())
 				{
 					(*j)->refuel();
 				}
@@ -1370,7 +1370,7 @@ void GeoscapeState::time1Hour()
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
 				std::string s = (*j)->rearm(_game->getRuleset());
-				if (s != "")
+				if (!s.empty())
 				{
 					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
 									   .arg(tr(s))
@@ -1483,18 +1483,18 @@ void GeoscapeState::time1Day()
 		}
 		// Handle science project
 		std::vector<ResearchProject*> finished;
-		for(std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin (); iter != (*i)->getResearch().end (); ++iter)
+		for (std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin(); iter != (*i)->getResearch().end(); ++iter)
 		{
 			if ((*iter)->step())
 			{
 				finished.push_back(*iter);
 			}
 		}
-		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
+		for (std::vector<ResearchProject*>::const_iterator iter = finished.begin(); iter != finished.end(); ++iter)
 		{
 			(*i)->removeResearch(*iter);
 			RuleResearch * bonus = 0;
-			const RuleResearch * research = (*iter)->getRules ();
+			const RuleResearch * research = (*iter)->getRules();
 			// If "researched" the live alien, his body sent to the stores.
 			if (Options::spendResearchedItems && research->needItem() && _game->getRuleset()->getUnit(research->getName()))
 			{
@@ -1506,13 +1506,13 @@ void GeoscapeState::time1Day()
 					)->getCorpseGeoscape()
 				); // ;)
 			}
-			if ((*iter)->getRules()->getGetOneFree().size() != 0)
+			if (!(*iter)->getRules()->getGetOneFree().empty())
 			{
 				std::vector<std::string> possibilities;
-				for(std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
+				for (std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
 				{
 					bool newFound = true;
-					for(std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
+					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
 					{
 						if (*f == (*discovered)->getName())
 						{
@@ -1524,28 +1524,28 @@ void GeoscapeState::time1Day()
 						possibilities.push_back(*f);
 					}
 				}
-				if (possibilities.size() != 0)
+				if (!possibilities.empty())
 				{
 					size_t pick = RNG::generate(0, possibilities.size()-1);
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
-					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
-					if (bonus->getLookup() != "")
+					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset());
+					if (!bonus->getLookup().empty())
 					{
-						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
+						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset());
 					}
 				}
 			}
 			const RuleResearch * newResearch = research;
-			std::string name = research->getLookup() == "" ? research->getName() : research->getLookup();
+			std::string name = research->getLookup().empty() ? research->getName() : research->getLookup();
 			if (_game->getSavedGame()->isResearched(name))
 			{
 				newResearch = 0;
 			}
-			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
-			if (research->getLookup() != "")
+			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset());
+			if (!research->getLookup().empty())
 			{
-				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
+				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset());
 			}
 			popup(new ResearchCompleteState(newResearch, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;
@@ -1611,7 +1611,7 @@ void GeoscapeState::time1Day()
 		}
 	}
 	// handle regional and country points for alien bases
-	for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+	for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 	{
 		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 		{
@@ -1676,7 +1676,7 @@ void GeoscapeState::time1Month()
 
 	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
-	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+	for (std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
 		if (newRetaliation)
 		{
@@ -1716,7 +1716,7 @@ void GeoscapeState::time1Month()
 		if ((*b)->getAvailablePsiLabs() > 0 && !Options::anytimePsiTraining)
 		{
 			psi = true;
-			for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
+			for (std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
 			{
 				if ((*s)->isInPsiTraining())
 				{
@@ -1735,7 +1735,7 @@ void GeoscapeState::time1Month()
 	// Handle Xcom Operatives discovering bases
 	if (!_game->getSavedGame()->getAlienBases()->empty() && RNG::percent(20))
 	{
-		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
 			if (!(*b)->isDiscovered())
 			{
@@ -2022,7 +2022,7 @@ void GeoscapeState::handleDogfights()
 	// Handle dogfights logic.
 	_minimizedDogfights = 0;
 	std::list<DogfightState*>::iterator d = _dogfights.begin();
-	while(d != _dogfights.end())
+	while (d != _dogfights.end())
 	{
 		if ((*d)->isMinimized())
 		{
@@ -2060,7 +2060,7 @@ void GeoscapeState::handleDogfights()
 int GeoscapeState::minimizedDogfightsCount()
 {
 	int minimizedDogfights = 0;
-	for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	for (std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
 		if ((*d)->isMinimized())
 		{
@@ -2089,7 +2089,7 @@ void GeoscapeState::startDogfight()
 		_dogfightStartTimer->stop();
 		_zoomInEffectTimer->stop();
 		timerReset();
-		while(!_dogfightsToBeStarted.empty())
+		while (!_dogfightsToBeStarted.empty())
 		{
 			_dogfights.push_back(_dogfightsToBeStarted.back());
 			_dogfightsToBeStarted.pop_back();
@@ -2097,7 +2097,7 @@ void GeoscapeState::startDogfight()
 			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
 		}
 		// Set correct number of interceptions for every dogfight.
-		for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+		for (std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 		{
 			(*d)->setInterceptionsCount(_dogfights.size());
 		}
@@ -2111,7 +2111,7 @@ void GeoscapeState::startDogfight()
 int GeoscapeState::getFirstFreeDogfightSlot()
 {
 	int slotNo = 1;
-	for(std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	for (std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
 		if ((*d)->getInterceptionNumber() == slotNo)
 		{

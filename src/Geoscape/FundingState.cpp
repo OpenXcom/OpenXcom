@@ -97,7 +97,7 @@ FundingState::FundingState()
 	{
 		std::wostringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
-		if((*i)->getFunding().size() > 1)
+		if ((*i)->getFunding().size() > 1)
 		{
 			ss2 << L'\x01';
 			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);

@@ -260,7 +260,11 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	if ((unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24 + 4)
 	{
-		++pos.z;
+		Tile *tileAbove = _save->getTile(pos + Position(0,0,1));
+		if (tileAbove && tileAbove->hasNoFloor(0))
+		{
+			++pos.z;
+		}
 	}
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
@@ -323,9 +327,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 									if (tst>127) --tsize; //last tile is blocked thus must be cropped
 									for (size_t i = 0; i < tsize; i++)
 									{
-										Position posi = _trajectory.at(i); 
+										Position posi = _trajectory.at(i);
 										//mark every tile of line as visible (as in original)
-										//this is needed because of bresenham narrow stroke. 
+										//this is needed because of bresenham narrow stroke.
 										_save->getTile(posi)->setVisible(+1);
 										_save->getTile(posi)->setDiscovered(true, 2);
 										// walls to the east or south of a visible tile, we see that too
@@ -848,7 +852,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			originVoxel.z -= 2;
 			Position targetVoxel;
 			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
-			bool gotHit = (aggro != 0 && aggro->getWasHit());
+			bool gotHit = (aggro != 0 && aggro->getWasHitBy(unit->getId()));
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually target the unit
@@ -928,7 +932,8 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		weapon->getAmmoItem() &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
-		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())))
+		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&
+		(_save->getDepth() != 0 || weapon->getRules()->isWaterOnly() == false))
 	{
 		return true;
 	}
@@ -986,7 +991,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
-			_save->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleGame(), action));
+			_save->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleGame(), action, false));
 			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleGame(), action));
 			return true;
 		}
@@ -1007,7 +1012,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
-	if(!tile)
+	if (!tile)
 	{
 		return 0;
 	}
@@ -1652,7 +1657,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	}
 	else
 	{
-        if ( block <= 127 ) 
+        if ( block <= 127 )
         {
             direction += 4;
             if (direction > 7)
@@ -1814,12 +1819,13 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 	{
 		dir = unit->getDirection();
 	}
+	Tile *tile;
 	for (int x = 0; x < size && door == -1; x++)
 	{
 		for (int y = 0; y < size && door == -1; y++)
 		{
 			std::vector<std::pair<Position, int> > checkPositions;
-			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,z));
+			tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
 			switch (dir)
@@ -1936,6 +1942,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
+				tile->animate();	// ensures frame advances for ufo doors to update TU cost
 				calculateFOV(unit->getPosition());
 				// look from the other side (may be need check reaction fire?)
 				std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
@@ -2211,7 +2218,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	int z = origin.z;
 	int i = 8;
 	Position lastPosition = Position(x,y,z);
-	while (z > 0) 
+	while (z > 0)
 	{
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
 		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
@@ -2699,6 +2706,13 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 	{
 		curvature = std::max(0.48, 1.73 / sqrt(sqrt((double)(action.actor->getStats()->strength) / (double)(action.weapon->getRules()->getWeight()))) + (action.actor->isKneeled()? 0.1 : 0.0));
 	}
+	else
+	{
+		// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
+		// curvature should be approximately 1.06358350461 at this point.
+		curvature = 1.73 / sqrt(sqrt(70.0 / 10.0)) + (action.actor->isKneeled()? 0.1 : 0.0);
+	}
+
 	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
 	if ((action.type == BA_THROW
@@ -2813,7 +2827,7 @@ int TileEngine::getDirectionTo(const Position &origin, const Position &target) c
  */
 Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 {
-	
+
 	const int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	const int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	if (!tile)
@@ -2832,7 +2846,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 		originVoxel.z += -tile->getTerrainLevel();
 
 		originVoxel.z += action.actor->getHeight() + action.actor->getFloatHeight();
-		
+
 		if (action.type == BA_THROW)
 		{
 			originVoxel.z -= 3;
@@ -2862,7 +2876,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 		{
 			offset = 16;
 		}
-		else if(action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !action.weapon->getRules()->isTwoHanded())
+		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !action.weapon->getRules()->isTwoHanded())
 		{
 			offset = 8;
 		}

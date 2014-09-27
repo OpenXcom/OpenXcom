@@ -23,6 +23,8 @@
 #include <vector>
 #include <string>
 #include <time.h>
+#include <stdint.h>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -47,6 +49,7 @@ class AlienStrategy;
 class AlienMission;
 class Target;
 class Soldier;
+class Craft;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -84,7 +87,8 @@ private:
 	GameDifficulty _difficulty;
 	bool _ironman;
 	GameTime *_time;
-	std::vector<int> _funds, _maintenance, _researchScores, _incomes, _expenditures;
+	std::vector<int> _researchScores;
+	std::vector<int64_t> _funds, _maintenance, _incomes, _expenditures;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -137,11 +141,11 @@ public:
 	/// Sets if the game is in ironman mode.
 	void setIronman(bool ironman);
 	/// Gets the current funds.
-	int getFunds() const;
+	int64_t getFunds() const;
 	/// Gets the list of funds from previous months.
-	std::vector<int> &getFundsList();
+	std::vector<int64_t> &getFundsList();
 	/// Sets new funds.
-	void setFunds(int funds);
+	void setFunds(int64_t funds);
 	/// Gets the current globe longitude.
 	double getGlobeLongitude() const;
 	/// Sets the new globe longitude.
@@ -215,15 +219,15 @@ public:
 	/// Gets debug mode.
 	bool getDebugMode() const;
 	/// return a list of maintenance costs
-	std::vector<int> &getMaintenances();
+	std::vector<int64_t> &getMaintenances();
 	/// sets the research score for the month
 	void addResearchScore(int score);
 	/// gets the list of research scores
 	std::vector<int> &getResearchScores();
 	/// gets the list of incomes.
-	std::vector<int> &getIncomes();
+	std::vector<int64_t> &getIncomes();
 	/// gets the list of expenditures.
-	std::vector<int> &getExpenditures();
+	std::vector<int64_t> &getExpenditures();
 	/// gets whether or not the player has been warned
 	bool getWarned() const;
 	/// sets whether or not the player has been warned
@@ -276,6 +280,8 @@ public:
 	void setLastSelectedArmor(const std::string &value);
 	//Gets the the last selected armour
 	std::string getLastSelectedArmor();
+	/// Returns the craft corresponding to the specified unique id.
+	Craft *findCraftByUniqueId(const CraftId& craftId) const;
 };
 
 }

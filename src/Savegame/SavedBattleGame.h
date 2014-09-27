@@ -76,7 +76,7 @@ private:
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
-	int _depth;
+	int _depth, _ambience;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -253,7 +253,13 @@ public:
 	const int getDepth() const;
 	/// set the depth of the battlescape game.
 	void setDepth(int depth);
+	/// uses the depth variable to set a palette.
 	void setPaletteByDepth(State *state);
+	/// sets the ambient sound effect;
+	void setAmbientSound(int sound);
+	/// gets the ambient sound effect;
+	const int getAmbientSound() const;
+
 };
 
 }

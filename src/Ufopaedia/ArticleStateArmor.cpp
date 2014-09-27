@@ -131,7 +131,7 @@ namespace OpenXcom
 	ArticleStateArmor::~ArticleStateArmor()
 	{}
 
-	void ArticleStateArmor::addStat(std::string label, int stat, bool plus)
+	void ArticleStateArmor::addStat(const std::string &label, int stat, bool plus)
 	{
 		if (stat != 0)
 		{
@@ -145,7 +145,7 @@ namespace OpenXcom
 		}
 	}
 
-	void ArticleStateArmor::addStat(std::string label, std::wstring stat)
+	void ArticleStateArmor::addStat(const std::string &label, const std::wstring &stat)
 	{
 		_lstInfo->addRow(2, tr(label).c_str(), stat.c_str());
 		_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);

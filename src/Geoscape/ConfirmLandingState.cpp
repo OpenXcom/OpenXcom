@@ -141,7 +141,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 	bgen.setCraft(_craft);
 	if (u != 0)
 	{
-		if(u->getStatus() == Ufo::CRASHED)
+		if (u->getStatus() == Ufo::CRASHED)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");

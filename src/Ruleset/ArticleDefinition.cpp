@@ -36,7 +36,7 @@ namespace YAML
 
 		static bool decode(const Node& node, OpenXcom::ArticleDefinitionRect& rhs)
 		{
-			if(!node.IsMap())
+			if (!node.IsMap())
 				return false;
 
 			rhs.x = node["x"].as<int>(rhs.x);

@@ -49,20 +49,20 @@ Palette::~Palette()
  */
 void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
-	if(_colors != 0)
+	if (_colors != 0)
 		throw Exception("loadDat can be run only once");
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
 	memset(_colors, 0, sizeof(SDL_Color) * _count);
 
-	// Load file and put colors in pallete
+	// Load file and put colors in palette
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!palFile)
 	{
 		throw Exception(filename + " not found");
 	}
 
-	// Move pointer to proper pallete
+	// Move pointer to proper palette
 	palFile.seekg(offset, std::ios::beg);
 
 	Uint8 value[3];
@@ -137,7 +137,7 @@ void Palette::savePal(const std::string &file) const
 
 void Palette::setColors(SDL_Color* pal, int ncolors)
 {
-	if(_colors != 0)
+	if (_colors != 0)
 		throw Exception("setColors can be run only once");
 	_count = ncolors;
 	_colors = new SDL_Color[_count];

@@ -41,7 +41,9 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
@@ -79,6 +81,10 @@ namespace OpenXcom
  */
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
 {
+	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
+	_messageColor = _game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color;
+
 	_previewSetting = Options::battleNewPreviewPath;
 	_smoothCamera = Options::battleSmoothCamera;
 	if (Options::traceAI)
@@ -93,6 +99,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, 0, 0);
 	_message->setX(_game->getScreen()->getDX());
 	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
+	_message->setTextColor(_messageColor);
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
@@ -147,6 +154,14 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
+	if (_save->getDepth() == 0)
+	{
+		_projectileSet = _res->getSurfaceSet("Projectiles");
+	}
+	else
+	{
+		_projectileSet = _res->getSurfaceSet("UnderwaterProjectiles");
+	}
 }
 
 /**
@@ -350,10 +365,6 @@ void Map::drawTerrain(Surface *surface)
 			}
 		}
 	}
-	else
-	{
-		_smoothingEngaged = false;
-	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
@@ -373,7 +384,7 @@ void Map::drawTerrain(Surface *surface)
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
+		_numWaypid->setColor(pathfinderTurnedOn ? _messageColor + 1 : Palette::blockOffset(1));
 	}
 
 	surface->lock();
@@ -769,7 +780,7 @@ void Map::drawTerrain(Surface *surface)
 
 								for (int i = begin; i != end; i += direction)
 								{
-									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
+									tmpSurface = _projectileSet->getFrame(_projectile->getParticle(i));
 									if (tmpSurface)
 									{
 										Position voxelPos = _projectile->getPosition(1-i);
@@ -822,6 +833,22 @@ void Map::drawTerrain(Surface *surface)
 								frameNumber = 4 + (_animFrame / 2);
 								tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
+							}
+							if (unit->getBreathFrame() > 0)
+							{
+								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
+								// we enlarge the unit sprite when aiming to accomodate the weapon. so adjust as necessary.
+								if (unit->getStatus() == STATUS_AIMING)
+								{
+									offset.x = 0;
+								}
+
+								// lower the bubbles for shorter or kneeling units.
+								offset.y += (22 - unit->getHeight());
+								if (tmpSurface)
+								{
+									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y - 30, tileShade);
+								}
 							}
 						}
 					}
@@ -1252,6 +1279,10 @@ void Map::animate(bool redraw)
 	// animate certain units (large flying units have a propultion animation)
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
+		if (_save->getDepth() > 0 && !(*i)->getFloorAbove())
+		{
+			(*i)->breathe();
+		}
 		if ((*i)->getArmor()->getConstantAnimation())
 		{
 			(*i)->setCache(0);
@@ -1366,6 +1397,23 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 				offset->x = -16;
 			}
 		}
+		if (_save->getDepth() > 0)
+		{
+			unit->setFloorAbove(false);
+
+			// make sure this unit isn't obscured by the floor above him, otherwise it looks weird.
+			if (_camera->getViewLevel() > unit->getPosition().z)
+			{
+				for (int z = _camera->getViewLevel(); z != unit->getPosition().z; --z)
+				{
+					if (!_save->getTile(Position(unit->getPosition().x, unit->getPosition().y, z))->hasNoFloor(0))
+					{
+						unit->setFloorAbove(true);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 }
@@ -1437,7 +1485,7 @@ void Map::cacheUnit(BattleUnit *unit)
 	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0, _save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 	bool invalid, dummy;
-	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
+	int numOfParts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 
 	unit->getCache(&invalid);
 	if (invalid)
@@ -1467,7 +1515,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				unitSprite->setBattleItem(lhandItem);
 			}
 
-			if(!lhandItem && !rhandItem)
+			if (!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}
@@ -1575,18 +1623,18 @@ void Map::refreshSelectorPosition()
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
-/*
+/**
  * Special handling for setting the height of the map viewport.
  * @param height the new base screen height.
  */
 void Map::setHeight(int height)
 {
 	Surface::setHeight(height);
-	_visibleMapHeight = height - ICON_HEIGHT;
+	_visibleMapHeight = height - _iconHeight;
 	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight : 200);
 	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
 }
-/*
+/**
  * Special handling for setting the width of the map viewport.
  * @param width the new base screen width.
  */
@@ -1597,12 +1645,59 @@ void Map::setWidth(int width)
 	_message->setX(_message->getX() + dX / 2);
 }
 
-/*
+/**
  * Get the hidden movement screen's vertical position.
  * @return the vertical position of the hidden movement window.
  */
-int Map::getMessageY()
+const int Map::getMessageY()
 {
 	return _message->getY();
+}
+
+/**
+ * Get the icon height.
+ */
+const int Map::getIconHeight()
+{
+	return _iconHeight;
+}
+
+/**
+ * Get the icon width.
+ */
+const int Map::getIconWidth()
+{
+	return _iconWidth;
+}
+
+/**
+ * Returns the angle(left/right balance) of a sound effect,
+ * based off a map position.
+ * @param pos the map position to calculate the sound angle from.
+ * @return the angle of the sound (280 to 440).
+ */
+const int Map::getSoundAngle(Position pos)
+{
+	int midPoint = getWidth() / 2;
+	Position relativePosition;
+
+	_camera->convertMapToScreen(pos, &relativePosition);
+	// cap the position to the screen edges relative to the center,
+	// negative values indicating a left-shift, and positive values shifting to the right.
+	relativePosition.x = std::max(-midPoint, std::min(midPoint, (relativePosition.x + _camera->getMapOffset().x) - midPoint));
+
+	// convert the relative distance to a relative increment of an 80 degree angle
+	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right
+	// which would effectively mute the sound out of one speaker.
+	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
+	return 360 + (relativePosition.x / (double)(midPoint / 80.0));
+}
+
+/**
+ * Reset the camera smoothing bool.
+ */
+void Map::resetCameraSmoothing()
+{
+	_smoothingEngaged = false;
 }
 }

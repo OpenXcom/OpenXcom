@@ -45,7 +45,7 @@ private:
 	int _frequency, _timesUsed, _maxCount;
 	std::map<std::string, std::vector<Position> > _items;
 public:
-	MapBlock(std::string name, int size_x, int size_y, MapBlockType type);
+	MapBlock(const std::string &name, int size_x, int size_y, MapBlockType type);
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);
