@@ -391,6 +391,18 @@ void BattlescapeGenerator::deployXCOM()
 				if (unit && !_save->getSelectedUnit())
 					_save->setSelectedUnit(unit);
 			}
+			if (_game->getSavedGame()->getMonthsPassed() == -1)
+			{
+				for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+				{
+					for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+					{
+						BattleUnit *unit = addXCOMVehicle(*j);
+						if (unit && !_save->getSelectedUnit())
+							_save->setSelectedUnit(unit);
+					}
+				}
+			}
 		}
 	}
 
@@ -430,24 +442,28 @@ void BattlescapeGenerator::deployXCOM()
 	}
 	else
 	{
-		// add items that are in the base
-		for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end();)
+		// only use the items in the craft in new battle mode.
+		if (_game->getSavedGame()->getMonthsPassed() != -1)
 		{
-			// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
-			RuleItem *rule = _game->getRuleset()->getItem(i->first);
-			if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && !rule->isFixed() && _game->getSavedGame()->isResearched(rule->getRequirements()))
+			// add items that are in the base
+			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end();)
 			{
-				for (int count = 0; count < i->second; count++)
+				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
+				RuleItem *rule = _game->getRuleset()->getItem(i->first);
+				if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && !rule->isFixed() && _game->getSavedGame()->isResearched(rule->getRequirements()))
 				{
-					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()), ground);
+					for (int count = 0; count < i->second; count++)
+					{
+						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()), ground);
+					}
+					std::map<std::string, int>::iterator tmp = i;
+					++i;
+					_base->getItems()->removeItem(tmp->first, tmp->second);
 				}
-				std::map<std::string, int>::iterator tmp = i;
-				++i;
-				_base->getItems()->removeItem(tmp->first, tmp->second);
-			}
-			else
-			{
-				++i;
+				else
+				{
+					++i;
+				}
 			}
 		}
 		// add items from crafts in base
@@ -591,7 +607,10 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 			}
 		}
 		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
-		addItem(item, unit);
+		if (!addItem(item, unit))
+		{
+			delete item;
+		}
 		if (!v->getRules()->getCompatibleAmmo()->empty())
 		{
 			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
@@ -1023,7 +1042,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			}
 		}
 	}
-
+	bool keep = true;
 	switch (item->getRules()->getBattleType())
 	{
 	case BT_FIREARM:
@@ -1050,15 +1069,10 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 		}
 		break;
 	case BT_AMMO:
-		// no weapon, or our weapon takes no ammo.
-		// we won't be needing this. move on.
-		if (!rightWeapon || rightWeapon->getRules()->getCompatibleAmmo()->empty())
-		{
-			break;
-		}
 		// xcom weapons will already be loaded, aliens and tanks, however, get their ammo added afterwards.
 		// so let's try to load them here.
-		if ((rightWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+		if (rightWeapon && (rightWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!rightWeapon->getRules()->getCompatibleAmmo()->empty() &&
 			!rightWeapon->getAmmoItem() &&
 			rightWeapon->setAmmoItem(item) == 0)
 		{
@@ -1067,11 +1081,40 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			break;
 		}
 		if (leftWeapon && (leftWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!leftWeapon->getRules()->getCompatibleAmmo()->empty() &&
 			!leftWeapon->getAmmoItem() &&
 			leftWeapon->setAmmoItem(item))
 		{
 			item->setSlot(leftHand);
 			placed = true;
+			break;
+		}
+		// don't take ammo for weapons we don't have.
+		keep = (unit->getFaction() != FACTION_PLAYER);
+		if (rightWeapon)
+		{
+			for (std::vector<std::string>::iterator i = rightWeapon->getRules()->getCompatibleAmmo()->begin(); i != rightWeapon->getRules()->getCompatibleAmmo()->end(); ++i)
+			{
+				if (*i == item->getRules()->getType())
+				{
+					keep = true;
+					break;
+				}
+			}
+		}
+		if (leftWeapon)
+		{
+			for (std::vector<std::string>::iterator i = leftWeapon->getRules()->getCompatibleAmmo()->begin(); i != leftWeapon->getRules()->getCompatibleAmmo()->end(); ++i)
+			{
+				if (*i == item->getRules()->getType())
+				{
+					keep = true;
+					break;
+				}
+			}
+		}
+		if (!keep)
+		{
 			break;
 		}
 	default:
