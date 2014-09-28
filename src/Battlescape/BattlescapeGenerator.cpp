@@ -591,6 +591,20 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor()), 0));
 	if (unit)
 	{
+		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
+		if (!addItem(item, unit))
+		{
+			delete item;
+		}
+		if (!v->getRules()->getCompatibleAmmo()->empty())
+		{
+			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
+			BattleItem *ammoItem = new BattleItem(_game->getRuleset()->getItem(ammo), _save->getCurrentItemId());
+			addItem(ammoItem, unit);
+			ammoItem->setAmmoQuantity(v->getAmmo());
+		}
+		unit->setTurretType(v->getRules()->getTurretType());
+
 		if (!rule->getBuiltInWeapons().empty())
 		{
 			for (std::vector<std::string>::const_iterator i = rule->getBuiltInWeapons().begin(); i != rule->getBuiltInWeapons().end(); ++i)
@@ -606,19 +620,6 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 				}
 			}
 		}
-		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
-		if (!addItem(item, unit))
-		{
-			delete item;
-		}
-		if (!v->getRules()->getCompatibleAmmo()->empty())
-		{
-			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
-			BattleItem *ammoItem = new BattleItem(_game->getRuleset()->getItem(ammo), _save->getCurrentItemId());
-			addItem(ammoItem, unit);
-			ammoItem->setAmmoQuantity(v->getAmmo());
-		}
-		unit->setTurretType(v->getRules()->getTurretType());
 	}
 	return unit;
 }
