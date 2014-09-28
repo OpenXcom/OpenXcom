@@ -1083,7 +1083,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 		if (leftWeapon && (leftWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
 			!leftWeapon->getRules()->getCompatibleAmmo()->empty() &&
 			!leftWeapon->getAmmoItem() &&
-			leftWeapon->setAmmoItem(item))
+			leftWeapon->setAmmoItem(item) == 0)
 		{
 			item->setSlot(leftHand);
 			placed = true;
