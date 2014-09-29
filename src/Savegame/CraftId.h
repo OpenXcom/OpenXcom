@@ -16,39 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_UNITTURNBSTATE_H
-#define OPENXCOM_UNITTURNBSTATE_H
+#ifndef OPENXCOM_CRAFTID_H
+#define OPENXCOM_CRAFTID_H
 
-#include "BattleState.h"
+#include <utility>
 #include <string>
 
 namespace OpenXcom
 {
 
-class BattleUnit;
-
-/**
- * State for turning units.
- */
-class UnitTurnBState : public BattleState
-{
-private:
-	BattleUnit *_unit;
-	bool _turret, _chargeTUs;
-public:
-	/// Creates a new UnitTurnBState class
-	UnitTurnBState(BattlescapeGame *parent, BattleAction action, bool chargeTUs = true);
-	/// Cleans up the UnitTurnBState.
-	~UnitTurnBState();
-	/// Initializes the state.
-	void init();
-	/// Handles a cancels request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-	/// Gets the result of the state.
-	std::string getResult() const;
-};
+typedef std::pair<std::string, int> CraftId;
 
 }
 

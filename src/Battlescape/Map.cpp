@@ -365,10 +365,6 @@ void Map::drawTerrain(Surface *surface)
 			}
 		}
 	}
-	else
-	{
-		_smoothingEngaged = false;
-	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
@@ -846,6 +842,9 @@ void Map::drawTerrain(Surface *surface)
 								{
 									offset.x = 0;
 								}
+
+								// lower the bubbles for shorter or kneeling units.
+								offset.y += (22 - unit->getHeight());
 								if (tmpSurface)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y - 30, tileShade);
@@ -1486,7 +1485,7 @@ void Map::cacheUnit(BattleUnit *unit)
 	UnitSprite *unitSprite = new UnitSprite(unit->getStatus() == STATUS_AIMING ? _spriteWidth * 2: _spriteWidth, _spriteHeight, 0, 0, _save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 	bool invalid, dummy;
-	int numOfParts = unit->getArmor()->getSize() == 1?1:unit->getArmor()->getSize()*2;
+	int numOfParts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 
 	unit->getCache(&invalid);
 	if (invalid)
@@ -1516,7 +1515,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				unitSprite->setBattleItem(lhandItem);
 			}
 
-			if(!lhandItem && !rhandItem)
+			if (!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}
@@ -1660,7 +1659,7 @@ const int Map::getMessageY()
  */
 const int Map::getIconHeight()
 {
-	return _iconWidth;
+	return _iconHeight;
 }
 
 /**
@@ -1668,7 +1667,37 @@ const int Map::getIconHeight()
  */
 const int Map::getIconWidth()
 {
-	return _iconHeight;
+	return _iconWidth;
 }
 
+/**
+ * Returns the angle(left/right balance) of a sound effect,
+ * based off a map position.
+ * @param pos the map position to calculate the sound angle from.
+ * @return the angle of the sound (280 to 440).
+ */
+const int Map::getSoundAngle(Position pos)
+{
+	int midPoint = getWidth() / 2;
+	Position relativePosition;
+
+	_camera->convertMapToScreen(pos, &relativePosition);
+	// cap the position to the screen edges relative to the center,
+	// negative values indicating a left-shift, and positive values shifting to the right.
+	relativePosition.x = std::max(-midPoint, std::min(midPoint, (relativePosition.x + _camera->getMapOffset().x) - midPoint));
+
+	// convert the relative distance to a relative increment of an 80 degree angle
+	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right
+	// which would effectively mute the sound out of one speaker.
+	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
+	return 360 + (relativePosition.x / (double)(midPoint / 80.0));
+}
+
+/**
+ * Reset the camera smoothing bool.
+ */
+void Map::resetCameraSmoothing()
+{
+	_smoothingEngaged = false;
+}
 }

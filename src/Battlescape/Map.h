@@ -145,6 +145,10 @@ public:
 	const int getIconHeight();
 	/// Get the icon width.
 	const int getIconWidth();
+	/// Convert a map position to a sound angle.
+	const int getSoundAngle(Position pos);
+	/// Reset the camera smoothing bool.
+	void resetCameraSmoothing();
 };
 
 }

@@ -235,10 +235,10 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		{
 			BattleUnit *targetUnit = NULL;
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getSavedBattle()->getUnits());
-			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
+			for (std::vector<BattleUnit*>::const_iterator i = units->begin(); i != units->end() && !targetUnit; ++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
-				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus () == STATUS_UNCONSCIOUS && (*i)->isWoundable())
+				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->isWoundable())
 				{
 					targetUnit = *i;
 				}

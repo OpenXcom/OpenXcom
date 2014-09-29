@@ -138,9 +138,9 @@ public:
 	/// Gets the base's available hangars.
 	int getAvailableHangars() const;
 	/// Get the number of available space lab (not used by a ResearchProject)
-	int getFreeLaboratories () const;
+	int getFreeLaboratories() const;
 	/// Get the number of available space lab (not used by a Production)
-	int getFreeWorkshops () const;
+	int getFreeWorkshops() const;
 
 	int getAllocatedScientists() const;
 
@@ -172,7 +172,7 @@ public:
 	/// Remove a Base Production's
 	void removeProduction (Production * p);
 	/// Get the list of Base Production's
-	const std::vector<Production *> & getProductions () const;
+	const std::vector<Production *> & getProductions() const;
 	/// Checks if this base is hyper-wave equipped.
 	bool getHyperDetection() const;
 	/// Gets the base's used psi lab space.

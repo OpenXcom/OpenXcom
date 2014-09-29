@@ -219,7 +219,7 @@ void BaseDefenseState::btnOkClick(Action *)
 {
 	_timer->stop();
 	_game->popState();
-	if(_ufo->getStatus() != Ufo::DESTROYED)
+	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
 		// Whatever happens in the base defense, the UFO has finished its duty
 		_ufo->setStatus(Ufo::DESTROYED);

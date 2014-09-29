@@ -27,7 +27,7 @@ namespace OpenXcom
 /**
  * Sets up a new empty sound set.
  */
-SoundSet::SoundSet() : _sounds()
+SoundSet::SoundSet()
 {
 
 }

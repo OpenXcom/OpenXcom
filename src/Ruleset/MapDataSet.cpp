@@ -34,7 +34,7 @@ MapData *MapDataSet::_scorchedTile = 0;
 /**
  * MapDataSet construction.
  */
-MapDataSet::MapDataSet(const std::string &name) : _name(name), _objects(), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name) : _name(name), _surfaceSet(0), _loaded(false)
 {
 }
 

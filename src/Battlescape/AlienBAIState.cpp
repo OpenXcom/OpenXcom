@@ -153,13 +153,13 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = (_unit->getMeleeWeapon() != "");
+	_melee = (!_unit->getMeleeWeapon().empty());
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
 	_wasHitBy.clear();
 
-	if(_unit->getCharging() && _unit->getCharging()->isOut())
+	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
 		_unit->setCharging(0);
 	}
@@ -1991,7 +1991,14 @@ void AlienBAIState::selectMeleeOrRanged()
 	}
 
 	int meleeOdds = 10;
-	int dmg = meleeWeapon->getPower() * _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType());
+
+	int dmg = meleeWeapon->getPower();
+	if (meleeWeapon->isStrengthApplied())
+	{
+		dmg += _unit->getStats()->strength;
+	}
+	dmg *= _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType());
+
 	if (dmg > 50)
 	{
 		meleeOdds += (dmg - 50) / 2;

@@ -53,14 +53,13 @@ namespace
 	
 struct HairBleach
 {
-	static const Uint8 ColorGroup = 15<<4;
 	static const Uint8 ColorShade = 15;
 
 	static const Uint8 Hair = 9 << 4;
 	static const Uint8 Face = 6 << 4;
 	static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
 	{
-		if(src > cutoff && src <= Face + 15)
+		if (src > cutoff && src <= Face + 15)
 		{
 			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
 		}
@@ -815,6 +814,11 @@ void XcomResourcePack::loadBattlescapeResources()
 						  "PAL_BATTLESCAPE_2",
 						  "PAL_BATTLESCAPE_3"};
 
+	SDL_Color backPal[] =  {{0, 5, 4, 255},
+							{0, 10, 34, 255},
+							{2, 9, 24, 255},
+							{2, 0, 24, 255}};
+
 	for (size_t i = 0; i < sizeof(lbms)/sizeof(lbms[0]); ++i)
 	{
 		std::ostringstream s;
@@ -828,7 +832,9 @@ void XcomResourcePack::loadBattlescapeResources()
 			Surface *tempSurface = new Surface(1, 1);
 			tempSurface->loadImage(CrossPlatform::getDataFile(s.str()));
 			_palettes[pals[i]] = new Palette();
-			_palettes[pals[i]]->setColors(tempSurface->getPalette(), 256);
+			SDL_Color *colors = tempSurface->getPalette();
+			colors[255] = backPal[i];
+			_palettes[pals[i]]->setColors(colors, 256);
 			delete tempSurface;
 		}
 	}

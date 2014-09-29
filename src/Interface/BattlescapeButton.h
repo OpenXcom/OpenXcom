@@ -68,6 +68,10 @@ public:
 	void initSurfaces();
 	/// Blits this surface onto another one.
 	void blit(Surface *surface);
+	/// Alters both versions of the button's X pos.
+	void setX(int x);
+	/// Alters both versions of the button's Y pos.
+	void setY(int y);
 
 };
 

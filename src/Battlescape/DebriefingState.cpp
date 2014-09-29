@@ -248,6 +248,11 @@ DebriefingState::~DebriefingState()
 	{
 		delete *i;
 	}
+	for (std::map<int, RecoveryItem*>::iterator i = _recoveryStats.begin(); i != _recoveryStats.end(); ++i)
+	{
+		delete i->second;
+	}
+	_recoveryStats.clear();
 	_rounds.clear();
 }
 
@@ -366,6 +371,18 @@ void ClearAlienBase::operator()(AlienMission *am) const
  */
 void DebriefingState::prepareDebriefing()
 {
+
+	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getItemsList().begin(); i != _game->getRuleset()->getItemsList().end(); ++i)
+	{
+		if (_game->getRuleset()->getItem(*i)->getSpecialType() > 1)
+		{
+			RecoveryItem *item = new RecoveryItem();
+			item->name = *i;
+			item->value = _game->getRuleset()->getItem(*i)->getRecoveryPoints();
+			_recoveryStats[_game->getRuleset()->getItem(*i)->getSpecialType()] = item;
+		}
+	}
+
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
@@ -379,15 +396,12 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", false));
 	_stats.push_back(new DebriefingStat("STR_TANKS_DESTROYED", false));
 	_stats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST", false));
-	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
-	_stats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
-	_stats.push_back(new DebriefingStat("STR_UFO_CONSTRUCTION", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_FOOD", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_REPRODUCTION", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_ENTERTAINMENT", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
-	_stats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
+
+	for (std::map<int, RecoveryItem*>::const_iterator i = _recoveryStats.begin(); i != _recoveryStats.end(); ++i)
+	{
+		_stats.push_back(new DebriefingStat((*i).second->name, true));
+	}
+
 	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
 
 	SavedGame *save = _game->getSavedGame();
@@ -592,7 +606,7 @@ void DebriefingState::prepareDebriefing()
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
-		if ((*j)->getSpawnUnit() != "")
+		if (!(*j)->getSpawnUnit().empty())
 		{
 			type = (*j)->getSpawnUnit();
 		}
@@ -715,7 +729,7 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
-				if ((*j)->getSpawnUnit() != "")
+				if (!(*j)->getSpawnUnit().empty())
 				{
 					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseGeoscape();
 				}
@@ -793,7 +807,7 @@ void DebriefingState::prepareDebriefing()
 	}
 	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && !base->getCrafts()->empty())
 	{
-		for(std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
+		for (std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
 		{
 			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
 		}
@@ -828,32 +842,11 @@ void DebriefingState::prepareDebriefing()
 				{
 					if (battle->getTiles()[i]->getMapData(part))
 					{
-						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+						size_t specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
+						if (_recoveryStats.find(specialType) != _recoveryStats.end())
 						{
-						case UFO_POWER_SOURCE:
-							addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
-						case UFO_NAVIGATION:
-							addStat("STR_UFO_NAVIGATION", 1, 5); break;
-						case UFO_CONSTRUCTION:
-							addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
-						case ALIEN_FOOD:
-							addStat("STR_ALIEN_FOOD", 1, 2); break;
-						case ALIEN_REPRODUCTION:
-							addStat("STR_ALIEN_REPRODUCTION", 1, 2); break;
-						case ALIEN_ENTERTAINMENT:
-							addStat("STR_ALIEN_ENTERTAINMENT", 1, 2); break;
-						case ALIEN_SURGERY:
-							addStat("STR_ALIEN_SURGERY", 1, 2); break;
-						case EXAM_ROOM:
-							addStat("STR_EXAMINATION_ROOM", 1, 2); break;
-						case ALIEN_ALLOYS:
-							addStat("STR_ALIEN_ALLOYS", 1, 1); break;
-						case ALIEN_HABITAT:
-							addStat("STR_ALIEN_HABITAT", 1, 1); break;
-						case MUST_DESTROY: break; // this is the brain
-						default: break;
+							addStat(_recoveryStats[specialType]->name, 1, _recoveryStats[specialType]->value);
 						}
-
 					}
 				}
 				// recover items from the floor
@@ -917,7 +910,7 @@ void DebriefingState::prepareDebriefing()
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			if ((*i)->item == "STR_ALIEN_ALLOYS")
+			if ((*i)->item == _recoveryStats[ALIEN_ALLOYS]->name)
 			{
 				(*i)->qty = (*i)->qty / aadivider;
 				(*i)->score = (*i)->score / aadivider;
@@ -937,53 +930,59 @@ void DebriefingState::prepareDebriefing()
 		reequipCraft(base, craft, true);
 	}
 
-	// reequip crafts (only which is on the base) after a base defense mission
-	if (battle->getMissionType() == "STR_BASE_DEFENSE" && !_destroyBase) // we MUST check the missionType here, to avoid non-base-defense missions case
+	if (battle->getMissionType() == "STR_BASE_DEFENSE")
 	{
-		for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
+		if (!_destroyBase)
 		{
-			if ((*c)->getStatus() != "STR_OUT")
-				reequipCraft(base, *c, false);
-		}
-		// Clearing base->getVehicles() objects, they don't needed anymore.
-		for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
-			delete (*i);
-		base->getVehicles()->clear();
-	}
-	if (_destroyBase && _game->getSavedGame()->getMonthsPassed() != -1)
-	{
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
-		{
-			if ((*i) == base)
+			// reequip crafts (only those on the base) after a base defense mission
+			for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
 			{
-
+				if ((*c)->getStatus() != "STR_OUT")
+					reequipCraft(base, *c, false);
+			}
+			// Clear base->getVehicles() objects, they aren't needed anymore.
+			for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
 				delete (*i);
-				_game->getSavedGame()->getBases()->erase(i);
-				break;
+			base->getVehicles()->clear();
+		}
+		else if (_game->getSavedGame()->getMonthsPassed() != -1)
+		{
+			for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+			{
+				if ((*i) == base)
+				{
+
+					delete (*i);
+					_game->getSavedGame()->getBases()->erase(i);
+					break;
+				}
 			}
 		}
 
-		AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
-		for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+		if (_region)
 		{
-			if ((*i)->getMission() == am)
+			AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
+			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 			{
-				delete *i;
-				i = _game->getSavedGame()->getUfos()->erase(i);
+				if ((*i)->getMission() == am)
+				{
+					delete *i;
+					i = _game->getSavedGame()->getUfos()->erase(i);
+				}
+				else
+				{
+					++i;
+				}
 			}
-			else
+			for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
+				i != _game->getSavedGame()->getAlienMissions().end(); ++i)
 			{
-				++i;
-			}
-		}
-		for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
-			i != _game->getSavedGame()->getAlienMissions().end(); ++i)
-		{
-			if ((AlienMission*)(*i) == am)
-			{
-				delete (*i);
-				_game->getSavedGame()->getAlienMissions().erase(i);
-				break;
+				if ((AlienMission*)(*i) == am)
+				{
+					delete (*i);
+					_game->getSavedGame()->getAlienMissions().erase(i);
+					break;
+				}
 			}
 		}
 	}

@@ -198,11 +198,11 @@ public:
 	/// Gets the ruleset for a specific research project.
 	RuleResearch *getResearch (const std::string &id) const;
 	/// Gets the list of all research projects.
-	const std::vector<std::string> &getResearchList () const;
+	const std::vector<std::string> &getResearchList() const;
 	/// Gets the ruleset for a specific manufacture project.
 	RuleManufacture *getManufacture (const std::string &id) const;
 	/// Gets the list of all manufacture projects.
-	const std::vector<std::string> &getManufactureList () const;
+	const std::vector<std::string> &getManufactureList() const;
 	/// Gets facilities for custom bases.
 	std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
 	/// Gets a specific UfoTrajectory.
@@ -232,11 +232,13 @@ public:
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 	std::vector<std::string> getPsiRequirements() const;
 	/// Returns the sorted list of inventories.
-	const std::vector<std::string> &getInvsList () const;
+	const std::vector<std::string> &getInvsList() const;
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
 	const std::string getAlienFuel() const;
+	/// Gets the minimum radar's range.
+	int getMinRadarRange() const;
 	/// Gets information on an interface element.
 	RuleInterface *getInterface(const std::string id) const;
 	/// Gets the ruleset for the globe

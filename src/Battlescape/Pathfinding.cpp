@@ -43,7 +43,7 @@ int Pathfinding::green = 4;
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
 {
 	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile
@@ -198,7 +198,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 	openList.push(start);
 	bool missile = (target && maxTUCost == -1);
 	// if the open list is empty, we've reached the end
-	while(!openList.empty())
+	while (!openList.empty())
 	{
 		PathfindingNode *currentNode = openList.pop();
 		Position const &currentPos = currentNode->getPosition();

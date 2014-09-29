@@ -61,7 +61,7 @@ struct BattleAction
 	int finalFacing;
 	bool finalAction;
     int number; // first action of turn, second, etc.?
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1), finalAction(false), number(0) { }
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1), finalAction(false), number(0) { }
 };
 
 /**
@@ -126,7 +126,7 @@ public:
 	/// Drops an item and affects it with gravity.
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
 	/// Converts a unit into a unit of another type.
-	BattleUnit *convertUnit(BattleUnit *unit, std::string newType);
+	BattleUnit *convertUnit(BattleUnit *unit, const std::string &newType);
 	/// Handles kneeling action.
 	bool kneel(BattleUnit *bu);
 	/// Cancels the current action.

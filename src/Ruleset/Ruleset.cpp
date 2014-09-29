@@ -73,7 +73,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _alienFuel(""), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_globe = new RuleGlobe();
 
@@ -165,39 +165,39 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin (); i != _research.end (); ++i)
+	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin(); i != _manufacture.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
+	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin(); i != _ufoTrajectories.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
+	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin(); i != _MCDPatches.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
+	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin(); i != _extraStrings.end(); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin (); i != _interfaces.end (); ++i)
+	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin(); i != _interfaces.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -521,13 +521,14 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		_globe->load(doc["globe"]);
 	}
-	for (YAML::const_iterator i = doc["soundRefs"].begin(); i != doc["soundRefs"].end(); ++i)
+	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
 	{
 		ResourcePack::DOOR_OPEN = (*i)["doorSound"].as<int>(ResourcePack::DOOR_OPEN);
 		ResourcePack::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(ResourcePack::SLIDING_DOOR_OPEN);
 		ResourcePack::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
 		ResourcePack::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
 		ResourcePack::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
+		ResourcePack::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(ResourcePack::EXPLOSION_OFFSET);
 		ResourcePack::ITEM_DROP = (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
 		ResourcePack::ITEM_THROW = (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
 		ResourcePack::ITEM_RELOAD = (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
@@ -1071,7 +1072,7 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
  * Returns the list of inventories.
  * @return The list of inventories.
  */
-const std::vector<std::string> &Ruleset::getInvsList () const
+const std::vector<std::string> &Ruleset::getInvsList() const
 {
 	return _invsIndex;
 }
@@ -1091,7 +1092,7 @@ RuleResearch *Ruleset::getResearch (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::vector<std::string> &Ruleset::getResearchList () const
+const std::vector<std::string> &Ruleset::getResearchList() const
 {
 	return _researchIndex;
 }
@@ -1111,7 +1112,7 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::vector<std::string> &Ruleset::getManufactureList () const
+const std::vector<std::string> &Ruleset::getManufactureList() const
 {
 	return _manufactureIndex;
 }
@@ -1200,7 +1201,7 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
 	{
 		const std::vector<City*> &cities = *rr->second->getCities();
-		std::vector<City *>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
+		std::vector<City *>::const_iterator citer = std::find_if (cities.begin(), cities.end(), EqualCoordinates(lon, lat));
 		if (citer != cities.end())
 		{
 			return *citer;
@@ -1456,6 +1457,33 @@ const std::string Ruleset::getAlienFuel() const
 {
 	return _alienFuel;
 }
+
+/**
+ * Returns the minimum facilitie's radar range.
+ * @return The minimum range.
+ */
+ int Ruleset::getMinRadarRange() const
+ {
+	static int minRadarRange = -1;
+
+	if (minRadarRange < 0)
+	{
+		minRadarRange = 0;
+		for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+		{
+			RuleBaseFacility *f = getBaseFacility(*i);
+			if (f == 0) continue;
+
+			int radarRange = f->getRadarRange();
+			if (radarRange > 0 && (minRadarRange == 0 || minRadarRange > radarRange))
+			{
+				minRadarRange = radarRange;
+			}
+		}
+	}
+
+	return minRadarRange;
+ }
 
 /**
  * Gets information on an interface.

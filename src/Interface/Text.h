@@ -61,7 +61,7 @@ public:
 	/// Cleans up the text.
 	~Text();
 	/// Formats an integer value as number with separators.
-	static std::wstring formatNumber(int64_t value, std::wstring currency = L"");
+	static std::wstring formatNumber(int64_t value, const std::wstring &currency = L"");
 	/// Formats an integer value as currency.
 	static std::wstring formatFunding(int64_t funds);
 	/// Formats an integer value as percentage.

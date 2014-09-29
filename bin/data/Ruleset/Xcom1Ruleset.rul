@@ -2526,33 +2526,53 @@ items:
   - type: STR_UFO_POWER_SOURCE
     size: 0.7
     costSell: 250000
+    specialType: 2
+    recoveryPoints: 20
   - type: STR_UFO_NAVIGATION
     size: 0.2
     costSell: 80000
+    specialType: 3
+    recoveryPoints: 5
   - type: STR_UFO_CONSTRUCTION
     size: 0.1
     costSell: 20000
+    specialType: 4
+    recoveryPoints: 2
   - type: STR_ALIEN_FOOD
     size: 0.2
     costSell: 5000
+    specialType: 5
+    recoveryPoints: 2
   - type: STR_ALIEN_REPRODUCTION
     size: 0.2
     costSell: 40000
+    specialType: 6
+    recoveryPoints: 2
   - type: STR_ALIEN_ENTERTAINMENT
     size: 0.2
     costSell: 20000
+    specialType: 7
+    recoveryPoints: 2
   - type: STR_ALIEN_SURGERY
     size: 0.2
     costSell: 38000
+    specialType: 8
+    recoveryPoints: 2
   - type: STR_EXAMINATION_ROOM
     size: 0.2
     costSell: 9000
+    specialType: 9
+    recoveryPoints: 2
   - type: STR_ALIEN_ALLOYS
     size: 0.1
     costSell: 6500
+    specialType: 10
+    recoveryPoints: 1
   - type: STR_ALIEN_HABITAT
     size: 0.1
     costSell: 100
+    specialType: 11
+    recoveryPoints: 1
   - type: STR_PERSONAL_ARMOR
     size: 0.8
     costSell: 54000
@@ -2680,8 +2700,6 @@ items:
   - type: ZOMBIE_WEAPON
     weight: 3
     bigSprite: 26
-    floorSprite: 31
-    handSprite: 104
     meleeSound: 48
     strengthApplied: true
     damageType: 7
@@ -3872,7 +3890,7 @@ armors:
       - 1.0
       - 1.2
       - 1.6
-      - 1.0
+      - 0.0
     loftempsSet: [ 2 ]
   - type: FLOATER_ARMOR0
     spriteSheet: FLOATER.PCK
@@ -3894,7 +3912,7 @@ armors:
       - 1.0
       - 1.2
       - 1.6
-      - 1.0
+      - 0.0
     loftempsSet: [ 3 ]
   - type: FLOATER_ARMOR1
     spriteSheet: FLOATER.PCK
@@ -3916,7 +3934,7 @@ armors:
       - 1.0
       - 1.2
       - 1.6
-      - 1.0
+      - 0.0
     loftempsSet: [ 3 ]
   - type: FLOATER_ARMOR2
     spriteSheet: FLOATER.PCK
@@ -3938,7 +3956,7 @@ armors:
       - 1.0
       - 1.2
       - 1.6
-      - 1.0
+      - 0.0
     loftempsSet: [ 3 ]
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
@@ -4391,7 +4409,7 @@ armors:
       - 1.0
       - 1.2
       - 1.6
-      - 1.0
+      - 0.0
     loftempsSet: [ 3 ]
 soldiers:
   - type: XCOM
@@ -9491,7 +9509,6 @@ extraSprites:
     subY: 3
     files:
       0: Resources/UI/globe_ufo.png
-  
 interfaces:
   - type: battlescape
     elements:
@@ -9519,7 +9536,7 @@ interfaces:
       - id: numAmmoRight
         color: 2
       - id: textTooltip
-        color: 128
+        color: -1
       - id: buttonReserveNone
         color: 67
       - id: buttonReserveSnap

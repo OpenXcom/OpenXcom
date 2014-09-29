@@ -84,13 +84,13 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	
 	size_t tally(0);
-	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
 		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
-		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
+		if (!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));
-			_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
+			_lstPossibilities->addRow (1, tr((*iter)->getName()).c_str());
 		}
 		else
 		{
@@ -98,7 +98,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 		}
 	}
 
-	if (!(tally == possibilities.size () || possibilities.empty ()))
+	if (!(tally == possibilities.size() || possibilities.empty()))
 	{
 		_txtTitle->setText(tr("STR_WE_CAN_NOW_RESEARCH"));
 	}

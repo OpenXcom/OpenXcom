@@ -97,7 +97,7 @@ struct GlobeStaticData
 		ret.x = (x-ox);
 		ret.y = (y-oy);
 		const double temp = (ret.x)*(ret.x) + (ret.y)*(ret.y);
-		if(limit > temp)
+		if (limit > temp)
 		{
 			ret.x *= norm;
 			ret.y *= norm;
@@ -199,11 +199,11 @@ struct CreateShadow
 
 		temp.x -= noise;
 
-		if(temp.x > 0.)
+		if (temp.x > 0.)
 		{
 			const Sint16 val = (temp.x> 31)? 31 : (Sint16)temp.x;
 			const int d = dest & helper::ColorGroup;
-			if(d ==  Globe::oceanColor1 || d == Globe::oceanColor2)
+			if (d ==  Globe::oceanColor1 || d == Globe::oceanColor2)
 			{
 				//this pixel is ocean
 				return Globe::oceanColor1 + val;
@@ -214,7 +214,7 @@ struct CreateShadow
 				if (dest==0) return val;
 				const int s = val / 3;
 				const int e = dest+s;
-				if(e > d + helper::ColorShade)
+				if (e > d + helper::ColorShade)
 					return d + helper::ColorShade;
 				return e;
 			}
@@ -222,7 +222,7 @@ struct CreateShadow
 		else
 		{
 			const int d = dest & helper::ColorGroup;
-			if(d ==  Globe::oceanColor1 || d ==  Globe::oceanColor2)
+			if (d ==  Globe::oceanColor1 || d ==  Globe::oceanColor2)
 			{
 				//this pixel is ocean
 				return Globe::oceanColor1;
@@ -237,7 +237,7 @@ struct CreateShadow
 	
 	static inline void func(Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
 	{
-		if(dest && earth.z)
+		if (dest && earth.z)
 			dest = getShadowValue(dest, earth, sun, noise);
 		else
 			dest = 0;
@@ -257,17 +257,8 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y):
-	InteractiveSurface(width, height, x, y),
-	_rotLon(0.0), _rotLat(0.0),
-	_hoverLon(0.0), _hoverLat(0.0),
-	_cenX(cenX), _cenY(cenY), _game(game),
-	_hover(false), _blink(-1), _cacheLand(),
-	_isMouseScrolling(false), _isMouseScrolled(false),
-	_xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0),
-	_lonBeforeMouseScrolling(0.0), _latBeforeMouseScrolling(0.0),
-	_mouseScrollingStartTime(0), _totalMouseMoveX(0),
-	_totalMouseMoveY(0), _mouseMovedOverThreshold(false)
+Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _hoverLon(0.0), _hoverLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _hover(false), _blink(-1),
+																					_isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _lonBeforeMouseScrolling(0.0), _latBeforeMouseScrolling(0.0), _mouseScrollingStartTime(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
 	_rules = game->getRuleset()->getGlobe();
 	if (game->getRuleset()->getInterface("geoscape") && game->getRuleset()->getInterface("geoscape")->getElement("globe"))
@@ -300,7 +291,7 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 
 	//filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
-	for(size_t i=0; i<_randomNoiseData.size(); ++i)
+	for (size_t i=0; i<_randomNoiseData.size(); ++i)
 		_randomNoiseData[i] = rand()%4;
 
 	cachePolygons();
@@ -1064,13 +1055,13 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 	else
 		SX=(deltax/len);
 
-	while(len>0)
+	while (len>0)
 	{
 		tcol=src->getPixel((int)x0,(int)y0);
 		if (tcol)
 		{
 			const int d = tcol & helper::ColorGroup;
-			if(d ==  oceanColor1 || d ==  oceanColor2)
+			if (d ==  oceanColor1 || d ==  oceanColor2)
 			{
 				//this pixel is ocean
 				tcol = oceanColor1 + shade + 8;
@@ -1078,7 +1069,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 			else
 			{
 				const int e = tcol + shade;
-				if(e > d + helper::ColorShade)
+				if (e > d + helper::ColorShade)
 					tcol = d + helper::ColorShade;
 				else tcol = e;
 			}
@@ -1381,7 +1372,7 @@ void Globe::drawDetail()
 			for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 			{
 				color += 10;
-				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+				for (size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
 				{
 					double lon2 = (*i)->getRules()->getLonMax().at(k);
 					double lon1 = (*i)->getRules()->getLonMin().at(k);
@@ -1401,7 +1392,7 @@ void Globe::drawDetail()
 			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 			{
 				color += 10;
-				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+				for (size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
 				{
 					double lon2 = (*i)->getRules()->getLonMax().at(k);
 					double lon1 = (*i)->getRules()->getLonMin().at(k);
@@ -1423,7 +1414,7 @@ void Globe::drawDetail()
 				for (std::vector<MissionZone>::const_iterator j = (*i)->getRules()->getMissionZones().begin(); j != (*i)->getRules()->getMissionZones().end(); ++j)
 				{
 					color += 2;
-					for(std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
+					for (std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
 					{
 						double lon2 = (*k).lonMax * M_PI / 180;
 						double lon1 = (*k).lonMin * M_PI / 180;
@@ -1459,7 +1450,7 @@ void Globe::drawPath(Surface *surface, double lon1, double lat1, double lon2, do
 	Cord a(CordPolar(lon1, lat1));
 	Cord b(CordPolar(lon2, lat2));
 
-	if(-b == a)
+	if (-b == a)
 		return;
 
 	b -= a;
@@ -1471,7 +1462,7 @@ void Globe::drawPath(Surface *surface, double lon1, double lat1, double lon2, do
 	b /= count;
 	p1 = CordPolar(a);
 	polarToCart(p1.lon, p1.lat, &x1, &y1);
-	for(int i = 0; i < count; ++i)
+	for (int i = 0; i < count; ++i)
 	{
 		a += b;
 		p2 = CordPolar(a);
@@ -1913,11 +1904,11 @@ void Globe::setupRadii(int width, int height)
 	_earthData.resize(_zoomRadius.size());
 	//filling normal field for each radius
 
-	for(size_t r = 0; r<_zoomRadius.size(); ++r)
+	for (size_t r = 0; r<_zoomRadius.size(); ++r)
 	{
 		_earthData[r].resize(width * height);
-		for(int j=0; j<height; ++j)
-			for(int i=0; i<width; ++i)
+		for (int j=0; j<height; ++j)
+			for (int i=0; i<width; ++i)
 			{
 				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _zoomRadius[r], i+.5, j+.5);
 			}
