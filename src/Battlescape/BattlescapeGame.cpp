@@ -1100,11 +1100,28 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				dropItem(unit->getPosition(), item, false, true);
 			}
 			unit->setCache(0);
-			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
-			if (_save->getTile(ba.target)) // only walk towards it when the place exists
+			// let's try a few times to get a tile to run to.
+			for (int i= 0; i < 20; i++)
 			{
-				_save->getPathfinding()->calculate(ba.actor, ba.target);
-				statePushBack(new UnitWalkBState(this, ba));
+				ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+
+				if (i >= 10 && ba.target.z > 0) // if we've had more than our fair share of failures, try going down.
+				{
+					ba.target.z--;
+					if (i >= 15 && ba.target.z > 0) // still failing? try further down.
+					{
+						ba.target.z--;
+					}
+				}
+				if (_save->getTile(ba.target)) // sanity check the tile.
+				{
+					_save->getPathfinding()->calculate(ba.actor, ba.target);
+					if (_save->getPathfinding()->getStartDirection() != -1) // sanity check the path.
+					{
+						statePushBack(new UnitWalkBState(this, ba));
+						break;
+					}
+				}
 			}
 		}
 		break;
