@@ -619,7 +619,7 @@ void Tile::animate()
 			_currentFrame[i] = newframe;
 		}
 	}
-	for (std::list<Particle*>::const_iterator i = _particles.begin(); i != _particles.end();)
+	for (std::list<Particle*>::iterator i = _particles.begin(); i != _particles.end();)
 	{
 		if (!(*i)->animate())
 		{
