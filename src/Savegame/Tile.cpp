@@ -29,6 +29,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "SerializationHelper.h"
+#include "../Battlescape/Particle.h"
 
 namespace OpenXcom
 {
@@ -74,6 +75,11 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), 
 Tile::~Tile()
 {
 	_inventory.clear();
+	for (std::list<Particle*>::iterator i = _particles.begin(); i != _particles.end(); ++i)
+	{
+		delete *i;
+	}
+	_particles.clear();
 }
 
 /**
@@ -613,6 +619,18 @@ void Tile::animate()
 			_currentFrame[i] = newframe;
 		}
 	}
+	for (std::list<Particle*>::const_iterator i = _particles.begin(); i != _particles.end();)
+	{
+		if (!(*i)->animate())
+		{
+			delete *i;
+			i = _particles.erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
 }
 
 /**
@@ -925,6 +943,24 @@ void Tile::setDangerous()
 bool Tile::getDangerous()
 {
 	return _danger;
+}
+
+/**
+ * adds a particle to this tile's internal storage buffer.
+ * @param particle the particle to add.
+ */
+void Tile::addParticle(Particle *particle)
+{
+	_particles.push_back(particle);
+}
+
+/**
+ * gets a pointer to this tile's particle array.
+ * @return a pointer to the internal array of particles.
+ */
+std::list<Particle *> *Tile::getParticleCloud()
+{
+	return &_particles;
 }
 
 }
