@@ -20,6 +20,9 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
+#include "Map.h"
+#include "Camera.h"
+#include "Particle.h"
 #include "../fmath.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
@@ -342,6 +345,10 @@ bool Projectile::move()
 			_position--;
 			return false;
 		}
+		if (_save->getDepth() > 0 && _vaporColor != -1 && _action.type != BA_THROW && RNG::percent(5))
+		{
+			addVaporCloud();
+		}
 	}
 	return true;
 }
@@ -400,7 +407,7 @@ Surface *Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	_position = _trajectory.size() - 1;
+	while (move());
 }
 
 /**
@@ -425,8 +432,32 @@ Position Projectile::getTarget()
 	return _action.target;
 }
 
+/**
+ * Is this projectile drawn back to front or front to back?
+ * @retun return if this is to be drawn in reverse order.
+ */
 bool Projectile::isReversed() const
 {
 	return _reversed;
+}
+
+/**
+ * adds a cloud of vapor at the projectile's current position.
+ */
+void Projectile::addVaporCloud()
+{
+	Tile *tile = _save->getTile(_trajectory.at(_position) / Position(16,16,24));
+	if (tile)
+	{
+		Position tilePos, voxelPos;
+		_save->getBattleGame()->getMap()->getCamera()->convertMapToScreen(_trajectory.at(_position) / Position(16,16,24), &tilePos);
+		tilePos += _save->getBattleGame()->getMap()->getCamera()->getMapOffset();
+		_save->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(_trajectory.at(_position), &voxelPos);
+		for (int i = 0; i != _vaporDensity; ++i)
+		{
+			Particle *particle = new Particle(voxelPos.x - tilePos.x + RNG::generate(0, 6) - 3, voxelPos.y - tilePos.y + RNG::generate(0, 6) - 3, RNG::generate(64, 214), _vaporColor, 19);
+			tile->addParticle(particle);
+		}
+	}
 }
 }

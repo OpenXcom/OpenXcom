@@ -77,7 +77,10 @@ public:
 	Position getOrigin();
 	/// Gets the targetted tile for the projectile.
 	Position getTarget();
+	/// Is this projectile being drawn back-to-front or front-to-back?
 	bool isReversed() const;
+	/// adds a cloud of particles at the projectile's location
+	void addVaporCloud();
 };
 
 }
