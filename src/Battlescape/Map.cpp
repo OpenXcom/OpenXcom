@@ -93,9 +93,14 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 		_previewSetting = PATH_FULL;
 	}
 	_res = _game->getResourcePack();
+	_save = _game->getSavedGame()->getSavedBattle();
+	if (_res->getLUTs()->size() > _save->getDepth())
+	{
+		_transparencies = &_res->getLUTs()->at(_save->getDepth());
+	}
+
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
-	_save = _game->getSavedGame()->getSavedBattle();
 	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, 0, 0);
 	_message->setX(_game->getScreen()->getDX());
 	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
