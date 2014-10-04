@@ -18,6 +18,7 @@
  */
 #include "XcomResourcePack.h"
 #include <sstream>
+#include <climits>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
