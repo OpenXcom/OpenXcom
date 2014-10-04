@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param origin Position the projectile originates from.
  * @param targetVoxel Position the projectile is targeting.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, int bulletSprite) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(bulletSprite), _reversed(false)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, int bulletSprite, int vaporColor, int vaporDensity) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(bulletSprite), _reversed(false), _vaporColor(vaporColor), _vaporDensity(vaporDensity)
 {
 	// this is the number of pixels the sprite will move between frames
 	_speed = Options::battleFireSpeed;

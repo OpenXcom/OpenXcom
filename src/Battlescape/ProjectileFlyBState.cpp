@@ -290,7 +290,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 	}
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite, _ammo->getRules()->getVaporColor(), _ammo->getRules()->getVaporDensity());
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -545,7 +545,7 @@ void ProjectileFlyBState::think()
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
 							// create a projectile
-							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite, _ammo->getRules()->getVaporColor(), _ammo->getRules()->getVaporDensity());
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(std::max(0.0, (_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0) - i * 5.0));
 							if (_projectileImpact != V_EMPTY)
