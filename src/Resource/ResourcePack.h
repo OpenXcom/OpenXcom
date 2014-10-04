@@ -58,6 +58,7 @@ protected:
 	std::map<std::string, SoundSet*> _sounds;
 	std::map<std::string, Music*> _musics;
 	std::vector<Uint16> _voxelData;
+	std::vector<std::vector<Uint8> > _transparencyLUTs;
 public:
 	static int DOOR_OPEN;
 	static int SLIDING_DOOR_OPEN;
@@ -106,6 +107,8 @@ public:
 	std::vector<Uint16> *getVoxelData();
 	/// Returns a specific sound from either the land or underwater resource set.
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
+	const std::vector<std::vector<Uint8> > *getLUTs() const;
+
 };
 
 }

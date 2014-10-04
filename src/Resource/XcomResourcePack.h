@@ -29,12 +29,15 @@ class Ruleset;
 class CatFile;
 class GMCatFile;
 class Music;
+class Palette;
 
 /**
  * Resource pack for the X-Com: UFO Defense game.
  */
 class XcomResourcePack : public ResourcePack
 {
+private:
+	Ruleset *_ruleset;
 public:
 	/// Creates the X-Com ruleset.
 	XcomResourcePack(Ruleset *rules);
@@ -46,6 +49,8 @@ public:
 	bool isImageFile(std::string extension);
 	/// Loads a specified music file.
 	Music *loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat);
+	/// Creates a transparency lookup table for a given palette.
+	void createTransparencyLUT(Palette *pal);
 };
 
 }

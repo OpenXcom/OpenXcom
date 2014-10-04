@@ -24,6 +24,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Savegame/GameTime.h"
+#include <SDL.h>
 
 namespace OpenXcom
 {
@@ -109,6 +110,7 @@ protected:
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
+	std::vector<SDL_Color> _transparencies;
 	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 	/// Loads a ruleset from a YAML file.
@@ -245,6 +247,8 @@ public:
 	RuleGlobe *getGlobe() const;
 	/// Gets the list of selective files for insertion into our cat files.
 	const std::map<std::string, SoundDefinition *> *getSoundDefinitions() const;
+	/// Gets the list of transparency colors, 
+	const std::vector<SDL_Color> *getTransparencies() const;
 };
 
 }
