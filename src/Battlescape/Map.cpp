@@ -28,6 +28,7 @@
 #include "Projectile.h"
 #include "Explosion.h"
 #include "BattlescapeState.h"
+#include "Particle.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -911,6 +912,28 @@ void Map::drawTerrain(Surface *surface)
 						}
 						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, shade);
+					}
+
+					//draw particle clouds
+					for (std::list<Particle*>::const_iterator i = tile->getParticleCloud()->begin(); i != tile->getParticleCloud()->end(); ++i)
+					{
+						int vaporX = screenPosition.x + (*i)->getX();
+						int vaporY = screenPosition.y + (*i)->getY();
+						if (_transparencies->size() >= ((*i)->getColor() + 1) * 1024)
+						{
+							switch ((*i)->getSize())
+							{
+							case 3:
+								surface->setPixel(vaporX+1, vaporY+1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX+1, vaporY+1)]); 
+							case 2:
+								surface->setPixel(vaporX + 1, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX + 1, vaporY)]); 
+							case 1:
+								surface->setPixel(vaporX, vaporY + 1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY + 1)]); 
+							default:
+								surface->setPixel(vaporX, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY)]); 
+								break;
+							}
+						}
 					}
 
 					// Draw Path Preview
