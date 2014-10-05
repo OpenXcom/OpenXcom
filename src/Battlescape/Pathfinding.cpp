@@ -435,6 +435,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
+			// TFTD thing: tiles on fire are cost 2 TUs more for whatever reason.
+			if (_save->getDepth() > 0 && destinationTile->getFire() > 0)
+			{
+				cost += 2;
+			}
+
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
 			if (Options::strafe && _strafeMove) {
