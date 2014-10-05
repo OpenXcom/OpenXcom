@@ -66,6 +66,8 @@ public:
 	static int SMALL_EXPLOSION;
 	static int LARGE_EXPLOSION;
 	static int EXPLOSION_OFFSET;
+	static int SMOKE_OFFSET;
+	static int UNDERWATER_SMOKE_OFFSET;
 	static int ITEM_DROP;
 	static int ITEM_THROW;
 	static int ITEM_RELOAD;

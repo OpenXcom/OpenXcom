@@ -658,7 +658,15 @@ void Map::drawTerrain(Surface *surface)
 									int shade = 0;
 									if (!tileWest->getFire())
 									{
-										frameNumber = 8 + int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+										if (_save->getDepth() > 0)
+										{
+											frameNumber += ResourcePack::UNDERWATER_SMOKE_OFFSET;
+										}
+										else
+										{
+											frameNumber += ResourcePack::SMOKE_OFFSET;
+										}
+										frameNumber += int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 										shade = tileWestShade;
 									}
 
@@ -898,7 +906,15 @@ void Map::drawTerrain(Surface *surface)
 						int shade = 0;
 						if (!tile->getFire())
 						{
-							frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+							if (_save->getDepth() > 0)
+							{
+								frameNumber += ResourcePack::UNDERWATER_SMOKE_OFFSET;
+							}
+							else
+							{
+								frameNumber += ResourcePack::SMOKE_OFFSET;
+							}
+							frameNumber += int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 							shade = tileShade;
 						}
 

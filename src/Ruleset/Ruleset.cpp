@@ -529,6 +529,8 @@ void Ruleset::loadFile(const std::string &filename)
 		ResourcePack::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
 		ResourcePack::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
 		ResourcePack::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(ResourcePack::EXPLOSION_OFFSET);
+		ResourcePack::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(ResourcePack::SMOKE_OFFSET);
+		ResourcePack::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(ResourcePack::UNDERWATER_SMOKE_OFFSET);
 		ResourcePack::ITEM_DROP = (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
 		ResourcePack::ITEM_THROW = (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
 		ResourcePack::ITEM_RELOAD = (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
