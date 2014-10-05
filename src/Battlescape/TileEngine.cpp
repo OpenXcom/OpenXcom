@@ -1647,9 +1647,9 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	{
 		if ( block <= 127 ) 
 		{
-			direction += Pathfinding::DIR_FULL_HTURN;
-			if (direction >= Pathfinding::DIR_UP)
-				direction -= Pathfinding::DIR_UP;
+			direction += 4;
+			if (direction > 7)
+				direction -= 8;
 			if (blockage(endTile,MapData::O_OBJECT, type, direction) > 127)
 			{
 				return -1; //hit bigwall, reveal bigwall tile
