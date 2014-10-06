@@ -117,6 +117,8 @@ set ( battlescape_src
   Battlescape/Camera.cpp
   Battlescape/Projectile.cpp
   Battlescape/Projectile.h
+  Battlescape/Particle.cpp
+  Battlescape/Particle.h
   Battlescape/UnitDieBState.h
   Battlescape/UnitDieBState.cpp
   Battlescape/Explosion.cpp
@@ -256,6 +258,9 @@ set ( engine_src
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
   Engine/Scalers/init.cpp
+  Engine/Scalers/config.h
+  Engine/Scalers/xbrz.h  
+  Engine/Scalers/xbrz.cpp
   Engine/Adlib/adlplayer.cpp
   Engine/Adlib/adlplayer.h
   Engine/Adlib/fmopl.cpp
@@ -271,8 +276,6 @@ set ( geoscape_src
   Geoscape/UfoDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
-  Geoscape/Polyline.h
-  Geoscape/Polyline.cpp
   Geoscape/ConfirmNewBaseState.h
   Geoscape/ConfirmNewBaseState.cpp
   Geoscape/ConfirmDestinationState.h
@@ -297,8 +300,6 @@ set ( geoscape_src
   Geoscape/LowFuelState.cpp
   Geoscape/CraftPatrolState.cpp
   Geoscape/CraftPatrolState.h
-  Geoscape/Polygon.h
-  Geoscape/Polygon.cpp
   Geoscape/UfoLostState.cpp
   Geoscape/UfoLostState.h
   Geoscape/GraphsState.cpp
@@ -350,6 +351,8 @@ set ( interface_src
   Interface/NumberText.h
   Interface/ArrowButton.cpp
   Interface/ArrowButton.h
+  Interface/BattlescapeButton.cpp
+  Interface/BattlescapeButton.h
   Interface/TextButton.cpp
   Interface/TextButton.h
   Interface/ToggleTextButton.cpp
@@ -457,6 +460,8 @@ set ( ruleset_src
   Ruleset/RuleItem.cpp
   Ruleset/RuleCraftWeapon.cpp
   Ruleset/RuleCraftWeapon.h
+  Ruleset/RuleInterface.h
+  Ruleset/RuleInterface.cpp
   Ruleset/RuleInventory.h
   Ruleset/RuleInventory.cpp
   Ruleset/MapBlock.h
@@ -505,6 +510,14 @@ set ( ruleset_src
   Ruleset/StatString.cpp
   Ruleset/StatStringCondition.h
   Ruleset/StatStringCondition.cpp
+  Ruleset/SoundDefinition.h
+  Ruleset/SoundDefinition.cpp
+  Ruleset/Polygon.h
+  Ruleset/Polygon.cpp
+  Ruleset/Polyline.h
+  Ruleset/Polyline.cpp
+  Ruleset/RuleGlobe.h
+  Ruleset/RuleGlobe.cpp
 )
 
 set ( savegame_src

@@ -19,6 +19,9 @@
 #include "RNG.h"
 #include <math.h>
 #include <time.h>
+#ifndef UINT64_MAX
+#define UINT64_MAX 0xffffffffffffffffULL
+#endif
 
 namespace OpenXcom
 {
@@ -44,7 +47,7 @@ uint64_t next()
 	x ^= x >> 12; // a
 	x ^= x << 25; // b
 	x ^= x >> 27; // c
-	return x * 2685821657736338717LL;
+	return x * 2685821657736338717ULL;
 }
 
 /**

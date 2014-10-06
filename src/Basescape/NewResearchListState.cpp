@@ -113,17 +113,17 @@ void NewResearchListState::btnOKClick(Action *)
 /**
  * Fills the list with possible ResearchProjects.
  */
-void NewResearchListState::fillProjectList ()
+void NewResearchListState::fillProjectList()
 {
 	_projects.clear();
 	_lstResearch->clearList();
 	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
 	std::vector<RuleResearch*>::iterator it = _projects.begin();
-	while (it != _projects.end ())
+	while (it != _projects.end())
 	{
 		if ((*it)->getRequirements().empty())
 		{
-			_lstResearch->addRow(1, tr((*it)->getName ()).c_str());
+			_lstResearch->addRow(1, tr((*it)->getName()).c_str());
 			++it;
 		}
 		else

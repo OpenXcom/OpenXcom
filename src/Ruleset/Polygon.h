@@ -20,6 +20,7 @@
 #define OPENXCOM_POLYGON_H
 
 #include <SDL.h>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
@@ -42,6 +43,8 @@ public:
 	Polygon(const Polygon& other);
 	/// Cleans up the polygon.
 	~Polygon();
+	/// Loads the polygon from YAML.
+	void load(const YAML::Node& node);
 	/// Gets the latitude of a point.
 	double getLatitude(int i) const;
 	/// Sets the latitude of a point.

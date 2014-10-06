@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(base), _state(state), _facilities()
+BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(base), _state(state)
 {
 	_screen = false;
 

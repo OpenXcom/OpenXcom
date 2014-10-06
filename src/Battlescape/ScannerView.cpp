@@ -100,7 +100,7 @@ void ScannerView::mouseClick (Action *, State *)
 void ScannerView::animate()
 {
 	_frame++;
-	if(_frame > 1)
+	if (_frame > 1)
 	{
 		_frame = 0;
 	}

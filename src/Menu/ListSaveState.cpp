@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-ListSaveState::ListSaveState(OptionsOrigin origin) : ListGamesState(origin, 1, false), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+ListSaveState::ListSaveState(OptionsOrigin origin) : ListGamesState(origin, 1, false), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
 	_edtSave = new TextEdit(this, 168, 9, 0, 0);

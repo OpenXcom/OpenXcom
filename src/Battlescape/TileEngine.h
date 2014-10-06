@@ -93,9 +93,9 @@ public:
 	/// Checks the distance squared between two positions.
 	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;
 	/// Checks the horizontal blockage of a tile.
-	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
 	/// Checks the vertical blockage of a tile.
-	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
 	/// Attempts a panic or mind control action.
 	bool psiAttack(BattleAction *action);
 	/// Applies gravity to anything that occupy this tile.

@@ -34,7 +34,7 @@
 
 namespace OpenXcom
 {
-	UfopaediaSelectState::UfopaediaSelectState(std::string section) : _section(section)
+	UfopaediaSelectState::UfopaediaSelectState(const std::string &section) : _section(section)
 	{
 		_screen = false;
 
@@ -110,7 +110,7 @@ namespace OpenXcom
 
 		_article_list.clear();
 		Ufopaedia::list(_game->getSavedGame(), _game->getRuleset(), _section, _article_list);
-		for(it = _article_list.begin(); it!=_article_list.end(); ++it)
+		for (it = _article_list.begin(); it!=_article_list.end(); ++it)
 		{
 			_lstSelection->addRow(1, tr((*it)->title).c_str());
 		}

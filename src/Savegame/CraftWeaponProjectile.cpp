@@ -73,7 +73,7 @@ CraftWeaponProjectileGlobalType CraftWeaponProjectile::getGlobalType() const
 void CraftWeaponProjectile::setDirection(const int &directon)
 {
 	_direction = directon;
-	if(_direction == D_UP)
+	if (_direction == D_UP)
 	{
 		_currentPosition = 0;
 	}
@@ -93,7 +93,7 @@ int CraftWeaponProjectile::getDirection() const
  */
 void CraftWeaponProjectile::move()
 {
-	if(_globalType == CWPGT_MISSILE)
+	if (_globalType == CWPGT_MISSILE)
 	{
 		int positionChange = _speed;
 
@@ -105,21 +105,21 @@ void CraftWeaponProjectile::move()
 		if ((_distanceCovered / 8) >= getRange())
 			setMissed(true);
 		
-		if(_direction == D_UP)
+		if (_direction == D_UP)
 		{
 			_currentPosition += positionChange;
 		}
-		else if(_direction == D_DOWN)
+		else if (_direction == D_DOWN)
 		{
 			_currentPosition -= positionChange;
 		}
 		
 		_distanceCovered += positionChange;
 	}
-	else if(_globalType == CWPGT_BEAM)
+	else if (_globalType == CWPGT_BEAM)
 	{
 		_state /= 2;
-		if(_state == 1)
+		if (_state == 1)
 		{
 			_toBeRemoved = true;
 		}

@@ -28,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a target with blank coordinates.
  */
-Target::Target() : _lon(0.0), _lat(0.0), _followers()
+Target::Target() : _lon(0.0), _lat(0.0)
 {
 }
 

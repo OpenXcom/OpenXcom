@@ -31,7 +31,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of region.
  * @param type String defining the type.
  */
-RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0), _missionRegion("")
+RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _regionWeight(0)
 {
 }
 

@@ -215,7 +215,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	std::vector<std::wstring> filterNames;
 	filterNames.push_back(tr("STR_DISABLED"));
 	filterNames.push_back(L"Scale");
-	filterNames.push_back(L"HQX");
+	filterNames.push_back(L"HQx");
+	filterNames.push_back(L"xBRZ");
+	_filters.push_back("");
 	_filters.push_back("");
 	_filters.push_back("");
 	_filters.push_back("");
@@ -254,6 +256,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	{
 		selFilter = 2;
 	}
+	else if (Options::useXBRZFilter)
+	{
+		selFilter = 3;
+	}
 
 	_txtFilter->setColor(Palette::blockOffset(8)+10);
 	_txtFilter->setText(tr("STR_DISPLAY_FILTER"));
@@ -275,11 +281,17 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	int displayMode = 0;
 	if (Options::fullscreen)
+	{
 		displayMode = 1;
+	}
 	else if (Options::borderless)
+	{
 		displayMode = 2;
+	}
 	else if (Options::allowResize)
+	{
 		displayMode = 3;
+	}
 
 	_cbxDisplayMode->setColor(Palette::blockOffset(15)-1);
 	_cbxDisplayMode->setOptions(displayModes);
@@ -456,21 +468,31 @@ void OptionsVideoState::cbxFilterChange(Action *)
 		Options::newOpenGL = false;
 		Options::newScaleFilter = false;
 		Options::newHQXFilter = false;
+		Options::newXBRZFilter = false;
 		break;
 	case 1:
 		Options::newOpenGL = false;
 		Options::newScaleFilter = true;
 		Options::newHQXFilter = false;
+		Options::newXBRZFilter = false;
 		break;
 	case 2:
 		Options::newOpenGL = false;
 		Options::newScaleFilter = false;
 		Options::newHQXFilter = true;
+		Options::newXBRZFilter = false;
+		break;
+	case 3:
+		Options::newOpenGL = false;
+		Options::newScaleFilter = false;
+		Options::newHQXFilter = false;
+		Options::newXBRZFilter = true;
 		break;
 	default:
 		Options::newOpenGL = true;
 		Options::newScaleFilter = false;
 		Options::newHQXFilter = false;
+		Options::newXBRZFilter = false;
 		Options::newOpenGLShader = _filters[_cbxFilter->getSelected()];
 		break;
 	}

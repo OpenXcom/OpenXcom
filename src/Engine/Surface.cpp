@@ -163,7 +163,7 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 Surface::Surface(const Surface& other)
 {
 	//if is native OpenXcom aligned surface
-	if(other._alignedBuffer)
+	if (other._alignedBuffer)
 	{
 		Uint8 bpp = other._surface->format->BitsPerPixel;
 		int width = other.getWidth();
@@ -531,12 +531,31 @@ void Surface::blit(Surface *surface)
  */
 void Surface::copy(Surface *surface)
 {
+	/*
+	SDL_BlitSurface uses colour matching,
+	and is therefor unreliable as a means
+	to copy the contents of one surface to another
+	instead we have to do this manually 
+
 	SDL_Rect from;
 	from.x = getX() - surface->getX();
 	from.y = getY() - surface->getY();
 	from.w = getWidth();
 	from.h = getHeight();
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
+	*/
+	const int from_x = getX() - surface->getX();
+	const int from_y = getY() - surface->getY();
+
+	lock();
+
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	{
+		Uint8 pixel = surface->getPixel(from_x + x, from_y + y);
+		setPixelIterative(&x, &y, pixel);
+	}
+
+	unlock();
 }
 
 /**
@@ -748,7 +767,7 @@ struct ColorReplace
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
 	{
-		if(src)
+		if (src)
 		{
 			const int newShade = (src&15) + shade;
 			if (newShade > 15)
@@ -777,7 +796,7 @@ struct StandartShade
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
 	{
-		if(src)
+		if (src)
 		{
 			const int newShade = (src&15) + shade;
 			if (newShade > 15)
@@ -806,13 +825,13 @@ struct StandartShade
 void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int newBaseColor)
 {
 	ShaderMove<Uint8> src(this, x, y);
-	if(half)
+	if (half)
 	{
 		GraphSubset g = src.getDomain();
 		g.beg_x = g.end_x/2;
 		src.setDomain(g);
 	}
-	if(newBaseColor)
+	if (newBaseColor)
 	{
 		--newBaseColor;
 		newBaseColor <<= 4;
@@ -824,11 +843,12 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 }
 
 /**
- * Set the surface to be redrawn
+ * Set the surface to be redrawn.
+ * @param valid true means redraw.
  */
-void Surface::invalidate()
+void Surface::invalidate(bool valid)
 {
-	_redraw = true;
+	_redraw = valid;
 }
 
 /**

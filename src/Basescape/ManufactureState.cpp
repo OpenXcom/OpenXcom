@@ -189,7 +189,7 @@ void ManufactureState::fillProductionList()
 {
 	const std::vector<Production *> productions(_base->getProductions());
 	_lstManufacture->clearList();
-	for(std::vector<Production *>::const_iterator iter = productions.begin(); iter != productions.end(); ++iter)
+	for (std::vector<Production *>::const_iterator iter = productions.begin(); iter != productions.end(); ++iter)
 	{
 		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();

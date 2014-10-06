@@ -29,12 +29,13 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "SerializationHelper.h"
+#include "../Battlescape/Particle.h"
 
 namespace OpenXcom
 {
 
 /// How many bytes various fields use in a serialized tile. See header.
-Tile::SerializationKey Tile::serializationKey = 
+Tile::SerializationKey Tile::serializationKey =
 {4, // index
  2, // _mapDataSetID, four of these
  2, // _mapDataID, four of these
@@ -74,6 +75,11 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), 
 Tile::~Tile()
 {
 	_inventory.clear();
+	for (std::list<Particle*>::iterator i = _particles.begin(); i != _particles.end(); ++i)
+	{
+		delete *i;
+	}
+	_particles.clear();
 }
 
 /**
@@ -228,16 +234,16 @@ bool Tile::isVoid() const
 }
 
 /**
- * Get the TU cost to walk over a certain part of the tile.
- * @param part
- * @param movementType
- * @return TU cost
+ * Gets the TU cost to walk over a certain part of the tile.
+ * @param part The part number.
+ * @param movementType The movement type.
+ * @return TU cost.
  */
 int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
 	{
-		if (_objects[part]->isUFODoor() && _currentFrame[part] == 7)
+		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;
@@ -518,37 +524,47 @@ int Tile::getFlammability() const
 {
 	int flam = 255;
 
-	if (_objects[3])
-	{
-		flam = _objects[3]->getFlammable();
-	}
-	else if (_objects[0])
-	{
-		flam = _objects[0]->getFlammable();
-	}
+	for (int i=0; i<4; ++i)
+		if (_objects[i] && (_objects[i]->getFlammable() < flam))
+			flam = _objects[i]->getFlammable();
 
 	return flam;
 }
 
 /*
- * Fuel of a tile is the lowest flammability of its objects.
+ * Fuel of a tile is the highest fuel of it's objects.
  * @return how long to burn.
  */
 int Tile::getFuel() const
 {
 	int fuel = 0;
 
-	if (_objects[3])
-	{
-		fuel = _objects[3]->getFuel();
-	}
-	else if (_objects[0])
-	{
-		fuel = _objects[0]->getFuel();
-	}
+	for (int i=0; i<4; ++i)
+		if (_objects[i] && (_objects[i]->getFuel() > fuel))
+			fuel = _objects[i]->getFuel();
 
 	return fuel;
 }
+
+
+/*
+ * Flammability of the particular part of the tile
+ * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
+ */
+int Tile::getFlammability(int part) const
+{
+	return _objects[part]->getFlammable();
+}
+
+/*
+ * Fuel of particular part of the tile
+ * @return how long to burn.
+ */
+int Tile::getFuel(int part) const
+{
+	return _objects[part]->getFuel();
+}
+
 /*
  * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of its objects.
  * NOT the sum of the fuel of the objects!
@@ -601,6 +617,18 @@ void Tile::animate()
 				newframe = 0;
 			}
 			_currentFrame[i] = newframe;
+		}
+	}
+	for (std::list<Particle*>::iterator i = _particles.begin(); i != _particles.end();)
+	{
+		if (!(*i)->animate())
+		{
+			delete *i;
+			i = _particles.erase(i);
+		}
+		else
+		{
+			++i;
 		}
 	}
 }
@@ -789,14 +817,10 @@ void Tile::prepareNewTurn()
 			// no fire: must be smoke
 			else
 			{
-				// aliens don't breathe
-				if (_unit->getOriginalFaction() != FACTION_HOSTILE)
+				// try to knock this guy out.
+				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
 				{
-					// try to knock this guy out.
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
-					{
-						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
-					}
+					_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
 				}
 			}
 		}
@@ -919,6 +943,24 @@ void Tile::setDangerous()
 bool Tile::getDangerous()
 {
 	return _danger;
+}
+
+/**
+ * adds a particle to this tile's internal storage buffer.
+ * @param particle the particle to add.
+ */
+void Tile::addParticle(Particle *particle)
+{
+	_particles.push_back(particle);
+}
+
+/**
+ * gets a pointer to this tile's particle array.
+ * @return a pointer to the internal array of particles.
+ */
+std::list<Particle *> *Tile::getParticleCloud()
+{
+	return &_particles;
 }
 
 }

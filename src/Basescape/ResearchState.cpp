@@ -175,13 +175,13 @@ void ResearchState::fillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
 	_lstResearch->clearList();
-	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
+	for (std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin(); iter != baseProjects.end(); ++iter)
 	{
 		std::wostringstream sstr;
-		sstr << (*iter)->getAssigned ();
+		sstr << (*iter)->getAssigned();
 		const RuleResearch *r = (*iter)->getRules();
 
-		std::wstring wstr = tr(r->getName ());
+		std::wstring wstr = tr(r->getName());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 	}
 	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE").arg(_base->getAvailableScientists()));

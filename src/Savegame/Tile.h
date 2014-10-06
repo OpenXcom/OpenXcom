@@ -35,6 +35,7 @@ class MapData;
 class BattleUnit;
 class BattleItem;
 class RuleInventory;
+class Particle;
 
 /**
  * Basic element of which a battle map is build.
@@ -78,6 +79,7 @@ protected:
 	int _TUMarker;
 	int _overlaps;
 	bool _danger;
+	std::list<Particle*> _particles;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -194,6 +196,10 @@ public:
 	int getFlammability() const;
 	/// Get turns to burn
 	int getFuel() const;
+	/// Get flammability of part.
+	int getFlammability(int part) const;
+	/// Get turns to burn of part
+	int getFuel(int part) const;
 	/// attempt to set the tile on fire, sets overlaps to one if successful.
 	void ignite(int power);
 	/// Get fire and smoke animation offset.
@@ -232,6 +238,10 @@ public:
 	void setDangerous();
 	/// check the danger flag on this tile.
 	bool getDangerous();
+	/// adds a particle to this tile's array.
+	void addParticle(Particle *particle);
+	/// gets a pointer to this tile's particle array.
+	std::list<Particle *> *getParticleCloud();
 
 };
 

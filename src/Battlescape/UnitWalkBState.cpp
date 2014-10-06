@@ -350,11 +350,11 @@ void UnitWalkBState::think()
 				}
 				if (door == 0)
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
+					_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
 				}
 				if (door == 1)
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
+					_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
 					return; // don't start walking yet, wait for the ufo door to open
 				}
 			}
@@ -554,7 +554,7 @@ void UnitWalkBState::playMovementSound()
 		// if a sound is configured in the ruleset, play that one
 		if (_unit->getWalkingPhase() == 0)
 		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getMoveSound())->play();
+			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _unit->getMoveSound())->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 	}
 	else
@@ -568,7 +568,7 @@ void UnitWalkBState::playMovementSound()
 			{
 				if (tile->getFootstepSound(tileBelow))
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow)*2))->play();
+					_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::WALK_OFFSET + (tile->getFootstepSound(tileBelow)*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 				}
 			}
 			// play footstep sound 2
@@ -576,7 +576,7 @@ void UnitWalkBState::playMovementSound()
 			{
 				if (tile->getFootstepSound(tileBelow))
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow)*2))->play();
+					_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), 1 + ResourcePack::WALK_OFFSET + (tile->getFootstepSound(tileBelow)*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 				}
 			}
 		}
@@ -585,7 +585,7 @@ void UnitWalkBState::playMovementSound()
 			// play default flying sound
 			if (_unit->getWalkingPhase() == 1 && !_falling)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
+				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::FLYING_SOUND)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 			}
 		}
 	}
