@@ -49,7 +49,7 @@ private:
 	void setAssignedScientist();
 	ResearchProject * _project;
 	RuleResearch * _rule;
-	void buildUi ();
+	void buildUi();
 	Timer *_timerMore, *_timerLess;
 	InteractiveSurface *_surfaceScientists;
 public:

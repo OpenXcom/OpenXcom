@@ -26,6 +26,7 @@
 #include "../Interface/ComboBox.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/Slider.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
@@ -242,7 +243,7 @@ void OptionsAudioState::slrSoundVolumeChange(Action *)
  */
 void OptionsAudioState::slrSoundVolumeRelease(Action *)
 {
-	_game->getResourcePack()->getSound("GEO.CAT", 5)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_FIRE)->play();
 }
 
 /**
@@ -261,7 +262,7 @@ void OptionsAudioState::slrUiVolumeChange(Action *)
  */
 void OptionsAudioState::slrUiVolumeRelease(Action *)
 {
-	_game->getResourcePack()->getSound("GEO.CAT", 0)->play(Mix_GroupAvailable(0));
+	TextButton::soundPress->play(Mix_GroupAvailable(0));
 }
 
 /**

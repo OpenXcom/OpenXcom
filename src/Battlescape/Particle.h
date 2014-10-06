@@ -16,37 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_POLYLINE_H
-#define OPENXCOM_POLYLINE_H
+#ifndef OPENXCOM_PARTICLE_H
+#define OPENXCOM_PARTICLE_H
+
+#include <SDL_types.h>
 
 namespace OpenXcom
 {
 
-/**
- * Represents a polyline in the world map.
- * Polylines constitute the textured land portions
- * of the X-Com globe and typically have 3-4 points.
- */
-class Polyline
+class Particle
 {
 private:
-	double *_lat, *_lon;
-	const int _points;
+	float _xOffset, _yOffset, _density;
+	Uint8 _color, _opacity, _size;
 public:
-	/// Creates a polyline with a number of points.
-	Polyline(int points);
-	/// Cleans up the polyline.
-	~Polyline();
-	/// Gets the latitude of a point.
-	double getLatitude(int i) const;
-	/// Sets the latitude of a point.
-	void setLatitude(int i, double lat);
-	/// Gets the longitude of a point.
-	double getLongitude(int i) const;
-	/// Sets the longitude of a point.
-	void setLongitude(int i, double lon);
-	/// Gets the number of points of the polyline.
-	int getPoints() const;
+	/// Create a particle.
+	Particle(float xOffset, float yOffset, float density, Uint8 color, Uint8 opacity);
+	/// Destroy a particle.
+	~Particle();
+	/// Animate a particle.
+	bool animate();
+	/// Get the size value.
+	int getSize() { return _size; }
+	/// Get the color.
+	Uint8 getColor() { return _color; }
+	/// Get the opacity.
+	Uint8 getOpacity() {return _opacity / 5; }
+	/// Get the horizontal shift.
+	float getX() { return _xOffset; }
+	/// Get the vertical shift.
+	float getY() { return _yOffset; }
 };
 
 }

@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0)
 {
 }
 

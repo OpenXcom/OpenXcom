@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0), _ambience(-1)
 {
 }
 
@@ -39,6 +39,14 @@ RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimi
 RuleTerrain::~RuleTerrain()
 {
 	for (std::vector<MapBlock*>::iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<LandingSite*>::iterator i = _ufoPositions.begin(); i != _ufoPositions.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<LandingSite*>::iterator i = _craftPositions.begin(); i != _craftPositions.end(); ++i)
 	{
 		delete *i;
 	}
@@ -74,6 +82,30 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	_textures = node["textures"].as< std::vector<int> >(_textures);
 	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
 	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
+	if (const YAML::Node &map = node["ufoPositions"])
+	{
+		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+		{
+			LandingSite *site = new LandingSite();
+			site->x = (*i)[0].as<int>();
+			site->y = (*i)[1].as<int>();
+			site->sizeX = (*i)[2].as<int>();
+			site->sizeY = (*i)[3].as<int>();
+			_ufoPositions.push_back(site);
+		}
+	}
+	if (const YAML::Node &map = node["craftPositions"])
+	{
+		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+		{
+			LandingSite *site = new LandingSite();
+			site->x = (*i)[0].as<int>();
+			site->y = (*i)[1].as<int>();
+			site->sizeX = (*i)[2].as<int>();
+			site->sizeY = (*i)[3].as<int>();
+			_craftPositions.push_back(site);
+		}
+	}
 
 	if (const YAML::Node &civs = node["civilianTypes"])
 	{
@@ -86,6 +118,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	}
 	_minDepth = node["minDepth"].as<int>(_minDepth);
 	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
+	_ambience = node["ambience"].as<int>(_ambience);
 }
 
 /**
@@ -158,7 +191,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 {
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if((*i)->getName() == name)
+		if ((*i)->getName() == name)
 			return (*i);
 	}
 	return 0;
@@ -245,14 +278,48 @@ std::vector<int> RuleTerrain::getRoadTypeOdds() const
 	return _roadTypeOdds;
 }
 
+/**
+ * Gets the min depth.
+ * @return The min depth.
+ */
 const int RuleTerrain::getMinDepth() const
 {
 	return _minDepth;
 }
 
+/**
+ * Gets the max depth.
+ * @return max depth.
+ */
 const int RuleTerrain::getMaxDepth() const
 {
 	return _maxDepth;
 }
 
+/**
+ * Gets The ambient sound effect.
+ * @return The ambient sound effect.
+ */
+const int RuleTerrain::getAmbience() const
+{
+	return _ambience;
+}
+
+/**
+ * Gets a list of potential UFO landing sites.
+ * @return a list of potential UFO landing sites.
+ */
+const std::vector<LandingSite*> *RuleTerrain::getUfoPositions()
+{
+	return &_ufoPositions;
+}
+
+/**
+ * Gets a list of potential xcom craft landing sites.
+ * @return a list of potential xcom craft landing sites.
+ */
+const std::vector<LandingSite*> *RuleTerrain::getCraftPositions()
+{
+	return &_craftPositions;
+}
 }

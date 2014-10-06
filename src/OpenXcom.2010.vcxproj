@@ -293,6 +293,7 @@
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Battlescape\UnitTurnBState.cpp" />
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
+    <ClCompile Include="Battlescape\Particle.cpp" />
     <ClCompile Include="Battlescape\WarningMessage.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
     <ClCompile Include="Engine\AdlibMusic.cpp" />
@@ -323,6 +324,7 @@
     <ClCompile Include="Engine\Scalers\scale2x.cpp" />
     <ClCompile Include="Engine\Scalers\scale3x.cpp" />
     <ClCompile Include="Engine\Scalers\scalebit.cpp" />
+    <ClCompile Include="Engine\Scalers\xbrz.cpp" />
     <ClCompile Include="Engine\Screen.cpp" />
     <ClCompile Include="Engine\Sound.cpp" />
     <ClCompile Include="Engine\SoundSet.cpp" />
@@ -363,14 +365,13 @@
     <ClCompile Include="Geoscape\LowFuelState.cpp" />
     <ClCompile Include="Geoscape\MonthlyReportState.cpp" />
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp" />
-    <ClCompile Include="Geoscape\Polygon.cpp" />
-    <ClCompile Include="Geoscape\Polyline.cpp" />
     <ClCompile Include="Geoscape\SelectDestinationState.cpp" />
     <ClCompile Include="Geoscape\TargetInfoState.cpp" />
     <ClCompile Include="Geoscape\UfoDetectedState.cpp" />
     <ClCompile Include="Geoscape\UfoLostState.cpp" />
     <ClCompile Include="Interface\ArrowButton.cpp" />
     <ClCompile Include="Interface\Bar.cpp" />
+    <ClCompile Include="Interface\BattlescapeButton.cpp" />
     <ClCompile Include="Interface\ComboBox.cpp" />
     <ClCompile Include="Interface\Cursor.cpp" />
     <ClCompile Include="Interface\FpsCounter.cpp" />
@@ -426,6 +427,8 @@
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
+    <ClCompile Include="Ruleset\Polygon.cpp" />
+    <ClCompile Include="Ruleset\Polyline.cpp" />
     <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
@@ -434,8 +437,11 @@
     <ClCompile Include="Ruleset\MapData.cpp" />
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
+    <ClCompile Include="Ruleset\RuleGlobe.cpp" />
+    <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
+    <ClCompile Include="Ruleset\RuleInterface.cpp" />
     <ClCompile Include="Ruleset\Unit.cpp" />
     <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -585,6 +591,7 @@
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Battlescape\UnitTurnBState.h" />
     <ClInclude Include="Battlescape\UnitWalkBState.h" />
+    <ClInclude Include="Battlescape\Particle.h" />
     <ClInclude Include="Battlescape\WarningMessage.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Action.h" />
@@ -614,10 +621,12 @@
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
     <ClInclude Include="Engine\Scalers\common.h" />
+    <ClInclude Include="Engine\Scalers\config.h" />
     <ClInclude Include="Engine\Scalers\hqx.h" />
     <ClInclude Include="Engine\Scalers\scale2x.h" />
     <ClInclude Include="Engine\Scalers\scale3x.h" />
     <ClInclude Include="Engine\Scalers\scalebit.h" />
+    <ClInclude Include="Engine\Scalers\xbrz.h" />
     <ClInclude Include="Engine\Screen.h" />
     <ClInclude Include="Engine\ShaderDraw.h" />
     <ClInclude Include="Engine\ShaderDrawHelper.h" />
@@ -661,8 +670,6 @@
     <ClInclude Include="Geoscape\LowFuelState.h" />
     <ClInclude Include="Geoscape\MonthlyReportState.h" />
     <ClInclude Include="Geoscape\MultipleTargetsState.h" />
-    <ClInclude Include="Geoscape\Polygon.h" />
-    <ClInclude Include="Geoscape\Polyline.h" />
     <ClInclude Include="Geoscape\PsiTrainingState.h" />
     <ClInclude Include="Geoscape\ResearchCompleteState.h" />
     <ClInclude Include="Geoscape\SelectDestinationState.h" />
@@ -671,6 +678,7 @@
     <ClInclude Include="Geoscape\UfoLostState.h" />
     <ClInclude Include="Interface\ArrowButton.h" />
     <ClInclude Include="Interface\Bar.h" />
+    <ClInclude Include="Interface\BattlescapeButton.h" />
     <ClInclude Include="Interface\ComboBox.h" />
     <ClInclude Include="Interface\Cursor.h" />
     <ClInclude Include="Interface\FpsCounter.h" />
@@ -727,8 +735,13 @@
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
+    <ClInclude Include="Ruleset\Polygon.h" />
+    <ClInclude Include="Ruleset\Polyline.h" />
+    <ClInclude Include="Ruleset\RuleGlobe.h" />
+    <ClInclude Include="Ruleset\SoundDefinition.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
+    <ClInclude Include="Ruleset\RuleInterface.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />

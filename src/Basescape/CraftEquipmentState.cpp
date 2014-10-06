@@ -443,12 +443,12 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	int cQty = 0;
 	if (item->isFixed()) cQty = c->getVehicleCount(_items[_sel]);
 	else cQty = c->getItems()->getItem(_items[_sel]);
-	if (0 >= change || 0 >= cQty) return;
+	if (change <= 0 || cQty <= 0) return;
 	change = std::min(cQty, change);
 	// Convert vehicle to item
 	if (item->isFixed())
 	{
-		if(!item->getCompatibleAmmo()->empty())
+		if (!item->getCompatibleAmmo()->empty())
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
@@ -542,7 +542,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		if (room > 0)
 		{
 			change = std::min(room, change);
-			if(!item->getCompatibleAmmo()->empty())
+			if (!item->getCompatibleAmmo()->empty())
 			{
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());

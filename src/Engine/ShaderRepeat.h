@@ -121,7 +121,7 @@ struct controler<ShaderRepeat<Pixel> >
 	inline void mod_y(int&, int&)
 	{
 		_curr_y = ( _range_image.beg_y - _off_y)%_size_y; 
-		if(_curr_y <0)
+		if (_curr_y <0)
 			_curr_y += _size_y;
 		_ptr_curr_y = _base;
 	}
@@ -134,7 +134,7 @@ struct controler<ShaderRepeat<Pixel> >
 	{
 		++_curr_y;
 		_ptr_curr_y += _pitch;
-		if(_curr_y == _size_y)
+		if (_curr_y == _size_y)
 		{
 			_curr_y = 0;
 			_ptr_curr_y -= _size_y*_pitch;
@@ -145,7 +145,7 @@ struct controler<ShaderRepeat<Pixel> >
 	inline void mod_x(int&, int&)
 	{
 		_curr_x = ( _range_image.beg_x - _off_x)%_size_x; 
-		if(_curr_x <0)
+		if (_curr_x <0)
 			_curr_x += _size_x;
 		_ptr_curr_x = _ptr_curr_y;
 	}
@@ -158,7 +158,7 @@ struct controler<ShaderRepeat<Pixel> >
 	{
 		++_curr_x;
 		_ptr_curr_x += 1;
-		if(_curr_x == _size_x)
+		if (_curr_x == _size_x)
 		{
 			_curr_x = 0;
 			_ptr_curr_x -= _size_x;

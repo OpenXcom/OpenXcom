@@ -119,7 +119,7 @@ YAML::Node AlienStrategy::save() const
 const std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)
 {
 	std::string chosen = _regionChances.choose();
-	if (chosen == "")
+	if (chosen.empty())
 	{
 		init(rules);
 		chosen = _regionChances.choose();

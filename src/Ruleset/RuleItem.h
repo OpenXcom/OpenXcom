@@ -66,8 +66,8 @@ private:
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
-	bool _strengthApplied, _skillApplied, _LOSRequired;
-	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound;
+	bool _strengthApplied, _skillApplied, _LOSRequired, _underwaterOnly;
+	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound, _specialType, _vaporColor, _vaporDensity;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -144,19 +144,19 @@ public:
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
 	/// Gets the medikit heal quantity.
-	int getHealQuantity () const;
+	int getHealQuantity() const;
 	/// Gets the medikit pain killer quantity.
-	int getPainKillerQuantity () const;
+	int getPainKillerQuantity() const;
 	/// Gets the medikit stimulant quantity.
-	int getStimulantQuantity () const;
+	int getStimulantQuantity() const;
 	/// Gets the medikit wound healed per shot.
-	int getWoundRecovery () const;
+	int getWoundRecovery() const;
 	/// Gets the medikit health recovered per shot.
-	int getHealthRecovery () const;
+	int getHealthRecovery() const;
 	/// Gets the medikit energy recovered per shot.
-	int getEnergyRecovery () const;
+	int getEnergyRecovery() const;
 	/// Gets the medikit stun recovered per shot.
-	int getStunRecovery () const;
+	int getStunRecovery() const;
 	/// Gets the Time Unit use.
 	int getTUUse() const;
 	/// Gets the max explosion radius.
@@ -219,6 +219,15 @@ public:
 	int getMeleeAnimation() const;
 	/// Check if LOS is required to use this item (only applies to psionic type items)
 	bool isLOSRequired() const;
+	/// Is this item restricted to use underwater?
+	const bool isWaterOnly() const;
+	/// Get the associated special type of this item.
+	const int getSpecialType() const;
+	/// Get the color offset to use for the vapor trail.
+	const int getVaporColor() const;
+	/// Gets the vapor cloud density.
+	const int getVaporDensity() const;
+
 };
 
 }

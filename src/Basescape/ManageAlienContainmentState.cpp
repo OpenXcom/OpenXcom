@@ -51,11 +51,11 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrigin origin) : _base(base), _origin(origin), _qtys(), _aliens(), _sel(0), _aliensSold(0), _researchedAliens(0)
+ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrigin origin) : _base(base), _origin(origin), _sel(0), _aliensSold(0), _researchedAliens(0)
 {
 	_overCrowded = Options::storageLimitsEnforced && _base->getAvailableContainment() < _base->getUsedContainment();
 
-	for(std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin (); iter != _base->getResearch().end (); ++iter)
+	for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin(); iter != _base->getResearch().end(); ++iter)
 	{
 		const RuleResearch *research = (*iter)->getRules();
 		if (_game->getRuleset()->getUnit(research->getName()))

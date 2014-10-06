@@ -142,4 +142,13 @@ void BattlescapeMessage::setHeight(int height)
 	_text->setHeight(height);
 }
 
+/*
+ * Sets the text color of the battlescape message.
+ * @param color the new color.
+ */
+void BattlescapeMessage::setTextColor(Uint8 color)
+{
+	_text->setColor(color);
+}
+
 }

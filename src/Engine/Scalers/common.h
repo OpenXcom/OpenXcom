@@ -46,6 +46,7 @@ static inline uint32_t rgb_to_yuv(uint32_t c)
     return RGBtoYUV[MASK_RGB & c];
 }
 
+
 /* Test if there is difference in color */
 static inline int yuv_diff(uint32_t yuv1, uint32_t yuv2) {
     return (( abs((int)((yuv1 & Ymask) - (yuv2 & Ymask))) > trY ) ||
@@ -61,7 +62,8 @@ static inline int Diff(uint32_t c1, uint32_t c2)
 /* Interpolate functions */
 static inline uint32_t Interpolate_2(uint32_t c1, int w1, uint32_t c2, int w2, int s)
 {
-    if (c1 == c2) {
+    if (c1 == c2)
+    {
         return c1;
     }
     return

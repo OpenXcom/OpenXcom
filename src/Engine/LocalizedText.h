@@ -48,9 +48,9 @@ public:
 	/// Create from existing unicode string.
 	LocalizedText(const std::wstring &);
 	/// Create the empty string.
-	LocalizedText() : _text(L""), _nextArg(1) { /* Empty by design. */ }
+	LocalizedText() : _nextArg(1) { /* Empty by design. */ }
 	/// Return constant wide string.
-	operator std::wstring const& () const OX_REQUIRED_RESULT;
+	operator std::wstring const&() const OX_REQUIRED_RESULT;
 	/// Return the UTF-8 representation of this string.
 	std::string asUTF8() const OX_REQUIRED_RESULT;
 	/// Get a pointer to underlying wchat_t data.
@@ -58,9 +58,9 @@ public:
 
 	// Argument substitution.
 	/// Replace next argument.
-	LocalizedText arg(std::wstring const &) const OX_REQUIRED_RESULT;
+	LocalizedText arg(const std::wstring &) const OX_REQUIRED_RESULT;
 	/// Replace next argument.
-	LocalizedText &arg(std::wstring const &) OX_REQUIRED_RESULT;
+	LocalizedText &arg(const std::wstring &) OX_REQUIRED_RESULT;
 	/// Replace next argument.
 	template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
 	/// Replace next argument.
@@ -93,7 +93,7 @@ inline LocalizedText::LocalizedText(const std::wstring &text, unsigned replaced)
  * Typecast to constant std::wstring reference.
  * This is used to avoid copying when the string will not change.
  */
-inline LocalizedText::operator std::wstring const& () const
+inline LocalizedText::operator std::wstring const&() const
 {
 	return _text;
 }

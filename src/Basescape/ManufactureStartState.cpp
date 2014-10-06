@@ -130,8 +130,8 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 
 	ItemContainer * itemContainer (base->getItems());
 	int row = 0;
-	for(std::map<std::string, int>::const_iterator iter = requiredItems.begin ();
-		iter != requiredItems.end ();
+	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();
+		iter != requiredItems.end();
 		++iter)
 	{
 		std::wostringstream s1, s2;

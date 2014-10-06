@@ -110,7 +110,7 @@ void ResearchCompleteState::btnReportClick(Action *)
 	std::string bonusName;
 	if (_bonus)
 	{
-		if (_bonus->getLookup() == "")
+		if (_bonus->getLookup().empty())
 			bonusName = _bonus->getName();
 		else
 			bonusName = _bonus->getLookup();
@@ -118,7 +118,7 @@ void ResearchCompleteState::btnReportClick(Action *)
 	}
 	if (_research)
 	{
-		if (_research->getLookup() == "")
+		if (_research->getLookup().empty())
 			name = _research->getName();
 		else
 			name = _research->getLookup();

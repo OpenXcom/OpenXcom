@@ -36,7 +36,7 @@ namespace YAML
 
 		static bool decode(const Node& node, OpenXcom::MissionWave& rhs)
 		{
-			if(!node.IsMap())
+			if (!node.IsMap())
 				return false;
 
 			rhs.ufoType = node["ufo"].as<std::string>();

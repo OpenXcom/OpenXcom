@@ -49,10 +49,11 @@ private:
 	int _speed;
 	int _bulletSprite;
 	bool _reversed;
+	int _vaporColor, _vaporDensity;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, bool extendLine);
 public:
 	/// Creates a new Projectile.
-	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position target, int bulletSprite);
+	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position target, int bulletSprite, int vaporColor, int vaporDensity);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.
@@ -76,7 +77,10 @@ public:
 	Position getOrigin();
 	/// Gets the targetted tile for the projectile.
 	Position getTarget();
+	/// Is this projectile being drawn back-to-front or front-to-back?
 	bool isReversed() const;
+	/// adds a cloud of particles at the projectile's location
+	void addVaporCloud();
 };
 
 }

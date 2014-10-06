@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0), _state(state)
+TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0), _state(state)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
