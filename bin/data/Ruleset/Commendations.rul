@@ -208,6 +208,415 @@ extraStrings:
      STR_AWARD_DECOR_7: "First gold pin"
      STR_AWARD_DECOR_8: "Second gold pin"
      STR_AWARD_DECOR_9: "Third gold pin"
+  - type: fr
+    strings:
+     STR_DIARY: "DOSSIER"
+     STR_KILLED: "TUE"
+     STR_STUNNED: "ASSOMME"
+     STR_REGION_UNKNOWN: "Lieu non révélé"
+     STR_WEAPON_UNKNOWN: "Improvisation"
+     STR_MISSION_WIN: "Victoire"
+     STR_MISSION_LOSS: "Défaite"
+     STR_NO_KILLS: "Bredouille"
+     STR_MISSION_DETAILS: "DETAILS MISSIONS"
+     STR_LOCATION: "LIEU"
+     STR_HUMAN: "Humain"
+     STR_MISSION_TYPE: "MISSION> {ALT}{0}"
+     STR_UFO_TYPE: "OVNI> {ALT}{0}"
+     STR_RACE_TYPE: "RACE> {ALT}{0}"
+     STR_DAYLIGHT_TYPE: "PERIODE> {ALT}{0}"
+     STR_DAY: "Jour"
+     STR_NIGHT: "Nuit"
+     STR_DAYS_WOUNDED: "JOURS BLESSE> {ALT}{0}"
+     STR_KILLS_UC: "TUES"
+     STR_MISSIONS_UC: "MISSIONS"
+     STR_AWARDS_UC: "RECOMPENSES"
+     STR_KILLS_BY_RACE: "MORTS/KO PAR RACE"
+     STR_KILLS_BY_RANK: "MORTS/KO PAR RANG"
+     STR_KILLS_BY_WEAPON: "MORTS/KO PAR ARME"
+     STR_MISSIONS_BY_LOCATION: "MISSIONS PAR LIEU"
+     STR_MISSIONS_BY_TYPE: "MISSIONS PAR TYPE"
+     STR_MISSIONS_BY_UFO: "MISSIONS PAR OVNI"
+     STR_MISSIONS_TYPE: "MISSIONS"
+     STR_UFO_CRASH_RECOVERY_LC: "Sécurisation d'un site de crash d'OVNI"
+     STR_UFO_GROUND_ASSAULT_LC: "Assaut d'OVNI"
+     STR_BASE_DEFENSE_LC: "Défense de Base"
+     STR_ALIEN_BASE_ASSAULT_LC: "Assaut de Base Alienne"
+     STR_TERROR_MISSION_LC: "Terreur Alienne"
+     STR_VEHICLE: "Vehicule"
+     STR_SCORE_VALUE: "SCORE> {ALT}{0}"
+     STR_WINS: "VICTOIRES> {ALT}{0}"
+     STR_STUNS: "KO> {ALT}{0}"
+     STR_COMMENDATIONS_UC: "DECORATIONS"
+     STR_COMMENDATIONS: "Décorations"
+     STR_MEDALS: "MEDAILLES"
+     STR_MEDAL_NAME: "Nom de la Médaille"
+     STR_MEDAL_AWARD_LEVEL: "Niveau de Trophée"
+     STR_MEDAL_DECOR_LEVEL: "Niveau de Décoration"
+     STR_MEDAL_DESCRIPTION: "DESCRIPTION"
+     STR_MEDAL_MERIT_STAR_NAME: "Medal of Aggression"
+     STR_MEDAL_MERIT_STAR_DESCRIPTION: "Remise à un soldat ayant éliminés de nombreux extra-terrestres."
+     STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
+     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Remise à un soldat ayant combattu la menace {0} avec succès."
+     STR_MEDAL_DEFENDER_MEDAL_NAME: "Guardian Star"
+     STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Remise à un soldat ayant pris part à une mission de défense de base victorieuse."
+     STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
+     STR_MEDAL_MILITARY_CROSS_DESCRIPTION: "Remise à un soldat ayant participé à un grand nombre de missions."
+     STR_MEDAL_SERVICE_MEDAL_NAME: "Long Service Medal"
+     STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: "Remise à un soldat en service pour une longue période."
+     STR_MEDAL_HONOR_CROSS_NAME: "XCOM Service Medal"
+     STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Remise à tout nouveau soldat en reconnaissance de sa dévotion dans le combat contre la menace extra-trrester et de prendre part à l'effort de guerre pour sauver l'humanité. Cette médaille n'a pas de décoration supplémentaire."
+     STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Order of the Custodian"
+     STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Remise à un soldat ayant défendu beaucoup de régions avec succès."
+     STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Police Medal"
+     STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Remise à un soldat ayant réussi à contrôler de nombreux aliens sans avoir eu besoin de recourir à la force."
+     STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
+     STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Remise à un soldat s'étant distingué dans l'usage de {0}."
+     STR_MEDAL_CAMPAIGN_RIBBON_NAME: "{0} Campaign Ribbon"
+     STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: "Remise à un soldat ayant été actif dans la protection de {0}."
+     STR_MEDAL_ORDER_OF_RESTRAINT_NAME: "Order of Restraint"
+     STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: "Remise à un soldat ayant neutralisé beaucoup d'extra-terrestres sans faire usage de la force."
+     STR_MEDAL_LONGEST_NIGHT_NAME: "Longest Night Ribbon"
+     STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: "Remise à un soldat ayant assisté aux horreurs des missions nocturnes de terreurs aliennes."
+     STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Medal of Heroism"
+     STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Remise à un soldat s'étant battu jusqu'à épuisement."
+     STR_MEDAL_HELLRAISER_MEDAL_NAME: "Inferno Star"
+     STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Remise à un soldat ayant utilisé des armes incdendiaires afin d'éliliner des extra-terrestres."
+     STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Order of the Hammer"
+     STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Remise à un soldat ayant tués des soldats extra-terrestres de tous types."
+     STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
+     STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Remise à un soldat n'ayant pas fait appel à la force pour neutraliser des cibles importantes."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
+     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Remise à un soldat ayant subit le feu nourri de la part de l'ennemi."
+     STR_MEDAL_MAN_OF_STEEL_NAME: "Man of Steel"
+     STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: "Remise à un soldat ayant été touchés plusieurs fois lors d'une seule mission."
+     STR_MEDAL_BLACK_CROSS_NAME: "Black Cross"
+     STR_MEDAL_BLACK_CROSS_DESCRIPTION: "Remise à un soldat ayant survécu à un tir fraternel."
+     STR_MEDAL_STAR_OF_VALOR_NAME: "Star of Valor"
+     STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Remise à un soldat ayant survécu seul à une mission."
+     STR_MEDAL_IRON_MAN_NAME: "Iron Man"
+     STR_MEDAL_IRON_MAN_DESCRIPTION: "Remise à un soldat qui est a montré clairement ses capacités d'Iron Man ou Iron Woman."
+     STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of Earth"
+     STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Remise à un soldat ayant été actif en défendant la Terre."
+     STR_MEDAL_SNIPER_TMPNAME: "Marksman Citation"
+     STR_MEDAL_SNIPER_TMPDESCRIPTION: "Remise à un sodat ayant réussi d'éliminer des ennemis qu'il visait depuis une grande distance ."
+     STR_MEDAL_LUCKYSHOT_TMPNAME: "Good Luck Citation"
+     STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Remise à un soldat ayant toucher sa cible en réussissant un tir improbable défiant les lois de la nature"
+     STR_MEDAL_DBLKILL_TMPNAME: "Performance Citation"
+     STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Remise à un soldat ayant démontré sa vaillance sur le champs de bataille en éliminant plusieurs cibles ennemis en un cours laps de temps."
+     STR_MEDAL_REACTIONFIRE_TMPNAME: "Swiftness Citation"
+     STR_MEDAL_REACTIONFIRE_TMPDESCRIPTION: "Remise à un soldat ayant démontré ses réflexes en éliminant un ennemi avant que celui-ci n'ait eu le temps de réagir."
+     STR_MEDAL_PURPLE_HEART_NAME: "Purple Heart"
+     STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Remise à un soldat ayant été blessé au champs d'honneur."
+     STR_MEDAL_CRIMSON_HEART_NAME: "Crimson Heart"
+     STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Remise à un soldat ayant été blessé durant une longue période."
+     STR_MEDAL_ORDER_OF_GLORY_NAME: "Order of Glory"
+     STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Remise à un soldat ayant été décisif au succès d'une mission."
+     STR_MEDAL_VALIANT_CRUX_NAME: "Valiant Crux"
+     STR_MEDAL_VALIANT_CRUX_DESCRIPTION: "Remise à un soldat ayant protégé tous les civils lors d'une mission de terreur alienne."
+     STR_MEDAL_FALLEN_NAME: "Order of the Fallen"
+     STR_MEDAL_FALLEN_DESCRIPTION: "Remise à un soldat tombé au combat en honneur du sacrifice consenti et de son dévouement dans la défense de la Terre."
+     STR_AWARD_0: "Première récompense"
+     STR_AWARD_1: "Seconde récompense"
+     STR_AWARD_2: "Troisième récompense"
+     STR_AWARD_3: "Quatrième récompense"
+     STR_AWARD_4: "Cinquième récompense"
+     STR_AWARD_5: "Sixième récompense"
+     STR_AWARD_6: "Septième récompense"
+     STR_AWARD_7: "Huitième récompense"
+     STR_AWARD_8: "Neuvième récompense"
+     STR_AWARD_9: "Dixième récompense"
+     STR_AWARD_DECOR_0: "Néant"
+     STR_AWARD_DECOR_1: "Premier Broche de Bronze"
+     STR_AWARD_DECOR_2: "Second Broche de Bronze"
+     STR_AWARD_DECOR_3: "Troisième Broche de Bronze"
+     STR_AWARD_DECOR_4: "Premier Broche d'Argent"
+     STR_AWARD_DECOR_5: "Second Broche d'Argent"
+     STR_AWARD_DECOR_6: "Troisième Broche d'Argent"
+     STR_AWARD_DECOR_7: "First Broche d'Or"
+     STR_AWARD_DECOR_8: "Second Broche d'Or"
+     STR_AWARD_DECOR_9: "Troisième Broche d'Or"
+     STR_MISSION_DETAILS: "DETAILS DE MISSIONS POUR{NEWLINE}{0}"
+     STR_DETAILS_UC: "DETAILS"
+     STR_TANK: "Blindé"
+     STR_HEAVY_WEAPONS_PLATFORM_LC: "Plateforme d'armement lourde"
+  - type: ru
+    strings:
+     STR_AWARDS_UC: "НАГРАД"
+     STR_COMMENDATIONS_UC: "НАГРАДНОЙ ЛИСТ"
+     STR_COMMENDATIONS: "Наградной лист"
+     STR_MEDALS: "МЕДАЛИ"
+     STR_MEDAL_NAME: "Наименование"
+     STR_MEDAL_AWARD_LEVEL: "Вид награды"
+     STR_MEDAL_DECOR_LEVEL: "Степень награды"
+     STR_MEDAL_DESCRIPTION: "ОПИСАНИЕ"
+     STR_MEDAL_MERIT_STAR_NAME: "Медаль агрессора"
+     STR_MEDAL_MERIT_STAR_DESCRIPTION: "Вручается солдату, уничтожившему значительное количество пришельцев в бою."
+     STR_MEDAL_XENOCIDE_MEDAL_NAME: "Медаль {0}-Ксеноцида"
+     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Вручается солдату, который был особенно успешен в борьбе с угрозой от расы {0}."
+     STR_MEDAL_DEFENDER_MEDAL_NAME: "Звезда Стража"
+     STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Вручается солдату, участвовавшему в обороне базы X-COM от инопланетного нападения."
+     STR_MEDAL_MILITARY_CROSS_NAME: "Военный Крест"
+     STR_MEDAL_MILITARY_CROSS_DESCRIPTION: "Вручается солдату за участие в значительном количестве операций."
+     STR_MEDAL_SERVICE_MEDAL_NAME: "Медаль за Выслугу"
+     STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: "Вручается солдату, за долгую и безупречную службу."
+     STR_MEDAL_HONOR_CROSS_NAME: "Медаль сил XCOM"
+     STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Вручается солдату вступившему в X-CОМ, в качестве признания его решимости бороться против инопланетной угрозы. У медали нет степеней."
+     STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Орден Хранителя"
+     STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Вручается солдату, участвовавшему в обороне нескольких регионов планеты."
+     STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Медаль Военного Специалиста"
+     STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Вручается солдату, который был особенно успешен в использовании спецсредств для перехвата управления силами пришельцев."
+     STR_MEDAL_WEAPON_PROFICIENCY_NAME: "Медаль {0} Мастер"
+     STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Вручается солдату, в совершенстве овладевшему навыками использования {0}."
+     STR_MEDAL_CAMPAIGN_RIBBON_NAME: "Лента за Кампанию {0}"
+     STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: "Вручается солдату, отличившемуся в боях за страну {0}."
+     STR_MEDAL_ORDER_OF_RESTRAINT_NAME: "Орден Выдержки"
+     STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: "Вручается солдату, который неоднократно производил обезвреживание и задержание пришельца."
+     STR_MEDAL_LONGEST_NIGHT_NAME: "Лента Долгой Ночи"
+     STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: "Вручается солдату, за участие в боях против пришельцев в темное время суток."
+     STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Медаль Героя"
+     STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Вручается солдату, не щадившему сил в борьбе против инопланетной угрозы."
+     STR_MEDAL_HELLRAISER_MEDAL_NAME: "Звезда Пламени"
+     STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Вручается солдату, за уничтожение пришельцев при помощи зажигательного оружия."
+     STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Орден Молота"
+     STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Вручается солдату, участвовавшему в уничтожении солдат пришельцев разных видов."
+     STR_MEDAL_BOLTS_CROSS_NAME: "Крест Молнии"
+     STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Вручается солдату, участвовавшему в обезвреживании и задержании высокопоставленного пришельца."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Звезда Асклепия"
+     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Вручается солдату, выстоявшему под массированным огнем противника."
+     STR_MEDAL_MAN_OF_STEEL_NAME: "Человек из Стали"
+     STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: "Вручается солдату, выдержавшему несколько попаданий за одну операцию."
+     STR_MEDAL_BLACK_CROSS_NAME: "Черный Крест"
+     STR_MEDAL_BLACK_CROSS_DESCRIPTION: "Вручается солдату, пережившему ошибочное попадание со стороны дружественных сил."
+     STR_MEDAL_STAR_OF_VALOR_NAME: "Звезда Доблести"
+     STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Вручается солдату, единственному из подразделения оставшемуся в живых в ходе операции."
+     STR_MEDAL_IRON_MAN_NAME: "Железный Человек"
+     STR_MEDAL_IRON_MAN_DESCRIPTION: "Вручается солдату, который действительно может быть назван Железным Человеком."
+     STR_MEDAL_ORDER_OF_EARTH_NAME: "Орден Земли"
+     STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Вручается солдату, отличившемуся при обороне Земли от инопланетной угрозы."
+     STR_MEDAL_SNIPER_TMPNAME: "Знак Снайпера"
+     STR_MEDAL_SNIPER_TMPDESCRIPTION: "Вручается солдату, успешно поражающему выбранные цели с большого расстояния."
+     STR_MEDAL_LUCKYSHOT_TMPNAME: "Знак Счастливчика"
+     STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Вручается солдату, кто несмотря на обстоятельства, успешно поразил цель в крайне неблагоприятных условиях."
+     STR_MEDAL_DBLKILL_TMPNAME: "Знак Безупречности"
+     STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Вручается солдату, который отличился на поле боя, уничтожив значительные силы противника за короткое время."
+     STR_MEDAL_REACTIONFIRE_TMPNAME: "Знак Быстроты"
+     STR_MEDAL_REACTIONFIRE_TMPDESCRIPTION: "Вручается солдату, продемонстрировавшему быстроту своих рефлексов, уничтожив противника до того, как он изготовился к ответному огню."
+     STR_MEDAL_PURPLE_HEART_NAME: "Пурпурное Сердце"
+     STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Вручается солдату, раненому на поле боя."
+     STR_MEDAL_CRIMSON_HEART_NAME: "Карминовое Сердце"
+     STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Вручается солдату, тяжело раненому на поле боя."
+     STR_MEDAL_ORDER_OF_GLORY_NAME: "Орден Славы"
+     STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Вручается солдату, чьи действия стали ключевыми в успехе операций X-COM."
+     STR_MEDAL_VALIANT_CRUX_NAME: "Крест Мужества"
+     STR_MEDAL_VALIANT_CRUX_DESCRIPTION: "Вручается солдату, защитившему всех гражданских лиц, в ходе антитеррористической миссии против сил пришельцев."
+     STR_MEDAL_FALLEN_NAME: "Орден Скорби"
+     STR_MEDAL_FALLEN_DESCRIPTION: "Вручается солдату, павшему на поле боя, чтобы почтить их героическую гибель, и их самоотверженность при обороне Земли от инопланетных захватчиков."
+     STR_MEDAL_TRAP_NAME: "Крест Мародера"
+     STR_MEDAL_TRAP_DESCRIPTION: "Вручается солдату, за успешное применение партизанской тактики ведения боя."
+     STR_MEDAL_ALIEN_BASE_ASSAULT_NAME: "Крест Землянина"
+     STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Вручается солдату, за участие в операции по уничтожению базы пришельцев."
+     STR_MEDAL_NIKE_CROSS_NAME: "Крест Победы"
+     STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Вручается солдату, единолично уничтожившему силы пришельцев в ходе операции."
+     STR_AWARD_0: "Первая награда"
+     STR_AWARD_1: "Вторая награда"
+     STR_AWARD_2: "Третья награда"
+     STR_AWARD_3: "Четвертая награда"
+     STR_AWARD_4: "Пятая награда"
+     STR_AWARD_5: "Шестая награда"
+     STR_AWARD_6: "Седьмая награда"
+     STR_AWARD_7: "Восьмая награда"
+     STR_AWARD_8: "Девятая награда"
+     STR_AWARD_9: "Десятая награда"
+     STR_AWARD_DECOR_0: "Нет"
+     STR_AWARD_DECOR_1: "Первая бронзовая"
+     STR_AWARD_DECOR_2: "Вторая бронзовая"
+     STR_AWARD_DECOR_3: "Третья бронзовая"
+     STR_AWARD_DECOR_4: "Первая серебряная"
+     STR_AWARD_DECOR_5: "Вторая серебряная"
+     STR_AWARD_DECOR_6: "Третья серебряная"
+     STR_AWARD_DECOR_7: "Первая золотая"
+     STR_AWARD_DECOR_8: "Вторая золотая"
+     STR_AWARD_DECOR_9: "Третья золотая"
+     STR_DIARY: "ЗАПИСЬ"
+     STR_KILLED: "УБИТО"
+     STR_STUNNED: "ЗАДЕРЖАНО"
+     STR_REGION_UNKNOWN: "Нет сведений"
+     STR_WEAPON_UNKNOWN: "Нет сведений"
+     STR_MISSION_WIN: "Победа"
+     STR_MISSION_LOSS: "Поражение"
+     STR_NO_KILLS: "Нет"
+     STR_MISSION_DETAILS: "ДАННЫЕ ПО ОПЕРАЦИИ"
+     STR_LOCATION: "МЕСТОПОЛОЖЕНИЕ"
+     STR_HUMAN: "Человек"
+     STR_MISSION_TYPE: "ТИП ОПЕРАЦИИ> {ALT}{0}"
+     STR_UFO_TYPE: "НЛО> {ALT}{0}"
+     STR_RACE_TYPE: "РАСА> {ALT}{0}"
+     STR_DAYLIGHT_TYPE: "ВРЕМЯ СУТОК> {ALT}{0}"
+     STR_DAY: "День"
+     STR_NIGHT: "Ночь"
+     STR_DAYS_WOUNDED: "В ГОСПИТАЛЕ> {ALT}{0}"
+     STR_KILLS_UC: "УБИТО"
+     STR_MISSIONS_UC: "ОПЕРАЦИЙ"
+     STR_KILLS_BY_RACE: "УБИТО/ЗАДЕРЖАНО ПО РАСАМ"
+     STR_KILLS_BY_RANK: "УБИТО/ЗАДЕРЖАНО ПО РАНГУ"
+     STR_KILLS_BY_WEAPON: "УБИТО/ЗАДЕРЖАНО ПО ОРУЖИЮ"
+     STR_MISSIONS_BY_LOCATION: "ОПЕРАЦИИ ПО МЕСТУ"
+     STR_MISSIONS_BY_TYPE: "ОПЕРАЦИИ ПО ТИПУ"
+     STR_MISSIONS_BY_UFO: "ОПЕРАЦИИ ПО НЛО"
+     STR_MISSIONS_TYPE: "ОПЕРАЦИИ"
+     STR_UFO_CRASH_RECOVERY_LC: "Крушение НЛО"
+     STR_UFO_GROUND_ASSAULT_LC: "Посадка НЛО"
+     STR_BASE_DEFENSE_LC: "Оборона базы"
+     STR_ALIEN_BASE_ASSAULT_LC: "Атака базы пришельцев"
+     STR_TERROR_MISSION_LC: "Антитеррор"
+     STR_VEHICLE: "Транспорт"
+     STR_SCORE_VALUE: "ОЧКОВ> {ALT}{0}"
+     STR_WINS: "ПОБЕД> {ALT}{0}"
+     STR_STUNS: "ЗАДЕРЖАНО> {ALT}{0}"
+     STR_MISSION_DETAILS: "СВЕДЕНИЯ ОБ ОПЕРАЦИИ ДЛЯ{NEWLINE}{0}"
+     STR_DETAILS_UC: "СВЕДЕНИЯ"
+     STR_TANK: "Танк"
+     STR_HEAVY_WEAPONS_PLATFORM_LC: "Тяжелая Боевая Платформа"	 
+  - type: it
+    strings:
+      STR_ALIEN_BASE_ASSAULT_LC: Assalto ad una Base Aliena
+      STR_AWARDS_UC: Riconoscimenti
+      STR_AWARD_0: Primo Riconoscimento
+      STR_AWARD_1: Secondo Riconoscimento
+      STR_AWARD_2: Terzo Riconoscimento
+      STR_AWARD_3: Quarto Riconoscimento
+      STR_AWARD_4: Quinto Riconoscimento
+      STR_AWARD_5: Sesto Riconoscimento
+      STR_AWARD_6: Settimo Riconoscimento
+      STR_AWARD_7: Ottavo Riconoscimento
+      STR_AWARD_8: Nono Riconoscimento
+      STR_AWARD_9: Decimo Riconoscimento
+      STR_AWARD_DECOR_0: Nessuno
+      STR_AWARD_DECOR_1: Prima Stella di Bronzo
+      STR_AWARD_DECOR_2: Seconda Stella di Bronzo
+      STR_AWARD_DECOR_3: Terza Stella di Bronzo
+      STR_AWARD_DECOR_4: "Prima Stella d'Argento"
+      STR_AWARD_DECOR_5: "Seconda Stella d'Argento"
+      STR_AWARD_DECOR_6: "Terza Stella d'Argento"
+      STR_AWARD_DECOR_7: "Prima Stella d'Oro"
+      STR_AWARD_DECOR_8: "Seconda Stella d'Oro"
+      STR_AWARD_DECOR_9: "Terza Stella d'Oro"
+      STR_BASE_DEFENSE_LC: Difesa di una Base
+      STR_COMMENDATIONS: Encomi
+      STR_COMMENDATIONS_UC: Encomi
+      STR_DAY: Giorno
+      STR_DAYLIGHT_TYPE: "Tempo> {ALT}{0}"
+      STR_DAYS_WOUNDED: "Giorni da Ferito> {ALT}{0}"
+      STR_DETAILS_UC: Dettagli
+      STR_DIARY: Record
+      STR_HEAVY_WEAPONS_PLATFORM_LC: Piattaforme per Plasma Pesante
+      STR_HUMAN: Umano
+      STR_KILLED: Uccisi
+      STR_KILLS_BY_RACE: Uccisi/Storditi per Razza
+      STR_KILLS_BY_RANK: Uccisi/Storditi per Rango
+      STR_KILLS_BY_WEAPON: Uccisi/Storditi per Arma
+      STR_KILLS_UC: Uccisioni
+      STR_LOCATION: Località
+      STR_MEDALS: Medaglie
+      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: Data ad un soldato che ha fatto parte di un incursione ad una base aliena che ha avuto successo.
+      STR_MEDAL_ALIEN_BASE_ASSAULT_NAME: Croce Terrestre
+      STR_MEDAL_AWARD_LEVEL: Livello di Riconoscimento
+      STR_MEDAL_BLACK_CROSS_DESCRIPTION: Data ad un soldato sopravvissuto a del fuoco amico.
+      STR_MEDAL_BLACK_CROSS_NAME: Croce Nera
+      STR_MEDAL_BOLTS_CROSS_DESCRIPTION: Data ad un soldato che usato una forza non letale per abbattere un obiettivo importante.
+      STR_MEDAL_BOLTS_CROSS_NAME: Croce del Fulmine
+      STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: Data ad un soldato che ha difeso con successo varie regioni.
+      STR_MEDAL_CAMPAIGN_MEDAL_NAME: Medaglia della Campagna
+      STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: "Data ad un soldato che è stato importante nella protezione di {0}"
+      STR_MEDAL_CAMPAIGN_RIBBON_NAME: "Nastro della Campagna in {0}"
+      STR_MEDAL_CRIMSON_HEART_DESCRIPTION: Data ad un soldato che è rimasto ferito per un lungo periodo di tempo.
+      STR_MEDAL_CRIMSON_HEART_NAME: Cuore Cremisi
+      STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Data ad un soldato che ha agito mirabilmente sul campo di battaglia, uccidendo più di una minaccia ostile in breve successione."
+      STR_MEDAL_DBLKILL_TMPNAME: Citazione per le Prestazioni
+      STR_MEDAL_DECOR_LEVEL: Livello di Decorazione
+      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: Data ad un soldato che ha fatto parte di una missione di difesa di una base che ha avuto successo.
+      STR_MEDAL_DEFENDER_MEDAL_NAME: Medaglia alla Difesa
+      STR_MEDAL_DESCRIPTION: Descrizione
+      STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: Data ad un soldato che ha ucciso soldati alieni di tutti i tipi.
+      STR_MEDAL_DISTINGUISHED_SERVICE_NAME: Ordine del Martello
+      STR_MEDAL_FALLEN_DESCRIPTION: Data ad un soldato per onorare la sua morte ed il suo impegno nella difesa della Terra.
+      STR_MEDAL_FALLEN_NAME: "L'Ordine dei Caduti."
+      STR_MEDAL_GRENADIERS_MEDAL_DESCRIPTION: Data ad un soldato che ha lanciato un esplosivo uccidendo 3 alieni in una volta.
+      STR_MEDAL_GRENADIERS_MEDAL_NAME: Medaglia dei Granatieri.
+      STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: Data ad un soldato che ha usato armi incendiarie per uccidere degli alieni.
+      STR_MEDAL_HELLRAISER_MEDAL_NAME: "Stella dell'Inferno."
+      STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Data a tutti i soldati di ritorno come riconoscimento per aver combattuto la minaccia Aliena, e per esser stati parte della forza per salvare l'umanità. Questa Medaglia non ha decorazioni aggiuntive."
+      STR_MEDAL_HONOR_CROSS_NAME: "Croce dell'Onore"
+      STR_MEDAL_IRON_MAN_DESCRIPTION: "Data ad un soldato che è veramente un Uomo d'Acciaio, o una Donna d'Acciaio."
+      STR_MEDAL_IRON_MAN_NAME: Iron Man
+      STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: Data ad un soldato che ha assistito agli orrori delle missioni di terrore aliene di notte.
+      STR_MEDAL_LONGEST_NIGHT_NAME: Nastro della Notte più Lunga
+      STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Data ad un soldato che ha vinto le probabilità, mandando a segno un imprevedibile colpo ad un altro bersaglio."
+      STR_MEDAL_LUCKYSHOT_TMPNAME: Citazione per la Buona Fortuna
+      STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: Data ad un soldato che è stato colpito varie volte durante una sola missione.
+      STR_MEDAL_MAN_OF_STEEL_NAME: "Uomo d'Acciaio."
+      STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Data ad un soldato che ha combattuto fino all'ultimo respiro."
+      STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Medaglia all'Eroismo"
+      STR_MEDAL_MERIT_STAR_DESCRIPTION: Data ad un soldato che ha ucciso molti alieni.
+      STR_MEDAL_MERIT_STAR_NAME: Stella al Merito.
+      STR_MEDAL_MILITARY_CROSS_DESCRIPTION: Data ad un soldato che ha partecipato a molte missioni.
+      STR_MEDAL_MILITARY_CROSS_NAME: Croce Militare
+      STR_MEDAL_NAME: Nome della Medaglia
+      STR_MEDAL_NIKE_CROSS_DESCRIPTION: Data ad un soldato che ha ucciso da solo tutti gli alieni durante una missione.
+      STR_MEDAL_NIKE_CROSS_NAME: Croce di Nike
+      STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: Data ad un soldato che è stato importante nella difesa della Terra
+      STR_MEDAL_ORDER_OF_EARTH_NAME: "L'Ordine della Terra"
+      STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: Data ad un soldato che è stato importante nella riuscita di una missione.
+      STR_MEDAL_ORDER_OF_GLORY_NAME: "L'Ordine della Gloria"
+      STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: Data ad un soldato che ha usato una forza non letale per abbattere vari nemici.
+      STR_MEDAL_ORDER_OF_RESTRAINT_NAME: "L'Ordine del Contenimento"
+      STR_MEDAL_PURPLE_HEART_DESCRIPTION: Data ad un soldato che è stato ferito sul campo di battaglia.
+      STR_MEDAL_PURPLE_HEART_NAME: Cuore Viola
+      STR_MEDAL_REACTIONFIRE_TMPDESCRIPTION: "Data ad un soldato che ha dimostrato riflessi pronti, uccidendo degli alieni prima che potessero rivalersi."
+      STR_MEDAL_REACTIONFIRE_TMPNAME: Citazione alla Rapidità
+      STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: Data ad un soldato che ha prestato servizio per vari mesi.
+      STR_MEDAL_SERVICE_MEDAL_NAME: Medaglia al Servizio
+      STR_MEDAL_SNIPER_TMPDESCRIPTION: Data ad un soldato che ha mandato a segno un colpo a grande distanza sul bersaglio designato.
+      STR_MEDAL_SNIPER_TMPNAME: Citazione per il Tiratore Scelto
+      STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: Data ad un soldato che ha usato forze non letali per controllare vari alieni con successo.
+      STR_MEDAL_SPECIALISTS_MEDAL_NAME: Medaglia dello Specialista
+      STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: Data ad un soldato che è stato sottoposto al fuoco nemico dalla minaccia aliena.
+      STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: Stella di Asclepio
+      STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Data ad un soldato che è stato l'ultimo sopravvissuto di una missione."
+      STR_MEDAL_STAR_OF_VALOR_NAME: Stella al Valore
+      STR_MEDAL_TRAP_DESCRIPTION: Data ad un soldato per aver usato le tattiche di guerriglia.
+      STR_MEDAL_TRAP_NAME: Croce del Predatore
+      STR_MEDAL_VALIANT_CRUX_DESCRIPTION: Data ad un soldato che ha protetto tutti i civili durante una missione del terrore.
+      STR_MEDAL_VALIANT_CRUX_NAME: Il Punto Cruciale
+      STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Data ad un soldato che ha dimostrato una differenza usando un {0}"
+      STR_MEDAL_WEAPON_PROFICIENCY_NAME: ""
+      STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Data ad un soldato che ha combattuto con successo la minaccia dei {0}"
+      STR_MEDAL_XENOCIDE_MEDAL_NAME: "Medaglia allo Xenocidio dei {0}"
+      STR_MISSIONS_BY_LOCATION: Missioni per Località
+      STR_MISSIONS_BY_TYPE: Missioni per Tipo
+      STR_MISSIONS_BY_UFO: Missioni per UFO
+      STR_MISSIONS_TYPE: Missioni
+      STR_MISSIONS_UC: Missioni
+      STR_MISSION_DETAILS: "Dettagli Missione per {NEWLINE}{0}"
+      STR_MISSION_LOSS: Sconfitte
+      STR_MISSION_TYPE: "Missione> {ALT}{0}"
+      STR_MISSION_WIN: Vittorie
+      STR_NIGHT: Di Notte
+      STR_NO_KILLS: Nessun uccisione
+      STR_RACE_TYPE: "Razza> {ALT}{0}"
+      STR_REGION_UNKNOWN: Località Riservate
+      STR_SCORE_VALUE: "Punteggio> {ALT}{0}"
+      STR_STUNNED: Storditi
+      STR_STUNS: "Stordimenti> {ALT}{0}"
+      STR_TANK: Tank
+      STR_TERROR_MISSION_LC: Missione del Terrore
+      STR_UFO_CRASH_RECOVERY_LC: Recupero di un UFO Schiantato
+      STR_UFO_GROUND_ASSAULT_LC: Attacco di un UFO Atterrato
+      STR_UFO_TYPE: "UFO> {ALT}{0}"
+      STR_VEHICLE: Veicolo
+      STR_WEAPON_UNKNOWN: Improvvisazione
+      STR_WINS: "Vittorie> {ALT}{0}"
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
 # Any vector greater than 10 will require more strings and more sprites decorations.
