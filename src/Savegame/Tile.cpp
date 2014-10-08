@@ -290,8 +290,9 @@ int Tile::getTerrainLevel() const
 
 	if (_objects[MapData::O_FLOOR])
 		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
+	// whichever's higher, but not the sum.
 	if (_objects[MapData::O_OBJECT])
-		level += _objects[MapData::O_OBJECT]->getTerrainLevel();
+		level = std::max(_objects[MapData::O_OBJECT]->getTerrainLevel(), level);
 
 	return level;
 }
