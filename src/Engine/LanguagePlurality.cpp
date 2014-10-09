@@ -191,6 +191,31 @@ const char *RomanianPlurality::getSuffix(unsigned n) const
 	return "_other";
 }
 
+/**
+ * Plurality rules for Croatian and Serbian languages.
+ * @note one = 1, 21, 31...; few = 2-4, 22-24, 32-34, ...; other = ...
+ */
+class CroatianPlurality : public LanguagePlurality
+{
+public:
+	virtual const char *getSuffix(unsigned n) const;
+	static LanguagePlurality *create() { return new CroatianPlurality; }
+};
+
+const char *CroatianPlurality::getSuffix(unsigned n) const
+{
+	if (n % 10 == 1 && n % 100 != 11)
+	{
+		return "_one";
+	}
+	else if ((n % 10 >= 2 && n % 10 <= 4) &&
+			!(n % 100 >= 12 && n % 100 <= 14))
+	{
+		return "_few";
+	}
+	return "_other";
+}
+
 /** A mapping of language to plurality rules.
  * It is populated the first time plurality rules are requested.
  * @see LanguagePlurality::create
@@ -210,18 +235,19 @@ LanguagePlurality *LanguagePlurality::create(const std::string &language)
 	if (s_factoryFunctions.empty())
 	{
 		s_factoryFunctions.insert(std::make_pair("fr", &ZeroOneSingular::create));
-		s_factoryFunctions.insert(std::make_pair("hu-HU", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("tr-TR", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("cs-CZ", &CzechPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("pl-PL", &PolishPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("hu", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("tr", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("cs", &CzechPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("pl", &PolishPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("ro", &RomanianPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("ru", &CyrillicPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("sk-SK", &CzechPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("sk", &CzechPlurality::create));
 		s_factoryFunctions.insert(std::make_pair("uk", &CyrillicPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("ja-JP", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("ja", &NoSingular::create));
 		s_factoryFunctions.insert(std::make_pair("ko", &NoSingular::create));
 		s_factoryFunctions.insert(std::make_pair("zh-CN", &NoSingular::create));
 		s_factoryFunctions.insert(std::make_pair("zh-TW", &NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("hr", &CroatianPlurality::create));
 	}
 	PFCreate creator = &OneSingular::create;
 	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);
