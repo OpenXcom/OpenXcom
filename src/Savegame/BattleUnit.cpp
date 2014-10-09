@@ -53,7 +53,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false),
+																_statistics(), _murdererId(0)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -109,6 +110,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	_statistics = new BattleUnitStatistics();
 }
 
 /**
@@ -127,7 +130,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																						_turretType(-1), _hidingForTurn(false)
+																						_turretType(-1), _hidingForTurn(false), _statistics(), _murdererId(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -180,6 +183,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_activeHand = "STR_RIGHT_HAND";
 	
 	lastCover = Position(-1, -1, -1);
+
+	_statistics = new BattleUnitStatistics();
 	
 }
 
@@ -191,6 +196,14 @@ BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
+	if (!getGeoscapeSoldier())
+	{
+		for (std::vector<BattleUnitKills*>::const_iterator i = _statistics->kills.begin(); i != _statistics->kills.end(); ++i)
+		{
+			delete *i;
+		}
+	}
+	delete _statistics;
 	delete _currentAIState;
 }
 
@@ -238,7 +251,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints = node["motionPoints"].as<int>(0);
-
+	_statistics->load(node["tempUnitStatistics"]);
 }
 
 /**
@@ -296,6 +309,7 @@ YAML::Node BattleUnit::save() const
 	if (!_spawnUnit.empty())
 		node["spawnUnit"] = _spawnUnit;
 	node["motionPoints"] = _motionPoints;
+	node["tempUnitStatistics"] = _statistics->save();
 
 	return node;
 }
@@ -2767,6 +2781,33 @@ std::string BattleUnit::getMeleeWeapon()
 		return _unitRules->getMeleeWeapon();
 	}
 	return "";
+}
+
+/**
+ * Get the unit's statistics.
+ * @return BattleUnitStatistics statistics.
+ */
+BattleUnitStatistics* BattleUnit::getStatistics()
+{
+	return _statistics;
+}
+
+/**
+ * Sets the unit murderer's id.
+ * @param int murderer id.
+ */
+void BattleUnit::setMurdererId(int id)
+{
+	_murdererId = id;
+}
+
+/**
+ * Gets the unit murderer's id.
+ * @return int murderer id.
+ */
+int BattleUnit::getMurdererId() const
+{
+	return _murdererId;
 }
 
 }

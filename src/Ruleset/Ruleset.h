@@ -59,6 +59,7 @@ class MCDPatch;
 class ExtraSprites;
 class ExtraSounds;
 class ExtraStrings;
+class RuleCommendations;
 class StatString;
 class RuleInterface;
 class RuleGlobe;
@@ -97,6 +98,7 @@ protected:
 	std::map<std::string, RuleInterface *> _interfaces;
 	std::map<std::string, SoundDefinition *> _soundDefs;
 	std::map<std::string, MCDPatch *> _MCDPatches;
+	std::map<std::string, RuleCommendations *> _commendations;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
@@ -167,6 +169,8 @@ public:
 	MapDataSet *getMapDataSet(const std::string &name);
 	/// Gets soldier unit rules.
 	RuleSoldier *getSoldier(const std::string &name) const;
+	/// Gets commendation rules.
+	std::map<std::string, RuleCommendations *> getCommendation() const;
 	/// Gets generated unit rules.
 	Unit *getUnit(const std::string &name) const;
 	/// Gets alien race rules.

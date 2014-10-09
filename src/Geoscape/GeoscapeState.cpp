@@ -55,6 +55,7 @@
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDeath.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Menu/PauseState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
@@ -468,6 +469,29 @@ void GeoscapeState::handle(Action *action)
 			if (_game->getSavedGame()->getDebugMode())
 			{
 				_txtDebug->setText(L"DEBUG MODE");
+			}
+			else
+			{
+				_txtDebug->setText(L"");
+			}
+		}
+		// "ctrl-c" - delete all soldier commendations
+		if (Options::debug && action->getDetails()->key.keysym.sym == SDLK_c && (SDL_GetModState() & KMOD_CTRL) != 0)
+		{
+			if (_game->getSavedGame()->getDebugMode())
+			{
+				_txtDebug->setText(L"SOLDIER COMMENDATIONS DELETED");
+                for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+				{
+					for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+					{
+						for (std::vector<SoldierCommendations*>::iterator k = (*j)->getDiary()->getSoldierCommendations()->begin(); k != (*j)->getDiary()->getSoldierCommendations()->end(); ++k)
+						{
+							delete *k;
+						}
+						(*j)->getDiary()->getSoldierCommendations()->clear();
+					}
+				}
 			}
 			else
 			{

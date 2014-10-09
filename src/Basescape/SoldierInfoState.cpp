@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierInfoState.h"
+#include "SoldierDiaryOverviewState.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -35,6 +36,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/Armor.h"
@@ -80,9 +82,10 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_btnArmor = new TextButton(110, 14, 130, 33);
 	_edtSoldier = new TextEdit(this, 210, 16, 40, 9);
 	_btnSack = new TextButton(60, 14, 260, 33);
+    _btnDiary = new TextButton(60, 14, 260, 48);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
-	_txtKills = new Text(100, 9, 230, 48);
+	_txtKills = new Text(100, 9, 200, 48);
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
 	_txtPsionic = new Text(150, 9, 0, 66);
@@ -155,6 +158,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	add(_btnArmor);
 	add(_edtSoldier);
 	add(_btnSack);
+	add(_btnDiary);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
@@ -254,6 +258,10 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
+
+	_btnDiary->setColor(Palette::blockOffset(15)+6);
+	_btnDiary->setText(tr("STR_DIARY"));
+	_btnDiary->onMouseClick((ActionHandler)&SoldierInfoState::btnDiaryClick);
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
@@ -595,6 +603,14 @@ void SoldierInfoState::edtSoldierPress(Action *action)
 }
 
 /**
+ * Set the soldier Id.
+ */
+void SoldierInfoState::setSoldierId(size_t soldier)
+{
+	_soldierId = soldier;
+}
+
+/**
  * Changes the soldier's name.
  * @param action Pointer to an action.
  */
@@ -609,6 +625,7 @@ void SoldierInfoState::edtSoldierChange(Action *action)
  */
 void SoldierInfoState::btnOkClick(Action *)
 {
+    
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
 	{
@@ -661,6 +678,15 @@ void SoldierInfoState::btnArmorClick(Action *)
 void SoldierInfoState::btnSackClick(Action *)
 {
 	_game->pushState(new SackSoldierState(_base, _soldierId));
+}
+
+/**
+ * Shows the Diary Soldier window.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::btnDiaryClick(Action *)
+{
+	_game->pushState(new SoldierDiaryOverviewState(_base, _soldierId, this));
 }
 
 }

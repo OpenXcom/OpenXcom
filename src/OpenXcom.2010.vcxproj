@@ -238,6 +238,9 @@
     <ClCompile Include="Basescape\SackSoldierState.cpp" />
     <ClCompile Include="Basescape\SellState.cpp" />
     <ClCompile Include="Basescape\SoldierArmorState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp" />
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
     <ClCompile Include="Basescape\SoldierMemorialState.cpp" />
     <ClCompile Include="Basescape\SoldiersState.cpp" />
@@ -260,6 +263,7 @@
     <ClCompile Include="Battlescape\BriefingState.cpp" />
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\CannotReequipState.cpp" />
+    <ClCompile Include="Battlescape\CommendationState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
@@ -437,6 +441,9 @@
     <ClCompile Include="Ruleset\MapData.cpp" />
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
+    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
+    <ClCompile Include="Ruleset\StatString.cpp" />
+    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleGlobe.cpp" />
     <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
@@ -483,6 +490,7 @@
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
     <ClCompile Include="Savegame\SoldierDeath.cpp" />
+    <ClCompile Include="Savegame\SoldierDiary.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />
     <ClCompile Include="Savegame\TerrorSite.cpp" />
     <ClCompile Include="Savegame\Tile.cpp" />
@@ -536,6 +544,9 @@
     <ClInclude Include="Basescape\SackSoldierState.h" />
     <ClInclude Include="Basescape\SellState.h" />
     <ClInclude Include="Basescape\SoldierArmorState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryMissionState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h" />
     <ClInclude Include="Basescape\SoldierInfoState.h" />
     <ClInclude Include="Basescape\SoldierMemorialState.h" />
     <ClInclude Include="Basescape\SoldiersState.h" />
@@ -558,6 +569,7 @@
     <ClInclude Include="Battlescape\BriefingState.h" />
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\CannotReequipState.h" />
+    <ClInclude Include="Battlescape\CommendationState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
@@ -735,6 +747,9 @@
     <ClInclude Include="Ruleset\MapData.h" />
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
+    <ClInclude Include="Ruleset\RuleCommendations.h" />
+    <ClInclude Include="Ruleset\StatString.h" />
+    <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />
@@ -785,6 +800,7 @@
     <ClInclude Include="Savegame\Soldier.h" />
     <ClInclude Include="Savegame\Node.h" />
     <ClInclude Include="Savegame\SoldierDeath.h" />
+    <ClInclude Include="Savegame\SoldierDiary.h" />
     <ClInclude Include="Savegame\Target.h" />
     <ClInclude Include="Savegame\TerrorSite.h" />
     <ClInclude Include="Savegame\Tile.h" />

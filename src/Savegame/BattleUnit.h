@@ -50,6 +50,163 @@ enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
 
+/**
+ * Container for battle unit kills statistics.
+ */
+struct BattleUnitKills
+{
+    /// Variables
+    std::string rank, race, weapon, weaponAmmo;
+	UnitFaction faction;
+	UnitStatus status;
+    int mission, turn;
+
+    /// Functions
+    // Make turn unique across all kills
+    int makeTurnUnique()
+    {
+        return turn += mission * 300; // Maintains divisibility by 3 as well
+    }
+    // Check to see if turn was on HOSTILE side
+    bool hostileTurn()
+    {
+        if ((turn - 1) % 3 == 0) return true;
+        return false;
+    }
+    // Load
+    void load(const YAML::Node &node)
+    {
+        rank = node["rank"].as<std::string>(rank);
+        race = node["race"].as<std::string>(race);
+        weapon = node["weapon"].as<std::string>(weapon);
+        weaponAmmo = node["weaponAmmo"].as<std::string>(weaponAmmo);
+        status = (UnitStatus)node["status"].as<int>();
+        faction = (UnitFaction)node["faction"].as<int>();
+        mission = node["mission"].as<int>(mission);
+        turn = node["turn"].as<int>(turn);
+    }
+    // Save
+    YAML::Node save() const
+    {
+        YAML::Node node;
+        node["rank"] = rank;
+        node["race"] = race;
+        node["weapon"] = weapon;
+        node["weaponAmmo"] = weaponAmmo;
+        node["status"] = (int)status;
+        node["faction"] = (int)faction;
+        node["mission"] = mission;
+        node["turn"] = turn;
+        return node;
+    }
+    // Convert victim State to string
+    std::string getUnitStatusString() const
+    {
+        switch (status)
+        {
+        case STATUS_DEAD:           return "STATUS_DEAD";
+        case STATUS_UNCONSCIOUS:    return "STATUS_UNCONSCIOUS";
+        default:                    return "status error";
+        }
+    }
+    // Convert victim Faction to string
+    std::string getUnitFactionString() const
+    {
+        switch (faction)
+        {
+        case FACTION_PLAYER:    return "FACTION_PLAYER";
+        case FACTION_HOSTILE:   return "FACTION_HOSTILE";
+        case FACTION_NEUTRAL:   return "FACTION_NEUTRAL";
+        default:                return "faction error";
+        }
+    }
+    BattleUnitKills(const YAML::Node& node) { load(node); }
+    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn) : 
+						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn) { }
+    ~BattleUnitKills() { }
+};
+
+/**
+ * Container for battle unit statistics.
+ */
+struct BattleUnitStatistics
+{
+	/// Variables
+	bool wasUnconcious;						// Tracks if the soldier fell unconcious
+    int shotAtCounter;                      // Tracks how many times the unit was shot at
+	int hitCounter;							// Tracks how many times the unit was hit
+	int shotByFriendlyCounter;				// Tracks how many times the unit was hit by a friendly
+	int shotFriendlyCounter;				// Tracks how many times the unit was hit a friendly
+	bool loneSurvivor;						// Tracks if the soldier was the only survivor
+	bool ironMan;							// Tracks if the soldier was the only soldier on the mission
+	int longDistanceHitCounter;				// Tracks how many long distance shots were landed
+	int lowAccuracyHitCounter;				// Tracks how many times the unit landed a low probability shot
+	int shotsFiredCounter;					// Tracks how many times a unit has shot
+	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
+    std::vector<BattleUnitKills*> kills;	// Tracks kills
+    int daysWounded;                        // Tracks how many days the unit was wounded for
+	bool KIA;								// Tracks if the soldier was killed in battle
+	bool nikeCross;							// Tracks if a soldier killed every alien
+
+	/// Functions
+	// Friendly fire check
+	bool hasFriendlyFired()
+	{
+		for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
+		{
+			if ((*i)->faction == FACTION_PLAYER)
+				return true;
+		}
+		return false;
+	}
+	// Load function
+	void load(const YAML::Node& node)
+	{
+		wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
+		if (const YAML::Node &YAMLkills = node["kills"])
+		{
+			for (YAML::const_iterator i = YAMLkills.begin(); i != YAMLkills.end(); ++i)
+				kills.push_back(new BattleUnitKills(*i));
+		}
+        shotAtCounter = node["shotAtCounter"].as<int>(shotAtCounter);
+		hitCounter = node["hitCounter"].as<int>(hitCounter);
+		shotByFriendlyCounter = node["shotByFriendlyCounter"].as<int>(shotByFriendlyCounter);
+		shotFriendlyCounter = node["shotFriendlyCounter"].as<int>(shotFriendlyCounter);
+		loneSurvivor = node["loneSurvivor"].as<bool>(loneSurvivor);
+		ironMan = node["ironMan"].as<bool>(ironMan);
+		longDistanceHitCounter = node["longDistanceHitCounter"].as<int>(longDistanceHitCounter);
+		lowAccuracyHitCounter = node["lowAccuracyHitCounter"].as<int>(lowAccuracyHitCounter);
+		shotsFiredCounter = node["shotsFiredCounter"].as<int>(shotsFiredCounter);
+		shotsLandedCounter = node["shotsLandedCounter"].as<int>(shotsLandedCounter);
+		nikeCross = node["nikeCross"].as<bool>(nikeCross);
+	}
+	// Save function
+	YAML::Node save() const
+	{
+		YAML::Node node;
+		node["wasUnconcious"] = wasUnconcious;
+		if (!kills.empty())
+		{
+			for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
+				node["kills"].push_back((*i)->save());
+		}
+        node["shotAtCounter"] = shotAtCounter;
+		node["hitCounter"] = hitCounter;
+		node["shotByFriendlyCounter"] = shotByFriendlyCounter;
+		node["shotFriendlyCounter"] = shotFriendlyCounter;
+		node["loneSurvivor"] = loneSurvivor;
+		node["ironMan"] = ironMan;
+		node["longDistanceHitCounter"] = longDistanceHitCounter;
+		node["lowAccuracyHitCounter"] = lowAccuracyHitCounter;
+		node["shotsFiredCounter"] = shotsFiredCounter;
+		node["shotsLandedCounter"] = shotsLandedCounter;
+		if (nikeCross) node["nikeCross"] = nikeCross;
+		return node;
+	}
+	BattleUnitStatistics(const YAML::Node& node) { load(node); }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false) { }
+	~BattleUnitStatistics() { }
+};
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
@@ -94,6 +251,8 @@ private:
 	int _turnsSinceSpotted;
 	std::string _spawnUnit;
 	std::string _activeHand;
+    BattleUnitStatistics* _statistics;
+	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
 
 	// static data
 	std::string _type;
@@ -435,6 +594,12 @@ public:
 	bool getFloorAbove();
 	/// Get the name of any melee weapon we may be carrying, or a built in one.
 	std::string getMeleeWeapon();
+    /// Get the unit's mission statistics.
+    BattleUnitStatistics* getStatistics();
+	/// Set the unit murderer's id.
+	void setMurdererId(int id);
+	/// Get the unit murderer's id.
+	int getMurdererId() const;
 
 };
 
