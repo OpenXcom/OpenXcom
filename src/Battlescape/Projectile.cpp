@@ -71,6 +71,7 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
 				_bulletSprite = ammo->getRules()->getBulletSprite();
 				_vaporColor = ammo->getRules()->getVaporColor();
 				_vaporDensity = ammo->getRules()->getVaporDensity();
+				_vaporProbability = ammo->getRules()->getVaporProbability();
 				_speed = std::max(1, _speed + ammo->getRules()->getBulletSpeed());
 			}
 
@@ -87,7 +88,10 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
 			{
 				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
 			}
+			if (_vaporProbability == 5)
 			{
+				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
+			}
 			if (!ammo || (ammo != _action.weapon || ammo->getRules()->getBulletSpeed() == 0))
 			{
 				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
@@ -364,7 +368,7 @@ bool Projectile::move()
 			_position--;
 			return false;
 		}
-		if (_save->getDepth() > 0 && _vaporColor != -1 && _action.type != BA_THROW && RNG::percent(5))
+		if (_save->getDepth() > 0 && _vaporColor != -1 && _action.type != BA_THROW && RNG::percent(_vaporProbability))
 		{
 			addVaporCloud();
 		}
