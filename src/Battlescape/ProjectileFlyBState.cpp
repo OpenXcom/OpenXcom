@@ -411,7 +411,7 @@ void ProjectileFlyBState::think()
 		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
 		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
 		bool hasFloor = t && !t->hasNoFloor(bt);
-		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+		bool unitCanFly = _action.actor->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()

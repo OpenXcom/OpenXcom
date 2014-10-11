@@ -115,11 +115,12 @@ private:
 	int _breathFrame;
 	bool _breathing;
 	bool _floorAbove;
+	MovementType _movementType;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
-	BattleUnit(Soldier *soldier, UnitFaction faction);
-	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
+	BattleUnit(Soldier *soldier, int depth);
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
 	/// Loads the unit from YAML.
@@ -435,6 +436,8 @@ public:
 	bool getFloorAbove();
 	/// Get the name of any melee weapon we may be carrying, or a built in one.
 	std::string getMeleeWeapon();
+	/// Use this function to check the unit's movement type.
+	MovementType getMovementType() const;
 
 };
 

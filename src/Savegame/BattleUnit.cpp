@@ -45,15 +45,15 @@ namespace OpenXcom
 /**
  * Initializes a BattleUnit from a Soldier
  * @param soldier Pointer to the Soldier.
- * @param faction Which faction the units belongs to.
+ * @param depth the depth of the battlefield (used to determine movement type in case of MT_FLOAT).
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0),
-																_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
-																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
-																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
-																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
-																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-																_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+BattleUnit::BattleUnit(Soldier *soldier, int depth) : _faction(FACTION_PLAYER), _originalFaction(FACTION_PLAYER), _killedBy(FACTION_PLAYER), _id(0), _pos(Position()), _tile(0),
+											_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
+											_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
+											_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
+											_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
+											_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
+											_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -70,6 +70,18 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_aggression = 1;
 	_specab = SPECAB_NONE;
 	_armor = soldier->getArmor();
+	_movementType = _armor->getMovementType();
+	if (_movementType == MT_FLOAT)
+	{
+		if (depth > 0)
+		{
+			_movementType = MT_FLY;
+		}
+		else
+		{
+			_movementType = MT_WALK;
+		}
+	}
 	_stats += *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
@@ -118,16 +130,17 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param id Unique unit ID.
  * @param armor Pointer to unit Armor.
  * @param diff difficulty level (for stat adjustement).
+ * @param depth the depth of the battlefield (used to determine movement type in case of MT_FLOAT).
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
-																						_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
-																						_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
-																						_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
-																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
-																						_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
-																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
-																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																						_turretType(-1), _hidingForTurn(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
+																											_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
+																											_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
+																											_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
+																											_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
+																											_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
+																											_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
+																											_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
+																											_turretType(-1), _hidingForTurn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -147,6 +160,20 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
+
+	_movementType = _armor->getMovementType();
+	if (_movementType == MT_FLOAT)
+	{
+		if (depth > 0)
+		{
+			_movementType = MT_FLY;
+		}
+		else
+		{
+			_movementType = MT_WALK;
+		}
+	}
+
 	_stats += *_armor->getStats();	// armors may modify effective stats
 	
 	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
@@ -1658,7 +1685,7 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 		return;
 	}
 	// unit could have changed from flying to walking or vice versa
-	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _armor->getMovementType() == MT_FLY)
+	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _movementType == MT_FLY)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -1670,7 +1697,7 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 	}
 	else if (_status == STATUS_UNCONSCIOUS)
 	{
-		_floating = _armor->getMovementType() == MT_FLY && _tile->hasNoFloor(tileBelow);
+		_floating = _movementType == MT_FLY && _tile->hasNoFloor(tileBelow);
 	}
 }
 
@@ -2767,6 +2794,14 @@ std::string BattleUnit::getMeleeWeapon()
 		return _unitRules->getMeleeWeapon();
 	}
 	return "";
+}
+
+/**
+ * use this instead of checking the rules of the armor.
+ */
+MovementType BattleUnit::getMovementType() const
+{
+	return _movementType;
 }
 
 }

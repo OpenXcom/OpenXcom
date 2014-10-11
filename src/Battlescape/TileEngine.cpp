@@ -1929,11 +1929,11 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				{
 					part = MapData::O_WESTWALL;
 				}
-				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
+				TUCost = tile->getTUCost(part, unit->getMovementType());
 			}
 			else if (door == 1 || door == 4)
 			{
-				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
+				TUCost = tile->getTUCost(part, unit->getMovementType());
 			}
 		}
 	}
@@ -2538,7 +2538,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 		{
 			if (occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 			{
-				if (occupant->getArmor()->getMovementType() == MT_FLY)
+				if (occupant->getMovementType() == MT_FLY)
 				{
 					// move to the position you're already in. this will unset the kneeling flag, set teh floating flag, etc.
 					occupant->startWalking(occupant->getDirection(), occupant->getPosition(), _save->getTile(occupant->getPosition() + Position(0,0,-1)), true);

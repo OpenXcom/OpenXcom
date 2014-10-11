@@ -339,7 +339,7 @@ void UnitSprite::drawRoutine0()
 		{
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
 		}
-		else if (_unit->isFloating() && _unit->getArmor()->getMovementType() == MT_FLY)
+		else if (_unit->isFloating() && _unit->getMovementType() == MT_FLY)
 		{
 			legs = _unitSurface->getFrame(legsFloat + unitDir);
 		}
@@ -799,7 +799,7 @@ void UnitSprite::drawRoutine2()
 
 	Surface *s = 0;
 
-	const int hoverTank = _unit->getArmor()->getMovementType() == MT_FLY ? 32 : 0;
+	const int hoverTank = _unit->getMovementType() == MT_FLY ? 32 : 0;
 	const int turret = _unit->getTurretType();
 
 	// draw the animated propulsion below the hwp
@@ -1350,7 +1350,7 @@ void UnitSprite::drawRoutine11()
 	}
 
 	int hoverTank = 0;
-	if (_unit->getArmor()->getMovementType() == MT_FLY)
+	if (_unit->getMovementType() == MT_FLY)
 	{
 		hoverTank = 128;
 	}

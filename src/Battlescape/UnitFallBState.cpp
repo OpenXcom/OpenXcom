@@ -94,7 +94,7 @@ void UnitFallBState::think()
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
-				if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getArmor()->getMovementType() == MT_FLY)
+				if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getMovementType() == MT_FLY)
 				{
 					largeCheck = false;
 				}
@@ -104,7 +104,7 @@ void UnitFallBState::think()
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
-			&& (*unit)->getArmor()->getMovementType() != MT_FLY
+			&& (*unit)->getMovementType() != MT_FLY
 			&& (*unit)->getWalkingPhase() == 0;
 
 		if (falling)
@@ -141,7 +141,7 @@ void UnitFallBState::think()
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
-			&& (*unit)->getArmor()->getMovementType() != MT_FLY
+			&& (*unit)->getMovementType() != MT_FLY
 			&& (*unit)->getWalkingPhase() == 0;
 
 		// The unit has moved from one tile to the other.
@@ -206,7 +206,7 @@ void UnitFallBState::think()
 							bool alreadyOccupied = t && t->getUnit() && (t->getUnit() != unitBelow);
 							bool movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(currentTile, t, dir, unitBelow);
 							bool hasFloor = t && !t->hasNoFloor(bt);
-							bool unitCanFly = unitBelow->getArmor()->getMovementType() == MT_FLY;
+							bool unitCanFly = unitBelow->getMovementType() == MT_FLY;
 
 							bool canMoveToTile = t && !alreadyOccupied && !alreadyTaken && !aboutToBeOccupiedFromAbove && !movementBlocked && (hasFloor || unitCanFly);
 							if (canMoveToTile)
