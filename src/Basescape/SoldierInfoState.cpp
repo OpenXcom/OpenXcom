@@ -280,7 +280,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numTimeUnits->setColor(Palette::blockOffset(13));
 
 	_barTimeUnits->setColor(Palette::blockOffset(3));
-	_barTimeUnits->setColor2(Palette::blockOffset(3)+4);
+	_barTimeUnits->setSecondaryColor(Palette::blockOffset(3)+4);
 	_barTimeUnits->setScale(1.0);
 	_barTimeUnits->setInvert(true);
 
@@ -290,7 +290,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numStamina->setColor(Palette::blockOffset(13));
 
 	_barStamina->setColor(Palette::blockOffset(9));
-	_barStamina->setColor2(Palette::blockOffset(9)+4);
+	_barStamina->setSecondaryColor(Palette::blockOffset(9)+4);
 	_barStamina->setScale(1.0);
 	_barStamina->setInvert(true);
 
@@ -300,7 +300,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numHealth->setColor(Palette::blockOffset(13));
 
 	_barHealth->setColor(Palette::blockOffset(2));
-	_barHealth->setColor2(Palette::blockOffset(2)+4);
+	_barHealth->setSecondaryColor(Palette::blockOffset(2)+4);
 	_barHealth->setScale(1.0);
 	_barHealth->setInvert(true);
 
@@ -310,7 +310,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numBravery->setColor(Palette::blockOffset(13));
 
 	_barBravery->setColor(Palette::blockOffset(4));
-	_barBravery->setColor2(Palette::blockOffset(4)+4);
+	_barBravery->setSecondaryColor(Palette::blockOffset(4)+4);
 	_barBravery->setScale(1.0);
 	_barBravery->setInvert(true);
 
@@ -320,7 +320,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numReactions->setColor(Palette::blockOffset(13));
 
 	_barReactions->setColor(Palette::blockOffset(1));
-	_barReactions->setColor2(Palette::blockOffset(1)+4);
+	_barReactions->setSecondaryColor(Palette::blockOffset(1)+4);
 	_barReactions->setScale(1.0);
 	_barReactions->setInvert(true);
 
@@ -330,7 +330,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numFiring->setColor(Palette::blockOffset(13));
 
 	_barFiring->setColor(Palette::blockOffset(8));
-	_barFiring->setColor2(Palette::blockOffset(8)+4);
+	_barFiring->setSecondaryColor(Palette::blockOffset(8)+4);
 	_barFiring->setScale(1.0);
 	_barFiring->setInvert(true);
 
@@ -340,7 +340,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numThrowing->setColor(Palette::blockOffset(13));
 
 	_barThrowing->setColor(Palette::blockOffset(10));
-	_barThrowing->setColor2(Palette::blockOffset(10)+4);
+	_barThrowing->setSecondaryColor(Palette::blockOffset(10)+4);
 	_barThrowing->setScale(1.0);
 	_barThrowing->setInvert(true);
 
@@ -350,7 +350,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numMelee->setColor(Palette::blockOffset(13));
 
 	_barMelee->setColor(Palette::blockOffset(4));
-	_barMelee->setColor2(Palette::blockOffset(4)+4);
+	_barMelee->setSecondaryColor(Palette::blockOffset(4)+4);
 	_barMelee->setScale(1.0);
 	_barMelee->setInvert(true);
 
@@ -360,7 +360,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numStrength->setColor(Palette::blockOffset(13));
 
 	_barStrength->setColor(Palette::blockOffset(5));
-	_barStrength->setColor2(Palette::blockOffset(5)+4);
+	_barStrength->setSecondaryColor(Palette::blockOffset(5)+4);
 	_barStrength->setScale(1.0);
 	_barStrength->setInvert(true);
 
@@ -370,7 +370,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numPsiStrength->setColor(Palette::blockOffset(13));
 
 	_barPsiStrength->setColor(Palette::blockOffset(11));
-	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
+	_barPsiStrength->setSecondaryColor(Palette::blockOffset(11)+4);
 	_barPsiStrength->setScale(1.0);
 	_barPsiStrength->setInvert(true);
 
@@ -380,7 +380,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_numPsiSkill->setColor(Palette::blockOffset(13));
 
 	_barPsiSkill->setColor(Palette::blockOffset(11));
-	_barPsiSkill->setColor2(Palette::blockOffset(11)+4);
+	_barPsiSkill->setSecondaryColor(Palette::blockOffset(11)+4);
 	_barPsiSkill->setScale(1.0);
 	_barPsiSkill->setInvert(true);
 }

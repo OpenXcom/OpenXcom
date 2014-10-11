@@ -49,6 +49,17 @@ void Frame::setColor(Uint8 color)
 	_color = color;
 	_redraw = true;
 }
+/**
+ * Changes the color used to draw the shaded border.
+ * only really to be used in conjunction with the State add()
+ * function as a convenience wrapper to avoid ugly hacks on that end
+ * better to have them here!
+ * @param color Color value.
+ */
+void Frame::setBorderColor(Uint8 color)
+{
+	setColor(color);
+}
 
 /**
  * Returns the color used to draw the shaded border.
@@ -63,7 +74,7 @@ Uint8 Frame::getColor() const
 * Changes the color used to draw the background.
 * @param bg Color value.
 */
-void Frame::setBackground(Uint8 bg)
+void Frame::setSecondaryColor(Uint8 bg)
 {
 	_bg = bg;
 	_redraw = true;
@@ -73,7 +84,7 @@ void Frame::setBackground(Uint8 bg)
 * Returns the color used to draw the background.
 * @return Color value.
 */
-Uint8 Frame::getBackground() const
+Uint8 Frame::getSecondaryColor() const
 {
 	return _bg;
 }
