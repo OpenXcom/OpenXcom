@@ -78,7 +78,7 @@ public:
 	std::string getStoreItem() const;
 	/// Gets the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
-	/// Gets whether the armor can fly.
+	/// DO NOT USE THIS FUNCTION OUTSIDE THE BATTLEUNIT CONSTRUCTOR OR I WILL HUNT YOU DOWN.
 	MovementType getMovementType() const;
 	/// Gets whether this is a normal or big unit.
 	int getSize() const;

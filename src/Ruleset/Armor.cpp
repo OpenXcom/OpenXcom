@@ -206,6 +206,9 @@ int Armor::getDrawingRoutine() const
 /**
  * Gets the movement type of this armor.
  * Useful for determining whether the armor can fly.
+ * @important: do not use this function outside the BattleUnit constructor,
+ * unless you are SURE you know what you are doing.
+ * for more information, see the BattleUnit constructor.
  * @return The movement type.
  */
 MovementType Armor::getMovementType() const
