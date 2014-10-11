@@ -666,8 +666,15 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		{
 			Position pos = Position((*i)[0] + (_craftX * 10), (*i)[1] + (_craftY * 10), (*i)[2] + _craftZ);
 			int dir = (*i)[3];
-
-			if (canPlaceXCOMUnit(_save->getTile(pos)))
+			bool canPlace = true;
+			for (int x = 0; x < unit->getArmor()->getSize(); ++x)
+			{
+				for (int y = 0; y < unit->getArmor()->getSize(); ++y)
+				{
+					canPlace = (canPlace && canPlaceXCOMUnit(_save->getTile(pos + Position(x,y,0))));
+				}
+			}
+			if (canPlace)
 			{
 				if (_save->setUnitPosition(unit, pos))
 				{
