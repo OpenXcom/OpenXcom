@@ -884,8 +884,28 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	}
 	else
 	{
-		delete unit;
-		unit = 0;
+		// ASSASSINATION CHALLENGE SPECIAL: screw the player, just because we didn't find a node,
+		// doesn't mean we can't ruin Tornis's day: spawn as many aliens as possible.
+		if (_game->getSavedGame()->getDifficulty() >= DIFF_SUPERHUMAN && placeUnitNearFriend(unit))
+		{
+			unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+			unit->setRankInt(alienRank);
+			int dir = _save->getTileEngine()->faceWindow(node->getPosition());
+			Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
+			if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
+				dir = unit->directionTo(craft);
+			if (dir != -1)
+				unit->setDirection(dir);
+			else
+				unit->setDirection(RNG::generate(0,7));
+
+			_save->getUnits()->push_back(unit);
+		}
+		else
+		{
+			delete unit;
+			unit = 0;
+		}
 	}
 
 	return unit;
