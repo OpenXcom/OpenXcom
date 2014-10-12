@@ -30,9 +30,6 @@
 #include "../Ruleset/RuleInterface.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/NumberText.h"
-#include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
@@ -41,7 +38,6 @@
 #include "../Interface/Slider.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
-#include "../Interface/Frame.h"
 #include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
