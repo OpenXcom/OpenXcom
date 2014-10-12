@@ -242,19 +242,19 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 bool SoldierDiary::manageCommendations(Ruleset *rules)
 {
 	std::map<std::string, RuleCommendations *> commendationsList = rules->getCommendation();
-	bool awardedCommendation = false;                   // This value is returned if at least on commendation was given
-    std::map<std::string, int> nextCommendationLevel;   // Noun, threshold
-    std::vector<std::string> modularCommendations;      // Commendation name
-	bool awardCommendationBool = false;                 // This value determines if a commendation will be given
+	bool awardedCommendation = false;                   // This value is returned if at least one commendation was given.
+    std::map<std::string, int> nextCommendationLevel;   // Noun, threshold.
+    std::vector<std::string> modularCommendations;      // Commendation name.
+	bool awardCommendationBool = false;                 // This value determines if a commendation will be given.
 	// Loop over all possible commendations
 	for (std::map<std::string, RuleCommendations *>::iterator i = commendationsList.begin(); i != commendationsList.end(); )
 	{	
 		awardCommendationBool = true;
         nextCommendationLevel.clear();
-        nextCommendationLevel["noNoun"] = 0; // Initialization
+        nextCommendationLevel["noNoun"] = 0;
         modularCommendations.clear();
-        // Loop over all the soldier's commendations, see if we already have the commendation
-        // If so, get the level and noun
+        // Loop over all the soldier's commendations, see if we already have the commendation.
+        // If so, get the level and noun.
         for (std::vector<SoldierCommendations*>::const_iterator j = _commendations.begin(); j != _commendations.end(); ++j)
         {
             if ( (*i).first == (*j)->getType() )
@@ -263,16 +263,16 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             }
         }
 		// Go through each possible criteria. Assume the medal is awarded, set to false if not.
-		// As soon as we find a medal criteria that we FAIL TO achieve, then we are not awarded a medal
+		// As soon as we find a medal criteria that we FAIL TO achieve, then we are not awarded a medal.
 		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
-			// Skip this medal if we have reached its max award level
+			// Skip this medal if we have reached its max award level.
 			if (nextCommendationLevel["noNoun"] >= (*j).second.size())
 			{
 				awardCommendationBool = false;
 				break;
 			}
-            // These criteria have no nouns, so only the nextCommendationLevel["noNoun"] will ever be used
+            // These criteria have no nouns, so only the nextCommendationLevel["noNoun"] will ever be used.
 			else if( nextCommendationLevel.count("noNoun") == 1 &&
 					((*j).first == "totalKills" && _killList.size() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMissions" && _missionIdList.size() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -306,8 +306,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 				awardCommendationBool = false;
 				break;
 			}
-			// Medals with the following criteria are unique because they need a noun
-            // And because they loop over a map<> (this allows for maximum moddability)
+			// Medals with the following criteria are unique because they need a noun.
+            // And because they loop over a map<> (this allows for maximum moddability).
 			else if ((*j).first == "totalKillsWithAWeapon" || (*j).first == "totalMissionsInARegion" || (*j).first == "totalKillsByRace" || (*j).first == "totalKillsByRank")
 			{
 				std::map<std::string, int> tempTotal;
@@ -319,26 +319,26 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					tempTotal = getAlienRaceTotal();
 				else if ((*j).first == "totalKillsByRank")
 					tempTotal = getAlienRankTotal();
-				// Loop over the temporary map
-				// Match nouns and decoration levels
+				// Loop over the temporary map.
+				// Match nouns and decoration levels.
 				for(std::map<std::string, int>::const_iterator k = tempTotal.begin(); k != tempTotal.end(); ++k)
 				{
 					int criteria = -1;
                     std::string noun = (*k).first;
-					// If there is no matching noun, get the first award criteria
+					// If there is no matching noun, get the first award criteria.
                     if (nextCommendationLevel.count(noun) == 0)
 						criteria = (*j).second.front(); 
-					// Otherwise, get the criteria that reflects the soldier's commendation level
+					// Otherwise, get the criteria that reflects the soldier's commendation level.
                     else if (nextCommendationLevel[noun] != (*j).second.size())
 						criteria = (*j).second.at(nextCommendationLevel[noun]); 
 
-                    // If a criteria was set AND the stat's count exceeds the criteria
+                    // If a criteria was set AND the stat's count exceeds the criteria.
                     if (criteria != -1 && (*k).second >= criteria)
                     {
                         modularCommendations.push_back(noun);
                     }
 				}
-				// If it is still empty, we did not get a commendation
+				// If it is still empty, we did not get a commendation.
 				if (modularCommendations.empty())
 				{
 					awardCommendationBool = false;
@@ -347,22 +347,22 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 			}
             else if ((*j).first == "killsWithCriteriaCareer" || (*j).first == "killsWithCriteriaMission" || (*j).first == "killsWithCriteriaTurn")
             {
-                // Fetch the kill criteria list
+                // Fetch the kill criteria list.
                 std::vector<std::map<int, std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
                 
-                // Loop over the OR vectors
+                // Loop over the OR vectors.
                 for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator orCriteria = _killCriteriaList->begin(); orCriteria != _killCriteriaList->end(); ++orCriteria)
                 {
-                    // Loop over the AND vectors
+                    // Loop over the AND vectors.
                     for (std::map<int, std::vector<std::string> >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
                     {
-                        int count = 0; // How many AND vectors (list of DETAILs) have been successful
+                        int count = 0; // How many AND vectors (list of DETAILs) have been successful.
 						if ((*j).first == "killsWithCriteriaTurn" || (*j).first == "killsWithCriteriaMission")
 							count++; // Turns and missions start at 1 because of how thisTime and lastTime work.
-                        int thisTime = -1; // Time being a turn or a mission
+                        int thisTime = -1; // Time being a turn or a mission.
                         int lastTime = -1;
                         bool goToNextTime = false;
-                        // Loop over the KILLS
+                        // Loop over the KILLS.
                         for (std::vector<BattleUnitKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
                         {
                             if ((*j).first == "killsWithCriteriaMission")
@@ -385,21 +385,21 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                                     ++singleKill;
                                 }
                             }
-                            // Skip kill-groups that we already got an award for
-                            // Skip kills that are inbetween turns
+                            // Skip kill-groups that we already got an award for.
+                            // Skip kills that are inbetween turns.
                             if ( thisTime == lastTime && goToNextTime && (*j).first != "killsWithCriteriaCareer")
                             {
                                 continue;
                             }
                             else if (thisTime != lastTime) 
                             {
-                                count = 1; // Reset
+                                count = 1; // Reset.
                                 goToNextTime = false;
                                 continue;
                             }
                             bool foundMatch = true;
 							
-                            // Loop over the DETAILs of the AND vector
+                            // Loop over the DETAILs of the AND vector.
                             for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
                             {
 								std::string battleTypeArray[] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",
@@ -439,27 +439,27 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                             {
                                 count++;
                                 if ( count == (*andCriteria).first) 
-                                    goToNextTime = true; // Criteria met, move to next mission/turn
+                                    goToNextTime = true; // Criteria met, move to next mission/turn.
                             }
                         }
                         int multiCriteria = (*andCriteria).first;
-                        // If one of the AND criteria fail, stop looking
+                        // If one of the AND criteria fail, stop looking.
                         if (multiCriteria == 0 || count / multiCriteria < (*j).second.at(nextCommendationLevel["noNoun"]))
                         {
                             awardCommendationBool = false;
                             break;
                         }
                     }
-                    }
-                    if (awardCommendationBool) 
-                        break; // Stop looking because we are getting one regardless
+                }
+                if (awardCommendationBool) 
+                    break; // Stop looking because we are getting one regardless.
             }
         }
 		bool awardedModularCommendation = false;
 		if (awardCommendationBool)
 		{
             // If we do not have modular medals, but are awarded a different medal,
-            // its noun will be "noNoun"
+            // its noun will be "noNoun".
             if (modularCommendations.empty())
             {
                 modularCommendations.push_back("noNoun");
@@ -487,7 +487,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
             }
 			awardedCommendation = true;
 		}
-		if (!awardedModularCommendation)
+		else
 		{
 			++i;
 		}
