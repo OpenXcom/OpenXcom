@@ -196,7 +196,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
             aliensKilled += (*i)->qty;
         }
 	}
-	if (civiliansSaved && !civiliansDead)
+	if (civiliansSaved && !civiliansDead && _missionStatistics->success == true)
 	{
 		_missionStatistics->valiantCrux = true;
 	}
@@ -275,7 +275,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 					soldierAlienKills++;
 				}
 			}
-			if (aliensKilled && aliensKilled == soldierAlienKills)
+			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true)
 			{
 				(*j)->getStatistics()->nikeCross = true;
 			}
