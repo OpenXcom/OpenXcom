@@ -1426,7 +1426,11 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			Tile *t = getTile(position + Position(x,y,0));
 			Tile *tb = getTile(position + Position(x,y,-1));
-			if (t == 0 || (t->getUnit() != 0 && t->getUnit() != bu) || t->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255 || (t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY))
+			if (t == 0 || 
+				(t->getUnit() != 0 && t->getUnit() != bu) ||
+				t->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255 ||
+				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
+				(t->getMapData(MapData::O_OBJECT) && t->getMapData(MapData::O_OBJECT)->getBigWall() && t->getMapData(MapData::O_OBJECT)->getBigWall() <= 3))
 			{
 				return false;
 			}
