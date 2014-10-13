@@ -91,8 +91,9 @@ void Armor::load(const YAML::Node &node)
 		_drawingRoutine == 10 ||
 		_drawingRoutine == 13 ||
 		_drawingRoutine == 14 ||
-		_drawingRoutine == 16 ||
-		_drawingRoutine == 17)
+		_drawingRoutine == 15 ||
+		_drawingRoutine == 17 ||
+		_drawingRoutine == 18)
 	{
 		_canHoldWeapon = true;
 	}
