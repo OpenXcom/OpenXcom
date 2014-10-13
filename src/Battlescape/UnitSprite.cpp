@@ -79,6 +79,7 @@ void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, 
 void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 {
 	_unit = unit;
+	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	_redraw = true;
 	_part = part;
 }
@@ -141,7 +142,6 @@ void UnitSprite::setAnimationFrame(int frame)
 void UnitSprite::draw()
 {
 	Surface::draw();
-	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	// Array of drawing routines
 	void (UnitSprite::*routines[])() = {&UnitSprite::drawRoutine0,
 		                                &UnitSprite::drawRoutine1,
@@ -197,8 +197,8 @@ void UnitSprite::drawRoutine0()
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
-            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") || 
-			     (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
+
+            if (_unit->getArmor()->getForcedTorso() == TORSO_USE_GENDER)
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
 			}
@@ -301,22 +301,28 @@ void UnitSprite::drawRoutine0()
 		}
 		return;
 	}
-
-	if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+	if (_drawingRoutine == 10 || _helmet)
 	{
-		torso = _unitSurface->getFrame(maleTorso + unitDir);
-	}
-	else if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC")
-	{
-		torso = _unitSurface->getFrame(femaleTorso + unitDir);
-	}
-	else if (_unit->getGender() == GENDER_FEMALE)
-	{
-		torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		if ((_unit->getGender() == GENDER_FEMALE && _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE) 
+			|| _unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE)
+		{
+			torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		}
+		else
+		{
+			torso = _unitSurface->getFrame(maleTorso + unitDir);
+		}
 	}
 	else
 	{
-		torso = _unitSurface->getFrame(maleTorso + unitDir);
+		if (_unit->getGender() == GENDER_FEMALE)
+		{
+			torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		}
+		else
+		{
+			torso = _unitSurface->getFrame(maleTorso + unitDir);
+		}
 	}
 
 	// when walking, torso(fixed sprite) has to be animated up/down
