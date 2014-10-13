@@ -859,7 +859,7 @@ int Base::getDefenseValue() const
 			total += (*i)->getRules()->getDefenseValue();
 		}
 	}
-	return total;
+	return total / 8;
 }
 
 /**
