@@ -581,7 +581,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_WESTWALL)
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
+			(tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST ||
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWESTANDNORTH ))
 			return true; // blocking part
 		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
 		if (!tileWest) return true;	// do not look outside of map
@@ -593,7 +594,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_NORTHWALL)
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
+			(tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH ||
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWESTANDNORTH ))
 			return true; // blocking part
 		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
 		if (!tileNorth) return true; // do not look outside of map
