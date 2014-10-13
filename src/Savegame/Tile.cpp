@@ -245,7 +245,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
 	{
 		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
-		if (_objects[part]->getBigWall() >= 4)
+		if (part == MapData::O_OBJECT && _objects[part]->getBigWall() >= 4)
 			return 0;
 		return _objects[part]->getTUCost(movementType);
 	}
