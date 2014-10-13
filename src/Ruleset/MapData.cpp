@@ -551,4 +551,15 @@ void MapData::setNoFloor(bool isNoFloor)
 {
 	_isNoFloor = isNoFloor;
 }
+
+/**
+ * set the "stops LOS" flag.
+ * @param stopLOS set the flag to THIS.
+ */
+void MapData::setStopLOS(bool stopLOS)
+{
+	_stopLOS = stopLOS;
+	_block[1] = stopLOS ? 255 : 0;
+}
+
 }

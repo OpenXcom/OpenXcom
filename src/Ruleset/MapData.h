@@ -162,6 +162,8 @@ public:
 	bool isBaseModule();
 	/// Sets this tile as not a floor (water, etc.)
 	void setNoFloor(bool isNoFloor);
+	/// Sets this tile as not stopping LOS.
+	void setStopLOS(bool stopLOS);
 };
 
 }
