@@ -344,6 +344,10 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					awardCommendationBool = false;
 					break;
 				}
+                else
+                {
+                    awardCommendationBool = true;
+                }
 			}
             else if ((*j).first == "killsWithCriteriaCareer" || (*j).first == "killsWithCriteriaMission" || (*j).first == "killsWithCriteriaTurn")
             {
@@ -404,10 +408,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                             {
 								std::string battleTypeArray[] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",
 									"BT_PROXIMITYGRENADE", "BT_MEDIKIT", "BT_SCANNER", "BT_MINDPROBE", "BT_PSIAMP", "BT_FLARE", "BT_CORPSE", "BT_END" };
+								std::vector<std::string> battleTypeVector(battleTypeArray, battleTypeArray + 13);
 								int battleType = 0;
-								for (; battleType != battleTypeArray->size(); ++battleType)
+								for (; battleType != battleTypeVector.size(); ++battleType)
 								{
-									if ((*detail) == battleTypeArray[battleType])
+									if ((*detail) == battleTypeVector[battleType])
 									{
 										break;
 									}
@@ -415,10 +420,11 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 
 								std::string damageTypeArray[] = { "DT_NONE", "DT_AP", "DT_IN", "DT_HE", "DT_LASER", "DT_PLASMA", 
 									"DT_STUN", "DT_MELEE", "DT_ACID", "DT_SMOKE", "DT_END"};
+								std::vector<std::string> damageTypeVector(damageTypeArray, damageTypeArray + 11);
 								int damageType = 0;
-								for (; damageType != damageTypeArray->size(); ++damageType)
+								for (; damageType != damageTypeVector.size(); ++damageType)
 								{
-									if ((*detail) == damageTypeArray[damageType])
+									if ((*detail) == damageTypeVector[damageType])
 									{
 										break;
 									}
@@ -449,10 +455,14 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                             awardCommendationBool = false;
                             break;
                         }
+                        else
+                        {
+                            awardCommendationBool = true;
+                        }
                     }
+                    if (awardCommendationBool) 
+                        break; // Stop looking because we are getting one regardless.
                 }
-                if (awardCommendationBool) 
-                    break; // Stop looking because we are getting one regardless.
             }
         }
 		bool awardedModularCommendation = false;
