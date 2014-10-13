@@ -431,11 +431,12 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 								}
 
                                 // See if we find no matches with any criteria. If so, break and try the next kill.
-								if ( (*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
+								if ( (*singleKill)->weapon == "STR_WEAPON_UNKNOWN" || (*singleKill)->weaponAmmo == "STR_WEAPON_UNKNOWN" ||
+									((*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
 									 (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
 									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
 									 rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType && 
-									 rules->getItem((*singleKill)->weapon)->getBattleType() != battleType )
+									 rules->getItem((*singleKill)->weapon)->getBattleType() != battleType) )
                                 {
                                     foundMatch = false;
                                     break;
