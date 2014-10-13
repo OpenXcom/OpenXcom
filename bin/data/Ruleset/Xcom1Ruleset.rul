@@ -9276,6 +9276,8 @@ MCDPatches:
         LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
       - MCDIndex: 51
         LOFTS: [6,6,6,6,6,6,6,6,6,6,6,6]
+      - MCDIndex: 62
+        bigWall: 0
   - type: U_EXT02
     data:
       - MCDIndex: 2
