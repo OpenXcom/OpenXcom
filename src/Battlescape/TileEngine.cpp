@@ -1944,7 +1944,6 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
-				tile->animate();	// ensures frame advances for ufo doors to update TU cost
 				calculateFOV(unit->getPosition());
 				// look from the other side (may be need check reaction fire?)
 				std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
