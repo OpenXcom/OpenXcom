@@ -303,7 +303,7 @@ void UnitSprite::drawRoutine0()
 		}
 		return;
 	}
-	if (_drawingRoutine == 10 || _helmet)
+	if (_drawingRoutine == 0 || _helmet)
 	{
 		if ((_unit->getGender() == GENDER_FEMALE && _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE) 
 			|| _unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE)
