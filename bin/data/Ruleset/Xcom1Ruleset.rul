@@ -4454,6 +4454,7 @@ soldiers:
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
+    femaleFrequency: 25
 units:
   - type: STR_TANK_CANNON
     race: STR_TANK_CANNON

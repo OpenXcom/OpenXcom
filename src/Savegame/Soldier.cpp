@@ -65,13 +65,13 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 		if (!names->empty())
 		{
 			size_t nationality = RNG::generate(0, names->size()-1);
-			_name = names->at(nationality)->genName(&_gender);
+			_name = names->at(nationality)->genName(&_gender, rules->getFemaleFrequency());
 			_look = (SoldierLook)names->at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
 		}
 		else
 		{
 			_name = L"";
-			_gender = (SoldierGender)RNG::generate(0, 1);
+			_gender = (RNG::percent(rules->getFemaleFrequency()) ? GENDER_FEMALE : GENDER_MALE);
 			_look = (SoldierLook)RNG::generate(0,3);
 		}
 	}
