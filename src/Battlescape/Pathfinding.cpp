@@ -804,6 +804,35 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 			return true;
 		}
 	}
+
+	//TFTD stairs 1 : endposition has to the south a terrainlevel -18 object (upper part of the stairs)
+	if (_save->getTile(endPosition + Position(0, 1, 0)) && _save->getTile(endPosition + Position(0, 1, 0))->getTerrainLevel() == -18)
+	{
+		// condition 2 : one position further to the south there has to be a terrainlevel -8 object (lower part of the stairs)
+		if (_save->getTile(endPosition + Position(0, 2, 0)) && _save->getTile(endPosition + Position(0, 2, 0))->getTerrainLevel() != -12)
+		{
+			return false;
+		}
+
+		// condition 3 : the start position has to be on either of the 3 tiles to the south of the endposition
+		if (startPosition == endPosition + Position(0, 1, 0) || startPosition == endPosition + Position(0, 2, 0) || startPosition == endPosition + Position(0, 3, 0))
+		{
+			return true;
+		}
+	}
+
+	// same for the east-west oriented stairs.
+	if (_save->getTile(endPosition + Position(1, 0, 0)) && _save->getTile(endPosition + Position(1, 0, 0))->getTerrainLevel() == -18)
+	{
+		if (_save->getTile(endPosition + Position(2, 0, 0)) && _save->getTile(endPosition + Position(2, 0, 0))->getTerrainLevel() != -12)
+		{
+			return false;
+		}
+		if (startPosition == endPosition + Position(1, 0, 0) || startPosition == endPosition + Position(2, 0, 0) || startPosition == endPosition + Position(3, 0, 0))
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
