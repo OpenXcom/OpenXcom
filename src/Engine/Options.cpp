@@ -201,6 +201,8 @@ void create()
 	_info.push_back(OptionInfo("keyFps", &keyFps, SDLK_F7, "STR_FPS_COUNTER", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyQuickSave", &keyQuickSave, SDLK_F5, "STR_QUICK_SAVE", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyQuickLoad", &keyQuickLoad, SDLK_F9, "STR_QUICK_LOAD", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyPrev", &keyPrev, SDLK_LEFT, "STR_PREV_OBJECT", "STR_GENERAL"));
+	_info.push_back(OptionInfo("keyNext", &keyNext, SDLK_RIGHT, "STR_NEXT_OBJECT", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyGeoLeft", &keyGeoLeft, SDLK_LEFT, "STR_ROTATE_LEFT", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("keyGeoRight", &keyGeoRight, SDLK_RIGHT, "STR_ROTATE_RIGHT", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("keyGeoUp", &keyGeoUp, SDLK_UP, "STR_ROTATE_UP", "STR_GEOSCAPE"));
