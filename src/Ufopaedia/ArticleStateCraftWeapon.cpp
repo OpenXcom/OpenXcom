@@ -90,6 +90,9 @@ namespace OpenXcom
 		_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
+		_lstInfo->addRow(2, tr("STR_ROUNDS").c_str(), Text::formatNumber(weapon->getAmmoMax()).c_str());
+		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
+
 		centerAllSurfaces();
 	}
 
