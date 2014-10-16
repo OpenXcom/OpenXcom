@@ -82,7 +82,7 @@ else ( )
     message ( FATAL_ERROR "Can't find yaml-cpp which is required" )
   else ()
     include_directories ( ${YAMLCPP_INCLUDE_DIR} )
-    message ( "found yaml-cpp(${YAMLCPP_LIBRARY_DIRS}:${YAMLCPP_INCLUDE_DIR})" )
+    message ( "found yaml-cpp(${YAMLCPP_LIBRARY}-${YAMLCPP_LIBRARY_DIRS}:${YAMLCPP_INCLUDE_DIR})" )
   endif ( NOT YAMLCPP_FOUND )
 endif()
 
