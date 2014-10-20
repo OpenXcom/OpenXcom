@@ -47,7 +47,7 @@ ActionMenuItem::ActionMenuItem(int id, Game *game, int x, int y) : InteractiveSu
 	_frame = new Frame(getWidth(), getHeight(), 0, 0);
 	_frame->setHighContrast(true);
 	_frame->setColor(actionMenu->border);
-	_frame->setBackground(actionMenu->color2);
+	_frame->setSecondaryColor(actionMenu->color2);
 	_frame->setThickness(8);
 
 	_txtDescription = new Text(200, 20, 10, 13);
@@ -151,7 +151,7 @@ void ActionMenuItem::draw()
 void ActionMenuItem::mouseIn(Action *action, State *state)
 {
 	_highlighted = true;
-	_frame->setBackground(_frame->getBackground() - _highlightModifier);
+	_frame->setSecondaryColor(_frame->getSecondaryColor() - _highlightModifier);
 	draw();
 	InteractiveSurface::mouseIn(action, state);
 }
@@ -165,7 +165,7 @@ void ActionMenuItem::mouseIn(Action *action, State *state)
 void ActionMenuItem::mouseOut(Action *action, State *state)
 {
 	_highlighted = false;
-	_frame->setBackground(_frame->getBackground() + _highlightModifier);
+	_frame->setSecondaryColor(_frame->getSecondaryColor() + _highlightModifier);
 	draw();
 	InteractiveSurface::mouseOut(action, state);
 }

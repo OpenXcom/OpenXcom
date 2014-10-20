@@ -135,7 +135,7 @@ void UnitWalkBState::think()
 				for (int y = size; y >= 0; y--)
 				{
 					Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
-					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || _unit->getArmor()->getMovementType() == MT_FLY)
+					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || _unit->getMovementType() == MT_FLY)
 						largeCheck = false;
 					_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
 				}
@@ -147,7 +147,7 @@ void UnitWalkBState::think()
 					_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit, _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
 				}
 			}
-			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY && _unit->getWalkingPhase() == 0;
+			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getMovementType() != MT_FLY && _unit->getWalkingPhase() == 0;
 
 			if (_falling)
 			{

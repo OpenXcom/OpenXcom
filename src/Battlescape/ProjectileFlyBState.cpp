@@ -184,13 +184,6 @@ void ProjectileFlyBState::init()
 		return;
 	case BA_PANIC:
 	case BA_MINDCONTROL:
-		if (_parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getMaxRange())
-		{
-			// out of range
-			_action.result = "STR_OUT_OF_RANGE";
-			_parent->popState();
-			return;
-		}
 		_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
 		return;
 	default:
@@ -287,17 +280,8 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
 	
-	int bulletSprite = -1;
-	if (_action.type != BA_THROW)
-	{
-		bulletSprite = _ammo->getRules()->getBulletSprite();
-		if (bulletSprite == -1)
-		{
-			bulletSprite = _action.weapon->getRules()->getBulletSprite();
-		}
-	}
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -427,7 +411,7 @@ void ProjectileFlyBState::think()
 		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
 		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
 		bool hasFloor = t && !t->hasNoFloor(bt);
-		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+		bool unitCanFly = _action.actor->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
@@ -544,15 +528,10 @@ void ProjectileFlyBState::think()
 					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
 					{
 						int i = 1;
-						int bulletSprite = _ammo->getRules()->getBulletSprite();
-						if (bulletSprite == -1)
-						{
-							bulletSprite = _action.weapon->getRules()->getBulletSprite();
-						}
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
 							// create a projectile
-							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(std::max(0.0, (_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0) - i * 5.0));
 							if (_projectileImpact != V_EMPTY)

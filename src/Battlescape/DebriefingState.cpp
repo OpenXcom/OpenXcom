@@ -959,27 +959,30 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
-		for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+		if (_region)
 		{
-			if ((*i)->getMission() == am)
+			AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
+			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 			{
-				delete *i;
-				i = _game->getSavedGame()->getUfos()->erase(i);
+				if ((*i)->getMission() == am)
+				{
+					delete *i;
+					i = _game->getSavedGame()->getUfos()->erase(i);
+				}
+				else
+				{
+					++i;
+				}
 			}
-			else
+			for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
+				i != _game->getSavedGame()->getAlienMissions().end(); ++i)
 			{
-				++i;
-			}
-		}
-		for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
-			i != _game->getSavedGame()->getAlienMissions().end(); ++i)
-		{
-			if ((AlienMission*)(*i) == am)
-			{
-				delete (*i);
-				_game->getSavedGame()->getAlienMissions().erase(i);
-				break;
+				if ((AlienMission*)(*i) == am)
+				{
+					delete (*i);
+					_game->getSavedGame()->getAlienMissions().erase(i);
+					break;
+				}
 			}
 		}
 	}

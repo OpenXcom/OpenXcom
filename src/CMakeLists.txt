@@ -117,6 +117,8 @@ set ( battlescape_src
   Battlescape/Camera.cpp
   Battlescape/Projectile.cpp
   Battlescape/Projectile.h
+  Battlescape/Particle.cpp
+  Battlescape/Particle.h
   Battlescape/UnitDieBState.h
   Battlescape/UnitDieBState.cpp
   Battlescape/Explosion.cpp

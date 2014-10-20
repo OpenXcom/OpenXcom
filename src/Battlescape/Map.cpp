@@ -28,6 +28,7 @@
 #include "Projectile.h"
 #include "Explosion.h"
 #include "BattlescapeState.h"
+#include "Particle.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -93,9 +94,14 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 		_previewSetting = PATH_FULL;
 	}
 	_res = _game->getResourcePack();
+	_save = _game->getSavedGame()->getSavedBattle();
+	if (_res->getLUTs()->size() > _save->getDepth())
+	{
+		_transparencies = &_res->getLUTs()->at(_save->getDepth());
+	}
+
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
-	_save = _game->getSavedGame()->getSavedBattle();
 	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, 0, 0);
 	_message->setX(_game->getScreen()->getDX());
 	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
@@ -652,7 +658,15 @@ void Map::drawTerrain(Surface *surface)
 									int shade = 0;
 									if (!tileWest->getFire())
 									{
-										frameNumber = 8 + int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+										if (_save->getDepth() > 0)
+										{
+											frameNumber += ResourcePack::UNDERWATER_SMOKE_OFFSET;
+										}
+										else
+										{
+											frameNumber += ResourcePack::SMOKE_OFFSET;
+										}
+										frameNumber += int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 										shade = tileWestShade;
 									}
 
@@ -892,7 +906,15 @@ void Map::drawTerrain(Surface *surface)
 						int shade = 0;
 						if (!tile->getFire())
 						{
-							frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+							if (_save->getDepth() > 0)
+							{
+								frameNumber += ResourcePack::UNDERWATER_SMOKE_OFFSET;
+							}
+							else
+							{
+								frameNumber += ResourcePack::SMOKE_OFFSET;
+							}
+							frameNumber += int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 							shade = tileShade;
 						}
 
@@ -906,6 +928,28 @@ void Map::drawTerrain(Surface *surface)
 						}
 						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, shade);
+					}
+
+					//draw particle clouds
+					for (std::list<Particle*>::const_iterator i = tile->getParticleCloud()->begin(); i != tile->getParticleCloud()->end(); ++i)
+					{
+						int vaporX = screenPosition.x + (*i)->getX();
+						int vaporY = screenPosition.y + (*i)->getY();
+						if (_transparencies->size() >= ((*i)->getColor() + 1) * 1024)
+						{
+							switch ((*i)->getSize())
+							{
+							case 3:
+								surface->setPixel(vaporX+1, vaporY+1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX+1, vaporY+1)]); 
+							case 2:
+								surface->setPixel(vaporX + 1, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX + 1, vaporY)]); 
+							case 1:
+								surface->setPixel(vaporX, vaporY + 1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY + 1)]); 
+							default:
+								surface->setPixel(vaporX, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY)]); 
+								break;
+							}
+						}
 					}
 
 					// Draw Path Preview

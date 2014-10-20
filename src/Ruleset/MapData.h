@@ -42,7 +42,7 @@ enum SpecialTileType{TILE=0,
 					END_POINT,
 					MUST_DESTROY};
 
-enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE};
+enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT};
 enum VoxelType{ V_EMPTY = -1, V_FLOOR, V_WESTWALL, V_NORTHWALL, V_OBJECT, V_UNIT, V_OUTOFBOUNDS };
 
 /**
@@ -162,6 +162,8 @@ public:
 	bool isBaseModule();
 	/// Sets this tile as not a floor (water, etc.)
 	void setNoFloor(bool isNoFloor);
+	/// Sets this tile as not stopping LOS.
+	void setStopLOS(bool stopLOS);
 };
 
 }

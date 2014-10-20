@@ -109,11 +109,11 @@ bool MapData::isNoFloor() const
  * 6: acts as an east wall
  * 7: acts as a south wall
  * 8: acts as a south and east wall.
+ * 9: acts as a north and west wall.
  * @return An integer representing what kind of bigwall this is.
  */
 int MapData::getBigWall() const
 {
-	if (_terrainLevel < 0) return 0; // this is a hack for eg. Skyranger Ramps
 	return _bigWall;
 }
 
@@ -551,4 +551,15 @@ void MapData::setNoFloor(bool isNoFloor)
 {
 	_isNoFloor = isNoFloor;
 }
+
+/**
+ * set the "stops LOS" flag.
+ * @param stopLOS set the flag to THIS.
+ */
+void MapData::setStopLOS(bool stopLOS)
+{
+	_stopLOS = stopLOS;
+	_block[1] = stopLOS ? 255 : 0;
+}
+
 }

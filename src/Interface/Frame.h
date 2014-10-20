@@ -42,10 +42,11 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the border color.
 	Uint8 getColor() const;
+	void setBorderColor(Uint8 color);
 	/// Sets the background color.
-	void setBackground(Uint8 bg);
+	void setSecondaryColor(Uint8 bg);
 	/// Gets the background color.
-	Uint8 getBackground() const;
+	Uint8 getSecondaryColor() const;
 	/// Sets the high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the border thickness.

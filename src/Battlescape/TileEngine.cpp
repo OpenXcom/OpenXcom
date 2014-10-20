@@ -941,11 +941,13 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		// has a melee weapon and is in melee range
 		((weapon->getRules()->getBattleType() == BT_MELEE &&
 		validMeleeRange(unit, target, unit->getDirection()) &&
+		unit->getActionTUs(BA_HIT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon)) ||
 		// has a gun capable of snap shot with ammo
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
 		weapon->getAmmoItem() &&
+		unit->getActionTUs(BA_SNAPSHOT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
 		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&
@@ -1943,11 +1945,11 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				{
 					part = MapData::O_WESTWALL;
 				}
-				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
+				TUCost = tile->getTUCost(part, unit->getMovementType());
 			}
 			else if (door == 1 || door == 4)
 			{
-				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
+				TUCost = tile->getTUCost(part, unit->getMovementType());
 			}
 		}
 	}
@@ -1958,7 +1960,6 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
-				tile->animate();	// ensures frame advances for ufo doors to update TU cost
 				calculateFOV(unit->getPosition());
 				// look from the other side (may be need check reaction fire?)
 				std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
@@ -2557,7 +2558,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 		{
 			if (occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 			{
-				if (occupant->getArmor()->getMovementType() == MT_FLY)
+				if (occupant->getMovementType() == MT_FLY)
 				{
 					// move to the position you're already in. this will unset the kneeling flag, set teh floating flag, etc.
 					occupant->startWalking(occupant->getDirection(), occupant->getPosition(), _save->getTile(occupant->getPosition() + Position(0,0,-1)), true);

@@ -27,7 +27,8 @@
 
 namespace OpenXcom
 {
-
+	
+enum ForcedTorso{ TORSO_USE_GENDER, TORSO_ALWAYS_MALE, TORSO_ALWAYS_FEMALE };
 /**
  * Represents a specific type of armor.
  * Not only soldier armor, but also alien armor - some alien races wear Soldier Armor, Leader Armor or Commander Armor
@@ -49,6 +50,7 @@ private:
 	int _deathFrames;
 	bool _constantAnimation;
 	bool _canHoldWeapon;
+	ForcedTorso _forcedTorso;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -78,7 +80,7 @@ public:
 	std::string getStoreItem() const;
 	/// Gets the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
-	/// Gets whether the armor can fly.
+	/// DO NOT USE THIS FUNCTION OUTSIDE THE BATTLEUNIT CONSTRUCTOR OR I WILL HUNT YOU DOWN.
 	MovementType getMovementType() const;
 	/// Gets whether this is a normal or big unit.
 	int getSize() const;
@@ -98,6 +100,8 @@ public:
 	bool getCanHoldWeapon();
 	/// Gets max view distance at dark in BattleScape.
 	int getVisibilityAtDark() const;
+	/// Checks if this armor ignores gender (power suit/flying suit).
+	ForcedTorso getForcedTorso();
 };
 
 }

@@ -634,10 +634,6 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 void AlienMission::spawnAlienBase(const Globe &globe, Game &engine)
 {
 	SavedGame &game = *engine.getSavedGame();
-	if (game.getAlienBases()->size() >= 8)
-	{
-		return;
-	}
 	const Ruleset &ruleset = *engine.getRuleset();
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
