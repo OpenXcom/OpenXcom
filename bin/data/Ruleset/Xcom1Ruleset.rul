@@ -2021,6 +2021,7 @@ items:
     invWidth: 1
     invHeight: 3
     skillApplied: false
+    clipSize: -1
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
