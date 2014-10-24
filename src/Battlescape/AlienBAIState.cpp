@@ -1522,7 +1522,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 
 	// account for the unit we're targetting
 	BattleUnit *target = _save->getTile(targetPos)->getUnit();
-	if (target)
+	if (target && !_save->getTile(targetPos)->getDangerous())
 	{
 		++enemiesAffected;
 		++efficacy;
