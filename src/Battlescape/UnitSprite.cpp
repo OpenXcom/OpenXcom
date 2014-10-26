@@ -888,12 +888,12 @@ void UnitSprite::drawRoutine4()
 	const int standConvert[8] = { 3, 2, 1, 0, 7, 6, 5, 4 }; // array for converting stand frames for some tftd civilians
 	const int offXAiming = 16;
 
-	if (_drawingRoutine == 16) // tftd civilian - first set
+	if (_drawingRoutine == 17) // tftd civilian - first set
 	{
 		stand = 64;
 		walk = 0;
 	}
-	else if (_drawingRoutine == 17) // tftd civilian - second set
+	else if (_drawingRoutine == 18) // tftd civilian - second set
 	{
 		stand = 140;
 		walk = 76;
@@ -918,7 +918,7 @@ void UnitSprite::drawRoutine4()
 	{
 		s = _unitSurface->getFrame(walk + (8 * unitDir) + _unit->getWalkingPhase());
 	}
-	else if (_drawingRoutine != 16)
+	else if (_drawingRoutine != 17)
 	{
 		s = _unitSurface->getFrame(stand + unitDir);
 	}
