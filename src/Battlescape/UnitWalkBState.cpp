@@ -116,8 +116,8 @@ void UnitWalkBState::think()
 		if ((_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0) || // next tile must be not occupied
 			(_parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit))
 		{
-			playMovementSound();
 			_unit->keepWalking(tileBelow, onScreen); // advances the phase
+			playMovementSound();
 		}
 		else if (!_falling)
 		{
