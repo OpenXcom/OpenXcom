@@ -29,6 +29,9 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Savegame/CraftWeapon.h"
+#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 #include "Globe.h"
@@ -38,6 +41,20 @@
 
 namespace OpenXcom
 {
+
+/**
+ * Turns an amount of time into a
+ * hour string.
+ * @param total 
+ */
+std::wstring InterceptState::formatTime(int total)
+{
+	std::wostringstream ss;
+	ss << L"(";
+  ss << tr("STR_HOUR", total);
+	ss << L")";
+	return ss.str();
+}
 
 /**
  * Initializes all the elements in the Intercept window.
@@ -55,11 +72,11 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 146);
 	_btnGotoBase = new TextButton(142, 16, 162, 146);
 	_txtTitle = new Text(300, 17, 10, 46);
-	_txtCraft = new Text(86, 9, 14, 70);
-	_txtStatus = new Text(70, 9, 100, 70);
-	_txtBase = new Text(80, 9, 170, 70);
-	_txtWeapons = new Text(80, 17, 238, 62);
-	_lstCrafts = new TextList(288, 64, 8, 78);
+	_txtCraft = new Text(86, 9, 8, 70);
+	_txtStatus = new Text(55, 9, 94, 70);
+	_txtBase = new Text(80, 9, 196, 70);
+	_txtWeapons = new Text(80, 17, 264, 62);
+	_lstCrafts = new TextList(312, 64, 2, 78);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);
@@ -110,7 +127,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(4, 86, 70, 80, 46);
+	_lstCrafts->setColumns(5, 86, 55, 47, 80, 46);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(6);
@@ -124,6 +141,37 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
+      std::wostringstream ssMaintenance;
+      ssMaintenance << "";
+      
+			if ((*j)->getStatus() != "STR_READY")
+			{
+        int maintenanceHours = 0;
+        if ((*j)->getDamage() > 0)
+        {
+          maintenanceHours += (int)ceil((double)(*j)->getDamage() / (*j)->getRules()->getRepairRate());
+        }
+        
+        if ((*j)->getFuel() < (*j)->getRules()->getMaxFuel())
+        {
+          maintenanceHours += (int)ceil((double)((*j)->getRules()->getMaxFuel() - (*j)->getFuel()) / (*j)->getRules()->getRefuelRate() / 2.0);
+        }
+        
+        unsigned int numWeapons = (*j)->getRules()->getWeapons();
+        for (unsigned int idx = 0; idx < numWeapons; idx++)
+        {
+          CraftWeapon *w = (*j)->getWeapons()->at(idx);
+          if (w != 0 && w->getAmmo() < w->getRules()->getAmmoMax())
+          {
+      			std::string clip = w->getRules()->getClipItem();
+      			int available = (*i)->getItems()->getItem(clip);
+            int needed = w->getRules()->getAmmoMax() - w->getAmmo();
+            maintenanceHours += (int)ceil((double)(needed < available ? needed : available) / w->getRules()->getRearmRate());
+          }
+        }
+        ssMaintenance << formatTime(maintenanceHours);
+      }
+
 			std::wostringstream ss;
 			if ((*j)->getNumWeapons() > 0)
 			{
@@ -152,7 +200,11 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 				ss << 0;
 			}
 			_crafts.push_back(*j);
-			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), tr((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
+			_lstCrafts->addRow(5, (*j)->getName(_game->getLanguage()).c_str(), 
+                            tr((*j)->getStatus()).c_str(), 
+                            ssMaintenance.str().c_str(), 
+                            (*i)->getName().c_str(), 
+                            ss.str().c_str());
 			if ((*j)->getStatus() == "STR_READY")
 			{
 				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
