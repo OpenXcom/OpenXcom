@@ -155,7 +155,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
             maintenanceHours += (int)ceil((double)(needed < available ? needed : available) / w->getRules()->getRearmRate());
           }
         }
-        ssStatus << L" (" << tr("STR_HOUR", maintenanceHours) << L")";
+        ssStatus << L": " << tr("STR_HOUR", maintenanceHours);
       }
 
 			std::wostringstream ss;
