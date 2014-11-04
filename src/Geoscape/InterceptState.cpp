@@ -43,20 +43,6 @@ namespace OpenXcom
 {
 
 /**
- * Turns an amount of time into a
- * hour string.
- * @param total 
- */
-std::wstring InterceptState::formatTime(int total)
-{
-	std::wostringstream ss;
-	ss << L"(";
-  ss << tr("STR_HOUR", total);
-	ss << L")";
-	return ss.str();
-}
-
-/**
  * Initializes all the elements in the Intercept window.
  * @param game Pointer to the core game.
  * @param globe Pointer to the Geoscape globe.
@@ -73,7 +59,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_btnGotoBase = new TextButton(142, 16, 162, 146);
 	_txtTitle = new Text(300, 17, 10, 46);
 	_txtCraft = new Text(86, 9, 8, 70);
-	_txtStatus = new Text(55, 9, 94, 70);
+	_txtStatus = new Text(102, 9, 94, 70);
 	_txtBase = new Text(80, 9, 196, 70);
 	_txtWeapons = new Text(80, 17, 264, 62);
 	_lstCrafts = new TextList(312, 64, 2, 78);
@@ -127,7 +113,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(5, 86, 55, 47, 80, 46);
+	_lstCrafts->setColumns(4, 86, 102, 80, 46);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(6);
@@ -141,8 +127,8 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-      std::wostringstream ssMaintenance;
-      ssMaintenance << "";
+      std::wostringstream ssStatus;
+      ssStatus << tr((*j)->getStatus());
       
 			if ((*j)->getStatus() != "STR_READY")
 			{
@@ -169,7 +155,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
             maintenanceHours += (int)ceil((double)(needed < available ? needed : available) / w->getRules()->getRearmRate());
           }
         }
-        ssMaintenance << formatTime(maintenanceHours);
+        ssStatus << L" (" << tr("STR_HOUR", maintenanceHours) << L")";
       }
 
 			std::wostringstream ss;
@@ -200,9 +186,8 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 				ss << 0;
 			}
 			_crafts.push_back(*j);
-			_lstCrafts->addRow(5, (*j)->getName(_game->getLanguage()).c_str(), 
-                            tr((*j)->getStatus()).c_str(), 
-                            ssMaintenance.str().c_str(), 
+			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), 
+                            ssStatus.str().c_str(), 
                             (*i)->getName().c_str(), 
                             ss.str().c_str());
 			if ((*j)->getStatus() == "STR_READY")

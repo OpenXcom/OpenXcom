@@ -49,8 +49,7 @@ private:
 	Base *_base;
 	Target *_target;
 	std::vector<Craft*> _crafts;
-	/// Formats an amount of time.
-	std::wstring formatTime(int time);
+
 public:
 	/// Creates the Intercept state.
 	InterceptState(Globe *globe, Base *base = 0, Target *target = 0);
