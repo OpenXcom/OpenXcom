@@ -51,6 +51,11 @@ namespace OpenXcom
  */
 InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _globe(globe), _base(base), _target(target)
 {
+  const int WIDTH_CRAFT = 84;   //86; 84
+  const int WIDTH_STATUS = 96;  //70;  // 4 - 28?
+  const int WIDTH_BASE = 56;    //80; 56
+  const int WIDTH_WEAPONS = 80; //80;
+  
 	_screen = false;
 
 	// Create objects
@@ -58,11 +63,15 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 146);
 	_btnGotoBase = new TextButton(142, 16, 162, 146);
 	_txtTitle = new Text(300, 17, 10, 46);
-	_txtCraft = new Text(86, 9, 8, 70);
-	_txtStatus = new Text(102, 9, 94, 70);
-	_txtBase = new Text(80, 9, 196, 70);
-	_txtWeapons = new Text(80, 17, 264, 62);
-	_lstCrafts = new TextList(312, 64, 2, 78);
+  int x = 4;
+	_txtCraft = new Text(WIDTH_CRAFT, 9, x, 70);
+  x += WIDTH_CRAFT;
+	_txtStatus = new Text(WIDTH_STATUS, 9, x, 70);
+  x += WIDTH_STATUS;
+	_txtBase = new Text(WIDTH_BASE, 9, x, 70);
+  x += WIDTH_BASE;
+	_txtWeapons = new Text(WIDTH_WEAPONS, 17, x, 62);
+	_lstCrafts = new TextList(316, 64, 2, 78);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);
@@ -113,10 +122,10 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(4, 86, 102, 80, 46);
+	_lstCrafts->setColumns(4, WIDTH_CRAFT, WIDTH_STATUS, WIDTH_BASE, WIDTH_WEAPONS);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-	_lstCrafts->setMargin(6);
+	_lstCrafts->setMargin(2);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 
