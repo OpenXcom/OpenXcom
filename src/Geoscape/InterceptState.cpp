@@ -52,9 +52,9 @@ namespace OpenXcom
 InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _globe(globe), _base(base), _target(target)
 {
   const int WIDTH_CRAFT   = 84;
-  const int WIDTH_STATUS  = 96;
+  const int WIDTH_STATUS  = 100;
   const int WIDTH_BASE    = 56;
-  const int WIDTH_WEAPONS = 80;
+  const int WIDTH_WEAPONS = 76;
   
 	_screen = false;
 
