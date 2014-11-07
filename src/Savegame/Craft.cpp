@@ -752,6 +752,77 @@ void Craft::consumeFuel()
 }
 
 /**
+ * Returns how long in hours until the 
+ * craft is repaired.
+ */
+unsigned int Craft::calcRepairTime()
+{
+  unsigned int repairTime = 0;
+
+  if (_damage > 0)
+  {
+    repairTime += (int)ceil((double)_damage / _rules->getRepairRate());
+  }
+  return repairTime;
+}
+
+/**
+ * Returns how long in hours until the 
+ * craft is refuelled (if there is fuel available).
+ */
+unsigned int Craft::calcRefuelTime()
+{
+  unsigned int refuelTime = 0;
+
+  if (_fuel < _rules->getMaxFuel())
+  { // We need fuel.
+    std::string item = _rules->getRefuelItem();
+    int available = _base->getItems()->getItem(item);
+    int needed = _rules->getMaxFuel() - _fuel;
+    if (item.empty())
+    { // We have unlimited fuel.
+      refuelTime += (int)ceil((double)(needed) / _rules->getRefuelRate() / 2.0);
+    }
+    else if (available > 0)
+    { // We have fuel.
+      refuelTime += (int)ceil((double)(needed < available ? needed : available) / _rules->getRefuelRate() / 2.0);
+    }
+  }
+  return refuelTime;
+}
+
+/**
+ * Returns how long in hours until the 
+ * craft is re-armed (if there is ammo available).
+ */
+unsigned int Craft::calcRearmTime()
+{
+  unsigned int rearmTime = 0;
+
+  unsigned int numWeapons = _rules->getWeapons();
+  for (unsigned int idx = 0; idx < numWeapons; idx++)
+  {
+    CraftWeapon *w = _weapons.at(idx);
+    if (w != 0 && w->getAmmo() < w->getRules()->getAmmoMax())
+    { // We need ammo
+      std::string clip = w->getRules()->getClipItem();
+      int available = _base->getItems()->getItem(clip);
+      int needed = w->getRules()->getAmmoMax() - w->getAmmo();
+			if (clip.empty())
+      { // We have unlimited ammo
+        rearmTime += (int)ceil((double)(needed) / w->getRules()->getRearmRate());
+      }
+      else if (available > 0)
+      { // We have ammo
+        rearmTime += (int)ceil((double)(needed < available ? needed : available) / w->getRules()->getRearmRate());
+      }
+    }
+  }
+
+  return rearmTime;
+}
+
+/**
  * Repairs the craft's damage every hour
  * while it's docked in the base.
  */
