@@ -29,9 +29,6 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
-#include "../Savegame/CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 #include "Globe.h"
@@ -137,33 +134,17 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
       std::wostringstream ssStatus;
-      ssStatus << tr((*j)->getStatus());
+      std::string status = (*j)->getStatus();
       
-			if ((*j)->getStatus() != "STR_READY")
+      ssStatus << tr(status);
+			if (status != "STR_READY" && status != "STR_OUT")
 			{
-        int maintenanceHours = 0;
-        if ((*j)->getDamage() > 0)
-        {
-          maintenanceHours += (int)ceil((double)(*j)->getDamage() / (*j)->getRules()->getRepairRate());
-        }
+        unsigned int maintenanceHours = 0;
         
-        if ((*j)->getFuel() < (*j)->getRules()->getMaxFuel())
-        {
-          maintenanceHours += (int)ceil((double)((*j)->getRules()->getMaxFuel() - (*j)->getFuel()) / (*j)->getRules()->getRefuelRate() / 2.0);
-        }
+        maintenanceHours += (*j)->calcRepairTime();
+        maintenanceHours += (*j)->calcRefuelTime();
+        maintenanceHours += (*j)->calcRearmTime();
         
-        unsigned int numWeapons = (*j)->getRules()->getWeapons();
-        for (unsigned int idx = 0; idx < numWeapons; idx++)
-        {
-          CraftWeapon *w = (*j)->getWeapons()->at(idx);
-          if (w != 0 && w->getAmmo() < w->getRules()->getAmmoMax())
-          {
-      			std::string clip = w->getRules()->getClipItem();
-      			int available = (*i)->getItems()->getItem(clip);
-            int needed = w->getRules()->getAmmoMax() - w->getAmmo();
-            maintenanceHours += (int)ceil((double)(needed < available ? needed : available) / w->getRules()->getRearmRate());
-          }
-        }
         ssStatus << L": " << tr("STR_HOUR", maintenanceHours);
       }
 
@@ -199,7 +180,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
                             ssStatus.str().c_str(), 
                             (*i)->getName().c_str(), 
                             ss.str().c_str());
-			if ((*j)->getStatus() == "STR_READY")
+			if (status == "STR_READY")
 			{
 				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
 			}
