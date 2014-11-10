@@ -793,8 +793,14 @@ void XcomResourcePack::loadBattlescapeResources()
 		Log(LOG_FATAL) << "Version 1.0 data detected";
 		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version");
 	}
+	// TFTD uses the loftemps dat from the terrain folder, but still has enemy unknown's version in the geodata folder, which is short by 2 entries.
 	s.str("");
-	s << "GEODATA/" << "LOFTEMPS.DAT";
+	s << "TERRAIN/" << "LOFTEMPS.DAT";
+	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+	{
+		s.str("");
+		s << "GEODATA/" << "LOFTEMPS.DAT";
+	}
 	MapDataSet::loadLOFTEMPS(CrossPlatform::getDataFile(s.str()), &_voxelData);
 
 	std::string scrs[] = {"TAC00.SCR"};
