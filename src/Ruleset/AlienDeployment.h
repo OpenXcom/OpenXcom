@@ -60,7 +60,7 @@ private:
 	int _width, _length, _height, _civilians;
 	std::vector<std::string> _terrains;
 	int _shade;
-	std::string _nextStage;
+	std::string _nextStage, _nextStageRace;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -82,6 +82,7 @@ public:
 	int getShade() const;
 	/// Gets the next stage of the mission.
 	std::string getNextStage() const;
+	std::string getNextStageRace() const;
 
 };
 

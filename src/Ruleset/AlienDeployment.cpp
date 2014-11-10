@@ -86,6 +86,7 @@ void AlienDeployment::load(const YAML::Node &node)
 	_terrains = node["terrains"].as<std::vector<std::string> >(_terrains);
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
+	_nextStageRace = node["nextStageRace"].as<std::string>(_nextStageRace);
 }
 
 /**
@@ -156,4 +157,8 @@ std::string AlienDeployment::getNextStage() const
 	return _nextStage;
 }
 
+std::string AlienDeployment::getNextStageRace() const
+{
+	return _nextStageRace;
+}
 }
