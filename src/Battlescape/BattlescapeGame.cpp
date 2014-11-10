@@ -1998,9 +1998,9 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 	{
 		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			if ((*j)->getHealth() > 0 && (*j)->getRespawn())
 			{
-				(*j)->setSpecialAbility(SPECAB_NONE);
+				(*j)->setRespawn(false);
 				convertUnit((*j), (*j)->getSpawnUnit());
 				j = _save->getUnits()->begin();
 			}

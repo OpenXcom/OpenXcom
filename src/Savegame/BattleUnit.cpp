@@ -53,7 +53,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) : _faction(FACTION_PLAYER), 
 											_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 											_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
 											_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-											_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
+											_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -140,7 +140,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																											_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 																											_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 																											_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																											_turretType(-1), _hidingForTurn(false)
+																											_turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -272,7 +272,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints = node["motionPoints"].as<int>(0);
-
+	_respawn = node["respawn"].as<bool>(_respawn);
 }
 
 /**
@@ -330,6 +330,7 @@ YAML::Node BattleUnit::save() const
 	if (!_spawnUnit.empty())
 		node["spawnUnit"] = _spawnUnit;
 	node["motionPoints"] = _motionPoints;
+	node["respawn"] = _respawn;
 
 	return node;
 }
@@ -1079,7 +1080,7 @@ void BattleUnit::knockOut(BattlescapeGame *battle)
 	}
 	else if (!_spawnUnit.empty())
 	{
-		setSpecialAbility(SPECAB_NONE);
+		setRespawn(false);
 		BattleUnit *newUnit = battle->convertUnit(this, _spawnUnit);
 		newUnit->knockOut(battle);
 	}
@@ -2325,12 +2326,20 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
- * Changes the unit's special ability.
- * @param specab special ability.
+ * Sets this unit to respawn (or not).
+ * @param respawn whether it should respawn.
  */
-void BattleUnit::setSpecialAbility(SpecialAbility specab)
+void BattleUnit::setRespawn(bool respawn)
 {
-	_specab = specab;
+	_respawn = respawn;
+}
+
+/**
+ * Gets this unit's respawn flag.
+ */
+bool BattleUnit::getRespawn()
+{
+	return _respawn;
 }
 
 /**

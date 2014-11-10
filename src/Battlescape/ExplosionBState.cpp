@@ -267,11 +267,12 @@ void ExplosionBState::explode()
 			if (!_item->getRules()->getZombieUnit().empty()
 				&& victim
 				&& victim->getArmor()->getSize() == 1
+				&& (victim->getGeoscapeSoldier() || victim->getUnitRules()->getRace() == "STR_CIVILIAN")
 				&& victim->getSpawnUnit().empty()
 				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				// converts the victim to a zombie on death
-				victim->setSpecialAbility(SPECAB_RESPAWN);
+				victim->setRespawn(true);
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
 			}
 		}

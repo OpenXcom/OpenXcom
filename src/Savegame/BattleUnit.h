@@ -114,7 +114,7 @@ private:
 	int _turretType;
 	int _breathFrame;
 	bool _breathing;
-	bool _floorAbove;
+	bool _floorAbove, _respawn;
 	MovementType _movementType;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
@@ -352,8 +352,10 @@ public:
 	int getAggression() const;
 	/// Get the units's special ability.
 	int getSpecialAbility() const;
-	/// Set the units's special ability.
-	void setSpecialAbility(SpecialAbility specab);
+	/// Set the units's respawn flag.
+	void setRespawn(bool respawn);
+	/// Get the units's respawn flag.
+	bool getRespawn();
 	/// Get the units's rank string.
 	std::string getRankString() const;
 	/// Get the geoscape-soldier object.
