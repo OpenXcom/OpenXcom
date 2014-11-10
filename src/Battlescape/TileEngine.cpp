@@ -1077,7 +1077,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 
 			bu->moraleChange(-morale_loss);
 
-			if (bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
+			if ((bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH || bu->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE) && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
 			{
 				if (type != DT_STUN && type != DT_HE)
 				{

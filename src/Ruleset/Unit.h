@@ -24,7 +24,7 @@
 
 namespace OpenXcom
 {
-enum SpecialAbility { SPECAB_NONE, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR };
+enum SpecialAbility { SPECAB_NONE, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_BURN_AND_EXPLODE };
 /**
  * This struct holds some plain unit attribute data together.
  */

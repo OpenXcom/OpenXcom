@@ -551,7 +551,7 @@ void ProjectileFlyBState::think()
 						}
 					}
 					// if the unit burns floortiles, burn floortiles
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 					{
 						_parent->getSave()->getTile(_action.target)->ignite(15);
 					}

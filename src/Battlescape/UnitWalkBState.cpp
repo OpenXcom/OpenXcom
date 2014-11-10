@@ -180,7 +180,7 @@ void UnitWalkBState::think()
 			// update the TU display
 			_parent->getSave()->getBattleState()->updateSoldierInfo();
 			// if the unit burns floortiles, burn floortiles
-			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 			{
 				_unit->getTile()->ignite(1);
 				Position here = (_unit->getPosition() * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
