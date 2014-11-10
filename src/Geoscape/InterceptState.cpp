@@ -48,6 +48,10 @@ namespace OpenXcom
  */
 InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _globe(globe), _base(base), _target(target)
 {
+  const int WIDTH_CRAFT = 84;
+  const int WIDTH_STATUS = 100;
+  const int WIDTH_BASE = 56;
+  const int WIDTH_WEAPONS = 76;
 	_screen = false;
 
 	// Create objects
@@ -55,13 +59,17 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 146);
 	_btnGotoBase = new TextButton(142, 16, 162, 146);
 	_txtTitle = new Text(300, 17, 10, 46);
-	_txtCraft = new Text(86, 9, 14, 70);
-	_txtStatus = new Text(70, 9, 100, 70);
-	_txtBase = new Text(80, 9, 170, 70);
-	_txtWeapons = new Text(80, 17, 238, 62);
-	_lstCrafts = new TextList(288, 64, 8, 78);
+  int x = 4;
+  _txtCraft = new Text(WIDTH_CRAFT, 9, x, 70);
+  x += WIDTH_CRAFT;
+  _txtStatus = new Text(WIDTH_STATUS, 9, x, 70);
+  x += WIDTH_STATUS;
+  _txtBase = new Text(WIDTH_BASE, 9, x, 70);
+  x += WIDTH_BASE;
+  _txtWeapons = new Text(WIDTH_WEAPONS, 17, x, 62);
+  _lstCrafts = new TextList(316, 64, 2, 78);
 
-	// Set palette
+  // Set palette
 	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
@@ -110,10 +118,10 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(4, 86, 70, 80, 46);
+  _lstCrafts->setColumns(4, WIDTH_CRAFT, WIDTH_STATUS, WIDTH_BASE, WIDTH_WEAPONS);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-	_lstCrafts->setMargin(6);
+	_lstCrafts->setMargin(2);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 
@@ -124,6 +132,21 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
+      std::wostringstream ssStatus;
+      std::string status = (*j)->getStatus();
+
+      ssStatus << tr(status);
+      if (status != "STR_READY" && status != "STR_OUT")
+      {
+        unsigned int maintenanceHours = 0;
+
+        maintenanceHours += (*j)->calcRepairTime();
+        maintenanceHours += (*j)->calcRefuelTime();
+        maintenanceHours += (*j)->calcRearmTime();
+
+        ssStatus << L": " << tr("STR_HOUR", maintenanceHours);
+      }
+      
 			std::wostringstream ss;
 			if ((*j)->getNumWeapons() > 0)
 			{
@@ -152,8 +175,11 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 				ss << 0;
 			}
 			_crafts.push_back(*j);
-			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), tr((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
-			if ((*j)->getStatus() == "STR_READY")
+      _lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(),
+                            ssStatus.str().c_str(),
+                            (*i)->getName().c_str(),
+                            ss.str().c_str());
+      if (status == "STR_READY")
 			{
 				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
 			}

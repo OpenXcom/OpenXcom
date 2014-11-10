@@ -698,34 +698,9 @@ void Craft::think()
  */
 void Craft::checkup()
 {
-	int available = 0, full = 0;
-	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
-	{
-		if ((*i) == 0)
-			continue;
-		available++;
-		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-		{
-			full++;
-		}
-		else
-		{
-			(*i)->setRearming(true);
-		}
-	}
-
-	if (_damage > 0)
-	{
-		_status = "STR_REPAIRS";
-	}
-	else if (available != full)
-	{
-		_status = "STR_REARMING";
-	}
-	else
-	{
-		_status = "STR_REFUELLING";
-	}
+	if      (calcRepairTime() > 0)    {_status = "STR_REPAIRS";}
+	else if (calcRearmTime(true) > 0) {_status = "STR_REARMING";}
+	else                              {_status = "STR_REFUELLING";}
 }
 
 /**
@@ -749,6 +724,80 @@ bool Craft::detect(Target *target) const
 void Craft::consumeFuel()
 {
 	setFuel(_fuel - getFuelConsumption());
+}
+
+/**
+ * Returns how long in hours until the
+ * craft is repaired.
+ */
+unsigned int Craft::calcRepairTime()
+{
+  unsigned int repairTime = 0;
+
+  if (_damage > 0)
+  {
+    repairTime += (int)ceil((double)_damage / _rules->getRepairRate());
+  }
+  return repairTime;
+}
+
+/**
+ * Returns how long in hours until the
+ * craft is refuelled (if there is fuel available).
+ */
+unsigned int Craft::calcRefuelTime()
+{
+  unsigned int refuelTime = 0;
+
+  if (_fuel < _rules->getMaxFuel())
+  { // We need fuel.
+    std::string item = _rules->getRefuelItem();
+    int available = _base->getItems()->getItem(item);
+    int needed = _rules->getMaxFuel() - _fuel;
+    if (item.empty())
+    { // We have unlimited fuel.
+      refuelTime += (int)ceil((double)(needed) / _rules->getRefuelRate() / 2.0);
+    }
+    else if (available > 0)
+    { // We have fuel.
+      refuelTime += (int)ceil((double)(needed < available ? needed : available) / _rules->getRefuelRate() / 2.0);
+    }
+  }
+  return refuelTime;
+}
+
+/**
+ * Returns how long in hours until the
+ * craft is re-armed (if there is ammo available).
+ * Sets the rearm flag if setRearmFlag is true.
+ */
+unsigned int Craft::calcRearmTime(bool setRearmFlag /*= false*/)
+{
+  unsigned int rearmTime = 0;
+
+  unsigned int numWeapons = _rules->getWeapons();
+  for (unsigned int idx = 0; idx < numWeapons; idx++)
+  {
+    CraftWeapon *w = _weapons.at(idx);
+    if (w != 0 && w->getAmmo() < w->getRules()->getAmmoMax())
+    { // We need ammo
+      std::string clip = w->getRules()->getClipItem();
+      int available = _base->getItems()->getItem(clip);
+      int needed = w->getRules()->getAmmoMax() - w->getAmmo();
+      if (clip.empty())
+      { // We have unlimited ammo
+        if (true == setRearmFlag) {w->setRearming(true);}
+        rearmTime += (int)ceil((double)(needed) / w->getRules()->getRearmRate());
+      }
+      else if (available > 0)
+      { // We have ammo
+        if (true == setRearmFlag) {w->setRearming(true);}
+        rearmTime += (int)ceil((double)(needed < available ? needed : available) / w->getRules()->getRearmRate());
+      }
+    }
+  }
+
+  return rearmTime;
 }
 
 /**

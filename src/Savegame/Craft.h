@@ -143,6 +143,12 @@ public:
 	void checkup();
 	/// Consumes the craft's fuel.
 	void consumeFuel();
+  /// Calculates the time to repair
+  unsigned int calcRepairTime();
+  /// Calculates the time to refuel
+  unsigned int calcRefuelTime();
+  /// Calculates the time to rearm and sets the rearm flag
+  unsigned int calcRearmTime(bool setRearmFlag = false);
 	/// Repairs the craft.
 	void repair();
 	/// Refuels the craft.
