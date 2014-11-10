@@ -18,6 +18,7 @@
  */
 #include "Tile.h"
 #include <algorithm>
+#include <random>
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
@@ -108,6 +109,10 @@ void Tile::load(const YAML::Node &node)
 	{
 		_currentFrame[2] = 7;
 	}
+	if (_fire || _smoke)
+	{
+		_animationOffset = rand() % 4;
+	}
 }
 
 /**
@@ -135,6 +140,10 @@ void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 	_discovered[2] = (boolFields & 4) ? true : false;
 	_currentFrame[1] = (boolFields & 8) ? 7 : 0;
 	_currentFrame[2] = (boolFields & 0x10) ? 7 : 0;
+	if (_fire || _smoke)
+	{
+		_animationOffset = rand() % 4;
+	}
 }
 
 
