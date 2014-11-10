@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a certain type of unit.
  * @param type String defining the type.
  */
-Unit::Unit(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE), _livingWeapon(false)
+Unit::Unit(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE), _livingWeapon(false), _female(false)
 {
 }
 
@@ -61,7 +61,7 @@ void Unit::load(const YAML::Node &node, int modIndex)
 	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
 	_meleeWeapon = node["meleeWeapon"].as<std::string>(_meleeWeapon);
 	_builtInWeapons = node["builtInWeapons"].as<std::vector<std::string> >(_builtInWeapons);
-
+	_female = node["female"].as<bool>(_female);
 	
 	if (node["deathSound"])
 	{
@@ -273,4 +273,8 @@ const std::vector<std::string> &Unit::getBuiltInWeapons() const
 	return _builtInWeapons;
 }
 
+const bool Unit::isFemale() const
+{
+	return _female;
+}
 }

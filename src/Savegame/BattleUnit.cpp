@@ -158,7 +158,14 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_specab = (SpecialAbility) unit->getSpecialAbility();
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
-	_gender = GENDER_MALE;
+	if (unit->isFemale())
+	{
+		_gender = GENDER_FEMALE;
+	}
+	else
+	{
+		_gender = GENDER_MALE;
+	}
 	_faceDirection = -1;
 
 	_movementType = _armor->getMovementType();

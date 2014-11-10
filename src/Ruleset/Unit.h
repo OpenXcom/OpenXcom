@@ -63,6 +63,7 @@ private:
 	bool _livingWeapon;
 	std::string _meleeWeapon;
 	std::vector<std::string> _builtInWeapons;
+	bool _female;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type);
@@ -110,6 +111,7 @@ public:
 	const std::string getMeleeWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::string> &getBuiltInWeapons() const;
+	const bool isFemale() const;
 };
 
 }
