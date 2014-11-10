@@ -2491,7 +2491,6 @@ bool TileEngine::psiAttack(BattleAction *action)
 		if (Options::allowPsiStrengthImprovement)
 		{
 			victim->addPsiStrengthExp();
-			victim->addPsiStrengthExp();
 		}
 		return false;
 	}
