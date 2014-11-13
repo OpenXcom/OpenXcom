@@ -305,7 +305,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	ufo->setAltitude(trajectory.getAltitude(0));
 	if (trajectory.getAltitude(0) == "STR_GROUND")
 	{
-		ufo->setSecondsRemaining(trajectory.groundTimer());
+		ufo->setSecondsRemaining(trajectory.groundTimer()*5);
 	}
 	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 	ufo->setLongitude(pos.first);
@@ -474,7 +474,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		else
 		{
 			// Set timer for UFO on the ground.
-			ufo.setSecondsRemaining(trajectory.groundTimer());
+			ufo.setSecondsRemaining(trajectory.groundTimer()*5);
 			if (ufo.getDetected() && ufo.getLandId() == 0)
 			{
 				ufo.setLandId(engine.getSavedGame()->getId("STR_LANDING_SITE"));
