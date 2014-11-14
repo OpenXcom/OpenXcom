@@ -1297,13 +1297,13 @@ void BattlescapeState::updateSoldierInfo()
 		_rank->clear();
 	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-	_barTimeUnits->setMax(battleUnit->getStats()->tu);
+	_barTimeUnits->setMax(battleUnit->getBaseStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
-	_barEnergy->setMax(battleUnit->getStats()->stamina);
+	_barEnergy->setMax(battleUnit->getBaseStats()->stamina);
 	_barEnergy->setValue(battleUnit->getEnergy());
 	_numHealth->setValue(battleUnit->getHealth());
-	_barHealth->setMax(battleUnit->getStats()->health);
+	_barHealth->setMax(battleUnit->getBaseStats()->health);
 	_barHealth->setValue(battleUnit->getHealth());
 	_barHealth->setValue2(battleUnit->getStunlevel());
 	_numMorale->setValue(battleUnit->getMorale());
@@ -1351,7 +1351,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getStats()->psiSkill > 0);
+	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getBaseStats()->psiSkill > 0);
 }
 
 /**

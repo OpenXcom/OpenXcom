@@ -542,7 +542,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// the losing squad all get a morale loss
 						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())
 						{
-							int bravery = (110 - (*i)->getStats()->bravery) / 10;
+							int bravery = (110 - (*i)->getBaseStats()->bravery) / 10;
 							(*i)->moraleChange(-(modifier * 200 * bravery / loserMod / 100));
 
 							if (victim->getFaction() == FACTION_HOSTILE && murderer)
@@ -592,7 +592,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	BattleUnit *bu = _save->getSelectedUnit();
 	if (_save->getSide() == FACTION_PLAYER)
 	{
-		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
+		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getBaseStats()->psiSkill > 0 && !bu->isOut());
 	}
 }
 
@@ -973,9 +973,9 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		}
 		switch (effectiveTuReserved)
 		{
-		case BA_SNAPSHOT: return tu + (bu->getStats()->tu / 3) <= bu->getTimeUnits(); break; // 33%
-		case BA_AUTOSHOT: return tu + ((bu->getStats()->tu / 5)*2) <= bu->getTimeUnits(); break; // 40%
-		case BA_AIMEDSHOT: return tu + (bu->getStats()->tu / 2) <= bu->getTimeUnits(); break; // 50%
+		case BA_SNAPSHOT: return tu + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits(); break; // 33%
+		case BA_AUTOSHOT: return tu + ((bu->getBaseStats()->tu / 5)*2) <= bu->getTimeUnits(); break; // 40%
+		case BA_AIMEDSHOT: return tu + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits(); break; // 50%
 		default: return tu <= bu->getTimeUnits(); break;
 		}
 	}
@@ -1166,7 +1166,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			}
 		}
 		// replace the TUs from shooting
-		unit->setTimeUnits(unit->getStats()->tu);
+		unit->setTimeUnits(unit->getBaseStats()->tu);
 		ba.type = BA_NONE;
 		break;
 	default: break;
