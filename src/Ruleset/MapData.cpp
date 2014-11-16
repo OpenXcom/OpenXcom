@@ -277,6 +277,8 @@ int MapData::getTUCost(MovementType movementType) const
 	case MT_SLIDE:
 		return _TUSlide;
 		break;
+	default:
+		break;
 	}
 	return 0;
 }

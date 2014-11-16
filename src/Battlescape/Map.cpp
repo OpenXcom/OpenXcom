@@ -95,7 +95,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	}
 	_res = _game->getResourcePack();
 	_save = _game->getSavedGame()->getSavedBattle();
-	if (_res->getLUTs()->size() > _save->getDepth())
+	if ((int)(_res->getLUTs()->size()) > _save->getDepth())
 	{
 		_transparencies = &_res->getLUTs()->at(_save->getDepth());
 	}
@@ -935,7 +935,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						int vaporX = screenPosition.x + (*i)->getX();
 						int vaporY = screenPosition.y + (*i)->getY();
-						if (_transparencies->size() >= ((*i)->getColor() + 1) * 1024)
+						if ((int)(_transparencies->size()) >= ((*i)->getColor() + 1) * 1024)
 						{
 							switch ((*i)->getSize())
 							{
