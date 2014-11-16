@@ -1217,12 +1217,12 @@ void Globe::drawVHLine(Surface *surface, double lon1, double lat1, double lon2, 
 
 	if (fabs(sx)<0.01)
 	{
-		seg = abs( sy/(2*M_PI)*48 );
+		seg = std::abs(sy/(2*M_PI)*48);
 		if (seg == 0) ++seg;
 	}
 	else
 	{
-		seg = abs( sx/(2*M_PI)*96 );
+		seg = std::abs(sx/(2*M_PI)*96);
 		if (seg == 0) ++seg;
 	}
 

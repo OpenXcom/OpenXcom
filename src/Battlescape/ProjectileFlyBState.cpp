@@ -651,7 +651,7 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
         if (curZ < 0 && dz < 0) //roll back
         {
             dz = std::max(dz, -1.0);
-            if (abs(dz)>1e-10) //rollback horizontal
+            if (std::abs(dz)>1e-10) //rollback horizontal
                 dist -= curZ / dz;
             break;
         }
