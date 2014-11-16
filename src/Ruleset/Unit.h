@@ -110,6 +110,7 @@ public:
 	const std::string getMeleeWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::string> &getBuiltInWeapons() const;
+	/// Is this unit a female?
 	const bool isFemale() const;
 };
 

@@ -1631,7 +1631,10 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	_facilities.erase(facility);
 }
 
-
+/**
+ * Cleans up the defenses vector and optionally reclaims the tanks and their ammo.
+ * @param reclaimItems determines whether the HWPs should be returned to storage.
+ */
 void Base::cleanupDefenses(bool reclaimItems)
 {
 	_defenses.clear();

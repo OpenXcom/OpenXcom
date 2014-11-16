@@ -82,6 +82,7 @@ public:
 	int getShade() const;
 	/// Gets the next stage of the mission.
 	std::string getNextStage() const;
+	/// Gets the race to use in the next stage.
 	std::string getNextStageRace() const;
 
 };

@@ -278,6 +278,11 @@ const std::vector<std::string> &Unit::getBuiltInWeapons() const
 	return _builtInWeapons;
 }
 
+/**
+ * Is this unit a female?
+ * only really relevent to the scream in the case of civilians.
+ * @return female or not.
+ */
 const bool Unit::isFemale() const
 {
 	return _female;

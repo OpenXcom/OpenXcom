@@ -438,7 +438,9 @@ public:
 	std::string getMeleeWeapon();
 	/// Use this function to check the unit's movement type.
 	MovementType getMovementType() const;
+	/// Checks if this unit is in hiding for a turn.
 	bool isHiding() {return _hidingForTurn; };
+	/// Sets this unit is in hiding for a turn (or not).
 	void setHiding(bool hiding) { _hidingForTurn = hiding; };
 
 };
