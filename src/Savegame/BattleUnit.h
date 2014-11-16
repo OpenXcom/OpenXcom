@@ -114,7 +114,7 @@ private:
 	int _turretType;
 	int _breathFrame;
 	bool _breathing;
-	bool _floorAbove, _respawn;
+	bool _hidingForTurn, _floorAbove, _respawn;
 	MovementType _movementType;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
@@ -403,8 +403,6 @@ public:
 
 	Unit *getUnitRules() const { return _unitRules; }
 
-	/// scratch value for AI's left hand to tell its right hand what's up...
-	bool _hidingForTurn; // don't zone out and start patrolling again
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
 	std::vector<BattleUnit *> &getUnitsSpottedThisTurn();
@@ -440,6 +438,8 @@ public:
 	std::string getMeleeWeapon();
 	/// Use this function to check the unit's movement type.
 	MovementType getMovementType() const;
+	bool isHiding() {return _hidingForTurn; };
+	void setHiding(bool hiding) { _hidingForTurn = hiding; };
 
 };
 

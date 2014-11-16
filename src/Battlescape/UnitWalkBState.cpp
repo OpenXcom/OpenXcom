@@ -248,7 +248,7 @@ void UnitWalkBState::think()
 		if (unitSpotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
 		{
 			if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
-			_unit->_hidingForTurn = false; // clearly we're not hidden now
+			_unit->setHiding(false); // clearly we're not hidden now
 			_parent->getMap()->cacheUnit(_unit);
 			postPathProcedures();
 			return;
@@ -448,7 +448,7 @@ void UnitWalkBState::think()
 				_unit->spendTimeUnits(_preMovementCost);
 			}
 			if (Options::traceAI) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
-			_unit->_hidingForTurn = false; // not hidden, are we...
+			_unit->setHiding(false); // not hidden, are we...
 			_pf->abortPath();
 			_unit->abortTurn(); //revert to a standing state.
 			_unit->setCache(0);
@@ -496,10 +496,10 @@ void UnitWalkBState::postPathProcedures()
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		}
-		else if (_unit->_hidingForTurn)
+		else if (_unit->isHiding())
 		{
 			dir = _unit->getDirection() + 4;
-			_unit->_hidingForTurn = false;
+			_unit->setHiding(false);
 			_unit->dontReselect();
 		}
 		if (dir != -1)

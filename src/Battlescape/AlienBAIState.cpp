@@ -324,7 +324,7 @@ void AlienBAIState::think(BattleAction *action)
 		// ignore new targets.
 		action->desperate = true;
 		// spin 180 at the end of your route.
-		_unit->_hidingForTurn = true;
+		_unit->setHiding(true);
 		break;
 	case AI_PATROL:
 		_unit->setCharging(0);
