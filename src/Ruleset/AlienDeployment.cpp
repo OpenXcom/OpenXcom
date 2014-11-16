@@ -157,6 +157,10 @@ std::string AlienDeployment::getNextStage() const
 	return _nextStage;
 }
 
+/**
+ * Gets the race to use on the next stage of the mission.
+ * @return The race for the next stage of the mission.
+ */
 std::string AlienDeployment::getNextStageRace() const
 {
 	return _nextStageRace;
