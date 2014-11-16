@@ -1903,7 +1903,7 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
  */
 int BattleUnit::getHeight() const
 {
-	return std::min(24, isKneeled()?getKneelHeight():getStandHeight());
+	return isKneeled()?getKneelHeight():getStandHeight();
 }
 
 /**

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Unit.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -52,6 +53,10 @@ void Unit::load(const YAML::Node &node, int modIndex)
 	_standHeight = node["standHeight"].as<int>(_standHeight);
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
 	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
+	if (_floatHeight + _standHeight > 25)
+	{
+		throw Exception("Error with unit "+ _type +": Unit height may not exceed 25");
+	}
 	_value = node["value"].as<int>(_value);
 	_intelligence = node["intelligence"].as<int>(_intelligence);
 	_aggression = node["aggression"].as<int>(_aggression);
