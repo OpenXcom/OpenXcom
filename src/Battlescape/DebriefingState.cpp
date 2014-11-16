@@ -460,6 +460,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			base = (*i);
 			base->setInBattlescape(false);
+			base->cleanupDefenses(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))

@@ -1270,7 +1270,17 @@ void Base::setupDefenses()
 		}
 	}
 
-	_vehicles.clear();
+	for (std::vector<Craft*>::iterator i = getCrafts()->begin(); i != getCrafts()->end(); ++i)
+		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
+				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's destructor for tanks on crafts
+
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end();)
+	{
+		delete *i;
+		i = _vehicles.erase(i);
+	}
+
 	// add vehicles that are in the crafts of the base, if it's not out
 	for (std::vector<Craft*>::iterator c = getCrafts()->begin(); c != getCrafts()->end(); ++c)
 	{
@@ -1299,7 +1309,9 @@ void Base::setupDefenses()
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
 				for (int j = 0; j < itemQty; ++j)
+				{
 					_vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
+				}
 				_items->removeItem(itemId, itemQty);
 			}
 			else // so this vehicle needs ammo
@@ -1618,4 +1630,34 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	delete *facility;
 	_facilities.erase(facility);
 }
+
+
+void Base::cleanupDefenses(bool reclaimItems)
+{
+	_defenses.clear();
+
+	for (std::vector<Craft*>::iterator i = getCrafts()->begin(); i != getCrafts()->end(); ++i)
+		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
+				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's destructor for tanks on crafts
+
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end();)
+	{
+		if (reclaimItems)
+		{
+			RuleItem *rule = (*i)->getRules();
+			std::string type = rule->getType();
+			_items->addItem(type);
+			if (!rule->getCompatibleAmmo()->empty())
+			{
+				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
+				int ammoPerVehicle = ammo->getClipSize();
+				_items->addItem(ammo->getType(), ammoPerVehicle);
+			}
+		}
+		delete *i;
+		i = _vehicles.erase(i);
+	}
+}
+
 }
