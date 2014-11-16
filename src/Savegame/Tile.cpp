@@ -313,7 +313,7 @@ int Tile::getTerrainLevel() const
  */
 int Tile::getFootstepSound(Tile *tileBelow) const
 {
-	int sound = 0;
+	int sound = -1;
 
 	if (_objects[MapData::O_FLOOR])
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();

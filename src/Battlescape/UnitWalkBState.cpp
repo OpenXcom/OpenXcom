@@ -566,7 +566,7 @@ void UnitWalkBState::playMovementSound()
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
 			{
-				if (tile->getFootstepSound(tileBelow))
+				if (tile->getFootstepSound(tileBelow) > -1)
 				{
 					_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::WALK_OFFSET + (tile->getFootstepSound(tileBelow)*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 				}
@@ -574,7 +574,7 @@ void UnitWalkBState::playMovementSound()
 			// play footstep sound 2
 			if (_unit->getWalkingPhase() == 7)
 			{
-				if (tile->getFootstepSound(tileBelow))
+				if (tile->getFootstepSound(tileBelow) > -1)
 				{
 					_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), 1 + ResourcePack::WALK_OFFSET + (tile->getFootstepSound(tileBelow)*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 				}
