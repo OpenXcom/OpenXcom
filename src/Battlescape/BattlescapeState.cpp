@@ -62,6 +62,7 @@
 #include "../Engine/Timer.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Exception.h"
 #include "../Geoscape/DefeatState.h"
 #include "../Geoscape/VictoryState.h"
 #include "../Interface/Cursor.h"
@@ -1915,7 +1916,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
-		nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+		nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStageRace();
 		if (nextStageRace == "")
 		{
 			for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
@@ -1936,6 +1937,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 					nextStageRace = (*i)->getAlienRace();
 					break;
 				}
+			}
+		}
+		else
+		{
+			if (_game->getRuleset()->getAlienRace(nextStageRace) == 0)
+			{
+				throw Exception(nextStageRace + " race not found.");
 			}
 		}
 	}
