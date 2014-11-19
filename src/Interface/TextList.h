@@ -46,10 +46,12 @@ private:
 	std::vector<size_t> _columns, _rows;
 	Font *_big, *_small, *_font;
 	Language *_lang;
-	size_t _scroll, _visibleRows, _selRow;
+	size_t _scroll, _visibleRows, _selRow, _numSelectedRows;
+	int _lastRowSelected;
+	std::map<size_t, Surface*> _selRows;
 	Uint8 _color, _color2;
 	std::map<int, TextHAlign> _align;
-	bool _dot, _selectable, _condensed, _contrast, _wrap;
+	bool _dot, _selectable, _multiSelectable, _condensed, _contrast, _wrap, _shiftSelect;
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
 	ScrollBar *_scrollbar;
@@ -66,6 +68,8 @@ private:
 	void updateArrows();
 	/// Updates the visible rows.
 	void updateVisible();
+	/// Builds a row selector, using the passed-in selector and the (absolute) row selection.
+	void buildRowSelector(Surface *selector, size_t rowSel);
 public:
 	/// Creates a text list with the specified size and position.
 	TextList(int width, int height, int x = 0, int y = 0);
@@ -127,6 +131,8 @@ public:
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.
 	void setSelectable(bool selectable);
+	/// Sets whether the list is multi-selectable (i.e. using ctrl+click and/or shift+click).
+	void setMultiSelectable(bool multiSelectable);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -137,6 +143,10 @@ public:
 	void setBackground(Surface *bg);
 	/// Gets the selected row in the list.
 	unsigned int getSelectedRow() const;
+	/// Gets the selected rows in the list currently selected.
+	unsigned int getSelectedRows() const;
+	/// Gets the number of currently selected rows (most useful during multi-select).
+	unsigned int getNumSelectedRows() const;
 	/// Sets the margin of the text list.
 	void setMargin(int margin);
 	/// Gets the margin of the text list.
@@ -183,6 +193,10 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
+	/// Processes a keyboard key press event.
+	void keyboardPress(Action *action, State *state);
+	/// Processes a keyboard key release event.
+	void keyboardRelease(Action *action, State *state);	
 	/// get the scroll depth
 	size_t getScroll();
 	/// set the scroll depth
