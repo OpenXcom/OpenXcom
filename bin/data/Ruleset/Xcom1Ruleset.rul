@@ -3189,6 +3189,7 @@ invs:
       STR_RIGHT_SHOULDER: 14
 terrains:
   - name: CULTA
+    script: FARM
     mapDataSets:
       - BLANKS
       - CULTIVAT
@@ -3198,107 +3199,82 @@ terrains:
       - name: CULTA00
         width: 10
         length: 10
-        type: 1
-        subType: 0
-        maxCount: 3
+        groups: 1
       - name: CULTA01
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA02
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA03
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA04
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA05
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA06
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA07
         width: 10
         length: 10
-        type: 1
-        subType: 0
-        maxCount: 3
+        groups: 1
       - name: CULTA08
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA09
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA10
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA11
         width: 10
         length: 10
-        type: 1
-        subType: 0
-        maxCount: 3
+        groups: 1
       - name: CULTA12
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA13
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA14
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA15
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA16
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA17
         width: 10
         length: 10
-        maxCount: 3
       - name: CULTA18
         width: 10
         length: 10
-        maxCount: 3
   - name: DESERT
     mapDataSets:
       - BLANKS
       - DESERT
-    largeBlockLimit: 3
     textures: [7, 8]
+    script: DESERT
     mapBlocks:
       - name: DESERT00
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: DESERT01
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: DESERT02
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: DESERT03
         width: 10
         length: 10
@@ -3330,18 +3306,17 @@ terrains:
     mapDataSets:
       - BLANKS
       - FOREST
-    largeBlockLimit: 2
     textures: [0, 6, 10, 11]
     hemisphere: -1
     mapBlocks:
       - name: FOREST00
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: FOREST01
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: FOREST02
         width: 10
         length: 10
@@ -3377,67 +3352,59 @@ terrains:
       - BLANKS
       - JUNGLE
     textures: [0, 6, 10, 11]
+    script: JUNGLE
     hemisphere: 1
     mapBlocks:
       - name: JUNGLE00
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: JUNGLE01
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: JUNGLE02
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: JUNGLE03
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE04
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE05
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE06
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE07
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE08
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE09
         width: 10
         length: 10
-        frequency: 2
       - name: JUNGLE10
         width: 10
         length: 10
-        frequency: 1
       - name: JUNGLE11
         width: 10
         length: 10
-        frequency: 1
   - name: MARS
     mapDataSets:
       - BLANKS
       - MARS
       - U_WALL02
+    script: MARS
     mapBlocks:
       - name: MARS00
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: MARS01
         width: 10
         length: 10
@@ -3468,26 +3435,25 @@ terrains:
       - name: MARS10
         width: 10
         length: 10
-        type: 6
+        groups: 2
   - name: MOUNT
     mapDataSets:
       - BLANKS
       - MOUNT
     textures: [5]
-    largeBlockLimit: 2
     mapBlocks:
       - name: MOUNT00
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: MOUNT01
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: MOUNT02
         width: 10
         length: 10
-        type: 1
+        groups: 1
       - name: MOUNT03
         width: 10
         length: 10
@@ -3523,23 +3489,20 @@ terrains:
       - BLANKS
       - POLAR
     textures: [9, 12]
-    largeBlockLimit: 1
+    script: POLAR
     mapBlocks:
       - name: POLAR00
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: POLAR01
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: POLAR02
         width: 10
         length: 10
-        type: 1
-        subType: 0
+        groups: [0, 1]
       - name: POLAR03
         width: 10
         length: 10
@@ -3580,12 +3543,11 @@ terrains:
       - U_WALL02
       - U_PODS
       - BRAIN
-    largeBlockLimit: 3
     mapBlocks:
       - name: UBASE_00
         width: 20
         length: 20
-        type: 7
+        groups: 3
       - name: UBASE_01
         width: 20
         length: 20
@@ -3601,7 +3563,7 @@ terrains:
       - name: UBASE_04
         width: 10
         length: 10
-        type: 6
+        groups: 2
       - name: UBASE_05
         width: 10
         length: 10
@@ -3611,7 +3573,7 @@ terrains:
       - name: UBASE_07
         width: 10
         length: 10
-        type: 4
+        groups: 1
       - name: UBASE_08
         width: 10
         length: 10
@@ -3626,20 +3588,23 @@ terrains:
         length: 10
 #       UBASE_12 is impassable, 13 and 14 are apparently unused.
 #       in the interest of preserving an original experience,
-#       they have been disabled. delete the hashes to re-enable.
-#      - name: UBASE_12
-#        width: 10
-#        length: 10
-#      - name: UBASE_13
-#        width: 10
-#        length: 10
-#      - name: UBASE_14
-#        width: 10
-#        length: 10
+#       they have been disabled by being added to group 5, which is unused in the scripts.
+      - name: UBASE_12
+        width: 10
+        length: 10
+        groups: 5
+      - name: UBASE_13
+        width: 10
+        length: 10
+        groups: 5
+      - name: UBASE_14
+        width: 10
+        length: 10
+        groups: 5
       - name: UBASE_15
         width: 20
         length: 20
-        type: 8
+        groups: 4
   - name: URBAN
     mapDataSets:
       - BLANKS
@@ -3647,37 +3612,31 @@ terrains:
       - URBITS
       - URBAN
       - FRNITURE
-    largeBlockLimit: 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
-    # roadTypeOdds: [EWRoad, NSRoad] (Crossroad is remainder)
-    roadTypeOdds: [50, 25]
+    script: URBAN
     mapBlocks:
       - name: URBAN00
         width: 10
         length: 10
-        type: 2
+        groups: 2
       - name: URBAN01
         width: 10
         length: 10
-        type: 3
+        groups: 3
       - name: URBAN02
         width: 10
         length: 10
-        type: 4
+        groups: 4
       - name: URBAN03
         width: 10
         length: 10
-        type: 1
-        subType: 0
-        frequency: 3
+        groups: [0, 1]
       - name: URBAN04
         width: 10
         length: 10
-        type: 1
-        subType: 0
-        frequency: 3
+        groups: [0, 1]
       - name: URBAN05
         width: 20
         length: 20
@@ -3696,28 +3655,24 @@ terrains:
       - name: URBAN14
         width: 10
         length: 10
-        frequency: 2
       - name: URBAN15
         width: 10
         length: 10
-        frequency: 2
       - name: URBAN16
         width: 10
         length: 10
-        frequency: 2
       - name: URBAN17
         width: 10
         length: 10
-        frequency: 2
       - name: URBAN18
         width: 10
         length: 10
-        frequency: 2
   - name: XBASE
     mapDataSets:
       - BLANKS
       - XBASE1
       - XBASE2
+    script: XBASE
     mapBlocks:
       - name: XBASE_00
         width: 10
@@ -3782,7 +3737,156 @@ terrains:
       - name: XBASE_20
         width: 10
         length: 10
-        type: 5
+mapScripts:
+  - type: DEFAULT # forest, mountain
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 2
+    - type: fillArea
+  - type: FARM
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: fillArea
+      blocks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+      maxUses: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  - type: DESERT
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 3
+    - type: fillArea
+  - type: JUNGLE
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: fillArea
+      blocks: [3, 4, 5, 6, 7, 8, 9, 10, 11]
+      freqs: [2, 2, 2, 2, 2, 2, 2, 1, 1]
+  - type: POLAR
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: addBlock
+      size: 2
+    - type: fillArea
+  - type: URBAN
+    commands:
+    - type: addCraft
+    - type: addLine
+      label: 1
+      direction: vertical
+      executionChances: 50
+      rects:
+        - [1, 1, 4, 1]
+    - type: addLine
+      label: 2
+      conditionals: -1
+      executionChances: 50
+      direction: horizontal
+      rects:
+        - [1, 1, 1, 3]
+    - type: addLine
+      conditionals: [-1, -2]
+      direction: both
+      rects:
+        - [1, 1, 3, 3]
+    - type: addBlock
+      size: 2
+      executions: 4
+    - type: fillArea
+      # URBAN set is lacking blocks 10-13, so the numbers don't correlate properly here,
+      # because these are references to the block numbers within the sets, not the file names.
+      blocks: [3, 4, 10, 11, 12, 13, 14]
+      freqs: [3, 3, 2, 2, 2, 2, 2]
+  - type: MARS
+    commands:
+    - type: addCraft
+    - type: addBlock
+      groups: 2
+    - type: fillArea
+  - type: ALIENBASE
+    commands:
+    - type: addBlock
+      groups: 2
+      executions: 2
+    - type: addBlock
+      size: 2
+      groups: 3
+    - type: addBlock
+      size: 2
+      executions: 3
+    - type: fillArea
+      groups: [0, 1]
+      freqs: [3, 2]
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+        MCDReplacements:
+          - type: westWall
+            set: 2
+            entry: 18
+          - type: northWall
+            set: 2
+            entry: 17
+          - type: corner
+            set: 2
+            entry: 19
+          - type: floor
+            set: 1
+            entry: 63
+  - type: BOSSBATTLE
+    commands:
+    - type: addBlock
+      groups: 2
+      executions: 2
+    - type: addBlock
+      groups: 4
+      size: 2
+    - type: addBlock
+      size: 2
+      executions: 3
+    - type: fillArea
+      groups: [0, 1]
+      freqs: [3, 2]
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+        MCDReplacements:
+          - type: westWall
+            set: 2
+            entry: 18
+          - type: northWall
+            set: 2
+            entry: 17
+          - type: corner
+            set: 2
+            entry: 19
+          - type: floor
+            set: 1
+            entry: 63
+  - type: XBASE
+    commands:
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+        MCDReplacements:
+          - type: westWall
+            set: 1
+            entry: 13
+          - type: northWall
+            set: 1
+            entry: 14
+    - type: fillArea
+      blocks: 20
 armors:
   - type: STR_NONE_UC
     spriteSheet: XCOM_0.PCK
@@ -6358,6 +6462,7 @@ alienDeployments:
     terrains:
       - UBASE
     shade: 15
+    script: ALIENBASE
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
@@ -6575,8 +6680,8 @@ alienDeployments:
             []
           -
             []
-    width: 60
-    length: 60
+    width: 50
+    length: 50
     height: 4
     terrains:
       - MARS
@@ -6732,6 +6837,7 @@ alienDeployments:
     terrains:
       - UBASE
     shade: 5
+    script: BOSSBATTLE
 research:
   - name: STR_LASER_WEAPONS
     cost: 50

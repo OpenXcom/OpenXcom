@@ -426,6 +426,7 @@
     <ClCompile Include="Ruleset\ExtraSounds.cpp" />
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
+    <ClCompile Include="Ruleset\MapScript.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
     <ClCompile Include="Ruleset\Polygon.cpp" />
     <ClCompile Include="Ruleset\Polyline.cpp" />
@@ -735,6 +736,7 @@
     <ClInclude Include="Ruleset\MapData.h" />
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
+    <ClInclude Include="Ruleset\MapScript.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />

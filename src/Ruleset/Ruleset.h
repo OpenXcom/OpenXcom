@@ -63,6 +63,7 @@ class StatString;
 class RuleInterface;
 class RuleGlobe;
 class SoundDefinition;
+class MapScript;
 
 /**
  * Set of rules and stats for a game.
@@ -97,6 +98,7 @@ protected:
 	std::map<std::string, RuleInterface *> _interfaces;
 	std::map<std::string, SoundDefinition *> _soundDefs;
 	std::map<std::string, MCDPatch *> _MCDPatches;
+	std::map<std::string, std::vector<MapScript *> > _mapScripts;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
@@ -249,6 +251,7 @@ public:
 	const std::map<std::string, SoundDefinition *> *getSoundDefinitions() const;
 	/// Gets the list of transparency colors, 
 	const std::vector<SDL_Color> *getTransparencies() const;
+	const std::vector<MapScript*> *getMapScript(std::string id) const;
 };
 
 }
