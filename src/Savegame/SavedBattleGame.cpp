@@ -1096,13 +1096,13 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
-		if ((*i)->getRank() == nodeRank										// ranks must match
+		if ((*i)->getRank() == nodeRank								// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL) 
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
-				|| unit->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true))		// check if not already occupied
+				|| unit->getMovementType() == MT_FLY)				// the flying unit bit is not set or the unit can fly
+			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
+			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{

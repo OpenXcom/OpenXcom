@@ -33,6 +33,7 @@
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
+#include "MapScript.h"
 #include "RuleSoldier.h"
 #include "Unit.h"
 #include "AlienRace.h"
@@ -200,6 +201,14 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin(); i != _interfaces.end(); ++i)
 	{
 		delete i->second;
+	}
+	for (std::map<std::string, std::vector<MapScript*> >::iterator i = _mapScripts.begin(); i != _mapScripts.end(); ++i)
+	{
+		for (std::vector<MapScript*>::iterator j = (*i).second.begin(); j != (*i).second.end();)
+		{
+			delete *j;
+			j = (*i).second.erase(j);
+		}
 	}
 }
 
@@ -578,6 +587,24 @@ void Ruleset::loadFile(const std::string &filename)
 			color.b = (*j)[2].as<int>(0);
 			color.unused = (*j)[3].as<int>(2);;
 			_transparencies.push_back(color);
+		}
+	}
+	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		if (_mapScripts.find(type) != _mapScripts.end())
+		{
+			for (std::vector<MapScript*>::iterator j = _mapScripts[type].begin(); j != _mapScripts[type].end();)
+			{
+				delete *j;
+				j = _mapScripts[type].erase(j);
+			}
+		}
+		for (YAML::const_iterator j = (*i)["commands"].begin(); j != (*i)["commands"].end(); ++j)
+		{
+			std::auto_ptr<MapScript> mapScript(new MapScript());
+			mapScript->load(*j);
+			_mapScripts[type].push_back(mapScript.release());
 		}
 	}
 
@@ -1528,6 +1555,12 @@ const std::map<std::string, SoundDefinition *> *Ruleset::getSoundDefinitions() c
 const std::vector<SDL_Color> *Ruleset::getTransparencies() const
 {
 	return &_transparencies;
+}
+
+const std::vector<MapScript*> *Ruleset::getMapScript(std::string id) const
+{
+	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
+	if (_mapScripts.end() != i) return &i->second; else return 0;
 }
 
 }
