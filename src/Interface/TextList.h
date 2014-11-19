@@ -144,7 +144,7 @@ public:
 	/// Gets the selected row in the list.
 	unsigned int getSelectedRow() const;
 	/// Gets the selected rows in the list currently selected.
-	unsigned int getSelectedRows() const;
+	std::vector<size_t> getSelectedRows();
 	/// Gets the number of currently selected rows (most useful during multi-select).
 	unsigned int getNumSelectedRows() const;
 	/// Sets the margin of the text list.

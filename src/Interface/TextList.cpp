@@ -635,16 +635,19 @@ unsigned int TextList::getSelectedRow() const
 * list is selectable or multi-selectable.
 * @return Selected row, -1 if none.
 */
-unsigned int TextList::getSelectedRows() const
+std::vector<size_t> TextList::getSelectedRows()
 {
-	if (_rows.empty() || _selRow >= _rows.size())
-	{
-		return -1;
+	std::vector<size_t> rows;
+
+	if (!_rows.empty() && _numSelectedRows > 0)
+	{		
+		for (std::map<size_t, Surface*>::iterator i = _selRows.begin(); i != _selRows.end(); ++i)
+		{
+			rows.push_back(i->first);
+		}		
 	}
-	else
-	{
-		return _rows[_selRow];
-	}
+
+	return rows;
 }
 
 /**
