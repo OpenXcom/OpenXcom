@@ -20,6 +20,7 @@
 #define OPENXCOM_SOLDIERSSTATE_H
 
 #include "../Engine/State.h"
+#include <map>
 
 namespace OpenXcom
 {
@@ -29,6 +30,8 @@ class Window;
 class Text;
 class TextList;
 class Base;
+class Soldier;
+class Craft;
 
 /**
  * Soldiers screen that lets the player
@@ -42,6 +45,18 @@ private:
 	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft;
 	TextList *_lstSoldiers;
 	Base *_base;
+	int _curCraftInList;
+
+	/// Updates the selected soldiers' assigned craft.
+	void changeCraft();
+	/// Check if all selected soldiers are on the same craft.
+	bool checkSameCraftAssignments();
+	/// Returns a vector of pointers to all selected soldiers.
+	std::vector<Soldier*> getSelectedSoldiers();
+	/// Return a map of all soldiers with associated row numbers corresponding to the selections made in the list.
+	std::map<Soldier*, size_t> getSelectedSoldiersWithRows();
+	/// Find the passed-in craft amongst the overall crafts.
+	int findCraftAmongstAllCrafts(Craft *craft);
 public:
 	/// Creates the Soldiers state.
 	SoldiersState(Base *base);
