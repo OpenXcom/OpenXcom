@@ -9,18 +9,15 @@ mapScripts:
         - [3, 2, 1, 1]
     - type: addBlock
       blocks: 15
-      size: 2
       rects:
         - [2, 3, 2, 2]
     - type: addBlock
-      size: 2
       blocks: 3
       executions: 2
       rects:
         - [0, 1, 2, 2]
         - [4, 3, 2, 2]
     - type: addBlock
-      size: 2
       blocks: 2
       executions: 2
       rects:
