@@ -57,6 +57,8 @@ private:
 	std::map<Soldier*, size_t> getSelectedSoldiersWithRows();
 	/// Find the passed-in craft amongst the overall crafts.
 	int findCraftAmongstAllCrafts(Craft *craft);
+	/// Check if any of the selected soldiers are wounded.
+	bool checkForWoundedSelectedSoldiers();
 public:
 	/// Creates the Soldiers state.
 	SoldiersState(Base *base);

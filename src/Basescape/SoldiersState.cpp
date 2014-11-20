@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 #include "SoldierMemorialState.h"
+#include "WoundedNoticeState.h"
 
 namespace OpenXcom
 {
@@ -227,6 +228,12 @@ namespace OpenXcom
 			return;
 		}
 
+		if (checkForWoundedSelectedSoldiers())
+		{
+			_game->pushState(new WoundedNoticeState);
+			return;
+		}
+
 		Craft *craftToAssign = 0;
 		Uint8 color = color = Palette::blockOffset(13) + 10;
 
@@ -264,7 +271,14 @@ namespace OpenXcom
 						tempCraft = crafts->at(_curCraftInList);
 
 						// TODO: Put in code to handle if ship is currently out (can't select those soldiers?).  Ditto for wounded soldiers.
-						// TODO: Test assigning soldiers to ship if the destination ship is out.
+
+						// if the craft is out, then we can't assign anyone to it; move along
+						if (tempCraft->getStatus() == "STR_OUT") 
+						{
+							continue;
+						}
+
+						// if there's room enough on the craft, make the assignment!
 						if (tempCraft->getSpaceAvailable() >= selectedSoldiers.size())
 						{
 							craftToAssign = tempCraft;
@@ -292,6 +306,28 @@ namespace OpenXcom
 			_lstSoldiers->setCellText(soldiersWithRows[(*it)], 2, craftName);
 			_lstSoldiers->setRowColor(soldiersWithRows[(*it)], color);
 		}
+	}
+
+	/**
+	  * Checks to see if any of the selected soldiers are wounded.
+	  * @return bool Returns true iff at least one of the selected soldiers is wounded.
+	  */
+	bool SoldiersState::checkForWoundedSelectedSoldiers()
+	{
+		bool haveWoundedSoldiers = false;
+
+		std::vector<Soldier*> selectedSoldiers = getSelectedSoldiers();
+
+		for (std::vector<Soldier*>::iterator it = selectedSoldiers.begin(); it != selectedSoldiers.end(); ++it)
+		{
+			if ((*it)->getWoundRecovery() != 0)
+			{
+				haveWoundedSoldiers = true;
+				break;
+			}
+		}
+
+		return haveWoundedSoldiers;
 	}
 
 	/**
