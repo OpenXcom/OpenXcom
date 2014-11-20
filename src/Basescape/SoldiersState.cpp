@@ -228,11 +228,12 @@ namespace OpenXcom
 		}
 
 		Craft *craftToAssign = 0;
+		Uint8 color = color = Palette::blockOffset(13) + 10;
 
 		if (checkSameCraftAssignments())
 		{
-			// move on to the next possible craft selection; if there's only 1, then remove the assignment
-			if (crafts->size() > 1)
+			// move on to the next possible craft selection
+			if (crafts->size() > 0)
 			{
 				Craft *tempCraft = 0;
 				
@@ -255,6 +256,7 @@ namespace OpenXcom
 					{
 						_curCraftInList = -1;
 						craftToAssign = 0;
+						color = Palette::blockOffset(15) + 6;
 						done = true;
 					}
 					else
@@ -266,6 +268,7 @@ namespace OpenXcom
 						if (tempCraft->getSpaceAvailable() >= selectedSoldiers.size())
 						{
 							craftToAssign = tempCraft;
+							color = Palette::blockOffset(13) + 10;
 							done = true;
 						}
 					}
@@ -277,6 +280,7 @@ namespace OpenXcom
 			// find the first craft for the selected soldiers and assign it to all selected soldiers
 			craftToAssign = (*selectedSoldiers.begin())->getCraft();
 			_curCraftInList = findCraftAmongstAllCrafts(craftToAssign);
+			color = Palette::blockOffset(13) + 10;
 		}
 
 		std::map<Soldier*, size_t> soldiersWithRows = getSelectedSoldiersWithRows();
@@ -286,6 +290,7 @@ namespace OpenXcom
 		{
 			(*it)->setCraft(craftToAssign);
 			_lstSoldiers->setCellText(soldiersWithRows[(*it)], 2, craftName);
+			_lstSoldiers->setRowColor(soldiersWithRows[(*it)], color);
 		}
 	}
 
