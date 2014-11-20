@@ -45,7 +45,7 @@ namespace OpenXcom
 	 * @param game Pointer to the core game.
 	 * @param base Pointer to the base to get info from.
 	 */
-	SoldiersState::SoldiersState(Base *base) : _base(base), _curCraftInList(-2)
+	SoldiersState::SoldiersState(Base *base) : _base(base)
 	{
 		bool isPsiBtnVisible = Options::anytimePsiTraining && _base->getAvailablePsiLabs() > 0;
 
@@ -123,6 +123,8 @@ namespace OpenXcom
 		_lstSoldiers->setBackground(_window);
 		_lstSoldiers->setMargin(8);
 		_lstSoldiers->onMouseClick((ActionHandler)&SoldiersState::lstSoldiersClick);
+
+		_curCraftInList = CRAFT_LIST_INDEX_INIT;
 	}
 
 	/**
@@ -205,7 +207,7 @@ namespace OpenXcom
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
 			// reset the group craft list index
-			_curCraftInList = -2;
+			_curCraftInList = CRAFT_LIST_INDEX_INIT;
 		}
 	}
 
@@ -228,6 +230,7 @@ namespace OpenXcom
 			return;
 		}
 
+		// if any of the soldiers we're attempting to assign to a craft are wounded, warn the player and disallow
 		if (checkForWoundedSelectedSoldiers())
 		{
 			_game->pushState(new WoundedNoticeState);
@@ -245,7 +248,7 @@ namespace OpenXcom
 				Craft *tempCraft = 0;
 				
 				// if this is the first time iterating through the list for this group, set it up
-				if (_curCraftInList == -2)
+				if (_curCraftInList == CRAFT_LIST_INDEX_INIT)
 				{
 					tempCraft = (*selectedSoldiers.begin())->getCraft();
 					_curCraftInList = findCraftAmongstAllCrafts(tempCraft);
@@ -269,8 +272,6 @@ namespace OpenXcom
 					else
 					{
 						tempCraft = crafts->at(_curCraftInList);
-
-						// TODO: Put in code to handle if ship is currently out (can't select those soldiers?).  Ditto for wounded soldiers.
 
 						// if the craft is out, then we can't assign anyone to it; move along
 						if (tempCraft->getStatus() == "STR_OUT") 
@@ -297,6 +298,7 @@ namespace OpenXcom
 			color = Palette::blockOffset(13) + 10;
 		}
 
+		// assign the chosen craft (or lack thereof) to selected soldiers
 		std::map<Soldier*, size_t> soldiersWithRows = getSelectedSoldiersWithRows();
 		std::wstring craftName = (craftToAssign == 0 ? tr("STR_NONE_UC") : craftToAssign->getName(_game->getLanguage()));
 

@@ -47,6 +47,8 @@ private:
 	Base *_base;
 	int _curCraftInList;
 
+	const int CRAFT_LIST_INDEX_INIT = -2;
+
 	/// Updates the selected soldiers' assigned craft.
 	void changeCraft();
 	/// Check if all selected soldiers are on the same craft.
