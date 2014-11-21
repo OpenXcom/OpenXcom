@@ -279,7 +279,27 @@ void ExplosionBState::explode()
 	}
 	if (_tile)
 	{
-		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
+		ItemDamageType DT;
+		switch (_tile->getExplosiveType())
+		{
+		case 0:
+			DT = DT_HE;
+			break;
+		case 5:
+			DT = DT_IN;
+			break;
+		case 6:
+			DT = DT_STUN;
+			break;
+		default:
+			DT = DT_SMOKE;
+			break;
+		}
+		if (DT != DT_HE)
+		{
+			_tile->setExplosive(0,0,true);
+		}
+		save->getTileEngine()->explode(_center, _power, DT, _power/10);
 		terrainExplosion = true;
 	}
 	if (!_tile && !_item)
