@@ -209,6 +209,8 @@ public:
 	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
 	/// destroy a facility and deal with the side effects.
 	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
+	/// Cleans up the defenses vector and optionally reclaims the tanks and their ammo.
+	void cleanupDefenses(bool reclaimItems);
 };
 
 }

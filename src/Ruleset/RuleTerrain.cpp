@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0), _minDepth(0), _maxDepth(0), _ambience(-1)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _hemisphere(0), _minDepth(0), _maxDepth(0), _ambience(-1)
 {
 }
 
@@ -39,14 +39,6 @@ RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimi
 RuleTerrain::~RuleTerrain()
 {
 	for (std::vector<MapBlock*>::iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
-	{
-		delete *i;
-	}
-	for (std::vector<LandingSite*>::iterator i = _ufoPositions.begin(); i != _ufoPositions.end(); ++i)
-	{
-		delete *i;
-	}
-	for (std::vector<LandingSite*>::iterator i = _craftPositions.begin(); i != _craftPositions.end(); ++i)
 	{
 		delete *i;
 	}
@@ -72,41 +64,14 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_mapBlocks.clear();
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
-			MapBlock *map = new MapBlock((*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
-			map->load(*i);
-			_mapBlocks.push_back(map);
+			MapBlock *mapBlock = new MapBlock((*i)["name"].as<std::string>());
+			mapBlock->load(*i);
+			_mapBlocks.push_back(mapBlock);
 		}
 	}
 	_name = node["name"].as<std::string>(_name);
-	_largeBlockLimit = node["largeBlockLimit"].as<int>(_largeBlockLimit);
 	_textures = node["textures"].as< std::vector<int> >(_textures);
 	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
-	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
-	if (const YAML::Node &map = node["ufoPositions"])
-	{
-		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
-		{
-			LandingSite *site = new LandingSite();
-			site->x = (*i)[0].as<int>();
-			site->y = (*i)[1].as<int>();
-			site->sizeX = (*i)[2].as<int>();
-			site->sizeY = (*i)[3].as<int>();
-			_ufoPositions.push_back(site);
-		}
-	}
-	if (const YAML::Node &map = node["craftPositions"])
-	{
-		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
-		{
-			LandingSite *site = new LandingSite();
-			site->x = (*i)[0].as<int>();
-			site->y = (*i)[1].as<int>();
-			site->sizeX = (*i)[2].as<int>();
-			site->sizeY = (*i)[3].as<int>();
-			_craftPositions.push_back(site);
-		}
-	}
-
 	if (const YAML::Node &civs = node["civilianTypes"])
 	{
 		_civilianTypes = civs.as<std::vector<std::string> >(_civilianTypes);
@@ -119,6 +84,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	_minDepth = node["minDepth"].as<int>(_minDepth);
 	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 	_ambience = node["ambience"].as<int>(_ambience);
+	_script = node["script"].as<std::string>(_script);
 }
 
 /**
@@ -155,29 +121,25 @@ std::string RuleTerrain::getName() const
  * @param force Whether to enforce the max size.
  * @return Pointer to the mapblock.
  */
-MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool force)
+MapBlock* RuleTerrain::getRandomMapBlock(int maxSizeX, int maxSizeY, int group, bool force)
 {
 	std::vector<MapBlock*> compliantMapBlocks;
 
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if (((force && (*i)->getSizeX() == maxsize) ||
-			(!force && (*i)->getSizeX() <= maxsize)) &&
-			((*i)->getType() == type || (*i)->getSubType() == type))
+		if (((*i)->getSizeX() == maxSizeX ||
+			(!force && (*i)->getSizeX() < maxSizeX)) &&
+			((*i)->getSizeY() == maxSizeY ||
+			(!force && (*i)->getSizeY() < maxSizeY)) &&
+			(*i)->isInGroup(group))
 		{
-			for (int j = 0; j != (*i)->getRemainingUses(); ++j)
-			{
-				compliantMapBlocks.push_back((*i));
-			}
+			compliantMapBlocks.push_back((*i));
 		}
 	}
 
 	if (compliantMapBlocks.empty()) return 0;
 
 	size_t n = RNG::generate(0, compliantMapBlocks.size() - 1);
-
-	if (type == MT_DEFAULT)
-		compliantMapBlocks[n]->markUsed();
 
 	return compliantMapBlocks[n];
 }
@@ -222,26 +184,6 @@ MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 }
 
 /**
- * Gets the maximum amount of large blocks in this terrain.
- * @return The maximum amount.
- */
-int RuleTerrain::getLargeBlockLimit() const
-{
-	return _largeBlockLimit;
-}
-
-/**
- * Resets the remaining uses of each mapblock.
- */
-void RuleTerrain::resetMapBlocks()
-{
-	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
-	{
-		(*i)->reset();
-	}
-}
-
-/**
  * Gets the array of globe texture IDs this terrain is loaded on.
  * @return Pointer to the array of texture IDs.
  */
@@ -267,15 +209,6 @@ int RuleTerrain::getHemisphere() const
 std::vector<std::string> RuleTerrain::getCivilianTypes() const
 {
 	return _civilianTypes;
-}
-
-/**
- * Gets the road type odds.
- * @return The road type odds.
- */
-std::vector<int> RuleTerrain::getRoadTypeOdds() const
-{
-	return _roadTypeOdds;
 }
 
 /**
@@ -306,20 +239,11 @@ const int RuleTerrain::getAmbience() const
 }
 
 /**
- * Gets a list of potential UFO landing sites.
- * @return a list of potential UFO landing sites.
+ * Gets The generation script name.
+ * @return The name of the script to use.
  */
-const std::vector<LandingSite*> *RuleTerrain::getUfoPositions()
+const std::string RuleTerrain::getScript()
 {
-	return &_ufoPositions;
-}
-
-/**
- * Gets a list of potential xcom craft landing sites.
- * @return a list of potential xcom craft landing sites.
- */
-const std::vector<LandingSite*> *RuleTerrain::getCraftPositions()
-{
-	return &_craftPositions;
+	return _script;
 }
 }

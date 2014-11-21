@@ -871,6 +871,12 @@
     <ClCompile Include="Engine\Scalers\xbrz.cpp">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\Particle.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapScript.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1766,6 +1772,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Scalers\config.h">
       <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\Particle.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapScript.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

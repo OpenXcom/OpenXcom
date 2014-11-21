@@ -239,7 +239,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 				pos = regionRules.getRandomPoint(trajectory.getZone(0));
 			}
 			ufo->setAltitude(assaultTrajectory.getAltitude(0));
-			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * battleshipRule.getMaxSpeed());
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 			Waypoint *wp = new Waypoint();
@@ -305,7 +305,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	ufo->setAltitude(trajectory.getAltitude(0));
 	if (trajectory.getAltitude(0) == "STR_GROUND")
 	{
-		ufo->setSecondsRemaining(trajectory.groundTimer());
+		ufo->setSecondsRemaining(trajectory.groundTimer()*5);
 	}
 	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 	ufo->setLongitude(pos.first);
@@ -474,7 +474,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		else
 		{
 			// Set timer for UFO on the ground.
-			ufo.setSecondsRemaining(trajectory.groundTimer());
+			ufo.setSecondsRemaining(trajectory.groundTimer()*5);
 			if (ufo.getDetected() && ufo.getLandId() == 0)
 			{
 				ufo.setLandId(engine.getSavedGame()->getId("STR_LANDING_SITE"));
@@ -634,10 +634,6 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 void AlienMission::spawnAlienBase(const Globe &globe, Game &engine)
 {
 	SavedGame &game = *engine.getSavedGame();
-	if (game.getAlienBases()->size() >= 8)
-	{
-		return;
-	}
 	const Ruleset &ruleset = *engine.getRuleset();
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);

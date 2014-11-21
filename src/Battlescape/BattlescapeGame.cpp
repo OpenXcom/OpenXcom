@@ -222,7 +222,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (_AIActionCounter == 1)
 	{
 		_playedAggroSound = false;
-		unit->_hidingForTurn = false;
+		unit->setHiding(false);
 		if (Options::traceAI) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
 	//AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(ai); // this cast only works when ai was already AlienBAIState at heart
@@ -288,6 +288,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 				ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
 				_parentState->debug(ss.str());
 				action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()), _save->getCurrentItemId());
+				action.weapon->setOwner(unit);
 				action.TU = unit->getActionTUs(action.type, action.weapon);
 				statePushBack(new ProjectileFlyBState(this, action));
 				_save->removeItem(action.weapon);
@@ -416,7 +417,6 @@ void BattlescapeGame::endTurn()
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
-		t = _save->getTileEngine()->checkForTerrainExplosions();
 		statePushBack(0);
 		return;
 	}
@@ -542,7 +542,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// the losing squad all get a morale loss
 						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())
 						{
-							int bravery = (110 - (*i)->getStats()->bravery) / 10;
+							int bravery = (110 - (*i)->getBaseStats()->bravery) / 10;
 							(*i)->moraleChange(-(modifier * 200 * bravery / loserMod / 100));
 
 							if (victim->getFaction() == FACTION_HOSTILE && murderer)
@@ -592,7 +592,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	BattleUnit *bu = _save->getSelectedUnit();
 	if (_save->getSide() == FACTION_PLAYER)
 	{
-		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
+		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getBaseStats()->psiSkill > 0 && !bu->isOut());
 	}
 }
 
@@ -973,9 +973,9 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		}
 		switch (effectiveTuReserved)
 		{
-		case BA_SNAPSHOT: return tu + (bu->getStats()->tu / 3) <= bu->getTimeUnits(); break; // 33%
-		case BA_AUTOSHOT: return tu + ((bu->getStats()->tu / 5)*2) <= bu->getTimeUnits(); break; // 40%
-		case BA_AIMEDSHOT: return tu + (bu->getStats()->tu / 2) <= bu->getTimeUnits(); break; // 50%
+		case BA_SNAPSHOT: return tu + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits(); break; // 33%
+		case BA_AUTOSHOT: return tu + ((bu->getBaseStats()->tu / 5)*2) <= bu->getTimeUnits(); break; // 40%
+		case BA_AIMEDSHOT: return tu + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits(); break; // 50%
 		default: return tu <= bu->getTimeUnits(); break;
 		}
 	}
@@ -1166,7 +1166,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			}
 		}
 		// replace the TUs from shooting
-		unit->setTimeUnits(unit->getStats()->tu);
+		unit->setTimeUnits(unit->getBaseStats()->tu);
 		ba.type = BA_NONE;
 		break;
 	default: break;
@@ -1588,7 +1588,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &ne
 	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
 	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
 
-	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty);
+	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty, getDepth());
 
 	if (!difficulty)
 	{
@@ -1998,9 +1998,9 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 	{
 		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			if ((*j)->getHealth() > 0 && (*j)->getRespawn())
 			{
-				(*j)->setSpecialAbility(SPECAB_NONE);
+				(*j)->setRespawn(false);
 				convertUnit((*j), (*j)->getSpawnUnit());
 				j = _save->getUnits()->begin();
 			}

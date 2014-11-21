@@ -169,6 +169,8 @@ openxcom_SOURCES = \
 	src/Battlescape/NextTurnState.h \
 	src/Battlescape/NoContainmentState.cpp \
 	src/Battlescape/NoContainmentState.h \
+	src/Battlescape/Particle.cpp \
+	src/Battlescape/Particle.h \
 	src/Battlescape/Pathfinding.cpp \
 	src/Battlescape/Pathfinding.h \
 	src/Battlescape/PathfindingNode.cpp \
@@ -488,6 +490,8 @@ openxcom_SOURCES = \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
+	src/Ruleset/MapScript.cpp \
+	src/Ruleset/MapScript.h \
 	src/Ruleset/MCDPatch.cpp \
 	src/Ruleset/MCDPatch.h \
 	src/Ruleset/RuleAlienMission.cpp \

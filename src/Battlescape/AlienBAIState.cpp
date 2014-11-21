@@ -274,7 +274,7 @@ void AlienBAIState::think(BattleAction *action)
 		}
 	}
 	if (_spottingEnemies > 2
-		|| _unit->getHealth() < 2 * _unit->getStats()->health / 3
+		|| _unit->getHealth() < 2 * _unit->getBaseStats()->health / 3
 		|| (_aggroTarget && _aggroTarget->getTurnsSinceSpotted() > _intelligence))
 	{
 		evaluate = true;
@@ -324,7 +324,7 @@ void AlienBAIState::think(BattleAction *action)
 		// ignore new targets.
 		action->desperate = true;
 		// spin 180 at the end of your route.
-		_unit->_hidingForTurn = true;
+		_unit->setHiding(true);
 		break;
 	case AI_PATROL:
 		_unit->setCharging(0);
@@ -699,7 +699,7 @@ void AlienBAIState::setupAttack()
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
 	{
-		if (_unit->getStats()->psiSkill && psiAction())
+		if (_unit->getBaseStats()->psiSkill && psiAction())
 		{
 			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
 			return;
@@ -1182,7 +1182,7 @@ void AlienBAIState::evaluateAIMode()
 	{
 		escapeOdds = 12;
 	}
-	if (_unit->getTimeUnits() > _unit->getStats()->tu / 2 || _unit->getCharging())
+	if (_unit->getTimeUnits() > _unit->getBaseStats()->tu / 2 || _unit->getCharging())
 	{
 		escapeOdds = 5;
 	}
@@ -1255,19 +1255,19 @@ void AlienBAIState::evaluateAIMode()
 	}
 
 	// take our overall health into consideration
-	if (_unit->getHealth() < _unit->getStats()->health / 3)
+	if (_unit->getHealth() < _unit->getBaseStats()->health / 3)
 	{
 		escapeOdds *= 1.7;
 		combatOdds *= 0.6;
 		ambushOdds *= 0.75;
 	}
-	else if (_unit->getHealth() < 2 * (_unit->getStats()->health / 3))
+	else if (_unit->getHealth() < 2 * (_unit->getBaseStats()->health / 3))
 	{
 		escapeOdds *= 1.4;
 		combatOdds *= 0.8;
 		ambushOdds *= 0.8;
 	}
-	else if (_unit->getHealth() < _unit->getStats()->health)
+	else if (_unit->getHealth() < _unit->getBaseStats()->health)
 	{
 		escapeOdds *= 1.1;
 	}
@@ -1498,11 +1498,11 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 		diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	}
 	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
-	int injurylevel = attackingUnit->getStats()->health - attackingUnit->getHealth();
+	int injurylevel = attackingUnit->getBaseStats()->health - attackingUnit->getHealth();
 	int desperation = (100 - attackingUnit->getMorale()) / 10;
 	int enemiesAffected = 0;
 	// if we're below 1/3 health, let's assume things are dire, and increase desperation.
-	if (injurylevel > (attackingUnit->getStats()->health / 3) * 2)
+	if (injurylevel > (attackingUnit->getBaseStats()->health / 3) * 2)
 		desperation += 3;
 
 	int efficacy = desperation;
@@ -1522,7 +1522,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 
 	// account for the unit we're targetting
 	BattleUnit *target = _save->getTile(targetPos)->getUnit();
-	if (target)
+	if (target && !_save->getTile(targetPos)->getDangerous())
 	{
 		++enemiesAffected;
 		++efficacy;
@@ -1788,7 +1788,7 @@ void AlienBAIState::grenadeAction()
 		tu += _unit->getActionTUs(BA_PRIME, grenade);
 		tu += _unit->getActionTUs(BA_THROW, grenade);
 		// do we have enough TUs to prime and throw the grenade?
-		if (tu <= _unit->getStats()->tu)
+		if (tu <= _unit->getTimeUnits())
 		{
 			BattleAction action;
 			action.weapon = grenade;
@@ -1824,7 +1824,7 @@ bool AlienBAIState::psiAction()
 	int cost = psiWeaponRules->getTUUse();
 	if (!psiWeaponRules->getFlatRate())
 	{
-		cost = (int)floor(_unit->getStats()->tu * cost / 100.0f);
+		cost = (int)floor(_unit->getBaseStats()->tu * cost / 100.0f);
 	}
 	bool LOSRequired = psiWeaponRules->isLOSRequired();
 
@@ -1836,7 +1836,7 @@ bool AlienBAIState::psiAction()
 		// and we didn't already do a psi action this round
 		&& !_didPsi)
 	{
-		int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
+		int psiAttackStrength = _unit->getBaseStats()->psiSkill * _unit->getBaseStats()->psiStrength / 50;
 		int chanceToAttack = 0;
 
 		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -1850,9 +1850,9 @@ bool AlienBAIState::psiAction()
 				std::find(_unit->getVisibleUnits()->begin(), _unit->getVisibleUnits()->end(), *i) != _unit->getVisibleUnits()->end()))
 			{
 				int chanceToAttackMe = psiAttackStrength
-					+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
+					+ (((*i)->getBaseStats()->psiSkill > 0) ? (*i)->getBaseStats()->psiSkill * -0.4 : 0)
 					- _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition())
-					- ((*i)->getStats()->psiStrength)
+					- ((*i)->getBaseStats()->psiStrength)
 					+ RNG::generate(55, 105);
 
 				if (chanceToAttackMe > chanceToAttack)
@@ -1886,7 +1886,7 @@ bool AlienBAIState::psiAction()
 		{
 			int controlOdds = 40;
 			int morale = _aggroTarget->getMorale();
-			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
+			int bravery = (110 - _aggroTarget->getBaseStats()->bravery) / 10;
 			if (bravery > 6)
 				controlOdds -= 15;
 			if (bravery < 4)
@@ -1995,7 +1995,7 @@ void AlienBAIState::selectMeleeOrRanged()
 	int dmg = meleeWeapon->getPower();
 	if (meleeWeapon->isStrengthApplied())
 	{
-		dmg += _unit->getStats()->strength;
+		dmg += _unit->getBaseStats()->strength;
 	}
 	dmg *= _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType());
 
@@ -2008,7 +2008,7 @@ void AlienBAIState::selectMeleeOrRanged()
 		meleeOdds -= 5 * (_visibleEnemies - 1);
 	}
 
-	if (meleeOdds > 0 && _unit->getHealth() >= 2 * _unit->getStats()->health / 3)
+	if (meleeOdds > 0 && _unit->getHealth() >= 2 * _unit->getBaseStats()->health / 3)
 	{
 		if (_unit->getAggression() == 0)
 		{

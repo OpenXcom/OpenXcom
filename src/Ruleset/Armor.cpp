@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  */
-Armor::Armor(const std::string &type) : _type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false)
+Armor::Armor(const std::string &type) : _type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _forcedTorso(TORSO_USE_GENDER)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -83,6 +83,7 @@ void Armor::load(const YAML::Node &node)
 		_loftempsSet.push_back(node["loftemps"].as<int>());
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
+	_forcedTorso = (ForcedTorso)node["forcedTorso"].as<int>(_forcedTorso);
 	if (_drawingRoutine == 0 ||
 		_drawingRoutine == 1 ||
 		_drawingRoutine == 4 ||
@@ -90,8 +91,9 @@ void Armor::load(const YAML::Node &node)
 		_drawingRoutine == 10 ||
 		_drawingRoutine == 13 ||
 		_drawingRoutine == 14 ||
-		_drawingRoutine == 16 ||
-		_drawingRoutine == 17)
+		_drawingRoutine == 15 ||
+		_drawingRoutine == 17 ||
+		_drawingRoutine == 18)
 	{
 		_canHoldWeapon = true;
 	}
@@ -206,6 +208,9 @@ int Armor::getDrawingRoutine() const
 /**
  * Gets the movement type of this armor.
  * Useful for determining whether the armor can fly.
+ * @important: do not use this function outside the BattleUnit constructor,
+ * unless you are SURE you know what you are doing.
+ * for more information, see the BattleUnit constructor.
  * @return The movement type.
  */
 MovementType Armor::getMovementType() const
@@ -284,4 +289,14 @@ bool Armor::getCanHoldWeapon()
 {
 	return _canHoldWeapon;
 }
+
+/**
+ * Checks if this armor ignores gender (power suit/flying suit).
+ * @return which torso to force on the sprite.
+ */
+ForcedTorso Armor::getForcedTorso()
+{
+	return _forcedTorso;
+}
+
 }

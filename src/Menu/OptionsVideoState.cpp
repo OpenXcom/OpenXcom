@@ -306,7 +306,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	
 	std::vector<std::string> scales;
 	scales.push_back("STR_ORIGINAL");
-	scales.push_back("STR_1.5X");
+	scales.push_back("STR_1_5X");
 	scales.push_back("STR_2X");
 	scales.push_back("STR_THIRD_DISPLAY");
 	scales.push_back("STR_HALF_DISPLAY");

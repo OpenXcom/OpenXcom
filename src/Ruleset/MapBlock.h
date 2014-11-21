@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-enum MapBlockType {MT_UNDEFINED = -1, MT_DEFAULT, MT_LANDINGZONE, MT_EWROAD, MT_NSROAD, MT_CROSSING, MT_DIRT, MT_XCOMSPAWN, MT_UBASECOMM, MT_FINALCOMM };
+enum MapBlockType {MT_UNDEFINED = -1, MT_DEFAULT, MT_LANDINGZONE, MT_EWROAD, MT_NSROAD, MT_CROSSING};
 class RuleTerrain;
 class Position;
 
@@ -41,11 +41,10 @@ class MapBlock
 private:
 	std::string _name;
 	int _size_x, _size_y, _size_z;
-	MapBlockType _type, _subType;
-	int _frequency, _timesUsed, _maxCount;
+	std::vector<int> _groups;
 	std::map<std::string, std::vector<Position> > _items;
 public:
-	MapBlock(const std::string &name, int size_x, int size_y, MapBlockType type);
+	MapBlock(const std::string &name);
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);
@@ -59,16 +58,9 @@ public:
 	int getSizeZ() const;
 	/// Sets the mapblock's z size.
 	void setSizeZ(int size_z);
-	/// Returns whether this mapblock is a landingzone.
-	MapBlockType getType() const;
-	/// Returns whether this mapblock is a landingzone.
-	MapBlockType getSubType() const;
-	/// Gets either remaining uses or frequency.
-	int getRemainingUses();
-	/// Decreases remaining uses.
-	void markUsed();
-	/// Resets remaining uses.
-	void reset();
+	/// Returns if this mapblock is from the group specified.
+	bool isInGroup(int group);
+	/// Gets the layout for any items that belong in this map block.
 	std::map<std::string, std::vector<Position> > *getItems();
 
 };

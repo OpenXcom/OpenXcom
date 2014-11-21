@@ -16,33 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MCDPATCH_H
-#define OPENXCOM_MCDPATCH_H
+#ifndef OPENXCOM_PARTICLE_H
+#define OPENXCOM_PARTICLE_H
 
-#include <string>
-#include <yaml-cpp/yaml.h>
+#include <SDL_types.h>
 
 namespace OpenXcom
 {
-class MapDataSet;
-/**
- * An MCD data Patch.
- */
-class MCDPatch
+
+class Particle
 {
 private:
-	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight, _specialTypes, _armors, _explosives, _flammabilities, _fuels, _HEBlocks, _footstepSounds;
-	std::vector<std::pair<size_t, bool> > _noFloors, _stopLOSses;
-	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
+	float _xOffset, _yOffset, _density;
+	Uint8 _color, _opacity, _size;
 public:
-	/// Creates an MCD Patch.
-	MCDPatch();
-	/// Cleans up the MCD Patch.
-	~MCDPatch();
-	/// Loads the MCD Patch from YAML.
-	void load(const YAML::Node& node);
-	/// Applies an MCD patch to a mapDataSet
-	void modifyData(MapDataSet *dataSet) const;
+	/// Create a particle.
+	Particle(float xOffset, float yOffset, float density, Uint8 color, Uint8 opacity);
+	/// Destroy a particle.
+	~Particle();
+	/// Animate a particle.
+	bool animate();
+	/// Get the size value.
+	int getSize() { return _size; }
+	/// Get the color.
+	Uint8 getColor() { return _color; }
+	/// Get the opacity.
+	Uint8 getOpacity() {return _opacity / 5; }
+	/// Get the horizontal shift.
+	float getX() { return _xOffset; }
+	/// Get the vertical shift.
+	float getY() { return _yOffset; }
 };
 
 }

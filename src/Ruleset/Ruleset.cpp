@@ -33,6 +33,7 @@
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
+#include "MapScript.h"
 #include "RuleSoldier.h"
 #include "Unit.h"
 #include "AlienRace.h"
@@ -200,6 +201,14 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, RuleInterface *>::const_iterator i = _interfaces.begin(); i != _interfaces.end(); ++i)
 	{
 		delete i->second;
+	}
+	for (std::map<std::string, std::vector<MapScript*> >::iterator i = _mapScripts.begin(); i != _mapScripts.end(); ++i)
+	{
+		for (std::vector<MapScript*>::iterator j = (*i).second.begin(); j != (*i).second.end();)
+		{
+			delete *j;
+			j = (*i).second.erase(j);
+		}
 	}
 }
 
@@ -529,6 +538,8 @@ void Ruleset::loadFile(const std::string &filename)
 		ResourcePack::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
 		ResourcePack::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
 		ResourcePack::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(ResourcePack::EXPLOSION_OFFSET);
+		ResourcePack::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(ResourcePack::SMOKE_OFFSET);
+		ResourcePack::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(ResourcePack::UNDERWATER_SMOKE_OFFSET);
 		ResourcePack::ITEM_DROP = (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
 		ResourcePack::ITEM_THROW = (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
 		ResourcePack::ITEM_RELOAD = (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
@@ -566,6 +577,37 @@ void Ruleset::loadFile(const std::string &filename)
 		ResourcePack::INTERCEPTOR_HIT = (*i)["intterceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
 		ResourcePack::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
 	}
+	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
+	{
+		for (YAML::const_iterator j = (*i)["colors"].begin(); j != (*i)["colors"].end(); ++j)
+		{
+			SDL_Color color;
+			color.r = (*j)[0].as<int>(0);
+			color.g = (*j)[1].as<int>(0);
+			color.b = (*j)[2].as<int>(0);
+			color.unused = (*j)[3].as<int>(2);;
+			_transparencies.push_back(color);
+		}
+	}
+	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		if (_mapScripts.find(type) != _mapScripts.end())
+		{
+			for (std::vector<MapScript*>::iterator j = _mapScripts[type].begin(); j != _mapScripts[type].end();)
+			{
+				delete *j;
+				j = _mapScripts[type].erase(j);
+			}
+		}
+		for (YAML::const_iterator j = (*i)["commands"].begin(); j != (*i)["commands"].end(); ++j)
+		{
+			std::auto_ptr<MapScript> mapScript(new MapScript());
+			mapScript->load(*j);
+			_mapScripts[type].push_back(mapScript.release());
+		}
+	}
+
 	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
@@ -1508,6 +1550,17 @@ RuleGlobe *Ruleset::getGlobe() const
 const std::map<std::string, SoundDefinition *> *Ruleset::getSoundDefinitions() const
 {
 	return &_soundDefs;
+}
+
+const std::vector<SDL_Color> *Ruleset::getTransparencies() const
+{
+	return &_transparencies;
+}
+
+const std::vector<MapScript*> *Ruleset::getMapScript(std::string id) const
+{
+	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
+	if (_mapScripts.end() != i) return &i->second; else return 0;
 }
 
 }

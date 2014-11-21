@@ -280,17 +280,8 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
 	
-	int bulletSprite = -1;
-	if (_action.type != BA_THROW)
-	{
-		bulletSprite = _ammo->getRules()->getBulletSprite();
-		if (bulletSprite == -1)
-		{
-			bulletSprite = _action.weapon->getRules()->getBulletSprite();
-		}
-	}
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -420,7 +411,7 @@ void ProjectileFlyBState::think()
 		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
 		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
 		bool hasFloor = t && !t->hasNoFloor(bt);
-		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+		bool unitCanFly = _action.actor->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
@@ -537,15 +528,10 @@ void ProjectileFlyBState::think()
 					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
 					{
 						int i = 1;
-						int bulletSprite = _ammo->getRules()->getBulletSprite();
-						if (bulletSprite == -1)
-						{
-							bulletSprite = _action.weapon->getRules()->getBulletSprite();
-						}
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
 							// create a projectile
-							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite);
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(std::max(0.0, (_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0) - i * 5.0));
 							if (_projectileImpact != V_EMPTY)
@@ -565,7 +551,7 @@ void ProjectileFlyBState::think()
 						}
 					}
 					// if the unit burns floortiles, burn floortiles
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 					{
 						_parent->getSave()->getTile(_action.target)->ignite(15);
 					}
@@ -634,7 +620,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	{
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
-	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16.0;
+	double maxDistance = (getMaxThrowDistance(weight, action->actor->getBaseStats()->strength, zd) + 8) / 16.0;
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));

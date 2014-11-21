@@ -21,7 +21,6 @@
 #include <sstream>
 #include <iomanip>
 #include <SDL_gfxPrimitives.h>
-#include "../lodepng.h"
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -41,6 +40,14 @@
 #include "CivilianBAIState.h"
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
+#include "WarningMessage.h"
+#include "DebriefingState.h"
+#include "InfoboxState.h"
+#include "MiniMapState.h"
+#include "BattlescapeGenerator.h"
+#include "BriefingState.h"
+#include "../lodepng.h"
+#include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/Music.h"
@@ -51,7 +58,13 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Exception.h"
+#include "../Geoscape/DefeatState.h"
+#include "../Geoscape/VictoryState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
@@ -59,33 +72,23 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
+#include "../Menu/PauseState.h"
+#include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInterface.h"
-#include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Timer.h"
-#include "WarningMessage.h"
-#include "../Menu/PauseState.h"
-#include "DebriefingState.h"
-#include "../Engine/RNG.h"
-#include "InfoboxState.h"
-#include "MiniMapState.h"
-#include "BattlescapeGenerator.h"
-#include "BriefingState.h"
-#include "../Geoscape/DefeatState.h"
-#include "../Geoscape/VictoryState.h"
-#include "../Engine/Logger.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Menu/LoadGameState.h"
-#include "../Menu/SaveGameState.h"
-#include "../fmath.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -1295,13 +1298,13 @@ void BattlescapeState::updateSoldierInfo()
 		_rank->clear();
 	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-	_barTimeUnits->setMax(battleUnit->getStats()->tu);
+	_barTimeUnits->setMax(battleUnit->getBaseStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
-	_barEnergy->setMax(battleUnit->getStats()->stamina);
+	_barEnergy->setMax(battleUnit->getBaseStats()->stamina);
 	_barEnergy->setValue(battleUnit->getEnergy());
 	_numHealth->setValue(battleUnit->getHealth());
-	_barHealth->setMax(battleUnit->getStats()->health);
+	_barHealth->setMax(battleUnit->getBaseStats()->health);
 	_barHealth->setValue(battleUnit->getHealth());
 	_barHealth->setValue2(battleUnit->getStunlevel());
 	_numMorale->setValue(battleUnit->getMorale());
@@ -1349,7 +1352,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getStats()->psiSkill > 0);
+	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getBaseStats()->psiSkill > 0);
 }
 
 /**
@@ -1909,9 +1912,40 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
 	}
 	std::string nextStage;
+	std::string nextStageRace;
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+		nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStageRace();
+		if (nextStageRace == "")
+		{
+			for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
+				i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+			{
+				if ((*i)->isInBattlescape())
+				{
+					nextStageRace = (*i)->getAlienRace();
+					break;
+				}
+			}
+			
+			for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin();
+				i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+			{
+				if ((*i)->isInBattlescape())
+				{
+					nextStageRace = (*i)->getAlienRace();
+					break;
+				}
+			}
+		}
+		else
+		{
+			if (_game->getRuleset()->getAlienRace(nextStageRace) == 0)
+			{
+				throw Exception(nextStageRace + " race not found.");
+			}
+		}
 	}
 	if (!nextStage.empty() && inExitArea)
 	{
@@ -1919,7 +1953,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_popups.clear();
 		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setAlienRace("STR_MIXED");
+		bgen.setAlienRace(nextStageRace);
 		bgen.nextStage();
 		_game->popState();
 		_game->pushState(new BriefingState(0, 0));
