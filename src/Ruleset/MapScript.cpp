@@ -27,12 +27,21 @@
 namespace OpenXcom
 {
 
-MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), _executionChances(100), _executions(1), _cumulativeFrequency(0), _label(0), _direction(MD_NONE)
+MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), _executionChances(100), _executions(1), _cumulativeFrequency(0), _label(0), _direction(MD_NONE), _tunnelData(0)
 {
 }
 
 MapScript::~MapScript()
 {
+	for (std::vector<SDL_Rect*>::iterator i = _rects.begin(); i != _rects.end();)
+	{
+		delete *i;
+		i = _rects.erase(i);
+	}
+	if (_tunnelData != 0)
+	{
+		delete _tunnelData;
+	}
 }
 
 /**
@@ -95,16 +104,17 @@ void MapScript::load(const YAML::Node& node)
 	}
 	if (const YAML::Node &map = node["tunnelData"])
 	{
-		_tunnelData.level = map["level"].as<int>(0);
-		MCDReplacement replacement;
+		_tunnelData = new TunnelData;
+		_tunnelData->level = map["level"].as<int>(0);
 		if (const YAML::Node &data = map["MCDReplacements"])
 		{
 			for (YAML::Node::const_iterator i = data.begin(); i != data.end(); ++i)
 			{
+				MCDReplacement replacement;
 				std::string type = (*i)["type"].as<std::string>("");
 				replacement.entry = (*i)["entry"].as<int>(-1);
 				replacement.set = (*i)["set"].as<int>(-1);
-				_tunnelData.replacements[type] = replacement;
+				_tunnelData->replacements[type] = replacement;
 			}
 		}
 	}
