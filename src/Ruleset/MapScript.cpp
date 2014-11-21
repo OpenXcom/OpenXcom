@@ -67,7 +67,10 @@ void MapScript::load(const YAML::Node& node)
 		else if (command == "removeBlock")
 			_type = MSC_REMOVE;
 		else if (command == "resize")
+		{
 			_type = MSC_RESIZE;
+			_sizeX = _sizeY = 0; // defaults: don't resize anything unless specified.
+		}
 		else
 		{
 			throw Exception("Unknown command: " + command);
