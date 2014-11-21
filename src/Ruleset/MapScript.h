@@ -60,7 +60,8 @@ private:
 	std::vector<int> _groupsTemp, _blocksTemp, _frequenciesTemp, _maxUsesTemp;
 	int _sizeX, _sizeY, _sizeZ, _executionChances, _executions, _cumulativeFrequency, _label;
 	MapDirection _direction;
-	TunnelData _tunnelData;
+	TunnelData *_tunnelData;
+
 	/// Randomly generate a group from within the array.
 	const int getGroupNumber();
 	/// Randomly generate a block number from within the array.
@@ -97,7 +98,7 @@ public:
 	/// Gets the direction this command goes (for lines and tunnels).
    	const MapDirection getDirection() const {return _direction;};
 	/// Gets the mcd replacement data for tunnel replacements.
-	TunnelData *getTunnelData() {return &_tunnelData;};
+	TunnelData *getTunnelData() {return _tunnelData;};
 	/// Randomly generate a block from within either the array of groups or blocks.
 	MapBlock *getNextBlock(RuleTerrain *terrain);
 };
