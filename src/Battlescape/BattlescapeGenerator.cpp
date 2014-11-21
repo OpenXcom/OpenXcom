@@ -84,6 +84,23 @@ BattlescapeGenerator::~BattlescapeGenerator()
 }
 
 /**
+ * Sets up all our various arrays and whatnot according to the size of the map.
+ */
+void BattlescapeGenerator::init()
+{
+	_blocks.clear();
+	_landingzone.clear();
+	_segments.clear();
+	_drillMap.clear();
+
+	_blocks.resize((_mapsize_x / 10), std::vector<MapBlock*>((_mapsize_y / 10)));
+	_landingzone.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));
+	_segments.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),0));
+	_drillMap.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),MD_NONE));
+
+	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
+}
+/**
  * Sets the XCom craft involved in the battle.
  * @param craft Pointer to XCom craft.
  */
@@ -1643,12 +1660,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 
 	// set up our map generation vars
 	_dummy = new MapBlock("dummy");
-	_blocks.resize((_mapsize_x / 10), std::vector<MapBlock*>((_mapsize_y / 10)));
-	_landingzone.resize((_mapsize_x / 10), std::vector<bool>((_mapsize_y / 10),false));
-	_segments.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),0));
-	_drillMap.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),MD_NONE));
 
-	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
+	init();
 
 	int x = 0, y = 0;
 	bool placed = false;
@@ -1842,6 +1855,30 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					break;
 				case MSC_REMOVE:
 					success = removeBlocks(command);
+					break;
+				case MSC_RESIZE:
+					if (_save->getMissionType() == "STR_BASE_DEFENSE")
+					{
+						throw Exception("Map Generator encountered an error: Base defense map cannot be resized.");
+					}
+					if (_blocksToDo < (_mapsize_x / 10) * (_mapsize_y / 10))
+					{
+						throw Exception("Map Generator encountered an error: One does not simply resize the map after adding blocks.");
+					}
+
+					if (command->getSizeX() > 0 && command->getSizeX() != _mapsize_x / 10)
+					{
+						_mapsize_x = command->getSizeX() * 10;
+					}
+					if (command->getSizeY() > 0 && command->getSizeY() != _mapsize_y / 10)
+					{
+						_mapsize_y = command->getSizeY() * 10;
+					}
+					if (command->getSizeZ() > 0 && command->getSizeZ() != _mapsize_z)
+					{
+						_mapsize_z = command->getSizeZ();
+					}
+					init();
 					break;
 				default:
 					break;

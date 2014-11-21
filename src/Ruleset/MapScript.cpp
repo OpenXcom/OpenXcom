@@ -27,7 +27,7 @@
 namespace OpenXcom
 {
 
-MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _executionChances(100), _executions(1), _cumulativeFrequency(0), _label(0), _direction(MD_NONE)
+MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), _executionChances(100), _executions(1), _cumulativeFrequency(0), _label(0), _direction(MD_NONE)
 {
 }
 
@@ -66,6 +66,8 @@ void MapScript::load(const YAML::Node& node)
 			_type = MSC_CHECKBLOCK;
 		else if (command == "removeBlock")
 			_type = MSC_REMOVE;
+		else if (command == "resize")
+			_type = MSC_RESIZE;
 		else
 		{
 			throw Exception("Unknown command: " + command);
@@ -118,8 +120,17 @@ void MapScript::load(const YAML::Node& node)
 	{
 		if (map.Type() == YAML::NodeType::Sequence)
 		{
-			_sizeX = map.as<std::pair<int, int> >().first;
-			_sizeY = map.as<std::pair<int, int> >().second;
+			int *sizes[3] = {&_sizeX, &_sizeY, &_sizeZ};
+			int entry = 0;
+			for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+			{
+				*sizes[entry] = (*i).as<int>(1);
+				entry++;
+				if (entry == 3)
+				{
+					break;
+				}
+			}
 		}
 		else
 		{
