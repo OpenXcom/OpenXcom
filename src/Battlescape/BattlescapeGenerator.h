@@ -75,6 +75,8 @@ private:
 	std::vector< std::vector<int> > _segments, _drillMap;
 	MapBlock *_dummy;
 
+	/// sets the map size and associated vars
+	void init();
 	/// Generates a new battlescape map.
 	void generateMap(const std::vector<MapScript*> *script);
 	/// Adds a vehicle to the game.
