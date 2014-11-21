@@ -113,6 +113,8 @@ private:
 	RuleTerrain *getTerrain(int tex, double lat);
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit *unit);
+	/// Load all Xcom weapons.
+	void loadWeapons();
 	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
 	bool addCraft(MapBlock *craftMap, MapScript *command, SDL_Rect &craftPos);
 	/// Adds a line (generally a road) to the map.
@@ -162,8 +164,6 @@ public:
 	void nextStage();
 	/// Generates an inventory battlescape.
 	void runInventory(Craft *craft);
-	/// Load all Xcom weapons.
-	void loadWeapons();
 	// Autoequip a set of units
 	static void autoEquip(std::vector<BattleUnit*> units, Ruleset *gameRuleset, SavedBattleGame *addToSave, std::vector<BattleItem*> *craftInv,
 		RuleInventory *groundRuleInv, int worldShade, bool allowAutoLoadout, bool overrideEquipmentLayout);
