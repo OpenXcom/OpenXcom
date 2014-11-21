@@ -417,7 +417,6 @@ void BattlescapeGame::endTurn()
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
-		t = _save->getTileEngine()->checkForTerrainExplosions();
 		statePushBack(0);
 		return;
 	}

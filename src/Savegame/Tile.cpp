@@ -49,7 +49,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -475,7 +475,7 @@ bool Tile::destroy(int part)
 		}
 		if (originalPart->getExplosive())
 		{
-			setExplosive(originalPart->getExplosive());
+			setExplosive(originalPart->getExplosive(), originalPart->getExplosiveType());
 		}
 	}
 	/* check if the floor on the lowest level is gone */
@@ -508,11 +508,12 @@ bool Tile::damage(int part, int power)
  * @param power Power of the damage.
  * @param force Force damage.
  */
-void Tile::setExplosive(int power, bool force)
+void Tile::setExplosive(int power, int damageType, bool force)
 {
 	if (force || _explosive < power)
 	{
 		_explosive = power;
+		_explosiveType = damageType;
 	}
 }
 
@@ -523,6 +524,15 @@ void Tile::setExplosive(int power, bool force)
 int Tile::getExplosive() const
 {
 	return _explosive;
+}
+
+/**
+ * Get explosive on this tile.
+ * @return explosive
+ */
+int Tile::getExplosiveType() const
+{
+	return _explosiveType;
 }
 
 /*

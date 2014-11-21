@@ -69,6 +69,7 @@ protected:
 	int _smoke;
 	int _fire;
 	int _explosive;
+	int _explosiveType;
 	Position _pos;
 	BattleUnit *_unit;
 	std::vector<BattleItem *> _inventory;
@@ -165,9 +166,11 @@ public:
 	/// Damage a tile part.
 	bool damage(int part, int power);
 	/// Set a "virtual" explosive on this tile, to detonate later.
-	void setExplosive(int power, bool force = false);
+	void setExplosive(int power, int damageType, bool force = false);
 	/// Get explosive power of this tile.
 	int getExplosive() const;
+	/// Get explosive power of this tile.
+	int getExplosiveType() const;
 	/// Animated the tile parts.
 	void animate();
 	/// Get object sprites.

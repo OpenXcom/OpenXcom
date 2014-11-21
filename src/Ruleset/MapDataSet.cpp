@@ -192,6 +192,7 @@ void MapDataSet::loadData()
 		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
+		to->setExplosiveType((int)mcd.HE_Type);
 		to->setExplosive((int)mcd.HE_Strength);
 		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
 		to->setMiniMapIndex(mcd.ScanG);

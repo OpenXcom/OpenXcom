@@ -1168,7 +1168,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					if (type == DT_HE)
 					{
 						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units (the halving is handled elsewhere)
-						dest->setExplosive(power_);
+						dest->setExplosive(power_, 0);
 					}
 
 					ret = tilesAffected.insert(dest); // check if we had this tile already
@@ -1351,7 +1351,7 @@ bool TileEngine::detonate(Tile* tile)
 {
 	int explosive = tile->getExplosive();
 	if (explosive == 0) return false; // no damage applied for this tile
-	tile->setExplosive(0,true);
+	tile->setExplosive(0,0,true);
 	bool objective = false;
 	Tile* tiles[9];
 	static const int parts[9]={0,1,2,0,1,2,3,3,3}; //6th is the object of current
