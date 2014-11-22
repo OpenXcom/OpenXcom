@@ -783,7 +783,7 @@ struct ColorReplace
 /**
  * help class used for Surface::blitNShade
  */
-struct StandartShade
+struct StandardShade
 {
 	/**
 	* Function used by ShaderDraw in Surface::blitNShade
@@ -838,7 +838,7 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 		ShaderDraw<ColorReplace>(ShaderSurface(surface), src, ShaderScalar(off), ShaderScalar(newBaseColor));
 	}
 	else
-		ShaderDraw<StandartShade>(ShaderSurface(surface), src, ShaderScalar(off));
+		ShaderDraw<StandardShade>(ShaderSurface(surface), src, ShaderScalar(off));
 
 }
 

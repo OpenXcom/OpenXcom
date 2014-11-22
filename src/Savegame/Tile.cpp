@@ -506,6 +506,7 @@ bool Tile::damage(int part, int power)
  * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
  * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that passes it.
  * @param power Power of the damage.
+ * @param damageType the damage type of the explosion (not the same as item damage types)
  * @param force Force damage.
  */
 void Tile::setExplosive(int power, int damageType, bool force)
