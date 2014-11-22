@@ -1660,9 +1660,6 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 
 	init();
 
-	int x = 0, y = 0;
-	bool placed = false;
-
 	MapBlock* craftMap = 0;
 	MapBlock* ufoMap = 0;
 
@@ -1671,7 +1668,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 
 	// create an array to track command success/failure
 	std::map<int, bool> conditionals;
-	
+
 	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); ++i)
 	{
 		(*i)->loadData();
@@ -1835,7 +1832,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 								{
 									for (std::vector<int>::const_iterator z = command->getBlocks()->begin(); z != command->getBlocks()->end() && !success; ++z)
 									{
-										if (*z < _terrain->getMapBlocks()->size())
+										if ((size_t)(*z) < _terrain->getMapBlocks()->size())
 										{
 											success = (_blocks[x][y] == _terrain->getMapBlocks()->at(*z));
 										}
@@ -2340,7 +2337,7 @@ bool BattlescapeGenerator::addBlock(int x, int y, MapBlock *block)
 				return false;
 		}
 	}
-	int drillType = 0;
+
 	for (int xd = 0; xd <= xSize; ++xd)
 	{
 		for (int yd = 0; yd <= ySize; ++yd)
@@ -2538,7 +2535,7 @@ bool BattlescapeGenerator::removeBlocks(MapScript *command)
 					{
 						for (std::vector<int>::const_iterator z = command->getBlocks()->begin(); z != command->getBlocks()->end(); ++z)
 						{
-							if (*z < _terrain->getMapBlocks()->size())
+							if ((size_t)(*z) < _terrain->getMapBlocks()->size())
 							{
 								// the deleted vector should only contain unique entries
 								std::pair<int, int> pos = std::make_pair<int, int>(x, y);
