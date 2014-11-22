@@ -253,6 +253,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
 			int owner = (*i)["owner"].as<int>();
+			int prevOwner = (*i)["previousOwner"].as<int>(-1);
 			int unit = (*i)["unit"].as<int>();
 
 			// match up items and units
@@ -265,6 +266,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				if ((*bu)->getId() == unit)
 				{
 					item->setUnit(*bu);
+				}
+			}
+			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+			{
+				if ((*bu)->getId() == prevOwner)
+				{
+					item->setPreviousOwner(*bu);
 				}
 			}
 
