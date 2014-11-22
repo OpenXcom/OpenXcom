@@ -33,15 +33,11 @@ MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), 
 
 MapScript::~MapScript()
 {
-	for (std::vector<SDL_Rect*>::iterator i = _rects.begin(); i != _rects.end();)
+	for (std::vector<SDL_Rect*>::iterator i = _rects.begin(); i != _rects.end();++i)
 	{
 		delete *i;
-		i = _rects.erase(i);
 	}
-	if (_tunnelData != 0)
-	{
-		delete _tunnelData;
-	}
+	delete _tunnelData;
 }
 
 /**

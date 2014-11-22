@@ -486,6 +486,8 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
  */
 void SavedBattleGame::initUtilities(ResourcePack *res)
 {
+	delete _pathfinding;
+	delete _tileEngine;
 	_pathfinding = new Pathfinding(this);
 	_tileEngine = new TileEngine(this, res->getVoxelData());
 }
