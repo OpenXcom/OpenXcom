@@ -99,6 +99,9 @@ void BattlescapeGenerator::init()
 	_drillMap.resize((_mapsize_x / 10), std::vector<int>((_mapsize_y / 10),MD_NONE));
 
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
+	// creates the tile objects
+	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	_save->initUtilities(_res);
 }
 /**
  * Sets the XCom craft involved in the battle.
@@ -216,8 +219,6 @@ void BattlescapeGenerator::nextStage()
 	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
 	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 	_worldShade = ruleDeploy->getShade();
-
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 
 	const std::vector<MapScript*> *script = _game->getRuleset()->getMapScript(_terrain->getScript());
 	if (_game->getRuleset()->getMapScript(ruleDeploy->getScript()))
@@ -341,10 +342,6 @@ void BattlescapeGenerator::run()
 	{
 		_worldShade = ruleDeploy->getShade();
 	}
-
-	// creates the tile objects
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
-	_save->initUtilities(_res);
 	
 	const std::vector<MapScript*> *script = _game->getRuleset()->getMapScript(_terrain->getScript());
 	if (_game->getRuleset()->getMapScript(ruleDeploy->getScript()))
