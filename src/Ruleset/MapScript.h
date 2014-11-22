@@ -81,7 +81,7 @@ public:
 	const int getSizeX() const {return _sizeX;};
 	/// Gets the Y size for this command.
 	const int getSizeY() const {return _sizeY;};
-	/// Gets the Y size for this command.
+	/// Gets the Z size for this command.
 	const int getSizeZ() const {return _sizeZ;};
 	/// Get the chances of this command executing.
 	const int getChancesOfExecution() const {return _executionChances;};
