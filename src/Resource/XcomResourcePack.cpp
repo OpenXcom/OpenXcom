@@ -817,7 +817,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	std::string lbms[] = {"D0.LBM",
 						  "D1.LBM",
 						  "D2.LBM",
-						  "D2.LBM"};
+						  "D3.LBM"};
 	std::string pals[] = {"PAL_BATTLESCAPE",
 						  "PAL_BATTLESCAPE_1",
 						  "PAL_BATTLESCAPE_2",
