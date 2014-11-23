@@ -31,6 +31,7 @@ namespace YAML
 			node["lowQty"] = rhs.lowQty;
 			node["highQty"] = rhs.highQty;
 			node["dQty"] = rhs.dQty;
+			node["extraQty"] = rhs.extraQty;
 			node["percentageOutsideUfo"] = rhs.percentageOutsideUfo;
 			node["itemSets"] = rhs.itemSets;
 			return node;
@@ -45,6 +46,7 @@ namespace YAML
 			rhs.lowQty = node["lowQty"].as<int>(rhs.lowQty);
 			rhs.highQty = node["highQty"].as<int>(rhs.highQty);
 			rhs.dQty = node["dQty"].as<int>(rhs.dQty);
+			rhs.extraQty = node["extraQty"].as<int>(0); // give this a default, as it's not 100% needed, unlike the others.
 			rhs.percentageOutsideUfo = node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
 			rhs.itemSets = node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
 			return true;

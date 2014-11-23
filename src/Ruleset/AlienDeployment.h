@@ -37,7 +37,7 @@ struct ItemSet
 struct DeploymentData
 {
 	int alienRank;
-	int lowQty, highQty, dQty;
+	int lowQty, highQty, dQty, extraQty;
 	int percentageOutsideUfo;
 	std::vector<ItemSet> itemSets;
 };
