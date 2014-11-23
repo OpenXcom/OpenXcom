@@ -522,6 +522,7 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		AlienBase *b = new AlienBase();
 		b->setId(1);
+		b->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(b);
 		bgen.setAlienBase(b);
 		bgen.setCraft(_craft);
@@ -553,6 +554,7 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		TerrorSite *t = new TerrorSite();
 		t->setId(1);
+		t->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(t);
 		bgen.setTerrorSite(t);
 		bgen.setCraft(_craft);
