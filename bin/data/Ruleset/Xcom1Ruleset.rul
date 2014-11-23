@@ -6687,7 +6687,6 @@ alienDeployments:
       - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
-    nextStageRace: STR_MIXED
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0
@@ -6837,6 +6836,7 @@ alienDeployments:
     terrains:
       - UBASE
     shade: 5
+    race: STR_MIXED
     script: BOSSBATTLE
 research:
   - name: STR_LASER_WEAPONS

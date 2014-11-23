@@ -286,6 +286,25 @@ void BattlescapeGenerator::nextStage()
 
 	size_t unitCount = _save->getUnits()->size();
 
+	// Let's figure out what race we're up against.
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
+		_alienRace == "" && i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			_alienRace = (*i)->getAlienRace();
+		}
+	}
+
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin();
+		_alienRace == "" && i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			_alienRace = (*i)->getAlienRace();
+		}
+	}
+
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
 	if (unitCount == _save->getUnits()->size())
@@ -790,6 +809,15 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
+	if (deployment->getRace() != "" && _game->getSavedGame()->getMonthsPassed() != -1)
+	{
+		_alienRace = deployment->getRace();
+		if (_game->getRuleset()->getAlienRace(_alienRace) == 0)
+		{
+			throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
+		}
+	}
+
 	if (_save->getDepth() > 0 && _alienRace.find("_UNDERWATER") == std::string::npos)
 	{
 		std::stringstream ss;
