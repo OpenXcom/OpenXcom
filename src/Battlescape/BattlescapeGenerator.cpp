@@ -824,6 +824,8 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 		else
 			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super (and beyond?)
 
+		quantity += RNG::generate(0, (*d).extraQty);
+
 		for (int i = 0; i < quantity; i++)
 		{
 			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUfo;
