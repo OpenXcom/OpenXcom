@@ -311,6 +311,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
+	_ambience = node["ambience"].as<int>(_ambience);
 }
 
 /**
@@ -429,7 +430,7 @@ YAML::Node SavedBattleGame::save() const
 	node["tuReserved"] = (int)_tuReserved;
     node["kneelReserved"] = _kneelReserved;
     node["depth"] = _depth;
-
+	node["ambience"] = _ambience;
 	return node;
 }
 
