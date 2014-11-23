@@ -1939,16 +1939,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				}
 			}
 		}
-		else
-		{
-			if (_game->getRuleset()->getAlienRace(nextStageRace) == 0)
-			{
-				throw Exception(nextStageRace + " race not found.");
-			}
-		}
 	}
 	if (!nextStage.empty() && inExitArea)
 	{
+		if (_game->getRuleset()->getAlienRace(nextStageRace) == 0)
+		{
+			throw Exception(nextStageRace + " race not found.");
+		}
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
 		_save->setMissionType(nextStage);
