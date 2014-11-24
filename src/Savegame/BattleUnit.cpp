@@ -1133,7 +1133,7 @@ int BattleUnit::getFallingPhase() const
  */
 bool BattleUnit::isOut() const
 {
-	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS;
+	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS || _status == STATUS_TIME_OUT;
 }
 
 /**
@@ -1465,6 +1465,11 @@ double BattleUnit::getReactionScore()
  */
 void BattleUnit::prepareNewTurn()
 {
+	if (_status == STATUS_TIMEOUT)
+	{
+		return;
+	}
+
 	// revert to original faction
 	_faction = _originalFaction;
 
@@ -2816,6 +2821,15 @@ std::string BattleUnit::getMeleeWeapon()
 MovementType BattleUnit::getMovementType() const
 {
 	return _movementType;
+}
+
+/**
+ * Sets this unit to "time-out" status, 
+ * meaning they will NOT take part in the current battle.
+ */
+void BattleUnit::goToTimeOut()
+{
+	_status = STATUS_TIME_OUT;
 }
 
 }

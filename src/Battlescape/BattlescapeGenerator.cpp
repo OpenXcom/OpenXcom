@@ -193,19 +193,22 @@ void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
 void BattlescapeGenerator::nextStage()
 {
 	// kill all enemy units, or those not in endpoint area (if aborted)
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if ((_game->getSavedGame()->getSavedBattle()->isAborted() && !(*j)->isInExitArea(END_POINT))
-			|| (*j)->getOriginalFaction() == FACTION_HOSTILE)
+		if ((*i)->getStatus() != STATUS_DEAD                              // if they're not dead
+			&& (((*i)->getOriginalFaction() == FACTION_PLAYER               // and they're a soldier
+			&& _game->getSavedGame()->getSavedBattle()->isAborted()           // and you aborted
+			&& !(*i)->isInExitArea(END_POINT))                                // and they're not on the exit
+			|| (*i)->getOriginalFaction() != FACTION_PLAYER))               // or they're not a soldier
 		{
-			(*j)->instaKill();
+			(*i)->goToTimeOut();
 		}
-		if ((*j)->getTile())
+		if ((*i)->getTile())
 		{
-			(*j)->getTile()->setUnit(0);
+			(*i)->getTile()->setUnit(0);
 		}
-		(*j)->setTile(0);
-		(*j)->setPosition(Position(-1,-1,-1), false);
+		(*i)->setTile(0);
+		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
 
 	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
