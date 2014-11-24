@@ -30,6 +30,7 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "../Savegame/Base.h"
 
 namespace OpenXcom
 {
@@ -46,10 +47,10 @@ FundingState::FundingState()
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(320, 17, 0, 8);
-	_txtCountry = new Text(100, 9, 32, 30);
-	_txtFunding = new Text(100, 9, 140, 30);
-	_txtChange = new Text(72, 9, 240, 30);
-	_lstCountries = new TextList(260, 136, 32, 40);
+	_txtCountry = new Text(100, 9, 32, 23);
+	_txtFunding = new Text(100, 9, 140, 23);
+	_txtChange = new Text(72, 9, 240, 23);
+	_lstCountries = new TextList(260, 153, 32, 33);
 
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
@@ -65,42 +66,42 @@ FundingState::FundingState()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
+	_window->setColor(Palette::blockOffset(15) - 1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
+	_btnOk->setColor(Palette::blockOffset(15) - 1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, Options::keyCancel);
 	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, Options::keyGeoFunding);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setColor(Palette::blockOffset(15) - 1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_INTERNATIONAL_RELATIONS"));
 
-	_txtCountry->setColor(Palette::blockOffset(8)+5);
+	_txtCountry->setColor(Palette::blockOffset(8) + 5);
 	_txtCountry->setText(tr("STR_COUNTRY"));
 
-	_txtFunding->setColor(Palette::blockOffset(8)+5);
+	_txtFunding->setColor(Palette::blockOffset(8) + 5);
 	_txtFunding->setText(tr("STR_FUNDING"));
 
-	_txtChange->setColor(Palette::blockOffset(8)+5);
+	_txtChange->setColor(Palette::blockOffset(8) + 5);
 	_txtChange->setText(tr("STR_CHANGE"));
 
-	_lstCountries->setColor(Palette::blockOffset(15)-1);
-	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
+	_lstCountries->setColor(Palette::blockOffset(15) - 1);
+	_lstCountries->setSecondaryColor(Palette::blockOffset(8) + 10);
 	_lstCountries->setColumns(3, 108, 100, 52);
 	_lstCountries->setDot(true);
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::wostringstream ss, ss2;
-		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
+		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size() - 1)) << L'\x01';
 		if ((*i)->getFunding().size() > 1)
 		{
 			ss2 << L'\x01';
-			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
+			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size() - 2);
 			if (change > 0)
 				ss2 << L'+';
 			ss2 << Text::formatFunding(change);
@@ -112,8 +113,24 @@ FundingState::FundingState()
 		}
 		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
-	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
-	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
+
+	// do gross and net totals at the bottom of the list
+	int grossTotal = _game->getSavedGame()->getCountryFunding();
+	int basesCostTotal = 0;
+
+	std::vector<Base*> *bases = _game->getSavedGame()->getBases();
+
+	for (std::vector<Base *>::iterator it = bases->begin(); it != bases->end(); ++it)
+	{
+		basesCostTotal += (*it)->getMonthlyMaintenace();
+	}
+
+	int netTotal = grossTotal - basesCostTotal;
+
+	_lstCountries->addRow(2, tr("STR_TOTAL_GROSS_UC").c_str(), Text::formatFunding(grossTotal).c_str());
+	_lstCountries->addRow(2, tr("STR_TOTAL_NET_UC").c_str(), Text::formatFunding(netTotal).c_str());
+	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8) + 5);
+	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size() + 1, Palette::blockOffset(8) + 5);
 }
 
 /**

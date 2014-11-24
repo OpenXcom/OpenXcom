@@ -169,6 +169,8 @@ en-US:
   STR_VICTORY_5: "Once the aliens have lost Mars they have lost the earth.  Before long the XCom research allows humanity to flourish once more, and claim Mars for itself.  The alien menace has gone, but for how long, no one knows..."
   STR_YOU_HAVE_FAILED: "You have failed to stop the alien onslaught.  One by one the funding nations sign pacts with aliens promising technology, prosperity and peace.  However it soon becomes clear that the aliens have other plans..."
   STR_TOTAL_UC: "TOTAL"
+  STR_TOTAL_GROSS_UC: "TOTAL (GROSS)"
+  STR_TOTAL_NET_UC: "TOTAL (NET)"
   STR_INCOME: "Income"
   STR_EXPENDITURE: "Expenditure"
   STR_MAINTENANCE: "Maintenance"
