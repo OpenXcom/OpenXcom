@@ -1465,7 +1465,7 @@ double BattleUnit::getReactionScore()
  */
 void BattleUnit::prepareNewTurn()
 {
-	if (_status == STATUS_TIMEOUT)
+	if (_status == STATUS_TIME_OUT)
 	{
 		return;
 	}
