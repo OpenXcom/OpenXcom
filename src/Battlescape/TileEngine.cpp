@@ -1034,7 +1034,9 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			}
 		}
 		if (tile->damage(part, rndPower))
-			_save->setObjectiveDestroyed(true);
+		{
+			_save->addDestroyedObjective();
+		}
 	}
 	else if (part == V_UNIT)
 	{
@@ -1328,7 +1330,9 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
 			if (detonate(*i))
-				_save->setObjectiveDestroyed(true);
+			{
+				_save->addDestroyedObjective();
+			}
 			applyGravity(*i);
 			Tile *j = _save->getTile((*i)->getPosition() + Position(0,0,1));
 			if (j)

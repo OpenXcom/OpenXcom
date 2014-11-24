@@ -1945,8 +1945,19 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		}
 	}
 
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
+	{
+		for (int j = 0; j != 4; ++j)
+		{
+			if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == MUST_DESTROY)
+			{
+				_save->addToObjectiveCount();
+			}
+		}
+	}
+
 	delete _dummy;
-	
+
 	attachNodeLinks();
 }
 

@@ -454,7 +454,7 @@ void BattlescapeGame::endTurn()
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
 
-	if (_save->isObjectiveDestroyed())
+	if (_save->allObjectivesDestroyed())
 	{
 		_parentState->finishBattle(false,liveSoldiers);
 		return;
