@@ -40,6 +40,7 @@
 #endif
 #include <map>
 #include <queue>
+#include <yaml-cpp/yaml.h>
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
@@ -67,8 +68,6 @@
 #ifdef __MORPHOS__
 #undef Insert
 #endif
-
-#include <yaml-cpp/yaml.h>
 
 #include "./fmath.h"
 #include "./version.h"
