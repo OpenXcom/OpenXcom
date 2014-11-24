@@ -1912,45 +1912,17 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
 	}
 	std::string nextStage;
-	std::string nextStageRace;
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
-		nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStageRace();
-		if (nextStageRace == "")
-		{
-			for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
-				i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
-			{
-				if ((*i)->isInBattlescape())
-				{
-					nextStageRace = (*i)->getAlienRace();
-					break;
-				}
-			}
-			
-			for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin();
-				i != _game->getSavedGame()->getAlienBases()->end(); ++i)
-			{
-				if ((*i)->isInBattlescape())
-				{
-					nextStageRace = (*i)->getAlienRace();
-					break;
-				}
-			}
-		}
 	}
+
 	if (!nextStage.empty() && inExitArea)
 	{
-		if (_game->getRuleset()->getAlienRace(nextStageRace) == 0)
-		{
-			throw Exception(nextStageRace + " race not found.");
-		}
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
 		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setAlienRace(nextStageRace);
 		bgen.nextStage();
 		_game->popState();
 		_game->pushState(new BriefingState(0, 0));

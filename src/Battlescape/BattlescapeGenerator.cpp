@@ -286,6 +286,25 @@ void BattlescapeGenerator::nextStage()
 
 	size_t unitCount = _save->getUnits()->size();
 
+	// Let's figure out what race we're up against.
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
+		_alienRace == "" && i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			_alienRace = (*i)->getAlienRace();
+		}
+	}
+
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin();
+		_alienRace == "" && i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			_alienRace = (*i)->getAlienRace();
+		}
+	}
+
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
 	if (unitCount == _save->getUnits()->size())
@@ -295,19 +314,6 @@ void BattlescapeGenerator::nextStage()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
-			(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT
-			/*
-			||
-			(_save->getTiles()[i]->getPosition().z == 1 &&
-			_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
-			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
-			*/
-			))
-				_save->getTiles()[i]->setDiscovered(true, 2);
-	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
@@ -379,21 +385,6 @@ void BattlescapeGenerator::run()
 	if (_ufo && _ufo->getStatus() == Ufo::CRASHED)
 	{
 		explodePowerSources();
-	}
-
-	if (!_craftDeployed)
-	{
-		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-		{
-			if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
-				(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT
-				/*||
-				(_save->getTiles()[i]->getPosition().z == _mapsize_z - 1 &&
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
-				_save->getTiles()[i]->getMapData(MapData::O_OBJECT))*/
-				))
-				_save->getTiles()[i]->setDiscovered(true, 2);
-		}
 	}
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
@@ -790,6 +781,15 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
+	if (deployment->getRace() != "" && _game->getSavedGame()->getMonthsPassed() != -1)
+	{
+		_alienRace = deployment->getRace();
+		if (_game->getRuleset()->getAlienRace(_alienRace) == 0)
+		{
+			throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
+		}
+	}
+
 	if (_save->getDepth() > 0 && _alienRace.find("_UNDERWATER") == std::string::npos)
 	{
 		std::stringstream ss;
@@ -1330,15 +1330,10 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 			{
 				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, part);
 			}
+
 		}
-		if (craft && _craftZ == z)
-		{
-			for (int z2 = _save->getMapSizeZ()-1; z2 >= _craftZ; --z2)
-			{
-				_save->getTile(Position(x, y, z2))->setDiscovered(true, 2);
-			}
-		}
-		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
+
+		_save->getTile(Position(x, y, z))->setDiscovered((discovered || mapblock->isFloorRevealed(z)), 2);
 
 		x++;
 
@@ -1950,8 +1945,19 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		}
 	}
 
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
+	{
+		for (int j = 0; j != 4; ++j)
+		{
+			if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == MUST_DESTROY)
+			{
+				_save->addToObjectiveCount();
+			}
+		}
+	}
+
 	delete _dummy;
-	
+
 	attachNodeLinks();
 }
 
