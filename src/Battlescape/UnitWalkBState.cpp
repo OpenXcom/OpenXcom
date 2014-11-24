@@ -491,7 +491,7 @@ void UnitWalkBState::postPathProcedures()
 				action.target = _unit->getCharging()->getPosition();
 				action.weapon = _unit->getMainHandWeapon();
 				action.type = BA_HIT;
-				bool remove = action.weapon->getRules()->getType() != _unit->getMeleeWeapon();
+				bool remove = !action.weapon || action.weapon->getRules()->getType() != _unit->getMeleeWeapon();
 				if (remove)
 				{
 					action.weapon = new BattleItem(_parent->getRuleset()->getItem(_unit->getMeleeWeapon()), _parent->getSave()->getCurrentItemId());
