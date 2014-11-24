@@ -314,19 +314,6 @@ void BattlescapeGenerator::nextStage()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
-			(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT
-			/*
-			||
-			(_save->getTiles()[i]->getPosition().z == 1 &&
-			_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
-			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
-			*/
-			))
-				_save->getTiles()[i]->setDiscovered(true, 2);
-	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
@@ -398,21 +385,6 @@ void BattlescapeGenerator::run()
 	if (_ufo && _ufo->getStatus() == Ufo::CRASHED)
 	{
 		explodePowerSources();
-	}
-
-	if (!_craftDeployed)
-	{
-		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-		{
-			if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
-				(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT
-				/*||
-				(_save->getTiles()[i]->getPosition().z == _mapsize_z - 1 &&
-				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
-				_save->getTiles()[i]->getMapData(MapData::O_OBJECT))*/
-				))
-				_save->getTiles()[i]->setDiscovered(true, 2);
-		}
 	}
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
@@ -1358,15 +1330,10 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 			{
 				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, part);
 			}
+
 		}
-		if (craft && _craftZ == z)
-		{
-			for (int z2 = _save->getMapSizeZ()-1; z2 >= _craftZ; --z2)
-			{
-				_save->getTile(Position(x, y, z2))->setDiscovered(true, 2);
-			}
-		}
-		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
+
+		_save->getTile(Position(x, y, z))->setDiscovered((discovered || mapblock->isFloorRevealed(z)), 2);
 
 		x++;
 

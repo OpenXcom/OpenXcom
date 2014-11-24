@@ -3564,6 +3564,7 @@ terrains:
         width: 10
         length: 10
         groups: 2
+        revealedFloors: 1
       - name: UBASE_05
         width: 10
         length: 10
