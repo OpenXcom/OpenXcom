@@ -36,7 +36,7 @@ namespace OpenXcom
 	{
 		Armor *armor = _game->getRuleset()->getArmor(defs->id);
 		
-		_lstInfo = new TextList(150, 56, 168, 120);
+		_lstInfo = new TextList(150, 64, 168, 110);
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(0)+2);

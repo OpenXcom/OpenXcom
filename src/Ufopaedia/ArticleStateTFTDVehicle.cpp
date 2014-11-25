@@ -43,9 +43,9 @@ namespace OpenXcom
 		add(_lstStats);
 
 		_lstStats->setColor(Palette::blockOffset(0)+2);
-		_lstStats->setColumns(2, 80, 70);
+		_lstStats->setColumns(2, 65, 85);
 		_lstStats->setDot(true);
-		
+
 		std::wostringstream ss;
 		ss << unit->getStats()->tu;
 		_lstStats->addRow(2, tr("STR_TIME_UNITS").c_str(), ss.str().c_str());
