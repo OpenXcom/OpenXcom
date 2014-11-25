@@ -19,7 +19,6 @@
 
 #include <sstream>
 #include "../fmath.h"
-#include "Ufopaedia.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDArmor.h"
 #include "../Ruleset/ArticleDefinition.h"

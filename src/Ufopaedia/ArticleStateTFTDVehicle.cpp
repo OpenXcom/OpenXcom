@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ufopaedia.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleStateTFTDVehicle.h"
 #include <sstream>
