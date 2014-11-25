@@ -877,6 +877,27 @@
     <ClCompile Include="Ruleset\MapScript.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDFacility.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraft.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDUso.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDArmor.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDItem.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraftWeapon.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDVehicle.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1778,6 +1799,27 @@
     </ClInclude>
     <ClInclude Include="Ruleset\MapScript.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDFacility.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraft.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDUso.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDArmor.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDItem.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraftWeapon.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDVehicle.h">
+      <Filter>Ufopaedia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

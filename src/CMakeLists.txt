@@ -614,6 +614,20 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateTextImage.h
   Ufopaedia/ArticleStateTFTD.cpp
   Ufopaedia/ArticleStateTFTD.h
+  Ufopaedia/ArticleStateTFTDArmor.cpp
+  Ufopaedia/ArticleStateTFTDArmor.h
+  Ufopaedia/ArticleStateTFTDCraft.cpp
+  Ufopaedia/ArticleStateTFTDCraft.h
+  Ufopaedia/ArticleStateTFTDCraftWeapon.cpp
+  Ufopaedia/ArticleStateTFTDCraftWeapon.h
+  Ufopaedia/ArticleStateTFTDFacility.cpp
+  Ufopaedia/ArticleStateTFTDFacility.h
+  Ufopaedia/ArticleStateTFTDItem.cpp
+  Ufopaedia/ArticleStateTFTDItem.h
+  Ufopaedia/ArticleStateTFTDUso.cpp
+  Ufopaedia/ArticleStateTFTDUso.h
+  Ufopaedia/ArticleStateTFTDVehicle.cpp
+  Ufopaedia/ArticleStateTFTDVehicle.h
   Ufopaedia/ArticleStateArmor.cpp
   Ufopaedia/ArticleStateArmor.h
   Ufopaedia/ArticleStateVehicle.cpp

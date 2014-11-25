@@ -30,6 +30,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Cursor.h"
 #include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
@@ -85,6 +86,16 @@ namespace OpenXcom
 
 	UfopaediaSelectState::~UfopaediaSelectState()
 	{}
+	
+	/**
+	 * Initializes the state.
+	 */
+	void UfopaediaSelectState::init()
+	{
+		State::init();
+		// this is to undo whatever the ufopaedia may have done to our colours.
+		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	}
 
 	/**
 	 * Returns to the previous screen.

@@ -620,6 +620,20 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateTextImage.h \
 	src/Ufopaedia/ArticleStateTFTD.cpp \
 	src/Ufopaedia/ArticleStateTFTD.h \
+	src/Ufopaedia/ArticleStateTFTDArmor.cpp \
+	src/Ufopaedia/ArticleStateTFTDArmor.h \
+	src/Ufopaedia/ArticleStateTFTDCraft.cpp \
+	src/Ufopaedia/ArticleStateTFTDCraft.h \
+	src/Ufopaedia/ArticleStateTFTDCraftWeapon.cpp \
+	src/Ufopaedia/ArticleStateTFTDCraftWeapon.h \
+	src/Ufopaedia/ArticleStateTFTDFacility.cpp \
+	src/Ufopaedia/ArticleStateTFTDFacility.h \
+	src/Ufopaedia/ArticleStateTFTDItem.cpp \
+	src/Ufopaedia/ArticleStateTFTDItem.h \
+	src/Ufopaedia/ArticleStateTFTDUso.cpp \
+	src/Ufopaedia/ArticleStateTFTDUso.h \
+	src/Ufopaedia/ArticleStateTFTDVehicle.cpp \
+	src/Ufopaedia/ArticleStateTFTDVehicle.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
 	src/Ufopaedia/ArticleStateVehicle.cpp \

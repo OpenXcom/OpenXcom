@@ -501,6 +501,13 @@
     <ClCompile Include="Ufopaedia\ArticleStateText.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateTextImage.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDArmor.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraft.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraftWeapon.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDFacility.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDItem.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDUso.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDVehicle.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateUfo.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateVehicle.cpp" />
     <ClCompile Include="Ufopaedia\Ufopaedia.cpp" />
@@ -804,6 +811,13 @@
     <ClInclude Include="Ufopaedia\ArticleStateText.h" />
     <ClInclude Include="Ufopaedia\ArticleStateTextImage.h" />
     <ClInclude Include="Ufopaedia\ArticleStateTFTD.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDArmor.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraft.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraftWeapon.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDFacility.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDItem.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDUso.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDVehicle.h" />
     <ClInclude Include="Ufopaedia\ArticleStateUfo.h" />
     <ClInclude Include="Ufopaedia\ArticleStateVehicle.h" />
     <ClInclude Include="Ufopaedia\Ufopaedia.h" />
