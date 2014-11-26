@@ -1327,13 +1327,6 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 				MapData *md = terrain->getMapData(&mapDataID, &mapDataSetID);
 				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
 			}
-			// if the part is empty and it's not a floor, remove it
-			// it prevents growing grass in UFOs
-			if (terrainObjectID == 0 && part == 3)
-			{
-				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, part);
-			}
-
 		}
 
 		_save->getTile(Position(x, y, z))->setDiscovered((discovered || mapblock->isFloorRevealed(z)), 2);
@@ -1537,7 +1530,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 	while (entryPoint == Position(-1, -1, -1) && tries)
 	{
 		BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
-		if (k->getFaction() == unit->getFaction() && k->getPosition() != Position(-1, -1, -1) && k->getArmor()->getSize() == 1)
+		if (k->getFaction() == unit->getFaction() && k->getPosition() != Position(-1, -1, -1) && k->getArmor()->getSize() >= unit->getArmor()->getSize())
 		{
 			entryPoint = k->getPosition();
 		}
