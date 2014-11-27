@@ -1325,7 +1325,10 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 				int mapDataSetID = mapDataSetOffset;
 				unsigned int mapDataID = terrainObjectID;
 				MapData *md = terrain->getMapData(&mapDataID, &mapDataSetID);
-				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, 3);
+				if (mapDataSetOffset > 0) // ie: ufo or craft.
+				{
+					_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, 3);
+				}
 				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
 			}
 		}
