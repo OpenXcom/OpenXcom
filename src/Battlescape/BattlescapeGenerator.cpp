@@ -784,13 +784,14 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
  */
 void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
 {
-	if (deployment->getRace() != "" && _game->getSavedGame()->getMonthsPassed() != -1)
+	if (deployment->getRace() != "" && _alienRace == "")
 	{
 		_alienRace = deployment->getRace();
 		if (_game->getRuleset()->getAlienRace(_alienRace) == 0)
 		{
 			throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
 		}
+		race = _game->getRuleset()->getAlienRace(_alienRace);
 	}
 
 	if (_save->getDepth() > 0 && _alienRace.find("_UNDERWATER") == std::string::npos)
