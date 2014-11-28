@@ -308,7 +308,7 @@ void BattlescapeGenerator::nextStage()
 		}
 	}
 
-	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
+	deployAliens(ruleDeploy);
 
 	if (unitCount == _save->getUnits()->size())
 	{
@@ -371,7 +371,7 @@ void BattlescapeGenerator::run()
 
 	size_t unitCount = _save->getUnits()->size();
 
-	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
+	deployAliens(ruleDeploy);
 
 	if (unitCount == _save->getUnits()->size())
 	{
@@ -782,27 +782,25 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
  * @param race Pointer to the alien race.
  * @param deployment Pointer to the deployment rules.
  */
-void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deployment)
+void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 {
 	if (deployment->getRace() != "" && _alienRace == "")
 	{
 		_alienRace = deployment->getRace();
-		if (_game->getRuleset()->getAlienRace(_alienRace) == 0)
-		{
-			throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
-		}
-		race = _game->getRuleset()->getAlienRace(_alienRace);
 	}
 
 	if (_save->getDepth() > 0 && _alienRace.find("_UNDERWATER") == std::string::npos)
 	{
-		std::stringstream ss;
-		ss << _alienRace << "_UNDERWATER";
-		if (_game->getRuleset()->getAlienRace(ss.str()))
-		{
-			race = _game->getRuleset()->getAlienRace(ss.str());
-		}
+		_alienRace = _alienRace + "_UNDERWATER";
 	}
+
+	if (_game->getRuleset()->getAlienRace(_alienRace) == 0)
+	{
+		throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
+	}
+
+	AlienRace *race = _game->getRuleset()->getAlienRace(_alienRace);
+
 	int month;
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{

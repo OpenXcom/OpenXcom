@@ -104,7 +104,7 @@ private:
 	/// Runs necessary checks before physically setting the position.
 	bool canPlaceXCOMUnit(Tile *tile);
 	/// Deploys the aliens, according to the alien deployment rules.
-	void deployAliens(AlienRace *race, AlienDeployment *deployment);
+	void deployAliens(AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int max);
 	/// Gets battlescape terrain.
