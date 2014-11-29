@@ -443,7 +443,7 @@ void setFolders()
         _configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
