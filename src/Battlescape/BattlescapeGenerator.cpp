@@ -317,6 +317,7 @@ void BattlescapeGenerator::nextStage()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
+	_save->setAborted(false);
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
