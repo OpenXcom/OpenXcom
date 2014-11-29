@@ -203,6 +203,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
+		unit->setSpecialWeapon(this, rule);
 		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
@@ -1786,7 +1787,7 @@ SavedGame *SavedBattleGame::getGeoscapeSave()
  * check the depth of the battlescape.
  * @return depth.
  */
-const int SavedBattleGame::getDepth() const
+int SavedBattleGame::getDepth() const
 {
 	return _depth;
 }
@@ -1831,7 +1832,7 @@ void SavedBattleGame::setAmbientSound(int sound)
  * get the ambient battlescape sound effect.
  * @return the intended sound.
  */
-const int SavedBattleGame::getAmbientSound() const
+int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
 }

@@ -695,6 +695,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			_save->getUnits()->push_back(unit);
 			_save->getTileEngine()->calculateFOV(unit);
 			unit->deriveRank();
+			unit->setSpecialWeapon(_save, _game->getRuleset());
 			return unit;
 		}
 		else if (_save->getMissionType() != "STR_BASE_DEFENSE")
@@ -706,6 +707,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				_save->getUnits()->push_back(unit);
 				_save->getTileEngine()->calculateFOV(unit);
 				unit->deriveRank();
+				unit->setSpecialWeapon(_save, _game->getRuleset());
 				return unit;
 			}
 		}
@@ -731,6 +733,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 					_save->getUnits()->push_back(unit);
 					unit->setDirection(dir);
 					unit->deriveRank();
+					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}
 			}
@@ -746,6 +749,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				{
 					_save->getUnits()->push_back(unit);
 					unit->deriveRank();
+					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}
 			}
@@ -926,6 +930,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	{
 		unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
+		unit->setSpecialWeapon(_save, _game->getRuleset());
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
@@ -952,6 +957,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		{
 			unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, 0));
 			unit->setRankInt(alienRank);
+			unit->setSpecialWeapon(_save, _game->getRuleset());
 			int dir = _save->getTileEngine()->faceWindow(unit->getPosition());
 			Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 			if (_save->getTileEngine()->distance(unit->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))

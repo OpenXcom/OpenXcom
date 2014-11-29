@@ -1352,7 +1352,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getBaseStats()->psiSkill > 0);
+	showPsiButton(battleUnit->getSpecialWeapon() &&  battleUnit->getSpecialWeapon()->getRules()->getBattleType() == BT_PSIAMP);
 }
 
 /**

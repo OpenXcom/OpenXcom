@@ -36,8 +36,10 @@
 #include "../Engine/RNG.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/Ruleset.h"
 #include "Tile.h"
 #include "SavedGame.h"
+#include "SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -47,13 +49,14 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param depth the depth of the battlefield (used to determine movement type in case of MT_FLOAT).
  */
-BattleUnit::BattleUnit(Soldier *soldier, int depth) : _faction(FACTION_PLAYER), _originalFaction(FACTION_PLAYER), _killedBy(FACTION_PLAYER), _id(0), _pos(Position()), _tile(0),
-											_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
-											_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
-											_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
-											_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
-											_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
-											_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false), _respawn(false)
+BattleUnit::BattleUnit(Soldier *soldier, int depth) :
+	_faction(FACTION_PLAYER), _originalFaction(FACTION_PLAYER), _killedBy(FACTION_PLAYER), _id(0), _pos(Position()), _tile(0),
+	_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
+	_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
+	_dontReselect(false), _fire(0), _specWeapon(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
+	_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
+	_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
+	_turnsSinceSpotted(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -132,15 +135,16 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) : _faction(FACTION_PLAYER), 
  * @param diff difficulty level (for stat adjustement).
  * @param depth the depth of the battlefield (used to determine movement type in case of MT_FLOAT).
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
-																											_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
-																											_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
-																											_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
-																											_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
-																											_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
-																											_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
-																											_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
-																											_turretType(-1), _hidingForTurn(false), _respawn(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth) :
+	_faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
+	_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
+	_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
+	_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _specWeapon(0), _currentAIState(0),
+	_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
+	_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
+	_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
+	_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
+	_turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -2798,21 +2802,24 @@ bool BattleUnit::getFloorAbove()
  * Get the name of any melee weapon we may be carrying, or a built in one.
  * @return the name .
  */
-std::string BattleUnit::getMeleeWeapon()
+BattleItem *BattleUnit::getMeleeWeapon()
 {
-	if (getItem("STR_RIGHT_HAND") && getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	BattleItem *meele = getItem("STR_RIGHT_HAND");
+	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
 	{
-		return getItem("STR_RIGHT_HAND")->getRules()->getType();
+		return meele;
 	}
-	if (getItem("STR_LEFT_HAND") && getItem("STR_LEFT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	meele = getItem("STR_LEFT_HAND");
+	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
 	{
-		return getItem("STR_LEFT_HAND")->getRules()->getType();
+		return meele;
 	}
-	if (_unitRules != 0)
+	meele = _specWeapon;
+	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
 	{
-		return _unitRules->getMeleeWeapon();
+		return meele;
 	}
-	return "";
+	return 0;
 }
 
 /**
@@ -2830,6 +2837,42 @@ MovementType BattleUnit::getMovementType() const
 void BattleUnit::goToTimeOut()
 {
 	_status = STATUS_TIME_OUT;
+}
+
+/**
+ * Set special weapon that is handled outside inventory.
+ * @param save
+ */
+void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule)
+{
+	RuleItem *item = 0;
+	if (getUnitRules())
+	{
+		item = rule->getItem(getUnitRules()->getMeleeWeapon());
+	}
+	if (!item)
+	{
+		item = rule->getItem(getArmor()->getSpecialWeapon());
+	}
+	if (!item && getBaseStats()->psiSkill > 0 && getFaction() == FACTION_HOSTILE)
+	{
+		item = rule->getItem("ALIEN_PSI_WEAPON");
+	}
+
+	if (item)
+	{
+		_specWeapon = new BattleItem(item, save->getCurrentItemId());
+		_specWeapon->setOwner(this);
+		save->removeItem(_specWeapon); //item outside inventory, deleted when game is shutdown.
+	}
+}
+
+/**
+ * Get special weapon.
+ */
+BattleItem *BattleUnit::getSpecialWeapon() const
+{
+	return _specWeapon;
 }
 
 }

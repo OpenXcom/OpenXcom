@@ -491,20 +491,10 @@ void UnitWalkBState::postPathProcedures()
 				action.target = _unit->getCharging()->getPosition();
 				action.weapon = _unit->getMainHandWeapon();
 				action.type = BA_HIT;
-				bool remove = !action.weapon || action.weapon->getRules()->getType() != _unit->getMeleeWeapon();
-				if (remove)
-				{
-					action.weapon = new BattleItem(_parent->getRuleset()->getItem(_unit->getMeleeWeapon()), _parent->getSave()->getCurrentItemId());
-					action.weapon->setOwner(_unit);
-				}
 				action.TU = _unit->getActionTUs(action.type, action.weapon);
 				action.targeting = true;
 				_unit->setCharging(0);
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-				if (remove)
-				{
-					_parent->getSave()->removeItem(action.weapon);
-				}
 			}
 		}
 		else if (_unit->isHiding())
