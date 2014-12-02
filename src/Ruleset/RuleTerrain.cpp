@@ -168,8 +168,8 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 {
 	MapDataSet* mdf = 0;
-
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin();
+	for (; i != _mapDataSets.end(); ++i)
 	{
 		mdf = *i;
 		if (*id < mdf->getSize())
@@ -179,7 +179,14 @@ MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 		*id -= mdf->getSize();
 		(*mapDataSetID)++;
 	}
-
+	if (i == _mapDataSets.end())
+	{
+		// oops! someone at microprose made an error in the map!
+		// set this broken tile reference to BLANKS 0.
+		mdf = _mapDataSets.front();
+		*id = 0;
+		*mapDataSetID = 0;
+	}
 	return mdf->getObjects()->at(*id);
 }
 
