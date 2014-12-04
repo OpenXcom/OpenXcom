@@ -60,6 +60,8 @@ enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LE
 class BattleUnit
 {
 private:
+	static const int SPEC_WEAPON_MAX = 3;
+
 	UnitFaction _faction, _originalFaction;
 	UnitFaction _killedBy;
 	int _id;
@@ -80,7 +82,7 @@ private:
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
-	BattleItem* _specWeapon;
+	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
 	BattleAIState *_currentAIState;
 	bool _visible;
 	Surface *_cache[5];
@@ -451,7 +453,7 @@ public:
 	/// Create special weapon for unit.
 	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
 	/// Get special weapon.
-	BattleItem *getSpecialWeapon() const;
+	BattleItem *getSpecialWeapon(BattleType type) const;
 };
 
 }

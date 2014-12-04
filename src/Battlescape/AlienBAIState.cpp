@@ -1821,15 +1821,12 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
-	if (!_unit->getSpecialWeapon())
+	BattleItem *item = _unit->getSpecialWeapon(BT_PSIAMP);
+	if (!item)
 	{
 		return false;
 	}
-	RuleItem *psiWeaponRules = _unit->getSpecialWeapon()->getRules();
-	if (psiWeaponRules->getBattleType() != BT_PSIAMP)
-	{
-		return false;
-	}
+	RuleItem *psiWeaponRules = item->getRules();
 	int cost = psiWeaponRules->getTUUse();
 	if (!psiWeaponRules->getFlatRate())
 	{
@@ -1917,13 +1914,13 @@ bool AlienBAIState::psiAction()
 			{
 				_psiAction->type = BA_MINDCONTROL;
 				_psiAction->target = _aggroTarget->getPosition();
-				_psiAction->weapon = _unit->getSpecialWeapon();
+				_psiAction->weapon = item;
 				return true;
 			}
 		}
 		_psiAction->type = BA_PANIC;
 		_psiAction->target = _aggroTarget->getPosition();
-		_psiAction->weapon = _unit->getSpecialWeapon();
+		_psiAction->weapon = item;
 		return true;
 	}
 	return false;

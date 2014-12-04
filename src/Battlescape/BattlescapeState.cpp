@@ -1352,7 +1352,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getSpecialWeapon() &&  battleUnit->getSpecialWeapon()->getRules()->getBattleType() == BT_PSIAMP);
+	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP));
 }
 
 /**

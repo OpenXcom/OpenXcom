@@ -588,7 +588,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	BattleUnit *bu = _save->getSelectedUnit();
 	if (_save->getSide() == FACTION_PLAYER)
 	{
-		_parentState->showPsiButton(bu && bu->getSpecialWeapon() &&  bu->getSpecialWeapon()->getRules()->getBattleType() == BT_PSIAMP && !bu->isOut());
+		_parentState->showPsiButton(bu && bu->getSpecialWeapon(BT_PSIAMP) && !bu->isOut());
 	}
 }
 
@@ -1425,7 +1425,7 @@ void BattlescapeGame::launchAction()
  */
 void BattlescapeGame::psiButtonAction()
 {
-	_currentAction.weapon = _save->getSelectedUnit()->getSpecialWeapon();
+	_currentAction.weapon = _save->getSelectedUnit()->getSpecialWeapon(BT_PSIAMP);
 	_currentAction.targeting = true;
 	_currentAction.type = BA_PANIC;
 	_currentAction.TU = 25;
