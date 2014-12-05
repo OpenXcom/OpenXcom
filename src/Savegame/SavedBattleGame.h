@@ -252,7 +252,7 @@ public:
 	/// a shortcut to the geoscape save.
 	SavedGame *getGeoscapeSave();
 	/// get the depth of the battlescape game.
-	const int getDepth() const;
+	int getDepth() const;
 	/// set the depth of the battlescape game.
 	void setDepth(int depth);
 	/// uses the depth variable to set a palette.
@@ -260,8 +260,7 @@ public:
 	/// sets the ambient sound effect;
 	void setAmbientSound(int sound);
 	/// gets the ambient sound effect;
-	const int getAmbientSound() const;
-
+	int getAmbientSound() const;
 };
 
 }

@@ -153,7 +153,7 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = (!_unit->getMeleeWeapon().empty());
+	_melee = (!_unit->getMeleeWeapon());
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
@@ -235,6 +235,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->type = _psiAction->type;
 		action->target = _psiAction->target;
 		action->number -= 1;
+		action->weapon = _psiAction->weapon;
 		return;
 	}
 	else
@@ -699,7 +700,7 @@ void AlienBAIState::setupAttack()
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
 	{
-		if (_unit->getBaseStats()->psiSkill && psiAction())
+		if (psiAction())
 		{
 			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
 			return;
@@ -1820,7 +1821,12 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
-	RuleItem *psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+	BattleItem *item = _unit->getSpecialWeapon(BT_PSIAMP);
+	if (!item)
+	{
+		return false;
+	}
+	RuleItem *psiWeaponRules = item->getRules();
 	int cost = psiWeaponRules->getTUUse();
 	if (!psiWeaponRules->getFlatRate())
 	{
@@ -1841,7 +1847,7 @@ bool AlienBAIState::psiAction()
 
 		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-				// don't target tanks
+			// don't target tanks
 			if ((*i)->getArmor()->getSize() == 1 &&
 				validTarget(*i, true, false) &&
 				// they must be player units
@@ -1908,11 +1914,13 @@ bool AlienBAIState::psiAction()
 			{
 				_psiAction->type = BA_MINDCONTROL;
 				_psiAction->target = _aggroTarget->getPosition();
+				_psiAction->weapon = item;
 				return true;
 			}
 		}
 		_psiAction->type = BA_PANIC;
 		_psiAction->target = _aggroTarget->getPosition();
+		_psiAction->weapon = item;
 		return true;
 	}
 	return false;
@@ -1929,6 +1937,7 @@ void AlienBAIState::meleeAttack()
 	if (_traceAI) { Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId(); }
 	_attackAction->target = _aggroTarget->getPosition();
 	_attackAction->type = BA_HIT;
+	_attackAction->weapon = _unit->getMeleeWeapon();
 }
 
 /**
@@ -1976,7 +1985,7 @@ BattleActionType AlienBAIState::getReserveMode()
 void AlienBAIState::selectMeleeOrRanged()
 {
 	RuleItem *rangedWeapon = _unit->getMainHandWeapon()->getRules();
-	RuleItem *meleeWeapon = _save->getBattleGame()->getRuleset()->getItem(_unit->getMeleeWeapon());
+	RuleItem *meleeWeapon = _unit->getMeleeWeapon() ? _unit->getMeleeWeapon()->getRules() : 0;
 
 	if (!meleeWeapon)
 	{

@@ -27,6 +27,7 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
 #include "Soldier.h"
+#include "BattleItem.h"
 
 namespace OpenXcom
 {
@@ -35,6 +36,7 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
+class SavedBattleGame;
 class Node;
 class Surface;
 class RuleInventory;
@@ -58,6 +60,8 @@ enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LE
 class BattleUnit
 {
 private:
+	static const int SPEC_WEAPON_MAX = 3;
+
 	UnitFaction _faction, _originalFaction;
 	UnitFaction _killedBy;
 	int _id;
@@ -78,6 +82,7 @@ private:
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
+	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
 	BattleAIState *_currentAIState;
 	bool _visible;
 	Surface *_cache[5];
@@ -118,8 +123,9 @@ private:
 	MovementType _movementType;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
-	/// Creates a BattleUnit.
+	/// Creates a BattleUnit from solder.
 	BattleUnit(Soldier *soldier, int depth);
+	/// Creates a BattleUnit from unit.
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
@@ -434,8 +440,8 @@ public:
 	void setFloorAbove(bool floor);
 	/// Get the flag for "floor above me".
 	bool getFloorAbove();
-	/// Get the name of any melee weapon we may be carrying, or a built in one.
-	std::string getMeleeWeapon();
+	/// Get any melee weapon we may be carrying, or a built in one.
+	BattleItem *getMeleeWeapon();
 	/// Use this function to check the unit's movement type.
 	MovementType getMovementType() const;
 	/// Checks if this unit is in hiding for a turn.
@@ -444,7 +450,10 @@ public:
 	void setHiding(bool hiding) { _hidingForTurn = hiding; };
 	/// Puts the unit in the corner to think about what he's done.
 	void goToTimeOut();
-
+	/// Create special weapon for unit.
+	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
+	/// Get special weapon.
+	BattleItem *getSpecialWeapon(BattleType type) const;
 };
 
 }

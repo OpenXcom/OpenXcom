@@ -2483,7 +2483,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			if (moraleLoss > 0)
 			_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
 		}
-		else// if (action->type == BA_MINDCONTROL)
+		else if (action->type == BA_MINDCONTROL)
 		{
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim->getPosition());

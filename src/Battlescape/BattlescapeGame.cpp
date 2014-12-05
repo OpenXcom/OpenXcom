@@ -275,23 +275,20 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{
-			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 			action.TU = unit->getActionTUs(action.type, action.weapon);
 		}
 		else
 		{
 			statePushBack(new UnitTurnBState(this, action));
 			// special behaviour here: we add and remove the item all at once.
-			if (action.type == BA_HIT && (!action.weapon || action.weapon->getRules()->getType() != unit->getMeleeWeapon()))
+			if (action.type == BA_HIT && action.weapon != unit->getMeleeWeapon())
 			{
-				ss.clear();
-				action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()), _save->getCurrentItemId());
-				action.weapon->setOwner(unit);
+				action.weapon = unit->getMeleeWeapon();
 				action.TU = unit->getActionTUs(action.type, action.weapon);
+				ss.clear();
 				ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
 				_parentState->debug(ss.str());
 				statePushBack(new ProjectileFlyBState(this, action));
-				_save->removeItem(action.weapon);
 				return;
 			}
 		}
@@ -311,7 +308,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
                 BattleUnit *unit = _save->getTile(action.target)->getUnit();
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 			}
-			_save->removeItem(action.weapon);
 		}
 	}
 
@@ -592,7 +588,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	BattleUnit *bu = _save->getSelectedUnit();
 	if (_save->getSide() == FACTION_PLAYER)
 	{
-		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getBaseStats()->psiSkill > 0 && !bu->isOut());
+		_parentState->showPsiButton(bu && bu->getSpecialWeapon(BT_PSIAMP) && !bu->isOut());
 	}
 }
 
@@ -848,7 +844,7 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
+				// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
@@ -1284,7 +1280,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				}
 				else
 				{
-						_parentState->warning("STR_NO_LINE_OF_FIRE");
+					_parentState->warning("STR_NO_LINE_OF_FIRE");
 				}
 			}
 		}
@@ -1292,11 +1288,6 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction() && _save->selectUnit(pos)->getVisible())
 			{
-				bool builtinpsi = !_currentAction.weapon;
-				if (builtinpsi)
-				{
-					_currentAction.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
-				}
 				_currentAction.TU = _currentAction.actor->getActionTUs(_currentAction.type, _currentAction.weapon);
 				_currentAction.target = pos;
 				if (!_currentAction.weapon->getRules()->isLOSRequired() ||
@@ -1323,12 +1314,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				}
 				else
 				{
-						_parentState->warning("STR_NO_LINE_OF_FIRE");
-				}
-				if (builtinpsi)
-				{
-					_save->removeItem(_currentAction.weapon);
-					_currentAction.weapon = 0;
+					_parentState->warning("STR_NO_LINE_OF_FIRE");
 				}
 			}
 		}
@@ -1439,7 +1425,7 @@ void BattlescapeGame::launchAction()
  */
 void BattlescapeGame::psiButtonAction()
 {
-	_currentAction.weapon = 0;
+	_currentAction.weapon = _save->getSelectedUnit()->getSpecialWeapon(BT_PSIAMP);
 	_currentAction.targeting = true;
 	_currentAction.type = BA_PANIC;
 	_currentAction.TU = 25;
@@ -1601,6 +1587,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &ne
 	newUnit->setDirection(3);
 	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
+	newUnit->setSpecialWeapon(getSave(), getRuleset());
 	getSave()->getUnits()->push_back(newUnit);
 	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new AlienBAIState(getSave(), newUnit, 0));

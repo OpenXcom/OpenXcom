@@ -62,6 +62,7 @@ void Armor::load(const YAML::Node &node)
 	}
 	_corpseGeo = node["corpseGeo"].as<std::string>(_corpseGeo);
 	_storeItem = node["storeItem"].as<std::string>(_storeItem);
+	_specWeapon = node["specialWeapon"].as<std::string>(_specWeapon);
 	_frontArmor = node["frontArmor"].as<int>(_frontArmor);
 	_sideArmor = node["sideArmor"].as<int>(_sideArmor);
 	_rearArmor = node["rearArmor"].as<int>(_rearArmor);
@@ -194,6 +195,15 @@ const std::vector<std::string> &Armor::getCorpseBattlescape() const
 std::string Armor::getStoreItem() const
 {
 	return _storeItem;
+}
+
+/**
+ * Gets the type of special weapon.
+ * @return The name of the special weapon.
+ */
+std::string Armor::getSpecialWeapon() const
+{
+	return _specWeapon;
 }
 
 /**
