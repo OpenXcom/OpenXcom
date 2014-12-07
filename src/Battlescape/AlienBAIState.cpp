@@ -2014,7 +2014,7 @@ void AlienBAIState::selectMeleeOrRanged()
 	}
 	if ( _visibleEnemies > 1 )
 	{
-		meleeOdds -= 5 * (_visibleEnemies - 1);
+		meleeOdds -= 20 * (_visibleEnemies - 1);
 	}
 
 	if (meleeOdds > 0 && _unit->getHealth() >= 2 * _unit->getBaseStats()->health / 3)
