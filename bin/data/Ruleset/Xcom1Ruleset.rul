@@ -6312,6 +6312,9 @@ alienDeployments:
     civilians: 16
     terrains:
       - URBAN
+    briefing:
+      palette: 2
+      music: GMENBASE
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6
@@ -6464,6 +6467,10 @@ alienDeployments:
       - UBASE
     shade: 15
     script: ALIENBASE
+    briefing:
+      textOffset: -16
+      background: BACK01.SCR
+      showTarget: false
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
@@ -6619,6 +6626,9 @@ alienDeployments:
     terrains:
       - XBASE
     shade: 5
+    briefing:
+      palette: 2
+      music: GMENBASE
   - type: STR_MARS_CYDONIA_LANDING
     data:
       - alienRank: 5
@@ -6688,6 +6698,10 @@ alienDeployments:
       - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
+    briefing:
+      textOffset: -16
+      palette: 6
+      music: GMNEWMAR
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0
@@ -6838,6 +6852,13 @@ alienDeployments:
       - UBASE
     shade: 5
     race: STR_MIXED
+    briefing:
+      textOffset: -16
+      palette: 6
+      music: GMNEWMAR
+      showTarget: false
+      showCraft: false
+      background: BACK01.SCR
     script: BOSSBATTLE
 research:
   - name: STR_LASER_WEAPONS

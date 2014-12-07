@@ -22,6 +22,25 @@
 namespace YAML
 {
 	template<>
+	struct convert<OpenXcom::ItemSet>
+	{
+		static Node encode(const OpenXcom::ItemSet& rhs)
+		{
+			Node node;
+			node = rhs.items;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::ItemSet& rhs)
+		{
+			if (!node.IsSequence())
+				return false;
+
+			rhs.items = node.as< std::vector<std::string> >(rhs.items);
+			return true;
+		}
+	};
+	template<>
 	struct convert<OpenXcom::DeploymentData>
 	{
 		static Node encode(const OpenXcom::DeploymentData& rhs)
@@ -49,6 +68,33 @@ namespace YAML
 			rhs.extraQty = node["extraQty"].as<int>(0); // give this a default, as it's not 100% needed, unlike the others.
 			rhs.percentageOutsideUfo = node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
 			rhs.itemSets = node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+			return true;
+		}
+	};
+	template<>
+	struct convert<OpenXcom::BriefingData>
+	{
+		static Node encode(const OpenXcom::BriefingData& rhs)
+		{
+			Node node;
+			node["palette"] = rhs.palette;
+			node["textOffset"] = rhs.textOffset;
+			node["music"] = rhs.music;
+			node["background"] = rhs.background;
+			node["showCraft"] = rhs.showCraft;
+			node["showTarget"] = rhs.showTarget;
+			return node;
+		}
+		static bool decode(const Node& node, OpenXcom::BriefingData& rhs)
+		{
+			if (!node.IsMap())
+				return false;
+			rhs.palette = node["palette"].as<int>(rhs.palette);
+			rhs.textOffset = node["textOffset"].as<int>(rhs.textOffset);
+			rhs.music = node["music"].as<std::string>(rhs.music);
+			rhs.background = node["background"].as<std::string>(rhs.background);
+			rhs.showCraft = node["showCraft"].as<bool>(rhs.showCraft);
+			rhs.showTarget = node["showTarget"].as<bool>(rhs.showTarget);
 			return true;
 		}
 	};
@@ -90,6 +136,7 @@ void AlienDeployment::load(const YAML::Node &node)
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
 	_race = node["race"].as<std::string>(_race);
 	_script = node["script"].as<std::string>(_script);
+	_briefingData = node["briefing"].as<BriefingData>(_briefingData);
 }
 
 /**
@@ -177,4 +224,16 @@ std::string AlienDeployment::getScript() const
 {
 	return _script;
 }
+
+/**
+
+/**
+ * Gets the briefing data for this mission type.
+ * @return data for the briefing window to use.
+ */
+BriefingData AlienDeployment::getBriefingData() const
+{
+	return _briefingData;
+}
+
 }

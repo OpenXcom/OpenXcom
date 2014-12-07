@@ -41,7 +41,13 @@ struct DeploymentData
 	int percentageOutsideUfo;
 	std::vector<ItemSet> itemSets;
 };
-
+struct BriefingData
+{
+	int palette, textOffset;
+	std::string music, background;
+	bool showCraft, showTarget;
+	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
+};
 /**
  * Represents a specific type of Alien Deployment.
  * Contains constant info about a Alien Deployment like
@@ -61,6 +67,7 @@ private:
 	std::vector<std::string> _terrains;
 	int _shade;
 	std::string _nextStage, _race, _script;
+	BriefingData _briefingData;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -86,32 +93,10 @@ public:
 	std::string getRace() const;
 	/// Gets the script to use for this deployment.
 	std::string getScript() const;
+	/// Gets the briefing data for this mission type.
+	BriefingData getBriefingData() const;
 
 };
 
 }
-
-namespace YAML
-{
-	template<>
-	struct convert<OpenXcom::ItemSet>
-	{
-		static Node encode(const OpenXcom::ItemSet& rhs)
-		{
-			Node node;
-			node = rhs.items;
-			return node;
-		}
-
-		static bool decode(const Node& node, OpenXcom::ItemSet& rhs)
-		{
-			if (!node.IsSequence())
-				return false;
-
-			rhs.items = node.as< std::vector<std::string> >(rhs.items);
-			return true;
-		}
-	};
-}
-
 #endif
