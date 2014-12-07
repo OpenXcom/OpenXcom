@@ -1743,14 +1743,16 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 			case 2: // east
 				if (wall == Pathfinding::BIGWALLNORTH ||
 					wall == Pathfinding::BIGWALLSOUTH ||
-					wall == Pathfinding::BIGWALLWEST)
+					wall == Pathfinding::BIGWALLWEST ||
+					wall == Pathfinding::BIGWALLWESTANDNORTH)
 				{
 					check = false;
 				}
 				break;
 			case 3: // south east
 				if (wall == Pathfinding::BIGWALLNORTH ||
-					wall == Pathfinding::BIGWALLWEST)
+					wall == Pathfinding::BIGWALLWEST ||
+					wall == Pathfinding::BIGWALLWESTANDNORTH)
 				{
 					check = false;
 				}
@@ -1758,7 +1760,8 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 			case 4: // south
 				if (wall == Pathfinding::BIGWALLWEST ||
 					wall == Pathfinding::BIGWALLEAST ||
-					wall == Pathfinding::BIGWALLNORTH)
+					wall == Pathfinding::BIGWALLNORTH ||
+					wall == Pathfinding::BIGWALLWESTANDNORTH)
 				{
 					check = false;
 				}
