@@ -347,6 +347,11 @@ void BattlescapeGenerator::run()
 		size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
 		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 	}
+	// new battle menu will have set the depth already
+	if (_terrain->getMaxDepth() > 0 && _save->getDepth() == 0)
+	{
+		_save->setDepth(RNG::generate(_terrain->getMinDepth(), _terrain->getMaxDepth()));
+	}
 
 	if (ruleDeploy->getShade() != -1)
 	{

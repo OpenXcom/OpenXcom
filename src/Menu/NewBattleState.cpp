@@ -511,12 +511,15 @@ void NewBattleState::btnOkClick(Action *)
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType(_missionTypes[_cbxMission->getSelected()]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	Base *base = 0;
 
 	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
-		bgen.setBase(_craft->getBase());
+		base = _craft->getBase();
+		bgen.setBase(base);
+		_craft = 0;
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
 	{
@@ -525,12 +528,7 @@ void NewBattleState::btnOkClick(Action *)
 		b->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(b);
 		bgen.setAlienBase(b);
-		bgen.setCraft(_craft);
 		_game->getSavedGame()->getAlienBases()->push_back(b);
-	}
-	else if (_missionTypes[_cbxMission->getSelected()] == "STR_MARS_CYDONIA_LANDING" || _missionTypes[_cbxMission->getSelected()] == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		bgen.setCraft(_craft);
 	}
 	else if (_craft && _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]))
 	{
@@ -539,7 +537,7 @@ void NewBattleState::btnOkClick(Action *)
 		_craft->setDestination(u);
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
-		if (_terrainTypes[_cbxTerrain->getSelected()] == "FOREST")
+		if (_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()])->getHemisphere() < 0)
 		{
 			u->setLatitude(-0.5);
 		}
@@ -560,23 +558,20 @@ void NewBattleState::btnOkClick(Action *)
 		bgen.setCraft(_craft);
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 	}
+
 	if (_craft)
 		_craft->setSpeed(0);
+
 	_game->getSavedGame()->setDifficulty((GameDifficulty)_cbxDifficulty->getSelected());
 
 	bgen.setWorldShade(_slrDarkness->getValue());
 	bgen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 	bgen.setAlienItemlevel(_slrAlienTech->getValue());
 	bgame->setDepth(_slrDepth->getValue());
+	bgen.setCraft(_craft);
 
 	bgen.run();
-	//_game->pushState(new BattlescapeState);
-	Base *base = 0;
-	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
-	{
-		base = _craft->getBase();
-		_craft = 0;
-	}
+
 	_game->popState();
 	_game->popState();
 	_game->pushState(new BriefingState(_craft, base));
