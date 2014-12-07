@@ -108,7 +108,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _noRetreat(false), _finalDestination(false), _finalMission(false)
 {
 }
 
@@ -135,6 +135,9 @@ void AlienDeployment::load(const YAML::Node &node)
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
 	_race = node["race"].as<std::string>(_race);
+	_noRetreat = node["noRetreat"].as<bool>(_noRetreat);
+	_finalDestination = node["finalDestination"].as<bool>(_finalDestination);
+	_finalMission = node["finalMission"].as<bool>(_finalMission);
 	_script = node["script"].as<std::string>(_script);
 	_briefingData = node["briefing"].as<BriefingData>(_briefingData);
 }
@@ -226,6 +229,31 @@ std::string AlienDeployment::getScript() const
 }
 
 /**
+ * Gets if aborting this mission will fail the game.
+ * @return if aborting this mission will fail the game.
+ */
+const bool AlienDeployment::isNoRetreat() const
+{
+	return _noRetreat;
+}
+
+/**
+ * Gets if winning this mission completes the game.
+ * @return if winning this mission completes the game.
+ */
+const bool AlienDeployment::isFinalDestination() const
+{
+	return _finalDestination;
+}
+
+/**
+ * Gets if winning this mission completes the game.
+ * @return if winning this mission completes the game.
+ */
+const bool AlienDeployment::isFinalMission() const
+{
+	return _finalMission;
+}
 
 /**
  * Gets the briefing data for this mission type.
