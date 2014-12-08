@@ -830,7 +830,7 @@ void SavedBattleGame::endTurn()
 
 	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 
-	if (_turn >= 20 || liveAliens < 2)
+	if ((_turn > 10 && liveAliens <= 2) || _turn > 20)
 	{
 		_cheating = true;
 	}
