@@ -219,8 +219,10 @@ public:
 	const City *locateCity(double lon, double lat) const;
 	/// Gets the alien item level table.
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
-	/// Gets the Defined starting base.
-	const YAML::Node &getStartingBase();
+	/// Gets the player starting base.
+	const YAML::Node &getStartingBase() const;
+	/// Gets the game starting time.
+	const GameTime &getStartingTime() const;
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
 	/// Gets the list of external Sprites.

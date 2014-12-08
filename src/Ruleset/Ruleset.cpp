@@ -1273,12 +1273,21 @@ const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 }
 
 /**
- * Gets the Defined starting base.
+ * Gets the defined starting base.
  * @return The starting base definition.
  */
-const YAML::Node &Ruleset::getStartingBase()
+const YAML::Node &Ruleset::getStartingBase() const
 {
 	return _startingBase;
+}
+
+/**
+ * Gets the defined starting time.
+ * @return The time the game starts in.
+ */
+const GameTime &Ruleset::getStartingTime() const
+{
+	return _startingTime;
 }
 
 /**

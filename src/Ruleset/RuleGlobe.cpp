@@ -154,8 +154,8 @@ void RuleGlobe::loadDat(const std::string &filename)
 		for (int i = 0, j = 0; i < points; ++i)
 		{
 			// Correct X-Com degrees and convert to radians
-			double lonRad = value[j++] * 0.125f * M_PI / 180;
-			double latRad = value[j++] * 0.125f * M_PI / 180;
+			double lonRad = value[j++] * 0.125 * M_PI / 180;
+			double latRad = value[j++] * 0.125 * M_PI / 180;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);

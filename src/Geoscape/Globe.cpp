@@ -1347,7 +1347,7 @@ void Globe::drawDetail()
 		// Draw bases names
 		for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
 		{
-			if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+			if ((*j)->getMarker() == -1 || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 				continue;
 			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 			label->setX(x - 40);
