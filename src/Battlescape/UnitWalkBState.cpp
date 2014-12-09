@@ -489,7 +489,7 @@ void UnitWalkBState::postPathProcedures()
 				BattleAction action;
 				action.actor = _unit;
 				action.target = _unit->getCharging()->getPosition();
-				action.weapon = _unit->getMainHandWeapon();
+				action.weapon = _unit->getMeleeWeapon();
 				action.type = BA_HIT;
 				action.TU = _unit->getActionTUs(action.type, action.weapon);
 				action.targeting = true;
