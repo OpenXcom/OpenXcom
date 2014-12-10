@@ -2582,9 +2582,12 @@ bool BattlescapeGenerator::removeBlocks(MapScript *command)
 		int y = (*z).second;
 		clearModule(x * 10, y * 10, _blocks[x][y]->getSizeX(), _blocks[x][y]->getSizeY());
 
-		for (int dx = x; dx != x + (_blocks[x][y]->getSizeX() / 10); ++dx)
+		int delx = (_blocks[x][y]->getSizeX() / 10);
+		int dely = (_blocks[x][y]->getSizeY() / 10);
+
+		for (int dx = x; dx != x + delx; ++dx)
 		{
-			for (int dy = y; dy != y + (_blocks[x][y]->getSizeY() / 10); ++dy)
+			for (int dy = y; dy != y + dely; ++dy)
 			{
 				_blocks[dx][dy] = 0;
 				_blocksToDo++;
