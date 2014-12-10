@@ -550,11 +550,6 @@ void ProjectileFlyBState::think()
 							delete proj;
 						}
 					}
-					// if the unit burns floortiles, burn floortiles
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
-					{
-						_parent->getSave()->getTile(_action.target)->ignite(15);
-					}
 
 					if (_projectileImpact == 4)
 					{
@@ -703,6 +698,11 @@ void ProjectileFlyBState::performMeleeAttack()
 	{
 		_parent->getSave()->removeItem(_ammo);
 		_action.weapon->setAmmoItem(0);
+	}
+	// if the unit burns floortiles, burn floortiles
+	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+	{
+		_parent->getSave()->getTile(_action.target)->ignite(15);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
 	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor, 0, true));
