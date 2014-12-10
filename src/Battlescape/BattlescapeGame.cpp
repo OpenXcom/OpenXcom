@@ -960,7 +960,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		return tu <= bu->getTimeUnits();
 	}
 
-	if (_save->getSide() == FACTION_HOSTILE) // aliens reserve TUs as a percentage rather than just enough for a single action.
+	if (_save->getSide() == FACTION_HOSTILE && !_debugPlay) // aliens reserve TUs as a percentage rather than just enough for a single action.
 	{
 		AlienBAIState *ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
 		if (ai)
