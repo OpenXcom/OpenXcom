@@ -1810,7 +1810,7 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 			}
 			else if (!tile->getMapData(part)->isNoFloor())
 			{
-				return 255;
+				return 256;
 			}
 		}
 
