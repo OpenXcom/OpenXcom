@@ -249,7 +249,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 					_action->actor->getPosition(),
 					_action->actor->getDirection(),
 					_action->actor,
-					0, &_action->target))
+					0, &_action->target, false))
 				{
 					Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->target));
 					if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())

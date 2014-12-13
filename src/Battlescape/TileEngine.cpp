@@ -2652,12 +2652,14 @@ bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int d
  * @param dest Destination position.
  * @return True when the range is valid.
  */
-bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest)
+bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy)
 {
 	if (direction < 0 || direction > 7)
 	{
 		return false;
 	}
+	std::vector<BattleUnit*> potentialTargets;
+	BattleUnit *chosenTarget = 0;
 	Position p;
 	int size = attacker->getArmor()->getSize() - 1;
 	Pathfinding::directionToVector(direction, &p);
@@ -2693,14 +2695,44 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attack
 							{
 								*dest = targetTile->getPosition();
 							}
-							return true;
+							if (target != 0)
+							{
+								return true;
+							}
+							else
+							{
+								potentialTargets.push_back(targetTile->getUnit());
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	return false;
+	
+	for (std::vector<BattleUnit*>::const_iterator i = potentialTargets.begin(); i != potentialTargets.end(); ++i)
+	{
+		// if there's actually something THERE, we'll chalk this up as a success.
+		if (!chosenTarget)
+		{
+			chosenTarget = *i;
+		}
+		// but if there's a target of a different faction, we'll prioritize them.
+		else if ((preferEnemy && (*i)->getFaction() != attacker->getFaction())
+		// or, if we're using a medikit, prioritize whichever friend is wounded the most.
+		|| (!preferEnemy && (*i)->getFaction() == attacker->getFaction() &&
+		(*i)->getFatalWounds() > chosenTarget->getFatalWounds()))
+		{
+			chosenTarget = *i;
+		}
+	}
+	
+	if (dest && chosenTarget)
+	{
+		*dest = chosenTarget->getPosition();
+	}
+
+	return chosenTarget != 0;
 }
 
 /**

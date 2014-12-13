@@ -103,7 +103,7 @@ public:
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.
-	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest);
+	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
 	/// Gets the AI to look through a window.
 	int faceWindow(const Position &position);
 	/// Checks a unit's % exposure on a tile.
