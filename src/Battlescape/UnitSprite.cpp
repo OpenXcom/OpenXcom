@@ -1401,7 +1401,7 @@ void UnitSprite::drawRoutine12()
 	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
 
-	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 15) )
+	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 16) )
 	{
 		// biodrone death frames
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
