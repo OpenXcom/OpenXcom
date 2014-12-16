@@ -318,17 +318,17 @@ void SaveConverter::loadDatLIGlob()
 	char *data = binaryBuffer("LIGLOB.DAT", buffer);
 
 	// 12 months of data - 0x04 * 12 = 0x30
-	for (int i = 0x04; i < 0x04 + 0x30; i += 4)
+	for (size_t i = 0x04; i < 0x04 + 0x30; i += 4)
 	{
 		int expenditure = load<int>(data + i);
 		_save->getExpenditures().push_back(expenditure);
 	}
-	for (int i = 0x34; i < 0x34 + 0x30; i += 4)
+	for (size_t i = 0x34; i < 0x34 + 0x30; i += 4)
 	{
 		int maintenance = load<int>(data + i);
 		_save->getMaintenances().push_back(maintenance);
 	}
-	for (int i = 0x64; i < 0x64 + 0x30; i += 4)
+	for (size_t i = 0x64; i < 0x64 + 0x30; i += 4)
 	{
 		int balance = load<int>(data + i);
 		_save->getFundsList().push_back(balance);
@@ -402,11 +402,11 @@ void SaveConverter::loadDatXcom()
 	char *data = binaryBuffer("XCOM.DAT", buffer);
 
 	// 12 months of data
-	int n = _nCountries + _nRegions;
-	for (int i = 0; i < n * 12; ++i)
+	size_t n = _nCountries + _nRegions;
+	for (size_t i = 0; i < n * 12; ++i)
 	{
 		int score = load<int>(data + i * 4);
-		int j = i % n;
+		size_t j = i % n;
 		// country
 		if (j < _nCountries)
 		{
@@ -431,11 +431,11 @@ void SaveConverter::loadDatAlien()
 	char *data = binaryBuffer("ALIEN.DAT", buffer);
 
 	// 12 months of data
-	int n = _nCountries + _nRegions;
-	for (int i = 0; i < n * 12; ++i)
+	size_t n = _nCountries + _nRegions;
+	for (size_t i = 0; i < n * 12; ++i)
 	{
 		int score = load<int>(data + i * 4);
-		int j = i % n;
+		size_t j = i % n;
 		// country
 		if (j < _nCountries)
 		{
@@ -466,7 +466,7 @@ void SaveConverter::loadDatDiplom()
 	}
 
 	// each country is 36 bytes
-	for (int i = 0; i < _nCountries; ++i)
+	for (size_t i = 0; i < _nCountries; ++i)
 	{
 		char *cdata = (data + i * 36);
 		Country *country = _save->getCountries()->at(i);
@@ -500,8 +500,8 @@ void SaveConverter::loadDatZonal()
 	char *data = binaryBuffer("ZONAL.DAT", buffer);
 
 	std::map<std::string, int> chances;
-	const int nRegions = 12;
-	for (int i = 0; i < nRegions; ++i)
+	const size_t nRegions = 12;
+	for (size_t i = 0; i < nRegions; ++i)
 	{
 		chances[_idRegions[i]] = load<Uint8>(data + i);
 	}
@@ -520,12 +520,12 @@ void SaveConverter::loadDatActs()
 	char *data = binaryBuffer("ACTS.DAT", buffer);
 
 	std::map < std::string, std::map<std::string, int> > chances;
-	const int nRegions = 12;
-	const int nMissions = 7;
-	for (int i = 0; i < nRegions * nMissions; ++i)
+	const size_t nRegions = 12;
+	const size_t nMissions = 7;
+	for (size_t i = 0; i < nRegions * nMissions; ++i)
 	{
-		int mission = i % nMissions;
-		int region = i / nMissions;
+		size_t mission = i % nMissions;
+		size_t region = i / nMissions;
 
 		chances[_idRegions[region]][_idMissions[mission]] = load<Uint8>(data + i);
 	}
@@ -551,7 +551,7 @@ void SaveConverter::loadDatMissions()
 	char *data = binaryBuffer("MISSIONS.DAT", buffer);
 	const int nRegions = 12;
 	const int nMissions = 7;
-	for (int i = 0; i < nRegions * nMissions; ++i)
+	for (size_t i = 0; i < nRegions * nMissions; ++i)
 	{
 		char *mdata = (data + i * 8);
 		int wave = load<Uint16>(mdata + 0x00);
@@ -587,7 +587,7 @@ void SaveConverter::loadDatLoc()
 	char *data = binaryBuffer("LOC.DAT", buffer);
 
 	// 50 records - 20 bytes each
-	for (int i = 0; i < 50; ++i)
+	for (size_t i = 0; i < 50; ++i)
 	{
 		char *tdata = (data + i * 20);
 		TargetType type = (TargetType)load<Uint8>(tdata);
@@ -673,7 +673,7 @@ void SaveConverter::loadDatBase()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("BASE.DAT", buffer);
 
-	std::vector<Base*> bases(8, 0);
+	std::vector<Base*> bases(8, (Base*)0);
 	for (size_t i = 0; i != _targets.size(); ++i)
 	{
 		Base *base = dynamic_cast<Base*>(_targets[i]);
@@ -719,7 +719,9 @@ void SaveConverter::loadDatBase()
 	for (std::vector<Base*>::iterator i = bases.begin(); i != bases.end(); ++i)
 	{
 		if (*i != 0)
+		{
 			_save->getBases()->push_back(*i);
+		}
 	}
 }
 
@@ -733,7 +735,7 @@ void SaveConverter::loadDatAStore()
 	char *data = binaryBuffer("ASTORE.DAT", buffer);
 
 	// 50 entries - 12 bytes each
-	for (int i = 0; i < 50; ++i)
+	for (size_t i = 0; i < 50; ++i)
 	{
 		char *adata = (data + i * 12);
 		int race = load<Uint8>(adata + 0x00);
@@ -764,7 +766,7 @@ void SaveConverter::loadDatTransfer()
 	char *data = binaryBuffer("TRANSFER.DAT", buffer);
 
 	// 100 entries - 8 bytes each
-	for (int i = 0; i < 50; ++i)
+	for (size_t i = 0; i < 100; ++i)
 	{
 		char *tdata = (data + i * 8);
 		int qty = load<Uint8>(tdata + 0x06);
@@ -851,7 +853,7 @@ void SaveConverter::loadDatCraft()
 				node["status"] = xcomStatus[load<Uint16>(cdata + 0x2A)];
 
 				// vehicles
-				for (int j = 0; j < 5; ++j)
+				for (size_t j = 0; j < 5; ++j)
 				{
 					int qty = load<Uint8>(cdata + 0x2C + j);
 					for (int v = 0; v < qty; ++v)
@@ -861,7 +863,7 @@ void SaveConverter::loadDatCraft()
 					}
 				}
 				// items
-				for (int j = 5; j < 55; ++j)
+				for (size_t j = 5; j < 55; ++j)
 				{
 					int qty = load<Uint8>(cdata + 0x2C + j);
 					if (qty != 0 && _idItems[j + 10] != 0)
@@ -940,7 +942,7 @@ void SaveConverter::loadDatSoldier()
 	char *data = binaryBuffer("SOLDIER.DAT", buffer);
 
 	// 250 soldier records - 68 bytes each
-	for (int i = 0; i < 250; ++i)
+	for (size_t i = 0; i < 250; ++i)
 	{
 		char *sdata = (data + i * 68);
 		int rank = load<Uint16>(sdata);
@@ -1023,7 +1025,7 @@ void SaveConverter::loadDatResearch()
 	char *data = binaryBuffer("RESEARCH.DAT", buffer);
 
 	// 22 bytes for each entry
-	for (int i = 0; i < _nResearch; ++i)
+	for (size_t i = 0; i < _nResearch; ++i)
 	{
 		char *rdata = (data + i * 22);
 		if (_idResearch[i] != 0)
@@ -1056,7 +1058,7 @@ void SaveConverter::loadDatUp()
 	char *data = binaryBuffer("UP.DAT", buffer);
 
 	// 12 bytes for each entry
-	for (int i = 0; i < _rule->getUfopaediaList().size(); ++i)
+	for (size_t i = 0; i < _rule->getUfopaediaList().size(); ++i)
 	{
 		char *rdata = (data + i * 12);
 		ArticleDefinition *article = _rule->getUfopaediaArticle(_rule->getUfopaediaList().at(i));
@@ -1088,10 +1090,10 @@ void SaveConverter::loadDatProject()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("PROJECT.DAT", buffer);
 	// 8 bases - 288 bytes each
-	for (int i = 0; i < _save->getBases()->size(); ++i)
+	for (size_t i = 0; i < _save->getBases()->size(); ++i)
 	{
 		Base *base = _save->getBases()->at(i);
-		for (int j = 0; j < _nResearch; ++j)
+		for (size_t j = 0; j < _nResearch; ++j)
 		{
 			char *pdata = (data + i * 288);
 			int remaining = load<Uint16>(pdata + j * 2);
@@ -1121,10 +1123,10 @@ void SaveConverter::loadDatBProd()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("BPROD.DAT", buffer);
 	// 8 bases - 350 bytes each
-	for (int i = 0; i < _save->getBases()->size(); ++i)
+	for (size_t i = 0; i < _save->getBases()->size(); ++i)
 	{
 		Base *base = _save->getBases()->at(i);
-		for (int j = 0; j < _nManufacture; ++j)
+		for (size_t j = 0; j < _nManufacture; ++j)
 		{
 			char *pdata = (data + i * 350);
 			int remaining = load<int>(pdata + j * 4);
@@ -1155,8 +1157,8 @@ void SaveConverter::loadDatXBases()
 {
 	std::vector<char> buffer;
 	char *data = binaryBuffer("XBASES.DAT", buffer);
-	const int nRegions = 12;
-	for (int i = 0; i < nRegions; ++i)
+	const size_t nRegions = 12;
+	for (size_t i = 0; i < nRegions; ++i)
 	{
 		char *bdata = (data + i * 4);
 		bool detected = load<Uint16>(bdata + 0x00) != 0;
