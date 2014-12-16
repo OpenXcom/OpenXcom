@@ -1849,7 +1849,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 								else
 								{
 									// wildcard, we don't care what block it is, we just wanna know if there's a block here
-									success = _blocks[x][y];
+									success = (_blocks[x][y] != 0);
 								}
 							}
 						}

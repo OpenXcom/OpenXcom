@@ -436,6 +436,8 @@ set ( menu_src
   Menu/LoadGameState.h
   Menu/SaveGameState.cpp
   Menu/SaveGameState.h
+  Menu/ListLoadOriginalState.cpp
+  Menu/ListLoadOriginalState.h
 )
 
 set ( resource_src
@@ -587,6 +589,9 @@ set ( savegame_src
   Savegame/SerializationHelper.h
   Savegame/SoldierDeath.h
   Savegame/SoldierDeath.cpp
+  Savegame/SaveConverter.cpp
+  Savegame/SaveConverter.h
+  Savegame/SaveConverterXcom1.h
 )
 
 set ( ufopedia_src

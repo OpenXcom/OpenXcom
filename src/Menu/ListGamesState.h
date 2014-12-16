@@ -48,7 +48,6 @@ protected:
 	TextList *_lstSaves;
 	ArrowButton *_sortName, *_sortDate;
 	OptionsOrigin _origin;
-	bool _showMsg, _noUI;
 	std::vector<SaveInfo> _saves;
 	unsigned int _firstValidRow;
 	bool _autoquick, _sortable;

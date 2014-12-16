@@ -166,6 +166,8 @@ public:
 	void setTime(GameTime time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
+	/// Resets the list of object IDs.
+	void setIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
@@ -189,7 +191,7 @@ public:
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject
-	void addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset = NULL);
+	void addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset = NULL, bool score = true);
 	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearch *> & getDiscoveredResearch() const;
 	/// Get the list of ResearchProject which can be researched in a Base

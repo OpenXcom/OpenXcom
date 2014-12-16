@@ -898,6 +898,12 @@
     <ClCompile Include="Ufopaedia\ArticleStateTFTDVehicle.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\SaveConverter.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListLoadOriginalState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1820,6 +1826,15 @@
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateTFTDVehicle.h">
       <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SaveConverter.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListLoadOriginalState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SaveConverterXcom1.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

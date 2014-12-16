@@ -227,6 +227,16 @@ RuleUfo *Ufo::getRules() const
 }
 
 /**
+ * Changes the ruleset for the UFO's type.
+ * @param rules Pointer to ruleset.
+ * @warning ONLY FOR NEW BATTLE USE!
+ */
+void Ufo::changeRules(RuleUfo *rules)
+{
+	_rules = rules;
+}
+
+/**
  * Returns the UFO's unique ID. If it's 0,
  * this UFO has never been detected.
  * @return Unique ID.

@@ -20,10 +20,13 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Action.h"
+#include "../Engine/Palette.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "ConfirmLoadState.h"
 #include "LoadGameState.h"
+#include "ListLoadOriginalState.h"
 
 namespace OpenXcom
 {
@@ -35,10 +38,28 @@ namespace OpenXcom
  */
 ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, true)
 {
-	centerAllSurfaces();
+	// Create objects
+	_btnOld = new TextButton(80, 16, 60, 172);
+
+	add(_btnOld);
 	
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
+
+	if (origin != OPT_MENU)
+	{
+		_btnOld->setVisible(false);
+	}
+	else
+	{
+		_btnCancel->setX(180);
+	}
+
+	_btnOld->setColor(Palette::blockOffset(8)+5);
+	_btnOld->setText(L"Original X-Com");
+	_btnOld->onMouseClick((ActionHandler)&ListLoadState::btnOldClick);
+
+	centerAllSurfaces();
 }
 
 /**
@@ -47,6 +68,15 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 ListLoadState::~ListLoadState()
 {
 
+}
+
+/**
+ * Switches to Original X-Com saves.
+ * @param action Pointer to an action.
+ */
+void ListLoadState::btnOldClick(Action *)
+{
+	_game->pushState(new ListLoadOriginalState);
 }
 
 /**

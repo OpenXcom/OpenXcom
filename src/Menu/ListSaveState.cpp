@@ -46,7 +46,6 @@ ListSaveState::ListSaveState(OptionsOrigin origin) : ListGamesState(origin, 1, f
 	add(_btnSaveGame);
 
 	// Set up objects
-
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
 	if (_game->getSavedGame()->isIronman())

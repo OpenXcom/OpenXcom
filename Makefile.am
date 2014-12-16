@@ -411,6 +411,8 @@ openxcom_SOURCES = \
 	src/Menu/ErrorMessageState.h \
 	src/Menu/ListLoadState.cpp \
 	src/Menu/ListLoadState.h \
+	src/Menu/ListLoadOriginalState.cpp \
+	src/Menu/ListLoadOriginalState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
 	src/Menu/NewBattleState.cpp \
@@ -580,6 +582,9 @@ openxcom_SOURCES = \
 	src/Savegame/SavedBattleGame.h \
 	src/Savegame/SavedGame.cpp \
 	src/Savegame/SavedGame.h \
+	src/Savegame/SaveConverter.cpp \
+	src/Savegame/SaveConverter.h \
+	src/Savegame/SaveConverterXcom1.h \
 	src/Savegame/SerializationHelper.h \
 	src/Savegame/SerializationHelper.cpp \
 	src/Savegame/Soldier.cpp \

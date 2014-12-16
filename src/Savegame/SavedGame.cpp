@@ -760,6 +760,15 @@ int SavedGame::getId(const std::string &name)
 }
 
 /**
+ * Resets the list of unique object IDs.
+ * @param ids New ID list.
+ */
+void SavedGame::setIds(const std::map<std::string, int> &ids)
+{
+	_ids = ids;
+}
+
+/**
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
@@ -900,14 +909,17 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
  * @param r The newly found ResearchProject
  * @param ruleset the game Ruleset
  */
-void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
+void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset, bool score)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin(), _discovered.end(), r);
 	if (itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
 		removePoppedResearch(r);
-		addResearchScore(r->getPoints());
+		if (score)
+		{
+			addResearchScore(r->getPoints());
+		}
 	}
 	if (ruleset)
 	{

@@ -392,6 +392,7 @@
     <ClCompile Include="Menu\ConfirmLoadState.cpp" />
     <ClCompile Include="Menu\IntroState.cpp" />
     <ClCompile Include="Menu\ListGamesState.cpp" />
+    <ClCompile Include="Menu\ListLoadOriginalState.cpp" />
     <ClCompile Include="Menu\ListLoadState.cpp" />
     <ClCompile Include="Menu\ListSaveState.cpp" />
     <ClCompile Include="Menu\LoadGameState.cpp" />
@@ -478,6 +479,7 @@
     <ClCompile Include="Savegame\Production.cpp" />
     <ClCompile Include="Savegame\Region.cpp" />
     <ClCompile Include="Savegame\ResearchProject.cpp" />
+    <ClCompile Include="Savegame\SaveConverter.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
     <ClCompile Include="Savegame\SerializationHelper.cpp" />
@@ -706,6 +708,7 @@
     <ClInclude Include="Menu\ConfirmLoadState.h" />
     <ClInclude Include="Menu\IntroState.h" />
     <ClInclude Include="Menu\ListGamesState.h" />
+    <ClInclude Include="Menu\ListLoadOriginalState.h" />
     <ClInclude Include="Menu\ListLoadState.h" />
     <ClInclude Include="Menu\ListSaveState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />
@@ -788,6 +791,8 @@
     <ClInclude Include="Savegame\Production.h" />
     <ClInclude Include="Savegame\Region.h" />
     <ClInclude Include="Savegame\ResearchProject.h" />
+    <ClInclude Include="Savegame\SaveConverter.h" />
+    <ClInclude Include="Savegame\SaveConverterXcom1.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
     <ClInclude Include="Savegame\SerializationHelper.h" />
