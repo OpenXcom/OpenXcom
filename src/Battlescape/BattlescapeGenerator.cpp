@@ -2289,14 +2289,14 @@ bool BattlescapeGenerator::addLine(MapDirection direction, const std::vector<SDL
 
 	int roadX, roadY;
 	int *iteratorValue = &roadX;
-	int *staticValue = &roadY;
+//	int *staticValue = &roadY;
 	MapBlockType comparator = MT_NSROAD;
 	MapBlockType typeToAdd = MT_EWROAD;
 	int limit = _mapsize_x / 10;
 	if (direction == MD_VERTICAL)
 	{
 		iteratorValue = &roadY;
-		staticValue = &roadX;
+//		staticValue = &roadX;
 		comparator = MT_EWROAD;
 		typeToAdd = MT_NSROAD;
 		limit = _mapsize_y / 10;

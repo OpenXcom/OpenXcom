@@ -371,7 +371,7 @@ MapBlock *MapScript::getNextBlock(RuleTerrain *terrain)
 		return terrain->getRandomMapBlock(_sizeX * 10, _sizeY * 10, getGroupNumber());
 	}
 	size_t result = getBlockNumber();
-	if (result < terrain->getMapBlocks()->size() && result != MT_UNDEFINED)
+	if (result < terrain->getMapBlocks()->size() && result != (unsigned)MT_UNDEFINED)
 	{
 		return terrain->getMapBlocks()->at(result);
 	}
