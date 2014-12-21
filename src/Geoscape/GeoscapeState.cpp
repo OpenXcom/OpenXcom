@@ -983,12 +983,11 @@ class DetectXCOMBase: public std::unary_function<Ufo *, bool>
 {
 public:
 	/// Create a detector for the given base.
-	DetectXCOMBase(const Base &base, int difficulty) : _base(base), _difficulty(difficulty) { /* Empty by design.  */ }
+	DetectXCOMBase(const Base &base) : _base(base) { /* Empty by design.  */ }
 	/// Attempt detection
 	bool operator()(const Ufo *ufo) const;
 private:
 	const Base &_base;	//!< The target base.
-	const int _difficulty;
 };
 
 /**
@@ -1005,7 +1004,7 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 	{
 		return false;
 	}
-	return RNG::percent(_base.getDetectionChance(_difficulty));
+	return RNG::percent(_base.getDetectionChance());
 }
 
 /**
@@ -1056,14 +1055,13 @@ void GeoscapeState::time10Minutes()
 			}
 		}
 	}
-	int diff = (int)(_game->getSavedGame()->getDifficulty());
 	if (Options::aggressiveRetaliation)
 	{
 		// Detect as many bases as possible.
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
+			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				// Base found
@@ -1078,7 +1076,7 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
+			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;

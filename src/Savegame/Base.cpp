@@ -1239,11 +1239,11 @@ bool isCompleted::operator()(const BaseFacility *facility) const
  * @param difficulty The savegame difficulty.
  * @return The detection chance.
  */
-size_t Base::getDetectionChance(int difficulty) const
+size_t Base::getDetectionChance() const
 {
 	size_t mindShields = std::count_if (_facilities.begin(), _facilities.end(), isMindShield());
 	size_t completedFacilities = std::count_if (_facilities.begin(), _facilities.end(), isCompleted());
-	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + difficulty / 2);
+	return ((completedFacilities / 6 + 15) / (mindShields + 1));
 }
 
 int Base::getGravShields() const
