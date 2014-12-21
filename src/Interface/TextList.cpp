@@ -38,9 +38,9 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _selRow(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false), _wrap(false),
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _selRow(0), _color(0), _dot(false), _selectable(false), _multiSelectable(false), _condensed(false), _contrast(false), _wrap(false),
 																								   _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
-																								   _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0), _arrowsLeftEdge(0), _arrowsRightEdge(0), _comboBox(0)
+																								   _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0), _arrowsLeftEdge(0), _arrowsRightEdge(0), _comboBox(0), _numSelectedRows(0), _shiftSelect(false), _lastRowSelected(-1)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY());
 	_up->setVisible(false);
@@ -74,6 +74,11 @@ TextList::~TextList()
 	{
 		delete *i;
 	}
+	for (std::map<size_t, Surface*>::iterator i = _selRows.begin(); i != _selRows.end(); ++i)
+	{
+		delete i->second;
+	}
+	
 	delete _selector;
 	delete _up;
 	delete _down;
@@ -559,6 +564,16 @@ void TextList::setSelectable(bool selectable)
 }
 
 /**
+* If enabled, the list will respond to player input,
+* highlighting selected rows and receiving clicks.
+* @param multiSelectable Multi-selectable setting.
+*/
+void TextList::setMultiSelectable(bool multiSelectable)
+{
+	_multiSelectable = multiSelectable;
+}
+
+/**
  * Changes the text list to use the big-size font.
  */
 void TextList::setBig()
@@ -613,6 +628,35 @@ unsigned int TextList::getSelectedRow() const
 	{
 		return _rows[_selRow];
 	}
+}
+
+/**
+* Returns the currently selected rows if the text
+* list is selectable or multi-selectable.
+* @return Selected row, -1 if none.
+*/
+std::vector<size_t> TextList::getSelectedRows()
+{
+	std::vector<size_t> rows;
+
+	if (!_rows.empty() && _numSelectedRows > 0)
+	{		
+		for (std::map<size_t, Surface*>::iterator i = _selRows.begin(); i != _selRows.end(); ++i)
+		{
+			rows.push_back(i->first);
+		}		
+	}
+
+	return rows;
+}
+
+/**
+  * Returns the number of currently selected rows.
+  @ return Number of selected rows.
+  */
+unsigned int TextList::getNumSelectedRows() const
+{
+	return _numSelectedRows;
 }
 
 /**
@@ -906,6 +950,12 @@ void TextList::blit(Surface *surface)
 	if (_visible && !_hidden)
 	{
 		_selector->blit(surface);
+
+		for (std::map<size_t, Surface*>::iterator i = _selRows.begin(); i != _selRows.end(); ++i)
+		{
+			buildRowSelector(i->second, i->first);
+			i->second->blit(surface);
+		}
 	}
 	Surface::blit(surface);
 	if (_visible && !_hidden)
@@ -1020,7 +1070,7 @@ void TextList::mouseRelease(Action *action, State *state)
 }
 
 /**
- * Ignores any mouse clicks that aren't on a row.
+ * Ignores any mouse clicks that aren't on a row.  Multi-select does not apply to combo boxes.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -1038,6 +1088,57 @@ void TextList::mouseClick(Action *action, State *state)
 			}
 		}
 	}
+	else if (_multiSelectable && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		int h = _font->getHeight() + _font->getSpacing();
+		size_t rowSel = std::max(0, (int)(_scroll + (int)floor(action->getRelativeYMouse() / (h * action->getYScale()))));
+
+		// continguous select; overrides current selection
+		if (_shiftSelect)
+		{
+			for (std::map<size_t, Surface*>::iterator i = _selRows.begin(); i != _selRows.end(); ++i)
+			{
+				delete i->second;
+			}
+
+			size_t startRow = 0;
+
+			// if we already have items here, grab the start row as the last row that was selected
+			if (_lastRowSelected > -1)
+			{
+				startRow = _lastRowSelected;
+			}
+
+			_selRows.clear();
+
+			size_t startIndex = std::min(startRow, rowSel);
+			size_t endIndex = std::max(startRow, rowSel);
+
+			for (size_t i = startIndex; i <= endIndex; ++i)
+			{
+				_selRows[i] = new Surface(*_selector);
+				buildRowSelector(_selRows[i], i);
+				++_numSelectedRows;
+			}
+		}
+		else
+		{
+			// if the row was already selected, deselect it; otherwise, add it to the selection set
+			std::map<size_t, Surface*>::iterator it;
+			if ((it = _selRows.find(rowSel)) != _selRows.end())
+			{
+				delete it->second;
+				_selRows.erase(it);
+				--_numSelectedRows;
+			}
+			else
+			{
+				_selRows[rowSel] = new Surface(*_selector);
+				_lastRowSelected = rowSel;
+				++_numSelectedRows;
+			}
+		}
+	}
 	else
 	{
 		InteractiveSurface::mouseClick(action, state);
@@ -1051,53 +1152,113 @@ void TextList::mouseClick(Action *action, State *state)
  */
 void TextList::mouseOver(Action *action, State *state)
 {
-	if (_selectable)
+	if (_selectable || _multiSelectable)
 	{
 		int h = _font->getHeight() + _font->getSpacing();
 		_selRow = std::max(0, (int)(_scroll + (int)floor(action->getRelativeYMouse() / (h * action->getYScale()))));
-		if (_selRow < _rows.size())
-		{
-			Text *selText = _texts[_rows[_selRow]].front();
-			int y = getY() + selText->getY();
-			int h = selText->getHeight() + _font->getSpacing();
-			if (y < getY() || y + h > getY() + getHeight())
-			{
-				h /= 2;
-			}
-			if (y < getY())
-			{
-				y = getY();
-			}
-			if (_selector->getHeight() != h)
-			{
-				// resizing doesn't work, but recreating does, so let's do that!
-				delete _selector;
-				_selector = new Surface(getWidth(), h, getX(), y);
-				_selector->setPalette(getPalette());
-			}
-			_selector->setY(y);
-			_selector->copy(_bg);
-			if (_contrast)
-			{
-				_selector->offset(-10, 1);
-			}
-			else if (_comboBox)
-			{
-				_selector->offset(+1, Palette::backPos);
-			}
-			else
-			{
-				_selector->offset(-10, Palette::backPos);
-			}
-			_selector->setVisible(true);
-		}
-		else
-		{
-			_selector->setVisible(false);
-		}
+
+		buildRowSelector(_selector, _selRow);
 	}
 
 	InteractiveSurface::mouseOver(action, state);
+}
+
+/**
+  * Flags any keyboard input, mostly for multi-select.
+  * @param action Pointer to an action.
+  * @param state State that the action handlers belong to.
+  */
+void TextList::keyboardPress(Action *action, State *state)
+{
+	SDLKey key = action->getDetails()->key.keysym.sym;
+
+	if (key == SDLK_LSHIFT || key == SDLK_RSHIFT)
+	{
+		_shiftSelect = true;
+	}
+
+	InteractiveSurface::keyboardPress(action, state);
+}
+
+/**
+* Un-flags any keyboard input, mostly for multi-select.
+* @param action Pointer to an action.
+* @param state State that the action handlers belong to.
+*/
+void TextList::keyboardRelease(Action *action, State *state)
+{
+	SDLKey key = action->getDetails()->key.keysym.sym;
+
+	if (key == SDLK_LSHIFT || key == SDLK_RSHIFT)
+	{
+		_shiftSelect = false;
+	}
+
+	InteractiveSurface::keyboardRelease(action, state);
+}
+
+/**
+  * Builds a row selector, using the passed-in selector and the (absolute) row selection.
+  * @param selector Pointer to a valid selector surface.
+  * @param rowSel The absolute row position in the text list.
+  */
+void TextList::buildRowSelector(Surface *selector, size_t rowSel)
+{
+	if (rowSel < _rows.size())
+	{
+		Text *selText = _texts[_rows[rowSel]].front();
+		int y = getY() + selText->getY();
+		int h = selText->getHeight() + _font->getSpacing();
+		if (y < getY() || y + h > getY() + getHeight())
+		{
+			h /= 2;
+		}
+		if (y < getY())
+		{
+			y = getY();
+		}
+		if (selector->getHeight() != h)
+		{
+			// resizing doesn't work, but recreating does, so let's do that!
+			delete selector;
+			selector = new Surface(getWidth(), h, getX(), y);
+			selector->setPalette(getPalette());
+		}
+		selector->setY(y);
+		selector->copy(_bg);
+		if (_contrast)
+		{
+			selector->offset(-10, 1);
+		}
+		else if (_comboBox)
+		{
+			selector->offset(+1, Palette::backPos);
+		}
+		else
+		{
+			selector->offset(-10, Palette::backPos);
+		}
+
+		if (_multiSelectable)
+		{
+			if (rowSel >= _scroll && rowSel < (_scroll + _visibleRows))
+			{
+				selector->setVisible(true);
+			}
+			else
+			{
+				selector->setVisible(false);
+			}
+		}
+		else
+		{
+			selector->setVisible(true);
+		}
+	}
+	else
+	{
+		selector->setVisible(false);
+	}
 }
 
 /**
