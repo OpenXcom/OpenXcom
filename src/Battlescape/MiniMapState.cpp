@@ -23,8 +23,6 @@
 #include "../Engine/Screen.h"
 #include "../Interface/BattlescapeButton.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"

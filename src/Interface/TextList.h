@@ -191,6 +191,8 @@ public:
 	void setComboBox(ComboBox *comboBox);
 	/// Check for a combobox.
 	ComboBox *getComboBox() const;
+	void setBorderColor(Uint8 color);
+	int getScrollbarColor();
 };
 
 }

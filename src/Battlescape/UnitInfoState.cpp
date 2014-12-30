@@ -32,8 +32,6 @@
 #include "../Interface/TextButton.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "../Engine/Options.h"

@@ -9649,8 +9649,16 @@ extraSprites:
     files:
       0: Resources/UI/globe_ufo.png
 interfaces:
+  - type: menu
+    elements:
+      - id: battlescapeTheme
+        color: -1
+        color2: -1
+        border: 0
   - type: battlescape
     elements:
+      - id: textLoad
+        color: 15
       - id: textName
         color: 128
       - id: numTUs
@@ -9692,6 +9700,8 @@ interfaces:
         color: 15
         color2: 27
         border: 20
+      - id: infoBoxOKButton
+        color: 15
       - id: infoBox
         color: -1
         color2: 10
@@ -9715,6 +9725,12 @@ interfaces:
         color: -1
         color2: 14
         border: 7
+      - id: optionLists
+        color: -1
+        color2: 14
+        border: -1
+      - id: messageWindowButtons
+        color: -1
       - id: actionMenu
         color: -1
         color2: 14

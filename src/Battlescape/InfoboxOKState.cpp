@@ -49,7 +49,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring &msg)
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_frame, "infoBoxOK", "battlescape");
-	add(_btnOk, "infoBoxOK", "battlescape");
+	add(_btnOk, "infoBoxOKButton", "battlescape");
 	add(_txtTitle, "infoBoxOK", "battlescape");
 
 	centerAllSurfaces();

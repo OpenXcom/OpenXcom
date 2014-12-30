@@ -60,8 +60,8 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	add(_txtInExit, "messageWindows", "battlescape");
 	add(_txtOutsideExit, "messageWindows", "battlescape");
 	add(_txtAbort, "messageWindows", "battlescape");
-	add(_btnOk, "messageWindows", "battlescape");
-	add(_btnCancel, "messageWindows", "battlescape");
+	add(_btnOk, "messageWindowButtons", "battlescape");
+	add(_btnCancel, "messageWindowButtons", "battlescape");
 
 	centerAllSurfaces();
 
