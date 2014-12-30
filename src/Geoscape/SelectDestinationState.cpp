@@ -68,7 +68,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_txtTitle = new Text(100, 16, 10 + dx, 6);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -77,10 +77,10 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
-	add(_window);
-	add(_btnCancel);
-	add(_btnCydonia);
-	add(_txtTitle);
+	add(_window, "genericWindow", "geoscape");
+	add(_btnCancel, "genericButton1", "geoscape");
+	add(_btnCydonia, "genericButton1", "geoscape");
+	add(_txtTitle, "genericText", "geoscape");
 
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&SelectDestinationState::globeClick);
@@ -119,15 +119,12 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton();
 
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SelectDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SelectDestinationState::btnCancelClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
@@ -138,7 +135,6 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	}
 	else
 	{
-		_btnCydonia->setColor(Palette::blockOffset(8)+5);
 		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
 	}

@@ -9909,12 +9909,111 @@ interfaces:
         color: 133   # minty green
       - id: button
         color: 138   # yellow
+  - type: itemsArriving
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 133   # minty green
+      - id: text1
+        color: 133   # minty green
+      - id: text2
+        color: 138   # yellow
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
+  - type: geoResearch
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+  - type: geoManufacture
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+  - type: baseNaming
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+      - id: button
+        color: 133   # minty green
+  - type: monthlyReport
+    elements:
+      - id: palette
+        color: 3
+      - id: window
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: text1
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: text2
+        color: 138   # yellow
+      - id: button
+        color: 239   # bright green
+  - type: ufopaedia
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: text
+        color: 138   # yellow
+      - id: list
+        color: 133
+        border: 239
+      - id: button1
+        color: 133   # minty green
+      - id: button2
+        color: 239   # bright green
   - type: geoscape
     elements:
       - id: loadPalette
         color: 6
       - id: textLoad
         color: 133   # minty green
+      - id: button
+        color: 246   # light blue
+        color2: 245  # slightly lighter blue
+      - id: text
+        color: 244   # even lighter blue
+      - id: genericPalette
+        color: 0     # brown
+      - id: genericWindow
+        color: 239   # bright green
+      - id: genericText
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: genericButton1
+        color: 133   # minty green
+      - id: genericButton2
+        color: 239   # bright green
+  - type: gameOver
+    elements:
+      - id: defeatText
+        color: 249
+      - id: victoryText
+        color: 249
   - type: battlescape
     elements:
       - id: textLoad

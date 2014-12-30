@@ -50,30 +50,25 @@ namespace OpenXcom
 		_lstSelection = new TextList(224, 104, 40, 50);
 
 		// Set palette
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color);
 
-		add(_window);
-		add(_txtTitle);
-		add(_btnOk);
-		add(_lstSelection);
+		add(_window, "window", "ufopaedia");
+		add(_txtTitle, "text", "ufopaedia");
+		add(_btnOk, "button2", "ufopaedia");
+		add(_lstSelection, "list", "ufopaedia");
 
 		centerAllSurfaces();
 
-		_window->setColor(Palette::blockOffset(15)-1);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-		_txtTitle->setColor(Palette::blockOffset(8)+10);
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setText(tr("STR_SELECT_ITEM"));
 
-		_btnOk->setColor(Palette::blockOffset(15)-1);
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaSelectState::btnOkClick);
 		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaSelectState::btnOkClick,Options::keyCancel);
 
-		_lstSelection->setColor(Palette::blockOffset(8)+5);
-		_lstSelection->setArrowColor(Palette::blockOffset(15)-1);
 		_lstSelection->setColumns(1, 206);
 		_lstSelection->setSelectable(true);
 		_lstSelection->setBackground(_window);

@@ -25,7 +25,6 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include <algorithm>
@@ -51,36 +50,31 @@ ResearchCompleteState::ResearchCompleteState(const RuleResearch * research, cons
 	_txtResearch = new Text(230, 32, 45, 96);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnReport);
-	add(_txtTitle);
-	add(_txtResearch);
+	add(_window, "window", "geoResearch");
+	add(_btnOk, "button", "geoResearch");
+	add(_btnReport, "button", "geoResearch");
+	add(_txtTitle, "text1", "geoResearch");
+	add(_txtResearch, "text2", "geoResearch");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, Options::keyCancel);
 
-	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
 	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, Options::keyOk);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_RESEARCH_COMPLETED"));
 
-	_txtResearch->setColor(Palette::blockOffset(8)+10);
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
 	_txtResearch->setWordWrap(true);

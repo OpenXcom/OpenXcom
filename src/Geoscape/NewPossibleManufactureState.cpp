@@ -49,34 +49,29 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	_lstPossibilities = new TextList(260, 80, 21, 56);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 6);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoManufacture")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnManufacture);
-	add(_txtTitle);
-	add(_lstPossibilities);
+	add(_window, "window", "geoManufacture");
+	add(_btnOk, "button", "geoManufacture");
+	add(_btnManufacture, "button", "geoManufacture");
+	add(_txtTitle, "text1", "geoManufacture");
+	add(_lstPossibilities, "text2", "geoManufacture");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, Options::keyCancel);
-	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnManufactureClick);
 	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, Options::keyOk);
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_WE_CAN_NOW_PRODUCE"));
 
-	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
