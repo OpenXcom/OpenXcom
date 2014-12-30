@@ -9649,12 +9649,154 @@ extraSprites:
     files:
       0: Resources/UI/globe_ufo.png
 interfaces:
-  - type: menu
+  - type: mainMenu
     elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+      - id: confirmDefaults
+        color: 138   # yellow
+      - id: confirmVideo
+        color: 239   # bright green
       - id: battlescapeTheme
         color: -1
         color2: -1
         border: 0
+  - type: newBattleMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: heading
+        color: 239   # bright green
+      - id: text
+        color: 138   # yellow
+      - id: frames
+        color: 239   # bright green
+      - id: button1
+        color: 239   # bright green
+      - id: button2
+        color: 133   # minty green
+  - type: newGameMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 138   # yellow
+      - id: ironman
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+  - type: optionsMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: tooltip
+        color: 133   # minty green
+      - id: button
+        color: 133   # minty green
+  - type: videoMenu
+    elements:
+      - id: text
+        color: 138   # yellow
+      - id: resolution
+        color: 239   # bright green
+      - id: button
+        color: 239   # bright green
+  - type: audioMenu
+    elements:
+      - id: text
+        color: 138   # yellow
+      - id: button
+        color: 239   # bright green
+  - type: controlsMenu
+    elements:
+      - id: optionLists
+        color: 138   # yellow
+        color2: 239  # bright green
+        border: 133  # minty green
+  - type: geoscapeMenu
+    elements:
+      - id: text
+        color: 138   # yellow
+      - id: button
+        color: 239   # bright green
+  - type: battlescapeMenu
+    elements:
+      - id: text
+        color: 138   # yellow
+      - id: button
+        color: 239   # bright green
+  - type: advancedMenu
+    elements:
+      - id: optionLists
+        color: 138   # yellow
+        color2: 239  # bright green
+        border: 133  # minty green
+  - type: modsMenu
+    elements:
+      - id: optionLists
+        color: 138   # yellow
+        border: 133  # minty green
+  - type: saveMenus
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: list
+        color: 138   # yellow
+        color2: 133  # minty green
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
+      - id: confirmLoad
+        color: 239   # bright green
+      - id: confirmDelete
+        color: 138   # yellow
+  - type: loadingText
+    elements:
+      - id: battlescape
+        color: 15    # white
+      - id: geoscape
+        color: 133   # minty green
+  - type: pauseMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+      - id: button
+        color: 133   # minty green
+  - type: errorMessages
+    elements:
+      - id: palette
+        color: 6   # oxide
+        color2: -1 # greyscale
+      - id: text
+        color: 138   # yellow
+        color2: 0    # white
+  - type: geoscape
+    elements:
+      - id: loadPalette
+        color: 6
+      - id: textLoad
+        color: 133   # minty green
   - type: battlescape
     elements:
       - id: textLoad

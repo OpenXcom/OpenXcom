@@ -24,7 +24,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -103,84 +102,70 @@ NewBattleState::NewBattleState() : _craft(0)
 	_btnRandom = new TextButton(100, 16, 212, 176);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("newBattleMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtMapOptions);
-	add(_frameLeft);
-	add(_txtAlienOptions);
-	add(_frameRight);
+	add(_window, "window", "newBattleMenu");
+	add(_txtTitle, "heading", "newBattleMenu");
+	add(_txtMapOptions, "heading", "newBattleMenu");
+	add(_frameLeft, "frames", "newBattleMenu");
+	add(_txtAlienOptions, "heading", "newBattleMenu");
+	add(_frameRight, "frames", "newBattleMenu");
 
-	add(_txtMission);
-	add(_txtCraft);
-	add(_btnEquip);
+	add(_txtMission, "text", "newBattleMenu");
+	add(_txtCraft, "text", "newBattleMenu");
+	add(_btnEquip, "button1", "newBattleMenu");
 	
-	add(_txtDarkness);
-	add(_slrDarkness);
-	add(_txtDepth);
-	add(_slrDepth);
-	add(_txtTerrain);
-	add(_txtDifficulty);
-	add(_txtAlienRace);
-	add(_txtAlienTech);
-	add(_slrAlienTech);
+	add(_txtDarkness, "text", "newBattleMenu");
+	add(_slrDarkness, "button1", "newBattleMenu");
+	add(_txtDepth, "text", "newBattleMenu");
+	add(_slrDepth, "button1", "newBattleMenu");
+	add(_txtTerrain, "text", "newBattleMenu");
+	add(_txtDifficulty, "text", "newBattleMenu");
+	add(_txtAlienRace, "text", "newBattleMenu");
+	add(_txtAlienTech, "text", "newBattleMenu");
+	add(_slrAlienTech, "button1", "newBattleMenu");
 
-	add(_btnOk);
-	add(_btnCancel);
-	add(_btnRandom);
+	add(_btnOk, "button2", "newBattleMenu");
+	add(_btnCancel, "button2", "newBattleMenu");
+	add(_btnRandom, "button2", "newBattleMenu");
 	
-	add(_cbxTerrain);
-	add(_cbxAlienRace);
-	add(_cbxDifficulty);
-	add(_cbxCraft);
-	add(_cbxMission);
+	add(_cbxTerrain, "button1", "newBattleMenu");
+	add(_cbxAlienRace, "button1", "newBattleMenu");
+	add(_cbxDifficulty, "button1", "newBattleMenu");
+	add(_cbxCraft, "button1", "newBattleMenu");
+	add(_cbxMission, "button1", "newBattleMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MISSION_GENERATOR"));
 
-	_txtMapOptions->setColor(Palette::blockOffset(15)-1);
 	_txtMapOptions->setText(tr("STR_MAP_OPTIONS"));
 
 	_frameLeft->setThickness(3);
-	_frameLeft->setColor(Palette::blockOffset(15)-1);
 
-	_txtAlienOptions->setColor(Palette::blockOffset(15)-1);
 	_txtAlienOptions->setText(tr("STR_ALIEN_OPTIONS"));
 
 	_frameRight->setThickness(3);
-	_frameRight->setColor(Palette::blockOffset(15)-1);
 
-	_txtMission->setColor(Palette::blockOffset(8)+10);
 	_txtMission->setText(tr("STR_MISSION"));
 
-	_txtCraft->setColor(Palette::blockOffset(8)+10);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_txtDarkness->setColor(Palette::blockOffset(8)+10);
 	_txtDarkness->setText(tr("STR_MAP_DARKNESS"));
 	
-	_txtDepth->setColor(Palette::blockOffset(8)+10);
 	_txtDepth->setText(tr("STR_MAP_DEPTH"));
 
-	_txtTerrain->setColor(Palette::blockOffset(8)+10);
 	_txtTerrain->setText(tr("STR_MAP_TERRAIN"));
 
-	_txtDifficulty->setColor(Palette::blockOffset(8)+10);
 	_txtDifficulty->setText(tr("STR_ALIEN_DIFFICULTY"));
 
-	_txtAlienRace->setColor(Palette::blockOffset(8)+10);
 	_txtAlienRace->setText(tr("STR_ALIEN_RACE"));
 	
-	_txtAlienTech->setColor(Palette::blockOffset(8)+10);
 	_txtAlienTech->setText(tr("STR_ALIEN_TECH_LEVEL"));
 
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
@@ -227,47 +212,35 @@ NewBattleState::NewBattleState() : _craft(0)
 		}
 	}
 
-	_cbxMission->setColor(Palette::blockOffset(15)-1);
 	_cbxMission->setOptions(_missionTypes);
 	_cbxMission->onChange((ActionHandler)&NewBattleState::cbxMissionChange);
 
-	_cbxCraft->setColor(Palette::blockOffset(15)-1);
 	_cbxCraft->setOptions(_crafts);
 	_cbxCraft->onChange((ActionHandler)&NewBattleState::cbxCraftChange);
 
-	_slrDarkness->setColor(Palette::blockOffset(15)-1);
 	_slrDarkness->setRange(0, 15);
 	
-	_slrDepth->setColor(Palette::blockOffset(15)-1);
 	_slrDepth->setRange(1, 3);
 
-	_cbxTerrain->setColor(Palette::blockOffset(15)-1);
 	_cbxTerrain->setOptions(terrainStrings);
 	_cbxTerrain->onChange((ActionHandler)&NewBattleState::cbxTerrainChange);
 
-	_cbxDifficulty->setColor(Palette::blockOffset(15)-1);
 	_cbxDifficulty->setOptions(difficulty);
 
-	_cbxAlienRace->setColor(Palette::blockOffset(15)-1);
 	_cbxAlienRace->setOptions(_alienRaces);
 
-	_slrAlienTech->setColor(Palette::blockOffset(15)-1);
 	_slrAlienTech->setRange(0, _game->getRuleset()->getAlienItemLevels().size()-1);
 
-	_btnEquip->setColor(Palette::blockOffset(15)-1);
 	_btnEquip->setText(tr("STR_EQUIP_CRAFT"));
 	_btnEquip->onMouseClick((ActionHandler)&NewBattleState::btnEquipClick);
 
-	_btnRandom->setColor(Palette::blockOffset(8)+5);
 	_btnRandom->setText(tr("STR_RANDOMIZE"));
 	_btnRandom->onMouseClick((ActionHandler)&NewBattleState::btnRandomClick);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewBattleState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewBattleState::btnOkClick, Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, Options::keyCancel);

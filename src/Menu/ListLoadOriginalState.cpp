@@ -59,13 +59,13 @@ ListLoadOriginalState::ListLoadOriginalState()
 	// Set palette
 	setPalette("PAL_GEOSCAPE", 6);
 
-	add(_window);
-	add(_btnNew);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtName);
-	add(_txtTime);
-	add(_txtDate);
+	add(_window, "window", "saveMenus");
+	add(_btnNew, "button", "saveMenus");
+	add(_btnCancel, "button", "saveMenus");
+	add(_txtTitle, "text", "saveMenus");
+	add(_txtName, "text", "saveMenus");
+	add(_txtTime, "text", "saveMenus");
+	add(_txtDate, "text", "saveMenus");
 
 	int y = 34;
 	for (int i = 0; i < SaveConverter::NUM_SAVES; ++i)
@@ -75,40 +75,35 @@ ListLoadOriginalState::ListLoadOriginalState()
 		_txtSlotTime[i] = new Text(30, 9, 195, y);
 		_txtSlotDate[i] = new Text(90, 9, 225, y);
 
-		add(_btnSlot[i]);
-		add(_txtSlotName[i]);
-		add(_txtSlotTime[i]);
-		add(_txtSlotDate[i]);
+		add(_btnSlot[i], "button", "saveMenus");
+		add(_txtSlotName[i], "list", "saveMenus");
+		add(_txtSlotTime[i], "list", "saveMenus");
+		add(_txtSlotDate[i], "list", "saveMenus");
 
 		y += 14;
 	}
 
+	centerAllSurfaces();
+
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnNew->setColor(Palette::blockOffset(8)+5);
 	_btnNew->setText(tr("STR_OPENXCOM"));
 	_btnNew->onMouseClick((ActionHandler)&ListLoadOriginalState::btnNewClick);
 	_btnNew->onKeyboardPress((ActionHandler)&ListLoadOriginalState::btnNewClick, Options::keyCancel);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ListLoadOriginalState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ListLoadOriginalState::btnCancelClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 
-	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(tr("STR_NAME"));
 
-	_txtTime->setColor(Palette::blockOffset(15)-1);
 	_txtTime->setText(tr("STR_TIME"));
 
-	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
 	std::wstring dots(80, '.');
@@ -120,11 +115,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 		_btnSlot[i]->setColor(Palette::blockOffset(8) + 5);
 		_btnSlot[i]->setText(ss.str());
 		_btnSlot[i]->onMouseClick((ActionHandler)&ListLoadOriginalState::btnSlotClick);
-
-		_txtSlotName[i]->setColor(Palette::blockOffset(8)+10);
-		_txtSlotTime[i]->setColor(Palette::blockOffset(8)+10);
-		_txtSlotDate[i]->setColor(Palette::blockOffset(8)+10);
-
+		
 		_txtSlotName[i]->setText(_saves[i].name + dots);
 		_txtSlotTime[i]->setText(_saves[i].time);
 		_txtSlotDate[i]->setText(_saves[i].date);

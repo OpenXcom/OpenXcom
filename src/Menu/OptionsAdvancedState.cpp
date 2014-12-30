@@ -45,8 +45,14 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin) : OptionsBaseSt
 	// Create objects
 	_lstOptions = new TextList(200, 136, 94, 8);
 	
-	add(_lstOptions);
-
+	if (origin != OPT_BATTLESCAPE)
+	{
+		add(_lstOptions, "optionLists", "advancedMenu");
+	}
+	else
+	{
+		add(_lstOptions, "optionLists", "battlescape");
+	}
 	centerAllSurfaces();
 
 	// how much room do we need for YES/NO
@@ -63,8 +69,6 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin) : OptionsBaseSt
 	// Set up objects
 	_lstOptions->setAlign(ALIGN_RIGHT, 1);
 	_lstOptions->setColumns(2, leftcol, rightcol);
-	_lstOptions->setColor(Palette::blockOffset(8)+10);
-	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
 	_lstOptions->setWordWrap(true);
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
@@ -72,14 +76,7 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin) : OptionsBaseSt
 	_lstOptions->onMouseOver((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOver);
 	_lstOptions->onMouseOut((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOut);
 
-	if (origin != OPT_BATTLESCAPE)
-	{
-		_colorGroup = Palette::blockOffset(15) - 1;
-	}
-	else
-	{
-		_colorGroup = Palette::blockOffset(1) - 1;
-	}
+	_colorGroup = _lstOptions->getSecondaryColor();
 
 	const std::vector<OptionInfo> &options = Options::getOptionInfo();
 	for (std::vector<OptionInfo>::const_iterator i = options.begin(); i != options.end(); ++i)

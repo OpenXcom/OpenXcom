@@ -98,21 +98,23 @@ void LoadGameState::buildUi(SDL_Color *palette)
 	// Set palette
 	setPalette(palette);
 
-	add(_txtStatus);
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		add(_txtStatus, "textLoad", "battlescape");
+		_txtStatus->setHighContrast(true);
+	}
+	else
+	{
+		add(_txtStatus, "textLoad", "geoscape");
+	}
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
 
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		_txtStatus->setColor(Palette::blockOffset(1)-1);
-		_txtStatus->setHighContrast(true);
-	}
 }
 
 /**

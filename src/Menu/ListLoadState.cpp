@@ -41,7 +41,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 	// Create objects
 	_btnOld = new TextButton(80, 16, 60, 172);
 
-	add(_btnOld);
+	add(_btnOld, "button", "saveMenus");
 	
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
@@ -55,7 +55,6 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 		_btnCancel->setX(180);
 	}
 
-	_btnOld->setColor(Palette::blockOffset(8)+5);
 	_btnOld->setText(L"Original X-Com");
 	_btnOld->onMouseClick((ActionHandler)&ListLoadState::btnOldClick);
 
