@@ -9791,6 +9791,82 @@ interfaces:
       - id: text
         color: 138   # yellow
         color2: 0    # white
+  - type: geoCraftScreens
+    elements:
+      - id: palette
+        color: 4     # aqua
+        color2: 6    # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: text2
+        color: 133   # minty green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: text3
+        color: 239   # bright green
+        color2: 133  # minty green
+        border: 239  # bright green
+      - id: button
+        color: 133   # minty green
+  - type: targetInfo
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 138   # yellow
+      - id: text
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: button
+        color: 133   # minty green
+  - type: confirmDestination
+    elements:
+      - id: palette
+        color: 4     # aqua
+        color2: 6    # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
+  - type: confirmCydonia
+    elements:
+      - id: palette
+        color: 5     # red
+      - id: window
+        color: 133   # minty green
+      - id: button
+        color: 133   # minty green
+      - id: text
+        color: 138   # yellow
+  - type: confirmLanding
+    elements:
+      - id: palette
+        color: 3     # pink
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+        color2: 138  # yellow
+      - id: button
+        color: 133   # minty green
+  - type: lowFuel
+    elements:
+      - id: palette
+        color: 4     # aqua
+      - id: text
+        color: 138  # yellow
+      - id: window
+        color: 239   # bright green
+      - id: button
+        color: 133   # minty green
   - type: geoscape
     elements:
       - id: loadPalette
