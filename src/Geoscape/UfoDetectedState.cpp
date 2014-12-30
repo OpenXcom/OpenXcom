@@ -96,43 +96,38 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	// Set palette
 	if (hyperwave)
 	{
-		setPalette("PAL_GEOSCAPE", 2);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color2);
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 7);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 	}
 
-	add(_window);
-	add(_btnIntercept);
-	add(_btnCentre);
-	add(_btnCancel);
-	add(_txtUfo);
-	add(_txtDetected);
-	add(_txtHyperwave);
-	add(_lstInfo);
-	add(_lstInfo2);
+	add(_window, "window", "UFOInfo");
+	add(_btnIntercept, "button", "UFOInfo");
+	add(_btnCentre, "button", "UFOInfo");
+	add(_btnCancel, "button", "UFOInfo");
+	add(_txtUfo, "text", "UFOInfo");
+	add(_txtDetected, "text", "UFOInfo");
+	add(_txtHyperwave, "text", "UFOInfo");
+	add(_lstInfo, "text", "UFOInfo");
+	add(_lstInfo2, "text", "UFOInfo");
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	centerAllSurfaces();
 
-	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&UfoDetectedState::btnInterceptClick);
 
-	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, Options::keyCancel);
 
-	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
 	{
 		_txtDetected->setText(tr("STR_DETECTED"));
@@ -142,44 +137,48 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 		_txtDetected->setText(L"");
 	}
 
-	_txtHyperwave->setColor(Palette::blockOffset(8)+5);
 	_txtHyperwave->setAlign(ALIGN_CENTER);
 	_txtHyperwave->setWordWrap(true);
 	_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
 
-	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
-	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 87, 120);
 	_lstInfo->setDot(true);
-	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
-	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
+	std::wostringstream ss;
+	ss << L'\x01' << tr(_ufo->getRules()->getSize());
+	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), ss.str().c_str());
+	ss.str(L"");
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
-	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(altitude).c_str());
-	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
+	ss << L'\x01' << tr(altitude);
+	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), ss.str().c_str());
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
 		heading = "STR_NONE_UC";
 	}
-	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(heading).c_str());
-	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), Text::formatNumber(_ufo->getSpeed()).c_str());
-	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
+	ss.str(L"");
+	ss << L'\x01' << tr(heading);
+	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), ss.str().c_str());
+	ss.str(L"");
+	ss << L'\x01' << Text::formatNumber(_ufo->getSpeed());
+	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 
-	_lstInfo2->setColor(Palette::blockOffset(8)+5);
 	_lstInfo2->setColumns(2, 87, 120);
 	_lstInfo2->setDot(true);
-	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), tr(_ufo->getRules()->getType()).c_str());
-	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), tr(_ufo->getAlienRace()).c_str());
-	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMissionType()).c_str());
-	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), tr(_ufo->getMission()->getRegion()).c_str());
-	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
+	ss.str(L"");
+	ss << L'\x01' << tr(_ufo->getRules()->getType());
+	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), ss.str().c_str());
+	ss.str(L"");
+	ss << L'\x01' << tr(_ufo->getAlienRace());
+	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), ss.str().c_str());
+	ss.str(L"");
+	ss << L'\x01' << tr(_ufo->getMissionType());
+	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), ss.str().c_str());
+	ss.str(L"");
+	ss << L'\x01' << tr(_ufo->getMission()->getRegion());
+	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), ss.str().c_str());
 }
 
 /**
