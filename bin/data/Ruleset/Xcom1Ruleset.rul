@@ -9946,6 +9946,25 @@ interfaces:
         color: 138   # yellow
       - id: button
         color: 133   # minty green
+  - type: dogfight
+    elements:
+      - id: button
+        color: 81
+      - id: text
+        color: 89
+      - id: minimizedNumber
+        color: 80
+      - id: background
+        color: 111
+      - id: craftRange
+        color: 160
+        color2: 176
+      - id: radarRange
+        color: 112
+        color2: 128
+      - id: damageRange
+        color: 13
+        color2: 14
   - type: baseNaming
     elements:
       - id: palette
