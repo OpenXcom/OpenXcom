@@ -53,7 +53,6 @@ private:
 	size_t _sel;
 	int _aliensSold, _researchedAliens;
 	bool _overCrowded;
-	Uint8 _color, _color2;
 	/// Gets selected quantity.
 	int getQuantity();
 public:

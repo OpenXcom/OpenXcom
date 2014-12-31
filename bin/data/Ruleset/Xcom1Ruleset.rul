@@ -10091,6 +10091,105 @@ interfaces:
         color: 249
       - id: victoryText
         color: 249
+  - type: sellMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 218   # blue
+        color2: 208  # white
+      - id: ammoColor
+        color: 246   # purple
+      - id: button
+        color: 218   # blue
+  - type: buyMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 218   # blue
+        color2: 208  # white
+      - id: ammoColor
+        color: 246   # purple
+      - id: button
+        color: 218   # blue
+      - id: errorPalette
+        color: 0     # brown
+      - id: errorMessage
+        color: 241   # pink
+  - type: manageContainment
+    elements:
+      - id: palette
+        color: 1     # burgundy
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 208   # white
+        color2: 218  # blue
+        border: 218  # blue
+      - id: button
+        color: 218   # blue
+      - id: errorPalette
+        color: 6     # oxide
+      - id: errorMessage
+        color: 241   # pink
+  - type: transferBaseSelect
+    elements:
+      - id: palette
+        color: 4     # dark green
+      - id: window
+        color: 213   # gold
+      - id: button
+        color: 213   # gold
+      - id: text
+        color: 213   # gold
+        color2: 208  # white
+      - id: list
+        color: 241   # pink
+        color2: 213  # gold
+  - type: transferMenu
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+      - id: list
+        color: 218   # blue
+        color2: 208  # white
+      - id: ammoColor
+        color: 246   # purple
+      - id: button
+        color: 246   # purple
+      - id: errorPalette
+        color: 0     # brown
+      - id: errorMessage
+        color: 241   # pink
+  - type: transferConfirm
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 213   # gold
+      - id: button
+        color: 246   # purple
+      - id: text
+        color: 218   # blue
+        color2: 241  # pink
   - type: basescape
     elements:
       - id: button
