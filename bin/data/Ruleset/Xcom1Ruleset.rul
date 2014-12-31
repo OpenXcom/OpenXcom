@@ -10016,6 +10016,22 @@ interfaces:
         border: 218  # blue
       - id: button
         color: 218   # blue
+  - type: graphs
+    elements:
+      - id: text
+        color: 135   # red
+      - id: scale
+        color: 103   # minty green
+      - id: graph
+        color: 160   # green
+      - id: button
+        color: 151   # grey
+      - id: regionTotal
+        color: 18    # salmon (inverted button offset)
+        color2: 136  # also salmon (the line itself)
+      - id: countryTotal
+        color: 22    # magenta (inverted button offset)
+        color2: 144  # also magenta (the line itself)
   - type: ufopaedia
     elements:
       - id: palette
