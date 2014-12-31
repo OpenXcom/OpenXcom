@@ -10283,6 +10283,42 @@ interfaces:
         color: 241   # pink
       - id: button2
         color: 246   # purple
+  - type: researchMenu
+    elements:
+      - id: palette
+        color: 1     # burgundy
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 246   # purple
+        border: 218  # blue
+      - id: button
+        color: 246   # purple
+  - type: selectNewResearch
+    elements:
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+      - id: list
+        color: 208   # white
+        border: 218  # blue
+      - id: button
+        color: 246   # purple
+  - type: allocateResearch
+    elements:
+      - id: window
+        color: 213   # gold
+      - id: text
+        color: 213   # gold
+        color2: 208  # white
+      - id: button1
+        color: 213   # gold
+      - id: button2
+        color: 218   # blue
   - type: basescape
     elements:
       - id: button

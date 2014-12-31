@@ -30,7 +30,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 #include "ResearchInfoState.h"
 #include "../Savegame/ItemContainer.h"
 
@@ -51,35 +50,30 @@ NewResearchListState::NewResearchListState(Base *base) : _base(base)
 	_lstResearch = new TextList(198, 88, 53, 54);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 1);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOK);
-	add(_txtTitle);
-	add(_lstResearch);
+	add(_window, "window", "selectNewResearch");
+	add(_btnOK, "button", "selectNewResearch");
+	add(_txtTitle, "text", "selectNewResearch");
+	add(_lstResearch, "list", "selectNewResearch");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOK->setColor(Palette::blockOffset(15)+6);
 	_btnOK->setText(tr("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
 	_btnOK->onKeyboardPress((ActionHandler)&NewResearchListState::btnOKClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_NEW_RESEARCH_PROJECTS"));
 
-	_lstResearch->setColor(Palette::blockOffset(13));
 	_lstResearch->setColumns(1, 190);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);
 	_lstResearch->setAlign(ALIGN_CENTER);
-	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->onMouseClick((ActionHandler)&NewResearchListState::onSelectProject);
 }
 

@@ -58,62 +58,44 @@ ResearchState::ResearchState(Base *base) : _base(base)
 	_lstResearch = new TextList(288, 112, 8, 62);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 1);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnNew);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtAvailable);
-	add(_txtAllocated);
-	add(_txtSpace);
-	add(_txtProject);
-	add(_txtScientists);
-	add(_txtProgress);
-	add(_lstResearch);
+	add(_window, "window", "researchMenu");
+	add(_btnNew, "button", "researchMenu");
+	add(_btnOk, "button", "researchMenu");
+	add(_txtTitle, "text", "researchMenu");
+	add(_txtAvailable, "text", "researchMenu");
+	add(_txtAllocated, "text", "researchMenu");
+	add(_txtSpace, "text", "researchMenu");
+	add(_txtProject, "text", "researchMenu");
+	add(_txtScientists, "text", "researchMenu");
+	add(_txtProgress, "text", "researchMenu");
+	add(_lstResearch, "list", "researchMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_RESEARCH"));
 
-	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtSpace->setColor(Palette::blockOffset(13)+10);
-	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtProject->setColor(Palette::blockOffset(13)+10);
 	_txtProject->setWordWrap(true);
 	_txtProject->setText(tr("STR_RESEARCH_PROJECT"));
 
-	_txtScientists->setColor(Palette::blockOffset(13)+10);
 	_txtScientists->setWordWrap(true);
 	_txtScientists->setText(tr("STR_SCIENTISTS_ALLOCATED_UC"));
 
-	_txtProgress->setColor(Palette::blockOffset(13)+10);
 	_txtProgress->setText(tr("STR_PROGRESS"));
 
-	_lstResearch->setColor(Palette::blockOffset(15)+6);
-	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->setColumns(3, 158, 58, 70);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
