@@ -115,6 +115,7 @@ public:
 	/// Returns a specific sound from either the land or underwater resource set.
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
 	const std::vector<std::vector<Uint8> > *getLUTs() const;
+	bool isMusicPlaying();
 
 };
 

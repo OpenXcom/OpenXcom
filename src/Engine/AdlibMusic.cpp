@@ -170,4 +170,14 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 #endif
 }
 
+bool AdlibMusic::isPlaying()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		return func_is_music_playing();
+	}
+#endif
+	return false;
+}
 }

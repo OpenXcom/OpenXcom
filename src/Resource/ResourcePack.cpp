@@ -288,5 +288,8 @@ const std::vector<std::vector<Uint8> > *ResourcePack::getLUTs() const
 {
 	return &_transparencyLUTs;
 }
-
+bool ResourcePack::isMusicPlaying()
+{
+	return _musics[_playingMusic]->isPlaying();
+}
 }
