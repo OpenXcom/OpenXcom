@@ -178,10 +178,6 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	// Set palette
 	setPalette("PAL_GEOSCAPE");
 
-	// Fix system colors
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-
 	add(_bg);
 	add(_sideLine);
 	add(_sidebar);

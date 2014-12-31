@@ -88,8 +88,6 @@ namespace OpenXcom
 	void UfopaediaSelectState::init()
 	{
 		State::init();
-		// this is to undo whatever the ufopaedia may have done to our colours.
-		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	}
 
 	/**

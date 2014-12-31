@@ -93,9 +93,6 @@ MainMenuState::MainMenuState()
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMSTORY");
-
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**

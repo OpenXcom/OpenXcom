@@ -229,10 +229,6 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMMARS");
-
-	// Restore system colors
-	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
 
 /**

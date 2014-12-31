@@ -35,7 +35,6 @@ namespace OpenXcom
 	{
 		// Set palette
 		setPalette("PAL_BASESCAPE");
-		_game->getCursor()->setColor(Palette::blockOffset(2)+9);
 
 		_btnOk->setX(227);
 		_btnOk->setY(179);

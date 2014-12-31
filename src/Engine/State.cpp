@@ -190,8 +190,10 @@ void State::init()
 {
 	_game->getScreen()->setPalette(_palette);
 	_game->getCursor()->setPalette(_palette);
+	_game->getCursor()->setColor(_cursorColor);
 	_game->getCursor()->draw();
 	_game->getFpsCounter()->setPalette(_palette);
+	_game->getFpsCounter()->setColor(_cursorColor);
 	_game->getFpsCounter()->draw();
 	if (_game->getResourcePack() != 0)
 	{
@@ -327,7 +329,7 @@ void State::lowerAllSurfaces()
  */
 void State::applyBattlescapeTheme()
 {
-	Element * element = _game->getRuleset()->getInterface("menu")->getElement("battlescapeTheme");
+	Element * element = _game->getRuleset()->getInterface("mainMenu")->getElement("battlescapeTheme");
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		Window* window = dynamic_cast<Window*>(*i);
@@ -454,6 +456,26 @@ void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool imme
 void State::setPalette(const std::string &palette, int backpals)
 {
 	setPalette(_game->getResourcePack()->getPalette(palette)->getColors(), 0, 256, false);
+	if (palette == "PAL_GEOSCAPE")
+	{
+		_cursorColor = ResourcePack::GEOSCAPE_CURSOR;
+	}
+	else if (palette == "PAL_BASESCAPE")
+	{
+		_cursorColor = ResourcePack::BASESCAPE_CURSOR;
+	}
+	else if (palette == "PAL_UFOPAEDIA")
+	{
+		_cursorColor = ResourcePack::UFOPAEDIA_CURSOR;
+	}
+	else if (palette == "PAL_GRAPHS")
+	{
+		_cursorColor = ResourcePack::GRAPHS_CURSOR;
+	}
+	else
+	{
+		_cursorColor = ResourcePack::BATTLESCAPE_CURSOR;
+	}
 	if (backpals != -1)
 		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
 	setPalette(NULL); // delay actual update to the end
