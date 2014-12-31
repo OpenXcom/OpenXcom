@@ -10016,6 +10016,21 @@ interfaces:
         border: 218  # blue
       - id: button
         color: 218   # blue
+  - type: fundingWindow
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 133   # minty green
+      - id: list
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: button
+        color: 239   # bright green
   - type: graphs
     elements:
       - id: text
