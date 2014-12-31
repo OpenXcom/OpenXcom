@@ -10377,6 +10377,107 @@ interfaces:
         color: 218   # blue
       - id: button
         color: 241   # pink
+  - type: soldierList
+    elements:
+      - id: palette
+        color: 2     # orange
+      - id: window
+        color: 241   # pink
+      - id: text1
+        color: 218   # blue
+      - id: text2
+        color: 241   # pink
+      - id: list
+        color: 218   # blue
+        color2: 246  # purple
+        border: 241  # pink
+      - id: button
+        color: 218   # blue
+  - type: soldierInfo
+    elements:
+      - id: text1
+        color: 218   # blue
+        color2: 208  # white
+      - id: text2
+        color: 241   # pink
+      - id: numbers
+        color: 208   # white
+      - id: button
+        color: 246   # purple
+      - id: barTUs
+        color: 48
+        color2: 52
+      - id: barEnergy
+        color: 144
+        color2: 148
+      - id: barHealth
+        color: 32
+        color2: 36
+      - id: barBravery
+        color: 64
+        color2: 68
+      - id: barReactions
+        color: 16
+        color2: 20
+      - id: barFiring
+        color: 128
+        color2: 132
+      - id: barThrowing
+        color: 160
+        color2: 164
+      - id: barMelee
+        color: 64
+        color2: 68
+      - id: barStrength
+        color: 80
+        color2: 84
+      - id: barPsiStrength
+        color: 176
+        color2: 180
+      - id: barPsiSkill
+        color: 176
+        color2: 180
+      - id: errorPalette
+        color: 0     # brown
+      - id: errorMessage
+        color: 241   # pink
+  - type: sackSoldier
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 241   # pink
+      - id: text
+        color: 218   # blue
+      - id: button
+        color: 246   # purple
+  - type: soldierArmor
+    elements:
+      - id: palette
+        color: 4     # green
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 213   # gold
+      - id: list
+        color: 208   # white
+        border: 213  # gold
+      - id: button
+        color: 213   # gold
+  - type: soldierMemorial
+    elements:
+      - id: palette
+        color: 7     # violet
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 246   # purple
+        border: 218  # blue
+      - id: button
+        color: 218   # blue
   - type: basescape
     elements:
       - id: button
