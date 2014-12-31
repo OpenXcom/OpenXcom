@@ -9989,6 +9989,33 @@ interfaces:
         color: 138   # yellow
       - id: button
         color: 239   # bright green
+  - type: psiTraining
+    elements:
+      - id: palette
+        color: 7     # violet
+      - id: window
+        color: 246   # purple
+      - id: text
+        color: 218   # light blue
+      - id: button1
+        color: 246   # purple
+      - id: button2
+        color: 218   # light blue
+  - type: allocatePsi
+    elements:
+      - id: palette
+        color: 7     # violet
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 246   # purple
+        color2: 213  # yellow
+        border: 218  # blue
+      - id: button
+        color: 218   # blue
   - type: ufopaedia
     elements:
       - id: palette
