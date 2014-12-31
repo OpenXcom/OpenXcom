@@ -10091,6 +10091,20 @@ interfaces:
         color: 249
       - id: victoryText
         color: 249
+  - type: basescape
+    elements:
+      - id: button
+        color: 213   # gold
+      - id: text1
+        color: 241   # pink
+      - id: text2
+        color: 246   # purple
+      - id: text3
+        color: 218   # blue
+      - id: errorPalette
+        color: 6     # oxide
+      - id: errorMessage
+        color: 241   # pink
   - type: battlescape
     elements:
       - id: textLoad
