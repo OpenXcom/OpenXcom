@@ -52,8 +52,8 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 
 	// Set palette
 	setPalette("PAL_BASESCAPE");
-
-	add(_view);
+	
+	add(_view, "baseView", "basescape");
 	add(_txtTitle, "text", "placeFacility");
 
 	centerAllSurfaces();

@@ -10584,10 +10584,16 @@ interfaces:
         color: 246   # purple
       - id: text3
         color: 218   # blue
+      - id: baseView
+        color: 213   # gold   (time remaining)
+        color2: 16   # orange (selector color)
       - id: errorPalette
         color: 6     # oxide
       - id: errorMessage
         color: 241   # pink
+      - id: miniBase
+        color: 48    # green
+        color2: 32   # red
   - type: battlescape
     elements:
       - id: textLoad

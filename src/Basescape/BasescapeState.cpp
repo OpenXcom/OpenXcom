@@ -84,9 +84,9 @@ BasescapeState::BasescapeState(Base *base, Globe *globe) : _base(base), _globe(g
 
 	// Set palette
 	setPalette("PAL_BASESCAPE");
-
-	add(_view);
-	add(_mini);
+	
+	add(_view, "baseView", "basescape");
+	add(_mini, "miniBase", "basescape");
 	add(_txtFacility, "text3", "basescape");
 	add(_edtBase, "text1", "basescape");
 	add(_txtLocation, "text2", "basescape");

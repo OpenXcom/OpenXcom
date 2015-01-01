@@ -105,7 +105,7 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 	setPalette("PAL_BASESCAPE");
 
 	add(_bg);
-	add(_mini);
+	add(_mini, "miniBase", "basescape");
 	add(_btnOk, "button", "baseInfo");
 	add(_btnTransfers, "button", "baseInfo");
 	add(_btnStores, "button", "baseInfo");

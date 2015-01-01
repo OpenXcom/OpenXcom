@@ -63,7 +63,7 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("placeFacility")->getElement("palette")->color);
 
 	add(_window, "window", "placeFacility");
-	add(_view);
+	add(_view, "baseView", "basescape");
 	add(_btnCancel, "button", "placeFacility");
 	add(_txtFacility, "text", "placeFacility");
 	add(_txtCost, "text", "placeFacility");
