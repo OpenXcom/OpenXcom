@@ -66,8 +66,11 @@ namespace OpenXcom
 const double Globe::ROTATE_LONGITUDE = 0.10;
 const double Globe::ROTATE_LATITUDE = 0.06;
 
-Uint8 Globe::oceanColor1 = Palette::blockOffset(12);
-Uint8 Globe::oceanColor2 = Palette::blockOffset(13);
+Uint8 Globe::OCEAN_COLOR = Palette::blockOffset(12);
+Uint8 Globe::COUNTRY_LABEL_COLOR = 239;
+Uint8 Globe::LINE_COLOR = 162;
+Uint8 Globe::CITY_LABEL_COLOR = 138;
+Uint8 Globe::BASE_LABEL_COLOR = 133;
 
 namespace
 {
@@ -169,7 +172,7 @@ struct Ocean
 {
 	static inline void func(Uint8& dest, const int&, const int&, const int&, const int&)
 	{
-		dest = Globe::oceanColor1;
+		dest = Globe::OCEAN_COLOR;
 	}
 };
 
@@ -203,10 +206,10 @@ struct CreateShadow
 		{
 			const Sint16 val = (temp.x> 31)? 31 : (Sint16)temp.x;
 			const int d = dest & helper::ColorGroup;
-			if (d ==  Globe::oceanColor1 || d == Globe::oceanColor2)
+			if (d ==  Globe::OCEAN_COLOR || d == Globe::OCEAN_COLOR + 16)
 			{
 				//this pixel is ocean
-				return Globe::oceanColor1 + val;
+				return Globe::OCEAN_COLOR + val;
 			}
 			else
 			{
@@ -222,10 +225,10 @@ struct CreateShadow
 		else
 		{
 			const int d = dest & helper::ColorGroup;
-			if (d ==  Globe::oceanColor1 || d ==  Globe::oceanColor2)
+			if (d ==  Globe::OCEAN_COLOR || d ==  Globe::OCEAN_COLOR + 16)
 			{
 				//this pixel is ocean
-				return Globe::oceanColor1;
+				return Globe::OCEAN_COLOR;
 			}
 			else
 			{
@@ -261,11 +264,6 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 																					_isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _lonBeforeMouseScrolling(0.0), _latBeforeMouseScrolling(0.0), _mouseScrollingStartTime(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
 	_rules = game->getRuleset()->getGlobe();
-	if (game->getRuleset()->getInterface("geoscape") && game->getRuleset()->getInterface("geoscape")->getElement("globe"))
-	{
-		Globe::oceanColor1 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color;
-		Globe::oceanColor2 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color2;
-	}
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_markerSet = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
 
@@ -914,7 +912,7 @@ void Globe::draw()
 void Globe::drawOcean()
 {
 	lock();
-	drawCircle(_cenX+1, _cenY, _radius+20, oceanColor1);
+	drawCircle(_cenX+1, _cenY, _radius+20, OCEAN_COLOR);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1061,10 +1059,10 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		if (tcol)
 		{
 			const int d = tcol & helper::ColorGroup;
-			if (d ==  oceanColor1 || d ==  oceanColor2)
+			if (d ==  OCEAN_COLOR || d ==  OCEAN_COLOR + 16)
 			{
 				//this pixel is ocean
-				tcol = oceanColor1 + shade + 8;
+				tcol = OCEAN_COLOR + shade + 8;
 			}
 			else
 			{
@@ -1276,7 +1274,7 @@ void Globe::drawDetail()
 				polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[0], &y[0]);
 				polarToCart((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1), &x[1], &y[1]);
 
-				_countries->drawLine(x[0], y[0], x[1], y[1], Palette::blockOffset(10)+2);
+				_countries->drawLine(x[0], y[0], x[1], y[1], LINE_COLOR);
 			}
 		}
 
@@ -1291,7 +1289,7 @@ void Globe::drawDetail()
 		label->setPalette(getPalette());
 		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(15)-1);
+		label->setColor(COUNTRY_LABEL_COLOR);
 
 		Sint16 x, y;
 		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
@@ -1319,7 +1317,7 @@ void Globe::drawDetail()
 		label->setPalette(getPalette());
 		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(8)+10);
+		label->setColor(CITY_LABEL_COLOR);
 
 		Sint16 x, y;
 		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
@@ -1352,7 +1350,7 @@ void Globe::drawDetail()
 			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 			label->setX(x - 40);
 			label->setY(y + 2);
-			label->setColor(Palette::blockOffset(8)+5);
+			label->setColor(BASE_LABEL_COLOR);
 			label->setText((*j)->getName());
 			label->blit(_countries);
 		}
