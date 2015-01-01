@@ -9785,12 +9785,14 @@ interfaces:
         color: 133   # minty green
   - type: errorMessages
     elements:
-      - id: palette
+      - id: geoscapePalette
         color: 6   # oxide
-        color2: -1 # greyscale
-      - id: text
+      - id: battlescapePalette
+        color: -1 # greyscale
+      - id: geoscapeColor
         color: 138   # yellow
-        color2: 0    # white
+      - id: battlescapeColor
+        color: 0    # white
   - type: geoCraftScreens
     elements:
       - id: palette
@@ -10085,6 +10087,10 @@ interfaces:
         color: 133   # minty green
       - id: genericButton2
         color: 239   # bright green
+      - id: errorPalette
+        color: 6     # brown
+      - id: errorMessage
+        color: 241   # pink
   - type: gameOver
     elements:
       - id: defeatText

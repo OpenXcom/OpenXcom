@@ -112,7 +112,6 @@ ListLoadOriginalState::ListLoadOriginalState()
 	{
 		std::wstringstream ss;
 		ss << (i + 1);
-		_btnSlot[i]->setColor(Palette::blockOffset(8) + 5);
 		_btnSlot[i]->setText(ss.str());
 		_btnSlot[i]->onMouseClick((ActionHandler)&ListLoadOriginalState::btnSlotClick);
 		
@@ -170,7 +169,8 @@ void ListLoadOriginalState::btnSlotClick(Action *action)
 		{
 			std::wostringstream error;
 			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << L"Battlescape saves aren't supported yet.";
-			_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
+
 		}
 		else
 		{

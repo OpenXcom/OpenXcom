@@ -1371,7 +1371,7 @@ void GeoscapeState::time1Hour()
 
 		if (Options::storageLimitsEnforced && (*i)->storesOverfull())
 		{
-			popup(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, Palette::blockOffset(15) + 1, "BACK13.SCR", 6));
+			popup(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, _game->getRuleset()->getInterface("geoscape")->getElement("errorMessage")->color, "BACK13.SCR", _game->getRuleset()->getInterface("geoscape")->getElement("errorPalette")->color));
 			popup(new SellState((*i)));
 		}
 	}

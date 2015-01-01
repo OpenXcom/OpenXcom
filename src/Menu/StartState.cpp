@@ -195,7 +195,7 @@ void StartState::think()
 					error << Language::fsToWstr(*i) << L'\n';
 				}
 				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(error.str(), state->getPalette(), _game->getRuleset()->getInterface("errorMessages")->getElement("text")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("palette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), state->getPalette(), _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			}
 			Options::reload = false;
 		}

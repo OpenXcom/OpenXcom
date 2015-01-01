@@ -182,9 +182,9 @@ void SaveGameState::think()
 			std::wostringstream error;
 			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 			if (_origin != OPT_BATTLESCAPE)
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("text")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("palette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("text")->color2, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("palette")->color2));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 		}
 		catch (YAML::Exception &e)
 		{
@@ -192,9 +192,9 @@ void SaveGameState::think()
 			std::wostringstream error;
 			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 			if (_origin != OPT_BATTLESCAPE)
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("text")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("palette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("text")->color2, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("palette")->color2));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 		}
 	}
 }

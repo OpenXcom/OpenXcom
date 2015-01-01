@@ -172,9 +172,9 @@ void LoadGameState::think()
 			std::wostringstream error;
 			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 			if (_origin != OPT_BATTLESCAPE)
-				_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
-				_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
 			if (_game->getSavedGame() == s)
 				_game->setSavedGame(0);
@@ -187,9 +187,9 @@ void LoadGameState::think()
 			std::wostringstream error;
 			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 			if (_origin != OPT_BATTLESCAPE)
-				_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(8) + 10, "BACK01.SCR", 6));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
-				_game->pushState(new ErrorMessageState(error.str(), _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
 			if (_game->getSavedGame() == s)
 				_game->setSavedGame(0);
