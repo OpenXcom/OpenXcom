@@ -10064,6 +10064,65 @@ interfaces:
         color: 133   # minty green
       - id: button2
         color: 239   # bright green
+  - type: noContainment
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: text
+        color: 133   # minty green
+      - id: button
+        color: 133   # minty green
+  - type: promotions
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: heading
+        color: 133   # minty green
+      - id: text
+        color: 239   # bright green
+      - id: list
+        color: 138   # yellow
+      - id: button
+        color: 239   # bright green
+  - type: cannotReequip
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: heading
+        color: 133   # minty green
+      - id: text
+        color: 239   # bright green
+      - id: list
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+  - type: debriefing
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: heading
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+      - id: list
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: totals
+        color: 133   # minty green
+      - id: button
+        color: 239   # bright green
+      - id: errorPalette
+        color: 0     # brown
+      - id: errorMessage
+        color: 133   # minty green
   - type: geoscape
     elements:
       - id: loadPalette
@@ -10676,6 +10735,8 @@ interfaces:
         border: -1
       - id: messageWindowButtons
         color: -1
+      - id: messageWindowBorder
+        color: -1
       - id: actionMenu
         color: -1
         color2: 14
@@ -10714,6 +10775,9 @@ interfaces:
       # required
       - id: textSlots
         color: 63
+      - id: weight
+        color: 16     # gold (acceptable)
+        color2: 32    # red (overweight)
       - id: grid
         color: 8
       - id: numStack
@@ -10759,6 +10823,8 @@ interfaces:
         color: 80
       - id: barUnderArmor
         color: 80
+      - id: button
+        color: 64
       # required
       - id: text
         color: 48
