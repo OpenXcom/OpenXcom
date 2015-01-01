@@ -509,7 +509,6 @@ void NewBattleState::btnOkClick(Action *)
 		u->setId(1);
 		_craft->setDestination(u);
 		bgen.setUfo(u);
-		bgen.setCraft(_craft);
 		if (_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()])->getHemisphere() < 0)
 		{
 			u->setLatitude(-0.5);
@@ -528,12 +527,14 @@ void NewBattleState::btnOkClick(Action *)
 		t->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(t);
 		bgen.setTerrorSite(t);
-		bgen.setCraft(_craft);
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 	}
 
 	if (_craft)
+	{
 		_craft->setSpeed(0);
+		bgen.setCraft(_craft);
+	}
 
 	_game->getSavedGame()->setDifficulty((GameDifficulty)_cbxDifficulty->getSelected());
 
@@ -541,7 +542,6 @@ void NewBattleState::btnOkClick(Action *)
 	bgen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 	bgen.setAlienItemlevel(_slrAlienTech->getValue());
 	bgame->setDepth(_slrDepth->getValue());
-	bgen.setCraft(_craft);
 
 	bgen.run();
 
