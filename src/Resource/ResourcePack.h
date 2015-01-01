@@ -83,11 +83,11 @@ public:
 	static int UFO_EXPLODE;
 	static int INTERCEPTOR_HIT;
 	static int INTERCEPTOR_EXPLODE;
-	static int ResourcePack::GEOSCAPE_CURSOR;
-	static int ResourcePack::BASESCAPE_CURSOR;
-	static int ResourcePack::BATTLESCAPE_CURSOR;
-	static int ResourcePack::UFOPAEDIA_CURSOR;
-	static int ResourcePack::GRAPHS_CURSOR;
+	static int GEOSCAPE_CURSOR;
+	static int BASESCAPE_CURSOR;
+	static int BATTLESCAPE_CURSOR;
+	static int UFOPAEDIA_CURSOR;
+	static int GRAPHS_CURSOR;
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack();
 	/// Cleans up the resource pack.
