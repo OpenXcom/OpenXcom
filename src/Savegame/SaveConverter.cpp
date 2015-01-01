@@ -283,7 +283,7 @@ void SaveConverter::loadDatIGlob()
 
 	// Fix up the months
 	int monthsPassed = month + (_year - _rule->getStartingTime().getYear()) * 12;
-	for (unsigned int i = 0; i < monthsPassed - 1; ++i)
+	for (int i = 0; i < monthsPassed - 1; ++i)
 	{
 		_save->addMonth();
 	}

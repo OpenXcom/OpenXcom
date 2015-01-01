@@ -47,9 +47,9 @@ private:
 	Timer *_timerLeft, *_timerRight;
 	size_t _sel, _craft;
 	Base *_base;
-	Uint8 _ammoColor;
 	std::vector<std::string> _items;
 	int _totalItems;
+	Uint8 _ammoColor;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
