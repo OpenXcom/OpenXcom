@@ -71,6 +71,13 @@ enum ChunkOpcodes
 	MASK = SKIP_LINES
 };
 
+enum PlayingState
+{
+	PLAYING,
+	FINISHED,
+	SKIPPED
+};
+
 FlcPlayer::FlcPlayer() : _fileBuf(0), _mainScreen(0), _realScreen(0), _game(0)
 {
 }
@@ -182,7 +189,7 @@ void FlcPlayer::deInit()
 */
 void FlcPlayer::play(bool skipLastFrame)
 {
-	_quit = false;
+	_playingState = PLAYING;
 
 	// Vertically center the video
 	_dy = (_mainScreen->h - _headerHeight) / 2;
@@ -193,17 +200,17 @@ void FlcPlayer::play(bool skipLastFrame)
 	_videoFrameData = _fileBuf + 128;
 	_audioFrameData = _videoFrameData;
 
-	while (!_quit)
+	while (!shouldQuit())
 	{
 		if (_frameCallBack)
 			(*_frameCallBack)();
 		else // TODO: support both, in the case the callback is not some audio?
 			decodeAudio(2);
 
-		if (!_quit)
+		if (!shouldQuit())
 			decodeVideo(skipLastFrame);
-		
-		if(!_quit)
+
+		if(!shouldQuit())
 			SDLPolling();
 	}
 	
@@ -212,7 +219,7 @@ void FlcPlayer::play(bool skipLastFrame)
 void FlcPlayer::delay(Uint32 milliseconds)
 {
 	Uint32 pauseStart = SDL_GetTicks();
-	while(SDL_GetTicks() < (pauseStart + milliseconds))
+	while(_playingState != SKIPPED && SDL_GetTicks() < (pauseStart + milliseconds))
 	{
 		SDLPolling();
 	}
@@ -226,7 +233,7 @@ void FlcPlayer::SDLPolling()
 		{
 		case SDL_MOUSEBUTTONDOWN:
 		case SDL_KEYDOWN:
-			_quit = true;
+			_playingState = SKIPPED;
 			break;
 		case SDL_VIDEORESIZE:
 			if (Options::allowResize)
@@ -250,6 +257,11 @@ void FlcPlayer::SDLPolling()
 			break;
 		}
 	}
+}
+
+bool FlcPlayer::shouldQuit()
+{
+	return _playingState == FINISHED || _playingState == SKIPPED;
 }
 
 void FlcPlayer::readFileHeader()
@@ -279,7 +291,7 @@ void FlcPlayer::decodeAudio(int frames)
 	{
 		if (!isValidFrame(_audioFrameData, _audioFrameSize, _audioFrameType))
 		{
-			_quit = true;
+			_playingState = FINISHED;
 			break;
 		}
 
@@ -315,7 +327,7 @@ void FlcPlayer::decodeVideo(bool skipLastFrame)
 	{
 		if (!isValidFrame(_videoFrameData, _videoFrameSize, _videoFrameType))
 		{
-			_quit = true;
+			_playingState = FINISHED;
 			break;
 		}
 
@@ -345,10 +357,10 @@ void FlcPlayer::decodeVideo(bool skipLastFrame)
 			_videoFrameData += _videoFrameSize;
 			// If this frame is the last one, don't play it
 			if(isEndOfFile(_videoFrameData))
-			_quit = true;
+				_playingState = FINISHED;
 
-			if(!_quit || !skipLastFrame)
-			playVideoFrame();
+			if(!shouldQuit() || !skipLastFrame)
+				playVideoFrame();
 
 			videoFrameFound = true;
 
@@ -475,7 +487,7 @@ void FlcPlayer::color256()
 
 	while (numColorPackets--) 
 	{
-		numColorsSkip = *(pSrc++);
+		numColorsSkip = *(pSrc++) + numColors;
 		numColors = *(pSrc++);
 		if (numColors == 0)
 		{
@@ -490,6 +502,11 @@ void FlcPlayer::color256()
 		}
 
 		_realScreen->setPalette(_colors, numColorsSkip, numColors, true);
+
+		if (numColorPackets >= 1)
+		{
+			++numColors;
+		}
 	}
 }
 
@@ -576,7 +593,7 @@ void FlcPlayer::fliBRun()
 {
 	Uint8 *pSrc, *pDst, *pTmpDst, fill;
 	Sint8 countData;
-	int heightCount, packetsCount;
+	int heightCount;
 
 	heightCount = _headerHeight;
 	pSrc = _chunkData + 6; // Skip chunk header
@@ -585,7 +602,7 @@ void FlcPlayer::fliBRun()
 	while (heightCount--) 
 	{
 		pTmpDst = pDst;
-		packetsCount = *(pSrc++);
+		++pSrc; // Read and skip the packet count value
 
 		int pixels = 0;
 		while (pixels != _headerWidth)
@@ -825,7 +842,7 @@ void FlcPlayer::deInitAudio()
 
 void FlcPlayer::stop()
 {
-	_quit = true;
+	_playingState = FINISHED;
 }
 
 bool FlcPlayer::isEndOfFile(Uint8 *pos)
