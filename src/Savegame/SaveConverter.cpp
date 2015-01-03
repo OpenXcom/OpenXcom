@@ -701,7 +701,7 @@ void SaveConverter::loadDatBase()
 			int engineers = load<Uint8>(bdata + 0x5E);
 			int scientists = load<Uint8>(bdata + 0x5F);
 			// items
-			for (int j = 0; j < _nItems; ++j)
+			for (size_t j = 0; j < _nItems; ++j)
 			{
 				int qty = load<Uint16>(bdata + 0x60 + j * 2);
 				if (qty != 0 && _idItems[j] != 0)
