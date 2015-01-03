@@ -681,9 +681,6 @@
     <ClCompile Include="Engine\FastLineClip.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Flc.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -903,6 +900,9 @@
     </ClCompile>
     <ClCompile Include="Menu\ListLoadOriginalState.cpp">
       <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FlcPlayer.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1590,9 +1590,6 @@
     <ClInclude Include="Engine\FastLineClip.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Flc.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1835,6 +1832,9 @@
     </ClInclude>
     <ClInclude Include="Savegame\SaveConverterXcom1.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FlcPlayer.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

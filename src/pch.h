@@ -82,7 +82,7 @@
 #include "./Basescape/TransferConfirmState.h"
 
 #include "./Engine/ShaderMove.h"
-#include "./Engine/Flc.h"
+#include "./Engine/FlcPlayer.h"
 #include "./Engine/Logger.h"
 #include "./Engine/Surface.h"
 #include "./Engine/Exception.h"
