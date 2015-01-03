@@ -904,6 +904,9 @@
     <ClCompile Include="Engine\FlcPlayer.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleVideo.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1835,6 +1838,9 @@
     </ClInclude>
     <ClInclude Include="Engine\FlcPlayer.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleVideo.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
