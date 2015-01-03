@@ -211,8 +211,8 @@ void FlcPlayer::play(bool skipLastFrame)
 
 void FlcPlayer::delay(Uint32 milliseconds)
 {
-	while(SDL_GetTicks() < (pauseStart + milliseconds))
 	Uint32 pauseStart = SDL_GetTicks();
+	while(SDL_GetTicks() < (pauseStart + milliseconds))
 	{
 		SDLPolling();
 	}
