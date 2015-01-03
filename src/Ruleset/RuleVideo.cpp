@@ -16,35 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_INTROSTATE_H
-#define OPENXCOM_INTROSTATE_H
-
-#include "../Engine/State.h"
+#include "RuleVideo.h"
 
 namespace OpenXcom
 {
-class FlcPlayer;
-/**
- * Shows the intro cinematic.
- */
-class IntroState : public State
-{
-private:
-	std::vector<std::string> _introFiles;
-	std::string _introSoundFileDOS, _introSoundFileWin;
-	bool _wasLetterBoxed;
-	int _oldMusic, _oldSound;
-	FlcPlayer *_flcPlayer;
-public:
-	/// Creates the Intro state.
-	IntroState(bool wasLetterBoxed);
-	/// Cleans up the Intro state.
-	~IntroState();
-	/// Starts the intro.
-	void init();
-  void end();
-};
 
+RuleVideo::RuleVideo(const std::string &id) : _id(id)
+{
 }
 
-#endif
+RuleVideo::~RuleVideo()
+{
+}
+
+void RuleVideo::load(const YAML::Node &node)
+{
+	if(const YAML::Node &videos = node["video"])
+	{
+		for(YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
+			_videos.push_back((*i).as<std::string>());
+	}
+
+	// Slides
+	/*if(const YAML::Node &slides = node["slides"])
+	{
+	for(YAML::const_iterator i = slides.begin(); i != slides.end(); ++i)
+			_slides.push_back(*i).as<std::string>());
+	}*/
+}
+
+const std::vector<std::string> * RuleVideo::getVideos() const
+{
+	return &_videos;
+}
+
+}
