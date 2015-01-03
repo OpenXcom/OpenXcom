@@ -103,7 +103,7 @@ void RuleGlobe::load(const YAML::Node &node)
 	
 	if (node["oceanPalette"])
 	{
-		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanColor"].as<Uint8>(12));
+		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<Uint8>(12));
 	}
 }
 
