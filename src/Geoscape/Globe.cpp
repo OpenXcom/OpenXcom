@@ -74,7 +74,7 @@ Uint8 Globe::BASE_LABEL_COLOR = 133;
 
 namespace
 {
-	
+
 ///helper class for `Globe` for drawing earth globe with shadows
 struct GlobeStaticData
 {
@@ -82,7 +82,7 @@ struct GlobeStaticData
 	Sint16 shade_gradient[240];
 	///size of x & y of noise surface
 	const int random_surf_size;
-	
+
 	/**
 	 * Function returning normal vector of sphere surface
 	 * @param ox x cord of sphere center
@@ -115,8 +115,8 @@ struct GlobeStaticData
 			return ret;
 		}
 	}
-	
-	//initialization	
+
+	//initialization
 	GlobeStaticData() : random_surf_size(60)
 	{
 		//filling terminator gradient LUT
@@ -237,7 +237,7 @@ struct CreateShadow
 			}
 		}
 	}
-	
+
 	static inline void func(Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
 	{
 		if (dest && earth.z)
@@ -283,7 +283,7 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 	_zoomOld = _zoom;
-	
+
 	setupRadii(width, height);
 	setZoom(_zoom);
 
@@ -838,10 +838,10 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	
+
 	_texture->setPalette(colors, firstcolor, ncolors);
 	_markerSet->setPalette(colors, firstcolor, ncolors);
-	
+
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
 	_radars->setPalette(colors, firstcolor, ncolors);
@@ -945,7 +945,7 @@ void Globe::drawLand()
 /**
  * Get position of sun from point on globe
  * @param lon longitude of position
- * @param lat latitude of position 
+ * @param lat latitude of position
  * @return position of sun
  */
 Cord Globe::getSunDirection(double lon, double lat) const
@@ -1002,13 +1002,13 @@ void Globe::drawShadow()
 {
 	ShaderMove<Cord> earth = ShaderMove<Cord>(_earthData[_zoom], getWidth(), getHeight());
 	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
-	
+
 	earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
-	
+
 	lock();
 	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise);
 	unlock();
-		
+
 }
 
 
@@ -1020,7 +1020,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 	bool inv;
 	Sint16 tcol;
 	double len,x0,y0,SX,SY;
-	if (abs((int)y2-(int)y1) > abs((int)x2-(int)x1)) 
+	if (abs((int)y2-(int)y1) > abs((int)x2-(int)x1))
 	{
 		len=abs((int)y2-(int)y1);
 		inv=false;
@@ -1031,7 +1031,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		inv=true;
 	}
 
-	if (y2<y1) { 
+	if (y2<y1) {
 	SY=-1;
   } else if ( AreSame(deltay, 0.0) ) {
 	SY=0;
@@ -1137,7 +1137,7 @@ void Globe::drawRadars()
 
 				if (range>0) drawGlobeCircle(lat,lon,range,48);
 			}
-	
+
 		}
 
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
@@ -1336,10 +1336,13 @@ void Globe::drawDetail()
 				marker->setY(y - 1);
 				marker->blit(_countries);
 
-				label->setX(x - 40);
-				label->setY(y + 2);
-				label->setText(_game->getLanguage()->getString((*j)->getName()));
-				label->blit(_countries);
+				if (_zoom >= (*j)->getZoomLevel())
+				{
+					label->setX(x - 40);
+					label->setY(y + 2);
+					label->setText(_game->getLanguage()->getString((*j)->getName()));
+					label->blit(_countries);
+				}
 			}
 		}
 		// Draw bases names
@@ -1357,7 +1360,7 @@ void Globe::drawDetail()
 
 		delete label;
 	}
-	
+
 	static int debugType = 0;
 	static bool canSwitchDebugType = false;
 	if (_game->getSavedGame()->getDebugMode())
@@ -1498,7 +1501,7 @@ void Globe::drawFlights()
 			// Hide crafts docked at base
 			if ((*j)->getStatus() != "STR_OUT" || (*j)->getDestination() == 0 /*|| pointBack((*j)->getLongitude(), (*j)->getLatitude())*/)
 				continue;
-			
+
 			double lon1 = (*j)->getLongitude();
 			double lon2 = (*j)->getDestination()->getLongitude();
 			double lat1 = (*j)->getLatitude();
@@ -1720,7 +1723,7 @@ void Globe::mouseRelease(Action *action, State *state)
  * @param state State that the action handlers belong to.
  */
 void Globe::mouseClick(Action *action, State *state)
-{	
+{
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		zoomIn();
@@ -1732,7 +1735,7 @@ void Globe::mouseClick(Action *action, State *state)
 
 	double lon, lat;
 	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
-	
+
 	// The following is the workaround for a rare problem where sometimes
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(

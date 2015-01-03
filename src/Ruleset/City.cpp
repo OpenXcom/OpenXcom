@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param lon Longitude of the city.
  * @param lat Latitude of the city.
  */
-City::City(const std::string &name, double lon, double lat): _name(name), _lon(lon), _lat(lat)
+City::City(const std::string &name, double lon, double lat): _name(name), _lon(lon), _lat(lat), _zoomLevel(3)
 {
 }
 
@@ -49,6 +49,7 @@ void City::load(const YAML::Node &node)
 	_name = node["name"].as<std::string>(_name);
 	_lon = node["lon"].as<double>(_lon) * M_PI / 180;
 	_lat = node["lat"].as<double>(_lat) * M_PI / 180;
+	_zoomLevel = node["zoom"].as<size_t>(_zoomLevel);
 }
 
 /**
@@ -76,6 +77,15 @@ double City::getLatitude() const
 double City::getLongitude() const
 {
 	return _lon;
+}
+
+/**
+ * Returns the the minimal zoom level that is required to show name of city on geoscape.
+ * @return The required zoom level.
+ */
+size_t City::getZoomLevel() const
+{
+	return _zoomLevel;
 }
 
 }
