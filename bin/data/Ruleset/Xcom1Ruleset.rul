@@ -9320,6 +9320,10 @@ alienItemLevels:
   - [1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
   - [1, 1, 2, 2, 2, 2, 2, 2, 2, 2]
   - [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+cutscenes:
+  - type: intro
+    videos:
+      - UFOINTRO\UFOINT.FLI
 MCDPatches:
 # pathFinding Hacks.
 # bigWall 1 = regular bigwall, no movement allowed.

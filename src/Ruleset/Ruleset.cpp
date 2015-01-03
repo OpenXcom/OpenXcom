@@ -644,7 +644,7 @@ void Ruleset::loadFile(const std::string &filename)
 	
 	for (YAML::const_iterator i = doc["cutscenes"].begin(); i != doc["cutscenes"].end(); ++i)
 	{
-		RuleVideo *rule = loadRule(*i, &_videos, 0, "id");
+		RuleVideo *rule = loadRule(*i, &_videos);
 		if (rule != 0)
 		{
 			rule->load(*i);

@@ -145,7 +145,7 @@ public:
 	// Stop FLC Player
 	void stop();
 	/// Delay player at the end
-	void delay(int milliseconds);
+	void delay(Uint32 milliseconds);
 	void setHeaderSpeed(int speed);
 	int getFrameCount();
 };

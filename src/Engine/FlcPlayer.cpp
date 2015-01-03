@@ -63,7 +63,7 @@ enum ChunkTypes
 	FRAME_TYPE = 0xF1FA,
 };
 
-enum ChunkOpcodes : unsigned short
+enum ChunkOpcodes
 {
 	PACKETS_COUNT = 0x0000, // 0000000000000000
 	LAST_PIXEL = 0x8000, // 1000000000000000
@@ -209,10 +209,10 @@ void FlcPlayer::play(bool skipLastFrame)
 	
 }
 
-void FlcPlayer::delay(int milliseconds)
+void FlcPlayer::delay(Uint32 milliseconds)
 {
-	int pauseStart = SDL_GetTicks();
 	while(SDL_GetTicks() < (pauseStart + milliseconds))
+	Uint32 pauseStart = SDL_GetTicks();
 	{
 		SDLPolling();
 	}
@@ -220,7 +220,6 @@ void FlcPlayer::delay(int milliseconds)
 void FlcPlayer::SDLPolling()
 {
 	SDL_Event event;
-
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
@@ -676,7 +675,6 @@ void FlcPlayer::color64()
 	Uint8 *pSrc;
 	Uint16 NumColors, NumColorPackets;
 	Uint8 NumColorsSkip;
-	int i;
 
 	pSrc = _chunkData + 6;
 	readU16(NumColorPackets, pSrc);
@@ -739,7 +737,6 @@ void FlcPlayer::audioCallback(void *userData, Uint8 *stream, int len)
 
 	while (len > 0)
 	{
-		int samplesToCopy = 0;
 		if (playBuff->sampleCount > 0)
 		{
 			int samplesToCopy = std::min(len, playBuff->sampleCount);
@@ -833,7 +830,7 @@ void FlcPlayer::stop()
 
 bool FlcPlayer::isEndOfFile(Uint8 *pos)
 {
-	return (pos - _fileBuf) == _fileSize;
+	return (pos - _fileBuf) == (int)(_fileSize); // should be Sint64, but let's assume the videos won't be 2gb
 }
 
 int FlcPlayer::getFrameCount()
