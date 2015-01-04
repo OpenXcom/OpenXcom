@@ -51,13 +51,19 @@ IntroState::IntroState(bool wasLetterBoxed) : _wasLetterBoxed(wasLetterBoxed)
 	const std::map<std::string, RuleVideo*> *videoRulesets = rules->getVideos();
 
 
-	const RuleVideo *videoRule = videoRulesets->find("intro")->second;
-	const std::vector<std::string> *videos = videoRule->getVideos();
+	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("intro");
 
-	std::vector<std::string>::const_iterator it;
-	for(it = videos->begin(); it != videos->end(); ++it)
+	if(videoRuleIt != videoRulesets->end())
 	{
-		_introFiles.push_back(CrossPlatform::getDataFile(*it));
+		const RuleVideo *videoRule = videoRuleIt->second;
+
+		const std::vector<std::string> *videos = videoRule->getVideos();
+
+		std::vector<std::string>::const_iterator it;
+		for(it = videos->begin(); it != videos->end(); ++it)
+		{
+			_introFiles.push_back(CrossPlatform::getDataFile(*it));
+		}
 	}
 
 	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
