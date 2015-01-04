@@ -478,7 +478,7 @@ void FlcPlayer::color256()
 {
 	Uint8 *pSrc;
 	Uint16 numColorPackets;
-	Uint16 numColors;
+	Uint16 numColors = 0;
 	Uint8 numColorsSkip;
 
 	pSrc = _chunkData + 6;
