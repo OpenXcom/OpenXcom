@@ -9323,7 +9323,7 @@ alienItemLevels:
 cutscenes:
   - type: intro
     videos:
-      - UFOINTRO\UFOINT.FLI
+      - UFOINTRO/UFOINT.FLI
 MCDPatches:
 # pathFinding Hacks.
 # bigWall 1 = regular bigwall, no movement allowed.

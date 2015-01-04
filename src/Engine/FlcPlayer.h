@@ -68,7 +68,7 @@ private:
 	int _screenDepth;
 	int _dx, _dy;
 	int _offset;
-	bool _quit;
+	int _playingState;
 	bool _hasAudio;
 	int _videoDelay;
 
@@ -111,6 +111,7 @@ private:
 	void decodeAudio(int frames);
 	void waitForNextFrame(Uint32 delay);
 	void SDLPolling();
+	bool shouldQuit();
 
 	void playVideoFrame();
 	void color256();
