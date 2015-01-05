@@ -284,7 +284,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 			{
 				const int distanceSqr = x*x + y*y;
 				test.z = z;
-				if (distanceSqr <= MAX_VIEW_DISTANCE*MAX_VIEW_DISTANCE)
+				if (distanceSqr <= MAX_VIEW_DISTANCE_SQR)
 				{
 					test.x = center.x + signX[direction]*(swap?y:x);
 					test.y = center.y + signY[direction]*(swap?x:y);
@@ -770,7 +770,7 @@ void TileEngine::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
+		if (distanceSq(position, (*i)->getPosition()) <= MAX_VIEW_DISTANCE_SQR)
 		{
 			calculateFOV(*i);
 		}
@@ -846,7 +846,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
-			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
+			distanceSq(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE_SQR)
 		{
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;
