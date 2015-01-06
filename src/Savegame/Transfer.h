@@ -47,7 +47,7 @@ private:
 	Craft *_craft;
 	std::string _itemId;
 	int _itemQty, _scientists, _engineers;
-	bool _delivered, _newRecruit;
+	bool _delivered;
 public:
 	/// Creates a new transfer.
 	Transfer(int hours);
@@ -83,10 +83,6 @@ public:
 	void advance(Base *base);
 	/// Get a pointer to the soldier being transferred.
 	Soldier *getSoldier();
-	/// Sets this transfer as a new acquisition.
-	void setNewRecruit();
-	/// Checks if this soldier has his paperwork filed with HQ.
-	bool isNewRecruit();
 
 };
 

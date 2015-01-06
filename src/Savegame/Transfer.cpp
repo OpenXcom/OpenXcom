@@ -31,7 +31,7 @@ namespace OpenXcom
  * Initializes a transfer.
  * @param hours Hours in-transit.
  */
-Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemQty(0), _scientists(0), _engineers(0), _delivered(false), _newRecruit(false)
+Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemQty(0), _scientists(0), _engineers(0), _delivered(false)
 {
 }
 
@@ -91,7 +91,6 @@ bool Transfer::load(const YAML::Node& node, Base *base, const Ruleset *rule, Sav
 	_scientists = node["scientists"].as<int>(_scientists);
 	_engineers = node["engineers"].as<int>(_engineers);
 	_delivered = node["delivered"].as<bool>(_delivered);
-	_newRecruit = node["newRecruit"].as<bool>(_newRecruit);
 	return true;
 }
 
@@ -127,10 +126,6 @@ YAML::Node Transfer::save() const
 	if (_delivered)
 	{
 		node["delivered"] = _delivered;
-	}
-	if (_newRecruit)
-	{
-		node["newRecruit"] = _newRecruit;
 	}
 	return node;
 }
@@ -325,22 +320,5 @@ void Transfer::advance(Base *base)
 Soldier *Transfer::getSoldier()
 {
 	return _soldier;
-}
-
-/**
- * Set this transfer as a new purchase.
- */
-void Transfer::setNewRecruit()
-{
-	_newRecruit = true;
-}
-
-/**
- * Check if this transfer is a new purchase.
- * @return if this soldier is a new recruit or not.
- */
-bool Transfer::isNewRecruit()
-{
-	return _newRecruit;
 }
 }

@@ -75,6 +75,13 @@ struct SaveInfo
 	bool reserved;
 };
 
+struct PromotionInfo
+{
+	int totalCommanders;
+	int totalColonels;
+	int totalCaptains;
+	int totalSergeants;
+};
 /**
  * The game data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like funds,
@@ -212,8 +219,9 @@ public:
 	Soldier *getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions(std::vector<Soldier*> &participants);
+	void processSoldier(Soldier *soldier, PromotionInfo &soldierData);
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
-	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
+	Soldier *inspectSoldiers(std::vector<Soldier*> &soldiers, std::vector<Soldier*> &participants, int rank);
 	///  Returns the list of alien bases.
 	std::vector<AlienBase*> *getAlienBases();
 	/// Sets debug mode.
