@@ -1300,6 +1300,13 @@ bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
 		soldiersTotal += (*i)->getSoldiers()->size();
+		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
+		{
+			if ((*j)->getType() == TRANSFER_SOLDIER && !(*j)->isNewRecruit())
+			{
+				soldiersTotal++;
+			}
+		}
 	}
 	Soldier *highestRanked = 0;
 
@@ -1313,7 +1320,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
 	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < 1 && filledPositions2 > 0 &&
+	if (filledPositions < 1 && filledPositions2 > 0 && soldiersTotal >= 30 &&
 		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		// only promote one colonel to commander
@@ -1324,7 +1331,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
 	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0 &&
+	if (filledPositions < 10 && filledPositions < (soldiersTotal / 23) && filledPositions2 > 0 &&
 		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
@@ -1334,7 +1341,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
 	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0 &&
+	if (filledPositions < 22 && filledPositions < (soldiersTotal / 11) && filledPositions2 > 0 &&
 		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
@@ -1344,7 +1351,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
 	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0 &&
+	if (filledPositions < 50 && filledPositions < (soldiersTotal / 5) && filledPositions2 > 0 &&
 		(!Options::fieldPromotions || soldier != stayedHome))
 	{
 		highestRanked->promoteRank();

@@ -250,6 +250,7 @@ void PurchaseState::btnOkClick(Action *)
 				{
 					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 					t->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
+					t->setNewRecruit();
 					_base->getTransfers()->push_back(t);
 				}
 			}
