@@ -315,6 +315,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 									 "GMGEO7",
 									 "GMGEO8",
 									 "GMGEO9",
+									 "GMTACTIC1",
 									 "GMTACTIC2",
 									 "GMTACTIC3",
 									 "GMTACTIC4",
