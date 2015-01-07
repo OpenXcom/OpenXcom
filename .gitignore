@@ -71,6 +71,8 @@ bin/data/TERRAIN
 bin/data/UFOGRAPH
 bin/data/UFOINTRO
 bin/data/UNITS
+bin/data/ANIMS
+bin/data/FLOP_INT
 deps/
 docs/html/
 build/
