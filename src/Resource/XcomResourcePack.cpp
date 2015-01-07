@@ -209,13 +209,16 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 
 	// Load intro
 	std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/");
-	std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
-	for (std::vector<std::string>::iterator i = lbms.begin(); i != lbms.end(); ++i)
+	if (CrossPlatform::folderExists(ufointro))
 	{
-		std::string path = ufointro + *i;
-		std::transform(i->begin(), i->end(), i->begin(), toupper);
-		_surfaces[*i] = new Surface(320, 200);
-		_surfaces[*i]->loadImage(path);
+		std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
+		for (std::vector<std::string>::iterator i = lbms.begin(); i != lbms.end(); ++i)
+		{
+			std::string path = ufointro + *i;
+			std::transform(i->begin(), i->end(), i->begin(), toupper);
+			_surfaces[*i] = new Surface(320, 200);
+			_surfaces[*i]->loadImage(path);
+		}
 	}
 
 	// Load surface sets
