@@ -105,6 +105,7 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, i
 
 	_frameCallBack = frameCallBack;
 	_realScreen = game->getScreen();
+	_realScreen->clear();
 	_game = game;
 	_dx = dx;
 	_dy = dy;
