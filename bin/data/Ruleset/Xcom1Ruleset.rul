@@ -10658,6 +10658,8 @@ interfaces:
         color: 246   # purple
       - id: text3
         color: 218   # blue
+      - id: textTooltip
+        color: 218   # blue
       - id: baseView
         color: 213   # gold   (time remaining)
         color2: 16   # orange (selector color)
