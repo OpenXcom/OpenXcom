@@ -479,7 +479,7 @@ void UnitSprite::drawRoutine0()
 
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			itemB->setY(itemA->getY() + torsoHandsWeaponY);
+			itemB->setY(itemB->getY() + torsoHandsWeaponY);
             leftArm->setY(torsoHandsWeaponY);
 			if (_itemB->getRules()->isTwoHanded())
 				rightArm->setY(torsoHandsWeaponY);
