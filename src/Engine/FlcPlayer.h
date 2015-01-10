@@ -149,6 +149,7 @@ public:
 	void delay(Uint32 milliseconds);
 	void setHeaderSpeed(int speed);
 	int getFrameCount();
+	bool wasSkipped();
 };
 
 }

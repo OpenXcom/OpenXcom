@@ -868,6 +868,11 @@ void FlcPlayer::setHeaderSpeed(int speed)
 	_headerSpeed = speed;
 }
 
+bool FlcPlayer::wasSkipped()
+{
+	return _playingState == SKIPPED;
+}
+
 void FlcPlayer::waitForNextFrame(Uint32 delay)
 {
 	static Uint32 oldTick = 0;

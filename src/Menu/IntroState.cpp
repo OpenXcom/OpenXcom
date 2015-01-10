@@ -464,6 +464,10 @@ void IntroState::init()
 					_flcPlayer->play(false);
 					_flcPlayer->deInit();
 				}
+				if (_flcPlayer->wasSkipped())
+				{
+					break;
+				}
 			}
 			delete _flcPlayer;
 			end();
