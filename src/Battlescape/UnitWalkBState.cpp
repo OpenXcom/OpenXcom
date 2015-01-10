@@ -85,7 +85,8 @@ void UnitWalkBState::init()
 void UnitWalkBState::think()
 {
 	bool unitSpotted = false;
-	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true));
+	int size = _unit->getArmor()->getSize() - 1;
+	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false));
 	if (_unit->isKneeled())
 	{
 		if (_parent->kneel(_unit))
@@ -117,7 +118,8 @@ void UnitWalkBState::think()
 		if ((_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0) || // next tile must be not occupied
 			(_parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit))
 		{
-			_unit->keepWalking(tileBelow, onScreen); // advances the phase
+			bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
+			_unit->keepWalking(tileBelow, onScreenBoundary); // advances the phase
 			playMovementSound();
 		}
 		else if (!_falling)
@@ -129,7 +131,6 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
-			int size = _unit->getArmor()->getSize() - 1;
 			bool largeCheck = true;
 			for (int x = size; x >= 0; x--)
 			{
@@ -152,9 +153,9 @@ void UnitWalkBState::think()
 
 			if (_falling)
 			{
-				for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
+				for (int x = size; x >= 0; --x)
 				{
-					for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
+					for (int y = size; y >= 0; --y)
 					{
 						Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
 						if (otherTileBelow && otherTileBelow->getUnit())
@@ -169,7 +170,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
+			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
@@ -359,9 +360,9 @@ void UnitWalkBState::think()
 					return; // don't start walking yet, wait for the ufo door to open
 				}
 			}
-			for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
+			for (int x = size; x >= 0; --x)
 			{
-				for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
+				for (int y = size; y >= 0; --y)
 				{
 					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit();
 					BattleUnit* unitBelowMyWay = 0;
@@ -548,7 +549,8 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true)) return;
+	int size = _unit->getArmor()->getSize() - 1;
+	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false)) return;
 
 	if (_unit->getMoveSound() != -1)
 	{
