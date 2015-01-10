@@ -1,3 +1,4 @@
+# Merge of "Commendations" ruleset with UFOPedia
 extraSprites:
   - type: Commendations
     width: 31
@@ -9,6 +10,204 @@ extraSprites:
     height: 8
     files:
       0: Resources/CommendationDecorations/
+  - type: MILITARY_CROSS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_MILITARY_CROSS.png    
+  - type: MEDAL_OF_HEROISM
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_MEDAL_OF_HEROISM.png
+  - type: STAR_OF_VALOR
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_STAR_OF_VALOR.png  
+  - type: DBLKILL
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_DBLKILL.png 
+  - type: FALLEN
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_FALLEN.png  
+  - type: SERVICE
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_SERVICE_MEDAL.png 
+  - type: HONOR_CROSS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_HONOR_CROSS.png 
+  - type: LONGEST_NIGHT
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_LONGEST_NIGHT.png
+  - type: ORDER_OF_EARTH
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ORDER_OF_EARTH.png
+  - type: PURPLE_HEART
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_PURPLE_HEART.png
+  - type: CRIMSON_HEART
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_CRIMSON_HEART.png    
+  - type: ORDER_OF_RESTRAINT
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ORDER_OF_RESTRAINT.png
+  - type: MAN_OF_STEEL
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_MAN_OF_STEEL.png  
+  - type: MERIT_STAR
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_MERIT_STAR.png  
+  - type: ALIEN_BASE_ASSAULT
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ALIEN_BASE_ASSAULT.png        
+  - type: DEFENDER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_DEFENDER.png
+  - type: TRAP
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_TRAP.png
+  - type: VALIANT_CRUX
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_VALIANT_CRUX.png
+  - type: REACTIONFIRE
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_REACTIONFIRE.png
+  - type: BOLTS_CROSS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_BOLTS_CROSS.png
+  - type: GRENADIERS_MEDAL
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_GRENADIERS_MEDAL.png
+  - type: BLACK_CROSS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_BLACK_CROSS.png
+  - type: STAR_OF_ASCLEPIUS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_STAR_OF_ASCLEPIUS.png
+  - type: CAMPAIGN_RIBBON
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_CAMPAIGN_RIBBON.png
+  - type: WEAPON_PROFICIENCY
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_WEAPON_PROFICIENCY.png
+  - type: DISTINGUISHED_SERVICE
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_DISTINGUISHED_SERVICE.png
+  - type: HELLRAISER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_HELLRAISER.png
+  - type: LUCKYSHOT
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_LUCKYSHOT.png
+  - type: IRON_MAN
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_IRON_MAN.png   
+  - type: XENOCIDE
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_XENOCIDE_MEDAL.png
+  - type: SNIPER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_SNIPER.png  
+  - type: NIKE_CROSS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_NIKE_CROSS.png
+  - type: ORDER_OF_GLORY
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ORDER_OF_GLORY.png      
 extraStrings:
   - type: en-US
     strings:
@@ -28,13 +227,149 @@ extraStrings:
      STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defense mission."
      STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
      STR_MEDAL_MILITARY_CROSS_DESCRIPTION: "Given to a soldier who has participated in many missions."
-     STR_MEDAL_SERVICE_MEDAL_NAME: "Service Medal"
+     STR_MEDAL_SERVICE_MEDAL_NAME: "Longevity Medal"
      STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: "Given to a soldier who has served for many months."
-     STR_MEDAL_HONOR_CROSS_NAME: "Honor Cross"
-     STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Given to all soldiers upon arrival as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
+     STR_MEDAL_HONOR_CROSS_NAME: "XCOM Service Medal"
+     STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Given to all soldiers in their first month of service as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
      STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Campaign Medal"
      STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully defended many regions."
-     STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Specialist Medal"
+     STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
+     STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Given to a soldier who has shown distinction using a {0}."
+     STR_MEDAL_CAMPAIGN_RIBBON_NAME: "{0} Campaign Ribbon"
+     STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: "Given to a soldier who has been instrumental in protecting {0}."
+     STR_MEDAL_ORDER_OF_RESTRAINT_NAME: "Order of Restraint"
+     STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down many aliens."
+     STR_MEDAL_LONGEST_NIGHT_NAME: "Longest Night Ribbon"
+     STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: "Given to a soldier who has witnessed the horrors of alien terror missions at night."
+     STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Medal of Heroism"
+     STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Given to a soldier who has fought to the last ounce of strength."
+     STR_MEDAL_HELLRAISER_MEDAL_NAME: "Inferno Star"
+     STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Given to a soldier who has used incendiary weapons to kill aliens."
+     STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Order of the Hammer"
+     STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed alien soldiers of all kinds."
+     STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
+     STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
+     STR_MEDAL_GRENADIERS_MEDAL_NAME: "Grenadier's Medal"
+     STR_MEDAL_GRENADIERS_MEDAL_DESCRIPTION: "Given to a soldier who has used thrown explosives to kill 3 aliens at once."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
+     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat."
+     STR_MEDAL_MAN_OF_STEEL_NAME: "Man of Steel"
+     STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: "Given to a soldier who has been shot several times during a single mission."
+     STR_MEDAL_BLACK_CROSS_NAME: "Black Cross"
+     STR_MEDAL_BLACK_CROSS_DESCRIPTION: "Given to a soldier that survives being hit by friendly fire."
+     STR_MEDAL_STAR_OF_VALOR_NAME: "Star of Valor"
+     STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Given to a soldier who was the lone survivor of a mission."
+     STR_MEDAL_IRON_MAN_NAME: "Iron Man"
+     STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly an Iron Man or Iron Woman."
+     STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of Earth"
+     STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Given to a soldier who has been instrumental in Earth's defense."
+     STR_MEDAL_SNIPER_TMPNAME: "Marksman Citation"
+     STR_MEDAL_SNIPER_TMPDESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."
+     STR_MEDAL_LUCKYSHOT_TMPNAME: "Good Luck Citation"
+     STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Given to a soldier who as defied the odds, landing an unlikely shot on an intended target"
+     STR_MEDAL_DBLKILL_TMPNAME: "Performance Citation"
+     STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Given to a soldier who has performed admirably on the field, killing more than one hostile threat in short succession."
+     STR_MEDAL_REACTIONFIRE_TMPNAME: "Swiftness Citation"
+     STR_MEDAL_REACTIONFIRE_TMPDESCRIPTION: "Given to a soldier who has demonstrated quick reflexes, killing aliens before they have a chance to retaliate."
+     STR_MEDAL_PURPLE_HEART_NAME: "Purple Heart"
+     STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Given to a soldier who was wounded on the battlefield."
+     STR_MEDAL_CRIMSON_HEART_NAME: "Crimson Heart"
+     STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Given to a soldier who was wounded for an extended period of time."
+     STR_MEDAL_ORDER_OF_GLORY_NAME: "Order of Glory"
+     STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Given to a soldier who was instrumental in a missions success."
+     STR_MEDAL_VALIANT_CRUX_NAME: "Valiant Crux"
+     STR_MEDAL_VALIANT_CRUX_DESCRIPTION: "Given to a soldier who protected all civilians during a terror mission."
+     STR_MEDAL_FALLEN_NAME: "Order of the Fallen"
+     STR_MEDAL_FALLEN_DESCRIPTION: "Given to a soldier to honor their death and their commitment to the defense of Earth."
+     STR_MEDAL_TRAP_NAME: "Prowler Cross"
+     STR_MEDAL_TRAP_DESCRIPTION: "Given to a soldier for exploiting guerrilla tactics."
+     STR_MEDAL_ALIEN_BASE_ASSAULT_NAME: "Terran Cross"
+     STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
+     STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
+     STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
+     STR_AWARD_0: "First award"
+     STR_AWARD_1: "Second award"
+     STR_AWARD_2: "Third award"
+     STR_AWARD_3: "Fourth award"
+     STR_AWARD_4: "Fifth award"
+     STR_AWARD_5: "Sixth award"
+     STR_AWARD_6: "Seventh award"
+     STR_AWARD_7: "Eighth award"
+     STR_AWARD_8: "Ninth award"
+     STR_AWARD_9: "Tenth award"
+     STR_AWARD_DECOR_0: "None"
+     STR_AWARD_DECOR_1: "First bronze pin"
+     STR_AWARD_DECOR_2: "Second bronze pin"
+     STR_AWARD_DECOR_3: "Third bronze pin"
+     STR_AWARD_DECOR_4: "First silver pin"
+     STR_AWARD_DECOR_5: "Second silver pin"
+     STR_AWARD_DECOR_6: "Third silver pin"
+     STR_AWARD_DECOR_7: "First gold pin"
+     STR_AWARD_DECOR_8: "Second gold pin"
+     STR_AWARD_DECOR_9: "Third gold pin"     
+     STR_HEAVY_WEAPONS_PLATFORMS: "COMMENDATION ENTRIES"
+     STR_XCOM_CRAFT_ARMAMENT: "XCOM CRAFT, ARMAMENT & HWPs"
+     STR_MEDAL_MERIT_STAR_UFOPEDIA: "'We may demonstrate to the enemy the unacceptable cost of his struggle by:{NEWLINE}  invading his territory;{NEWLINE}  conducting operations to increase his suffering;{NEWLINE}  or by wearing down the enemy.    {NEWLINE}  --Clauswitz'   {NEWLINE} {NEWLINE} This award is given to a soldier who has proven their lethality and killed many aliens.{NEWLINE} {NEWLINE}  Eligibility for the award starts at 10 kills. Additional awards are issued for every 10 kills after that."
+     STR_MEDAL_MILITARY_CROSS_UFOPEDIA: "'Permanence, perseverance, and persistence in spite of all obstacles, discouragements, and impossibilities: It is this, that in all things distinguishes the strong soul from the weak.'{NEWLINE}      --Thomas Carlyle{NEWLINE} {NEWLINE}  This decoration is awarded to soldiers who have participated in many missions. Their reliability and tenacity have made them trusted veterans of the force. {NEWLINE} {NEWLINE}     The award is issued at 4, 8, 12, 16, 20, 25, 30, 35, 40, and 50 missions."
+     STR_MEDAL_ORDER_OF_EARTH_UFOPEDIA: "'Those who contemplate the beauty of the earth find reserves of strength that will endure as long as life lasts.'{NEWLINE}     -- Rachel Carson {NEWLINE} {NEWLINE} By participating in important missions, this soldier has played a crucial part in defending our planet and hampered alien activity. {NEWLINE} {NEWLINE} This medal is presented for missions that do not involve small and medium enemy scout craft, this award is issued at 3, 5, 10, 15, 20, 25, 30, 35, 40, and 50 missions."
+     STR_MEDAL_MEDAL_OF_HEROISM_UFOPEDIA: "'Only a man who knows what it is like to be defeated can reach down to the bottom of his soul and come up with the extra ounce of power it takes to win when the match is even.'{NEWLINE}    -- Muhammad Ali {NEWLINE} {NEWLINE}  This medal is presented to a soldier who has fought to the last ounce of strength! This medal issued when as soldier has fallen unconcious on the field, yet survived. {NEWLINE} {NEWLINE} The medal is presented every two times a soldier passes out, up to 8 times (for four levels of citation)."
+     STR_MEDAL_STAR_OF_VALOR_UFOPEDIA: "'I will never quit. My nation expects me to be physically harder and mentally stronger than my enemies. If knocked down, I will get back up: every time. I will draw on every remaining ounce of strength to protect my teammates and to accomplish our mission. I am never out of the fight.'{NEWLINE}     -- Marcus Luttrell  {NEWLINE} {NEWLINE}  When the squad wipe is in progress, this soldier kept their head and managed to salvage the dropship. {NEWLINE} {NEWLINE}  The lone survivor of any mission is awarded this medal only once."
+     STR_MEDAL_DBLKILL_TMPNAME_UFOPEDIA: "'One enemy soldier is never enough, but two is entirely too many.'{NEWLINE}   -- Murphy's Laws of Combat' {NEWLINE} {NEWLINE} This citation recognizes soldiers who eliminate two targets in rapid succession. The quicker we remove the enemy, the quicker we go home. {NEWLINE} {NEWLINE}  Four levels of award exists for these fast shooters."
+     STR_MEDAL_CRIMSON_HEART_UFOPEDIA: "The intense sacrifice of the wounded warrior is honored by this award. Truly a 'Red Badge of Courage,' this medal honors the soldier that has been gravely wounded.{NEWLINE} {NEWLINE}  This award is based on the cummulative number of days wounded, and is awarded for every 30 days of recovery up to 300 days."
+     STR_MEDAL_PURPLE_HEART_UFOPEDIA: "Wounds received on the battlefield are tangible evidence of the willingness of XCOM soldiers to put themselves in harm's way.  This sacrifice is honored in this version of the classic award for wounded soldiers. {NEWLINE} {NEWLINE} This medal is given to soldiers who are wounded on the battlefield.  This award is issued once."
+     STR_MEDAL_FALLEN_UFOPEDIA: "'A hero is someone who has given his or her life to something bigger than oneself.'{NEWLINE}     -- Joseph Campebell {NEWLINE} {NEWLINE}  The ultimate price was paid willingly, that mankind might survive.  This award is posthumously awarded to all XCOM troops that die in battle.  It is only fitting that we honor them in our memory and our deeds as we press on in the cause for which they died.  {NEWLINE} {NEWLINE} This award is posthumously awarded to all XCOM troops that die in battle."
+     STR_MEDAL_SERVICE_MEDAL_UFOPEDIA: "This commendation is presented to soldiers who have served XCOM for extended periods of time. We recognize the tremendous sacrfice that these valiant troops make while remaining in XCOM service. This decoration is awarded to soldiers who have seen friends come and go and have been seasoned in the struggle of XCOM against the Foe. Their reliability and tenacity have made them a trusted veteran of the force.  {NEWLINE} {NEWLINE}   The commendation is issued for every three months of service."
+     STR_MEDAL_HONOR_CROSS_UFOPEDIA: "'A man who has nothing for which he is willing to fight; nothing he cares about more than his own personal safety, is a miserable creature who has no chance of being free unless made and kept so by the exertions of better men than himself.'{NEWLINE}        -- (John Stewart Mill)  {NEWLINE} {NEWLINE}  This award is given to all soldiers serving in XCOM, as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
+     STR_MEDAL_LONGEST_NIGHT_UFOPEDIA: "'Day does not forestall nightmares - Night is not needed for dreams - There is no better time than here - No better place than now' {NEWLINE}    -- Chase LeBlanc    {NEWLINE} {NEWLINE}  This award is given to soldiers who have witnessed the horrors of terror missions at night. Dangerous aliens lurk beyond the shadows and death comes quick to any who are not careful. Those who survive are truly brave individuals. {NEWLINE} {NEWLINE} This award is presented for each night Terror Mission up to 4 missions."
+     STR_MEDAL_ORDER_OF_RESTRAINT_UFOPEDIA: "'There will be a substantial reward for the one who finds the Millennium Falcon. You are free to use any methods necessary, but I want them alive. No disintegrations.' -Darth Vader {NEWLINE} {NEWLINE} Presented in recognition of a soldier who has mastered the art of taking the extra-terrestrials alive. Live specimens can be incredibly important in our understanding of the menace that we face. {NEWLINE} {NEWLINE} The award is issued at 4, 8, 12, and 16 captives."
+     STR_MEDAL_MAN_OF_STEEL_UFOPEDIA: "Arthur: 'Look, you stupid bastard, you've got no arms left!' {NEWLINE}Black Knight-- 'Yes I have.' {NEWLINE}Arthur: (exasperated) 'Look!' {NEWLINE}Black Knight: 'Just a flesh wound.'{NEWLINE} (Monty Python and the Holy Grail) {NEWLINE} {NEWLINE} The iron constitution of this soldier (and possibly his armor) has allowed him to withstand multiple hits from the enemy. {NEWLINE} {NEWLINE} This is awarded for being hit five times, and has three levels. "
+     STR_MEDAL_ALIEN_BASE_ASSAULT_UFOPEDIA: "'Place your army in deadly peril, and it will survive; plunge it into desperate straits, and it will come off in safety. -  Sun Tzu' {NEWLINE} {NEWLINE} Every attack on an enemy base is a step toward victory. Destroying the enemy at their nodes of power ensures our progress toward ultimate supremacy. {NEWLINE} {NEWLINE} This commendation is presented to soldiers who participate in an assault on an alien base. This may be awarded three times."
+     STR_MEDAL_DEFENDER_UFOPEDIA: "'You cannot choose your battlefield, God does that for you; But you can plant a standard, Where a standard never flew.{NEWLINE}     -- Nathalia Crane' {NEWLINE} {NEWLINE} This medal is awarded to a warrior who has taken part in a successful base defense mission. Though the alien hordes tried to overwhelm this valiant soul, they held the line and ensured that XCOM maintained control of this crucial facility.{NEWLINE} {NEWLINE} Awards are issued for up to three successful base defenses."
+     STR_MEDAL_TRAP_UFOPEDIA: "' Hello? Anybody home? {NEWLINE}Hello, Mr. Gopher! {NEWLINE}It's me, Mr. Squirrel. {NEWLINE}Just a harmless squirrel. {NEWLINE}Not a plastic explosive or anything. {NEWLINE}Nothing to be worried about. {NEWLINE}    - CaddyShack. ' {NEWLINE} {NEWLINE} This medal is awarded in recognition of mastery of killing the enemy with boobytraps and IEDs. There are four levels of award at 1, 3, 5, and 8 kills with proximity grenades."
+     STR_MEDAL_VALIANT_CRUX_UFOPEDIA: "'The true soldier fights not because he hates what is in front of him, but because he loves what is behind him.' {NEWLINE}    --G. K. CHESTERTON  {NEWLINE} {NEWLINE} When terror strikes, it is a tiny few that can respond so overwhelmingly that all the innocent bystanders are spared the wrath of the unearthly menace. {NEWLINE} {NEWLINE} Any soldier that participates in a Terror Mission where all civilians are saved will receive this award. There are four levels of this award."
+     STR_MEDAL_REACTIONFIRE_UFOPEDIA: " 'When you are in a combat situation, you mustn't let your mind be polluted by emotions like fear and anger. Simply accept the situation and react, even if you are facing impossible odds. Keep your head clear and you will be one step ahead of your attackers.' {NEWLINE} -- Aaron B. Powell, Doomsday Diaries {NEWLINE} {NEWLINE} This medal is given to soldiers whose lightning reflexes have made them instinctive killers. Dropping targets during an enemy turn, reduces the threat to the whole squad. {NEWLINE} {NEWLINE} This medal is issued for every two reaction fire kills up to four times. "
+     STR_MEDAL_BOLTS_CROSS_UFOPEDIA: "Captain Steven Hiller: 'Y'know, this was supposed to be my weekend off, but noooo. You got me out here draggin' your heavy ass through the burnin' desert with your dreadlocks stickin' out the back of my parachute.'{NEWLINE}  - Independence Day{NEWLINE} {NEWLINE}  This high commendation recognizes a critical accomplishment in the capture of a high value target. Enemy Leaders and Commanders are sure to give us a better understanding of alien goals and ways we can defeat them. {NEWLINE} {NEWLINE} This award is presented once to any soldier that captures one of these important targets."
+     STR_MEDAL_GRENADIERS_MEDAL_UFOPEDIA: " 'Five second fuses always burn three seconds.{NEWLINE} -- Murphy's Laws of Combat' {NEWLINE} {NEWLINE} This commendation is presented to soldiers that have made the most of their XCOM grenades! Beyond a standard proficiency medal, it recognizes the ability to kill multiple enemy with one standard grenade. {NEWLINE} {NEWLINE} Four levels of award are issued for killing three enemy at once with the standard issue hand grenate and proximity grenade."
+     STR_MEDAL_BLACK_CROSS_MEDAL_UFOPEDIA: "'Bullets do not discriminate. They are equal-opportunity projectiles.' {NEWLINE}    -- Peter Duysings{NEWLINE} {NEWLINE} Also known as: 'You should have ducked, Carl!' this medal is given to soldiers who have been hit by friendly fire. As Murphy says: 'Friendly Fire Isn't.' {NEWLINE} {NEWLINE} This commendation is available for award up to four times."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_MEDAL_UFOPEDIA: "'War is life multiplied by some number that no one has ever heard of.' {NEWLINE}     -- Sebastian Junger. {NEWLINE} {NEWLINE} By drawing intense fire from the enemy, this soldier has provided heroic assistance to his comrades. {NEWLINE} {NEWLINE} This medal is awarded to soldiers who have been targeted ten times by the enemy. This award has three levels."
+     STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_NAME: "Campaign Ribbon"
+     STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_UFOPEDIA: "'We need to thank all of our troops, and particularly those for whom we can never express enough gratitude... for they have given their lives so that all of us may be free.'{NEWLINE}    -Virgil Goode {NEWLINE} {NEWLINE}The countries of a given region recognize the skill and valor by which this trooper has protected their lives and property in this war against the Alien Menace. {NEWLINE} {NEWLINE} This medal is awarded for 10, 20 and 30 missions in a given region."
+     STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME: "Weapon Proficiency Medal"      
+     STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA: "'Anything worth shooting is worth shooting twice. Ammo is cheap. Life is expensive.'{NEWLINE}   -- US Ranger Rules for Gunfighting {NEWLINE} {NEWLINE} This medal is awarded to recognize a soldier's extreme prociency with a given weapon. They have become a true expert in their field and a master at their craft. {NEWLINE} {NEWLINE} This medal is awarded for 10, 20 and 30 kills with a specific weapon."
+     STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA: "'Don't fear them, my child. We are going to kill them all.'{NEWLINE}    --The Kingdom {NEWLINE} {NEWLINE} This medal recognizes the soldier who has mastered the art of killing aliens in all forms. No alien race is immune to their predations. {NEWLINE} {NEWLINE} This award is presented for killing a soldier of all the primary races. Further awards are given for 5, 10, and 15 more specimens of each race. "
+     STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA: " 'Of the four classical elements, fire is by far the most primal. The most challenging. The most dangerous. The most transforming. The most visceral. The most fun. Seriously, which enemies would cower in their tracks if you appeared in front of them and proclaimed yourself to be a great water wizard?'{NEWLINE}   -- The Rant {NEWLINE} {NEWLINE} This award is presented to those who have mastered the art of destroying the enemy with fire. The award is given for every five torched aliens, up to four times. "
+     STR_MEDAL_LUCKYSHOT_MEDAL_UFOPEDIA: "'The best luck of all is the luck you make for yourself. {NEWLINE}    -- Douglas MacArthur' {NEWLINE} {NEWLINE} When a soldier repeatedly defies the odds, and lands incredible shots, they become eligible for this award. {NEWLINE} {NEWLINE} Presented for every three lucky shots, this citation has four levels. "
+     STR_MEDAL_IRON_MAN_MEDAL_UFOPEDIA: "'If you're short of everything but the enemy, you're in a combat zone.{NEWLINE}   -- Murphy's Laws of Combat' {NEWLINE} {NEWLINE} This award is presented to soldiers who take on the foe single-handedly. Only the hardcore attempt this and fewer survive. The award has only one level. "
+     STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA_NAME: "Alien Race Xenocide Medal"
+     STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA: " 'If you find yourself in a fair fight, you didn't plan your mission properly.'{NEWLINE}    -- (David Hackworth) {NEWLINE} {NEWLINE} Given to a soldier who has become a lethal machine in cutting down a specific alien race. This race has suffered such depradations by this XCOM hero, that they have come to calling him XenoCide. {NEWLINE} {NEWLINE} Award levels are 10, 20, and 30 Kills of a given race."
+     STR_MEDAL_SNIPER_MEDAL_UFOPEDIA: "{NEWLINE}'My crosshairs steady, {NEWLINE} My trigger cold,{NEWLINE}I feel the recoil{NEWLINE} and watch him fold.{NEWLINE}The mission accomplished,{NEWLINE} I grab my gear.{NEWLINE}I'll clean my rifle{NEWLINE} in the rear.'{NEWLINE}   -- Marine Sniper{NEWLINE} {NEWLINE} This citation is designed to recognize expertise in dealing death from afar. {NEWLINE} {NEWLINE} Presented for every three longrange hits, this citation has four levels."
+     STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA: " 'You've got to believe that you are right to be a good soldier, that's why mercenaries are no good. It's emotion that makes a good fighting man - and knowing that you are fighting for a good cause.' {NEWLINE}    - Audie Murphy {NEWLINE} {NEWLINE} This decorations recognizes unparalleled battlefield prowess. Embodying Lethality, this warrior has proven their combat expertise in the most tangible means possible. {NEWLINE} {NEWLINE} This award is exclusively for soldiers who single handedly kill every alien in a singe mission. This award is presented up to three times. "
+     STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA: "'If you take more than your fair share of objectives, you will have more than your fair share objectives to take.' {NEWLINE}     -- Murphy's Laws of Combat {NEWLINE} {NEWLINE} This citation is given to honor a soldier who has killed seven enemies in a single mission. This feat is unparralled and demonstrates the true grit of this lethal trooper. {NEWLINE} {NEWLINE}This award may be issued three times. "
+  - type: en-GB
+    strings:
+     STR_AWARDS_UC: "AWARDS"
+     STR_COMMENDATIONS_UC: "COMMENDATIONS"
+     STR_COMMENDATIONS: "Commendations"
+     STR_MEDALS: "MEDALS"
+     STR_MEDAL_NAME: "Medal Name"
+     STR_MEDAL_AWARD_LEVEL: "Award Level"
+     STR_MEDAL_DECOR_LEVEL: "Decoration Level"
+     STR_MEDAL_DESCRIPTION: "DESCRIPTION"
+     STR_MEDAL_MERIT_STAR_NAME: "Medal of Aggression"
+     STR_MEDAL_MERIT_STAR_DESCRIPTION: "Given to a soldier who has killed many aliens."
+     STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
+     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in combating the {0} menace."
+     STR_MEDAL_DEFENDER_MEDAL_NAME: "Guardian Star"
+     STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defence mission."
+     STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
+     STR_MEDAL_MILITARY_CROSS_DESCRIPTION: "Given to a soldier who has participated in many missions."
+     STR_MEDAL_SERVICE_MEDAL_NAME: "Long Service Medal"
+     STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: "Given to a soldier who has served for many months."
+     STR_MEDAL_HONOR_CROSS_NAME: "Honor Cross"
+     STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Given to all soldiers in their first month of service as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
+     STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Order of the Custodian"
+     STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully defended many regions."
+     STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Police Medal"
      STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully used non-lethal force to crowd-control many aliens."
      STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
      STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Given to a soldier who has shown distinction using a {0}."
@@ -110,104 +445,45 @@ extraStrings:
      STR_AWARD_DECOR_7: "First gold pin"
      STR_AWARD_DECOR_8: "Second gold pin"
      STR_AWARD_DECOR_9: "Third gold pin"
-  - type: en-GB
-    strings:
-     STR_AWARDS_UC: "AWARDS"
-     STR_COMMENDATIONS_UC: "COMMENDATIONS"
-     STR_COMMENDATIONS: "Commendations"
-     STR_MEDALS: "MEDALS"
-     STR_MEDAL_NAME: "Medal Name"
-     STR_MEDAL_AWARD_LEVEL: "Award Level"
-     STR_MEDAL_DECOR_LEVEL: "Decoration Level"
-     STR_MEDAL_DESCRIPTION: "DESCRIPTION"
-     STR_MEDAL_MERIT_STAR_NAME: "Medal of Aggression"
-     STR_MEDAL_MERIT_STAR_DESCRIPTION: "Given to a soldier who has killed many aliens."
-     STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Xenocide Medal"
-     STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in combating the {0} menace."
-     STR_MEDAL_DEFENDER_MEDAL_NAME: "Guardian Star"
-     STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defence mission."
-     STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
-     STR_MEDAL_MILITARY_CROSS_DESCRIPTION: "Given to a soldier who has participated in many missions."
-     STR_MEDAL_SERVICE_MEDAL_NAME: "Long Service Medal"
-     STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: "Given to a soldier who has served for many months."
-     STR_MEDAL_HONOR_CROSS_NAME: "XCOM Service Medal"
-     STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Given to all soldiers upon arrival as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
-     STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Order of the Custodian"
-     STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully defended many regions."
-     STR_MEDAL_SPECIALISTS_MEDAL_NAME: "Police Medal"
-     STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully used non-lethal force to crowd-control many aliens."
-     STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Proficiency Medal"
-     STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Given to a soldier who has shown distinction using a {0}."
-     STR_MEDAL_CAMPAIGN_RIBBON_NAME: "{0} Campaign Ribbon"
-     STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: "Given to a soldier who has been instrumental in protecting {0}."
-     STR_MEDAL_ORDER_OF_RESTRAINT_NAME: "Order of Restraint"
-     STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down many aliens."
-     STR_MEDAL_LONGEST_NIGHT_NAME: "Longest Night Ribbon"
-     STR_MEDAL_LONGEST_NIGHT_DESCRIPTION: "Given to a soldier who has witnessed the horrors of alien terror missions at night."
-     STR_MEDAL_MEDAL_OF_HEROISM_NAME: "Medal of Heroism"
-     STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Given to a soldier who has fought to the last ounce of strength."
-     STR_MEDAL_HELLRAISER_MEDAL_NAME: "Inferno Star"
-     STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Given to a soldier who has used incendiary weapons to kill aliens."
-     STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Order of the Hammer"
-     STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed alien soldiers of all kinds."
-     STR_MEDAL_BOLTS_CROSS_NAME: "Bolt's Cross"
-     STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
-     STR_MEDAL_STAR_OF_ASCLEPIUS_NAME: "Star of Asclepius"
-     STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has been under heavy fire from the enemy threat."
-     STR_MEDAL_MAN_OF_STEEL_NAME: "Man of Steel"
-     STR_MEDAL_MAN_OF_STEEL_DESCRIPTION: "Given to a soldier who has been shot several times during a single mission."
-     STR_MEDAL_BLACK_CROSS_NAME: "Black Cross"
-     STR_MEDAL_BLACK_CROSS_DESCRIPTION: "Given to a soldier that survives being hit by friendly fire."
-     STR_MEDAL_STAR_OF_VALOR_NAME: "Star of Valor"
-     STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Given to a soldier who was the lone survivor of a mission."
-     STR_MEDAL_IRON_MAN_NAME: "Iron Man"
-     STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly an Iron Man or Iron Woman."
-     STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of Earth"
-     STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Given to a soldier who has been instrumental in Earth's defense."
-     STR_MEDAL_SNIPER_TMPNAME: "Marksman Citation"
-     STR_MEDAL_SNIPER_TMPDESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."
-     STR_MEDAL_LUCKYSHOT_TMPNAME: "Good Luck Citation"
-     STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION: "Given to a soldier who as defied the odds, landing an unlikely shot on an intended target"
-     STR_MEDAL_DBLKILL_TMPNAME: "Performance Citation"
-     STR_MEDAL_DBLKILL_TMPDESCRIPTION: "Given to a soldier who has performed admirably on the field, killing more than one hostile threat in short succession."
-     STR_MEDAL_REACTIONFIRE_TMPNAME: "Swiftness Citation"
-     STR_MEDAL_REACTIONFIRE_TMPDESCRIPTION: "Given to a soldier who has demonstrated quick reflexes, killing aliens before they have a chance to retaliate."
-     STR_MEDAL_PURPLE_HEART_NAME: "Purple Heart"
-     STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Given to a soldier who was wounded on the battlefield."
-     STR_MEDAL_CRIMSON_HEART_NAME: "Crimson Heart"
-     STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Given to a soldier who was wounded for an extended period of time."
-     STR_MEDAL_ORDER_OF_GLORY_NAME: "Order of Glory"
-     STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Given to a soldier who was instrumental in a missions success."
-     STR_MEDAL_VALIANT_CRUX_NAME: "Valiant Crux"
-     STR_MEDAL_VALIANT_CRUX_DESCRIPTION: "Given to a soldier who protected all civilians during a terror mission."
-     STR_MEDAL_FALLEN_NAME: "Order of the Fallen"
-     STR_MEDAL_FALLEN_DESCRIPTION: "Given to a soldier to honor their death and their commitment to the defense of Earth."
-     STR_MEDAL_TRAP_NAME: "Prowler Cross"
-     STR_MEDAL_TRAP_DESCRIPTION: "Given to a soldier for exploiting guerrilla tactics."
-     STR_MEDAL_ALIEN_BASE_ASSAULT_NAME: "Terran Cross"
-     STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
-     STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
-     STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
-     STR_AWARD_0: "First award"
-     STR_AWARD_1: "Second award"
-     STR_AWARD_2: "Third award"
-     STR_AWARD_3: "Fourth award"
-     STR_AWARD_4: "Fifth award"
-     STR_AWARD_5: "Sixth award"
-     STR_AWARD_6: "Seventh award"
-     STR_AWARD_7: "Eighth award"
-     STR_AWARD_8: "Ninth award"
-     STR_AWARD_9: "Tenth award"
-     STR_AWARD_DECOR_0: "None"
-     STR_AWARD_DECOR_1: "First bronze pin"
-     STR_AWARD_DECOR_2: "Second bronze pin"
-     STR_AWARD_DECOR_3: "Third bronze pin"
-     STR_AWARD_DECOR_4: "First silver pin"
-     STR_AWARD_DECOR_5: "Second silver pin"
-     STR_AWARD_DECOR_6: "Third silver pin"
-     STR_AWARD_DECOR_7: "First gold pin"
-     STR_AWARD_DECOR_8: "Second gold pin"
-     STR_AWARD_DECOR_9: "Third gold pin"
+     STR_HEAVY_WEAPONS_PLATFORMS: "COMMENDATION ENTRIES"
+     STR_XCOM_CRAFT_ARMAMENT: "XCOM CRAFT, ARMAMENT & HWPs"
+# This _UFOPEDIA section is simply a copy of the en-US section that mod development was done on.  No attempts have been made to Anglicize spellings, etc.
+     STR_MEDAL_MERIT_STAR_UFOPEDIA: "'We may demonstrate to the enemy the unacceptable cost of his struggle by:{NEWLINE}  invading his territory;{NEWLINE}  conducting operations to increase his suffering;{NEWLINE}  or by wearing down the enemy.    {NEWLINE}  --Clauswitz'   {NEWLINE} {NEWLINE} This award is given to a soldier who has proven their lethality and killed many aliens.{NEWLINE} {NEWLINE}  Eligibility for the award starts at 10 kills. Additional awards are issued for every 10 kills after that."
+     STR_MEDAL_MILITARY_CROSS_UFOPEDIA: "'Permanence, perseverance, and persistence in spite of all obstacles, discouragements, and impossibilities: It is this, that in all things distinguishes the strong soul from the weak.'{NEWLINE}      --Thomas Carlyle{NEWLINE} {NEWLINE}  This decoration is awarded to soldiers who have participated in many missions. Their reliability and tenacity have made them trusted veterans of the force. {NEWLINE} {NEWLINE}     The award is issued at 4, 8, 12, 16, 20, 25, 30, 35, 40, and 50 missions."
+     STR_MEDAL_ORDER_OF_EARTH_UFOPEDIA: "'Those who contemplate the beauty of the earth find reserves of strength that will endure as long as life lasts.'{NEWLINE}     -- Rachel Carson {NEWLINE} {NEWLINE} By participating in important missions, this soldier has played a crucial part in defending our planet and hampered alien activity. {NEWLINE} {NEWLINE} This medal is presented for missions that do not involve small and medium enemy scout craft, this award is issued at 3, 5, 10, 15, 20, 25, 30, 35, 40, and 50 missions."
+     STR_MEDAL_MEDAL_OF_HEROISM_UFOPEDIA: "'Only a man who knows what it is like to be defeated can reach down to the bottom of his soul and come up with the extra ounce of power it takes to win when the match is even.'{NEWLINE}    -- Muhammad Ali {NEWLINE} {NEWLINE}  This medal is presented to a soldier who has fought to the last ounce of strength! This medal issued when as soldier has fallen unconcious on the field, yet survived. {NEWLINE} {NEWLINE} The medal is presented every two times a soldier passes out, up to 8 times (for four levels of citation)."
+     STR_MEDAL_STAR_OF_VALOR_UFOPEDIA: "'I will never quit. My nation expects me to be physically harder and mentally stronger than my enemies. If knocked down, I will get back up: every time. I will draw on every remaining ounce of strength to protect my teammates and to accomplish our mission. I am never out of the fight.'{NEWLINE}     -- Marcus Luttrell  {NEWLINE} {NEWLINE}  When the squad wipe is in progress, this soldier kept their head and managed to salvage the dropship. {NEWLINE} {NEWLINE}  The lone survivor of any mission is awarded this medal only once."
+     STR_MEDAL_DBLKILL_TMPNAME_UFOPEDIA: "'One enemy soldier is never enough, but two is entirely too many.'{NEWLINE}   -- Murphy's Laws of Combat' {NEWLINE} {NEWLINE} This citation recognizes soldiers who eliminate two targets in rapid succession. The quicker we remove the enemy, the quicker we go home. {NEWLINE} {NEWLINE}  Four levels of award exists for these fast shooters."
+     STR_MEDAL_CRIMSON_HEART_UFOPEDIA: "The intense sacrifice of the wounded warrior is honored by this award. Truly a 'Red Badge of Courage,' this medal honors the soldier that has been gravely wounded.{NEWLINE} {NEWLINE}  This award is based on the cummulative number of days wounded, and is awarded for every 30 days of recovery up to 300 days."
+     STR_MEDAL_PURPLE_HEART_UFOPEDIA: "Wounds received on the battlefield are tangible evidence of the willingness of XCOM soldiers to put themselves in harm's way.  This sacrifice is honored in this version of the classic award for wounded soldiers. {NEWLINE} {NEWLINE} This medal is given to soldiers who are wounded on the battlefield.  This award is issued once."
+     STR_MEDAL_FALLEN_UFOPEDIA: "'A hero is someone who has given his or her life to something bigger than oneself.'{NEWLINE}     -- Joseph Campebell {NEWLINE} {NEWLINE}  The ultimate price was paid willingly, that mankind might survive.  This award is posthumously awarded to all XCOM troops that die in battle.  It is only fitting that we honor them in our memory and our deeds as we press on in the cause for which they died.  {NEWLINE} {NEWLINE} This award is posthumously awarded to all XCOM troops that die in battle."
+     STR_MEDAL_SERVICE_MEDAL_UFOPEDIA: "This commendation is presented to soldiers who have served XCOM for extended periods of time. We recognize the tremendous sacrfice that these valiant troops make while remaining in XCOM service. This decoration is awarded to soldiers who have seen friends come and go and have been seasoned in the struggle of XCOM against the Foe. Their reliability and tenacity have made them a trusted veteran of the force.  {NEWLINE} {NEWLINE}   The commendation is issued for every three months of service."
+     STR_MEDAL_HONOR_CROSS_UFOPEDIA: "'A man who has nothing for which he is willing to fight; nothing he cares about more than his own personal safety, is a miserable creature who has no chance of being free unless made and kept so by the exertions of better men than himself.'{NEWLINE}        -- (John Stewart Mill)  {NEWLINE} {NEWLINE}  This award is given to all soldiers serving in XCOM, as recognition for fighting the Alien threat, and for being part of the force to save humanity. This medal has no additional decorations."
+     STR_MEDAL_LONGEST_NIGHT_UFOPEDIA: "'Day does not forestall nightmares - Night is not needed for dreams - There is no better time than here - No better place than now' {NEWLINE}    -- Chase LeBlanc    {NEWLINE} {NEWLINE}  This award is given to soldiers who have witnessed the horrors of terror missions at night. Dangerous aliens lurk beyond the shadows and death comes quick to any who are not careful. Those who survive are truly brave individuals. {NEWLINE} {NEWLINE} This award is presented for each night Terror Mission up to 4 missions."
+     STR_MEDAL_ORDER_OF_RESTRAINT_UFOPEDIA: "'There will be a substantial reward for the one who finds the Millennium Falcon. You are free to use any methods necessary, but I want them alive. No disintegrations.' -Darth Vader {NEWLINE} {NEWLINE} Presented in recognition of a soldier who has mastered the art of taking the extra-terrestrials alive. Live specimens can be incredibly important in our understanding of the menace that we face. {NEWLINE} {NEWLINE} The award is issued at 4, 8, 12, and 16 captives."
+     STR_MEDAL_MAN_OF_STEEL_UFOPEDIA: "Arthur: 'Look, you stupid bastard, you've got no arms left!' {NEWLINE}Black Knight-- 'Yes I have.' {NEWLINE}Arthur: (exasperated) 'Look!' {NEWLINE}Black Knight: 'Just a flesh wound.'{NEWLINE} (Monty Python and the Holy Grail) {NEWLINE} {NEWLINE} The iron constitution of this soldier (and possibly his armor) has allowed him to withstand multiple hits from the enemy. {NEWLINE} {NEWLINE} This is awarded for being hit five times, and has three levels. "
+     STR_MEDAL_ALIEN_BASE_ASSAULT_UFOPEDIA: "'Place your army in deadly peril, and it will survive; plunge it into desperate straits, and it will come off in safety. -  Sun Tzu' {NEWLINE} {NEWLINE} Every attack on an enemy base is a step toward victory. Destroying the enemy at their nodes of power ensures our progress toward ultimate supremacy. {NEWLINE} {NEWLINE} This commendation is presented to soldiers who participate in an assault on an alien base. This may be awarded three times."
+     STR_MEDAL_DEFENDER_UFOPEDIA: "'You cannot choose your battlefield, God does that for you; But you can plant a standard, Where a standard never flew.{NEWLINE}     -- Nathalia Crane' {NEWLINE} {NEWLINE} This medal is awarded to a warrior who has taken part in a successful base defense mission. Though the alien hordes tried to overwhelm this valiant soul, they held the line and ensured that XCOM maintained control of this crucial facility.{NEWLINE} {NEWLINE} Awards are issued for up to three successful base defenses."
+     STR_MEDAL_TRAP_UFOPEDIA: "' Hello? Anybody home? {NEWLINE}Hello, Mr. Gopher! {NEWLINE}It's me, Mr. Squirrel. {NEWLINE}Just a harmless squirrel. {NEWLINE}Not a plastic explosive or anything. {NEWLINE}Nothing to be worried about. {NEWLINE}    - CaddyShack. ' {NEWLINE} {NEWLINE} This medal is awarded in recognition of mastery of killing the enemy with boobytraps and IEDs. There are four levels of award at 1, 3, 5, and 8 kills with proximity grenades."
+     STR_MEDAL_VALIANT_CRUX_UFOPEDIA: "'The true soldier fights not because he hates what is in front of him, but because he loves what is behind him.' {NEWLINE}    --G. K. CHESTERTON  {NEWLINE} {NEWLINE} When terror strikes, it is a tiny few that can respond so overwhelmingly that all the innocent bystanders are spared the wrath of the unearthly menace. {NEWLINE} {NEWLINE} Any soldier that participates in a Terror Mission where all civilians are saved will receive this award. There are four levels of this award."
+     STR_MEDAL_REACTIONFIRE_UFOPEDIA: " 'When you are in a combat situation, you mustn't let your mind be polluted by emotions like fear and anger. Simply accept the situation and react, even if you are facing impossible odds. Keep your head clear and you will be one step ahead of your attackers.' {NEWLINE} -- Aaron B. Powell, Doomsday Diaries {NEWLINE} {NEWLINE} This medal is given to soldiers whose lightning reflexes have made them instinctive killers. Dropping targets during an enemy turn, reduces the threat to the whole squad. {NEWLINE} {NEWLINE} This medal is issued for every two reaction fire kills up to four times. "
+     STR_MEDAL_BOLTS_CROSS_UFOPEDIA: "Captain Steven Hiller: 'Y'know, this was supposed to be my weekend off, but noooo. You got me out here draggin' your heavy ass through the burnin' desert with your dreadlocks stickin' out the back of my parachute.'{NEWLINE}  - Independence Day{NEWLINE} {NEWLINE}  This high commendation recognizes a critical accomplishment in the capture of a high value target. Enemy Leaders and Commanders are sure to give us a better understanding of alien goals and ways we can defeat them. {NEWLINE} {NEWLINE} This award is presented once to any soldier that captures one of these important targets."
+     STR_MEDAL_GRENADIERS_MEDAL_UFOPEDIA: " 'Five second fuses always burn three seconds.{NEWLINE} -- Murphy's Laws of Combat' {NEWLINE} {NEWLINE} This commendation is presented to soldiers that have made the most of their XCOM grenades! Beyond a standard proficiency medal, it recognizes the ability to kill multiple enemy with one standard grenade. {NEWLINE} {NEWLINE} Four levels of award are issued for killing three enemy at once with the standard issue hand grenate and proximity grenade."
+     STR_MEDAL_BLACK_CROSS_MEDAL_UFOPEDIA: "'Bullets do not discriminate. They are equal-opportunity projectiles.' {NEWLINE}    -- Peter Duysings{NEWLINE} {NEWLINE} Also known as: 'You should have ducked, Carl!' this medal is given to soldiers who have been hit by friendly fire. As Murphy says: 'Friendly Fire Isn't.' {NEWLINE} {NEWLINE} This commendation is available for award up to four times."
+     STR_MEDAL_STAR_OF_ASCLEPIUS_MEDAL_UFOPEDIA: "'War is life multiplied by some number that no one has ever heard of.' {NEWLINE}     -- Sebastian Junger. {NEWLINE} {NEWLINE} By drawing intense fire from the enemy, this soldier has provided heroic assistance to his comrades. {NEWLINE} {NEWLINE} This medal is awarded to soldiers who have been targeted ten times by the enemy. This award has three levels."
+     STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_NAME: "Order of the Custodian"
+     STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_UFOPEDIA: "'We need to thank all of our troops, and particularly those for whom we can never express enough gratitude... for they have given their lives so that all of us may be free.'{NEWLINE}    -Virgil Goode {NEWLINE} {NEWLINE}The countries of a given region recognize the skill and valor by which this trooper has protected their lives and property in this war against the Alien Menace. {NEWLINE} {NEWLINE} This medal is awarded for 10, 20 and 30 missions in a given region."
+     STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME: "Weapon Proficiency Medal"      
+     STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA: "'Anything worth shooting is worth shooting twice. Ammo is cheap. Life is expensive.'{NEWLINE}   -- US Ranger Rules for Gunfighting {NEWLINE} {NEWLINE} This medal is awarded to recognize a soldier's extreme prociency with a given weapon. They have become a true expert in their field and a master at their craft. {NEWLINE} {NEWLINE} This medal is awarded for 10, 20 and 30 kills with a specific weapon."
+     STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA: "'Don't fear them, my child. We are going to kill them all.'{NEWLINE}    --The Kingdom {NEWLINE} {NEWLINE} This medal recognizes the soldier who has mastered the art of killing aliens in all forms. No alien race is immune to their predations. {NEWLINE} {NEWLINE} This award is presented for killing a soldier of all the primary races. Further awards are given for 5, 10, and 15 more specimens of each race. "
+     STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA: " 'Of the four classical elements, fire is by far the most primal. The most challenging. The most dangerous. The most transforming. The most visceral. The most fun. Seriously, which enemies would cower in their tracks if you appeared in front of them and proclaimed yourself to be a great water wizard?'{NEWLINE}   -- The Rant {NEWLINE} {NEWLINE} This award is presented to those who have mastered the art of destroying the enemy with fire. The award is given for every five torched aliens, up to four times. "
+     STR_MEDAL_LUCKYSHOT_MEDAL_UFOPEDIA: "'The best luck of all is the luck you make for yourself. {NEWLINE}    -- Douglas MacArthur' {NEWLINE} {NEWLINE} When a soldier repeatedly defies the odds, and lands incredible shots, they become eligible for this award. {NEWLINE} {NEWLINE} Presented for every three lucky shots, this citation has four levels. "
+     STR_MEDAL_IRON_MAN_MEDAL_UFOPEDIA: "'If you're short of everything but the enemy, you're in a combat zone.{NEWLINE}   -- Murphy's Laws of Combat' {NEWLINE} {NEWLINE} This award is presented to soldiers who take on the foe single-handedly. Only the hardcore attempt this and fewer survive. The award has only one level. "
+     STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA_NAME: "Alien Race Xenocide Medal"
+     STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA: " 'If you find yourself in a fair fight, you didn't plan your mission properly.'{NEWLINE}    -- (David Hackworth) {NEWLINE} {NEWLINE} Given to a soldier who has become a lethal machine in cutting down a specific alien race. This race has suffered such depradations by this XCOM hero, that they have come to calling him XenoCide. {NEWLINE} {NEWLINE} Award levels are 10, 20, and 30 Kills of a given race."
+     STR_MEDAL_SNIPER_MEDAL_UFOPEDIA: "{NEWLINE}'My crosshairs steady, {NEWLINE} My trigger cold,{NEWLINE}I feel the recoil{NEWLINE} and watch him fold.{NEWLINE}The mission accomplished,{NEWLINE} I grab my gear.{NEWLINE}I'll clean my rifle{NEWLINE} in the rear.'{NEWLINE}   -- Marine Sniper{NEWLINE} {NEWLINE} This citation is designed to recognize expertise in dealing death from afar. {NEWLINE} {NEWLINE} Presented for every three longrange hits, this citation has four levels."
+     STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA: " 'You've got to believe that you are right to be a good soldier, that's why mercenaries are no good. It's emotion that makes a good fighting man - and knowing that you are fighting for a good cause.' {NEWLINE}    - Audie Murphy {NEWLINE} {NEWLINE} This decorations recognizes unparalleled battlefield prowess. Embodying Lethality, this warrior has proven their combat expertise in the most tangible means possible. {NEWLINE} {NEWLINE} This award is exclusively for soldiers who single handedly kill every alien in a singe mission. This award is presented up to three times. "
+     STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA: "'If you take more than your fair share of objectives, you will have more than your fair share objectives to take.' {NEWLINE}     -- Murphy's Laws of Combat {NEWLINE} {NEWLINE} This citation is given to honor a soldier who has killed seven enemies in a single mission. This feat is unparralled and demonstrates the true grit of this lethal trooper. {NEWLINE} {NEWLINE}This award may be issued three times. "     
   - type: fr
     strings:
      STR_DIARY: "DOSSIER"
@@ -616,7 +892,7 @@ extraStrings:
       STR_UFO_TYPE: "UFO> {ALT}{0}"
       STR_VEHICLE: Veicolo
       STR_WEAPON_UNKNOWN: Improvvisazione
-      STR_WINS: "Vittorie> {ALT}{0}"
+      STR_WINS: "Vittorie> {ALT}{0}"                      
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
 # Any vector greater than 10 will require more strings and more sprites decorations.
@@ -870,3 +1146,246 @@ commendations:
     sprite: 32
     criteria:
       totalAllAliensKilled: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
+ufopaedia:
+  - id: STR_MEDAL_MILITARY_CROSS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: MILITARY_CROSS
+    text: STR_MEDAL_MILITARY_CROSS_UFOPEDIA
+    text_width: 158
+    listOrder: 6001
+  - id: STR_MEDAL_MERIT_STAR_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: MERIT_STAR
+    text: STR_MEDAL_MERIT_STAR_UFOPEDIA
+    text_width: 158
+    listOrder: 6002 
+  - id: STR_MEDAL_ORDER_OF_RESTRAINT_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: ORDER_OF_RESTRAINT
+    text: STR_MEDAL_ORDER_OF_RESTRAINT_UFOPEDIA
+    text_width: 158
+    listOrder: 6003
+  - id: STR_MEDAL_DEFENDER_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: DEFENDER
+    text: STR_MEDAL_DEFENDER_UFOPEDIA
+    text_width: 158
+    listOrder: 6004    
+  - id: STR_MEDAL_LONGEST_NIGHT_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: LONGEST_NIGHT
+    text: STR_MEDAL_LONGEST_NIGHT_UFOPEDIA
+    text_width: 158
+    listOrder: 6005
+  - id: STR_MEDAL_HONOR_CROSS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: HONOR_CROSS
+    text: STR_MEDAL_HONOR_CROSS_UFOPEDIA
+    text_width: 158
+    listOrder: 6006    
+  - id: STR_MEDAL_SERVICE_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: SERVICE
+    text: STR_MEDAL_SERVICE_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6007
+  - id: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: WEAPON_PROFICIENCY 
+    text: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6008
+  - id: STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: CAMPAIGN_RIBBON
+    text: STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6009
+  - id: STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: XENOCIDE
+    text: STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6010
+  - id: STR_MEDAL_MEDAL_OF_HEROISM_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: MEDAL_OF_HEROISM
+    text: STR_MEDAL_MEDAL_OF_HEROISM_UFOPEDIA
+    text_width: 158
+    listOrder: 6011
+  - id: STR_MEDAL_HELLRAISER_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: HELLRAISER
+    text: STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6012
+  - id: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: DISTINGUISHED_SERVICE
+    text: STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6013
+  - id: STR_MEDAL_BOLTS_CROSS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: BOLTS_CROSS
+    text: STR_MEDAL_BOLTS_CROSS_UFOPEDIA
+    text_width: 162
+    listOrder: 6014
+  - id: STR_MEDAL_GRENADIERS_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: GRENADIERS_MEDAL
+    text: STR_MEDAL_GRENADIERS_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6015 
+  - id: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: STAR_OF_ASCLEPIUS
+    text: STR_MEDAL_STAR_OF_ASCLEPIUS_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6016 
+  - id: STR_MEDAL_MAN_OF_STEEL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: MAN_OF_STEEL
+    text: STR_MEDAL_MAN_OF_STEEL_UFOPEDIA
+    text_width: 158
+    listOrder: 6017
+  - id: STR_MEDAL_BLACK_CROSS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: BLACK_CROSS
+    text: STR_MEDAL_BLACK_CROSS_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6018
+  - id: STR_MEDAL_STAR_OF_VALOR_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: STAR_OF_VALOR
+    text: STR_MEDAL_STAR_OF_VALOR_UFOPEDIA
+    text_width: 158
+    listOrder: 6019    
+  - id: STR_MEDAL_IRON_MAN_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: IRON_MAN
+    text: STR_MEDAL_IRON_MAN_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6020
+  - id: STR_MEDAL_ORDER_OF_EARTH_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: ORDER_OF_EARTH
+    text: STR_MEDAL_ORDER_OF_EARTH_UFOPEDIA
+    text_width: 158
+    listOrder: 6021    
+  - id: STR_MEDAL_SNIPER_TMPNAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: SNIPER
+    text: STR_MEDAL_SNIPER_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6022
+  - id: STR_MEDAL_LUCKYSHOT_TMPNAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: LUCKYSHOT
+    text: STR_MEDAL_LUCKYSHOT_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6023
+  - id: STR_MEDAL_DBLKILL_TMPNAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: DBLKILL
+    text: STR_MEDAL_DBLKILL_TMPNAME_UFOPEDIA
+    text_width: 158
+    listOrder: 6024
+  - id: STR_MEDAL_REACTIONFIRE_TMPNAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: REACTIONFIRE
+    text: STR_MEDAL_REACTIONFIRE_UFOPEDIA
+    text_width: 165
+    listOrder: 6025 
+  - id: STR_MEDAL_PURPLE_HEART_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PURPLE_HEART
+    text: STR_MEDAL_PURPLE_HEART_UFOPEDIA
+    text_width: 158
+    listOrder: 6026    
+  - id: STR_MEDAL_CRIMSON_HEART_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: CRIMSON_HEART
+    text: STR_MEDAL_CRIMSON_HEART_UFOPEDIA
+    text_width: 158
+    listOrder: 6027
+  - id: STR_MEDAL_ORDER_OF_GLORY_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: ORDER_OF_GLORY
+    text: STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA
+    text_width: 158
+    listOrder: 6028
+  - id: STR_MEDAL_VALIANT_CRUX_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: VALIANT_CRUX
+    text: STR_MEDAL_VALIANT_CRUX_UFOPEDIA
+    text_width: 158
+    listOrder: 6029    
+  - id: STR_MEDAL_FALLEN_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: FALLEN
+    text: STR_MEDAL_FALLEN_UFOPEDIA
+    text_width: 158
+    listOrder: 6030
+  - id: STR_MEDAL_TRAP_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: TRAP
+    text: STR_MEDAL_TRAP_UFOPEDIA
+    text_width: 158
+    listOrder: 6031    
+  - id: STR_MEDAL_ALIEN_BASE_ASSAULT_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: ALIEN_BASE_ASSAULT
+    text: STR_MEDAL_ALIEN_BASE_ASSAULT_UFOPEDIA
+    text_width: 158
+    listOrder: 6032
+  - id: STR_MEDAL_NIKE_CROSS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033  
+# entries below move the HWPs to the Craft Section of the UFOPedia
+  - id: STR_TANK_CANNON
+    section: STR_XCOM_CRAFT_ARMAMENT
+  - id: STR_TANK_ROCKET_LAUNCHER
+    section: STR_XCOM_CRAFT_ARMAMENT
+  - id: STR_TANK_LASER_CANNON
+    section: STR_XCOM_CRAFT_ARMAMENT
+  - id: STR_HOVERTANK_PLASMA
+    section: STR_XCOM_CRAFT_ARMAMENT
+  - id: STR_HOVERTANK_LAUNCHER
+    section: STR_XCOM_CRAFT_ARMAMENT
