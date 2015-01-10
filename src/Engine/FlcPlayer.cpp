@@ -470,7 +470,7 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	float volume = Game::volumeExponent(Options::musicVolume);
 	for (int i = 0; i < _audioFrameSize; i++)
 	{
-		float tempVal = std::min(256.0f, std::max((float)(_chunkData[i]) * volume, 0.0f));
+		float tempVal = (float)(_chunkData[i]) * volume;
 		_chunkData[i] = tempVal;
 	}
 	/* Copy the data.... */
