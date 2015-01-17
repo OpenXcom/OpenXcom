@@ -670,6 +670,7 @@ void GraphsState::drawCountryLines()
 	double range = upperLimit - lowerLimit;
 	double low = lowerLimit;
 	int grids = 9; // cells in grid
+	if (low<0) grids--;
 	int check = _income ? 50 : 10;
 	while (range > check * grids)
 	{
@@ -684,7 +685,7 @@ void GraphsState::drawCountryLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			// upperLimit -= check;
+			upperLimit -= check;
 		}
 	}
 
@@ -842,7 +843,9 @@ void GraphsState::drawRegionLines()
 	double range = upperLimit - lowerLimit;
 	double low = lowerLimit;
 	int check = 10;
-	while (range > check * 9)
+	int grids = 9; // cells in grid
+	if (low<0) grids--;
+	while (range > check * grids)
 	{
 		check *= 2;
 	}
@@ -855,7 +858,7 @@ void GraphsState::drawRegionLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			// upperLimit -= check;
+			upperLimit -= check;
 		}
 	}
 	range = upperLimit - lowerLimit;
@@ -1025,7 +1028,9 @@ void GraphsState::drawFinanceLines()
 	double range = upperLimit - lowerLimit;
 	double low = lowerLimit;
 	int check = 250;
-	while (range > check * 9)
+	int grids = 9; // cells in grid
+	if (low<0) grids--;
+	while (range > check * grids)
 	{
 		check *= 2;
 	}
@@ -1038,7 +1043,7 @@ void GraphsState::drawFinanceLines()
 		while (low < lowerLimit)
 		{
 			lowerLimit -= check;
-			// upperLimit -= check;
+			upperLimit -= check;
 		}
 	}
 	//toggle screens
