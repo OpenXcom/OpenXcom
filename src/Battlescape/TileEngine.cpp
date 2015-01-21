@@ -89,6 +89,7 @@ void TileEngine::calculateSunShading()
 
 /**
   * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
+  * TODO: angle the shadow according to the time? - link to Options::globeSeasons (or whatever the realistic lighting one is)
   * @param tile The tile to calculate sun shading for.
   */
 void TileEngine::calculateSunShading(Tile *tile)
@@ -405,9 +406,10 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	}
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
-	if (currentUnit->getFaction() == FACTION_PLAYER &&
+	if ((currentUnit->getFaction() == FACTION_PLAYER &&
 		distance(currentUnit->getPosition(), tile->getPosition()) > 9 &&
-		tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+		tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS) ||
+		distance(currentUnit->getPosition(), tile->getPosition()) > MAX_VIEW_DISTANCE)
 	{
 		return false;
 	}
@@ -791,7 +793,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 		return false;
 	}
 
-	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);
+	std::vector<std::pair<BattleUnit *, BattleActionType> > spotters = getSpottingUnits(unit);
 	bool result = false;
 
 	// not mind controlled, or controlled by the player
@@ -799,27 +801,28 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
 		// get the first man up to bat.
-		BattleUnit *reactor = getReactor(spotters, unit);
+		BattleActionType attackType;
+		BattleUnit *reactor = getReactor(spotters, attackType, unit);
 		// start iterating through the possible reactors until the current unit is the one with the highest score.
 		while (reactor != unit)
 		{
-			if (!tryReactionSnap(reactor, unit))
+			if (!tryReaction(reactor, unit, attackType))
 			{
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
-				for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				for (std::vector<std::pair<BattleUnit *, BattleActionType> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 				{
-					if (*i == reactor)
+					if ((*i).first == reactor)
 					{
 						spotters.erase(i);
 						break;
 					}
 				}
 				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
-				reactor = getReactor(spotters, unit);
+				reactor = getReactor(spotters, attackType, unit);
 				continue;
 			}
 			// nice shot, kid. don't get cocky.
-			reactor = getReactor(spotters, unit);
+			reactor = getReactor(spotters, attackType, unit);
 			result = true;
 		}
 	}
@@ -831,9 +834,9 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
  * @param unit The unit to check for spotters of.
  * @return A vector of units that can see this unit.
  */
-std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
+std::vector<std::pair<BattleUnit *, BattleActionType> > TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	std::vector<BattleUnit*> spotters;
+	std::vector<std::pair<BattleUnit *, BattleActionType> > spotters;
 	Tile *tile = unit->getTile();
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -866,10 +869,13 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 				}
 				(*i)->addToVisibleUnits(unit);
 				// no reaction on civilian turn.
-				if (_save->getSide() != FACTION_NEUTRAL &&
-					canMakeSnap(*i, unit))
+				if (_save->getSide() != FACTION_NEUTRAL)
 				{
-					spotters.push_back(*i);
+					BattleActionType attackType = determineReactionType(*i, unit);
+					if (attackType != BA_NONE)
+					{
+						spotters.push_back(std::make_pair(*i, attackType));
+					}
 				}
 			}
 		}
@@ -883,18 +889,19 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
  * @param unit The unit to check scores against.
  * @return The unit with the highest reactions.
  */
-BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit)
+BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, BattleActionType> > spotters, BattleActionType &attackType, BattleUnit *unit)
 {
 	int bestScore = -1;
 	BattleUnit *bu = 0;
-	for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+	for (std::vector<std::pair<BattleUnit *, BattleActionType> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
-		if (!(*i)->isOut() &&
-		canMakeSnap(*i, unit) &&
-		(*i)->getReactionScore() > bestScore)
+		if (!(*i).first->isOut() &&
+		determineReactionType((*i).first, unit) != BA_NONE &&
+		(*i).first->getReactionScore() > bestScore)
 		{
-			bestScore = (*i)->getReactionScore();
-			bu = *i;
+			bestScore = (*i).first->getReactionScore();
+			bu = (*i).first;
+			attackType = (*i).second;
 		}
 	}
 	if (unit->getReactionScore() <= bestScore)
@@ -907,6 +914,7 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
 	else
 	{
 		bu = unit;
+		attackType = BA_NONE;
 	}
 	return bu;
 }
@@ -917,29 +925,39 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
  * @param target The unit to check sight TO.
  * @return True if the target is valid.
  */
-bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
+BattleActionType TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 {
+	BattleItem *meleeWeapon = unit->getMeleeWeapon();
+	if (meleeWeapon &&
+		// has a melee weapon and is in melee range
+		validMeleeRange(unit, target, unit->getDirection()) &&
+		unit->getActionTUs(BA_HIT, meleeWeapon) > 0 &&
+		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, meleeWeapon) &&
+		(unit->getOriginalFaction() != FACTION_PLAYER ||
+		_save->getGeoscapeSave()->isResearched(meleeWeapon->getRules()->getRequirements())) &&
+		(_save->getDepth() != 0 || meleeWeapon->getRules()->isWaterOnly() == false))
+	{
+		return BA_HIT;
+	}
+
 	BattleItem *weapon = unit->getMainHandWeapon();
 	// has a weapon
 	if (weapon &&
-		// has a melee weapon and is in melee range
-		((weapon->getRules()->getBattleType() == BT_MELEE &&
-		validMeleeRange(unit, target, unit->getDirection()) &&
-		unit->getActionTUs(BA_HIT, weapon) > 0 &&
-		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon)) ||
 		// has a gun capable of snap shot with ammo
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
 		weapon->getAmmoItem() &&
 		unit->getActionTUs(BA_SNAPSHOT, weapon) > 0 &&
-		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))) &&
+		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon)) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
 		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&
 		(_save->getDepth() != 0 || weapon->getRules()->isWaterOnly() == false))
 	{
-		return true;
+		return BA_SNAPSHOT;
 	}
-	return false;
+
+
+	return BA_NONE;
 }
 
 /**
@@ -948,23 +966,24 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
  * @param target The unit to check sight TO.
  * @return True if the action should (theoretically) succeed.
  */
-bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
+bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, BattleActionType attackType)
 {
 	BattleAction action;
 	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
 	action.actor = unit;
-	action.weapon = unit->getMainHandWeapon();
+	if (attackType == BA_HIT)
+	{
+		action.weapon = unit->getMeleeWeapon();
+	}
+	else
+	{
+		action.weapon = unit->getMainHandWeapon();
+	}
 	if (!action.weapon)
 	{
 		return false;
 	}
-	// reaction fire is ALWAYS snap shot.
-	action.type = BA_SNAPSHOT;
-	// unless we're a melee unit.
-	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
-	{
-		action.type = BA_HIT;
-	}
+	action.type = attackType;
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
@@ -2446,7 +2465,7 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
-	return (int)Round(sqrt(float(x*x + y*y)));
+	return (int)std::ceil(sqrt(float(x*x + y*y)));
 }
 
 /**
