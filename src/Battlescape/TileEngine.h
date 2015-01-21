@@ -32,7 +32,6 @@ class BattleUnit;
 class BattleItem;
 class Tile;
 struct BattleAction;
-enum BattleActionType;
 /**
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
  * Note that this function does not handle any sounds or animations.
@@ -126,13 +125,13 @@ public:
 	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
 	/// Creates a vector of units that can spot this unit.
-	std::vector<std::pair<BattleUnit *, BattleActionType> > getSpottingUnits(BattleUnit* unit);
+	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
-	BattleUnit* getReactor(std::vector<std::pair<BattleUnit *, BattleActionType> > spotters, BattleActionType &attackType, BattleUnit *unit);
+	BattleUnit* getReactor(std::vector<std::pair<BattleUnit *, int> > spotters, int &attackType, BattleUnit *unit);
 	/// Checks validity of a snap shot to this position.
-	BattleActionType determineReactionType(BattleUnit *unit, BattleUnit *target);
+	int determineReactionType(BattleUnit *unit, BattleUnit *target);
 	/// Tries to perform a reaction snap shot to this location.
-	bool tryReaction(BattleUnit *unit, BattleUnit *target, BattleActionType attackType);
+	bool tryReaction(BattleUnit *unit, BattleUnit *target, int attackType);
 	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
 	/// Get direction to a certain point

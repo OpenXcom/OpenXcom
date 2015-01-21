@@ -793,7 +793,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 		return false;
 	}
 
-	std::vector<std::pair<BattleUnit *, BattleActionType> > spotters = getSpottingUnits(unit);
+	std::vector<std::pair<BattleUnit *, int> > spotters = getSpottingUnits(unit);
 	bool result = false;
 
 	// not mind controlled, or controlled by the player
@@ -801,7 +801,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
 		// get the first man up to bat.
-		BattleActionType attackType;
+		int attackType;
 		BattleUnit *reactor = getReactor(spotters, attackType, unit);
 		// start iterating through the possible reactors until the current unit is the one with the highest score.
 		while (reactor != unit)
@@ -809,7 +809,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 			if (!tryReaction(reactor, unit, attackType))
 			{
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
-				for (std::vector<std::pair<BattleUnit *, BattleActionType> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				for (std::vector<std::pair<BattleUnit *, int> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 				{
 					if ((*i).first == reactor)
 					{
@@ -834,9 +834,9 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
  * @param unit The unit to check for spotters of.
  * @return A vector of units that can see this unit.
  */
-std::vector<std::pair<BattleUnit *, BattleActionType> > TileEngine::getSpottingUnits(BattleUnit* unit)
+std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	std::vector<std::pair<BattleUnit *, BattleActionType> > spotters;
+	std::vector<std::pair<BattleUnit *, int> > spotters;
 	Tile *tile = unit->getTile();
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -871,7 +871,7 @@ std::vector<std::pair<BattleUnit *, BattleActionType> > TileEngine::getSpottingU
 				// no reaction on civilian turn.
 				if (_save->getSide() != FACTION_NEUTRAL)
 				{
-					BattleActionType attackType = determineReactionType(*i, unit);
+					int attackType = determineReactionType(*i, unit);
 					if (attackType != BA_NONE)
 					{
 						spotters.push_back(std::make_pair(*i, attackType));
@@ -889,11 +889,11 @@ std::vector<std::pair<BattleUnit *, BattleActionType> > TileEngine::getSpottingU
  * @param unit The unit to check scores against.
  * @return The unit with the highest reactions.
  */
-BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, BattleActionType> > spotters, BattleActionType &attackType, BattleUnit *unit)
+BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, int> > spotters, int &attackType, BattleUnit *unit)
 {
 	int bestScore = -1;
 	BattleUnit *bu = 0;
-	for (std::vector<std::pair<BattleUnit *, BattleActionType> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+	for (std::vector<std::pair<BattleUnit *, int> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		if (!(*i).first->isOut() &&
 		determineReactionType((*i).first, unit) != BA_NONE &&
@@ -925,7 +925,7 @@ BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, BattleAct
  * @param target The unit to check sight TO.
  * @return True if the target is valid.
  */
-BattleActionType TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
+int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 {
 	// prioritize melee
 	BattleItem *meleeWeapon = unit->getMeleeWeapon();
@@ -967,7 +967,7 @@ BattleActionType TileEngine::determineReactionType(BattleUnit *unit, BattleUnit 
  * @param target The unit to check sight TO.
  * @return True if the action should (theoretically) succeed.
  */
-bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, BattleActionType attackType)
+bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackType)
 {
 	BattleAction action;
 	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
