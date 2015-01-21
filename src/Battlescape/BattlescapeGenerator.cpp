@@ -1761,45 +1761,51 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					success = addLine((MapDirection)(command->getDirection()), command->getRects());
 					break;
 				case MSC_ADDCRAFT:
-					craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
-					if (addCraft(craftMap, command, _craftPos))
+					if (_craft)
 					{
-						// by default addCraft adds blocks from group 1.
-						// this can be overwritten in the command by defining specific groups or blocks
-						// or this behaviour can be suppressed by leaving group 1 empty
-						// this is intentional to allow for TFTD's cruise liners/etc
-						// in this situation, you can end up with ANYTHING under your craft, so be careful
-						for (x = _craftPos.x; x < _craftPos.x + _craftPos.w; ++x)
+						craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
+						if (addCraft(craftMap, command, _craftPos))
 						{
-							for (y = _craftPos.y; y < _craftPos.y + _craftPos.h; ++y)
+							// by default addCraft adds blocks from group 1.
+							// this can be overwritten in the command by defining specific groups or blocks
+							// or this behaviour can be suppressed by leaving group 1 empty
+							// this is intentional to allow for TFTD's cruise liners/etc
+							// in this situation, you can end up with ANYTHING under your craft, so be careful
+							for (x = _craftPos.x; x < _craftPos.x + _craftPos.w; ++x)
 							{
-								if (_blocks[x][y])
+								for (y = _craftPos.y; y < _craftPos.y + _craftPos.h; ++y)
 								{
-									loadMAP(_blocks[x][y], x * 10, y * 10, _terrain, 0);
+									if (_blocks[x][y])
+									{
+										loadMAP(_blocks[x][y], x * 10, y * 10, _terrain, 0);
+									}
 								}
 							}
+							_craftDeployed = true;
+							success = true;
 						}
-						_craftDeployed = true;
-						success = true;
 					}
 					break;
 				case MSC_ADDUFO:
 					// as above, note that the craft and the ufo will never be allowed to overlap.
 					// TODO: make _ufopos a vector ;)
-					ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
-					if (addCraft(ufoMap, command, _ufoPos))
+					if (_ufo)
 					{
-						for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
+						ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
+						if (addCraft(ufoMap, command, _ufoPos))
 						{
-							for (y = _ufoPos.y; y < _ufoPos.y + _ufoPos.h; ++y)
+							for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
 							{
-								if (_blocks[x][y])
+								for (y = _ufoPos.y; y < _ufoPos.y + _ufoPos.h; ++y)
 								{
-									loadMAP(_blocks[x][y], x * 10, y * 10, _terrain, 0);
+									if (_blocks[x][y])
+									{
+										loadMAP(_blocks[x][y], x * 10, y * 10, _terrain, 0);
+									}
 								}
 							}
+							success = true;
 						}
-						success = true;
 					}
 					break;
 				case MSC_DIGTUNNEL:
