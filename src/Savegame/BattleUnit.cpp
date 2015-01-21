@@ -279,6 +279,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints = node["motionPoints"].as<int>(0);
 	_respawn = node["respawn"].as<bool>(_respawn);
+	_activeHand = node["activeHand"].as<std::string>(_activeHand);
 }
 
 /**
@@ -336,6 +337,7 @@ YAML::Node BattleUnit::save() const
 		node["spawnUnit"] = _spawnUnit;
 	node["motionPoints"] = _motionPoints;
 	node["respawn"] = _respawn;
+	node["activeHand"] = _activeHand;
 
 	return node;
 }
