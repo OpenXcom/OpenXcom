@@ -81,6 +81,7 @@ struct PromotionInfo
 	int totalColonels;
 	int totalCaptains;
 	int totalSergeants;
+	PromotionInfo(): totalCommanders(0), totalColonels(0), totalCaptains(0), totalSergeants(0){}
 };
 /**
  * The game data that gets written to disk when the game is saved.
