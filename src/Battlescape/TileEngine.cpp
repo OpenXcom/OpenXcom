@@ -984,7 +984,7 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
 	{
 		return false;
 	}
-	action.type = attackType;
+	action.type = (BattleActionType)(attackType);
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
