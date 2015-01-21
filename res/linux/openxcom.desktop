@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=OpenXcom
-Comment=An open-source clone of the famous X-COM game
+Comment=Open-source clone of UFO: Enemy Unknown
 Exec=openxcom
 Terminal=false
 Icon=openxcom
