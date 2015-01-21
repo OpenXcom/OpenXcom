@@ -927,6 +927,7 @@ BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, BattleAct
  */
 BattleActionType TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 {
+	// prioritize melee
 	BattleItem *meleeWeapon = unit->getMeleeWeapon();
 	if (meleeWeapon &&
 		// has a melee weapon and is in melee range
@@ -940,7 +941,7 @@ BattleActionType TileEngine::determineReactionType(BattleUnit *unit, BattleUnit 
 		return BA_HIT;
 	}
 
-	BattleItem *weapon = unit->getMainHandWeapon();
+	BattleItem *weapon = unit->getMainHandWeapon(unit->getFaction() != FACTION_PLAYER);
 	// has a weapon
 	if (weapon &&
 		// has a gun capable of snap shot with ammo
@@ -977,7 +978,7 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, BattleActionT
 	}
 	else
 	{
-		action.weapon = unit->getMainHandWeapon();
+		action.weapon = unit->getMainHandWeapon(unit->getFaction() != FACTION_PLAYER);
 	}
 	if (!action.weapon)
 	{
