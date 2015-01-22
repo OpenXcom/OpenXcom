@@ -57,7 +57,14 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_lstTotal = new TextList(100, 9, 205, 136);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color);
+	if (_game->getRuleset()->getInterface("costsInfo")->getElement("palette")->TFTDMode)
+	{
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color);
+	}
+	else
+	{
+		setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color);
+	}
 
 	add(_window, "window", "costsInfo");
 	add(_btnOk, "button", "costsInfo");

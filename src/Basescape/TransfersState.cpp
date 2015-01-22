@@ -53,7 +53,14 @@ TransfersState::TransfersState(Base *base) : _base(base)
 	_lstTransfers = new TextList(273, 112, 14, 50);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color);
+	if (_game->getRuleset()->getInterface("transferInfo")->getElement("palette")->TFTDMode)
+	{
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color);
+	}
+	else
+	{
+		setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color);
+	}
 
 	add(_window, "window", "transferInfo");
 	add(_btnOk, "button", "transferInfo");
