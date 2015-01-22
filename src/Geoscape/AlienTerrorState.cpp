@@ -55,41 +55,35 @@ AlienTerrorState::AlienTerrorState(TerrorSite *terror, const std::string &city, 
 	_txtCity = new Text(246, 17, 5, 80);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("terrorSite")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnIntercept);
-	add(_btnCentre);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtCity);
+	add(_window, "window", "terrorSite");
+	add(_btnIntercept, "button", "terrorSite");
+	add(_btnCentre, "button", "terrorSite");
+	add(_btnCancel, "button", "terrorSite");
+	add(_txtTitle, "text", "terrorSite");
+	add(_txtCity, "text", "terrorSite");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
 
-	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&AlienTerrorState::btnInterceptClick);
 
-	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)&AlienTerrorState::btnCentreClick);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&AlienTerrorState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(tr("STR_ALIENS_TERRORISE"));
 
-	_txtCity->setColor(Palette::blockOffset(8)+5);
 	_txtCity->setBig();
 	_txtCity->setAlign(ALIGN_CENTER);
 	_txtCity->setText(tr(city));

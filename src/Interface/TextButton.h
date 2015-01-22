@@ -87,6 +87,7 @@ public:
 	void setComboBox(ComboBox *comboBox);
 	void setWidth(int width);
 	void setHeight(int height);
+	void setSecondaryColor(Uint8 color);
 };
 
 }

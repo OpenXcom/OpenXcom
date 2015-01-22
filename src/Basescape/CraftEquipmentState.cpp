@@ -34,7 +34,6 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
@@ -59,7 +58,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _craft(craft), _base(base), _totalItems(0)
+CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _craft(craft), _base(base), _totalItems(0), _ammoColor(0)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	bool craftHasACrew = c->getNumSoldiers() > 0;
@@ -79,67 +78,54 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 2);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftEquipment")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnClear);
-	add(_btnInventory);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtStores);
-	add(_txtAvailable);
-	add(_txtUsed);
-	add(_txtCrew);
-	add(_lstEquipment);
+	_ammoColor = _game->getRuleset()->getInterface("craftEquipment")->getElement("ammoColor")->color;
+
+	add(_window, "window", "craftEquipment");
+	add(_btnOk, "button", "craftEquipment");
+	add(_btnClear, "button", "craftEquipment");
+	add(_btnInventory, "button", "craftEquipment");
+	add(_txtTitle, "text", "craftEquipment");
+	add(_txtItem, "text", "craftEquipment");
+	add(_txtStores, "text", "craftEquipment");
+	add(_txtAvailable, "text", "craftEquipment");
+	add(_txtUsed, "text", "craftEquipment");
+	add(_txtCrew, "text", "craftEquipment");
+	add(_lstEquipment, "list", "craftEquipment");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, Options::keyCancel);
 
-	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(tr("STR_UNLOAD_CRAFT"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
 	_btnClear->setVisible(isNewBattle);
 
-	_btnInventory->setColor(Palette::blockOffset(15) + 1);
 	_btnInventory->setText(tr("STR_INVENTORY"));
 	_btnInventory->onMouseClick((ActionHandler)&CraftEquipmentState::btnInventoryClick);
 	_btnInventory->setVisible(craftHasACrew && !isNewBattle);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_CRAFT").arg(c->getName(_game->getLanguage())));
 
-	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtStores->setColor(Palette::blockOffset(15)+1);
 	_txtStores->setText(tr("STR_STORES"));
 
-	_txtAvailable->setColor(Palette::blockOffset(15)+1);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 
-	_txtUsed->setColor(Palette::blockOffset(15)+1);
-	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
-	_txtCrew->setColor(Palette::blockOffset(15)+1);
-	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
 	std::wostringstream ss3;
 	ss3 << tr("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
 	_txtCrew->setText(ss3.str());
 
-	_lstEquipment->setColor(Palette::blockOffset(13)+10);
-	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 156, 83, 41);
 	_lstEquipment->setSelectable(true);
@@ -196,16 +182,16 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 			{
 				if (rule->getBattleType() == BT_AMMO)
 				{
-					color = Palette::blockOffset(15)+6;
+					color = _ammoColor;
 				}
 				else
 				{
-					color = Palette::blockOffset(13)+10;
+					color = _lstEquipment->getColor();
 				}
 			}
 			else
 			{
-				color = Palette::blockOffset(13);
+					color = _lstEquipment->getSecondaryColor();
 			}
 			_lstEquipment->setRowColor(row, color);
 
@@ -239,10 +225,6 @@ void CraftEquipmentState::init()
 
 	Craft *c = _base->getCrafts()->at(_craft);
 	c->setInBattlescape(false);
-
-	// Restore system colors
-	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
 
 /**
@@ -403,16 +385,16 @@ void CraftEquipmentState::updateQuantity()
 		RuleItem *rule = _game->getRuleset()->getItem(_items[_sel]);
 		if (rule->getBattleType() == BT_AMMO)
 		{
-			color = Palette::blockOffset(15)+6;
+			color = _ammoColor;
 		}
 		else
 		{
-			color = Palette::blockOffset(13)+10;
+			color = _lstEquipment->getColor();
 		}
 	}
 	else
 	{
-		color = Palette::blockOffset(13);
+		color = _lstEquipment->getSecondaryColor();
 	}
 	_lstEquipment->setRowColor(_sel, color);
 	_lstEquipment->setCellText(_sel, 1, ss.str());
@@ -568,7 +550,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-					_game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_game->pushState(new ErrorMessageState(msg, _palette, _game->getRuleset()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getRuleset()->getInterface("craftEquipment")->getElement("errorPalette")->color));
 				}
 			}
 			else
@@ -588,7 +570,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		{
 			_timerRight->stop();
 			LocalizedText msg(tr("STR_NO_MORE_EQUIPMENT_ALLOWED", c->getRules()->getMaxItems()));
-			_game->pushState(new ErrorMessageState(msg, _palette, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+			_game->pushState(new ErrorMessageState(msg, _palette, _game->getRuleset()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getRuleset()->getInterface("craftEquipment")->getElement("errorPalette")->color));
 			change = c->getRules()->getMaxItems() - _totalItems;
 		}
 		c->getItems()->addItem(_items[_sel],change);
@@ -627,10 +609,6 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.runInventory(craft);
-
-		// Fix system colors
-		_game->getCursor()->setColor(Palette::blockOffset(9));
-		_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 		_game->getScreen()->clear();
 		_game->pushState(new InventoryState(false, 0));

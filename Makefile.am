@@ -227,8 +227,8 @@ openxcom_SOURCES = \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \
-	src/Engine/Flc.cpp \
-	src/Engine/Flc.h \
+	src/Engine/FlcPlayer.cpp \
+	src/Engine/FlcPlayer.h \
 	src/Engine/Font.cpp \
 	src/Engine/Font.h \
 	src/Engine/Game.cpp \
@@ -411,6 +411,8 @@ openxcom_SOURCES = \
 	src/Menu/ErrorMessageState.h \
 	src/Menu/ListLoadState.cpp \
 	src/Menu/ListLoadState.h \
+	src/Menu/ListLoadOriginalState.cpp \
+	src/Menu/ListLoadOriginalState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
 	src/Menu/NewBattleState.cpp \
@@ -490,6 +492,8 @@ openxcom_SOURCES = \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
+	src/Ruleset/MapScript.cpp \
+	src/Ruleset/MapScript.h \
 	src/Ruleset/MCDPatch.cpp \
 	src/Ruleset/MCDPatch.h \
 	src/Ruleset/RuleAlienMission.cpp \
@@ -524,6 +528,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleTerrain.h \
 	src/Ruleset/RuleUfo.cpp \
 	src/Ruleset/RuleUfo.h \
+	src/Ruleset/RuleVideo.cpp \
+	src/Ruleset/RuleVideo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
 	src/Ruleset/StatString.h \
@@ -578,6 +584,9 @@ openxcom_SOURCES = \
 	src/Savegame/SavedBattleGame.h \
 	src/Savegame/SavedGame.cpp \
 	src/Savegame/SavedGame.h \
+	src/Savegame/SaveConverter.cpp \
+	src/Savegame/SaveConverter.h \
+	src/Savegame/SaveConverterXcom1.h \
 	src/Savegame/SerializationHelper.h \
 	src/Savegame/SerializationHelper.cpp \
 	src/Savegame/Soldier.cpp \
@@ -618,6 +627,20 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateTextImage.h \
 	src/Ufopaedia/ArticleStateTFTD.cpp \
 	src/Ufopaedia/ArticleStateTFTD.h \
+	src/Ufopaedia/ArticleStateTFTDArmor.cpp \
+	src/Ufopaedia/ArticleStateTFTDArmor.h \
+	src/Ufopaedia/ArticleStateTFTDCraft.cpp \
+	src/Ufopaedia/ArticleStateTFTDCraft.h \
+	src/Ufopaedia/ArticleStateTFTDCraftWeapon.cpp \
+	src/Ufopaedia/ArticleStateTFTDCraftWeapon.h \
+	src/Ufopaedia/ArticleStateTFTDFacility.cpp \
+	src/Ufopaedia/ArticleStateTFTDFacility.h \
+	src/Ufopaedia/ArticleStateTFTDItem.cpp \
+	src/Ufopaedia/ArticleStateTFTDItem.h \
+	src/Ufopaedia/ArticleStateTFTDUso.cpp \
+	src/Ufopaedia/ArticleStateTFTDUso.h \
+	src/Ufopaedia/ArticleStateTFTDVehicle.cpp \
+	src/Ufopaedia/ArticleStateTFTDVehicle.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
 	src/Ufopaedia/ArticleStateVehicle.cpp \

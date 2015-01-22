@@ -63,7 +63,7 @@ void PlaceStartFacilityState::viewClick(Action *)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, _game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	}
 	else
 	{

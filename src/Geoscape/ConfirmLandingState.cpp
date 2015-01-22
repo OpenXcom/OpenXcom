@@ -33,7 +33,6 @@
 #include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Battlescape/BriefingState.h"
@@ -64,32 +63,27 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) :
 	_txtBegin = new Text(206, 17, 25, 130);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtMessage);
-	add(_txtBegin);
+	add(_window, "window", "confirmLanding");
+	add(_btnYes, "button", "confirmLanding");
+	add(_btnNo, "button", "confirmLanding");
+	add(_txtMessage, "text", "confirmLanding");
+	add(_txtBegin, "text", "confirmLanding");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, Options::keyCancel);
 
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
-	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setWordWrap(true);
@@ -97,10 +91,11 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) :
 						 .arg(_craft->getName(_game->getLanguage()))
 						 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
-	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
+	std::wostringstream ss;
+	ss << L'\x01' << tr("STR_BEGIN_MISSION");
+	_txtBegin->setText(ss.str().c_str());
 }
 
 /**

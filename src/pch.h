@@ -40,6 +40,7 @@
 #endif
 #include <map>
 #include <queue>
+#include <yaml-cpp/yaml.h>
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
@@ -68,8 +69,6 @@
 #undef Insert
 #endif
 
-#include <yaml-cpp/yaml.h>
-
 #include "./fmath.h"
 #include "./version.h"
 
@@ -83,7 +82,7 @@
 #include "./Basescape/TransferConfirmState.h"
 
 #include "./Engine/ShaderMove.h"
-#include "./Engine/Flc.h"
+#include "./Engine/FlcPlayer.h"
 #include "./Engine/Logger.h"
 #include "./Engine/Surface.h"
 #include "./Engine/Exception.h"

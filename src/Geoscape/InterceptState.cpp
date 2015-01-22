@@ -62,54 +62,44 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 4);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnCancel);
-	add(_btnGotoBase);
-	add(_txtTitle);
-	add(_txtCraft);
-	add(_txtStatus);
-	add(_txtBase);
-	add(_txtWeapons);
-	add(_lstCrafts);
+	add(_window, "window", "geoCraftScreens");
+	add(_btnCancel, "button", "geoCraftScreens");
+	add(_btnGotoBase, "button", "geoCraftScreens");
+	add(_txtTitle, "text1", "geoCraftScreens");
+	add(_txtCraft, "text2", "geoCraftScreens");
+	add(_txtStatus, "text2", "geoCraftScreens");
+	add(_txtBase, "text2", "geoCraftScreens");
+	add(_txtWeapons, "text2", "geoCraftScreens");
+	add(_lstCrafts, "text1", "geoCraftScreens");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyCancel);
 	_btnCancel->onKeyboardPress((ActionHandler)&InterceptState::btnCancelClick, Options::keyGeoIntercept);
 
-	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)&InterceptState::btnGotoBaseClick);
 	_btnGotoBase->setVisible(_base != 0);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_LAUNCH_INTERCEPTION"));
 
-	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setText(tr("STR_STATUS"));
 
-	_txtBase->setColor(Palette::blockOffset(8)+5);
 	_txtBase->setText(tr("STR_BASE"));
 
-	_txtWeapons->setColor(Palette::blockOffset(8)+5);
 	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
-	_lstCrafts->setColor(Palette::blockOffset(15)-1);
-	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCrafts->setColumns(4, 86, 70, 80, 46);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
@@ -155,7 +145,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), tr((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
 			if ((*j)->getStatus() == "STR_READY")
 			{
-				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
+				_lstCrafts->setCellColor(row, 1, _lstCrafts->getSecondaryColor());
 			}
 			row++;
 		}

@@ -91,9 +91,9 @@ void create()
 	_info.push_back(OptionInfo("useOpenGLSmoothing", &useOpenGLSmoothing, true));
 	_info.push_back(OptionInfo("debug", &debug, false));
 	_info.push_back(OptionInfo("debugUi", &debugUi, false));
-	_info.push_back(OptionInfo("soundVolume", &soundVolume, MIX_MAX_VOLUME));
-	_info.push_back(OptionInfo("musicVolume", &musicVolume, MIX_MAX_VOLUME));
-	_info.push_back(OptionInfo("uiVolume", &uiVolume, MIX_MAX_VOLUME/2));
+	_info.push_back(OptionInfo("soundVolume", &soundVolume, 2*(MIX_MAX_VOLUME/3)));
+	_info.push_back(OptionInfo("musicVolume", &musicVolume, 2*(MIX_MAX_VOLUME/3)));
+	_info.push_back(OptionInfo("uiVolume", &uiVolume, MIX_MAX_VOLUME/3));
 	_info.push_back(OptionInfo("language", &language, ""));
 	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 8));
 	_info.push_back(OptionInfo("battleEdgeScroll", (int*)&battleEdgeScroll, SCROLL_AUTO));
@@ -443,7 +443,7 @@ void setFolders()
         _configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{

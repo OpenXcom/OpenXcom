@@ -95,7 +95,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	}
 	_res = _game->getResourcePack();
 	_save = _game->getSavedGame()->getSavedBattle();
-	if (_res->getLUTs()->size() > _save->getDepth())
+	if ((int)(_res->getLUTs()->size()) > _save->getDepth())
 	{
 		_transparencies = &_res->getLUTs()->at(_save->getDepth());
 	}
@@ -547,7 +547,7 @@ void Map::drawTerrain(Surface *surface)
 							/*
 							 * Phase IV: render any south or east wall type objects in the tile to the north
 							 */
-							if (tileNorth->getMapData(MapData::O_OBJECT) && tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+							if (tileNorth->getMapData(MapData::O_OBJECT) && tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() >= 6 && tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 							{
 								tmpSurface = tileNorth->getSprite(MapData::O_OBJECT);
 								if (tmpSurface)
@@ -613,7 +613,7 @@ void Map::drawTerrain(Surface *surface)
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
 								}
 								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
-								if (tmpSurface && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6 && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
+								if (tmpSurface && (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6 || tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9) && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
 								{
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
 									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
@@ -632,7 +632,7 @@ void Map::drawTerrain(Surface *surface)
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y, tileWestShade, true);
 								}
 								// Draw soldier
-								if (westUnit && westUnit->getStatus() != STATUS_WALKING && (!tileWest->getMapData(MapData::O_OBJECT) || tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6) && (westUnit->getVisible() || _save->getDebugMode()))
+								if (westUnit && westUnit->getStatus() != STATUS_WALKING && (!tileWest->getMapData(MapData::O_OBJECT) || tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6 || tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9) && (westUnit->getVisible() || _save->getDebugMode()))
 								{
 									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 									int part = 0;
@@ -682,7 +682,7 @@ void Map::drawTerrain(Surface *surface)
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, shade, true);
 								}
 								// Draw object
-								if (tileWest->getMapData(MapData::O_OBJECT) && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+								if (tileWest->getMapData(MapData::O_OBJECT) && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6 && tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 								{
 									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
@@ -725,7 +725,7 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 						// Draw object
-						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
+						if (tile->getMapData(MapData::O_OBJECT) && (tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6 || tile->getMapData(MapData::O_OBJECT)->getBigWall() == 9))
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
@@ -935,7 +935,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						int vaporX = screenPosition.x + (*i)->getX();
 						int vaporY = screenPosition.y + (*i)->getY();
-						if (_transparencies->size() >= ((*i)->getColor() + 1) * 1024)
+						if ((int)(_transparencies->size()) >= ((*i)->getColor() + 1) * 1024)
 						{
 							switch ((*i)->getSize())
 							{
@@ -972,7 +972,7 @@ void Map::drawTerrain(Surface *surface)
 					if (!tile->isVoid())
 					{
 						// Draw object
-						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() >= 6 && tile->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
@@ -1320,7 +1320,7 @@ void Map::animate(bool redraw)
 		_save->getTiles()[i]->animate();
 	}
 
-	// animate certain units (large flying units have a propultion animation)
+	// animate certain units (large flying units have a propulsion animation)
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (_save->getDepth() > 0 && !(*i)->getFloorAbove())
@@ -1448,7 +1448,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 			// make sure this unit isn't obscured by the floor above him, otherwise it looks weird.
 			if (_camera->getViewLevel() > unit->getPosition().z)
 			{
-				for (int z = _camera->getViewLevel(); z != unit->getPosition().z; --z)
+				for (int z = std::min(_camera->getViewLevel(), _save->getMapSizeZ() - 1); z != unit->getPosition().z; --z)
 				{
 					if (!_save->getTile(Position(unit->getPosition().x, unit->getPosition().y, z))->hasNoFloor(0))
 					{
@@ -1550,11 +1550,11 @@ void Map::cacheUnit(BattleUnit *unit)
 
 			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
-			if (rhandItem)
+			if (rhandItem && !rhandItem->getRules()->isFixed())
 			{
 				unitSprite->setBattleItem(rhandItem);
 			}
-			if (lhandItem)
+			if (lhandItem && !lhandItem->getRules()->isFixed())
 			{
 				unitSprite->setBattleItem(lhandItem);
 			}

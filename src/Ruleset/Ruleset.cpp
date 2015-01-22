@@ -33,6 +33,7 @@
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
 #include "MapDataSet.h"
+#include "MapScript.h"
 #include "RuleSoldier.h"
 #include "Unit.h"
 #include "AlienRace.h"
@@ -47,6 +48,7 @@
 #include "ExtraStrings.h"
 #include "RuleInterface.h"
 #include "SoundDefinition.h"
+#include "RuleMusic.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -66,6 +68,7 @@
 #include "StatString.h"
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"
+#include "RuleVideo.h"
 
 namespace OpenXcom
 {
@@ -201,6 +204,22 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, std::vector<MapScript*> >::iterator i = _mapScripts.begin(); i != _mapScripts.end(); ++i)
+	{
+		for (std::vector<MapScript*>::iterator j = (*i).second.begin(); j != (*i).second.end();)
+		{
+			delete *j;
+			j = (*i).second.erase(j);
+		}
+	}
+	for (std::map<std::string, RuleVideo *>::const_iterator i = _videos.begin(); i != _videos.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleMusic *>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -214,6 +233,8 @@ void Ruleset::load(const std::string &source)
 		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
 		loadFiles(dirname);
+
+	_modIndex += 1000;
 }
 
 /**
@@ -381,9 +402,20 @@ void Ruleset::loadFile(const std::string &filename)
 				case UFOPAEDIA_TYPE_ARMOR: rule = new ArticleDefinitionArmor(); break;
 				case UFOPAEDIA_TYPE_BASE_FACILITY: rule = new ArticleDefinitionBaseFacility(); break;
 				case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
-				case UFOPAEDIA_TYPE_TFTD: rule = new ArticleDefinitionTFTD(); break;
 				case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
 				case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
+				case UFOPAEDIA_TYPE_TFTD:
+				case UFOPAEDIA_TYPE_TFTD_CRAFT:
+				case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
+				case UFOPAEDIA_TYPE_TFTD_VEHICLE:
+				case UFOPAEDIA_TYPE_TFTD_ITEM:
+				case UFOPAEDIA_TYPE_TFTD_ARMOR:
+				case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
+				case UFOPAEDIA_TYPE_TFTD_USO:
+					{
+						rule = new ArticleDefinitionTFTD();
+						break;
+					}
 				default: rule = 0; break;
 				}
 				_ufopaediaArticles[id] = rule;
@@ -567,6 +599,11 @@ void Ruleset::loadFile(const std::string &filename)
 		ResourcePack::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(ResourcePack::UFO_EXPLODE);
 		ResourcePack::INTERCEPTOR_HIT = (*i)["intterceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
 		ResourcePack::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
+		ResourcePack::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(ResourcePack::GEOSCAPE_CURSOR);
+		ResourcePack::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(ResourcePack::BASESCAPE_CURSOR);
+		ResourcePack::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(ResourcePack::BATTLESCAPE_CURSOR);
+		ResourcePack::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(ResourcePack::UFOPAEDIA_CURSOR);
+		ResourcePack::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(ResourcePack::GRAPHS_CURSOR);
 	}
 	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
 	{
@@ -580,7 +617,25 @@ void Ruleset::loadFile(const std::string &filename)
 			_transparencies.push_back(color);
 		}
 	}
-
+	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		if (_mapScripts.find(type) != _mapScripts.end())
+		{
+			for (std::vector<MapScript*>::iterator j = _mapScripts[type].begin(); j != _mapScripts[type].end();)
+			{
+				delete *j;
+				j = _mapScripts[type].erase(j);
+			}
+		}
+		for (YAML::const_iterator j = (*i)["commands"].begin(); j != (*i)["commands"].end(); ++j)
+		{
+			std::auto_ptr<MapScript> mapScript(new MapScript());
+			mapScript->load(*j);
+			_mapScripts[type].push_back(mapScript.release());
+		}
+	}
+	
 	// refresh _psiRequirements for psiStrengthEval
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
@@ -591,8 +646,23 @@ void Ruleset::loadFile(const std::string &filename)
 			break;
 		}
 	}
-
-	_modIndex += 1000;
+	
+	for (YAML::const_iterator i = doc["cutscenes"].begin(); i != doc["cutscenes"].end(); ++i)
+	{
+		RuleVideo *rule = loadRule(*i, &_videos);
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
+	for (YAML::const_iterator i = doc["musics"].begin(); i != doc["musics"].end(); ++i)
+	{
+		RuleMusic *rule = loadRule(*i, &_musics);
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
 }
 
 /**
@@ -1235,12 +1305,21 @@ const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 }
 
 /**
- * Gets the Defined starting base.
+ * Gets the defined starting base.
  * @return The starting base definition.
  */
-const YAML::Node &Ruleset::getStartingBase()
+const YAML::Node &Ruleset::getStartingBase() const
 {
 	return _startingBase;
+}
+
+/**
+ * Gets the defined starting time.
+ * @return The time the game starts in.
+ */
+const GameTime &Ruleset::getStartingTime() const
+{
+	return _startingTime;
 }
 
 /**
@@ -1528,6 +1607,22 @@ const std::map<std::string, SoundDefinition *> *Ruleset::getSoundDefinitions() c
 const std::vector<SDL_Color> *Ruleset::getTransparencies() const
 {
 	return &_transparencies;
+}
+
+const std::vector<MapScript*> *Ruleset::getMapScript(std::string id) const
+{
+	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
+	if (_mapScripts.end() != i) return &i->second; else return 0;
+}
+
+const std::map<std::string, RuleVideo *> *Ruleset::getVideos() const
+{
+	return &_videos;
+}
+
+const std::map<std::string, RuleMusic *> *Ruleset::getMusic() const
+{
+	return &_musics;
 }
 
 }

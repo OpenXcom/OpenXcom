@@ -48,22 +48,19 @@ PsiTrainingState::PsiTrainingState()
 	_btnOk = new TextButton(160, 14, 80, 174);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 7);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("psiTraining")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
+	add(_window, "window", "psiTraining");
+	add(_btnOk, "button2", "psiTraining");
+	add(_txtTitle, "text", "psiTraining");
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&PsiTrainingState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
@@ -74,10 +71,9 @@ PsiTrainingState::PsiTrainingState()
 		if ((*b)->getAvailablePsiLabs())
 		{
 			TextButton *btnBase = new TextButton(160, 14, 80, 40 + 16 * buttons);
-			btnBase->setColor(Palette::blockOffset(15) + 6);
 			btnBase->onMouseClick((ActionHandler)&PsiTrainingState::btnBaseXClick);
 			btnBase->setText((*b)->getName());
-			add(btnBase);
+			add(btnBase, "button1", "psiTraining");
 			_bases.push_back(*b);
 			_btnBases.push_back(btnBase);
 			++buttons;

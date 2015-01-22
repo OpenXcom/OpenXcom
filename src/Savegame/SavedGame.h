@@ -75,6 +75,14 @@ struct SaveInfo
 	bool reserved;
 };
 
+struct PromotionInfo
+{
+	int totalCommanders;
+	int totalColonels;
+	int totalCaptains;
+	int totalSergeants;
+	PromotionInfo(): totalCommanders(0), totalColonels(0), totalCaptains(0), totalSergeants(0){}
+};
 /**
  * The game data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like funds,
@@ -166,6 +174,8 @@ public:
 	void setTime(GameTime time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
+	/// Resets the list of object IDs.
+	void setIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
@@ -189,7 +199,7 @@ public:
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject
-	void addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset = NULL);
+	void addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset = NULL, bool score = true);
 	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearch *> & getDiscoveredResearch() const;
 	/// Get the list of ResearchProject which can be researched in a Base
@@ -210,8 +220,9 @@ public:
 	Soldier *getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions(std::vector<Soldier*> &participants);
+	void processSoldier(Soldier *soldier, PromotionInfo &soldierData);
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
-	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
+	Soldier *inspectSoldiers(std::vector<Soldier*> &soldiers, std::vector<Soldier*> &participants, int rank);
 	///  Returns the list of alien bases.
 	std::vector<AlienBase*> *getAlienBases();
 	/// Sets debug mode.

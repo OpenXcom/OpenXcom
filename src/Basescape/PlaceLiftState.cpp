@@ -52,9 +52,9 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 
 	// Set palette
 	setPalette("PAL_BASESCAPE");
-
-	add(_view);
-	add(_txtTitle);
+	
+	add(_view, "baseView", "basescape");
+	add(_txtTitle, "text", "placeFacility");
 
 	centerAllSurfaces();
 
@@ -64,7 +64,6 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
 }
 
