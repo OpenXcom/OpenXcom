@@ -820,7 +820,7 @@ void GeoscapeState::time5Seconds()
 								startDogfight();
 								_dogfightStartTimer->start();
 							}
-							_game->getResourcePack()->getRandomMusic("GMINTER")->play();
+							_game->getResourcePack()->playMusic("GMINTER", true);
 						}
 						break;
 					case Ufo::LANDED:
