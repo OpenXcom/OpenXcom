@@ -36,6 +36,7 @@
 #include "../Savegame/Node.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/RuleMusic.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
@@ -255,22 +256,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	{
 #ifndef __NO_MUSIC
 		// Load musics
-		std::string mus[] = {"GMDEFEND",
-							 "GMENBASE",
-							 "GMGEO1",
-							 "GMGEO2",
-							 "GMINTER",
-							 "GMINTRO1",
-							 "GMINTRO2",
-							 "GMINTRO3",
-							 "GMLOSE",
-							 "GMMARS",
-							 "GMNEWMAR",
-							 "GMSTORY",
-							 "GMTACTIC",
-							 "GMWIN"};
-		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
-		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f};
+		const std::map<std::string, RuleMusic *> musics = *rules->getMusic();
 
 		// Check which music version is available
 		CatFile *adlibcat = 0, *aintrocat = 0;
@@ -292,54 +278,23 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 
 		// Try the preferred format first, otherwise use the default priority
 		MusicFormat priority[] = {Options::preferredMusic, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI};
-
-		for (size_t i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
+		for (std::map<std::string, RuleMusic *>::const_iterator i = musics.begin(); i != musics.end(); ++i)
 		{
 			Music *music = 0;
 			for (size_t j = 0; j < sizeof(priority)/sizeof(priority[0]) && music == 0; ++j)
 			{
-				music = loadMusic(priority[j], mus[i], tracks[i], tracks_normalize[i], adlibcat, aintrocat, gmcat);
-			}
-			if (!music)
-			{
-				throw Exception(mus[i] + " not found");
-			}
-			_musics[mus[i]] = music;
-		}
-		delete gmcat;
-		delete adlibcat;
-		delete aintrocat;
-
-		// Ok, now try to load the optional musics
-		std::string musOptional[] = {"GMGEO3",
-									 "GMGEO4",
-									 "GMGEO5",
-									 "GMGEO6",
-									 "GMGEO7",
-									 "GMGEO8",
-									 "GMGEO9",
-									 "GMTACTIC1",
-									 "GMTACTIC2",
-									 "GMTACTIC3",
-									 "GMTACTIC4",
-									 "GMTACTIC5",
-									 "GMTACTIC6",
-									 "GMTACTIC7",
-									 "GMTACTIC8",
-									 "GMTACTIC9"};
-
-		for (size_t i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
-		{
-			Music *music = 0;
-			for (size_t j = 0; j < sizeof(priority) / sizeof(priority[0]) && music == 0; ++j)
-			{
-				music = loadMusic(priority[j], musOptional[i], 0, 0, 0, 0, 0);
+				music = loadMusic(priority[j], (*i).first, (*i).second->getCatPos(), (*i).second->getNormalization(), adlibcat, aintrocat, gmcat);
 			}
 			if (music)
 			{
-				_musics[musOptional[i]] = music;
+				_musics[(*i).first] = music;
 			}
+
 		}
+
+		delete gmcat;
+		delete adlibcat;
+		delete aintrocat;
 #endif		
 		
 		if (rules->getSoundDefinitions()->empty())
@@ -1017,7 +972,15 @@ Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int
 				else if (aintrocat)
 				{
 					track -= adlibcat->getAmount();
-					music->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+					if (track < aintrocat->getAmount())
+					{
+						music->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+					}
+					else
+					{
+						delete music;
+						music = 0;
+					}
 				}
 			}
 		}
@@ -1025,7 +988,7 @@ Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int
 		else if (fmt == MUSIC_MIDI)
 		{
 			// DOS MIDI
-			if (gmcat)
+			if (gmcat && track < gmcat->getAmount())
 			{
 				music = gmcat->loadMIDI(track);
 			}

@@ -907,6 +907,9 @@
     <ClCompile Include="Ruleset\RuleVideo.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleMusic.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1840,6 +1843,9 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleVideo.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleMusic.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
