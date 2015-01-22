@@ -52,14 +52,7 @@ StoresState::StoresState(Base *base) : _base(base)
 	_lstStores = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	if (_game->getRuleset()->getInterface("storesInfo")->getElement("palette")->TFTDMode)
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("storesInfo")->getElement("palette")->color);
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("storesInfo")->getElement("palette")->color);
-	}
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("storesInfo")->getElement("palette")->color);
 
 	add(_window, "window", "storesInfo");
 	add(_btnOk, "button", "storesInfo");

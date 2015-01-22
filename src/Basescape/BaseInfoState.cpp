@@ -102,14 +102,7 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 	_barLongRange = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 169 : 165);
 
 	// Set palette
-	if (_game->getRuleset()->getInterface("baseInfo")->getElement("palette")->TFTDMode)
-	{
-		setPalette("PAL_GEOSCAPE");
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE");
-	}
+	setPalette("PAL_BASESCAPE");
 
 	add(_bg);
 	add(_mini, "miniBase", "basescape");
