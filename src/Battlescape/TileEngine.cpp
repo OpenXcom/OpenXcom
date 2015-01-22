@@ -2915,9 +2915,8 @@ int TileEngine::getDirectionTo(const Position &origin, const Position &target) c
  */
 Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 {
-
-	const int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
-	const int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+	const int dirYshift[8] = {1, 1, 8, 15,15,15,8, 1};
+	const int dirXshift[8] = {8, 14,15,15,8, 1, 1, 1};
 	if (!tile)
 	{
 		tile = action.actor->getTile();
@@ -2959,18 +2958,9 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 				originVoxel.z -= 4;
 			}
 		}
-		int offset = 0;
-		if (action.actor->getArmor()->getSize() > 1)
-		{
-			offset = 16;
-		}
-		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !action.weapon->getRules()->isTwoHanded())
-		{
-			offset = 8;
-		}
 		int direction = getDirectionTo(origin, action.target);
-		originVoxel.x += dirXshift[direction+offset]*action.actor->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction+offset]*action.actor->getArmor()->getSize();
+		originVoxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction]*action.actor->getArmor()->getSize();
 	}
 	else
 	{
