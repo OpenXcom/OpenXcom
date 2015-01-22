@@ -75,11 +75,12 @@ private:
 
 	typedef struct AudioBuffer
 	{
-		char *samples;
+		Sint16 *samples;
 		int sampleCount;
 		int sampleBufSize;
 		int currSamplePos;
 	}AudioBuffer;
+
 
 	typedef struct AudioData
 	{

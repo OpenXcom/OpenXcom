@@ -447,7 +447,7 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	{
 		_audioData.sampleRate = sampleRate;
 		_hasAudio = true;
-		initAudio(AUDIO_U8, 1);
+		initAudio(AUDIO_S16SYS, 1);
 	}
 	else
 	{
@@ -458,30 +458,25 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	SDL_SemWait(_audioData.sharedLock);
 	AudioBuffer *loadingBuff = _audioData.loadingBuffer;
 	assert(loadingBuff->currSamplePos == 0);
-	int newSize = (_audioFrameSize + loadingBuff->sampleCount);
+	int newSize = (_audioFrameSize + loadingBuff->sampleCount )*2;
 	if (newSize > loadingBuff->sampleBufSize)
 	{
 		/* If the sample count has changed, we need to reallocate (Handles initial state
 		* of '0' sample count too, as realloc(NULL, size) == malloc(size) */
-		loadingBuff->samples = (char*)realloc(loadingBuff->samples, newSize);
+		loadingBuff->samples = (Sint16*)realloc(loadingBuff->samples, newSize);
 		loadingBuff->sampleBufSize = newSize;
 	}
 
 	float volume = Game::volumeExponent(Options::musicVolume);
 	for (int i = 0; i < _audioFrameSize; i++)
 	{
-		float tempVal = (float)(_chunkData[i]) * volume;
-		_chunkData[i] = tempVal;
+		loadingBuff->samples[loadingBuff->sampleCount + i] = (float)((_chunkData[i]) -128) * 240 * volume;
 	}
-	/* Copy the data.... */
-	memcpy(loadingBuff->samples + loadingBuff->sampleCount, _chunkData, _audioFrameSize);
-
 	loadingBuff->sampleCount += _audioFrameSize;
 
 	SDL_SemPost(_audioData.sharedLock);
-
-	
 }
+
 void FlcPlayer::color256()
 {
 	Uint8 *pSrc;
@@ -764,12 +759,12 @@ void FlcPlayer::audioCallback(void *userData, Uint8 *stream, int len)
 	{
 		if (playBuff->sampleCount > 0)
 		{
-			int samplesToCopy = std::min(len, playBuff->sampleCount);
-			memcpy(stream, playBuff->samples + playBuff->currSamplePos, samplesToCopy);
+			int bytesToCopy = std::min(len, playBuff->sampleCount * 2);
+			memcpy(stream, playBuff->samples + playBuff->currSamplePos, bytesToCopy);
 
-			playBuff->currSamplePos += samplesToCopy;
-			playBuff->sampleCount -= samplesToCopy;
-			len -= samplesToCopy;
+			playBuff->currSamplePos += bytesToCopy / 2;
+			playBuff->sampleCount -= bytesToCopy / 2;
+			len -= bytesToCopy;
 
 			assert(playBuff->sampleCount >= 0);
 		}
@@ -794,8 +789,8 @@ void FlcPlayer::initAudio(Uint16 format, Uint8 channels)
 {
 	int err;
 
-	err = Mix_OpenAudio(_audioData.sampleRate, format, channels, _audioFrameSize);
-	_videoDelay = 1000 / (_audioData.sampleRate / _audioFrameSize);
+	err = Mix_OpenAudio(_audioData.sampleRate, format, channels, _audioFrameSize *2);
+	_videoDelay = 1000 / (_audioData.sampleRate / _audioFrameSize );
 
 	if (err)
 	{
@@ -809,14 +804,14 @@ void FlcPlayer::initAudio(Uint16 format, Uint8 channels)
 	_audioData.loadingBuffer = new AudioBuffer();
 	_audioData.loadingBuffer->currSamplePos = 0;
 	_audioData.loadingBuffer->sampleCount = 0;
-	_audioData.loadingBuffer->samples = (char *)malloc(_audioFrameSize);
-	_audioData.loadingBuffer->sampleBufSize = _audioFrameSize;
+	_audioData.loadingBuffer->samples = (Sint16 *)malloc(_audioFrameSize * 2);
+	_audioData.loadingBuffer->sampleBufSize = _audioFrameSize * 2;
 
 	_audioData.playingBuffer = new AudioBuffer();
 	_audioData.playingBuffer->currSamplePos = 0;
 	_audioData.playingBuffer->sampleCount = 0;
-	_audioData.playingBuffer->samples = (char *)malloc(_audioFrameSize);
-	_audioData.playingBuffer->sampleBufSize = _audioFrameSize;
+	_audioData.playingBuffer->samples = (Sint16 *)malloc(_audioFrameSize * 2);
+	_audioData.playingBuffer->sampleBufSize = _audioFrameSize * 2;
 
 	Mix_HookMusic(FlcPlayer::audioCallback, &_audioData);
 }
