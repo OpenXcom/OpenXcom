@@ -78,6 +78,8 @@ public:
 	const MissionWave &getWave(size_t index) const { return _waves[index]; }
 	/// Gets the score for this mission.
 	int getPoints() const;
+	/// Gets lowest available month (allows late missions).
+	const int determineLowestMonth() const;
 private:
 	/// The mission's type ID.
 	std::string _type;
