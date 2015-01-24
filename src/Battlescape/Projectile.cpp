@@ -51,12 +51,12 @@ namespace OpenXcom
  * @param action An action.
  * @param origin Position the projectile originates from.
  * @param targetVoxel Position the projectile is targeting.
+ * @param ammo the ammo that produced this projectile, where applicable.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, int bulletSprite, int vaporColor, int vaporDensity) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(bulletSprite), _reversed(false), _vaporColor(vaporColor), _vaporDensity(vaporDensity)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, BattleItem *ammo) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(-1), _reversed(false), _vaporColor(-1), _vaporDensity(-1), _vaporProbability(5)
 {
 	// this is the number of pixels the sprite will move between frames
 	_speed = Options::battleFireSpeed;
-
 	if (_action.weapon)
 	{
 		if (_action.type == BA_THROW)
@@ -65,13 +65,36 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
 		}
 		else
 		{
-			if (_action.weapon->getRules()->getBulletSpeed() != 0)
+			// try to get all the required info from the ammo, if present
+			if (ammo)
+			{
+				_bulletSprite = ammo->getRules()->getBulletSprite();
+				_vaporColor = ammo->getRules()->getVaporColor();
+				_vaporDensity = ammo->getRules()->getVaporDensity();
+				_vaporProbability = ammo->getRules()->getVaporProbability();
+				_speed = std::max(1, _speed + ammo->getRules()->getBulletSpeed());
+			}
+
+			// no ammo, or the ammo didn't contain the info we wanted, see what the weapon has on offer.
+			if (_bulletSprite == -1)
+			{
+				_bulletSprite = _action.weapon->getRules()->getBulletSprite();
+			}
+			if (_vaporColor == -1)
+			{
+				_vaporColor = _action.weapon->getRules()->getVaporColor();
+			}
+			if (_vaporDensity == -1)
+			{
+				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
+			}
+			if (_vaporProbability == 5)
+			{
+				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
+			}
+			if (!ammo || (ammo != _action.weapon || ammo->getRules()->getBulletSpeed() == 0))
 			{
 				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
-			}
-			else if (_action.weapon->getAmmoItem() && _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
-			{
-				_speed = std::max(1, _speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
 			}
 		}
 	}
@@ -345,7 +368,7 @@ bool Projectile::move()
 			_position--;
 			return false;
 		}
-		if (_save->getDepth() > 0 && _vaporColor != -1 && _action.type != BA_THROW && RNG::percent(5))
+		if (_save->getDepth() > 0 && _vaporColor != -1 && _action.type != BA_THROW && RNG::percent(_vaporProbability))
 		{
 			addVaporCloud();
 		}

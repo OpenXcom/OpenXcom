@@ -91,6 +91,10 @@ YAML::Node BattleItem::save() const
 	{
 		node["owner"] = -1;
 	}
+	if (_previousOwner)
+	{
+		node["previousOwner"] = _previousOwner->getId();
+	}
 	if (_unit)
 	{
 		node["unit"] = _unit->getId();
@@ -227,6 +231,15 @@ void BattleItem::setOwner(BattleUnit *owner)
 {
 	_previousOwner = _owner;
 	_owner = owner;
+}
+
+/**
+ * Sets the item's previous owner.
+ * @param owner Pointer to Battleunit.
+ */
+void BattleItem::setPreviousOwner(BattleUnit *owner)
+{
+	_previousOwner = owner;
 }
 
 /**

@@ -21,7 +21,6 @@
 #include <sstream>
 #include <iomanip>
 #include <SDL_gfxPrimitives.h>
-#include "../lodepng.h"
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -41,6 +40,14 @@
 #include "CivilianBAIState.h"
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
+#include "WarningMessage.h"
+#include "DebriefingState.h"
+#include "InfoboxState.h"
+#include "MiniMapState.h"
+#include "BattlescapeGenerator.h"
+#include "BriefingState.h"
+#include "../lodepng.h"
+#include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/Music.h"
@@ -51,7 +58,13 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Timer.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Exception.h"
+#include "../Geoscape/DefeatState.h"
+#include "../Geoscape/VictoryState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
@@ -59,33 +72,21 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
+#include "../Menu/PauseState.h"
+#include "../Menu/LoadGameState.h"
+#include "../Menu/SaveGameState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInterface.h"
-#include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Timer.h"
-#include "WarningMessage.h"
-#include "../Menu/PauseState.h"
-#include "DebriefingState.h"
-#include "../Engine/RNG.h"
-#include "InfoboxState.h"
-#include "MiniMapState.h"
-#include "BattlescapeGenerator.h"
-#include "BriefingState.h"
-#include "../Geoscape/DefeatState.h"
-#include "../Geoscape/VictoryState.h"
-#include "../Engine/Logger.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Menu/LoadGameState.h"
-#include "../Menu/SaveGameState.h"
-#include "../fmath.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -178,10 +179,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	// Set palette
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	// Fix system colors
-	_game->getCursor()->setColor(Palette::blockOffset(9));
-	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
-	
 	if (_game->getRuleset()->getInterface("battlescape")->getElement("pathfinding"))
 	{
 		Element *pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
@@ -474,7 +471,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	_btnReserveAuto->setGroup(&_reserve);
 	
 	// Set music
-	_game->getResourcePack()->playMusic("GMTACTIC");
+	_game->getResourcePack()->playMusic("GMTACTIC", true);
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
@@ -1295,13 +1292,13 @@ void BattlescapeState::updateSoldierInfo()
 		_rank->clear();
 	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-	_barTimeUnits->setMax(battleUnit->getStats()->tu);
+	_barTimeUnits->setMax(battleUnit->getBaseStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
-	_barEnergy->setMax(battleUnit->getStats()->stamina);
+	_barEnergy->setMax(battleUnit->getBaseStats()->stamina);
 	_barEnergy->setValue(battleUnit->getEnergy());
 	_numHealth->setValue(battleUnit->getHealth());
-	_barHealth->setMax(battleUnit->getStats()->health);
+	_barHealth->setMax(battleUnit->getBaseStats()->health);
 	_barHealth->setValue(battleUnit->getHealth());
 	_barHealth->setValue2(battleUnit->getStunlevel());
 	_numMorale->setValue(battleUnit->getMorale());
@@ -1349,7 +1346,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getStats()->psiSkill > 0);
+	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP));
 }
 
 /**
@@ -1913,13 +1910,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
 	}
+
 	if (!nextStage.empty() && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
 		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setAlienRace("STR_MIXED");
 		bgen.nextStage();
 		_game->popState();
 		_game->pushState(new BriefingState(0, 0));
@@ -1934,7 +1931,9 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
+			if (_game->getRuleset()->getDeployment(_save->getMissionType()) &&
+				_game->getRuleset()->getDeployment(_save->getMissionType())->isNoRetreat() &&
+				_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new DefeatState);
 			}
@@ -1947,7 +1946,9 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
+			if (_game->getRuleset()->getDeployment(_save->getMissionType()) &&
+				_game->getRuleset()->getDeployment(_save->getMissionType())->isFinalMission() &&
+				_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new VictoryState);
 			}
@@ -1956,8 +1957,6 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->pushState(new DebriefingState);
 			}
 		}
-		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
 }
 
@@ -2181,6 +2180,10 @@ void BattlescapeState::stopScrolling(Action *action)
 		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
 		_battleGame->setupCursor();
+		if (_battleGame->getCurrentAction()->actor == 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()))
+		{
+			getMap()->setCursorType(CT_NORMAL);
+		}
 	}
 	else
 	{

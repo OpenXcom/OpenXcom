@@ -28,7 +28,6 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
 #include "../Interface/ArrowButton.h"
@@ -87,46 +86,34 @@ void ResearchInfoState::buildUi()
 	_surfaceScientists->onMouseClick((ActionHandler)&ResearchInfoState::handleWheel, 0);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 1);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
 	add(_surfaceScientists);
-	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtAvailableScientist);
-	add(_txtAvailableSpace);
-	add(_txtAllocatedScientist);
-	add(_txtMore);
-	add(_txtLess);
-	add(_btnMore);
-	add(_btnLess);
+	add(_window, "window", "allocateResearch");
+	add(_btnOk, "button2", "allocateResearch");
+	add(_btnCancel, "button2", "allocateResearch");
+	add(_txtTitle, "text", "allocateResearch");
+	add(_txtAvailableScientist, "text", "allocateResearch");
+	add(_txtAvailableSpace, "text", "allocateResearch");
+	add(_txtAllocatedScientist, "text", "allocateResearch");
+	add(_txtMore, "text", "allocateResearch");
+	add(_txtLess, "text", "allocateResearch");
+	add(_btnMore, "button1", "allocateResearch");
+	add(_btnLess, "button1", "allocateResearch");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+
 	_txtTitle->setBig();
 
 	_txtTitle->setText(_rule ? tr(_rule->getName()) : tr(_project->getRules()->getName()));
 
-	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
-	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtAvailableSpace->setColor(Palette::blockOffset(13)+5);
-	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtAllocatedScientist->setColor(Palette::blockOffset(13)+5);
-	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocatedScientist->setBig();
 
 	_txtMore->setText(tr("STR_INCREASE"));
 	_txtLess->setText(tr("STR_DECREASE"));
-
-	_txtMore->setColor(Palette::blockOffset(13)+5);
-	_txtLess->setColor(Palette::blockOffset(13)+5);
 
 	_txtMore->setBig();
 	_txtLess->setBig();
@@ -142,8 +129,6 @@ void ResearchInfoState::buildUi()
 		}
 	}
 	setAssignedScientist();
-	_btnMore->setColor(Palette::blockOffset(13)+5);
-	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)&ResearchInfoState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)&ResearchInfoState::moreRelease);
 	_btnMore->onMouseClick((ActionHandler)&ResearchInfoState::moreClick, 0);
@@ -156,10 +141,8 @@ void ResearchInfoState::buildUi()
 	_timerLess = new Timer(250);
 	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, Options::keyOk);
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	if (_rule)
 	{
 		_btnOk->setText(tr("STR_START_PROJECT"));

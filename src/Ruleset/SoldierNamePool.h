@@ -37,7 +37,7 @@ class SoldierNamePool
 private:
 	std::vector<std::wstring> _maleFirst, _femaleFirst, _maleLast, _femaleLast;
 	std::vector<int> _lookWeights;
-	int _totalWeight;
+	int _totalWeight, _femaleFrequency;
 public:
 	/// Creates a blank pool.
 	SoldierNamePool();
@@ -46,7 +46,7 @@ public:
 	/// Loads the pool from YAML.
 	void load(const std::string &filename);
 	/// Generates a new name from the pool.
-	std::wstring genName(SoldierGender *gender) const;
+	std::wstring genName(SoldierGender *gender, int femaleFrequency) const;
 	/// Generates an int representing the index of the soldier's look, when passed the maximum index value.
 	size_t genLook(size_t numLooks);
 };

@@ -54,43 +54,36 @@ MainMenuState::MainMenuState()
 	_txtTitle = new Text(256, 30, 32, 45);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnNewGame);
-	add(_btnNewBattle);
-	add(_btnLoad);
-	add(_btnOptions);
-	add(_btnQuit);
-	add(_txtTitle);
+	add(_window, "window", "mainMenu");
+	add(_btnNewGame, "button", "mainMenu");
+	add(_btnNewBattle, "button", "mainMenu");
+	add(_btnLoad, "button", "mainMenu");
+	add(_btnOptions, "button", "mainMenu");
+	add(_btnQuit, "button", "mainMenu");
+	add(_txtTitle, "text", "mainMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnNewGame->setColor(Palette::blockOffset(8)+5);
 	_btnNewGame->setText(tr("STR_NEW_GAME"));
 	_btnNewGame->onMouseClick((ActionHandler)&MainMenuState::btnNewGameClick);
 
-	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
 	_btnNewBattle->setText(tr("STR_NEW_BATTLE"));
 	_btnNewBattle->onMouseClick((ActionHandler)&MainMenuState::btnNewBattleClick);
 
-	_btnLoad->setColor(Palette::blockOffset(8)+5);
 	_btnLoad->setText(tr("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
-	_btnOptions->setColor(Palette::blockOffset(8)+5);
 	_btnOptions->setText(tr("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
 
-	_btnQuit->setColor(Palette::blockOffset(8)+5);
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	std::wostringstream title;
@@ -100,9 +93,6 @@ MainMenuState::MainMenuState()
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMSTORY");
-
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**

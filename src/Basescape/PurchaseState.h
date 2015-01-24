@@ -51,6 +51,7 @@ private:
 	size_t _sel, _itemOffset;
 	int _total, _pQty, _cQty;
 	double _iQty;
+	Uint8 _ammoColor;
 	Timer *_timerInc, *_timerDec;
 	/// Gets selected price.
 	int getPrice();

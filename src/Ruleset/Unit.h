@@ -24,8 +24,7 @@
 
 namespace OpenXcom
 {
-
-enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_RESPAWN };
+enum SpecialAbility { SPECAB_NONE, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_BURN_AND_EXPLODE };
 /**
  * This struct holds some plain unit attribute data together.
  */
@@ -63,6 +62,7 @@ private:
 	bool _livingWeapon;
 	std::string _meleeWeapon;
 	std::vector<std::string> _builtInWeapons;
+	bool _female;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type);
@@ -110,6 +110,8 @@ public:
 	const std::string getMeleeWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::string> &getBuiltInWeapons() const;
+	/// Is this unit a female?
+	const bool isFemale() const;
 };
 
 }

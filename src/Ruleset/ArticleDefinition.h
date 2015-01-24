@@ -28,17 +28,24 @@ namespace OpenXcom
 {
 	/// define article types
 	enum UfopaediaTypeId {
-		UFOPAEDIA_TYPE_UNKNOWN         = 0,
-		UFOPAEDIA_TYPE_CRAFT           = 1,
-		UFOPAEDIA_TYPE_CRAFT_WEAPON    = 2,
-		UFOPAEDIA_TYPE_VEHICLE         = 3,
-		UFOPAEDIA_TYPE_ITEM            = 4,
-		UFOPAEDIA_TYPE_ARMOR           = 5,
-		UFOPAEDIA_TYPE_BASE_FACILITY   = 6,
-		UFOPAEDIA_TYPE_TEXTIMAGE       = 7,
-		UFOPAEDIA_TYPE_TEXT            = 8,
-		UFOPAEDIA_TYPE_UFO             = 9,
-		UFOPAEDIA_TYPE_TFTD            = 10
+		UFOPAEDIA_TYPE_UNKNOWN            = 0,
+		UFOPAEDIA_TYPE_CRAFT              = 1,
+		UFOPAEDIA_TYPE_CRAFT_WEAPON       = 2,
+		UFOPAEDIA_TYPE_VEHICLE            = 3,
+		UFOPAEDIA_TYPE_ITEM               = 4,
+		UFOPAEDIA_TYPE_ARMOR              = 5,
+		UFOPAEDIA_TYPE_BASE_FACILITY      = 6,
+		UFOPAEDIA_TYPE_TEXTIMAGE          = 7,
+		UFOPAEDIA_TYPE_TEXT               = 8,
+		UFOPAEDIA_TYPE_UFO                = 9,
+		UFOPAEDIA_TYPE_TFTD               = 10,
+		UFOPAEDIA_TYPE_TFTD_CRAFT         = 11,
+		UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON  = 12,
+		UFOPAEDIA_TYPE_TFTD_VEHICLE       = 13,
+		UFOPAEDIA_TYPE_TFTD_ITEM          = 14,
+		UFOPAEDIA_TYPE_TFTD_ARMOR         = 15,
+		UFOPAEDIA_TYPE_TFTD_BASE_FACILITY = 16,
+		UFOPAEDIA_TYPE_TFTD_USO           = 17
 	};
 
 	/**
@@ -172,6 +179,7 @@ namespace OpenXcom
 		std::string image_id;
 		std::string text;
 		int text_width;
+		std::string weapon;
 	};
 
 	/**

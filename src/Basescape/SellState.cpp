@@ -36,7 +36,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
@@ -72,50 +71,33 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	_txtSell = new Text(96, 9, 180, Options::storageLimitsEnforced? 44:33);
 	_txtValue = new Text(40, 9, 260, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44);
-
 	// Set palette
-	if (origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_GEOSCAPE", 0);
-		_color  = Palette::blockOffset(15)-1;
-		_color2 = Palette::blockOffset(8)+10;
-		_color3 = Palette::blockOffset(8)+5;
-		_colorAmmo = Palette::blockOffset(15)+6;
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE", 0);
-		_color  = Palette::blockOffset(13)+10;
-		_color2 = Palette::blockOffset(13);
-		_color3 = Palette::blockOffset(13)+5;
-		_colorAmmo = Palette::blockOffset(15)+6;
-	}
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtSales);
-	add(_txtFunds);
-	add(_txtSpaceUsed);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtSell);
-	add(_txtValue);
-	add(_lstItems);
+	_ammoColor = _game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color;
+
+	add(_window, "window", "sellMenu");
+	add(_btnOk, "button", "sellMenu");
+	add(_btnCancel, "button", "sellMenu");
+	add(_txtTitle, "text", "sellMenu");
+	add(_txtSales, "text", "sellMenu");
+	add(_txtFunds, "text", "sellMenu");
+	add(_txtSpaceUsed, "text", "sellMenu");
+	add(_txtItem, "text", "sellMenu");
+	add(_txtQuantity, "text", "sellMenu");
+	add(_txtSell, "text", "sellMenu");
+	add(_txtValue, "text", "sellMenu");
+	add(_lstItems, "list", "sellMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(_color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SellState::btnOkClick, Options::keyOk);
 
-	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SellState::btnCancelClick, Options::keyCancel);
@@ -126,21 +108,14 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 		_btnOk->setVisible(false);
 	}
 
-	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
-	_txtSales->setColor(_color);
-	_txtSales->setSecondaryColor(_color2);
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 
-	_txtFunds->setColor(_color);
-	_txtFunds->setSecondaryColor(_color2);
 	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_txtSpaceUsed->setColor(_color);
-	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 
 	std::wostringstream ss5;
@@ -148,19 +123,14 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	_txtSpaceUsed->setText(ss5.str());
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
 
-	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(_color);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtSell->setColor(_color);
 	_txtSell->setText(tr("STR_SELL_SACK"));
 
-	_txtValue->setColor(_color);
 	_txtValue->setText(tr("STR_VALUE"));
 
-	_lstItems->setColor(_color);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 156, 54, 24, 53);
 	_lstItems->setSelectable(true);
@@ -242,7 +212,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 			{
 				item.insert(0, L"  ");
 				_lstItems->addRow(4, item.c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str());
-				_lstItems->setRowColor(_qtys.size() - 1, _colorAmmo);
+				_lstItems->setRowColor(_qtys.size() - 1, _ammoColor);
 			}
 			else
 			{
@@ -702,17 +672,17 @@ void SellState::updateItemStrings()
 
 	if (_qtys[_sel] > 0)
 	{
-		_lstItems->setRowColor(_sel, _color2);
+		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
 	}
 	else
 	{
-		_lstItems->setRowColor(_sel, _color);
+		_lstItems->setRowColor(_sel, _lstItems->getColor());
 		if (_sel > _itemOffset)
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, _colorAmmo);
+				_lstItems->setRowColor(_sel, _ammoColor);
 			}
 		}
 	}

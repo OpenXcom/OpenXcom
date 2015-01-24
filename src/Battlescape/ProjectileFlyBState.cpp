@@ -174,12 +174,6 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor, 0, &_action.target))
-		{
-			_action.result = "STR_THERE_IS_NO_ONE_THERE";
-			_parent->popState();
-			return;
-		}
 		performMeleeAttack();
 		return;
 	case BA_PANIC:
@@ -283,22 +277,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	if (_action.type != BA_THROW || _action.type != BA_LAUNCH)
 		_unit->getStatistics()->shotsFiredCounter++;
 
-	int bulletSprite = -1;
-	int vaporColor = -1;
-	int vaporDensity = -1;
-	if (_action.type != BA_THROW)
-	{
-		bulletSprite = _ammo->getRules()->getBulletSprite();
-		if (bulletSprite == -1)
-		{
-			bulletSprite = _action.weapon->getRules()->getBulletSprite();
-		}
-		vaporColor = _ammo->getRules()->getVaporColor();
-		vaporDensity = _ammo->getRules()->getVaporDensity();
-	}
-
 	// create a new projectile
-	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite, vaporColor, vaporDensity);
+	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -428,7 +408,7 @@ void ProjectileFlyBState::think()
 		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
 		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
 		bool hasFloor = t && !t->hasNoFloor(bt);
-		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+		bool unitCanFly = _action.actor->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
@@ -550,15 +530,10 @@ void ProjectileFlyBState::think()
 					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
 					{
 						int i = 1;
-						int bulletSprite = _ammo->getRules()->getBulletSprite();
-						if (bulletSprite == -1)
-						{
-							bulletSprite = _action.weapon->getRules()->getBulletSprite();
-						}
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
 							// create a projectile
-							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, bulletSprite, _ammo->getRules()->getVaporColor(), _ammo->getRules()->getVaporDensity());
+							Projectile *proj = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(std::max(0.0, (_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0) - i * 5.0));
 							if (_projectileImpact != V_EMPTY)
@@ -576,11 +551,6 @@ void ProjectileFlyBState::think()
 							}
 							delete proj;
 						}
-					}
-					// if the unit burns floortiles, burn floortiles
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
-					{
-						_parent->getSave()->getTile(_action.target)->ignite(15);
 					}
 
 					if (_projectileImpact == 4)
@@ -643,7 +613,7 @@ void ProjectileFlyBState::cancel()
 	{
 		_parent->getMap()->getProjectile()->skipTrajectory();
 		Position p = _parent->getMap()->getProjectile()->getPosition();
-		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false))
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false, 0, false))
 			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x/16, p.y/16, p.z/24));
 	}
 }
@@ -669,7 +639,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
 	{
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
-	double maxDistance = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16.0;
+	double maxDistance = (getMaxThrowDistance(weight, action->actor->getBaseStats()->strength, zd) + 8) / 16.0;
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
@@ -700,7 +670,7 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
         if (curZ < 0 && dz < 0) //roll back
         {
             dz = std::max(dz, -1.0);
-            if (abs(dz)>1e-10) //rollback horizontal
+            if (std::abs(dz)>1e-10) //rollback horizontal
                 dist -= curZ / dz;
             break;
         }
@@ -752,6 +722,11 @@ void ProjectileFlyBState::performMeleeAttack()
 	{
 		_parent->getSave()->removeItem(_ammo);
 		_action.weapon->setAmmoItem(0);
+	}
+	// if the unit burns floortiles, burn floortiles
+	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+	{
+		_parent->getSave()->getTile(_action.target)->ignite(15);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
 	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor, 0, true));

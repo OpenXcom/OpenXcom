@@ -57,31 +57,27 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 6);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color);
 	}
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtMessage);
+	add(_window, "confirmDelete", "saveMenus");
+	add(_btnYes, "confirmDelete", "saveMenus");
+	add(_btnNo, "confirmDelete", "saveMenus");
+	add(_txtMessage, "confirmDelete", "saveMenus");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, Options::keyCancel);
 
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
@@ -113,9 +109,9 @@ void DeleteGameState::btnYesClick(Action *)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(error, _palette, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(error, _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 		else
-			_game->pushState(new ErrorMessageState(error, _palette, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(error, _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 	}
 }
 

@@ -104,7 +104,7 @@ public:
 	/// Checks if the camera is showing all map layers.
 	bool getShowAllLayers() const;
 	/// Checks if map coordinates X,Y,Z are on screen.
-	bool isOnScreen(const Position &mapPos, const bool unitWalking) const;
+	bool isOnScreen(const Position &mapPos, const bool unitWalking, const int unitSize, const bool boundary) const;
 	/// Resize the viewable area.
 	void resize();
 	/// stop mouse scrolling.

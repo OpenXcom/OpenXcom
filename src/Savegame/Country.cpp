@@ -93,7 +93,7 @@ RuleCountry *Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-const std::vector<int> &Country::getFunding() const
+std::vector<int> &Country::getFunding()
 {
 	return _funding;
 }
@@ -140,7 +140,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-const std::vector<int> &Country::getActivityXcom() const
+std::vector<int> &Country::getActivityXcom()
 {
 	return _activityXcom;
 }
@@ -149,7 +149,7 @@ const std::vector<int> &Country::getActivityXcom() const
  * Gets the country's alien activity level.
  * @return activity level.
  */
-const std::vector<int> &Country::getActivityAlien() const
+std::vector<int> &Country::getActivityAlien()
 {
 	return _activityAlien;
 }
@@ -229,7 +229,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 /**
  * @return if we will sign a new pact.
  */
-bool Country::getNewPact()
+bool Country::getNewPact() const
 {
 	return _newPact;
 }
@@ -247,8 +247,17 @@ void Country::setNewPact()
  * at month's end if _newPact is set.
  * @return if we have signed a pact.
  */
-bool Country::getPact()
+bool Country::getPact() const
 {
 	return _pact;
 }
+
+/**
+ * sign a new pact.
+ */
+void Country::setPact()
+{
+	 _pact = true;
+}
+
 }

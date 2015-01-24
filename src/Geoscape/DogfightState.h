@@ -64,7 +64,8 @@ private:
 	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionNumber;
 	size_t _interceptionsCount;
 	int _x, _y, _minimizedIconX, _minimizedIconY;
-
+	// craft min/max, radar min/max, damage min/max
+	int _color[6];
 	// Ends the dogfight.
 	void endDogfight();
 

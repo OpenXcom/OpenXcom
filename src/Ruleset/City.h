@@ -34,6 +34,7 @@ class City
 private:
 	std::string _name;
 	double _lon, _lat;
+	size_t _zoomLevel;
 public:
 	/// Creates a new city at a certain position.
 	City(const std::string &name, double lon, double lat);
@@ -47,6 +48,8 @@ public:
 	double getLatitude() const;
 	/// Gets the city's longitude.
 	double getLongitude() const;
+	/// Gets the level of zoom that show city name.
+	size_t getZoomLevel() const;
 };
 
 }

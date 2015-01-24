@@ -43,15 +43,14 @@ AliensCrashState::AliensCrashState()
 	
 	// Set palette
 	setPalette("PAL_BATTLESCAPE");
-
-	add(_window);
-	add(_btnOk, "messageWindows", "battlescape");
+	
+	add(_window, "messageWindowBorder", "battlescape");
+	add(_btnOk, "messageWindowButtons", "battlescape");
 	add(_txtTitle, "messageWindows", "battlescape");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 

@@ -37,11 +37,17 @@ struct ItemSet
 struct DeploymentData
 {
 	int alienRank;
-	int lowQty, highQty, dQty;
+	int lowQty, highQty, dQty, extraQty;
 	int percentageOutsideUfo;
 	std::vector<ItemSet> itemSets;
 };
-
+struct BriefingData
+{
+	int palette, textOffset;
+	std::string music, background;
+	bool showCraft, showTarget;
+	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
+};
 /**
  * Represents a specific type of Alien Deployment.
  * Contains constant info about a Alien Deployment like
@@ -60,7 +66,9 @@ private:
 	int _width, _length, _height, _civilians;
 	std::vector<std::string> _terrains;
 	int _shade;
-	std::string _nextStage;
+	std::string _nextStage, _race, _script;
+	bool _noRetreat, _finalDestination, _finalMission;
+	BriefingData _briefingData;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -82,32 +90,20 @@ public:
 	int getShade() const;
 	/// Gets the next stage of the mission.
 	std::string getNextStage() const;
+	/// Gets the race to use in the next stage.
+	std::string getRace() const;
+	/// Gets the script to use for this deployment.
+	std::string getScript() const;
+	/// Checks if aborting this mission will fail the game (all mars and t'leth stages).
+	const bool isNoRetreat() const;
+	/// Checks if this is the destination for the final mission (mars stage 1, t'leth stage 1).
+	const bool isFinalDestination() const;
+	/// Checks if winning this mission will complete the game (mars stage 2, t'leth stage 3).
+	const bool isFinalMission() const;
+	/// Gets the briefing data for this mission type.
+	BriefingData getBriefingData() const;
 
 };
 
 }
-
-namespace YAML
-{
-	template<>
-	struct convert<OpenXcom::ItemSet>
-	{
-		static Node encode(const OpenXcom::ItemSet& rhs)
-		{
-			Node node;
-			node = rhs.items;
-			return node;
-		}
-
-		static bool decode(const Node& node, OpenXcom::ItemSet& rhs)
-		{
-			if (!node.IsSequence())
-				return false;
-
-			rhs.items = node.as< std::vector<std::string> >(rhs.items);
-			return true;
-		}
-	};
-}
-
 #endif

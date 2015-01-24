@@ -57,36 +57,31 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin)
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
 	}
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtTitle);
-	add(_txtTimer);
+	add(_window, "confirmVideo", "mainMenu");
+	add(_btnYes, "confirmVideo", "mainMenu");
+	add(_btnNo, "confirmVideo", "mainMenu");
+	add(_txtTitle, "confirmVideo", "mainMenu");
+	add(_txtTimer, "confirmVideo", "mainMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&OptionsConfirmState::btnYesClick);
 
-	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&OptionsConfirmState::btnNoClick);
 	// no keyboard shortcuts to make sure users can see the message
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(tr("STR_DISPLAY_OPTIONS_CONFIRM"));
 
-	_txtTimer->setColor(Palette::blockOffset(15)-1);
 	_txtTimer->setAlign(ALIGN_CENTER);
 	_txtTimer->setWordWrap(true);
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(_countdown));

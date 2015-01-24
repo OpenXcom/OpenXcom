@@ -24,7 +24,6 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
@@ -46,11 +45,11 @@ ResearchRequiredState::ResearchRequiredState(RuleItem *item)
 	_txtTitle = new Text(288, 80, 16, 50);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
+	add(_window, "window", "geoResearch");
+	add(_btnOk, "button", "geoResearch");
+	add(_txtTitle, "text1", "geoResearch");
 
 	centerAllSurfaces();
 
@@ -58,16 +57,13 @@ ResearchRequiredState::ResearchRequiredState(RuleItem *item)
 	std::string clip = item->getCompatibleAmmo()->front();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchRequiredState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyCancel);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyOk);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);

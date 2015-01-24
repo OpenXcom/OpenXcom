@@ -1,0 +1,320 @@
+manufacture:
+  - name: STR_FUSION_BALL_LAUNCHER
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_FUSION_MISSILE
+    space: 6
+    time: 400
+    cost: 242000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_LASER_CANNON
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_LASER_CANNON
+    space: 6
+    time: 300
+    cost: 182000
+  - name: STR_PLASMA_BEAM
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_PLASMA_CANNON
+    space: 8
+    time: 500
+    cost: 226000
+    requiredItems:
+      STR_ELERIUM_115: 15
+  - name: STR_FUSION_BALL
+    category: STR_CRAFT_AMMUNITION
+    requires:
+      - STR_FUSION_MISSILE
+    space: 6
+    time: 600
+    cost: 28000
+    requiredItems:
+      STR_ELERIUM_115: 4
+  - name: STR_TANK_LASER_CANNON
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_LASER_CANNON
+    space: 25
+    time: 1200
+    cost: 500000
+  - name: STR_HOVERTANK_PLASMA
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_PLASMA_CANNON
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 1200
+    cost: 850000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 30
+  - name: STR_HOVERTANK_LAUNCHER
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_FUSION_MISSILE
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 1200
+    cost: 900000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 25
+  - name: STR_HWP_FUSION_BOMB
+    category: STR_HWP_CANNON_SHELLS
+    requires:
+      - STR_FUSION_MISSILE
+      - STR_NEW_FIGHTER_CRAFT
+    space: 25
+    time: 400
+    cost: 15000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 5
+  - name: STR_LASER_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_LASER_PISTOL
+    space: 2
+    time: 300
+    cost: 8000
+  - name: STR_LASER_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_LASER_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+  - name: STR_HEAVY_LASER
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_LASER
+    space: 4
+    time: 700
+    cost: 32000
+  - name: STR_MOTION_SCANNER
+    category: STR_EQUIPMENT
+    requires:
+      - STR_MOTION_SCANNER
+    space: 4
+    time: 220
+    cost: 34000
+  - name: STR_MEDI_KIT
+    category: STR_EQUIPMENT
+    requires:
+      - STR_MEDI_KIT
+    space: 4
+    time: 420
+    cost: 28000
+  - name: STR_PSI_AMP
+    category: STR_EQUIPMENT
+    requires:
+      - STR_PSI_AMP
+    space: 6
+    time: 500
+    cost: 160000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_HEAVY_PLASMA
+    category: STR_WEAPON
+    requires:
+      - STR_HEAVY_PLASMA
+      - STR_HEAVY_PLASMA_CLIP
+    space: 4
+    time: 1000
+    cost: 122000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_HEAVY_PLASMA_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_HEAVY_PLASMA_CLIP
+    space: 4
+    time: 80
+    cost: 6000
+    requiredItems:
+      STR_ELERIUM_115: 3
+  - name: STR_PLASMA_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_PLASMA_RIFLE
+      - STR_PLASMA_RIFLE_CLIP
+    space: 4
+    time: 820
+    cost: 88000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_PLASMA_RIFLE_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_PLASMA_RIFLE_CLIP
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ELERIUM_115: 2
+  - name: STR_PLASMA_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_PLASMA_PISTOL
+      - STR_PLASMA_PISTOL_CLIP
+    space: 3
+    time: 600
+    cost: 56000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_PLASMA_PISTOL_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_PLASMA_PISTOL_CLIP
+    space: 4
+    time: 60
+    cost: 2000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_BLASTER_LAUNCHER
+    category: STR_WEAPON
+    requires:
+      - STR_BLASTER_LAUNCHER
+      - STR_BLASTER_BOMB
+    space: 5
+    time: 1200
+    cost: 90000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_BLASTER_BOMB
+    category: STR_AMMUNITION
+    requires:
+      - STR_BLASTER_BOMB
+    space: 3
+    time: 220
+    cost: 8000
+    requiredItems:
+      STR_ELERIUM_115: 3
+  - name: STR_SMALL_LAUNCHER
+    category: STR_WEAPON
+    requires:
+      - STR_SMALL_LAUNCHER
+      - STR_STUN_BOMB
+    space: 3
+    time: 900
+    cost: 78000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_STUN_BOMB
+    category: STR_AMMUNITION
+    requires:
+      - STR_STUN_BOMB
+    space: 2
+    time: 200
+    cost: 7000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_ALIEN_GRENADE
+    category: STR_WEAPON
+    requires:
+      - STR_ALIEN_GRENADE
+    space: 2
+    time: 200
+    cost: 6700
+    requiredItems:
+      STR_ELERIUM_115: 2
+  - name: STR_MIND_PROBE
+    category: STR_EQUIPMENT
+    requires:
+      - STR_MIND_PROBE
+    space: 4
+    time: 1200
+    cost: 262000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_PERSONAL_ARMOR
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_PERSONAL_ARMOR
+    space: 12
+    time: 800
+    cost: 22000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 4
+  - name: STR_POWER_SUIT
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_POWER_SUIT
+    space: 16
+    time: 1000
+    cost: 42000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 5
+  - name: STR_FLYING_SUIT
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_FLYING_SUIT
+    space: 16
+    time: 1400
+    cost: 58000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 16
+  - name: STR_ALIEN_ALLOYS
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ALIEN_ALLOYS
+    space: 10
+    time: 100
+    cost: 3000
+  - name: STR_UFO_POWER_SOURCE
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_UFO_POWER_SOURCE
+    space: 22
+    time: 1400
+    cost: 130000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 16
+  - name: STR_UFO_NAVIGATION
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_UFO_NAVIGATION
+    space: 18
+    time: 1600
+    cost: 150000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 3
+  - name: STR_FIRESTORM
+    category: STR_CRAFT
+    requires:
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 14000
+    cost: 400000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 65
+      STR_UFO_POWER_SOURCE: 1
+      STR_UFO_NAVIGATION: 1
+  - name: STR_LIGHTNING
+    category: STR_CRAFT
+    requires:
+      - STR_NEW_FIGHTER_TRANSPORTER
+    space: 34
+    time: 18000
+    cost: 600000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 85
+      STR_UFO_POWER_SOURCE: 1
+      STR_UFO_NAVIGATION: 1
+  - name: STR_AVENGER
+    category: STR_CRAFT
+    requires:
+      - STR_ULTIMATE_CRAFT
+    space: 36
+    time: 34000
+    cost: 900000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 120
+      STR_UFO_POWER_SOURCE: 2
+      STR_UFO_NAVIGATION: 1
