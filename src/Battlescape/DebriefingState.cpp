@@ -256,7 +256,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			int soldierAlienKills = 0;
 			for (std::vector<BattleUnitKills*>::const_iterator k = (*j)->getStatistics()->kills.begin(); k != (*j)->getStatistics()->kills.end(); ++k)
 			{
-				if ((*k)->faction == FACTION_HOSTILE)
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_DEAD")
 				{
 					soldierAlienKills++;
 				}

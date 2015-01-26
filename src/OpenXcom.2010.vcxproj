@@ -759,15 +759,9 @@
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
     <ClInclude Include="Ruleset\AlienDeployment.h" />
-<<<<<<< HEAD
-    <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\RuleCommendations.h" />
-    <ClInclude Include="Ruleset\StatString.h" />
-    <ClInclude Include="Ruleset\StatStringCondition.h" />
-=======
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\MapScript.h" />
->>>>>>> master
     <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />
