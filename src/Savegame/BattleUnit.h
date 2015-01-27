@@ -62,6 +62,8 @@ struct BattleUnitKills
 	UnitFaction faction;
 	UnitStatus status;
     int mission, turn;
+    UnitSide side;
+    UnitBodyPart bodypart;
 
     /// Functions
     // Make turn unique across all kills
@@ -86,6 +88,8 @@ struct BattleUnitKills
         faction = (UnitFaction)node["faction"].as<int>();
         mission = node["mission"].as<int>(mission);
         turn = node["turn"].as<int>(turn);
+        side = (UnitSide)node["side"].as<int>();
+        bodypart = (UnitBodyPart)node["bodypart"].as<int>();
     }
     // Save
     YAML::Node save() const
@@ -99,9 +103,11 @@ struct BattleUnitKills
         node["faction"] = (int)faction;
         node["mission"] = mission;
         node["turn"] = turn;
+        node["side"] = (int)side;
+        node["bodypart"] = (int)bodypart;
         return node;
     }
-    // Convert victim State to string
+    // Convert victim State to string.
     std::string getUnitStatusString() const
     {
         switch (status)
@@ -111,7 +117,7 @@ struct BattleUnitKills
         default:                    return "status error";
         }
     }
-    // Convert victim Faction to string
+    // Convert victim Faction to string.
     std::string getUnitFactionString() const
     {
         switch (faction)
@@ -122,9 +128,36 @@ struct BattleUnitKills
         default:                return "faction error";
         }
     }
+    // Convert victim Side to string.
+    std::string getUnitSideString() const
+    {
+        switch (side)
+        {
+        case SIDE_FRONT:    return "SIDE_FRONT";
+        case SIDE_LEFT:     return "SIDE_LEFT";
+        case SIDE_RIGHT:    return "SIDE_RIGHT";
+        case SIDE_REAR:     return "SIDE_REAR";
+        case SIDE_UNDER:    return "SIDE_UNDER";
+        default:            return "side error";
+        }
+    }
+    // Convert victim Body part to string.
+    std::string getUnitBodyPart() const
+    {
+        switch (bodypart)
+        {
+        case BODYPART_HEAD:     return "BODYPART_HEAD";
+        case BODYPART_TORSO:    return "BODYPART_TORSO";
+        case BODYPART_RIGHTARM: return "BODYPART_RIGHTARM";
+        case BODYPART_LEFTARM:  return "BODYPART_LEFTARM";
+        case BODYPART_RIGHTLEG: return "BODYPART_RIGHTLEG";
+        case BODYPART_LEFTLEG:  return "BODYPART_LEFTLEG";
+        default:                return "body part error";
+        }
+    }
     BattleUnitKills(const YAML::Node& node) { load(node); }
-    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn) : 
-						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn) { }
+    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn, UnitSide Side, UnitBodyPart BodyPart) : 
+						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn), side(Side), bodypart(BodyPart) { }
     ~BattleUnitKills() { }
 };
 
@@ -261,6 +294,8 @@ private:
 	std::string _activeHand;
     BattleUnitStatistics* _statistics;
 	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
+    UnitSide _fatalShotSide;
+    UnitBodyPart _fatalShotBodyPart;
 
 	// static data
 	std::string _type;
@@ -622,6 +657,12 @@ public:
 	void setMurdererId(int id);
 	/// Get the unit murderer's id.
 	int getMurdererId() const;
+    /// Set information on the unit's fatal shot.
+    void setFatalShotInfo(UnitSide side, UnitBodyPart bodypart);
+    /// Get information on the unit's fatal shot's side.
+    UnitSide getFatalShotSide() const;
+    /// Get information on the unit's fatal shot's body part.
+    UnitBodyPart getFatalShotBodyPart() const;
 };
 
 }

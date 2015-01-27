@@ -108,6 +108,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["_allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
+    _headshotTotal = node["_headshotTotal"].as<int>(_headshotTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -156,6 +157,7 @@ YAML::Node SoldierDiary::save() const
 	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["_allAliensStunnedTotal"] = _allAliensStunnedTotal;
+    if (_headshotTotal) node["_headshotTotal"] = _headshotTotal;
 	return node;
 }
 /**
@@ -175,10 +177,14 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             _stunTotal++;
 		_killList.push_back(*kill);
 		if ((*kill)->hostileTurn())
+        {
 			if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
 				_trapKillTotal++;
 			else
 				_reactionFireTotal++;
+        }
+        if ((*kill)->getUnitSideString() == "BODYPART_HEAD")
+            _headshotTotal++;
     }
     _regionTotal[missionStatistics->region.c_str()]++;
     _countryTotal[missionStatistics->country.c_str()]++;
@@ -306,7 +312,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "totalTrapKills" && _trapKillTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
-                    ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ))
+                    ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+                    ((*j).first == "totalHeadShots" && _headshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
 			{
 				awardCommendationBool = false;
 				break;
