@@ -149,7 +149,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 
 	int total = 0, statsY = 0, recoveryY = 0;
 	int civiliansSaved = 0, civiliansDead = 0;
-    int aliensKilled = 0;
+    int aliensKilled = 0, aliensStunned = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
@@ -180,6 +180,10 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
         if ((*i)->item == "STR_ALIENS_KILLED")
         {
             aliensKilled += (*i)->qty;
+        }
+        if ((*i)->item == "STR_LIVE_ALIENS_RECOVERED")
+        {
+            aliensStunned += (*i)->qty;
         }
 	}
 	if (civiliansSaved && !civiliansDead && _missionStatistics->success == true)
@@ -254,16 +258,25 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		if ((*j)->getGeoscapeSoldier())
 		{
 			int soldierAlienKills = 0;
+			int soldierAlienStuns = 0;
 			for (std::vector<BattleUnitKills*>::const_iterator k = (*j)->getStatistics()->kills.begin(); k != (*j)->getStatistics()->kills.end(); ++k)
 			{
 				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_DEAD")
 				{
 					soldierAlienKills++;
 				}
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+				{
+					soldierAlienStuns++;
+				}
 			}
 			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true)
 			{
 				(*j)->getStatistics()->nikeCross = true;
+			}
+			if (aliensStunned && aliensStunned == soldierAlienStuns && _missionStatistics->success == true)
+			{
+				(*j)->getStatistics()->mercyCross = true;
 			}
 			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();

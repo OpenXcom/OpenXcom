@@ -287,6 +287,8 @@ extraStrings:
      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
      STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
      STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
+     STR_MEDAL_MERCY_CROSS_NAME: "Mercy Cross"
+     STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly stunned every alien in a mission."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -425,6 +427,8 @@ extraStrings:
      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
      STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
      STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
+     STR_MEDAL_MERCY_CROSS_NAME: "Nike Cross"
+     STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -694,6 +698,8 @@ extraStrings:
      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Вручается солдату, за участие в операции по уничтожению базы пришельцев."
      STR_MEDAL_NIKE_CROSS_NAME: "Крест Победы"
      STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Вручается солдату, единолично уничтожившему силы пришельцев в ходе операции."
+     STR_MEDAL_MERCY_CROSS_NAME: "Крест Победы"
+     STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Вручается солдату, единолично уничтожившему силы пришельцев в ходе операции."
      STR_AWARD_0: "Первая награда"
      STR_AWARD_1: "Вторая награда"
      STR_AWARD_2: "Третья награда"
@@ -841,6 +847,8 @@ extraStrings:
       STR_MEDAL_NAME: Nome della Medaglia
       STR_MEDAL_NIKE_CROSS_DESCRIPTION: Data ad un soldato che ha ucciso da solo tutti gli alieni durante una missione.
       STR_MEDAL_NIKE_CROSS_NAME: Croce di Nike
+      STR_MEDAL_MERCY_CROSS_DESCRIPTION: Data ad un soldato che ha ucciso da solo tutti gli alieni durante una missione.
+      STR_MEDAL_MERCY_CROSS_NAME: Croce di Nike
       STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: Data ad un soldato che è stato importante nella difesa della Terra
       STR_MEDAL_ORDER_OF_EARTH_NAME: "L'Ordine della Terra"
       STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: Data ad un soldato che è stato importante nella riuscita di una missione.
@@ -1146,6 +1154,11 @@ commendations:
     sprite: 32
     criteria:
       totalAllAliensKilled: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
+  - type: STR_MEDAL_MERCY_CROSS_NAME
+    description: STR_MEDAL_MERCY_CROSS_DESCRIPTION
+    sprite: 32
+    criteria:
+      totalAllAliensStunned: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1376,6 +1389,13 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: NIKE_CROSS
     text: STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033
+  - id: STR_MEDAL_MERCY_CROSS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_MERCY_CROSS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6033  
 # entries below move the HWPs to the Craft Section of the UFOPedia
