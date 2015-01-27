@@ -171,20 +171,30 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
     {
 		(*kill)->makeTurnUnique();
+        _killList.push_back(*kill);
         if ((*kill)->getUnitStatusString() == "STATUS_DEAD")
+        {
             _killTotal++;
+            if ((*kill)->getUnitSideString() == "BODYPART_HEAD")
+            {
+                _headshotTotal++;
+            }
+        }
         else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+        {
             _stunTotal++;
-		_killList.push_back(*kill);
+        }		
 		if ((*kill)->hostileTurn())
         {
 			if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+            {
 				_trapKillTotal++;
+            }
 			else
+            {
 				_reactionFireTotal++;
+            }
         }
-        if ((*kill)->getUnitSideString() == "BODYPART_HEAD")
-            _headshotTotal++;
     }
     _regionTotal[missionStatistics->region.c_str()]++;
     _countryTotal[missionStatistics->country.c_str()]++;
