@@ -301,6 +301,14 @@ extraStrings:
      STR_MEDAL_ALLUFOS_DESCRIPTION: "Given to a soldier who has participated in missions involving every UFO type."
      STR_MEDAL_ALLMISSIONS_NAME: "To Hell and Back Medal"
      STR_MEDAL_ALLMISSIONS_DESCRIPTION: "Given to a soldier who as participated in every mission type."
+     STR_MEDAL_ANTITERROR_NAME: "Anti-Terrorist Award"
+     STR_MEDAL_ANTITERROR_DESCRIPTION: "Given to a soldier who as killed all types of terror threats."
+     STR_MEDAL_ALLBATTLETYPES_NAME: "Lethality Award"
+     STR_MEDAL_ALLBATTLETYPES_DESCRIPTION: "Given to a soldier who has demonstrated lethal abilities with all types of weapons."
+     STR_MEDAL_NIGHTOPS_NAME: "Night Ops Specialist"
+     STR_MEDAL_NIGHTOPS_DESCRIPTION: "Given to a soldier who as been part of several night missions."
+     STR_MEDAL_ALLRANKS_NAME: "Taking Names"
+     STR_MEDAL_ALLRANKS_DESCRIPTION: "Given to a soldier who as killed aliens of all ranks."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -453,6 +461,14 @@ extraStrings:
      STR_MEDAL_ALLUFOS_DESCRIPTION: "Given to a soldier who has participated in missions involving every UFO type."
      STR_MEDAL_ALLMISSIONS_NAME: "To Hell and Back Medal"
      STR_MEDAL_ALLMISSIONS_DESCRIPTION: "Given to a soldier who as participated in every mission type."
+     STR_MEDAL_ANTITERROR_NAME: "Anti-Terrorist Award"
+     STR_MEDAL_ANTITERROR_DESCRIPTION: "Given to a soldier who as killed all types of terror threats."
+     STR_MEDAL_ALLBATTLETYPES_NAME: "Lethality Award"
+     STR_MEDAL_ALLBATTLETYPES_DESCRIPTION: "Given to a soldier who has demonstrated lethal abilities with all types of weapons."
+     STR_MEDAL_NIGHTOPS_NAME: "Night Ops Specialist"
+     STR_MEDAL_NIGHTOPS_DESCRIPTION: "Given to a soldier who as been part of several night missions."
+     STR_MEDAL_ALLRANKS_NAME: "Taking Names"
+     STR_MEDAL_ALLRANKS_DESCRIPTION: "Given to a soldier who as killed aliens of all ranks."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1229,6 +1245,50 @@ commendations:
     sprite: 32
     criteria:
       totalAllMissionTypes: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  - type: STR_MEDAL_ANTITERROR_NAME
+    description: STR_MEDAL_ANTITERROR_DESCRIPTION
+    sprite: 32
+    criteria:
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+    killCriteria:
+      -
+        1: ["STR_CYBERDISC", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_REAPER", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_CHRYSSALID", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_SILACOID", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_CELATID", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_SECTOPOD", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_ZOMBIE", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+  - type: STR_MEDAL_ALLBATTLETYPES_NAME
+    description: STR_MEDAL_ALLBATTLETYPES_DESCRIPTION
+    sprite: 32
+    criteria:
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+    killCriteria:
+      -
+        1: ["BT_FIREARM", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["BT_MELEE", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["BT_PROXIMITYGRENADE", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["BT_GRENADE", "FACTION_HOSTILE", "STATUS_DEAD"]
+  - type: STR_MEDAL_NIGHTOPS_NAME
+    description: STR_MEDAL_NIGHTOPS_DESCRIPTION
+    sprite: 32
+    criteria:
+      totalNightMissions: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+  - type: STR_MEDAL_ALLRANKS_NAME
+    description: STR_MEDAL_ALLRANKS_DESCRIPTION
+    sprite: 32
+    criteria:
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+    killCriteria:
+      -
+        1: ["STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_LIVE_ENGINEER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_LIVE_MEDIC", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_LIVE_NAVIGATOR", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1508,6 +1568,34 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: NIKE_CROSS
     text: STR_MEDAL_ALLMISSIONS_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033
+  - id: STR_MEDAL_ANTITERROR_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_ANTITERROR_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033
+- id: STR_MEDAL_ALLBATTLETYPES_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_ALLBATTLETYPES_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033
+- id: STR_MEDAL_NIGHTOPS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_NIGHTOPS_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033
+- id: STR_MEDAL_ALLRANKS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_ALLRANKS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6033
 # entries below move the HWPs to the Craft Section of the UFOPedia
