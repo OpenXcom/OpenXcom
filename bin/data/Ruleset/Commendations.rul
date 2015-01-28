@@ -1210,7 +1210,7 @@ commendations:
     description: STR_MEDAL_HEALER_DESCRIPTION
     sprite: 32
     criteria:
-      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+      totalWoundsHealed: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
