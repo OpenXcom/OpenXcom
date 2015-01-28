@@ -142,7 +142,7 @@ struct BattleUnitKills
         }
     }
     // Convert victim Body part to string.
-    std::string getUnitBodyPart() const
+    std::string getUnitBodyPartString() const
     {
         switch (bodypart)
         {
