@@ -233,6 +233,7 @@ void MedikitState::onHealClick(Action *)
 		{
 			_targetUnit->setTimeUnits(0);
 		}
+		_unit->getStatistics()->woundsHealed++;
 	}
 	else
 	{

@@ -183,6 +183,7 @@ struct BattleUnitStatistics
 	bool KIA;								// Tracks if the soldier was killed in battle
 	bool nikeCross;							// Tracks if a soldier killed every alien
     bool mercyCross;                        // Tracks if a soldier stunned every alien
+    int woundsHealed;                       // Tracks how many times a fatal wound was healed by thits unit
 
 	/// Functions
 	// Friendly fire check
@@ -216,6 +217,7 @@ struct BattleUnitStatistics
 		shotsLandedCounter = node["shotsLandedCounter"].as<int>(shotsLandedCounter);
 		nikeCross = node["nikeCross"].as<bool>(nikeCross);
         mercyCross = node["mercyCross"].as<bool>(mercyCross);
+        woundsHealed = node["woundsHealed"].as<int>(woundsHealed);
 	}
 	// Save function
 	YAML::Node save() const
@@ -239,10 +241,11 @@ struct BattleUnitStatistics
 		node["shotsLandedCounter"] = shotsLandedCounter;
 		if (nikeCross) node["nikeCross"] = nikeCross;
         if (mercyCross) node["mercyCross"] = mercyCross;
+        node["woundsHealed"] = woundsHealed;
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0) { }
 	~BattleUnitStatistics() { }
 };
 

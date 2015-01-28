@@ -295,6 +295,8 @@ extraStrings:
      STR_MEDAL_REARSHOT_DESCRIPTION: "Given to a soldier who has demonstrated cunning, able to surprise enemies and kill them from behind."
      STR_MEDAL_FLANKSHOT_NAME: "Tactition Citation"
      STR_MEDAL_FLANKSHOT_DESCRIPTION: "Given to a soldier who has demonstratd great tactic, able to flank and kill enemies."
+     STR_MEDAL_HEALER_NAME: "Hippocratic Star"
+     STR_MEDAL_HEALER_DESCRIPTION: "Given to a soldier who has performed medical services in the field."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -441,6 +443,8 @@ extraStrings:
      STR_MEDAL_REARSHOT_DESCRIPTION: "Given to a soldier who has demonstrated cunning, able to surprise enemies and kill them from behind."
      STR_MEDAL_FLANKSHOT_NAME: "Tactition Citation"
      STR_MEDAL_FLANKSHOT_DESCRIPTION: "Given to a soldier who has demonstratd great tactic, able to flank and kill enemies."
+     STR_MEDAL_HEALER_NAME: "Hippocratic Star"
+     STR_MEDAL_HEALER_DESCRIPTION: "Given to a soldier who has performed medical services in the field."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1189,6 +1193,11 @@ commendations:
     sprite: 32
     criteria:
       totalFlankShots: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+  - type: STR_MEDAL_HEALER_NAME
+    description: STR_MEDAL_HEALER_DESCRIPTION
+    sprite: 32
+    criteria:
+      totalWoundsHealed: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1447,6 +1456,13 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: NIKE_CROSS
     text: STR_MEDAL_FLANKSHOT_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033
+  - id: STR_MEDAL_HEALER_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_HEALER_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6033
 # entries below move the HWPs to the Craft Section of the UFOPedia

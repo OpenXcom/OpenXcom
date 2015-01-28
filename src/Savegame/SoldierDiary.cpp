@@ -111,6 +111,7 @@ void SoldierDiary::load(const YAML::Node& node)
     _headshotTotal = node["_headshotTotal"].as<int>(_headshotTotal);
     _rearshotTotal = node["_rearshotTotal"].as<int>(_rearshotTotal);
     _flankshotTotal = node["_flankshotTotal"].as<int>(_flankshotTotal);
+    _woundsHealedTotal = node["_woundsHealedTotal"].as<int>(_woundsHealedTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -162,6 +163,7 @@ YAML::Node SoldierDiary::save() const
     if (_headshotTotal) node["_headshotTotal"] = _headshotTotal;
     if (_rearshotTotal) node["_rearshotTotal"] = _rearshotTotal;
     if (_flankshotTotal) node["_flankshotTotal"] =_flankshotTotal;
+    if (_woundsHealedTotal) node["_woundsHealedTotal"] = _woundsHealedTotal;
 	return node;
 }
 /**
@@ -259,6 +261,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_allAliensKilledTotal++;
     if (unitStatistics->nikeCross)
 		_allAliensStunnedTotal++;
+	_woundsHealedTotal = unitStatistics->woundsHealed++;
     _missionIdList.push_back(missionStatistics->id);
 }
 /**
@@ -340,7 +343,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalHeadShots" && _headshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalRearShots" && _rearshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "totalFlankShots" && _flankshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )                    
+                    ((*j).first == "totalFlankShots" && _flankshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalWoundsHealed" && _woundsHealedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
 			{
 				awardCommendationBool = false;
 				break;
