@@ -291,6 +291,8 @@ extraStrings:
      STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly stunned every alien in a mission."
      STR_MEDAL_HEADSHOT_NAME: "Head Hunter"
      STR_MEDAL_HEADSHOT_DESCRIPTION: "Given to a soldier with a steady hand who has landed multiple headshots."
+     STR_MEDAL_REARSHOT_NAME: "Cunning Citation"
+     STR_MEDAL_REARSHOT_DESCRIPTION: "Given to a soldier who has demonstrated cunning, able to surprise enemies and kill them from behind."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -433,6 +435,8 @@ extraStrings:
      STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly stunned every alien in a mission."
      STR_MEDAL_HEADSHOT_NAME: "Head Hunter"
      STR_MEDAL_HEADSHOT_DESCRIPTION: "Given to a soldier with a steady hand who has landed multiple headshots."
+     STR_MEDAL_REARSHOT_NAME: "Cunning Citation"
+     STR_MEDAL_REARSHOT_DESCRIPTION: "Given to a soldier who has demonstrated cunning, able to surprise enemies and kill them from behind."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -936,6 +940,7 @@ extraStrings:
 #   totalTrapKills
 #   isDead
 #   totalHeadShots
+#   totalRearShots
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
 # the commendation will be given out repeatedly.
@@ -1169,6 +1174,11 @@ commendations:
     sprite: 32
     criteria:
       totalHeadShots: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+  - type: STR_MEDAL_REARSHOT_NAME
+    description: STR_MEDAL_REARSHOT_DESCRIPTION
+    sprite: 32
+    criteria:
+      totalRearShots: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]      
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1414,7 +1424,14 @@ ufopaedia:
     image_id: NIKE_CROSS
     text: STR_MEDAL_HEADSHOT_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033  
+    listOrder: 6033
+  - id: STR_MEDAL_REARSHOT_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: NIKE_CROSS
+    text: STR_MEDAL_REARSHOT_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6033    
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT

@@ -109,6 +109,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["_allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
     _headshotTotal = node["_headshotTotal"].as<int>(_headshotTotal);
+    _rearshotTotal = node["_rearshotTotal"].as<int>(_rearshotTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -158,6 +159,7 @@ YAML::Node SoldierDiary::save() const
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["_allAliensStunnedTotal"] = _allAliensStunnedTotal;
     if (_headshotTotal) node["_headshotTotal"] = _headshotTotal;
+    if (_rearshotTotal) node["_rearshotTotal"] = _rearshotTotal;
 	return node;
 }
 /**
@@ -172,27 +174,34 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     {
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
-        if ((*kill)->getUnitStatusString() == "STATUS_DEAD")
+        if ((*kill)->getUnitFactionString() == "FACTION_HOSTILE")
         {
-            _killTotal++;
-            if ((*kill)->getUnitSideString() == "BODYPART_HEAD")
+            if ((*kill)->getUnitStatusString() == "STATUS_DEAD")
             {
-                _headshotTotal++;
+                _killTotal++;
+                if ((*kill)->getUnitBodyPartString() == "BODYPART_HEAD")
+                {
+                    _headshotTotal++;
+                }
+                if ((*kill)->getUnitSideString() == "SIDE_REAR")
+                {
+                    _rearshotTotal++;
+                }
             }
-        }
-        else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
-        {
-            _stunTotal++;
-        }		
-		if ((*kill)->hostileTurn())
-        {
-			if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+            else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             {
-				_trapKillTotal++;
-            }
-			else
+                _stunTotal++;
+            }		
+            if ((*kill)->hostileTurn())
             {
-				_reactionFireTotal++;
+                if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+                {
+                    _trapKillTotal++;
+                }
+                else
+                {
+                    _reactionFireTotal++;
+                }
             }
         }
     }
@@ -323,7 +332,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "totalHeadShots" && _headshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+                    ((*j).first == "totalHeadShots" && _headshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+                    ((*j).first == "totalRearShots" && _rearshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
 			{
 				awardCommendationBool = false;
 				break;
