@@ -964,6 +964,8 @@ extraStrings:
 # or one of these factions: FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER.
 # or one of these battle types: BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE
 # or one of these damage types: DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE
+# or one of these sides: SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER
+# or one of these body parts: BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG
 # Use the strings from the ruleset to define them (mods can be used too). 
 # For example, look at "STR_MEDAL_BOLTS_CROSS_NAME". It is awarded if a soldier
 # stuns one hostile commander or stuns one hostile leader.
@@ -1182,22 +1184,33 @@ commendations:
     description: STR_MEDAL_HEADSHOT_DESCRIPTION
     sprite: 32
     criteria:
-      totalHeadShots: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+    killCriteria:
+      -
+        1: ["BODYPART_HEAD", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_REARSHOT_NAME
     description: STR_MEDAL_REARSHOT_DESCRIPTION
     sprite: 32
     criteria:
-      totalRearShots: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+    killCriteria:
+      -
+        1: ["SIDE_REAR", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_FLANKSHOT_NAME
     description: STR_MEDAL_FLANKSHOT_DESCRIPTION
     sprite: 32
     criteria:
-      totalFlankShots: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+    killCriteria:
+      -
+        1: ["SIDE_LEFT", "FACTION_HOSTILE", "STATUS_DEAD"]
+      -
+        1: ["SIDE_RIGHT", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_HEALER_NAME
     description: STR_MEDAL_HEALER_DESCRIPTION
     sprite: 32
     criteria:
-      totalWoundsHealed: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+      killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7

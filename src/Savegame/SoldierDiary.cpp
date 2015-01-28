@@ -39,7 +39,8 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
 	_nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0), _shotAtCounterTotal(0), _hitCounterTotal(0), _loneSurvivorTotal(0),
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0)
+	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
+    _woundsHealedTotal(0)
 {
 }
 /**
@@ -108,9 +109,6 @@ void SoldierDiary::load(const YAML::Node& node)
 	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["_allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
-    _headshotTotal = node["_headshotTotal"].as<int>(_headshotTotal);
-    _rearshotTotal = node["_rearshotTotal"].as<int>(_rearshotTotal);
-    _flankshotTotal = node["_flankshotTotal"].as<int>(_flankshotTotal);
     _woundsHealedTotal = node["_woundsHealedTotal"].as<int>(_woundsHealedTotal);
 }
 /**
@@ -160,9 +158,6 @@ YAML::Node SoldierDiary::save() const
 	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["_allAliensStunnedTotal"] = _allAliensStunnedTotal;
-    if (_headshotTotal) node["_headshotTotal"] = _headshotTotal;
-    if (_rearshotTotal) node["_rearshotTotal"] = _rearshotTotal;
-    if (_flankshotTotal) node["_flankshotTotal"] =_flankshotTotal;
     if (_woundsHealedTotal) node["_woundsHealedTotal"] = _woundsHealedTotal;
 	return node;
 }
@@ -183,18 +178,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             if ((*kill)->getUnitStatusString() == "STATUS_DEAD")
             {
                 _killTotal++;
-                if ((*kill)->getUnitBodyPartString() == "BODYPART_HEAD")
-                {
-                    _headshotTotal++;
-                }
-                if ((*kill)->getUnitSideString() == "SIDE_REAR")
-                {
-                    _rearshotTotal++;
-                }
-				if ((*kill)->getUnitSideString() == "SIDE_LEFT" || (*kill)->getUnitSideString() == "SIDE_RIGHT")
-                {
-                    _flankshotTotal++;
-                }
             }
             else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             {
@@ -341,9 +324,6 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "totalHeadShots" && _headshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "totalRearShots" && _rearshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "totalFlankShots" && _flankshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWoundsHealed" && _woundsHealedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
 			{
 				awardCommendationBool = false;
@@ -479,7 +459,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 									 (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
 									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
 									 rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType && 
-									 rules->getItem((*singleKill)->weapon)->getBattleType() != battleType) )
+									 rules->getItem((*singleKill)->weapon)->getBattleType() != battleType &&
+                                     (*singleKill)->getUnitSideString() != (*detail) && (*singleKill)->getUnitBodyPartString() != (*detail)) )
                                 {
                                     foundMatch = false;
                                     break;
