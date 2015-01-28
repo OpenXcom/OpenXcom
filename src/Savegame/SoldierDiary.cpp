@@ -110,6 +110,7 @@ void SoldierDiary::load(const YAML::Node& node)
     _allAliensStunnedTotal = node["_allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
     _headshotTotal = node["_headshotTotal"].as<int>(_headshotTotal);
     _rearshotTotal = node["_rearshotTotal"].as<int>(_rearshotTotal);
+    _flankshotTotal = node["_flankshotTotal"].as<int>(_flankshotTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -160,6 +161,7 @@ YAML::Node SoldierDiary::save() const
     if (_allAliensStunnedTotal) node["_allAliensStunnedTotal"] = _allAliensStunnedTotal;
     if (_headshotTotal) node["_headshotTotal"] = _headshotTotal;
     if (_rearshotTotal) node["_rearshotTotal"] = _rearshotTotal;
+    if (_flankshotTotal) node["_flankshotTotal"] =_flankshotTotal;
 	return node;
 }
 /**
@@ -186,6 +188,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
                 if ((*kill)->getUnitSideString() == "SIDE_REAR")
                 {
                     _rearshotTotal++;
+                }
+				if ((*kill)->getUnitSideString() == "SIDE_LEFT" || (*kill)->getUnitSideString() == "SIDE_RIGHT")
+                {
+                    _flankshotTotal++;
                 }
             }
             else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
@@ -333,7 +339,8 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalHeadShots" && _headshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "totalRearShots" && _rearshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+                    ((*j).first == "totalRearShots" && _rearshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+                    ((*j).first == "totalFlankShots" && _flankshotTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )                    
 			{
 				awardCommendationBool = false;
 				break;
