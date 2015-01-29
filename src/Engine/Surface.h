@@ -219,6 +219,12 @@ public:
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.
 	void setTooltip(const std::string &tooltip);
+	/// Sets the color of the surface.
+	virtual void setColor(Uint8 color) { /* empty by design */ };
+	/// Sets the secondary color of the surface.
+	virtual void setSecondaryColor(Uint8 color) { /* empty by design */ };
+	/// Sets the border colour of the surface.
+	virtual void setBorderColor(Uint8 color) { /* empty by design */ };
 
 };
 

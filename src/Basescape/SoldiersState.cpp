@@ -68,54 +68,44 @@ SoldiersState::SoldiersState(Base *base) : _base(base)
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 2);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnPsiTraining);
-	add(_btnMemorial);
-	add(_txtTitle);
-	add(_txtName);
-	add(_txtRank);
-	add(_txtCraft);
-	add(_lstSoldiers);
+	add(_window, "window", "soldierList");
+	add(_btnOk, "button", "soldierList");
+	add(_btnPsiTraining, "button", "soldierList");
+	add(_btnMemorial, "button", "soldierList");
+	add(_txtTitle, "text1", "soldierList");
+	add(_txtName, "text2", "soldierList");
+	add(_txtRank, "text2", "soldierList");
+	add(_txtCraft, "text2", "soldierList");
+	add(_lstSoldiers, "list", "soldierList");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, Options::keyCancel);
 
-	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsiTraining->onMouseClick((ActionHandler)&SoldiersState::btnPsiTrainingClick);
 	_btnPsiTraining->setVisible(isPsiBtnVisible);
 
-	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)&SoldiersState::btnMemorialClick);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SOLDIER_LIST"));
 
-	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_RANK"));
 
-	_txtCraft->setColor(Palette::blockOffset(15)+1);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+1);
 	_lstSoldiers->setColumns(3, 114, 92, 74);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
@@ -145,7 +135,7 @@ void SoldiersState::init()
 		_lstSoldiers->addRow(3, (*i)->getName(true).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 		if ((*i)->getCraft() == 0)
 		{
-			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
+			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor());
 		}
 		row++;
 	}

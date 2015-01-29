@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Initializes a new pool with blank lists of names.
  */
-SoldierNamePool::SoldierNamePool() : _totalWeight(0)
+SoldierNamePool::SoldierNamePool() : _totalWeight(0), _femaleFrequency(-1)
 {
 }
 
@@ -82,6 +82,7 @@ void SoldierNamePool::load(const std::string &filename)
 	{
 		_totalWeight += (*i);
 	}
+	_femaleFrequency = doc["femaleFrequency"].as<int>(_femaleFrequency);
 }
 
 /**
@@ -90,11 +91,20 @@ void SoldierNamePool::load(const std::string &filename)
  * @param gender Returned gender of the name.
  * @return The soldier's name.
  */
-std::wstring SoldierNamePool::genName(SoldierGender *gender) const
+std::wstring SoldierNamePool::genName(SoldierGender *gender, int femaleFrequency) const
 {
 	std::wostringstream name;
-	int gen = RNG::generate(1, 10);
-	if (gen <= 5)
+	bool female;
+	if (_femaleFrequency > -1)
+	{
+		female = RNG::percent(_femaleFrequency);
+	}
+	else
+	{
+		female = RNG::percent(femaleFrequency);
+	}
+
+	if (!female)
 	{
 		*gender = GENDER_MALE;
 		size_t first = RNG::generate(0, _maleFirst.size() - 1);

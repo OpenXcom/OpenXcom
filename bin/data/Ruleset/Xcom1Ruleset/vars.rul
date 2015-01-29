@@ -1,0 +1,16 @@
+# X-COM 1 (UFO: Enemy Unknown) ruleset
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+startingTime:
+  second: 0
+  minute: 0
+  hour: 12
+  weekday: 6
+  day: 1
+  month: 1
+  year: 1999
+costSoldier: 20000
+costEngineer: 25000
+costScientist: 30000
+timePersonnel: 72
+initialFunding: 6000
+alienFuel: STR_ELERIUM_115

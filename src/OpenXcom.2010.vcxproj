@@ -307,7 +307,7 @@
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
     <ClCompile Include="Engine\FastLineClip.cpp" />
-    <ClCompile Include="Engine\Flc.cpp" />
+    <ClCompile Include="Engine\FlcPlayer.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GMCat.cpp" />
@@ -396,6 +396,7 @@
     <ClCompile Include="Menu\ConfirmLoadState.cpp" />
     <ClCompile Include="Menu\IntroState.cpp" />
     <ClCompile Include="Menu\ListGamesState.cpp" />
+    <ClCompile Include="Menu\ListLoadOriginalState.cpp" />
     <ClCompile Include="Menu\ListLoadState.cpp" />
     <ClCompile Include="Menu\ListSaveState.cpp" />
     <ClCompile Include="Menu\LoadGameState.cpp" />
@@ -430,6 +431,7 @@
     <ClCompile Include="Ruleset\ExtraSounds.cpp" />
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
+    <ClCompile Include="Ruleset\MapScript.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
     <ClCompile Include="Ruleset\Polygon.cpp" />
     <ClCompile Include="Ruleset\Polyline.cpp" />
@@ -445,6 +447,8 @@
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleGlobe.cpp" />
+    <ClCompile Include="Ruleset\RuleMusic.cpp" />
+    <ClCompile Include="Ruleset\RuleVideo.cpp" />
     <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
@@ -484,6 +488,7 @@
     <ClCompile Include="Savegame\Production.cpp" />
     <ClCompile Include="Savegame\Region.cpp" />
     <ClCompile Include="Savegame\ResearchProject.cpp" />
+    <ClCompile Include="Savegame\SaveConverter.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
     <ClCompile Include="Savegame\SerializationHelper.cpp" />
@@ -508,6 +513,13 @@
     <ClCompile Include="Ufopaedia\ArticleStateText.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateTextImage.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDArmor.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraft.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraftWeapon.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDFacility.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDItem.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDUso.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDVehicle.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateUfo.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateVehicle.cpp" />
     <ClCompile Include="Ufopaedia\Ufopaedia.cpp" />
@@ -615,7 +627,7 @@
     <ClInclude Include="Engine\DosFont.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\FastLineClip.h" />
-    <ClInclude Include="Engine\Flc.h" />
+    <ClInclude Include="Engine\FlcPlayer.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GMCat.h" />
@@ -710,6 +722,7 @@
     <ClInclude Include="Menu\ConfirmLoadState.h" />
     <ClInclude Include="Menu\IntroState.h" />
     <ClInclude Include="Menu\ListGamesState.h" />
+    <ClInclude Include="Menu\ListLoadOriginalState.h" />
     <ClInclude Include="Menu\ListLoadState.h" />
     <ClInclude Include="Menu\ListSaveState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />
@@ -746,14 +759,15 @@
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
     <ClInclude Include="Ruleset\AlienDeployment.h" />
-    <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\RuleCommendations.h" />
-    <ClInclude Include="Ruleset\StatString.h" />
-    <ClInclude Include="Ruleset\StatStringCondition.h" />
+    <ClInclude Include="Ruleset\AlienRace.h" />
+    <ClInclude Include="Ruleset\MapScript.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />
     <ClInclude Include="Ruleset\RuleGlobe.h" />
+    <ClInclude Include="Ruleset\RuleMusic.h" />
+    <ClInclude Include="Ruleset\RuleVideo.h" />
     <ClInclude Include="Ruleset\SoundDefinition.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
@@ -794,6 +808,8 @@
     <ClInclude Include="Savegame\Production.h" />
     <ClInclude Include="Savegame\Region.h" />
     <ClInclude Include="Savegame\ResearchProject.h" />
+    <ClInclude Include="Savegame\SaveConverter.h" />
+    <ClInclude Include="Savegame\SaveConverterXcom1.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
     <ClInclude Include="Savegame\SerializationHelper.h" />
@@ -818,6 +834,13 @@
     <ClInclude Include="Ufopaedia\ArticleStateText.h" />
     <ClInclude Include="Ufopaedia\ArticleStateTextImage.h" />
     <ClInclude Include="Ufopaedia\ArticleStateTFTD.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDArmor.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraft.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraftWeapon.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDFacility.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDItem.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDUso.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDVehicle.h" />
     <ClInclude Include="Ufopaedia\ArticleStateUfo.h" />
     <ClInclude Include="Ufopaedia\ArticleStateVehicle.h" />
     <ClInclude Include="Ufopaedia\Ufopaedia.h" />

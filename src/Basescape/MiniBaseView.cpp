@@ -117,33 +117,33 @@ void MiniBaseView::draw()
 			lock();
 			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
 			{
-				int pal;
+				int color;
 				if ((*f)->getBuildTime() == 0)
-					pal = 3;
+					color = _green;
 				else
-					pal = 2;
+					color = _red;
 
 				r.x = i * (MINI_SIZE + 2) + 2 + (*f)->getX() * 2;
 				r.y = 2 + (*f)->getY() * 2;
 				r.w = (*f)->getRules()->getSize() * 2;
 				r.h = (*f)->getRules()->getSize() * 2;
-				drawRect(&r, Palette::blockOffset(pal)+3);
+				drawRect(&r, color+3);
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
-				drawRect(&r, Palette::blockOffset(pal)+5);
+				drawRect(&r, color+5);
 				r.x--;
 				r.y--;
-				drawRect(&r, Palette::blockOffset(pal)+2);
+				drawRect(&r, color+2);
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
-				drawRect(&r, Palette::blockOffset(pal)+3);
+				drawRect(&r, color+3);
 				r.x--;
 				r.y--;
-				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
+				setPixel(r.x, r.y, color+1);
 			}
 			unlock();
 		}
@@ -161,4 +161,13 @@ void MiniBaseView::mouseOver(Action *action, State *state)
 	InteractiveSurface::mouseOver(action, state);
 }
 
+
+void MiniBaseView::setColor(Uint8 color)
+{
+	_green = color;
+}
+void MiniBaseView::setSecondaryColor(Uint8 color)
+{
+	_red = color;
+}
 }

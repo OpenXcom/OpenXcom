@@ -53,44 +53,36 @@ TransfersState::TransfersState(Base *base) : _base(base)
 	_lstTransfers = new TextList(273, 112, 14, 50);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtArrivalTime);
-	add(_lstTransfers);
+	add(_window, "window", "transferInfo");
+	add(_btnOk, "button", "transferInfo");
+	add(_txtTitle, "text", "transferInfo");
+	add(_txtItem, "text", "transferInfo");
+	add(_txtQuantity, "text", "transferInfo");
+	add(_txtArrivalTime, "text", "transferInfo");
+	add(_lstTransfers, "list", "transferInfo");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransfersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFERS"));
 
-	_txtItem->setColor(Palette::blockOffset(15)+6);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(15)+6);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtArrivalTime->setColor(Palette::blockOffset(15)+6);
 	_txtArrivalTime->setText(tr("STR_ARRIVAL_TIME_HOURS"));
 
-	_lstTransfers->setColor(Palette::blockOffset(13)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstTransfers->setColumns(3, 155, 75, 46);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);

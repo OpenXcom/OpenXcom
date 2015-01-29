@@ -1155,4 +1155,16 @@ ComboBox *TextList::getComboBox() const
 {
 	return _comboBox;
 }
+
+void TextList::setBorderColor(Uint8 color)
+{
+	_up->setColor(color);
+	_down->setColor(color);
+	_scrollbar->setColor(color);
+}
+
+int TextList::getScrollbarColor()
+{
+	return _scrollbar->getColor();
+}
 }

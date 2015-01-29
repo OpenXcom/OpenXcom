@@ -24,6 +24,8 @@
 #include "../Engine/Exception.h"
 #include "Polygon.h"
 #include "Polyline.h"
+#include "../Engine/Palette.h"
+#include "../Geoscape/Globe.h"
 #include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
@@ -94,6 +96,15 @@ void RuleGlobe::load(const YAML::Node &node)
 			_polylines.push_back(polyline);
 		}
 	}
+	Globe::COUNTRY_LABEL_COLOR = node["countryColor"].as<Uint8>(Globe::COUNTRY_LABEL_COLOR);
+	Globe::CITY_LABEL_COLOR = node["cityColor"].as<Uint8>(Globe::CITY_LABEL_COLOR);
+	Globe::BASE_LABEL_COLOR = node["baseColor"].as<Uint8>(Globe::BASE_LABEL_COLOR);
+	Globe::LINE_COLOR = node["lineColor"].as<Uint8>(Globe::LINE_COLOR);
+	
+	if (node["oceanPalette"])
+	{
+		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<Uint8>(12));
+	}
 }
 
 /**
@@ -154,8 +165,8 @@ void RuleGlobe::loadDat(const std::string &filename)
 		for (int i = 0, j = 0; i < points; ++i)
 		{
 			// Correct X-Com degrees and convert to radians
-			double lonRad = value[j++] * 0.125f * M_PI / 180;
-			double latRad = value[j++] * 0.125f * M_PI / 180;
+			double lonRad = value[j++] * 0.125 * M_PI / 180;
+			double latRad = value[j++] * 0.125 * M_PI / 180;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);

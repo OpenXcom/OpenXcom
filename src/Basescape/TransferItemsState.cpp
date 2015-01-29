@@ -36,7 +36,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -55,7 +54,7 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom(baseFrom), _baseTo(baseTo), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0), _hasSci(0), _hasEng(0), _distance(0.0)
+TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom(baseFrom), _baseTo(baseTo), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0), _hasSci(0), _hasEng(0), _distance(0.0), _ammoColor(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -69,55 +68,46 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 0);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferMenu")->getElement("palette")->color);
+	_ammoColor = _game->getRuleset()->getInterface("transferMenu")->getElement("ammoColor")->color;
 
-	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtAmountTransfer);
-	add(_txtAmountDestination);
-	add(_lstItems);
+	add(_window, "window", "transferMenu");
+	add(_btnOk, "button", "transferMenu");
+	add(_btnCancel, "button", "transferMenu");
+	add(_txtTitle, "text", "transferMenu");
+	add(_txtItem, "text", "transferMenu");
+	add(_txtQuantity, "text", "transferMenu");
+	add(_txtAmountTransfer, "text", "transferMenu");
+	add(_txtAmountDestination, "text", "transferMenu");
+	add(_lstItems, "list", "transferMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TransferItemsState::btnOkClick, Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&TransferItemsState::btnCancelClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFER"));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
 	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
 	_txtAmountTransfer->setWordWrap(true);
 
-	_txtAmountDestination->setColor(Palette::blockOffset(13)+10);
 	_txtAmountDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
 	_txtAmountDestination->setWordWrap(true);
 
-	_lstItems->setColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 162, 58, 40, 20);
 	_lstItems->setSelectable(true);
@@ -193,7 +183,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 			{
 				item.insert(0, L"  ");
 				_lstItems->addRow(4, item.c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
-				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_baseQty.size() - 1, _ammoColor);
 			}
 			else
 			{
@@ -549,48 +539,50 @@ void TransferItemsState::increaseByValue(int change)
 		selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 
 	if (0 >= change || getQuantity() <= _transferQty[_sel]) return;
+	std::wstring errorMessage = L"";
 	// Check Living Quarters
 	if ((TRANSFER_SOLDIER == selType || TRANSFER_SCIENTIST == selType || TRANSFER_ENGINEER == selType)
 		&& _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_ACCOMODATION"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-		return;
+		errorMessage = tr("STR_NO_FREE_ACCOMODATION");
 	}
-	if (TRANSFER_CRAFT == selType )
+	else if (TRANSFER_CRAFT == selType )
 	{
 		Craft *craft =  _crafts[_sel - _soldiers.size()];
 		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_TRANSFER"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-			return;
+			errorMessage = tr("STR_NO_FREE_HANGARS_FOR_TRANSFER");
 		}
-		if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
+		else if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_ACCOMODATION_CREW"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-			return;
+			errorMessage = tr("STR_NO_FREE_ACCOMODATION_CREW");
 		}
-		if (Options::storageLimitsEnforced && _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
+		else if (Options::storageLimitsEnforced && _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
 		{
 			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-			return;
+			errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT");
 		}
 	}
-	if (TRANSFER_ITEM == selType && !selItem->getAlien()
+	else if (TRANSFER_ITEM == selType && !selItem->getAlien()
 		&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_STORE_SPACE"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-		return;
+		errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 	}
-	if (TRANSFER_ITEM == selType && selItem->getAlien()
+	else if (TRANSFER_ITEM == selType && selItem->getAlien()
 		&& Options::storageLimitsEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::storageLimitsEnforced * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER"), _palette, Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		errorMessage = tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER");
+	}
+
+	if (errorMessage != L"")
+	{
+		RuleInterface *menuInterface = _game->getRuleset()->getInterface("transferMenu");
+		_game->pushState(new ErrorMessageState(errorMessage, _palette, menuInterface->getElement("errorMessage")->color, "BACK13.SCR", menuInterface->getElement("errorPalette")->color));
 		return;
 	}
 
@@ -709,17 +701,17 @@ void TransferItemsState::updateItemStrings()
 	_lstItems->setCellText(_sel, 2, ss2.str());
 	if (_transferQty[_sel] > 0)
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
 	}
 	else
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+		_lstItems->setRowColor(_sel, _lstItems->getColor());
 		if (_sel > _itemOffset)
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_sel, _ammoColor);
 			}
 		}
 	}

@@ -46,19 +46,17 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_txtMessage = new Text(224, 48, 48, 76);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 7);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 	
-	add(_window);
-	add(_btnOk);
-	add(_txtMessage);
+	add(_window, "window", "UFOInfo");
+	add(_btnOk, "button", "UFOInfo");
+	add(_txtMessage, "text", "UFOInfo");
 
 	centerAllSurfaces();
 	
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyOk);
@@ -67,7 +65,6 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	_txtMessage->setColor(Palette::blockOffset(8)+5);
 
 	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE").arg(_base->getName()));
 

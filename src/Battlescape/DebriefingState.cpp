@@ -101,61 +101,47 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_lstTotal = new TextList(290, 9, 16, 12);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("debriefing")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtScore);
-	add(_txtRecovery);
-	add(_txtRating);
-	add(_lstStats);
-	add(_lstRecovery);
-	add(_lstTotal);
+	add(_window, "window", "debriefing");
+	add(_btnOk, "button", "debriefing");
+	add(_txtTitle, "heading", "debriefing");
+	add(_txtItem, "text", "debriefing");
+	add(_txtQuantity, "text", "debriefing");
+	add(_txtScore, "text", "debriefing");
+	add(_txtRecovery, "text", "debriefing");
+	add(_txtRating, "text", "debriefing");
+	add(_lstStats, "list", "debriefing");
+	add(_lstRecovery, "list", "debriefing");
+	add(_lstTotal, "totals", "debriefing");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 
-	_txtItem->setColor(Palette::blockOffset(8)+5);
 	_txtItem->setText(tr("STR_LIST_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 	_txtQuantity->setAlign(ALIGN_RIGHT);
 
-	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));
 
-	_txtRecovery->setColor(Palette::blockOffset(8)+5);
 	_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 
-	_txtRating->setColor(Palette::blockOffset(8)+5);
-
-	_lstStats->setColor(Palette::blockOffset(15)-1);
-	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstStats->setColumns(3, 224, 30, 64);
 	_lstStats->setDot(true);
 
-	_lstRecovery->setColor(Palette::blockOffset(15)-1);
-	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstRecovery->setColumns(3, 224, 30, 64);
 	_lstRecovery->setDot(true);
 
-	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 254, 64);
 	_lstTotal->setDot(true);
 
@@ -163,7 +149,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 
 	int total = 0, statsY = 0, recoveryY = 0;
 	int civiliansSaved = 0, civiliansDead = 0;
-    int aliensKilled = 0;
+    int aliensKilled = 0, aliensStunned = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
@@ -194,6 +180,10 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
         if ((*i)->item == "STR_ALIENS_KILLED")
         {
             aliensKilled += (*i)->qty;
+        }
+        if ((*i)->item == "STR_LIVE_ALIENS_RECOVERED")
+        {
+            aliensStunned += (*i)->qty;
         }
 	}
 	if (civiliansSaved && !civiliansDead && _missionStatistics->success == true)
@@ -268,16 +258,25 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		if ((*j)->getGeoscapeSoldier())
 		{
 			int soldierAlienKills = 0;
+			int soldierAlienStuns = 0;
 			for (std::vector<BattleUnitKills*>::const_iterator k = (*j)->getStatistics()->kills.begin(); k != (*j)->getStatistics()->kills.end(); ++k)
 			{
-				if ((*k)->faction == FACTION_HOSTILE)
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_DEAD")
 				{
 					soldierAlienKills++;
+				}
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+				{
+					soldierAlienStuns++;
 				}
 			}
 			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true)
 			{
 				(*j)->getStatistics()->nikeCross = true;
+			}
+			if (aliensStunned && aliensStunned == soldierAlienStuns && _missionStatistics->success == true)
+			{
+				(*j)->getStatistics()->mercyCross = true;
 			}
 			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
@@ -301,10 +300,6 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 
 	// Set music
 	_game->getResourcePack()->playMusic("GMMARS");
-
-	// Restore system colors
-	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
 
 /**
@@ -372,12 +367,12 @@ void DebriefingState::btnOkClick(Action *)
 			else if (_manageContainment)
 			{
 				_game->pushState(new ManageAlienContainmentState(_base, OPT_BATTLESCAPE));
-				_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8) + 5, "BACK01.SCR", 0));
+				_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 			if (!_manageContainment && Options::storageLimitsEnforced && _base->storesOverfull())
 			{
 				_game->pushState(new SellState(_base, OPT_BATTLESCAPE));
-				_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(8) + 5, "BACK01.SCR", 0));
+				_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 		}
 
@@ -540,6 +535,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			base = (*i);
 			base->setInBattlescape(false);
+			base->cleanupDefenses(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))

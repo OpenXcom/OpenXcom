@@ -79,6 +79,7 @@ void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, 
 void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 {
 	_unit = unit;
+	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	_redraw = true;
 	_part = part;
 }
@@ -141,7 +142,6 @@ void UnitSprite::setAnimationFrame(int frame)
 void UnitSprite::draw()
 {
 	Surface::draw();
-	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	// Array of drawing routines
 	void (UnitSprite::*routines[])() = {&UnitSprite::drawRoutine0,
 		                                &UnitSprite::drawRoutine1,
@@ -158,12 +158,13 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine0,
 										&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine0,
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine4,
 										&UnitSprite::drawRoutine4,
-										&UnitSprite::drawRoutine18,
 										&UnitSprite::drawRoutine19,
-										&UnitSprite::drawRoutine20};
+										&UnitSprite::drawRoutine20,
+										&UnitSprite::drawRoutine21};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -172,14 +173,15 @@ void UnitSprite::draw()
  * Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
  * mutons (routine 10),
  * aquanauts (routine 13),
- * aquatoids, calcinites, deep ones, gill men, lobster men, tasoths (routine 14).
+ * calcinites, deep ones, gill men, lobster men, tasoths (routine 14),
+ * aquatoids (routine 15) (this one is no different, it just precludes breathing animations.
  */
 void UnitSprite::drawRoutine0()
 {
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
 	// magic numbers
 	const int legsStand = 16, legsKneel = 24;
-	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat;
+	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat, torsoHandsWeaponY = 0;
 	if (_drawingRoutine <= 10)
 	{
 		die = 264; // ufo:eu death frame
@@ -197,8 +199,8 @@ void UnitSprite::drawRoutine0()
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
-            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") || 
-			     (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
+
+            if (_unit->getArmor()->getForcedTorso() == TORSO_USE_GENDER)
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
 			}
@@ -238,8 +240,9 @@ void UnitSprite::drawRoutine0()
 	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
 	const int larmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
 	const int rarmWalk[8] = { 48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7 };
-	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0}; // bobbing up and down
-	const int alternateyoffWalk[8] = {1, 1, 0, 0, 1, 1, 0, 0}; // bobbing up and down (muton)
+	const int YoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0}; // bobbing up and down
+	const int mutonYoffWalk[8] = {1, 1, 0, 0, 1, 1, 0, 0}; // bobbing up and down (muton)
+	const int aquatoidYoffWalk[8] = {1, 0, 0, 1, 2, 1, 0, 0}; // bobbing up and down (aquatoid)
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
 	const int offX2[8] = { -8, 3, 5, 12, 6, -1, -5, -13 }; // for the left handed weapons
@@ -301,30 +304,44 @@ void UnitSprite::drawRoutine0()
 		}
 		return;
 	}
-
-	if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+	if (_drawingRoutine == 0 || _helmet)
 	{
-		torso = _unitSurface->getFrame(maleTorso + unitDir);
-	}
-	else if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC")
-	{
-		torso = _unitSurface->getFrame(femaleTorso + unitDir);
-	}
-	else if (_unit->getGender() == GENDER_FEMALE)
-	{
-		torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		if ((_unit->getGender() == GENDER_FEMALE && _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE) 
+			|| _unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE)
+		{
+			torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		}
+		else
+		{
+			torso = _unitSurface->getFrame(maleTorso + unitDir);
+		}
 	}
 	else
 	{
-		torso = _unitSurface->getFrame(maleTorso + unitDir);
+		if (_unit->getGender() == GENDER_FEMALE)
+		{
+			torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		}
+		else
+		{
+			torso = _unitSurface->getFrame(maleTorso + unitDir);
+		}
 	}
 
+	
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		torso->setY(yoffWalk[walkPhase]);
+		
 		if (_drawingRoutine == 10)
-			torso->setY(alternateyoffWalk[walkPhase]);
+			torsoHandsWeaponY = mutonYoffWalk[walkPhase];
+		else if (_drawingRoutine == 13 || _drawingRoutine == 14)
+			torsoHandsWeaponY = YoffWalk[walkPhase]+1;
+		else if (_drawingRoutine == 15)
+			torsoHandsWeaponY = aquatoidYoffWalk[walkPhase];
+		else
+			torsoHandsWeaponY = YoffWalk[walkPhase];
+		torso->setY(torsoHandsWeaponY);
 		legs = _unitSurface->getFrame(legsWalk[unitDir] + walkPhase);
 		leftArm = _unitSurface->getFrame(larmWalk[unitDir] + walkPhase);
 		rightArm = _unitSurface->getFrame(rarmWalk[unitDir] + walkPhase);
@@ -339,7 +356,7 @@ void UnitSprite::drawRoutine0()
 		{
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
 		}
-		else if (_unit->isFloating() && _unit->getArmor()->getMovementType() == MT_FLY)
+		else if (_unit->isFloating() && _unit->getMovementType() == MT_FLY)
 		{
 			legs = _unitSurface->getFrame(legsFloat + unitDir);
 		}
@@ -412,20 +429,10 @@ void UnitSprite::drawRoutine0()
 		// the fixed arm(s) have to be animated up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			if (_drawingRoutine == 10)
-			{
-				itemA->setY(itemA->getY() + alternateyoffWalk[walkPhase]);
-				rightArm->setY(alternateyoffWalk[walkPhase]);
-				if (_itemA->getRules()->isTwoHanded())
-					leftArm->setY(alternateyoffWalk[walkPhase]);
-			}
-			else
-			{
-				itemA->setY(itemA->getY() + yoffWalk[walkPhase]);
-				rightArm->setY(yoffWalk[walkPhase]);
-				if (_itemA->getRules()->isTwoHanded())
-					leftArm->setY(yoffWalk[walkPhase]);
-			}
+			itemA->setY(itemA->getY() + torsoHandsWeaponY);
+            rightArm->setY(torsoHandsWeaponY);
+			if (_itemA->getRules()->isTwoHanded())
+				leftArm->setY(torsoHandsWeaponY);
 		}
 	}
 	//if we are left handed or dual wielding...
@@ -472,20 +479,10 @@ void UnitSprite::drawRoutine0()
 
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			if (_drawingRoutine == 10)
-			{
-				leftArm->setY(alternateyoffWalk[walkPhase]);
-				itemB->setY(itemB->getY() + alternateyoffWalk[walkPhase]);
-				if (_itemB->getRules()->isTwoHanded())
-					rightArm->setY(alternateyoffWalk[walkPhase]);
-			}
-			else
-			{
-				leftArm->setY(yoffWalk[walkPhase]);
-				itemB->setY(itemB->getY() + yoffWalk[walkPhase]);
-				if (_itemB->getRules()->isTwoHanded())
-					rightArm->setY(yoffWalk[walkPhase]);
-			}
+			itemB->setY(itemB->getY() + torsoHandsWeaponY);
+            leftArm->setY(torsoHandsWeaponY);
+			if (_itemB->getRules()->isTwoHanded())
+				rightArm->setY(torsoHandsWeaponY);
 		}
 	}
 	// offset everything but legs when kneeled
@@ -799,7 +796,7 @@ void UnitSprite::drawRoutine2()
 
 	Surface *s = 0;
 
-	const int hoverTank = _unit->getArmor()->getMovementType() == MT_FLY ? 32 : 0;
+	const int hoverTank = _unit->getMovementType() == MT_FLY ? 32 : 0;
 	const int turret = _unit->getTurretType();
 
 	// draw the animated propulsion below the hwp
@@ -858,7 +855,7 @@ void UnitSprite::drawRoutine3()
 
 /**
  * Drawing routine for civilians, ethereals, zombies (routine 4),
- * tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
+ * tftd civilians, tftd zombies (routine 17), more tftd civilians (routine 18).
  * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
  */
 void UnitSprite::drawRoutine4()
@@ -880,12 +877,12 @@ void UnitSprite::drawRoutine4()
 	const int standConvert[8] = { 3, 2, 1, 0, 7, 6, 5, 4 }; // array for converting stand frames for some tftd civilians
 	const int offXAiming = 16;
 
-	if (_drawingRoutine == 16) // tftd civilian - first set
+	if (_drawingRoutine == 17) // tftd civilian - first set
 	{
 		stand = 64;
 		walk = 0;
 	}
-	else if (_drawingRoutine == 17) // tftd civilian - second set
+	else if (_drawingRoutine == 18) // tftd civilian - second set
 	{
 		stand = 140;
 		walk = 76;
@@ -910,7 +907,7 @@ void UnitSprite::drawRoutine4()
 	{
 		s = _unitSurface->getFrame(walk + (8 * unitDir) + _unit->getWalkingPhase());
 	}
-	else if (_drawingRoutine != 16)
+	else if (_drawingRoutine != 17)
 	{
 		s = _unitSurface->getFrame(stand + unitDir);
 	}
@@ -1339,7 +1336,7 @@ void UnitSprite::drawRoutine9()
 }
 
 /**
-* Drawing routine for terror tanks.
+* Drawing routine for tftd tanks.
 */
 void UnitSprite::drawRoutine11()
 {
@@ -1349,73 +1346,35 @@ void UnitSprite::drawRoutine11()
 		return;
 	}
 
-	int hoverTank = 0;
-	if (_unit->getArmor()->getMovementType() == MT_FLY)
-	{
-		hoverTank = 128;
-	}
-	const int offY[8] = { 6, 1, 4, 1, 4, 1, 6, 1 }; // coelacanth offset
-	const int offTurretX[8] = { -3, -2, 0, 0, 0, 2, 3, 0 }; // turret offsets
-	const int offTurretY[8] = { -3, -5, -4, -2, -4, -5, -3, -3 }; // turret offsets
+	const int offTurretX[8] = { -2, -6, -5, 0, 5, 6, 2, 0 }; // turret offsets
+	const int offTurretY[8] = { -12, -13, -16, -16, -16, -13, -12, -12 }; // turret offsets
 
-	Surface *s = 0;
+	int body = 0;
+	int animFrame = _unit->getWalkingPhase() % 4;
+	if (_unit->getMovementType() == MT_FLY)
+	{
+		body = 128;
+		animFrame = _animationFrame % 4;
+	}
+
+	Surface *s = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
+	s->setY(4);
+	s->blit(this);
+
 	int turret = _unit->getTurretType();
-
-	if (hoverTank != 0)
-	{
-		// draw the displacer
-		s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
-		s->blit(this);
-	}
-	else
-	{
-		// draw the coelacanth
-		if (_unit->getStatus() == STATUS_WALKING)
-		{
-			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() % 4));
-		}
-		else
-		{
-			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
-		}
-		s->setY(offY[_unit->getDirection()]);
-		s->blit(this);
-	}
-
-	int turretOffsetX = 0;
-	int turretOffsetY = 0;
-	switch (_part)
-	{
-		case 1:
-			turretOffsetX = -16;
-			turretOffsetY = -8;
-			break;
-		case 2:
-			turretOffsetX = 16;
-			turretOffsetY = -8;
-			break;
-		case 3:
-			turretOffsetX = 0;
-			turretOffsetY = -16;
-			break;
-	}
-
 	// draw the turret, overlapping all 4 parts
-	if (turret != -1)
+	if (_part == 3 && turret != -1 && !_unit->getFloorAbove())
 	{
 		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
-		turretOffsetX += offTurretX[_unit->getDirection()];
-		turretOffsetY += offTurretY[_unit->getDirection()];
-		turretOffsetY += offY[_unit->getDirection()];
-		s->setX(turretOffsetX);
-		s->setY(turretOffsetY);
+		s->setX(offTurretX[_unit->getDirection()]);
+		s->setY(offTurretY[_unit->getDirection()]);
 		s->blit(this);
 	}
 
 }
 
 /**
-* Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
+* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
 */
 void UnitSprite::drawRoutine12()
 {
@@ -1431,7 +1390,7 @@ void UnitSprite::drawRoutine12()
 	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
 
-	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 15) )
+	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 16) )
 	{
 		// biodrone death frames
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
@@ -1445,7 +1404,7 @@ void UnitSprite::drawRoutine12()
 /**
  * Drawing routine for tentaculats.
  */
-void UnitSprite::drawRoutine18()
+void UnitSprite::drawRoutine19()
 {
 	Surface *s = 0;
 	// magic numbers
@@ -1479,7 +1438,7 @@ void UnitSprite::drawRoutine18()
 /**
  * Drawing routine for triscenes.
  */
-void UnitSprite::drawRoutine19()
+void UnitSprite::drawRoutine20()
 {
 	if (_unit->isOut())
 	{
@@ -1504,7 +1463,7 @@ void UnitSprite::drawRoutine19()
 /**
  * Drawing routine for xarquids.
  */
-void UnitSprite::drawRoutine20()
+void UnitSprite::drawRoutine21()
 {
 	if (_unit->isOut())
 	{

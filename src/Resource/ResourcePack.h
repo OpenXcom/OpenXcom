@@ -83,6 +83,11 @@ public:
 	static int UFO_EXPLODE;
 	static int INTERCEPTOR_HIT;
 	static int INTERCEPTOR_EXPLODE;
+	static int GEOSCAPE_CURSOR;
+	static int BASESCAPE_CURSOR;
+	static int BATTLESCAPE_CURSOR;
+	static int UFOPAEDIA_CURSOR;
+	static int GRAPHS_CURSOR;
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack();
 	/// Cleans up the resource pack.
@@ -110,6 +115,7 @@ public:
 	/// Returns a specific sound from either the land or underwater resource set.
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
 	const std::vector<std::vector<Uint8> > *getLUTs() const;
+	bool isMusicPlaying();
 
 };
 

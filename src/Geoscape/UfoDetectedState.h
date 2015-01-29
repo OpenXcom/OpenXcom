@@ -39,7 +39,6 @@ class UfoDetectedState : public State
 private:
 	Ufo *_ufo;
 	GeoscapeState *_state;
-	bool _hyperwave;
 
 	TextButton *_btnIntercept, *_btnCentre, *_btnCancel;
 	Window *_window;

@@ -33,6 +33,13 @@
 #include "ArticleStateUfo.h"
 #include "ArticleStateVehicle.h"
 #include "ArticleStateTFTD.h"
+#include "ArticleStateTFTDArmor.h"
+#include "ArticleStateTFTDVehicle.h"
+#include "ArticleStateTFTDItem.h"
+#include "ArticleStateTFTDFacility.h"
+#include "ArticleStateTFTDCraft.h"
+#include "ArticleStateTFTDCraftWeapon.h"
+#include "ArticleStateTFTDUso.h"
 #include "../Engine/Game.h"
 
 namespace OpenXcom
@@ -124,6 +131,27 @@ namespace OpenXcom
 				break;
 			case UFOPAEDIA_TYPE_TFTD:
 				return new ArticleStateTFTD(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_CRAFT:
+				return new ArticleStateTFTDCraft(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
+				return new ArticleStateTFTDCraftWeapon(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_VEHICLE:
+				return new ArticleStateTFTDVehicle(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_ITEM:
+				return new ArticleStateTFTDItem(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_ARMOR:
+				return new ArticleStateTFTDArmor(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
+				return new ArticleStateTFTDFacility(dynamic_cast<ArticleDefinitionTFTD *> (article));
+				break;
+			case UFOPAEDIA_TYPE_TFTD_USO:
+				return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD *> (article));
 				break;
 			default: break;
 		}

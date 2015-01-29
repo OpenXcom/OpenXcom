@@ -26,7 +26,6 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
 #include "../Savegame/SavedGame.h"
@@ -52,33 +51,28 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 1);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnResearch);
-	add(_txtTitle);
-	add(_lstPossibilities);
+	add(_window, "window", "geoResearch");
+	add(_btnOk, "button", "geoResearch");
+	add(_btnResearch, "button", "geoResearch");
+	add(_txtTitle, "text1", "geoResearch");
+	add(_lstPossibilities, "text2", "geoResearch");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnOkClick, Options::keyCancel);
-	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
 	_btnResearch->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnResearchClick, Options::keyOk);
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);

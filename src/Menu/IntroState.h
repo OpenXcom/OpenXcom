@@ -23,16 +23,18 @@
 
 namespace OpenXcom
 {
-
+class FlcPlayer;
 /**
  * Shows the intro cinematic.
  */
 class IntroState : public State
 {
 private:
-	std::string _introFile, _introSoundFileDOS, _introSoundFileWin;
+	std::vector<std::string> _introFiles;
+	std::string _introSoundFileDOS, _introSoundFileWin;
 	bool _wasLetterBoxed;
 	int _oldMusic, _oldSound;
+	FlcPlayer *_flcPlayer;
 public:
 	/// Creates the Intro state.
 	IntroState(bool wasLetterBoxed);
@@ -40,6 +42,7 @@ public:
 	~IntroState();
 	/// Starts the intro.
 	void init();
+  void end();
 };
 
 }

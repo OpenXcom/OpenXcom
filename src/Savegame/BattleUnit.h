@@ -27,6 +27,7 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
 #include "Soldier.h"
+#include "BattleItem.h"
 
 namespace OpenXcom
 {
@@ -35,6 +36,7 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
+class SavedBattleGame;
 class Node;
 class Surface;
 class RuleInventory;
@@ -45,7 +47,7 @@ class Language;
 class AlienBAIState;
 class CivilianBAIState;
 
-enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK, STATUS_TIME_OUT};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
@@ -60,6 +62,8 @@ struct BattleUnitKills
 	UnitFaction faction;
 	UnitStatus status;
     int mission, turn;
+    UnitSide side;
+    UnitBodyPart bodypart;
 
     /// Functions
     // Make turn unique across all kills
@@ -84,6 +88,8 @@ struct BattleUnitKills
         faction = (UnitFaction)node["faction"].as<int>();
         mission = node["mission"].as<int>(mission);
         turn = node["turn"].as<int>(turn);
+        side = (UnitSide)node["side"].as<int>();
+        bodypart = (UnitBodyPart)node["bodypart"].as<int>();
     }
     // Save
     YAML::Node save() const
@@ -97,9 +103,11 @@ struct BattleUnitKills
         node["faction"] = (int)faction;
         node["mission"] = mission;
         node["turn"] = turn;
+        node["side"] = (int)side;
+        node["bodypart"] = (int)bodypart;
         return node;
     }
-    // Convert victim State to string
+    // Convert victim State to string.
     std::string getUnitStatusString() const
     {
         switch (status)
@@ -109,7 +117,7 @@ struct BattleUnitKills
         default:                    return "status error";
         }
     }
-    // Convert victim Faction to string
+    // Convert victim Faction to string.
     std::string getUnitFactionString() const
     {
         switch (faction)
@@ -120,9 +128,36 @@ struct BattleUnitKills
         default:                return "faction error";
         }
     }
+    // Convert victim Side to string.
+    std::string getUnitSideString() const
+    {
+        switch (side)
+        {
+        case SIDE_FRONT:    return "SIDE_FRONT";
+        case SIDE_LEFT:     return "SIDE_LEFT";
+        case SIDE_RIGHT:    return "SIDE_RIGHT";
+        case SIDE_REAR:     return "SIDE_REAR";
+        case SIDE_UNDER:    return "SIDE_UNDER";
+        default:            return "side error";
+        }
+    }
+    // Convert victim Body part to string.
+    std::string getUnitBodyPartString() const
+    {
+        switch (bodypart)
+        {
+        case BODYPART_HEAD:     return "BODYPART_HEAD";
+        case BODYPART_TORSO:    return "BODYPART_TORSO";
+        case BODYPART_RIGHTARM: return "BODYPART_RIGHTARM";
+        case BODYPART_LEFTARM:  return "BODYPART_LEFTARM";
+        case BODYPART_RIGHTLEG: return "BODYPART_RIGHTLEG";
+        case BODYPART_LEFTLEG:  return "BODYPART_LEFTLEG";
+        default:                return "body part error";
+        }
+    }
     BattleUnitKills(const YAML::Node& node) { load(node); }
-    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn) : 
-						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn) { }
+    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn, UnitSide Side, UnitBodyPart BodyPart) : 
+						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn), side(Side), bodypart(BodyPart) { }
     ~BattleUnitKills() { }
 };
 
@@ -147,6 +182,8 @@ struct BattleUnitStatistics
     int daysWounded;                        // Tracks how many days the unit was wounded for
 	bool KIA;								// Tracks if the soldier was killed in battle
 	bool nikeCross;							// Tracks if a soldier killed every alien
+    bool mercyCross;                        // Tracks if a soldier stunned every alien
+    int woundsHealed;                       // Tracks how many times a fatal wound was healed by thits unit
 
 	/// Functions
 	// Friendly fire check
@@ -179,6 +216,8 @@ struct BattleUnitStatistics
 		shotsFiredCounter = node["shotsFiredCounter"].as<int>(shotsFiredCounter);
 		shotsLandedCounter = node["shotsLandedCounter"].as<int>(shotsLandedCounter);
 		nikeCross = node["nikeCross"].as<bool>(nikeCross);
+        mercyCross = node["mercyCross"].as<bool>(mercyCross);
+        woundsHealed = node["woundsHealed"].as<int>(woundsHealed);
 	}
 	// Save function
 	YAML::Node save() const
@@ -201,10 +240,12 @@ struct BattleUnitStatistics
 		node["shotsFiredCounter"] = shotsFiredCounter;
 		node["shotsLandedCounter"] = shotsLandedCounter;
 		if (nikeCross) node["nikeCross"] = nikeCross;
+        if (mercyCross) node["mercyCross"] = mercyCross;
+        node["woundsHealed"] = woundsHealed;
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0) { }
 	~BattleUnitStatistics() { }
 };
 
@@ -215,6 +256,8 @@ struct BattleUnitStatistics
 class BattleUnit
 {
 private:
+	static const int SPEC_WEAPON_MAX = 3;
+
 	UnitFaction _faction, _originalFaction;
 	UnitFaction _killedBy;
 	int _id;
@@ -235,6 +278,7 @@ private:
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
+	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
 	BattleAIState *_currentAIState;
 	bool _visible;
 	Surface *_cache[5];
@@ -253,6 +297,8 @@ private:
 	std::string _activeHand;
     BattleUnitStatistics* _statistics;
 	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
+    UnitSide _fatalShotSide;
+    UnitBodyPart _fatalShotBodyPart;
 
 	// static data
 	std::string _type;
@@ -273,12 +319,14 @@ private:
 	int _turretType;
 	int _breathFrame;
 	bool _breathing;
-	bool _floorAbove;
+	bool _hidingForTurn, _floorAbove, _respawn;
+	MovementType _movementType;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
-	/// Creates a BattleUnit.
-	BattleUnit(Soldier *soldier, UnitFaction faction);
-	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
+	/// Creates a BattleUnit from solder.
+	BattleUnit(Soldier *soldier, int depth);
+	/// Creates a BattleUnit from unit.
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
 	/// Loads the unit from YAML.
@@ -487,7 +535,7 @@ public:
 	/// Gets the unit's name.
 	std::wstring getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
-	UnitStats *getStats();
+	UnitStats *getBaseStats();
 	/// Get the unit's stand height.
 	int getStandHeight() const;
 	/// Get the unit's kneel height.
@@ -510,8 +558,10 @@ public:
 	int getAggression() const;
 	/// Get the units's special ability.
 	int getSpecialAbility() const;
-	/// Set the units's special ability.
-	void setSpecialAbility(SpecialAbility specab);
+	/// Set the units's respawn flag.
+	void setRespawn(bool respawn);
+	/// Get the units's respawn flag.
+	bool getRespawn();
 	/// Get the units's rank string.
 	std::string getRankString() const;
 	/// Get the geoscape-soldier object.
@@ -559,8 +609,6 @@ public:
 
 	Unit *getUnitRules() const { return _unitRules; }
 
-	/// scratch value for AI's left hand to tell its right hand what's up...
-	bool _hidingForTurn; // don't zone out and start patrolling again
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
 	std::vector<BattleUnit *> &getUnitsSpottedThisTurn();
@@ -592,15 +640,32 @@ public:
 	void setFloorAbove(bool floor);
 	/// Get the flag for "floor above me".
 	bool getFloorAbove();
-	/// Get the name of any melee weapon we may be carrying, or a built in one.
-	std::string getMeleeWeapon();
+	/// Get any melee weapon we may be carrying, or a built in one.
+	BattleItem *getMeleeWeapon();
+	/// Use this function to check the unit's movement type.
+	MovementType getMovementType() const;
+	/// Checks if this unit is in hiding for a turn.
+	bool isHiding() {return _hidingForTurn; };
+	/// Sets this unit is in hiding for a turn (or not).
+	void setHiding(bool hiding) { _hidingForTurn = hiding; };
+	/// Puts the unit in the corner to think about what he's done.
+	void goToTimeOut();
+	/// Create special weapon for unit.
+	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
+	/// Get special weapon.
+	BattleItem *getSpecialWeapon(BattleType type) const;
     /// Get the unit's mission statistics.
     BattleUnitStatistics* getStatistics();
 	/// Set the unit murderer's id.
 	void setMurdererId(int id);
 	/// Get the unit murderer's id.
 	int getMurdererId() const;
-
+    /// Set information on the unit's fatal shot.
+    void setFatalShotInfo(UnitSide side, UnitBodyPart bodypart);
+    /// Get information on the unit's fatal shot's side.
+    UnitSide getFatalShotSide() const;
+    /// Get information on the unit's fatal shot's body part.
+    UnitBodyPart getFatalShotBodyPart() const;
 };
 
 }

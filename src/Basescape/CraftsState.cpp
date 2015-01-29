@@ -58,56 +58,44 @@ CraftsState::CraftsState(Base *base) : _base(base)
 	_lstCrafts = new TextList(288, 118, 8, 58);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 3);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftSelect")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtBase);
-	add(_txtName);
-	add(_txtStatus);
-	add(_txtWeapon);
-	add(_txtCrew);
-	add(_txtHwp);
-	add(_lstCrafts);
+	add(_window, "window", "craftSelect");
+	add(_btnOk, "button", "craftSelect");
+	add(_txtTitle, "text", "craftSelect");
+	add(_txtBase, "text", "craftSelect");
+	add(_txtName, "text", "craftSelect");
+	add(_txtStatus, "text", "craftSelect");
+	add(_txtWeapon, "text", "craftSelect");
+	add(_txtCrew, "text", "craftSelect");
+	add(_txtHwp, "text", "craftSelect");
+	add(_lstCrafts, "list", "craftSelect");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftsState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
-	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
 	_txtBase->setText(tr("STR_BASE_").arg(_base->getName()));
 
-	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(tr("STR_STATUS"));
 
-	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
 	_txtWeapon->setWordWrap(true);
 
-	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setText(tr("STR_CREW"));
 
-	_txtHwp->setColor(Palette::blockOffset(15)+1);
 	_txtHwp->setText(tr("STR_HWPS"));
-
-	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCrafts->setColumns(5, 94, 68, 44, 46, 28);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
@@ -152,7 +140,7 @@ void CraftsState::btnOkClick(Action *)
 	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_base));
-		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 0));
+		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("craftSelect")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("craftSelect")->getElement("errorPalette")->color));
 	}
 }
 

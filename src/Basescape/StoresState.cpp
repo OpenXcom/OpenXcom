@@ -29,7 +29,6 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/ItemContainer.h"
 
@@ -53,43 +52,36 @@ StoresState::StoresState(Base *base) : _base(base)
 	_lstStores = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 0);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("storesInfo")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtSpaceUsed);
-	add(_lstStores);
+	add(_window, "window", "storesInfo");
+	add(_btnOk, "button", "storesInfo");
+	add(_txtTitle, "text", "storesInfo");
+	add(_txtItem, "text", "storesInfo");
+	add(_txtQuantity, "text", "storesInfo");
+	add(_txtSpaceUsed, "text", "storesInfo");
+	add(_lstStores, "list", "storesInfo");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_STORES"));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 
-	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 162, 92, 32);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);

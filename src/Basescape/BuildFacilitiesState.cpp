@@ -26,7 +26,6 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "PlaceFacilityState.h"
@@ -51,31 +50,26 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("selectFacility")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_lstFacilities);
+	add(_window, "window", "selectFacility");
+	add(_btnOk, "button", "selectFacility");
+	add(_txtTitle, "text", "selectFacility");
+	add(_lstFacilities, "list", "selectFacility");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BuildFacilitiesState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INSTALLATION"));
 
-	_lstFacilities->setColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 100);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);

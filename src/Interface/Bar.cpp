@@ -65,7 +65,7 @@ Uint8 Bar::getColor() const
  * Changes the color used to draw the second contents.
  * @param color Color value.
  */
-void Bar::setColor2(Uint8 color)
+void Bar::setSecondaryColor(Uint8 color)
 {
 	_color2 = color;
 	_redraw = true;
@@ -75,7 +75,7 @@ void Bar::setColor2(Uint8 color)
  * Returns the second color used to draw the bar.
  * @return Color value.
  */
-Uint8 Bar::getColor2() const
+Uint8 Bar::getSecondaryColor() const
 {
 	return _color2;
 }
