@@ -314,7 +314,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	pos = getWaypoint(trajectory, 1, globe, regionRules);
 	wp->setLongitude(pos.first);
 	wp->setLatitude(pos.second);
-		ufo->setDestination(wp);
+	ufo->setDestination(wp);
 	return ufo;
 }
 

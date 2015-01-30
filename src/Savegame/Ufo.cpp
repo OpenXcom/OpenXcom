@@ -64,7 +64,7 @@ Ufo::~Ufo()
 		}
 		else
 		{
-			 ++i;
+			++i;
 		}
 	}
 	if (_mission)

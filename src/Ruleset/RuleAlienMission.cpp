@@ -132,7 +132,7 @@ const std::string RuleAlienMission::generateRace(const size_t monthsPassed) cons
 
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();	
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
 	return rc->second->top();
 }
 
