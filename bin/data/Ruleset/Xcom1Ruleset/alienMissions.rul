@@ -244,6 +244,7 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_TERROR
     points: 10
+    specialUfo: STR_TERROR_SHIP
     raceWeights:
       0:
         STR_SECTOID: 30
@@ -286,6 +287,7 @@ alienMissions:
         timer: 9000
   - type: STR_ALIEN_RETALIATION
     points: 0
+    specialUfo: STR_BATTLESHIP
     raceWeights: {} #Special case, race comes from trigger UFO.
     waves:
       - ufo: STR_SMALL_SCOUT
@@ -306,6 +308,7 @@ alienMissions:
         timer: 3000
   - type: STR_ALIEN_SUPPLY
     points: 0
+    specialUfo: STR_SUPPLY_SHIP
     raceWeights: {} #Special case, race comes from base.
     waves:
       - ufo: STR_SUPPLY_SHIP

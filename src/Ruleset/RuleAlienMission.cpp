@@ -64,6 +64,7 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_points = node["points"].as<int>(_points);
 	_waves = node["waves"].as< std::vector<MissionWave> >(_waves);
+	_specialUfo = node["specialUfo"].as<std::string>(_specialUfo);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
