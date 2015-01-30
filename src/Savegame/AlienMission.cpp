@@ -227,7 +227,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			// Spawn a battleship straight for the XCOM base.
 			const RuleUfo &battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
 			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
-			Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
+			Ufo *ufo = new Ufo(&battleshipRule);
 			ufo->setMissionInfo(this, &assaultTrajectory);
 			std::pair<double, double> pos;
 			if (trajectory.getAltitude(0) == "STR_GROUND")
@@ -257,7 +257,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			return 0;
 		}
 		// Our destination is always an alien base.
-		Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+		Ufo *ufo = new Ufo(&ufoRule);
 		ufo->setMissionInfo(this, &trajectory);
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
 		std::pair<double, double> pos;
@@ -298,7 +298,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		return ufo;
 	}
 	// Spawn according to sequence.
-	Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+	Ufo *ufo = new Ufo(&ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, 0, globe, regionRules);
