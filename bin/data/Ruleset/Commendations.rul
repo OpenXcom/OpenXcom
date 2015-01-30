@@ -1,4 +1,4 @@
-# Merge of "Commendations" ruleset with UFOPedia
+# Merged SAPPER and SECTOPOD_KILL medals in.  Corrected names and numbers in UFOPedia section.
 extraSprites:
   - type: Commendations
     width: 31
@@ -207,7 +207,19 @@ extraSprites:
     width: 320
     height: 200
     files:
-      0: Resources/Medals/MEDAL_ORDER_OF_GLORY.png      
+      0: Resources/Medals/MEDAL_ORDER_OF_GLORY.png
+  - type: SAPPER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_SAPPER.png
+  - type: SECTOPOD_KILL
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_SECTOPOD_KILL.png      
 extraStrings:
   - type: en-US
     strings:
@@ -287,6 +299,10 @@ extraStrings:
      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
      STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
      STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
+     STR_MEDAL_SAPPER_NAME: "Sapper Medal"
+     STR_MEDAL_SAPPER_DESCRIPTION: "Given to a soldier who kills a metal foe with a high explosive pack"
+     STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME: "Metal Menace Citation"
+     STR_MEDAL_SECTOPOD_KILL_MEDAL_DESCRIPTION: "Given to a soldier that kills the most fearsome enemy construct: The Sectopod!"
      STR_MEDAL_MERCY_CROSS_NAME: "Mercy Cross"
      STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly stunned every alien in a mission."
      STR_MEDAL_HEADSHOT_NAME: "Head Hunter"
@@ -367,6 +383,8 @@ extraStrings:
      STR_MEDAL_SNIPER_MEDAL_UFOPEDIA: "{NEWLINE}'My crosshairs steady, {NEWLINE} My trigger cold,{NEWLINE}I feel the recoil{NEWLINE} and watch him fold.{NEWLINE}The mission accomplished,{NEWLINE} I grab my gear.{NEWLINE}I'll clean my rifle{NEWLINE} in the rear.'{NEWLINE}   -- Marine Sniper{NEWLINE} {NEWLINE} This citation is designed to recognize expertise in dealing death from afar. {NEWLINE} {NEWLINE} Presented for every three longrange hits, this citation has four levels."
      STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA: " 'You've got to believe that you are right to be a good soldier, that's why mercenaries are no good. It's emotion that makes a good fighting man - and knowing that you are fighting for a good cause.' {NEWLINE}    - Audie Murphy {NEWLINE} {NEWLINE} This decorations recognizes unparalleled battlefield prowess. Embodying Lethality, this warrior has proven their combat expertise in the most tangible means possible. {NEWLINE} {NEWLINE} This award is exclusively for soldiers who single handedly kill every alien in a singe mission. This award is presented up to three times. "
      STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA: "'If you take more than your fair share of objectives, you will have more than your fair share objectives to take.' {NEWLINE}     -- Murphy's Laws of Combat {NEWLINE} {NEWLINE} This citation is given to honor a soldier who has killed seven enemies in a single mission. This feat is unparralled and demonstrates the true grit of this lethal trooper. {NEWLINE} {NEWLINE}This award may be issued three times. "
+     STR_MEDAL_SAPPER_UFOPEDIA: " 'There's a tank at the tree line. It will steamroll over us... Unless someone can stop it with a satchel charge.'{NEWLINE} .... 'There's not that many men left.'{NEWLINE} -- 'I'll go.' {NEWLINE}      -- Juoksuhaudantie {NEWLINE} {NEWLINE} This award is given to soldiers who kill a metal foe such as CyberDiscs and Sectopods with a High Explosive pack. Hazardous in the extreme, these acts of heroism are recognised with this award. {NEWLINE} {NEWLINE} This award is issued for every HE Pack kill of a robotic enemy and is awarded up to ten times."     
+     STR_MEDAL_SECTOPOD_KILL_MEDAL_UFOPEDIA: "A robot may not injure humanity, or, through inaction, allow humanity to come to harm.{NEWLINE}-Isaac Asimov: 'The Zeroth Law of Robotics' {NEWLINE} {NEWLINE} The ground shaking crunch of the Sectopod sends a shudder into the bravest soldier. The difficulty of bringing down this Metal Menace is recognised by this citation. {NEWLINE} {NEWLINE} This citation is presented to every soldier that kills a sectopod, regardless of means. Ten levels of award are available for up to ten kills. "   
   - type: en-GB
     strings:
      STR_AWARDS_UC: "AWARDS"
@@ -447,6 +465,10 @@ extraStrings:
      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
      STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
      STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
+     STR_MEDAL_SAPPER_NAME: "Sapper Medal"
+     STR_MEDAL_SAPPER_DESCRIPTION: "Given to a soldier who kills a metal foe with a high explosive pack"
+     STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME: "Metal Menace Citation"
+     STR_MEDAL_SECTOPOD_KILL_MEDAL_DESCRIPTION: "Given to a soldier that kills the most fearsome enemy construct: The Sectopod!"
      STR_MEDAL_MERCY_CROSS_NAME: "Mercy Cross"
      STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly stunned every alien in a mission."
      STR_MEDAL_HEADSHOT_NAME: "Head Hunter"
@@ -527,7 +549,9 @@ extraStrings:
      STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA: " 'If you find yourself in a fair fight, you didn't plan your mission properly.'{NEWLINE}    -- (David Hackworth) {NEWLINE} {NEWLINE} Given to a soldier who has become a lethal machine in cutting down a specific alien race. This race has suffered such depradations by this XCOM hero, that they have come to calling him XenoCide. {NEWLINE} {NEWLINE} Award levels are 10, 20, and 30 Kills of a given race."
      STR_MEDAL_SNIPER_MEDAL_UFOPEDIA: "{NEWLINE}'My crosshairs steady, {NEWLINE} My trigger cold,{NEWLINE}I feel the recoil{NEWLINE} and watch him fold.{NEWLINE}The mission accomplished,{NEWLINE} I grab my gear.{NEWLINE}I'll clean my rifle{NEWLINE} in the rear.'{NEWLINE}   -- Marine Sniper{NEWLINE} {NEWLINE} This citation is designed to recognize expertise in dealing death from afar. {NEWLINE} {NEWLINE} Presented for every three longrange hits, this citation has four levels."
      STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA: " 'You've got to believe that you are right to be a good soldier, that's why mercenaries are no good. It's emotion that makes a good fighting man - and knowing that you are fighting for a good cause.' {NEWLINE}    - Audie Murphy {NEWLINE} {NEWLINE} This decorations recognizes unparalleled battlefield prowess. Embodying Lethality, this warrior has proven their combat expertise in the most tangible means possible. {NEWLINE} {NEWLINE} This award is exclusively for soldiers who single handedly kill every alien in a singe mission. This award is presented up to three times. "
-     STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA: "'If you take more than your fair share of objectives, you will have more than your fair share objectives to take.' {NEWLINE}     -- Murphy's Laws of Combat {NEWLINE} {NEWLINE} This citation is given to honor a soldier who has killed seven enemies in a single mission. This feat is unparralled and demonstrates the true grit of this lethal trooper. {NEWLINE} {NEWLINE}This award may be issued three times. "     
+     STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA: "'If you take more than your fair share of objectives, you will have more than your fair share objectives to take.' {NEWLINE}     -- Murphy's Laws of Combat {NEWLINE} {NEWLINE} This citation is given to honor a soldier who has killed seven enemies in a single mission. This feat is unparralled and demonstrates the true grit of this lethal trooper. {NEWLINE} {NEWLINE}This award may be issued three times. "
+     STR_MEDAL_SAPPER_UFOPEDIA: " 'There's a tank at the tree line. It will steamroll over us... Unless someone can stop it with a satchel charge.'{NEWLINE} .... 'There's not that many men left.'{NEWLINE} -- 'I'll go.' {NEWLINE}      -- Juoksuhaudantie {NEWLINE} {NEWLINE} This award is given to soldiers who kill a metal foe such as CyberDiscs and Sectopods with a High Explosive pack. Hazardous in the extreme, these acts of heroism are recognised with this award. {NEWLINE} {NEWLINE} This award is issued for every HE Pack kill of a robotic enemy and is awarded up to ten times."     
+     STR_MEDAL_SECTOPOD_KILL_MEDAL_UFOPEDIA: "A robot may not injure humanity, or, through inaction, allow humanity to come to harm.{NEWLINE}-Isaac Asimov: 'The Zeroth Law of Robotics' {NEWLINE} {NEWLINE} The ground shaking crunch of the Sectopod sends a shudder into the bravest soldier. The difficulty of bringing down this Metal Menace is recognised by this citation. {NEWLINE} {NEWLINE} This citation is presented to every soldier that kills a sectopod, regardless of means. Ten levels of award are available for up to ten kills. "      
   - type: fr
     strings:
      STR_DIARY: "DOSSIER"
@@ -1199,6 +1223,24 @@ commendations:
     sprite: 32
     criteria:
       totalAllAliensKilled: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
+  - type: STR_MEDAL_SAPPER_NAME
+    description: STR_MEDAL_SAPPER_DESCRIPTION
+    sprite: 33
+    criteria:
+      killsWithCriteriaCareer: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    killCriteria:
+      -
+        1: ["STR_SECTOPOD_TERRORIST", "STR_LIVE_TERRORIST", "STATUS_DEAD", "BT_GRENADE"]
+      - 
+        1: ["STR_CYBERDISC_TERRORIST", "STR_LIVE_TERRORIST", "STATUS_DEAD", "BT_GRENADE"]
+  - type: STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME
+    description: STR_SECTOPOD_KILL_MEDAL_DESCRIPTION
+    sprite: 35
+    criteria:
+      killsWithCriteriaCareer: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    killCriteria:
+      -
+        1: ["STR_SECTOPOD_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_MERCY_CROSS_NAME
     description: STR_MEDAL_MERCY_CROSS_DESCRIPTION
     sprite: 32
@@ -1267,7 +1309,7 @@ commendations:
     killCriteria:
       -
         1: ["BT_FIREARM", "FACTION_HOSTILE", "STATUS_DEAD"]
-        1: ["BT_MELEE", "FACTION_HOSTILE", "STATUS_DEAD"]
+        1: ["BT_MELEE", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
         1: ["BT_PROXIMITYGRENADE", "FACTION_HOSTILE", "STATUS_DEAD"]
         1: ["BT_GRENADE", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_NIGHTOPS_NAME
@@ -1521,83 +1563,97 @@ ufopaedia:
     text: STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6033
+  - id: STR_MEDAL_SAPPER_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: SAPPER
+    text: STR_MEDAL_SAPPER_UFOPEDIA
+    text_width: 158
+    listOrder: 6034
+  - id: STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: SECTOPOD_KILL
+    text: STR_MEDAL_SECTOPOD_KILL_MEDAL_UFOPEDIA
+    text_width: 158
+    listOrder: 6035 
   - id: STR_MEDAL_MERCY_CROSS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: MERCY_CROSS
     text: STR_MEDAL_MERCY_CROSS_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033  
+    listOrder: 6036  
   - id: STR_MEDAL_HEADSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: HEADSHOT
     text: STR_MEDAL_HEADSHOT_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6037
   - id: STR_MEDAL_REARSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: REARSHOT
     text: STR_MEDAL_REARSHOT_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6038
   - id: STR_MEDAL_FLANKSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: FLANKSHOT
     text: STR_MEDAL_FLANKSHOT_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6039
   - id: STR_MEDAL_HEALER_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: HEALER
     text: STR_MEDAL_HEALER_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6040
   - id: STR_MEDAL_ALLUFOS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: ALLUFOS
     text: STR_MEDAL_ALLUFOS_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6041
   - id: STR_MEDAL_ALLMISSIONS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: ALLMISSIONS
     text: STR_MEDAL_ALLMISSIONS_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6042
   - id: STR_MEDAL_ANTITERROR_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: ANTITERROR
     text: STR_MEDAL_ANTITERROR_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6043
 - id: STR_MEDAL_ALLBATTLETYPES_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: ALLBATTLETYPES
     text: STR_MEDAL_ALLBATTLETYPES_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6044
 - id: STR_MEDAL_NIGHTOPS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: NIGHTOPS
     text: STR_MEDAL_NIGHTOPS_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6045
 - id: STR_MEDAL_ALLRANKS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIKE_CROSS
+    image_id: ALLRANKS
     text: STR_MEDAL_ALLRANKS_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6033
+    listOrder: 6046
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT
