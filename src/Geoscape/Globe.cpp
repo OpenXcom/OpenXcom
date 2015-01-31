@@ -1331,13 +1331,13 @@ void Globe::drawDetail()
 				// Convert coordinates
 				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 
-				Surface *marker = _markerSet->getFrame(CITY_MARKER);
-				marker->setX(x - 1);
-				marker->setY(y - 1);
-				marker->blit(_countries);
-
 				if (_zoom >= (*j)->getZoomLevel())
 				{
+					Surface *marker = _markerSet->getFrame(CITY_MARKER);
+					marker->setX(x - 1);
+					marker->setY(y - 1);
+					marker->blit(_countries);
+
 					label->setX(x - 40);
 					label->setY(y + 2);
 					label->setText(_game->getLanguage()->getString((*j)->getName()));

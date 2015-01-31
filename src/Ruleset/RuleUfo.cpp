@@ -200,7 +200,7 @@ int RuleUfo::getScore() const
  * Gets the terrain data needed to draw the UFO in the battlescape.
  * @return The RuleTerrain.
  */
-RuleTerrain *RuleUfo::getBattlescapeTerrainData()
+RuleTerrain *RuleUfo::getBattlescapeTerrainData() const
 {
 	return _battlescapeTerrainData;
 }
