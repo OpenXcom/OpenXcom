@@ -158,7 +158,7 @@ public:
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
-	/// Sets up the next stage (for cydonia/tftd terror missions).
+	/// Sets up the next stage (for Cydonia/TFTD missions).
 	void nextStage();
 	/// Generates an inventory battlescape.
 	void runInventory(Craft *craft);

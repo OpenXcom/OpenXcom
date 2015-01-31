@@ -48,7 +48,7 @@
 #include "../Engine/ShaderMove.h"
 #include "../Engine/ShaderRepeat.h"
 #include "../Engine/Options.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/LocalizedText.h"
 #include "../Savegame/BaseFacility.h"

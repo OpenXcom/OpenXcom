@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ALIENTERRORSTATE_H
-#define OPENXCOM_ALIENTERRORSTATE_H
+#ifndef OPENXCOM_MISSIONDETECTEDSTATE_H
+#define OPENXCOM_MISSIONDETECTEDSTATE_H
 
 #include "../Engine/State.h"
 

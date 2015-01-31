@@ -33,7 +33,7 @@
 #include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Base.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"

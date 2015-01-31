@@ -31,7 +31,7 @@
 #include "Base.h"
 #include "Ufo.h"
 #include "Waypoint.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "AlienBase.h"
 #include "Vehicle.h"
 #include "../Ruleset/RuleItem.h"

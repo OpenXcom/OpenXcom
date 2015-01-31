@@ -48,7 +48,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDeath.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"

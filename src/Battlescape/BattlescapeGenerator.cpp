@@ -55,7 +55,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Savegame/Vehicle.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "CivilianBAIState.h"

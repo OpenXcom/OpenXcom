@@ -41,7 +41,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Savegame/Ufo.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleTerrain.h"

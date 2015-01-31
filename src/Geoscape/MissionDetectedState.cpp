@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "AlienTerrorState.h"
+#include "MissionDetectedState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -27,7 +27,7 @@
 #include "GeoscapeState.h"
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Engine/Options.h"
 #include "InterceptState.h"
 

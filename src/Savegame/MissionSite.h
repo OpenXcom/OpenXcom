@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TERRORSITE_H
-#define OPENXCOM_TERRORSITE_H
+#ifndef OPENXCOM_MISSIONSITE_H
+#define OPENXCOM_MISSIONSITE_H
 
 #include "Target.h"
 #include <string>

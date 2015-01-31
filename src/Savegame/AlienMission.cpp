@@ -34,7 +34,7 @@
 #include "../Ruleset/City.h"
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "Ufo.h"
 #include "Craft.h"
 #include "Region.h"

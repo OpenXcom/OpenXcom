@@ -45,7 +45,7 @@
 #include "Transfer.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "AlienBase.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"

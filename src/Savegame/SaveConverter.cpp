@@ -43,7 +43,7 @@
 #include "Craft.h"
 #include "AlienBase.h"
 #include "Waypoint.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "CraftWeapon.h"
 #include "Transfer.h"
 #include "Vehicle.h"
