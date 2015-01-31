@@ -58,7 +58,7 @@
 namespace OpenXcom
 {
 
-enum TargetType { TARGET_NONE, TARGET_UFO, TARGET_CRAFT, TARGET_XBASE, TARGET_ABASE, TARGET_CRASH, TARGET_LANDED, TARGET_WAYPOINT, TARGET_TERROR };
+enum TargetType { TARGET_NONE, TARGET_UFO, TARGET_CRAFT, TARGET_XBASE, TARGET_ABASE, TARGET_CRASH, TARGET_LANDED, TARGET_WAYPOINT, TARGET_TERROR, TARGET_PORT = 51, TARGET_ISLAND = 52, TARGET_SHIP = 53, TARGET_ARTEFACT = 54 };
 const char *xcomAltitudes[] = { "STR_GROUND", "STR_VERY_LOW", "STR_LOW", "STR_HIGH", "STR_VERY_HIGH" };
 const char *xcomStatus[] = { "STR_READY", "STR_OUT", "STR_REPAIRS", "STR_REFUELLING", "STR_REARMING" };
 
@@ -606,7 +606,7 @@ void SaveConverter::loadDatLoc()
 		Base *xbase = 0;
 		AlienBase *abase = 0;
 		Waypoint *waypoint = 0;
-		TerrorSite *terror = 0;
+		MissionSite *mission = 0;
 		switch (type)
 		{
 		case TARGET_NONE:
@@ -646,12 +646,20 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			terror = new TerrorSite();
-			terror->setId(id);
-			terror->setAlienRace(_idRaces[dat]);
-			terror->setSecondsRemaining(timer * 3600);
-			_save->getTerrorSites()->push_back(terror);
-			target = terror;
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"));
+		case TARGET_PORT:
+			mission = new MissionSite(_rule->getAlienMission("STR_PORT_ATTACK"));
+		case TARGET_ISLAND:
+			mission = new MissionSite(_rule->getAlienMission("STR_ISLAND_ATTACK"));
+		case TARGET_SHIP:
+			mission = new MissionSite(_rule->getAlienMission("STR_SHIP_RESCUE_MISSION"));
+		case TARGET_ARTEFACT:
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_CONTACT_SITE_MISSION"));
+			mission->setId(id);
+			mission->setAlienRace(_idRaces[dat]);
+			mission->setSecondsRemaining(timer * 3600);
+			_save->getMissionSites()->push_back(mission);
+			target = mission;
 			break;
 		}
 		if (target != 0)

@@ -522,12 +522,12 @@ void NewBattleState::btnOkClick(Action *)
 	}
 	else
 	{
-		TerrorSite *t = new TerrorSite();
-		t->setId(1);
-		t->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-		_craft->setDestination(t);
-		bgen.setTerrorSite(t);
-		_game->getSavedGame()->getTerrorSites()->push_back(t);
+		MissionSite *m = new MissionSite(0);
+		m->setId(1);
+		m->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+		_craft->setDestination(m);
+		bgen.setMissionSite(m);
+		_game->getSavedGame()->getMissionSites()->push_back(m);
 	}
 
 	if (_craft)

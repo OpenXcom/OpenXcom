@@ -35,6 +35,7 @@
 #include "AlienBase.h"
 #include "Vehicle.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleAlienMission.h"
 
 namespace OpenXcom
 {
@@ -172,9 +173,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 				}
 			}
 		}
-		else if (type == "STR_TERROR_SITE")
+		else if (type == "STR_ALIEN_BASE")
 		{
-			for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 			{
 				if ((*i)->getId() == id)
 				{
@@ -183,11 +184,14 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 				}
 			}
 		}
-		else if (type == "STR_ALIEN_BASE")
+		else
 		{
-			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+			// Backwards compatibility
+			if (type == "STR_TERROR_SITE")
+				type = "STR_ALIEN_TERROR";
+			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
 			{
-				if ((*i)->getId() == id)
+				if ((*i)->getId() == id && (*i)->getRules()->getType() == type)
 				{
 					setDestination(*i);
 					break;
@@ -333,7 +337,9 @@ int Craft::getMarker() const
 {
 	if (_status != "STR_OUT")
 		return -1;
-	return 1;
+	else if (_rules->getMarker() == -1)
+		return 1;
+	return _rules->getMarker();
 }
 
 /**

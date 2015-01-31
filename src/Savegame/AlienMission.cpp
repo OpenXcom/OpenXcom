@@ -414,12 +414,12 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			// Remove UFO, replace with TerrorSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			ufo.setStatus(Ufo::DESTROYED);
-			TerrorSite *terrorSite = new TerrorSite();
-			terrorSite->setLongitude(ufo.getLongitude());
-			terrorSite->setLatitude(ufo.getLatitude());
-			terrorSite->setId(game.getId("STR_TERROR_SITE"));
-			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);
-			terrorSite->setAlienRace(_race);
+			MissionSite *missionSite = new MissionSite(&_rule);
+			missionSite->setLongitude(ufo.getLongitude());
+			missionSite->setLatitude(ufo.getLatitude());
+			missionSite->setId(game.getId(_rule.getMarkerName()));
+			missionSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);
+			missionSite->setAlienRace(_race);
 			if (!rules.locateCity(ufo.getLongitude(), ufo.getLatitude()))
 			{
 				std::ostringstream error;
@@ -440,13 +440,13 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 				}
 				assert(0 && "Terror Mission failed to find a city, please check your log file for more details");
 			}
-			game.getTerrorSites()->push_back(terrorSite);
+			game.getMissionSites()->push_back(missionSite);
 			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 			{
 				Craft* c = dynamic_cast<Craft*>(*t);
 				if (c && c->getNumSoldiers() != 0)
 				{
-					c->setDestination(terrorSite);
+					c->setDestination(missionSite);
 					t = ufo.getFollowers()->begin();
 				}
 				else

@@ -232,7 +232,7 @@ std::string AlienDeployment::getScript() const
  * Gets if aborting this mission will fail the game.
  * @return if aborting this mission will fail the game.
  */
-const bool AlienDeployment::isNoRetreat() const
+bool AlienDeployment::isNoRetreat() const
 {
 	return _noRetreat;
 }
@@ -241,7 +241,7 @@ const bool AlienDeployment::isNoRetreat() const
  * Gets if winning this mission completes the game.
  * @return if winning this mission completes the game.
  */
-const bool AlienDeployment::isFinalDestination() const
+bool AlienDeployment::isFinalDestination() const
 {
 	return _finalDestination;
 }
@@ -250,7 +250,7 @@ const bool AlienDeployment::isFinalDestination() const
  * Gets if winning this mission completes the game.
  * @return if winning this mission completes the game.
  */
-const bool AlienDeployment::isFinalMission() const
+bool AlienDeployment::isFinalMission() const
 {
 	return _finalMission;
 }

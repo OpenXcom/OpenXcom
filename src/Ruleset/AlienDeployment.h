@@ -95,14 +95,13 @@ public:
 	/// Gets the script to use for this deployment.
 	std::string getScript() const;
 	/// Checks if aborting this mission will fail the game (all mars and t'leth stages).
-	const bool isNoRetreat() const;
+	bool isNoRetreat() const;
 	/// Checks if this is the destination for the final mission (mars stage 1, t'leth stage 1).
-	const bool isFinalDestination() const;
+	bool isFinalDestination() const;
 	/// Checks if winning this mission will complete the game (mars stage 2, t'leth stage 3).
-	const bool isFinalMission() const;
+	bool isFinalMission() const;
 	/// Gets the briefing data for this mission type.
 	BriefingData getBriefingData() const;
-
 };
 
 }

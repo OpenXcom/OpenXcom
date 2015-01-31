@@ -296,7 +296,7 @@ int Ufo::getMarker() const
 	case Ufo::CRASHED:
 		return 4;
 	default:
-		return -1;
+		return _rules->getMarker();
 	}
 }
 

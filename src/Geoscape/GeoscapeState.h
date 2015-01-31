@@ -33,7 +33,7 @@ class Text;
 class Timer;
 class DogfightState;
 class Ufo;
-class TerrorSite;
+class MissionSite;
 class Base;
 
 /**
@@ -144,8 +144,8 @@ public:
 	int getFirstFreeDogfightSlot();
 	/// Handler for clicking the timer button.
 	void btnTimerClick(Action *action);
-	/// Process a terror site
-	bool processTerrorSite(TerrorSite *ts) const;
+	/// Process a mission site
+	bool processMissionSite(MissionSite *site) const;
 	/// Handles base defense
 	void handleBaseDefense(Base *base, Ufo *ufo);
 	/// Update the resolution settings, we just resized the window.

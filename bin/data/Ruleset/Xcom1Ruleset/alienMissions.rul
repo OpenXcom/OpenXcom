@@ -244,6 +244,8 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_TERROR
     points: 10
+    deployment: STR_TERROR_MISSION
+    markerName: STR_TERROR_SITE
     raceWeights:
       0:
         STR_SECTOID: 30

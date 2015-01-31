@@ -69,7 +69,7 @@ namespace OpenXcom
  * Sets up a BattlescapeGenerator.
  * @param game pointer to Game object.
  */
-BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _alienBase(0), _terrain(0),
+BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _mission(0), _alienBase(0), _terrain(0),
 														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftDeployed(false), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
@@ -177,13 +177,13 @@ void BattlescapeGenerator::setBase(Base *base)
 }
 
 /**
- * Sets the terror site involved in the battle.
- * @param terror Pointer to terror site.
+ * Sets the mission site involved in the battle.
+ * @param mission Pointer to mission site.
  */
-void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
+void BattlescapeGenerator::setMissionSite(MissionSite *mission)
 {
-	_terror = terror;
-	_terror->setInBattlescape(true);
+	_mission = mission;
+	_mission->setInBattlescape(true);
 }
 
 
@@ -290,8 +290,8 @@ void BattlescapeGenerator::nextStage()
 	size_t unitCount = _save->getUnits()->size();
 
 	// Let's figure out what race we're up against.
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
-		_alienRace == "" && i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin();
+		_alienRace == "" && i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{

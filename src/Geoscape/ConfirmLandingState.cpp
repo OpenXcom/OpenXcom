@@ -40,6 +40,7 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/RuleAlienMission.h"
 
 namespace OpenXcom
 {
@@ -125,7 +126,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 {
 	_game->popState();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	MissionSite* m = dynamic_cast<MissionSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame *bgame = new SavedBattleGame();
@@ -143,11 +144,11 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setUfo(u);
 		bgen.setAlienRace(u->getAlienRace());
 	}
-	else if (t != 0)
+	else if (m != 0)
 	{
-		bgame->setMissionType("STR_TERROR_MISSION");
-		bgen.setTerrorSite(t);
-		bgen.setAlienRace(t->getAlienRace());
+		bgame->setMissionType(m->getRules()->getDeployment());
+		bgen.setMissionSite(m);
+		bgen.setAlienRace(m->getAlienRace());
 	}
 	else if (b != 0)
 	{

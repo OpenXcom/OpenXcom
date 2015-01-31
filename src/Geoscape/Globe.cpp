@@ -751,7 +751,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin(); i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
 		if (targetNear((*i), x, y))
 		{
@@ -1552,13 +1552,13 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	// Draw the terror site markers
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	// Draw the mission site markers
+	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin(); i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
 		drawTarget(*i);
 	}
 
-	// Draw the Alien Base markers
+	// Draw the alien base markers
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
 	{
 		drawTarget(*i);
