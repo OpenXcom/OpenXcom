@@ -219,7 +219,13 @@ extraSprites:
     width: 320
     height: 200
     files:
-      0: Resources/Medals/MEDAL_SECTOPOD_KILL.png      
+      0: Resources/Medals/MEDAL_SECTOPOD_KILL.png
+  - type: PLACEHOLDER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_PLACEHOLDER.png        
 extraStrings:
   - type: en-US
     strings:
@@ -1235,7 +1241,7 @@ commendations:
         1: ["STR_CYBERDISC_TERRORIST", "STR_LIVE_TERRORIST", "STATUS_DEAD", "BT_GRENADE"]
   - type: STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME
     description: STR_SECTOPOD_KILL_MEDAL_DESCRIPTION
-    sprite: 35
+    sprite: 34
     criteria:
       killsWithCriteriaCareer: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     killCriteria:
@@ -1243,12 +1249,12 @@ commendations:
         1: ["STR_SECTOPOD_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_MERCY_CROSS_NAME
     description: STR_MEDAL_MERCY_CROSS_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       totalAllAliensStunned: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
   - type: STR_MEDAL_HEADSHOT_NAME
     description: STR_MEDAL_HEADSHOT_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1256,7 +1262,7 @@ commendations:
         1: ["BODYPART_HEAD", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_REARSHOT_NAME
     description: STR_MEDAL_REARSHOT_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1264,7 +1270,7 @@ commendations:
         1: ["SIDE_REAR", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_FLANKSHOT_NAME
     description: STR_MEDAL_FLANKSHOT_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1274,22 +1280,22 @@ commendations:
         1: ["SIDE_RIGHT", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_HEALER_NAME
     description: STR_MEDAL_HEALER_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       totalWoundsHealed: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
   - type: STR_MEDAL_ALLUFOS_NAME
     description: STR_MEDAL_ALLUFOS_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       totalAllUFOs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_ALLMISSIONS_NAME
     description: STR_MEDAL_ALLMISSIONS_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       totalAllMissionTypes: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_ANTITERROR_NAME
     description: STR_MEDAL_ANTITERROR_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1303,7 +1309,7 @@ commendations:
         1: ["STR_ZOMBIE", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_ALLBATTLETYPES_NAME
     description: STR_MEDAL_ALLBATTLETYPES_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1314,12 +1320,12 @@ commendations:
         1: ["BT_GRENADE", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_NIGHTOPS_NAME
     description: STR_MEDAL_NIGHTOPS_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       totalNightMissions: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_ALLRANKS_NAME
     description: STR_MEDAL_ALLRANKS_DESCRIPTION
-    sprite: 32
+    sprite: 35
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
