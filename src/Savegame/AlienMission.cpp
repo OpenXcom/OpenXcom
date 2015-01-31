@@ -225,9 +225,9 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		if (found != game.getBases()->end())
 		{
 			// Spawn a battleship straight for the XCOM base.
-			const RuleUfo &battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
+			const RuleUfo &battleshipRule = *ruleset.getUfo(_rule.getSpecialUfo());
 			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
-			Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
+			Ufo *ufo = new Ufo(&battleshipRule);
 			ufo->setMissionInfo(this, &assaultTrajectory);
 			std::pair<double, double> pos;
 			if (trajectory.getAltitude(0) == "STR_GROUND")
@@ -251,13 +251,13 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	}
 	else if (_rule.getType() == "STR_ALIEN_SUPPLY")
 	{
-		if (ufoRule.getType() == "STR_SUPPLY_SHIP" && !_base)
+		if (ufoRule.getType() == _rule.getSpecialUfo() && !_base)
 		{
 			// No base to supply!
 			return 0;
 		}
 		// Our destination is always an alien base.
-		Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+		Ufo *ufo = new Ufo(&ufoRule);
 		ufo->setMissionInfo(this, &trajectory);
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
 		std::pair<double, double> pos;
@@ -276,7 +276,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		Waypoint *wp = new Waypoint();
 		if (trajectory.getAltitude(1) == "STR_GROUND")
 		{
-			if (ufoRule.getType() == "STR_SUPPLY_SHIP")
+			if (ufoRule.getType() == _rule.getSpecialUfo())
 			{
 				// Supply ships on supply missions land on bases, ignore trajectory zone.
 				pos.first = _base->getLongitude();
@@ -298,7 +298,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		return ufo;
 	}
 	// Spawn according to sequence.
-	Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+	Ufo *ufo = new Ufo(&ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, 0, globe, regionRules);
@@ -314,7 +314,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	pos = getWaypoint(trajectory, 1, globe, regionRules);
 	wp->setLongitude(pos.first);
 	wp->setLatitude(pos.second);
-		ufo->setDestination(wp);
+	ufo->setDestination(wp);
 	return ufo;
 }
 
@@ -380,7 +380,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	// UFO: lon: 3.61412 lat: -0.373329
 	// Zone: Longitudes: 3.61412 to 3.61412 Lattitudes: -0.373329 to -0.373329
 	// http://openxcom.org/bugs/openxcom/issues/615#comment_3292
-	if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(nextWaypoint) == RuleRegion::CITY_MISSION_ZONE)
+	if (ufo.getRules()->getType() == _rule.getSpecialUfo() && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(nextWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 	{
 		while (!rules.locateCity(pos.first, pos.second))
 		{
@@ -408,7 +408,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	{
 		// UFO landed.
 
-		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(curWaypoint) == RuleRegion::CITY_MISSION_ZONE)
+		if (ufo.getRules()->getType() == _rule.getSpecialUfo() && _rule.getType() == "STR_ALIEN_TERROR" && trajectory.getZone(curWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 		{
 			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.
