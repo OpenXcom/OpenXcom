@@ -70,6 +70,7 @@
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"
 #include "RuleVideo.h"
+#include "../Savegame/SoldierDiary.h"
 
 namespace OpenXcom
 {
@@ -790,6 +791,7 @@ SavedGame *Ruleset::newSave() const
 		Soldier *soldier = genSoldier(save);
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
+		soldier->getDiary()->awardOriginalEightCommendation();
 	}
 
 	save->getBases()->push_back(base);

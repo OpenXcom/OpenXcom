@@ -719,6 +719,13 @@ void SoldierDiary::addMonthlyService()
 	_monthsService++;
 }
 /**
+ *  Award special commendation to the original 8 soldiers.
+ */
+void SoldierDiary::awardOriginalEightCommendation()
+{
+    _commendations.push_back(new SoldierCommendations("STR_MEDAL_ORIGINAL8_NAME", "NoNoun"));
+}
+/**
  * Initializes a new commendation entry from YAML.
  * @param node YAML node.
  */

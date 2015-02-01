@@ -337,6 +337,8 @@ extraStrings:
      STR_MEDAL_NIGHTOPS_DESCRIPTION: "Given to a soldier who as been part of several night missions."
      STR_MEDAL_ALLRANKS_NAME: "Taking Names"
      STR_MEDAL_ALLRANKS_DESCRIPTION: "Given to a soldier who as killed aliens of all ranks."
+     STR_MEDAL_ORIGINAL8_NAME: "First to Serve"
+     STR_MEDAL_ORIGINAL8_DESCRIPTION: "Given to a soldier who was first in line to combat the enemy unknown."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -505,6 +507,8 @@ extraStrings:
      STR_MEDAL_NIGHTOPS_DESCRIPTION: "Given to a soldier who as been part of several night missions."
      STR_MEDAL_ALLRANKS_NAME: "Taking Names"
      STR_MEDAL_ALLRANKS_DESCRIPTION: "Given to a soldier who as killed aliens of all ranks."
+     STR_MEDAL_ORIGINAL8_NAME: "First to Serve"
+     STR_MEDAL_ORIGINAL8_DESCRIPTION: "Given to a soldier who was first in line to combat the enemy unknown."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1043,7 +1047,7 @@ extraStrings:
 commendations:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
-    sprite: 0
+    sprite: 36
     criteria:
       killsWithCriteriaCareer: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     killCriteria:
@@ -1263,7 +1267,7 @@ commendations:
       totalAllAliensStunned: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
   - type: STR_MEDAL_HEADSHOT_NAME
     description: STR_MEDAL_HEADSHOT_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1271,7 +1275,7 @@ commendations:
         1: ["BODYPART_HEAD", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_REARSHOT_NAME
     description: STR_MEDAL_REARSHOT_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1279,7 +1283,7 @@ commendations:
         1: ["SIDE_REAR", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_FLANKSHOT_NAME
     description: STR_MEDAL_FLANKSHOT_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1289,22 +1293,22 @@ commendations:
         1: ["SIDE_RIGHT", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_HEALER_NAME
     description: STR_MEDAL_HEALER_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       totalWoundsHealed: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
   - type: STR_MEDAL_ALLUFOS_NAME
     description: STR_MEDAL_ALLUFOS_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       totalAllUFOs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_ALLMISSIONS_NAME
     description: STR_MEDAL_ALLMISSIONS_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       totalAllMissionTypes: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_ANTITERROR_NAME
     description: STR_MEDAL_ANTITERROR_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1318,7 +1322,7 @@ commendations:
         1: ["STR_ZOMBIE", "STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_ALLBATTLETYPES_NAME
     description: STR_MEDAL_ALLBATTLETYPES_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1329,12 +1333,12 @@ commendations:
         1: ["BT_GRENADE", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_NIGHTOPS_NAME
     description: STR_MEDAL_NIGHTOPS_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       totalNightMissions: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_ALLRANKS_NAME
     description: STR_MEDAL_ALLRANKS_DESCRIPTION
-    sprite: 99
+    sprite: 00
     criteria:
       killsWithCriteriaCareer: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
     killCriteria:
@@ -1346,6 +1350,12 @@ commendations:
         1: ["STR_LIVE_LEADER", "FACTION_HOSTILE", "STATUS_DEAD"]
         1: ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_DEAD"]
         1: ["STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
+  - type: STR_MEDAL_ORIGINAL8_NAME
+    description: STR_MEDAL_ORIGINAL8_DESCRIPTION
+    sprite: 00
+    criteria:
+      totalLongDistanceHits: [999]
+      # Dummy criteria so the game doesn't enter an infinite loop .
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1667,6 +1677,13 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #ALLRANKS
     text: STR_MEDAL_ALLRANKS_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6046
+  - id: STR_MEDAL_ORIGINAL8_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #ORIGINAL8
+    text: STR_MEDAL_ORIGINAL8_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6046
 # entries below move the HWPs to the Craft Section of the UFOPedia

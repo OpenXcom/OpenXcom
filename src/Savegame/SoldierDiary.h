@@ -130,6 +130,8 @@ public:
     std::vector<int> &getMissionIdList();
     /// Get the kill list.
     std::vector<BattleUnitKills*> &getKills();
+    /// Award special commendation to the original 8 soldiers.
+    void awardOriginalEightCommendation();
 };
 }
 #endif
