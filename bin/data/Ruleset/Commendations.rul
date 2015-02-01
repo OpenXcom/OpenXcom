@@ -339,6 +339,8 @@ extraStrings:
      STR_MEDAL_ALLRANKS_DESCRIPTION: "Given to a soldier who as killed aliens of all ranks."
      STR_MEDAL_ORIGINAL8_NAME: "First to Serve"
      STR_MEDAL_ORIGINAL8_DESCRIPTION: "Given to a soldier who was first in line to combat the enemy unknown."
+     STR_MEDAL_STATGAIN_NAME: "Improvement Citation"
+     STR_MEDAL_STATGAIN_DESCRIPTION: "Given to a soldier who has dedicated himself or herself to improvement."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -509,6 +511,8 @@ extraStrings:
      STR_MEDAL_ALLRANKS_DESCRIPTION: "Given to a soldier who as killed aliens of all ranks."
      STR_MEDAL_ORIGINAL8_NAME: "First to Serve"
      STR_MEDAL_ORIGINAL8_DESCRIPTION: "Given to a soldier who was first in line to combat the enemy unknown."
+     STR_MEDAL_STATGAIN_NAME: "Improvement Citation"
+     STR_MEDAL_STATGAIN_DESCRIPTION: "Given to a soldier who has dedicated himself or herself to improvement."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1355,7 +1359,12 @@ commendations:
     sprite: 00
     criteria:
       totalLongDistanceHits: [999]
-      # Dummy criteria so the game doesn't enter an infinite loop .
+      # Dummy criteria so the game doesn't enter an infinite loop.
+  - type: STR_MEDAL_STATGAIN_NAME
+    description: STR_MEDAL_STATGAIN_DESCRIPTION
+    sprite: 00
+    criteria:
+      totalStatGain: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1684,6 +1693,13 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #ORIGINAL8
     text: STR_MEDAL_ORIGINAL8_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6046
+  - id: STR_MEDAL_STATGAIN_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #STATGAIN
+    text: STR_MEDAL_STATGAIN_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6046
 # entries below move the HWPs to the Craft Section of the UFOPedia

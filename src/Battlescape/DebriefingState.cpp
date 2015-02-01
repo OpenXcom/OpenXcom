@@ -285,6 +285,9 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 				(*j)->getStatistics()->KIA = true;
 			}
 
+			// Set the UnitStats delta
+			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
+
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getRuleset());
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{

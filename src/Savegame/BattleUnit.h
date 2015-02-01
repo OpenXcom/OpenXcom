@@ -184,6 +184,7 @@ struct BattleUnitStatistics
 	bool nikeCross;							// Tracks if a soldier killed every alien
     bool mercyCross;                        // Tracks if a soldier stunned every alien
     int woundsHealed;                       // Tracks how many times a fatal wound was healed by thits unit
+    UnitStats delta;                        // Tracks the increase in unit stats
 
 	/// Functions
 	// Friendly fire check
