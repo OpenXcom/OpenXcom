@@ -345,6 +345,8 @@ extraStrings:
      STR_MEDAL_REVIVE_DESCRIPTION: "Given to a soldier who returned from the brink a fellow soldier."
      STR_MEDAL_MEDIKIT_NAME: "Medical Citation"
      STR_MEDAL_MEDIKIT_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
+     STR_MEDAL_BRAVERYGAIN_NAME: "Medal of Bravery"
+     STR_MEDAL_BRAVERYGAIN_DESCRIPTION: "Given to a soldier who is an example of bravery."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -521,6 +523,8 @@ extraStrings:
      STR_MEDAL_REVIVE_DESCRIPTION: "Given to a soldier who returned from the brink a fellow soldier."
      STR_MEDAL_MEDIKIT_NAME: "Medical Citation"
      STR_MEDAL_MEDIKIT_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
+     STR_MEDAL_BRAVERYGAIN_NAME: "Medal of Bravery"
+     STR_MEDAL_BRAVERYGAIN_DESCRIPTION: "Given to a soldier who is an example of bravery."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1383,6 +1387,11 @@ commendations:
     sprite: 00
     criteria:
       totalWholeMedikit: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
+  - type: STR_MEDAL_BRAVERYGAIN_NAME
+    description: STR_MEDAL_BRAVERYGAIN_DESCRIPTION
+    sprite: 00
+    criteria:
+      totalBraveryGain: [10, 10, 20, 20, 20, 20, 30, 30, 30, 30]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1734,6 +1743,13 @@ ufopaedia:
     text: STR_MEDAL_MEDIKIT_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6050
+  - id: STR_MEDAL_BRAVERYGAIN_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #BRAVERYGAIN
+    text: STR_MEDAL_BRAVERYGAIN_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6051
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT
