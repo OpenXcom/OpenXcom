@@ -1586,77 +1586,77 @@ ufopaedia:
   - id: STR_MEDAL_MERCY_CROSS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: MERCY_CROSS
+    image_id: PLACEHOLDER #MERCY_CROSS
     text: STR_MEDAL_MERCY_CROSS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6036  
   - id: STR_MEDAL_HEADSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: HEADSHOT
+    image_id: PLACEHOLDER #HEADSHOT
     text: STR_MEDAL_HEADSHOT_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6037
   - id: STR_MEDAL_REARSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: REARSHOT
+    image_id: PLACEHOLDER #REARSHOT
     text: STR_MEDAL_REARSHOT_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6038
   - id: STR_MEDAL_FLANKSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: FLANKSHOT
+    image_id: PLACEHOLDER #FLANKSHOT
     text: STR_MEDAL_FLANKSHOT_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6039
   - id: STR_MEDAL_HEALER_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: HEALER
+    image_id: PLACEHOLDER #HEALER
     text: STR_MEDAL_HEALER_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6040
   - id: STR_MEDAL_ALLUFOS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: ALLUFOS
+    image_id: PLACEHOLDER #ALLUFOS
     text: STR_MEDAL_ALLUFOS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6041
   - id: STR_MEDAL_ALLMISSIONS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: ALLMISSIONS
+    image_id: PLACEHOLDER #ALLMISSIONS
     text: STR_MEDAL_ALLMISSIONS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6042
   - id: STR_MEDAL_ANTITERROR_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: ANTITERROR
+    image_id: PLACEHOLDER #ANTITERROR
     text: STR_MEDAL_ANTITERROR_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6043
 - id: STR_MEDAL_ALLBATTLETYPES_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: ALLBATTLETYPES
+    image_id: PLACEHOLDER #ALLBATTLETYPES
     text: STR_MEDAL_ALLBATTLETYPES_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6044
 - id: STR_MEDAL_NIGHTOPS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: NIGHTOPS
+    image_id: PLACEHOLDER #NIGHTOPS
     text: STR_MEDAL_NIGHTOPS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6045
 - id: STR_MEDAL_ALLRANKS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: ALLRANKS
+    image_id: PLACEHOLDER #ALLRANKS
     text: STR_MEDAL_ALLRANKS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6046
