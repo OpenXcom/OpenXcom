@@ -832,7 +832,7 @@ extraStrings:
      STR_MISSION_DETAILS: "СВЕДЕНИЯ ОБ ОПЕРАЦИИ ДЛЯ{NEWLINE}{0}"
      STR_DETAILS_UC: "СВЕДЕНИЯ"
      STR_TANK: "Танк"
-     STR_HEAVY_WEAPONS_PLATFORM_LC: "Тяжелая Боевая Платформа"	 
+     STR_HEAVY_WEAPONS_PLATFORM_LC: "Тяжелая Боевая Платформа" 
   - type: it
     strings:
       STR_ALIEN_BASE_ASSAULT_LC: Assalto ad una Base Aliena
@@ -1590,7 +1590,7 @@ ufopaedia:
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #MERCY_CROSS
-    text: STR_MEDAL_MERCY_CROSS_MEDAL_UFOPEDIA
+    text: STR_MEDAL_MERCY_CROSS_UFOPEDIA
     text_width: 164
     listOrder: 6036  
   - id: STR_MEDAL_HEADSHOT_NAME
@@ -1642,21 +1642,21 @@ ufopaedia:
     text: STR_MEDAL_ANTITERROR_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6043
-- id: STR_MEDAL_ALLBATTLETYPES_NAME
+  - id: STR_MEDAL_ALLBATTLETYPES_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #ALLBATTLETYPES
     text: STR_MEDAL_ALLBATTLETYPES_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6044
-- id: STR_MEDAL_NIGHTOPS_NAME
+  - id: STR_MEDAL_NIGHTOPS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #NIGHTOPS
     text: STR_MEDAL_NIGHTOPS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6045
-- id: STR_MEDAL_ALLRANKS_NAME
+  - id: STR_MEDAL_ALLRANKS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #ALLRANKS
