@@ -40,7 +40,7 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
 	_totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
 	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
-    _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0)
+    _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0)
 {
 }
 /**
@@ -113,6 +113,8 @@ void SoldierDiary::load(const YAML::Node& node)
 	_allUFOs = node["_allUFOs"].as<int>(_allUFOs);
 	_allMissionTypes = node["_allMissionTypes"].as<int>(_allMissionTypes);
 	_statGainTotal = node["_statGainTotal"].as<int>(_statGainTotal);
+    _revivedUnitTotal = node["_revivedUnitTotal"].as<int>(_revivedUnitTotal);
+    _wholeMedikitTotal = node["_wholeMedikitTotal"].as<int>(_wholeMedikitTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -165,6 +167,8 @@ YAML::Node SoldierDiary::save() const
 	if (_allUFOs) node["_allUFOs"] = _allUFOs;
 	if (_allMissionTypes) node["_allMissionTypes"] = _allMissionTypes;
 	if (_statGainTotal) node["_statGainTotal"] =_statGainTotal;
+    if (_revivedUnitTotal) node["_revivedUnitTotal"] = _revivedUnitTotal;
+    if(_wholeMedikitTotal) node["_wholeMedikitTotal"] = _wholeMedikitTotal;
 	return node;
 }
 /**
@@ -269,6 +273,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	_statGainTotal += unitStatistics->delta.melee;
 	_statGainTotal += unitStatistics->delta.psiSkill;
 
+    _revivedUnitTotal += unitStatistics->revivedSoldier;
+    _wholeMedikitTotal += std::min( std::min(unitStatistics->woundsHealed, unitStatistics->appliedStimulant), unitStatistics->appliedPainKill);
     _missionIdList.push_back(missionStatistics->id);
 }
 /**
@@ -351,7 +357,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "totalWoundsHealed" && _woundsHealedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllUFOs" && _allUFOs < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllMissionTypes" && _allMissionTypes < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalStatGain" && _statGainTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+					((*j).first == "totalStatGain" && _statGainTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalRevives" && _revivedUnitTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalWholeMedikit" && _wholeMedikitTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
 			{
 				awardCommendationBool = false;
 				break;

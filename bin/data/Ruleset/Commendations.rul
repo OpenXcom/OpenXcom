@@ -341,6 +341,10 @@ extraStrings:
      STR_MEDAL_ORIGINAL8_DESCRIPTION: "Given to a soldier who was first in line to combat the enemy unknown."
      STR_MEDAL_STATGAIN_NAME: "Improvement Citation"
      STR_MEDAL_STATGAIN_DESCRIPTION: "Given to a soldier who has dedicated himself or herself to improvement."
+     STR_MEDAL_REVIVE_NAME: "Angel's Cross"
+     STR_MEDAL_REVIVE_DESCRIPTION: "Given to a soldier who returned from the brink a fellow soldier."
+     STR_MEDAL_MEDIKIT_NAME: "Medical Citation"
+     STR_MEDAL_MEDIKIT_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -513,6 +517,10 @@ extraStrings:
      STR_MEDAL_ORIGINAL8_DESCRIPTION: "Given to a soldier who was first in line to combat the enemy unknown."
      STR_MEDAL_STATGAIN_NAME: "Improvement Citation"
      STR_MEDAL_STATGAIN_DESCRIPTION: "Given to a soldier who has dedicated himself or herself to improvement."
+     STR_MEDAL_REVIVE_NAME: "Angel's Cross"
+     STR_MEDAL_REVIVE_DESCRIPTION: "Given to a soldier who returned from the brink a fellow soldier."
+     STR_MEDAL_MEDIKIT_NAME: "Medical Citation"
+     STR_MEDAL_MEDIKIT_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1365,6 +1373,16 @@ commendations:
     sprite: 00
     criteria:
       totalStatGain: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  - type: STR_MEDAL_REVIVE_NAME
+    description: STR_MEDAL_REVIVE_DESCRIPTION
+    sprite: 00
+    criteria:
+      totalRevives: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
+  - type: STR_MEDAL_MEDIKIT_NAME
+    description: STR_MEDAL_MEDIKIT_DESCRIPTION
+    sprite: 00
+    criteria:
+      totalWholeMedikit: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1694,14 +1712,28 @@ ufopaedia:
     image_id: PLACEHOLDER #ORIGINAL8
     text: STR_MEDAL_ORIGINAL8_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6046
+    listOrder: 6047
   - id: STR_MEDAL_STATGAIN_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #STATGAIN
     text: STR_MEDAL_STATGAIN_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6046
+    listOrder: 6048
+  - id: STR_MEDAL_REVIVE_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #REVIVE
+    text: STR_MEDAL_REVIVE_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6049
+  - id: STR_MEDAL_MEDIKIT_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #MEDIKIT
+    text: STR_MEDAL_MEDIKIT_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6050
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT
