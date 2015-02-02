@@ -1346,11 +1346,16 @@ items:
     invHeight: 3
     clipSize: -1
     recover: false
-  - type: STR_SECTOID_SOLDIER
+  - type: STR_SECTOID_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
-    costSell: 40000
+    costSell: 60000
+  - type: STR_SECTOID_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
   - type: STR_SECTOID_ENGINEER
     size: 0.0
     recover: true
@@ -1366,26 +1371,76 @@ items:
     recover: true
     liveAlien: true
     costSell: 60000
-  - type: STR_SECTOID_LEADER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_SECTOID_COMMANDER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_CYBERDISC_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 80000
-  - type: STR_FLOATER_SOLDIER
+  - type: STR_SECTOID_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
     costSell: 40000
+  - type: STR_SNAKEMAN_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_SNAKEMAN_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_SNAKEMAN_ENGINEER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_SNAKEMAN_NAVIGATOR
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_SNAKEMAN_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_ETHEREAL_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 80000
+  - type: STR_ETHEREAL_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_ETHEREAL_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_MUTON_ENGINEER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_MUTON_NAVIGATOR
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_MUTON_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_FLOATER_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_FLOATER_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
   - type: STR_FLOATER_ENGINEER
     size: 0.0
     recover: true
@@ -1401,82 +1456,7 @@ items:
     recover: true
     liveAlien: true
     costSell: 60000
-  - type: STR_FLOATER_LEADER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_FLOATER_COMMANDER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_REAPER_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 40000
-  - type: STR_SNAKEMAN_SOLDIER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 40000
-  - type: STR_SNAKEMAN_ENGINEER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_SNAKEMAN_NAVIGATOR
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_SNAKEMAN_LEADER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_SNAKEMAN_COMMANDER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_CHRYSSALID_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_MUTON_SOLDIER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 40000
-  - type: STR_MUTON_NAVIGATOR
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_MUTON_ENGINEER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_ETHEREAL_SOLDIER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_ETHEREAL_LEADER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-  - type: STR_ETHEREAL_COMMANDER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 80000
-  - type: STR_SILACOID_TERRORIST
+  - type: STR_FLOATER_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
@@ -1486,7 +1466,27 @@ items:
     recover: true
     liveAlien: true
     costSell: 40000
+  - type: STR_SILACOID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_CHRYSSALID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_REAPER_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
   - type: STR_SECTOPOD_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 80000
+  - type: STR_CYBERDISC_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true

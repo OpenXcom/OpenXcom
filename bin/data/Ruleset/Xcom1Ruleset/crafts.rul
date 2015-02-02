@@ -21,30 +21,6 @@ crafts:
         - name: PLANE
           width: 10
           length: 20
-  - type: STR_INTERCEPTOR
-    sprite: 3
-    fuelMax: 1000
-    damageMax: 100
-    speedMax: 2100
-    accel: 3
-    weapons: 2
-    costBuy: 600000
-    costRent: 600000
-    refuelRate: 50
-    transferTime: 96
-    score: 250
-  - type: STR_FIRESTORM
-    requires:
-      - STR_NEW_FIGHTER_CRAFT
-    sprite: 4
-    fuelMax: 20
-    damageMax: 500
-    speedMax: 4200
-    accel: 9
-    weapons: 2
-    refuelItem: STR_ELERIUM_115
-    refuelRate: 5
-    score: 250
   - type: STR_LIGHTNING
     requires:
       - STR_NEW_FIGHTER_TRANSPORTER
@@ -131,3 +107,27 @@ crafts:
       - [6, 12, 1, 0]
       - [6, 13, 1, 0]
       - [6, 14, 1, 0]
+  - type: STR_INTERCEPTOR
+    sprite: 3
+    fuelMax: 1000
+    damageMax: 100
+    speedMax: 2100
+    accel: 3
+    weapons: 2
+    costBuy: 600000
+    costRent: 600000
+    refuelRate: 50
+    transferTime: 96
+    score: 250
+  - type: STR_FIRESTORM
+    requires:
+      - STR_NEW_FIGHTER_CRAFT
+    sprite: 4
+    fuelMax: 20
+    damageMax: 500
+    speedMax: 4200
+    accel: 9
+    weapons: 2
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 250

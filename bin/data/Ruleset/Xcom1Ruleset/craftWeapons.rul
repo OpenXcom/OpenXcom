@@ -42,6 +42,20 @@ craftWeapons:
     clip: STR_CANNON_ROUNDS_X50
     projectileType: 2
     projectileSpeed: 8
+  - type: STR_FUSION_BALL_UC
+    sprite: 3
+    sound: 7
+    damage: 230
+    range: 65
+    accuracy: 100
+    reloadCautious: 32
+    reloadStandard: 24
+    reloadAggressive: 16
+    ammoMax: 2
+    launcher: STR_FUSION_BALL_LAUNCHER
+    clip: STR_FUSION_BALL
+    projectileType: 3
+    projectileSpeed: 8
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
@@ -68,17 +82,3 @@ craftWeapons:
     rearmRate: 50
     launcher: STR_PLASMA_BEAM
     projectileType: 5
-  - type: STR_FUSION_BALL_UC
-    sprite: 3
-    sound: 7
-    damage: 230
-    range: 65
-    accuracy: 100
-    reloadCautious: 32
-    reloadStandard: 24
-    reloadAggressive: 16
-    ammoMax: 2
-    launcher: STR_FUSION_BALL_LAUNCHER
-    clip: STR_FUSION_BALL
-    projectileType: 3
-    projectileSpeed: 8

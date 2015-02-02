@@ -200,7 +200,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 				qty += (*j)->getItems()->getItem(*i);
 			}
 		}
-		if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->getAlien()))
+		if (qty > 0 && (Options::canSellLiveAliens || !_game->getRuleset()->getItem(*i)->isAlien()))
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);

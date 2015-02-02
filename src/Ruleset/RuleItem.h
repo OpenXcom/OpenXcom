@@ -170,7 +170,7 @@ public:
 	/// Gets the item's turret type.
 	int getTurretType() const;
 	/// Checks if this a live alien.
-	bool getAlien() const;
+	bool isAlien() const;
 	/// Should we charge a flat rate?
 	bool getFlatRate() const;
 	/// Should this weapon arc?
