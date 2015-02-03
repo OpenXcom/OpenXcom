@@ -586,6 +586,11 @@ void ProjectileFlyBState::think()
 									_unit->setTurnsSinceSpotted(0);
 								}
 							}
+							// If our victim was hit by DT_IN, assume that _unit is his murderer until someone else kills victim.
+							if (_action.weapon->getRules()->getDamageType() == DT_IN)
+							{
+								victim->setMurdererId(_unit->getId());
+							}
 						}
 					}
 				}
