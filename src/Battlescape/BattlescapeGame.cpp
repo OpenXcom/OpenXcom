@@ -658,19 +658,30 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					if ((*i)->getId() == victim->getMurdererId())
 					{
 						murderer = (*i);
-						// Now assign the missing kill stats.
-						killStatMission = _save->getGeoscapeSave()->getMissionStatistics()->size();
-
+						// Now find a plausible weapon. First a gun loaded with IN ammo, then a gun that can use IN ammo found in the inventory,
+						// then simlpy the IN thing.
 						for (std::vector<BattleItem*>::iterator it = murderer->getInventory()->begin(); it != murderer->getInventory()->end(); ++it)
 						{
-							if ((*it)->getRules()->getDamageType() == DT_IN)
+							if ((*it)->getRules()->getBattleType() == BT_FIREARM && (*it)->getAmmoItem()->getRules()->getDamageType() == DT_IN)
+							{
+								killStatWeaponAmmo = (*it)->getAmmoItem()->getRules()->getName();
+								killStatWeapon = (*it)->getRules()->getName();
+								break;
+							}
+							else if ((*it)->getRules()->getDamageType() == DT_IN)
 							{
 								killStatWeaponAmmo = (*it)->getRules()->getName();
-								killStatWeapon = killStatWeaponAmmo;
-							}
-							for (std::vector<std::string>::iterator c = (*it)->getRules()->getCompatibleAmmo()->begin(); c != (*it)->getRules()->getCompatibleAmmo()->end(); ++c)
-							{
-								if ((*c) == killStatWeaponAmmo)
+								if ((*it)->getRules()->getBattleType() == BT_AMMO)
+								{
+									for (std::vector<std::string>::iterator c = (*it)->getRules()->getCompatibleAmmo()->begin(); c != (*it)->getRules()->getCompatibleAmmo()->end(); ++c)
+									{
+										if ((*c) == killStatWeaponAmmo)
+										{
+											killStatWeapon = (*it)->getRules()->getName();
+										}
+									}
+								}
+								else if ((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 								{
 									killStatWeapon = (*it)->getRules()->getName();
 								}
