@@ -76,7 +76,8 @@ private:
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
 		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA, _trapKillTotal, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
-        _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal;
+        _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank;
+    bool _bestSoldier;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
 public:
@@ -132,6 +133,10 @@ public:
     std::vector<BattleUnitKills*> &getKills();
     /// Award special commendation to the original 8 soldiers.
     void awardOriginalEightCommendation();
+    /// Award post-humous best-of rank commendation.
+    void awardBestOfRank(SoldierRank rank);
+    /// Award post-humous best overall commendation.
+    void awardBestOverall();
 };
 }
 #endif

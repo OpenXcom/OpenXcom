@@ -347,6 +347,10 @@ extraStrings:
      STR_MEDAL_MEDIKIT_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
      STR_MEDAL_BRAVERYGAIN_NAME: "Medal of Bravery"
      STR_MEDAL_BRAVERYGAIN_DESCRIPTION: "Given to a soldier who is an example of bravery."
+     STR_MEDAL_BESTOFRANK_NAME: "Best of Rank"
+     STR_MEDAL_BESTOFRANK_DESCRIPTION: "Given post humously to a soldier who was a rising star in his or her respective rank."
+     STR_MEDAL_BESTSOLDIER_NAME: "Best Soldier"
+     STR_MEDAL_BESTSOLDIER_DESCRIPTION: "Given post humously to a soldier who was an example for all others."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -525,6 +529,10 @@ extraStrings:
      STR_MEDAL_MEDIKIT_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
      STR_MEDAL_BRAVERYGAIN_NAME: "Medal of Bravery"
      STR_MEDAL_BRAVERYGAIN_DESCRIPTION: "Given to a soldier who is an example of bravery."
+     STR_MEDAL_BESTOFRANK_NAME: "Best of Rank"
+     STR_MEDAL_BESTOFRANK_DESCRIPTION: "Given post humously to a soldier who was a rising star in his or her respective rank."
+     STR_MEDAL_BESTSOLDIER_NAME: "Best Soldier"
+     STR_MEDAL_BESTSOLDIER_DESCRIPTION: "Given post humously to a soldier who was an example for all others."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -1392,6 +1400,16 @@ commendations:
     sprite: 00
     criteria:
       totalBraveryGain: [10, 10, 20, 20, 20, 20, 30, 30, 30, 30]
+  - type: STR_MEDAL_BESTOFRANK_NAME
+    description: STR_MEDAL_BESTOFRANK_DESCRIPTION
+    sprite: 00
+    criteria:
+      bestOfRank: [1, 2, 3, 4, 4, 5, 6, 6]
+  - type: STR_MEDAL_BESTSOLDIER_NAME
+    description: STR_MEDAL_BESTSOLDIER_DESCRIPTION
+    sprite: 00
+    criteria:
+      bestSoldier: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1750,6 +1768,21 @@ ufopaedia:
     text: STR_MEDAL_BRAVERYGAIN_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6051
+  - id: STR_MEDAL_BESTOFRANK_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #BESTOFRANK
+    text: STR_MEDAL_BESTOFRANK_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6052
+  - id: STR_MEDAL_BESTSOLDIER_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER #BESTSOLDIER
+    text: STR_MEDAL_BESTSOLDIER_MEDAL_UFOPEDIA
+    text_width: 164
+    listOrder: 6053
+
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT

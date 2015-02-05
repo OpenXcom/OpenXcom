@@ -288,6 +288,37 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			// Set the UnitStats delta
 			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
 
+			std::map<SoldierRank, Soldier*> bestSoldierCandidates;
+			int bestScore[7] = {0, 0, 0, 0, 0, 0, 0};
+			int bestOverallScore = 0;
+			// Check to see if any of the dead soldiers were exceptional.
+			for (std::vector<Soldier*>::iterator deadUnit = _game->getSavedGame()->getDeadSoldiers()->begin(); deadUnit != _game->getSavedGame()->getDeadSoldiers()->end(); ++deadUnit)
+			{
+				// Find the best soldier per rank by comparing score
+				int score = (*deadUnit)->getDiary()->getScoreTotal();
+				SoldierRank rank = (*deadUnit)->getRank();				
+				
+				if (score > bestScore[rank])
+				{
+					bestSoldierCandidates[rank] = (*deadUnit);
+					bestScore[rank] = score;
+					if (score > bestOverallScore)
+					{
+						bestOverallScore = score;
+					}
+				}
+			}
+			// Now award those soldiers commendations!
+			for (std::map<SoldierRank, Soldier*>::iterator bestSoldier = bestSoldierCandidates.begin(); bestSoldier != bestSoldierCandidates.end(); ++bestSoldier)
+			{
+				(*bestSoldier).second->getDiary()->awardBestOfRank((*bestSoldier).second->getRank());
+				if ((*bestSoldier).second->getDiary()->getScoreTotal() == bestOverallScore)
+				{
+					(*bestSoldier).second->getDiary()->awardBestOverall();
+					bestOverallScore++; // If there is a tie, first come first serve!
+				}
+			}
+
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getRuleset());
 			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{

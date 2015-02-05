@@ -792,6 +792,10 @@ SavedGame *Ruleset::newSave() const
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 		soldier->getDiary()->awardOriginalEightCommendation();
+		for (std::vector<SoldierCommendations*>::iterator comm = soldier->getDiary()->getSoldierCommendations()->begin(); comm != soldier->getDiary()->getSoldierCommendations()->end(); ++comm)
+		{
+			(*comm)->makeOld(); // Soldier was already awarded these before arriving on base.
+		}
 	}
 
 	save->getBases()->push_back(base);
