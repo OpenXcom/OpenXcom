@@ -76,7 +76,7 @@ private:
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _manageContainment, _destroyBase;
 	int _containmentLimit;
-	std::vector<Soldier*> _soldiersCommended;
+	std::vector<Soldier*> _soldiersCommended, _deadSoldiersCommended;
 	int _limitsEnforced;
 public:
 	/// Creates the Debriefing state.

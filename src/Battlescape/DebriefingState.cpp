@@ -29,6 +29,7 @@
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
 #include "CommendationState.h"
+#include "CommendationLateState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCountry.h"
@@ -326,7 +327,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			}
             else if ((*j)->getStatus() == STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
             {
-                // Quietly award dead soldiers their commendations as well
+                _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
             }
 		}
 	}
@@ -382,6 +383,10 @@ void DebriefingState::btnOkClick(Action *)
 	{
 		if (!_destroyBase)
 		{
+			if (!_deadSoldiersCommended.empty())
+			{
+				_game->pushState(new CommendationLateState(_deadSoldiersCommended));
+			}
             if (!_soldiersCommended.empty())
             {
                 _game->pushState(new CommendationState(_soldiersCommended));

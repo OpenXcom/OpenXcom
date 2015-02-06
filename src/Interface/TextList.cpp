@@ -254,8 +254,17 @@ void TextList::addRow(int cols, ...)
 
 	for (int i = 0; i < cols; ++i)
 	{
+		int width;
 		// Place text
-		Text* txt = new Text(_columns[i], _font->getHeight(), _margin + rowX, getY());
+        if (_flooding)
+        {
+            width = 340;
+        }
+        else
+        {
+            width = _columns[i];
+        }
+		Text* txt = new Text(width, _font->getHeight(), _margin + rowX, getY());
 		txt->setPalette(this->getPalette());
 		txt->initText(_big, _small, _lang);
 		txt->setColor(_color);
@@ -1166,5 +1175,10 @@ void TextList::setBorderColor(Uint8 color)
 int TextList::getScrollbarColor()
 {
 	return _scrollbar->getColor();
+}
+
+void TextList::setFlooding(bool flooding)
+{
+    _flooding = flooding;
 }
 }
