@@ -349,7 +349,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
 					((*j).first == "totalFellUnconcious" && _unconciousTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalShotAt10Times" && _shotAtCounter10in1Mission < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalHit5Times" && _hitCounter5in1Mission < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalFriendlyFired" && _totalShotByFriendlyCounter < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalFriendlyFired" && (_totalShotByFriendlyCounter < (*j).second.at(nextCommendationLevel["noNoun"]) || _KIA || _MIA)) ||
 					((*j).first == "total_lone_survivor" && _loneSurvivorTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalIronMan" && _ironManTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalImportantMissions" && _importantMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 

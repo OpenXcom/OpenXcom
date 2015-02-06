@@ -317,11 +317,11 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			}
 
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getRuleset());
-			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
-            else if ((*j)->getStatus() == STATUS_DEAD && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+            else if ((*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
             {
                 _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
             }
@@ -790,7 +790,7 @@ void DebriefingState::prepareDebriefing()
 						if ((*i) == soldier)
 						{
 							(*j)->updateGeoscapeStats(*i);
-							(*j)->getStatistics()->KIA() = true;
+							(*j)->getStatistics()->KIA = true;
 							SoldierDeath *death = new SoldierDeath();
 							death->setTime(*save->getTime());
 							(*i)->die(death);
@@ -846,7 +846,7 @@ void DebriefingState::prepareDebriefing()
 							if ((*i) == soldier)
 							{
 								(*j)->updateGeoscapeStats(*i);
-								(*j)->getStatistics()->MIA() = true;
+								(*j)->getStatistics()->MIA = true;
 								SoldierDeath *death = new SoldierDeath();
 								death->setTime(*save->getTime());
 								(*i)->die(death);
