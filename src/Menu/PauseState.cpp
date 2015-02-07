@@ -72,40 +72,34 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("pauseMenu")->getElement("palette")->color);
 	}
 
-	add(_window);
-	add(_btnLoad);
-	add(_btnSave);
-	add(_btnAbandon);
-	add(_btnOptions);
-	add(_btnCancel);
-	add(_txtTitle);
+	add(_window, "window", "pauseMenu");
+	add(_btnLoad, "button", "pauseMenu");
+	add(_btnSave, "button", "pauseMenu");
+	add(_btnAbandon, "button", "pauseMenu");
+	add(_btnOptions, "button", "pauseMenu");
+	add(_btnCancel, "button", "pauseMenu");
+	add(_txtTitle, "text", "pauseMenu");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnLoad->setColor(Palette::blockOffset(15)-1);
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);
 
-	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&PauseState::btnSaveClick);
 
-	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
 	_btnAbandon->onMouseClick((ActionHandler)&PauseState::btnAbandonClick);
 
-	_btnOptions->setColor(Palette::blockOffset(15)-1);
 	_btnOptions->setText(tr("STR_GAME_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&PauseState::btnOptionsClick);
 
-	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyCancel);
@@ -118,7 +112,6 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyBattleOptions);
 	}
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));

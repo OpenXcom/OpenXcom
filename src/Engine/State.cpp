@@ -26,8 +26,6 @@
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
@@ -55,6 +53,7 @@ State::State() : _screen(true), _modal(0)
 {
 	// initialize palette to all black
 	memset(_palette, 0, sizeof(_palette));
+	_cursorColor = _game->getCursor()->getColor();
 }
 
 /**
@@ -108,33 +107,40 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 	// this only works if we're dealing with a battlescape button
 	BattlescapeButton *bsbtn = dynamic_cast<BattlescapeButton*>(surface);
 
-	if (_game->getRuleset()->getInterface(category) && _game->getRuleset()->getInterface(category)->getElement(id))
+	if (_game->getRuleset()->getInterface(category))
 	{
 		Element *element = _game->getRuleset()->getInterface(category)->getElement(id);
+		if (element)
+		{
+			if (parent && element->w != INT_MAX && element->h != INT_MAX)
+			{
+				surface->setWidth(element->w);
+				surface->setHeight(element->h);
+			}
 
-		if (parent && element->w != INT_MAX && element->h != INT_MAX)
-		{
-			surface->setWidth(element->w);
-			surface->setHeight(element->h);
-		}
+			if (parent && element->x != INT_MAX && element->y != INT_MAX)
+			{
+				surface->setX(parent->getX() + element->x);
+				surface->setY(parent->getY() + element->y);
+			}
+			if (bsbtn)
+			{
+				bsbtn->setTftdMode(element->TFTDMode);
+			}
 
-		if (parent && element->x != INT_MAX && element->y != INT_MAX)
-		{
-			surface->setX(parent->getX() + element->x);
-			surface->setY(parent->getY() + element->y);
+			if (element->color != INT_MAX)
+			{
+				surface->setColor(element->color);
+			}
+			if (element->color2 != INT_MAX)
+			{
+				surface->setSecondaryColor(element->color2);
+			}
+			if (element->border != INT_MAX)
+			{
+				surface->setBorderColor(element->border);
+			}
 		}
-		if (bsbtn)
-		{
-			bsbtn->setTftdMode(element->TFTDMode);
-		}
-
-		if (element->color)
-		{
-			surface->setColor(element->color);
-			surface->setSecondaryColor(element->color2);
-			surface->setBorderColor(element->border);
-		}
-		surface->invalidate(false);
 	}
 
 	if (bsbtn)
@@ -185,8 +191,10 @@ void State::init()
 {
 	_game->getScreen()->setPalette(_palette);
 	_game->getCursor()->setPalette(_palette);
+	_game->getCursor()->setColor(_cursorColor);
 	_game->getCursor()->draw();
 	_game->getFpsCounter()->setPalette(_palette);
+	_game->getFpsCounter()->setColor(_cursorColor);
 	_game->getFpsCounter()->draw();
 	if (_game->getResourcePack() != 0)
 	{
@@ -322,56 +330,64 @@ void State::lowerAllSurfaces()
  */
 void State::applyBattlescapeTheme()
 {
+	Element * element = _game->getRuleset()->getInterface("mainMenu")->getElement("battlescapeTheme");
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		Window* window = dynamic_cast<Window*>(*i);
 		if (window)
 		{
-			window->setColor(Palette::blockOffset(0)-1);
+			window->setColor(element->color);
 			window->setHighContrast(true);
 			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+			continue;
 		}
 		Text* text = dynamic_cast<Text*>(*i);
 		if (text)
 		{
-			text->setColor(Palette::blockOffset(0)-1);
+			text->setColor(element->color);
 			text->setHighContrast(true);
+			continue;
 		}
 		TextButton* button = dynamic_cast<TextButton*>(*i);
 		if (button)
 		{
-			button->setColor(Palette::blockOffset(0)-1);
+			button->setColor(element->color);
 			button->setHighContrast(true);
+			continue;
 		}
 		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
 		if (edit)
 		{
-			edit->setColor(Palette::blockOffset(0)-1);
+			edit->setColor(element->color);
 			edit->setHighContrast(true);
+			continue;
 		}
 		TextList* list = dynamic_cast<TextList*>(*i);
 		if (list)
 		{
-			list->setColor(Palette::blockOffset(0)-1);
-			list->setArrowColor(Palette::blockOffset(0));
+			list->setColor(element->color);
+			list->setArrowColor(element->border);
 			list->setHighContrast(true);
+			continue;
 		}
 		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
 		if (arrow)
 		{
-			arrow->setColor(Palette::blockOffset(0));
+			arrow->setColor(element->border);
+			continue;
 		}
 		Slider *slider = dynamic_cast<Slider*>(*i);
 		if (slider)
 		{
-			slider->setColor(Palette::blockOffset(0)-1);
+			slider->setColor(element->color);
 			slider->setHighContrast(true);
+			continue;
 		}
 		ComboBox *combo = dynamic_cast<ComboBox*>(*i);
 		if (combo)
 		{
-			combo->setColor(Palette::blockOffset(0)-1);
-			combo->setArrowColor(Palette::blockOffset(0));
+			combo->setColor(element->color);
+			combo->setArrowColor(element->border);
 			combo->setHighContrast(true);
 		}
 	}
@@ -441,6 +457,26 @@ void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool imme
 void State::setPalette(const std::string &palette, int backpals)
 {
 	setPalette(_game->getResourcePack()->getPalette(palette)->getColors(), 0, 256, false);
+	if (palette == "PAL_GEOSCAPE")
+	{
+		_cursorColor = ResourcePack::GEOSCAPE_CURSOR;
+	}
+	else if (palette == "PAL_BASESCAPE")
+	{
+		_cursorColor = ResourcePack::BASESCAPE_CURSOR;
+	}
+	else if (palette == "PAL_UFOPAEDIA")
+	{
+		_cursorColor = ResourcePack::UFOPAEDIA_CURSOR;
+	}
+	else if (palette == "PAL_GRAPHS")
+	{
+		_cursorColor = ResourcePack::GRAPHS_CURSOR;
+	}
+	else
+	{
+		_cursorColor = ResourcePack::BATTLESCAPE_CURSOR;
+	}
 	if (backpals != -1)
 		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
 	setPalette(NULL); // delay actual update to the end

@@ -52,7 +52,7 @@ namespace OpenXcom
  * Initializes a brand new battlescape saved game.
  */
 SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0), _side(FACTION_PLAYER), _turn(1),
-                                     _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
+                                     _debugMode(false), _aborted(false), _itemId(0), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -204,6 +204,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
+		unit->setSpecialWeapon(this, rule);
 		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
@@ -247,6 +248,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
 			int owner = (*i)["owner"].as<int>();
+			int prevOwner = (*i)["previousOwner"].as<int>(-1);
 			int unit = (*i)["unit"].as<int>();
 
 			// match up items and units
@@ -259,6 +261,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				if ((*bu)->getId() == unit)
 				{
 					item->setUnit(*bu);
+				}
+			}
+			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+			{
+				if ((*bu)->getId() == prevOwner)
+				{
+					item->setPreviousOwner(*bu);
 				}
 			}
 
@@ -294,9 +303,11 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			 ++weaponi;
 		}
 	}
-	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
+	_objectivesDestroyed = node["objectivesDestroyed"].as<int>(_objectivesDestroyed);
+	_objectivesNeeded = node["objectivesNeeded"].as<int>(_objectivesNeeded);
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
+	_ambience = node["ambience"].as<int>(_ambience);
 }
 
 /**
@@ -342,9 +353,10 @@ void SavedBattleGame::loadMapResources(Game *game)
 YAML::Node SavedBattleGame::save() const
 {
 	YAML::Node node;
-	if (_objectiveDestroyed)
+	if (_objectivesNeeded)
 	{
-		node["objectiveDestroyed"] = _objectiveDestroyed;
+		node["objectivesDestroyed"] = _objectivesDestroyed;
+		node["objectivesNeeded"] = _objectivesNeeded;
 	}
 	node["width"] = _mapsize_x;
 	node["length"] = _mapsize_y;
@@ -414,7 +426,7 @@ YAML::Node SavedBattleGame::save() const
 	node["tuReserved"] = (int)_tuReserved;
     node["kneelReserved"] = _kneelReserved;
     node["depth"] = _depth;
-
+	node["ambience"] = _ambience;
 	return node;
 }
 
@@ -472,6 +484,8 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
  */
 void SavedBattleGame::initUtilities(ResourcePack *res, Ruleset *rule)
 {
+	delete _pathfinding;
+	delete _tileEngine;
 	_pathfinding = new Pathfinding(this);
 	_tileEngine = new TileEngine(this, res->getVoxelData(), rule->getMaxViewDistance(), rule->getMaxDarknessToSeeUnits());
 }
@@ -810,7 +824,7 @@ void SavedBattleGame::endTurn()
 
 	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 
-	if (_turn >= 20 || liveAliens < 2)
+	if ((_turn > 10 && liveAliens <= 2) || _turn > 20)
 	{
 		_cheating = true;
 	}
@@ -1046,12 +1060,19 @@ bool SavedBattleGame::isAborted() const
 
 /**
  * Sets whether the objective is destroyed.
- * @param flag True if the objective is destroyed.
  */
-void SavedBattleGame::setObjectiveDestroyed(bool flag)
+void SavedBattleGame::addToObjectiveCount()
 {
-	_objectiveDestroyed = flag;
-	if (flag && Options::battleAutoEnd)
+	_objectivesNeeded++;
+}
+
+/**
+ * Sets whether the objective is destroyed.
+ */
+void SavedBattleGame::addDestroyedObjective()
+{
+	_objectivesDestroyed++;
+	if (allObjectivesDestroyed() && Options::battleAutoEnd)
 	{
 		setSelectedUnit(0);
 		_battleState->getBattleGame()->cancelCurrentAction(true);
@@ -1060,12 +1081,12 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 }
 
 /**
- * Returns whether the objective is detroyed.
- * @return True if the objective is destroyed.
+ * Returns whether the objectives are detroyed.
+ * @return True if the objectives are destroyed.
  */
-bool SavedBattleGame::isObjectiveDestroyed()
+bool SavedBattleGame::allObjectivesDestroyed()
 {
-	return _objectiveDestroyed;
+	return (_objectivesNeeded > 0 && _objectivesDestroyed == _objectivesNeeded);
 }
 
 /**
@@ -1090,13 +1111,13 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
-		if ((*i)->getRank() == nodeRank										// ranks must match
+		if ((*i)->getRank() == nodeRank								// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL) 
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
-				|| unit->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true))		// check if not already occupied
+				|| unit->getMovementType() == MT_FLY)				// the flying unit bit is not set or the unit can fly
+			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
+			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{
@@ -1244,11 +1265,11 @@ void SavedBattleGame::prepareNewTurn()
 					{
 						if ((*i)->destroy(MapData::O_OBJECT))
 						{
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 						}
 						if ((*i)->destroy(MapData::O_FLOOR))
 						{
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 						}
 					}
 				}
@@ -1258,7 +1279,7 @@ void SavedBattleGame::prepareNewTurn()
 					{
 						if ((*i)->destroy(MapData::O_FLOOR))
 						{
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 						}
 					}
 				}
@@ -1760,7 +1781,7 @@ SavedGame *SavedBattleGame::getGeoscapeSave()
  * check the depth of the battlescape.
  * @return depth.
  */
-const int SavedBattleGame::getDepth() const
+int SavedBattleGame::getDepth() const
 {
 	return _depth;
 }
@@ -1805,7 +1826,7 @@ void SavedBattleGame::setAmbientSound(int sound)
  * get the ambient battlescape sound effect.
  * @return the intended sound.
  */
-const int SavedBattleGame::getAmbientSound() const
+int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
 }

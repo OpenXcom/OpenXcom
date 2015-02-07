@@ -27,7 +27,6 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
@@ -56,39 +55,32 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	_lstArmor = new TextList(160, 40, 73, 88);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 4);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtType);
-	add(_txtQuantity);
-	add(_lstArmor);
+	add(_window, "window", "soldierArmor");
+	add(_btnCancel, "button", "soldierArmor");
+	add(_txtTitle, "text", "soldierArmor");
+	add(_txtType, "text", "soldierArmor");
+	add(_txtQuantity, "text", "soldierArmor");
+	add(_lstArmor, "list", "soldierArmor");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SoldierArmorState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SoldierArmorState::btnCancelClick, Options::keyCancel);
 
 	Soldier *s = _base->getSoldiers()->at(_soldier);
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName()));
 
-	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_lstArmor->setColor(Palette::blockOffset(13));
-	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
 	_lstArmor->setColumns(2, 112, 41);
 	_lstArmor->setSelectable(true);
 	_lstArmor->setBackground(_window);

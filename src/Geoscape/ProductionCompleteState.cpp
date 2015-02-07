@@ -53,25 +53,22 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	_txtMessage = new Text(246, 110, 37, 35);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 6);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoManufacture")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnGotoBase);
-	add(_txtMessage);
+	add(_window, "window", "geoManufacture");
+	add(_btnOk, "button", "geoManufacture");
+	add(_btnGotoBase, "button", "geoManufacture");
+	add(_txtMessage, "text1", "geoManufacture");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, Options::keyCancel);
 
-	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	if (_endType != PROGRESS_CONSTRUCTION)
 	{
 		_btnGotoBase->setText(tr("STR_ALLOCATE_MANUFACTURE"));
@@ -82,7 +79,6 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	}
 	_btnGotoBase->onMouseClick((ActionHandler)&ProductionCompleteState::btnGotoBaseClick);
 
-	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();

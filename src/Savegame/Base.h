@@ -194,7 +194,7 @@ public:
 	/// Gets the retaliation status of this base.
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
-	size_t getDetectionChance(int difficulty) const;
+	size_t getDetectionChance() const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
 	/// Setup base defenses.
@@ -209,6 +209,8 @@ public:
 	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
 	/// destroy a facility and deal with the side effects.
 	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
+	/// Cleans up the defenses vector and optionally reclaims the tanks and their ammo.
+	void cleanupDefenses(bool reclaimItems);
 };
 
 }

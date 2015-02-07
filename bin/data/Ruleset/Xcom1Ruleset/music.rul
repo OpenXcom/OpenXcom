@@ -1,0 +1,61 @@
+musics:
+  - type: GMDEFEND
+    catPos: 3
+    normalization: 0.76
+  - type: GMENBASE
+    catPos: 6
+    normalization: 0.83
+  - type: GMGEO1
+    catPos: 0
+    normalization: 1.19
+  - type: GMGEO2
+    catPos: 18
+    normalization: 1.0
+  - type: GMGEO3
+  - type: GMGEO4
+  - type: GMGEO5
+  - type: GMGEO6
+  - type: GMGEO7
+  - type: GMGEO8
+  - type: GMGEO9
+  - type: GMGEO10
+  - type: GMINTER
+    catPos: 2
+    normalization: 0.74
+  - type: GMINTRO1
+    catPos: 19
+    normalization: 0.8
+  - type: GMINTRO2
+    catPos: 20
+    normalization: 0.8
+  - type: GMINTRO3
+    catPos: 21
+    normalization: 0.8
+  - type: GMLOSE
+    catPos: 10
+    normalization: 1.0
+  - type: GMMARS
+    catPos: 9
+    normalization: 0.92
+  - type: GMNEWMAR
+    catPos: 8
+    normalization: 0.81
+  - type: GMSTORY
+    catPos: 12
+    normalization: 1.0
+  - type: GMTACTIC
+    catPos: 17
+    normalization: 1.14
+  - type: GMTACTIC1
+  - type: GMTACTIC2
+  - type: GMTACTIC3
+  - type: GMTACTIC4
+  - type: GMTACTIC5
+  - type: GMTACTIC6
+  - type: GMTACTIC7
+  - type: GMTACTIC8
+  - type: GMTACTIC9
+  - type: GMTACTIC10
+  - type: GMWIN
+    catPos: 11
+    normalization: 0.84

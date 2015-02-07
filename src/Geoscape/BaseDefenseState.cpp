@@ -28,7 +28,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Ufo.h"
 #include "../Interface/TextList.h"
@@ -65,46 +64,43 @@ BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) :
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(300, 17, 16, 6);
 	_txtInit = new Text(300, 10, 16, 24);
-	_lstDefenses = new TextList(300, 130, 16, 40);
+	_lstDefenses = new TextList(300, 128, 16, 40);
 	_btnOk = new TextButton(120, 18, 100, 170);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 2);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtInit);
-	add(_lstDefenses);
+	add(_window, "window", "baseDefense");
+	add(_btnOk, "button", "baseDefense");
+	add(_txtTitle, "text", "baseDefense");
+	add(_txtInit, "text", "baseDefense");
+	add(_lstDefenses, "text", "baseDefense");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, Options::keyCancel);
 	_btnOk->setVisible(false);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_BASE_UNDER_ATTACK").arg(_base->getName()));
 	_txtInit->setVisible(false);
 
-	_txtInit->setColor(Palette::blockOffset(13)+10);
 	_txtInit->setText(tr("STR_BASE_DEFENSES_INITIATED"));
 
-	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
 	_timer = new Timer(250);
 	_timer->onTimer((StateHandler)&BaseDefenseState::nextStep);
 	_timer->start();
+
+	_explosionCount = 0;
 }
 /**
  *
@@ -137,19 +133,20 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 		case BDA_DESTROY:
-			_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(),L" ",L" ");
+			if (!_explosionCount)
+			{
+				_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(),L" ",L" ");
+				++_row;
+				if (_row > 14)
+				{
+					_lstDefenses->scrollDown(true);
+				}
+			}
 			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
-			_timer->setInterval(100);
-			_action = BDA_EXPLODING1;
-			return;
-		case BDA_EXPLODING1:
-			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
-			_action = BDA_EXPLODING2;
-			return;
-		case BDA_EXPLODING2:
-			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
-			_timer->setInterval(250);
-			_action = BDA_END;
+			if (++_explosionCount == 3)
+			{
+				_action = BDA_END;
+			}
 			return;
 		case BDA_END:
 			_btnOk->setVisible(true);
@@ -166,6 +163,10 @@ void BaseDefenseState::nextStep()
 		else if (_attacks == _defenses && _passes < _gravShields)
 		{
 			_lstDefenses->addRow(3, tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),L" ",L" ");
+			if (_row > 14)
+			{
+				_lstDefenses->scrollDown(true);
+			}
 			++_row;
 			++_passes;
 			_attacks = 0;
@@ -182,10 +183,15 @@ void BaseDefenseState::nextStep()
 			_lstDefenses->addRow(3, tr((def)->getRules()->getType()).c_str(),L" ",L" ");
 			++_row;
 			_action = BDA_FIRE;
+			if (_row > 14)
+			{
+				_lstDefenses->scrollDown(true);
+			}
 			return;
 		case BDA_FIRE:
 			_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
 			_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
+			_timer->setInterval(333);
 			_action = BDA_RESOLVE;
 			return;
 		case BDA_RESOLVE:
@@ -205,6 +211,7 @@ void BaseDefenseState::nextStep()
 			else
 				_action = BDA_NONE;
 			++_attacks;
+			_timer->setInterval(250);
 			return;
 		default:
 			break;
@@ -221,9 +228,11 @@ void BaseDefenseState::btnOkClick(Action *)
 	_game->popState();
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		// Whatever happens in the base defense, the UFO has finished its duty
-		_ufo->setStatus(Ufo::DESTROYED);
 		_state->handleBaseDefense(_base, _ufo);
+	}
+	else
+	{
+		_base->cleanupDefenses(true);
 	}
 }
 }

@@ -382,13 +382,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 							// as there is no wall blocking us.
 			if (direction == 0 || direction == 7 || direction == 1)
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 2 || direction == 1 || direction == 3)
+			if (!fellDown && (direction == 2 || direction == 1 || direction == 3))
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 4 || direction == 3 || direction == 5)
+			if (!fellDown && (direction == 4 || direction == 3 || direction == 5))
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
 			if (direction == 6 || direction == 5 || direction == 7)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-
 			// don't let tanks phase through doors.
 			if (x && y)
 			{
@@ -860,7 +859,7 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	{
 		if (bu->getMovementType() == MT_FLY)
 		{
-			if ((direction == DIR_UP && destinationTile && !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
+			if ((direction == DIR_UP && destinationTile && destinationTile->hasNoFloor(startTile)) // flying up only possible when there is no roof
 				|| (direction == DIR_DOWN && destinationTile && startTile->hasNoFloor(belowStart)) // falling down only possible when there is no floor
 				)
 			{

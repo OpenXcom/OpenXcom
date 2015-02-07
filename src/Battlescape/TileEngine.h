@@ -32,7 +32,6 @@ class BattleUnit;
 class BattleItem;
 class Tile;
 struct BattleAction;
-
 /**
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
  * Note that this function does not handle any sounds or animations.
@@ -40,10 +39,10 @@ struct BattleAction;
 class TileEngine
 {
 private:
-	const int _maxViewDistance;        // 20 tiles by default
-	const int _maxViewDistanceSq;      // 20 * 20
-	const int _maxVoxelViewDistance;   // maxViewDistance * 16
-	const int _maxDarknessToSeeUnits;  // 9 by default
+	const int MAX_VIEW_DISTANCE;         // 20 tiles by default
+	const int MAX_VIEW_DISTANCE_SQR;     // 20 * 20
+	const int MAX_VOXEL_VIEW_DISTANCE;   // MAX_VIEW_DISTANCE * 16
+	const int MAX_DARKNESS_TO_SEE_UNITS; // 9 by default
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
@@ -51,13 +50,13 @@ private:
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 	/// Get max view distance.
-	inline int getMaxViewDistance() const        {return _maxViewDistance;}
+	inline int getMaxViewDistance() const        {return MAX_VIEW_DISTANCE;}
 	/// Get square of max view distance.
-	inline int getMaxViewDistanceSq() const      {return _maxViewDistanceSq;}
+	inline int getMaxViewDistanceSqr() const     {return MAX_VIEW_DISTANCE_SQR;}
 	/// Get max view distance in voxel space.
-	inline int getMaxVoxelViewDistance() const   {return _maxVoxelViewDistance;}
+	inline int getMaxVoxelViewDistance() const   {return MAX_VOXEL_VIEW_DISTANCE;}
 	/// Get threshold of darkness for LoS calculation.
-	inline int getMaxDarknessToSeeUnits() const  {return _maxDarknessToSeeUnits;}
+	inline int getMaxDarknessToSeeUnits() const  {return MAX_DARKNESS_TO_SEE_UNITS;}
 public:
 	/// Creates a new TileEngine class.
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData, int maxViewDistance, int maxDarknessToSeeUnits);
@@ -112,7 +111,7 @@ public:
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.
-	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest);
+	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
 	/// Gets the AI to look through a window.
 	int faceWindow(const Position &position);
 	/// Checks a unit's % exposure on a tile.
@@ -134,13 +133,13 @@ public:
 	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
 	/// Creates a vector of units that can spot this unit.
-	std::vector<BattleUnit *> getSpottingUnits(BattleUnit* unit);
+	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
-	BattleUnit* getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit);
+	BattleUnit* getReactor(std::vector<std::pair<BattleUnit *, int> > spotters, int &attackType, BattleUnit *unit);
 	/// Checks validity of a snap shot to this position.
-	bool canMakeSnap(BattleUnit *unit, BattleUnit *target);
+	int determineReactionType(BattleUnit *unit, BattleUnit *target);
 	/// Tries to perform a reaction snap shot to this location.
-	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
+	bool tryReaction(BattleUnit *unit, BattleUnit *target, int attackType);
 	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
 	/// Get direction to a certain point

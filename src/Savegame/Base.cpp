@@ -859,7 +859,7 @@ int Base::getDefenseValue() const
 			total += (*i)->getRules()->getDefenseValue();
 		}
 	}
-	return total / 8;
+	return total;
 }
 
 /**
@@ -1108,7 +1108,7 @@ int Base::getUsedContainment() const
 	int total = 0;
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
-		if (_rule->getItem((i)->first)->getAlien())
+		if (_rule->getItem((i)->first)->isAlien())
 		{
 			total += (i)->second;
 		}
@@ -1117,7 +1117,7 @@ int Base::getUsedContainment() const
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			if (_rule->getItem((*i)->getItems())->getAlien())
+			if (_rule->getItem((*i)->getItems())->isAlien())
 			{
 				total += (*i)->getQuantity();
 			}
@@ -1239,11 +1239,11 @@ bool isCompleted::operator()(const BaseFacility *facility) const
  * @param difficulty The savegame difficulty.
  * @return The detection chance.
  */
-size_t Base::getDetectionChance(int difficulty) const
+size_t Base::getDetectionChance() const
 {
 	size_t mindShields = std::count_if (_facilities.begin(), _facilities.end(), isMindShield());
 	size_t completedFacilities = std::count_if (_facilities.begin(), _facilities.end(), isCompleted());
-	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + difficulty / 2);
+	return ((completedFacilities / 6 + 15) / (mindShields + 1));
 }
 
 int Base::getGravShields() const
@@ -1270,7 +1270,17 @@ void Base::setupDefenses()
 		}
 	}
 
-	_vehicles.clear();
+	for (std::vector<Craft*>::iterator i = getCrafts()->begin(); i != getCrafts()->end(); ++i)
+		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
+				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's destructor for tanks on crafts
+
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end();)
+	{
+		delete *i;
+		i = _vehicles.erase(i);
+	}
+
 	// add vehicles that are in the crafts of the base, if it's not out
 	for (std::vector<Craft*>::iterator c = getCrafts()->begin(); c != getCrafts()->end(); ++c)
 	{
@@ -1299,7 +1309,9 @@ void Base::setupDefenses()
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
 				for (int j = 0; j < itemQty; ++j)
+				{
 					_vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
+				}
 				_items->removeItem(itemId, itemQty);
 			}
 			else // so this vehicle needs ammo
@@ -1618,4 +1630,37 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	delete *facility;
 	_facilities.erase(facility);
 }
+
+/**
+ * Cleans up the defenses vector and optionally reclaims the tanks and their ammo.
+ * @param reclaimItems determines whether the HWPs should be returned to storage.
+ */
+void Base::cleanupDefenses(bool reclaimItems)
+{
+	_defenses.clear();
+
+	for (std::vector<Craft*>::iterator i = getCrafts()->begin(); i != getCrafts()->end(); ++i)
+		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
+				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's destructor for tanks on crafts
+
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end();)
+	{
+		if (reclaimItems)
+		{
+			RuleItem *rule = (*i)->getRules();
+			std::string type = rule->getType();
+			_items->addItem(type);
+			if (!rule->getCompatibleAmmo()->empty())
+			{
+				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
+				int ammoPerVehicle = ammo->getClipSize();
+				_items->addItem(ammo->getType(), ammoPerVehicle);
+			}
+		}
+		delete *i;
+		i = _vehicles.erase(i);
+	}
+}
+
 }

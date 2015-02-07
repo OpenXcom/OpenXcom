@@ -56,35 +56,31 @@ ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) :
 	// Set palette
 	if (w != 0 && w->getId() == 0)
 	{
-		setPalette("PAL_GEOSCAPE", 6);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color2);
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 4);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color);
 	}
 
-	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
-	add(_txtTarget);
+	add(_window, "window", "confirmDestination");
+	add(_btnOk, "button", "confirmDestination");
+	add(_btnCancel, "button", "confirmDestination");
+	add(_txtTarget, "text", "confirmDestination");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnOkClick, Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnCancelClick, Options::keyCancel);
 
-	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);

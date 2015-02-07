@@ -46,7 +46,6 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/AlienMission.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Engine/Options.h"
 #include <cstdlib>
@@ -234,7 +233,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
+DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(0), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
 {
 	_screen = false;
 
@@ -285,19 +284,19 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	add(_range2);
 	add(_damage);
 	add(_btnMinimize);
-	add(_btnStandoff);
-	add(_btnCautious);
-	add(_btnStandard);
-	add(_btnAggressive);
-	add(_btnDisengage);
-	add(_btnUfo);
-	add(_txtAmmo1);
-	add(_txtAmmo2);
-	add(_txtDistance);
+	add(_btnStandoff, "button", "dogfight");
+	add(_btnCautious, "button", "dogfight");
+	add(_btnStandard, "button", "dogfight");
+	add(_btnAggressive, "button", "dogfight");
+	add(_btnDisengage, "button", "dogfight");
+	add(_btnUfo, "button", "dogfight");
+	add(_txtAmmo1, "text", "dogfight");
+	add(_txtAmmo2, "text", "dogfight");
+	add(_txtDistance, "text", "dogfight");
 	add(_preview);
-	add(_txtStatus);
+	add(_txtStatus, "text", "dogfight");
 	add(_btnMinimizedIcon);
-	add(_txtInterceptionNumber);
+	add(_txtInterceptionNumber, "minimizedNumber", "dogfight");
 
 	// Set up objects
 	Surface *graphic;
@@ -338,42 +337,30 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_btnMinimize->onMouseClick((ActionHandler)&DogfightState::btnMinimizeClick);
 
 	_btnStandoff->copy(_window);
-	_btnStandoff->setColor(Palette::blockOffset(5)+1);
 	_btnStandoff->setGroup(&_mode);
 	_btnStandoff->onMousePress((ActionHandler)&DogfightState::btnStandoffPress);
 
 	_btnCautious->copy(_window);
-	_btnCautious->setColor(Palette::blockOffset(5)+1);
 	_btnCautious->setGroup(&_mode);
 	_btnCautious->onMousePress((ActionHandler)&DogfightState::btnCautiousPress);
 
 	_btnStandard->copy(_window);
-	_btnStandard->setColor(Palette::blockOffset(5)+1);
 	_btnStandard->setGroup(&_mode);
 	_btnStandard->onMousePress((ActionHandler)&DogfightState::btnStandardPress);
 
 	_btnAggressive->copy(_window);
-	_btnAggressive->setColor(Palette::blockOffset(5)+1);
 	_btnAggressive->setGroup(&_mode);
 	_btnAggressive->onMousePress((ActionHandler)&DogfightState::btnAggressivePress);
 
 	_btnDisengage->copy(_window);
-	_btnDisengage->setColor(Palette::blockOffset(5)+1);
 	_btnDisengage->onMousePress((ActionHandler)&DogfightState::btnDisengagePress);
 	_btnDisengage->setGroup(&_mode);
 
 	_btnUfo->copy(_window);
-	_btnUfo->setColor(Palette::blockOffset(5)+1);
 	_btnUfo->onMouseClick((ActionHandler)&DogfightState::btnUfoClick);
 
-	_txtAmmo1->setColor(Palette::blockOffset(5)+9);
-
-	_txtAmmo2->setColor(Palette::blockOffset(5)+9);
-
-	_txtDistance->setColor(Palette::blockOffset(5)+9);
 	_txtDistance->setText(L"640");
 
-	_txtStatus->setColor(Palette::blockOffset(5)+9);
 	_txtStatus->setText(tr("STR_STANDOFF"));
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
@@ -389,7 +376,6 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	// Draw correct number on the minimized dogfight icon.
 	std::wostringstream ss1;
 	ss1 << _craft->getInterceptionOrder();
-	_txtInterceptionNumber->setColor(Palette::blockOffset(5));
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
@@ -432,7 +418,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		ammo->setText(ss.str());
 
 		// Draw range (1 km = 1 pixel)
-		Uint8 color = Palette::blockOffset(7) - 1;
+		Uint8 color = _game->getRuleset()->getInterface("dogfight")->getElement("background")->color;
 		range->lock();
 
 		int rangeY = range->getHeight() - w->getRules()->getRange(), connectY = 57;
@@ -526,12 +512,19 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		_ufoSize = 4;
 	}
 
+	_color[0] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color;
+	_color[1] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2;
+	_color[2] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color;
+	_color[3] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2;
+	_color[4] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color;
+	_color[5] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2;
+
 	// Get crafts height. Used for damage indication.
 	int x =_damage->getWidth() / 2;
 	for (int y = 0; y < _damage->getHeight(); ++y)
 	{
 		Uint8 pixelColor = _damage->getPixel(x, y);
-		if (pixelColor >= Palette::blockOffset(10) || pixelColor < Palette::blockOffset(11))
+		if (pixelColor >= _color[0] && pixelColor < _color[1])
 		{
 			++_craftHeight;
 		}
@@ -599,9 +592,9 @@ void DogfightState::animateCraftDamage()
 		return;
 	}
 	--_currentCraftDamageColor;
-	if (_currentCraftDamageColor < 13)
+	if (_currentCraftDamageColor < _color[4])
 	{
-		_currentCraftDamageColor = 14;
+		_currentCraftDamageColor = _color[5];
 	}
 	drawCraftDamage();
 }
@@ -620,6 +613,10 @@ void DogfightState::drawCraftDamage()
 		if (!_craftDamageAnimTimer->isRunning())
 		{
 			_craftDamageAnimTimer->start();
+			if (_currentCraftDamageColor < _color[4])
+			{
+				_currentCraftDamageColor = _color[4];
+			}
 		}
 		int damagePercentage = _craft->getDamagePercentage();
 		int rowsToColor = (int)floor((double)_craftHeight * (double)(damagePercentage / 100.));
@@ -635,12 +632,12 @@ void DogfightState::drawCraftDamage()
 			for (int x = 0; x < _damage->getWidth(); ++x)
 			{
 				int pixelColor = _damage->getPixel(x, y);
-				if (pixelColor == 13 || pixelColor == 14)
+				if (pixelColor >= _color[4] && pixelColor <= _color[5])
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
 					rowColored = true;
 				}
-				if (pixelColor >= Palette::blockOffset(10) && pixelColor < Palette::blockOffset(11))
+				if (pixelColor >= _color[0] && pixelColor < _color[1])
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
 					rowColored = true;
@@ -673,12 +670,12 @@ void DogfightState::animate()
 		for (int y = 0; y < _window->getHeight(); ++y)
 		{
 			Uint8 radarPixelColor = _window->getPixel(x, y);
-			if (radarPixelColor >= Palette::blockOffset(7) && radarPixelColor < Palette::blockOffset(7) + 16)
+			if (radarPixelColor >= _color[2] && radarPixelColor < _color[3])
 			{
 				++radarPixelColor;
-				if (radarPixelColor >= Palette::blockOffset(7) + 16)
+				if (radarPixelColor >= _color[3])
 				{
-					radarPixelColor = Palette::blockOffset(7);
+					radarPixelColor = _color[2];
 				}
 				_window->setPixel(x, y, radarPixelColor);
 			}

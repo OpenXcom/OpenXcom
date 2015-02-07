@@ -65,9 +65,9 @@ void RuleInterface::load(const YAML::Node& node)
 		{
 			element.x = element.y = INT_MAX;
 		}
-		element.color = (*i)["color"].as<int>(0);
-		element.color2 = (*i)["color2"].as<int>(0);
-		element.border = (*i)["border"].as<int>(0);
+		element.color = (*i)["color"].as<int>(INT_MAX);
+		element.color2 = (*i)["color2"].as<int>(INT_MAX);
+		element.border = (*i)["border"].as<int>(INT_MAX);
 		element.TFTDMode = (*i)["TFTDMode"].as<bool>(false);
 
 		std::string id = (*i)["id"].as<std::string>("");

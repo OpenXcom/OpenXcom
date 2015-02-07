@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _sightRange(268), _battlescapeTerrainData(0)
+RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _marker(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _sightRange(268), _battlescapeTerrainData(0)
 {
 }
 
@@ -49,6 +49,7 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 	_type = node["type"].as<std::string>(_type);
 	_size = node["size"].as<std::string>(_size);
 	_sprite = node["sprite"].as<int>(_sprite);
+	_marker = node["marker"].as<int>(_marker);
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);
 	_accel = node["accel"].as<int>(_accel);
@@ -127,6 +128,15 @@ int RuleUfo::getSprite() const
 }
 
 /**
+ * Returns the globe marker for the UFO type.
+ * @return Marker sprite, -1 if none.
+ */
+int RuleUfo::getMarker() const
+{
+	return _marker;
+}
+
+/**
  * Gets the maximum damage (damage the UFO can take)
  * of the UFO.
  * @return The maximum damage.
@@ -190,7 +200,7 @@ int RuleUfo::getScore() const
  * Gets the terrain data needed to draw the UFO in the battlescape.
  * @return The RuleTerrain.
  */
-RuleTerrain *RuleUfo::getBattlescapeTerrainData()
+RuleTerrain *RuleUfo::getBattlescapeTerrainData() const
 {
 	return _battlescapeTerrainData;
 }

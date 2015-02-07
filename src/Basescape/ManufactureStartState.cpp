@@ -62,45 +62,37 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_btnStart = new TextButton(136, 16, 168, 155);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtManHour);
-	add(_txtCost);
-	add(_txtWorkSpace);
-	add(_btnCancel);
+	add(_window, "window", "allocateManufacture");
+	add(_txtTitle, "text", "allocateManufacture");
+	add(_txtManHour, "text", "allocateManufacture");
+	add(_txtCost, "text", "allocateManufacture");
+	add(_txtWorkSpace, "text", "allocateManufacture");
+	add(_btnCancel, "button", "allocateManufacture");
 
-	add(_txtRequiredItemsTitle);
-	add(_txtItemNameColumn);
-	add(_txtUnitRequiredColumn);
-	add(_txtUnitAvailableColumn);
-	add(_lstRequiredItems);
+	add(_txtRequiredItemsTitle, "text", "allocateManufacture");
+	add(_txtItemNameColumn, "text", "allocateManufacture");
+	add(_txtUnitRequiredColumn, "text", "allocateManufacture");
+	add(_txtUnitAvailableColumn, "text", "allocateManufacture");
+	add(_lstRequiredItems, "list", "allocateManufacture");
 
-	add(_btnStart);
+	add(_btnStart, "button", "allocateManufacture");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setText(tr(_item->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtManHour->setColor(Palette::blockOffset(13)+10);
 	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT").arg(_item->getManufactureTime()));
 
-	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setSecondaryColor(Palette::blockOffset(13));
 	_txtCost->setText(tr("STR_COST_PER_UNIT_").arg(Text::formatFunding(_item->getManufactureCost())));
 
-	_txtWorkSpace->setColor(Palette::blockOffset(13)+10);
-	_txtWorkSpace->setSecondaryColor(Palette::blockOffset(13));
 	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED").arg(_item->getRequiredSpace()));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ManufactureStartState::btnCancelClick, Options::keyCancel);
@@ -110,24 +102,21 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	bool productionPossible = _game->getSavedGame()->getFunds() > _item->getManufactureCost();
 	productionPossible &= (availableWorkSpace > 0);
 
-	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
 	_txtRequiredItemsTitle->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
 	_txtRequiredItemsTitle->setAlign(ALIGN_CENTER);
-	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
+
 	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));
 	_txtItemNameColumn->setWordWrap(true);
-	_txtUnitRequiredColumn->setColor(Palette::blockOffset(13)+10);
+
 	_txtUnitRequiredColumn->setText(tr("STR_UNITS_REQUIRED"));
 	_txtUnitRequiredColumn->setWordWrap(true);
-	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
+
 	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
 	_txtUnitAvailableColumn->setWordWrap(true);
 
 	_lstRequiredItems->setColumns(3, 140, 75, 55);
 	_lstRequiredItems->setBackground(_window);
-	_lstRequiredItems->setColor(Palette::blockOffset(13));
-	_lstRequiredItems->setArrowColor(Palette::blockOffset(15)+1);
-
+	
 	ItemContainer * itemContainer (base->getItems());
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();
@@ -135,11 +124,10 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 		++iter)
 	{
 		std::wostringstream s1, s2;
-		s1 << iter->second;
-		s2 << itemContainer->getItem(iter->first);
+		s1 << L'\x01' << iter->second;
+		s2 << L'\x01' << itemContainer->getItem(iter->first);
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
 		_lstRequiredItems->addRow(3, tr(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
-		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
 		row++;
 	}
 	_txtRequiredItemsTitle->setVisible(!requiredItems.empty());
@@ -148,7 +136,6 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_txtUnitAvailableColumn->setVisible(!requiredItems.empty());
 	_lstRequiredItems->setVisible(!requiredItems.empty());
 
-	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(tr("STR_START_PRODUCTION"));
 	_btnStart->onMouseClick((ActionHandler)&ManufactureStartState::btnStartClick);
 	_btnStart->onKeyboardPress((ActionHandler)&ManufactureStartState::btnStartClick, Options::keyOk);

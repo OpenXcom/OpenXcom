@@ -45,7 +45,7 @@
 #include "Transfer.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "AlienBase.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"
@@ -133,7 +133,7 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
-	for (std::vector<TerrorSite*>::iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	for (std::vector<MissionSite*>::iterator i = _missionSites.begin(); i != _missionSites.end(); ++i)
 	{
 		delete *i;
 	}
@@ -395,11 +395,20 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_waypoints.push_back(w);
 	}
 
+	// Backwards compatibility
 	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
-		TerrorSite *t = new TerrorSite();
-		t->load(*i);
-		_terrorSites.push_back(t);
+		MissionSite *m = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"));
+		m->load(*i);
+		_missionSites.push_back(m);
+	}
+
+	for (YAML::const_iterator i = doc["missionSites"].begin(); i != doc["missionSites"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		MissionSite *m = new MissionSite(rule->getAlienMission(type));
+		m->load(*i);
+		_missionSites.push_back(m);
 	}
 
 	// Discovered Techs Should be loaded before Bases (e.g. for PSI evaluation)
@@ -509,9 +518,9 @@ void SavedGame::save(const std::string &filename) const
 	{
 		node["waypoints"].push_back((*i)->save());
 	}
-	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	for (std::vector<MissionSite*>::const_iterator i = _missionSites.begin(); i != _missionSites.end(); ++i)
 	{
-		node["terrorSites"].push_back((*i)->save());
+		node["missionSites"].push_back((*i)->save());
 	}
 	// Alien bases must be saved before alien missions.
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
@@ -760,6 +769,15 @@ int SavedGame::getId(const std::string &name)
 }
 
 /**
+ * Resets the list of unique object IDs.
+ * @param ids New ID list.
+ */
+void SavedGame::setIds(const std::map<std::string, int> &ids)
+{
+	_ids = ids;
+}
+
+/**
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
@@ -868,12 +886,12 @@ std::vector<Waypoint*> *SavedGame::getWaypoints()
 }
 
 /**
- * Returns the list of terror sites.
- * @return Pointer to terror site list.
+ * Returns the list of mission sites.
+ * @return Pointer to mission site list.
  */
-std::vector<TerrorSite*> *SavedGame::getTerrorSites()
+std::vector<MissionSite*> *SavedGame::getMissionSites()
 {
-	return &_terrorSites;
+	return &_missionSites;
 }
 
 /**
@@ -900,14 +918,17 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
  * @param r The newly found ResearchProject
  * @param ruleset the game Ruleset
  */
-void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
+void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset, bool score)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin(), _discovered.end(), r);
 	if (itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
 		removePoppedResearch(r);
-		addResearchScore(r->getPoints());
+		if (score)
+		{
+			addResearchScore(r->getPoints());
+		}
 	}
 	if (ruleset)
 	{
@@ -1283,105 +1304,153 @@ Soldier *SavedGame::getSoldier(int id) const
  */
 bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 {
-	size_t soldiersPromoted = 0, soldiersTotal = 0;
-
+	int soldiersPromoted = 0;
+	Soldier *highestRanked = 0;
+	PromotionInfo soldierData;
+	std::vector<Soldier*> soldiers;
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
-		soldiersTotal += (*i)->getSoldiers()->size();
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			soldiers.push_back(*j);
+			processSoldier(*j, soldierData);
+		}
+		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
+		{
+			if ((*j)->getType() == TRANSFER_SOLDIER)
+			{
+				soldiers.push_back((*j)->getSoldier());
+				processSoldier((*j)->getSoldier(), soldierData);
+			}
+		}
 	}
-	Soldier *highestRanked = 0;
 
-	// now determine the number of positions we have of each rank,
-	// and the soldier with the heighest promotion score of the rank below it
+	int totalSoldiers = (int)(soldiers.size());
 
-	size_t filledPositions = 0, filledPositions2 = 0;
-	std::vector<Soldier*>::const_iterator soldier, stayedHome;
-	stayedHome = participants.end();
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_COMMANDER);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
-
-	if (filledPositions < 1 && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if (soldierData.totalCommanders == 0)
 	{
-		// only promote one colonel to commander
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		if (totalSoldiers >= 30)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_COLONEL);
+			if (highestRanked)
+			{
+				// only promote one colonel to commander
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalCommanders++;
+				soldierData.totalColonels--;
+			}
+		}
 	}
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if ((totalSoldiers / 23) > soldierData.totalColonels)
 	{
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		while ((totalSoldiers / 23) > soldierData.totalColonels)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_CAPTAIN);
+			if (highestRanked)
+			{
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalColonels++;
+				soldierData.totalCaptains--;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if ((totalSoldiers / 11) > soldierData.totalCaptains)
 	{
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		while ((totalSoldiers / 11) > soldierData.totalCaptains)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_SERGEANT);
+			if (highestRanked)
+			{
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalCaptains++;
+				soldierData.totalSergeants--;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if ((totalSoldiers / 5) > soldierData.totalSergeants)
 	{
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		while ((totalSoldiers / 5) > soldierData.totalSergeants)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_SQUADDIE);
+			if (highestRanked)
+			{
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalSergeants++;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
 
 	return (soldiersPromoted > 0);
 }
 
 /**
- * Checks how many soldiers of a rank exist and which one has the highest score.
- * @param highestRanked Pointer to store the highest-scoring soldier of that rank.
- * @param total Pointer to an int to store the total in.
- * @param rank Rank to inspect.
+ * Processes a soldier, and adds their rank to the promotions data array.
+ * @param soldier the soldier to process.
+ * @param soldierData the data array to put their info into.
  */
-void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank)
+void SavedGame::processSoldier(Soldier *soldier, PromotionInfo &soldierData)
+{
+	switch (soldier->getRank())
+	{
+	case RANK_COMMANDER:
+		soldierData.totalCommanders++;
+		break;
+	case RANK_COLONEL:
+		soldierData.totalColonels++;
+		break;
+	case RANK_CAPTAIN:
+		soldierData.totalCaptains++;
+		break;
+	case RANK_SERGEANT:
+		soldierData.totalSergeants++;
+		break;
+	default:
+		break;
+	}
+}
+/**
+ * Checks how many soldiers of a rank exist and which one has the highest score.
+ * @param soldiers full list of live soldiers.
+ * @param participants list of participants on this mission.
+ * @param rank Rank to inspect.
+ * @return the highest ranked soldier
+ */
+Soldier *SavedGame::inspectSoldiers(std::vector<Soldier*> &soldiers, std::vector<Soldier*> &participants, int rank)
 {
 	int highestScore = 0;
-	*total = 0;
-
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	Soldier *highestRanked = 0;
+	for (std::vector<Soldier*>::iterator i = soldiers.begin(); i != soldiers.end(); ++i)
 	{
-		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		if ((*i)->getRank() == rank)
 		{
-			if ((*j)->getRank() == (SoldierRank)rank)
+			int score = getSoldierScore(*i);
+			if (score > highestScore && (!Options::fieldPromotions || std::find(participants.begin(), participants.end(), *i) != participants.end()))
 			{
-				(*total)++;
-				int score = getSoldierScore(*j);
-				if (score > highestScore)
-				{
-					highestScore = score;
-					*highestRanked = (*j);
-				}
-			}
-		}
-		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
-		{
-			if ((*j)->getType() == TRANSFER_SOLDIER && (*j)->getSoldier()->getRank() == (SoldierRank)rank)
-			{
-				(*total)++;
-				int score = getSoldierScore((*j)->getSoldier());
-				if (score > highestScore)
-				{
-					highestScore = score;
-					*highestRanked = (*j)->getSoldier();
-				}
+				highestScore = score;
+				highestRanked = (*i);
 			}
 		}
 	}
+	return highestRanked;
 }
 
 /**

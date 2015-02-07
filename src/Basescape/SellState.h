@@ -57,7 +57,7 @@ private:
 	int _total, _hasSci, _hasEng;
 	double _spaceChange;
 	Timer *_timerInc, *_timerDec;
-	Uint8 _color, _color2, _color3, _colorAmmo;
+	Uint8 _ammoColor;
 	OptionsOrigin _origin;
 	/// Gets selected price.
 	int getPrice();

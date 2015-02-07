@@ -56,7 +56,7 @@ private:
 	SpecialTileType _specialType;
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke, _baseModule;
 	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
-	int _armor, _flammable, _fuel, _explosive, _bigWall;
+	int _armor, _flammable, _fuel, _explosive, _explosiveType, _bigWall;
 	int _sprite[8];
 	int _block[6];
 	int _loftID[12];
@@ -146,6 +146,10 @@ public:
 	int getExplosive() const;
 	/// Sets the amount of explosive.
 	void setExplosive(int value);
+	/// Gets the type of explosive.
+	int getExplosiveType() const;
+	/// Sets the type of explosive.
+	void setExplosiveType(int value);
 	/// Sets the MiniMap index
 	void setMiniMapIndex(unsigned short i);
 	/// Gets the MiniMap index
