@@ -68,7 +68,7 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	bool _objectiveDestroyed;
+	int _objectivesDestroyed, _objectivesNeeded;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _cheating;
@@ -76,7 +76,7 @@ private:
 	BattleActionType _tuReserved;
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
-	int _depth;
+	int _depth, _ambience;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -183,10 +183,12 @@ public:
 	void setAborted(bool flag);
 	/// Checks if the mission was aborted.
 	bool isAborted() const;
-	/// Sets whether the objective is destroyed.
-	void setObjectiveDestroyed(bool flag);
-	/// Checks if the objective is detroyed.
-	bool isObjectiveDestroyed();
+	/// Sets how many objectives need to be destroyed.
+	void addToObjectiveCount();
+	/// increments the objective counter.
+	void addDestroyedObjective();
+	/// Checks if all the objectives are detroyed.
+	bool allObjectivesDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
 	/// Gets a spawn node.
@@ -250,10 +252,15 @@ public:
 	/// a shortcut to the geoscape save.
 	SavedGame *getGeoscapeSave();
 	/// get the depth of the battlescape game.
-	const int getDepth() const;
+	int getDepth() const;
 	/// set the depth of the battlescape game.
 	void setDepth(int depth);
+	/// uses the depth variable to set a palette.
 	void setPaletteByDepth(State *state);
+	/// sets the ambient sound effect;
+	void setAmbientSound(int sound);
+	/// gets the ambient sound effect;
+	int getAmbientSound() const;
 };
 
 }

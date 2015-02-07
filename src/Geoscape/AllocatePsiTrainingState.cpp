@@ -33,7 +33,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -58,52 +57,42 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 	_lstSoldiers = new TextList(290, 112, 8, 52);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 7);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("allocatePsi")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtName);
-	add(_txtTitle);
-	add(_txtRemaining);
-	add(_txtPsiStrength);
-	add(_txtPsiSkill);
-	add(_txtTraining);
-	add(_lstSoldiers);
+	add(_window, "window", "allocatePsi");
+	add(_btnOk, "button", "allocatePsi");
+	add(_txtName, "text", "allocatePsi");
+	add(_txtTitle, "text", "allocatePsi");
+	add(_txtRemaining, "text", "allocatePsi");
+	add(_txtPsiStrength, "text", "allocatePsi");
+	add(_txtPsiSkill, "text", "allocatePsi");
+	add(_txtTraining, "text", "allocatePsi");
+	add(_lstSoldiers, "list", "allocatePsi");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AllocatePsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AllocatePsiTrainingState::btnOkClick, Options::keyCancel);
 	
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 	
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
-	_txtRemaining->setColor(Palette::blockOffset(13)+10);
-	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
 	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 	
-	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME"));
 	
-	_txtPsiStrength->setColor(Palette::blockOffset(13)+10);
 	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
 
-	_txtPsiSkill->setColor(Palette::blockOffset(13)+10);
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_IMPROVEMENT"));
 
-	_txtTraining->setColor(Palette::blockOffset(13)+10);
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
-	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setAlign(ALIGN_RIGHT, 3);
 	_lstSoldiers->setColumns(4, 114, 80, 62, 30);
 	_lstSoldiers->setSelectable(true);
@@ -136,12 +125,12 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 		if ((*s)->isInPsiTraining())
 		{
 			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), tr("STR_YES").c_str());
-			_lstSoldiers->setRowColor(row, Palette::blockOffset(13)+5);
+			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor());
 		}
 		else
 		{
 			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), tr("STR_NO").c_str());
-			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
+			_lstSoldiers->setRowColor(row, _lstSoldiers->getColor());
 		}
 		row++;
 	}
@@ -177,7 +166,7 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action *action)
 			if (_base->getUsedPsiLabs() < _base->getAvailablePsiLabs())
 			{
 				_lstSoldiers->setCellText(_sel, 3, tr("STR_YES").c_str());
-				_lstSoldiers->setRowColor(_sel, Palette::blockOffset(13)+5);
+				_lstSoldiers->setRowColor(_sel, _lstSoldiers->getSecondaryColor());
 				_labSpace--;
 				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 				_base->getSoldiers()->at(_sel)->setPsiTraining();
@@ -186,7 +175,7 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action *action)
 		else
 		{
 			_lstSoldiers->setCellText(_sel, 3, tr("STR_NO").c_str());
-			_lstSoldiers->setRowColor(_sel, Palette::blockOffset(15)+6);
+			_lstSoldiers->setRowColor(_sel, _lstSoldiers->getColor());
 			_labSpace++;
 			_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 			_base->getSoldiers()->at(_sel)->setPsiTraining();

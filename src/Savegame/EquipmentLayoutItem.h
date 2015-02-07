@@ -41,7 +41,7 @@ public:
 	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 	EquipmentLayoutItem(const YAML::Node& node);
 	/// Creates a new soldier-equipment layout item.
-	EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int fuseTimer);
+	EquipmentLayoutItem(const std::string &itemType, const std::string &slot, int slotX, int slotY, const std::string &ammoItem, int fuseTimer);
 	/// Cleans up the soldier-equipment layout item.
 	~EquipmentLayoutItem();
 	/// Gets the item's type which has to be in a slot

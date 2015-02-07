@@ -40,10 +40,10 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules)
+Ufo::Ufo(const RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
-  , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
+  , _inBattlescape(false), _mission(0), _trajectory(0)
   , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
 {
 }
@@ -64,7 +64,7 @@ Ufo::~Ufo()
 		}
 		else
 		{
-			 ++i;
+			++i;
 		}
 	}
 	if (_mission)
@@ -151,7 +151,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	if (game.getMonthsPassed() != -1)
 	{
 		int missionID = node["mission"].as<int>();
-		std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+		std::vector<AlienMission *>::const_iterator found = std::find_if (game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
 		if (found == game.getAlienMissions().end())
 		{
 			// Corrupt save file.
@@ -221,9 +221,19 @@ YAML::Node Ufo::saveId() const
  * Returns the ruleset for the UFO's type.
  * @return Pointer to ruleset.
  */
-RuleUfo *Ufo::getRules() const
+const RuleUfo *Ufo::getRules() const
 {
 	return _rules;
+}
+
+/**
+ * Changes the ruleset for the UFO's type.
+ * @param rules Pointer to ruleset.
+ * @warning ONLY FOR NEW BATTLE USE!
+ */
+void Ufo::changeRules(const RuleUfo *rules)
+{
+	_rules = rules;
 }
 
 /**
@@ -266,6 +276,27 @@ std::wstring Ufo::getName(Language *lang) const
 		break;
 	default:
 		return L"";
+	}
+}
+
+/**
+ * Returns the globe marker for the UFO.
+ * @return Marker sprite, -1 if none.
+ */
+int Ufo::getMarker() const
+{
+	if (!_detected)
+		return -1;
+	switch (_status)
+	{
+	case Ufo::FLYING:
+		return 2;
+	case Ufo::LANDED:
+		return 3;
+	case Ufo::CRASHED:
+		return 4;
+	default:
+		return _rules->getMarker();
 	}
 }
 
@@ -536,12 +567,12 @@ const std::string &Ufo::getAlienRace() const
 	return _mission->getRace();
 }
 
-void Ufo::setShotDownByCraftId(const int id)
+void Ufo::setShotDownByCraftId(const CraftId& craft)
 {
-	_shotDownByCraftId = id;
+	_shotDownByCraftId = craft;
 }
 
-int Ufo::getShotDownByCraftId() const
+CraftId Ufo::getShotDownByCraftId() const
 {
 	return _shotDownByCraftId;
 }

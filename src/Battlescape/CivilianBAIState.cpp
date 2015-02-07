@@ -163,7 +163,7 @@ void CivilianBAIState::think(BattleAction *action)
 		}
 	}
 	if (_spottingEnemies > 2
-		|| _unit->getHealth() < 2 * _unit->getStats()->health / 3)
+		|| _unit->getHealth() < 2 * _unit->getBaseStats()->health / 3)
 	{
 		evaluate = true;
 	}
@@ -195,7 +195,6 @@ void CivilianBAIState::think(BattleAction *action)
 		action->number = 3;
 		_unit->dontReselect();
 		action->desperate = true;
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		action->type = _patrolAction->type;
@@ -551,15 +550,15 @@ void CivilianBAIState::evaluateAIMode()
 		break;
 	}
 
-	if (_unit->getHealth() < _unit->getStats()->health / 3)
+	if (_unit->getHealth() < _unit->getBaseStats()->health / 3)
 	{
 		escapeOdds *= 1.7;
 	}
-	else if (_unit->getHealth() < 2 * (_unit->getStats()->health / 3))
+	else if (_unit->getHealth() < 2 * (_unit->getBaseStats()->health / 3))
 	{
 		escapeOdds *= 1.4;
 	}
-	else if (_unit->getHealth() < _unit->getStats()->health)
+	else if (_unit->getHealth() < _unit->getBaseStats()->health)
 	{
 		escapeOdds *= 1.1;
 	}

@@ -87,14 +87,14 @@ void UnitFallBState::think()
 			unit = _parent->getSave()->getFallingUnits()->erase(unit);
 			continue;
 		}
-		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition(), true));
+		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition(), true, size, false));
 		Tile *tileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(0,0,-1));
 		for (int x = size; x >= 0; x--)
 		{
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
-				if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getArmor()->getMovementType() == MT_FLY)
+				if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getMovementType() == MT_FLY)
 				{
 					largeCheck = false;
 				}
@@ -104,7 +104,7 @@ void UnitFallBState::think()
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
-			&& (*unit)->getArmor()->getMovementType() != MT_FLY
+			&& (*unit)->getMovementType() != MT_FLY
 			&& (*unit)->getWalkingPhase() == 0;
 
 		if (falling)
@@ -141,7 +141,7 @@ void UnitFallBState::think()
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
-			&& (*unit)->getArmor()->getMovementType() != MT_FLY
+			&& (*unit)->getMovementType() != MT_FLY
 			&& (*unit)->getWalkingPhase() == 0;
 
 		// The unit has moved from one tile to the other.
@@ -206,7 +206,7 @@ void UnitFallBState::think()
 							bool alreadyOccupied = t && t->getUnit() && (t->getUnit() != unitBelow);
 							bool movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(currentTile, t, dir, unitBelow);
 							bool hasFloor = t && !t->hasNoFloor(bt);
-							bool unitCanFly = unitBelow->getArmor()->getMovementType() == MT_FLY;
+							bool unitCanFly = unitBelow->getMovementType() == MT_FLY;
 
 							bool canMoveToTile = t && !alreadyOccupied && !alreadyTaken && !aboutToBeOccupiedFromAbove && !movementBlocked && (hasFloor || unitCanFly);
 							if (canMoveToTile)
@@ -267,11 +267,11 @@ void UnitFallBState::think()
 			else
 			{
 				// if the unit burns floortiles, burn floortiles
-				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR)
+				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR || (*unit)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					(*unit)->getTile()->ignite(1);
 					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
-					_parent->getTileEngine()->hit(here, (*unit)->getStats()->strength, DT_IN, (*unit));
+					_parent->getTileEngine()->hit(here, (*unit)->getBaseStats()->strength, DT_IN, (*unit));
 				}
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();

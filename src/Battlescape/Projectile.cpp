@@ -20,6 +20,9 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
+#include "Map.h"
+#include "Camera.h"
+#include "Particle.h"
 #include "../fmath.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
@@ -48,12 +51,12 @@ namespace OpenXcom
  * @param action An action.
  * @param origin Position the projectile originates from.
  * @param targetVoxel Position the projectile is targeting.
+ * @param ammo the ammo that produced this projectile, where applicable.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, int bulletSprite) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(bulletSprite), _reversed(false)
+Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, BattleItem *ammo) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(-1), _reversed(false), _vaporColor(-1), _vaporDensity(-1), _vaporProbability(5)
 {
 	// this is the number of pixels the sprite will move between frames
 	_speed = Options::battleFireSpeed;
-
 	if (_action.weapon)
 	{
 		if (_action.type == BA_THROW)
@@ -62,13 +65,36 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
 		}
 		else
 		{
-			if (_action.weapon->getRules()->getBulletSpeed() != 0)
+			// try to get all the required info from the ammo, if present
+			if (ammo)
+			{
+				_bulletSprite = ammo->getRules()->getBulletSprite();
+				_vaporColor = ammo->getRules()->getVaporColor();
+				_vaporDensity = ammo->getRules()->getVaporDensity();
+				_vaporProbability = ammo->getRules()->getVaporProbability();
+				_speed = std::max(1, _speed + ammo->getRules()->getBulletSpeed());
+			}
+
+			// no ammo, or the ammo didn't contain the info we wanted, see what the weapon has on offer.
+			if (_bulletSprite == -1)
+			{
+				_bulletSprite = _action.weapon->getRules()->getBulletSprite();
+			}
+			if (_vaporColor == -1)
+			{
+				_vaporColor = _action.weapon->getRules()->getVaporColor();
+			}
+			if (_vaporDensity == -1)
+			{
+				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
+			}
+			if (_vaporProbability == 5)
+			{
+				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
+			}
+			if (!ammo || (ammo != _action.weapon || ammo->getRules()->getBulletSpeed() == 0))
 			{
 				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
-			}
-			else if (_action.weapon->getAmmoItem() && _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
-			{
-				_speed = std::max(1, _speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
 			}
 		}
 	}
@@ -118,7 +144,7 @@ int Projectile::calculateTrajectory(double accuracy, Position originVoxel)
 			hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 		}
 
-		if (hitPos != _action.target && _action.result == "")
+		if (hitPos != _action.target && _action.result.empty())
 		{
 			if (test == V_NORTHWALL)
 			{
@@ -195,7 +221,7 @@ int Projectile::calculateThrow(double accuracy)
 	if (_action.type != BA_THROW)
 	{
 		BattleUnit *tu = targetTile->getUnit();
-		if(!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
+		if (!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
 			tu = _save->getTile(_action.target - Position(0, 0, 1))->getUnit();
 		if (tu)
 		{
@@ -342,6 +368,10 @@ bool Projectile::move()
 			_position--;
 			return false;
 		}
+		if (_save->getDepth() > 0 && _vaporColor != -1 && _action.type != BA_THROW && RNG::percent(_vaporProbability))
+		{
+			addVaporCloud();
+		}
 	}
 	return true;
 }
@@ -400,7 +430,7 @@ Surface *Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	_position = _trajectory.size() - 1;
+	while (move());
 }
 
 /**
@@ -425,8 +455,32 @@ Position Projectile::getTarget()
 	return _action.target;
 }
 
+/**
+ * Is this projectile drawn back to front or front to back?
+ * @retun return if this is to be drawn in reverse order.
+ */
 bool Projectile::isReversed() const
 {
 	return _reversed;
+}
+
+/**
+ * adds a cloud of vapor at the projectile's current position.
+ */
+void Projectile::addVaporCloud()
+{
+	Tile *tile = _save->getTile(_trajectory.at(_position) / Position(16,16,24));
+	if (tile)
+	{
+		Position tilePos, voxelPos;
+		_save->getBattleGame()->getMap()->getCamera()->convertMapToScreen(_trajectory.at(_position) / Position(16,16,24), &tilePos);
+		tilePos += _save->getBattleGame()->getMap()->getCamera()->getMapOffset();
+		_save->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(_trajectory.at(_position), &voxelPos);
+		for (int i = 0; i != _vaporDensity; ++i)
+		{
+			Particle *particle = new Particle(voxelPos.x - tilePos.x + RNG::generate(0, 6) - 3, voxelPos.y - tilePos.y + RNG::generate(0, 6) - 3, RNG::generate(64, 214), _vaporColor, 19);
+			tile->addParticle(particle);
+		}
+	}
 }
 }

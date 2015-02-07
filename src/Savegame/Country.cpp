@@ -93,7 +93,7 @@ RuleCountry *Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-const std::vector<int> &Country::getFunding() const
+std::vector<int> &Country::getFunding()
 {
 	return _funding;
 }
@@ -113,7 +113,7 @@ void Country::setFunding(int funding)
  */
 int Country::getSatisfaction()
 {
-	if(_pact)
+	if (_pact)
 		return 0;
 	return _satisfaction;
 }
@@ -140,7 +140,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-const std::vector<int> &Country::getActivityXcom() const
+std::vector<int> &Country::getActivityXcom()
 {
 	return _activityXcom;
 }
@@ -149,7 +149,7 @@ const std::vector<int> &Country::getActivityXcom() const
  * Gets the country's alien activity level.
  * @return activity level.
  */
-const std::vector<int> &Country::getActivityAlien() const
+std::vector<int> &Country::getActivityAlien()
 {
 	return _activityAlien;
 }
@@ -199,7 +199,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	}
 
 	// about to be in cahoots
-	if(_newPact && !_pact)
+	if (_newPact && !_pact)
 	{
 		_newPact = false;
 		_pact = true;
@@ -209,7 +209,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 
 
 	// set the new funding and reset the activity meters
-	if(_pact)
+	if (_pact)
 		_funding.push_back(0);
 	else if (_satisfaction != 2)
 		_funding.push_back(funding + newFunding);
@@ -218,18 +218,18 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
-	if(_activityAlien.size() > 12)
+	if (_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());
-	if(_activityXcom.size() > 12)
+	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
-	if(_funding.size() > 12)
+	if (_funding.size() > 12)
 		_funding.erase(_funding.begin());
 }
 
 /**
  * @return if we will sign a new pact.
  */
-bool Country::getNewPact()
+bool Country::getNewPact() const
 {
 	return _newPact;
 }
@@ -247,8 +247,17 @@ void Country::setNewPact()
  * at month's end if _newPact is set.
  * @return if we have signed a pact.
  */
-bool Country::getPact()
+bool Country::getPact() const
 {
 	return _pact;
 }
+
+/**
+ * sign a new pact.
+ */
+void Country::setPact()
+{
+	 _pact = true;
+}
+
 }

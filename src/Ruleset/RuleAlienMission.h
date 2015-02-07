@@ -78,16 +78,30 @@ public:
 	const MissionWave &getWave(size_t index) const { return _waves[index]; }
 	/// Gets the score for this mission.
 	int getPoints() const;
+	/// Gets type of special ufo type for special action like retaliation or supply.
+	const std::string &getSpecialUfo() const { return _specialUfo; }
+	/// Gets the alien deployment for this mission.
+	std::string getDeployment() const;
+	/// Gets the marker name for this mission.
+	std::string getMarkerName() const;
+	/// Gets the marker icon for this mission.
+	int getMarkerIcon() const;
 private:
 	/// The mission's type ID.
 	std::string _type;
+	/// Type of special ufo type.
+	std::string _specialUfo;
 	/// The race distribution over game time.
 	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 	/// The mission's points
 	int _points;
-
+	/// The mission's battlescape deployment.
+	std::string _deployment;
+	/// The mission's globe marker.
+	std::string _markerName;
+	int _markerIcon;
 };
 
 }

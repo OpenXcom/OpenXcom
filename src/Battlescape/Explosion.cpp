@@ -21,6 +21,9 @@
 namespace OpenXcom
 {
 
+const int Explosion::HIT_FRAMES = 4;
+const int Explosion::EXPLODE_FRAMES = 8;
+const int Explosion::BULLET_FRAMES = 10;
 /**
  * Sets up a Explosion sprite with the specified size and position.
  * @param position Explosion center position in voxel x/y/z.
@@ -28,7 +31,7 @@ namespace OpenXcom
  * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
  * @param hit True for melee and psi attacks.
  */
-Explosion::Explosion(Position position, int startFrame, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big), _hit(hit)
+Explosion::Explosion(Position position, int startFrame, int frameDelay, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _frameDelay(frameDelay), _big(big), _hit(hit)
 {
 
 }
@@ -47,8 +50,16 @@ Explosion::~Explosion()
  */
 bool Explosion::animate()
 {
+	if (_frameDelay > 0)
+	{
+		_frameDelay--;
+		return true;
+	}
+
 	_currentFrame++;
-	if ((_hit && _currentFrame == 4) || (_big && _currentFrame == 8) || (!_big && _currentFrame == _startFrame+10))
+	if ((_hit && _currentFrame == _startFrame + HIT_FRAMES) ||
+		(_big && _currentFrame == _startFrame + EXPLODE_FRAMES) ||
+		(!_big && !_hit && _currentFrame == _startFrame + BULLET_FRAMES))
 	{
 		return false;
 	}
@@ -73,6 +84,8 @@ Position Explosion::getPosition() const
  */
 int Explosion::getCurrentFrame() const
 {
+	if (_frameDelay > 0)
+		return -1;
 	return _currentFrame;
 }
 

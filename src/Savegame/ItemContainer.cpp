@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes an item container with no contents.
  */
-ItemContainer::ItemContainer() : _qty()
+ItemContainer::ItemContainer()
 {
 }
 

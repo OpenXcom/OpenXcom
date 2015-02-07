@@ -79,6 +79,8 @@ public:
 	std::wstring getName(Language* lang = 0) const;
 	/// Sets the base's name.
 	void setName(const std::wstring &name);
+	/// Gets the base's marker.
+	int getMarker() const;
 	/// Gets the base's facilities.
 	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.
@@ -136,9 +138,9 @@ public:
 	/// Gets the base's available hangars.
 	int getAvailableHangars() const;
 	/// Get the number of available space lab (not used by a ResearchProject)
-	int getFreeLaboratories () const;
+	int getFreeLaboratories() const;
 	/// Get the number of available space lab (not used by a Production)
-	int getFreeWorkshops () const;
+	int getFreeWorkshops() const;
 
 	int getAllocatedScientists() const;
 
@@ -170,7 +172,7 @@ public:
 	/// Remove a Base Production's
 	void removeProduction (Production * p);
 	/// Get the list of Base Production's
-	const std::vector<Production *> & getProductions () const;
+	const std::vector<Production *> & getProductions() const;
 	/// Checks if this base is hyper-wave equipped.
 	bool getHyperDetection() const;
 	/// Gets the base's used psi lab space.
@@ -192,7 +194,7 @@ public:
 	/// Gets the retaliation status of this base.
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
-	size_t getDetectionChance(int difficulty) const;
+	size_t getDetectionChance() const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
 	/// Setup base defenses.
@@ -207,6 +209,8 @@ public:
 	std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility *remove);
 	/// destroy a facility and deal with the side effects.
 	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
+	/// Cleans up the defenses vector and optionally reclaims the tanks and their ammo.
+	void cleanupDefenses(bool reclaimItems);
 };
 
 }

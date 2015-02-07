@@ -22,6 +22,7 @@
 #include "MovingTarget.h"
 #include <string>
 #include <yaml-cpp/yaml.h>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -43,13 +44,13 @@ class Ufo : public MovingTarget
 public:
 	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
 private:
-	RuleUfo *_rules;
+	const RuleUfo *_rules;
 	int _id, _crashId, _landId, _damage;
 	std::string _direction, _altitude;
 	enum UfoStatus _status;
 	size_t _secondsRemaining;
 	bool _inBattlescape;
-	int _shotDownByCraftId;
+	CraftId _shotDownByCraftId;
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;
@@ -59,7 +60,7 @@ private:
 	void calculateSpeed();
 public:
 	/// Creates a UFO of the specified type.
-	Ufo(RuleUfo *rules);
+	Ufo(const RuleUfo *rules);
 	/// Cleans up the UFO.
 	~Ufo();
 	/// Loads the UFO from YAML.
@@ -69,13 +70,17 @@ public:
 	/// Saves the UFO's ID to YAML.
 	YAML::Node saveId() const;
 	/// Gets the UFO's ruleset.
-	RuleUfo *getRules() const;
+	const RuleUfo *getRules() const;
+	/// Sets the UFO's ruleset.
+	void changeRules(const RuleUfo *rules);
 	/// Gets the UFO's ID.
 	int getId() const;
 	/// Sets the UFO's ID.
 	void setId(int id);
 	/// Gets the UFO's name.
 	std::wstring getName(Language *lang) const;
+	/// Gets the UFO's marker.
+	int getMarker() const;
 	/// Gets the UFO's amount of damage.
 	int getDamage() const;
 	/// Sets the UFO's amount of damage.
@@ -111,9 +116,9 @@ public:
 	/// Gets the UFO's alien race.
 	const std::string &getAlienRace() const;
 	/// Sets the ID of craft which shot down the UFO.
-	void setShotDownByCraftId(const int id);
+	void setShotDownByCraftId(const CraftId& craftId);
 	/// Gets the ID of craft which shot down the UFO.
-	int getShotDownByCraftId() const;
+	CraftId getShotDownByCraftId() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
 	/// Gets the UFO's Mission type.

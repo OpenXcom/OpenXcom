@@ -62,7 +62,7 @@ void RuleManufacture::load(const YAML::Node &node, int listOrder)
  * Gets the unique name of the manufacture.
  * @return The name.
  */
-std::string RuleManufacture::getName () const
+std::string RuleManufacture::getName() const
 {
 	return _name;
 }
@@ -71,7 +71,7 @@ std::string RuleManufacture::getName () const
  * Gets the category shown in the manufacture list.
  * @return The category.
  */
-std::string RuleManufacture::getCategory () const
+std::string RuleManufacture::getCategory() const
 {
 	return _category;
 }
@@ -90,7 +90,7 @@ const std::vector<std::string> &RuleManufacture::getRequirements() const
  * Gets the required workspace to start production.
  * @return The required workspace.
 */
-int RuleManufacture::getRequiredSpace () const
+int RuleManufacture::getRequiredSpace() const
 {
 	return _space;
 }
@@ -99,7 +99,7 @@ int RuleManufacture::getRequiredSpace () const
  * Gets the time needed to manufacture one object.
  * @return The time needed to manufacture one object (in man/hour).
 */
-int RuleManufacture::getManufactureTime () const
+int RuleManufacture::getManufactureTime() const
 {
 	return _time;
 }
@@ -109,7 +109,7 @@ int RuleManufacture::getManufactureTime () const
  * Gets the cost of manufacturing one object.
  * @return The cost of manufacturing one object.
 */
-int RuleManufacture::getManufactureCost () const
+int RuleManufacture::getManufactureCost() const
 {
 	return _cost;
 }

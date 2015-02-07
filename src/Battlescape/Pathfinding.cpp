@@ -35,11 +35,15 @@
 namespace OpenXcom
 {
 
+int Pathfinding::red = 3;
+int Pathfinding::yellow = 10;
+int Pathfinding::green = 4;
+
 /**
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
 {
 	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile
@@ -88,7 +92,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	bool sneak = Options::sneakyAI && unit->getFaction() == FACTION_HOSTILE;
 
 	Position startPosition = unit->getPosition();
-	_movementType = unit->getArmor()->getMovementType();
+	_movementType = unit->getMovementType();
 	if (target != 0 && maxTUCost == -1)  // pathfinding for missile
 	{
 		_movementType = MT_FLY;
@@ -194,7 +198,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 	openList.push(start);
 	bool missile = (target && maxTUCost == -1);
 	// if the open list is empty, we've reached the end
-	while(!openList.empty())
+	while (!openList.empty())
 	{
 		PathfindingNode *currentNode = openList.pop();
 		Position const &currentPos = currentNode->getPosition();
@@ -378,13 +382,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 							// as there is no wall blocking us.
 			if (direction == 0 || direction == 7 || direction == 1)
 				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 2 || direction == 1 || direction == 3)
+			if (!fellDown && (direction == 2 || direction == 1 || direction == 3))
 				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 4 || direction == 3 || direction == 5)
+			if (!fellDown && (direction == 4 || direction == 3 || direction == 5))
 				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
 			if (direction == 6 || direction == 5 || direction == 7)
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-
 			// don't let tanks phase through doors.
 			if (x && y)
 			{
@@ -430,6 +433,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (_unit->getFaction() == FACTION_HOSTILE &&
 				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
+
+			// TFTD thing: tiles on fire are cost 2 TUs more for whatever reason.
+			if (_save->getDepth() > 0 && destinationTile->getFire() > 0)
+			{
+				cost += 2;
+			}
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
@@ -571,7 +580,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_WESTWALL)
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
+			(tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST ||
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWESTANDNORTH ))
 			return true; // blocking part
 		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
 		if (!tileWest) return true;	// do not look outside of map
@@ -583,7 +593,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_NORTHWALL)
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
+			(tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH ||
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWESTANDNORTH ))
 			return true; // blocking part
 		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
 		if (!tileNorth) return true; // do not look outside of map
@@ -792,6 +803,35 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 			return true;
 		}
 	}
+
+	//TFTD stairs 1 : endposition has to the south a terrainlevel -18 object (upper part of the stairs)
+	if (_save->getTile(endPosition + Position(0, 1, 0)) && _save->getTile(endPosition + Position(0, 1, 0))->getTerrainLevel() == -18)
+	{
+		// condition 2 : one position further to the south there has to be a terrainlevel -8 object (lower part of the stairs)
+		if (_save->getTile(endPosition + Position(0, 2, 0)) && _save->getTile(endPosition + Position(0, 2, 0))->getTerrainLevel() != -12)
+		{
+			return false;
+		}
+
+		// condition 3 : the start position has to be on either of the 3 tiles to the south of the endposition
+		if (startPosition == endPosition + Position(0, 1, 0) || startPosition == endPosition + Position(0, 2, 0) || startPosition == endPosition + Position(0, 3, 0))
+		{
+			return true;
+		}
+	}
+
+	// same for the east-west oriented stairs.
+	if (_save->getTile(endPosition + Position(1, 0, 0)) && _save->getTile(endPosition + Position(1, 0, 0))->getTerrainLevel() == -18)
+	{
+		if (_save->getTile(endPosition + Position(2, 0, 0)) && _save->getTile(endPosition + Position(2, 0, 0))->getTerrainLevel() != -12)
+		{
+			return false;
+		}
+		if (startPosition == endPosition + Position(1, 0, 0) || startPosition == endPosition + Position(2, 0, 0) || startPosition == endPosition + Position(3, 0, 0))
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -817,9 +857,9 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	}
 	else
 	{
-		if (bu->getArmor()->getMovementType() == MT_FLY)
+		if (bu->getMovementType() == MT_FLY)
 		{
-			if ((direction == DIR_UP && destinationTile && !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
+			if ((direction == DIR_UP && destinationTile && destinationTile->hasNoFloor(startTile)) // flying up only possible when there is no roof
 				|| (direction == DIR_DOWN && destinationTile && startTile->hasNoFloor(belowStart)) // falling down only possible when there is no floor
 				)
 			{
@@ -860,7 +900,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
-		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT);
 	}
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool running = Options::strafe && _modifierUsed && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
@@ -912,13 +952,13 @@ bool Pathfinding::previewPath(bool bRemove)
 					tile->setPreview(-1);
 					tile->setTUMarker(-1);
 				}
-				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
+				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?Pathfinding::green : Pathfinding::yellow) : Pathfinding::red));
 			}
 		}
 	}
 	if (switchBack)
 	{
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE);
 	}
 	return true;
 }
@@ -1153,7 +1193,7 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	_unit = unit;
 	if (unit != 0)
 	{
-		_movementType = unit->getArmor()->getMovementType();
+		_movementType = unit->getMovementType();
 	}
 	else
 	{

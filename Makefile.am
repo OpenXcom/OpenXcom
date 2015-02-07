@@ -169,6 +169,8 @@ openxcom_SOURCES = \
 	src/Battlescape/NextTurnState.h \
 	src/Battlescape/NoContainmentState.cpp \
 	src/Battlescape/NoContainmentState.h \
+	src/Battlescape/Particle.cpp \
+	src/Battlescape/Particle.h \
 	src/Battlescape/Pathfinding.cpp \
 	src/Battlescape/Pathfinding.h \
 	src/Battlescape/PathfindingNode.cpp \
@@ -225,8 +227,8 @@ openxcom_SOURCES = \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \
-	src/Engine/Flc.cpp \
-	src/Engine/Flc.h \
+	src/Engine/FlcPlayer.cpp \
+	src/Engine/FlcPlayer.h \
 	src/Engine/Font.cpp \
 	src/Engine/Font.h \
 	src/Engine/Game.cpp \
@@ -257,6 +259,7 @@ openxcom_SOURCES = \
 	src/Engine/RNG.cpp \
 	src/Engine/RNG.h \
 	src/Engine/Scalers/common.h \
+	src/Engine/Scalers/config.h \
 	src/Engine/Scalers/hqx.h \
 	src/Engine/Scalers/hq2x.cpp \
 	src/Engine/Scalers/hq3x.cpp \
@@ -268,6 +271,8 @@ openxcom_SOURCES = \
 	src/Engine/Scalers/scale2x.h \
 	src/Engine/Scalers/scale3x.cpp \
 	src/Engine/Scalers/scale3x.h \
+	src/Engine/Scalers/xbrz.cpp \
+	src/Engine/Scalers/xbrz.h \
 	src/Engine/Screen.cpp \
 	src/Engine/Screen.h \
 	src/Engine/ShaderDraw.h \
@@ -290,8 +295,8 @@ openxcom_SOURCES = \
 	src/Engine/Zoom.h \
 	src/Geoscape/AlienBaseState.cpp \
 	src/Geoscape/AlienBaseState.h \
-	src/Geoscape/AlienTerrorState.cpp \
-	src/Geoscape/AlienTerrorState.h \
+	src/Geoscape/MissionDetectedState.cpp \
+	src/Geoscape/MissionDetectedState.h \
 	src/Geoscape/AllocatePsiTrainingState.cpp \
 	src/Geoscape/AllocatePsiTrainingState.h \
 	src/Geoscape/BaseDefenseState.cpp \
@@ -343,10 +348,6 @@ openxcom_SOURCES = \
 	src/Geoscape/NewPossibleManufactureState.h \
 	src/Geoscape/NewPossibleResearchState.cpp \
 	src/Geoscape/NewPossibleResearchState.h \
-	src/Geoscape/Polygon.cpp \
-	src/Geoscape/Polygon.h \
-	src/Geoscape/Polyline.cpp \
-	src/Geoscape/Polyline.h \
 	src/Geoscape/ProductionCompleteState.cpp \
 	src/Geoscape/ProductionCompleteState.h \
 	src/Geoscape/PsiTrainingState.cpp \
@@ -367,6 +368,8 @@ openxcom_SOURCES = \
 	src/Geoscape/VictoryState.h \
 	src/Interface/ArrowButton.cpp \
 	src/Interface/ArrowButton.h \
+	src/Interface/BattlescapeButton.cpp \
+	src/Interface/BattlescapeButton.h \
 	src/Interface/Bar.cpp \
 	src/Interface/Bar.h \
 	src/Interface/ComboBox.cpp \
@@ -408,6 +411,8 @@ openxcom_SOURCES = \
 	src/Menu/ErrorMessageState.h \
 	src/Menu/ListLoadState.cpp \
 	src/Menu/ListLoadState.h \
+	src/Menu/ListLoadOriginalState.cpp \
+	src/Menu/ListLoadOriginalState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
 	src/Menu/NewBattleState.cpp \
@@ -477,12 +482,18 @@ openxcom_SOURCES = \
 	src/Ruleset/ExtraSounds.h \
 	src/Ruleset/ExtraStrings.cpp \
 	src/Ruleset/ExtraStrings.h \
+	src/Ruleset/Polygon.cpp \
+	src/Ruleset/Polygon.h \
+	src/Ruleset/Polyline.cpp \
+	src/Ruleset/Polyline.h \
 	src/Ruleset/MapBlock.cpp \
 	src/Ruleset/MapBlock.h \
 	src/Ruleset/MapData.cpp \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
+	src/Ruleset/MapScript.cpp \
+	src/Ruleset/MapScript.h \
 	src/Ruleset/MCDPatch.cpp \
 	src/Ruleset/MCDPatch.h \
 	src/Ruleset/RuleAlienMission.cpp \
@@ -495,12 +506,18 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleCraft.h \
 	src/Ruleset/RuleCraftWeapon.cpp \
 	src/Ruleset/RuleCraftWeapon.h \
+	src/Ruleset/RuleGlobe.cpp \
+	src/Ruleset/RuleGlobe.h \
+	src/Ruleset/RuleInterface.cpp \
+	src/Ruleset/RuleInterface.h \
 	src/Ruleset/RuleInventory.cpp \
 	src/Ruleset/RuleInventory.h \
 	src/Ruleset/RuleItem.cpp \
 	src/Ruleset/RuleItem.h \
 	src/Ruleset/RuleManufacture.cpp \
 	src/Ruleset/RuleManufacture.h \
+	src/Ruleset/RuleMusic.cpp \
+	src/Ruleset/RuleMusic.h \
 	src/Ruleset/RuleRegion.cpp \
 	src/Ruleset/RuleRegion.h \
 	src/Ruleset/RuleResearch.cpp \
@@ -513,12 +530,16 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleTerrain.h \
 	src/Ruleset/RuleUfo.cpp \
 	src/Ruleset/RuleUfo.h \
+	src/Ruleset/RuleVideo.cpp \
+	src/Ruleset/RuleVideo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
 	src/Ruleset/StatString.h \
 	src/Ruleset/StatString.cpp \
 	src/Ruleset/StatStringCondition.h \
 	src/Ruleset/StatStringCondition.cpp \
+	src/Ruleset/SoundDefinition.h \
+	src/Ruleset/SoundDefinition.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \
@@ -565,6 +586,9 @@ openxcom_SOURCES = \
 	src/Savegame/SavedBattleGame.h \
 	src/Savegame/SavedGame.cpp \
 	src/Savegame/SavedGame.h \
+	src/Savegame/SaveConverter.cpp \
+	src/Savegame/SaveConverter.h \
+	src/Savegame/SaveConverterXcom1.h \
 	src/Savegame/SerializationHelper.h \
 	src/Savegame/SerializationHelper.cpp \
 	src/Savegame/Soldier.cpp \
@@ -573,8 +597,8 @@ openxcom_SOURCES = \
 	src/Savegame/SoldierDeath.h \
 	src/Savegame/Target.cpp \
 	src/Savegame/Target.h \
-	src/Savegame/TerrorSite.cpp \
-	src/Savegame/TerrorSite.h \
+	src/Savegame/MissionSite.cpp \
+	src/Savegame/MissionSite.h \
 	src/Savegame/Tile.cpp \
 	src/Savegame/Tile.h \
 	src/Savegame/Transfer.cpp \
@@ -605,6 +629,20 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateTextImage.h \
 	src/Ufopaedia/ArticleStateTFTD.cpp \
 	src/Ufopaedia/ArticleStateTFTD.h \
+	src/Ufopaedia/ArticleStateTFTDArmor.cpp \
+	src/Ufopaedia/ArticleStateTFTDArmor.h \
+	src/Ufopaedia/ArticleStateTFTDCraft.cpp \
+	src/Ufopaedia/ArticleStateTFTDCraft.h \
+	src/Ufopaedia/ArticleStateTFTDCraftWeapon.cpp \
+	src/Ufopaedia/ArticleStateTFTDCraftWeapon.h \
+	src/Ufopaedia/ArticleStateTFTDFacility.cpp \
+	src/Ufopaedia/ArticleStateTFTDFacility.h \
+	src/Ufopaedia/ArticleStateTFTDItem.cpp \
+	src/Ufopaedia/ArticleStateTFTDItem.h \
+	src/Ufopaedia/ArticleStateTFTDUso.cpp \
+	src/Ufopaedia/ArticleStateTFTDUso.h \
+	src/Ufopaedia/ArticleStateTFTDVehicle.cpp \
+	src/Ufopaedia/ArticleStateTFTDVehicle.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
 	src/Ufopaedia/ArticleStateVehicle.cpp \

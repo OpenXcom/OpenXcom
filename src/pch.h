@@ -40,6 +40,7 @@
 #endif
 #include <map>
 #include <queue>
+#include <yaml-cpp/yaml.h>
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
@@ -68,8 +69,6 @@
 #undef Insert
 #endif
 
-#include <yaml-cpp/yaml.h>
-
 #include "./fmath.h"
 #include "./version.h"
 
@@ -83,7 +82,7 @@
 #include "./Basescape/TransferConfirmState.h"
 
 #include "./Engine/ShaderMove.h"
-#include "./Engine/Flc.h"
+#include "./Engine/FlcPlayer.h"
 #include "./Engine/Logger.h"
 #include "./Engine/Surface.h"
 #include "./Engine/Exception.h"
@@ -102,6 +101,7 @@
 #include "./Engine/Scalers/common.h"
 #include "./Engine/Scalers/scale2x.h"
 #include "./Engine/Scalers/scale3x.h"
+#include "./Engine/Scalers/xbrz.h"
 #include "./Engine/ShaderRepeat.h"
 #include "./Engine/SoundSet.h"
 #include "./Engine/Action.h"
@@ -218,7 +218,7 @@
 #include "./Geoscape/UfoDetectedState.h"
 #include "./Geoscape/MultipleTargetsState.h"
 #include "./Geoscape/GeoscapeCraftState.h"
-#include "./Geoscape/Polygon.h"
+#include "./Ruleset/Polygon.h"
 #include "./Geoscape/AlienBaseState.h"
 #include "./Geoscape/BaseNameState.h"
 #include "./Geoscape/GeoscapeState.h"
@@ -236,9 +236,9 @@
 #include "./Geoscape/MonthlyReportState.h"
 #include "./Geoscape/GraphsState.h"
 #include "./Geoscape/ResearchCompleteState.h"
-#include "./Geoscape/AlienTerrorState.h"
+#include "./Geoscape/MissionDetectedState.h"
 #include "./Geoscape/NewPossibleResearchState.h"
-#include "./Geoscape/Polyline.h"
+#include "./Ruleset/Polyline.h"
 #include "./Geoscape/ProductionCompleteState.h"
 #include "./Geoscape/SelectDestinationState.h"
 #include "./Geoscape/ConfirmNewBaseState.h"
@@ -276,6 +276,8 @@
 #include "./Ruleset/City.h"
 #include "./Ruleset/AlienDeployment.h"
 #include "./Ruleset/RuleTerrain.h"
+#include "./Ruleset/RuleInterface.h"
+#include "./Ruleset/RuleGlobe.h"
 #include "./Interface/ToggleTextButton.h"
 #include "./Interface/TextButton.h"
 #include "./Interface/TextEdit.h"
@@ -322,7 +324,7 @@
 #include "./Savegame/Ufo.h"
 #include "./Savegame/Node.h"
 #include "./Savegame/Tile.h"
-#include "./Savegame/TerrorSite.h"
+#include "./Savegame/MissionSite.h"
 #include "./Savegame/Waypoint.h"
 #include "./Savegame/Base.h"
 #include "./Savegame/AlienBase.h"

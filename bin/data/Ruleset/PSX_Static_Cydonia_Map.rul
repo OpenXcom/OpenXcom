@@ -1,0 +1,76 @@
+mapScripts:
+  - type: BOSSBATTLE
+    commands:
+    - type: addBlock
+      groups: 2
+      executions: 2
+      rects:
+        - [1, 0, 1, 1]
+        - [3, 2, 1, 1]
+    - type: addBlock
+      blocks: 15
+      rects:
+        - [2, 3, 2, 2]
+    - type: addBlock
+      blocks: 3
+      executions: 2
+      rects:
+        - [0, 1, 2, 2]
+        - [4, 3, 2, 2]
+    - type: addBlock
+      blocks: 2
+      executions: 2
+      rects:
+        - [2, 0, 2, 2]
+        - [4, 0, 2, 2]
+    - type: addBlock
+      blocks: 8
+      executions: 2
+      rects:
+        - [2, 2, 1, 1]
+        - [2, 5, 1, 1]
+    - type: addBlock
+      blocks: 10
+      executions: 2
+      rects:
+        - [0, 3, 1, 1]
+        - [5, 5, 1, 1]
+    - type: addBlock
+      blocks: 13
+      executions: 2
+      rects:
+        - [1, 4, 1, 1]
+        - [4, 5, 1, 1]
+    - type: addBlock
+      blocks: 14
+      executions: 2
+      rects:
+        - [1, 5, 1, 1]
+        - [3, 5, 1, 1]
+    - type: addBlock
+      blocks: 11
+      rects:
+        - [4, 2, 1, 1]
+    - type: addBlock
+      blocks: 6
+      rects:
+        - [0, 5, 1, 1]
+    - type: fillArea
+      blocks: 7
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+        MCDReplacements:
+          - type: westWall
+            set: 2
+            entry: 18
+          - type: northWall
+            set: 2
+            entry: 17
+          - type: corner
+            set: 2
+            entry: 19
+          - type: floor
+            set: 1
+            entry: 63

@@ -21,7 +21,7 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""), _cost(0), _points(0), _getOneFree(), _requires(), _needItem(false), _listOrder(0)
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _points(0), _needItem(false), _listOrder(0)
 {
 }
 
@@ -61,7 +61,7 @@ int RuleResearch::getCost() const
  * Gets the name of this ResearchProject.
  * @return The name of this ResearchProject.
  */
-const std::string & RuleResearch::getName () const
+const std::string & RuleResearch::getName() const
 {
 	return _name;
 }
@@ -70,7 +70,7 @@ const std::string & RuleResearch::getName () const
  * Gets the list of dependencies, i.e. ResearchProjects, that must be discovered before this one.
  * @return The list of ResearchProjects.
  */
-const std::vector<std::string> & RuleResearch::getDependencies () const
+const std::vector<std::string> & RuleResearch::getDependencies() const
 {
 	return _dependencies;
 }
@@ -88,7 +88,7 @@ bool RuleResearch::needItem() const
  * Gets the list of ResearchProjects unlocked by this research.
  * @return The list of ResearchProjects.
  */
-const std::vector<std::string> & RuleResearch::getUnlocked () const
+const std::vector<std::string> & RuleResearch::getUnlocked() const
 {
 	return _unlocks;
 }
@@ -106,7 +106,7 @@ int RuleResearch::getPoints() const
  * Gets the list of ResearchProjects granted at random for free by this research.
  * @return The list of ResearchProjects.
  */
-const std::vector<std::string> & RuleResearch::getGetOneFree () const
+const std::vector<std::string> & RuleResearch::getGetOneFree() const
 {
 	return _getOneFree;
 }
@@ -115,7 +115,7 @@ const std::vector<std::string> & RuleResearch::getGetOneFree () const
  * Gets what article to look up in the ufopedia.
  * @return The article to look up in the ufopaedia
  */
-const std::string RuleResearch::getLookup () const
+const std::string RuleResearch::getLookup() const
 {
 	return _lookup;
 }

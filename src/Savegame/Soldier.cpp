@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(0)
 {
 	if (names != 0)
 	{
@@ -65,13 +65,13 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 		if (!names->empty())
 		{
 			size_t nationality = RNG::generate(0, names->size()-1);
-			_name = names->at(nationality)->genName(&_gender);
+			_name = names->at(nationality)->genName(&_gender, rules->getFemaleFrequency());
 			_look = (SoldierLook)names->at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
 		}
 		else
 		{
 			_name = L"";
-			_gender = (SoldierGender)RNG::generate(0, 1);
+			_gender = (RNG::percent(rules->getFemaleFrequency()) ? GENDER_FEMALE : GENDER_MALE);
 			_look = (SoldierLook)RNG::generate(0,3);
 		}
 	}
@@ -485,26 +485,26 @@ void Soldier::trainPsi()
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
-	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
 	{
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
 	}
 	else
 	{
-		if(_currentStats.psiSkill <= (psiSkillCap / 2)) _improvement = RNG::generate(5, 12);
-		else if(_currentStats.psiSkill < psiSkillCap) _improvement = RNG::generate(1, 3);
+		if (_currentStats.psiSkill <= (psiSkillCap / 2)) _improvement = RNG::generate(5, 12);
+		else if (_currentStats.psiSkill < psiSkillCap) _improvement = RNG::generate(1, 3);
 
 		if (Options::allowPsiStrengthImprovement)
 		{
-			if(_currentStats.psiStrength <= (psiStrengthCap / 2)) _psiStrImprovement = RNG::generate(5, 12);
-			else if(_currentStats.psiStrength < psiStrengthCap) _psiStrImprovement = RNG::generate(1, 3);
+			if (_currentStats.psiStrength <= (psiStrengthCap / 2)) _psiStrImprovement = RNG::generate(5, 12);
+			else if (_currentStats.psiStrength < psiStrengthCap) _psiStrImprovement = RNG::generate(1, 3);
 		}
 	}
 	_currentStats.psiSkill += _improvement;
 	_currentStats.psiStrength += _psiStrImprovement;
-	if(_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
-	if(_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
+	if (_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
+	if (_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
 }
 
 /**

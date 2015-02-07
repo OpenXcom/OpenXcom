@@ -45,7 +45,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	// Create objects
 	_lstMods = new TextList(200, 136, 94, 8);
 	
-	add(_lstMods);
+	add(_lstMods, "optionLists", "modsMenu");
 
 	centerAllSurfaces();
 
@@ -63,8 +63,6 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	// Set up objects
 	_lstMods->setAlign(ALIGN_RIGHT, 1);
 	_lstMods->setColumns(2, leftcol, rightcol);
-	_lstMods->setColor(Palette::blockOffset(8)+10);
-	_lstMods->setArrowColor(Palette::blockOffset(8) + 5);
 	_lstMods->setWordWrap(true);
 	_lstMods->setSelectable(true);
 	_lstMods->setBackground(_window);

@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param visibleMapHeight Current height the view is at.
  */
 Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollMouseTimer(0), _scrollKeyTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()),
-																																 _mapOffset(-250,250,0), _center(), _scrollMouseX(0), _scrollMouseY(0), _scrollKeyX(0), _scrollKeyY(0), _scrollTrigger(false), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
+																																 _mapOffset(-250,250,0), _scrollMouseX(0), _scrollMouseY(0), _scrollKeyX(0), _scrollKeyY(0), _scrollTrigger(false), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
 {
 }
 
@@ -571,20 +571,49 @@ bool Camera::getShowAllLayers() const
  * Checks if map coordinates X,Y,Z are on screen.
  * @param mapPos Coordinates to check.
  * @param unitWalking True to offset coordinates for a unit walking.
+ * @param unitSize size of unit (0 - single, 1 - 2x2, etc, used for walking only
+ * @param boundary True if it's for caching calculation
  * @return True if the map coordinates are on screen.
  */
-bool Camera::isOnScreen(const Position &mapPos, const bool unitWalking) const
+bool Camera::isOnScreen(const Position &mapPos, const bool unitWalking, const int unitSize, const bool boundary) const
 {
 	Position screenPos;
 	convertMapToScreen(mapPos, &screenPos);
-	screenPos.x += _mapOffset.x;
-	screenPos.y += _mapOffset.y;
+	int posx = _spriteWidth/2, posy = _spriteHeight - _spriteWidth/4;
+	int sizex = _spriteWidth/2, sizey = _spriteHeight/2;
+	if (unitSize > 0)
+	{
+		posy -= _spriteWidth /4;
+		sizex = _spriteWidth*unitSize;
+		sizey = _spriteWidth*unitSize/2;
+	}
+	screenPos.x += _mapOffset.x + posx;
+	screenPos.y += _mapOffset.y + posy;
 	if (unitWalking)
 	{
-		return screenPos.x >= -48
-			&& screenPos.x <= _screenWidth + 24
-			&& screenPos.y >= -56
-			&& screenPos.y <= _screenHeight + 12;
+/* pretty hardcoded hack to handle overlapping by icons
+(they are always in the center at the bottom of the screen)
+Free positioned icons would require more complex workaround.
+__________
+|________|
+||      ||
+|| ____ ||
+||_|XX|_||
+|________|
+*/
+		if (boundary) //to make sprite updates even being slightly outside of screen
+		{
+			sizex += _spriteWidth;
+			sizey += _spriteWidth/2;
+		}
+		if ( screenPos.x < 0 - sizex
+			|| screenPos.x >= _screenWidth + sizex
+			|| screenPos.y < 0 - sizey
+			|| screenPos.y >= _screenHeight + sizey ) return false; //totally outside
+		int side = ( _screenWidth - _map->getIconWidth() ) / 2;
+		if ( (screenPos.y < (_screenHeight - _map->getIconHeight()) + sizey) ) return true; //above icons
+		if ( (side > 1) && ( (screenPos.x < side + sizex) || (screenPos.x >= (_screenWidth - side - sizex)) ) ) return true; //at sides (if there are any)
+		return false;
 	}
 	else
 	{
@@ -602,7 +631,7 @@ void Camera::resize()
 {
 	_screenWidth = _map->getWidth();
 	_screenHeight = _map->getHeight();
-	_visibleMapHeight = _map->getHeight() - Map::ICON_HEIGHT;
+	_visibleMapHeight = _map->getHeight() - _map->getIconHeight();
 }
 
 void Camera::stopMouseScrolling()

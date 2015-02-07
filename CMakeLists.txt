@@ -144,5 +144,12 @@ if ( BUILD_PACKAGE )
 )
 endif()
 
+if ( NOT WIN32 )
+  install(FILES "${CMAKE_SOURCE_DIR}/res/linux/openxcom.desktop"     DESTINATION share/applications)
+  install(FILES "${CMAKE_SOURCE_DIR}/res/linux/icons/openxcom_48x48.png"   DESTINATION share/icons/hicolor/48x48/apps RENAME openxcom.png)
+  install(FILES "${CMAKE_SOURCE_DIR}/res/linux/icons/openxcom_128x128.png"   DESTINATION share/icons/hicolor/128x128/apps RENAME openxcom.png)
+  install(FILES "${CMAKE_SOURCE_DIR}/res/linux/icons/openxcom.svg"   DESTINATION share/icons/hicolor/scalable/apps)
+endif ()
+
 add_subdirectory ( docs )
 add_subdirectory ( src )

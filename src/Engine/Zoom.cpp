@@ -19,8 +19,6 @@
 
 #include "Zoom.h"
 
-//#include "Scalers/hq2x.hpp"
-
 #include "Exception.h"
 #include "Surface.h"
 #include "Logger.h"
@@ -37,6 +35,9 @@
 #include "Scalers/common.h"
 #include "Scalers/hqx.h"
 
+// xBRZ
+
+#include "Scalers/xbrz.h"
 
 #if (_MSC_VER >= 1400) || (defined(__MINGW32__) && defined(__SSE2__))
 
@@ -147,6 +148,7 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
  * @param dst The zoomed surface (output).
  * @return 0 for success or -1 for error.
  */
+/*
 static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 {
 	Uint32 dataSrc;
@@ -197,6 +199,7 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
+*/
 #endif
 
 /**
@@ -276,6 +279,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
  * @param dst The zoomed surface (output).
  * @return 0 for success or -1 for error.
  */
+/*
 static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 {
 	Uint32 dataSrc;
@@ -323,6 +327,7 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
+*/
 #endif
 
 /**
@@ -400,7 +405,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 					if (dsty + j >= dst->h) break;
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
-				} while(say[dsty + ++j] == 0); // fill in all relevant rows
+				} while (say[dsty + ++j] == 0); // fill in all relevant rows
 				
 				dataSrc >>= 16;
 				pixelDst++; // forward 4 bytes!
@@ -488,7 +493,7 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 					if (dsty + j >= dst->h) break;
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
-				} while(say[dsty + ++j] == 0); // fill in all relevant rows
+				} while (say[dsty + ++j] == 0); // fill in all relevant rows
 				
 				dataSrc >>= 8;
 				pixelDst++; // forward 4 bytes!
@@ -718,60 +723,64 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	int dgap;
 	static bool proclaimed = false;
 
-	if (Screen::isHQXEnabled())
+	if (Screen::is32bitEnabled())
 	{
-		static bool initDone = false;
-
-		if (!initDone)
+		if (Options::useXBRZFilter)
 		{
-			hqxInit();
-			initDone = true;
+			// check the resolution to see which scale we need
+			for (size_t factor = 2; factor <= 5; factor++)
+			{
+				if (dst->w == src->w * (int)factor && dst->h == src->h * (int)factor)
+				{
+					xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h);
+					return 0;
+				}
+			}
 		}
 
-		// HQX_API void HQX_CALLCONV hq2x_32_rb( uint32_t * src, uint32_t src_rowBytes, uint32_t * dest, uint32_t dest_rowBytes, int width, int height );
-
-		if (dst->w == src->w * 2 && dst->h == src->h * 2)
+		if (Options::useHQXFilter)
 		{
-			hq2x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
-			return 0;
-		}
+			static bool initDone = false;
 
-		if (dst->w == src->w * 3 && dst->h == src->h * 3)
-		{
-			hq3x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
-			return 0;
-		}
+			if (!initDone)
+			{
+				hqxInit();
+				initDone = true;
+			}
 
-		if (dst->w == src->w * 4 && dst->h == src->h * 4)
-		{
-			hq4x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
-			return 0;
-		}
+			// HQX_API void HQX_CALLCONV hq2x_32_rb( uint32_t * src, uint32_t src_rowBytes, uint32_t * dest, uint32_t dest_rowBytes, int width, int height );
 
+			if (dst->w == src->w * 2 && dst->h == src->h * 2)
+			{
+				hq2x_32_rb((uint32_t*)src->pixels, src->pitch, (uint32_t*)dst->pixels, dst->pitch, src->w, src->h);
+				return 0;
+			}
+
+			if (dst->w == src->w * 3 && dst->h == src->h * 3)
+			{
+				hq3x_32_rb((uint32_t*)src->pixels, src->pitch, (uint32_t*)dst->pixels, dst->pitch, src->w, src->h);
+				return 0;
+			}
+
+			if (dst->w == src->w * 4 && dst->h == src->h * 4)
+			{
+				hq4x_32_rb((uint32_t*)src->pixels, src->pitch, (uint32_t*)dst->pixels, dst->pitch, src->w, src->h);
+				return 0;
+			}
+		}
 	}
 
 	if (Options::useScaleFilter)
 	{
 		// check the resolution to see which of scale2x, scale3x, etc. we need
-
-		if (dst->w == src->w * 2 && dst->h == src->h *2 && !scale_precondition(2, src->format->BytesPerPixel, src->w, src->h))
+		for (size_t factor = 2; factor <= 4; factor++)
 		{
-			scale(2, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
-			return 0;
+			if (dst->w == src->w * (int)factor && dst->h == src->h * (int)factor && !scale_precondition(factor, src->format->BytesPerPixel, src->w, src->h))
+			{
+				scale(factor, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
+				return 0;
+			}
 		}
-
-		if (dst->w == src->w * 3 && dst->h == src->h *3 && !scale_precondition(3, src->format->BytesPerPixel, src->w, src->h))
-		{
-			scale(3, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
-			return 0;
-		}
-
-		if (dst->w == src->w * 4 && dst->h == src->h *4 && !scale_precondition(4, src->format->BytesPerPixel, src->w, src->h))
-		{
-			scale(4, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
-			return 0;
-		}
-
 	}
 
 	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	

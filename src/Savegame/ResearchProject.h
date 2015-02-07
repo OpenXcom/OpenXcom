@@ -43,9 +43,9 @@ public:
 	/// set the number of scientist assigned to this ResearchProject
 	void setAssigned (int nb);
 	/// get the number of scientist assigned to this ResearchProject
-	int getAssigned () const;
+	int getAssigned() const;
 	/// get time already spent on this ResearchProject
-	int getSpent () const;
+	int getSpent() const;
 	/// set time already spent on this ResearchProject
 	void setSpent (int spent);
 	/// get time cost of this ResearchProject
@@ -53,13 +53,13 @@ public:
 	/// set time cost of this ResearchProject
 	void setCost(int f);
 	/// get the ResearchProject Ruleset
-	const RuleResearch * getRules () const;
+	const RuleResearch * getRules() const;
 	/// load the ResearchProject from YAML
 	void load(const YAML::Node& node);
 	/// save the ResearchProject to YAML
 	YAML::Node save() const;
 	/// Get a string describing current progress.
-	std::string getResearchProgress () const;
+	std::string getResearchProgress() const;
 };
 }
 #endif

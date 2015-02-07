@@ -37,7 +37,6 @@ class OptionsAdvancedState : public OptionsBaseState
 {
 private:
 	TextList *_lstOptions;
-	size_t _boolQuantity;
 	Uint8 _colorGroup;
 	std::vector<OptionInfo> _settingsGeneral, _settingsGeo, _settingsBattle;
 

@@ -43,9 +43,13 @@ public:
 	/// Loads sound from a chunk of memory.
 	void load(const void *data, unsigned int size);
 	/// Plays the sound.
-	void play(int channel = -1) const;
+	void play(int channel = -1, int angle = 0, int distance = 0) const;
 	/// Stops all sounds.
 	static void stop();
+	/// Plays the sound repeatedly.
+	void loop();
+	/// Stops the looping sound effect.
+	void stopLoop();
 };
 
 }

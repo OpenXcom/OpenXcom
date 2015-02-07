@@ -20,6 +20,7 @@
 #include <cmath>
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
@@ -55,6 +56,7 @@ namespace OpenXcom
  */
 Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _groundOffset(0), _animFrame(0)
 {
+	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 	_grid = new Surface(width, height, x, y);
 	_items = new Surface(width, height, x, y);
 	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
@@ -63,8 +65,8 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base)
 	_stackNumber->setBordered(true);
 
 	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1)-1);
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2);
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color);
 
 	_animTimer = new Timer(125);
 	_animTimer->onTimer((SurfaceHandler)&Inventory::drawPrimers);
@@ -140,10 +142,14 @@ void Inventory::drawGrid()
 	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
 	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	text.setColor(Palette::blockOffset(4)-1);
+
+	RuleInterface *rule = _game->getRuleset()->getInterface("inventory");
+
+	text.setColor(rule->getElement("textSlots")->color);
 	text.setHighContrast(true);
 
-	Uint8 color = Palette::blockOffset(0)+8;
+	Uint8 color = rule->getElement("grid")->color;
+
 	for (std::map<std::string, RuleInventory*>::iterator i = _game->getRuleset()->getInventories()->begin(); i != _game->getRuleset()->getInventories()->end(); ++i)
 	{
 		// Draw grid
@@ -214,6 +220,7 @@ void Inventory::drawItems()
 {
 	_items->clear();
 	_grenadeIndicators.clear();
+	Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
 	if (_selUnit != 0)
 	{
 		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
@@ -272,7 +279,7 @@ void Inventory::drawItems()
 				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-6);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
-				_stackNumber->setColor(Palette::blockOffset(4)+2);
+				_stackNumber->setColor(color);
 				_stackNumber->blit(stackLayer);
 			}
 		}
@@ -581,7 +588,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							{
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
-								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+								_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 								arrangeGround(false);
 							}
 							else
@@ -635,7 +642,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								_stackLevel[x][y] += 1;
 							}
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -649,7 +656,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -685,7 +692,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_RELOAD)->play();
 							if (item->getSlot()->getType() == INV_GROUND)
 							{
 								arrangeGround(false);
@@ -716,7 +723,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -757,6 +764,7 @@ void Inventory::mouseClick(Action *action, State *state)
 									{
 										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 										item->setFuseTimer(0);
+										arrangeGround(false);
 									}
 									else _game->pushState(new PrimeGrenadeState(0, true, item));
 								}
@@ -764,6 +772,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1);  // Unprime the grenade
+									arrangeGround(false);
 								}
 							}
 						}
@@ -952,7 +961,7 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 				{
 					placed = true;
 					moveItem(item, newSlot, x2, y2);
-					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+					_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
 					drawItems();
 				}
 				else

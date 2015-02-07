@@ -24,8 +24,7 @@
 
 namespace OpenXcom
 {
-
-enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_RESPAWN };
+enum SpecialAbility { SPECAB_NONE, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_BURN_AND_EXPLODE };
 /**
  * This struct holds some plain unit attribute data together.
  */
@@ -61,6 +60,9 @@ private:
 	SpecialAbility _specab;
 	std::string _spawnUnit;
 	bool _livingWeapon;
+	std::string _meleeWeapon;
+	std::vector<std::string> _builtInWeapons;
+	bool _female;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type);
@@ -100,9 +102,16 @@ public:
 	std::string getSpawnUnit() const;
 	/// Gets the unit's war cry.
 	int getAggroSound() const;
+	/// Gets how much energy this unit recovers per turn.
+	const int getEnergyRecovery() const;
 	/// Checks if this unit has a built in weapon.
-	bool isLivingWeapon() const;
-	int getEnergyRecovery() const;
+	const bool isLivingWeapon() const;
+	/// Gets the name of any melee weapon that may be built in to this unit.
+	const std::string getMeleeWeapon() const;
+	/// Gets a vector of integrated items this unit has available.
+	const std::vector<std::string> &getBuiltInWeapons() const;
+	/// Is this unit a female?
+	const bool isFemale() const;
 };
 
 }

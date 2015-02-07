@@ -77,6 +77,8 @@ public:
 	BattleUnit *getPreviousOwner() const;
 	/// Sets the owner.
 	void setOwner(BattleUnit *owner);
+	/// Sets the item's previous owner.
+	void setPreviousOwner(BattleUnit *owner);
 	/// Removes the item from previous owner and moves to new owner.
 	void moveToOwner(BattleUnit *owner);
 	/// Gets the item's inventory slot.
@@ -112,19 +114,19 @@ public:
 	/// Set medikit Heal quantity
 	void setHealQuantity (int heal);
 	/// Get medikit heal quantity
-	int getHealQuantity () const;
+	int getHealQuantity() const;
 	/// Set medikit pain killers quantity
 	void setPainKillerQuantity (int pk);
 	/// Get medikit pain killers quantity
-	int getPainKillerQuantity () const;
+	int getPainKillerQuantity() const;
 	/// Set medikit stimulant quantity
 	void setStimulantQuantity (int stimulant);
 	/// Get medikit stimulant quantity
-	int getStimulantQuantity () const;
+	int getStimulantQuantity() const;
 	/// Set xcom property flag
 	void setXCOMProperty (bool flag);
 	/// Get xcom property flag
-	bool getXCOMProperty () const;
+	bool getXCOMProperty() const;
 	/// get the flag representing "not dropped on player turn"
 	bool getTurnFlag() const;
 	/// set the flag representing "not dropped on player turn"

@@ -27,7 +27,8 @@
 
 namespace OpenXcom
 {
-
+	
+enum ForcedTorso{ TORSO_USE_GENDER, TORSO_ALWAYS_MALE, TORSO_ALWAYS_FEMALE };
 /**
  * Represents a specific type of armor.
  * Not only soldier armor, but also alien armor - some alien races wear Soldier Armor, Leader Armor or Commander Armor
@@ -38,7 +39,7 @@ class Armor
 public:	
 	static const int DAMAGE_TYPES = 10;
 private:
-	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem;
+	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem, _specWeapon;
 	std::vector<std::string> _corpseBattle;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
@@ -49,6 +50,7 @@ private:
 	int _deathFrames;
 	bool _constantAnimation;
 	bool _canHoldWeapon;
+	ForcedTorso _forcedTorso;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -76,9 +78,11 @@ public:
 	const std::vector<std::string> &getCorpseBattlescape() const;
 	/// Gets the stores item.
 	std::string getStoreItem() const;
+	/// Gets the special weapon type.
+	std::string getSpecialWeapon() const;
 	/// Gets the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
-	/// Gets whether the armor can fly.
+	/// DO NOT USE THIS FUNCTION OUTSIDE THE BATTLEUNIT CONSTRUCTOR OR I WILL HUNT YOU DOWN.
 	MovementType getMovementType() const;
 	/// Gets whether this is a normal or big unit.
 	int getSize() const;
@@ -96,6 +100,8 @@ public:
 	bool getConstantAnimation();
 	/// Gets if armor can hold weapon.
 	bool getCanHoldWeapon();
+	/// Checks if this armor ignores gender (power suit/flying suit).
+	ForcedTorso getForcedTorso();
 };
 
 }

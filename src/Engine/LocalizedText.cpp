@@ -27,7 +27,7 @@ namespace OpenXcom
  * @param val The value to place in the next placeholder's position.
  * @return A translated string with all occurences of the marker replaced by @a val.
  */
-LocalizedText LocalizedText::arg(std::wstring const &val) const
+LocalizedText LocalizedText::arg(const std::wstring &val) const
 {
 	std::wostringstream os;
 	os << '{' << _nextArg << '}';
@@ -48,7 +48,7 @@ LocalizedText LocalizedText::arg(std::wstring const &val) const
  * @param val The value to place in the next placeholder's position.
  * @return The translated string with all occurences of the marker replaced by @a val.
  */
-LocalizedText &LocalizedText::arg(std::wstring const &val)
+LocalizedText &LocalizedText::arg(const std::wstring &val)
 {
 	std::wostringstream os;
 	os << '{' << _nextArg << '}';

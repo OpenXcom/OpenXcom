@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(const std::string &id, SDL_Color *palette, Uint8 color, std::string bg, int bgColor)
+ErrorMessageState::ErrorMessageState(const std::string &id, SDL_Color *palette, Uint8 color, const std::string &bg, int bgColor)
 {
 	create(id, L"", palette, color, bg, bgColor);
 }
@@ -52,7 +52,7 @@ ErrorMessageState::ErrorMessageState(const std::string &id, SDL_Color *palette, 
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(const std::wstring &msg, SDL_Color *palette, Uint8 color, std::string bg, int bgColor)
+ErrorMessageState::ErrorMessageState(const std::wstring &msg, SDL_Color *palette, Uint8 color, const std::string &bg, int bgColor)
 {
 	create("", msg, palette, color, bg, bgColor);
 }
@@ -74,7 +74,7 @@ ErrorMessageState::~ErrorMessageState()
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-void ErrorMessageState::create(const std::string &str, const std::wstring &wstr, SDL_Color *palette, Uint8 color, std::string bg, int bgColor)
+void ErrorMessageState::create(const std::string &str, const std::wstring &wstr, SDL_Color *palette, Uint8 color, const std::string &bg, int bgColor)
 {
 	_screen = false;
 

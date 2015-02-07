@@ -22,6 +22,7 @@
 #include "MovingTarget.h"
 #include <vector>
 #include <string>
+#include "CraftId.h"
 
 namespace OpenXcom
 {
@@ -64,6 +65,8 @@ public:
 	YAML::Node save() const;
 	/// Saves the craft's ID to YAML.
 	YAML::Node saveId() const;
+	/// Loads a craft ID from YAML.
+	static CraftId loadId(const YAML::Node &node);
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.
@@ -74,6 +77,8 @@ public:
 	std::wstring getName(Language *lang) const;
 	/// Sets the craft's name.
 	void setName(const std::wstring &newName);
+	/// Gets the craft's marker.
+	int getMarker() const;
 	/// Gets the craft's base.
 	Base *getBase() const;
 	/// Sets the craft's base.
@@ -164,6 +169,8 @@ public:
 	void setInterceptionOrder(const int order);
 	/// Gets interception number.
 	int getInterceptionOrder() const;
+	/// Gets the craft's unique id.
+	CraftId getUniqueId() const;
 };
 
 }

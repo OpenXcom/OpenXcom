@@ -40,10 +40,10 @@ class RuleCraft
 private:
 	std::string _type;
 	std::vector<std::string> _requires;
-	int _sprite;
+	int _sprite, _marker;
 	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
-	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
+	int _repairRate, _refuelRate, _radarRange, _sightRange, _transferTime, _score;
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
 	int _listOrder, _maxItems;
@@ -58,9 +58,11 @@ public:
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.
-	const std::vector<std::string> &getRequirements () const;
+	const std::vector<std::string> &getRequirements() const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
+	/// Gets the craft's globe marker.
+	int getMarker() const;
 	/// Gets the craft's maximum fuel.
 	int getMaxFuel() const;
 	/// Gets the craft's maximum damage.
@@ -89,6 +91,8 @@ public:
 	int getRefuelRate() const;
 	/// Gets the craft's radar range.
 	int getRadarRange() const;
+	/// Gets the craft's sight range.
+	int getSightRange() const;
 	/// Gets the craft's transfer time.
 	int getTransferTime() const;
 	/// Gets the craft's score.
@@ -101,7 +105,8 @@ public:
 	int getListOrder() const;
 	/// Gets the deployment priority for the craft.
 	std::vector<std::vector<int> > &getDeployment();
-	const int getMaxItems() const;
+	/// Gets the item limit for this craft.
+	int getMaxItems() const;
 };
 
 }

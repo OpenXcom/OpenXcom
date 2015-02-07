@@ -34,7 +34,7 @@ MapData *MapDataSet::_scorchedTile = 0;
 /**
  * MapDataSet construction.
  */
-MapDataSet::MapDataSet(const std::string &name) : _name(name), _objects(), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name) : _name(name), _surfaceSet(0), _loaded(false)
 {
 }
 
@@ -192,6 +192,7 @@ void MapDataSet::loadData()
 		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
+		to->setExplosiveType((int)mcd.HE_Type);
 		to->setExplosive((int)mcd.HE_Strength);
 		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
 		to->setMiniMapIndex(mcd.ScanG);
@@ -220,19 +221,6 @@ void MapDataSet::loadData()
 	}
 
 	mapFile.close();
-
-	// process the mapdataset to put block values on floortiles (as we don't have em in UFO)
-	for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
-	{
-		if ((*i)->getObjectType() == MapData::O_FLOOR && (*i)->getBlock(DT_HE) == 0)
-		{
-			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,(*i)->getArmor());
-			if ((*i)->getDieMCD())
-			{
-				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,(*i)->getArmor());
-			}
-		}
-	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	std::ostringstream s1,s2;

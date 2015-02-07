@@ -43,11 +43,10 @@ class RuleTerrain
 private:
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<MapBlock*> _mapBlocks;
-	std::string _name;
-	int _largeBlockLimit;
-	std::vector<int> _textures, _roadTypeOdds;
+	std::string _name, _script;
+	std::vector<int> _textures;
 	std::vector<std::string> _civilianTypes;
-	int _hemisphere, _minDepth, _maxDepth;
+	int _hemisphere, _minDepth, _maxDepth, _ambience;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -60,22 +59,23 @@ public:
 	/// Gets the terrain's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
-	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type, bool force = false);
+	MapBlock *getRandomMapBlock(int maxSizeX, int maxSizeY, int group, bool force = true);
 	/// Gets a mapblock given its name.
 	MapBlock *getMapBlock(const std::string &name);
 	/// Gets the mapdata object.
 	MapData *getMapData(unsigned int *id, int *mapDataSetID) const;
-	/// Gets the maximum amount of large blocks in this terrain.
-	int getLargeBlockLimit() const;
-	void resetMapBlocks();
 	std::vector<int> *getTextures();
 	int getHemisphere() const;
 	/// Gets teh civilian types to use.
 	std::vector<std::string> getCivilianTypes() const;
-	/// Gets road type odds.
-	std::vector<int> getRoadTypeOdds() const;
+	/// get the minimum depth.
 	const int getMinDepth() const;
+	/// get the maximum depth.
 	const int getMaxDepth() const;
+	/// get the ambient sound effect.
+	const int getAmbience() const;
+	/// Gets The generation script name.
+	const std::string getScript();
 };
 
 }

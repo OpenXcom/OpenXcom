@@ -23,6 +23,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Action.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -33,6 +34,8 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -55,47 +58,41 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 4);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftArmor")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtName);
-	add(_txtCraft);
-	add(_txtArmor);
-	add(_lstSoldiers);
+	add(_window, "window", "craftArmor");
+	add(_btnOk, "button", "craftArmor");
+	add(_txtTitle, "text", "craftArmor");
+	add(_txtName, "text", "craftArmor");
+	add(_txtCraft, "text", "craftArmor");
+	add(_txtArmor, "text", "craftArmor");
+	add(_lstSoldiers, "list", "craftArmor");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftArmorState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_ARMOR"));
 
-	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_txtArmor->setColor(Palette::blockOffset(13)+10);
 	_txtArmor->setText(tr("STR_ARMOR"));
 
-	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 74, 92);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler)&CraftArmorState::lstSoldiersClick);
+	_lstSoldiers->onMousePress((ActionHandler)&CraftArmorState::lstSoldiersClick);
 
+	Uint8 otherCraftColor = _game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color;
 	int row = 0;
 	Craft *c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
@@ -105,15 +102,15 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 		Uint8 color;
 		if ((*i)->getCraft() == c)
 		{
-			color = Palette::blockOffset(13);
+			color = _lstSoldiers->getSecondaryColor();
 		}
 		else if ((*i)->getCraft() != 0)
 		{
-			color = Palette::blockOffset(15)+6;
+			color = otherCraftColor;
 		}
 		else
 		{
-			color = Palette::blockOffset(13)+10;
+			color = _lstSoldiers->getColor();
 		}
 		_lstSoldiers->setRowColor(row, color);
 		row++;
@@ -155,11 +152,44 @@ void CraftArmorState::btnOkClick(Action *)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstSoldiersClick(Action *)
-{
+void CraftArmorState::lstSoldiersClick(Action *action)
+{	
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
-		_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
+	{
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_game->pushState(new SoldierArmorState(_base, _lstSoldiers->getSelectedRow()));
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			SavedGame *save;
+			save = _game->getSavedGame();
+			Armor *a = _game->getRuleset()->getArmor(save->getLastSelectedArmor());
+			if (save->getMonthsPassed() != -1)
+			{
+				if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
+				{
+					if (s->getArmor()->getStoreItem() != "STR_NONE")
+					{
+						_base->getItems()->addItem(s->getArmor()->getStoreItem());
+					}
+					if (a->getStoreItem() != "STR_NONE")
+					{
+						_base->getItems()->removeItem(a->getStoreItem());
+					}
+					
+					s->setArmor(a);
+					_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
+				}
+			}
+			else
+			{
+				s->setArmor(a);
+				_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
+			}
+		}
+	}
 }
 
 }

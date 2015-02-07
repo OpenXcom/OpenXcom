@@ -1,0 +1,4 @@
+cutscenes:
+  - type: intro
+    videos:
+      - UFOINTRO/UFOINT.FLI

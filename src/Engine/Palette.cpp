@@ -49,20 +49,20 @@ Palette::~Palette()
  */
 void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
-	if(_colors != 0)
+	if (_colors != 0)
 		throw Exception("loadDat can be run only once");
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
 	memset(_colors, 0, sizeof(SDL_Color) * _count);
 
-	// Load file and put colors in pallete
+	// Load file and put colors in palette
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!palFile)
 	{
 		throw Exception(filename + " not found");
 	}
 
-	// Move pointer to proper pallete
+	// Move pointer to proper palette
 	palFile.seekg(offset, std::ios::beg);
 
 	Uint8 value[3];
@@ -137,7 +137,7 @@ void Palette::savePal(const std::string &file) const
 
 void Palette::setColors(SDL_Color* pal, int ncolors)
 {
-	if(_colors != 0)
+	if (_colors != 0)
 		throw Exception("setColors can be run only once");
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
@@ -145,11 +145,23 @@ void Palette::setColors(SDL_Color* pal, int ncolors)
 
 	for (int i = 0; i < _count; ++i)
 	{
-		// Correct X-Com colors to RGB colors
+		// TFTD's LBM colors are good the way they are - no need for adjustment here, except...
 		_colors[i].r = pal[i].r;
 		_colors[i].g = pal[i].g;
 		_colors[i].b = pal[i].b;
 		_colors[i].unused = 255;
+		if (i > 15 && _colors[i].r == _colors[0].r &&
+			_colors[i].g == _colors[0].g &&
+			_colors[i].b == _colors[0].b)
+		{
+			// SDL "optimizes" surfaces by using RGB colour matching to reassign pixels to an "earlier" matching colour in the palette,
+			// meaning any pixels in a surface that are meant to be black will be reassigned as colour 0, rendering them transparent.
+			// avoid this eventuality by altering the "later" colours just enough to disambiguate them without causing them to look significantly different.
+			// SDL 2.0 has some functionality that should render this hack unnecessary.
+			_colors[i].r++;
+			_colors[i].g++;
+			_colors[i].b++;
+		}
 	}
 	_colors[0].unused = 0;
 	

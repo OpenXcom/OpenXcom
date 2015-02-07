@@ -245,12 +245,6 @@
     <ClCompile Include="Geoscape\MultipleTargetsState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\Polygon.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\Polyline.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\SelectDestinationState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -590,12 +584,6 @@
     <ClCompile Include="Basescape\ManufactureState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\TerrorSite.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\AlienTerrorState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -685,9 +673,6 @@
       <Filter>Battlescape</Filter>
     </ClCompile>
     <ClCompile Include="Engine\FastLineClip.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Flc.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
@@ -855,6 +840,75 @@
     </ClCompile>
     <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp">
       <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleInterface.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\BattlescapeButton.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleGlobe.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Polygon.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Polyline.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\SoundDefinition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\xbrz.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\Particle.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\MapScript.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDFacility.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraft.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDUso.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDArmor.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDItem.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraftWeapon.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Ufopaedia\ArticleStateTFTDVehicle.cpp">
+      <Filter>Ufopaedia</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\SaveConverter.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ListLoadOriginalState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FlcPlayer.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleVideo.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleMusic.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\MissionSite.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\MissionDetectedState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1106,12 +1160,6 @@
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\MultipleTargetsState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\Polygon.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\Polyline.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\SelectDestinationState.h">
@@ -1448,12 +1496,6 @@
     <ClInclude Include="Basescape\NewManufactureListState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\TerrorSite.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\AlienTerrorState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\ResearchCompleteState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -1546,9 +1588,6 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Engine\FastLineClip.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Flc.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
@@ -1733,6 +1772,81 @@
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
       <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleInterface.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\BattlescapeButton.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleGlobe.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Polygon.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Polyline.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\SoundDefinition.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\xbrz.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\config.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\Particle.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\MapScript.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDFacility.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraft.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDUso.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDArmor.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDItem.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraftWeapon.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Ufopaedia\ArticleStateTFTDVehicle.h">
+      <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SaveConverter.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ListLoadOriginalState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SaveConverterXcom1.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FlcPlayer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleVideo.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleMusic.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\MissionSite.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\MissionDetectedState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

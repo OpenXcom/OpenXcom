@@ -214,11 +214,17 @@ public:
 	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
 	/// Invalidate the surface: force it to be redrawn
-	void invalidate();
+	void invalidate(bool valid = true);
 	/// Gets the tooltip of the surface.
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.
 	void setTooltip(const std::string &tooltip);
+	/// Sets the color of the surface.
+	virtual void setColor(Uint8 color) { /* empty by design */ };
+	/// Sets the secondary color of the surface.
+	virtual void setSecondaryColor(Uint8 color) { /* empty by design */ };
+	/// Sets the border colour of the surface.
+	virtual void setBorderColor(Uint8 color) { /* empty by design */ };
 
 };
 
