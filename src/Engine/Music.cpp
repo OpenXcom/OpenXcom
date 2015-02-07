@@ -145,4 +145,14 @@ void Music::resume()
 #endif
 }
 
+bool Music::isPlaying()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		return Mix_Playing(-1);
+	}
+#endif
+	return false;
+}
 }

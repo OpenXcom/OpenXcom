@@ -29,6 +29,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "SerializationHelper.h"
+#include "../Battlescape/Particle.h"
 
 namespace OpenXcom
 {
@@ -48,7 +49,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -74,6 +75,11 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), 
 Tile::~Tile()
 {
 	_inventory.clear();
+	for (std::list<Particle*>::iterator i = _particles.begin(); i != _particles.end(); ++i)
+	{
+		delete *i;
+	}
+	_particles.clear();
 }
 
 /**
@@ -90,9 +96,12 @@ void Tile::load(const YAML::Node &node)
 	}
 	_fire = node["fire"].as<int>(_fire);
 	_smoke = node["smoke"].as<int>(_smoke);
-	for (int i = 0; i < 3; i++)
+	if (node["discovered"])
 	{
-		_discovered[i] = node["discovered"][i].as<bool>();
+		for (int i = 0; i < 3; i++)
+		{
+			_discovered[i] = node["discovered"][i].as<bool>();
+		}
 	}
 	if (node["openDoorWest"])
 	{
@@ -101,6 +110,10 @@ void Tile::load(const YAML::Node &node)
 	if (node["openDoorNorth"])
 	{
 		_currentFrame[2] = 7;
+	}
+	if (_fire || _smoke)
+	{
+		_animationOffset = std::rand() % 4;
 	}
 }
 
@@ -129,6 +142,10 @@ void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 	_discovered[2] = (boolFields & 4) ? true : false;
 	_currentFrame[1] = (boolFields & 8) ? 7 : 0;
 	_currentFrame[2] = (boolFields & 0x10) ? 7 : 0;
+	if (_fire || _smoke)
+	{
+		_animationOffset = std::rand() % 4;
+	}
 }
 
 
@@ -239,7 +256,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
 	{
 		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
-		if (_objects[part]->getBigWall() >= 4)
+		if (part == MapData::O_OBJECT && _objects[part]->getBigWall() >= 4)
 			return 0;
 		return _objects[part]->getTUCost(movementType);
 	}
@@ -276,7 +293,7 @@ bool Tile::isBigWall() const
 
 /**
  * If an object stand on this tile, this returns how high the unit is it standing.
- * @return the level in pixels
+ * @return the level in pixels (so negative values are higher)
  */
 int Tile::getTerrainLevel() const
 {
@@ -284,8 +301,9 @@ int Tile::getTerrainLevel() const
 
 	if (_objects[MapData::O_FLOOR])
 		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
+	// whichever's higher, but not the sum.
 	if (_objects[MapData::O_OBJECT])
-		level += _objects[MapData::O_OBJECT]->getTerrainLevel();
+		level = std::min(_objects[MapData::O_OBJECT]->getTerrainLevel(), level);
 
 	return level;
 }
@@ -297,11 +315,11 @@ int Tile::getTerrainLevel() const
  */
 int Tile::getFootstepSound(Tile *tileBelow) const
 {
-	int sound = 0;
+	int sound = -1;
 
 	if (_objects[MapData::O_FLOOR])
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
-	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() == 0)
+	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() <= 1 && _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
 		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
@@ -323,7 +341,7 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 
 	if (_objects[part]->isDoor())
 	{
-		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
+		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 			return 4;
 		if (_unit && _unit != unit && _unit->getPosition() != getPosition())
 			return -1;
@@ -334,7 +352,7 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 	}
 	if (_objects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
 	{
-		if (unit &&	unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
+		if (unit &&	unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 			return 4;
 		_currentFrame[part] = 1; // start opening door
 		return 1;
@@ -460,7 +478,7 @@ bool Tile::destroy(int part)
 		}
 		if (originalPart->getExplosive())
 		{
-			setExplosive(originalPart->getExplosive());
+			setExplosive(originalPart->getExplosive(), originalPart->getExplosiveType());
 		}
 	}
 	/* check if the floor on the lowest level is gone */
@@ -491,13 +509,15 @@ bool Tile::damage(int part, int power)
  * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
  * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that passes it.
  * @param power Power of the damage.
+ * @param damageType the damage type of the explosion (not the same as item damage types)
  * @param force Force damage.
  */
-void Tile::setExplosive(int power, bool force)
+void Tile::setExplosive(int power, int damageType, bool force)
 {
 	if (force || _explosive < power)
 	{
 		_explosive = power;
+		_explosiveType = damageType;
 	}
 }
 
@@ -508,6 +528,15 @@ void Tile::setExplosive(int power, bool force)
 int Tile::getExplosive() const
 {
 	return _explosive;
+}
+
+/**
+ * Get explosive on this tile.
+ * @return explosive
+ */
+int Tile::getExplosiveType() const
+{
+	return _explosiveType;
 }
 
 /*
@@ -611,6 +640,18 @@ void Tile::animate()
 				newframe = 0;
 			}
 			_currentFrame[i] = newframe;
+		}
+	}
+	for (std::list<Particle*>::iterator i = _particles.begin(); i != _particles.end();)
+	{
+		if (!(*i)->animate())
+		{
+			delete *i;
+			i = _particles.erase(i);
+		}
+		else
+		{
+			++i;
 		}
 	}
 }
@@ -925,6 +966,24 @@ void Tile::setDangerous()
 bool Tile::getDangerous()
 {
 	return _danger;
+}
+
+/**
+ * adds a particle to this tile's internal storage buffer.
+ * @param particle the particle to add.
+ */
+void Tile::addParticle(Particle *particle)
+{
+	_particles.push_back(particle);
+}
+
+/**
+ * gets a pointer to this tile's particle array.
+ * @return a pointer to the internal array of particles.
+ */
+std::list<Particle *> *Tile::getParticleCloud()
+{
+	return &_particles;
 }
 
 }

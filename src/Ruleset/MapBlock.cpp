@@ -18,6 +18,8 @@
  */
 #include "MapBlock.h"
 #include "../Battlescape/Position.h"
+#include <sstream>
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -25,8 +27,9 @@ namespace OpenXcom
 /**
  * MapBlock construction.
  */
-MapBlock::MapBlock(const std::string &name, int size_x, int size_y, MapBlockType type):_name(name), _size_x(size_x), _size_y(size_y), _size_z(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
+MapBlock::MapBlock(const std::string &name):_name(name), _size_x(10), _size_y(10), _size_z(4)
 {
+	_groups.push_back(0);
 }
 
 /**
@@ -46,12 +49,36 @@ void MapBlock::load(const YAML::Node &node)
 	_size_x = node["width"].as<int>(_size_x);
 	_size_y = node["length"].as<int>(_size_y);
 	_size_z = node["height"].as<int>(_size_z);
-	_type = (MapBlockType)node["type"].as<int>(_type);
-	if (_subType == MT_UNDEFINED)
-		_subType = (MapBlockType)node["type"].as<int>(_type);
-	_subType = (MapBlockType)node["subType"].as<int>(_subType);
-	_frequency = node["frequency"].as<int>(_frequency);
-	_maxCount = node["maxCount"].as<int>(_maxCount);
+	if ((_size_x % 10) != 0 || (_size_y % 10) != 0)
+	{
+		std::stringstream ss;
+		ss << "Error: MapBlock " << _name << ": Size must be divisible by ten";
+		throw Exception(ss.str());
+	}
+	if (const YAML::Node &map = node["groups"])
+	{
+		_groups.clear();
+		if (map.Type() == YAML::NodeType::Sequence)
+		{
+			_groups = map.as<std::vector<int> >(_groups);
+		}
+		else
+		{
+			_groups.push_back(map.as<int>(0));
+		}
+	}
+	if (const YAML::Node &map = node["revealedFloors"])
+	{
+		_revealedFloors.clear();
+		if (map.Type() == YAML::NodeType::Sequence)
+		{
+			_revealedFloors = map.as<std::vector<int> >(_revealedFloors);
+		}
+		else
+		{
+			_revealedFloors.push_back(map.as<int>(0));
+		}
+	}
 	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
 }
 
@@ -104,58 +131,23 @@ int MapBlock::getSizeZ() const
  * Gets the type of mapblock.
  * @return The mapblock's type.
  */
-MapBlockType MapBlock::getType() const
+bool MapBlock::isInGroup(int group)
 {
-	return _type;
+	return std::find(_groups.begin(), _groups.end(), group) != _groups.end();
 }
 
 /**
- * Gets the secondary type of the mapblock, if the primary type is occupied.
- * @return The mapblock's secondary type.
+ * Gets if this floor should be revealed or not.
  */
-MapBlockType MapBlock::getSubType() const
+bool MapBlock::isFloorRevealed(int floor)
 {
-	return _subType;
+	return std::find(_revealedFloors.begin(), _revealedFloors.end(), floor) != _revealedFloors.end();
 }
 
 /**
- * Gets either the remaining uses of the mapblock OR THE FREQUENCY!
- * Remaining limits the number of times a mapblock occurs.
- * Frequency increases the odds of a mapblock occuring.
- * @return int
+ * Gets the items and their positioning for any items associated with this block.
+ * @return the items and their positions.
  */
-int MapBlock::getRemainingUses()
-{
-	if (_maxCount == -1)
-	{
-		return _frequency;
-	}
-	return _maxCount - _timesUsed;
-}
-
-/**
- * Decreases the remaining uses of a mapblock for this session.
- */
-void MapBlock::markUsed()
-{
-	if (_maxCount == -1)
-	{
-		return;
-	}
-	_timesUsed++;
-	if (_timesUsed >= _maxCount)
-	{
-		_timesUsed = _maxCount;
-	}
-}
-
-/**
- * Resets the remaining uses of a mapblock for this session.
- */
-void MapBlock::reset()
-{
-	_timesUsed = 0;
-}
 std::map<std::string, std::vector<Position> > *MapBlock::getItems()
 {
 	return &_items;

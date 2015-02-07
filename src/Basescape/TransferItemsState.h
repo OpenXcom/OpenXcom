@@ -57,6 +57,7 @@ private:
 	double _iQty;
 	int _hasSci, _hasEng;
 	double _distance;
+	Uint8 _ammoColor;
 	Timer *_timerInc, *_timerDec;
 	/// Gets selected cost.
 	int getCost() const;

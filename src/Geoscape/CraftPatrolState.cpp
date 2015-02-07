@@ -51,31 +51,27 @@ CraftPatrolState::CraftPatrolState(Craft *craft, Globe *globe) : _craft(craft), 
 	_txtPatrolling = new Text(224, 17, 16, 120);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 4);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnRedirect);
-	add(_txtDestination);
-	add(_txtPatrolling);
+	add(_window, "window", "geoCraftScreens");
+	add(_btnOk, "button", "geoCraftScreens");
+	add(_btnRedirect, "button", "geoCraftScreens");
+	add(_txtDestination, "text1", "geoCraftScreens");
+	add(_txtPatrolling, "text1", "geoCraftScreens");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftPatrolState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftPatrolState::btnOkClick, Options::keyCancel);
 
-	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)&CraftPatrolState::btnRedirectClick);
 	_btnRedirect->onKeyboardPress((ActionHandler)&CraftPatrolState::btnRedirectClick, Options::keyOk);
 
-	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
 	_txtDestination->setAlign(ALIGN_CENTER);
 	_txtDestination->setWordWrap(true);
@@ -83,7 +79,6 @@ CraftPatrolState::CraftPatrolState(Craft *craft, Globe *globe) : _craft(craft), 
 							 .arg(_craft->getName(_game->getLanguage()))
 							 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
 	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));

@@ -16,41 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ALIENTERRORSTATE_H
-#define OPENXCOM_ALIENTERRORSTATE_H
+#ifndef OPENXCOM_ListLoadOriginalState_H
+#define OPENXCOM_ListLoadOriginalState_H
 
 #include "../Engine/State.h"
+#include <vector>
+#include "../Savegame/SaveConverter.h"
 
 namespace OpenXcom
 {
 
-class TerrorSite;
 class TextButton;
 class Window;
 class Text;
-class GeoscapeState;
 
 /**
- * Displays info on a terror site.
+ * Base class for saved game screens which
+ * provides the common layout and listing.
  */
-class AlienTerrorState : public State
+class ListLoadOriginalState : public State
 {
 private:
-	TerrorSite *_terror;
-	GeoscapeState *_state;
-
-	TextButton *_btnIntercept, *_btnCentre, *_btnCancel;
+	TextButton *_btnNew, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtCity;
+	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
+	TextButton *_btnSlot[SaveConverter::NUM_SAVES];
+	Text *_txtSlotName[SaveConverter::NUM_SAVES];
+	Text *_txtSlotTime[SaveConverter::NUM_SAVES];
+	Text *_txtSlotDate[SaveConverter::NUM_SAVES];
+	SaveOriginal _saves[SaveConverter::NUM_SAVES];
 public:
-	/// Creates the Ufo Detected state.
-	AlienTerrorState(TerrorSite *terror, const std::string &city, GeoscapeState *state);
-	/// Cleans up the Ufo Detected state.
-	~AlienTerrorState();
-	/// Handler for clicking the Intercept button.
-	void btnInterceptClick(Action *action);
-	/// Handler for clicking the Centre on UFO button.
-	void btnCentreClick(Action *action);
+	/// Creates the Saved Game state.
+	ListLoadOriginalState();
+	/// Cleans up the Saved Game state.
+	~ListLoadOriginalState();
+	/// Handler for clicking a Save Slot button.
+	void btnSlotClick(Action *action);
+	/// Handler for clicking the OpenXcom button.
+	void btnNewClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };

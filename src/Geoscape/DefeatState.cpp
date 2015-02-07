@@ -59,7 +59,7 @@ DefeatState::DefeatState() : _screen(-1)
 		setPalette(screen->getPalette());
 
 		add(_bg[i]);
-		add(_text[i]);
+		add(_text[i], "defeatText", "gameOver");
 
 		screen->blit(_bg[i]);
 		_bg[i]->setVisible(false);
@@ -68,7 +68,6 @@ DefeatState::DefeatState() : _screen(-1)
 		std::ostringstream ss;
 		ss << "STR_GAME_OVER_" << i + 1;
 		_text[i]->setText(tr(ss.str()));
-		_text[i]->setColor(Palette::blockOffset(15)+9);
 		_text[i]->setWordWrap(true);
 		_text[i]->setVisible(false);
 	}

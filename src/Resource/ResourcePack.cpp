@@ -36,6 +36,8 @@ int ResourcePack::SLIDING_DOOR_CLOSE = 21;
 int ResourcePack::SMALL_EXPLOSION = 2;
 int ResourcePack::LARGE_EXPLOSION = 5;
 int ResourcePack::EXPLOSION_OFFSET = 0;
+int ResourcePack::SMOKE_OFFSET = 8;
+int ResourcePack::UNDERWATER_SMOKE_OFFSET = 0;
 int ResourcePack::ITEM_DROP = 38;
 int ResourcePack::ITEM_THROW = 39;
 int ResourcePack::ITEM_RELOAD = 17;
@@ -51,6 +53,11 @@ int ResourcePack::UFO_CRASH = 10;
 int ResourcePack::UFO_EXPLODE = 11;
 int ResourcePack::INTERCEPTOR_HIT = 10;
 int ResourcePack::INTERCEPTOR_EXPLODE = 13;
+int ResourcePack::GEOSCAPE_CURSOR = 252;
+int ResourcePack::BASESCAPE_CURSOR = 252;
+int ResourcePack::BATTLESCAPE_CURSOR = 144;
+int ResourcePack::UFOPAEDIA_CURSOR = 252;
+int ResourcePack::GRAPHS_CURSOR = 252;
 /**
  * Initializes a blank resource set pointing to a folder.
  */
@@ -277,4 +284,12 @@ Sound *ResourcePack::getSoundByDepth(unsigned int depth, unsigned int sound) con
 		return getSound("BATTLE2.CAT", sound);
 }
 
+const std::vector<std::vector<Uint8> > *ResourcePack::getLUTs() const
+{
+	return &_transparencyLUTs;
+}
+bool ResourcePack::isMusicPlaying()
+{
+	return _musics[_playingMusic]->isPlaying();
+}
 }

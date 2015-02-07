@@ -60,23 +60,22 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_numMaintenance = new Text(110, 17, 202, 126);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("placeFacility")->getElement("palette")->color);
 
-	add(_window);
-	add(_view);
-	add(_btnCancel);
-	add(_txtFacility);
-	add(_txtCost);
-	add(_numCost);
-	add(_txtTime);
-	add(_numTime);
-	add(_txtMaintenance);
-	add(_numMaintenance);
+	add(_window, "window", "placeFacility");
+	add(_view, "baseView", "basescape");
+	add(_btnCancel, "button", "placeFacility");
+	add(_txtFacility, "text", "placeFacility");
+	add(_txtCost, "text", "placeFacility");
+	add(_numCost, "numbers", "placeFacility");
+	add(_txtTime, "text", "placeFacility");
+	add(_numTime, "numbers", "placeFacility");
+	add(_txtMaintenance, "text", "placeFacility");
+	add(_numMaintenance, "numbers", "placeFacility");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
@@ -84,32 +83,24 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_view->setSelectable(rule->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, Options::keyCancel);
 
-	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(tr(_rule->getType()));
 
-	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setText(tr("STR_COST_UC"));
 
-	_numCost->setColor(Palette::blockOffset(13));
 	_numCost->setBig();
 	_numCost->setText(Text::formatFunding(_rule->getBuildCost()));
 
-	_txtTime->setColor(Palette::blockOffset(13)+10);
 	_txtTime->setText(tr("STR_CONSTRUCTION_TIME_UC"));
 
-	_numTime->setColor(Palette::blockOffset(13));
 	_numTime->setBig();
 	_numTime->setText(tr("STR_DAY", _rule->getBuildTime()));
 
-	_txtMaintenance->setColor(Palette::blockOffset(13)+10);
 	_txtMaintenance->setText(tr("STR_MAINTENANCE_UC"));
 
-	_numMaintenance->setColor(Palette::blockOffset(13));
 	_numMaintenance->setBig();
 	_numMaintenance->setText(Text::formatFunding(_rule->getMonthlyCost()));
 }
@@ -139,13 +130,12 @@ void PlaceFacilityState::viewClick(Action *)
 {
 	if (!_view->isPlaceable(_rule))
 	{
-		_game->popState();
-		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_CANNOT_BUILD_HERE"), _palette, _game->getRuleset()->getInterface("placeFacility")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("placeFacility")->getElement("errorPalette")->color));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, _game->getRuleset()->getInterface("placeFacility")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("placeFacility")->getElement("errorPalette")->color));
 	}
 	else
 	{

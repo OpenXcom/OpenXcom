@@ -40,7 +40,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules)
+Ufo::Ufo(const RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _mission(0), _trajectory(0)
@@ -64,7 +64,7 @@ Ufo::~Ufo()
 		}
 		else
 		{
-			 ++i;
+			++i;
 		}
 	}
 	if (_mission)
@@ -221,9 +221,19 @@ YAML::Node Ufo::saveId() const
  * Returns the ruleset for the UFO's type.
  * @return Pointer to ruleset.
  */
-RuleUfo *Ufo::getRules() const
+const RuleUfo *Ufo::getRules() const
 {
 	return _rules;
+}
+
+/**
+ * Changes the ruleset for the UFO's type.
+ * @param rules Pointer to ruleset.
+ * @warning ONLY FOR NEW BATTLE USE!
+ */
+void Ufo::changeRules(const RuleUfo *rules)
+{
+	_rules = rules;
 }
 
 /**
@@ -286,7 +296,7 @@ int Ufo::getMarker() const
 	case Ufo::CRASHED:
 		return 4;
 	default:
-		return -1;
+		return _rules->getMarker();
 	}
 }
 

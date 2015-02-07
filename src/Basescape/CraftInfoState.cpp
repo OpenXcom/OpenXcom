@@ -80,22 +80,22 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_equip = new Surface(220, 18, 85, 121);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", 3);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftInfo")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnW1);
-	add(_btnW2);
-	add(_btnCrew);
-	add(_btnEquip);
-	add(_btnArmor);
-	add(_edtCraft);
-	add(_txtDamage);
-	add(_txtFuel);
-	add(_txtW1Name);
-	add(_txtW1Ammo);
-	add(_txtW2Name);
-	add(_txtW2Ammo);
+	add(_window, "window", "craftInfo");
+	add(_btnOk, "button", "craftInfo");
+	add(_btnW1, "button", "craftInfo");
+	add(_btnW2, "button", "craftInfo");
+	add(_btnCrew, "button", "craftInfo");
+	add(_btnEquip, "button", "craftInfo");
+	add(_btnArmor, "button", "craftInfo");
+	add(_edtCraft, "text1", "craftInfo");
+	add(_txtDamage, "text1", "craftInfo");
+	add(_txtFuel, "text1", "craftInfo");
+	add(_txtW1Name, "text2", "craftInfo");
+	add(_txtW1Ammo, "text2", "craftInfo");
+	add(_txtW2Name, "text2", "craftInfo");
+	add(_txtW2Ammo, "text2", "craftInfo");
 	add(_sprite);
 	add(_weapon1);
 	add(_weapon2);
@@ -105,56 +105,34 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, Options::keyCancel);
 
-	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
 	_btnW1->onMouseClick((ActionHandler)&CraftInfoState::btnW1Click);
 
-	_btnW2->setColor(Palette::blockOffset(13)+10);
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)&CraftInfoState::btnW2Click);
 
-	_btnCrew->setColor(Palette::blockOffset(13)+10);
 	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
 
-	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(tr("STR_EQUIPMENT_UC"));
 	_btnEquip->onMouseClick((ActionHandler)&CraftInfoState::btnEquipClick);
 
-	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&CraftInfoState::btnArmorClick);
 
-	_edtCraft->setColor(Palette::blockOffset(13)+10);
 	_edtCraft->setBig();
 	_edtCraft->setAlign(ALIGN_CENTER);
 	_edtCraft->onChange((ActionHandler)&CraftInfoState::edtCraftChange);
 
-	_txtDamage->setColor(Palette::blockOffset(13)+10);
-	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtFuel->setColor(Palette::blockOffset(13)+10);
-	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtW1Name->setColor(Palette::blockOffset(13)+5);
 	_txtW1Name->setWordWrap(true);
 
-	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
-	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-	_txtW2Name->setColor(Palette::blockOffset(13)+5);
 	_txtW2Name->setWordWrap(true);
-
-	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
-	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
 }
 
 /**
@@ -248,8 +226,10 @@ void CraftInfoState::init()
 			frame->setY(0);
 			frame->blit(_weapon1);
 
-			_txtW1Name->setText(tr(w1->getRules()->getType()));
 			std::wostringstream ss;
+			ss << L'\x01' << tr(w1->getRules()->getType());
+			_txtW1Name->setText(ss.str());
+			ss.str(L"");
 			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING" && w1->getAmmo() < w1->getRules()->getAmmoMax())
@@ -285,8 +265,10 @@ void CraftInfoState::init()
 			frame->setY(0);
 			frame->blit(_weapon2);
 
-			_txtW2Name->setText(tr(w2->getRules()->getType()));
 			std::wostringstream ss;
+			ss << L'\x01' << tr(w2->getRules()->getType());
+			_txtW2Name->setText(ss.str());
+			ss.str(L"");
 			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING" && w2->getAmmo() < w2->getRules()->getAmmoMax())

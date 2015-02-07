@@ -18,6 +18,7 @@
  */
 #include "XcomResourcePack.h"
 #include <sstream>
+#include <climits>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
@@ -35,6 +36,7 @@
 #include "../Savegame/Node.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/RuleMusic.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
@@ -44,6 +46,7 @@
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/ExtraSounds.h"
 #include "../Engine/AdlibMusic.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -76,6 +79,7 @@ struct HairBleach
  */
 XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 {
+	_ruleset = rules;
 	// Load palettes
 	const char *pal[] = {"PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA"};
 	for (size_t i = 0; i < sizeof(pal) / sizeof(pal[0]); ++i)
@@ -206,13 +210,16 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 
 	// Load intro
 	std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/");
-	std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
-	for (std::vector<std::string>::iterator i = lbms.begin(); i != lbms.end(); ++i)
+	if (CrossPlatform::folderExists(ufointro))
 	{
-		std::string path = ufointro + *i;
-		std::transform(i->begin(), i->end(), i->begin(), toupper);
-		_surfaces[*i] = new Surface(320, 200);
-		_surfaces[*i]->loadImage(path);
+		std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
+		for (std::vector<std::string>::iterator i = lbms.begin(); i != lbms.end(); ++i)
+		{
+			std::string path = ufointro + *i;
+			std::transform(i->begin(), i->end(), i->begin(), toupper);
+			_surfaces[*i] = new Surface(320, 200);
+			_surfaces[*i]->loadImage(path);
+		}
 	}
 
 	// Load surface sets
@@ -249,22 +256,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	{
 #ifndef __NO_MUSIC
 		// Load musics
-		std::string mus[] = {"GMDEFEND",
-							 "GMENBASE",
-							 "GMGEO1",
-							 "GMGEO2",
-							 "GMINTER",
-							 "GMINTRO1",
-							 "GMINTRO2",
-							 "GMINTRO3",
-							 "GMLOSE",
-							 "GMMARS",
-							 "GMNEWMAR",
-							 "GMSTORY",
-							 "GMTACTIC",
-							 "GMWIN"};
-		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
-		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f};
+		const std::map<std::string, RuleMusic *> musics = *rules->getMusic();
 
 		// Check which music version is available
 		CatFile *adlibcat = 0, *aintrocat = 0;
@@ -286,53 +278,23 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 
 		// Try the preferred format first, otherwise use the default priority
 		MusicFormat priority[] = {Options::preferredMusic, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI};
-
-		for (size_t i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
+		for (std::map<std::string, RuleMusic *>::const_iterator i = musics.begin(); i != musics.end(); ++i)
 		{
 			Music *music = 0;
 			for (size_t j = 0; j < sizeof(priority)/sizeof(priority[0]) && music == 0; ++j)
 			{
-				music = loadMusic(priority[j], mus[i], tracks[i], tracks_normalize[i], adlibcat, aintrocat, gmcat);
-			}
-			if (!music)
-			{
-				throw Exception(mus[i] + " not found");
-			}
-			_musics[mus[i]] = music;
-		}
-		delete gmcat;
-		delete adlibcat;
-		delete aintrocat;
-
-		// Ok, now try to load the optional musics
-		std::string musOptional[] = {"GMGEO3",
-									 "GMGEO4",
-									 "GMGEO5",
-									 "GMGEO6",
-									 "GMGEO7",
-									 "GMGEO8",
-									 "GMGEO9",
-									 "GMTACTIC2",
-									 "GMTACTIC3",
-									 "GMTACTIC4",
-									 "GMTACTIC5",
-									 "GMTACTIC6",
-									 "GMTACTIC7",
-									 "GMTACTIC8",
-									 "GMTACTIC9"};
-
-		for (size_t i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
-		{
-			Music *music = 0;
-			for (size_t j = 0; j < sizeof(priority) / sizeof(priority[0]) && music == 0; ++j)
-			{
-				music = loadMusic(priority[j], musOptional[i], 0, 0, 0, 0, 0);
+				music = loadMusic(priority[j], (*i).first, (*i).second->getCatPos(), (*i).second->getNormalization(), adlibcat, aintrocat, gmcat);
 			}
 			if (music)
 			{
-				_musics[musOptional[i]] = music;
+				_musics[(*i).first] = music;
 			}
+
 		}
+
+		delete gmcat;
+		delete adlibcat;
+		delete aintrocat;
 #endif		
 		
 		if (rules->getSoundDefinitions()->empty())
@@ -790,8 +752,14 @@ void XcomResourcePack::loadBattlescapeResources()
 		Log(LOG_FATAL) << "Version 1.0 data detected";
 		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version");
 	}
+	// TFTD uses the loftemps dat from the terrain folder, but still has enemy unknown's version in the geodata folder, which is short by 2 entries.
 	s.str("");
-	s << "GEODATA/" << "LOFTEMPS.DAT";
+	s << "TERRAIN/" << "LOFTEMPS.DAT";
+	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+	{
+		s.str("");
+		s << "GEODATA/" << "LOFTEMPS.DAT";
+	}
 	MapDataSet::loadLOFTEMPS(CrossPlatform::getDataFile(s.str()), &_voxelData);
 
 	std::string scrs[] = {"TAC00.SCR"};
@@ -808,7 +776,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	std::string lbms[] = {"D0.LBM",
 						  "D1.LBM",
 						  "D2.LBM",
-						  "D2.LBM"};
+						  "D3.LBM"};
 	std::string pals[] = {"PAL_BATTLESCAPE",
 						  "PAL_BATTLESCAPE_1",
 						  "PAL_BATTLESCAPE_2",
@@ -835,6 +803,7 @@ void XcomResourcePack::loadBattlescapeResources()
 			SDL_Color *colors = tempSurface->getPalette();
 			colors[255] = backPal[i];
 			_palettes[pals[i]]->setColors(colors, 256);
+			createTransparencyLUT(_palettes[pals[i]]);
 			delete tempSurface;
 		}
 	}
@@ -1003,7 +972,15 @@ Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int
 				else if (aintrocat)
 				{
 					track -= adlibcat->getAmount();
-					music->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+					if (track < aintrocat->getAmount())
+					{
+						music->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+					}
+					else
+					{
+						delete music;
+						music = 0;
+					}
 				}
 			}
 		}
@@ -1011,7 +988,7 @@ Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int
 		else if (fmt == MUSIC_MIDI)
 		{
 			// DOS MIDI
-			if (gmcat)
+			if (gmcat && track < gmcat->getAmount())
 			{
 				music = gmcat->loadMIDI(track);
 			}
@@ -1046,6 +1023,58 @@ Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int
 		music = 0;
 	}
 	return music;
+}
+
+/**
+ * Preamble:
+ * this is the most horrible function i've ever written, and it makes me sad.
+ * this is, however, a necessary evil, in order to save massive amounts of time in the draw function.
+ * when used with the default TFTD ruleset, this function loops 4,194,304 times
+ * (4 palettes, 4 tints, 4 levels of opacity, 256 colors, 256 comparisons per)
+ * each additional tint in the rulesets will result in over a million iterations more.
+ * @param pal the palette to base the lookup table on.
+ */
+void XcomResourcePack::createTransparencyLUT(Palette *pal)
+{
+	SDL_Color desiredColor;
+	std::vector<Uint8> lookUpTable;
+	// start with the color sets
+	for (std::vector<SDL_Color>::const_iterator tint = _ruleset->getTransparencies()->begin(); tint != _ruleset->getTransparencies()->end(); ++tint)
+	{
+		// then the opacity levels, using the alpha channel as the step
+		for (int opacity = 1; opacity < 1 + tint->unused * 4; opacity += tint->unused)
+		{
+			// then the palette itself
+			for (int currentColor = 0; currentColor < 256; ++currentColor)
+			{
+				// add the RGB values from the ruleset to those of the colors contained in the palette
+				// in order to determine the desired color
+				// yes all this casting and clamping is required, we're dealing with Uint8s here, and there's
+				// a lot of potential for values to wrap around, which would be very bad indeed.
+				desiredColor.r = std::min(255, (int)(pal->getColors(currentColor)->r) + (tint->r * opacity));
+				desiredColor.g = std::min(255, (int)(pal->getColors(currentColor)->g) + (tint->g * opacity));
+				desiredColor.b = std::min(255, (int)(pal->getColors(currentColor)->b) + (tint->b * opacity));
+ 
+				Uint8 closest = 0;
+				int lowestDifference = INT_MAX;
+				// now compare each color in the palette to find the closest match to our desired one
+				for (int comparator = 0; comparator < 256; ++comparator)
+				{
+					int currentDifference = Sqr(desiredColor.r - pal->getColors(comparator)->r) +
+											Sqr(desiredColor.g-pal->getColors(comparator)->g) +
+											Sqr(desiredColor.b-pal->getColors(comparator)->b);
+ 
+					if (currentDifference < lowestDifference)
+					{
+						closest = comparator;
+						lowestDifference = currentDifference;
+					}
+				}
+				lookUpTable.push_back(closest);
+			}
+		}
+	}
+	_transparencyLUTs.push_back(lookUpTable);
 }
 
 }

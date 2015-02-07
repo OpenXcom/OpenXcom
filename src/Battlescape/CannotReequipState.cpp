@@ -51,44 +51,37 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	_lstItems = new TextList(288, 112, 8, 58);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("cannotReequip")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtCraft);
-	add(_lstItems);
+	add(_window, "window", "cannotReequip");
+	add(_btnOk, "button", "cannotReequip");
+	add(_txtTitle, "heading", "cannotReequip");
+	add(_txtItem, "text", "cannotReequip");
+	add(_txtQuantity, "text", "cannotReequip");
+	add(_txtCraft, "text", "cannotReequip");
+	add(_lstItems, "list", "cannotReequip");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CannotReequipState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
 
-	_txtItem->setColor(Palette::blockOffset(15)-1);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(15)-1);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtCraft->setColor(Palette::blockOffset(15)-1);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstItems->setColor(Palette::blockOffset(8)+10);
 	_lstItems->setColumns(3, 162, 46, 80);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);

@@ -43,7 +43,6 @@
 #include "../Savegame/GameTime.h"
 #include "../Engine/Music.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -84,11 +83,11 @@
 #include "../Savegame/Production.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/City.h"
-#include "AlienTerrorState.h"
+#include "MissionDetectedState.h"
 #include "AlienBaseState.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Country.h"
@@ -179,28 +178,24 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	// Set palette
 	setPalette("PAL_GEOSCAPE");
 
-	// Fix system colors
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-
 	add(_bg);
 	add(_sideLine);
 	add(_sidebar);
 	add(_globe);
 
-	add(_btnIntercept);
-	add(_btnBases);
-	add(_btnGraphs);
-	add(_btnUfopaedia);
-	add(_btnOptions);
-	add(_btnFunding);
+	add(_btnIntercept, "button", "geoscape");
+	add(_btnBases, "button", "geoscape");
+	add(_btnGraphs, "button", "geoscape");
+	add(_btnUfopaedia, "button", "geoscape");
+	add(_btnOptions, "button", "geoscape");
+	add(_btnFunding, "button", "geoscape");
 
-	add(_btn5Secs);
-	add(_btn1Min);
-	add(_btn5Mins);
-	add(_btn30Mins);
-	add(_btn1Hour);
-	add(_btn1Day);
+	add(_btn5Secs, "button", "geoscape");
+	add(_btn1Min, "button", "geoscape");
+	add(_btn5Mins, "button", "geoscape");
+	add(_btn30Mins, "button", "geoscape");
+	add(_btn1Hour, "button", "geoscape");
+	add(_btn1Day, "button", "geoscape");
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -209,21 +204,21 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
-	add(_sideTop);
-	add(_sideBottom);
+	add(_sideTop, "button", "geoscape");
+	add(_sideBottom, "button", "geoscape");
 
-	add(_txtFunds);
-	add(_txtHour);
-	add(_txtHourSep);
-	add(_txtMin);
-	add(_txtMinSep);
-	add(_txtSec);
-	add(_txtWeekday);
-	add(_txtDay);
-	add(_txtMonth);
-	add(_txtYear);
+	add(_txtFunds, "text", "geoscape");
+	add(_txtHour, "text", "geoscape");
+	add(_txtHourSep, "text", "geoscape");
+	add(_txtMin, "text", "geoscape");
+	add(_txtMinSep, "text", "geoscape");
+	add(_txtSec, "text", "geoscape");
+	add(_txtWeekday, "text", "geoscape");
+	add(_txtDay, "text", "geoscape");
+	add(_txtMonth, "text", "geoscape");
+	add(_txtYear, "text", "geoscape");
 
-	add(_txtDebug);
+	add(_txtDebug, "text", "geoscape");
 
 	// Set up objects
 	Surface *geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
@@ -235,91 +230,67 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
 
 	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
-	_btnIntercept->setColor(Palette::blockOffset(15)+6);
-	_btnIntercept->setTextColor(Palette::blockOffset(15)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&GeoscapeState::btnInterceptClick);
 	_btnIntercept->onKeyboardPress((ActionHandler)&GeoscapeState::btnInterceptClick, Options::keyGeoIntercept);
 
 	_btnBases->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
-	_btnBases->setColor(Palette::blockOffset(15)+6);
-	_btnBases->setTextColor(Palette::blockOffset(15)+5);
 	_btnBases->setText(tr("STR_BASES"));
 	_btnBases->onMouseClick((ActionHandler)&GeoscapeState::btnBasesClick);
 	_btnBases->onKeyboardPress((ActionHandler)&GeoscapeState::btnBasesClick, Options::keyGeoBases);
 
 	_btnGraphs->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
-	_btnGraphs->setColor(Palette::blockOffset(15)+6);
-	_btnGraphs->setTextColor(Palette::blockOffset(15)+5);
 	_btnGraphs->setText(tr("STR_GRAPHS"));
 	_btnGraphs->onMouseClick((ActionHandler)&GeoscapeState::btnGraphsClick);
 	_btnGraphs->onKeyboardPress((ActionHandler)&GeoscapeState::btnGraphsClick, Options::keyGeoGraphs);
 
 	_btnUfopaedia->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
-	_btnUfopaedia->setColor(Palette::blockOffset(15)+6);
-	_btnUfopaedia->setTextColor(Palette::blockOffset(15)+5);
 	_btnUfopaedia->setText(tr("STR_UFOPAEDIA_UC"));
 	_btnUfopaedia->onMouseClick((ActionHandler)&GeoscapeState::btnUfopaediaClick);
 	_btnUfopaedia->onKeyboardPress((ActionHandler)&GeoscapeState::btnUfopaediaClick, Options::keyGeoUfopedia);
 
 	_btnOptions->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
-	_btnOptions->setColor(Palette::blockOffset(15)+6);
-	_btnOptions->setTextColor(Palette::blockOffset(15)+5);
 	_btnOptions->setText(tr("STR_OPTIONS_UC"));
 	_btnOptions->onMouseClick((ActionHandler)&GeoscapeState::btnOptionsClick);
 	_btnOptions->onKeyboardPress((ActionHandler)&GeoscapeState::btnOptionsClick, Options::keyGeoOptions);
 
 	_btnFunding->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
-	_btnFunding->setColor(Palette::blockOffset(15)+6);
-	_btnFunding->setTextColor(Palette::blockOffset(15)+5);
 	_btnFunding->setText(tr("STR_FUNDING_UC"));
 	_btnFunding->onMouseClick((ActionHandler)&GeoscapeState::btnFundingClick);
 	_btnFunding->onKeyboardPress((ActionHandler)&GeoscapeState::btnFundingClick, Options::keyGeoFunding);
 
 	_btn5Secs->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn5Secs->setBig();
-	_btn5Secs->setColor(Palette::blockOffset(15)+6);
-	_btn5Secs->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setText(tr("STR_5_SECONDS"));
 	_btn5Secs->setGroup(&_timeSpeed);
 	_btn5Secs->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed1);
 
 	_btn1Min->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn1Min->setBig();
-	_btn1Min->setColor(Palette::blockOffset(15)+6);
-	_btn1Min->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Min->setText(tr("STR_1_MINUTE"));
 	_btn1Min->setGroup(&_timeSpeed);
 	_btn1Min->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed2);
 
 	_btn5Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn5Mins->setBig();
-	_btn5Mins->setColor(Palette::blockOffset(15)+6);
-	_btn5Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setText(tr("STR_5_MINUTES"));
 	_btn5Mins->setGroup(&_timeSpeed);
 	_btn5Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed3);
 
 	_btn30Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn30Mins->setBig();
-	_btn30Mins->setColor(Palette::blockOffset(15)+6);
-	_btn30Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setText(tr("STR_30_MINUTES"));
 	_btn30Mins->setGroup(&_timeSpeed);
 	_btn30Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed4);
 
 	_btn1Hour->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn1Hour->setBig();
-	_btn1Hour->setColor(Palette::blockOffset(15)+6);
-	_btn1Hour->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setText(tr("STR_1_HOUR"));
 	_btn1Hour->setGroup(&_timeSpeed);
 	_btn1Hour->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed5);
 
 	_btn1Day->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn1Day->setBig();
-	_btn1Day->setColor(Palette::blockOffset(15)+6);
-	_btn1Day->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed6);
@@ -352,44 +323,28 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
 
-	_sideTop->setColor(Palette::blockOffset(15)+6);
-	_sideBottom->setColor(Palette::blockOffset(15)+6);
-	
-	_txtFunds->setColor(Palette::blockOffset(15)+4);
 	_txtFunds->setAlign(ALIGN_CENTER);
 	_txtFunds->setVisible(Options::showFundsOnGeoscape);
 
 	_txtHour->setBig();
-	_txtHour->setColor(Palette::blockOffset(15)+4);
 	_txtHour->setAlign(ALIGN_RIGHT);
 
 	_txtHourSep->setBig();
-	_txtHourSep->setColor(Palette::blockOffset(15)+4);
 	_txtHourSep->setText(L":");
 
 	_txtMin->setBig();
-	_txtMin->setColor(Palette::blockOffset(15)+4);
 
 	_txtMinSep->setBig();
-	_txtMinSep->setColor(Palette::blockOffset(15)+4);
 	_txtMinSep->setText(L":");
 
-	_txtSec->setColor(Palette::blockOffset(15)+4);
-
-	_txtWeekday->setColor(Palette::blockOffset(15)+4);
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
-	_txtDay->setColor(Palette::blockOffset(15)+4);
 	_txtDay->setAlign(ALIGN_CENTER);
 
-	_txtMonth->setColor(Palette::blockOffset(15)+4);
 	_txtMonth->setAlign(ALIGN_CENTER);
 
-	_txtYear->setColor(Palette::blockOffset(15)+4);
 	_txtYear->setAlign(ALIGN_CENTER);
 
-	_txtDebug->setColor(Palette::blockOffset(15)+4);
-	
 	if (Options::showFundsOnGeoscape)
 	{
 		_txtHour->setY(_txtHour->getY()+6);
@@ -697,21 +652,21 @@ void GeoscapeState::time5Seconds()
 				(*i)->think();
 				if ((*i)->reachedDestination())
 				{
-					size_t terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
+					size_t count = _game->getSavedGame()->getMissionSites()->size();
 					AlienMission *mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
-						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() == Ufo::LANDED))
 							popup(new UfoLostState((*i)->getName(_game->getLanguage())));
 					}
-					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
+					if (count < _game->getSavedGame()->getMissionSites()->size())
 					{
-						TerrorSite *ts = _game->getSavedGame()->getTerrorSites()->back();
-						const City *city = _game->getRuleset()->locateCity(ts->getLongitude(), ts->getLatitude());
+						MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
+						const City *city = _game->getRuleset()->locateCity(site->getLongitude(), site->getLatitude());
 						assert(city);
-						popup(new AlienTerrorState(ts, city->getName(), this));
+						popup(new MissionDetectedState(site, city->getName(), this));
 					}
 					// If UFO was destroyed, don't spawn missions
 					if ((*i)->getStatus() == Ufo::DESTROYED)
@@ -840,7 +795,7 @@ void GeoscapeState::time5Seconds()
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
-				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
 				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
 				if (u != 0)
 				{
@@ -865,7 +820,7 @@ void GeoscapeState::time5Seconds()
 								startDogfight();
 								_dogfightStartTimer->start();
 							}
-							_game->getResourcePack()->playMusic("GMINTER");
+							_game->getResourcePack()->playMusic("GMINTER", true);
 						}
 						break;
 					case Ufo::LANDED:
@@ -894,13 +849,13 @@ void GeoscapeState::time5Seconds()
 					popup(new CraftPatrolState((*j), _globe));
 					(*j)->setDestination(0);
 				}
-				else if (t != 0)
+				else if (m != 0)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
 						// look up polygons texture
 						int texture, shade;
-						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
+						_globe->getPolygonTextureAndShade(m->getLongitude(), m->getLatitude(), &texture, &shade);
 						timerReset();
 						popup(new ConfirmLandingState(*j, texture, shade));
 					}
@@ -983,12 +938,11 @@ class DetectXCOMBase: public std::unary_function<Ufo *, bool>
 {
 public:
 	/// Create a detector for the given base.
-	DetectXCOMBase(const Base &base, int difficulty) : _base(base), _difficulty(difficulty) { /* Empty by design.  */ }
+	DetectXCOMBase(const Base &base) : _base(base) { /* Empty by design.  */ }
 	/// Attempt detection
 	bool operator()(const Ufo *ufo) const;
 private:
 	const Base &_base;	//!< The target base.
-	const int _difficulty;
 };
 
 /**
@@ -1005,7 +959,7 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 	{
 		return false;
 	}
-	return RNG::percent(_base.getDetectionChance(_difficulty));
+	return RNG::percent(_base.getDetectionChance());
 }
 
 /**
@@ -1056,14 +1010,13 @@ void GeoscapeState::time10Minutes()
 			}
 		}
 	}
-	int diff = (int)(_game->getSavedGame()->getDifficulty());
 	if (Options::aggressiveRetaliation)
 	{
 		// Detect as many bases as possible.
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
+			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				// Base found
@@ -1078,7 +1031,7 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase, diff));
+			std::vector<Ufo*>::const_iterator uu = std::find_if (_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
@@ -1108,38 +1061,38 @@ private:
 	const Globe &_globe;
 };
 
-/** @brief Process a TerrorSite.
- * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
- * @param ts Pointer to terror site.
- * @return Has terror site expired?
+/** @brief Process a MissionSite.
+ * This function object will count down towards expiring a MissionSite, and handle expired MissionSites.
+ * @param ts Pointer to mission site.
+ * @return Has mission site expired?
  */
-bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
+bool GeoscapeState::processMissionSite(MissionSite *site) const
 {
-	if (ts->getSecondsRemaining() >= 30 * 60)
+	if (site->getSecondsRemaining() >= 30 * 60)
 	{
-		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
+		site->setSecondsRemaining(site->getSecondsRemaining() - 30 * 60);
 		return false;
 	}
-	if (!ts->getFollowers()->empty()) // CHEEKY EXPLOIT
+	if (!site->getFollowers()->empty()) // CHEEKY EXPLOIT
 	{
 		return false;
 	}
 	// Score and delete it.
-	Region *region = _game->getSavedGame()->locateRegion(*ts);
+	Region *region = _game->getSavedGame()->locateRegion(*site);
 	if (region)
 	{
-		region->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
-		//kids, tell your folks... don't ignore terror sites.
+		region->addActivityAlien(site->getRules()->getPoints() * 100);
+		//kids, tell your folks... don't ignore mission sites.
 	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
-		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
+		if ((*k)->getRules()->insideCountry(site->getLongitude(), site->getLatitude()))
 		{
-			(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
+			(*k)->addActivityAlien(site->getRules()->getPoints() * 100);
 			break;
 		}
 	}
-	delete ts;
+	delete site;
 	return true;
 }
 
@@ -1337,17 +1290,16 @@ void GeoscapeState::time30Minutes()
 		}
 	}
 
-	// Processes TerrorSites
-	for (std::vector<TerrorSite*>::iterator ts = _game->getSavedGame()->getTerrorSites()->begin();
-		ts != _game->getSavedGame()->getTerrorSites()->end();)
+	// Processes MissionSites
+	for (std::vector<MissionSite*>::iterator site = _game->getSavedGame()->getMissionSites()->begin(); site != _game->getSavedGame()->getMissionSites()->end();)
 	{
-		if (processTerrorSite(*ts))
+		if (processMissionSite(*site))
 		{
-			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
+			site = _game->getSavedGame()->getMissionSites()->erase(site);
 		}
 		else
 		{
-			++ts;
+			++site;
 		}
 	}
 }
@@ -1418,7 +1370,7 @@ void GeoscapeState::time1Hour()
 
 		if (Options::storageLimitsEnforced && (*i)->storesOverfull())
 		{
-			popup(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, Palette::blockOffset(15) + 1, "BACK13.SCR", 6));
+			popup(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, _game->getRuleset()->getInterface("geoscape")->getElement("errorMessage")->color, "BACK13.SCR", _game->getRuleset()->getInterface("geoscape")->getElement("errorPalette")->color));
 			popup(new SellState((*i)));
 		}
 	}

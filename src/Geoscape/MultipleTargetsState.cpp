@@ -61,22 +61,20 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 		_window = new Window(this, 136, winHeight, 60, winY, POPUP_VERTICAL);
 
 		// Set palette
-		setPalette("PAL_GEOSCAPE", 7);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
-		add(_window);
+		add(_window, "window", "UFOInfo");
 
 		// Set up objects
-		_window->setColor(Palette::blockOffset(8) + 5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 		int y = btnY;
 		for (size_t i = 0; i < _targets.size(); ++i)
 		{
 			TextButton *button = new TextButton(116, BUTTON_HEIGHT, 70, y);
-			button->setColor(Palette::blockOffset(8) + 5);
 			button->setText(_targets[i]->getName(_game->getLanguage()));
 			button->onMouseClick((ActionHandler)&MultipleTargetsState::btnTargetClick);
-			add(button);
+			add(button, "button", "UFOInfo");
 
 			_btnTargets.push_back(button);
 

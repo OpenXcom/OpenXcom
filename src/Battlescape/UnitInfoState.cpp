@@ -32,8 +32,6 @@
 #include "../Interface/TextButton.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "../Engine/Options.h"
@@ -245,8 +243,8 @@ UnitInfoState::UnitInfoState(BattleUnit *unit, BattlescapeState *parent, bool fr
 
 	if (!_mindProbe)
 	{
-		add(_btnPrev);
-		add(_btnNext);
+		add(_btnPrev, "button", "stats");
+		add(_btnNext, "button", "stats");
 	}
 
 	centerAllSurfaces();
@@ -430,11 +428,9 @@ UnitInfoState::UnitInfoState(BattleUnit *unit, BattlescapeState *parent, bool fr
 	if (!_mindProbe)
 	{
 		_btnPrev->setText(L"<<");
-		_btnPrev->setColor(Palette::blockOffset(4));
 		_btnPrev->onMouseClick((ActionHandler)&UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress((ActionHandler)&UnitInfoState::btnPrevClick, Options::keyBattlePrevUnit);
 		_btnNext->setText(L">>");
-		_btnNext->setColor(Palette::blockOffset(4));
 		_btnNext->onMouseClick((ActionHandler)&UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress((ActionHandler)&UnitInfoState::btnNextClick, Options::keyBattleNextUnit);
 	}
@@ -459,7 +455,7 @@ void UnitInfoState::init()
 	std::wostringstream ss;
 	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(_unit->getStats()->tu);
+	_barTimeUnits->setMax(_unit->getBaseStats()->tu);
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
 	ss.str(L"");
@@ -476,13 +472,13 @@ void UnitInfoState::init()
 	ss.str(L"");
 	ss << _unit->getEnergy();
 	_numEnergy->setText(ss.str());
-	_barEnergy->setMax(_unit->getStats()->stamina);
+	_barEnergy->setMax(_unit->getBaseStats()->stamina);
 	_barEnergy->setValue(_unit->getEnergy());
 
 	ss.str(L"");
 	ss << _unit->getHealth();
 	_numHealth->setText(ss.str());
-	_barHealth->setMax(_unit->getStats()->health);
+	_barHealth->setMax(_unit->getBaseStats()->health);
 	_barHealth->setValue(_unit->getHealth());
 	_barHealth->setValue2(_unit->getStunlevel());
 
@@ -493,10 +489,10 @@ void UnitInfoState::init()
 	_barFatalWounds->setValue(_unit->getFatalWounds());
 
 	ss.str(L"");
-	ss << _unit->getStats()->bravery;
+	ss << _unit->getBaseStats()->bravery;
 	_numBravery->setText(ss.str());
-	_barBravery->setMax(_unit->getStats()->bravery);
-	_barBravery->setValue(_unit->getStats()->bravery);
+	_barBravery->setMax(_unit->getBaseStats()->bravery);
+	_barBravery->setValue(_unit->getBaseStats()->bravery);
 
 	ss.str(L"");
 	ss << _unit->getMorale();
@@ -505,42 +501,42 @@ void UnitInfoState::init()
 	_barMorale->setValue(_unit->getMorale());
 
 	ss.str(L"");
-	ss << _unit->getStats()->reactions;
+	ss << _unit->getBaseStats()->reactions;
 	_numReactions->setText(ss.str());
-	_barReactions->setMax(_unit->getStats()->reactions);
-	_barReactions->setValue(_unit->getStats()->reactions);
+	_barReactions->setMax(_unit->getBaseStats()->reactions);
+	_barReactions->setValue(_unit->getBaseStats()->reactions);
 
 	ss.str(L"");
-	ss << (int)((_unit->getStats()->firing * _unit->getHealth()) / _unit->getStats()->health);
+	ss << (int)((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numFiring->setText(ss.str());
-	_barFiring->setMax(_unit->getStats()->firing);
-	_barFiring->setValue((_unit->getStats()->firing * _unit->getHealth()) / _unit->getStats()->health);
+	_barFiring->setMax(_unit->getBaseStats()->firing);
+	_barFiring->setValue((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
 
 	ss.str(L"");
-	ss << (int)((_unit->getStats()->throwing * _unit->getHealth()) / _unit->getStats()->health);
+	ss << (int)((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numThrowing->setText(ss.str());
-	_barThrowing->setMax(_unit->getStats()->throwing);
-	_barThrowing->setValue((_unit->getStats()->throwing * _unit->getHealth()) / _unit->getStats()->health);
+	_barThrowing->setMax(_unit->getBaseStats()->throwing);
+	_barThrowing->setValue((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
 
 	ss.str(L"");
-	ss << (int)((_unit->getStats()->melee * _unit->getHealth()) / _unit->getStats()->health);
+	ss << (int)((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numMelee->setText(ss.str());
-	_barMelee->setMax(_unit->getStats()->melee);
-	_barMelee->setValue((_unit->getStats()->melee * _unit->getHealth()) / _unit->getStats()->health);
+	_barMelee->setMax(_unit->getBaseStats()->melee);
+	_barMelee->setValue((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
 
 	ss.str(L"");
-	ss << _unit->getStats()->strength;
+	ss << _unit->getBaseStats()->strength;
 	_numStrength->setText(ss.str());
-	_barStrength->setMax(_unit->getStats()->strength);
-	_barStrength->setValue(_unit->getStats()->strength);
+	_barStrength->setMax(_unit->getBaseStats()->strength);
+	_barStrength->setValue(_unit->getBaseStats()->strength);
 
-	if (_unit->getStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (_unit->getBaseStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		ss.str(L"");
-		ss << _unit->getStats()->psiStrength;
+		ss << _unit->getBaseStats()->psiStrength;
 		_numPsiStrength->setText(ss.str());
-		_barPsiStrength->setMax(_unit->getStats()->psiStrength);
-		_barPsiStrength->setValue(_unit->getStats()->psiStrength);
+		_barPsiStrength->setMax(_unit->getBaseStats()->psiStrength);
+		_barPsiStrength->setValue(_unit->getBaseStats()->psiStrength);
 
 		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
@@ -553,13 +549,13 @@ void UnitInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-	if (_unit->getStats()->psiSkill > 0)
+	if (_unit->getBaseStats()->psiSkill > 0)
 	{
 		ss.str(L"");
-		ss << _unit->getStats()->psiSkill;
+		ss << _unit->getBaseStats()->psiSkill;
 		_numPsiSkill->setText(ss.str());
-		_barPsiSkill->setMax(_unit->getStats()->psiSkill);
-		_barPsiSkill->setValue(_unit->getStats()->psiSkill);
+		_barPsiSkill->setMax(_unit->getBaseStats()->psiSkill);
+		_barPsiSkill->setValue(_unit->getBaseStats()->psiSkill);
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);

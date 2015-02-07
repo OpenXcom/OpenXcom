@@ -1,0 +1,133 @@
+crafts:
+  - type: STR_SKYRANGER
+    sprite: 0
+    fuelMax: 1500
+    damageMax: 150
+    speedMax: 760
+    accel: 2
+    soldiers: 14
+    vehicles: 3
+    costBuy: 500000
+    costRent: 500000
+    refuelRate: 50
+    transferTime: 72
+    score: 200
+    battlescapeTerrainData:
+      name: PLANE
+      mapDataSets:
+        - BLANKS
+        - PLANE
+      mapBlocks:
+        - name: PLANE
+          width: 10
+          length: 20
+  - type: STR_LIGHTNING
+    requires:
+      - STR_NEW_FIGHTER_TRANSPORTER
+    sprite: 1
+    fuelMax: 30
+    damageMax: 800
+    speedMax: 3100
+    accel: 9
+    weapons: 1
+    soldiers: 12
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 300
+    battlescapeTerrainData:
+      name: LIGHTNIN
+      mapDataSets:
+        - BLANKS
+        - LIGHTNIN
+      mapBlocks:
+        - name: LIGHTNIN
+          width: 20
+          length: 10
+    deployment:
+      - [10, 5, 1, 2]
+      - [10, 6, 1, 2]
+      - [10, 4, 1, 2]
+      - [9, 7, 1, 2]
+      - [9, 3, 1, 2]
+      - [8, 7, 1, 2]
+      - [8, 3, 1, 2]
+      - [7, 7, 1, 2]
+      - [7, 3, 1, 2]
+      - [6, 6, 1, 2]
+      - [6, 4, 1, 2]
+      - [6, 5, 1, 2]
+  - type: STR_AVENGER
+    requires:
+      - STR_ULTIMATE_CRAFT
+    sprite: 2
+    fuelMax: 60
+    damageMax: 1200
+    speedMax: 5400
+    accel: 10
+    weapons: 2
+    soldiers: 26
+    vehicles: 4
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 400
+    spacecraft: true
+    battlescapeTerrainData:
+      name: AVENGER
+      mapDataSets:
+        - BLANKS
+        - AVENGER
+      mapBlocks:
+        - name: AVENGER
+          width: 10
+          length: 20
+    deployment:
+      - [4, 9, 1, 0]
+      - [5, 9, 1, 0]
+      - [4, 10, 1, 0]
+      - [5, 10, 1, 0]
+      - [4, 11, 1, 0]
+      - [5, 11, 1, 0]
+      - [4, 12, 1, 0]
+      - [5, 12, 1, 0]
+      - [4, 13, 1, 0]
+      - [5, 13, 1, 0]
+      - [4, 14, 1, 0]
+      - [5, 14, 1, 0]
+      - [4, 15, 1, 0]
+      - [5, 15, 1, 0]
+      - [4, 16, 1, 0]
+      - [5, 16, 1, 0]
+      - [3, 10, 1, 0]
+      - [3, 11, 1, 0]
+      - [3, 12, 1, 0]
+      - [3, 13, 1, 0]
+      - [3, 14, 1, 0]
+      - [6, 10, 1, 0]
+      - [6, 11, 1, 0]
+      - [6, 12, 1, 0]
+      - [6, 13, 1, 0]
+      - [6, 14, 1, 0]
+  - type: STR_INTERCEPTOR
+    sprite: 3
+    fuelMax: 1000
+    damageMax: 100
+    speedMax: 2100
+    accel: 3
+    weapons: 2
+    costBuy: 600000
+    costRent: 600000
+    refuelRate: 50
+    transferTime: 96
+    score: 250
+  - type: STR_FIRESTORM
+    requires:
+      - STR_NEW_FIGHTER_CRAFT
+    sprite: 4
+    fuelMax: 20
+    damageMax: 500
+    speedMax: 4200
+    accel: 9
+    weapons: 2
+    refuelItem: STR_ELERIUM_115
+    refuelRate: 5
+    score: 250

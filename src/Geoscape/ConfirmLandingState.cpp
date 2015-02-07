@@ -33,14 +33,14 @@
 #include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/RuleAlienMission.h"
 
 namespace OpenXcom
 {
@@ -64,32 +64,27 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) :
 	_txtBegin = new Text(206, 17, 25, 130);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtMessage);
-	add(_txtBegin);
+	add(_window, "window", "confirmLanding");
+	add(_btnYes, "button", "confirmLanding");
+	add(_btnNo, "button", "confirmLanding");
+	add(_txtMessage, "text", "confirmLanding");
+	add(_txtBegin, "text", "confirmLanding");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, Options::keyCancel);
 
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
-	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setWordWrap(true);
@@ -97,10 +92,11 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) :
 						 .arg(_craft->getName(_game->getLanguage()))
 						 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
-	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
+	std::wostringstream ss;
+	ss << L'\x01' << tr("STR_BEGIN_MISSION");
+	_txtBegin->setText(ss.str().c_str());
 }
 
 /**
@@ -130,7 +126,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 {
 	_game->popState();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	MissionSite* m = dynamic_cast<MissionSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame *bgame = new SavedBattleGame();
@@ -148,11 +144,11 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setUfo(u);
 		bgen.setAlienRace(u->getAlienRace());
 	}
-	else if (t != 0)
+	else if (m != 0)
 	{
-		bgame->setMissionType("STR_TERROR_MISSION");
-		bgen.setTerrorSite(t);
-		bgen.setAlienRace(t->getAlienRace());
+		bgame->setMissionType(m->getRules()->getDeployment());
+		bgen.setMissionSite(m);
+		bgen.setAlienRace(m->getAlienRace());
 	}
 	else if (b != 0)
 	{

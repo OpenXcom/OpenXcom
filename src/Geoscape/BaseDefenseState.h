@@ -33,7 +33,7 @@ class TextList;
 class GeoscapeState;
 class Timer;
 
-enum BaseDefenseActionType { BDA_NONE, BDA_FIRE, BDA_RESOLVE, BDA_DESTROY, BDA_EXPLODING1, BDA_EXPLODING2, BDA_END };
+enum BaseDefenseActionType { BDA_NONE, BDA_FIRE, BDA_RESOLVE, BDA_DESTROY, BDA_END };
 
 /**
  * Base Defense Screen for when ufos try to attack.
@@ -47,7 +47,7 @@ private:
 	TextList *_lstDefenses;
 	Base *_base;
 	Ufo *_ufo;
-	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks;
+	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks, _explosionCount;
 	BaseDefenseActionType _action;
 	Timer *_timer;
 	GeoscapeState *_state;

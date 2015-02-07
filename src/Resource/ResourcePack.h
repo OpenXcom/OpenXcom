@@ -58,6 +58,7 @@ protected:
 	std::map<std::string, SoundSet*> _sounds;
 	std::map<std::string, Music*> _musics;
 	std::vector<Uint16> _voxelData;
+	std::vector<std::vector<Uint8> > _transparencyLUTs;
 public:
 	static int DOOR_OPEN;
 	static int SLIDING_DOOR_OPEN;
@@ -65,6 +66,8 @@ public:
 	static int SMALL_EXPLOSION;
 	static int LARGE_EXPLOSION;
 	static int EXPLOSION_OFFSET;
+	static int SMOKE_OFFSET;
+	static int UNDERWATER_SMOKE_OFFSET;
 	static int ITEM_DROP;
 	static int ITEM_THROW;
 	static int ITEM_RELOAD;
@@ -80,6 +83,11 @@ public:
 	static int UFO_EXPLODE;
 	static int INTERCEPTOR_HIT;
 	static int INTERCEPTOR_EXPLODE;
+	static int GEOSCAPE_CURSOR;
+	static int BASESCAPE_CURSOR;
+	static int BATTLESCAPE_CURSOR;
+	static int UFOPAEDIA_CURSOR;
+	static int GRAPHS_CURSOR;
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack();
 	/// Cleans up the resource pack.
@@ -92,8 +100,6 @@ public:
 	SurfaceSet *getSurfaceSet(const std::string &name) const;
 	/// Gets a particular music.
 	Music *getMusic(const std::string &name) const;
-	/// Gets a random music.
-	Music *getRandomMusic(const std::string &name) const;
 	/// Plays a particular music.
 	void playMusic(const std::string &name, bool random = false);
 	/// Gets a particular sound.
@@ -106,6 +112,13 @@ public:
 	std::vector<Uint16> *getVoxelData();
 	/// Returns a specific sound from either the land or underwater resource set.
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
+	const std::vector<std::vector<Uint8> > *getLUTs() const;
+	bool isMusicPlaying();
+
+private:
+	/// Gets a random music. this is private to prevent access, use playMusic(name, true) instead.
+	Music *getRandomMusic(const std::string &name) const;
+
 };
 
 }

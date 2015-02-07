@@ -42,7 +42,7 @@ enum SpecialTileType{TILE=0,
 					END_POINT,
 					MUST_DESTROY};
 
-enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE};
+enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT};
 enum VoxelType{ V_EMPTY = -1, V_FLOOR, V_WESTWALL, V_NORTHWALL, V_OBJECT, V_UNIT, V_OUTOFBOUNDS };
 
 /**
@@ -56,7 +56,7 @@ private:
 	SpecialTileType _specialType;
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke, _baseModule;
 	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
-	int _armor, _flammable, _fuel, _explosive, _bigWall;
+	int _armor, _flammable, _fuel, _explosive, _explosiveType, _bigWall;
 	int _sprite[8];
 	int _block[6];
 	int _loftID[12];
@@ -146,6 +146,10 @@ public:
 	int getExplosive() const;
 	/// Sets the amount of explosive.
 	void setExplosive(int value);
+	/// Gets the type of explosive.
+	int getExplosiveType() const;
+	/// Sets the type of explosive.
+	void setExplosiveType(int value);
 	/// Sets the MiniMap index
 	void setMiniMapIndex(unsigned short i);
 	/// Gets the MiniMap index
@@ -162,6 +166,8 @@ public:
 	bool isBaseModule();
 	/// Sets this tile as not a floor (water, etc.)
 	void setNoFloor(bool isNoFloor);
+	/// Sets this tile as not stopping LOS.
+	void setStopLOS(bool stopLOS);
 };
 
 }

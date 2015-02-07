@@ -50,44 +50,40 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtFollowers = new Text(182, 40, 37, 88);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("targetInfo")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnIntercept);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtTargetted);
-	add(_txtFollowers);
+	add(_window, "window", "targetInfo");
+	add(_btnIntercept, "button", "targetInfo");
+	add(_btnOk, "button", "targetInfo");
+	add(_txtTitle, "text", "targetInfo");
+	add(_txtTargetted, "text", "targetInfo");
+	add(_txtFollowers, "text", "targetInfo");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&TargetInfoState::btnInterceptClick);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	std::wostringstream ss;
+
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(_target->getName(_game->getLanguage()));
+	ss << L'\x01' << _target->getName(_game->getLanguage());
+	_txtTitle->setText(ss.str().c_str());
 
-	_txtTargetted->setColor(Palette::blockOffset(15)-1);
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
-
-	_txtFollowers->setColor(Palette::blockOffset(15)-1);
+	ss.str(L"");
 	_txtFollowers->setAlign(ALIGN_CENTER);
-	std::wostringstream ss;
 	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
 		ss << (*i)->getName(_game->getLanguage()) << L'\n';

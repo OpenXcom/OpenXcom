@@ -50,6 +50,7 @@ public:
 	static void pause();
 	/// Resumes all music.
 	static void resume();
+	virtual bool isPlaying();
 };
 
 }

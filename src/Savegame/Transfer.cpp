@@ -321,5 +321,4 @@ Soldier *Transfer::getSoldier()
 {
 	return _soldier;
 }
-
 }

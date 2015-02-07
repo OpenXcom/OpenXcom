@@ -28,7 +28,7 @@ namespace OpenXcom
 MapData::MapData(MapDataSet *dataset) : _dataset(dataset), _specialType(TILE), 
 				_isUfoDoor(false), _stopLOS(false), _isNoFloor(false), _isGravLift(false), _isDoor(false), _blockFire(false), _blockSmoke(false), _baseModule(false),
 				_yOffset(0), _TUWalk(0), _TUFly(0), _TUSlide(0), _terrainLevel(0), _footstepSound(0), _dieMCD(0), _altMCD(0), _objectType(0), _lightSource(0),
-				_armor(0), _flammable(0), _fuel(0), _explosive(0), _bigWall(0), _miniMapIndex(0)
+				_armor(0), _flammable(0), _fuel(0), _explosive(0), _explosiveType(0), _bigWall(0), _miniMapIndex(0)
 {
 	std::fill_n(_sprite, 8, 0);
 	std::fill_n(_block, 6, 0);
@@ -109,11 +109,11 @@ bool MapData::isNoFloor() const
  * 6: acts as an east wall
  * 7: acts as a south wall
  * 8: acts as a south and east wall.
+ * 9: acts as a north and west wall.
  * @return An integer representing what kind of bigwall this is.
  */
 int MapData::getBigWall() const
 {
-	if (_terrainLevel < 0) return 0; // this is a hack for eg. Skyranger Ramps
 	return _bigWall;
 }
 
@@ -276,6 +276,8 @@ int MapData::getTUCost(MovementType movementType) const
 		break;
 	case MT_SLIDE:
 		return _TUSlide;
+		break;
+	default:
 		break;
 	}
 	return 0;
@@ -481,6 +483,24 @@ void MapData::setExplosive(int value)
 }
 
 /**
+ * Gets the type of explosive.
+ * @return The amount of explosive.
+ */
+int MapData::getExplosiveType() const
+{
+	return _explosiveType;
+}
+
+/**
+ * Sets the type of explosive.
+ * @param value The type of explosive.
+ */
+void MapData::setExplosiveType(int value)
+{
+	_explosiveType = value;
+}
+
+/**
  * Sets the SCANG.DAT index for minimap.
  * @param i The minimap index.
  */
@@ -551,4 +571,15 @@ void MapData::setNoFloor(bool isNoFloor)
 {
 	_isNoFloor = isNoFloor;
 }
+
+/**
+ * set the "stops LOS" flag.
+ * @param stopLOS set the flag to THIS.
+ */
+void MapData::setStopLOS(bool stopLOS)
+{
+	_stopLOS = stopLOS;
+	_block[1] = stopLOS ? 255 : 0;
+}
+
 }

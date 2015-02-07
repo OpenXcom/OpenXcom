@@ -46,9 +46,9 @@ public:
 	/// Gets the bar's color.
 	Uint8 getColor() const;
 	/// Sets the bar's second color.
-	void setColor2(Uint8 color);
+	void setSecondaryColor(Uint8 color);
 	/// Gets the bar's second color.
-	Uint8 getColor2() const;
+	Uint8 getSecondaryColor() const;
 	/// Sets the bar's scale.
 	void setScale(double scale);
 	/// Gets the bar's scale.

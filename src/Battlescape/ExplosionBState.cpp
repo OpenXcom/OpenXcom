@@ -82,7 +82,7 @@ void ExplosionBState::init()
 		// since melee aliens don't use a conventional weapon type, we use their strength instead.
 		if (_item->getRules()->isStrengthApplied())
 		{
-			_power += _unit->getStats()->strength;
+			_power += _unit->getBaseStats()->strength;
 		}
 
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE &&
@@ -94,7 +94,7 @@ void ExplosionBState::init()
 		_power = _tile->getExplosive();
 		_areaOfEffect = true;
 	}
-	else if (_unit && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+	else if (_unit && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
 		_areaOfEffect = true;
@@ -267,25 +267,46 @@ void ExplosionBState::explode()
 			if (!_item->getRules()->getZombieUnit().empty()
 				&& victim
 				&& victim->getArmor()->getSize() == 1
+				&& (victim->getGeoscapeSoldier() || victim->getUnitRules()->getRace() == "STR_CIVILIAN")
 				&& victim->getSpawnUnit().empty()
 				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				// converts the victim to a zombie on death
-				victim->setSpecialAbility(SPECAB_RESPAWN);
+				victim->setRespawn(true);
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
 			}
 		}
 	}
 	if (_tile)
 	{
-		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
+		ItemDamageType DT;
+		switch (_tile->getExplosiveType())
+		{
+		case 0:
+			DT = DT_HE;
+			break;
+		case 5:
+			DT = DT_IN;
+			break;
+		case 6:
+			DT = DT_STUN;
+			break;
+		default:
+			DT = DT_SMOKE;
+			break;
+		}
+		if (DT != DT_HE)
+		{
+			_tile->setExplosive(0,0,true);
+		}
+		save->getTileEngine()->explode(_center, _power, DT, _power/10);
 		terrainExplosion = true;
 	}
 	if (!_tile && !_item)
 	{
 		int radius = 6;
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-		if (_unit && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		if (_unit && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
 		}

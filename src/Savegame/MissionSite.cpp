@@ -16,32 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include <sstream>
 #include "../Engine/Language.h"
+#include "../Ruleset/RuleAlienMission.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes a terror site.
+ * Initializes a mission site.
  */
-TerrorSite::TerrorSite() : Target(), _id(0), _secondsRemaining(0), _inBattlescape(false)
+MissionSite::MissionSite(const RuleAlienMission *rules) : Target(), _rules(rules), _id(0), _secondsRemaining(0), _inBattlescape(false)
 {
 }
 
 /**
  *
  */
-TerrorSite::~TerrorSite()
+MissionSite::~MissionSite()
 {
 }
 
 /**
- * Loads the terror site from a YAML file.
+ * Loads the mission site from a YAML file.
  * @param node YAML node.
  */
-void TerrorSite::load(const YAML::Node &node)
+void MissionSite::load(const YAML::Node &node)
 {
 	Target::load(node);
 	_id = node["id"].as<int>(_id);
@@ -51,12 +52,13 @@ void TerrorSite::load(const YAML::Node &node)
 }
 
 /**
- * Saves the terror site to a YAML file.
+ * Saves the mission site to a YAML file.
  * @return YAML node.
  */
-YAML::Node TerrorSite::save() const
+YAML::Node MissionSite::save() const
 {
 	YAML::Node node = Target::save();
+	node["type"] = _rules->getType();
 	node["id"] = _id;
 	if (_secondsRemaining)
 		node["secondsRemaining"] = _secondsRemaining;
@@ -67,104 +69,115 @@ YAML::Node TerrorSite::save() const
 }
 
 /**
- * Saves the terror site's unique identifiers to a YAML file.
+ * Saves the mission site's unique identifiers to a YAML file.
  * @return YAML node.
  */
-YAML::Node TerrorSite::saveId() const
+YAML::Node MissionSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = "STR_TERROR_SITE";
+	node["type"] = _rules->getType();
 	node["id"] = _id;
 	return node;
 }
 
 /**
- * Returns the terror site's unique ID.
+ * Returns the ruleset for the mission's type.
+ * @return Pointer to ruleset.
+ */
+const RuleAlienMission *MissionSite::getRules() const
+{
+	return _rules;
+}
+
+/**
+ * Returns the mission site's unique ID.
  * @return Unique ID.
  */
-int TerrorSite::getId() const
+int MissionSite::getId() const
 {
 	return _id;
 }
 
 /**
- * Changes the terror site's unique ID.
+ * Changes the mission site's unique ID.
  * @param id Unique ID.
  */
-void TerrorSite::setId(int id)
+void MissionSite::setId(int id)
 {
 	_id = id;
 }
 
 /**
- * Returns the terror site's unique identifying name.
+ * Returns the mission site's unique identifying name.
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring TerrorSite::getName(Language *lang) const
+std::wstring MissionSite::getName(Language *lang) const
 {
-	return lang->getString("STR_TERROR_SITE").arg(_id);
+	return lang->getString(_rules->getMarkerName()).arg(_id);
 }
 
 /**
- * Returns the globe marker for the terror site.
+ * Returns the globe marker for the mission site.
  * @return Marker sprite, -1 if none.
  */
-int TerrorSite::getMarker() const
+int MissionSite::getMarker() const
 {
-	return 5;
+	if (_rules->getMarkerIcon() == -1)
+		return 5;
+	return _rules->getMarkerIcon();
 }
 
 /**
- * Returns the number of seconds remaining before the terror site expires.
+ * Returns the number of seconds remaining before the mission site expires.
  * @return Amount of seconds.
  */
-size_t TerrorSite::getSecondsRemaining() const
+size_t MissionSite::getSecondsRemaining() const
 {
 	return _secondsRemaining;
 }
 
 /**
- * Changes the number of seconds before the terror site expires.
+ * Changes the number of seconds before the mission site expires.
  * @param seconds Amount of seconds.
  */
-void TerrorSite::setSecondsRemaining(size_t seconds)
+void MissionSite::setSecondsRemaining(size_t seconds)
 {
 	_secondsRemaining = seconds;
 }
 
 /**
- * Returns the alien race currently residing in the terror site.
+ * Returns the alien race currently residing in the mission site.
  * @return Alien race.
  */
-std::string TerrorSite::getAlienRace() const
+std::string MissionSite::getAlienRace() const
 {
 	return _race;
 }
 
 /**
- * Changes the alien race currently residing in the terror site.
+ * Changes the alien race currently residing in the mission site.
  * @param race Alien race.
  */
-void TerrorSite::setAlienRace(const std::string &race)
+void MissionSite::setAlienRace(const std::string &race)
 {
 	_race = race;
 }
 
 /**
- * Gets the terror site's battlescape status.
+ * Gets the mission site's battlescape status.
  * @return bool
  */
-bool TerrorSite::isInBattlescape() const
+bool MissionSite::isInBattlescape() const
 {
 	return _inBattlescape;
 }
 
 /**
- * Sets the terror site's battlescape status.
+ * Sets the mission site's battlescape status.
  * @param inbattle .
  */
-void TerrorSite::setInBattlescape(bool inbattle)
+void MissionSite::setInBattlescape(bool inbattle)
 {
 	_inBattlescape = inbattle;
 }
