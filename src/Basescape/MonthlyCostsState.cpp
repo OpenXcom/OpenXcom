@@ -48,13 +48,14 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_txtCost = new Text(80, 9, 115, 32);
 	_txtQuantity = new Text(55, 9, 195, 32);
 	_txtTotal = new Text(60, 9, 249, 32);
-	_txtRental = new Text(150, 9, 10, 48);
+	_txtRental = new Text(150, 9, 10, 40);
 	_txtSalaries = new Text(150, 9, 10, 80);
-	_txtIncome = new Text(150, 9, 10, 136);
-	_lstCrafts = new TextList(288, 24, 10, 56);
-	_lstSalaries = new TextList(300, 30, 10, 88);
-	_lstMaintenance = new TextList(300, 9, 10, 120);
-	_lstTotal = new TextList(100, 9, 205, 136);
+	_txtIncome = new Text(150, 9, 10, 146);
+	_txtMaintenance = new Text(150, 9, 10, 154);
+	_lstCrafts = new TextList(288, 32, 10, 48);
+	_lstSalaries = new TextList(300, 40, 10, 88);
+	_lstMaintenance = new TextList(300, 9, 10, 128);
+	_lstTotal = new TextList(100, 9, 205, 150);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color);
@@ -71,6 +72,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	add(_lstSalaries, "list", "costsInfo");
 	add(_lstMaintenance, "text1", "costsInfo");
 	add(_txtIncome, "list", "costsInfo");
+	add(_txtMaintenance, "list", "costsInfo");
 	add(_lstTotal, "text2", "costsInfo");
 
 	centerAllSurfaces();
@@ -101,6 +103,10 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	ss << tr("STR_INCOME") << L"=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
+	std::wostringstream ss2;
+	ss2 << tr("STR_MAINTENANCE") << L"=" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
+	_txtMaintenance->setText(ss2.str());
+
 	_lstCrafts->setColumns(4, 125, 70, 44, 60);
 	_lstCrafts->setDot(true);
 
@@ -110,9 +116,9 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
 		if (craft->getRentCost() != 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
-			std::wostringstream ss2;
-			ss2 << _base->getCraftCount((*i));
-			_lstCrafts->addRow(4, tr(*i).c_str(), Text::formatFunding(craft->getRentCost()).c_str(), ss2.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getRentCost()).c_str());
+			std::wostringstream ss3;
+			ss3 << _base->getCraftCount((*i));
+			_lstCrafts->addRow(4, tr(*i).c_str(), Text::formatFunding(craft->getRentCost()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getRentCost()).c_str());
 		}
 	}
 

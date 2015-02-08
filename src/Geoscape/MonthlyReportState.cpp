@@ -56,10 +56,13 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_btnBigOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(300, 17, 16, 8);
-	_txtMonth = new Text(110, 9, 16, 24);
-	_txtRating = new Text(180, 9, 125, 24);
-	_txtChange = new Text(300, 9, 16, 32);
-	_txtDesc = new Text(280, 140, 16, 40);
+	_txtMonth = new Text(160, 9, 16, 24);
+	_txtRating = new Text(160, 9, 166, 24);
+	_txtIncome = new Text(160, 9, 16, 32);
+	_txtMaintenance = new Text(160, 9, 166, 32);
+	_txtChange = new Text(160, 9, 16, 40);
+	_txtBalance = new Text(160, 9, 166, 40);
+	_txtDesc = new Text(280, 132, 16, 48);
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
@@ -71,7 +74,10 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	add(_txtTitle, "text1", "monthlyReport");
 	add(_txtMonth, "text1", "monthlyReport");
 	add(_txtRating, "text1", "monthlyReport");
+	add(_txtIncome, "text1", "monthlyReport");
+	add(_txtMaintenance, "text1", "monthlyReport");
 	add(_txtChange, "text1", "monthlyReport");
+	add(_txtBalance, "text1", "monthlyReport");
 	add(_txtDesc, "text2", "monthlyReport");
 	add(_txtFailure, "text2", "monthlyReport");
 
@@ -151,17 +157,28 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
+	std::wostringstream ss;
+	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	_txtIncome->setText(ss.str());
+
+	std::wostringstream ss2;
+	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(-_game->getSavedGame()->getBaseMaintenance());
+	_txtMaintenance->setText(ss2.str());
+
 	std::wostringstream ss3;
 	if (_fundingDiff > 0)
 		ss3 << '+';
 	ss3 << Text::formatFunding(_fundingDiff);
-
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
+
+	std::wostringstream ss4;
+	ss4 << tr("STR_BALANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtBalance->setText(ss4.str());
 
 	_txtDesc->setWordWrap(true);
 
 	// calculate satisfaction
-	std::wostringstream ss4;
+	std::wostringstream ss5;
 	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
 	bool resetWarning = true;
 	if (_ratingTotal > difficulty_threshold)
@@ -180,7 +197,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 		_sadList.erase(_sadList.begin(), _sadList.end());
 		_gameOver = true;
 	}
-	ss4 << satisFactionString;
+	ss5 << satisFactionString;
 
 	if (!_gameOver)
 	{
@@ -188,8 +205,8 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 		{
 			if (_game->getSavedGame()->getWarned())
 			{
-				ss4.str(L"");
-				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+				ss5.str(L"");
+				ss5 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
 				_sadList.erase(_sadList.begin(), _sadList.end());
@@ -197,7 +214,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 			}
 			else
 			{
-				ss4 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
+				ss5 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 				_game->getSavedGame()->setWarned(true);
 				resetWarning = false;
 			}
@@ -207,11 +224,11 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	if (resetWarning && _game->getSavedGame()->getWarned())
 		_game->getSavedGame()->setWarned(false);
 
-	ss4 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
-	ss4 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
-	ss4 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
+	ss5 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
+	ss5 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
+	ss5 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
 	
-	_txtDesc->setText(ss4.str());
+	_txtDesc->setText(ss5.str());
 }
 
 

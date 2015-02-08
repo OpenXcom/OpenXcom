@@ -41,7 +41,7 @@ private:
 
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtCost, *_txtQuantity, *_txtTotal, *_txtRental, *_txtSalaries, *_txtIncome;
+	Text *_txtTitle, *_txtCost, *_txtQuantity, *_txtTotal, *_txtRental, *_txtSalaries, *_txtIncome, *_txtMaintenance;
 	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;
 public:
 	/// Creates the Monthly Costs state.
