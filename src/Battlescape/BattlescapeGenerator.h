@@ -40,7 +40,7 @@ class AlienRace;
 class AlienDeployment;
 class Game;
 class Base;
-class TerrorSite;
+class MissionSite;
 class AlienBase;
 class BattleUnit;
 class MapScript;
@@ -57,7 +57,7 @@ private:
 	Craft *_craft;
 	Ufo *_ufo;
 	Base *_base;
-	TerrorSite *_terror;
+	MissionSite *_mission;
 	AlienBase *_alienBase;
 	RuleTerrain *_terrain;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
@@ -152,13 +152,13 @@ public:
 	void setAlienItemlevel(int alienItemLevel);
 	/// Sets the XCom base.
 	void setBase(Base *base);
-	/// Sets the terror site.
-	void setTerrorSite(TerrorSite* site);
+	/// Sets the mission site.
+	void setMissionSite(MissionSite* mission);
 	/// Sets the alien base
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
-	/// Sets up the next stage (for cydonia/tftd terror missions).
+	/// Sets up the next stage (for Cydonia/TFTD missions).
 	void nextStage();
 	/// Generates an inventory battlescape.
 	void runInventory(Craft *craft);

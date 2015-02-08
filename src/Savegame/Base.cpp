@@ -1108,7 +1108,7 @@ int Base::getUsedContainment() const
 	int total = 0;
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
-		if (_rule->getItem((i)->first)->getAlien())
+		if (_rule->getItem((i)->first)->isAlien())
 		{
 			total += (i)->second;
 		}
@@ -1117,7 +1117,7 @@ int Base::getUsedContainment() const
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			if (_rule->getItem((*i)->getItems())->getAlien())
+			if (_rule->getItem((*i)->getItems())->isAlien())
 			{
 				total += (*i)->getQuantity();
 			}

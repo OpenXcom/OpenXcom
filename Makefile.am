@@ -295,8 +295,8 @@ openxcom_SOURCES = \
 	src/Engine/Zoom.h \
 	src/Geoscape/AlienBaseState.cpp \
 	src/Geoscape/AlienBaseState.h \
-	src/Geoscape/AlienTerrorState.cpp \
-	src/Geoscape/AlienTerrorState.h \
+	src/Geoscape/MissionDetectedState.cpp \
+	src/Geoscape/MissionDetectedState.h \
 	src/Geoscape/AllocatePsiTrainingState.cpp \
 	src/Geoscape/AllocatePsiTrainingState.h \
 	src/Geoscape/BaseDefenseState.cpp \
@@ -516,6 +516,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleItem.h \
 	src/Ruleset/RuleManufacture.cpp \
 	src/Ruleset/RuleManufacture.h \
+	src/Ruleset/RuleMusic.cpp \
+	src/Ruleset/RuleMusic.h \
 	src/Ruleset/RuleRegion.cpp \
 	src/Ruleset/RuleRegion.h \
 	src/Ruleset/RuleResearch.cpp \
@@ -595,8 +597,8 @@ openxcom_SOURCES = \
 	src/Savegame/SoldierDeath.h \
 	src/Savegame/Target.cpp \
 	src/Savegame/Target.h \
-	src/Savegame/TerrorSite.cpp \
-	src/Savegame/TerrorSite.h \
+	src/Savegame/MissionSite.cpp \
+	src/Savegame/MissionSite.h \
 	src/Savegame/Tile.cpp \
 	src/Savegame/Tile.h \
 	src/Savegame/Transfer.cpp \

@@ -143,7 +143,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
-		if (qty > 0 && _game->getRuleset()->getItem(*i)->getAlien())
+		if (qty > 0 && _game->getRuleset()->getItem(*i)->isAlien())
 		{
 			_qtys.push_back(0);
 			_aliens.push_back(*i);

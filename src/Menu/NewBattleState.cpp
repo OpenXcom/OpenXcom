@@ -41,7 +41,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Savegame/Ufo.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleTerrain.h"
@@ -53,6 +53,7 @@
 #include "../Engine/Logger.h"
 #include "../Basescape/CraftInfoState.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Ruleset/RuleAlienMission.h"
 
 namespace OpenXcom
 {
@@ -488,12 +489,14 @@ void NewBattleState::btnOkClick(Action *)
 
 	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
 
+	// base defense
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
 		base = _craft->getBase();
 		bgen.setBase(base);
 		_craft = 0;
 	}
+	// alien base
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
 	{
 		AlienBase *b = new AlienBase();
@@ -503,6 +506,7 @@ void NewBattleState::btnOkClick(Action *)
 		bgen.setAlienBase(b);
 		_game->getSavedGame()->getAlienBases()->push_back(b);
 	}
+	// ufo assault
 	else if (_craft && _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]))
 	{
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]));
@@ -520,14 +524,23 @@ void NewBattleState::btnOkClick(Action *)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
+	// terror site / alien artefact
 	else
 	{
-		TerrorSite *t = new TerrorSite();
-		t->setId(1);
-		t->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-		_craft->setDestination(t);
-		bgen.setTerrorSite(t);
-		_game->getSavedGame()->getTerrorSites()->push_back(t);
+		for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getAlienMissionList().begin(); i != _game->getRuleset()->getAlienMissionList().end(); ++i)
+		{
+			const RuleAlienMission *mission = _game->getRuleset()->getAlienMission(*i);
+			if (bgame->getMissionType() == mission->getDeployment())
+			{
+				MissionSite *m = new MissionSite(mission);
+				m->setId(1);
+				m->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+				_craft->setDestination(m);
+				bgen.setMissionSite(m);
+				_game->getSavedGame()->getMissionSites()->push_back(m);
+				break;
+			}
+		}
 	}
 
 	if (_craft)

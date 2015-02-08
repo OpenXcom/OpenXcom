@@ -43,7 +43,7 @@
 #include "Craft.h"
 #include "AlienBase.h"
 #include "Waypoint.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "CraftWeapon.h"
 #include "Transfer.h"
 #include "Vehicle.h"
@@ -54,11 +54,12 @@
 #include "ResearchProject.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
 
-enum TargetType { TARGET_NONE, TARGET_UFO, TARGET_CRAFT, TARGET_XBASE, TARGET_ABASE, TARGET_CRASH, TARGET_LANDED, TARGET_WAYPOINT, TARGET_TERROR };
+enum TargetType { TARGET_NONE, TARGET_UFO, TARGET_CRAFT, TARGET_XBASE, TARGET_ABASE, TARGET_CRASH, TARGET_LANDED, TARGET_WAYPOINT, TARGET_TERROR, TARGET_PORT = 0x51, TARGET_ISLAND = 0x52, TARGET_SHIP = 0x53, TARGET_ARTEFACT = 0x54 };
 const char *xcomAltitudes[] = { "STR_GROUND", "STR_VERY_LOW", "STR_LOW", "STR_HIGH", "STR_VERY_HIGH" };
 const char *xcomStatus[] = { "STR_READY", "STR_OUT", "STR_REPAIRS", "STR_REFUELLING", "STR_REARMING" };
 
@@ -71,7 +72,8 @@ template <> unsigned int load(char* data) { return SDL_SwapLE32(*(unsigned int*)
 template <> std::string load(char* data) { return data; }
 template <> std::wstring load(char* data) { return Language::utf8ToWstr(data); }
 
-#define SET_ID(a, b, n) { b = a; *n = sizeof(a)/sizeof(a[0]); }
+#define ARR_BEGIN(x) x
+#define ARR_END(x) x + sizeof(x)/sizeof(x[0])
 
 char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char> &buffer)
 {
@@ -103,6 +105,66 @@ SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
 	{
 		throw Exception(_saveName + " is not a valid save folder");
 	}
+
+	_idCountries = _rule->getCountriesList();
+	_idRegions = _rule->getRegionsList();
+	_idFacilities = _rule->getBaseFacilitiesList();
+	//_idItems = _rule->getItemsList();
+	_idItems = std::vector<std::string>(ARR_BEGIN(xcom1Items), ARR_END(xcom1Items));
+	_idCrews = _rule->getAlienRacesList();
+	_idCrafts = _rule->getCraftsList();
+	_idUfos = _rule->getUfosList();
+	_idCraftWeapons = _rule->getCraftWeaponsList();
+	_idMissions = _rule->getAlienMissionList();
+	_idResearch = _rule->getResearchList();
+	_idResearch.resize(95); // TODO
+	_idManufacture = _rule->getManufactureList();
+	_idUfopaedia = _rule->getUfopaediaList();
+
+	for (std::vector<std::string>::const_iterator i = _rule->getArmorsList().begin(); i != _rule->getArmorsList().end(); ++i)
+	{
+		Armor *armor = _rule->getArmor(*i);
+		if (!armor->getSpriteInventory().empty())
+		{
+			_idArmor.push_back(*i);
+		}
+	}
+
+	_idAlienRaces.push_back("");
+	_idAlienRanks.push_back("");
+	for (std::vector<std::string>::const_iterator i = _rule->getItemsList().begin(); i != _rule->getItemsList().end(); ++i)
+	{
+		RuleItem *item = _rule->getItem(*i);
+		if (item->isAlien())
+		{
+			size_t n = i->find_last_of('_');
+			if (n != std::string::npos)
+			{
+				std::string race = i->substr(0, n);
+				if (std::find(_idAlienRaces.begin(), _idAlienRaces.end(), race) == _idAlienRaces.end())
+				{
+					_idAlienRaces.push_back(race);
+				}
+				std::string rank = i->substr(n);
+				if (std::find(_idAlienRanks.begin(), _idAlienRanks.end(), race) == _idAlienRanks.end())
+				{
+					_idAlienRanks.push_back(rank);
+				}
+			}
+		}
+	}
+
+	_idMarkers.push_back("STR_UFO");
+	_idMarkers.push_back("STR_TERROR_SITE");
+	_idMarkers.push_back("STR_ALIEN_BASE");
+	_idMarkers.push_back("STR_LANDING_SITE");
+	_idMarkers.push_back("STR_CRASH_SITE");
+	_idMarkers.push_back("STR_WAYPOINT");
+	for (std::vector<std::string>::const_iterator i = _idCrafts.begin(); i != _idCrafts.end(); ++i)
+	{
+		_idMarkers.push_back(*i);
+	}
+
 }
 
 SaveConverter::~SaveConverter()
@@ -157,32 +219,16 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 }
 
 /**
- * Converts an UFO: Enemy Unknown / X-COM: UFO Defense save into an OpenXcom save.
+ * Converts an original X-COM save into an OpenXcom save.
  * @return New OpenXcom save.
  */
-SavedGame *SaveConverter::loadXcom1()
+SavedGame *SaveConverter::loadOriginal()
 {
-	SET_ID(xcom1Markers, _idMarkers, &_nMarkers);
-	SET_ID(xcom1Countries, _idCountries, &_nCountries);
-	SET_ID(xcom1Regions, _idRegions, &_nRegions);
-	SET_ID(xcom1Facilities, _idFacilities, &_nFacilities);
-	SET_ID(xcom1Items, _idItems, &_nItems);
-	SET_ID(xcom1Races, _idRaces, &_nRaces);
-	SET_ID(xcom1Crafts, _idCrafts, &_nCrafts);
-	SET_ID(xcom1Ufos, _idUfos, &_nUfos);
-	SET_ID(xcom1CraftWeapons, _idCraftWeapons, &_nCraftWeapons);
-	SET_ID(xcom1Missions, _idMissions, &_nMissions);
-	SET_ID(xcom1Armor, _idArmor, &_nArmor);
-	SET_ID(xcom1LiveAliens, _idLiveAliens, &_nLiveAliens);
-	SET_ID(xcom1LiveRanks, _idLiveRanks, &_nLiveRanks);
-	SET_ID(xcom1Research, _idResearch, &_nResearch);
-	SET_ID(xcom1Manufacture, _idManufacture, &_nManufacture);
-
 	_save = new SavedGame();
 
 	// Load globe data
 	_save->getIncomes().clear();
-	for (size_t i = 0; i < _nCountries; ++i)
+	for (size_t i = 0; i < _idCountries.size(); ++i)
 	{
 		Country *country = new Country(_rule->getCountry(_idCountries[i]));
 		country->getActivityAlien().clear();
@@ -190,7 +236,7 @@ SavedGame *SaveConverter::loadXcom1()
 		country->getFunding().clear();
 		_save->getCountries()->push_back(country);
 	}
-	for (size_t i = 0; i < _nRegions; ++i)
+	for (size_t i = 0; i < _idRegions.size(); ++i)
 	{
 		Region *region = new Region(_rule->getRegion(_idRegions[i]));
 		region->getActivityAlien().clear();
@@ -292,14 +338,14 @@ void SaveConverter::loadDatIGlob()
 	graphVector(_save->getMaintenances(), month, _year != _rule->getStartingTime().getYear());
 	graphVector(_save->getFundsList(), month, _year != _rule->getStartingTime().getYear());
 	graphVector(_save->getResearchScores(), month, _year != _rule->getStartingTime().getYear());
-	for (size_t i = 0; i < _nCountries; ++i)
+	for (size_t i = 0; i < _idCountries.size(); ++i)
 	{
 		Country *country = _save->getCountries()->at(i);
 		graphVector(country->getActivityAlien(), month, _year != _rule->getStartingTime().getYear());
 		graphVector(country->getActivityXcom(), month, _year != _rule->getStartingTime().getYear());
 		graphVector(country->getFunding(), month, _year != _rule->getStartingTime().getYear());
 	}
-	for (size_t i = 0; i < _nRegions; ++i)
+	for (size_t i = 0; i < _idRegions.size(); ++i)
 	{
 		Region *region = _save->getRegions()->at(i);
 		graphVector(region->getActivityAlien(), month, _year != _rule->getStartingTime().getYear());
@@ -348,7 +394,7 @@ void SaveConverter::loadDatUIGlob()
 
 	std::map<std::string, int> ids;
 	// IDs are 2 bytes each
-	for (size_t i = 0; i < _nMarkers; ++i)
+	for (size_t i = 0; i < _idMarkers.size(); ++i)
 	{
 		ids[_idMarkers[i]] = load<Uint16>(data + i * 2);
 	}
@@ -402,20 +448,20 @@ void SaveConverter::loadDatXcom()
 	char *data = binaryBuffer("XCOM.DAT", buffer);
 
 	// 12 months of data
-	size_t n = _nCountries + _nRegions;
+	size_t n = _idCountries.size() + _idRegions.size();
 	for (size_t i = 0; i < n * 12; ++i)
 	{
 		int score = load<int>(data + i * 4);
 		size_t j = i % n;
 		// country
-		if (j < _nCountries)
+		if (j < _idCountries.size())
 		{
 			_save->getCountries()->at(j)->getActivityXcom().push_back(score);
 		}
 		// region
 		else
 		{
-			j -= _nCountries;
+			j -= _idCountries.size();
 			_save->getRegions()->at(j)->getActivityXcom().push_back(score);
 		}
 	}
@@ -431,20 +477,20 @@ void SaveConverter::loadDatAlien()
 	char *data = binaryBuffer("ALIEN.DAT", buffer);
 
 	// 12 months of data
-	size_t n = _nCountries + _nRegions;
+	size_t n = _idCountries.size() + _idRegions.size();
 	for (size_t i = 0; i < n * 12; ++i)
 	{
 		int score = load<int>(data + i * 4);
 		size_t j = i % n;
 		// country
-		if (j < _nCountries)
+		if (j < _idCountries.size())
 		{
 			_save->getCountries()->at(j)->getActivityAlien().push_back(score);
 		}
 		// region
 		else
 		{
-			j -= _nCountries;
+			j -= _idCountries.size();
 			_save->getRegions()->at(j)->getActivityAlien().push_back(score);
 		}
 	}
@@ -466,7 +512,7 @@ void SaveConverter::loadDatDiplom()
 	}
 
 	// each country is 36 bytes
-	for (size_t i = 0; i < _nCountries; ++i)
+	for (size_t i = 0; i < _idCountries.size(); ++i)
 	{
 		char *cdata = (data + i * 36);
 		Country *country = _save->getCountries()->at(i);
@@ -565,7 +611,7 @@ void SaveConverter::loadDatMissions()
 			YAML::Node node;
 			AlienMission *m = new AlienMission(*_rule->getAlienMission(_idMissions[mission]));
 			node["region"] = _idRegions[region];
-			node["race"] = _idRaces[race];
+			node["race"] = _idCrews[race];
 			node["nextWave"] = wave * 30;
 			node["nextUfoCounter"] = ufoCounter;
 			node["spawnCountdown"] = spawn;
@@ -606,7 +652,7 @@ void SaveConverter::loadDatLoc()
 		Base *xbase = 0;
 		AlienBase *abase = 0;
 		Waypoint *waypoint = 0;
-		TerrorSite *terror = 0;
+		MissionSite *mission = 0;
 		switch (type)
 		{
 		case TARGET_NONE:
@@ -634,7 +680,7 @@ void SaveConverter::loadDatLoc()
 		case TARGET_ABASE:
 			abase = new AlienBase();
 			abase->setId(id);
-			abase->setAlienRace(_idRaces[dat]);
+			abase->setAlienRace(_idCrews[dat]);
 			abase->setDiscovered(!visibility.test(0));
 			_save->getAlienBases()->push_back(abase);
 			target = abase;
@@ -646,13 +692,28 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			terror = new TerrorSite();
-			terror->setId(id);
-			terror->setAlienRace(_idRaces[dat]);
-			terror->setSecondsRemaining(timer * 3600);
-			_save->getTerrorSites()->push_back(terror);
-			target = terror;
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"));
 			break;
+		case TARGET_PORT:
+			mission = new MissionSite(_rule->getAlienMission("STR_PORT_ATTACK"));
+			break;
+		case TARGET_ISLAND:
+			mission = new MissionSite(_rule->getAlienMission("STR_ISLAND_ATTACK"));
+			break;
+		case TARGET_SHIP:
+			mission = new MissionSite(_rule->getAlienMission("STR_SHIP_RESCUE_MISSION"));
+			break;
+		case TARGET_ARTEFACT:
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_CONTACT_SITE_MISSION"));
+			break;
+		}
+		if (mission != 0)
+		{
+			mission->setId(id);
+			mission->setAlienRace(_idCrews[dat]);
+			mission->setSecondsRemaining(timer * 3600);
+			_save->getMissionSites()->push_back(mission);
+			target = mission;
 		}
 		if (target != 0)
 		{
@@ -686,7 +747,7 @@ void SaveConverter::loadDatBase()
 			for (int j = 0; j < 36; ++j)
 			{
 				size_t facilityType = *(bdata + 0x16 + j);
-				if (facilityType < _nFacilities)
+				if (facilityType < _idFacilities.size())
 				{
 					BaseFacility *facility = new BaseFacility(_rule->getBaseFacility(_idFacilities[facilityType]), base);
 					int x = j % 6;
@@ -701,10 +762,10 @@ void SaveConverter::loadDatBase()
 			int engineers = load<Uint8>(bdata + 0x5E);
 			int scientists = load<Uint8>(bdata + 0x5F);
 			// items
-			for (size_t j = 0; j < _nItems; ++j)
+			for (size_t j = 0; j < _idItems.size(); ++j)
 			{
 				int qty = load<Uint16>(bdata + 0x60 + j * 2);
-				if (qty != 0 && _idItems[j] != 0)
+				if (qty != 0 && !_idItems[j].empty())
 				{
 					base->getItems()->addItem(_idItems[j], qty);
 				}
@@ -744,8 +805,8 @@ void SaveConverter::loadDatAStore()
 		{
 			int rank = load<Uint8>(adata + 0x01);
 			int base = load<Uint8>(adata + 0x02);
-			liveAlien = _idLiveAliens[race];
-			liveAlien += _idLiveRanks[rank];
+			liveAlien = _idAlienRaces[race];
+			liveAlien += _idAlienRanks[rank];
 			if (base != 0xFF)
 			{
 				Base *b = dynamic_cast<Base*>(_targets[base]);
@@ -866,7 +927,7 @@ void SaveConverter::loadDatCraft()
 				for (size_t j = 5; j < 55; ++j)
 				{
 					int qty = load<Uint8>(cdata + 0x2C + j);
-					if (qty != 0 && _idItems[j + 10] != 0)
+					if (qty != 0 && !_idItems[j + 10].empty())
 					{
 						craft->getItems()->addItem(_idItems[j + 10], qty);
 					}
@@ -901,11 +962,32 @@ void SaveConverter::loadDatCraft()
 
 				int mission = load<Uint16>(cdata + 0x1C);
 				int region = load<Uint16>(cdata + 0x1E);
+				std::ostringstream trajectory;
 				AlienMission *m = _missions[std::make_pair(mission, region)];
+				if (m == 0)
+				{
+					YAML::Node subnode;
+					m = new AlienMission(*_rule->getAlienMission(_idMissions[mission]));
+					subnode["region"] = _idRegions[region];
+					subnode["race"] = _idCrews[load<Uint16>(cdata + 0x24)];
+					subnode["nextWave"] = 1;
+					subnode["nextUfoCounter"] = 0;
+					subnode["spawnCountdown"] = 1000;
+					subnode["uniqueID"] = _save->getId("ALIEN_MISSIONS");
+					m->load(subnode, *_save);
+					_save->getAlienMissions().push_back(m);
+					_missions[std::make_pair(mission, region)] = m;
+					if (mission == 6)
+					{
+						trajectory << "__RETALIATION_ASSAULT_RUN";
+					}
+				}
 				node["mission"] = m->getId();
 				m->increaseLiveUfos();
-				std::stringstream trajectory;
-				trajectory << "P" << load<Uint16>(cdata + 0x22);
+				if (trajectory.str().empty())
+				{
+					trajectory << "P" << load<Uint16>(cdata + 0x22);
+				}
 				node["trajectory"] = trajectory.str();
 				node["trajectoryPoint"] = (int)load<Uint16>(cdata + 0x20);
 				std::bitset<7> status(load<int>(cdata + 0x64));
@@ -1025,13 +1107,13 @@ void SaveConverter::loadDatResearch()
 	char *data = binaryBuffer("RESEARCH.DAT", buffer);
 
 	// 22 bytes for each entry
-	for (size_t i = 0; i < _nResearch; ++i)
+	for (size_t i = 0; i < _idResearch.size(); ++i)
 	{
 		char *rdata = (data + i * 22);
-		if (_idResearch[i] != 0)
+		if (!_idResearch[i].empty())
 		{
 			RuleResearch *research = _rule->getResearch(_idResearch[i]);
-			if (research != 0)
+			if (research != 0 && research->getCost() != 0)
 			{
 				bool discovered = load<Uint8>(rdata + 0x0A) != 0;
 				bool popped = load<Uint8>(rdata + 0x12) != 0;
@@ -1058,10 +1140,10 @@ void SaveConverter::loadDatUp()
 	char *data = binaryBuffer("UP.DAT", buffer);
 
 	// 12 bytes for each entry
-	for (size_t i = 0; i < _rule->getUfopaediaList().size(); ++i)
+	for (size_t i = 0; i < _idUfopaedia.size(); ++i)
 	{
 		char *rdata = (data + i * 12);
-		ArticleDefinition *article = _rule->getUfopaediaArticle(_rule->getUfopaediaList().at(i));
+		ArticleDefinition *article = _rule->getUfopaediaArticle(_idUfopaedia[i]);
 		if (article != 0)
 		{
 			bool discovered = load<Uint8>(rdata + 0x08) == 2;
@@ -1093,15 +1175,15 @@ void SaveConverter::loadDatProject()
 	for (size_t i = 0; i < _save->getBases()->size(); ++i)
 	{
 		Base *base = _save->getBases()->at(i);
-		for (size_t j = 0; j < _nResearch; ++j)
+		for (size_t j = 0; j < _idResearch.size(); ++j)
 		{
 			char *pdata = (data + i * 288);
 			int remaining = load<Uint16>(pdata + j * 2);
 			int scientists = load<Uint8>(pdata + 0xC0 + j);
-			if (remaining != 0 && _idResearch[j] != 0)
+			if (remaining != 0 && !_idResearch[j].empty())
 			{
 				RuleResearch *research = _rule->getResearch(_idResearch[j]);
-				if (research != 0)
+				if (research != 0 && research->getCost() != 0)
 				{
 					ResearchProject *project = new ResearchProject(research, research->getCost());
 					project->setAssigned(scientists);
@@ -1126,14 +1208,14 @@ void SaveConverter::loadDatBProd()
 	for (size_t i = 0; i < _save->getBases()->size(); ++i)
 	{
 		Base *base = _save->getBases()->at(i);
-		for (size_t j = 0; j < _nManufacture; ++j)
+		for (size_t j = 0; j < _idManufacture.size(); ++j)
 		{
 			char *pdata = (data + i * 350);
 			int remaining = load<int>(pdata + j * 4);
 			int engineers = load<Uint16>(pdata + 0x8C + j * 2);
 			int total = load<Uint16>(pdata + 0xD2 + j * 2);
 			int produced = load<Uint16>(pdata + 0x118 + j * 2);
-			if (remaining != 0 && _idManufacture[j] != 0)
+			if (remaining != 0 && !_idManufacture[j].empty())
 			{
 				RuleManufacture *manufacture = _rule->getManufacture(_idManufacture[j]);
 				if (manufacture != 0)

@@ -51,7 +51,7 @@ namespace YAML
 namespace OpenXcom
 {
 
-RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0)
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _markerIcon(-1)
 {
 }
 
@@ -64,6 +64,10 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_points = node["points"].as<int>(_points);
 	_waves = node["waves"].as< std::vector<MissionWave> >(_waves);
+	_specialUfo = node["specialUfo"].as<std::string>(_specialUfo);
+	_deployment = node["deployment"].as<std::string>(_deployment);
+	_markerName = node["markerName"].as<std::string>(_markerName);
+	_markerIcon = node["markerIcon"].as<int>(_markerIcon);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
@@ -132,7 +136,7 @@ const std::string RuleAlienMission::generateRace(const size_t monthsPassed) cons
 
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();	
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
 	return rc->second->top();
 }
 
@@ -154,6 +158,33 @@ RuleAlienMission::~RuleAlienMission()
 int RuleAlienMission::getPoints() const
 {
 	return _points;
+}
+
+/**
+ * Returns the alien deployment for this mission.
+ * @return String ID for deployment.
+ */
+std::string RuleAlienMission::getDeployment() const
+{
+	return _deployment;
+}
+
+/**
+ * Returns the globe marker name for this mission.
+ * @return String ID for marker name.
+ */
+std::string RuleAlienMission::getMarkerName() const
+{
+	return _markerName;
+}
+
+/**
+ * Returns the globe marker icon for this mission.
+ * @return Marker sprite, -1 if none.
+ */
+int RuleAlienMission::getMarkerIcon() const
+{
+	return _markerIcon;
 }
 
 }

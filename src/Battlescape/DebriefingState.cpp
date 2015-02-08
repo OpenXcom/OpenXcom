@@ -52,7 +52,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/SoldierDiary.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
@@ -637,14 +637,14 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// terror site disappears (even when you abort)
-	for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+	// mission site disappears (even when you abort)
+	for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{
 			_missionStatistics->alienRace = (*i)->getAlienRace();
 			delete *i;
-			save->getTerrorSites()->erase(i);
+			save->getMissionSites()->erase(i);
 			break;
 		}
 	}

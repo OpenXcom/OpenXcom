@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TERRORSITE_H
-#define OPENXCOM_TERRORSITE_H
+#ifndef OPENXCOM_MISSIONSITE_H
+#define OPENXCOM_MISSIONSITE_H
 
 #include "Target.h"
 #include <string>
@@ -26,46 +26,51 @@
 namespace OpenXcom
 {
 
+class RuleAlienMission;
+
 /**
- * Represents an alien terror site on the world.
+ * Represents an alien mission site on the world.
  */
-class TerrorSite : public Target
+class MissionSite : public Target
 {
 private:
+	const RuleAlienMission *_rules;
 	int _id;
 	size_t _secondsRemaining;
 	std::string _race;
 	bool _inBattlescape;
 public:
-	/// Creates a terror site.
-	TerrorSite();
-	/// Cleans up the terror site.
-	~TerrorSite();
-	/// Loads the terror site from YAML.
+	/// Creates a mission site.
+	MissionSite(const RuleAlienMission *rules);
+	/// Cleans up the mission site.
+	~MissionSite();
+	/// Loads the mission site from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the terror site to YAML.
+	/// Saves the mission site to YAML.
 	YAML::Node save() const;
-	/// Saves the terror site's ID to YAML.
+	/// Saves the mission site's ID to YAML.
 	YAML::Node saveId() const;
-	/// Gets the terror site's ID.
+	/// Gets the mission site's ruleset.
+	const RuleAlienMission *getRules() const;
+	/// Gets the mission site's ID.
 	int getId() const;
-	/// Sets the terror site's ID.
+	/// Sets the mission site's ID.
 	void setId(int id);
-	/// Gets the terror site's name.
+	/// Gets the mission site's name.
 	std::wstring getName(Language *lang) const;
-	/// Gets the terror site's marker.
+	/// Gets the mission site's marker.
 	int getMarker() const;
-	/// Gets the seconds until this terror site expires.
+	/// Gets the seconds until this mission site expires.
 	size_t getSecondsRemaining() const;
-	/// Sets the seconds until this terror site expires.
+	/// Sets the seconds until this mission site expires.
 	void setSecondsRemaining(size_t seconds);
-	/// Gets the terror site's alien race.
+	/// Gets the mission site's alien race.
 	std::string getAlienRace() const;
-	/// Sets the terror site's alien race.
+	/// Sets the mission site's alien race.
 	void setAlienRace(const std::string &race);
-	/// Sets the TerrorSite's battlescape status.
+	/// Sets the mission site's battlescape status.
 	void setInBattlescape(bool inbattle);
-	/// Gets if the TerrorSite is in battlescape.
+	/// Gets if the mission site is in battlescape.
 	bool isInBattlescape() const;
 };
 

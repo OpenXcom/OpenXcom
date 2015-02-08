@@ -84,11 +84,11 @@
 #include "../Savegame/Production.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/City.h"
-#include "AlienTerrorState.h"
+#include "MissionDetectedState.h"
 #include "AlienBaseState.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Country.h"
@@ -676,21 +676,21 @@ void GeoscapeState::time5Seconds()
 				(*i)->think();
 				if ((*i)->reachedDestination())
 				{
-					size_t terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
+					size_t count = _game->getSavedGame()->getMissionSites()->size();
 					AlienMission *mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
-						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() == Ufo::LANDED))
 							popup(new UfoLostState((*i)->getName(_game->getLanguage())));
 					}
-					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
+					if (count < _game->getSavedGame()->getMissionSites()->size())
 					{
-						TerrorSite *ts = _game->getSavedGame()->getTerrorSites()->back();
-						const City *city = _game->getRuleset()->locateCity(ts->getLongitude(), ts->getLatitude());
+						MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
+						const City *city = _game->getRuleset()->locateCity(site->getLongitude(), site->getLatitude());
 						assert(city);
-						popup(new AlienTerrorState(ts, city->getName(), this));
+						popup(new MissionDetectedState(site, city->getName(), this));
 					}
 					// If UFO was destroyed, don't spawn missions
 					if ((*i)->getStatus() == Ufo::DESTROYED)
@@ -819,7 +819,7 @@ void GeoscapeState::time5Seconds()
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
-				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
 				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
 				if (u != 0)
 				{
@@ -844,7 +844,7 @@ void GeoscapeState::time5Seconds()
 								startDogfight();
 								_dogfightStartTimer->start();
 							}
-							_game->getResourcePack()->getRandomMusic("GMINTER")->play();
+							_game->getResourcePack()->playMusic("GMINTER", true);
 						}
 						break;
 					case Ufo::LANDED:
@@ -873,13 +873,13 @@ void GeoscapeState::time5Seconds()
 					popup(new CraftPatrolState((*j), _globe));
 					(*j)->setDestination(0);
 				}
-				else if (t != 0)
+				else if (m != 0)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
 						// look up polygons texture
 						int texture, shade;
-						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
+						_globe->getPolygonTextureAndShade(m->getLongitude(), m->getLatitude(), &texture, &shade);
 						timerReset();
 						popup(new ConfirmLandingState(*j, texture, shade));
 					}
@@ -1085,38 +1085,38 @@ private:
 	const Globe &_globe;
 };
 
-/** @brief Process a TerrorSite.
- * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
- * @param ts Pointer to terror site.
- * @return Has terror site expired?
+/** @brief Process a MissionSite.
+ * This function object will count down towards expiring a MissionSite, and handle expired MissionSites.
+ * @param ts Pointer to mission site.
+ * @return Has mission site expired?
  */
-bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
+bool GeoscapeState::processMissionSite(MissionSite *site) const
 {
-	if (ts->getSecondsRemaining() >= 30 * 60)
+	if (site->getSecondsRemaining() >= 30 * 60)
 	{
-		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
+		site->setSecondsRemaining(site->getSecondsRemaining() - 30 * 60);
 		return false;
 	}
-	if (!ts->getFollowers()->empty()) // CHEEKY EXPLOIT
+	if (!site->getFollowers()->empty()) // CHEEKY EXPLOIT
 	{
 		return false;
 	}
 	// Score and delete it.
-	Region *region = _game->getSavedGame()->locateRegion(*ts);
+	Region *region = _game->getSavedGame()->locateRegion(*site);
 	if (region)
 	{
-		region->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
-		//kids, tell your folks... don't ignore terror sites.
+		region->addActivityAlien(site->getRules()->getPoints() * 100);
+		//kids, tell your folks... don't ignore mission sites.
 	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
-		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
+		if ((*k)->getRules()->insideCountry(site->getLongitude(), site->getLatitude()))
 		{
-			(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 100);
+			(*k)->addActivityAlien(site->getRules()->getPoints() * 100);
 			break;
 		}
 	}
-	delete ts;
+	delete site;
 	return true;
 }
 
@@ -1314,17 +1314,16 @@ void GeoscapeState::time30Minutes()
 		}
 	}
 
-	// Processes TerrorSites
-	for (std::vector<TerrorSite*>::iterator ts = _game->getSavedGame()->getTerrorSites()->begin();
-		ts != _game->getSavedGame()->getTerrorSites()->end();)
+	// Processes MissionSites
+	for (std::vector<MissionSite*>::iterator site = _game->getSavedGame()->getMissionSites()->begin(); site != _game->getSavedGame()->getMissionSites()->end();)
 	{
-		if (processTerrorSite(*ts))
+		if (processMissionSite(*site))
 		{
-			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
+			site = _game->getSavedGame()->getMissionSites()->erase(site);
 		}
 		else
 		{
-			++ts;
+			++site;
 		}
 	}
 }

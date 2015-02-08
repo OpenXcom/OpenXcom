@@ -566,13 +566,13 @@ void TransferItemsState::increaseByValue(int change)
 			errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT");
 		}
 	}
-	else if (TRANSFER_ITEM == selType && !selItem->getAlien()
+	else if (TRANSFER_ITEM == selType && !selItem->isAlien()
 		&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
 	{
 		_timerInc->stop();
 		errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 	}
-	else if (TRANSFER_ITEM == selType && selItem->getAlien()
+	else if (TRANSFER_ITEM == selType && selItem->isAlien()
 		&& Options::storageLimitsEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::storageLimitsEnforced * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
@@ -608,7 +608,7 @@ void TransferItemsState::increaseByValue(int change)
 		if (!Options::canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
 	}
 	// Item count
-	else if (TRANSFER_ITEM == selType && !selItem->getAlien() )
+	else if (TRANSFER_ITEM == selType && !selItem->isAlien() )
 	{
 		double storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
 		double freeStores = _baseTo->getAvailableStores() - _baseTo->getUsedStores() - _iQty;
@@ -624,7 +624,7 @@ void TransferItemsState::increaseByValue(int change)
 		_total += getCost() * change;
 	}
 	// Live Aliens count
-	else if (TRANSFER_ITEM == selType && selItem->getAlien() )
+	else if (TRANSFER_ITEM == selType && selItem->isAlien() )
 	{
 		int freeContainment = Options::storageLimitsEnforced ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
 		change = std::min(std::min(freeContainment, getQuantity() - _transferQty[_sel]), change);
@@ -673,7 +673,7 @@ void TransferItemsState::decreaseByValue(int change)
 	else if (TRANSFER_ITEM == selType)
 	{
 		const RuleItem * selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		if (!selItem->getAlien())
+		if (!selItem->isAlien())
 		{
 			_iQty -= selItem->getSize() * change;
 		}

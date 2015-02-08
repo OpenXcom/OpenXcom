@@ -100,8 +100,6 @@ public:
 	SurfaceSet *getSurfaceSet(const std::string &name) const;
 	/// Gets a particular music.
 	Music *getMusic(const std::string &name) const;
-	/// Gets a random music.
-	Music *getRandomMusic(const std::string &name) const;
 	/// Plays a particular music.
 	void playMusic(const std::string &name, bool random = false);
 	/// Gets a particular sound.
@@ -116,6 +114,10 @@ public:
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
 	const std::vector<std::vector<Uint8> > *getLUTs() const;
 	bool isMusicPlaying();
+
+private:
+	/// Gets a random music. this is private to prevent access, use playMusic(name, true) instead.
+	Music *getRandomMusic(const std::string &name) const;
 
 };
 
