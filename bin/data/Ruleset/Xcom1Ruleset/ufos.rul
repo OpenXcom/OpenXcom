@@ -63,29 +63,6 @@ ufos:
         - name: UFO_120
           width: 20
           length: 20
-  - type: STR_ABDUCTOR
-    size: STR_MEDIUM_UC
-    sprite: 4
-    damageMax: 500
-    speedMax: 4300
-    accel: 8
-    power: 40
-    range: 20
-    score: 250
-    reload: 16
-    breakOffTime: 250
-    battlescapeTerrainData:
-      name: UFO_140
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_OPER2
-        - U_BITS
-      mapBlocks:
-        - name: UFO_140
-          width: 20
-          length: 20
   - type: STR_HARVESTER
     size: STR_MEDIUM_UC
     sprite: 3
@@ -109,28 +86,28 @@ ufos:
         - name: UFO_130
           width: 20
           length: 20
-  - type: STR_SUPPLY_SHIP
-    size: STR_LARGE
-    sprite: 7
-    damageMax: 2200
-    speedMax: 3200
-    accel: 6
-    power: 60
-    range: 36
-    score: 400
-    reload: 12
-    breakOffTime: 1500
+  - type: STR_ABDUCTOR
+    size: STR_MEDIUM_UC
+    sprite: 4
+    damageMax: 500
+    speedMax: 4300
+    accel: 8
+    power: 40
+    range: 20
+    score: 250
+    reload: 16
+    breakOffTime: 250
     battlescapeTerrainData:
-      name: UFO_170
+      name: UFO_140
       mapDataSets:
         - BLANKS
         - U_EXT02
         - U_WALL02
-        - U_DISEC2
+        - U_OPER2
         - U_BITS
       mapBlocks:
-        - name: UFO_170
-          width: 30
+        - name: UFO_140
+          width: 20
           length: 20
   - type: STR_TERROR_SHIP
     size: STR_LARGE
@@ -178,3 +155,26 @@ ufos:
         - name: UFO_160
           width: 30
           length: 30
+  - type: STR_SUPPLY_SHIP
+    size: STR_LARGE
+    sprite: 7
+    damageMax: 2200
+    speedMax: 3200
+    accel: 6
+    power: 60
+    range: 36
+    score: 400
+    reload: 12
+    breakOffTime: 1500
+    battlescapeTerrainData:
+      name: UFO_170
+      mapDataSets:
+        - BLANKS
+        - U_EXT02
+        - U_WALL02
+        - U_DISEC2
+        - U_BITS
+      mapBlocks:
+        - name: UFO_170
+          width: 30
+          length: 20

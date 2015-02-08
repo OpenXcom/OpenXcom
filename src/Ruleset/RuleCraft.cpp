@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0), _repairRate(1), _refuelRate(1), _radarRange(672), _sightRange(1696), _transferTime(0), _score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0), _maxItems(0)
+RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _marker(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0), _repairRate(1), _refuelRate(1), _radarRange(672), _sightRange(1696), _transferTime(0), _score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0), _maxItems(0)
 {
 
 }
@@ -58,6 +58,7 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 		if (_sprite > 4)
 			_sprite += modIndex;
 	}
+	_marker = node["marker"].as<int>(_marker);
 	_fuelMax = node["fuelMax"].as<int>(_fuelMax);
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);
@@ -123,6 +124,15 @@ const std::vector<std::string> &RuleCraft::getRequirements() const
 int RuleCraft::getSprite() const
 {
 	return _sprite;
+}
+
+/**
+ * Returns the globe marker for the craft type.
+ * @return Marker sprite, -1 if none.
+ */
+int RuleCraft::getMarker() const
+{
+	return _marker;
 }
 
 /**
@@ -330,10 +340,10 @@ std::vector<std::vector<int> > &RuleCraft::getDeployment()
 }
 
 /**
- * Gets the item limit for this craft.
- * @return the item limit.
+ * Gets the maximum amount of items this craft can store.
+ * @return number of items.
  */
-const int RuleCraft::getMaxItems() const
+int RuleCraft::getMaxItems() const
 {
 	return _maxItems;
 }

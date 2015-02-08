@@ -16,41 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ALIENTERRORSTATE_H
-#define OPENXCOM_ALIENTERRORSTATE_H
+#ifndef OPENXCOM_MISSIONDETECTEDSTATE_H
+#define OPENXCOM_MISSIONDETECTEDSTATE_H
 
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-class TerrorSite;
+class MissionSite;
 class TextButton;
 class Window;
 class Text;
 class GeoscapeState;
 
 /**
- * Displays info on a terror site.
+ * Displays info on a detected mission site.
  */
-class AlienTerrorState : public State
+class MissionDetectedState : public State
 {
 private:
-	TerrorSite *_terror;
+	MissionSite *_mission;
 	GeoscapeState *_state;
 
-	TextButton *_btnIntercept, *_btnCentre, *_btnCancel;
+	TextButton *_btnIntercept, *_btnCenter, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle, *_txtCity;
 public:
-	/// Creates the Ufo Detected state.
-	AlienTerrorState(TerrorSite *terror, const std::string &city, GeoscapeState *state);
-	/// Cleans up the Ufo Detected state.
-	~AlienTerrorState();
+	/// Creates the Mission Detected state.
+	MissionDetectedState(MissionSite *mission, const std::string &city, GeoscapeState *state);
+	/// Cleans up the Mission Detected state.
+	~MissionDetectedState();
 	/// Handler for clicking the Intercept button.
 	void btnInterceptClick(Action *action);
-	/// Handler for clicking the Centre on UFO button.
-	void btnCentreClick(Action *action);
+	/// Handler for clicking the Center on Site button.
+	void btnCenterClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
 };

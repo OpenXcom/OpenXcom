@@ -48,7 +48,7 @@
 #include "../Engine/ShaderMove.h"
 #include "../Engine/ShaderRepeat.h"
 #include "../Engine/Options.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/LocalizedText.h"
 #include "../Savegame/BaseFacility.h"
@@ -751,7 +751,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin(); i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
 		if (targetNear((*i), x, y))
 		{
@@ -1331,13 +1331,13 @@ void Globe::drawDetail()
 				// Convert coordinates
 				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 
-				Surface *marker = _markerSet->getFrame(CITY_MARKER);
-				marker->setX(x - 1);
-				marker->setY(y - 1);
-				marker->blit(_countries);
-
 				if (_zoom >= (*j)->getZoomLevel())
 				{
+					Surface *marker = _markerSet->getFrame(CITY_MARKER);
+					marker->setX(x - 1);
+					marker->setY(y - 1);
+					marker->blit(_countries);
+
 					label->setX(x - 40);
 					label->setY(y + 2);
 					label->setText(_game->getLanguage()->getString((*j)->getName()));
@@ -1552,13 +1552,13 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	// Draw the terror site markers
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	// Draw the mission site markers
+	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin(); i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
 		drawTarget(*i);
 	}
 
-	// Draw the Alien Base markers
+	// Draw the alien base markers
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
 	{
 		drawTarget(*i);
