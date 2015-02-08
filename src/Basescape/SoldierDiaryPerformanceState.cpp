@@ -102,7 +102,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
     // Commendation stats
     _txtMedalName = new Text(90, 18, 16, 36);
     _txtMedalLevel = new Text(90, 18, 206, 36);
-	_txtMedalInfo = new Text(280, 32, 20, 150);
+	_txtMedalInfo = new Text(280, 32, 20, 135);
     _lstCommendations = new TextList(240, 80, 48, 52);
 	// Commendation sprites
 	_commendationSprite = _game->getResourcePack()->getSurfaceSet("Commendations");
