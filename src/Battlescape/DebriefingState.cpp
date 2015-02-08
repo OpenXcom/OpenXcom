@@ -304,6 +304,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 						bestOverallScore = score;
 					}
 				}
+				// Look for a kill on the same turn as death, award martyr
 			}
 			// Now award those soldiers commendations!
 			for (std::map<SoldierRank, Soldier*>::iterator bestSoldier = bestSoldierCandidates.begin(); bestSoldier != bestSoldierCandidates.end(); ++bestSoldier)

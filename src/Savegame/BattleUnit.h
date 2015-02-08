@@ -189,6 +189,7 @@ struct BattleUnitStatistics
     int appliedPainKill;                    // Tracks how many times this soldier applied pain killers
     int revivedSoldier;                     // Tracks how many times this soldier revived another unit
 	bool MIA;								// Tracks if the soldier was left behind :(
+	bool martyr;							// Tracks if the soldier killed himself in order to kill an alien
 
 	/// Functions
 	// Friendly fire check
@@ -226,6 +227,7 @@ struct BattleUnitStatistics
         appliedStimulant = node["appliedStimulant"].as<int>(appliedStimulant);
         appliedPainKill = node["appliedPainKill"].as<int>(appliedPainKill);
         revivedSoldier = node["revivedSoldier"].as<int>(revivedSoldier);
+		martyr = node["martyr"].as<bool>(martyr);
 	}
 	// Save function
 	YAML::Node save() const
@@ -237,26 +239,27 @@ struct BattleUnitStatistics
 			for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin() ; i != kills.end() ; ++i)
 				node["kills"].push_back((*i)->save());
 		}
-        node["shotAtCounter"] = shotAtCounter;
-		node["hitCounter"] = hitCounter;
-		node["shotByFriendlyCounter"] = shotByFriendlyCounter;
-		node["shotFriendlyCounter"] = shotFriendlyCounter;
-		node["loneSurvivor"] = loneSurvivor;
-		node["ironMan"] = ironMan;
-		node["longDistanceHitCounter"] = longDistanceHitCounter;
-		node["lowAccuracyHitCounter"] = lowAccuracyHitCounter;
-		node["shotsFiredCounter"] = shotsFiredCounter;
-		node["shotsLandedCounter"] = shotsLandedCounter;
+        if (shotAtCounter) node["shotAtCounter"] = shotAtCounter;
+		if (hitCounter) node["hitCounter"] = hitCounter;
+		if (shotByFriendlyCounter) node["shotByFriendlyCounter"] = shotByFriendlyCounter;
+		if (shotFriendlyCounter) node["shotFriendlyCounter"] = shotFriendlyCounter;
+		if (loneSurvivor) node["loneSurvivor"] = loneSurvivor;
+		if (ironMan) node["ironMan"] = ironMan;
+		if (longDistanceHitCounter) node["longDistanceHitCounter"] = longDistanceHitCounter;
+		if (lowAccuracyHitCounter) node["lowAccuracyHitCounter"] = lowAccuracyHitCounter;
+		if (shotsFiredCounter) node["shotsFiredCounter"] = shotsFiredCounter;
+		if (shotsLandedCounter) node["shotsLandedCounter"] = shotsLandedCounter;
 		if (nikeCross) node["nikeCross"] = nikeCross;
         if (mercyCross) node["mercyCross"] = mercyCross;
-        node["woundsHealed"] = woundsHealed;
-        node["appliedStimulant"] = appliedStimulant;
-        node["appliedPainKill"] = appliedPainKill;
-        node["revivedSoldier"] = revivedSoldier;
+        if (woundsHealed) node["woundsHealed"] = woundsHealed;
+        if (appliedStimulant) node["appliedStimulant"] = appliedStimulant;
+        if (appliedPainKill) node["appliedPainKill"] = appliedPainKill;
+        if (revivedSoldier) node["revivedSoldier"] = revivedSoldier;
+		if (martyr) node["martyr"] = martyr;
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(false) { }
 	~BattleUnitStatistics() { }
 };
 
