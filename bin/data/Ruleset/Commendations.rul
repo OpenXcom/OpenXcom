@@ -1416,7 +1416,7 @@ commendations:
         1: ["STR_LIVE_TERRORIST", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_ORIGINAL8_NAME
     description: STR_MEDAL_ORIGINAL8_DESCRIPTION
-    sprite: 38
+    sprite: 50
     criteria:
       totalLongDistanceHits: [999]
       # Dummy criteria so the game doesn't enter an infinite loop.
