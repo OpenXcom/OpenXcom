@@ -225,7 +225,25 @@ extraSprites:
     width: 320
     height: 200
     files:
-      0: Resources/Medals/MEDAL_MERCY_CROSS.png         
+      0: Resources/Medals/MEDAL_MERCY_CROSS.png
+  - type: REVIVE
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ANGEL.png
+  - type: NIGHTOPS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_NIGHTOPS.png 
+  - type: HEALER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_HEALER.png 
   - type: PLACEHOLDER
     singleImage: true
     width: 320
@@ -318,9 +336,9 @@ extraStrings:
      STR_MEDAL_SECTOPOD_KILL_MEDAL_DESCRIPTION: "Given to a soldier that kills the most fearsome enemy construct: The Sectopod!"
      STR_MEDAL_MERCY_CROSS_NAME: "Mercy Cross"
      STR_MEDAL_MERCY_CROSS_DESCRIPTION: "Given to a soldier who single handedly stunned every alien in a mission."
-     STR_MEDAL_HEADSHOT_NAME: “Order of David”
+     STR_MEDAL_HEADSHOT_NAME: "Order of David"
      STR_MEDAL_HEADSHOT_DESCRIPTION: "Given to a soldier with a steady hand who has landed multiple headshots."
-     STR_MEDAL_REARSHOT_NAME:  “Paris Commendation”
+     STR_MEDAL_REARSHOT_NAME:  "Paris Commendation"
      STR_MEDAL_REARSHOT_DESCRIPTION: "Given to a soldier who has demonstrated cunning, able to surprise enemies and kill them from behind."
      STR_MEDAL_FLANKSHOT_NAME: "Enfilade Citation"
      STR_MEDAL_FLANKSHOT_DESCRIPTION: "Given to a soldier who has demonstrated great tactics, able to flank and kill enemies."
@@ -418,7 +436,7 @@ extraStrings:
      STR_MEDAL_HEADSHOT_UFOPEDIA: " 'The stone sank into Goliath's forehead, and he fell to the ground on his face. '  David is famous for slaying the giant, with his  sling and a well placed shot. {NEWLINE}{NEWLINE}  Although this achievement relies mainly on luck, and does not provide greater damage than other hits, it is none the less, noteworthy.  {NEWLINE} {NEWLINE} XCOM soldiers who score three headshots will receive this award. There are four levels of this award. "
      STR_MEDAL_REARSHOT_UFOPEDIA: " Paris, in Greek mythology is renown for neutralizing an almost invulnerable hero, Achilles, with an arrow shot to his heel. {NEWLINE} {NEWLINE} The XCOM soldier who mimics Paris may find that he can exploit similar vulnerabilities in his Extraterrestrial adversaries. {NEWLINE}{NEWLINE} This commendation is issued for every three enemy kills from behind, up to four times. "
      STR_MEDAL_FLANKSHOT_UFOPEDIA: " 'To enfilade is to position (troops or guns) so as to be able to fire at a flank. ' {NEWLINE} {NEWLINE} A time honored military tactic, the flank attack exploits an enemy’s weakness in both side armor and in the fact that the enemy’s offensive weaponry is pointed elsewhere. {NEWLINE} {NEWLINE} This citation is issued for every three enemy kills from the flank, up to four times. "
-     STR_MEDAL_HEALER_UFOPEDIA: "placeholder text"
+     STR_MEDAL_HEALER_UFOPEDIA: " 'We had a deep appreciation for the quiet medic. He was nurse, doctor, first-aid station and hospital to us.  Above the roar of battle the cry of 'Medic!' was often heard, and Doc was always there for the 3d platoon.' -- Robert W. Black {NEWLINE} {NEWLINE} The Combat Medic is a vital part of every military unit.  XCOM soldiers care for their own and help keep their companions in arm, in the fight. {NEWLINE} {NEWLINE} This award is issued for every three wounds healed, up to twelve wounds."
      STR_MEDAL_ALLUFOS_UFOPEDIA: "TECHINT, or Technical Intelligence involves gaining knowledge of enemy capabilities through exploitation of captured equipment.  {NEWLINE} {NEWLINE} XCOM gains knowledge and materiel from every UFO that they recover.  {NEWLINE} {NEWLINE}Soldiers involved in missions with every UFO Type will receive this award.  This award is issued once."
      STR_MEDAL_ALLMISSIONS_UFOPEDIA: " 'You can tell 'em that {NEWLINE} I've been from hell and back {NEWLINE} When the heat is on, I fire back {NEWLINE} In this cold world, where your lighters at {NEWLINE} Let's burn it down, f-f-fire back' - Kid Ink {NEWLINE}{NEWLINE} This soldier has seen it all.. crashed UFOs, Landed UFOs, Terror missions, base mission, even kicking in the enemy's door and invading his base. {NEWLINE} {NEWLINE}This commendation is awarded to soldiers who participate in every type of mission. "
      STR_MEDAL_ANTITERROR_UFOPEDIA: " 'For a true hero isn't measured by the size of his strength, but by the strength of his heart.' - Zeus (Hercules) {NEWLINE} {NEWLINE} Just as Hercules was renown for slaying many nightmarish monsters in his time, so too, the recipient of this award has slain his fair share of terrible enemies. {NEWLINE} {NEWLINE} This medal is given to soldiers who slay one of every type of terrorist unit in the game.  There are four levels of this award. "
@@ -432,6 +450,8 @@ extraStrings:
      STR_MEDAL_BRAVERYGAIN_UFOPEDIA: "placeholder text"
      STR_MEDAL_BESTOFRANK_UFOPEDIA: "placeholder text"
      STR_MEDAL_BESTSOLDIER_UFOPEDIA:  "placeholder text"
+     STR_MEDAL_BESTSOLDIER_UFOPEDIA:  "placeholder text"
+     STR_MEDAL_MIA_MEDAL_UFOPEDIA: "placeholder text
      
   - type: en-GB
     strings:
@@ -1789,7 +1809,7 @@ ufopaedia:
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #STATGAIN
-    text: STR_MEDAL_STATGAIN_MEDAL_UFOPEDIA
+    text: STR_MEDAL_STATGAIN_UFOPEDIA
     text_width: 164
     listOrder: 6048
   - id: STR_MEDAL_REVIVE_NAME
