@@ -1457,22 +1457,22 @@ commendations:
       totalWholeMedikit: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
   - type: STR_MEDAL_BRAVERYGAIN_NAME
     description: STR_MEDAL_BRAVERYGAIN_DESCRIPTION
-    sprite: 00
+    sprite: 54
     criteria:
       totalBraveryGain: [10, 10, 20, 20, 20, 20, 30, 30, 30, 30]
   - type: STR_MEDAL_BESTOFRANK_NAME
     description: STR_MEDAL_BESTOFRANK_DESCRIPTION
-    sprite: 00
+    sprite: 53
     criteria:
       bestOfRank: [1, 2, 3, 4, 4, 5, 6, 6]
   - type: STR_MEDAL_BESTSOLDIER_NAME
     description: STR_MEDAL_BESTSOLDIER_DESCRIPTION
-    sprite: 00
+    sprite: 52
     criteria:
       bestSoldier: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_MIA_NAME
     description: STR_MEDAL_MIA_DESCRIPTION
-    sprite: 00
+    sprite: 51
     criteria:
       isMIA: [1]
 ufopaedia:
