@@ -274,12 +274,18 @@ extraSprites:
     height: 200
     files:
       0: Resources/Medals/MEDAL_ANTITERROR.png         
-  - type: PLACEHOLDER
+  - type: ALLBATTLETYPES
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Medals/MEDAL_PLACEHOLDER.png        
+      0: Resources/Medals/MEDAL_ALLBATTLETYPES.png 
+  - type: FLANKSHOT
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_FLANKSHOT.png          
   - type: PLACEHOLDER
     singleImage: true
     width: 320
@@ -1780,7 +1786,7 @@ ufopaedia:
   - id: STR_MEDAL_FLANKSHOT_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #FLANKSHOT
+    image_id: FLANKSHOT
     text: STR_MEDAL_FLANKSHOT_UFOPEDIA
     text_width: 164
     listOrder: 6039
@@ -1815,7 +1821,7 @@ ufopaedia:
   - id: STR_MEDAL_ALLBATTLETYPES_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #ALLBATTLETYPES
+    image_id: ALLBATTLETYPES
     text: STR_MEDAL_ALLBATTLETYPES_UFOPEDIA
     text_width: 164
     listOrder: 6044
