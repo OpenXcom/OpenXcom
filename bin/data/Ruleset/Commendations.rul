@@ -243,7 +243,43 @@ extraSprites:
     width: 320
     height: 200
     files:
-      0: Resources/Medals/MEDAL_HEALER.png 
+      0: Resources/Medals/MEDAL_HEALER.png
+  - type: BESTOFRANK
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_BESTOFRANK.png  
+  - type: BESTSOLDIER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_BESTSOLDIER.png        
+  - type: ALLMISSIONS
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ALLMISSIONS.png  
+  - type: STATGAIN
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_STATGAIN.png
+  - type: ANTITERROR
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_ANTITERROR.png         
+  - type: PLACEHOLDER
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Medals/MEDAL_PLACEHOLDER.png        
   - type: PLACEHOLDER
     singleImage: true
     width: 320
@@ -1751,7 +1787,7 @@ ufopaedia:
   - id: STR_MEDAL_HEALER_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #HEALER
+    image_id: HEALER
     text: STR_MEDAL_HEALER_UFOPEDIA
     text_width: 164
     listOrder: 6040
@@ -1765,14 +1801,14 @@ ufopaedia:
   - id: STR_MEDAL_ALLMISSIONS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #ALLMISSIONS
+    image_id: ALLMISSIONS
     text: STR_MEDAL_ALLMISSIONS_UFOPEDIA
     text_width: 164
     listOrder: 6042
   - id: STR_MEDAL_ANTITERROR_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #ANTITERROR
+    image_id: ANTITERROR
     text: STR_MEDAL_ANTITERROR_UFOPEDIA
     text_width: 164
     listOrder: 6043
@@ -1786,7 +1822,7 @@ ufopaedia:
   - id: STR_MEDAL_NIGHTOPS_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #NIGHTOPS
+    image_id: NIGHTOPS
     text: STR_MEDAL_NIGHTOPS_UFOPEDIA
     text_width: 164
     listOrder: 6045
@@ -1807,14 +1843,14 @@ ufopaedia:
   - id: STR_MEDAL_STATGAIN_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #STATGAIN
+    image_id: STATGAIN
     text: STR_MEDAL_STATGAIN_UFOPEDIA
     text_width: 164
     listOrder: 6048
   - id: STR_MEDAL_REVIVE_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #REVIVE
+    image_id: REVIVE
     text: STR_MEDAL_REVIVE_UFOPEDIA
     text_width: 164
     listOrder: 6049
@@ -1835,24 +1871,24 @@ ufopaedia:
   - id: STR_MEDAL_BESTOFRANK_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #BESTOFRANK
+    image_id: BESTOFRANK
     text: STR_MEDAL_BESTOFRANK_UFOPEDIA
     text_width: 164
     listOrder: 6052
   - id: STR_MEDAL_BESTSOLDIER_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
-    image_id: PLACEHOLDER #BESTSOLDIER
+    image_id: BESTSOLDIER
     text: STR_MEDAL_BESTSOLDIER_UFOPEDIA
     text_width: 164
-    listOrder: 6053
+    listOrder: 6053    
   - id: STR_MEDAL_MIA_NAME
     type_id: 7
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: PLACEHOLDER #MIA
     text: STR_MEDAL_MIA_MEDAL_UFOPEDIA
     text_width: 164
-    listOrder: 6054
+    listOrder: 6054    
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT
@@ -1864,3 +1900,4 @@ ufopaedia:
     section: STR_XCOM_CRAFT_ARMAMENT
   - id: STR_HOVERTANK_LAUNCHER
     section: STR_XCOM_CRAFT_ARMAMENT
+
