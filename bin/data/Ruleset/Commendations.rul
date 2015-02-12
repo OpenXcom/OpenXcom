@@ -407,7 +407,7 @@ extraStrings:
      STR_MEDAL_BESTSOLDIER_NAME: "Best Soldier"
      STR_MEDAL_BESTSOLDIER_DESCRIPTION: "Given posthumously to a soldier who was an example for all others."     
      STR_MEDAL_MIA_NAME: "Order of the Forgotten"
-     STR_MEDAL_MIA_DESCRIPTION: "Given to a soldier to honor their death and their commitment to the defense of Earth."
+     STR_MEDAL_MIA_DESCRIPTION: "Given to a soldier to honor their loss and their commitment to the defense of Earth."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -486,7 +486,7 @@ extraStrings:
      STR_MEDAL_BRAVERYGAIN_UFOPEDIA: "'I learned that courage was not the absence of fear, but the triumph over it. The brave man is not he who does not feel afraid, but he who conquers that fear.' - Nelson Mandela {NEWLINE} {NEWLINE} This soldier has been in intense situations and has confronted fear in the face!  {NEWLINE} {NEWLINE} This award is presented for every 10 pt increase in a soldier's bravery. This award has three levels."
      STR_MEDAL_BESTOFRANK_UFOPEDIA: "'When he shall die,{NEWLINE} Take him and cut him out in little stars... {NEWLINE}- Shakespeare --Romeo & Juliet {NEWLINE} {NEWLINE} XCOM heroes, be they Rookie, Sergeant, Captain, or Commander, deserve recognition for excellence when they die.  {NEWLINE} {NEWLINE} This order is bestowed upon fallen the soldier who is the highest of their rank at the time of their demise. This award will be presented to the deceased to recognize that they had the highest score for their rank at the time of their death. More than one soldier may receive this posthumous recognition at each level. "
      STR_MEDAL_BESTSOLDIER_UFOPEDIA:  "'It is nothing to die. It is frightful not to live.' - Victor Hugo, Les Misérables{NEWLINE} {NEWLINE} When heroes die their deeds live on.  The exploits of XCOM troopers are not forgotten when they die in glorious battle. {NEWLINE} {NEWLINE} This order is bestowed upon the soldier who is the highest of the fallen. This award will be presented to new members to the ranks of the fallen to recognize that they have the highest score at the time of their death. More than one soldier may receive this posthumous recognition. "
-     STR_MEDAL_MIA_MEDAL_UFOPEDIA: "placeholder text"
+     STR_MEDAL_MIA_MEDAL_UFOPEDIA: " '...we pay tribute to the men and women who have not returned from the battlefield... we will never forget the sacrifices they made... we will forever honor their memory.'  {NEWLINE}- Barack Obama, 2009{NEWLINE} {NEWLINE} The terrible expedience of the necessity of leaving a fallen comrade cannot be denied.  XCOM honors those who have given their all in such a fashion.{NEWLINE} {NEWLINE}This order is awarded to soldiers who have gone missing in action.  We honor the ones who didn’t make it home."
      
   - type: en-GB
     strings:
