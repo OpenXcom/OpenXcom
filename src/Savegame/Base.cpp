@@ -945,7 +945,7 @@ int Base::getCraftMaintenance() const
 int Base::getPersonnelMaintenance() const
 {
 	size_t total = 0;
-	total += _soldiers.size() * _rule->getSoldierCost();
+	total += getTotalSoldiers() * _rule->getSoldierCost();
 	total += getTotalEngineers() * _rule->getEngineerCost();
 	total += getTotalScientists() * _rule->getScientistCost();
 	return total;
