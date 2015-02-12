@@ -9,7 +9,7 @@ ufos:
     range: 0
     score: 50
     reload: 56
-    breakOffTime: 100
+    breakOffTime: 200
     battlescapeTerrainData:
       name: UFO1A
       mapDataSets:
@@ -28,8 +28,8 @@ ufos:
     power: 20
     range: 15
     score: 75
-    reload: 28
-    breakOffTime: 125
+    reload: 56
+    breakOffTime: 250
     battlescapeTerrainData:
       name: UFO_110
       mapDataSets:
@@ -50,8 +50,8 @@ ufos:
     power: 20
     range: 34
     score: 125
-    reload: 24
-    breakOffTime: 150
+    reload: 48
+    breakOffTime: 300
     battlescapeTerrainData:
       name: UFO_120
       mapDataSets:
@@ -72,8 +72,8 @@ ufos:
     power: 40
     range: 22
     score: 250
-    reload: 24
-    breakOffTime: 250
+    reload: 48
+    breakOffTime: 500
     battlescapeTerrainData:
       name: UFO_130
       mapDataSets:
@@ -95,8 +95,8 @@ ufos:
     power: 40
     range: 20
     score: 250
-    reload: 16
-    breakOffTime: 250
+    reload: 32
+    breakOffTime: 500
     battlescapeTerrainData:
       name: UFO_140
       mapDataSets:
@@ -118,8 +118,8 @@ ufos:
     power: 120
     range: 42
     score: 500
-    reload: 12
-    breakOffTime: 1000
+    reload: 24
+    breakOffTime: 2000
     battlescapeTerrainData:
       name: UFO_150
       mapDataSets:
@@ -141,8 +141,8 @@ ufos:
     power: 140
     range: 65
     score: 700
-    reload: 12
-    breakOffTime: 2000
+    reload: 24
+    breakOffTime: 4000
     battlescapeTerrainData:
       name: UFO_160
       mapDataSets:
@@ -164,8 +164,8 @@ ufos:
     power: 60
     range: 36
     score: 400
-    reload: 12
-    breakOffTime: 1500
+    reload: 24
+    breakOffTime: 3000
     battlescapeTerrainData:
       name: UFO_170
       mapDataSets:

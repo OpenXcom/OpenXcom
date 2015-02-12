@@ -54,8 +54,8 @@ private:
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;
-	bool _detected, _hyperDetected;
-	int _shootingAt, _hitFrame;
+	bool _detected, _hyperDetected, _processedIntercept;
+	int _shootingAt, _hitFrame, _fireCountdown, _escapeCountdown;
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 public:
@@ -155,6 +155,12 @@ public:
 	void setHitFrame(int frame);
 	/// Gets the UFO's hit frame.
 	int getHitFrame();
+	void setFireCountdown(int time);
+	int getFireCountdown();
+	void setEscapeCountdown(int time);
+	int getEscapeCountdown();
+	void setInterceptionProcessed(bool processed);
+	bool getInterceptionProcessed();
 
 };
 
