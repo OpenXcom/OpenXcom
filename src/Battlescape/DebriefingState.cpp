@@ -710,44 +710,7 @@ void DebriefingState::prepareDebriefing()
 						(*j)->getTile()->addItem(*k, _game->getRuleset()->getInventory("STR_GROUND"));
 					}
 				}
-
-				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
-				if (!(*j)->getSpawnUnit().empty())
-				{
-					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseGeoscape();
-				}
-				if (base->getAvailableContainment())
-				{
-					// 10 points for recovery
-					addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-				}
-				RuleResearch *research = _game->getRuleset()->getResearch(type);
-				if (research != 0 && _game->getSavedGame()->isResearchAvailable(research, _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
-				{
-					if (base->getAvailableContainment() == 0)
-					{
-						_noContainment = true;
-						base->getItems()->addItem(corpseItem, 1);
-					}
-					else
-					{
-						// more points if it's not researched
-						addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10);
-						base->getItems()->addItem(type, 1);
-						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0;
-					}
-				}
-				else
-				{
-					if (Options::canSellLiveAliens)
-					{
-						_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(type)->getSellCost());
-					}
-					else
-					{
-						base->getItems()->addItem(corpseItem, 1);
-					}
-				}
+				recoverAlien(*j, base);
 			}
 			else if (oldFaction == FACTION_NEUTRAL)
 			{
@@ -1085,30 +1048,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				{
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						if (base->getAvailableContainment())
-						{
-							// 10 points for recovery
-							addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-						}
-						if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch((*it)->getUnit()->getType()), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
-						{
-							if (base->getAvailableContainment() == 0)
-							{
-								_noContainment = true;
-								base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
-							}
-							else
-							{
-								// more points if it's not researched
-								addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*it)->getUnit()->getValue() * 2) - 10);
-								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
-								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0);
-							}
-						}
-						else
-						{
-							base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
-						}
+						recoverAlien((*it)->getUnit(), base);
 					}
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
 					{
@@ -1148,6 +1088,45 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				}
 			}
 		}
+	}
+}
+
+/**
+ * Recovers a live alien from the battlescape.
+ * @param from Battle unit to recover.
+ * @param base Base to add items to.
+ */
+void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
+{
+	std::string type = from->getType();
+	if (base->getAvailableContainment() == 0)
+	{
+		_noContainment = true;
+		addStat("STR_ALIEN_CORPSES_RECOVERED", 1, from->getValue());
+
+		std::string corpseItem = from->getArmor()->getCorpseGeoscape();
+		if (!from->getSpawnUnit().empty())
+		{
+			corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(from->getSpawnUnit())->getArmor())->getCorpseGeoscape();
+		}
+		base->getItems()->addItem(corpseItem, 1);
+	}
+	else
+	{
+		RuleResearch *research = _game->getRuleset()->getResearch(type);
+		if (research != 0 && !_game->getSavedGame()->isResearched(type))
+		{
+			// more points if it's not researched
+			addStat("STR_LIVE_ALIENS_RECOVERED", 1, from->getValue() * 2);
+		}
+		else
+		{
+			// 10 points for recovery
+			addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
+		}
+
+		base->getItems()->addItem(type, 1);
+		_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0;
 	}
 }
 
