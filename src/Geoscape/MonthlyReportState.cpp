@@ -56,12 +56,11 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_btnBigOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(300, 17, 16, 8);
-	_txtMonth = new Text(160, 9, 16, 24);
-	_txtRating = new Text(160, 9, 166, 24);
-	_txtIncome = new Text(160, 9, 16, 32);
-	_txtMaintenance = new Text(160, 9, 166, 32);
-	_txtChange = new Text(160, 9, 16, 40);
-	_txtBalance = new Text(160, 9, 166, 40);
+	_txtMonth = new Text(130, 9, 16, 24);
+	_txtRating = new Text(160, 9, 146, 24);
+	_txtIncome = new Text(300, 9, 16, 32);
+	_txtMaintenance = new Text(130, 9, 16, 40);
+	_txtBalance = new Text(160, 9, 146, 40);
 	_txtDesc = new Text(280, 132, 16, 48);
 	_txtFailure = new Text(290, 160, 15, 10);
 
@@ -76,7 +75,6 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	add(_txtRating, "text1", "monthlyReport");
 	add(_txtIncome, "text1", "monthlyReport");
 	add(_txtMaintenance, "text1", "monthlyReport");
-	add(_txtChange, "text1", "monthlyReport");
 	add(_txtBalance, "text1", "monthlyReport");
 	add(_txtDesc, "text2", "monthlyReport");
 	add(_txtFailure, "text2", "monthlyReport");
@@ -159,21 +157,19 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 
 	std::wostringstream ss;
 	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << L" (";
+	if (_fundingDiff > 0)
+		ss << '+';
+	ss << Text::formatFunding(_fundingDiff) << L")";
 	_txtIncome->setText(ss.str());
 
 	std::wostringstream ss2;
-	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(-_game->getSavedGame()->getBaseMaintenance());
+	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
 	_txtMaintenance->setText(ss2.str());
 
 	std::wostringstream ss3;
-	if (_fundingDiff > 0)
-		ss3 << '+';
-	ss3 << Text::formatFunding(_fundingDiff);
-	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
-
-	std::wostringstream ss4;
-	ss4 << tr("STR_BALANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtBalance->setText(ss4.str());
+	ss3 << tr("STR_BALANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtBalance->setText(ss3.str());
 
 	_txtDesc->setWordWrap(true);
 
@@ -276,7 +272,9 @@ void MonthlyReportState::btnOkClick(Action *)
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);
 			_txtRating->setVisible(false);
-			_txtChange->setVisible(false);
+			_txtIncome->setVisible(false);
+			_txtMaintenance->setVisible(false);
+			_txtBalance->setVisible(false);
 			_txtDesc->setVisible(false);
 			_btnOk->setVisible(false);
 			_btnBigOk->setVisible(true);
