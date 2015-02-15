@@ -490,7 +490,12 @@ void GeoscapeState::init()
 	}
 	_globe->unsetNewBaseHover();
 
-	if (_game->getSavedGame()->getMonthsPassed() == -1)
+		// run once
+	if (_game->getSavedGame()->getMonthsPassed() == -1 &&
+		// as long as there's a base
+		!_game->getSavedGame()->getBases()->empty() &&
+		// and it has a name (THIS prevents it from running prior to the base being placed.)
+		_game->getSavedGame()->getBases()->front()->getName() != L"")
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions(true);
@@ -820,17 +825,19 @@ void GeoscapeState::time5Seconds()
 						}
 						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
-							_dogfightsToBeStarted.push_back(new DogfightState(_globe, (*j), u));
-
-							if (!_dogfightStartTimer->isRunning())
 							{
-								_pause = true;
-								timerReset();
-								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
-								startDogfight();
-								_dogfightStartTimer->start();
+								_dogfightsToBeStarted.push_back(new DogfightState(_globe, (*j), u));
+
+								if (!_dogfightStartTimer->isRunning())
+								{
+									_pause = true;
+									timerReset();
+									_globe->center((*j)->getLongitude(), (*j)->getLatitude());
+									startDogfight();
+									_dogfightStartTimer->start();
+								}
+								_game->getResourcePack()->playMusic("GMINTER", true);
 							}
-							_game->getResourcePack()->playMusic("GMINTER", true);
 						}
 						break;
 					case Ufo::LANDED:
