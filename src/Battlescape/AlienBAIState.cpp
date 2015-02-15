@@ -1033,8 +1033,6 @@ int AlienBAIState::selectNearestTarget()
 	int tally = 0;
 	_closestDist= 100;
 	_aggroTarget = 0;
-	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
-	origin.z -= 2;
 	Position target;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1048,7 +1046,12 @@ int AlienBAIState::selectNearestTarget()
 				bool valid = false;
 				if (_rifle || !_melee)
 				{
-					valid = true;
+					BattleAction action;
+					action.actor = _unit;
+					action.weapon = _unit->getMainHandWeapon();
+					action.target = (*i)->getPosition();
+					Position origin = _save->getTileEngine()->getOriginVoxel(action, 0);
+					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
 				}
 				else
 				{
