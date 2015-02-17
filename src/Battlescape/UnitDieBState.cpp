@@ -159,7 +159,7 @@ void UnitDieBState::think()
 		{
 			// converts the dead zombie to a chryssalid
 			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
-			newUnit->lookAt(_originalDir);
+			newUnit->setDirection(_originalDir);
 		}
 		else
 		{
