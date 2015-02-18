@@ -69,8 +69,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getMap()->setUnitDying(true);
 		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		_originalDir = _unit->getDirection();
-		if (_originalDir != 3)
+		if (_unit->getDirection() != 3)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
 		}
@@ -138,6 +137,13 @@ void UnitDieBState::think()
 		{
 			playDeathSound();
 		}
+		if (_unit->getRespawn())
+		{
+			while (_unit->getStatus() == STATUS_COLLAPSING)
+			{
+				_unit->keepFalling();
+			}
+		}
 	}
 
 	if (_unit->isOut())
@@ -159,7 +165,6 @@ void UnitDieBState::think()
 		{
 			// converts the dead zombie to a chryssalid
 			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
-			newUnit->setDirection(_originalDir);
 		}
 		else
 		{
