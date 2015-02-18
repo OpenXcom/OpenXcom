@@ -1,0 +1,4 @@
+OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO
+Defense in USA) turn-based strategy game by MicroProse. It is written in
+C++/SDL and licensed under the GPL3. OpenXcom requires game resources from the
+original game (DOS, Windows or Steam version).
