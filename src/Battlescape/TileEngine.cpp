@@ -1388,9 +1388,6 @@ bool TileEngine::detonate(Tile* tile)
 	tiles[7] = _save->getTile(Position(pos.x, pos.y-1, pos.z)); //north bigwall
 	tiles[8] = _save->getTile(Position(pos.x-1, pos.y, pos.z)); //west bigwall
 
-	// explosions create smoke which only stays 1 or 2 turns
-//	tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
-
 	int remainingPower, fireProof, fuel;
 	bool destroyed, bigwalldestroyed = true, skipnorthwest = false;
 	for (int i = 8; i >=0; --i)

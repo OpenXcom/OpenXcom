@@ -299,7 +299,7 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
-	if (_unit->getType() == "SOLDIER" || _unit->getUnitRules()->getRace() == "STR_CIVILIAN")
+	if (_unit->getDeathSound() == -1)
 	{
 		if (_unit->getGender() == GENDER_MALE)
 		{
