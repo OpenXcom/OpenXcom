@@ -824,7 +824,7 @@ items:
     compatibleAmmo:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
-    tuAimed: 80
+    tuAimed: 66
     battleType: 1
     twoHanded: true
     waypoint: true
