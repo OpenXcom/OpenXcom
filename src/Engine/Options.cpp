@@ -133,6 +133,7 @@ void create()
 	_info.push_back(OptionInfo("preferredMusic", (int*)&preferredMusic, MUSIC_AUTO));
 	_info.push_back(OptionInfo("preferredSound", (int*)&preferredSound, SOUND_AUTO));
 	_info.push_back(OptionInfo("musicAlwaysLoop", &musicAlwaysLoop, false));
+	_info.push_back(OptionInfo("font", &font, "Font"));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));

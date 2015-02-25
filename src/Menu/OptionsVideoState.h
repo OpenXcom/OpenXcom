@@ -48,15 +48,15 @@ private:
 	TextEdit *_txtDisplayWidth, *_txtDisplayHeight;
 	ArrowButton *_btnDisplayResolutionUp, *_btnDisplayResolutionDown;
 
-	Text *_txtLanguage, *_txtFilter, *_txtGeoScale, *_txtBattleScale;
-	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale;
+	Text *_txtLanguage, *_txtFilter, *_txtGeoScale, *_txtBattleScale, *_txtFont;
+	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale, *_cbxFont;
 	Text *_txtMode;
 	Text *_txtOptions;
 	ToggleTextButton *_btnLetterbox, *_btnLockMouse;
 
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
-	std::vector<std::string> _langs, _filters;
+	std::vector<std::string> _langs, _filters, _fonts;
 
 	void updateDisplayResolution();
 public:
@@ -76,6 +76,8 @@ public:
 	void cbxLanguageChange(Action *action);
 	/// Handler for changing the Filter combobox.
 	void cbxFilterChange(Action *action);
+	/// Handler for changing the Font combobox.
+	void cbxFontChange(Action *action);
 	/// Handler for clicking the Display Mode combobox.
 	void updateDisplayMode(Action *action);
 	/// Handler for clicking the Letterboxed button.
