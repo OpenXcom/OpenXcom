@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <yaml-cpp/yaml.h>
 #include "Font.h"
 #include "DosFont.h"
 #include "Surface.h"
@@ -285,6 +287,34 @@ void Font::fix(const std::string &file, int width)
 	}
 
 	SDL_SaveBMP(s->getSurface(), file.c_str());
+}
+
+/**
+ * Gets all the fonts found in the
+ * Data folder and returns their properties.
+ * @param files List of font filenames.
+ * @param names List of font human-readable names.
+ */
+void Font::getList(std::vector<std::string> &files, std::vector<std::string> &names)
+{
+	files = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "dat");
+	names.clear();
+
+	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
+	{
+		*i = CrossPlatform::noExt(*i);
+		YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/" + *i + ".dat"));
+		std::string name;
+		if (doc["name"])
+		{
+			name = doc["name"].as<std::string>();
+		}
+		else
+		{
+			name = *i;
+		}
+		names.push_back(name);
+	}
 }
 
 }

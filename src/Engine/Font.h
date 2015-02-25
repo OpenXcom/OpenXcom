@@ -79,6 +79,8 @@ public:
 	SDL_Rect getCharSize(wchar_t c);
 	/// Gets the font's surface.
 	Surface *getSurface() const;
+	/// Gets list of fonts in the data directory.
+	static void getList(std::vector<std::string> &files, std::vector<std::string> &names);
 
 	void fix(const std::string &file, int width);
 };
