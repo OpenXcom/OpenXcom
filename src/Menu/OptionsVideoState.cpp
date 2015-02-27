@@ -223,6 +223,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxFont->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxFont->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
+	// Hide these options during gameplay as they require to reload game
+	_cbxFont->setVisible(_origin == OPT_MENU);
+	_txtFont->setVisible(_origin == OPT_MENU);
+
 	std::vector<std::wstring> filterNames;
 	filterNames.push_back(tr("STR_DISABLED"));
 	filterNames.push_back(L"Scale");
@@ -508,6 +512,7 @@ void OptionsVideoState::cbxFilterChange(Action *)
 void OptionsVideoState::cbxFontChange(Action *)
 {
 	Options::font = _fonts[_cbxFont->getSelected()];
+	Options::reload = true;
 }
 
 
