@@ -526,6 +526,8 @@ set ( ruleset_src
   Ruleset/RuleVideo.cpp
   Ruleset/RuleMusic.h
   Ruleset/RuleMusic.cpp
+  Ruleset/Texture.h
+  Ruleset/Texture.cpp
 )
 
 set ( savegame_src

@@ -107,8 +107,6 @@ private:
 	void deployAliens(AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int max);
-	/// Gets battlescape terrain.
-	RuleTerrain *getTerrain(int tex, double lat);
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit *unit);
 	/// Load all Xcom weapons.
@@ -156,6 +154,8 @@ public:
 	void setMissionSite(MissionSite* mission);
 	/// Sets the alien base
 	void setAlienBase(AlienBase* base);
+	/// Sets the terrain.
+	void setTerrain(RuleTerrain *terrain);
 	/// Runs the generator.
 	void run();
 	/// Sets up the next stage (for Cydonia/TFTD missions).

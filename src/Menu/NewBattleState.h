@@ -50,7 +50,6 @@ private:
 	Slider *_slrDarkness, *_slrAlienTech, *_slrDepth;
 	TextButton *_btnOk, *_btnCancel, *_btnEquip, *_btnRandom;
 	std::vector<std::string> _missionTypes, _terrainTypes, _alienRaces, _crafts;
-	std::vector<int> _textures;
 	Craft *_craft;
 public:
 	/// Creates the New Battle state.

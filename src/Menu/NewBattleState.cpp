@@ -179,7 +179,6 @@ NewBattleState::NewBattleState() : _craft(0)
 		{
 			_terrainTypes.push_back(*i);
 			terrainStrings.push_back("STR_" + *i);
-			_textures.push_back(_game->getRuleset()->getTerrain(*i)->getTextures()->at(0));
 		}
 	}
 
@@ -487,7 +486,11 @@ void NewBattleState::btnOkClick(Action *)
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	Base *base = 0;
 
-	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	if (ruleDeploy->getTerrains().empty())
+	{
+		bgen.setTerrain(_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
+	}
 
 	// base defense
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
@@ -513,10 +516,6 @@ void NewBattleState::btnOkClick(Action *)
 		u->setId(1);
 		_craft->setDestination(u);
 		bgen.setUfo(u);
-		if (_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()])->getHemisphere() < 0)
-		{
-			u->setLatitude(-0.5);
-		}
 		// either ground assault or ufo crash
 		if (RNG::generate(0,1) == 1)
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");

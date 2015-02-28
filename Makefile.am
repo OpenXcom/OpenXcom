@@ -540,6 +540,8 @@ openxcom_SOURCES = \
 	src/Ruleset/StatStringCondition.cpp \
 	src/Ruleset/SoundDefinition.h \
 	src/Ruleset/SoundDefinition.cpp \
+	src/Ruleset/Texture.h \
+	src/Ruleset/Texture.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \
