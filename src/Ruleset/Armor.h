@@ -51,6 +51,8 @@ private:
 	bool _constantAnimation;
 	bool _canHoldWeapon;
 	ForcedTorso _forcedTorso;
+	int _faceColorGroup, _hairColorGroup;
+	std::vector<int> _faceColor, _hairColor;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -102,6 +104,14 @@ public:
 	bool getCanHoldWeapon() const;
 	/// Checks if this armor ignores gender (power suit/flying suit).
 	ForcedTorso getForcedTorso() const;
+	/// Get face base color
+	int getFaceColorGroup() const;
+	/// Get hair base color
+	int getHairColorGroup() const;
+	/// Get face base color
+	const std::vector<int>& getFaceColor() const;
+	/// Get hair base color
+	const std::vector<int>& getHairColor() const;
 };
 
 }

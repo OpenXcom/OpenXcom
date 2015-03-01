@@ -126,6 +126,8 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	setRecolor(soldier->getGender() + 2 * (soldier->getLook()));
 }
 
 /**
@@ -280,6 +282,15 @@ void BattleUnit::load(const YAML::Node &node)
 	_motionPoints = node["motionPoints"].as<int>(0);
 	_respawn = node["respawn"].as<bool>(_respawn);
 	_activeHand = node["activeHand"].as<std::string>(_activeHand);
+
+	if (const YAML::Node& p = node["recolor"])
+	{
+		for (size_t i = 0; i < 2; ++i)
+		{
+			_recolor[i].first = p[i][0].as<Uint8>();
+			_recolor[i].second = p[i][1].as<Uint8>();
+		}
+	}
 }
 
 /**
@@ -339,7 +350,38 @@ YAML::Node BattleUnit::save() const
 	node["respawn"] = _respawn;
 	node["activeHand"] = _activeHand;
 
+	for (size_t i = 0; i < 2; ++i)
+	{
+		YAML::Node p;
+		p.push_back(_recolor[i].first);
+		p.push_back(_recolor[i].second);
+		node["recolor"].push_back(p);
+	}
+
 	return node;
+}
+
+void BattleUnit::setRecolor(int selectLook)
+{
+	int BaseColor = 0;
+
+	int faceColor = _armor->getFaceColor()[selectLook];
+	int faceColorGroup = _armor->getFaceColorGroup();
+	if (faceColorGroup > 0 && faceColor >= 0)
+	{
+		_recolor[BaseColor].first = faceColorGroup << 4;
+		_recolor[BaseColor].second = faceColor;
+		++BaseColor;
+	}
+
+	int hairColor = _armor->getHairColor()[selectLook];
+	int hairColorGroup = _armor->getHairColorGroup();
+	if (hairColorGroup > 0 && hairColor >= 0)
+	{
+		_recolor[BaseColor].first = hairColorGroup << 4;
+		_recolor[BaseColor].second = hairColor;
+		++BaseColor;
+	}
 }
 
 /**
@@ -795,6 +837,23 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
 	if (part < 0) part = 0;
 	*invalid = _cacheInvalid;
 	return _cache[part];
+}
+
+/**
+ * Gets values used for recoloring sprites.
+ * @param i what value choose.
+ * @return Pairs of value, where first is color group to replace and second is new color group with shade.
+ */
+std::pair<Uint8, Uint8> BattleUnit::getRecolor(int i) const
+{
+	if (i >= 0 && i < 2)
+	{
+		return _recolor[i];
+	}
+	else
+	{
+		return std::pair<Uint8, Uint8>(0, 0);
+	}
 }
 
 /**
