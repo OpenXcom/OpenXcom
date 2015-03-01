@@ -1255,46 +1255,6 @@ const std::vector<std::string> &Ruleset::getAlienMissionList() const
 	return _alienMissionsIndex;
 }
 
-#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
-
-/**
- * @brief Match a city based on coordinates.
- * This function object compares a city's coordinates with the stored coordinates.
- */
-class EqualCoordinates: std::unary_function<const City *, bool>
-{
-public:
-	/// Remembers the coordinates.
-	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
-	/// Compares with stored coordinates.
-	//bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
-	bool operator()(const City *city) const { return (fabs(city->getLongitude() - _lon) < CITY_EPSILON) &&
-	                                                 (fabs(city->getLatitude() - _lat) < CITY_EPSILON); }
-private:
-	double _lon, _lat;
-};
-
-/**
- * Finds the city at coordinates @a lon, @a lat.
- * The search will only match exact coordinates.
- * @param lon The longtitude.
- * @param lat The latitude.
- * @return A pointer to the city information, or 0 if no city was found.
- */
-const City *Ruleset::locateCity(double lon, double lat) const
-{
-	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
-	{
-		const std::vector<City*> &cities = *rr->second->getCities();
-		std::vector<City *>::const_iterator citer = std::find_if (cities.begin(), cities.end(), EqualCoordinates(lon, lat));
-		if (citer != cities.end())
-		{
-			return *citer;
-		}
-	}
-	return 0;
-}
-
 /**
  * Gets the alien item level table.
  * @return A deep array containing the alien item levels.

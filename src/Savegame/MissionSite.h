@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class RuleAlienMission;
+class AlienDeployment;
 
 /**
  * Represents an alien mission site on the world.
@@ -35,13 +36,14 @@ class MissionSite : public Target
 {
 private:
 	const RuleAlienMission *_rules;
+	const AlienDeployment *_deployment;
 	int _id;
 	size_t _secondsRemaining;
 	std::string _race;
 	bool _inBattlescape;
 public:
 	/// Creates a mission site.
-	MissionSite(const RuleAlienMission *rules);
+	MissionSite(const RuleAlienMission *rules, const AlienDeployment *deployment);
 	/// Cleans up the mission site.
 	~MissionSite();
 	/// Loads the mission site from YAML.
@@ -52,6 +54,8 @@ public:
 	YAML::Node saveId() const;
 	/// Gets the mission site's ruleset.
 	const RuleAlienMission *getRules() const;
+	/// Gets the mission site's deployment.
+	const AlienDeployment *getDeployment() const;
 	/// Gets the mission site's ID.
 	int getId() const;
 	/// Sets the mission site's ID.

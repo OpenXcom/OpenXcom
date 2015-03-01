@@ -1324,6 +1324,8 @@ void Globe::drawDetail()
 		{
 			for (std::vector<City*>::iterator j = (*i)->getRules()->getCities()->begin(); j != (*i)->getRules()->getCities()->end(); ++j)
 			{
+				drawTarget(*j, _countries);
+
 				// Don't draw if city is facing back
 				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 					continue;
@@ -1331,18 +1333,10 @@ void Globe::drawDetail()
 				// Convert coordinates
 				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 
-				if (_zoom >= (*j)->getZoomLevel())
-				{
-					Surface *marker = _markerSet->getFrame(CITY_MARKER);
-					marker->setX(x - 1);
-					marker->setY(y - 1);
-					marker->blit(_countries);
-
-					label->setX(x - 40);
-					label->setY(y + 2);
-					label->setText(_game->getLanguage()->getString((*j)->getName()));
-					label->blit(_countries);
-				}
+				label->setX(x - 40);
+				label->setY(y + 2);
+				label->setText((*j)->getName(_game->getLanguage()));
+				label->blit(_countries);
 			}
 		}
 		// Draw bases names
@@ -1417,10 +1411,10 @@ void Globe::drawDetail()
 					color += 2;
 					for (std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
 					{
-						double lon2 = (*k).lonMax * M_PI / 180;
-						double lon1 = (*k).lonMin * M_PI / 180;
-						double lat2 = (*k).latMax * M_PI / 180;
-						double lat1 = (*k).latMin * M_PI / 180;
+						double lon2 = (*k).lonMax;
+						double lon1 = (*k).lonMin;
+						double lat2 = (*k).latMax;
+						double lat1 = (*k).latMin;
 
 						drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
 						drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
@@ -1519,7 +1513,7 @@ void Globe::drawFlights()
  * Draws the marker for a specified target on the globe.
  * @param target Pointer to globe target.
  */
-void Globe::drawTarget(Target *target)
+void Globe::drawTarget(Target *target, Surface *surface)
 {
 	if (target->getMarker() != -1 && !pointBack(target->getLongitude(), target->getLatitude()))
 	{
@@ -1528,7 +1522,7 @@ void Globe::drawTarget(Target *target)
 		Surface *marker = _markerSet->getFrame(target->getMarker());
 		marker->setX(x - 1);
 		marker->setY(y - 1);
-		marker->blit(_markers);
+		marker->blit(surface);
 	}
 }
 
@@ -1543,31 +1537,31 @@ void Globe::drawMarkers()
 	// Draw the base markers
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		drawTarget(*i);
+		drawTarget(*i, _markers);
 	}
 
 	// Draw the waypoint markers
 	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
 	{
-		drawTarget(*i);
+		drawTarget(*i, _markers);
 	}
 
 	// Draw the mission site markers
 	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin(); i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
-		drawTarget(*i);
+		drawTarget(*i, _markers);
 	}
 
 	// Draw the alien base markers
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
 	{
-		drawTarget(*i);
+		drawTarget(*i, _markers);
 	}
 
 	// Draw the UFO markers
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
-		drawTarget(*i);
+		drawTarget(*i, _markers);
 	}
 
 	// Draw the craft markers
@@ -1575,7 +1569,7 @@ void Globe::drawMarkers()
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			drawTarget(*j);
+			drawTarget(*j, _markers);
 		}
 	}
 }

@@ -20,6 +20,7 @@
 #include <sstream>
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -27,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a mission site.
  */
-MissionSite::MissionSite(const RuleAlienMission *rules) : Target(), _rules(rules), _id(0), _secondsRemaining(0), _inBattlescape(false)
+MissionSite::MissionSite(const RuleAlienMission *rules, const AlienDeployment *deployment) : Target(), _rules(rules), _deployment(deployment), _id(0), _secondsRemaining(0), _inBattlescape(false)
 {
 }
 
@@ -59,6 +60,7 @@ YAML::Node MissionSite::save() const
 {
 	YAML::Node node = Target::save();
 	node["type"] = _rules->getType();
+	node["deployment"] = _deployment->getType();
 	node["id"] = _id;
 	if (_secondsRemaining)
 		node["secondsRemaining"] = _secondsRemaining;
@@ -75,7 +77,7 @@ YAML::Node MissionSite::save() const
 YAML::Node MissionSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = _rules->getType();
+	node["type"] = _rules->getMarkerName();
 	node["id"] = _id;
 	return node;
 }
@@ -87,6 +89,15 @@ YAML::Node MissionSite::saveId() const
 const RuleAlienMission *MissionSite::getRules() const
 {
 	return _rules;
+}
+
+/**
+ * Returns the ruleset for the mission's deployment.
+ * @return Pointer to deployment rules.
+ */
+const AlienDeployment *MissionSite::getDeployment() const
+{
+	return _deployment;
 }
 
 /**

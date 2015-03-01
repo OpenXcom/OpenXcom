@@ -679,9 +679,10 @@ void GeoscapeState::time5Seconds()
 					if (count < _game->getSavedGame()->getMissionSites()->size())
 					{
 						MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
-						const City *city = _game->getRuleset()->locateCity(site->getLongitude(), site->getLatitude());
-						assert(city);
-						popup(new MissionDetectedState(site, city->getName(), this));
+						size_t zone = (*i)->getTrajectory().getZone((*i)->getTrajectoryPoint());
+						std::string region = (*i)->getMission()->getRegion();
+						MissionArea area = _game->getRuleset()->getRegion(region)->getMissionPoint(zone, *i);
+						popup(new MissionDetectedState(site, area.name, this));
 					}
 					// If UFO was destroyed, don't spawn missions
 					if ((*i)->getStatus() == Ufo::DESTROYED)
@@ -711,7 +712,7 @@ void GeoscapeState::time5Seconds()
 			{
 				AlienMission *mission = (*i)->getMission();
 				bool detected = (*i)->getDetected();
-				mission->ufoLifting(**i, *_game, *_globe);
+				mission->ufoLifting(**i, *_game->getSavedGame(), *_globe);
 				if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 				{
 					popup(new UfoLostState((*i)->getName(_game->getLanguage())));

@@ -398,7 +398,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	// Backwards compatibility
 	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
-		MissionSite *m = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"));
+		MissionSite *m = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"), rule->getDeployment("STR_TERROR_MISSION"));
 		m->load(*i);
 		_missionSites.push_back(m);
 	}
@@ -406,7 +406,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["missionSites"].begin(); i != doc["missionSites"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		MissionSite *m = new MissionSite(rule->getAlienMission(type));
+		std::string deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
+		MissionSite *m = new MissionSite(rule->getAlienMission(type), rule->getDeployment(deployment));
 		m->load(*i);
 		_missionSites.push_back(m);
 	}

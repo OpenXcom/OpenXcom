@@ -693,19 +693,19 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_TERROR_MISSION"));
 			break;
 		case TARGET_PORT:
-			mission = new MissionSite(_rule->getAlienMission("STR_PORT_ATTACK"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_PORT_ATTACK"));
 			break;
 		case TARGET_ISLAND:
-			mission = new MissionSite(_rule->getAlienMission("STR_ISLAND_ATTACK"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ISLAND_ATTACK"));
 			break;
 		case TARGET_SHIP:
-			mission = new MissionSite(_rule->getAlienMission("STR_SHIP_RESCUE_MISSION"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_SHIP_RESCUE_MISSION"));
 			break;
 		case TARGET_ARTEFACT:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_CONTACT_SITE_MISSION"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ALIEN_CONTACT_SITE_MISSION"));
 			break;
 		}
 		if (mission != 0)

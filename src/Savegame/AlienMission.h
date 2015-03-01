@@ -102,11 +102,11 @@ public:
 	/// Handle UFO reaching a waypoint.
 	void ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, Game &engine, const Globe &globe);
+	void ufoLifting(Ufo &ufo, SavedGame &game, const Globe &globe);
 	/// Handle UFO shot down.
-	void ufoShotDown(Ufo &ufo, Game &engine, const Globe &globe);
+	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.
-	void addScore(const double lon, const double lat, Game &engine);
+	void addScore(const double lon, const double lat, SavedGame &game);
 private:
 	/// Spawns a UFO, based on mission rules.
 	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);

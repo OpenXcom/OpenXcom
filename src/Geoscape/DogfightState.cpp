@@ -1005,7 +1005,7 @@ void DogfightState::update()
 		if (_ufo->isCrashed())
 		{
 			AlienMission *mission = _ufo->getMission();
-			mission->ufoShotDown(*_ufo, *_game, *_globe);
+			mission->ufoShotDown(*_ufo);
 			// Check for retaliation trigger.
 			if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
 			{

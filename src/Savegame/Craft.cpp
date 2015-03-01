@@ -187,11 +187,11 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		else
 		{
 			// Backwards compatibility
-			if (type == "STR_TERROR_SITE")
-				type = "STR_ALIEN_TERROR";
+			if (type == "STR_ALIEN_TERROR")
+				type = "STR_TERROR_SITE";
 			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
 			{
-				if ((*i)->getId() == id && (*i)->getRules()->getType() == type)
+				if ((*i)->getId() == id && (*i)->getRules()->getMarkerName() == type)
 				{
 					setDestination(*i);
 					break;
