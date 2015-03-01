@@ -527,20 +527,12 @@ void NewBattleState::btnOkClick(Action *)
 	else
 	{
 		const AlienDeployment *deployment = _game->getRuleset()->getDeployment(bgame->getMissionType());
-		for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getAlienMissionList().begin(); i != _game->getRuleset()->getAlienMissionList().end(); ++i)
-		{
-			const RuleAlienMission *mission = _game->getRuleset()->getAlienMission(*i);
-			if (bgame->getMissionType() == mission->getDeployment())
-			{
-				MissionSite *m = new MissionSite(mission, deployment);
-				m->setId(1);
-				m->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-				_craft->setDestination(m);
-				bgen.setMissionSite(m);
-				_game->getSavedGame()->getMissionSites()->push_back(m);
-				break;
-			}
-		}
+		MissionSite *m = new MissionSite(0, deployment);
+		m->setId(1);
+		m->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+		_craft->setDestination(m);
+		bgen.setMissionSite(m);
+		_game->getSavedGame()->getMissionSites()->push_back(m);
 	}
 
 	if (_craft)

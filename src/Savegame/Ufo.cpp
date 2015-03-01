@@ -546,7 +546,7 @@ void Ufo::think()
 
 /**
  * Gets the UFO's battlescape status.
- * @return bool
+ * @return Is the UFO currently in battle?
  */
 bool Ufo::isInBattlescape() const
 {
@@ -555,7 +555,7 @@ bool Ufo::isInBattlescape() const
 
 /**
  * Sets the UFO's battlescape status.
- * @param inbattle .
+ * @param inbattle True if it's in battle, False otherwise.
  */
 void Ufo::setInBattlescape(bool inbattle)
 {

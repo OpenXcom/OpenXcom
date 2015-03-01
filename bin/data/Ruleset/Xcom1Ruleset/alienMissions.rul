@@ -245,8 +245,6 @@ alienMissions:
   - type: STR_ALIEN_TERROR
     points: 10
     specialUfo: STR_TERROR_SHIP
-    deployment: STR_TERROR_MISSION
-    markerName: STR_TERROR_SITE
     raceWeights:
       0:
         STR_SECTOID: 30

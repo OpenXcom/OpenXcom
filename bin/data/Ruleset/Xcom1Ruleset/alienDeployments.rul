@@ -832,9 +832,12 @@ alienDeployments:
     civilians: 16
     terrains:
       - URBAN
+    alert: STR_ALIENS_TERRORISE
     briefing:
       palette: 2
-      music: GMENBASE
+      music: GMENBASE    
+    markerName: STR_TERROR_SITE
+    duration: [4, 10]
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6

@@ -37,9 +37,9 @@ class MissionSite : public Target
 private:
 	const RuleAlienMission *_rules;
 	const AlienDeployment *_deployment;
-	int _id;
+	int _id, _texture;
 	size_t _secondsRemaining;
-	std::string _race;
+	std::string _race, _city;
 	bool _inBattlescape;
 public:
 	/// Creates a mission site.
@@ -76,6 +76,14 @@ public:
 	void setInBattlescape(bool inbattle);
 	/// Gets if the mission site is in battlescape.
 	bool isInBattlescape() const;
+	/// Gets the mission site's texture.
+	int getTexture() const;
+	/// Sets the mission site's texture.
+	void setTexture(int texture);
+	/// Gets the mission site's city.
+	std::string getCity() const;
+	/// Sets the mission site's city.
+	void setCity(const std::string &city);
 };
 
 }

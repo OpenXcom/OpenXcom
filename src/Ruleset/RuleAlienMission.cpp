@@ -51,7 +51,7 @@ namespace YAML
 namespace OpenXcom
 {
 
-RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _markerIcon(-1)
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0)
 {
 }
 
@@ -65,9 +65,6 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_points = node["points"].as<int>(_points);
 	_waves = node["waves"].as< std::vector<MissionWave> >(_waves);
 	_specialUfo = node["specialUfo"].as<std::string>(_specialUfo);
-	_deployment = node["deployment"].as<std::string>(_deployment);
-	_markerName = node["markerName"].as<std::string>(_markerName);
-	_markerIcon = node["markerIcon"].as<int>(_markerIcon);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
@@ -158,33 +155,6 @@ RuleAlienMission::~RuleAlienMission()
 int RuleAlienMission::getPoints() const
 {
 	return _points;
-}
-
-/**
- * Returns the alien deployment for this mission.
- * @return String ID for deployment.
- */
-std::string RuleAlienMission::getDeployment() const
-{
-	return _deployment;
-}
-
-/**
- * Returns the globe marker name for this mission.
- * @return String ID for marker name.
- */
-std::string RuleAlienMission::getMarkerName() const
-{
-	return _markerName;
-}
-
-/**
- * Returns the globe marker icon for this mission.
- * @return Marker sprite, -1 if none.
- */
-int RuleAlienMission::getMarkerIcon() const
-{
-	return _markerIcon;
 }
 
 }

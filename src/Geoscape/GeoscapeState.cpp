@@ -679,10 +679,7 @@ void GeoscapeState::time5Seconds()
 					if (count < _game->getSavedGame()->getMissionSites()->size())
 					{
 						MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
-						size_t zone = (*i)->getTrajectory().getZone((*i)->getTrajectoryPoint());
-						std::string region = (*i)->getMission()->getRegion();
-						MissionArea area = _game->getRuleset()->getRegion(region)->getMissionPoint(zone, *i);
-						popup(new MissionDetectedState(site, area.name, this));
+						popup(new MissionDetectedState(site, this));
 					}
 					// If UFO was destroyed, don't spawn missions
 					if ((*i)->getStatus() == Ufo::DESTROYED)
@@ -874,6 +871,7 @@ void GeoscapeState::time5Seconds()
 						// look up polygons texture
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(m->getLongitude(), m->getLatitude(), &texture, &shade);
+						texture = m->getTexture();
 						timerReset();
 						popup(new ConfirmLandingState(*j, texture, shade));
 					}

@@ -30,6 +30,7 @@
 #include "../Savegame/MissionSite.h"
 #include "../Engine/Options.h"
 #include "InterceptState.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -38,10 +39,9 @@ namespace OpenXcom
  * Initializes all the elements in the Mission Detected window.
  * @param game Pointer to the core game.
  * @param mission Pointer to the respective Mission Site.
- * @param city Attacked city name, if any.
  * @param state Pointer to the Geoscape.
  */
-MissionDetectedState::MissionDetectedState(MissionSite *mission, const std::string &city, GeoscapeState *state) : _mission(mission), _state(state)
+MissionDetectedState::MissionDetectedState(MissionSite *mission, GeoscapeState *state) : _mission(mission), _state(state)
 {
 	_screen = false;
 
@@ -81,11 +81,11 @@ MissionDetectedState::MissionDetectedState(MissionSite *mission, const std::stri
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(tr("STR_ALIENS_TERRORISE"));
+	_txtTitle->setText(tr(mission->getDeployment()->getAlertMessage()));
 
 	_txtCity->setBig();
 	_txtCity->setAlign(ALIGN_CENTER);
-	_txtCity->setText(tr(city));
+	_txtCity->setText(tr(mission->getCity()));
 }
 
 /**

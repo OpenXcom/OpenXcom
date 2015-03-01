@@ -41,6 +41,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -146,7 +147,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 	}
 	else if (m != 0)
 	{
-		bgame->setMissionType(m->getRules()->getDeployment());
+		bgame->setMissionType(m->getDeployment()->getType());
 		bgen.setMissionSite(m);
 		bgen.setAlienRace(m->getAlienRace());
 	}

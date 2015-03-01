@@ -44,7 +44,7 @@ private:
 	Text *_txtTitle, *_txtCity;
 public:
 	/// Creates the Mission Detected state.
-	MissionDetectedState(MissionSite *mission, const std::string &city, GeoscapeState *state);
+	MissionDetectedState(MissionSite *mission, GeoscapeState *state);
 	/// Cleans up the Mission Detected state.
 	~MissionDetectedState();
 	/// Handler for clicking the Intercept button.

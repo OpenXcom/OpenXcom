@@ -45,6 +45,7 @@
 #include <algorithm>
 #include <functional>
 #include <math.h>
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -401,13 +402,16 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 
 			MissionArea area = regionRules.getMissionPoint(trajectory.getZone(curWaypoint), &ufo);
 			Texture *texture = rules.getGlobe()->getTexture(area.texture);
+			AlienDeployment *deployment = rules.getDeployment(texture->getDeployment());
 			
-			MissionSite *missionSite = new MissionSite(&_rule, rules.getDeployment(texture->getDeployment()));
+			MissionSite *missionSite = new MissionSite(&_rule, deployment);
 			missionSite->setLongitude(ufo.getLongitude());
 			missionSite->setLatitude(ufo.getLatitude());
-			missionSite->setId(game.getId(_rule.getMarkerName()));
-			missionSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);
+			missionSite->setId(game.getId(deployment->getMarkerName()));
+			missionSite->setSecondsRemaining(RNG::generate(deployment->getDurationMin(), deployment->getDurationMax()) * 3600);
 			missionSite->setAlienRace(_race);
+			missionSite->setTexture(area.texture);
+			missionSite->setCity(area.name);
 			game.getMissionSites()->push_back(missionSite);
 			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 			{

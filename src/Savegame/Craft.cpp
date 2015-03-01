@@ -35,7 +35,7 @@
 #include "AlienBase.h"
 #include "Vehicle.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -191,7 +191,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 				type = "STR_TERROR_SITE";
 			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
 			{
-				if ((*i)->getId() == id && (*i)->getRules()->getMarkerName() == type)
+				if ((*i)->getId() == id && (*i)->getDeployment()->getMarkerName() == type)
 				{
 					setDestination(*i);
 					break;
@@ -843,7 +843,7 @@ std::string Craft::rearm(Ruleset *rules)
 
 /**
  * Returns the craft's battlescape status.
- * @return Is the craft on the battlescape?
+ * @return Is the craft currently in battle?
  */
 bool Craft::isInBattlescape() const
 {
