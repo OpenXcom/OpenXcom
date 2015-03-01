@@ -328,11 +328,11 @@ void UnitSprite::drawRoutine0()
 		}
 	}
 
-	
+
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		
+
 		if (_drawingRoutine == 10)
 			torsoHandsWeaponY = mutonYoffWalk[walkPhase];
 		else if (_drawingRoutine == 13 || _drawingRoutine == 14)
@@ -646,7 +646,7 @@ void UnitSprite::drawRoutine1()
 		// unit is drawn as an item
 		return;
 	}
-	
+
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
@@ -968,7 +968,7 @@ void UnitSprite::drawRoutine4()
 			itemB->setY(offY3[unitDir]);
 		}
 	}
-	
+
 	if (_unit->getStatus() == STATUS_AIMING)
 	{
 		s->setX(offXAiming);

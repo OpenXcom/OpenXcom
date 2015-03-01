@@ -26,7 +26,11 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  */
-Armor::Armor(const std::string &type) : _type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _forcedTorso(TORSO_USE_GENDER)
+Armor::Armor(const std::string &type) :
+	_type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
+	_drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0),
+	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false),
+	_forcedTorso(TORSO_USE_GENDER)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -74,7 +78,7 @@ void Armor::load(const YAML::Node &node)
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
-		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
+		for (size_t i = 0; i < dmg.size() && i < (size_t)DAMAGE_TYPES; ++i)
 		{
 			_damageModifier[i] = dmg[i].as<float>();
 		}
@@ -242,7 +246,7 @@ int Armor::getSize() const
  * @param dt The damageType.
  * @return The damage modifier 0->1.
  */
-float Armor::getDamageModifier(ItemDamageType dt)
+float Armor::getDamageModifier(ItemDamageType dt) const
 {
 	return _damageModifier[(int)dt];
 }
@@ -250,7 +254,7 @@ float Armor::getDamageModifier(ItemDamageType dt)
 /** Gets the loftempSet.
  * @return The loftempsSet.
  */
-std::vector<int> Armor::getLoftempsSet() const
+const std::vector<int>& Armor::getLoftempsSet() const
 {
 	return _loftempsSet;
 }
@@ -259,7 +263,7 @@ std::vector<int> Armor::getLoftempsSet() const
   * Gets pointer to the armor's stats.
   * @return stats Pointer to the armor's stats.
   */
-UnitStats *Armor::getStats()
+const UnitStats *Armor::getStats() const
 {
 	return &_stats;
 }
@@ -268,7 +272,7 @@ UnitStats *Armor::getStats()
  * Gets the armor's weight.
  * @return the weight of the armor.
  */
-int Armor::getWeight()
+int Armor::getWeight() const
 {
 	return _weight;
 }
@@ -277,7 +281,7 @@ int Armor::getWeight()
  * Gets number of death frames.
  * @return number of death frames.
  */
-int Armor::getDeathFrames()
+int Armor::getDeathFrames() const
 {
 	return _deathFrames;
 }
@@ -286,7 +290,7 @@ int Armor::getDeathFrames()
  * Gets if armor uses constant animation.
  * @return if it uses constant animation
  */
-bool Armor::getConstantAnimation()
+bool Armor::getConstantAnimation() const
 {
 	return _constantAnimation;
 }
@@ -295,7 +299,7 @@ bool Armor::getConstantAnimation()
  * Gets if armor can hold weapon.
  * @return if it can hold weapon
  */
-bool Armor::getCanHoldWeapon()
+bool Armor::getCanHoldWeapon() const
 {
 	return _canHoldWeapon;
 }
@@ -304,7 +308,7 @@ bool Armor::getCanHoldWeapon()
  * Checks if this armor ignores gender (power suit/flying suit).
  * @return which torso to force on the sprite.
  */
-ForcedTorso Armor::getForcedTorso()
+ForcedTorso Armor::getForcedTorso() const
 {
 	return _forcedTorso;
 }

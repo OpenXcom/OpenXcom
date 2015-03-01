@@ -27,7 +27,7 @@
 
 namespace OpenXcom
 {
-	
+
 enum ForcedTorso{ TORSO_USE_GENDER, TORSO_ALWAYS_MALE, TORSO_ALWAYS_FEMALE };
 /**
  * Represents a specific type of armor.
@@ -36,7 +36,7 @@ enum ForcedTorso{ TORSO_USE_GENDER, TORSO_ALWAYS_MALE, TORSO_ALWAYS_FEMALE };
  */
 class Armor
 {
-public:	
+public:
 	static const int DAMAGE_TYPES = 10;
 private:
 	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem, _specWeapon;
@@ -87,21 +87,21 @@ public:
 	/// Gets whether this is a normal or big unit.
 	int getSize() const;
 	/// Gets damage modifier.
-	float getDamageModifier(ItemDamageType dt);
+	float getDamageModifier(ItemDamageType dt) const;
 	/// Gets loftempSet
-	std::vector<int> getLoftempsSet() const;
+	const std::vector<int>& getLoftempsSet() const;
 	/// Gets the armor's stats.
-	UnitStats *getStats();
+	const UnitStats *getStats() const;
 	/// Gets the armor's weight.
-	int getWeight();
+	int getWeight() const;
 	/// Gets number of death frames.
-	int getDeathFrames();
+	int getDeathFrames() const;
 	/// Gets if armor uses constant animation.
-	bool getConstantAnimation();
+	bool getConstantAnimation() const;
 	/// Gets if armor can hold weapon.
-	bool getCanHoldWeapon();
+	bool getCanHoldWeapon() const;
 	/// Checks if this armor ignores gender (power suit/flying suit).
-	ForcedTorso getForcedTorso();
+	ForcedTorso getForcedTorso() const;
 };
 
 }
