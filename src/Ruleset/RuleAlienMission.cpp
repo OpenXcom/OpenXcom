@@ -31,6 +31,7 @@ namespace YAML
 			node["count"] = rhs.ufoCount;
 			node["trajectory"] = rhs.trajectory;
 			node["timer"] = rhs.spawnTimer;
+			node["objective"] = rhs.objective;
 			return node;
 		}
 
@@ -43,6 +44,7 @@ namespace YAML
 			rhs.ufoCount = node["count"].as<size_t>();
 			rhs.trajectory = node["trajectory"].as<std::string>();
 			rhs.spawnTimer = node["timer"].as<size_t>();
+			rhs.objective = node["objective"].as<bool>(false);
 			return true;
 		}
 	};
@@ -51,8 +53,19 @@ namespace YAML
 namespace OpenXcom
 {
 
-RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0)
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _objective(OBJECTIVE_SCORE), _spawnZone(-1)
 {
+}
+
+/**
+ * Ensures the allocated memory is released.
+ */
+RuleAlienMission::~RuleAlienMission()
+{
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
+	{
+		delete ii->second;
+	}
 }
 
 /**
@@ -64,7 +77,9 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_points = node["points"].as<int>(_points);
 	_waves = node["waves"].as< std::vector<MissionWave> >(_waves);
-	_specialUfo = node["specialUfo"].as<std::string>(_specialUfo);
+	_objective = (MissionObjective)node["objective"].as<int>(_objective);
+	_spawnUfo = node["spawnUfo"].as<std::string>(_spawnUfo);
+	_spawnZone = node["spawnZone"].as<int>(_spawnZone);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
@@ -135,17 +150,6 @@ const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
 	return rc->second->top();
-}
-
-/**
- * Ensures the allocated memory is released.
- */
-RuleAlienMission::~RuleAlienMission()
-{
-	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
-	{
-		delete ii->second;
-	}
 }
 
 /**

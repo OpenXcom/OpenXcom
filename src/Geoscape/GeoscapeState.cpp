@@ -107,6 +107,7 @@
 #include "../Menu/SaveGameState.h"
 #include "../Menu/ListSaveState.h"
 #include "../Ruleset/AlienRace.h"
+#include "../Ruleset/RuleGlobe.h"
 
 namespace OpenXcom
 {
@@ -499,7 +500,7 @@ void GeoscapeState::init()
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions(true);
-		setupTerrorMission();
+		setupLandMission();
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
 	}
 }
@@ -849,7 +850,7 @@ void GeoscapeState::time5Seconds()
 								int texture, shade;
 								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 								timerReset();
-								popup(new ConfirmLandingState(*j, texture, shade));
+								popup(new ConfirmLandingState(*j, _game->getRuleset()->getGlobe()->getTexture(texture), shade));
 							}
 						}
 						else if (u->getStatus() != Ufo::LANDED)
@@ -873,7 +874,7 @@ void GeoscapeState::time5Seconds()
 						_globe->getPolygonTextureAndShade(m->getLongitude(), m->getLatitude(), &texture, &shade);
 						texture = m->getTexture();
 						timerReset();
-						popup(new ConfirmLandingState(*j, texture, shade));
+						popup(new ConfirmLandingState(*j, _game->getRuleset()->getGlobe()->getTexture(texture), shade));
 					}
 					else
 					{
@@ -889,7 +890,7 @@ void GeoscapeState::time5Seconds()
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
 							timerReset();
-							popup(new ConfirmLandingState(*j, texture, shade));
+							popup(new ConfirmLandingState(*j, _game->getRuleset()->getGlobe()->getTexture(texture), shade));
 						}
 						else
 						{
@@ -1578,6 +1579,7 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
+	const RuleAlienMission *baseMission = _game->getRuleset()->getRandomMission(OBJECTIVE_BASE);
 	// handle regional and country points for alien bases
 	for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 	{
@@ -1585,7 +1587,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
+				(*k)->addActivityAlien(baseMission->getPoints() / 10);
 				break;
 			}
 		}
@@ -1593,7 +1595,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
+				(*k)->addActivityAlien(baseMission->getPoints() / 10);
 				break;
 			}
 		}
@@ -1634,7 +1636,7 @@ void GeoscapeState::time1Month()
 	if (monthsPassed > 5)
 		determineAlienMissions();
 
-	setupTerrorMission();
+	setupLandMission();
 
 	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
@@ -1652,9 +1654,9 @@ void GeoscapeState::time1Month()
 			{
 				if ((*i)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 				{
-					if (!_game->getSavedGame()->getAlienMission((*i)->getRules()->getType(), "STR_ALIEN_RETALIATION"))
+					if (!_game->getSavedGame()->findAlienMission((*i)->getRules()->getType(), OBJECTIVE_RETALIATION))
 					{
-						const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+						const RuleAlienMission &rule = *_game->getRuleset()->getRandomMission(OBJECTIVE_RETALIATION);
 						AlienMission *mission = new AlienMission(rule);
 						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 						mission->setRegion((*i)->getRules()->getType(), *_game->getRuleset());
@@ -2170,29 +2172,38 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
-void GeoscapeState::setupTerrorMission()
+void GeoscapeState::setupLandMission()
 {
-	//Determine a random region with at least one city and no currently running terror mission.
+	const RuleAlienMission &missionRules = *_game->getRuleset()->getRandomMission(OBJECTIVE_SITE);
+	//Determine a random region with a valid mission zone and no mission already running
 	RuleRegion* region = 0;
-	int counter = 0;
+	bool picked = false;
 	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
-	do
+	// we try 40 times to pick a valid zone for a terror mission
+	for (int counter = 0; counter < 40 && !picked; ++counter)
 	{
-		// we try 40 times to pick a valid zone for a terror mission
-		if (counter == 40) return;
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		counter++;
+		if (_game->getSavedGame()->findAlienMission(region->getType(), OBJECTIVE_SITE) == 0)
+		{
+			const MissionZone &zone = region->getMissionZones().at(missionRules.getSpawnZone());
+			for (std::vector<MissionArea>::const_iterator i = zone.areas.begin(); i != zone.areas.end(); ++i)
+			{
+				if (i->isPoint())
+				{
+					picked = true;
+					break;
+				}
+			}
+		}
 	}
-	while (region->getCities()->empty() || _game->getSavedGame()->getAlienMission(region->getType(), "STR_ALIEN_TERROR") != 0);
 	// Choose race for terror mission.
-	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
-	const std::string &terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
-	AlienMission *terrorMission = new AlienMission(terrorRules);
-	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-	terrorMission->setRegion(region->getType(), *_game->getRuleset());
-	terrorMission->setRace(terrorRace);
-	terrorMission->start(150);
-	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
+	const std::string &race = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
+	AlienMission *mission = new AlienMission(missionRules);
+	mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+	mission->setRegion(region->getType(), *_game->getRuleset());
+	mission->setRace(race);
+	mission->start(150);
+	_game->getSavedGame()->getAlienMissions().push_back(mission);
 }
 /**
  * Handler for clicking on a timer button.

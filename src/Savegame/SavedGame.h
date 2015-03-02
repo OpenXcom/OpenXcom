@@ -25,6 +25,7 @@
 #include <time.h>
 #include <stdint.h>
 #include "CraftId.h"
+#include "../Ruleset/RuleAlienMission.h"
 
 namespace OpenXcom
 {
@@ -252,8 +253,8 @@ public:
 	std::vector<AlienMission*> &getAlienMissions() { return _activeMissions; }
 	/// Read-only access to the current alien missions.
 	const std::vector<AlienMission*> &getAlienMissions() const { return _activeMissions; }
-	/// Gets a mission matching region and type.
-	AlienMission *getAlienMission(const std::string &region, const std::string &type) const;
+	/// Finds a mission by region and objective.
+	AlienMission *findAlienMission(const std::string &region, MissionObjective objective) const;
 	/// Locate a region containing a position.
 	Region *locateRegion(double lon, double lat) const;
 	/// Locate a region containing a Target.

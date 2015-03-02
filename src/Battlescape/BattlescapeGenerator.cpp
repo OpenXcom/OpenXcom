@@ -129,9 +129,8 @@ void BattlescapeGenerator::setUfo(Ufo *ufo)
  * Sets the world texture where a ufo crashed. This is used to determine the terrain.
  * @param texture Texture id of the polygon on the globe.
  */
-void BattlescapeGenerator::setWorldTexture(int texture)
+void BattlescapeGenerator::setWorldTexture(Texture *texture)
 {
-	if (texture < 0) texture = 0;
 	_worldTexture = texture;
 }
 
@@ -340,17 +339,16 @@ void BattlescapeGenerator::run()
 
 	if (_terrain == 0)
 	{
-		if (ruleDeploy->getTerrains().empty())
-		{
-			Target *target = _ufo;
-			if (_mission) target = _mission;
-			Texture *texture = _game->getRuleset()->getGlobe()->getTexture(_worldTexture);
-			_terrain = _game->getRuleset()->getTerrain(texture->getRandomTerrain(target));
-		}
-		else
+		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty())
 		{
 			size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
 			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+		}
+		else
+		{			
+			Target *target = _ufo;
+			if (_mission) target = _mission;
+			_terrain = _game->getRuleset()->getTerrain(_worldTexture->getRandomTerrain(target));
 		}
 	}
 	// new battle menu will have set the depth already

@@ -44,6 +44,7 @@ class MissionSite;
 class AlienBase;
 class BattleUnit;
 class MapScript;
+class Texture;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -61,7 +62,8 @@ private:
 	AlienBase *_alienBase;
 	RuleTerrain *_terrain;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
-	int _worldTexture, _worldShade;
+	Texture *_worldTexture;
+	int _worldShade;
 	int _unitSequence;
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
@@ -141,7 +143,7 @@ public:
 	/// Sets the ufo.
 	void setUfo(Ufo* ufo);
 	/// Sets the polygon texture.
-	void setWorldTexture(int texture);
+	void setWorldTexture(Texture *texture);
 	/// Sets the polygon shade.
 	void setWorldShade(int shade);
 	/// Sets the alien race.

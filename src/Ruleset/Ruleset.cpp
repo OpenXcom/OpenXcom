@@ -69,6 +69,7 @@
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"
 #include "RuleVideo.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -1244,6 +1245,25 @@ const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
 {
 	std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.find(id);
 	if (_alienMissions.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the rules for a random alien mission based on a specific objective.
+ * @param objective Alien mission objective.
+ * @return Rules for the alien mission.
+ */
+const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective) const
+{
+	std::vector<RuleAlienMission*> missions;
+	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
+	{
+		if (i->second->getObjective() == objective)
+		{
+			missions.push_back(i->second);
+		}
+	}
+	size_t pick = RNG::generate(0, missions.size() - 1);
+	return missions[pick];
 }
 
 /**

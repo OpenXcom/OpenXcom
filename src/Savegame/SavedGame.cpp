@@ -1502,27 +1502,27 @@ class matchRegionAndType: public std::unary_function<AlienMission *, bool>
 {
 public:
 	/// Store the region and type.
-	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	matchRegionAndType(const std::string &region, MissionObjective objective) : _region(region), _objective(objective) { }
 	/// Match against stored values.
 	bool operator()(const AlienMission *mis) const
 	{
-		return mis->getRegion() == _region && mis->getType() == _type;
+		return mis->getRegion() == _region && mis->getRules().getObjective() == _objective;
 	}
 private:
 
 	const std::string &_region;
-	const std::string &_type;
+	MissionObjective _objective;
 };
 
 /**
- * Find a mission from the active alien missions.
- * @param region The region ID.
- * @param type The mission type ID.
+ * Find a mission type in the active alien missions.
+ * @param region The region string ID.
+ * @param objective The active mission objective.
  * @return A pointer to the mission, or 0 if no mission matched.
  */
-AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
+AlienMission *SavedGame::findAlienMission(const std::string &region, MissionObjective objective) const
 {
-	std::vector<AlienMission*>::const_iterator ii = std::find_if (_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
+	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, objective));
 	if (ii == _activeMissions.end())
 		return 0;
 	return *ii;
