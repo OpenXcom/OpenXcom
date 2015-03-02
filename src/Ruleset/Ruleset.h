@@ -218,7 +218,7 @@ public:
 	/// Gets the ruleset for a specific alien mission.
 	const RuleAlienMission *getAlienMission(const std::string &id) const;
 	/// Gets the ruleset for a random alien mission.
-	const RuleAlienMission *getRandomMission(MissionObjective objective) const;
+	const RuleAlienMission *getRandomMission(MissionObjective objective, size_t monthsPassed) const;
 	/// Gets the list of all alien missions.
 	const std::vector<std::string> &getAlienMissionList() const;
 	/// Gets the alien item level table.

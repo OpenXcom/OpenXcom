@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_RULEALIENMISSION_H
 
 #include <vector>
+#include <map>
 #include <string>
 #include <yaml-cpp/yaml.h>
 
@@ -91,20 +92,24 @@ public:
 	const std::string &getSpawnUfo() const { return _spawnUfo; }
 	/// Gets the zone for spawning an alien site or base.
 	int getSpawnZone() const { return _spawnZone; }
+	/// Gets the chances of this mission based on the game time.
+	int getWeight(const size_t monthsPassed) const;
 private:
 	/// The mission's type ID.
 	std::string _type;
-	/// The mission's objective UFO.
+	/// The UFO to use for spawning.
 	std::string _spawnUfo;
 	/// The race distribution over game time.
 	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;
+	/// The mission's weights.
+	std::map<size_t, int> _weights;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 	/// The mission's points.
 	int _points;
 	/// The mission's objective.
 	MissionObjective _objective;
-	/// Spawn a mission site in this zone.
+	/// The mission zone to use for spawning.
 	int _spawnZone;
 };
 

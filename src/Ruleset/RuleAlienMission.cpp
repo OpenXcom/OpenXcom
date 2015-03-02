@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -80,6 +80,7 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_objective = (MissionObjective)node["objective"].as<int>(_objective);
 	_spawnUfo = node["spawnUfo"].as<std::string>(_spawnUfo);
 	_spawnZone = node["spawnZone"].as<int>(_spawnZone);
+	_weights = node["missionWeights"].as< std::map<size_t, int> >(_weights);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
@@ -145,7 +146,12 @@ const std::string RuleAlienMission::generateRace(const size_t monthsPassed) cons
 	return rc->second->choose();
 }
 
-
+/**
+ * Chooses the most likely race for this mission.
+ * The racial distribution may vary based on the current game date.
+ * @param monthsPassed The number of months that have passed in the game world.
+ * @return The string id of the race.
+ */
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
@@ -159,6 +165,29 @@ const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 int RuleAlienMission::getPoints() const
 {
 	return _points;
+}
+
+/**
+ * Returns the chances of this mission being generated based on the current game date.
+ * @param monthsPassed The number of months that have passed in the game world.
+ * @return The weight.
+ */
+int RuleAlienMission::getWeight(const size_t monthsPassed) const
+{
+	if (_weights.empty())
+	{
+		return 1;
+	}
+	int weight = 0;
+	for (std::map<size_t, int>::const_iterator i = _weights.begin(); i != _weights.end(); ++i)
+	{
+		if (i->first > monthsPassed)
+		{
+			break;
+		}
+		weight = i->second;
+	}
+	return weight;
 }
 
 }

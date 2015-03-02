@@ -64,8 +64,6 @@ public:
 	void load(const YAML::Node& node, SavedGame &game);
 	/// Saves the mission to YAML.
 	YAML::Node save() const;
-	/// Gets the mission's type.
-	const std::string &getType() const;
 	/// Gets the mission's ruleset.
 	const RuleAlienMission &getRules() const { return _rule; }
 	/// Gets the mission's region.

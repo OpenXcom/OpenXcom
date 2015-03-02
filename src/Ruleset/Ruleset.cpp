@@ -1252,18 +1252,28 @@ const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
  * @param objective Alien mission objective.
  * @return Rules for the alien mission.
  */
-const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective) const
+const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective, size_t monthsPassed) const
 {
-	std::vector<RuleAlienMission*> missions;
+	int totalWeight = 0;
+	std::map<int, RuleAlienMission*> possibilities;
 	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
-		if (i->second->getObjective() == objective)
+		int weight = i->second->getWeight(monthsPassed);
+		if (weight > 0)
 		{
-			missions.push_back(i->second);
+			totalWeight += weight;
+			possibilities[totalWeight] = i->second;
 		}
 	}
-	size_t pick = RNG::generate(0, missions.size() - 1);
-	return missions[pick];
+	int pick = RNG::generate(1, totalWeight);
+	for (std::map<int, RuleAlienMission*>::const_iterator i = possibilities.begin(); i != possibilities.end(); ++i)
+	{
+		if (pick <= i->first)
+		{
+			return i->second;
+		}
+	}
+	return 0;
 }
 
 /**

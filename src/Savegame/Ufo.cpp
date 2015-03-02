@@ -30,6 +30,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
+#include "../Ruleset/RuleAlienMission.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
 
@@ -626,7 +627,7 @@ int Ufo::getVisibility() const
  */
 const std::string &Ufo::getMissionType() const
 {
-	return _mission->getType();
+	return _mission->getRules().getType();
 }
 
 /**

@@ -72,6 +72,7 @@ private:
 };
 
 /**
+ * Loads the alien mission from a YAML file.
  * @param node The YAML node containing the data.
  * @param game The game data, required to locate the alien base.
  */
@@ -97,6 +98,10 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 
 }
 
+/**
+ * Saves the alien mission to a YAML file.
+ * @return YAML node.
+ */
 YAML::Node AlienMission::save() const
 {
 	YAML::Node node;
@@ -113,11 +118,6 @@ YAML::Node AlienMission::save() const
 		node["alienBase"] = _base->getId();
 	}
 	return node;
-}
-
-const std::string &AlienMission::getType() const
-{
-	return _rule.getType();
 }
 
 /**
