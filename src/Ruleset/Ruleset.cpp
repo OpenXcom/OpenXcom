@@ -1258,10 +1258,9 @@ const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective, si
 	std::map<int, RuleAlienMission*> possibilities;
 	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
-		int weight = i->second->getWeight(monthsPassed);
-		if (weight > 0)
+		if (i->second->getObjective() == objective && i->second->getWeight(monthsPassed) > 0)
 		{
-			totalWeight += weight;
+			totalWeight += i->second->getWeight(monthsPassed);
 			possibilities[totalWeight] = i->second;
 		}
 	}

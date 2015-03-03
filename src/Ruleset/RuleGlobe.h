@@ -56,6 +56,8 @@ public:
 	void loadDat(const std::string &filename);
 	/// Gets a specific world texture.
 	Texture *getTexture(int id) const;
+	/// Gets all the terrains for a specific deployment.
+	std::vector<std::string> getTerrains(const std::string &deployment) const;
 };
 
 }

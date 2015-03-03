@@ -215,4 +215,25 @@ Texture *RuleGlobe::getTexture(int id) const
 	if (_textures.end() != i) return i->second; else return 0;
 }
 
+/**
+ * Returns a list of all globe terrains associated with this deployment.
+ * @param deployment Deployment name.
+ * @return List of terrains.
+ */
+std::vector<std::string> RuleGlobe::getTerrains(const std::string &deployment) const
+{
+	std::vector<std::string> terrains;
+	for (std::map<int, Texture*>::const_iterator i = _textures.begin(); i != _textures.end(); ++i)
+	{
+		if (i->second->getDeployment() == deployment)
+		{
+			for (std::vector<TerrainCriteria>::const_iterator j = i->second->getTerrain()->begin(); j != i->second->getTerrain()->end(); ++j)
+			{
+				terrains.push_back(j->name);
+			}
+		}
+	}
+	return terrains;
+}
+
 }

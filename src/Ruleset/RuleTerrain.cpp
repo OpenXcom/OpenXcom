@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _hemisphere(0), _minDepth(0), _maxDepth(0), _ambience(-1)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _minDepth(0), _maxDepth(0), _ambience(-1)
 {
 }
 
@@ -70,8 +70,6 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		}
 	}
 	_name = node["name"].as<std::string>(_name);
-	_textures = node["textures"].as< std::vector<int> >(_textures);
-	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
 	if (const YAML::Node &civs = node["civilianTypes"])
 	{
 		_civilianTypes = civs.as<std::vector<std::string> >(_civilianTypes);
@@ -188,25 +186,6 @@ MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 		*mapDataSetID = 0;
 	}
 	return mdf->getObjects()->at(*id);
-}
-
-/**
- * Gets the array of globe texture IDs this terrain is loaded on.
- * @return Pointer to the array of texture IDs.
- */
-std::vector<int> *RuleTerrain::getTextures()
-{
-	return &_textures;
-}
-
-/**
- * Gets the hemishpere this terrain occurs on.
- * -1 = northern, 0 = either, 1 = southern.
- * @return The hemisphere.
- */
-int RuleTerrain::getHemisphere() const
-{
-	return _hemisphere;
 }
 
 /**

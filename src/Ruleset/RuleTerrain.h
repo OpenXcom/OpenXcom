@@ -44,9 +44,8 @@ private:
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name, _script;
-	std::vector<int> _textures;
 	std::vector<std::string> _civilianTypes;
-	int _hemisphere, _minDepth, _maxDepth, _ambience;
+	int _minDepth, _maxDepth, _ambience;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -64,17 +63,15 @@ public:
 	MapBlock *getMapBlock(const std::string &name);
 	/// Gets the mapdata object.
 	MapData *getMapData(unsigned int *id, int *mapDataSetID) const;
-	std::vector<int> *getTextures();
-	int getHemisphere() const;
-	/// Gets teh civilian types to use.
+	/// Gets the civilian types to use.
 	std::vector<std::string> getCivilianTypes() const;
-	/// get the minimum depth.
+	/// Gets the minimum depth.
 	const int getMinDepth() const;
-	/// get the maximum depth.
+	/// Gets the maximum depth.
 	const int getMaxDepth() const;
-	/// get the ambient sound effect.
+	/// Gets the ambient sound effect.
 	const int getAmbience() const;
-	/// Gets The generation script name.
+	/// Gets the generation script name.
 	const std::string getScript();
 };
 
