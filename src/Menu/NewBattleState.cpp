@@ -508,7 +508,8 @@ void NewBattleState::btnOkClick(Action *)
 	else
 	{
 		const AlienDeployment *deployment = _game->getRuleset()->getDeployment(bgame->getMissionType());
-		MissionSite *m = new MissionSite(0, deployment);
+		const RuleAlienMission *mission = _game->getRuleset()->getAlienMission(_game->getRuleset()->getAlienMissionList().front()); // doesn't matter
+		MissionSite *m = new MissionSite(mission, deployment);
 		m->setId(1);
 		m->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(m);
