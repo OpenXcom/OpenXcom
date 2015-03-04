@@ -451,6 +451,7 @@ void NewBattleState::initSave()
 	}
 
 	_game->setSavedGame(save);
+	cbxMissionChange(0);
 }
 
 /**
@@ -555,6 +556,8 @@ void NewBattleState::btnCancelClick(Action *)
  */
 void NewBattleState::btnRandomClick(Action *)
 {
+	initSave();
+
 	_cbxMission->setSelected(RNG::generate(0, _missionTypes.size()-1));
 	cbxMissionChange(0);
 	_cbxCraft->setSelected(RNG::generate(0, _crafts.size() - 1));
@@ -565,8 +568,6 @@ void NewBattleState::btnRandomClick(Action *)
 	_cbxAlienRace->setSelected(RNG::generate(0, _alienRaces.size()-1));
 	_cbxDifficulty->setSelected(RNG::generate(0, 4));
 	_slrAlienTech->setValue(RNG::generate(0, _game->getRuleset()->getAlienItemLevels().size()-1));
-
-	initSave();
 }
 
 /**
