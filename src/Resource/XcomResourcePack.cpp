@@ -113,7 +113,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		_palettes[s2] = new Palette();
 		_palettes[s2]->loadDat(CrossPlatform::getDataFile(s1), 128);
 	}
-	
+
 	// Correct Battlescape palette
 	{
 		std::string s1 = "GEODATA/PALETTES.DAT";
@@ -193,11 +193,11 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 			newGeo->setPixel(newWidth+x, newHeight+y, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth-x-1, newHeight+y, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth*3-x-1, newHeight+y, oldGeo->getPixel(x, y));
-			
+
 			newGeo->setPixel(newWidth+x, newHeight-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth*3-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
-			
+
 			newGeo->setPixel(newWidth+x, newHeight*3-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth*3-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
@@ -314,8 +314,8 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		delete gmcat;
 		delete adlibcat;
 		delete aintrocat;
-#endif		
-		
+#endif
+
 		if (rules->getSoundDefinitions()->empty())
 		{
 			// Load sounds
@@ -387,7 +387,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 				}
 			}
 		}
-		
+
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")))
 		{
@@ -408,7 +408,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	Window::soundPopup[2] = getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
-	
+
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
 	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
@@ -491,7 +491,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 			{
 				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
 			}
-			
+
 			if (subdivision)
 			{
 				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
@@ -616,7 +616,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		surface1->setPalette(surface2->getPalette());
 		surface2->blit(surface1);
 	}
-	
+
 	std::vector< std::pair<std::string, ExtraSounds *> >extraSounds = rules->getExtraSounds();
 	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
@@ -712,7 +712,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	s2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
 	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
-	
+
 	s.str("");
 	s2.str("");
 	s << "UFOGRAPH/" << "HIT.PCK";
@@ -790,7 +790,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
-	
+
 
 	std::string lbms[] = {"D0.LBM",
 						  "D1.LBM",
@@ -846,7 +846,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		}
 	}
 
-	
+
 	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
 	std::vector<std::string> bdys = CrossPlatform::getFolderContents(ufograph, "BDY");
 	for (std::vector<std::string>::iterator i = bdys.begin(); i != bdys.end(); ++i)
@@ -1094,7 +1094,7 @@ void XcomResourcePack::createTransparencyLUT(Palette *pal)
 				desiredColor.r = std::min(255, (int)(pal->getColors(currentColor)->r) + (tint->r * opacity));
 				desiredColor.g = std::min(255, (int)(pal->getColors(currentColor)->g) + (tint->g * opacity));
 				desiredColor.b = std::min(255, (int)(pal->getColors(currentColor)->b) + (tint->b * opacity));
- 
+
 				Uint8 closest = 0;
 				int lowestDifference = INT_MAX;
 				// now compare each color in the palette to find the closest match to our desired one
@@ -1103,7 +1103,7 @@ void XcomResourcePack::createTransparencyLUT(Palette *pal)
 					int currentDifference = Sqr(desiredColor.r - pal->getColors(comparator)->r) +
 											Sqr(desiredColor.g-pal->getColors(comparator)->g) +
 											Sqr(desiredColor.b-pal->getColors(comparator)->b);
- 
+
 					if (currentDifference < lowestDifference)
 					{
 						closest = comparator;
