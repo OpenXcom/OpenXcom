@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _extraFrame(false)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
@@ -145,31 +145,9 @@ void UnitDieBState::think()
 			}
 		}
 	}
-
-	if (_unit->isOut())
+	if (_extraFrame)
 	{
-		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
-		{
-			playDeathSound();
-		}
-		if (_unit->getStatus() == STATUS_UNCONSCIOUS && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
-		{
-			_unit->instaKill();
-		}
 		_parent->getMap()->setUnitDying(false);
-		if (_unit->getTurnsSinceSpotted() < 255)
-		{
-			_unit->setTurnsSinceSpotted(255);
-		}
-		if (!_unit->getSpawnUnit().empty())
-		{
-			// converts the dead zombie to a chryssalid
-			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
-		}
-		else
-		{
-			convertUnitToCorpse();
-		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
@@ -199,7 +177,7 @@ void UnitDieBState::think()
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
-			_parent->tallyUnits(liveAliens, liveSoldiers, false);
+			_parent->tallyUnits(liveAliens, liveSoldiers);
 
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
@@ -209,6 +187,32 @@ void UnitDieBState::think()
 			}
 		}
 	}
+	else if (_unit->isOut())
+	{
+		_extraFrame = true;
+		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
+		{
+			playDeathSound();
+		}
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+		{
+			_unit->instaKill();
+		}
+		if (_unit->getTurnsSinceSpotted() < 255)
+		{
+			_unit->setTurnsSinceSpotted(255);
+		}
+		if (!_unit->getSpawnUnit().empty())
+		{
+			// converts the dead zombie to a chryssalid
+			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
+		}
+		else
+		{
+			convertUnitToCorpse();
+		}
+	}
+	
 	_parent->getMap()->cacheUnit(_unit);
 }
 

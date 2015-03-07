@@ -1584,20 +1584,21 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &ne
 
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	newUnit->setPosition(unit->getPosition());
-	newUnit->setDirection(3);
+	newUnit->setDirection(unit->getDirection());
 	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
 	newUnit->setSpecialWeapon(getSave(), getRuleset());
 	getSave()->getUnits()->push_back(newUnit);
-	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new AlienBAIState(getSave(), newUnit, 0));
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(newUnit);
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
+	newUnit->setVisible(visible);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
 	getTileEngine()->applyGravity(newUnit->getTile());
-	newUnit->setVisible(visible);
+	newUnit->dontReselect();
+	getMap()->cacheUnit(newUnit);
 	//newUnit->getCurrentAIState()->think();
 	return newUnit;
 
