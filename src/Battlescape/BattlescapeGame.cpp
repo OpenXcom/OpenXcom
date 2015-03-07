@@ -175,7 +175,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		unit->dontReselect();
 	}
-	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2 || !unit->reselectAllowed())
+	if (_AIActionCounter >= 2 || !unit->reselectAllowed())
 	{
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
@@ -275,40 +275,25 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_AIMEDSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
 	{
+		ss.clear();
+		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
+		_parentState->debug(ss.str());
+		action.TU = unit->getActionTUs(action.type, action.weapon);
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{
-			action.TU = unit->getActionTUs(action.type, action.weapon);
+			statePushBack(new PsiAttackBState(this, action));
 		}
 		else
 		{
 			statePushBack(new UnitTurnBState(this, action));
-			// special behaviour here: we add and remove the item all at once.
-			if (action.type == BA_HIT && action.weapon != unit->getMeleeWeapon())
+			if (action.type == BA_HIT)
 			{
 				action.weapon = unit->getMeleeWeapon();
-				action.TU = unit->getActionTUs(action.type, action.weapon);
-				ss.clear();
-				ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
-				_parentState->debug(ss.str());
-				statePushBack(new ProjectileFlyBState(this, action));
-				return;
+				statePushBack(new MeleeAttackBState(this, action));
 			}
-		}
-
-		ss.clear();
-		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
-		_parentState->debug(ss.str());
-
-		statePushBack(new ProjectileFlyBState(this, action));
-		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
-		{
-			bool success = _save->getTileEngine()->psiAttack(&action);
-			if (success && action.type == BA_MINDCONTROL)
+			else
 			{
-				// show a little infobox with the name of the unit and "... is under alien control"
-				Game *game = _parentState->getGame();
-                BattleUnit *unit = _save->getTile(action.target)->getUnit();
-				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+				statePushBack(new ProjectileFlyBState(this, action));
 			}
 		}
 	}

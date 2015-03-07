@@ -32,7 +32,7 @@ class Game;
 class SavedGame;
 class Ruleset;
 class RuleRegion;
-class MissionWave;
+struct MissionWave;
 class UfoTrajectory;
 class AlienBase;
 

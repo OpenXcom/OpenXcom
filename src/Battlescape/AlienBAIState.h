@@ -114,6 +114,7 @@ public:
 	BattleActionType getReserveMode();
 	/// Assuming we have both a ranged and a melee weapon, we have to select one.
 	void selectMeleeOrRanged();
+	BattleUnit* getTarget();
 };
 
 }

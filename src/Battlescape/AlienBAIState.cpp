@@ -153,7 +153,7 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = _unit->getMeleeWeapon();
+	_melee = _unit->getMeleeWeapon() != 0;
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
@@ -2096,6 +2096,11 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 		}
 	}
 	return bestScore > 2;
+}
+
+BattleUnit* AlienBAIState::getTarget()
+{
+	return _aggroTarget;
 }
 
 }
