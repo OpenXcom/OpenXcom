@@ -166,7 +166,7 @@ void NextTurnState::close()
 
 	int liveAliens = 0;
 	int liveSoldiers = 0;
-	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 	if (liveAliens == 0 || liveSoldiers == 0)
 	{
 		_state->finishBattle(false, liveSoldiers);

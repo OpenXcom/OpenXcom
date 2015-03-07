@@ -828,7 +828,7 @@ void SavedBattleGame::endTurn()
 	}
 	int liveSoldiers, liveAliens;
 
-	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 
 	if ((_turn > 10 && liveAliens <= 2) || _turn > 20)
 	{

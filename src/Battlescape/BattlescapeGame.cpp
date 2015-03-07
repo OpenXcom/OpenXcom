@@ -431,8 +431,8 @@ void BattlescapeGame::endTurn()
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
-	// we'll tally them NOW, so that any infected units will... change
-	tallyUnits(liveAliens, liveSoldiers, true);
+
+	tallyUnits(liveAliens, liveSoldiers);
 
 	_save->endTurn();
 
@@ -1974,23 +1974,10 @@ BattleActionType BattlescapeGame::getReservedAction()
  * @param &liveSoldiers The integer in which to store the live XCom tally.
  * @param convert Should we convert infected units?
  */
-void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
+void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers)
 {
 	liveSoldiers = 0;
 	liveAliens = 0;
-
-	if (convert)
-	{
-		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
-		{
-			if ((*j)->getHealth() > 0 && (*j)->getRespawn())
-			{
-				(*j)->setRespawn(false);
-				convertUnit((*j), (*j)->getSpawnUnit());
-				j = _save->getUnits()->begin();
-			}
-		}
-	}
 
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
@@ -2018,6 +2005,18 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 	}
 }
 
+void BattlescapeGame::convertInfected()
+{
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if ((*j)->getHealth() > 0 && (*j)->getRespawn())
+		{
+			(*j)->setRespawn(false);
+			convertUnit((*j), (*j)->getSpawnUnit());
+			j = _save->getUnits()->begin();
+		}
+	}
+}
 /**
  * Sets the kneel reservation setting.
  * @param reserved Should we reserve an extra 4 TUs to kneel?
