@@ -156,6 +156,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgame->setMissionType("STR_ALIEN_BASE_ASSAULT");
 		bgen.setAlienBase(b);
 		bgen.setAlienRace(b->getAlienRace());
+		bgen.setWorldTexture(0);
 	}
 	else
 	{
