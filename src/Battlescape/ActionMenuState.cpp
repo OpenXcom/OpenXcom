@@ -302,7 +302,12 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if (_action->type == BA_HIT)
 		{
-			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+			// check beforehand if we have enough time units
+			if (_action->TU > _action->actor->getTimeUnits())
+			{
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+			}
+			else if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),
 				_action->actor,

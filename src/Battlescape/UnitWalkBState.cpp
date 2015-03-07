@@ -18,7 +18,7 @@
  */
 
 #include "UnitWalkBState.h"
-#include "ProjectileFlyBState.h"
+#include "MeleeAttackBState.h"
 #include "TileEngine.h"
 #include "Pathfinding.h"
 #include "BattlescapeState.h"
@@ -495,7 +495,7 @@ void UnitWalkBState::postPathProcedures()
 				action.TU = _unit->getActionTUs(action.type, action.weapon);
 				action.targeting = true;
 				_unit->setCharging(0);
-				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+				_parent->statePushBack(new MeleeAttackBState(_parent, action));
 			}
 		}
 		else if (_unit->isHiding())

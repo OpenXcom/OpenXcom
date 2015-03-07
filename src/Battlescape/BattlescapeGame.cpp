@@ -30,6 +30,7 @@
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
+#include "MeleeAttackBState.h"
 #include "PsiAttackBState.h"
 #include "ExplosionBState.h"
 #include "TileEngine.h"
@@ -646,7 +647,7 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					statePushBack(new ProjectileFlyBState(this, _currentAction));
+					statePushBack(new MeleeAttackBState(this, _currentAction));
 					return;
 				}
 				else

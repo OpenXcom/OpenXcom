@@ -48,6 +48,7 @@
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
 #include "ProjectileFlyBState.h"
+#include "MeleeAttackBState.h"
 #include "../Engine/Logger.h"
 #include "../fmath.h"
 
@@ -1013,8 +1014,14 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
 		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
-			_save->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleGame(), action, false));
-			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleGame(), action));
+			if (action.type == BA_HIT)
+			{
+				_save->getBattleGame()->statePushBack(new MeleeAttackBState(_save->getBattleGame(), action));
+			}
+			else
+			{
+				_save->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleGame(), action));
+			}
 			return true;
 		}
 	}

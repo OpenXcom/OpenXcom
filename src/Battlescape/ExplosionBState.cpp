@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param tile Tile the explosion is on.
  * @param lowerWeapon Whether the unit causing this explosion should now lower their weapon.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _pistolWhip(false), _hit(false)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon, bool cosmetic) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon), _cosmetic(cosmetic)
 {
 
 }
@@ -72,14 +72,8 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
-		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
-		_pistolWhip = (_item->getRules()->getBattleType() != BT_MELEE &&
-			_parent->getCurrentAction()->type == BA_HIT);
-		if (_pistolWhip)
-		{
-			_power = _item->getRules()->getMeleePower();
-		}
-		// since melee aliens don't use a conventional weapon type, we use their strength instead.
+
+		// this usually only applies to melee, but as a concession for modders i'll leave it here in case they wanna make bows or something.
 		if (_item->getRules()->isStrengthApplied())
 		{
 			_power += _unit->getBaseStats()->strength;
@@ -87,7 +81,7 @@ void ExplosionBState::init()
 
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE &&
 						_item->getRules()->getExplosionRadius() != 0 &&
-						!_pistolWhip;
+						!_cosmetic;
 	}
 	else if (_tile)
 	{
@@ -153,24 +147,22 @@ void ExplosionBState::init()
 	// create a bullet hit
 	{
 		_parent->setStateInterval(std::max(1, ((BattlescapeState::DEFAULT_ANIM_SPEED/2) - (10 * _item->getRules()->getExplosionSpeed()))));
-		_hit = _pistolWhip || _item->getRules()->getBattleType() == BT_MELEE;
-		bool psi = _item->getRules()->getBattleType() == BT_PSIAMP;
 		int anim = _item->getRules()->getHitAnimation();
 		int sound = _item->getRules()->getHitSound();
-		if (_hit || psi) // Play melee animation on hitting and psiing
+		if (_cosmetic) // Play melee animation on hitting and psiing
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 		}
-		Explosion *explosion = new Explosion(_center, anim, 0, false, (_hit || psi)); // Don't burn the tile
+		Explosion *explosion = new Explosion(_center, anim, 0, false, _cosmetic);
 		_parent->getMap()->getExplosions()->push_back(explosion);
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = t->getUnit();
-		if ((_hit || psi) && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
+		if (_cosmetic && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
-		if (sound != -1)
+		if (sound != -1 && !_cosmetic)
 		{
 			// bullet hit sound
 			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), sound)->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
@@ -217,32 +209,6 @@ void ExplosionBState::explode()
 {
 	bool terrainExplosion = false;
 	SavedBattleGame *save = _parent->getSave();
-	// last minute adjustment: determine if we actually 
-	if (_hit)
-	{
-		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
-		BattleUnit *targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
-		if (_unit && !_unit->isOut())
-		{
-			_unit->aim(false);
-			_unit->setCache(0);
-		}
-		if (!RNG::percent(_unit->getFiringAccuracy(BA_HIT, _item)))
-		{
-			_parent->getMap()->cacheUnits();
-			_parent->popState();
-			return;
-		}
-		else if (targetUnit && targetUnit->getOriginalFaction() == FACTION_HOSTILE &&
-				_unit->getOriginalFaction() == FACTION_PLAYER)
-		{
-			_unit->addMeleeExp();
-		}
-		if (_item->getRules()->getMeleeHitSound() != -1)
-		{
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
-		}
-	}
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
@@ -251,30 +217,28 @@ void ExplosionBState::explode()
 			_unit = _item->getPreviousOwner();
 		}
 
+		BattleUnit *victim = 0;
+
 		if (_areaOfEffect)
 		{
 			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
 		}
-		else
+		else if (!_cosmetic)
 		{
 			ItemDamageType type = _item->getRules()->getDamageType();
-			if (_pistolWhip)
-			{
-				type = DT_STUN;
-			}
-			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, type, _unit);
-			// check if this unit turns others into zombies
-			if (!_item->getRules()->getZombieUnit().empty()
-				&& victim
-				&& victim->getArmor()->getSize() == 1
-				&& (victim->getGeoscapeSoldier() || victim->getUnitRules()->getRace() == "STR_CIVILIAN")
-				&& victim->getSpawnUnit().empty()
-				&& victim->getOriginalFaction() != FACTION_HOSTILE)
-			{
-				// converts the victim to a zombie on death
-				victim->setRespawn(true);
-				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
-			}
+
+			victim = save->getTileEngine()->hit(_center, _power, type, _unit);
+		}
+		// check if this unit turns others into zombies
+		if (!_item->getRules()->getZombieUnit().empty()
+			&& victim
+			&& victim->getArmor()->getSize() == 1
+			&& (victim->getGeoscapeSoldier() || victim->getUnitRules()->getRace() == "STR_CIVILIAN")
+			&& victim->getSpawnUnit().empty())
+		{
+			// converts the victim to a zombie on death
+			victim->setRespawn(true);
+			victim->setSpawnUnit(_item->getRules()->getZombieUnit());
 		}
 	}
 	if (_tile)
@@ -314,8 +278,11 @@ void ExplosionBState::explode()
 		terrainExplosion = true;
 	}
 
-	// now check for new casualties
-	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
+	if (!_cosmetic)
+	{
+		// now check for new casualties
+		_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
+	}
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 	if (_unit && !_unit->isOut() && _lowerWeapon)

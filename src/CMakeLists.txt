@@ -169,6 +169,8 @@ set ( battlescape_src
   Battlescape/MedikitState.h
   Battlescape/MedikitView.cpp
   Battlescape/MedikitView.h
+  Battlescape/MeleeAttackBState.cpp
+  Battlescape/MeleeAttackBState.h
   Battlescape/ScannerState.cpp
   Battlescape/ScannerState.h
   Battlescape/ScannerView.cpp

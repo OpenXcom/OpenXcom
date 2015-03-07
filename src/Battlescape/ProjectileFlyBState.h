@@ -64,7 +64,6 @@ public:
 	void setOriginVoxel(Position pos);
 	/// Set the boolean flag to angle a blaster bomb towards the floor.
 	void targetFloor();
-	void performMeleeAttack();
 
 };
 
