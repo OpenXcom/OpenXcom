@@ -402,7 +402,7 @@ void ManageAlienContainmentState::updateStrings()
 	ss << qty;
 	ss2 << _qtys[_sel];
 
-	_lstAliens->setRowColor(_sel, (qty != 0)? _lstAliens->getSecondaryColor() : _lstAliens->getColor());
+	_lstAliens->setRowColor(_sel, (qty == 0)? _lstAliens->getSecondaryColor() : _lstAliens->getColor());
 	_lstAliens->setCellText(_sel, 1, ss.str());
 	_lstAliens->setCellText(_sel, 2, ss2.str());
 
