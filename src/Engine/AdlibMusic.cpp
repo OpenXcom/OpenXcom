@@ -110,6 +110,7 @@ void AdlibMusic::load(const std::string &filename)
 void AdlibMusic::load(const void *data, int size)
 {
 	_data = (char*)data;
+	if (*(unsigned char*)_data<=56) size+=*(unsigned char*)_data;
 	_size = (size_t)(size);
 }
 
