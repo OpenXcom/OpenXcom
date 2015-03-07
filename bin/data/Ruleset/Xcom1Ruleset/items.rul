@@ -1254,6 +1254,7 @@ items:
     invWidth: 2
     invHeight: 3
     recover: false
+    flatRate: true
   - type: CHRYSSALID_WEAPON
     weight: 3
     bigSprite: -1
@@ -1271,6 +1272,7 @@ items:
     invHeight: 3
     recover: false
     zombieUnit: STR_ZOMBIE
+    flatRate: true
   - type: CELATID_WEAPON
     weight: 3
     bigSprite: -2
@@ -1309,6 +1311,7 @@ items:
     invWidth: 2
     invHeight: 3
     recover: false
+    flatRate: true
   - type: SECTOPOD_WEAPON
     weight: 3
     bigSprite: -2
@@ -1346,6 +1349,7 @@ items:
     invHeight: 3
     clipSize: -1
     recover: false
+    flatRate: true
   - type: STR_SECTOID_COMMANDER
     size: 0.0
     recover: true
