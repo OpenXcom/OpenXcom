@@ -175,6 +175,8 @@ set ( battlescape_src
   Battlescape/ScannerView.h
   Battlescape/PromotionsState.cpp
   Battlescape/PromotionsState.h
+  Battlescape/PsiAttackBState.cpp
+  Battlescape/PsiAttackBState.h
   Battlescape/BattlescapeGame.cpp
   Battlescape/BattlescapeGame.h
   Battlescape/CannotReequipState.cpp

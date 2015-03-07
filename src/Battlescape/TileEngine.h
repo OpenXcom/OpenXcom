@@ -96,8 +96,6 @@ public:
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
 	/// Checks the vertical blockage of a tile.
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
-	/// Attempts a panic or mind control action.
-	bool psiAttack(BattleAction *action);
 	/// Applies gravity to anything that occupy this tile.
 	Tile *applyGravity(Tile *t);
 	/// Returns melee validity between two units.

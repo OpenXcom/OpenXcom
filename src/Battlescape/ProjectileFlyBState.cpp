@@ -175,10 +175,6 @@ void ProjectileFlyBState::init()
 	case BA_HIT:
 		performMeleeAttack();
 		return;
-	case BA_PANIC:
-	case BA_MINDCONTROL:
-		_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
-		return;
 	default:
 		_parent->popState();
 		return;
@@ -426,7 +422,7 @@ void ProjectileFlyBState::think()
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->invalidate();
 			}
-			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL && !_parent->getSave()->getUnitsFalling())
+			if (!_parent->getSave()->getUnitsFalling())
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}

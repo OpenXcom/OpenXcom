@@ -187,6 +187,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Projectile.h \
 	src/Battlescape/PromotionsState.cpp \
 	src/Battlescape/PromotionsState.h \
+	src/Battlescape/PsiAttackBState.cpp \
+	src/Battlescape/PsiAttackBState.h \
 	src/Battlescape/ScannerState.cpp \
 	src/Battlescape/ScannerState.h \
 	src/Battlescape/ScannerView.cpp \

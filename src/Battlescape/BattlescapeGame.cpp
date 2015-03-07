@@ -30,6 +30,7 @@
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
+#include "PsiAttackBState.h"
 #include "ExplosionBState.h"
 #include "TileEngine.h"
 #include "UnitInfoState.h"
@@ -1297,20 +1298,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 					getMap()->setCursorType(CT_NONE);
 					_parentState->getGame()->getCursor()->setVisible(false);
 					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-					statePushBack(new ProjectileFlyBState(this, _currentAction));
-					if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
-					{
-						if (getTileEngine()->psiAttack(&_currentAction))
-						{
-							// show a little infobox if it's successful
-							Game *game = _parentState->getGame();
-							if (_currentAction.type == BA_PANIC)
-								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
-							else if (_currentAction.type == BA_MINDCONTROL)
-								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
-							_parentState->updateSoldierInfo();
-						}
-					}
+					statePushBack(new PsiAttackBState(this, _currentAction));
 				}
 				else
 				{
