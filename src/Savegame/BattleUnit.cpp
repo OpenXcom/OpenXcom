@@ -1184,7 +1184,6 @@ int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 		case BA_SNAPSHOT:
 			cost = item->getTUSnap();
 			break;
-		case BA_STUN:
 		case BA_HIT:
 			cost = item->getTUMelee();
 			break;
@@ -1354,7 +1353,7 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 		weaponAcc = item->getRules()->getAccuracyAimed();
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
-	else if (actionType == BA_HIT || actionType == BA_STUN)
+	else if (actionType == BA_HIT)
 	{
 		if (item->getRules()->isSkillApplied())
 		{

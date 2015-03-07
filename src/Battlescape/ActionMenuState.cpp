@@ -300,7 +300,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			_game->popState();
 		}
-		else if (_action->type == BA_STUN || _action->type == BA_HIT)
+		else if (_action->type == BA_HIT)
 		{
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),

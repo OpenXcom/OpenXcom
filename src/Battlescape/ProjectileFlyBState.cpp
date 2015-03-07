@@ -88,7 +88,6 @@ void ProjectileFlyBState::init()
 
 	if (_parent->getPanicHandled() &&
 		_action.type != BA_HIT &&
-		_action.type != BA_STUN &&
 		_action.actor->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";

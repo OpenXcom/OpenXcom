@@ -1112,8 +1112,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				unit &&
 				unit->getOriginalFaction() == FACTION_PLAYER &&
 				type != DT_NONE &&
-				_save->getBattleGame()->getCurrentAction()->type != BA_HIT &&
-				_save->getBattleGame()->getCurrentAction()->type != BA_STUN)
+				_save->getBattleGame()->getCurrentAction()->type != BA_HIT)
 			{
 				unit->addFiringExp();
 			}
