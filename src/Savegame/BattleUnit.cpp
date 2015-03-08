@@ -505,6 +505,11 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 	_lastPos = _pos;
 	_cacheInvalid = cache;
 	_kneeled = false;
+	if (_breathFrame >= 0)
+	{
+		_breathing = false;
+		_breathFrame = 0;
+	}
 }
 
 /**
