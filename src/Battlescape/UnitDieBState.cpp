@@ -205,7 +205,6 @@ void UnitDieBState::think()
 		if (!_unit->getSpawnUnit().empty())
 		{
 			// converts the dead zombie to a chryssalid
-			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
 		}
 		else
 		{
