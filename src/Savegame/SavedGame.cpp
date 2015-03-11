@@ -428,7 +428,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
-	
+
 	const YAML::Node &research = doc["poppedResearch"];
 	for (YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
@@ -996,7 +996,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
-		
+
 		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end())
@@ -1022,7 +1022,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			{
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
-				
+
 				bool leader ( leaderCheck != research->getUnlocked().end());
 				bool cmnder ( cmnderCheck != research->getUnlocked().end());
 
@@ -1120,12 +1120,12 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 		return true;
 	}
 	else if (liveAlien)
-	{		
+	{
 		if (!r->getGetOneFree().empty())
 		{
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_COMMANDER_PLUS");
-				
+
 			bool leader ( leaderCheck != r->getUnlocked().end());
 			bool cmnder ( cmnderCheck != r->getUnlocked().end());
 
@@ -1573,7 +1573,7 @@ std::vector<int64_t> &SavedGame::getExpenditures()
 	return _expenditures;
 }
 /**
- * return if the player has been 
+ * return if the player has been
  * warned about poor performance.
  * @return true or false.
  */
@@ -1752,7 +1752,7 @@ void SavedGame::setLastSelectedArmor(const std::string &value)
 
 /**
  * Gets the the last selected armour
- * @return last used armor type string 
+ * @return last used armor type string
  */
 std::string SavedGame::getLastSelectedArmor()
 {
@@ -1778,5 +1778,5 @@ Craft *SavedGame::findCraftByUniqueId(const CraftId& craftId) const
 	return NULL;
 }
 
-    
+
 }
