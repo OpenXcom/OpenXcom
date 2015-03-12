@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _extraFrame(false)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
@@ -69,8 +69,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getMap()->setUnitDying(true);
 		}
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		_originalDir = _unit->getDirection();
-		if (_originalDir != 3)
+		if (_unit->getDirection() != 3)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
 		}
@@ -138,33 +137,17 @@ void UnitDieBState::think()
 		{
 			playDeathSound();
 		}
+		if (_unit->getRespawn())
+		{
+			while (_unit->getStatus() == STATUS_COLLAPSING)
+			{
+				_unit->keepFalling();
+			}
+		}
 	}
-
-	if (_unit->isOut())
+	if (_extraFrame)
 	{
-		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
-		{
-			playDeathSound();
-		}
-		if (_unit->getStatus() == STATUS_UNCONSCIOUS && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
-		{
-			_unit->instaKill();
-		}
 		_parent->getMap()->setUnitDying(false);
-		if (_unit->getTurnsSinceSpotted() < 255)
-		{
-			_unit->setTurnsSinceSpotted(255);
-		}
-		if (!_unit->getSpawnUnit().empty())
-		{
-			// converts the dead zombie to a chryssalid
-			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
-			newUnit->lookAt(_originalDir);
-		}
-		else
-		{
-			convertUnitToCorpse();
-		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
@@ -194,7 +177,7 @@ void UnitDieBState::think()
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
-			_parent->tallyUnits(liveAliens, liveSoldiers, false);
+			_parent->tallyUnits(liveAliens, liveSoldiers);
 
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
@@ -204,6 +187,32 @@ void UnitDieBState::think()
 			}
 		}
 	}
+	else if (_unit->isOut())
+	{
+		_extraFrame = true;
+		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
+		{
+			playDeathSound();
+		}
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+		{
+			_unit->instaKill();
+		}
+		if (_unit->getTurnsSinceSpotted() < 255)
+		{
+			_unit->setTurnsSinceSpotted(255);
+		}
+		if (!_unit->getSpawnUnit().empty())
+		{
+			// converts the dead zombie to a chryssalid
+			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
+		}
+		else
+		{
+			convertUnitToCorpse();
+		}
+	}
+	
 	_parent->getMap()->cacheUnit(_unit);
 }
 
@@ -294,7 +303,7 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
-	if (_unit->getType() == "SOLDIER" || _unit->getUnitRules()->getRace() == "STR_CIVILIAN")
+	if (_unit->getDeathSound() == -1)
 	{
 		if (_unit->getGender() == GENDER_MALE)
 		{

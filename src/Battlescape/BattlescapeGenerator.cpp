@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,8 @@
 #include "../Ruleset/AlienRace.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleGlobe.h"
+#include "../Ruleset/Texture.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/MissionSite.h"
@@ -127,9 +129,8 @@ void BattlescapeGenerator::setUfo(Ufo *ufo)
  * Sets the world texture where a ufo crashed. This is used to determine the terrain.
  * @param texture Texture id of the polygon on the globe.
  */
-void BattlescapeGenerator::setWorldTexture(int texture)
+void BattlescapeGenerator::setWorldTexture(Texture *texture)
 {
-	if (texture < 0) texture = 0;
 	_worldTexture = texture;
 }
 
@@ -336,16 +337,19 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrains().empty())
+	if (_terrain == 0)
 	{
-		double lat = 0;
-		if (_ufo) lat = _ufo->getLatitude();
-		_terrain = getTerrain(_worldTexture, lat);
-	}
-	else
-	{
-		size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
-		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty())
+		{
+			size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
+			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+		}
+		else
+		{			
+			Target *target = _ufo;
+			if (_mission) target = _mission;
+			_terrain = _game->getRuleset()->getTerrain(_worldTexture->getRandomTerrain(target));
+		}
 	}
 	// new battle menu will have set the depth already
 	if (_terrain->getMaxDepth() > 0 && _save->getDepth() == 0)
@@ -1560,32 +1564,6 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 
 
 /**
- * Gets battlescape terrain using globe texture and latitude.
- * @param tex Globe texture.
- * @param lat Latitude.
- * @return Pointer to ruleterrain.
- */
-RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
-{
-	RuleTerrain *t =  0;
-	const std::vector<std::string> &terrains = _game->getRuleset()->getTerrainList();
-	for (std::vector<std::string>::const_iterator i = terrains.begin(); i != terrains.end(); ++i)
-	{
-		t =  _game->getRuleset()->getTerrain(*i);
-		for (std::vector<int>::iterator j = t->getTextures()->begin(); j != t->getTextures()->end(); ++j )
-		{
-			if (*j == tex && (t->getHemisphere() == 0 || (t->getHemisphere() < 0 && lat < 0) || (t->getHemisphere() > 0 && lat >= 0)))
-			{
-				return t;
-			}
-		}
-	}
-
-	assert(0 && "No matching terrain for globe texture");
-	return t;
-}
-
-/**
 * Creates a mini-battle-save for managing inventory from the Geoscape.
 * Kids, don't try this at home!
 * @param craft Pointer to craft to manage.
@@ -2602,4 +2580,14 @@ bool BattlescapeGenerator::removeBlocks(MapScript *command)
 	}
 	return success;
 }
+
+/**
+ * Sets the terrain to be used in battle generation.
+ * @param terrain Pointer to the terrain rules.
+ */
+void BattlescapeGenerator::setTerrain(RuleTerrain *terrain)
+{
+	_terrain = terrain;
+}
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,10 +19,12 @@
 #ifndef OPENXCOM_RULEREGION_H
 #define OPENXCOM_RULEREGION_H
 
+#define _USE_MATH_DEFINES
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 #include "../fmath.h"
+#include <math.h>
 #include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
@@ -35,10 +37,17 @@ namespace OpenXcom
 struct MissionArea
 {
 	double lonMin, lonMax, latMin, latMax;
+	int texture;
+	std::string name;
 
     bool operator== (const MissionArea& ma) const
 	{
 		return AreSame(lonMax, ma.lonMax) && AreSame(lonMin, ma.lonMin) && AreSame(latMax, ma.latMax) && AreSame(latMin, ma.latMin);
+	}
+
+	bool isPoint() const
+	{
+		return AreSame(lonMin, lonMax) && AreSame(latMin, latMax);
 	}
 };
 
@@ -56,6 +65,7 @@ struct MissionZone
 };
 
 class City;
+class Target;
 
 /**
  * Represents a specific region of the world.
@@ -78,8 +88,6 @@ private:
 	/// Do missions in the region defined by this string instead.
 	std::string _missionRegion;
 public:
-	static const int CITY_MISSION_ZONE = 3;
-	static const int ALIEN_BASE_ZONE = 4;
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
 	/// Cleans up the region ruleset.
@@ -100,8 +108,10 @@ public:
 	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
 	/// Gets the substitute mission region.
 	const std::string &getMissionRegion() const { return _missionRegion; }
-	/// Gets a random point inside a mission site.
-	std::pair<double, double> getRandomPoint(size_t site) const;
+	/// Gets a random point inside a mission zone.
+	std::pair<double, double> getRandomPoint(size_t zone) const;
+	/// Gets the mission area for the corresponding target.
+	MissionArea getMissionPoint(size_t zone, Target *target) const;
 	/// Gets the maximum longitude.
 	const std::vector<double> &getLonMax() const { return _lonMax; }
 	/// Gets the minimum longitude.
@@ -123,22 +133,24 @@ namespace YAML
 		static Node encode(const OpenXcom::MissionArea& rhs)
 		{
 			Node node;
-			node.push_back(rhs.lonMin);
-			node.push_back(rhs.lonMax);
-			node.push_back(rhs.latMin);
-			node.push_back(rhs.latMax);
+			node.push_back(rhs.lonMin / M_PI * 180.0);
+			node.push_back(rhs.lonMax / M_PI * 180.0);
+			node.push_back(rhs.latMin / M_PI * 180.0);
+			node.push_back(rhs.latMax / M_PI * 180.0);
 			return node;
 		}
 
 		static bool decode(const Node& node, OpenXcom::MissionArea& rhs)
 		{
-			if (!node.IsSequence() || node.size() != 4)
+			if (!node.IsSequence() || node.size() < 4)
 				return false;
 
-			rhs.lonMin = node[0].as<double>();
-			rhs.lonMax = node[1].as<double>();
-			rhs.latMin = node[2].as<double>();
-			rhs.latMax = node[3].as<double>();
+			rhs.lonMin = node[0].as<double>() * M_PI / 180.0;
+			rhs.lonMax = node[1].as<double>() * M_PI / 180.0;
+			rhs.latMin = node[2].as<double>() * M_PI / 180.0;
+			rhs.latMax = node[3].as<double>() * M_PI / 180.0;
+			if (node.size() >= 5) rhs.texture = node[4].as<int>();
+			if (node.size() >= 6) rhs.name = node[5].as<std::string>();
 			return true;
 		}
 	};

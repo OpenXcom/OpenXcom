@@ -134,6 +134,8 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_INFILTRATION
     points: 0
+    objective: 1
+    spawnZone: 4 #Mission zone for alien bases
     raceWeights:
       0:
         STR_SECTOID: 60
@@ -195,6 +197,8 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_BASE
     points: 50
+    objective: 2
+    spawnZone: 4 #Mission zone for alien bases
     raceWeights:
       0:
         STR_SECTOID: 30
@@ -244,9 +248,8 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_TERROR
     points: 10
-    specialUfo: STR_TERROR_SHIP
-    deployment: STR_TERROR_MISSION
-    markerName: STR_TERROR_SITE
+    objective: 3
+    spawnZone: 3 #Mission zone for terror missions
     raceWeights:
       0:
         STR_SECTOID: 30
@@ -287,9 +290,11 @@ alienMissions:
         count: 1
         trajectory: P7
         timer: 9000
+        objective: true
   - type: STR_ALIEN_RETALIATION
     points: 0
-    specialUfo: STR_BATTLESHIP
+    objective: 4
+    spawnUfo: STR_BATTLESHIP #Spawned for the final retaliation run
     raceWeights: {} #Special case, race comes from trigger UFO.
     waves:
       - ufo: STR_SMALL_SCOUT
@@ -310,10 +315,11 @@ alienMissions:
         timer: 3000
   - type: STR_ALIEN_SUPPLY
     points: 0
-    specialUfo: STR_SUPPLY_SHIP
+    objective: 5
     raceWeights: {} #Special case, race comes from base.
     waves:
       - ufo: STR_SUPPLY_SHIP
         count: 1
         trajectory: P9
         timer: 6000
+        objective: true

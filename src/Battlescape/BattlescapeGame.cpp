@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,6 +30,8 @@
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
 #include "ProjectileFlyBState.h"
+#include "MeleeAttackBState.h"
+#include "PsiAttackBState.h"
 #include "ExplosionBState.h"
 #include "TileEngine.h"
 #include "UnitInfoState.h"
@@ -173,7 +175,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		unit->dontReselect();
 	}
-	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2 || !unit->reselectAllowed())
+	if (_AIActionCounter >= 2 || !unit->reselectAllowed())
 	{
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
@@ -273,40 +275,25 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_AIMEDSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
 	{
+		ss.clear();
+		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
+		_parentState->debug(ss.str());
+		action.TU = unit->getActionTUs(action.type, action.weapon);
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{
-			action.TU = unit->getActionTUs(action.type, action.weapon);
+			statePushBack(new PsiAttackBState(this, action));
 		}
 		else
 		{
 			statePushBack(new UnitTurnBState(this, action));
-			// special behaviour here: we add and remove the item all at once.
-			if (action.type == BA_HIT && action.weapon != unit->getMeleeWeapon())
+			if (action.type == BA_HIT)
 			{
 				action.weapon = unit->getMeleeWeapon();
-				action.TU = unit->getActionTUs(action.type, action.weapon);
-				ss.clear();
-				ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
-				_parentState->debug(ss.str());
-				statePushBack(new ProjectileFlyBState(this, action));
-				return;
+				statePushBack(new MeleeAttackBState(this, action));
 			}
-		}
-
-		ss.clear();
-		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
-		_parentState->debug(ss.str());
-
-		statePushBack(new ProjectileFlyBState(this, action));
-		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
-		{
-			bool success = _save->getTileEngine()->psiAttack(&action);
-			if (success && action.type == BA_MINDCONTROL)
+			else
 			{
-				// show a little infobox with the name of the unit and "... is under alien control"
-				Game *game = _parentState->getGame();
-                BattleUnit *unit = _save->getTile(action.target)->getUnit();
-				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
+				statePushBack(new ProjectileFlyBState(this, action));
 			}
 		}
 	}
@@ -431,8 +418,8 @@ void BattlescapeGame::endTurn()
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
-	// we'll tally them NOW, so that any infected units will... change
-	tallyUnits(liveAliens, liveSoldiers, true);
+
+	tallyUnits(liveAliens, liveSoldiers);
 
 	_save->endTurn();
 
@@ -645,7 +632,7 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					statePushBack(new ProjectileFlyBState(this, _currentAction));
+					statePushBack(new MeleeAttackBState(this, _currentAction));
 					return;
 				}
 				else
@@ -1297,20 +1284,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 					getMap()->setCursorType(CT_NONE);
 					_parentState->getGame()->getCursor()->setVisible(false);
 					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-					statePushBack(new ProjectileFlyBState(this, _currentAction));
-					if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
-					{
-						if (getTileEngine()->psiAttack(&_currentAction))
-						{
-							// show a little infobox if it's successful
-							Game *game = _parentState->getGame();
-							if (_currentAction.type == BA_PANIC)
-								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
-							else if (_currentAction.type == BA_MINDCONTROL)
-								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
-							_parentState->updateSoldierInfo();
-						}
-					}
+					statePushBack(new PsiAttackBState(this, _currentAction));
 				}
 				else
 				{
@@ -1584,20 +1558,21 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &ne
 
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	newUnit->setPosition(unit->getPosition());
-	newUnit->setDirection(3);
+	newUnit->setDirection(unit->getDirection());
 	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
 	newUnit->setSpecialWeapon(getSave(), getRuleset());
 	getSave()->getUnits()->push_back(newUnit);
-	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new AlienBAIState(getSave(), newUnit, 0));
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(newUnit);
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
+	newUnit->setVisible(visible);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
 	getTileEngine()->applyGravity(newUnit->getTile());
-	newUnit->setVisible(visible);
+	newUnit->dontReselect();
+	getMap()->cacheUnit(newUnit);
 	//newUnit->getCurrentAIState()->think();
 	return newUnit;
 
@@ -1974,23 +1949,10 @@ BattleActionType BattlescapeGame::getReservedAction()
  * @param &liveSoldiers The integer in which to store the live XCom tally.
  * @param convert Should we convert infected units?
  */
-void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
+void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers)
 {
 	liveSoldiers = 0;
 	liveAliens = 0;
-
-	if (convert)
-	{
-		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
-		{
-			if ((*j)->getHealth() > 0 && (*j)->getRespawn())
-			{
-				(*j)->setRespawn(false);
-				convertUnit((*j), (*j)->getSpawnUnit());
-				j = _save->getUnits()->begin();
-			}
-		}
-	}
 
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
@@ -2018,6 +1980,18 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 	}
 }
 
+void BattlescapeGame::convertInfected()
+{
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if ((*j)->getHealth() > 0 && (*j)->getRespawn())
+		{
+			(*j)->setRespawn(false);
+			convertUnit((*j), (*j)->getSpawnUnit());
+			j = _save->getUnits()->begin();
+		}
+	}
+}
 /**
  * Sets the kneel reservation setting.
  * @param reserved Should we reserve an extra 4 TUs to kneel?

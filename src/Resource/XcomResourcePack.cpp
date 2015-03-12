@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,8 +53,11 @@ namespace OpenXcom
 
 namespace
 {
-	
-struct HairBleach
+
+/**
+ * Recolor class used in UFO
+ */
+struct HairXCOM1
 {
 	static const Uint8 ColorShade = 15;
 
@@ -62,15 +65,31 @@ struct HairBleach
 	static const Uint8 Face = 6 << 4;
 	static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
 	{
-		if (src > cutoff && src <= Face + 15)
+		if (src > cutoff && src <= Face + ColorShade)
 		{
 			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
 		}
 	}
 };
 
+/**
+ * Recolor class used in TFTD
+ */
+struct HairXCOM2
+{
+	static const Uint8 HairMan = 4 << 4;
+	static const Uint8 HairWoman = 1 << 4;
+	static inline void func(Uint8& src, int, int, int, int)
+	{
+		if (src >= HairMan && src <= HairMan + HairXCOM1::ColorShade)
+		{
+			src = HairWoman + (src & HairXCOM1::ColorShade);
+		}
+	}
+};
+
 }
-	
+
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
@@ -94,7 +113,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		_palettes[s2] = new Palette();
 		_palettes[s2]->loadDat(CrossPlatform::getDataFile(s1), 128);
 	}
-	
+
 	// Correct Battlescape palette
 	{
 		std::string s1 = "GEODATA/PALETTES.DAT";
@@ -174,11 +193,11 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 			newGeo->setPixel(newWidth+x, newHeight+y, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth-x-1, newHeight+y, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth*3-x-1, newHeight+y, oldGeo->getPixel(x, y));
-			
+
 			newGeo->setPixel(newWidth+x, newHeight-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth*3-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
-			
+
 			newGeo->setPixel(newWidth+x, newHeight*3-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
 			newGeo->setPixel(newWidth*3-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
@@ -295,8 +314,8 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		delete gmcat;
 		delete adlibcat;
 		delete aintrocat;
-#endif		
-		
+#endif
+
 		if (rules->getSoundDefinitions()->empty())
 		{
 			// Load sounds
@@ -368,7 +387,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 				}
 			}
 		}
-		
+
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")))
 		{
@@ -389,7 +408,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	Window::soundPopup[2] = getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
-	
+
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
 	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
@@ -472,7 +491,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 			{
 				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
 			}
-			
+
 			if (subdivision)
 			{
 				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
@@ -597,7 +616,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		surface1->setPalette(surface2->getPalette());
 		surface2->blit(surface1);
 	}
-	
+
 	std::vector< std::pair<std::string, ExtraSounds *> >extraSounds = rules->getExtraSounds();
 	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
@@ -693,7 +712,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	s2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
 	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
-	
+
 	s.str("");
 	s2.str("");
 	s << "UFOGRAPH/" << "HIT.PCK";
@@ -771,7 +790,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
-	
+
 
 	std::string lbms[] = {"D0.LBM",
 						  "D1.LBM",
@@ -827,7 +846,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		}
 	}
 
-	
+
 	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
 	std::vector<std::string> bdys = CrossPlatform::getFolderContents(ufograph, "BDY");
 	for (std::vector<std::string>::iterator i = bdys.begin(); i != bdys.end(); ++i)
@@ -864,11 +883,14 @@ void XcomResourcePack::loadBattlescapeResources()
 	//"fix" of hair color of male personal armor
 	if (Options::battleHairBleach)
 	{
-		if (_sets.find("XCOM_1.PCK") != _sets.end())
-		{
-			SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
+		std::string name;
 
-			for (int i = 0; i < 16; ++i)
+		name = "XCOM_1.PCK";
+		if (_sets.find(name) != _sets.end())
+		{
+			SurfaceSet *xcom_1 = _sets[name];
+
+			for (int i = 0; i < 8; ++i)
 			{
 				//chest frame
 				Surface *surf = xcom_1->getFrame(4 * 8 + i);
@@ -878,11 +900,11 @@ void XcomResourcePack::loadBattlescapeResources()
 				dim.beg_y = 6;
 				dim.end_y = 9;
 				head.setDomain(dim);
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 5));
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 5));
 				dim.beg_y = 9;
 				dim.end_y = 10;
 				head.setDomain(dim);
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 6));
 				surf->unlock();
 			}
 
@@ -898,8 +920,26 @@ void XcomResourcePack::loadBattlescapeResources()
 				dim.end_x = 20;
 				head.setDomain(dim);
 				surf->lock();
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 6));
 				surf->unlock();
+			}
+		}
+
+		name = "TDXCOM_?.PCK";
+		for (int j = 0; j < 3; ++j)
+		{
+			name[7] = '0' + j;
+			if (_sets.find(name) != _sets.end())
+			{
+				SurfaceSet *xcom_2 = _sets[name];
+				for (int i = 0; i < 8; ++i)
+				{
+					//male chest frame
+					Surface *surf = xcom_2->getFrame(270 + i);
+					surf->lock();
+					ShaderDraw<HairXCOM2>(ShaderSurface(surf));
+					surf->unlock();
+				}
 			}
 		}
 	}
@@ -1054,7 +1094,7 @@ void XcomResourcePack::createTransparencyLUT(Palette *pal)
 				desiredColor.r = std::min(255, (int)(pal->getColors(currentColor)->r) + (tint->r * opacity));
 				desiredColor.g = std::min(255, (int)(pal->getColors(currentColor)->g) + (tint->g * opacity));
 				desiredColor.b = std::min(255, (int)(pal->getColors(currentColor)->b) + (tint->b * opacity));
- 
+
 				Uint8 closest = 0;
 				int lowestDifference = INT_MAX;
 				// now compare each color in the palette to find the closest match to our desired one
@@ -1063,7 +1103,7 @@ void XcomResourcePack::createTransparencyLUT(Palette *pal)
 					int currentDifference = Sqr(desiredColor.r - pal->getColors(comparator)->r) +
 											Sqr(desiredColor.g-pal->getColors(comparator)->g) +
 											Sqr(desiredColor.b-pal->getColors(comparator)->b);
- 
+
 					if (currentDifference < lowestDifference)
 					{
 						closest = comparator;

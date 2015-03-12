@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -822,7 +822,7 @@ void SavedBattleGame::endTurn()
 	}
 	int liveSoldiers, liveAliens;
 
-	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 
 	if ((_turn > 10 && liveAliens <= 2) || _turn > 20)
 	{

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,6 +44,7 @@ class MissionSite;
 class AlienBase;
 class BattleUnit;
 class MapScript;
+class Texture;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -61,7 +62,8 @@ private:
 	AlienBase *_alienBase;
 	RuleTerrain *_terrain;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
-	int _worldTexture, _worldShade;
+	Texture *_worldTexture;
+	int _worldShade;
 	int _unitSequence;
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
@@ -107,8 +109,6 @@ private:
 	void deployAliens(AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int max);
-	/// Gets battlescape terrain.
-	RuleTerrain *getTerrain(int tex, double lat);
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit *unit);
 	/// Load all Xcom weapons.
@@ -143,7 +143,7 @@ public:
 	/// Sets the ufo.
 	void setUfo(Ufo* ufo);
 	/// Sets the polygon texture.
-	void setWorldTexture(int texture);
+	void setWorldTexture(Texture *texture);
 	/// Sets the polygon shade.
 	void setWorldShade(int shade);
 	/// Sets the alien race.
@@ -156,6 +156,8 @@ public:
 	void setMissionSite(MissionSite* mission);
 	/// Sets the alien base
 	void setAlienBase(AlienBase* base);
+	/// Sets the terrain.
+	void setTerrain(RuleTerrain *terrain);
 	/// Runs the generator.
 	void run();
 	/// Sets up the next stage (for Cydonia/TFTD missions).

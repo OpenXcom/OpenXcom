@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -121,6 +121,9 @@ private:
 	bool _breathing;
 	bool _hidingForTurn, _floorAbove, _respawn;
 	MovementType _movementType;
+	std::pair<Uint8, Uint8> _recolor[2];
+
+	void setRecolor(int selectLook);
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit from solder.
@@ -183,6 +186,8 @@ public:
 	void setCache(Surface *cache, int part = 0);
 	/// If this unit is cached on the battlescape.
 	Surface *getCache(bool *invalid, int part = 0) const;
+	/// Gets unit sprite recolors values.
+	std::pair<Uint8, Uint8> getRecolor(int i) const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?

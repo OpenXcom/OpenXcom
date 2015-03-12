@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,9 @@ class MonthlyReportState : public State
 private:
 	TextButton *_btnOk, *_btnBigOk;
 	Window *_window;
-	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtFailure;
+	Text *_txtTitle, *_txtMonth, *_txtRating;
+	Text *_txtIncome, *_txtMaintenance, *_txtBalance;
+	Text *_txtDesc, *_txtFailure;
 	bool _psi, _gameOver;
 	int _ratingTotal, _fundingDiff, _lastMonthsRating;
 	std::vector<std::string> _happyList, _sadList, _pactList;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -66,7 +66,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
-	_deathSound = 0; // this one is hardcoded
+	_deathSound = -1; // this one is hardcoded
 	_aggroSound = -1;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
@@ -129,6 +129,8 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	setRecolor(soldier->getGender() + 2 * (soldier->getLook()));
 }
 
 /**
@@ -228,6 +230,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	setRecolor(std::rand() % 8);
 }
 
 
@@ -286,6 +290,15 @@ void BattleUnit::load(const YAML::Node &node)
 	_motionPoints = node["motionPoints"].as<int>(0);
 	_respawn = node["respawn"].as<bool>(_respawn);
 	_activeHand = node["activeHand"].as<std::string>(_activeHand);
+
+	if (const YAML::Node& p = node["recolor"])
+	{
+		for (size_t i = 0; i < 2; ++i)
+		{
+			_recolor[i].first = p[i][0].as<Uint8>();
+			_recolor[i].second = p[i][1].as<Uint8>();
+		}
+	}
 }
 
 /**
@@ -345,7 +358,38 @@ YAML::Node BattleUnit::save() const
 	node["respawn"] = _respawn;
 	node["activeHand"] = _activeHand;
 
+	for (size_t i = 0; i < 2; ++i)
+	{
+		YAML::Node p;
+		p.push_back(_recolor[i].first);
+		p.push_back(_recolor[i].second);
+		node["recolor"].push_back(p);
+	}
+
 	return node;
+}
+
+void BattleUnit::setRecolor(int selectLook)
+{
+	int BaseColor = 0;
+
+	int faceColor = _armor->getFaceColor()[selectLook];
+	int faceColorGroup = _armor->getFaceColorGroup();
+	if (faceColorGroup > 0 && faceColor >= 0)
+	{
+		_recolor[BaseColor].first = faceColorGroup << 4;
+		_recolor[BaseColor].second = faceColor;
+		++BaseColor;
+	}
+
+	int hairColor = _armor->getHairColor()[selectLook];
+	int hairColorGroup = _armor->getHairColorGroup();
+	if (hairColorGroup > 0 && hairColor >= 0)
+	{
+		_recolor[BaseColor].first = hairColorGroup << 4;
+		_recolor[BaseColor].second = hairColor;
+		++BaseColor;
+	}
 }
 
 /**
@@ -511,6 +555,11 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 	_lastPos = _pos;
 	_cacheInvalid = cache;
 	_kneeled = false;
+	if (_breathFrame >= 0)
+	{
+		_breathing = false;
+		_breathFrame = 0;
+	}
 }
 
 /**
@@ -801,6 +850,23 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
 	if (part < 0) part = 0;
 	*invalid = _cacheInvalid;
 	return _cache[part];
+}
+
+/**
+ * Gets values used for recoloring sprites.
+ * @param i what value choose.
+ * @return Pairs of value, where first is color group to replace and second is new color group with shade.
+ */
+std::pair<Uint8, Uint8> BattleUnit::getRecolor(int i) const
+{
+	if (i >= 0 && i < 2)
+	{
+		return _recolor[i];
+	}
+	else
+	{
+		return std::pair<Uint8, Uint8>(0, 0);
+	}
 }
 
 /**
@@ -1190,7 +1256,6 @@ int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 		case BA_SNAPSHOT:
 			cost = item->getTUSnap();
 			break;
-		case BA_STUN:
 		case BA_HIT:
 			cost = item->getTUMelee();
 			break;
@@ -1360,7 +1425,7 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 		weaponAcc = item->getRules()->getAccuracyAimed();
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
-	else if (actionType == BA_HIT || actionType == BA_STUN)
+	else if (actionType == BA_HIT)
 	{
 		if (item->getRules()->isSkillApplied())
 		{
@@ -1617,7 +1682,7 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFire(int fire)
 {
-	if (_specab == SPECAB_BURNFLOOR || _specab == SPECAB_BURN_AND_EXPLODE)
+	if (_specab != SPECAB_BURNFLOOR && _specab != SPECAB_BURN_AND_EXPLODE)
 		_fire = fire;
 }
 
@@ -2025,7 +2090,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 
 	UnitStats *stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
-	int healthLoss = stats->health - _health;
+	int healthLoss = _stats.health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 

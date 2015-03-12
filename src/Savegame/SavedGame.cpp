@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -398,7 +398,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	// Backwards compatibility
 	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
-		MissionSite *m = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"));
+		MissionSite *m = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"), rule->getDeployment("STR_TERROR_MISSION"));
 		m->load(*i);
 		_missionSites.push_back(m);
 	}
@@ -406,7 +406,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::const_iterator i = doc["missionSites"].begin(); i != doc["missionSites"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		MissionSite *m = new MissionSite(rule->getAlienMission(type));
+		std::string deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
+		MissionSite *m = new MissionSite(rule->getAlienMission(type), rule->getDeployment(deployment));
 		m->load(*i);
 		_missionSites.push_back(m);
 	}
@@ -427,7 +428,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
-	
+
 	const YAML::Node &research = doc["poppedResearch"];
 	for (YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
@@ -995,7 +996,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
-		
+
 		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end())
@@ -1021,7 +1022,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			{
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
-				
+
 				bool leader ( leaderCheck != research->getUnlocked().end());
 				bool cmnder ( cmnderCheck != research->getUnlocked().end());
 
@@ -1119,12 +1120,12 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 		return true;
 	}
 	else if (liveAlien)
-	{		
+	{
 		if (!r->getGetOneFree().empty())
 		{
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_COMMANDER_PLUS");
-				
+
 			bool leader ( leaderCheck != r->getUnlocked().end());
 			bool cmnder ( cmnderCheck != r->getUnlocked().end());
 
@@ -1501,27 +1502,27 @@ class matchRegionAndType: public std::unary_function<AlienMission *, bool>
 {
 public:
 	/// Store the region and type.
-	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	matchRegionAndType(const std::string &region, MissionObjective objective) : _region(region), _objective(objective) { }
 	/// Match against stored values.
 	bool operator()(const AlienMission *mis) const
 	{
-		return mis->getRegion() == _region && mis->getType() == _type;
+		return mis->getRegion() == _region && mis->getRules().getObjective() == _objective;
 	}
 private:
 
 	const std::string &_region;
-	const std::string &_type;
+	MissionObjective _objective;
 };
 
 /**
- * Find a mission from the active alien missions.
- * @param region The region ID.
- * @param type The mission type ID.
+ * Find a mission type in the active alien missions.
+ * @param region The region string ID.
+ * @param objective The active mission objective.
  * @return A pointer to the mission, or 0 if no mission matched.
  */
-AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
+AlienMission *SavedGame::findAlienMission(const std::string &region, MissionObjective objective) const
 {
-	std::vector<AlienMission*>::const_iterator ii = std::find_if (_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
+	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, objective));
 	if (ii == _activeMissions.end())
 		return 0;
 	return *ii;
@@ -1572,7 +1573,7 @@ std::vector<int64_t> &SavedGame::getExpenditures()
 	return _expenditures;
 }
 /**
- * return if the player has been 
+ * return if the player has been
  * warned about poor performance.
  * @return true or false.
  */
@@ -1751,7 +1752,7 @@ void SavedGame::setLastSelectedArmor(const std::string &value)
 
 /**
  * Gets the the last selected armour
- * @return last used armor type string 
+ * @return last used armor type string
  */
 std::string SavedGame::getLastSelectedArmor()
 {
@@ -1777,5 +1778,5 @@ Craft *SavedGame::findCraftByUniqueId(const CraftId& craftId) const
 	return NULL;
 }
 
-    
+
 }
