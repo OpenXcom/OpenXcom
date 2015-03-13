@@ -64,8 +64,8 @@ void Target::load(const YAML::Node &node)
 YAML::Node Target::save() const
 {
 	YAML::Node node;
-	node["lon"] = _lon;
-	node["lat"] = _lat;
+	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
+	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
 	return node;
 }
 
@@ -76,8 +76,8 @@ YAML::Node Target::save() const
 YAML::Node Target::saveId() const
 {
 	YAML::Node node;
-	node["lon"] = _lon;
-	node["lat"] = _lat;
+	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
+	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
 	return node;
 }
 

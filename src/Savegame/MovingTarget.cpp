@@ -73,9 +73,9 @@ YAML::Node MovingTarget::save() const
 	{
 		node["dest"] = _dest->saveId();
 	}
-	node["speedLon"] = _speedLon;
-	node["speedLat"] = _speedLat;
-	node["speedRadian"] = _speedRadian;
+	node["speedLon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _speedLon).str();
+	node["speedLat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _speedLat).str();
+	node["speedRadian"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _speedRadian).str();
 	node["speed"] = _speed;
 	return node;
 }
