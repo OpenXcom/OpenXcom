@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _extraFrame(false)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _extraFrame(0)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
@@ -145,19 +145,19 @@ void UnitDieBState::think()
 			}
 		}
 	}
-	if (_extraFrame)
+	if (_extraFrame == 2)
 	{
 		_parent->getMap()->setUnitDying(false);
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
-		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
+		if (_unit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			Game *game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
 				if (_unit->getArmor()->getSize() == 1)
 				{
-					if (_damageType == DT_NONE)
+					if (_damageType == DT_NONE && _unit->getSpawnUnit().empty())
 					{
 						game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 					}
@@ -187,9 +187,13 @@ void UnitDieBState::think()
 			}
 		}
 	}
+	else if (_extraFrame == 1)
+	{
+		_extraFrame++;
+	}
 	else if (_unit->isOut())
 	{
-		_extraFrame = true;
+		_extraFrame = 1;
 		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();

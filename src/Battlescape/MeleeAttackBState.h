@@ -39,7 +39,7 @@ private:
 	BattleUnit *_unit, *_target;
 	BattleItem *_weapon, *_ammo;
 	Position _voxel;
-	bool _initialized;
+	bool _initialized, _deathMessage;
 public:
 	/// Creates a new MeleeAttackBState class
 	MeleeAttackBState(BattlescapeGame *parent, BattleAction action);
