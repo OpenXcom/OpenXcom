@@ -496,6 +496,8 @@ void AlienBAIState::setupPatrol()
 			// can i shoot an object?
 			if (_fromNode->isTarget() &&
 				_unit->getMainHandWeapon() &&
+				_unit->getMainHandWeapon()->getRules()->getAccuracySnap() &&
+				_unit->getMainHandWeapon()->getAmmoItem() &&
 				_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
 				_save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
