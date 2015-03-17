@@ -21,6 +21,7 @@
 #include <cmath>
 #include "../Engine/Language.h"
 #include "Craft.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {
@@ -64,8 +65,8 @@ void Target::load(const YAML::Node &node)
 YAML::Node Target::save() const
 {
 	YAML::Node node;
-	node["lon"] = _lon;
-	node["lat"] = _lat;
+	node["lon"] = serializeDouble(_lon);
+	node["lat"] = serializeDouble(_lat);
 	return node;
 }
 
@@ -76,8 +77,8 @@ YAML::Node Target::save() const
 YAML::Node Target::saveId() const
 {
 	YAML::Node node;
-	node["lon"] = _lon;
-	node["lat"] = _lat;
+	node["lon"] = serializeDouble(_lon);
+	node["lat"] = serializeDouble(_lat);
 	return node;
 }
 

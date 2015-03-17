@@ -18,6 +18,7 @@
  */
 #include "SerializationHelper.h"
 #include <assert.h>
+#include <sstream>
 
 namespace OpenXcom
 {
@@ -71,6 +72,14 @@ void serializeInt(Uint8 **buffer, Uint8 sizeKey, int value)
 	}
 
 	*buffer += sizeKey;
+}
+
+std::string serializeDouble(double value)
+{
+	std::ostringstream stream;
+	stream.precision(std::numeric_limits<double>::digits10 + 2);
+	stream << value;
+	return stream.str();
 }
 
 }
