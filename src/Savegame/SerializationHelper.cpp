@@ -19,6 +19,7 @@
 #include "SerializationHelper.h"
 #include <assert.h>
 #include <sstream>
+#include <limits>
 
 namespace OpenXcom
 {
