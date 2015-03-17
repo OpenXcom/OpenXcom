@@ -633,7 +633,6 @@ void BattlescapeGame::handleNonTargetAction()
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					statePushBack(new MeleeAttackBState(this, _currentAction));
-					return;
 				}
 				else
 				{
