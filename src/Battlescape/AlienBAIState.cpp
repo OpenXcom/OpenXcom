@@ -1497,7 +1497,7 @@ bool AlienBAIState::findFirePoint()
 bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	if (_save->getTurn() < 3)
+	if (_save->getTurn() < _save->getBattleState()->getGame()->getRuleset()->getTurnAIUseGrenade())
 		return false;
 	if (diff == -1)
 	{
