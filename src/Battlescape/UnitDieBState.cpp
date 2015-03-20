@@ -232,19 +232,23 @@ void UnitDieBState::cancel()
  */
 void UnitDieBState::convertUnitToCorpse()
 {
-	_parent->getSave()->getBattleState()->showPsiButton(false);
 	Position lastPosition = _unit->getPosition();
+	int size = _unit->getArmor()->getSize();
+	bool dropItems = (size == 1 && 
+		(!Options::weaponSelfDestruction ||
+		(_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS)));
+
+	_parent->getSave()->getBattleState()->showPsiButton(false);
 	// remove the unconscious body item corresponding to this unit, and if it was being carried, keep track of what slot it was in
 	if (lastPosition != Position(-1,-1,-1))
 	{
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
 	}
-	int size = _unit->getArmor()->getSize();
-	BattleItem *itemToKeep = 0;
-	bool dropItems = !Options::weaponSelfDestruction || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
-	// move inventory from unit to the ground for non-large units
-	if (size == 1 && dropItems)
+
+	// move inventory from unit to the ground
+	if (dropItems)
 	{
+		std::vector<BattleItem*> itemsToKeep;
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(lastPosition, (*i));
@@ -254,15 +258,16 @@ void UnitDieBState::convertUnitToCorpse()
 			}
 			else
 			{
-				itemToKeep = *i;
+				itemsToKeep.push_back(*i);
 			}
 		}
-	}
-	_unit->getInventory()->clear();
 
-	if (itemToKeep != 0)
-	{
-		_unit->getInventory()->push_back(itemToKeep);
+		_unit->getInventory()->clear();
+
+		for (std::vector<BattleItem*>::iterator i = itemsToKeep.begin(); i != itemsToKeep.end(); ++i)
+		{
+			_unit->getInventory()->push_back(*i);
+		}
 	}
 
 	// remove unit-tile link
