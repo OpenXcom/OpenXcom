@@ -48,8 +48,7 @@ private:
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
 	int _deathFrames;
-	bool _constantAnimation;
-	bool _canHoldWeapon;
+	bool _constantAnimation, _canHoldWeapon, _hasInventory;
 	ForcedTorso _forcedTorso;
 	int _faceColorGroup, _hairColorGroup;
 	std::vector<int> _faceColor, _hairColor;
@@ -112,6 +111,8 @@ public:
 	const std::vector<int>& getFaceColor() const;
 	/// Get hair base color
 	const std::vector<int>& getHairColor() const;
+	/// can we access this unit's inventory?
+	const bool hasInventory() const;
 };
 
 }
