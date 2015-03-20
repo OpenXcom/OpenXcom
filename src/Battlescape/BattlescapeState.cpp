@@ -1378,7 +1378,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
  */
 void BattlescapeState::blinkHealthBar()
 {
-	static Uint8 color = _barHealth->getColor(), maxcolor = (color & 0xF0) + 8;
+	static Uint8 color = _barHealth->getColor(), maxcolor = color + 3, step = 0;
 
 	BattleUnit *bu = _save->getSelectedUnit();
 	if (bu == 0 || !_barHealth->getVisible()) return;
@@ -1387,9 +1387,10 @@ void BattlescapeState::blinkHealthBar()
 	{
 		if (bu->getFatalWound(i) > 0)
 		{
-			_barHealth->setColor(color++);
+			_barHealth->setColor(color);
+			color += step ^= 1;		// +1, +0, +1, +0, ...
 			if (color > maxcolor)
-				color = maxcolor & 0xF0;
+				color = maxcolor - 3;
 			break;
 		}
 	}
