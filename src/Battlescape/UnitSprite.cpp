@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y, bool helmet) : Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0), _unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0), _drawingRoutine(0), _helmet(helmet)
+UnitSprite::UnitSprite(int width, int height, int x, int y, bool helmet) : Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0), _unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0), _drawingRoutine(0), _helmet(helmet), _color(0), _colorSize(0)
 {
 }
 
@@ -85,13 +85,15 @@ void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 
 	if (Options::battleHairBleach)
 	{
-		_colorA = _unit->getRecolor(0);
-		_colorB = _unit->getRecolor(1);
-	}
-	else
-	{
-		_colorA = std::pair<Uint8, Uint8>();
-		_colorB = std::pair<Uint8, Uint8>();
+		_colorSize =_unit->getRecolor().size();
+		if (_colorSize)
+		{
+			_color = &(_unit->getRecolor()[0]);
+		}
+		else
+		{
+			_color = 0;
+		}
 	}
 }
 
@@ -120,7 +122,7 @@ struct ColorReplace
 	static const Uint8 ColorGroup = 15<<4;
 	static const Uint8 ColorShade = 15;
 
-	static inline bool func(Uint8& dest, const Uint8& src, const std::pair<Uint8, Uint8>& face_color)
+	static inline bool loop(Uint8& dest, const Uint8& src, const std::pair<Uint8, Uint8>& face_color)
 	{
 		if ((src & ColorGroup) == face_color.first)
 		{
@@ -132,30 +134,18 @@ struct ColorReplace
 			return false;
 		}
 	}
-};
 
-struct Color1
-{
-	static inline void func(Uint8& dest, const Uint8& src, const std::pair<Uint8, Uint8>& colorA, int, int)
+	static inline void func(Uint8& dest, const Uint8& src, const std::pair<Uint8, Uint8> *color, int size, int)
 	{
 		if (src)
 		{
-			if (ColorReplace::func(dest, src, colorA)) return;
-
-			dest = src;
-		}
-	}
-};
-
-struct Color2
-{
-	static inline void func(Uint8& dest, const Uint8& src, const std::pair<Uint8, Uint8>& colorA, const std::pair<Uint8, Uint8>& colorB, int)
-	{
-		if (src)
-		{
-			if (ColorReplace::func(dest, src, colorA)) return;
-			if (ColorReplace::func(dest, src, colorB)) return;
-
+			for (int i = 0; i < size; ++i)
+			{
+				if (loop(dest, src, color[i]))
+				{
+					return;
+				}
+			}
 			dest = src;
 		}
 	}
@@ -165,16 +155,10 @@ struct Color2
 
 void UnitSprite::drawRecolored(Surface *src)
 {
-	if (_colorB.first != 0)
+	if (_colorSize)
 	{
 		lock();
-		ShaderDraw<Color2>(ShaderSurface(this), ShaderSurface(src), ShaderScalar(_colorA), ShaderScalar(_colorB));
-		unlock();
-	}
-	else if (_colorA.first != 0)
-	{
-		lock();
-		ShaderDraw<Color1>(ShaderSurface(this), ShaderSurface(src), ShaderScalar(_colorA));
+		ShaderDraw<ColorReplace>(ShaderSurface(this), ShaderSurface(src), ShaderScalar(_color), ShaderScalar(_colorSize));
 		unlock();
 	}
 	else

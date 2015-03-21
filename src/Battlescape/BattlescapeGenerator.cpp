@@ -704,7 +704,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			unit->setDirection(RNG::generate(0,7));
 			_save->getUnits()->push_back(unit);
 			_save->getTileEngine()->calculateFOV(unit);
-			unit->deriveRank();
 			unit->setSpecialWeapon(_save, _game->getRuleset());
 			return unit;
 		}
@@ -716,7 +715,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				unit->setDirection(RNG::generate(0,7));
 				_save->getUnits()->push_back(unit);
 				_save->getTileEngine()->calculateFOV(unit);
-				unit->deriveRank();
 				unit->setSpecialWeapon(_save, _game->getRuleset());
 				return unit;
 			}
@@ -742,7 +740,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				{
 					_save->getUnits()->push_back(unit);
 					unit->setDirection(dir);
-					unit->deriveRank();
 					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}
@@ -758,7 +755,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 				{
 					_save->getUnits()->push_back(unit);
-					unit->deriveRank();
 					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}

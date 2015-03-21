@@ -188,6 +188,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["units"].begin(); i != node["units"].end(); ++i)
 	{
 		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
+		UnitFaction originalFaction = (UnitFaction)(*i)["originalFaction"].as<int>(faction);
 		int id = (*i)["soldierId"].as<int>();
 		BattleUnit *unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
@@ -200,7 +201,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
-			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
+			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
 		unit->setSpecialWeapon(this, rule);
@@ -209,13 +210,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
-			
-			// silly hack to fix mind controlled aliens
-			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
-			if (unit->getOriginalFaction() == FACTION_HOSTILE)
-			{
-				unit->adjustStats(savedGame->getDifficulty());
-			}
 		}
 		if (unit->getStatus() != STATUS_DEAD)
 		{

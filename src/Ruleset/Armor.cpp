@@ -31,13 +31,11 @@ Armor::Armor(const std::string &type) :
 	_type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
 	_drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0),
 	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false),
-	_forcedTorso(TORSO_USE_GENDER), _faceColorGroup(0), _hairColorGroup(0)
+	_forcedTorso(TORSO_USE_GENDER),
+	_faceColorGroup(0), _hairColorGroup(0), _utileColorGroup(0), _rankColorGroup(0)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
-
-	_faceColor.resize((LOOK_AFRICAN + 1) * 2);
-	_hairColor.resize((LOOK_AFRICAN + 1) * 2);
 }
 
 /**
@@ -113,16 +111,12 @@ void Armor::load(const YAML::Node &node)
 
 	_faceColorGroup = node["spriteFaceGroup"].as<int>(_faceColorGroup);
 	_hairColorGroup = node["spriteHairGroup"].as<int>(_hairColorGroup);
-	if (const YAML::Node& colors = node["spriteFaceColor"])
-	{
-		for (size_t i = 0; i < colors.size() && i < _faceColor.size(); ++i)
-			_faceColor[i] = colors[i].as<int>();
-	}
-	if (const YAML::Node& colors = node["spriteHairColor"])
-	{
-		for (size_t i = 0; i < colors.size() && i < _hairColor.size(); ++i)
-			_hairColor[i] = colors[i].as<int>();
-	}
+	_rankColorGroup = node["spriteRankGroup"].as<int>(_rankColorGroup);
+	_utileColorGroup = node["spriteUtileGroup"].as<int>(_utileColorGroup);
+	_faceColor = node["spriteFaceColor"].as<std::vector<int> >(_faceColor);
+	_hairColor = node["spriteHairColor"].as<std::vector<int> >(_hairColor);
+	_rankColor = node["spriteRankColor"].as<std::vector<int> >(_rankColor);
+	_utileColor = node["spriteUtileColor"].as<std::vector<int> >(_utileColor);
 }
 
 /**
@@ -331,8 +325,8 @@ ForcedTorso Armor::getForcedTorso() const
 }
 
 /**
- * Gets hair base color group for replacement, if -1 then don't replace colors.
- * @return Color group or -1.
+ * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
  */
 int Armor::getFaceColorGroup() const
 {
@@ -340,8 +334,8 @@ int Armor::getFaceColorGroup() const
 }
 
 /**
- * Gets hair base color group for replacement, if -1 then don't replace colors.
- * @return Color group or -1.
+ * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
  */
 int Armor::getHairColorGroup() const
 {
@@ -349,20 +343,85 @@ int Armor::getHairColorGroup() const
 }
 
 /**
- * Gets new face colors for replacement.
- * @return Vector with new values based on gender and race.
+ * Gets utile base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
  */
-const std::vector<int>& Armor::getFaceColor() const
+int Armor::getUtileColorGroup() const
 {
-	return _faceColor;
+	return _utileColorGroup;
 }
 
 /**
- * Gets new hair colors for replacement.
- * @return Vector with new values based on gender and race.
+ * Gets rank base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
  */
-const std::vector<int>& Armor::getHairColor() const
+int Armor::getRankColorGroup() const
 {
-	return _hairColor;
+	return _rankColorGroup;
 }
+
+/**
+ * Gets new face colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getFaceColor(int i) const
+{
+	if ((size_t)i < _faceColor.size())
+	{
+		return _faceColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Gets new hair colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getHairColor(int i) const
+{
+	if ((size_t)i < _hairColor.size())
+	{
+		return _hairColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Gets new utile colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getUtileColor(int i) const
+{
+	if ((size_t)i < _utileColor.size())
+	{
+		return _utileColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Gets new rank colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getRankColor(int i) const
+{
+	if ((size_t)i < _rankColor.size())
+	{
+		return _rankColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 }
