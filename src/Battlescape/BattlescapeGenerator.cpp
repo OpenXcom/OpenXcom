@@ -345,7 +345,7 @@ void BattlescapeGenerator::run()
 			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 		}
 		else
-		{			
+		{
 			Target *target = _ufo;
 			if (_mission) target = _mission;
 			_terrain = _game->getRuleset()->getTerrain(_worldTexture->getRandomTerrain(target));
