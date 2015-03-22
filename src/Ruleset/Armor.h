@@ -48,8 +48,7 @@ private:
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
 	int _deathFrames;
-	bool _constantAnimation;
-	bool _canHoldWeapon;
+	bool _constantAnimation, _canHoldWeapon, _hasInventory;
 	ForcedTorso _forcedTorso;
 	int _faceColorGroup, _hairColorGroup, _utileColorGroup, _rankColorGroup;
 	std::vector<int> _faceColor, _hairColor, _utileColor, _rankColor;
@@ -120,6 +119,8 @@ public:
 	int getUtileColor(int i) const;
 	/// Get rank base color
 	int getRankColor(int i) const;
+	/// can we access this unit's inventory?
+	bool hasInventory() const;
 };
 
 }

@@ -1128,7 +1128,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 
 			if (type != DT_IN)
 			{
-				if (_armor->getSize() == 1)
+				if (_armor->getDamageModifier(DT_STUN) > 0.0)
 				{
 					// conventional weapons can cause additional stun damage
 					_stunlevel += RNG::generate(0, power / 4);
@@ -2853,12 +2853,12 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
 
 /**
  * Checks if this unit has an inventory. Large units and/or
- * terror units don't have inventories.
+ * terror units generally don't have inventories.
  * @return True if an inventory is available, false otherwise.
  */
 bool BattleUnit::hasInventory() const
 {
-	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+	return (_armor->hasInventory());
 }
 
 /**

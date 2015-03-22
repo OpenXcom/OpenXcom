@@ -673,9 +673,19 @@ void DebriefingState::prepareDebriefing()
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);
 						RuleItem *tankRule = _game->getRuleset()->getItem(type);
-						BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-						if (!tankRule->getCompatibleAmmo()->empty() && 0 != ammoItem && 0 < ammoItem->getAmmoQuantity())
-							base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+						if ((*j)->getItem("STR_RIGHT_HAND"))
+						{
+							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+						}
+						if ((*j)->getItem("STR_LEFT_HAND"))
+						{
+							RuleItem *secondaryRule = (*j)->getItem("STR_LEFT_HAND")->getRules();
+							BattleItem *ammoItem = (*j)->getItem("STR_LEFT_HAND")->getAmmoItem();
+							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+						}
 					}
 				}
 				else

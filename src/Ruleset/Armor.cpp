@@ -30,7 +30,7 @@ namespace OpenXcom
 Armor::Armor(const std::string &type) :
 	_type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
 	_drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0),
-	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false),
+	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _hasInventory(true),
 	_forcedTorso(TORSO_USE_GENDER),
 	_faceColorGroup(0), _hairColorGroup(0), _utileColorGroup(0), _rankColorGroup(0)
 {
@@ -55,6 +55,7 @@ void Armor::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
 	_spriteInv = node["spriteInv"].as<std::string>(_spriteInv);
+	_hasInventory = node["allowInv"].as<bool>(_hasInventory);
 	if (node["corpseItem"])
 	{
 		_corpseBattle.clear();
@@ -422,6 +423,15 @@ int Armor::getRankColor(int i) const
 	{
 		return 0;
 	}
+}
+
+/**
+ * Can this unit's inventory be accessed for any reason?
+ * @return if we can access the inventory.
+ */
+bool Armor::hasInventory() const
+{
+	return _hasInventory;
 }
 
 }
