@@ -42,7 +42,7 @@ protected:
 	int _knownEnemies, _visibleEnemies, _spottingEnemies;
 	int _escapeTUs, _ambushTUs, _reserveTUs;
 	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction, *_psiAction;
-	bool _rifle, _melee, _blaster;
+	bool _rifle, _melee, _blaster, _grenade;
 	bool _traceAI, _didPsi;
 	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
