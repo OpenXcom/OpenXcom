@@ -47,7 +47,7 @@ void MissionSite::load(const YAML::Node &node)
 {
 	Target::load(node);
 	_id = node["id"].as<int>(_id);
-	_texture = node["id"].as<int>(_texture);
+	_texture = node["texture"].as<int>(_texture);
 	_secondsRemaining = node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_race = node["race"].as<std::string>(_race);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
