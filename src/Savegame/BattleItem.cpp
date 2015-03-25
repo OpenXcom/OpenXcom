@@ -46,7 +46,6 @@ BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _own
 		// weapon does not need ammo, ammo item points to weapon
 		else if ((_rules->getBattleType() == BT_FIREARM || _rules->getBattleType() == BT_MELEE) && _rules->getCompatibleAmmo()->empty())
 		{
-			setAmmoQuantity(_rules->getClipSize());
 			_ammoItem = this;
 		}
 	}
