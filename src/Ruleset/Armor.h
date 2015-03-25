@@ -50,8 +50,8 @@ private:
 	int _deathFrames;
 	bool _constantAnimation, _canHoldWeapon, _hasInventory;
 	ForcedTorso _forcedTorso;
-	int _faceColorGroup, _hairColorGroup;
-	std::vector<int> _faceColor, _hairColor;
+	int _faceColorGroup, _hairColorGroup, _utileColorGroup, _rankColorGroup;
+	std::vector<int> _faceColor, _hairColor, _utileColor, _rankColor;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -107,12 +107,20 @@ public:
 	int getFaceColorGroup() const;
 	/// Get hair base color
 	int getHairColorGroup() const;
+	/// Get utile base color
+	int getUtileColorGroup() const;
+	/// Get rank base color
+	int getRankColorGroup() const;
 	/// Get face base color
-	const std::vector<int>& getFaceColor() const;
+	int getFaceColor(int i) const;
 	/// Get hair base color
-	const std::vector<int>& getHairColor() const;
+	int getHairColor(int i) const;
+	/// Get utile base color
+	int getUtileColor(int i) const;
+	/// Get rank base color
+	int getRankColor(int i) const;
 	/// can we access this unit's inventory?
-	const bool hasInventory() const;
+	bool hasInventory() const;
 };
 
 }

@@ -58,7 +58,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
 	for (int i = 0; i < 121; ++i)
 	{
 		_tileSearch[i].x = ((i%11) - 5);
-		_tileSearch[i].y = ((i/11) - 5); 
+		_tileSearch[i].y = ((i/11) - 5);
 	}
 }
 
@@ -136,7 +136,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			getTile(pos)->load((*i));
 		}
 	}
-	else 
+	else
 	{
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
@@ -151,7 +151,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		serKey._mapDataSetID = node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields = node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
-		// load binary tile data! 
+		// load binary tile data!
 		YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8 *r = (Uint8*)binTiles.data();
@@ -188,6 +188,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["units"].begin(); i != node["units"].end(); ++i)
 	{
 		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
+		UnitFaction originalFaction = (UnitFaction)(*i)["originalFaction"].as<int>(faction);
 		int id = (*i)["soldierId"].as<int>();
 		BattleUnit *unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
@@ -200,7 +201,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
-			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
+			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
 		unit->setSpecialWeapon(this, rule);
@@ -209,13 +210,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
-			
-			// silly hack to fix mind controlled aliens
-			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
-			if (unit->getOriginalFaction() == FACTION_HOSTILE)
-			{
-				unit->adjustStats(savedGame->getDifficulty());
-			}
 		}
 		if (unit->getStatus() != STATUS_DEAD)
 		{
@@ -955,7 +949,7 @@ void SavedBattleGame::resetUnitTiles()
 		}
 	}
 }
- 
+
 /**
  * Gives access to the "storage space" vector, for distribution of items in base defense missions.
  * @return Vector of storage positions.
@@ -1118,9 +1112,9 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
 		if ((*i)->getRank() == nodeRank								// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL) 
+			&& (!((*i)->getType() & Node::TYPE_SMALL)
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING) 
+			&& (!((*i)->getType() & Node::TYPE_FLYING)
 				|| unit->getMovementType() == MT_FLY)				// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
 			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
@@ -1181,7 +1175,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			&& (!scout || n != fromNode)																// scouts push forward
 			&& n->getPosition().x > 0 && n->getPosition().y > 0)
 		{
-			if (!preferred 
+			if (!preferred
 				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
 				|| preferred->getFlags() < n->getFlags())
 			{
@@ -1447,7 +1441,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			Tile *t = getTile(position + Position(x,y,0));
 			Tile *tb = getTile(position + Position(x,y,-1));
-			if (t == 0 || 
+			if (t == 0 ||
 				(t->getUnit() != 0 && t->getUnit() != bu) ||
 				t->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255 ||
 				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
