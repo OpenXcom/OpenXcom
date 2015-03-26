@@ -339,7 +339,7 @@ void BattlescapeGenerator::run()
 
 	if (_terrain == 0)
 	{
-		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty())
+		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty() || !ruleDeploy->getTerrains().empty())
 		{
 			size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
 			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
