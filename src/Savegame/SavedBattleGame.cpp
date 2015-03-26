@@ -92,6 +92,14 @@ SavedBattleGame::~SavedBattleGame()
 	{
 		delete *i;
 	}
+	for (std::vector<BattleItem*>::iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<BattleItem*>::iterator i = _recoverConditional.begin(); i != _recoverConditional.end(); ++i)
+	{
+		delete *i;
+	}
 	for (std::vector<BattleItem*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
 	{
 		delete *i;
@@ -308,6 +316,30 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 	_ambience = node["ambience"].as<int>(_ambience);
+
+	for (YAML::const_iterator i = node["recoverConditional"].begin(); i != node["recoverConditional"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		_itemId = (*i)["id"].as<int>(_itemId);
+		if (rule->getItem(type))
+		{
+			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+			item->load(*i);
+			_recoverConditional.push_back(item);
+		}
+	}
+
+	for (YAML::const_iterator i = node["recoverGuaranteed"].begin(); i != node["recoverGuaranteed"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		_itemId = (*i)["id"].as<int>(_itemId);
+		if (rule->getItem(type))
+		{
+			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+			item->load(*i);
+			_recoverGuaranteed.push_back(item);
+		}
+	}
 }
 
 /**
@@ -428,6 +460,14 @@ YAML::Node SavedBattleGame::save() const
     node["kneelReserved"] = _kneelReserved;
     node["depth"] = _depth;
 	node["ambience"] = _ambience;
+	for (std::vector<BattleItem*>::const_iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)
+	{
+		node["recoverGuaranteed"].push_back((*i)->save());
+	}
+	for (std::vector<BattleItem*>::const_iterator i = _recoverConditional.begin(); i != _recoverConditional.end(); ++i)
+	{
+		node["recoverConditional"].push_back((*i)->save());
+	}
 	return node;
 }
 
@@ -1829,6 +1869,24 @@ void SavedBattleGame::setAmbientSound(int sound)
 int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
+}
+
+/**
+ * get the list of items we're guaranteed to take with us (ie: items that were in the skyranger)
+ * @return the list of items we're garaunteed.
+ */
+std::vector<BattleItem*> *SavedBattleGame::getGuaranteedRecoveredItems()
+{
+	return &_recoverGuaranteed;
+}
+
+/**
+ * get the list of items we're not guaranteed to take with us (ie: items that were NOT in the skyranger)
+ * @return the list of items we might get.
+ */
+std::vector<BattleItem*> *SavedBattleGame::getConditionalRecoveredItems()
+{
+	return &_recoverConditional;
 }
 
 }

@@ -791,6 +791,10 @@ void DebriefingState::prepareDebriefing()
 
 		if (!aborted)
 		{
+			// if this was a 2-stage mission, and we didn't abort (ie: we have time to clean up)
+			// we can recover items from the earlier stages as well
+			recoverItems(battle->getConditionalRecoveredItems(), base);
+
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
@@ -878,6 +882,10 @@ void DebriefingState::prepareDebriefing()
 				base->getItems()->addItem((*i)->item, (*i)->qty);
 			}
 		}
+
+		// assuming this was a multi-stage mission,
+		// recover everything that was in the craft in the previous stage
+		recoverItems(battle->getGuaranteedRecoveredItems(), base);
 	}
 
 	// reequip craft after a non-base-defense mission (of course only if it's not lost already (that case craft=0))
