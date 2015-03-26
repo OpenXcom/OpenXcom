@@ -304,7 +304,7 @@ void ExplosionBState::explode()
 
 	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
-		_parent->getSave()->removeItem(_item)
+		_parent->getSave()->removeItem(_item);
 	}
 }
 
