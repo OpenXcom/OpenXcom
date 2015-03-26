@@ -304,7 +304,14 @@ void ExplosionBState::explode()
 
 	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
-		_parent->getSave()->removeItem(_item);
+		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin(); j != _parent->getSave()->getItems()->end(); ++j)
+		{
+			if (_item->getId() == (*j)->getId())
+			{
+				_parent->getSave()->removeItem(_item);
+				break;
+			}
+		}
 	}
 }
 
