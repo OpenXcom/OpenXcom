@@ -605,6 +605,8 @@ void Ruleset::loadFile(const std::string &filename)
 		ResourcePack::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(ResourcePack::BATTLESCAPE_CURSOR);
 		ResourcePack::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(ResourcePack::UFOPAEDIA_CURSOR);
 		ResourcePack::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(ResourcePack::GRAPHS_CURSOR);
+		ResourcePack::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(ResourcePack::DEBRIEF_MUSIC_GOOD);
+		ResourcePack::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(ResourcePack::DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
 	{

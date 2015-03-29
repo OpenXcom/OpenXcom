@@ -213,8 +213,15 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	}
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
-	// Set music
-	_game->getResourcePack()->playMusic("GMMARS");
+	if (total <= 0)
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
+	}
+
 }
 
 /**
