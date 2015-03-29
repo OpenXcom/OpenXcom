@@ -36,6 +36,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/RuleUfo.h"
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
@@ -63,6 +64,15 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	AlienDeployment *deployment = _game->getRuleset()->getDeployment(mission);
 	if (!deployment) // landing site or crash site.
+	{
+		Ufo * u = dynamic_cast <Ufo*> (craft->getDestination());
+		if (u)
+		{
+			deployment = _game->getRuleset()->getDeployment(u->getRules()->getType());
+		}
+	}
+
+	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 		_game->getResourcePack()->playMusic("GMDEFEND");
