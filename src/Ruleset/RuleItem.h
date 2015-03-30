@@ -61,7 +61,7 @@ private:
 	int _recoveryPoints;
 	int _armor;
 	int _turretType;
-	int _turnAICanUse;
+	int _aiUseDelay;
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
@@ -171,7 +171,7 @@ public:
 	/// Gets the item's turret type.
 	int getTurretType() const;
 	/// Gets first turn when AI can use item.
-	int getTurnAICanUse() const {return _turnAICanUse;}
+	int getAIUseDelay() const {return _aiUseDelay;}
 	/// Checks if this a live alien.
 	bool isAlien() const;
 	/// Should we charge a flat rate?

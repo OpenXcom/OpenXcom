@@ -189,7 +189,7 @@ void AlienBAIState::think(BattleAction *action)
 	if (action->weapon)
 	{
 		RuleItem *rule = action->weapon->getRules();
-		if (rule->getTurnAICanUse() <= _save->getTurn()
+		if (_save->getTurn() >= rule->getAIUseDelay()
 			&& (!rule->isWaterOnly() || _save->getDepth() != 0))
 		{
 			if (rule->getBattleType() == BT_FIREARM)
@@ -218,7 +218,7 @@ void AlienBAIState::think(BattleAction *action)
 	}
 
 	BattleItem *grenade = _unit->getGrenadeFromBelt();
-	_grenade = grenade != 0 && grenade->getRules()->getTurnAICanUse() <= _save->getTurn();
+	_grenade = grenade != 0 && _save->getTurn() >= grenade->getRules()->getAIUseDelay();
 
 	if (_spottingEnemies && !_escapeTUs)
 	{
