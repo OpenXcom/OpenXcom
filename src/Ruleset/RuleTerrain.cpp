@@ -79,6 +79,10 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_civilianTypes.push_back("MALE_CIVILIAN");
 		_civilianTypes.push_back("FEMALE_CIVILIAN");
 	}
+	for (YAML::const_iterator i = node["music"].begin(); i != node["music"].end(); ++i)
+	{
+		_music.push_back((*i).as<std::string>(""));
+	}
 	_minDepth = node["minDepth"].as<int>(_minDepth);
 	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 	_ambience = node["ambience"].as<int>(_ambience);
@@ -231,5 +235,14 @@ const int RuleTerrain::getAmbience() const
 const std::string RuleTerrain::getScript()
 {
 	return _script;
+}
+
+/**
+ * Gets The list of musics this terrain has to choose from.
+ * @return The list of track names.
+ */
+const std::vector<std::string> &RuleTerrain::getMusic()
+{
+	return _music;
 }
 }
