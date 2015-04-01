@@ -527,8 +527,8 @@ void ProjectileFlyBState::think()
 									_parent->getMap()->getExplosions()->push_back(explosion);
 									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), 0);
 								}
-								++i;
 							}
+							++i;
 							delete proj;
 						}
 					}

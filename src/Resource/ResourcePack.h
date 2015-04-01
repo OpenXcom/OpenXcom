@@ -88,6 +88,8 @@ public:
 	static int BATTLESCAPE_CURSOR;
 	static int UFOPAEDIA_CURSOR;
 	static int GRAPHS_CURSOR;
+	static std::string DEBRIEF_MUSIC_GOOD;
+	static std::string DEBRIEF_MUSIC_BAD;
 	/// Create a new resource pack with a folder's contents.
 	ResourcePack();
 	/// Cleans up the resource pack.

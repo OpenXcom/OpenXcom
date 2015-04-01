@@ -633,7 +633,6 @@ void BattlescapeGame::handleNonTargetAction()
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					statePushBack(new MeleeAttackBState(this, _currentAction));
-					return;
 				}
 				else
 				{
@@ -1525,11 +1524,6 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &ne
 
 	unit->instaKill();
 
-	if (Options::battleNotifyDeath && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
-	{
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender()).arg(unit->getName(_parentState->getGame()->getLanguage()))));
-	}
-
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		dropItem(unit->getPosition(), (*i));
@@ -1980,17 +1974,20 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers)
 	}
 }
 
-void BattlescapeGame::convertInfected()
+bool BattlescapeGame::convertInfected()
 {
+	bool retVal = false;
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getHealth() > 0 && (*j)->getRespawn())
 		{
+			retVal = true;
 			(*j)->setRespawn(false);
 			convertUnit((*j), (*j)->getSpawnUnit());
 			j = _save->getUnits()->begin();
 		}
 	}
+	return retVal;
 }
 /**
  * Sets the kneel reservation setting.

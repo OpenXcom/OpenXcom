@@ -218,6 +218,40 @@ void BattlescapeGenerator::nextStage()
 	}
 	_save->resetTurnCounter();
 
+	// remove all items not belonging to our soldiers from the map.
+	// sort items into two categories:
+	// the ones that we are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
+	// and the ones that are scattered about on the ground, that will be recovered ONLY on success.
+	// this does not include items in your soldier's hands.
+	std::vector<BattleItem*> *takeHomeGuaranteed = _save->getGuaranteedRecoveredItems();
+	std::vector<BattleItem*> *takeHomeConditional = _save->getConditionalRecoveredItems();
+	std::map<RuleItem*, int> guaranteedRounds, conditionalRounds;
+
+	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end();)
+	{
+		Tile *tile = (*j)->getTile();
+		if (!(*j)->getOwner() || (*j)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
+		{
+			(*j)->setTile(0);
+		}
+		if (tile)
+		{
+			std::vector<BattleItem*> *toContainer = takeHomeConditional;
+			if (tile->getMapData(MapData::O_FLOOR)
+				&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			{
+				toContainer = takeHomeGuaranteed;
+			}
+			if ((*j)->getRules()->isRecoverable() && !(*j)->getXCOMProperty())
+			{
+				toContainer->push_back(*j);
+				j = _save->getItems()->erase(j);
+				continue;
+			}
+		}
+		++j;
+	}
+
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
@@ -278,14 +312,6 @@ void BattlescapeGenerator::nextStage()
 		}
 	}
 
-	// remove all items not belonging to our soldiers from the map.
-	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
-	{
-		if (!(*j)->getOwner() || (*j)->getOwner()->getId() > highestSoldierID)
-		{
-			(*j)->setTile(0);
-		}
-	}
 	_unitSequence = _save->getUnits()->back()->getId() + 1;
 
 	size_t unitCount = _save->getUnits()->size();
@@ -339,13 +365,13 @@ void BattlescapeGenerator::run()
 
 	if (_terrain == 0)
 	{
-		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty())
+		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty() || !ruleDeploy->getTerrains().empty())
 		{
 			size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
 			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 		}
 		else
-		{			
+		{
 			Target *target = _ufo;
 			if (_mission) target = _mission;
 			_terrain = _game->getRuleset()->getTerrain(_worldTexture->getRandomTerrain(target));
@@ -400,6 +426,14 @@ void BattlescapeGenerator::run()
 		explodePowerSources();
 	}
 
+	if (!ruleDeploy->getMusic().empty())
+	{
+		_save->setMusic(ruleDeploy->getMusic().at(RNG::generate(0, ruleDeploy->getMusic().size()-1)));
+	}
+	else if (!_terrain->getMusic().empty())
+	{
+		_save->setMusic(_terrain->getMusic().at(RNG::generate(0, _terrain->getMusic().size()-1)));
+	}
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	_save->setGlobalShade(_worldShade);
 
@@ -704,7 +738,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			unit->setDirection(RNG::generate(0,7));
 			_save->getUnits()->push_back(unit);
 			_save->getTileEngine()->calculateFOV(unit);
-			unit->deriveRank();
 			unit->setSpecialWeapon(_save, _game->getRuleset());
 			return unit;
 		}
@@ -716,7 +749,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				unit->setDirection(RNG::generate(0,7));
 				_save->getUnits()->push_back(unit);
 				_save->getTileEngine()->calculateFOV(unit);
-				unit->deriveRank();
 				unit->setSpecialWeapon(_save, _game->getRuleset());
 				return unit;
 			}
@@ -742,7 +774,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				{
 					_save->getUnits()->push_back(unit);
 					unit->setDirection(dir);
-					unit->deriveRank();
 					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}
@@ -758,7 +789,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 				{
 					_save->getUnits()->push_back(unit);
-					unit->deriveRank();
 					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}

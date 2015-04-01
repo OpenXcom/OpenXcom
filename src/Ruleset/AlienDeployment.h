@@ -64,7 +64,7 @@ private:
 	std::string _type;
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
-	std::vector<std::string> _terrains;
+	std::vector<std::string> _terrains, _music;
 	int _shade;
 	std::string _nextStage, _race, _script;
 	bool _noRetreat, _finalDestination, _finalMission;
@@ -116,6 +116,8 @@ public:
 	int getDurationMin() const;
 	/// Gets the maximum duration for this mission.
 	int getDurationMax() const;
+	/// Gets the list of music to pick from.
+	std::vector<std::string> &getMusic();
 };
 
 }

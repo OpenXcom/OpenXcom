@@ -40,7 +40,8 @@ private:
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
 	int _part, _animationFrame, _drawingRoutine;
 	bool _helmet;
-	std::pair<Uint8, Uint8> _colorA, _colorB;
+	const std::pair<Uint8, Uint8> *_color;
+	int _colorSize;
 
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
 	/// mutons (routine 10),

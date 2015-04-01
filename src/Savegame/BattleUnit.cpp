@@ -130,7 +130,10 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 
 	lastCover = Position(-1, -1, -1);
 
-	setRecolor(soldier->getGender() + 2 * (soldier->getLook()));
+	deriveRank();
+
+	int look = soldier->getGender() + 2 * soldier->getLook();
+	setRecolor(look, look, _rankInt);
 }
 
 /**
@@ -231,7 +234,35 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 
 	lastCover = Position(-1, -1, -1);
 
-	setRecolor(std::rand() % 8);
+	int generalRank = 0;
+	if (faction == FACTION_HOSTILE)
+	{
+		const int max = 7;
+		const char* rankList[max] =
+		{
+			"STR_LIVE_SOLDIER",
+			"STR_LIVE_ENGINEER",
+			"STR_LIVE_MEDIC",
+			"STR_LIVE_NAVIGATOR",
+			"STR_LIVE_LEADER",
+			"STR_LIVE_COMMANDER",
+			"STR_LIVE_TERRORIST",
+		};
+		for (int i = 0; i < max; ++i)
+		{
+			if (_rank.compare(rankList[i]) == 0)
+			{
+				generalRank = i;
+				break;
+			}
+		}
+	}
+	else if (faction == FACTION_NEUTRAL)
+	{
+		generalRank = std::rand() % 8;
+	}
+
+	setRecolor(std::rand() % 8, std::rand() % 8, generalRank);
 }
 
 
@@ -293,10 +324,10 @@ void BattleUnit::load(const YAML::Node &node)
 
 	if (const YAML::Node& p = node["recolor"])
 	{
-		for (size_t i = 0; i < 2; ++i)
+		_recolor.clear();
+		for (size_t i = 0; i < p.size(); ++i)
 		{
-			_recolor[i].first = p[i][0].as<Uint8>();
-			_recolor[i].second = p[i][1].as<Uint8>();
+			_recolor.push_back(std::make_pair(p[i][0].as<int>(), p[i][1].as<int>()));
 		}
 	}
 }
@@ -358,37 +389,40 @@ YAML::Node BattleUnit::save() const
 	node["respawn"] = _respawn;
 	node["activeHand"] = _activeHand;
 
-	for (size_t i = 0; i < 2; ++i)
+	for (size_t i = 0; i < _recolor.size(); ++i)
 	{
 		YAML::Node p;
-		p.push_back(_recolor[i].first);
-		p.push_back(_recolor[i].second);
+		p.push_back((int)_recolor[i].first);
+		p.push_back((int)_recolor[i].second);
 		node["recolor"].push_back(p);
 	}
 
 	return node;
 }
 
-void BattleUnit::setRecolor(int selectLook)
+/**
+ * Prepare vector values for recolor.
+ * @param basicLook select index for hair and face color.
+ * @param utileLook select index for utile color.
+ * @param rankLook select index for rank color.
+ */
+void BattleUnit::setRecolor(int basicLook, int utileLook, int rankLook)
 {
-	int BaseColor = 0;
-
-	int faceColor = _armor->getFaceColor()[selectLook];
-	int faceColorGroup = _armor->getFaceColorGroup();
-	if (faceColorGroup > 0 && faceColor >= 0)
+	const int colorsMax = 4;
+	std::pair<int, int> colors[colorsMax] =
 	{
-		_recolor[BaseColor].first = faceColorGroup << 4;
-		_recolor[BaseColor].second = faceColor;
-		++BaseColor;
-	}
+		std::make_pair(_armor->getFaceColorGroup(), _armor->getFaceColor(basicLook)),
+		std::make_pair(_armor->getHairColorGroup(), _armor->getHairColor(basicLook)),
+		std::make_pair(_armor->getUtileColorGroup(), _armor->getUtileColor(utileLook)),
+		std::make_pair(_armor->getRankColorGroup(), _armor->getRankColor(rankLook)),
+	};
 
-	int hairColor = _armor->getHairColor()[selectLook];
-	int hairColorGroup = _armor->getHairColorGroup();
-	if (hairColorGroup > 0 && hairColor >= 0)
+	for (int i = 0; i < colorsMax; ++i)
 	{
-		_recolor[BaseColor].first = hairColorGroup << 4;
-		_recolor[BaseColor].second = hairColor;
-		++BaseColor;
+		if (colors[i].first > 0 && colors[i].second > 0)
+		{
+			_recolor.push_back(std::make_pair(colors[i].first << 4, colors[i].second));
+		}
 	}
 }
 
@@ -857,16 +891,9 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
  * @param i what value choose.
  * @return Pairs of value, where first is color group to replace and second is new color group with shade.
  */
-std::pair<Uint8, Uint8> BattleUnit::getRecolor(int i) const
+const std::vector<std::pair<Uint8, Uint8> > &BattleUnit::getRecolor() const
 {
-	if (i >= 0 && i < 2)
-	{
-		return _recolor[i];
-	}
-	else
-	{
-		return std::pair<Uint8, Uint8>(0, 0);
-	}
+	return _recolor;
 }
 
 /**
@@ -1107,7 +1134,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 
 			if (type != DT_IN)
 			{
-				if (_armor->getSize() == 1)
+				if (_armor->getDamageModifier(DT_STUN) > 0.0)
 				{
 					// conventional weapons can cause additional stun damage
 					_stunlevel += RNG::generate(0, power / 4);
@@ -2832,12 +2859,12 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
 
 /**
  * Checks if this unit has an inventory. Large units and/or
- * terror units don't have inventories.
+ * terror units generally don't have inventories.
  * @return True if an inventory is available, false otherwise.
  */
 bool BattleUnit::hasInventory() const
 {
-	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+	return (_armor->hasInventory());
 }
 
 /**

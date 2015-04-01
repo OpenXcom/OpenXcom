@@ -44,7 +44,7 @@ private:
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name, _script;
-	std::vector<std::string> _civilianTypes;
+	std::vector<std::string> _civilianTypes, _music;
 	int _minDepth, _maxDepth, _ambience;
 public:
 	RuleTerrain(const std::string &name);
@@ -73,6 +73,8 @@ public:
 	const int getAmbience() const;
 	/// Gets the generation script name.
 	const std::string getScript();
+	/// Gets the list of music to pick from.
+	const std::vector<std::string> &getMusic();
 };
 
 }

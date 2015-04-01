@@ -308,8 +308,7 @@ void ExplosionBState::explode()
 		{
 			if (_item->getId() == (*j)->getId())
 			{
-				delete *j;
-				_parent->getSave()->getItems()->erase(j);
+				_parent->getSave()->removeItem(_item);
 				break;
 			}
 		}

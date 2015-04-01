@@ -213,8 +213,15 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	}
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
-	// Set music
-	_game->getResourcePack()->playMusic("GMMARS");
+	if (total <= 0)
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
+	}
+
 }
 
 /**
@@ -673,9 +680,19 @@ void DebriefingState::prepareDebriefing()
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);
 						RuleItem *tankRule = _game->getRuleset()->getItem(type);
-						BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-						if (!tankRule->getCompatibleAmmo()->empty() && 0 != ammoItem && 0 < ammoItem->getAmmoQuantity())
-							base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+						if ((*j)->getItem("STR_RIGHT_HAND"))
+						{
+							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+						}
+						if ((*j)->getItem("STR_LEFT_HAND"))
+						{
+							RuleItem *secondaryRule = (*j)->getItem("STR_LEFT_HAND")->getRules();
+							BattleItem *ammoItem = (*j)->getItem("STR_LEFT_HAND")->getAmmoItem();
+							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+						}
 					}
 				}
 				else
@@ -781,6 +798,10 @@ void DebriefingState::prepareDebriefing()
 
 		if (!aborted)
 		{
+			// if this was a 2-stage mission, and we didn't abort (ie: we have time to clean up)
+			// we can recover items from the earlier stages as well
+			recoverItems(battle->getConditionalRecoveredItems(), base);
+
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
@@ -868,6 +889,10 @@ void DebriefingState::prepareDebriefing()
 				base->getItems()->addItem((*i)->item, (*i)->qty);
 			}
 		}
+
+		// assuming this was a multi-stage mission,
+		// recover everything that was in the craft in the previous stage
+		recoverItems(battle->getGuaranteedRecoveredItems(), base);
 	}
 
 	// reequip craft after a non-base-defense mission (of course only if it's not lost already (that case craft=0))

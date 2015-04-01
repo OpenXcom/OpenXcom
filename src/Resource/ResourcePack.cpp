@@ -58,6 +58,8 @@ int ResourcePack::BASESCAPE_CURSOR = 252;
 int ResourcePack::BATTLESCAPE_CURSOR = 144;
 int ResourcePack::UFOPAEDIA_CURSOR = 252;
 int ResourcePack::GRAPHS_CURSOR = 252;
+std::string ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
+std::string ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
 /**
  * Initializes a blank resource set pointing to a folder.
  */

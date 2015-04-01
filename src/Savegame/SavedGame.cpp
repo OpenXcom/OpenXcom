@@ -31,6 +31,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
 #include "SavedBattleGame.h"
+#include "SerializationHelper.h"
 #include "GameTime.h"
 #include "Country.h"
 #include "Base.h"
@@ -499,8 +500,8 @@ void SavedGame::save(const std::string &filename) const
 	node["incomes"] = _incomes;
 	node["expenditures"] = _expenditures;
 	node["warned"] = _warned;
-	node["globeLon"] = _globeLon;
-	node["globeLat"] = _globeLat;
+	node["globeLon"] = serializeDouble(_globeLon);
+	node["globeLat"] = serializeDouble(_globeLat);
 	node["globeZoom"] = _globeZoom;
 	node["ids"] = _ids;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)

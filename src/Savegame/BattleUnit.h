@@ -121,9 +121,10 @@ private:
 	bool _breathing;
 	bool _hidingForTurn, _floorAbove, _respawn;
 	MovementType _movementType;
-	std::pair<Uint8, Uint8> _recolor[2];
+	std::vector<std::pair<Uint8, Uint8> > _recolor;
 
-	void setRecolor(int selectLook);
+	/// Helper function initing recolor vector.
+	void setRecolor(int basicLook, int utileLook, int rankLook);
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit from solder.
@@ -187,7 +188,7 @@ public:
 	/// If this unit is cached on the battlescape.
 	Surface *getCache(bool *invalid, int part = 0) const;
 	/// Gets unit sprite recolors values.
-	std::pair<Uint8, Uint8> getRecolor(int i) const;
+	const std::vector<std::pair<Uint8, Uint8> > &getRecolor() const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?

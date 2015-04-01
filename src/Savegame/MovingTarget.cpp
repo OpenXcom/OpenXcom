@@ -20,6 +20,7 @@
 #include "MovingTarget.h"
 #include <cmath>
 #include "../fmath.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {
@@ -73,9 +74,9 @@ YAML::Node MovingTarget::save() const
 	{
 		node["dest"] = _dest->saveId();
 	}
-	node["speedLon"] = _speedLon;
-	node["speedLat"] = _speedLat;
-	node["speedRadian"] = _speedRadian;
+	node["speedLon"] = serializeDouble(_speedLon);
+	node["speedLat"] = serializeDouble(_speedLat);
+	node["speedRadian"] = serializeDouble(_speedRadian);
 	node["speed"] = _speed;
 	return node;
 }

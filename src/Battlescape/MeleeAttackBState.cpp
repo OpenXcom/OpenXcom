@@ -23,10 +23,13 @@
 #include "TileEngine.h"
 #include "Pathfinding.h"
 #include "Map.h"
+#include "InfoboxState.h"
 #include "Camera.h"
 #include "AlienBAIState.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
@@ -41,7 +44,7 @@ namespace OpenXcom
 /**
  * Sets up a MeleeAttackBState.
  */
-MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false)
+MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false), _deathMessage(false)
 {
 }
 
@@ -118,8 +121,7 @@ void MeleeAttackBState::init()
 	}
 
 	int height = _target->getFloatHeight() + (_target->getHeight() / 2) - _parent->getSave()->getTile(_action.target)->getTerrainLevel();
-	_parent->getSave()->getPathfinding()->directionToVector(_unit->getDirection(), &_voxel);
-	_voxel = _action.target * Position(16, 16, 24) + Position(8, 8, height) - _voxel;
+	_voxel = _action.target * Position(16, 16, 24) + Position(8, 8, height);
 
 	performMeleeAttack();
 }
@@ -128,6 +130,13 @@ void MeleeAttackBState::init()
  */
 void MeleeAttackBState::think()
 {
+	if (_deathMessage)
+	{
+		Game *game = _parent->getSave()->getBattleState()->getGame();
+		game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _target->getGender()).arg(_target->getName(game->getLanguage()))));
+		_parent->popState();
+		return;
+	}
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 
 	// if the unit burns floortiles, burn floortiles
@@ -140,7 +149,6 @@ void MeleeAttackBState::think()
 	// this is because unlike regular bullet hits or explosions, melee attacks can MISS.
 	// we also do it at this point instead of in performMeleeAttack because we want the scream to come AFTER the hit sound
 	resolveHit();
-
 		// aliens
 	if (_unit->getFaction() != FACTION_PLAYER &&
 		// with enough TU for a second attack (*2 because they'll get charged for the initial attack when this state pops.)
@@ -172,8 +180,15 @@ void MeleeAttackBState::think()
 		{
 			_parent->setupCursor();
 		}
-		_parent->convertInfected();
-		_parent->popState();
+		if (_parent->convertInfected() && Options::battleNotifyDeath && _target && _target->getFaction() == FACTION_PLAYER)
+		{
+			_deathMessage = true;
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		}
+		else
+		{
+			_parent->popState();
+		}
 	}
 }
 
@@ -253,8 +268,15 @@ void MeleeAttackBState::resolveHit()
 			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 		}
 		
+		// offset the damage voxel ever so slightly so that the target knows which side the attack came from
+		Position difference = _unit->getPosition() - _action.target;
+		// large units may cause it to offset too much, so we'll clamp the values.
+		difference.x = std::max(-1, std::min(1, difference.x));
+		difference.y = std::max(-1, std::min(1, difference.y));
+
+		Position damagePosition = _voxel + difference;
 		// damage the unit.
-		_parent->getSave()->getTileEngine()->hit(_voxel, power, type, _unit);
+		_parent->getSave()->getTileEngine()->hit(damagePosition, power, type, _unit);
 		// now check for new casualties
 		_parent->checkForCasualties(_ammo, _unit);
 	}
