@@ -161,6 +161,8 @@ openxcom_SOURCES = \
 	src/Battlescape/MedikitState.h \
 	src/Battlescape/MedikitView.cpp \
 	src/Battlescape/MedikitView.h \
+	src/Battlescape/MeleeAttackBState.cpp \
+	src/Battlescape/MeleeAttackBState.h \
 	src/Battlescape/MiniMapState.cpp \
 	src/Battlescape/MiniMapState.h \
 	src/Battlescape/MiniMapView.cpp \
@@ -187,6 +189,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Projectile.h \
 	src/Battlescape/PromotionsState.cpp \
 	src/Battlescape/PromotionsState.h \
+	src/Battlescape/PsiAttackBState.cpp \
+	src/Battlescape/PsiAttackBState.h \
 	src/Battlescape/ScannerState.cpp \
 	src/Battlescape/ScannerState.h \
 	src/Battlescape/ScannerView.cpp \
@@ -540,6 +544,8 @@ openxcom_SOURCES = \
 	src/Ruleset/StatStringCondition.cpp \
 	src/Ruleset/SoundDefinition.h \
 	src/Ruleset/SoundDefinition.cpp \
+	src/Ruleset/Texture.h \
+	src/Ruleset/Texture.cpp \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
 	src/Ruleset/Unit.cpp \

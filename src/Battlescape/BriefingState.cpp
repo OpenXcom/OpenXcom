@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,6 +36,7 @@
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/RuleUfo.h"
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
@@ -63,6 +64,15 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	AlienDeployment *deployment = _game->getRuleset()->getDeployment(mission);
 	if (!deployment) // landing site or crash site.
+	{
+		Ufo * u = dynamic_cast <Ufo*> (craft->getDestination());
+		if (u)
+		{
+			deployment = _game->getRuleset()->getDeployment(u->getRules()->getType());
+		}
+	}
+
+	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 		_game->getResourcePack()->playMusic("GMDEFEND");
@@ -157,7 +167,7 @@ void BriefingState::btnOkClick(Action *)
 	_game->getScreen()->resetDisplay(false);
 	BattlescapeState *bs = new BattlescapeState;
 	int liveAliens = 0, liveSoldiers = 0;
-	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);

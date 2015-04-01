@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -93,6 +93,13 @@ void ListSaveState::updateList()
  */
 void ListSaveState::lstSavesPress(Action *action)
 {
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _edtSave->isFocused())
+	{
+		_edtSave->setText(L"");
+		_edtSave->setVisible(false);
+		_edtSave->setFocus(false, false);
+		_lstSaves->setScrolling(true);
+	}
 	ListGamesState::lstSavesPress(action);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{

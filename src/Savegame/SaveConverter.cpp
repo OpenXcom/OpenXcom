@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -602,7 +602,8 @@ void SaveConverter::loadDatMissions()
 		char *mdata = (data + i * 8);
 		int wave = load<Uint16>(mdata + 0x00);
 		if (wave != 0xFFFF)
-		{			int ufoCounter = load<Uint16>(mdata + 0x02);
+		{
+			int ufoCounter = load<Uint16>(mdata + 0x02);
 			int spawn = load<Uint16>(mdata + 0x04);
 			int race = load<Uint16>(mdata + 0x06);
 			int mission = i % nMissions;
@@ -692,19 +693,19 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_TERROR_MISSION"));
 			break;
 		case TARGET_PORT:
-			mission = new MissionSite(_rule->getAlienMission("STR_PORT_ATTACK"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_PORT_ATTACK"));
 			break;
 		case TARGET_ISLAND:
-			mission = new MissionSite(_rule->getAlienMission("STR_ISLAND_ATTACK"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ISLAND_ATTACK"));
 			break;
 		case TARGET_SHIP:
-			mission = new MissionSite(_rule->getAlienMission("STR_SHIP_RESCUE_MISSION"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_SHIP_RESCUE_MISSION"));
 			break;
 		case TARGET_ARTEFACT:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_CONTACT_SITE_MISSION"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ALIEN_CONTACT_SITE_MISSION"));
 			break;
 		}
 		if (mission != 0)

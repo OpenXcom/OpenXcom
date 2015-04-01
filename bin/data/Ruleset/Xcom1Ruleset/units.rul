@@ -146,6 +146,7 @@ units:
     value: 30
     intelligence: 4
     energyRecovery: 20
+    female: true
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
@@ -468,7 +469,7 @@ units:
     standHeight: 23
     kneelHeight: 16
     value: 25
-    deathSound: 48
+    deathSound: 10
     intelligence: 2
     aggression: 2
     energyRecovery: 34
@@ -608,8 +609,7 @@ units:
     standHeight: 21
     kneelHeight: 16
     value: 25
-    deathSound: 49
-    aggroSound: 49
+    deathSound: 9
     intelligence: 4
     aggression: 1
     energyRecovery: 40
@@ -702,7 +702,7 @@ units:
     standHeight: 10
     kneelHeight: 10
     value: 20
-    deathSound: 51
+    deathSound: 8
     moveSound: 47
     intelligence: 3
     aggression: 2
@@ -729,7 +729,7 @@ units:
     kneelHeight: 12
     floatHeight: 6
     value: 20
-    deathSound: 51
+    deathSound: 7
     moveSound: 16
     intelligence: 3
     aggression: 2
@@ -847,7 +847,6 @@ units:
     standHeight: 18
     kneelHeight: 18
     value: 18
-    deathSound: 48
     intelligence: 3
     aggression: 2
     energyRecovery: 20

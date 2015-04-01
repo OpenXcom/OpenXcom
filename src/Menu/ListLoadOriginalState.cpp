@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -142,10 +142,11 @@ void ListLoadOriginalState::btnNewClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ListLoadOriginalState::btnCancelClick(Action *)
+void ListLoadOriginalState::btnCancelClick(Action *action)
 {
 	_game->popState();
 	_game->popState();
+	action->getDetails()->type = SDL_NOEVENT;
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -213,8 +213,15 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	}
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
-	// Set music
-	_game->getResourcePack()->playMusic("GMMARS");
+	if (total <= 0)
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
+	}
+
 }
 
 /**
@@ -672,10 +679,20 @@ void DebriefingState::prepareDebriefing()
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem(type);
-						RuleItem *tankRule = _game->getRuleset()->getItem(type);
-						BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-						if (!tankRule->getCompatibleAmmo()->empty() && 0 != ammoItem && 0 < ammoItem->getAmmoQuantity())
-							base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity() / _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front())->getClipSize());
+						if ((*j)->getItem("STR_RIGHT_HAND"))
+						{
+							RuleItem *tankRule = (*j)->getItem("STR_RIGHT_HAND")->getRules();
+							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity() / _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front())->getClipSize());
+						}
+						if ((*j)->getItem("STR_LEFT_HAND"))
+						{
+							RuleItem *secondaryRule = (*j)->getItem("STR_LEFT_HAND")->getRules();
+							BattleItem *ammoItem = (*j)->getItem("STR_LEFT_HAND")->getAmmoItem();
+							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity() / _game->getRuleset()->getItem(secondaryRule->getCompatibleAmmo()->front())->getClipSize());
+						}
 					}
 				}
 				else
@@ -710,44 +727,7 @@ void DebriefingState::prepareDebriefing()
 						(*j)->getTile()->addItem(*k, _game->getRuleset()->getInventory("STR_GROUND"));
 					}
 				}
-
-				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
-				if (!(*j)->getSpawnUnit().empty())
-				{
-					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseGeoscape();
-				}
-				if (base->getAvailableContainment())
-				{
-					// 10 points for recovery
-					addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-				}
-				RuleResearch *research = _game->getRuleset()->getResearch(type);
-				if (research != 0 && _game->getSavedGame()->isResearchAvailable(research, _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
-				{
-					if (base->getAvailableContainment() == 0)
-					{
-						_noContainment = true;
-						base->getItems()->addItem(corpseItem, 1);
-					}
-					else
-					{
-						// more points if it's not researched
-						addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10);
-						base->getItems()->addItem(type, 1);
-						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0;
-					}
-				}
-				else
-				{
-					if (Options::canSellLiveAliens)
-					{
-						_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(type)->getSellCost());
-					}
-					else
-					{
-						base->getItems()->addItem(corpseItem, 1);
-					}
-				}
+				recoverAlien(*j, base);
 			}
 			else if (oldFaction == FACTION_NEUTRAL)
 			{
@@ -818,6 +798,10 @@ void DebriefingState::prepareDebriefing()
 
 		if (!aborted)
 		{
+			// if this was a 2-stage mission, and we didn't abort (ie: we have time to clean up)
+			// we can recover items from the earlier stages as well
+			recoverItems(battle->getConditionalRecoveredItems(), base);
+
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
@@ -905,6 +889,10 @@ void DebriefingState::prepareDebriefing()
 				base->getItems()->addItem((*i)->item, (*i)->qty);
 			}
 		}
+
+		// assuming this was a multi-stage mission,
+		// recover everything that was in the craft in the previous stage
+		recoverItems(battle->getGuaranteedRecoveredItems(), base);
 	}
 
 	// reequip craft after a non-base-defense mission (of course only if it's not lost already (that case craft=0))
@@ -944,7 +932,7 @@ void DebriefingState::prepareDebriefing()
 
 		if (_region)
 		{
-			AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
+			AlienMission* am = _game->getSavedGame()->findAlienMission(_region->getRules()->getType(), OBJECTIVE_RETALIATION);
 			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 			{
 				if ((*i)->getMission() == am)
@@ -1085,30 +1073,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				{
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						if (base->getAvailableContainment())
-						{
-							// 10 points for recovery
-							addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
-						}
-						if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch((*it)->getUnit()->getType()), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
-						{
-							if (base->getAvailableContainment() == 0)
-							{
-								_noContainment = true;
-								base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
-							}
-							else
-							{
-								// more points if it's not researched
-								addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*it)->getUnit()->getValue() * 2) - 10);
-								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
-								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0);
-							}
-						}
-						else
-						{
-							base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
-						}
+						recoverAlien((*it)->getUnit(), base);
 					}
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
 					{
@@ -1148,6 +1113,45 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				}
 			}
 		}
+	}
+}
+
+/**
+ * Recovers a live alien from the battlescape.
+ * @param from Battle unit to recover.
+ * @param base Base to add items to.
+ */
+void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
+{
+	std::string type = from->getType();
+	if (base->getAvailableContainment() == 0)
+	{
+		_noContainment = true;
+		addStat("STR_ALIEN_CORPSES_RECOVERED", 1, from->getValue());
+
+		std::string corpseItem = from->getArmor()->getCorpseGeoscape();
+		if (!from->getSpawnUnit().empty())
+		{
+			corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(from->getSpawnUnit())->getArmor())->getCorpseGeoscape();
+		}
+		base->getItems()->addItem(corpseItem, 1);
+	}
+	else
+	{
+		RuleResearch *research = _game->getRuleset()->getResearch(type);
+		if (research != 0 && !_game->getSavedGame()->isResearched(type))
+		{
+			// more points if it's not researched
+			addStat("STR_LIVE_ALIENS_RECOVERED", 1, from->getValue() * 2);
+		}
+		else
+		{
+			// 10 points for recovery
+			addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10);
+		}
+
+		base->getItems()->addItem(type, 1);
+		_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _limitsEnforced) < 0;
 	}
 }
 

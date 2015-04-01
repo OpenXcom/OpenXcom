@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,12 +21,14 @@
 #define OPENXCOM_SERHELP_H
 
 #include <SDL_types.h>
+#include <string>
 
 namespace OpenXcom
 {
 
 int unserializeInt(Uint8 **buffer, Uint8 sizeKey);
 void serializeInt(Uint8 **buffer, Uint8 sizeKey, int value);
+std::string serializeDouble(double value);
 
 }
 

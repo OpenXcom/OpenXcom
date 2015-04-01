@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,8 @@
 #include "../Ruleset/AlienRace.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleGlobe.h"
+#include "../Ruleset/Texture.h"
 #include "../Resource/XcomResourcePack.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/MissionSite.h"
@@ -127,9 +129,8 @@ void BattlescapeGenerator::setUfo(Ufo *ufo)
  * Sets the world texture where a ufo crashed. This is used to determine the terrain.
  * @param texture Texture id of the polygon on the globe.
  */
-void BattlescapeGenerator::setWorldTexture(int texture)
+void BattlescapeGenerator::setWorldTexture(Texture *texture)
 {
-	if (texture < 0) texture = 0;
 	_worldTexture = texture;
 }
 
@@ -217,6 +218,40 @@ void BattlescapeGenerator::nextStage()
 	}
 	_save->resetTurnCounter();
 
+	// remove all items not belonging to our soldiers from the map.
+	// sort items into two categories:
+	// the ones that we are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
+	// and the ones that are scattered about on the ground, that will be recovered ONLY on success.
+	// this does not include items in your soldier's hands.
+	std::vector<BattleItem*> *takeHomeGuaranteed = _save->getGuaranteedRecoveredItems();
+	std::vector<BattleItem*> *takeHomeConditional = _save->getConditionalRecoveredItems();
+	std::map<RuleItem*, int> guaranteedRounds, conditionalRounds;
+
+	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end();)
+	{
+		Tile *tile = (*j)->getTile();
+		if (!(*j)->getOwner() || (*j)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
+		{
+			(*j)->setTile(0);
+		}
+		if (tile)
+		{
+			std::vector<BattleItem*> *toContainer = takeHomeConditional;
+			if (tile->getMapData(MapData::O_FLOOR)
+				&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			{
+				toContainer = takeHomeGuaranteed;
+			}
+			if ((*j)->getRules()->isRecoverable() && !(*j)->getXCOMProperty())
+			{
+				toContainer->push_back(*j);
+				j = _save->getItems()->erase(j);
+				continue;
+			}
+		}
+		++j;
+	}
+
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
@@ -277,14 +312,6 @@ void BattlescapeGenerator::nextStage()
 		}
 	}
 
-	// remove all items not belonging to our soldiers from the map.
-	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
-	{
-		if (!(*j)->getOwner() || (*j)->getOwner()->getId() > highestSoldierID)
-		{
-			(*j)->setTile(0);
-		}
-	}
 	_unitSequence = _save->getUnits()->back()->getId() + 1;
 
 	size_t unitCount = _save->getUnits()->size();
@@ -336,16 +363,19 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrains().empty())
+	if (_terrain == 0)
 	{
-		double lat = 0;
-		if (_ufo) lat = _ufo->getLatitude();
-		_terrain = getTerrain(_worldTexture, lat);
-	}
-	else
-	{
-		size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
-		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty() || !ruleDeploy->getTerrains().empty())
+		{
+			size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
+			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+		}
+		else
+		{
+			Target *target = _ufo;
+			if (_mission) target = _mission;
+			_terrain = _game->getRuleset()->getTerrain(_worldTexture->getRandomTerrain(target));
+		}
 	}
 	// new battle menu will have set the depth already
 	if (_terrain->getMaxDepth() > 0 && _save->getDepth() == 0)
@@ -396,6 +426,14 @@ void BattlescapeGenerator::run()
 		explodePowerSources();
 	}
 
+	if (!ruleDeploy->getMusic().empty())
+	{
+		_save->setMusic(ruleDeploy->getMusic().at(RNG::generate(0, ruleDeploy->getMusic().size()-1)));
+	}
+	else if (!_terrain->getMusic().empty())
+	{
+		_save->setMusic(_terrain->getMusic().at(RNG::generate(0, _terrain->getMusic().size()-1)));
+	}
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	_save->setGlobalShade(_worldShade);
 
@@ -700,7 +738,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			unit->setDirection(RNG::generate(0,7));
 			_save->getUnits()->push_back(unit);
 			_save->getTileEngine()->calculateFOV(unit);
-			unit->deriveRank();
 			unit->setSpecialWeapon(_save, _game->getRuleset());
 			return unit;
 		}
@@ -712,7 +749,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				unit->setDirection(RNG::generate(0,7));
 				_save->getUnits()->push_back(unit);
 				_save->getTileEngine()->calculateFOV(unit);
-				unit->deriveRank();
 				unit->setSpecialWeapon(_save, _game->getRuleset());
 				return unit;
 			}
@@ -738,7 +774,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				{
 					_save->getUnits()->push_back(unit);
 					unit->setDirection(dir);
-					unit->deriveRank();
 					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}
@@ -754,7 +789,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 				{
 					_save->getUnits()->push_back(unit);
-					unit->deriveRank();
 					unit->setSpecialWeapon(_save, _game->getRuleset());
 					return unit;
 				}
@@ -1558,32 +1592,6 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 	return false;
 }
 
-
-/**
- * Gets battlescape terrain using globe texture and latitude.
- * @param tex Globe texture.
- * @param lat Latitude.
- * @return Pointer to ruleterrain.
- */
-RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
-{
-	RuleTerrain *t =  0;
-	const std::vector<std::string> &terrains = _game->getRuleset()->getTerrainList();
-	for (std::vector<std::string>::const_iterator i = terrains.begin(); i != terrains.end(); ++i)
-	{
-		t =  _game->getRuleset()->getTerrain(*i);
-		for (std::vector<int>::iterator j = t->getTextures()->begin(); j != t->getTextures()->end(); ++j )
-		{
-			if (*j == tex && (t->getHemisphere() == 0 || (t->getHemisphere() < 0 && lat < 0) || (t->getHemisphere() > 0 && lat >= 0)))
-			{
-				return t;
-			}
-		}
-	}
-
-	assert(0 && "No matching terrain for globe texture");
-	return t;
-}
 
 /**
 * Creates a mini-battle-save for managing inventory from the Geoscape.
@@ -2602,4 +2610,14 @@ bool BattlescapeGenerator::removeBlocks(MapScript *command)
 	}
 	return success;
 }
+
+/**
+ * Sets the terrain to be used in battle generation.
+ * @param terrain Pointer to the terrain rules.
+ */
+void BattlescapeGenerator::setTerrain(RuleTerrain *terrain)
+{
+	_terrain = terrain;
+}
+
 }

@@ -33,3 +33,57 @@ globe:
     - [91.625, -28, 88.875, -28.125]
     - [88.25, -28, 80.875, -30.375]
     - [77.875, -35.375, 73.375, -39.375, 80.5, -42.25, 80, -45, 82.5, -45.125, 82.875, -47.25, 85.75, -47.125, 86.375, -49.125, 88, -49.125, 90.625, -45.25, 96.25, -42.75, 105, -41.5, 112, -43.625, 112.125, -45, 119.875, -46.75, 115.75, -47.75, 116.75, -49.875]
+  textures:
+    - id: 0
+      terrain:
+        - name: FOREST
+          area: [0, 360, -90, 0]
+        - name: JUNGLE
+          area: [0, 360, 0, 90]
+    - id: 1
+      terrain:
+        - name: CULTA
+    - id: 2
+      terrain:
+        - name: CULTA
+    - id: 3
+      terrain:
+        - name: CULTA
+    - id: 4
+      terrain:
+        - name: CULTA
+    - id: 5
+      terrain:
+        - name: MOUNT
+    - id: 6
+      terrain:
+        - name: FOREST
+          area: [0, 360, -90, 0]
+        - name: JUNGLE
+          area: [0, 360, 0, 90]
+    - id: 7
+      terrain:
+        - name: DESERT
+    - id: 8
+      terrain:
+        - name: DESERT
+    - id: 9
+      terrain:
+        - name: POLAR
+    - id: 10
+      terrain:
+        - name: FOREST
+          area: [0, 360, -90, 0]
+        - name: JUNGLE
+          area: [0, 360, 0, 90]
+    - id: 11
+      terrain:
+        - name: FOREST
+          area: [0, 360, -90, 0]
+        - name: JUNGLE
+          area: [0, 360, 0, 90]
+    - id: 12
+      terrain:
+        - name: POLAR
+    - id: -1
+      deployment: STR_TERROR_MISSION
