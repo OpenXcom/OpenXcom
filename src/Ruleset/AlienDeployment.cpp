@@ -108,7 +108,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _noRetreat(false), _finalDestination(false), _finalMission(false), _markerIcon(-1), _durationMin(0), _durationMax(0)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _noRetreat(false), _finalDestination(false), _finalMission(false), _markerIcon(-1), _durationMin(0), _durationMax(0), _minDepth(0), _maxDepth(0)
 {
 }
 
@@ -143,6 +143,8 @@ void AlienDeployment::load(const YAML::Node &node)
 	_briefingData = node["briefing"].as<BriefingData>(_briefingData);
 	_markerName = node["markerName"].as<std::string>(_markerName);
 	_markerIcon = node["markerIcon"].as<int>(_markerIcon);
+	_minDepth = node["minDepth"].as<int>(_minDepth);
+	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 	if (node["duration"])
 	{
 		_durationMin = node["duration"][0].as<int>(_durationMin);
@@ -329,4 +331,23 @@ std::vector<std::string> &AlienDeployment::getMusic()
 {
 	return _music;
 }
+
+/**
+ * Gets The minimum depth for this deployment.
+ * @return The minimum depth.
+ */
+int AlienDeployment::getMinDepth()
+{
+	return _minDepth;
+}
+
+/**
+ * Gets The maximum depth for this deployment.
+ * @return The maximum depth.
+ */
+int AlienDeployment::getMaxDepth()
+{
+	return _maxDepth;
+}
+
 }
