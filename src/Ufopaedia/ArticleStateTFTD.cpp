@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ufopaedia.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleStateTFTD.h"
 #include "../Engine/Game.h"
@@ -27,16 +26,13 @@
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/Cursor.h"
 
 namespace OpenXcom
 {
 
 	ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD *defs) : ArticleState(defs->id)
 	{
-		// add screen elements
-		_txtTitle = new Text(284, 16, 36, 14);
-		_btnTitle = new TextButton(288, 27, 34, 6);
-
 		// Set palette
 		setPalette("PAL_BASESCAPE");
 
@@ -55,18 +51,17 @@ namespace OpenXcom
 		_btnNext->setHeight(10);
 		_btnNext->setWidth(23);
 		_btnNext->setColor(Palette::blockOffset(0)+2);
-		
+
 		ArticleState::initLayout();
 
-		_btnTitle->setColor(Palette::blockOffset(9) + 4);
-		_btnTitle->setHighContrast(true);
-
-		// add other elements
-		add(_btnTitle);
-		add(_txtTitle);
-		// Set up objects
-		_game->getResourcePack()->getSurface("UP030.BDY")->blit(_bg);
+		_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
 		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+
+		_txtInfo = new Text(defs->text_width, 150, 318 - defs->text_width, 36);
+		_txtTitle = new Text(284, 16, 36, 14);
+
+		add(_txtTitle);
+		add(_txtInfo);
 
 		_txtTitle->setColor(Palette::blockOffset(0)+2);
 		_txtTitle->setBig();
@@ -74,14 +69,21 @@ namespace OpenXcom
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setText(tr(defs->title));
 
-		_txtInfo = new Text(152, 64, 168, 40);
-		add(_txtInfo);
-
 		_txtInfo->setColor(Palette::blockOffset(0)+2);
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(tr(defs->text));
 
-		centerAllSurfaces();
+		// all of the above are common to the TFTD articles.
+
+		if (defs->getType() == UFOPAEDIA_TYPE_TFTD)
+		{
+			// this command is contained in all the subtypes of this article,
+			// and probably shouldn't run until all surfaces are added.
+			// in the case of a simple image/title/text article,
+			// we're done adding surfaces for now.
+			centerAllSurfaces();
+		}
+
 	}
 
 	ArticleStateTFTD::~ArticleStateTFTD()

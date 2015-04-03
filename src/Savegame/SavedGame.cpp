@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,6 +31,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
 #include "SavedBattleGame.h"
+#include "SerializationHelper.h"
 #include "GameTime.h"
 #include "Country.h"
 #include "Base.h"
@@ -45,7 +46,7 @@
 #include "Transfer.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
-#include "TerrorSite.h"
+#include "MissionSite.h"
 #include "AlienBase.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"
@@ -133,7 +134,7 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
-	for (std::vector<TerrorSite*>::iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	for (std::vector<MissionSite*>::iterator i = _missionSites.begin(); i != _missionSites.end(); ++i)
 	{
 		delete *i;
 	}
@@ -395,11 +396,21 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_waypoints.push_back(w);
 	}
 
+	// Backwards compatibility
 	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
-		TerrorSite *t = new TerrorSite();
-		t->load(*i);
-		_terrorSites.push_back(t);
+		MissionSite *m = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"), rule->getDeployment("STR_TERROR_MISSION"));
+		m->load(*i);
+		_missionSites.push_back(m);
+	}
+
+	for (YAML::const_iterator i = doc["missionSites"].begin(); i != doc["missionSites"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		std::string deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
+		MissionSite *m = new MissionSite(rule->getAlienMission(type), rule->getDeployment(deployment));
+		m->load(*i);
+		_missionSites.push_back(m);
 	}
 
 	// Discovered Techs Should be loaded before Bases (e.g. for PSI evaluation)
@@ -418,7 +429,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
-	
+
 	const YAML::Node &research = doc["poppedResearch"];
 	for (YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
@@ -489,8 +500,8 @@ void SavedGame::save(const std::string &filename) const
 	node["incomes"] = _incomes;
 	node["expenditures"] = _expenditures;
 	node["warned"] = _warned;
-	node["globeLon"] = _globeLon;
-	node["globeLat"] = _globeLat;
+	node["globeLon"] = serializeDouble(_globeLon);
+	node["globeLat"] = serializeDouble(_globeLat);
 	node["globeZoom"] = _globeZoom;
 	node["ids"] = _ids;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
@@ -509,9 +520,9 @@ void SavedGame::save(const std::string &filename) const
 	{
 		node["waypoints"].push_back((*i)->save());
 	}
-	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	for (std::vector<MissionSite*>::const_iterator i = _missionSites.begin(); i != _missionSites.end(); ++i)
 	{
-		node["terrorSites"].push_back((*i)->save());
+		node["missionSites"].push_back((*i)->save());
 	}
 	// Alien bases must be saved before alien missions.
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
@@ -760,6 +771,15 @@ int SavedGame::getId(const std::string &name)
 }
 
 /**
+ * Resets the list of unique object IDs.
+ * @param ids New ID list.
+ */
+void SavedGame::setIds(const std::map<std::string, int> &ids)
+{
+	_ids = ids;
+}
+
+/**
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
@@ -868,12 +888,12 @@ std::vector<Waypoint*> *SavedGame::getWaypoints()
 }
 
 /**
- * Returns the list of terror sites.
- * @return Pointer to terror site list.
+ * Returns the list of mission sites.
+ * @return Pointer to mission site list.
  */
-std::vector<TerrorSite*> *SavedGame::getTerrorSites()
+std::vector<MissionSite*> *SavedGame::getMissionSites()
 {
-	return &_terrorSites;
+	return &_missionSites;
 }
 
 /**
@@ -900,14 +920,17 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
  * @param r The newly found ResearchProject
  * @param ruleset the game Ruleset
  */
-void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
+void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset, bool score)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin(), _discovered.end(), r);
 	if (itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
 		removePoppedResearch(r);
-		addResearchScore(r->getPoints());
+		if (score)
+		{
+			addResearchScore(r->getPoints());
+		}
 	}
 	if (ruleset)
 	{
@@ -974,7 +997,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
-		
+
 		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end())
@@ -1000,7 +1023,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			{
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
-				
+
 				bool leader ( leaderCheck != research->getUnlocked().end());
 				bool cmnder ( cmnderCheck != research->getUnlocked().end());
 
@@ -1098,12 +1121,12 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 		return true;
 	}
 	else if (liveAlien)
-	{		
+	{
 		if (!r->getGetOneFree().empty())
 		{
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_COMMANDER_PLUS");
-				
+
 			bool leader ( leaderCheck != r->getUnlocked().end());
 			bool cmnder ( cmnderCheck != r->getUnlocked().end());
 
@@ -1283,105 +1306,153 @@ Soldier *SavedGame::getSoldier(int id) const
  */
 bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 {
-	size_t soldiersPromoted = 0, soldiersTotal = 0;
-
+	int soldiersPromoted = 0;
+	Soldier *highestRanked = 0;
+	PromotionInfo soldierData;
+	std::vector<Soldier*> soldiers;
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
-		soldiersTotal += (*i)->getSoldiers()->size();
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			soldiers.push_back(*j);
+			processSoldier(*j, soldierData);
+		}
+		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
+		{
+			if ((*j)->getType() == TRANSFER_SOLDIER)
+			{
+				soldiers.push_back((*j)->getSoldier());
+				processSoldier((*j)->getSoldier(), soldierData);
+			}
+		}
 	}
-	Soldier *highestRanked = 0;
 
-	// now determine the number of positions we have of each rank,
-	// and the soldier with the heighest promotion score of the rank below it
+	int totalSoldiers = (int)(soldiers.size());
 
-	size_t filledPositions = 0, filledPositions2 = 0;
-	std::vector<Soldier*>::const_iterator soldier, stayedHome;
-	stayedHome = participants.end();
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_COMMANDER);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
-
-	if (filledPositions < 1 && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if (soldierData.totalCommanders == 0)
 	{
-		// only promote one colonel to commander
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		if (totalSoldiers >= 30)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_COLONEL);
+			if (highestRanked)
+			{
+				// only promote one colonel to commander
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalCommanders++;
+				soldierData.totalColonels--;
+			}
+		}
 	}
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if ((totalSoldiers / 23) > soldierData.totalColonels)
 	{
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		while ((totalSoldiers / 23) > soldierData.totalColonels)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_CAPTAIN);
+			if (highestRanked)
+			{
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalColonels++;
+				soldierData.totalCaptains--;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if ((totalSoldiers / 11) > soldierData.totalCaptains)
 	{
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		while ((totalSoldiers / 11) > soldierData.totalCaptains)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_SERGEANT);
+			if (highestRanked)
+			{
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalCaptains++;
+				soldierData.totalSergeants--;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
-	soldier = std::find(participants.begin(), participants.end(), highestRanked);
 
-	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0 &&
-		(!Options::fieldPromotions || soldier != stayedHome))
+	if ((totalSoldiers / 5) > soldierData.totalSergeants)
 	{
-		highestRanked->promoteRank();
-		soldiersPromoted++;
+		while ((totalSoldiers / 5) > soldierData.totalSergeants)
+		{
+			highestRanked = inspectSoldiers(soldiers, participants, RANK_SQUADDIE);
+			if (highestRanked)
+			{
+				highestRanked->promoteRank();
+				soldiersPromoted++;
+				soldierData.totalSergeants++;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
 
 	return (soldiersPromoted > 0);
 }
 
 /**
- * Checks how many soldiers of a rank exist and which one has the highest score.
- * @param highestRanked Pointer to store the highest-scoring soldier of that rank.
- * @param total Pointer to an int to store the total in.
- * @param rank Rank to inspect.
+ * Processes a soldier, and adds their rank to the promotions data array.
+ * @param soldier the soldier to process.
+ * @param soldierData the data array to put their info into.
  */
-void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank)
+void SavedGame::processSoldier(Soldier *soldier, PromotionInfo &soldierData)
+{
+	switch (soldier->getRank())
+	{
+	case RANK_COMMANDER:
+		soldierData.totalCommanders++;
+		break;
+	case RANK_COLONEL:
+		soldierData.totalColonels++;
+		break;
+	case RANK_CAPTAIN:
+		soldierData.totalCaptains++;
+		break;
+	case RANK_SERGEANT:
+		soldierData.totalSergeants++;
+		break;
+	default:
+		break;
+	}
+}
+/**
+ * Checks how many soldiers of a rank exist and which one has the highest score.
+ * @param soldiers full list of live soldiers.
+ * @param participants list of participants on this mission.
+ * @param rank Rank to inspect.
+ * @return the highest ranked soldier
+ */
+Soldier *SavedGame::inspectSoldiers(std::vector<Soldier*> &soldiers, std::vector<Soldier*> &participants, int rank)
 {
 	int highestScore = 0;
-	*total = 0;
-
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	Soldier *highestRanked = 0;
+	for (std::vector<Soldier*>::iterator i = soldiers.begin(); i != soldiers.end(); ++i)
 	{
-		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		if ((*i)->getRank() == rank)
 		{
-			if ((*j)->getRank() == (SoldierRank)rank)
+			int score = getSoldierScore(*i);
+			if (score > highestScore && (!Options::fieldPromotions || std::find(participants.begin(), participants.end(), *i) != participants.end()))
 			{
-				(*total)++;
-				int score = getSoldierScore(*j);
-				if (score > highestScore)
-				{
-					highestScore = score;
-					*highestRanked = (*j);
-				}
-			}
-		}
-		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
-		{
-			if ((*j)->getType() == TRANSFER_SOLDIER && (*j)->getSoldier()->getRank() == (SoldierRank)rank)
-			{
-				(*total)++;
-				int score = getSoldierScore((*j)->getSoldier());
-				if (score > highestScore)
-				{
-					highestScore = score;
-					*highestRanked = (*j)->getSoldier();
-				}
+				highestScore = score;
+				highestRanked = (*i);
 			}
 		}
 	}
+	return highestRanked;
 }
 
 /**
@@ -1432,27 +1503,27 @@ class matchRegionAndType: public std::unary_function<AlienMission *, bool>
 {
 public:
 	/// Store the region and type.
-	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	matchRegionAndType(const std::string &region, MissionObjective objective) : _region(region), _objective(objective) { }
 	/// Match against stored values.
 	bool operator()(const AlienMission *mis) const
 	{
-		return mis->getRegion() == _region && mis->getType() == _type;
+		return mis->getRegion() == _region && mis->getRules().getObjective() == _objective;
 	}
 private:
 
 	const std::string &_region;
-	const std::string &_type;
+	MissionObjective _objective;
 };
 
 /**
- * Find a mission from the active alien missions.
- * @param region The region ID.
- * @param type The mission type ID.
+ * Find a mission type in the active alien missions.
+ * @param region The region string ID.
+ * @param objective The active mission objective.
  * @return A pointer to the mission, or 0 if no mission matched.
  */
-AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
+AlienMission *SavedGame::findAlienMission(const std::string &region, MissionObjective objective) const
 {
-	std::vector<AlienMission*>::const_iterator ii = std::find_if (_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
+	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, objective));
 	if (ii == _activeMissions.end())
 		return 0;
 	return *ii;
@@ -1503,7 +1574,7 @@ std::vector<int64_t> &SavedGame::getExpenditures()
 	return _expenditures;
 }
 /**
- * return if the player has been 
+ * return if the player has been
  * warned about poor performance.
  * @return true or false.
  */
@@ -1682,7 +1753,7 @@ void SavedGame::setLastSelectedArmor(const std::string &value)
 
 /**
  * Gets the the last selected armour
- * @return last used armor type string 
+ * @return last used armor type string
  */
 std::string SavedGame::getLastSelectedArmor()
 {
@@ -1708,5 +1779,5 @@ Craft *SavedGame::findCraftByUniqueId(const CraftId& craftId) const
 	return NULL;
 }
 
-    
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,7 +39,6 @@ class UfoDetectedState : public State
 private:
 	Ufo *_ufo;
 	GeoscapeState *_state;
-	bool _hyperwave;
 
 	TextButton *_btnIntercept, *_btnCentre, *_btnCancel;
 	Window *_window;

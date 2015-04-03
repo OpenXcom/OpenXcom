@@ -1,5 +1,5 @@
 	/*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,6 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/AlienMission.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Engine/Options.h"
 #include <cstdlib>
@@ -234,12 +233,11 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
+DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1FireCountdown(0), _w2FireCountdown(0), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(0), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
 {
 	_screen = false;
 
 	_craft->setInDogfight(true);
-	_timeScale = 50 + Options::dogfightSpeed;
 
 	// Create objects
 	_window = new Surface(160, 96, _x, _y);
@@ -265,13 +263,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_btnMinimizedIcon = new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterceptionNumber = new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
-	_animTimer = new Timer(Options::dogfightSpeed + 10);
-	_moveTimer = new Timer(Options::dogfightSpeed);
-	_w1Timer = new Timer(0);
-	_w2Timer = new Timer(0);
 	_mode = _btnStandoff;
-	_ufoWtimer = new Timer(0);
-	_ufoEscapeTimer = new Timer(0);
 	_craftDamageAnimTimer = new Timer(500);
 
 	// Set palette
@@ -285,19 +277,19 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	add(_range2);
 	add(_damage);
 	add(_btnMinimize);
-	add(_btnStandoff);
-	add(_btnCautious);
-	add(_btnStandard);
-	add(_btnAggressive);
-	add(_btnDisengage);
-	add(_btnUfo);
-	add(_txtAmmo1);
-	add(_txtAmmo2);
-	add(_txtDistance);
+	add(_btnStandoff, "button", "dogfight");
+	add(_btnCautious, "button", "dogfight");
+	add(_btnStandard, "button", "dogfight");
+	add(_btnAggressive, "button", "dogfight");
+	add(_btnDisengage, "button", "dogfight");
+	add(_btnUfo, "button", "dogfight");
+	add(_txtAmmo1, "text", "dogfight");
+	add(_txtAmmo2, "text", "dogfight");
+	add(_txtDistance, "text", "dogfight");
 	add(_preview);
-	add(_txtStatus);
+	add(_txtStatus, "text", "dogfight");
 	add(_btnMinimizedIcon);
-	add(_txtInterceptionNumber);
+	add(_txtInterceptionNumber, "minimizedNumber", "dogfight");
 
 	// Set up objects
 	Surface *graphic;
@@ -338,42 +330,30 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_btnMinimize->onMouseClick((ActionHandler)&DogfightState::btnMinimizeClick);
 
 	_btnStandoff->copy(_window);
-	_btnStandoff->setColor(Palette::blockOffset(5)+1);
 	_btnStandoff->setGroup(&_mode);
 	_btnStandoff->onMousePress((ActionHandler)&DogfightState::btnStandoffPress);
 
 	_btnCautious->copy(_window);
-	_btnCautious->setColor(Palette::blockOffset(5)+1);
 	_btnCautious->setGroup(&_mode);
 	_btnCautious->onMousePress((ActionHandler)&DogfightState::btnCautiousPress);
 
 	_btnStandard->copy(_window);
-	_btnStandard->setColor(Palette::blockOffset(5)+1);
 	_btnStandard->setGroup(&_mode);
 	_btnStandard->onMousePress((ActionHandler)&DogfightState::btnStandardPress);
 
 	_btnAggressive->copy(_window);
-	_btnAggressive->setColor(Palette::blockOffset(5)+1);
 	_btnAggressive->setGroup(&_mode);
 	_btnAggressive->onMousePress((ActionHandler)&DogfightState::btnAggressivePress);
 
 	_btnDisengage->copy(_window);
-	_btnDisengage->setColor(Palette::blockOffset(5)+1);
 	_btnDisengage->onMousePress((ActionHandler)&DogfightState::btnDisengagePress);
 	_btnDisengage->setGroup(&_mode);
 
 	_btnUfo->copy(_window);
-	_btnUfo->setColor(Palette::blockOffset(5)+1);
 	_btnUfo->onMouseClick((ActionHandler)&DogfightState::btnUfoClick);
 
-	_txtAmmo1->setColor(Palette::blockOffset(5)+9);
-
-	_txtAmmo2->setColor(Palette::blockOffset(5)+9);
-
-	_txtDistance->setColor(Palette::blockOffset(5)+9);
 	_txtDistance->setText(L"640");
 
-	_txtStatus->setColor(Palette::blockOffset(5)+9);
 	_txtStatus->setText(tr("STR_STANDOFF"));
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
@@ -389,7 +369,6 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	// Draw correct number on the minimized dogfight icon.
 	std::wostringstream ss1;
 	ss1 << _craft->getInterceptionOrder();
-	_txtInterceptionNumber->setColor(Palette::blockOffset(5));
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
@@ -432,7 +411,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		ammo->setText(ss.str());
 
 		// Draw range (1 km = 1 pixel)
-		Uint8 color = Palette::blockOffset(7) - 1;
+		Uint8 color = _game->getRuleset()->getInterface("dogfight")->getElement("background")->color;
 		range->lock();
 
 		int rangeY = range->getHeight() - w->getRules()->getRange(), connectY = 57;
@@ -482,26 +461,24 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	frame->setY(0);
 	frame->blit(_damage);
 
-	_animTimer->onTimer((StateHandler)&DogfightState::animate);
-	_animTimer->start();
-
-	_moveTimer->onTimer((StateHandler)&DogfightState::move);
-	_moveTimer->start();
-
-	_w1Timer->onTimer((StateHandler)&DogfightState::fireWeapon1);
-
-	_w2Timer->onTimer((StateHandler)&DogfightState::fireWeapon2);
-
-	_ufoWtimer->onTimer((StateHandler)&DogfightState::ufoFireWeapon);
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty()));
-	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
-	_ufoWtimer->setInterval(_ufoFireInterval);
-
-	_ufoEscapeTimer->onTimer((StateHandler)&DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 15 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
-	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
-
 	_craftDamageAnimTimer->onTimer((StateHandler)&DogfightState::animateCraftDamage);
+
+	// don't set these variables if the ufo is already engaged in a dogfight
+	if (!_ufo->getEscapeCountdown())
+	{
+		_ufo->setFireCountdown(0);
+		_ufo->setEscapeCountdown(_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 30 * (int)(_game->getSavedGame()->getDifficulty()));
+	}
+
+	// technically this block is redundant, but i figure better to initialize the variables as SOMETHING
+	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+	{
+		_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getStandardReload();
+	}
+	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+	{
+		_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
+	}
 
 	// Set UFO size - going to be moved to Ufo class to implement simultanous dogfights.
 	std::string ufoSize = _ufo->getRules()->getSize();
@@ -526,12 +503,19 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		_ufoSize = 4;
 	}
 
+	_color[0] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color;
+	_color[1] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2;
+	_color[2] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color;
+	_color[3] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2;
+	_color[4] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color;
+	_color[5] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2;
+
 	// Get crafts height. Used for damage indication.
 	int x =_damage->getWidth() / 2;
 	for (int y = 0; y < _damage->getHeight(); ++y)
 	{
 		Uint8 pixelColor = _damage->getPixel(x, y);
-		if (pixelColor >= Palette::blockOffset(10) || pixelColor < Palette::blockOffset(11))
+		if (pixelColor >= _color[0] && pixelColor < _color[1])
 		{
 			++_craftHeight;
 		}
@@ -545,16 +529,10 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 }
 
 /**
- * Deletes timers.
+ * Cleans up the dogfight state.
  */
 DogfightState::~DogfightState()
 {
-	delete _animTimer;
-	delete _moveTimer;
-	delete _w1Timer;
-	delete _w2Timer;
-	delete _ufoWtimer;
-	delete _ufoEscapeTimer;
 	delete _craftDamageAnimTimer;
 	while (!_projectiles.empty())
 	{
@@ -563,29 +541,24 @@ DogfightState::~DogfightState()
 	}
 	if (_craft)
 		_craft->setInDogfight(false);
+	// set the ufo as "free" for the next engagement (as applicable)
+	if (_ufo)
+		_ufo->setInterceptionProcessed(false);
 }
 
 /**
- * Runs the dogfighter timers.
+ * Runs the higher level dogfight functionality.
  */
 void DogfightState::think()
 {
 	if (!_endDogfight)
 	{
-		_moveTimer->think(this, 0);
-		if (!_endDogfight && !_minimized) // check _endDogfight again, because moveTimer can change it
-		{
-			_animTimer->think(this, 0);
-			_w1Timer->think(this, 0);
-			_w2Timer->think(this, 0);
-			_ufoWtimer->think(this, 0);
-			_ufoEscapeTimer->think(this, 0);
-			_craftDamageAnimTimer->think(this, 0);
-		}
-		else if (!_endDogfight && (_craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED))
-		{
-			endDogfight();
-		}
+		update();
+		_craftDamageAnimTimer->think(this, 0);
+	}
+	if (_craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED)
+	{
+		endDogfight();
 	}
 }
 
@@ -599,9 +572,9 @@ void DogfightState::animateCraftDamage()
 		return;
 	}
 	--_currentCraftDamageColor;
-	if (_currentCraftDamageColor < 13)
+	if (_currentCraftDamageColor < _color[4])
 	{
-		_currentCraftDamageColor = 14;
+		_currentCraftDamageColor = _color[5];
 	}
 	drawCraftDamage();
 }
@@ -611,15 +584,15 @@ void DogfightState::animateCraftDamage()
  */
 void DogfightState::drawCraftDamage()
 {
-	if (_minimized)
-	{
-		return;
-	}
 	if (_craft->getDamagePercentage() != 0)
 	{
 		if (!_craftDamageAnimTimer->isRunning())
 		{
 			_craftDamageAnimTimer->start();
+			if (_currentCraftDamageColor < _color[4])
+			{
+				_currentCraftDamageColor = _color[4];
+			}
 		}
 		int damagePercentage = _craft->getDamagePercentage();
 		int rowsToColor = (int)floor((double)_craftHeight * (double)(damagePercentage / 100.));
@@ -635,12 +608,12 @@ void DogfightState::drawCraftDamage()
 			for (int x = 0; x < _damage->getWidth(); ++x)
 			{
 				int pixelColor = _damage->getPixel(x, y);
-				if (pixelColor == 13 || pixelColor == 14)
+				if (pixelColor >= _color[4] && pixelColor <= _color[5])
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
 					rowColored = true;
 				}
-				if (pixelColor >= Palette::blockOffset(10) && pixelColor < Palette::blockOffset(11))
+				if (pixelColor >= _color[0] && pixelColor < _color[1])
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
 					rowColored = true;
@@ -663,22 +636,18 @@ void DogfightState::drawCraftDamage()
  */
 void DogfightState::animate()
 {
-	if (_minimized)
-	{
-		return;
-	}
 	// Animate radar waves and other stuff.
 	for (int x = 0; x < _window->getWidth(); ++x)
 	{
 		for (int y = 0; y < _window->getHeight(); ++y)
 		{
 			Uint8 radarPixelColor = _window->getPixel(x, y);
-			if (radarPixelColor >= Palette::blockOffset(7) && radarPixelColor < Palette::blockOffset(7) + 16)
+			if (radarPixelColor >= _color[2] && radarPixelColor < _color[3])
 			{
 				++radarPixelColor;
-				if (radarPixelColor >= Palette::blockOffset(7) + 16)
+				if (radarPixelColor >= _color[3])
 				{
-					radarPixelColor = Palette::blockOffset(7);
+					radarPixelColor = _color[2];
 				}
 				_window->setPixel(x, y, radarPixelColor);
 			}
@@ -729,10 +698,11 @@ void DogfightState::animate()
 }
 
 /**
- * Moves the craft towards the UFO according to
- * the current interception mode. Handles projectile movements as well.
+ * Updates all the elements in the dogfight, including ufo movement,
+ * weapons fire, projectile movement, ufo escape conditions,
+ * craft and ufo destruction conditions, and retaliation mission generation, as applicable.
  */
-void DogfightState::move()
+void DogfightState::update()
 {
 	bool finalRun = false;
 	// Check if craft is not low on fuel when window minimized, and
@@ -743,32 +713,43 @@ void DogfightState::move()
 		endDogfight();
 		return;
 	}
-	
-	if (_minimized && _ufo->getSpeed() > _craft->getSpeed())
-	{
-		_craft->setSpeed(_craft->getRules()->getMaxSpeed());
-		if (_ufo->getSpeed() > _craft->getSpeed())
-		{
-			_ufoBreakingOff = true;
-		}
-	}
-	// Check if UFO is not breaking off.
-	if (_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())
-	{
-		_craft->setSpeed(_craft->getRules()->getMaxSpeed());
-		// Crappy craft is chasing UFO.
-		if (_ufo->getSpeed() > _craft->getSpeed())
-		{
-			_ufoBreakingOff = true;
-			finalRun = true;
-			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
-		}
-		else //ufo cannot break off, because it's too slow
-		{
-			_ufoBreakingOff = false;
-		}
 
+	if (!_minimized)
+	{
+		animate();
+		int escapeCounter = _ufo->getEscapeCountdown();
+		if (!_ufo->isCrashed() && !_ufo->isDestroyed() && !_craft->isDestroyed())
+		{
+			if (escapeCounter > 0 && !_ufo->getInterceptionProcessed())
+			{
+				escapeCounter--;
+				_ufo->setEscapeCountdown(escapeCounter);
+				_ufo->setInterceptionProcessed(true);
+				if (_ufo->getFireCountdown() > 0)
+				{
+					_ufo->setFireCountdown(_ufo->getFireCountdown() - 1);
+				}
+			}
+			// Check if UFO is breaking off.
+			if (escapeCounter == 0)
+			{
+				_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
+			}
+		}
 	}
+	// Crappy craft is chasing UFO.
+	if (_ufo->getSpeed() > _craft->getRules()->getMaxSpeed())
+	{
+		_ufoBreakingOff = true;
+		finalRun = true;
+		setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
+	}
+	else //ufo cannot break off, because it's too slow
+	{
+		_craft->setSpeed(_ufo->getSpeed());
+		_ufoBreakingOff = false;
+	}
+
 	bool projectileInFlight = false;
 	if (!_minimized)
 	{
@@ -917,21 +898,20 @@ void DogfightState::move()
 			{
 				continue;
 			}
-			Timer *wTimer = 0;
+			int wTimer;
 			if (i == 0)
 			{
-				wTimer = _w1Timer;
+				wTimer = _w1FireCountdown;
 			}
 			else
 			{
-				wTimer = _w2Timer;
+				wTimer = _w2FireCountdown;
 			}
 
 			// Handle weapon firing
-			if (!wTimer->isRunning() && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
+			if (wTimer == 0 && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
 				&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				wTimer->start();
 				if (i == 0)
 				{
 					fireWeapon1();
@@ -941,39 +921,50 @@ void DogfightState::move()
 					fireWeapon2();
 				}
 			}
-			else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || (w->getAmmo() == 0 && !projectileInFlight) || _mode == _btnStandoff
-				|| _mode == _btnDisengage || _ufo->isCrashed() || _craft->isDestroyed()))
+			else if (wTimer > 0)
 			{
-				wTimer->stop();
-				// Handle craft distance according to option set by user and available ammo.
-				if (w->getAmmo() == 0 && !_craft->isDestroyed())
+				if (i == 0)
 				{
-					if (_mode == _btnCautious)
-					{
-						minimumDistance();
-					}
-					else if (_mode == _btnStandard)
-					{
-						maximumDistance();
-					}
+					_w1FireCountdown--;
+				}
+				else
+				{
+					_w2FireCountdown--;
+				}
+			}
+
+			if (w->getAmmo() == 0 && !projectileInFlight && !_craft->isDestroyed())
+			{
+				// Handle craft distance according to option set by user and available ammo.
+				if (_mode == _btnCautious)
+				{
+					minimumDistance();
+				}
+				else if (_mode == _btnStandard)
+				{
+					maximumDistance();
 				}
 			}
 		}
 
 		// Handle UFO firing.
-		if (!_ufoWtimer->isRunning() && _currentDist <= _ufo->getRules()->getWeaponRange() * 8 && !_ufo->isCrashed() && !_craft->isDestroyed())
+		if (_currentDist <= _ufo->getRules()->getWeaponRange() * 8 && !_ufo->isCrashed() && !_craft->isDestroyed())
 		{
 			if (_ufo->getShootingAt() == 0)
 			{
 				_ufo->setShootingAt(_interceptionNumber);
-				_ufoWtimer->start();
-				ufoFireWeapon();
+			}
+			if (_ufo->getShootingAt() == _interceptionNumber)
+			{
+				if (_ufo->getFireCountdown() == 0)
+				{
+					ufoFireWeapon();
+				}
 			}
 		}
-		else if (_ufoWtimer->isRunning() && (_currentDist > _ufo->getRules()->getWeaponRange() * 8 || _ufo->isCrashed() || _craft->isDestroyed()))
+		else if (_ufo->getShootingAt() == _interceptionNumber)
 		{
 			_ufo->setShootingAt(0);
-			_ufoWtimer->stop();
 		}
 	}
 
@@ -998,133 +989,130 @@ void DogfightState::move()
 	}
 
 	// End dogfight if craft is destroyed.
-	if (!_end && _craft->isDestroyed())
+	if (!_end)
 	{
-		setStatus("STR_INTERCEPTOR_DESTROYED");
-		_timeout += 30;
-		_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::INTERCEPTOR_EXPLODE)->play();
-		finalRun = true;
-		_destroyCraft = true;
-		_ufo->setShootingAt(0);
-		_ufoWtimer->stop();
-		_w1Timer->stop();
-		_w2Timer->stop();
-	}
+		if (_craft->isDestroyed())
+		{
+			setStatus("STR_INTERCEPTOR_DESTROYED");
+			_timeout += 30;
+			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::INTERCEPTOR_EXPLODE)->play();
+			finalRun = true;
+			_destroyCraft = true;
+			_ufo->setShootingAt(0);
+		}
 	
-	// End dogfight if UFO is crashed or destroyed.
-	if (!_end && _ufo->isCrashed())
-	{
-		AlienMission *mission = _ufo->getMission();
-		mission->ufoShotDown(*_ufo, *_game, *_globe);
-		// Check for retaliation trigger.
-		if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
+		// End dogfight if UFO is crashed or destroyed.
+		if (_ufo->isCrashed())
 		{
-			// Spawn retaliation mission.
-			std::string targetRegion;
-			if (RNG::percent(50 - 6 * (int)(_game->getSavedGame()->getDifficulty())))
+			AlienMission *mission = _ufo->getMission();
+			mission->ufoShotDown(*_ufo);
+			// Check for retaliation trigger.
+			if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
 			{
-				// Attack on UFO's mission region
-				targetRegion = _ufo->getMission()->getRegion();
-			}
-			else
-			{
-				// Try to find and attack the originating base.
-				targetRegion = _game->getSavedGame()->locateRegion(*_craft->getBase())->getRules()->getType();
-				// TODO: If the base is removed, the mission is canceled.
-			}
-			// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
-			if (!_game->getSavedGame()->getAlienMission(targetRegion, "STR_ALIEN_RETALIATION"))
-			{
-				const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
-				AlienMission *mission = new AlienMission(rule);
-				mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-				mission->setRegion(targetRegion, *_game->getRuleset());
-				mission->setRace(_ufo->getAlienRace());
-				mission->start();
-				_game->getSavedGame()->getAlienMissions().push_back(mission);
-			}
-		}
-		_ufoEscapeTimer->stop();
-		if (_ufo->isDestroyed())
-		{
-			if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
-			{
-				for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				// Spawn retaliation mission.
+				std::string targetRegion;
+				if (RNG::percent(50 - 6 * (int)(_game->getSavedGame()->getDifficulty())))
 				{
-					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
-					{
-						(*country)->addActivityXcom(_ufo->getRules()->getScore()*2);
-						break;
-					}
+					// Attack on UFO's mission region
+					targetRegion = _ufo->getMission()->getRegion();
 				}
-				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				else
 				{
-					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
-					{
-						(*region)->addActivityXcom(_ufo->getRules()->getScore()*2);
-						break;
-					}
+					// Try to find and attack the originating base.
+					targetRegion = _game->getSavedGame()->locateRegion(*_craft->getBase())->getRules()->getType();
+					// TODO: If the base is removed, the mission is canceled.
 				}
-				setStatus("STR_UFO_DESTROYED");
-				_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play(); //11
-			}
-			_destroyUfo = true;
-		}
-		else
-		{
-			if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
-			{
-				setStatus("STR_UFO_CRASH_LANDS");
-				_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_CRASH)->play(); //10
-				for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
+				if (!_game->getSavedGame()->findAlienMission(targetRegion, OBJECTIVE_RETALIATION))
 				{
-					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
-					{
-						(*country)->addActivityXcom(_ufo->getRules()->getScore());
-						break;
-					}
-				}
-				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
-				{
-					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
-					{
-						(*region)->addActivityXcom(_ufo->getRules()->getScore());
-						break;
-					}
+					const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+					AlienMission *mission = new AlienMission(rule);
+					mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+					mission->setRegion(targetRegion, *_game->getRuleset());
+					mission->setRace(_ufo->getAlienRace());
+					mission->start();
+					_game->getSavedGame()->getAlienMissions().push_back(mission);
 				}
 			}
-			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+
+			if (_ufo->isDestroyed())
 			{
-				_ufo->setStatus(Ufo::DESTROYED);
+				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
+				{
+					for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+					{
+						if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
+						{
+							(*country)->addActivityXcom(_ufo->getRules()->getScore()*2);
+							break;
+						}
+					}
+					for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+					{
+						if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
+						{
+							(*region)->addActivityXcom(_ufo->getRules()->getScore()*2);
+							break;
+						}
+					}
+					setStatus("STR_UFO_DESTROYED");
+					_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play(); //11
+				}
 				_destroyUfo = true;
 			}
 			else
 			{
-				_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
-				_ufo->setAltitude("STR_GROUND");
-				if (_ufo->getCrashId() == 0)
+				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 				{
-					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
+					setStatus("STR_UFO_CRASH_LANDS");
+					_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_CRASH)->play(); //10
+					for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+					{
+						if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
+						{
+							(*country)->addActivityXcom(_ufo->getRules()->getScore());
+							break;
+						}
+					}
+					for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+					{
+						if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
+						{
+							(*region)->addActivityXcom(_ufo->getRules()->getScore());
+							break;
+						}
+					}
+				}
+				if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+				{
+					_ufo->setStatus(Ufo::DESTROYED);
+					_destroyUfo = true;
+				}
+				else
+				{
+					_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
+					_ufo->setAltitude("STR_GROUND");
+					if (_ufo->getCrashId() == 0)
+					{
+						_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
+					}
 				}
 			}
-		}
-		_timeout += 30;
-		if (_ufo->getShotDownByCraftId() != _craft->getUniqueId())
-		{
-			_timeout += 50;
-			_ufo->setHitFrame(3);
-		}
-		finalRun = true;
-	}
+			_timeout += 30;
+			if (_ufo->getShotDownByCraftId() != _craft->getUniqueId())
+			{
+				_timeout += 50;
+				_ufo->setHitFrame(3);
+			}
+			finalRun = true;
 
-	if (!_end && _ufo->getStatus() == Ufo::LANDED)
-	{
-		_timeout += 30;
-		finalRun = true;
-		_ufo->setShootingAt(0);
-		_ufoWtimer->stop();
-		_w1Timer->stop();
-		_w2Timer->stop();
+			if (_ufo->getStatus() == Ufo::LANDED)
+			{
+				_timeout += 30;
+				finalRun = true;
+				_ufo->setShootingAt(0);
+			}
+		}
 	}
 
 	if (!projectileInFlight && finalRun)
@@ -1144,6 +1132,7 @@ void DogfightState::fireWeapon1()
 		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 		if (w1->setAmmo(w1->getAmmo() - 1))
 		{
+			_w1FireCountdown = _w1FireInterval;
 
 			std::wostringstream ss;
 			ss << w1->getAmmo();
@@ -1170,6 +1159,7 @@ void DogfightState::fireWeapon2()
 		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 		if (w2->setAmmo(w2->getAmmo() - 1))
 		{
+			_w2FireCountdown = _w2FireInterval;
 
 			std::wostringstream ss;
 			ss << w2->getAmmo();
@@ -1192,9 +1182,8 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty()));
-	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
-	_ufoWtimer->setInterval(_ufoFireInterval);
+	int fireCountdown = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty()));
+	_ufo->setFireCountdown(RNG::generate(0, fireCountdown) + fireCountdown);
 
 	setStatus("STR_UFO_RETURN_FIRE");
 	CraftWeaponProjectile *p = new CraftWeaponProjectile();
@@ -1304,7 +1293,6 @@ void DogfightState::btnMinimizeClick(Action *)
 			_txtStatus->setVisible(false);
 			_btnMinimizedIcon->setVisible(true);
 			_txtInterceptionNumber->setVisible(true);
-			_ufoEscapeTimer->stop();
 		}
 		else
 		{
@@ -1339,14 +1327,13 @@ void DogfightState::btnCautiousPress(Action *)
 		setStatus("STR_CAUTIOUS_ATTACK");
 		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * _timeScale);
+			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getCautiousReload();
 		}
 		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * _timeScale);
+			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getCautiousReload();
 		}
 		minimumDistance();
-		_ufoEscapeTimer->start();
 	}
 }
 
@@ -1362,14 +1349,13 @@ void DogfightState::btnStandardPress(Action *)
 		setStatus("STR_STANDARD_ATTACK");
 		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * _timeScale);
+			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getStandardReload();
 		}
 		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * _timeScale);
+			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
 		}
 		maximumDistance();
-		_ufoEscapeTimer->start();
 	}
 }
 
@@ -1385,14 +1371,13 @@ void DogfightState::btnAggressivePress(Action *)
 		setStatus("STR_AGGRESSIVE_ATTACK");
 		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * _timeScale);
+			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getAggressiveReload();
 		}
 		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * _timeScale);
+			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getAggressiveReload();
 		}
 		_targetDist = 64;
-		_ufoEscapeTimer->start();
 	}
 }
 
@@ -1407,7 +1392,6 @@ void DogfightState::btnDisengagePress(Action *)
 		_end = true;
 		setStatus("STR_DISENGAGING");
 		_targetDist = 800;
-		_ufoEscapeTimer->stop();
 	}
 }
 
@@ -1450,25 +1434,13 @@ void DogfightState::previewClick(Action *)
 }
 
 /*
- * Sets UFO to break off mode. Started via timer.
- */
-void DogfightState::ufoBreakOff()
-{
-	if (!_ufo->isCrashed() && !_ufo->isDestroyed() && !_craft->isDestroyed())
-	{
-		_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
-		_ufoBreakingOff = true;
-	}
-}
-
-/*
  * Draws the UFO blob on the radar screen.
  * Currently works only for original sized blobs
  * 13 x 13 pixels.
  */
 void DogfightState::drawUfo()
 {
-	if (_ufoSize < 0 || _ufo->isDestroyed() || _minimized)
+	if (_ufoSize < 0 || _ufo->isDestroyed())
 	{
 		return;
 	}
@@ -1507,11 +1479,8 @@ void DogfightState::drawUfo()
  * shape will be different. Currently works for 
  * original sized blobs 3 x 6 pixels.
  */
-void DogfightState::drawProjectile(const CraftWeaponProjectile* p) {
-	if (_minimized)
-	{
-		return;
-	}
+void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
+{
 	int xPos = _battle->getWidth() / 2 + p->getHorizontalPosition();
 	// Draw missiles.
 	if (p->getGlobalType() == CWPGT_MISSILE)

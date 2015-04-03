@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,7 +32,6 @@ class BattleUnit;
 class BattleItem;
 class Tile;
 struct BattleAction;
-
 /**
  * A utility class that modifies tile properties on a battlescape map. This includes lighting, destruction, smoke, fire, fog of war.
  * Note that this function does not handle any sounds or animations.
@@ -41,6 +40,7 @@ class TileEngine
 {
 private:
 	static const int MAX_VIEW_DISTANCE = 20;
+	static const int MAX_VIEW_DISTANCE_SQR = MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE;
 	static const int MAX_VOXEL_VIEW_DISTANCE = MAX_VIEW_DISTANCE * 16;
 	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
 	SavedBattleGame *_save;
@@ -96,14 +96,12 @@ public:
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
 	/// Checks the vertical blockage of a tile.
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
-	/// Attempts a panic or mind control action.
-	bool psiAttack(BattleAction *action);
 	/// Applies gravity to anything that occupy this tile.
 	Tile *applyGravity(Tile *t);
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.
-	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest);
+	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
 	/// Gets the AI to look through a window.
 	int faceWindow(const Position &position);
 	/// Checks a unit's % exposure on a tile.
@@ -125,13 +123,13 @@ public:
 	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
 	/// Creates a vector of units that can spot this unit.
-	std::vector<BattleUnit *> getSpottingUnits(BattleUnit* unit);
+	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
-	BattleUnit* getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit);
+	BattleUnit* getReactor(std::vector<std::pair<BattleUnit *, int> > spotters, int &attackType, BattleUnit *unit);
 	/// Checks validity of a snap shot to this position.
-	bool canMakeSnap(BattleUnit *unit, BattleUnit *target);
+	int determineReactionType(BattleUnit *unit, BattleUnit *target);
 	/// Tries to perform a reaction snap shot to this location.
-	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
+	bool tryReaction(BattleUnit *unit, BattleUnit *target, int attackType);
 	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
 	/// Get direction to a certain point

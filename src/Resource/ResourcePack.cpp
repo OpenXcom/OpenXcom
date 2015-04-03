@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,13 @@ int ResourcePack::UFO_CRASH = 10;
 int ResourcePack::UFO_EXPLODE = 11;
 int ResourcePack::INTERCEPTOR_HIT = 10;
 int ResourcePack::INTERCEPTOR_EXPLODE = 13;
+int ResourcePack::GEOSCAPE_CURSOR = 252;
+int ResourcePack::BASESCAPE_CURSOR = 252;
+int ResourcePack::BATTLESCAPE_CURSOR = 144;
+int ResourcePack::UFOPAEDIA_CURSOR = 252;
+int ResourcePack::GRAPHS_CURSOR = 252;
+std::string ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
+std::string ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
 /**
  * Initializes a blank resource set pointing to a folder.
  */
@@ -283,5 +290,8 @@ const std::vector<std::vector<Uint8> > *ResourcePack::getLUTs() const
 {
 	return &_transparencyLUTs;
 }
-
+bool ResourcePack::isMusicPlaying()
+{
+	return _musics[_playingMusic]->isPlaying();
+}
 }

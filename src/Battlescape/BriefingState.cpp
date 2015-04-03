@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,6 +34,9 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/RuleUfo.h"
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
@@ -59,38 +62,35 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	AlienDeployment *deployment = _game->getRuleset()->getDeployment(mission);
+	Ufo * ufo = dynamic_cast <Ufo*> (craft->getDestination());
+	if (!deployment && ufo) // landing site or crash site.
+	{
+			deployment = _game->getRuleset()->getDeployment(ufo->getRules()->getType());
+	}
 
-	// Set palette
-	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
-	{
-		setPalette("PAL_GEOSCAPE", 2);
-		_game->getResourcePack()->playMusic("GMENBASE");
-	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		setPalette("PAL_GEOSCAPE", 6);
-		_game->getResourcePack()->playMusic("GMNEWMAR");
-	}
-	else
+	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 		_game->getResourcePack()->playMusic("GMDEFEND");
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
+	}
+	else
+	{
+		BriefingData data = deployment->getBriefingData();
+		setPalette("PAL_GEOSCAPE", data.palette);
+		_game->getResourcePack()->playMusic(data.music);
+		_window->setBackground(_game->getResourcePack()->getSurface(data.background));
+		_txtCraft->setY(56 + data.textOffset);
+		_txtBriefing->setY(72 + data.textOffset);
+		_txtTarget->setVisible(data.showTarget);
+		_txtCraft->setVisible(data.showCraft);
 	}
 
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
-	{
-		_txtCraft->setY(40);
-		_txtBriefing->setY(56);
-		_txtTarget->setVisible(false);
-	}
 	add(_txtTarget);
-	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_txtCraft->setVisible(false);
-	}
 	add(_txtCraft);
 	add(_txtBriefing);
 
@@ -131,21 +131,25 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
-
-	// Show respective mission briefing
-	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-	}
-	else
-	{
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
-	}
-
+	
 	_txtTitle->setText(tr(mission));
 	std::ostringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(briefingtext.str()));
+
+	// if this UFO has a specific briefing, use that instead
+	if (ufo)
+	{
+		briefingtext.str("");
+		briefingtext << ufo->getRules()->getType() << "_BRIEFING";
+		// this is not a great check, if the string isn't defined
+		// for the selected language, it will revert to the default
+		// briefing text instead. this will make it harder to notice missing strings in mods.
+		if (tr(briefingtext.str()).asUTF8() != briefingtext.str())
+		{
+			_txtBriefing->setText(tr(briefingtext.str()));
+		}
+	}
 
 	if (mission == "STR_BASE_DEFENSE")
 	{
@@ -174,7 +178,7 @@ void BriefingState::btnOkClick(Action *)
 	_game->getScreen()->resetDisplay(false);
 	BattlescapeState *bs = new BattlescapeState;
 	int liveAliens = 0, liveSoldiers = 0;
-	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);

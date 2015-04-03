@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,32 +21,30 @@
 
 #include <string>
 #include <yaml-cpp/yaml.h>
+#include "../Savegame/Target.h"
 
 namespace OpenXcom
 {
+
+class Language;
 
 /**
  * Represents a city of the world.
  * Aliens target cities for certain missions.
  */
-class City
+class City : public Target
 {
 private:
 	std::string _name;
-	double _lon, _lat;
 public:
 	/// Creates a new city at a certain position.
 	City(const std::string &name, double lon, double lat);
 	/// Cleans up the city.
 	~City();
-	/// Loads the city from YAML.
-	void load(const YAML::Node& node);
 	/// Gets the city's name.
-	std::string getName() const;
-	/// Gets the city's latitude.
-	double getLatitude() const;
-	/// Gets the city's longitude.
-	double getLongitude() const;
+	std::wstring getName(Language *lang) const;
+	/// Gets the city's marker.
+	int getMarker() const;
 };
 
 }

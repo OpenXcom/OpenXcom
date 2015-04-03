@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,7 +41,7 @@ class MapBlock
 private:
 	std::string _name;
 	int _size_x, _size_y, _size_z;
-	std::vector<int> _groups;
+	std::vector<int> _groups, _revealedFloors;
 	std::map<std::string, std::vector<Position> > _items;
 public:
 	MapBlock(const std::string &name);
@@ -60,6 +60,8 @@ public:
 	void setSizeZ(int size_z);
 	/// Returns if this mapblock is from the group specified.
 	bool isInGroup(int group);
+	/// Gets if this floor should be revealed or not.
+	bool isFloorRevealed(int floor);
 	/// Gets the layout for any items that belong in this map block.
 	std::map<std::string, std::vector<Position> > *getItems();
 

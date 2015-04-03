@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,10 +49,10 @@ void MapBlock::load(const YAML::Node &node)
 	_size_x = node["width"].as<int>(_size_x);
 	_size_y = node["length"].as<int>(_size_y);
 	_size_z = node["height"].as<int>(_size_z);
-	if (_size_x & 10 != 0 || _size_y % 10 != 0)
+	if ((_size_x % 10) != 0 || (_size_y % 10) != 0)
 	{
 		std::stringstream ss;
-		ss << "MapBlock " << _name << ": Size must be divisible by ten";
+		ss << "Error: MapBlock " << _name << ": Size must be divisible by ten";
 		throw Exception(ss.str());
 	}
 	if (const YAML::Node &map = node["groups"])
@@ -65,6 +65,18 @@ void MapBlock::load(const YAML::Node &node)
 		else
 		{
 			_groups.push_back(map.as<int>(0));
+		}
+	}
+	if (const YAML::Node &map = node["revealedFloors"])
+	{
+		_revealedFloors.clear();
+		if (map.Type() == YAML::NodeType::Sequence)
+		{
+			_revealedFloors = map.as<std::vector<int> >(_revealedFloors);
+		}
+		else
+		{
+			_revealedFloors.push_back(map.as<int>(0));
 		}
 	}
 	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
@@ -122,6 +134,14 @@ int MapBlock::getSizeZ() const
 bool MapBlock::isInGroup(int group)
 {
 	return std::find(_groups.begin(), _groups.end(), group) != _groups.end();
+}
+
+/**
+ * Gets if this floor should be revealed or not.
+ */
+bool MapBlock::isFloorRevealed(int floor)
+{
+	return std::find(_revealedFloors.begin(), _revealedFloors.end(), floor) != _revealedFloors.end();
 }
 
 /**

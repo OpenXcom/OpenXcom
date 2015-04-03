@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -68,7 +68,7 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	bool _objectiveDestroyed;
+	int _objectivesDestroyed, _objectivesNeeded;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _cheating;
@@ -77,6 +77,8 @@ private:
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
 	int _depth, _ambience;
+	std::vector<BattleItem*> _recoverGuaranteed, _recoverConditional;
+	std::string _music;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -183,10 +185,12 @@ public:
 	void setAborted(bool flag);
 	/// Checks if the mission was aborted.
 	bool isAborted() const;
-	/// Sets whether the objective is destroyed.
-	void setObjectiveDestroyed(bool flag);
-	/// Checks if the objective is detroyed.
-	bool isObjectiveDestroyed();
+	/// Sets how many objectives need to be destroyed.
+	void addToObjectiveCount();
+	/// increments the objective counter.
+	void addDestroyedObjective();
+	/// Checks if all the objectives are detroyed.
+	bool allObjectivesDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
 	/// Gets a spawn node.
@@ -250,7 +254,7 @@ public:
 	/// a shortcut to the geoscape save.
 	SavedGame *getGeoscapeSave();
 	/// get the depth of the battlescape game.
-	const int getDepth() const;
+	int getDepth() const;
 	/// set the depth of the battlescape game.
 	void setDepth(int depth);
 	/// uses the depth variable to set a palette.
@@ -258,8 +262,15 @@ public:
 	/// sets the ambient sound effect;
 	void setAmbientSound(int sound);
 	/// gets the ambient sound effect;
-	const int getAmbientSound() const;
-
+	int getAmbientSound() const;
+	/// gets the list of items we're guaranteed.
+	std::vector<BattleItem*> *getGuaranteedRecoveredItems();
+	/// gets the list of items we MIGHT get.
+	std::vector<BattleItem*> *getConditionalRecoveredItems();
+	/// Get the name of the music track.
+	std::string &getMusic();
+	/// Set the name of the music track.
+	void setMusic(std::string track);
 };
 
 }

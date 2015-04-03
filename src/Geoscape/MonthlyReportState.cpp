@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,49 +56,48 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_btnBigOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(300, 17, 16, 8);
-	_txtMonth = new Text(110, 9, 16, 24);
-	_txtRating = new Text(180, 9, 125, 24);
-	_txtChange = new Text(300, 9, 16, 32);
-	_txtDesc = new Text(280, 140, 16, 40);
+	_txtMonth = new Text(130, 9, 16, 24);
+	_txtRating = new Text(160, 9, 146, 24);
+	_txtIncome = new Text(300, 9, 16, 32);
+	_txtMaintenance = new Text(130, 9, 16, 40);
+	_txtBalance = new Text(160, 9, 146, 40);
+	_txtDesc = new Text(280, 132, 16, 48);
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnOk);
-	add(_btnBigOk);
-	add(_txtTitle);
-	add(_txtMonth);
-	add(_txtRating);
-	add(_txtChange);
-	add(_txtDesc);
-	add(_txtFailure);
+	add(_window, "window", "monthlyReport");
+	add(_btnOk, "button", "monthlyReport");
+	add(_btnBigOk, "button", "monthlyReport");
+	add(_txtTitle, "text1", "monthlyReport");
+	add(_txtMonth, "text1", "monthlyReport");
+	add(_txtRating, "text1", "monthlyReport");
+	add(_txtIncome, "text1", "monthlyReport");
+	add(_txtMaintenance, "text1", "monthlyReport");
+	add(_txtBalance, "text1", "monthlyReport");
+	add(_txtDesc, "text2", "monthlyReport");
+	add(_txtFailure, "text2", "monthlyReport");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyCancel);
 	
-	_btnBigOk->setColor(Palette::blockOffset(8)+10);
 	_btnBigOk->setText(tr("STR_OK"));
 	_btnBigOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 	_btnBigOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyOk);
 	_btnBigOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyCancel);
 	_btnBigOk->setVisible(false);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 
-	_txtFailure->setColor(Palette::blockOffset(8)+10);
 	_txtFailure->setBig();
 	_txtFailure->setAlign(ALIGN_CENTER);
 	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
@@ -133,8 +132,6 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	}
 	int difficulty_threshold = 100*((int)(_game->getSavedGame()->getDifficulty())-9);
 
-	_txtMonth->setColor(Palette::blockOffset(15)-1);
-	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
 
 	// Calculate rating
@@ -156,24 +153,28 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 		rating = tr("STR_RATING_EXCELLENT");
 	}
 
-	_txtRating->setColor(Palette::blockOffset(15)-1);
-	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
-	std::wostringstream ss3;
+	std::wostringstream ss;
+	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << L" (";
 	if (_fundingDiff > 0)
-		ss3 << '+';
-	ss3 << Text::formatFunding(_fundingDiff);
+		ss << '+';
+	ss << Text::formatFunding(_fundingDiff) << L")";
+	_txtIncome->setText(ss.str());
 
-	_txtChange->setColor(Palette::blockOffset(15)-1);
-	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
+	std::wostringstream ss2;
+	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
+	_txtMaintenance->setText(ss2.str());
 
-	_txtDesc->setColor(Palette::blockOffset(8)+10);
+	std::wostringstream ss3;
+	ss3 << tr("STR_BALANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtBalance->setText(ss3.str());
+
 	_txtDesc->setWordWrap(true);
 
 	// calculate satisfaction
-	std::wostringstream ss4;
+	std::wostringstream ss5;
 	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
 	bool resetWarning = true;
 	if (_ratingTotal > difficulty_threshold)
@@ -192,7 +193,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 		_sadList.erase(_sadList.begin(), _sadList.end());
 		_gameOver = true;
 	}
-	ss4 << satisFactionString;
+	ss5 << satisFactionString;
 
 	if (!_gameOver)
 	{
@@ -200,8 +201,8 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 		{
 			if (_game->getSavedGame()->getWarned())
 			{
-				ss4.str(L"");
-				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+				ss5.str(L"");
+				ss5 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
 				_sadList.erase(_sadList.begin(), _sadList.end());
@@ -209,7 +210,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 			}
 			else
 			{
-				ss4 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
+				ss5 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 				_game->getSavedGame()->setWarned(true);
 				resetWarning = false;
 			}
@@ -219,11 +220,11 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	if (resetWarning && _game->getSavedGame()->getWarned())
 		_game->getSavedGame()->setWarned(false);
 
-	ss4 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
-	ss4 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
-	ss4 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
+	ss5 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
+	ss5 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
+	ss5 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
 	
-	_txtDesc->setText(ss4.str());
+	_txtDesc->setText(ss5.str());
 }
 
 
@@ -267,11 +268,13 @@ void MonthlyReportState::btnOkClick(Action *)
 		}
 		else
 		{
-			_window->setColor(Palette::blockOffset(8)+10);
+			_window->setColor(_game->getRuleset()->getInterface("monthlyReport")->getElement("window")->color2);
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);
 			_txtRating->setVisible(false);
-			_txtChange->setVisible(false);
+			_txtIncome->setVisible(false);
+			_txtMaintenance->setVisible(false);
+			_txtBalance->setVisible(false);
 			_txtDesc->setVisible(false);
 			_btnOk->setVisible(false);
 			_btnBigOk->setVisible(true);

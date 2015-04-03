@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,7 +45,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	// Create objects
 	_lstMods = new TextList(200, 136, 94, 8);
 	
-	add(_lstMods);
+	add(_lstMods, "optionLists", "modsMenu");
 
 	centerAllSurfaces();
 
@@ -63,8 +63,6 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	// Set up objects
 	_lstMods->setAlign(ALIGN_RIGHT, 1);
 	_lstMods->setColumns(2, leftcol, rightcol);
-	_lstMods->setColor(Palette::blockOffset(8)+10);
-	_lstMods->setArrowColor(Palette::blockOffset(8) + 5);
 	_lstMods->setWordWrap(true);
 	_lstMods->setSelectable(true);
 	_lstMods->setBackground(_window);
@@ -73,18 +71,24 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	_lstMods->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
 	_lstMods->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
 
-	std::vector<std::string> rulesets = CrossPlatform::getDataContents("Ruleset/", "rul");
+	std::vector<std::string> rulesets = CrossPlatform::getDataContents("Ruleset/");
 	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
 	{
-		std::string mod = CrossPlatform::noExt(*i);
-		std::wstring modName = Language::fsToWstr(mod);
-		Language::replace(modName, L"_", L" ");
-		// ignore default ruleset
-		if (mod != "Xcom1Ruleset")
+		std::string filename = *i;
+		std::transform(filename.begin(), filename.end(), filename.begin(), tolower);
+
+		if ((filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".rul") || !CrossPlatform::getDataContents("Ruleset/" + *i, "rul").empty())
 		{
-			bool modEnabled = (std::find(Options::rulesets.begin(), Options::rulesets.end(), mod) != Options::rulesets.end());
-			_lstMods->addRow(2, modName.c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
-			_mods.push_back(mod);
+			std::string mod = CrossPlatform::noExt(*i);
+			std::wstring modName = Language::fsToWstr(mod);
+			Language::replace(modName, L"_", L" ");
+			// ignore default ruleset
+			if (mod != "Xcom1Ruleset")
+			{
+				bool modEnabled = (std::find(Options::rulesets.begin(), Options::rulesets.end(), mod) != Options::rulesets.end());
+				_lstMods->addRow(2, modName.c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+				_mods.push_back(mod);
+			}
 		}
 	}
 }

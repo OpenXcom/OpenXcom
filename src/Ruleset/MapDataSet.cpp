@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -221,19 +221,6 @@ void MapDataSet::loadData()
 	}
 
 	mapFile.close();
-
-	// process the mapdataset to put block values on floortiles (as we don't have em in UFO)
-	for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
-	{
-		if ((*i)->getObjectType() == MapData::O_FLOOR && (*i)->getBlock(DT_HE) == 0)
-		{
-			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,(*i)->getArmor());
-			if ((*i)->getDieMCD())
-			{
-				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,(*i)->getArmor());
-			}
-		}
-	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	std::ostringstream s1,s2;

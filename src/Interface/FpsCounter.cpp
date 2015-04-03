@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,6 @@ FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, hei
 	_timer->start();
 
 	_text = new NumberText(width, height, x, y);
-	setColor(Palette::blockOffset(15)+12);
 }
 
 /**

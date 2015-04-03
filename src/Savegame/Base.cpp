@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -859,7 +859,7 @@ int Base::getDefenseValue() const
 			total += (*i)->getRules()->getDefenseValue();
 		}
 	}
-	return total / 8;
+	return total;
 }
 
 /**
@@ -945,7 +945,7 @@ int Base::getCraftMaintenance() const
 int Base::getPersonnelMaintenance() const
 {
 	size_t total = 0;
-	total += _soldiers.size() * _rule->getSoldierCost();
+	total += getTotalSoldiers() * _rule->getSoldierCost();
 	total += getTotalEngineers() * _rule->getEngineerCost();
 	total += getTotalScientists() * _rule->getScientistCost();
 	return total;
@@ -1108,7 +1108,7 @@ int Base::getUsedContainment() const
 	int total = 0;
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
-		if (_rule->getItem((i)->first)->getAlien())
+		if (_rule->getItem((i)->first)->isAlien())
 		{
 			total += (i)->second;
 		}
@@ -1117,7 +1117,7 @@ int Base::getUsedContainment() const
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			if (_rule->getItem((*i)->getItems())->getAlien())
+			if (_rule->getItem((*i)->getItems())->isAlien())
 			{
 				total += (*i)->getQuantity();
 			}
@@ -1239,11 +1239,11 @@ bool isCompleted::operator()(const BaseFacility *facility) const
  * @param difficulty The savegame difficulty.
  * @return The detection chance.
  */
-size_t Base::getDetectionChance(int difficulty) const
+size_t Base::getDetectionChance() const
 {
 	size_t mindShields = std::count_if (_facilities.begin(), _facilities.end(), isMindShield());
 	size_t completedFacilities = std::count_if (_facilities.begin(), _facilities.end(), isCompleted());
-	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + difficulty / 2);
+	return ((completedFacilities / 6 + 15) / (mindShields + 1));
 }
 
 int Base::getGravShields() const

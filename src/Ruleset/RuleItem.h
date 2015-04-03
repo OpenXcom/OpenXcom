@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -170,7 +170,7 @@ public:
 	/// Gets the item's turret type.
 	int getTurretType() const;
 	/// Checks if this a live alien.
-	bool getAlien() const;
+	bool isAlien() const;
 	/// Should we charge a flat rate?
 	bool getFlatRate() const;
 	/// Should this weapon arc?

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -87,6 +87,7 @@ public:
 	void setComboBox(ComboBox *comboBox);
 	void setWidth(int width);
 	void setHeight(int height);
+	void setSecondaryColor(Uint8 color);
 };
 
 }

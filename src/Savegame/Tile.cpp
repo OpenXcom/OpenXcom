@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -96,9 +96,12 @@ void Tile::load(const YAML::Node &node)
 	}
 	_fire = node["fire"].as<int>(_fire);
 	_smoke = node["smoke"].as<int>(_smoke);
-	for (int i = 0; i < 3; i++)
+	if (node["discovered"])
 	{
-		_discovered[i] = node["discovered"][i].as<bool>();
+		for (int i = 0; i < 3; i++)
+		{
+			_discovered[i] = node["discovered"][i].as<bool>();
+		}
 	}
 	if (node["openDoorWest"])
 	{
@@ -316,7 +319,7 @@ int Tile::getFootstepSound(Tile *tileBelow) const
 
 	if (_objects[MapData::O_FLOOR])
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
-	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() == 0 && _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
+	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() <= 1 && _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
 		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
@@ -506,6 +509,7 @@ bool Tile::damage(int part, int power)
  * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
  * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that passes it.
  * @param power Power of the damage.
+ * @param damageType the damage type of the explosion (not the same as item damage types)
  * @param force Force damage.
  */
 void Tile::setExplosive(int power, int damageType, bool force)

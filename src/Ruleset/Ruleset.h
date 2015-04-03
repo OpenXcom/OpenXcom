@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,6 +24,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../Savegame/GameTime.h"
+#include "../Ruleset/RuleAlienMission.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -53,7 +54,6 @@ class AlienRace;
 class AlienDeployment;
 class UfoTrajectory;
 class RuleAlienMission;
-class City;
 class Base;
 class MCDPatch;
 class ExtraSprites;
@@ -64,6 +64,8 @@ class RuleInterface;
 class RuleGlobe;
 class SoundDefinition;
 class MapScript;
+class RuleVideo;
+class RuleMusic;
 
 /**
  * Set of rules and stats for a game.
@@ -97,12 +99,14 @@ protected:
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, RuleInterface *> _interfaces;
 	std::map<std::string, SoundDefinition *> _soundDefs;
+	std::map<std::string, RuleVideo *>_videos;
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::map<std::string, std::vector<MapScript *> > _mapScripts;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	std::vector<StatString*> _statStrings;
+	std::map<std::string, RuleMusic *> _musics;
 	RuleGlobe *_globe;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	std::string _alienFuel;
@@ -213,14 +217,16 @@ public:
 	const UfoTrajectory *getUfoTrajectory(const std::string &id) const;
 	/// Gets the ruleset for a specific alien mission.
 	const RuleAlienMission *getAlienMission(const std::string &id) const;
+	/// Gets the ruleset for a random alien mission.
+	const RuleAlienMission *getRandomMission(MissionObjective objective, size_t monthsPassed) const;
 	/// Gets the list of all alien missions.
 	const std::vector<std::string> &getAlienMissionList() const;
-	/// Gets the city at the specified coordinates.
-	const City *locateCity(double lon, double lat) const;
 	/// Gets the alien item level table.
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
-	/// Gets the Defined starting base.
-	const YAML::Node &getStartingBase();
+	/// Gets the player starting base.
+	const YAML::Node &getStartingBase() const;
+	/// Gets the game starting time.
+	const GameTime &getStartingTime() const;
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
 	/// Gets the list of external Sprites.
@@ -230,7 +236,7 @@ public:
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Gets the list of StatStrings.
-    std::vector<StatString *> getStatStrings() const;    
+	std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
@@ -252,6 +258,9 @@ public:
 	/// Gets the list of transparency colors, 
 	const std::vector<SDL_Color> *getTransparencies() const;
 	const std::vector<MapScript*> *getMapScript(std::string id) const;
+	/// Gets the list videos for intro/outro etc.
+	const std::map<std::string, RuleVideo *> *getVideos() const;
+	const std::map<std::string, RuleMusic *> *getMusic() const;
 };
 
 }

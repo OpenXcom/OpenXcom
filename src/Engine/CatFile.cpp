@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,10 +31,6 @@ namespace OpenXcom
  */
 CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios::binary), _amount(0), _offset(0), _size(0)
 {
-	if (!this)
-		return;
-
-	
 	// Get amount of files
 	read((char*)&_amount, sizeof(_amount));
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -103,10 +103,14 @@ private:
 	/// Draw flight path.
 	void drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2);
 	/// Draw target marker.
-	void drawTarget(Target *target);
+	void drawTarget(Target *target, Surface *surface);
 public:
-	static Uint8 oceanColor1;
-	static Uint8 oceanColor2;
+
+	static Uint8 COUNTRY_LABEL_COLOR;
+	static Uint8 LINE_COLOR;
+	static Uint8 CITY_LABEL_COLOR;
+	static Uint8 BASE_LABEL_COLOR;
+	static Uint8 OCEAN_COLOR;
 	/// Creates a new globe at the specified position and size.
 	Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.

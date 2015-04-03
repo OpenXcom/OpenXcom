@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Armor.h"
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
@@ -26,7 +27,12 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  */
-Armor::Armor(const std::string &type) : _type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0), _deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _forcedTorso(TORSO_USE_GENDER)
+Armor::Armor(const std::string &type) :
+	_type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
+	_drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0),
+	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _hasInventory(true),
+	_forcedTorso(TORSO_USE_GENDER),
+	_faceColorGroup(0), _hairColorGroup(0), _utileColorGroup(0), _rankColorGroup(0)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
@@ -49,6 +55,7 @@ void Armor::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
 	_spriteInv = node["spriteInv"].as<std::string>(_spriteInv);
+	_hasInventory = node["allowInv"].as<bool>(_hasInventory);
 	if (node["corpseItem"])
 	{
 		_corpseBattle.clear();
@@ -62,6 +69,7 @@ void Armor::load(const YAML::Node &node)
 	}
 	_corpseGeo = node["corpseGeo"].as<std::string>(_corpseGeo);
 	_storeItem = node["storeItem"].as<std::string>(_storeItem);
+	_specWeapon = node["specialWeapon"].as<std::string>(_specWeapon);
 	_frontArmor = node["frontArmor"].as<int>(_frontArmor);
 	_sideArmor = node["sideArmor"].as<int>(_sideArmor);
 	_rearArmor = node["rearArmor"].as<int>(_rearArmor);
@@ -73,7 +81,7 @@ void Armor::load(const YAML::Node &node)
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 	if (const YAML::Node &dmg = node["damageModifier"])
 	{
-		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
+		for (size_t i = 0; i < dmg.size() && i < (size_t)DAMAGE_TYPES; ++i)
 		{
 			_damageModifier[i] = dmg[i].as<float>();
 		}
@@ -101,6 +109,15 @@ void Armor::load(const YAML::Node &node)
 	{
 		_canHoldWeapon = false;
 	}
+
+	_faceColorGroup = node["spriteFaceGroup"].as<int>(_faceColorGroup);
+	_hairColorGroup = node["spriteHairGroup"].as<int>(_hairColorGroup);
+	_rankColorGroup = node["spriteRankGroup"].as<int>(_rankColorGroup);
+	_utileColorGroup = node["spriteUtileGroup"].as<int>(_utileColorGroup);
+	_faceColor = node["spriteFaceColor"].as<std::vector<int> >(_faceColor);
+	_hairColor = node["spriteHairColor"].as<std::vector<int> >(_hairColor);
+	_rankColor = node["spriteRankColor"].as<std::vector<int> >(_rankColor);
+	_utileColor = node["spriteUtileColor"].as<std::vector<int> >(_utileColor);
 }
 
 /**
@@ -197,6 +214,15 @@ std::string Armor::getStoreItem() const
 }
 
 /**
+ * Gets the type of special weapon.
+ * @return The name of the special weapon.
+ */
+std::string Armor::getSpecialWeapon() const
+{
+	return _specWeapon;
+}
+
+/**
  * Gets the drawing routine ID.
  * @return The drawing routine ID.
  */
@@ -232,7 +258,7 @@ int Armor::getSize() const
  * @param dt The damageType.
  * @return The damage modifier 0->1.
  */
-float Armor::getDamageModifier(ItemDamageType dt)
+float Armor::getDamageModifier(ItemDamageType dt) const
 {
 	return _damageModifier[(int)dt];
 }
@@ -240,7 +266,7 @@ float Armor::getDamageModifier(ItemDamageType dt)
 /** Gets the loftempSet.
  * @return The loftempsSet.
  */
-std::vector<int> Armor::getLoftempsSet() const
+const std::vector<int>& Armor::getLoftempsSet() const
 {
 	return _loftempsSet;
 }
@@ -249,7 +275,7 @@ std::vector<int> Armor::getLoftempsSet() const
   * Gets pointer to the armor's stats.
   * @return stats Pointer to the armor's stats.
   */
-UnitStats *Armor::getStats()
+const UnitStats *Armor::getStats() const
 {
 	return &_stats;
 }
@@ -258,7 +284,7 @@ UnitStats *Armor::getStats()
  * Gets the armor's weight.
  * @return the weight of the armor.
  */
-int Armor::getWeight()
+int Armor::getWeight() const
 {
 	return _weight;
 }
@@ -267,7 +293,7 @@ int Armor::getWeight()
  * Gets number of death frames.
  * @return number of death frames.
  */
-int Armor::getDeathFrames()
+int Armor::getDeathFrames() const
 {
 	return _deathFrames;
 }
@@ -276,7 +302,7 @@ int Armor::getDeathFrames()
  * Gets if armor uses constant animation.
  * @return if it uses constant animation
  */
-bool Armor::getConstantAnimation()
+bool Armor::getConstantAnimation() const
 {
 	return _constantAnimation;
 }
@@ -285,7 +311,7 @@ bool Armor::getConstantAnimation()
  * Gets if armor can hold weapon.
  * @return if it can hold weapon
  */
-bool Armor::getCanHoldWeapon()
+bool Armor::getCanHoldWeapon() const
 {
 	return _canHoldWeapon;
 }
@@ -294,9 +320,118 @@ bool Armor::getCanHoldWeapon()
  * Checks if this armor ignores gender (power suit/flying suit).
  * @return which torso to force on the sprite.
  */
-ForcedTorso Armor::getForcedTorso()
+ForcedTorso Armor::getForcedTorso() const
 {
 	return _forcedTorso;
+}
+
+/**
+ * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
+ */
+int Armor::getFaceColorGroup() const
+{
+	return _faceColorGroup;
+}
+
+/**
+ * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
+ */
+int Armor::getHairColorGroup() const
+{
+	return _hairColorGroup;
+}
+
+/**
+ * Gets utile base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
+ */
+int Armor::getUtileColorGroup() const
+{
+	return _utileColorGroup;
+}
+
+/**
+ * Gets rank base color group for replacement, if 0 then don't replace colors.
+ * @return Color group or 0.
+ */
+int Armor::getRankColorGroup() const
+{
+	return _rankColorGroup;
+}
+
+/**
+ * Gets new face colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getFaceColor(int i) const
+{
+	if ((size_t)i < _faceColor.size())
+	{
+		return _faceColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Gets new hair colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getHairColor(int i) const
+{
+	if ((size_t)i < _hairColor.size())
+	{
+		return _hairColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Gets new utile colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getUtileColor(int i) const
+{
+	if ((size_t)i < _utileColor.size())
+	{
+		return _utileColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Gets new rank colors for replacement, if 0 then don't replace colors.
+ * @return Color index or 0.
+ */
+int Armor::getRankColor(int i) const
+{
+	if ((size_t)i < _rankColor.size())
+	{
+		return _rankColor[i];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Can this unit's inventory be accessed for any reason?
+ * @return if we can access the inventory.
+ */
+bool Armor::hasInventory() const
+{
+	return _hasInventory;
 }
 
 }

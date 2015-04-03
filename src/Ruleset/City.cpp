@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "City.h"
-#include <math.h>
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -29,8 +28,10 @@ namespace OpenXcom
  * @param lon Longitude of the city.
  * @param lat Latitude of the city.
  */
-City::City(const std::string &name, double lon, double lat): _name(name), _lon(lon), _lat(lat)
+City::City(const std::string &name, double lon, double lat): Target(), _name(name)
 {
+	_lon = lon;
+	_lat = lat;
 }
 
 /**
@@ -41,41 +42,22 @@ City::~City()
 }
 
 /**
- * Loads the region type from a YAML file.
- * @param node YAML node.
+ * Returns the city's unique identifying name.
+ * @param lang Language to get strings from.
+ * @return Full name.
  */
-void City::load(const YAML::Node &node)
+std::wstring City::getName(Language *lang) const
 {
-	_name = node["name"].as<std::string>(_name);
-	_lon = node["lon"].as<double>(_lon) * M_PI / 180;
-	_lat = node["lat"].as<double>(_lat) * M_PI / 180;
+	return lang->getString(_name);
 }
 
 /**
- * Returns the name of the city.
- * @return The city's name.
+ * Returns the globe marker for the UFO.
+ * @return Marker sprite, -1 if none.
  */
-std::string City::getName() const
+int City::getMarker() const
 {
-	return _name;
-}
-
-/**
- * Returns the latitude coordinate of the city.
- * @return The city's latitude in radians.
- */
-double City::getLatitude() const
-{
-	return _lat;
-}
-
-/**
- * Returns the longitude coordinate of the city.
- * @return The city's longitude in radians.
- */
-double City::getLongitude() const
-{
-	return _lon;
+	return 8;
 }
 
 }

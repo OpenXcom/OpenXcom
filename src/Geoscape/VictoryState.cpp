@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -62,7 +62,7 @@ VictoryState::VictoryState() : _screen(-1)
 		setPalette(screen->getPalette());
 
 		add(_bg[i]);
-		add(_text[i]);
+		add(_text[i], "victoryText", "gameOver");
 
 		screen->blit(_bg[i]);
 		_bg[i]->setVisible(false);
@@ -71,7 +71,6 @@ VictoryState::VictoryState() : _screen(-1)
 		std::ostringstream ss;
 		ss << "STR_VICTORY_" << i + 1;
 		_text[i]->setText(tr(ss.str()));
-		_text[i]->setColor(Palette::blockOffset(15)+9);
 		_text[i]->setWordWrap(true);
 		_text[i]->setVisible(false);
 	}

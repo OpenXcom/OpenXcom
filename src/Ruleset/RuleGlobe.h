@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class Polygon;
 class Polyline;
+class Texture;
 
 /**
  * Represents the contents of the Geoscape globe,
@@ -39,6 +40,7 @@ class RuleGlobe
 private:
 	std::list<Polygon*> _polygons;
 	std::list<Polyline*> _polylines;
+	std::map<int, Texture*> _textures;
 public:
 	/// Creates a blank globe ruleset.
 	RuleGlobe();
@@ -52,6 +54,10 @@ public:
 	std::list<Polyline*> *getPolylines();
 	/// Loads a set of polygons from a DAT file.
 	void loadDat(const std::string &filename);
+	/// Gets a specific world texture.
+	Texture *getTexture(int id) const;
+	/// Gets all the terrains for a specific deployment.
+	std::vector<std::string> getTerrains(const std::string &deployment) const;
 };
 
 }

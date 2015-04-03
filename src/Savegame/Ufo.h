@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ class Ufo : public MovingTarget
 public:
 	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
 private:
-	RuleUfo *_rules;
+	const RuleUfo *_rules;
 	int _id, _crashId, _landId, _damage;
 	std::string _direction, _altitude;
 	enum UfoStatus _status;
@@ -54,13 +54,13 @@ private:
 	AlienMission *_mission;
 	const UfoTrajectory *_trajectory;
 	size_t _trajectoryPoint;
-	bool _detected, _hyperDetected;
-	int _shootingAt, _hitFrame;
+	bool _detected, _hyperDetected, _processedIntercept;
+	int _shootingAt, _hitFrame, _fireCountdown, _escapeCountdown;
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 public:
 	/// Creates a UFO of the specified type.
-	Ufo(RuleUfo *rules);
+	Ufo(const RuleUfo *rules);
 	/// Cleans up the UFO.
 	~Ufo();
 	/// Loads the UFO from YAML.
@@ -70,7 +70,9 @@ public:
 	/// Saves the UFO's ID to YAML.
 	YAML::Node saveId() const;
 	/// Gets the UFO's ruleset.
-	RuleUfo *getRules() const;
+	const RuleUfo *getRules() const;
+	/// Sets the UFO's ruleset.
+	void changeRules(const RuleUfo *rules);
 	/// Gets the UFO's ID.
 	int getId() const;
 	/// Sets the UFO's ID.
@@ -153,6 +155,12 @@ public:
 	void setHitFrame(int frame);
 	/// Gets the UFO's hit frame.
 	int getHitFrame();
+	void setFireCountdown(int time);
+	int getFireCountdown();
+	void setEscapeCountdown(int time);
+	int getEscapeCountdown();
+	void setInterceptionProcessed(bool processed);
+	bool getInterceptionProcessed();
 
 };
 

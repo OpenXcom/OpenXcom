@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,6 +49,7 @@ private:
 	Base *_base;
 	std::vector<std::string> _items;
 	int _totalItems;
+	Uint8 _ammoColor;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:

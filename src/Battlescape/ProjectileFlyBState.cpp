@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -87,8 +87,6 @@ void ProjectileFlyBState::init()
 	}
 
 	if (_parent->getPanicHandled() &&
-		_action.type != BA_HIT &&
-		_action.type != BA_STUN &&
 		_action.actor->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
@@ -120,16 +118,13 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
+		_unit->lookAt(_action.target, _unit->getTurretType() != -1);
+		while (_unit->getStatus() == STATUS_TURNING)
+		{
+			_unit->turn();
+		}
 	}
-
-	// autoshot will default back to snapshot if it's not possible
-	if (weapon->getRules()->getAccuracyAuto() == 0 && _action.type == BA_AUTOSHOT)
-		_action.type = BA_SNAPSHOT;
-
-	// snapshot defaults to "hit" if it's a melee weapon
-	// (in case of reaction "shots" with a melee weapon)
-	if (weapon->getRules()->getBattleType() == BT_MELEE && _action.type == BA_SNAPSHOT)
-		_action.type = BA_HIT;
+	
 	Tile *endTile = _parent->getSave()->getTile(_action.target);
 	switch (_action.type)
 	{
@@ -173,19 +168,6 @@ void ProjectileFlyBState::init()
 		}
 		_projectileItem = weapon;
 		break;
-	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor, 0, &_action.target))
-		{
-			_action.result = "STR_THERE_IS_NO_ONE_THERE";
-			_parent->popState();
-			return;
-		}
-		performMeleeAttack();
-		return;
-	case BA_PANIC:
-	case BA_MINDCONTROL:
-		_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
-		return;
 	default:
 		_parent->popState();
 		return;
@@ -433,11 +415,11 @@ void ProjectileFlyBState::think()
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->invalidate();
 			}
-			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL && !_parent->getSave()->getUnitsFalling())
+			if (!_parent->getSave()->getUnitsFalling())
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
-			if (!_unit->isOut() && _action.type != BA_HIT)
+			if (!_unit->isOut())
 			{
 				_unit->abortTurn();
 			}
@@ -545,15 +527,10 @@ void ProjectileFlyBState::think()
 									_parent->getMap()->getExplosions()->push_back(explosion);
 									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), 0);
 								}
-								++i;
 							}
+							++i;
 							delete proj;
 						}
-					}
-					// if the unit burns floortiles, burn floortiles
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
-					{
-						_parent->getSave()->getTile(_action.target)->ignite(15);
 					}
 
 					if (_projectileImpact == 4)
@@ -594,7 +571,7 @@ void ProjectileFlyBState::cancel()
 	{
 		_parent->getMap()->getProjectile()->skipTrajectory();
 		Position p = _parent->getMap()->getProjectile()->getPosition();
-		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false))
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false, 0, false))
 			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x/16, p.y/16, p.z/24));
 	}
 }
@@ -651,7 +628,7 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
         if (curZ < 0 && dz < 0) //roll back
         {
             dz = std::max(dz, -1.0);
-            if (abs(dz)>1e-10) //rollback horizontal
+            if (std::abs(dz)>1e-10) //rollback horizontal
                 dist -= curZ / dz;
             break;
         }
@@ -677,34 +654,5 @@ void ProjectileFlyBState::setOriginVoxel(Position pos)
 void ProjectileFlyBState::targetFloor()
 {
 	_targetFloor = true;
-}
-
-void ProjectileFlyBState::performMeleeAttack()
-{
-	BattleUnit *target = _parent->getSave()->getTile(_action.target)->getUnit();
-	int height = target->getFloatHeight() + (target->getHeight() / 2);
-	Position voxel;
-	_parent->getSave()->getPathfinding()->directionToVector(_unit->getDirection(), &voxel);
-	voxel = _action.target * Position(16, 16, 24) + Position(8,8,height - _parent->getSave()->getTile(_action.target)->getTerrainLevel()) - voxel;
-	// set the soldier in an aiming position
-	_unit->aim(true);
-	_unit->setCache(0);
-	_parent->getMap()->cacheUnit(_unit);
-	// and we have a lift-off
-	if (_ammo && _ammo->getRules()->getMeleeAttackSound() != -1)
-	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
-	}
-	else if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
-	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
-	}
-	if (!_parent->getSave()->getDebugMode() && _action.weapon->getRules()->getBattleType() == BT_MELEE && _ammo && _ammo->spendBullet() == false)
-	{
-		_parent->getSave()->removeItem(_ammo);
-		_action.weapon->setAmmoItem(0);
-	}
-	_parent->getMap()->setCursorType(CT_NONE);
-	_parent->statePushNext(new ExplosionBState(_parent, voxel, _action.weapon, _action.actor, 0, true));
 }
 }

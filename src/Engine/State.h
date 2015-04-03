@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,8 @@
 #include <vector>
 #include <string>
 #include <SDL.h>
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -51,6 +53,7 @@ protected:
 	bool _screen;
 	InteractiveSurface *_modal;
 	SDL_Color _palette[256];
+	Uint8 _cursorColor;
 public:
 	/// Creates a new state linked to a game.
 	State();

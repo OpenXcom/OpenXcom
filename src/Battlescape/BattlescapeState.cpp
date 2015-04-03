@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -76,9 +76,7 @@
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/SavedGame.h"
@@ -87,7 +85,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/TerrorSite.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
@@ -181,10 +179,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	// Set palette
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	// Fix system colors
-	_game->getCursor()->setColor(Palette::blockOffset(9));
-	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
-	
 	if (_game->getRuleset()->getInterface("battlescape")->getElement("pathfinding"))
 	{
 		Element *pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
@@ -477,7 +471,14 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	_btnReserveAuto->setGroup(&_reserve);
 	
 	// Set music
-	_game->getResourcePack()->playMusic("GMTACTIC");
+	if (_save->getMusic() == "")
+	{
+		_game->getResourcePack()->playMusic("GMTACTIC", true);
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(_save->getMusic());
+	}
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
@@ -1352,7 +1353,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getBaseStats()->psiSkill > 0);
+	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP));
 }
 
 /**
@@ -1912,48 +1913,17 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
 	}
 	std::string nextStage;
-	std::string nextStageRace;
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
-		nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStageRace();
-		if (nextStageRace == "")
-		{
-			for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin();
-				i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
-			{
-				if ((*i)->isInBattlescape())
-				{
-					nextStageRace = (*i)->getAlienRace();
-					break;
-				}
-			}
-			
-			for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin();
-				i != _game->getSavedGame()->getAlienBases()->end(); ++i)
-			{
-				if ((*i)->isInBattlescape())
-				{
-					nextStageRace = (*i)->getAlienRace();
-					break;
-				}
-			}
-		}
-		else
-		{
-			if (_game->getRuleset()->getAlienRace(nextStageRace) == 0)
-			{
-				throw Exception(nextStageRace + " race not found.");
-			}
-		}
 	}
+
 	if (!nextStage.empty() && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
 		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setAlienRace(nextStageRace);
 		bgen.nextStage();
 		_game->popState();
 		_game->pushState(new BriefingState(0, 0));
@@ -1968,7 +1938,9 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
+			if (_game->getRuleset()->getDeployment(_save->getMissionType()) &&
+				_game->getRuleset()->getDeployment(_save->getMissionType())->isNoRetreat() &&
+				_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new DefeatState);
 			}
@@ -1981,7 +1953,9 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
+			if (_game->getRuleset()->getDeployment(_save->getMissionType()) &&
+				_game->getRuleset()->getDeployment(_save->getMissionType())->isFinalMission() &&
+				_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new VictoryState);
 			}
@@ -1990,8 +1964,6 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->pushState(new DebriefingState);
 			}
 		}
-		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
 }
 
@@ -2215,6 +2187,10 @@ void BattlescapeState::stopScrolling(Action *action)
 		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
 		_battleGame->setupCursor();
+		if (_battleGame->getCurrentAction()->actor == 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()))
+		{
+			getMap()->setCursorType(CT_NORMAL);
+		}
 	}
 	else
 	{

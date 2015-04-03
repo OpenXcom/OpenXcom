@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,14 +24,11 @@
 
 namespace OpenXcom
 {
-	class Game;
 	class Text;
-	class TextButton;
-	class ArticleStateTextImage;
 	class ArticleDefinitionTFTD;
 
 	/**
-	 * ArticleStateTextImage has a title, text block and a background image.
+	 * Every TFTD article has a title, text block and a background image, with little to no variation.
 	 */
 
 	class ArticleStateTFTD : public ArticleState
@@ -43,7 +40,6 @@ namespace OpenXcom
 	protected:
 		Text *_txtTitle;
 		Text *_txtInfo;
-		TextButton *_btnTitle;
 	};
 }
 

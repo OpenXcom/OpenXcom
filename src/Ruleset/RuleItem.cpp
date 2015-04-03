@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -663,7 +663,7 @@ int RuleItem::getTurretType() const
  * Returns if this is a live alien.
  * @return True if this is a live alien.
  */
-bool RuleItem::getAlien() const
+bool RuleItem::isAlien() const
 {
 	return _liveAlien;
 }

@@ -169,12 +169,16 @@ set ( battlescape_src
   Battlescape/MedikitState.h
   Battlescape/MedikitView.cpp
   Battlescape/MedikitView.h
+  Battlescape/MeleeAttackBState.cpp
+  Battlescape/MeleeAttackBState.h
   Battlescape/ScannerState.cpp
   Battlescape/ScannerState.h
   Battlescape/ScannerView.cpp
   Battlescape/ScannerView.h
   Battlescape/PromotionsState.cpp
   Battlescape/PromotionsState.h
+  Battlescape/PsiAttackBState.cpp
+  Battlescape/PsiAttackBState.h
   Battlescape/BattlescapeGame.cpp
   Battlescape/BattlescapeGame.h
   Battlescape/CannotReequipState.cpp
@@ -238,8 +242,8 @@ set ( engine_src
   Engine/LocalizedText.h
   Engine/FastLineClip.cpp
   Engine/FastLineClip.h
-  Engine/Flc.cpp
-  Engine/Flc.h
+  Engine/FlcPlayer.cpp
+  Engine/FlcPlayer.h
   Engine/Zoom.cpp
   Engine/Zoom.h
   Engine/ShaderDraw.h
@@ -332,8 +336,8 @@ set ( geoscape_src
   Geoscape/PsiTrainingState.cpp
   Geoscape/AlienBaseState.h
   Geoscape/AlienBaseState.cpp
-  Geoscape/AlienTerrorState.h
-  Geoscape/AlienTerrorState.cpp
+  Geoscape/MissionDetectedState.h
+  Geoscape/MissionDetectedState.cpp
   Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleManufactureState.cpp
   Geoscape/VictoryState.h
@@ -436,6 +440,8 @@ set ( menu_src
   Menu/LoadGameState.h
   Menu/SaveGameState.cpp
   Menu/SaveGameState.h
+  Menu/ListLoadOriginalState.cpp
+  Menu/ListLoadOriginalState.h
 )
 
 set ( resource_src
@@ -520,6 +526,12 @@ set ( ruleset_src
   Ruleset/Polyline.cpp
   Ruleset/RuleGlobe.h
   Ruleset/RuleGlobe.cpp
+  Ruleset/RuleVideo.h
+  Ruleset/RuleVideo.cpp
+  Ruleset/RuleMusic.h
+  Ruleset/RuleMusic.cpp
+  Ruleset/Texture.h
+  Ruleset/Texture.cpp
 )
 
 set ( savegame_src
@@ -573,8 +585,8 @@ set ( savegame_src
   Savegame/ResearchProject.cpp
   Savegame/Production.h
   Savegame/Production.cpp
-  Savegame/TerrorSite.h
-  Savegame/TerrorSite.cpp
+  Savegame/MissionSite.h
+  Savegame/MissionSite.cpp
   Savegame/Vehicle.h
   Savegame/Vehicle.cpp
   Savegame/EquipmentLayoutItem.h
@@ -587,6 +599,9 @@ set ( savegame_src
   Savegame/SerializationHelper.h
   Savegame/SoldierDeath.h
   Savegame/SoldierDeath.cpp
+  Savegame/SaveConverter.cpp
+  Savegame/SaveConverter.h
+  Savegame/SaveConverterXcom1.h
 )
 
 set ( ufopedia_src
@@ -614,6 +629,20 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateTextImage.h
   Ufopaedia/ArticleStateTFTD.cpp
   Ufopaedia/ArticleStateTFTD.h
+  Ufopaedia/ArticleStateTFTDArmor.cpp
+  Ufopaedia/ArticleStateTFTDArmor.h
+  Ufopaedia/ArticleStateTFTDCraft.cpp
+  Ufopaedia/ArticleStateTFTDCraft.h
+  Ufopaedia/ArticleStateTFTDCraftWeapon.cpp
+  Ufopaedia/ArticleStateTFTDCraftWeapon.h
+  Ufopaedia/ArticleStateTFTDFacility.cpp
+  Ufopaedia/ArticleStateTFTDFacility.h
+  Ufopaedia/ArticleStateTFTDItem.cpp
+  Ufopaedia/ArticleStateTFTDItem.h
+  Ufopaedia/ArticleStateTFTDUso.cpp
+  Ufopaedia/ArticleStateTFTDUso.h
+  Ufopaedia/ArticleStateTFTDVehicle.cpp
+  Ufopaedia/ArticleStateTFTDVehicle.h
   Ufopaedia/ArticleStateArmor.cpp
   Ufopaedia/ArticleStateArmor.h
   Ufopaedia/ArticleStateVehicle.cpp

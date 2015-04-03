@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -153,7 +153,7 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = (!_unit->getMeleeWeapon().empty());
+	_melee = _unit->getMeleeWeapon() != 0;
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
@@ -235,6 +235,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->type = _psiAction->type;
 		action->target = _psiAction->target;
 		action->number -= 1;
+		action->weapon = _psiAction->weapon;
 		return;
 	}
 	else
@@ -495,6 +496,8 @@ void AlienBAIState::setupPatrol()
 			// can i shoot an object?
 			if (_fromNode->isTarget() &&
 				_unit->getMainHandWeapon() &&
+				_unit->getMainHandWeapon()->getRules()->getAccuracySnap() &&
+				_unit->getMainHandWeapon()->getAmmoItem() &&
 				_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
 				_save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
@@ -699,7 +702,7 @@ void AlienBAIState::setupAttack()
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
 	{
-		if (_unit->getBaseStats()->psiSkill && psiAction())
+		if (psiAction())
 		{
 			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
 			return;
@@ -1032,8 +1035,6 @@ int AlienBAIState::selectNearestTarget()
 	int tally = 0;
 	_closestDist= 100;
 	_aggroTarget = 0;
-	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
-	origin.z -= 2;
 	Position target;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1047,6 +1048,11 @@ int AlienBAIState::selectNearestTarget()
 				bool valid = false;
 				if (_rifle || !_melee)
 				{
+					BattleAction action;
+					action.actor = _unit;
+					action.weapon = _unit->getMainHandWeapon();
+					action.target = (*i)->getPosition();
+					Position origin = _save->getTileEngine()->getOriginVoxel(action, 0);
 					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
 				}
 				else
@@ -1781,31 +1787,35 @@ void AlienBAIState::grenadeAction()
 {
 	// do we have a grenade on our belt?
 	BattleItem *grenade = _unit->getGrenadeFromBelt();
-	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
-	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff, true))
+	int tu = 4; // 4TUs for picking up the grenade
+	tu += _unit->getActionTUs(BA_PRIME, grenade);
+	tu += _unit->getActionTUs(BA_THROW, grenade);
+	// do we have enough TUs to prime and throw the grenade?
+	if (tu <= _unit->getTimeUnits())
 	{
-		int tu = 4; // 4TUs for picking up the grenade
-		tu += _unit->getActionTUs(BA_PRIME, grenade);
-		tu += _unit->getActionTUs(BA_THROW, grenade);
-		// do we have enough TUs to prime and throw the grenade?
-		if (tu <= _unit->getTimeUnits())
+		BattleAction action;
+		action.weapon = grenade;
+		action.type = BA_THROW;
+		action.actor = _unit;
+		if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff, true))
 		{
-			BattleAction action;
-			action.weapon = grenade;
 			action.target = _aggroTarget->getPosition();
-			action.type = BA_THROW;
-			action.actor = _unit;
-			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
-			Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
-			// are we within range?
-			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel))
-			{
-				_attackAction->weapon = grenade;
-				_attackAction->target = action.target;
-				_attackAction->type = BA_THROW;
-				_rifle = false;
-				_melee = false;
-			}
+		}
+		else if (!getNodeOfBestEfficacy(&action))
+		{
+			return;
+		}
+		Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+		Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
+		// are we within range?
+		if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel))
+		{
+			_attackAction->weapon = grenade;
+			_attackAction->target = action.target;
+			_attackAction->type = BA_THROW;
+			_attackAction->TU = tu;
+			_rifle = false;
+			_melee = false;
 		}
 	}
 }
@@ -1820,7 +1830,12 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
-	RuleItem *psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+	BattleItem *item = _unit->getSpecialWeapon(BT_PSIAMP);
+	if (!item)
+	{
+		return false;
+	}
+	RuleItem *psiWeaponRules = item->getRules();
 	int cost = psiWeaponRules->getTUUse();
 	if (!psiWeaponRules->getFlatRate())
 	{
@@ -1841,7 +1856,7 @@ bool AlienBAIState::psiAction()
 
 		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-				// don't target tanks
+			// don't target tanks
 			if ((*i)->getArmor()->getSize() == 1 &&
 				validTarget(*i, true, false) &&
 				// they must be player units
@@ -1908,11 +1923,13 @@ bool AlienBAIState::psiAction()
 			{
 				_psiAction->type = BA_MINDCONTROL;
 				_psiAction->target = _aggroTarget->getPosition();
+				_psiAction->weapon = item;
 				return true;
 			}
 		}
 		_psiAction->type = BA_PANIC;
 		_psiAction->target = _aggroTarget->getPosition();
+		_psiAction->weapon = item;
 		return true;
 	}
 	return false;
@@ -1929,6 +1946,7 @@ void AlienBAIState::meleeAttack()
 	if (_traceAI) { Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId(); }
 	_attackAction->target = _aggroTarget->getPosition();
 	_attackAction->type = BA_HIT;
+	_attackAction->weapon = _unit->getMeleeWeapon();
 }
 
 /**
@@ -1976,7 +1994,7 @@ BattleActionType AlienBAIState::getReserveMode()
 void AlienBAIState::selectMeleeOrRanged()
 {
 	RuleItem *rangedWeapon = _unit->getMainHandWeapon()->getRules();
-	RuleItem *meleeWeapon = _save->getBattleGame()->getRuleset()->getItem(_unit->getMeleeWeapon());
+	RuleItem *meleeWeapon = _unit->getMeleeWeapon() ? _unit->getMeleeWeapon()->getRules() : 0;
 
 	if (!meleeWeapon)
 	{
@@ -2005,7 +2023,7 @@ void AlienBAIState::selectMeleeOrRanged()
 	}
 	if ( _visibleEnemies > 1 )
 	{
-		meleeOdds -= 5 * (_visibleEnemies - 1);
+		meleeOdds -= 20 * (_visibleEnemies - 1);
 	}
 
 	if (meleeOdds > 0 && _unit->getHealth() >= 2 * _unit->getBaseStats()->health / 3)
@@ -2027,6 +2045,64 @@ void AlienBAIState::selectMeleeOrRanged()
 		}
 	}
 	_melee = false;
+}
+
+/**
+ * Checks nearby nodes to see if they'd make good grenade targets
+ * @param action contains our details one weapon and user, and we set the target for it here.
+ * @return if we found a viable node or not.
+ */
+bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
+{
+	// i hate the player and i want him dead, but i don't want to piss him off.
+	if (_save->getTurn() < 3)
+		return false;
+
+	int bestScore = 2;
+	Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(_unit);
+	Position targetVoxel;
+	for (std::vector<Node*>::const_iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+	{
+		int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
+		if (dist <= 20 && dist > action->weapon->getRules()->getExplosionRadius() &&
+			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), MapData::O_FLOOR, &targetVoxel, _unit))
+		{
+			int nodePoints = 0;
+			for (std::vector<BattleUnit*>::const_iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+			{
+				dist = _save->getTileEngine()->distance((*i)->getPosition(), (*j)->getPosition());
+				if (!(*j)->isOut() && dist < action->weapon->getRules()->getExplosionRadius())
+				{
+					Position targetOriginVoxel = _save->getTileEngine()->getSightOriginVoxel(*j);
+					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), MapData::O_FLOOR, &targetVoxel, *j))
+					{
+						if ((*j)->getFaction() != FACTION_HOSTILE)
+						{
+							if ((*j)->getTurnsSinceSpotted() <= _intelligence)
+							{
+								nodePoints++;
+							}
+						}
+						else
+						{
+							nodePoints -= 2;
+						}
+					}
+				}
+			}
+			if (nodePoints > bestScore)
+			{
+				bestScore = nodePoints;
+				action->target = (*i)->getPosition();
+			}
+		}
+	}
+	return bestScore > 2;
+}
+
+BattleUnit* AlienBAIState::getTarget()
+{
+	return _aggroTarget;
 }
 
 }

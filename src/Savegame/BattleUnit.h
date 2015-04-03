@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
 #include "Soldier.h"
+#include "BattleItem.h"
 
 namespace OpenXcom
 {
@@ -35,6 +36,7 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
+class SavedBattleGame;
 class Node;
 class Surface;
 class RuleInventory;
@@ -45,7 +47,7 @@ class Language;
 class AlienBAIState;
 class CivilianBAIState;
 
-enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
+enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK, STATUS_TIME_OUT};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
 enum UnitSide {SIDE_FRONT, SIDE_LEFT, SIDE_RIGHT, SIDE_REAR, SIDE_UNDER};
 enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LEFTARM, BODYPART_RIGHTLEG, BODYPART_LEFTLEG};
@@ -58,6 +60,8 @@ enum UnitBodyPart {BODYPART_HEAD, BODYPART_TORSO, BODYPART_RIGHTARM, BODYPART_LE
 class BattleUnit
 {
 private:
+	static const int SPEC_WEAPON_MAX = 3;
+
 	UnitFaction _faction, _originalFaction;
 	UnitFaction _killedBy;
 	int _id;
@@ -78,6 +82,7 @@ private:
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
+	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
 	BattleAIState *_currentAIState;
 	bool _visible;
 	Surface *_cache[5];
@@ -116,10 +121,15 @@ private:
 	bool _breathing;
 	bool _hidingForTurn, _floorAbove, _respawn;
 	MovementType _movementType;
+	std::vector<std::pair<Uint8, Uint8> > _recolor;
+
+	/// Helper function initing recolor vector.
+	void setRecolor(int basicLook, int utileLook, int rankLook);
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
-	/// Creates a BattleUnit.
+	/// Creates a BattleUnit from solder.
 	BattleUnit(Soldier *soldier, int depth);
+	/// Creates a BattleUnit from unit.
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
@@ -177,6 +187,8 @@ public:
 	void setCache(Surface *cache, int part = 0);
 	/// If this unit is cached on the battlescape.
 	Surface *getCache(bool *invalid, int part = 0) const;
+	/// Gets unit sprite recolors values.
+	const std::vector<std::pair<Uint8, Uint8> > &getRecolor() const;
 	/// Kneel down.
 	void kneel(bool kneeled);
 	/// Is kneeled?
@@ -434,15 +446,20 @@ public:
 	void setFloorAbove(bool floor);
 	/// Get the flag for "floor above me".
 	bool getFloorAbove();
-	/// Get the name of any melee weapon we may be carrying, or a built in one.
-	std::string getMeleeWeapon();
+	/// Get any melee weapon we may be carrying, or a built in one.
+	BattleItem *getMeleeWeapon();
 	/// Use this function to check the unit's movement type.
 	MovementType getMovementType() const;
 	/// Checks if this unit is in hiding for a turn.
 	bool isHiding() {return _hidingForTurn; };
 	/// Sets this unit is in hiding for a turn (or not).
 	void setHiding(bool hiding) { _hidingForTurn = hiding; };
-
+	/// Puts the unit in the corner to think about what he's done.
+	void goToTimeOut();
+	/// Create special weapon for unit.
+	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
+	/// Get special weapon.
+	BattleItem *getSpecialWeapon(BattleType type) const;
 };
 
 }

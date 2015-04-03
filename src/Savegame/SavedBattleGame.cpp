@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,13 +52,13 @@ namespace OpenXcom
  * Initializes a brand new battlescape saved game.
  */
 SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0), _side(FACTION_PLAYER), _turn(1),
-                                     _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
+                                     _debugMode(false), _aborted(false), _itemId(0), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
 	{
 		_tileSearch[i].x = ((i%11) - 5);
-		_tileSearch[i].y = ((i/11) - 5); 
+		_tileSearch[i].y = ((i/11) - 5);
 	}
 }
 
@@ -89,6 +89,14 @@ SavedBattleGame::~SavedBattleGame()
 	}
 
 	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<BattleItem*>::iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<BattleItem*>::iterator i = _recoverConditional.begin(); i != _recoverConditional.end(); ++i)
 	{
 		delete *i;
 	}
@@ -136,7 +144,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			getTile(pos)->load((*i));
 		}
 	}
-	else 
+	else
 	{
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
@@ -151,7 +159,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		serKey._mapDataSetID = node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields = node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
-		// load binary tile data! 
+		// load binary tile data!
 		YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8 *r = (Uint8*)binTiles.data();
@@ -188,6 +196,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["units"].begin(); i != node["units"].end(); ++i)
 	{
 		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
+		UnitFaction originalFaction = (UnitFaction)(*i)["originalFaction"].as<int>(faction);
 		int id = (*i)["soldierId"].as<int>();
 		BattleUnit *unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
@@ -200,21 +209,15 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
-			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
+			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
+		unit->setSpecialWeapon(this, rule);
 		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
-			
-			// silly hack to fix mind controlled aliens
-			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
-			if (unit->getOriginalFaction() == FACTION_HOSTILE)
-			{
-				unit->adjustStats(savedGame->getDifficulty());
-			}
 		}
 		if (unit->getStatus() != STATUS_DEAD)
 		{
@@ -253,6 +256,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
 			int owner = (*i)["owner"].as<int>();
+			int prevOwner = (*i)["previousOwner"].as<int>(-1);
 			int unit = (*i)["unit"].as<int>();
 
 			// match up items and units
@@ -265,6 +269,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				if ((*bu)->getId() == unit)
 				{
 					item->setUnit(*bu);
+				}
+			}
+			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+			{
+				if ((*bu)->getId() == prevOwner)
+				{
+					item->setPreviousOwner(*bu);
 				}
 			}
 
@@ -300,9 +311,36 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			 ++weaponi;
 		}
 	}
-	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
+	_objectivesDestroyed = node["objectivesDestroyed"].as<int>(_objectivesDestroyed);
+	_objectivesNeeded = node["objectivesNeeded"].as<int>(_objectivesNeeded);
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
+	_ambience = node["ambience"].as<int>(_ambience);
+
+	for (YAML::const_iterator i = node["recoverConditional"].begin(); i != node["recoverConditional"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		_itemId = (*i)["id"].as<int>(_itemId);
+		if (rule->getItem(type))
+		{
+			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+			item->load(*i);
+			_recoverConditional.push_back(item);
+		}
+	}
+
+	for (YAML::const_iterator i = node["recoverGuaranteed"].begin(); i != node["recoverGuaranteed"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		_itemId = (*i)["id"].as<int>(_itemId);
+		if (rule->getItem(type))
+		{
+			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+			item->load(*i);
+			_recoverGuaranteed.push_back(item);
+		}
+	}
+	_music = node["music"].as<std::string>(_music);
 }
 
 /**
@@ -349,9 +387,10 @@ void SavedBattleGame::loadMapResources(Game *game)
 YAML::Node SavedBattleGame::save() const
 {
 	YAML::Node node;
-	if (_objectiveDestroyed)
+	if (_objectivesNeeded)
 	{
-		node["objectiveDestroyed"] = _objectiveDestroyed;
+		node["objectivesDestroyed"] = _objectivesDestroyed;
+		node["objectivesNeeded"] = _objectivesNeeded;
 	}
 	node["width"] = _mapsize_x;
 	node["length"] = _mapsize_y;
@@ -421,6 +460,16 @@ YAML::Node SavedBattleGame::save() const
 	node["tuReserved"] = (int)_tuReserved;
     node["kneelReserved"] = _kneelReserved;
     node["depth"] = _depth;
+	node["ambience"] = _ambience;
+	for (std::vector<BattleItem*>::const_iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)
+	{
+		node["recoverGuaranteed"].push_back((*i)->save());
+	}
+	for (std::vector<BattleItem*>::const_iterator i = _recoverConditional.begin(); i != _recoverConditional.end(); ++i)
+	{
+		node["recoverConditional"].push_back((*i)->save());
+	}
+	node["music"] = _music;
 
 	return node;
 }
@@ -478,6 +527,8 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
  */
 void SavedBattleGame::initUtilities(ResourcePack *res)
 {
+	delete _pathfinding;
+	delete _tileEngine;
 	_pathfinding = new Pathfinding(this);
 	_tileEngine = new TileEngine(this, res->getVoxelData());
 }
@@ -814,9 +865,9 @@ void SavedBattleGame::endTurn()
 	}
 	int liveSoldiers, liveAliens;
 
-	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 
-	if (_turn >= 20 || liveAliens < 2)
+	if ((_turn > 10 && liveAliens <= 2) || _turn > 20)
 	{
 		_cheating = true;
 	}
@@ -941,7 +992,7 @@ void SavedBattleGame::resetUnitTiles()
 		}
 	}
 }
- 
+
 /**
  * Gives access to the "storage space" vector, for distribution of items in base defense missions.
  * @return Vector of storage positions.
@@ -1052,12 +1103,19 @@ bool SavedBattleGame::isAborted() const
 
 /**
  * Sets whether the objective is destroyed.
- * @param flag True if the objective is destroyed.
  */
-void SavedBattleGame::setObjectiveDestroyed(bool flag)
+void SavedBattleGame::addToObjectiveCount()
 {
-	_objectiveDestroyed = flag;
-	if (flag && Options::battleAutoEnd)
+	_objectivesNeeded++;
+}
+
+/**
+ * Sets whether the objective is destroyed.
+ */
+void SavedBattleGame::addDestroyedObjective()
+{
+	_objectivesDestroyed++;
+	if (allObjectivesDestroyed() && Options::battleAutoEnd)
 	{
 		setSelectedUnit(0);
 		_battleState->getBattleGame()->cancelCurrentAction(true);
@@ -1066,12 +1124,12 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 }
 
 /**
- * Returns whether the objective is detroyed.
- * @return True if the objective is destroyed.
+ * Returns whether the objectives are detroyed.
+ * @return True if the objectives are destroyed.
  */
-bool SavedBattleGame::isObjectiveDestroyed()
+bool SavedBattleGame::allObjectivesDestroyed()
 {
-	return _objectiveDestroyed;
+	return (_objectivesNeeded > 0 && _objectivesDestroyed == _objectivesNeeded);
 }
 
 /**
@@ -1097,9 +1155,9 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
 		if ((*i)->getRank() == nodeRank								// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL) 
+			&& (!((*i)->getType() & Node::TYPE_SMALL)
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING) 
+			&& (!((*i)->getType() & Node::TYPE_FLYING)
 				|| unit->getMovementType() == MT_FLY)				// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
 			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
@@ -1160,7 +1218,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			&& (!scout || n != fromNode)																// scouts push forward
 			&& n->getPosition().x > 0 && n->getPosition().y > 0)
 		{
-			if (!preferred 
+			if (!preferred
 				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
 				|| preferred->getFlags() < n->getFlags())
 			{
@@ -1250,11 +1308,11 @@ void SavedBattleGame::prepareNewTurn()
 					{
 						if ((*i)->destroy(MapData::O_OBJECT))
 						{
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 						}
 						if ((*i)->destroy(MapData::O_FLOOR))
 						{
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 						}
 					}
 				}
@@ -1264,7 +1322,7 @@ void SavedBattleGame::prepareNewTurn()
 					{
 						if ((*i)->destroy(MapData::O_FLOOR))
 						{
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 						}
 					}
 				}
@@ -1426,7 +1484,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			Tile *t = getTile(position + Position(x,y,0));
 			Tile *tb = getTile(position + Position(x,y,-1));
-			if (t == 0 || 
+			if (t == 0 ||
 				(t->getUnit() != 0 && t->getUnit() != bu) ||
 				t->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255 ||
 				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
@@ -1766,7 +1824,7 @@ SavedGame *SavedBattleGame::getGeoscapeSave()
  * check the depth of the battlescape.
  * @return depth.
  */
-const int SavedBattleGame::getDepth() const
+int SavedBattleGame::getDepth() const
 {
 	return _depth;
 }
@@ -1811,9 +1869,44 @@ void SavedBattleGame::setAmbientSound(int sound)
  * get the ambient battlescape sound effect.
  * @return the intended sound.
  */
-const int SavedBattleGame::getAmbientSound() const
+int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
 }
 
+/**
+ * get the list of items we're guaranteed to take with us (ie: items that were in the skyranger)
+ * @return the list of items we're garaunteed.
+ */
+std::vector<BattleItem*> *SavedBattleGame::getGuaranteedRecoveredItems()
+{
+	return &_recoverGuaranteed;
+}
+
+/**
+ * get the list of items we're not guaranteed to take with us (ie: items that were NOT in the skyranger)
+ * @return the list of items we might get.
+ */
+std::vector<BattleItem*> *SavedBattleGame::getConditionalRecoveredItems()
+{
+	return &_recoverConditional;
+}
+
+/**
+ * Get the music track for the current battle.
+ * @return the name of the music track.
+ */
+std::string &SavedBattleGame::getMusic()
+{
+	return _music;
+}
+
+/**
+ * Set the music track for this battle.
+ * @param track the track name.
+ */
+void SavedBattleGame::setMusic(std::string track)
+{
+	_music = track;
+}
 }

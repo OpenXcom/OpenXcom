@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,7 +49,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring &msg)
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_frame, "infoBoxOK", "battlescape");
-	add(_btnOk, "infoBoxOK", "battlescape");
+	add(_btnOk, "infoBoxOKButton", "battlescape");
 	add(_txtTitle, "infoBoxOK", "battlescape");
 
 	centerAllSurfaces();

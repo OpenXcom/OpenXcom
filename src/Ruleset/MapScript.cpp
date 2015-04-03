@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,15 +33,11 @@ MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), 
 
 MapScript::~MapScript()
 {
-	for (std::vector<SDL_Rect*>::iterator i = _rects.begin(); i != _rects.end();)
+	for (std::vector<SDL_Rect*>::iterator i = _rects.begin(); i != _rects.end();++i)
 	{
 		delete *i;
-		i = _rects.erase(i);
 	}
-	if (_tunnelData != 0)
-	{
-		delete _tunnelData;
-	}
+	delete _tunnelData;
 }
 
 /**
@@ -374,10 +370,10 @@ MapBlock *MapScript::getNextBlock(RuleTerrain *terrain)
 	{
 		return terrain->getRandomMapBlock(_sizeX * 10, _sizeY * 10, getGroupNumber());
 	}
-	size_t result = getBlockNumber();
-	if (result < terrain->getMapBlocks()->size() && result != MT_UNDEFINED)
+	int result = getBlockNumber();
+	if (result < (int)(terrain->getMapBlocks()->size()) && result != MT_UNDEFINED)
 	{
-		return terrain->getMapBlocks()->at(result);
+		return terrain->getMapBlocks()->at((size_t)(result));
 	}
 	return 0;
 }

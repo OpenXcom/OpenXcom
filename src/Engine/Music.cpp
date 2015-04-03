@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -145,4 +145,14 @@ void Music::resume()
 #endif
 }
 
+bool Music::isPlaying()
+{
+#ifndef __NO_MUSIC
+	if (!Options::mute)
+	{
+		return Mix_Playing(-1);
+	}
+#endif
+	return false;
+}
 }
