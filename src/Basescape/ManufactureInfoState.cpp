@@ -29,8 +29,12 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/BaseFacility.h"
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
 #include "../Menu/ErrorMessageState.h"
@@ -68,25 +72,26 @@ void ManufactureInfoState::buildUi()
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 150, 0, 25, POPUP_BOTH);
-	_txtTitle = new Text(320, 17, 0, 35);
-	_btnOk = new TextButton(136, 16, 168, 150);
-	_btnStop = new TextButton(136, 16, 16, 150);
-	_btnSell = new ToggleTextButton(60, 16, 244, 56);
-	_txtAvailableEngineer = new Text(200, 9, 16, 55);
-	_txtAvailableSpace = new Text(200, 9, 16, 65);
-	_txtAllocatedEngineer = new Text(112, 32, 16, 75);
-	_txtUnitToProduce = new Text(104, 32, 168, 75);
-	_txtEngineerUp = new Text(90, 9, 40, 113);
-	_txtEngineerDown = new Text(90, 9, 40, 133);
-	_txtUnitUp = new Text(90, 9, 192, 113);
-	_txtUnitDown = new Text(90, 9, 192, 133);
-	_btnEngineerUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 132, 109);
-	_btnEngineerDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 132, 131);
-	_btnUnitUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 284, 109);
-	_btnUnitDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 284, 131);
-	_txtAllocated = new Text(40, 16, 128, 83);
-	_txtTodo = new Text(40, 16, 272, 83);
+	_window = new Window(this, 320, 165, 0, 18, POPUP_BOTH);
+	_txtTitle = new Text(320, 17, 0, 28);
+	_txtAvailableEngineer = new Text(200, 9, 16, 48);
+	_txtAvailableSpace = new Text(200, 9, 16, 58);
+	_txtMonthlyProfit = new Text(200, 9, 16, 68);
+	_btnSell = new ToggleTextButton(60, 16, 244, 59);
+	_txtAllocatedEngineer = new Text(112, 32, 16, 83);
+	_txtUnitToProduce = new Text(104, 32, 168, 83);
+	_txtAllocated = new Text(40, 16, 128, 91);
+	_txtTodo = new Text(40, 16, 272, 91);
+	_txtEngineerUp = new Text(90, 9, 40, 118);
+	_txtEngineerDown = new Text(90, 9, 40, 138);
+	_btnEngineerUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 132, 114);
+	_btnEngineerDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 132, 136);
+	_txtUnitUp = new Text(90, 9, 192, 118);
+	_txtUnitDown = new Text(90, 9, 192, 138);
+	_btnUnitUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 284, 114);
+	_btnUnitDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 284, 136);
+	_btnOk = new TextButton(136, 16, 168, 158);
+	_btnStop = new TextButton(136, 16, 16, 158);
 
 	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
 	_surfaceEngineers->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelEngineer, 0);
@@ -103,6 +108,7 @@ void ManufactureInfoState::buildUi()
 	add(_txtTitle, "text", "manufactureInfo");
 	add(_txtAvailableEngineer, "text", "manufactureInfo");
 	add(_txtAvailableSpace, "text", "manufactureInfo");
+	add(_txtMonthlyProfit, "text", "manufactureInfo");
 	add(_txtAllocatedEngineer, "text", "manufactureInfo");
 	add(_txtAllocated, "text", "manufactureInfo");
 	add(_txtUnitToProduce, "text", "manufactureInfo");
@@ -166,6 +172,7 @@ void ManufactureInfoState::buildUi()
 	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
 	_btnSell->setText(tr("STR_SELL_PRODUCTION"));
+	_btnSell->onMouseClick((ActionHandler)&ManufactureInfoState::btnSellClick, 0);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureInfoState::btnOkClick);
@@ -179,8 +186,9 @@ void ManufactureInfoState::buildUi()
 		_production = new Production (_item, 1);
 		_base->addProduction(_production);
 	}
-	setAssignedEngineer();
 	_btnSell->setPressed(_production->getSellItems());
+	initProfitInfo();
+	setAssignedEngineer();
 
 	_timerMoreEngineer = new Timer(250);
 	_timerLessEngineer = new Timer(250);
@@ -190,6 +198,62 @@ void ManufactureInfoState::buildUi()
 	_timerLessEngineer->onTimer((StateHandler)&ManufactureInfoState::onLessEngineer);
 	_timerMoreUnit->onTimer((StateHandler)&ManufactureInfoState::onMoreUnit);
 	_timerLessUnit->onTimer((StateHandler)&ManufactureInfoState::onLessUnit);
+}
+
+void ManufactureInfoState::initProfitInfo ()
+{
+	Ruleset *ruleset = _game->getRuleset();
+	const RuleManufacture *item = _production->getRules();
+
+	_producedItemsValue = 0;
+	for (std::map<std::string, int>::const_iterator i = item->getProducedItems().begin(); i != item->getProducedItems().end(); ++i)
+	{
+		int sellValue = 0;
+		if (item->getCategory() == "STR_CRAFT")
+		{
+			sellValue = ruleset->getCraft(i->first)->getSellCost();
+		}
+		else
+		{
+			sellValue = ruleset->getItem(i->first)->getSellCost();
+		}
+		_producedItemsValue += sellValue * i->second;
+	}
+}
+
+// note that this function calculates only the change in funds, not the change
+// in net worth.  after discussion in the forums, it was decided that focusing
+// only on visible changes in funds was clearer and more valuable to the player
+// than trying to take used materials and maintenance costs into account.
+int ManufactureInfoState::getMonthlyNetFunds ()
+{
+	// does not take into account leap years, but a game is unlikely to take long enough for that to matter
+	static const int AVG_HOURS_PER_MONTH = (365 * 24) / 12;
+
+	const RuleManufacture *item = _production->getRules();
+	int saleValue = _btnSell->getPressed() ? _producedItemsValue : 0;
+
+	int numEngineers = _production->getAssignedEngineers();
+	int manHoursPerMonth = AVG_HOURS_PER_MONTH * numEngineers;
+	if (!_production->getInfiniteAmount())
+	{
+		// scale down to actual number of man hours required if the job will
+		// take less than one month
+		int manHoursRemaining = item->getManufactureTime() * (_production->getAmountTotal() - _production->getAmountProduced());
+		manHoursPerMonth = std::min(manHoursPerMonth, manHoursRemaining);
+	}
+	float itemsPerMonth = (float)manHoursPerMonth / (float)item->getManufactureTime();
+
+	return (saleValue - item->getManufactureCost()) * itemsPerMonth;
+}
+
+/**
+ * Refreshes profit values.
+ * @param action A pointer to an Action.
+ */
+void ManufactureInfoState::btnSellClick(Action *)
+{
+	setAssignedEngineer();
 }
 
 /**
@@ -228,6 +292,35 @@ void ManufactureInfoState::exitState()
 	}
 }
 
+static void _formatProfit (int profit, std::wostringstream &outStream)
+{
+	bool profitIsNeg = false;
+	if (0 > profit)
+	{
+		profit = -profit;
+		profitIsNeg = true;
+	}
+
+	std::wstring suffix = L"";
+	if (1000000000 <= profit)
+	{
+		profit /= 1000000000;
+		suffix = L"B";
+	}
+	else if (1000000 <= profit)
+	{
+		profit /= 1000000;
+		suffix = L"M";
+	}
+	else if (1000 <= profit)
+	{
+		profit /= 1000;
+		suffix = L"K";
+	}
+
+	outStream << (profitIsNeg ? L"-" : L"+") << L"$" << profit << suffix;
+}
+
 /**
  * Updates display of assigned/available engineer/workshop space.
  */
@@ -243,6 +336,9 @@ void ManufactureInfoState::setAssignedEngineer()
 	if (_production->getInfiniteAmount()) s4 << Language::utf8ToWstr("∞");
 	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
+	std::wostringstream s6;
+	_formatProfit(getMonthlyNetFunds(), s6);
+	_txtMonthlyProfit->setText(tr("STR_NET_FUNDS_PER_MONTH_UC").arg(s6.str()));
 }
 
 /**
