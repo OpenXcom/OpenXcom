@@ -41,7 +41,7 @@ private:
 	int _sprite, _marker;
 	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime, _sightRange;
 	RuleTerrain *_battlescapeTerrainData;
-	std::string _modSprite, _breifingString;
+	std::string _modSprite, _briefingString;
 public:
 	/// Creates a blank UFO ruleset.
 	RuleUfo(const std::string &type);
