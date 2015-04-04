@@ -91,32 +91,25 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 		_txtCraft->setVisible(data.showCraft);
 	}
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtTarget);
-	add(_txtCraft);
-	add(_txtBriefing);
+	add(_window, "window", "briefing");
+	add(_btnOk, "button", "briefing");
+	add(_txtTitle, "text", "briefing");
+	add(_txtTarget, "text", "briefing");
+	add(_txtCraft, "text", "briefing");
+	add(_txtBriefing, "text", "briefing");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
-
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
-
-	_txtTarget->setColor(Palette::blockOffset(8)+5);
 	_txtTarget->setBig();
-
-	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
+
 	std::wstring s;
 	if (craft)
 	{
@@ -133,7 +126,6 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	}
 	_txtCraft->setText(s);
 
-	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
 	
 	_txtTitle->setText(tr(mission));

@@ -1098,6 +1098,15 @@ interfaces:
         color: 24
         color2: 28
         border: 15
+  - type: briefing
+    elements:
+      - id: window
+        color: 239
+      - id: button
+        color: 133
+        color2: 133
+      - id: text
+        color: 133
   - type: inventory
     elements:
       - id: textName
