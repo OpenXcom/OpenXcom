@@ -63,10 +63,14 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	AlienDeployment *deployment = _game->getRuleset()->getDeployment(mission);
-	Ufo * ufo = dynamic_cast <Ufo*> (craft->getDestination());
-	if (!deployment && ufo) // landing site or crash site.
+	Ufo * ufo = 0;
+	if (!deployment && craft)
 	{
+		ufo = dynamic_cast <Ufo*> (craft->getDestination());
+		if (ufo) // landing site or crash site.
+		{
 			deployment = _game->getRuleset()->getDeployment(ufo->getRules()->getType());
+		}
 	}
 
 	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
@@ -138,17 +142,11 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	_txtBriefing->setText(tr(briefingtext.str()));
 
 	// if this UFO has a specific briefing, use that instead
-	if (ufo)
+	if (ufo && ufo->getRules()->getBriefingString() != "")
 	{
 		briefingtext.str("");
-		briefingtext << ufo->getRules()->getType() << "_BRIEFING";
-		// this is not a great check, if the string isn't defined
-		// for the selected language, it will revert to the default
-		// briefing text instead. this will make it harder to notice missing strings in mods.
-		if (tr(briefingtext.str()).asUTF8() != briefingtext.str())
-		{
-			_txtBriefing->setText(tr(briefingtext.str()));
-		}
+		briefingtext << ufo->getRules()->getBriefingString();
+		_txtBriefing->setText(tr(briefingtext.str()));
 	}
 
 	if (mission == "STR_BASE_DEFENSE")
