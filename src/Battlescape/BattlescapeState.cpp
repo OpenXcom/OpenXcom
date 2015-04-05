@@ -1472,88 +1472,91 @@ void BattlescapeState::warning(const std::string &message)
  */
 inline void BattlescapeState::handle(Action *action)
 {
-	if (_game->getCursor()->getVisible() || ((action->getDetails()->type == SDL_MOUSEBUTTONDOWN || action->getDetails()->type == SDL_MOUSEBUTTONUP) && action->getDetails()->button.button == SDL_BUTTON_RIGHT))
+	if (!_firstInit)
 	{
-		State::handle(action);
-
-		if (_isMouseScrolling && !Options::battleDragScrollInvert)
+		if (_game->getCursor()->getVisible() || ((action->getDetails()->type == SDL_MOUSEBUTTONDOWN || action->getDetails()->type == SDL_MOUSEBUTTONUP) && action->getDetails()->button.button == SDL_BUTTON_RIGHT))
 		{
-			_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
-		}
+			State::handle(action);
 
-		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-		{
-			if (action->getDetails()->button.button == SDL_BUTTON_X1)
+			if (_isMouseScrolling && !Options::battleDragScrollInvert)
 			{
-				btnNextSoldierClick(action);
+				_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
 			}
-			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
-			{
-				btnPrevSoldierClick(action);
-			}
-		}
 
-		if (action->getDetails()->type == SDL_KEYDOWN)
-		{
-			if (Options::debug)
+			if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 			{
-				// "ctrl-d" - enable debug mode
-				if (action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
+				if (action->getDetails()->button.button == SDL_BUTTON_X1)
 				{
-					_save->setDebugMode();
-					debug(L"Debug Mode");
+					btnNextSoldierClick(action);
 				}
-				// "ctrl-v" - reset tile visibility
-				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_v && (SDL_GetModState() & KMOD_CTRL) != 0)
+				else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 				{
-					debug(L"Resetting tile visibility");
-					_save->resetTiles();
+					btnPrevSoldierClick(action);
 				}
-				// "ctrl-k" - kill all aliens
-				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_k && (SDL_GetModState() & KMOD_CTRL) != 0)
+			}
+
+			if (action->getDetails()->type == SDL_KEYDOWN)
+			{
+				if (Options::debug)
 				{
-					debug(L"Influenza bacterium dispersed");
-					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
+					// "ctrl-d" - enable debug mode
+					if (action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+						_save->setDebugMode();
+						debug(L"Debug Mode");
+					}
+					// "ctrl-v" - reset tile visibility
+					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_v && (SDL_GetModState() & KMOD_CTRL) != 0)
+					{
+						debug(L"Resetting tile visibility");
+						_save->resetTiles();
+					}
+					// "ctrl-k" - kill all aliens
+					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_k && (SDL_GetModState() & KMOD_CTRL) != 0)
+					{
+						debug(L"Influenza bacterium dispersed");
+						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
 						{
-							(*i)->instaKill();
-							if ((*i)->getTile())
+							if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 							{
-								(*i)->getTile()->setUnit(0);
+								(*i)->instaKill();
+								if ((*i)->getTile())
+								{
+									(*i)->getTile()->setUnit(0);
+								}
 							}
 						}
 					}
+					// f11 - voxel map dump
+					else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+					{
+						saveVoxelMap();
+					}
+					// f9 - ai
+					else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::traceAI)
+					{
+						saveAIMap();
+					}
 				}
-				// f11 - voxel map dump
-				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+				// quick save and quick load
+				// not works in debug mode to prevent conflict in hotkeys by default
+				else if (!_game->getSavedGame()->isIronman())
 				{
-					saveVoxelMap();
+					if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+					{
+						_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK, _palette));
+					}
+					else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+					{
+						_game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK, _palette));
+					}
 				}
-				// f9 - ai
-				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::traceAI)
-				{
-					saveAIMap();
-				}
-			}
-			// quick save and quick load
-			// not works in debug mode to prevent conflict in hotkeys by default
-			else if (!_game->getSavedGame()->isIronman())
-			{
-				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
-				{
-					_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_QUICK, _palette));
-				}
-				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
-				{
-					_game->pushState(new LoadGameState(OPT_BATTLESCAPE, SAVE_QUICK, _palette));
-				}
-			}
 
-			// voxel view dump
-			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
-			{
-				saveVoxelView();
+				// voxel view dump
+				if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
+				{
+					saveVoxelView();
+				}
 			}
 		}
 	}
