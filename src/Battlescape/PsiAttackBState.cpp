@@ -62,24 +62,13 @@ void PsiAttackBState::init()
 	_initialized = true;
 
 	_item = _action.weapon;
-
-	if (!_item) // can't make a psi attack without a weapon
-	{
-		_parent->popState();
-		return;
-	}
-	else if (_item->getRules()->getHitSound() != -1)
-	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
-	}
+	_unit = _action.actor;
 
 	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
 		_parent->popState();
 		return;
 	}
-
-	_unit = _action.actor;
 
 	if (_unit->getTimeUnits() < _action.TU) // not enough time units
 	{
@@ -90,10 +79,20 @@ void PsiAttackBState::init()
 
 	_target = _parent->getSave()->getTile(_action.target)->getUnit();
 
-	if (!_target) // invalid target
+	if (!_target || !_target->getVisible()) // invalid target
 	{
 		_parent->popState();
 		return;
+	}
+
+	if (!_item) // can't make a psi attack without a weapon
+	{
+		_parent->popState();
+		return;
+	}
+	else if (_item->getRules()->getHitSound() != -1)
+	{
+		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 
 	// make a cosmetic explosion
