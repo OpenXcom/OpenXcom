@@ -283,9 +283,9 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	add(_btnAggressive, "button", "dogfight");
 	add(_btnDisengage, "button", "dogfight");
 	add(_btnUfo, "button", "dogfight");
-	add(_txtAmmo1, "text", "dogfight");
-	add(_txtAmmo2, "text", "dogfight");
-	add(_txtDistance, "text", "dogfight");
+	add(_txtAmmo1, "numbers", "dogfight");
+	add(_txtAmmo2, "numbers", "dogfight");
+	add(_txtDistance, "numbers", "dogfight");
 	add(_preview);
 	add(_txtStatus, "text", "dogfight");
 	add(_btnMinimizedIcon);
@@ -372,6 +372,16 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
+	// define the colors to be used
+	_colors[CRAFT_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color;
+	_colors[CRAFT_MAX] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2;
+	_colors[RADAR_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color;
+	_colors[RADAR_MAX] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2;
+	_colors[DAMAGE_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color;
+	_colors[DAMAGE_MAX] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2;
+	_colors[BLOB_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("radarDetail")->color;
+	_colors[RANGE_METER] = _game->getRuleset()->getInterface("dogfight")->getElement("radarDetail")->color2;
+
 	for (unsigned int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
 		CraftWeapon *w = _craft->getWeapons()->at(i);
@@ -411,7 +421,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		ammo->setText(ss.str());
 
 		// Draw range (1 km = 1 pixel)
-		Uint8 color = _game->getRuleset()->getInterface("dogfight")->getElement("background")->color;
+		Uint8 color = _colors[RANGE_METER];
 		range->lock();
 
 		int rangeY = range->getHeight() - w->getRules()->getRange(), connectY = 57;
@@ -503,19 +513,12 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		_ufoSize = 4;
 	}
 
-	_color[0] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color;
-	_color[1] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2;
-	_color[2] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color;
-	_color[3] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2;
-	_color[4] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color;
-	_color[5] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2;
-
 	// Get crafts height. Used for damage indication.
 	int x =_damage->getWidth() / 2;
 	for (int y = 0; y < _damage->getHeight(); ++y)
 	{
 		Uint8 pixelColor = _damage->getPixel(x, y);
-		if (pixelColor >= _color[0] && pixelColor < _color[1])
+		if (pixelColor >= _colors[CRAFT_MIN] && pixelColor < _colors[CRAFT_MAX])
 		{
 			++_craftHeight;
 		}
@@ -572,9 +575,9 @@ void DogfightState::animateCraftDamage()
 		return;
 	}
 	--_currentCraftDamageColor;
-	if (_currentCraftDamageColor < _color[4])
+	if (_currentCraftDamageColor < _colors[DAMAGE_MIN])
 	{
-		_currentCraftDamageColor = _color[5];
+		_currentCraftDamageColor = _colors[DAMAGE_MAX];
 	}
 	drawCraftDamage();
 }
@@ -589,9 +592,9 @@ void DogfightState::drawCraftDamage()
 		if (!_craftDamageAnimTimer->isRunning())
 		{
 			_craftDamageAnimTimer->start();
-			if (_currentCraftDamageColor < _color[4])
+			if (_currentCraftDamageColor < _colors[DAMAGE_MIN])
 			{
-				_currentCraftDamageColor = _color[4];
+				_currentCraftDamageColor = _colors[DAMAGE_MIN];
 			}
 		}
 		int damagePercentage = _craft->getDamagePercentage();
@@ -608,12 +611,12 @@ void DogfightState::drawCraftDamage()
 			for (int x = 0; x < _damage->getWidth(); ++x)
 			{
 				int pixelColor = _damage->getPixel(x, y);
-				if (pixelColor >= _color[4] && pixelColor <= _color[5])
+				if (pixelColor >= _colors[DAMAGE_MIN] && pixelColor <= _colors[DAMAGE_MAX])
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
 					rowColored = true;
 				}
-				if (pixelColor >= _color[0] && pixelColor < _color[1])
+				if (pixelColor >= _colors[CRAFT_MIN] && pixelColor < _colors[CRAFT_MAX])
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
 					rowColored = true;
@@ -642,12 +645,12 @@ void DogfightState::animate()
 		for (int y = 0; y < _window->getHeight(); ++y)
 		{
 			Uint8 radarPixelColor = _window->getPixel(x, y);
-			if (radarPixelColor >= _color[2] && radarPixelColor < _color[3])
+			if (radarPixelColor >= _colors[RADAR_MIN] && radarPixelColor < _colors[RADAR_MAX])
 			{
 				++radarPixelColor;
-				if (radarPixelColor >= _color[3])
+				if (radarPixelColor >= _colors[RADAR_MAX])
 				{
-					radarPixelColor = _color[2];
+					radarPixelColor = _colors[RADAR_MIN];
 				}
 				_window->setPixel(x, y, radarPixelColor);
 			}
@@ -1463,9 +1466,9 @@ void DogfightState::drawUfo()
 				}
 				Uint8 radarPixelColor = _window->getPixel(currentUfoXposition + x + 3, currentUfoYposition + y + 3); // + 3 cause of the window frame
 				Uint8 color = radarPixelColor - pixelOffset;
-				if (color < 108)
+				if (color < _colors[BLOB_MIN])
 				{
-					color = 108;
+					color = _colors[BLOB_MIN];
 				}
 				_battle->setPixel(currentUfoXposition + x, currentUfoYposition + y, color);
 			}
@@ -1500,9 +1503,9 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 				{
 					Uint8 radarPixelColor = _window->getPixel(xPos + x + 3, yPos + y + 3); // + 3 cause of the window frame
 					Uint8 color = radarPixelColor - pixelOffset;
-					if (color < 108)
+					if (color < _colors[BLOB_MIN])
 					{
-						color = 108;
+						color = _colors[BLOB_MIN];
 					}
 					_battle->setPixel(xPos + x, yPos + y, color);
 				}
@@ -1519,9 +1522,9 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 		{
 			Uint8 radarPixelColor = _window->getPixel(xPos + 3, y + 3);
 			Uint8 color = radarPixelColor - pixelOffset;
-			if (color < 108)
+			if (color < _colors[BLOB_MIN])
 			{
-				color = 108;
+				color = _colors[BLOB_MIN];
 			}
 			_battle->setPixel(xPos, y, color);
 		}
