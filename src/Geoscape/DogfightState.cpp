@@ -291,6 +291,11 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	add(_btnMinimizedIcon);
 	add(_txtInterceptionNumber, "minimizedNumber", "dogfight");
 
+	if (_txtDistance->isTFTDMode())
+	{
+		_txtDistance->setY(_txtDistance->getY() + 1);
+		_txtDistance->setX(_txtDistance->getX() + 7);
+	}
 	// Set up objects
 	Surface *graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
@@ -1766,7 +1771,14 @@ void DogfightState::moveWindow()
 	_btnUfo->setX(_x + 120); _btnUfo->setY(_y + 52);
 	_txtAmmo1->setX(_x + 4); _txtAmmo1->setY(_y + 70);
 	_txtAmmo2->setX(_x + 64); _txtAmmo2->setY(_y + 70);
-	_txtDistance->setX(_x + 116); _txtDistance->setY(_y + 72);
+	if (_txtDistance->isTFTDMode())
+	{
+		_txtDistance->setX(_x + 123); _txtDistance->setY(_y + 73);
+	}
+	else
+	{
+		_txtDistance->setX(_x + 116); _txtDistance->setY(_y + 72);
+	}
 	_txtStatus->setX(_x + 4); _txtStatus->setY(_y + 85);
 	_btnMinimizedIcon->setX(_minimizedIconX); _btnMinimizedIcon->setY(_minimizedIconY);
 	_txtInterceptionNumber->setX(_minimizedIconX + 18); _txtInterceptionNumber->setY(_minimizedIconY + 6);
