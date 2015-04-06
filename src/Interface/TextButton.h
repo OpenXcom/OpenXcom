@@ -43,7 +43,7 @@ private:
 	Uint8 _color;
 	Text *_text;
 	TextButton **_group;
-	bool _contrast;
+	bool _contrast, _geoscapeButton;
 	ComboBox *_comboBox;
 protected:
 	bool isButtonHandled(Uint8 button = 0);
@@ -88,6 +88,7 @@ public:
 	void setWidth(int width);
 	void setHeight(int height);
 	void setSecondaryColor(Uint8 color);
+	void setGeoscapeButton(bool geo);
 };
 
 }
