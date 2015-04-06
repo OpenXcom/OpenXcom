@@ -253,7 +253,14 @@ void TextButton::draw()
 
 	if (press)
 	{
-		this->invert(_color + 3 * mul);
+		if (_tftdMode)
+		{
+			this->invert(_color + 2 * mul);
+		}
+		else
+		{
+			this->invert(_color + 3 * mul);
+		}
 	}
 	_text->setInvert(press);
 

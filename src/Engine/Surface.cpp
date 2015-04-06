@@ -134,7 +134,7 @@ inline void DeleteAligned(void* buffer)
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
-Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _tftdMode(false), _alignedBuffer(0)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
@@ -930,4 +930,21 @@ void Surface::setHeight(int height)
 	_redraw = true;
 }
 
+/**
+ * TFTD mode: much like click inversion, but does a colour swap rather than a palette shift.
+ * @param mode set TFTD mode to this.
+ */
+void Surface::setTFTDMode(bool mode)
+{
+	_tftdMode = mode;
+}
+
+/**
+ * checks TFTD mode.
+ * @return TFTD mode.
+ */
+bool Surface::isTFTDMode()
+{
+	return _tftdMode;
+}
 }
