@@ -79,7 +79,7 @@ void PsiAttackBState::init()
 
 	_target = _parent->getSave()->getTile(_action.target)->getUnit();
 
-	if (!_target || !_target->getVisible()) // invalid target
+	if (!_target) // invalid target
 	{
 		_parent->popState();
 		return;
