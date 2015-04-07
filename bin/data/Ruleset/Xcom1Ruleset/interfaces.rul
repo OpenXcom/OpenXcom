@@ -305,10 +305,13 @@ interfaces:
         color: 81
       - id: text
         color: 89
+      - id: numbers
+        color: 89
       - id: minimizedNumber
         color: 80
-      - id: background
-        color: 111
+      - id: radarDetail
+        color: 108
+        color2: 111
       - id: craftRange
         color: 160
         color2: 176
@@ -1098,6 +1101,15 @@ interfaces:
         color: 24
         color2: 28
         border: 15
+  - type: briefing
+    elements:
+      - id: window
+        color: 239
+      - id: button
+        color: 133
+        color2: 133
+      - id: text
+        color: 133
   - type: inventory
     elements:
       - id: textName

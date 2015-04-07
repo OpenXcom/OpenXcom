@@ -123,10 +123,8 @@ void State::add(Surface *surface, const std::string id, const std::string catego
 				surface->setX(parent->getX() + element->x);
 				surface->setY(parent->getY() + element->y);
 			}
-			if (bsbtn)
-			{
-				bsbtn->setTftdMode(element->TFTDMode);
-			}
+
+			surface->setTFTDMode(element->TFTDMode);
 
 			if (element->color != INT_MAX)
 			{

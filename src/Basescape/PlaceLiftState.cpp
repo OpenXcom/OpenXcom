@@ -61,7 +61,15 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 	// Set up objects
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
-	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
+	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getBaseFacilitiesList().begin(); i != _game->getRuleset()->getBaseFacilitiesList().end(); ++i)
+	{
+		if (_game->getRuleset()->getBaseFacility(*i)->isLift())
+		{
+			_lift = _game->getRuleset()->getBaseFacility(*i);
+			break;
+		}
+	}
+	_view->setSelectable(_lift->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
 
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
@@ -81,7 +89,7 @@ PlaceLiftState::~PlaceLiftState()
  */
 void PlaceLiftState::viewClick(Action *)
 {
-	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
+	BaseFacility *fac = new BaseFacility(_lift, _base);
 	fac->setX(_view->getGridX());
 	fac->setY(_view->getGridY());
 	_base->getFacilities()->push_back(fac);
