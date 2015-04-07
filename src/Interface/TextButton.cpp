@@ -260,7 +260,7 @@ void TextButton::draw()
 
 	if (press)
 	{
-		if (_tftdMode)
+		if (_geoscapeButton)
 		{
 			this->invert(_color + 2 * mul);
 		}
