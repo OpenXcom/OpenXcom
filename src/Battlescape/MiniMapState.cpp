@@ -85,7 +85,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	_txtLevel->setBig();
 	_txtLevel->setHighContrast(true);
 	std::wostringstream s;
-	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+	if (_txtLevel->isTFTDMode())
 	{
 		s << tr("STR_LEVEL_SHORT");
 	}
@@ -146,7 +146,7 @@ void MiniMapState::btnOkClick(Action *)
 void MiniMapState::btnLevelUpClick(Action *)
 {
 	std::wostringstream s;
-	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+	if (_miniMapView->isTFTDMode())
 	{
 		s << tr("STR_LEVEL_SHORT");
 	}
@@ -161,7 +161,7 @@ void MiniMapState::btnLevelUpClick(Action *)
 void MiniMapState::btnLevelDownClick(Action *)
 {
 	std::wostringstream s;
-	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+	if (_miniMapView->isTFTDMode())
 	{
 		s << tr("STR_LEVEL_SHORT");
 	}
