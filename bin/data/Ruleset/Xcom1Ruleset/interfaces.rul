@@ -165,6 +165,10 @@ interfaces:
         border: 239  # bright green
       - id: button
         color: 133   # minty green
+      - id: list
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
   - type: targetInfo
     elements:
       - id: palette
@@ -398,10 +402,10 @@ interfaces:
       - id: button
         color: 151   # grey
       - id: regionTotal
-        color: 18    # salmon (inverted button offset)
+        color: 133    # salmon (inverted button offset)
         color2: 136  # also salmon (the line itself)
       - id: countryTotal
-        color: 22    # magenta (inverted button offset)
+        color: 141    # magenta (inverted button offset)
         color2: 144  # also magenta (the line itself)
   - type: ufopaedia
     elements:
