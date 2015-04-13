@@ -225,22 +225,33 @@ void BattlescapeGenerator::nextStage()
 	// this does not include items in your soldier's hands.
 	std::vector<BattleItem*> *takeHomeGuaranteed = _save->getGuaranteedRecoveredItems();
 	std::vector<BattleItem*> *takeHomeConditional = _save->getConditionalRecoveredItems();
+	std::vector<BattleItem*> takeToNextStage;
 	std::map<RuleItem*, int> guaranteedRounds, conditionalRounds;
 
 	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end();)
 	{
-		Tile *tile = (*j)->getTile();
 		if (!(*j)->getOwner() || (*j)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
 		{
-			(*j)->setTile(0);
-		}
-		if (tile)
-		{
+			Tile *tile = (*j)->getTile();
 			std::vector<BattleItem*> *toContainer = takeHomeConditional;
-			if (tile->getMapData(MapData::O_FLOOR)
-				&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			if (tile)
 			{
-				toContainer = takeHomeGuaranteed;
+				tile->removeItem(*j);
+				if (tile->getMapData(MapData::O_FLOOR))
+				{
+					if (tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+					{
+						toContainer = takeHomeGuaranteed;
+					}
+					else if (tile->getMapData(MapData::O_FLOOR)->getSpecialType() == END_POINT
+					&& (*j)->getRules()->isRecoverable()
+					&& !(*j)->getUnit())
+					{
+						takeToNextStage.push_back(*j);
+						++j;
+						continue;
+					}
+				}
 			}
 			if ((*j)->getRules()->isRecoverable() && !(*j)->getXCOMProperty())
 			{
@@ -310,6 +321,13 @@ void BattlescapeGenerator::nextStage()
 				}
 			}
 		}
+	}
+
+	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
+
+	for (std::vector<BattleItem*>::iterator i = takeToNextStage.begin(); i != takeToNextStage.end(); ++i)
+	{
+		_craftInventoryTile->addItem(*i, ground);
 	}
 
 	_unitSequence = _save->getUnits()->back()->getId() + 1;

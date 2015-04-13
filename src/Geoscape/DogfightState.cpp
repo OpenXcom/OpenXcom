@@ -1754,32 +1754,13 @@ void DogfightState::calculateWindowPosition()
  */
 void DogfightState::moveWindow()
 {
-	_window->setX(_x); _window->setY(_y);
-	_battle->setX(_x + 3); _battle->setY(_y + 3);
-	_weapon1->setX(_x + 4); _weapon1->setY(_y + 52);
-	_range1->setX(_x + 19); _range1->setY(_y + 3);
-	_weapon2->setX(_x + 64); _weapon2->setY(_y + 52);
-	_range2->setX(_x + 43); _range2->setY(_y + 3);
-	_damage->setX(_x + 93); _damage->setY(_y + 40);
-	_btnMinimize->setX(_x); _btnMinimize->setY(_y);
-	_preview->setX(_x); _preview->setY(_y);
-	_btnStandoff->setX(_x + 83); _btnStandoff->setY(_y + 4);
-	_btnCautious->setX(_x + 120); _btnCautious->setY(_y + 4);
-	_btnStandard->setX(_x + 83); _btnStandard->setY(_y + 20);
-	_btnAggressive->setX(_x + 120); _btnAggressive->setY(_y + 20);
-	_btnDisengage->setX(_x + 120); _btnDisengage->setY(_y + 36);
-	_btnUfo->setX(_x + 120); _btnUfo->setY(_y + 52);
-	_txtAmmo1->setX(_x + 4); _txtAmmo1->setY(_y + 70);
-	_txtAmmo2->setX(_x + 64); _txtAmmo2->setY(_y + 70);
-	if (_txtDistance->isTFTDMode())
+	int x = _window->getX() - _x;
+	int y = _window->getY() - _y;
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		_txtDistance->setX(_x + 123); _txtDistance->setY(_y + 73);
+		(*i)->setX((*i)->getX() - x);
+		(*i)->setY((*i)->getY() - y);
 	}
-	else
-	{
-		_txtDistance->setX(_x + 116); _txtDistance->setY(_y + 72);
-	}
-	_txtStatus->setX(_x + 4); _txtStatus->setY(_y + 85);
 	_btnMinimizedIcon->setX(_minimizedIconX); _btnMinimizedIcon->setY(_minimizedIconY);
 	_txtInterceptionNumber->setX(_minimizedIconX + 18); _txtInterceptionNumber->setY(_minimizedIconY + 6);
 }

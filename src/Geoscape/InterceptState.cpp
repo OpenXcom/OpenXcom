@@ -72,7 +72,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	add(_txtStatus, "text2", "geoCraftScreens");
 	add(_txtBase, "text2", "geoCraftScreens");
 	add(_txtWeapons, "text2", "geoCraftScreens");
-	add(_lstCrafts, "text1", "geoCraftScreens");
+	add(_lstCrafts, "list", "geoCraftScreens");
 
 	centerAllSurfaces();
 
