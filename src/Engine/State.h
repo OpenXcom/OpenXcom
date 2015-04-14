@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <SDL.h>
+#include <climits>
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInterface.h"
 
