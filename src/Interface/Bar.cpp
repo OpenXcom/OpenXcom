@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Bar::Bar(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _color2(0), _borderColor(0), _scale(0), _max(0), _value(0), _value2(0), _invert(false), _secondOnTop(true)
+Bar::Bar(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _color2(0), _borderColor(0), _scale(0), _max(0), _value(0), _value2(0), _secondOnTop(true)
 {
 
 }
@@ -166,17 +166,6 @@ void Bar::setSecondValueOnTop(bool onTop)
 }
 
 /**
- * Enables/disables color inverting. Some bars have
- * darker borders and others have lighter borders.
- * @param invert Invert setting.
- */
-void Bar::setInvert(bool invert)
-{
-	_invert = invert;
-	_redraw = true;
-}
-
-/**
  * Draws the bordered bar filled according
  * to its values.
  */
@@ -190,17 +179,10 @@ void Bar::draw()
 	square.w = (Uint16)(_scale * _max) + 1;
 	square.h = getHeight();
 
-	if (_invert)
-	{
-		drawRect(&square, _color);
-	}
+	if (_borderColor)
+		drawRect(&square, _borderColor);
 	else
-	{
-		if (_borderColor)
-			drawRect(&square, _borderColor);
-		else
-			drawRect(&square, _color + 4);
-	}
+		drawRect(&square, _color + 4);
 
 	square.y++;
 	square.w--;
@@ -208,39 +190,19 @@ void Bar::draw()
 
 	drawRect(&square, 0);
 
-	if (_invert)
+	if (_secondOnTop)
 	{
-		if (_secondOnTop)
-		{
-			square.w = (Uint16)(_scale * _value);
-			drawRect(&square, _color + 4);
-			square.w = (Uint16)(_scale * _value2);
-			drawRect(&square, _color2 + 4);
-		}
-		else
-		{
-			square.w = (Uint16)(_scale * _value2);
-			drawRect(&square, _color2 + 4);
-			square.w = (Uint16)(_scale * _value);
-			drawRect(&square, _color + 4);
-		}
+		square.w = (Uint16)(_scale * _value);
+		drawRect(&square, _color);
+		square.w = (Uint16)(_scale * _value2);
+		drawRect(&square, _color2);
 	}
 	else
 	{
-		if (_secondOnTop)
-		{
-			square.w = (Uint16)(_scale * _value);
-			drawRect(&square, _color);
-			square.w = (Uint16)(_scale * _value2);
-			drawRect(&square, _color2);
-		}
-		else
-		{
-			square.w = (Uint16)(_scale * _value2);
-			drawRect(&square, _color2);
-			square.w = (Uint16)(_scale * _value);
-			drawRect(&square, _color);
-		}
+		square.w = (Uint16)(_scale * _value2);
+		drawRect(&square, _color2);
+		square.w = (Uint16)(_scale * _value);
+		drawRect(&square, _color);
 	}
 }
 
