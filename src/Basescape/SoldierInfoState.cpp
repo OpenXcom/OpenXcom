@@ -142,9 +142,17 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_txtPsiSkill = new Text(120, 9, 6, yPos);
 	_numPsiSkill = new Text(18, 9, 131, yPos);
 	_barPsiSkill = new Bar(170, 7, 150, yPos);
-
+	
 	// Set palette
-	setPalette("PAL_BASESCAPE");
+	Element *element = _game->getRuleset()->getInterface("soldierInfo")->getElement("palette");
+	if (element && element->TFTDMode)
+	{
+		setPalette("PAL_GEOSCAPE");
+	}
+	else
+	{
+		setPalette("PAL_BASESCAPE");
+	}
 
 	add(_bg);
 	add(_rank);
@@ -253,56 +261,46 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
 	_barTimeUnits->setScale(1.0);
-	_barTimeUnits->setInvert(true);
 
 	_txtStamina->setText(tr("STR_STAMINA"));
 
 	_barStamina->setScale(1.0);
-	_barStamina->setInvert(true);
 
 	_txtHealth->setText(tr("STR_HEALTH"));
 
 	_barHealth->setScale(1.0);
-	_barHealth->setInvert(true);
 
 	_txtBravery->setText(tr("STR_BRAVERY"));
 
 	_barBravery->setScale(1.0);
-	_barBravery->setInvert(true);
 
 	_txtReactions->setText(tr("STR_REACTIONS"));
 
 	_barReactions->setScale(1.0);
-	_barReactions->setInvert(true);
 
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
 	_barFiring->setScale(1.0);
-	_barFiring->setInvert(true);
 
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
 	_barThrowing->setScale(1.0);
-	_barThrowing->setInvert(true);
 
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
 
 	_barMelee->setScale(1.0);
-	_barMelee->setInvert(true);
 
 	_txtStrength->setText(tr("STR_STRENGTH"));
 
 	_barStrength->setScale(1.0);
-	_barStrength->setInvert(true);
 
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
 	_barPsiStrength->setScale(1.0);
-	_barPsiStrength->setInvert(true);
 
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
+
 	_barPsiSkill->setScale(1.0);
-	_barPsiSkill->setInvert(true);
 }
 
 /**

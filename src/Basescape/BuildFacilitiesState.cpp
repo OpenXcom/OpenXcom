@@ -50,7 +50,22 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("selectFacility")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	Element *element = _game->getRuleset()->getInterface("selectFacility")->getElement("palette");
+	if (element)
+	{
+		if (element->TFTDMode)
+		{
+			pal = "PAL_GEOSCAPE";
+		}
+		if (element->color != INT_MAX)
+		{
+			color = element->color;
+		}
+	}
+	
+	setPalette(pal, color);
 
 	add(_window, "window", "selectFacility");
 	add(_btnOk, "button", "selectFacility");

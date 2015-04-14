@@ -80,7 +80,22 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_equip = new Surface(220, 18, 85, 121);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftInfo")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 3; // pink by default in ufo palette
+	Element *element = _game->getRuleset()->getInterface("craftInfo")->getElement("palette");
+	if (element)
+	{
+		if (element->TFTDMode)
+		{
+			pal = "PAL_GEOSCAPE";
+		}
+		if (element->color != INT_MAX)
+		{
+			color = element->color;
+		}
+	}
+	
+	setPalette(pal, color);
 
 	add(_window, "window", "craftInfo");
 	add(_btnOk, "button", "craftInfo");

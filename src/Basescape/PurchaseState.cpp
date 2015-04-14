@@ -69,7 +69,22 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("buyMenu")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 0; // brown by default in ufo palette
+	Element *element = _game->getRuleset()->getInterface("buyMenu")->getElement("palette");
+	if (element)
+	{
+		if (element->TFTDMode)
+		{
+			pal = "PAL_GEOSCAPE";
+		}
+		if (element->color != INT_MAX)
+		{
+			color = element->color;
+		}
+	}
+	
+	setPalette(pal, color);
 
 	_ammoColor = _game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color;
 

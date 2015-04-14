@@ -53,7 +53,22 @@ DismantleFacilityState::DismantleFacilityState(Base *base, BaseView *view, BaseF
 	_txtFacility = new Text(142, 9, 25, 85);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("dismantleFacility")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	Element *element = _game->getRuleset()->getInterface("dismantleFacility")->getElement("palette");
+	if (element)
+	{
+		if (element->TFTDMode)
+		{
+			pal = "PAL_GEOSCAPE";
+		}
+		if (element->color != INT_MAX)
+		{
+			color = element->color;
+		}
+	}
+	
+	setPalette(pal, color);
 
 	add(_window, "window", "dismantleFacility");
 	add(_btnOk, "button", "dismantleFacility");

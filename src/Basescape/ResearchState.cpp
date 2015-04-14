@@ -56,9 +56,24 @@ ResearchState::ResearchState(Base *base) : _base(base)
 	_txtScientists = new Text(106, 17, 120, 44);
 	_txtProgress = new Text(84, 9, 226, 44);
 	_lstResearch = new TextList(288, 112, 8, 62);
-
+	
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 1; // burgundy by default in ufo palette
+	Element *element = _game->getRuleset()->getInterface("researchMenu")->getElement("palette");
+	if (element)
+	{
+		if (element->TFTDMode)
+		{
+			pal = "PAL_GEOSCAPE";
+		}
+		if (element->color != INT_MAX)
+		{
+			color = element->color;
+		}
+	}
+	
+	setPalette(pal, color);
 
 	add(_window, "window", "researchMenu");
 	add(_btnNew, "button", "researchMenu");

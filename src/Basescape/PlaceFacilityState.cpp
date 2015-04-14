@@ -58,9 +58,24 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_numTime = new Text(110, 17, 202, 98);
 	_txtMaintenance = new Text(110, 9, 202, 118);
 	_numMaintenance = new Text(110, 17, 202, 126);
-
+	
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("placeFacility")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	Element *element = _game->getRuleset()->getInterface("placeFacility")->getElement("palette");
+	if (element)
+	{
+		if (element->TFTDMode)
+		{
+			pal = "PAL_GEOSCAPE";
+		}
+		if (element->color != INT_MAX)
+		{
+			color = element->color;
+		}
+	}
+	
+	setPalette(pal, color);
 
 	add(_window, "window", "placeFacility");
 	add(_view, "baseView", "basescape");
