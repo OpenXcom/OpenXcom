@@ -394,7 +394,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	else
 	{
 		// UFO landed.
-		if (wave.objective && trajectory.getZone(curWaypoint) == _rule.getSpawnZone())
+		if (wave.objective && trajectory.getZone(curWaypoint) == (size_t)(_rule.getSpawnZone()))
 		{
 			// Remove UFO, replace with MissionSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), game);

@@ -1498,8 +1498,8 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	Ruleset *ruleset = _save->getBattleState()->getGame()->getRuleset();
-	if (!grenade && _save->getTurn() < ruleset->getTurnAIUseBlaster() ||
-		 grenade && _save->getTurn() < ruleset->getTurnAIUseGrenade())
+	if ((!grenade && _save->getTurn() < ruleset->getTurnAIUseBlaster()) ||
+		 (grenade && _save->getTurn() < ruleset->getTurnAIUseGrenade()))
 	{
 		return false;
 	}

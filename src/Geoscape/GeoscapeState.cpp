@@ -2195,7 +2195,7 @@ void GeoscapeState::setupLandMission()
 	for (int counter = 0; counter < 40 && !picked; ++counter)
 	{
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		if (region->getMissionZones().size() > missionRules.getSpawnZone() &&
+		if (region->getMissionZones().size() > (size_t)(missionRules.getSpawnZone()) &&
 			_game->getSavedGame()->findAlienMission(region->getType(), OBJECTIVE_SITE) == 0)
 		{
 			const MissionZone &zone = region->getMissionZones().at(missionRules.getSpawnZone());

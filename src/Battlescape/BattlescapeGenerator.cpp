@@ -905,7 +905,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 				outside = false;
 			Unit *rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
-			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9));
+			size_t itemLevel = (size_t)(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 			if (unit)
 			{
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.

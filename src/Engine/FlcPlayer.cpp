@@ -468,7 +468,7 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	}
 
 	float volume = Game::volumeExponent(Options::musicVolume);
-	for (int i = 0; i < _audioFrameSize; i++)
+	for (unsigned int i = 0; i < _audioFrameSize; i++)
 	{
 		loadingBuff->samples[loadingBuff->sampleCount + i] = (float)((_chunkData[i]) -128) * 240 * volume;
 	}
