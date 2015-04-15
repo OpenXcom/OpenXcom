@@ -985,6 +985,13 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
 	{
 		return false;
 	}
+
+	// check restrictions for aliens
+	if (unit->getFaction() == FACTION_HOSTILE && _save->getTurn() < action.weapon->getRules()->getAIUseDelay())
+	{
+		return false;
+	}
+
 	action.type = (BattleActionType)(attackType);
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);

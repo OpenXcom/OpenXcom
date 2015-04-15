@@ -832,6 +832,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     armor: 40
+    aiUseDelay: 3
   - type: STR_BLASTER_BOMB
     requires:
       - STR_BLASTER_BOMB
@@ -899,6 +900,7 @@ items:
     damageType: 3
     battleType: 4
     recoveryPoints: 1
+    aiUseDelay: 3
     blastRadius: 5
   - type: STR_ELERIUM_115
     size: 0.1
