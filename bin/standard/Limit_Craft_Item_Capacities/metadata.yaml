@@ -1,0 +1,10 @@
+#
+# metadata.yaml for Limit Craft Item Capacities
+
+name: Limit Craft Item Capacities
+version: 1.0
+description: Limits craft capacities to 80 items
+author: OpenXcom team
+url: http://openxcom.org/
+
+master: xcom1

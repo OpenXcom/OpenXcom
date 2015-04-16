@@ -1,0 +1,11 @@
+#
+# metadata.yaml for XCOM2
+
+name: X-Com: Terror From the Deep
+version: 1.0
+description: The original X-Com: Terror From the Deep
+author: Microprose
+url: http://openxcom.org/
+id: xcom2
+
+isMaster: true

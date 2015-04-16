@@ -1,0 +1,10 @@
+#
+# metadata.yaml for XcomUtil Pistol Auto Shot
+
+name: XcomUtil Pistol Auto Shot
+version: 1.0
+description: Adds auto-fire capabilities to the pistol
+author: OpenXcom team
+url: http://openxcom.org/
+
+master: xcom1
