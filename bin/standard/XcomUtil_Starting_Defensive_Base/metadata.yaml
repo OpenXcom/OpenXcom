@@ -1,7 +1,7 @@
 #
 # metadata.yaml for XcomUtil Starting Defensive Base
 
-name: XcomUtil Starting Defensive Base
+name: "XcomUtil: Starting Defensive Base"
 version: 1.0
 description: Rearranges the standard starting base layout to be more defensive-minded
 author: OpenXcom team

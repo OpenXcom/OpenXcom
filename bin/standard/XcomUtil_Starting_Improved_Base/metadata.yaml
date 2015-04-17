@@ -1,7 +1,7 @@
 #
 # metadata.yaml for XcomUtil Starting Improved Base
 
-name: XcomUtil Starting Improved Base
+name: "XcomUtil: Starting Improved Base"
 version: 1.0
 description: Adds a few facilities to the standard starting base layout
 author: OpenXcom team

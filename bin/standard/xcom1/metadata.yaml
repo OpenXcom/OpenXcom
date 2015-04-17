@@ -1,11 +1,13 @@
 #
 # metadata.yaml for XCOM1
 
-name: UFO: Enemy Unknown / X-Com: UFO Defense
+name: "UFO: Enemy Unknown / X-Com: UFO Defense"
 version: 1.0
-description: The original UFO: Enemy Unknown / X-Com: UFO Defense
+description: "The original UFO: Enemy Unknown / X-Com: UFO Defense"
 author: Microprose
 url: http://openxcom.org/
 id: xcom1
 
 isMaster: true
+loadResources:
+  - UFO

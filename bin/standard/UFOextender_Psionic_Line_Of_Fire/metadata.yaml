@@ -1,7 +1,7 @@
 #
 # metadata.yaml for UFOextender Psionic Line Of Fire
 
-name: UFOextender: Psionic Line Of Fire
+name: "UFOextender: Psionic Line Of Fire"
 version: 1.0
 description: Limits psi attacks to targets within the attacker's line of sight
 author: OpenXcom team

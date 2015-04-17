@@ -1,7 +1,7 @@
 #
 # metadata.yaml for XcomUtil Always Daytime
 
-name: XcomUtil Always Daytime
+name: "XcomUtil: Always Daytime"
 version: 1.0
 description: Forces daylight lighting for all battles
 author: OpenXcom team

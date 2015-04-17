@@ -1,7 +1,7 @@
 #
 # metadata.yaml for XcomUtil High Explosive Damage
 
-name: XcomUtil High Explosive Damage
+name: "XcomUtil: High Explosive Damage"
 version: 1.0
 description: Increases the damage output and blast radius of high explosives
 author: OpenXcom team
