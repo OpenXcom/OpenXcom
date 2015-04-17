@@ -190,6 +190,8 @@ set ( battlescape_src
 )
 
 set ( engine_src
+  Engine/FileMap.h
+  Engine/FileMap.cpp
   Engine/State.h
   Engine/State.cpp
   Engine/CatFile.cpp
@@ -206,6 +208,8 @@ set ( engine_src
   Engine/Language.h
   Engine/LanguagePlurality.cpp
   Engine/LanguagePlurality.h
+  Engine/ModInfo.cpp
+  Engine/ModInfo.h
   Engine/Game.cpp
   Engine/Game.h
   Engine/Action.cpp
