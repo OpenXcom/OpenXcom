@@ -337,6 +337,11 @@ interfaces:
       - id: damageRange
         color: 13
         color2: 14
+      - id: disabledWeapon
+        color: 24
+        color2: 7
+      - id: disabledAmmo
+        color: 24
   - type: baseNaming
     elements:
       - id: palette
