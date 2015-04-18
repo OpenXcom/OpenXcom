@@ -21,6 +21,7 @@
 #include <vector>
 #include "../Engine/Game.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
@@ -79,7 +80,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 
 		if ((filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".rul") || !CrossPlatform::getDataContents("Ruleset/" + *i, "rul").empty())
 		{
-			std::string mod = CrossPlatform::noExt(*i);
+			std::string mod = FileMap::noExt(*i);
 			std::wstring modName = Language::fsToWstr(mod);
 			Language::replace(modName, L"_", L" ");
 			// ignore default ruleset

@@ -41,10 +41,10 @@ namespace CrossPlatform
 	std::vector<std::string> findUserFolders();
 	/// Finds the game's config folder in the system.
 	std::string findConfigFolder();
-	/// Gets the path for a data file.
+	/// Gets the path for a data file when given a relative path, like "units/zombie.pck".
 	std::string getDataFile(const std::string &filename);
-    /// Gets the path for a data folder
-	std::string getDataFolder(const std::string &foldername);
+    /// searches the data folders for the specified relative path
+	std::string searchDataFolders(const std::string &foldername);
 	/// Creates a folder.
 	bool createFolder(const std::string &path);
 	/// Terminates a path.
@@ -59,12 +59,8 @@ namespace CrossPlatform
 	bool fileExists(const std::string &path);
 	/// Deletes the specified file.
 	bool deleteFile(const std::string &path);
-	/// Gets the basename of a file.
-	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
 	/// Sanitizes the characters in a filename.
 	std::string sanitizeFilename(const std::string &filename);
-	/// Removes the extension from a file.
-	std::string noExt(const std::string &file);
 	/// Gets the system locale.
 	std::string getLocale();
 	/// Checks if an event is a quit shortcut.

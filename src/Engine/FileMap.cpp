@@ -28,14 +28,14 @@ namespace OpenXcom
 namespace FileMap
 {
 
-static std::vector<std::string>                       _rulesets;
+static std::vector< std::vector<std::string> >        _rulesets;
 static std::map<std::string, std::string>             _resources;
 static std::map< std::string, std::set<std::string> > _vdirs;
 static std::set<std::string>                          _emptySet;
 
 static std::string _lcase(const std::string &in)
 {
-	std::string ret;
+	std::string ret = in;
 	std::transform(in.begin(), in.end(), ret.begin(), tolower);
 	return ret;
 }
@@ -45,6 +45,7 @@ const std::string &getFilePath(const std::string &relativeFilePath)
 	std::string canonicalRelativeFilePath = _lcase(relativeFilePath);
 	if (_resources.find(canonicalRelativeFilePath) == _resources.end())
 	{
+		Log(LOG_WARNING) << "file not found: " << relativeFilePath;
 		return relativeFilePath;
 	}
 
@@ -54,6 +55,13 @@ const std::string &getFilePath(const std::string &relativeFilePath)
 const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 {
 	std::string canonicalRelativePath = _lcase(relativePath);
+	
+	// trim of trailing '/' characters
+	while (!canonicalRelativePath.empty() && "/" == canonicalRelativePath.substr(canonicalRelativePath.length() - 1, 1))
+	{
+		canonicalRelativePath.resize(canonicalRelativePath.length() -1);
+	}
+	
 	if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
 	{
 		return _emptySet;
@@ -62,15 +70,17 @@ const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 	return _vdirs.at(canonicalRelativePath);
 }
 
-std::set<std::string> filterFiles(const std::set<std::string> &files, const std::string &ext)
+template <typename T>
+std::set<std::string> _filterFiles(const T &files, const std::string &ext)
 {
 	std::set<std::string> ret;
 	size_t extLen = ext.length() + 1; // +1 for the '.'
-	for (std::set<std::string>::const_iterator i = files.begin(); i != files.end(); ++i)
+	std::string lcaseExt = _lcase(ext);
+	for (typename T::const_iterator i = files.begin(); i != files.end(); ++i)
 	{
 		// < not <= since we should have at least one character in the filename that is
 		// not part of the extention
-		if (extLen < i->length() && 0 == i->substr(i->length() - extLen).compare(ext))
+		if (extLen < i->length() && 0 == _lcase(i->substr(i->length() - (extLen - 1))).compare(lcaseExt))
 		{
 			ret.insert(*i);
 		}
@@ -79,7 +89,10 @@ std::set<std::string> filterFiles(const std::set<std::string> &files, const std:
 	return ret;
 }
 
-const std::vector<std::string> &getRulesets()
+std::set<std::string> filterFiles(const std::vector<std::string> &files, const std::string &ext) { return _filterFiles(files, ext); }
+std::set<std::string> filterFiles(const std::set<std::string>    &files, const std::string &ext) { return _filterFiles(files, ext); }
+
+const std::vector< std::vector<std::string> > &getRulesets()
 {
 	return _rulesets;
 }
@@ -99,66 +112,99 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 {
 	std::string fullDir = basePath + (relPath.length() ? "/" + relPath : "");
 	std::vector<std::string> files = CrossPlatform::getFolderContents(fullDir);
+	std::set<std::string> rulesetFiles = _filterFiles(files, "rul");
+
+	if (!ignoreRulesets && rulesetFiles.size())
+	{
+		_rulesets.insert(_rulesets.begin(), std::vector<std::string>());
+		for (std::set<std::string>::iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
+		{
+			std::string fullpath = fullDir + "/" + *i;
+			Log(LOG_DEBUG) << "  recording ruleset: " << fullpath;
+			_rulesets.front().push_back(fullpath);
+		}
+	}
+
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
-		if (*i == "metadata.yaml")
+		std::string fullpath = fullDir + "/" + *i;
+		
+		if (_lcase(*i) == "metadata.yaml" || rulesetFiles.find(*i) != rulesetFiles.end())
 		{
-			// no need to map mod metadata files
+			// no need to map mod metadata files or ruleset files
+			Log(LOG_DEBUG) << "  ignoring non-resource file: " << fullpath;
 			continue;
 		}
 
-		std::string fullpath = fullDir + "/" + *i;
 		if (CrossPlatform::folderExists(fullpath))
 		{
-			Log(LOG_INFO) << "  recursing into: " << fullpath;
+			Log(LOG_DEBUG) << "  recursing into: " << fullpath;
 			_mapFiles(basePath, _combinePath(relPath, *i), true);
 			continue;
 		}
 
-		if (5 <= i->length() && 0 == i->substr(i->length() - 4).compare(".rul"))
+		// populate resource map
+		std::string canonicalRelativeFilePath = _lcase(_combinePath(relPath, *i));
+		if (_resources.insert(std::pair<std::string, std::string>(canonicalRelativeFilePath, fullpath)).second)
 		{
-			if (ignoreRulesets)
-			{
-				Log(LOG_INFO) << "  ignoring ruleset: " << fullpath;
-			}
-			else
-			{
-				Log(LOG_INFO) << "  recording ruleset: " << fullpath;
-				_rulesets.insert(_rulesets.begin(), fullpath);
-			}
+			Log(LOG_DEBUG) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
 		}
 		else
 		{
-			// populate resource map
-			std::string canonicalRelativeFilePath = _lcase(_combinePath(relPath, *i));
-			if (_resources.insert(std::pair<std::string, std::string>(canonicalRelativeFilePath, fullpath)).second)
-			{
-				Log(LOG_INFO) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
-			}
-			else
-			{
-				Log(LOG_INFO) << "  resource already mapped by higher-priority mod; ignoring: " << fullpath;
-			}
+			Log(LOG_DEBUG) << "  resource already mapped by higher-priority mod; ignoring: " << fullpath;
+		}
 
-			// populate vdir map
-			std::string canonicalRelativePath = _lcase(relPath);
-			std::string lcaseFile = _lcase(*i);
-			if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
-			{
-				_vdirs.insert(std::pair< std::string, std::set<std::string> >(canonicalRelativePath, std::set<std::string>()));
-			}
-			if (_vdirs.at(canonicalRelativePath).insert(lcaseFile).second)
-			{
-				Log(LOG_INFO) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << lcaseFile;
-			}
+		// populate vdir map
+		std::string canonicalRelativePath = _lcase(relPath);
+		std::string lcaseFile = _lcase(*i);
+		if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
+		{
+			_vdirs.insert(std::pair< std::string, std::set<std::string> >(canonicalRelativePath, std::set<std::string>()));
+		}
+		if (_vdirs.at(canonicalRelativePath).insert(lcaseFile).second)
+		{
+			Log(LOG_DEBUG) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << lcaseFile;
 		}
 	}
 }
 
 void load(const std::string &path, bool ignoreRulesets)
 {
-	Log(LOG_INFO) << "mapping resources in: " << path;
+	Log(LOG_INFO) << "  mapping resources in: " << path;
 	_mapFiles(path, "", ignoreRulesets);
+}
+
+std::string noExt(const std::string &filename)
+{
+	size_t dot = filename.find_last_of('.');
+	if (dot == std::string::npos)
+	{
+		return filename;
+	}
+	return filename.substr(0, dot);
+}
+
+std::string baseFilename(const std::string &path, int (*transform)(int))
+{
+	size_t sep = path.find_last_of("/");
+	std::string filename;
+	if (sep == std::string::npos)
+	{
+		filename = path;
+	}
+	else if (sep == path.size() - 1)
+	{
+		return baseFilename(path.substr(0, path.size() - 1), transform);
+	}
+	else
+	{
+		filename = path.substr(sep + 1);
+	}
+	if (transform != 0)
+	{
+		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
+	}
+	return filename;
 }
 
 }

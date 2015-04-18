@@ -32,7 +32,9 @@ namespace OpenXcom
  */
 namespace FileMap
 {
-	/// Gets the path for a data file when given a relative (case insensitive) path, like "units/zombie.pck".
+	/// Gets the real filesystem path for a data file when given a relative (case insensitive) path,
+	/// like "units/zombie.pck".  If the file has not been mapped via the load() function, the input
+	/// path is returned verbatim (for use in error messages when the file is ultimately not found).
 	const std::string &getFilePath(const std::string &relativeFilePath);
 
 	/// Returns the set of files in a virtual folder.  The virtual folder contains files from all active mods
@@ -40,17 +42,25 @@ namespace FileMap
 	/// filesystem paths via getFilePath()
 	const std::set<std::string> &getVFolderContents(const std::string &relativePath);
 
-	/// Returns a the subset of the given files that matches the given extention
-	std::set<std::string> filterFiles(const std::set<std::string> &files, const std::string &ext);
+	/// Returns the subset of the given files that matches the given extention
+	std::set<std::string> filterFiles(const std::vector<std::string> &files, const std::string &ext);
+	std::set<std::string> filterFiles(const std::set<std::string>    &files, const std::string &ext);
 
-	/// Returns the list of ruleset files found, in reverse order, while mapping resources.
-	const std::vector<std::string> &getRulesets();
+	/// Returns the ruleset files found, grouped by mod, while mapping resources.  The highest-prioirity mod
+	/// will be last in the returned vector.
+	const std::vector< std::vector<std::string> > &getRulesets();
 
 	/// Scans a directory tree rooted at the specified filesystem path.  Any files it encounters that have already
 	/// been mapped will be ignored.  Therefore, load files from mods with the highest priority first.  If
 	/// ignoreRulesets is false (the default), it will add any rulesets it finds to the front of the vector
 	/// returned by getRulesets().
 	void load(const std::string &path, bool ignoreRulesets = false);
+
+	/// Removes the extension from a file.
+	std::string noExt(const std::string &file);
+
+	/// Gets the basename of a file.
+	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
 }
 
 }

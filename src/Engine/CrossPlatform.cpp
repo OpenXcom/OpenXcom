@@ -113,7 +113,7 @@ std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
 #ifdef __MORPHOS__
-	list.push_back("PROGDIR:data/");
+	list.push_back("PROGDIR:");
 	return list;
 #endif
 	
@@ -123,7 +123,7 @@ std::vector<std::string> findDataFolders()
 	// Get Documents folder
 	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
 	{
-		PathAppendA(path, "OpenXcom\\data\\");
+		PathAppendA(path, "OpenXcom\\");
 		list.push_back(path);
 	}
 
@@ -131,34 +131,32 @@ std::vector<std::string> findDataFolders()
 	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
 	{
 		PathRemoveFileSpecA(path);
-		PathAppendA(path, "data\\");
 		list.push_back(path);
 	}
 
 	// Get working directory
 	if (GetCurrentDirectoryA(MAX_PATH, path) != 0)
 	{
-		PathAppendA(path, "data\\");
 		list.push_back(path);
 	}
 #else
 	char const *home = getHome();
 #ifdef __HAIKU__
-	list.push_back("/boot/apps/OpenXcom/data/");
+	list.push_back("/boot/apps/OpenXcom/");
 #endif
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
-		snprintf(path, MAXPATHLEN, "%s/openxcom/data/", xdg_data_home);
+		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
  	}
  	else
  	{
 #ifdef __APPLE__
-		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/data/", home);
+		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
 #else
-		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
+		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
 #endif
  	}
  	list.push_back(path);
@@ -169,28 +167,28 @@ std::vector<std::string> findDataFolders()
 		char *dir = strtok(xdg_data_dirs, ":");
 		while (dir != 0)
 		{
-			snprintf(path, MAXPATHLEN, "%s/openxcom/data/", dir);
+			snprintf(path, MAXPATHLEN, "%s/openxcom/", dir);
 			list.push_back(path);
 			dir = strtok(0, ":");
 		}
 	}
 #ifdef __APPLE__
-	snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
+	snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/", home);
 	list.push_back(path);
 #else
-	list.push_back("/usr/local/share/openxcom/data/");
+	list.push_back("/usr/local/share/openxcom/");
 #ifndef __FreeBSD__
-	list.push_back("/usr/share/openxcom/data/");
+	list.push_back("/usr/share/openxcom/");
 #endif
 #ifdef DATADIR
-	snprintf(path, MAXPATHLEN, "%s/data/", DATADIR);
+	snprintf(path, MAXPATHLEN, "%s/", DATADIR);
 	list.push_back(path);
 #endif
 
 #endif
 	
 	// Get working directory
-	list.push_back("./data/");
+	list.push_back("./");
 #endif
 
 	return list;
@@ -421,7 +419,7 @@ std::string getDataFile(const std::string &filename)
  * @param foldername Original foldername.
  * @return Correct foldername or "" if it doesn't exist.
  */
-std::string getDataFolder(const std::string &foldername)
+std::string searchDataFolders(const std::string &foldername)
 {
 	// Correct folder separator
 	std::string name = foldername;
@@ -652,31 +650,6 @@ bool deleteFile(const std::string &path)
 }
 
 /**
- * Gets the base filename of a path.
- * @param path Full path to file.
- * @param transform Optional function to transform the filename.
- * @return Base filename.
- */
-std::string baseFilename(const std::string &path, int (*transform)(int))
-{
-	size_t sep = path.find_last_of(PATH_SEPARATOR);
-	std::string filename;
-	if (sep == std::string::npos)
-	{
-		filename = path;
-	}
-	else
-	{
-		filename = path.substr(0, sep + 1);
-	}
-	if (transform != 0)
-	{
-		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
-	}
-	return filename;
-}
-
-/**
  * Replaces invalid filesystem characters with _.
  * @param filename Original filename.
  * @return Filename without invalid characters
@@ -698,21 +671,6 @@ std::string sanitizeFilename(const std::string &filename)
 		}
 	}
 	return newFilename;
-}
-
-/**
- * Removes the extension from a filename.
- * @param filename Original filename.
- * @return Filename without the extension.
- */
-std::string noExt(const std::string &filename)
-{
-	size_t dot = filename.find_last_of('.');
-	if (dot == std::string::npos)
-	{
-		return filename;
-	}
-	return filename.substr(0, filename.find_last_of('.'));
 }
 
 /**
@@ -955,7 +913,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 #else
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
+	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(unixPath));
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{

@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include "OptionInfo.h"
+#include "ModInfo.h"
 
 namespace OpenXcom
 {
@@ -94,6 +95,8 @@ namespace Options
 	void backupDisplay();
 	/// Switches display options.
 	void switchDisplay();
+	/// Gets the map of mod ids to mod infos
+	const std::map<std::string, ModInfo> &getModInfos();
 }
 
 }

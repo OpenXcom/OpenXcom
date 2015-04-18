@@ -20,7 +20,7 @@
 #include "DosFont.h"
 #include "Surface.h"
 #include "Language.h"
-#include "CrossPlatform.h"
+#include "FileMap.h"
 #include "Logger.h"
 
 namespace OpenXcom
@@ -73,7 +73,7 @@ void Font::load(const YAML::Node &node)
 	std::string image = "Language/" + node["image"].as<std::string>();
 
 	Surface *fontTemp = new Surface(_width, _height);
-	fontTemp->loadImage(CrossPlatform::getDataFile(image));
+	fontTemp->loadImage(FileMap::getFilePath(image));
 	_surface = new Surface(fontTemp->getWidth(), fontTemp->getHeight());
 	_surface->setPalette(_palette, 0, 6);
 	fontTemp->blit(_surface);

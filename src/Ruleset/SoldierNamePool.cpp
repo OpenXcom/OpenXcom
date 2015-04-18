@@ -24,7 +24,6 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Exception.h"
-#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -49,8 +48,7 @@ SoldierNamePool::~SoldierNamePool()
  */
 void SoldierNamePool::load(const std::string &filename)
 {
-	std::string s = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
-	YAML::Node doc = YAML::LoadFile(s);
+	YAML::Node doc = YAML::LoadFile(filename);
 
 	for (YAML::const_iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
 	{

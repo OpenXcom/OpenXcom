@@ -32,6 +32,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "CrossPlatform.h"
+#include "FileMap.h"
 #include "Screen.h"
 
 namespace OpenXcom
@@ -50,6 +51,7 @@ std::string _configFolder;
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _commandLine;
 std::vector<OptionInfo> _info;
+std::map<std::string, ModInfo> _modInfos;
 
 /**
  * Sets up the options by creating their OptionInfo metadata.
@@ -278,6 +280,38 @@ void create()
 	_info.push_back(OptionInfo("FPS", &FPS, 60, "STR_FPS_LIMIT", "STR_GENERAL"));
 	_info.push_back(OptionInfo("FPSInactive", &FPSInactive, 30, "STR_FPS_INACTIVE_LIMIT", "STR_GENERAL"));
 #endif
+
+}
+
+// we can get fancier with these detection routines, but for now just look for
+// files that exist in one game but not the other
+static bool _ufoIsInstalled()
+{
+	return CrossPlatform::fileExists(CrossPlatform::getDataFile("UFO/TERRAIN/UFO1.PCK"));
+}
+
+static bool _tftdIsInstalled()
+{
+	return CrossPlatform::fileExists(CrossPlatform::getDataFile("TFTD/TERRAIN/SEA.PCK"));
+}
+
+static void _setDefaultRuleset()
+{
+	// try to find xcom1
+	if (_ufoIsInstalled())
+	{
+		Log(LOG_DEBUG) << "detected UFO";
+		rulesets.push_back("xcom1");
+	}
+	else if (_tftdIsInstalled())
+	{
+		Log(LOG_DEBUG) << "detected TFTD";
+		rulesets.push_back("xcom2");
+	}
+	else
+	{
+		Log(LOG_ERROR) << "neither UFO or TFTD data was detected";
+	}
 }
 
 /**
@@ -292,7 +326,10 @@ void resetDefault()
 	backupDisplay();
 
 	rulesets.clear();
-	rulesets.push_back("Xcom1Ruleset");
+	if (!_dataList.empty())
+	{
+		_setDefaultRuleset();
+	}
 
 	purchaseExclusions.clear();
 }
@@ -318,22 +355,24 @@ void loadArgs(int argc, char *argv[])
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
+				++i; // we'll be consuming the next argument too
+
 				if (argname == "data")
 				{
-					_dataFolder = CrossPlatform::endPath(argv[i+1]);
+					_dataFolder = CrossPlatform::endPath(argv[i]);
 				}
 				else if (argname == "user")
 				{
-					_userFolder = CrossPlatform::endPath(argv[i+1]);
+					_userFolder = CrossPlatform::endPath(argv[i]);
 				}
 				else if (argname == "cfg")
 				{
-					_configFolder = CrossPlatform::endPath(argv[i+1]);
+					_configFolder = CrossPlatform::endPath(argv[i]);
 				}
 				else
 				{
 					//save this command line option for now, we will apply it later
-					_commandLine[argname] = argv[i+1];
+					_commandLine[argname] = argv[i];
 				}
 			}
 			else
@@ -386,6 +425,56 @@ bool showHelp(int argc, char *argv[])
 	return false;
 }
 
+const std::map<std::string, ModInfo> &getModInfos() { return _modInfos; }
+
+static void _scanMods(const std::string &modsDir)
+{
+	std::vector<std::string> contents = CrossPlatform::getDataContents(modsDir);
+	for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
+	{
+		std::string modPath = CrossPlatform::searchDataFolders(modsDir + "/" + *i);
+		if (!CrossPlatform::folderExists(modPath))
+		{
+			// skip non-directories (e.g. README.txt)
+			continue;
+		}
+
+		std::string metadataPath = CrossPlatform::getDataFile(modPath + "/metadata.yaml");
+		if (!CrossPlatform::fileExists(metadataPath))
+		{
+			Log(LOG_WARNING) << metadataPath << " not found; skipping " << *i;
+			continue;
+		}
+
+		Log(LOG_INFO) << "- " << modPath;
+		
+		ModInfo modInfo(modPath);
+		modInfo.load(metadataPath);
+
+		Log(LOG_DEBUG) << "  id: " << modInfo.getId();
+		Log(LOG_DEBUG) << "  name: " << modInfo.getName();
+		Log(LOG_DEBUG) << "  version: " << modInfo.getVersion();
+		Log(LOG_DEBUG) << "  description: " << modInfo.getDescription();
+		Log(LOG_DEBUG) << "  author: " << modInfo.getAuthor();
+		Log(LOG_DEBUG) << "  url: " << modInfo.getUrl();
+		Log(LOG_DEBUG) << "  loadResources:";
+		std::vector<std::string> externals = modInfo.getExternalResourceDirs();
+		for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
+		{
+			Log(LOG_DEBUG) << "    " << *j;
+		}
+		Log(LOG_DEBUG) << "  masters:";
+		std::set<std::string> masters = modInfo.getMasters();
+		for (std::set<std::string>::iterator j = masters.begin(); j != masters.end(); ++j)
+		{
+			Log(LOG_DEBUG) << "    " << *j;
+		}
+		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
+
+		_modInfos.insert(std::pair<std::string, ModInfo>(modInfo.getId(), modInfo));
+	}
+}
+
 /**
  * Handles the initialization of setting up default options
  * and finding and loading any existing ones.
@@ -401,6 +490,7 @@ bool init(int argc, char *argv[])
 	resetDefault();
 	loadArgs(argc, argv);
 	setFolders();
+	_setDefaultRuleset();
 	updateOptions();
 
 	std::string s = getUserFolder();
@@ -422,6 +512,33 @@ bool init(int argc, char *argv[])
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
+
+	Log(LOG_INFO) << "Scanning standard mods...";
+	_scanMods("standard");
+	Log(LOG_INFO) << "Scanning user mods...";
+	_scanMods("mods");
+	Log(LOG_INFO) << "Mapping resource files...";
+	for (std::vector<std::string>::reverse_iterator i = Options::rulesets.rbegin(); i != Options::rulesets.rend(); ++i)
+	{
+		std::map<std::string, ModInfo>::const_iterator modIt = Options::getModInfos().find(*i);
+		if (Options::getModInfos().end() == modIt)
+		{
+			Log(LOG_WARNING) << "mod not found: " << *i;
+			Options::badMods.push_back(*i);
+			Options::badMods.push_back("not found");
+			continue;
+		}
+
+		ModInfo modInfo = modIt->second;
+		FileMap::load(modInfo.getPath());
+		for (std::vector<std::string>::const_iterator j = modInfo.getExternalResourceDirs().begin(); j != modInfo.getExternalResourceDirs().end(); ++j)
+		{
+			FileMap::load(CrossPlatform::searchDataFolders(*j), true);
+		}
+	}
+	// pick up stuff in common
+	FileMap::load(CrossPlatform::searchDataFolders("common"), true);
+
 	return true;
 }
 

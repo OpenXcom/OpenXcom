@@ -11,14 +11,5 @@ After the copy, this directory should contain at least the following items:
   UFOINTRO
   UNITS
 
-If you want to import your old games, make sure you copy these in too:
-  GAME_1
-  GAME_2
-  GAME_3
-  GAME_4
-  GAME_5
-  GAME_6
-  GAME_7
-  GAME_8
-  GAME_9
-  GAME_10
+If you want to import your old games, copy the GAME_* folders to the
+directory where your OpenXcom saves are.

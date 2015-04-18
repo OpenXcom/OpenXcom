@@ -303,9 +303,9 @@ int StartState::load(void *game_ptr)
 	Game *game = (Game*)game_ptr;
 	try
 	{
-		Log(LOG_INFO) << "Loading ruleset...";
-		game->loadRuleset();
-		Log(LOG_INFO) << "Ruleset loaded successfully.";
+		Log(LOG_INFO) << "Loading rulesets...";
+		game->loadRulesets();
+		Log(LOG_INFO) << "Rulesets loaded successfully.";
 		Log(LOG_INFO) << "Loading resources...";
 		game->setResourcePack(new XcomResourcePack(game->getRuleset()));
 		Log(LOG_INFO) << "Resources loaded successfully.";

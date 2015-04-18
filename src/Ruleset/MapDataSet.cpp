@@ -23,7 +23,7 @@
 #include <SDL_endian.h>
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 
 namespace OpenXcom
 {
@@ -159,14 +159,11 @@ void MapDataSet::loadData()
 	MCD mcd;
 
 	// Load Terrain Data from MCD file
-	std::ostringstream s;
-	s << "TERRAIN/" << _name << ".MCD";
-
-	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(), std::ios::in | std::ios::binary);
+	std::string fname = "TERRAIN/" + _name + ".MCD";
+	std::ifstream mapFile(FileMap::getFilePath(fname).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception(s.str() + " not found");
+		throw Exception(fname + " not found");
 	}
 
 	while (mapFile.read((char*)&mcd, sizeof(MCD)))
@@ -223,12 +220,9 @@ void MapDataSet::loadData()
 	mapFile.close();
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
-	std::ostringstream s1,s2;
-	s1 << "TERRAIN/" << _name << ".PCK";
-	s2 << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);
-	_surfaceSet->loadPck(CrossPlatform::getDataFile(s1.str()), CrossPlatform::getDataFile(s2.str()));
-
+	_surfaceSet->loadPck(FileMap::getFilePath("TERRAIN/" + _name + ".PCK"),
+			     FileMap::getFilePath("TERRAIN/" + _name + ".TAB"));
 }
 
 /**

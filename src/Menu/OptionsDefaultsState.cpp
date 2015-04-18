@@ -98,12 +98,15 @@ OptionsDefaultsState::~OptionsDefaultsState()
  */
 void OptionsDefaultsState::btnYesClick(Action *action)
 {
-	if (_origin == OPT_MENU && Options::rulesets.size() > 1)
+	std::vector<std::string> prevRulesets(Options::rulesets);
+	Options::resetDefault();
+	_game->defaultLanguage();
+
+	if (_origin == OPT_MENU && prevRulesets != Options::rulesets)
 	{
 		Options::reload = true;
 	}
-	Options::resetDefault();
-	_game->defaultLanguage();
+
 	_game->popState();
 	_state->btnOkClick(action);
 }

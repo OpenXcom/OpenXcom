@@ -30,6 +30,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "SavedBattleGame.h"
 #include "SerializationHelper.h"
 #include "GameTime.h"
@@ -244,7 +245,7 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 		}
 		else
 		{
-			save.displayName = Language::fsToWstr(CrossPlatform::noExt(file));
+			save.displayName = Language::fsToWstr(FileMap::noExt(file));
 		}
 		save.reserved = false;
 	}

@@ -18,14 +18,14 @@
  */
 
 #include "ModInfo.h"
-#include "CrossPlatform.h"
+#include "FileMap.h"
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
 ModInfo::ModInfo(const std::string &path) :
-	 _path(path), _name(CrossPlatform::noExt(CrossPlatform::baseFilename(path))),
+	 _path(path), _name(FileMap::noExt(FileMap::baseFilename(path))),
 	_desc("No description"), _version("1.0"), _author("unknown"),
 	_url("unknown"), _id(_name), _isMaster(false)
 {
