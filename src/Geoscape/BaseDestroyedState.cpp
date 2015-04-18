@@ -61,7 +61,7 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyCancel);
-		
+
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);

@@ -197,7 +197,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 				_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(_aliens[i])->getSellCost() * _qtys[i]);
 			}
 			else
-			{				
+			{
 				// add the corpses
 				_base->getItems()->addItem(
 					_game->getRuleset()->getArmor(

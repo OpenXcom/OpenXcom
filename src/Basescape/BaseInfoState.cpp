@@ -195,7 +195,7 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)&BaseInfoState::edtBaseChange);
-	
+
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));

@@ -71,7 +71,7 @@ ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, const std::string &file
 	_txtText->setBig();
 	_txtText->setWordWrap(true);
 	_txtText->setText(tr("STR_MISSING_CONTENT_PROMPT"));
-	
+
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();

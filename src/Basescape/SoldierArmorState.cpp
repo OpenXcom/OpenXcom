@@ -152,7 +152,7 @@ void SoldierArmorState::lstArmorClick(Action *)
 	SavedGame *_save;
 	_save = _game->getSavedGame();
 	_save->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
-	
+
 	_game->popState();
 }
 

@@ -298,7 +298,7 @@ void CraftInfoState::init()
 /**
  * Turns an amount of time into a
  * day/hour string.
- * @param total 
+ * @param total
  */
 std::wstring CraftInfoState::formatTime(int total)
 {

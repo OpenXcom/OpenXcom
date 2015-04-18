@@ -77,16 +77,16 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AllocatePsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AllocatePsiTrainingState::btnOkClick, Options::keyCancel);
-	
+
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
-	
+
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
 	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
-	
+
 	_txtName->setText(tr("STR_NAME"));
-	
+
 	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
 
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_IMPROVEMENT"));

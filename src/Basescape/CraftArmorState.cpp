@@ -153,7 +153,7 @@ void CraftArmorState::btnOkClick(Action *)
  * @param action Pointer to an action.
  */
 void CraftArmorState::lstSoldiersClick(Action *action)
-{	
+{
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
 	{
@@ -178,7 +178,7 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 					{
 						_base->getItems()->removeItem(a->getStoreItem());
 					}
-					
+
 					s->setArmor(a);
 					_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 				}

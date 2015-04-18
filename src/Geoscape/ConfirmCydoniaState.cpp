@@ -89,7 +89,7 @@ void ConfirmCydoniaState::btnYesClick(Action *)
 {
 	_game->popState();
 	_game->popState();
-	
+
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
