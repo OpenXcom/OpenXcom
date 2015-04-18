@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-ToggleTextButton::ToggleTextButton(int width, int height, int x, int y) : TextButton(width, height, x, y), _invertedColor(-1), _originalColor(-1), _fakeGroup(0)
+ToggleTextButton::ToggleTextButton(int width, int height, int x, int y) : TextButton(width, height, x, y), _originalColor(-1), _invertedColor(-1), _fakeGroup(0)
 {
     _isPressed = false;
     TextButton::setGroup(&_fakeGroup);

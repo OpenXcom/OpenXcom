@@ -76,7 +76,8 @@ private:
 	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
-	bool _AISecondMove, _endTurnProcessed;
+	bool _AISecondMove, _playedAggroSound;
+	bool _endTurnRequested, _endTurnProcessed;
 
 	/// Ends the turn.
 	void endTurn();
@@ -89,8 +90,10 @@ private:
 	std::vector<InfoboxOKState*> _infoboxQueue;
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
-	bool _playedAggroSound, _endTurnRequested;
 public:
+	/// is debug mode enabled in the battlescape?
+	static bool _debugPlay;
+
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
 	/// Cleans up the BattlescapeGame state.
@@ -163,7 +166,6 @@ public:
 	ResourcePack *getResourcePack();
 	/// Gets the ruleset.
 	const Ruleset *getRuleset() const;
-	static bool _debugPlay;
 	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
 	/// Tries to find an item and pick it up if possible.

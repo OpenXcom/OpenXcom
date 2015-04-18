@@ -1301,7 +1301,7 @@ void Globe::drawDetail()
 			// Convert coordinates
 			polarToCart((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude(), &x, &y);
 
-			label->setX(x - 40);
+			label->setX(x - 50);
 			label->setY(y);
 			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
 			label->blit(_countries);
@@ -1313,7 +1313,7 @@ void Globe::drawDetail()
 	// Draw the city and base markers
 	if (_zoom >= 3)
 	{
-		Text *label = new Text(80, 9, 0, 0);
+		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
 		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
@@ -1333,7 +1333,7 @@ void Globe::drawDetail()
 				// Convert coordinates
 				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 
-				label->setX(x - 40);
+				label->setX(x - 50);
 				label->setY(y + 2);
 				label->setText((*j)->getName(_game->getLanguage()));
 				label->blit(_countries);
@@ -1345,7 +1345,7 @@ void Globe::drawDetail()
 			if ((*j)->getMarker() == -1 || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 				continue;
 			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
-			label->setX(x - 40);
+			label->setX(x - 50);
 			label->setY(y + 2);
 			label->setColor(BASE_LABEL_COLOR);
 			label->setText((*j)->getName());

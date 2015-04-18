@@ -91,7 +91,7 @@ public:
 	/// Gets the UFO type for special spawns.
 	const std::string &getSpawnUfo() const { return _spawnUfo; }
 	/// Gets the zone for spawning an alien site or base.
-	int getSpawnZone() const { return _spawnZone; }
+	unsigned int getSpawnZone() const { return _spawnZone; }
 	/// Gets the chances of this mission based on the game time.
 	int getWeight(const size_t monthsPassed) const;
 private:

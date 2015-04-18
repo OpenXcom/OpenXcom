@@ -250,7 +250,7 @@ void TextList::addRow(int cols, ...)
 	va_list args;
 	va_start(args, cols);
 	std::vector<Text*> temp;
-	int rowX = 0, rows = 1;
+	int rowX = 0, rows = 1, rowHeight = 0;
 
 	for (int i = 0; i < cols; ++i)
 	{
@@ -274,13 +274,17 @@ void TextList::addRow(int cols, ...)
 			txt->setSmall();
 		}
 		txt->setText(va_arg(args, wchar_t*));
+		// grab this before we enable word wrapping so we can use it to calculate
+		// the total row height below
+		int vmargin = _font->getHeight() - txt->getTextHeight();
 		// Wordwrap text if necessary
 		if (_wrap && txt->getTextWidth() > txt->getWidth())
 		{
-			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
 			txt->setWordWrap(true, true);
-			rows = 2;
+			rows = std::max(rows, txt->getNumLines());
 		}
+		rowHeight = std::max(rowHeight, txt->getTextHeight() + vmargin);
+		
 		// Places dots between text
 		if (_dot && i < cols - 1)
 		{
@@ -304,6 +308,13 @@ void TextList::addRow(int cols, ...)
 			rowX += _columns[i];
 		}
 	}
+
+	// ensure all elements in this row are the same height
+	for (int i = 0; i < cols; ++i)
+	{
+		temp[i]->setHeight(rowHeight);
+	}
+
 	_texts.push_back(temp);
 	for (int i = 0; i < rows; ++i)
 	{
@@ -493,10 +504,7 @@ Uint8 TextList::getSecondaryColor() const
  */
 void TextList::setWordWrap(bool wrap)
 {
-	if (wrap != _wrap)
-	{
-		_wrap = wrap;
-	}
+	_wrap = wrap;
 }
 
 /**
@@ -876,8 +884,12 @@ void TextList::draw()
 	int y = 0;
 	if (!_rows.empty())
 	{
-		if (_scroll > 0 && _rows[_scroll] == _rows[_scroll-1])
+		// for wrapped items, offset the draw height above the visible surface
+		// so that the correct row appears at the top
+		for (int row = _scroll; row > 0 && _rows[row] == _rows[row - 1]; --row)
+		{
 			y -= _font->getHeight() + _font->getSpacing();
+		}
 		for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
 		{
 			for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)

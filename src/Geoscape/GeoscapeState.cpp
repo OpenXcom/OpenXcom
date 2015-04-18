@@ -309,6 +309,9 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_btn1Day->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true);
 
+	_sideBottom->setGeoscapeButton(true);
+	_sideTop->setGeoscapeButton(true);
+
 	_btnRotateLeft->onMousePress((ActionHandler)&GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
@@ -2195,7 +2198,7 @@ void GeoscapeState::setupLandMission()
 	for (int counter = 0; counter < 40 && !picked; ++counter)
 	{
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		if (region->getMissionZones().size() > missionRules.getSpawnZone() &&
+		if (region->getMissionZones().size() > (size_t)(missionRules.getSpawnZone()) &&
 			_game->getSavedGame()->findAlienMission(region->getType(), OBJECTIVE_SITE) == 0)
 		{
 			const MissionZone &zone = region->getMissionZones().at(missionRules.getSpawnZone());
