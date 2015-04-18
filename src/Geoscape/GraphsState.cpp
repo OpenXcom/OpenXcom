@@ -71,8 +71,8 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	_txtYears = new TextList(200, 8, 121, 191);
 
 	// Set palette
-	setPalette("PAL_GRAPHS");
-	
+	setInterface("graphs");
+
 	//add all our elements
 	add(_bg);
 	add(_btnUfoRegion);
@@ -132,7 +132,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	_xcomRegionLines.push_back(new Surface(320,200,0,0));
 	add(_xcomRegionLines.at(offset));
 	add(_btnRegionTotal, "button", "graphs");
-	
+
 	offset = 0;
 	for (std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{

@@ -50,8 +50,8 @@ PromotionsState::PromotionsState()
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("promotions")->getElement("palette")->color);
-	
+	setInterface("promotions");
+
 	add(_window, "window", "promotions");
 	add(_btnOk, "button", "promotions");
 	add(_txtTitle, "heading", "promotions");

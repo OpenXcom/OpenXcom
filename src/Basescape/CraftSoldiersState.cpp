@@ -60,22 +60,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 2; // orange by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("craftSoldiers")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("craftSoldiers");
 
 	add(_window, "window", "craftSoldiers");
 	add(_btnOk, "button", "craftSoldiers");

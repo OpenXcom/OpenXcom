@@ -51,7 +51,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(308, 60, 6, 60);
 
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("alienBase")->getElement("palette")->color);
+	setInterface("alienBase");
 
 	add(_window, "window", "alienBase");
 	add(_btnOk, "text", "alienBase");

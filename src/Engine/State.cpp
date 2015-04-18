@@ -48,7 +48,7 @@ Game* State::_game = 0;
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State() : _screen(true), _modal(0)
+State::State() : _screen(true), _modal(0), _ruleInterface(0), _ruleInterfaceParent(0)
 {
 	// initialize palette to all black
 	memset(_palette, 0, sizeof(_palette));
@@ -64,6 +64,55 @@ State::~State()
 	{
 		delete *i;
 	}
+}
+
+/**
+ * Set interface data form ruleset.
+ * @param category From witch load palette and backpals colors.
+ * @param alterPal Do use alternative backpal colors?
+ * @param battlescape Do use battlescape palette?
+ */
+void State::setInterface(const std::string& category, bool alterPal, bool battlescape)
+{
+	int backPal = -1;
+	std::string pal = "PAL_GEOSCAPE";
+
+	_ruleInterface = _game->getRuleset()->getInterface(category);
+	if (_ruleInterface)
+	{
+		_ruleInterfaceParent = _game->getRuleset()->getInterface(_ruleInterface->getParent());
+		pal = _ruleInterface->getPalette();
+		Element *element = _ruleInterface->getElement("palette");
+		if (_ruleInterfaceParent)
+		{
+			if (!element)
+			{
+				element = _ruleInterfaceParent->getElement("palette");
+			}
+			if (pal.empty())
+			{
+				pal = _ruleInterfaceParent->getPalette();
+			}
+		}
+		if (element)
+		{
+			int color = alterPal ? element->color2 : element->color;
+			if (color != INT_MAX)
+			{
+				backPal = color;
+			}
+		}
+	}
+	if (battlescape)
+	{
+		pal = "PAL_BATTLESCAPE";
+		backPal = -1;
+	}
+	else if (pal.empty())
+	{
+		pal = "PAL_GEOSCAPE";
+	}
+	setPalette(pal, backPal);
 }
 
 /**
@@ -98,11 +147,11 @@ void State::add(Surface *surface)
  * @param parent the surface to base the coordinates of this element off.
  * @note if no parent is defined the element will not be moved.
  */
-void State::add(Surface *surface, const std::string id, const std::string category, Surface *parent)
+void State::add(Surface *surface, const std::string &id, const std::string &category, Surface *parent)
 {
 	// Set palette
 	surface->setPalette(_palette);
-	
+
 	// this only works if we're dealing with a battlescape button
 	BattlescapeButton *bsbtn = dynamic_cast<BattlescapeButton*>(surface);
 

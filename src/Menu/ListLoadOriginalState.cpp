@@ -57,7 +57,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 	_txtDate = new Text(90, 9, 225, 24);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 6);
+	setInterface("saveMenus");
 
 	add(_window, "window", "saveMenus");
 	add(_btnNew, "button", "saveMenus");

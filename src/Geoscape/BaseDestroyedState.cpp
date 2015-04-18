@@ -46,14 +46,14 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_txtMessage = new Text(224, 48, 48, 76);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
-	
+	setInterface("UFOInfo");
+
 	add(_window, "window", "UFOInfo");
 	add(_btnOk, "button", "UFOInfo");
 	add(_txtMessage, "text", "UFOInfo");
 
 	centerAllSurfaces();
-	
+
 	// Set up objects
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 

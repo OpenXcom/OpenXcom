@@ -57,7 +57,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 	_lstSoldiers = new TextList(290, 112, 8, 52);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("allocatePsi")->getElement("palette")->color);
+	setInterface("allocatePsi");
 
 	add(_window, "window", "allocatePsi");
 	add(_btnOk, "button", "allocatePsi");

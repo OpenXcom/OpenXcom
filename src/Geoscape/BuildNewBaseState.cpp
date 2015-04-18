@@ -75,7 +75,7 @@ BuildNewBaseState::BuildNewBaseState(Base *base, Globe *globe, bool first) : _ba
 	_hoverTimer->start();
 	
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
+	setInterface("geoscape");
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);

@@ -65,7 +65,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color);
+	setInterface("monthlyReport");
 
 	add(_window, "window", "monthlyReport");
 	add(_btnOk, "button", "monthlyReport");

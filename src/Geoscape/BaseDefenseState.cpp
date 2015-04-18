@@ -68,7 +68,7 @@ BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) :
 	_btnOk = new TextButton(120, 18, 100, 170);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color);
+	setInterface("baseDefense");
 
 	add(_window, "window", "baseDefense");
 	add(_btnOk, "button", "baseDefense");

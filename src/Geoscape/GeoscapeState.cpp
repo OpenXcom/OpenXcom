@@ -178,7 +178,7 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_txtDebug = new Text(200, 18, 0, 0);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE");
+	setInterface("geoscape");
 
 	add(_bg);
 	add(_sideLine);

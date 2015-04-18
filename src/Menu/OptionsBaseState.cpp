@@ -73,14 +73,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	_txtTooltip = new Text(305, 25, 8, 148);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("optionsMenu")->getElement("palette")->color);
-	}
+	setInterface("optionsMenu", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "window", "optionsMenu");
 

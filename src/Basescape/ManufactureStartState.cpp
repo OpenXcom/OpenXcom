@@ -60,24 +60,9 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_lstRequiredItems = new TextList(270, 40, 30, 108);
 
 	_btnStart = new TextButton(136, 16, 168, 155);
-	
+
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("allocateManufacture");
 
 	add(_window, "window", "allocateManufacture");
 	add(_txtTitle, "text", "allocateManufacture");

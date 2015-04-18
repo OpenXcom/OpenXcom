@@ -267,7 +267,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_craftDamageAnimTimer = new Timer(500);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE");
+	setInterface("dogfight");
 
 	add(_window);
 	add(_battle);
