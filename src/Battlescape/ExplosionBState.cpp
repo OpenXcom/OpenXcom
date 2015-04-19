@@ -197,10 +197,6 @@ void ExplosionBState::think()
 			}
 		}
 	}
-	else
-	{
-		_parent->getMap()->setBlastFlash(false);
-	}
 }
 
 /**

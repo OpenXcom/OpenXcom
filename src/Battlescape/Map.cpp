@@ -1213,6 +1213,7 @@ void Map::drawTerrain(Surface *surface)
 				pixel = (pixel / 16) * 16;
 				surface->setPixelIterative(&x, &y, pixel);
 			}
+			_flashScreen = false;
 		}
 		else
 		{
