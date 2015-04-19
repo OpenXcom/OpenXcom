@@ -1210,10 +1210,7 @@ void Map::drawTerrain(Surface *surface)
 			for (int x = 0, y = 0; x < surface->getWidth() && y < surface->getHeight();)
 			{
 				Uint8 pixel = surface->getPixel(x, y);
-				if (pixel != 0)
-				{
-					pixel = (pixel / 16) * 16;
-				}
+				pixel = (pixel / 16) * 16;
 				surface->setPixelIterative(&x, &y, pixel);
 			}
 		}
