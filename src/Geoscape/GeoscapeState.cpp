@@ -178,7 +178,7 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_txtDebug = new Text(200, 18, 0, 0);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE");
+	setInterface("geoscape");
 
 	add(_bg);
 	add(_sideLine);
@@ -397,7 +397,7 @@ GeoscapeState::~GeoscapeState()
 	delete _zoomOutEffectTimer;
 	delete _dogfightStartTimer;
 	delete _dogfightTimer;
-	
+
 	std::list<DogfightState*>::iterator it = _dogfights.begin();
 	for (; it != _dogfights.end();)
 	{
@@ -1566,7 +1566,7 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
+					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
@@ -2267,7 +2267,7 @@ void GeoscapeState::resize(int &dX, int &dY)
 		dY = 0;
 		return;
 	}
-	
+
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
 	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, (int)(Options::displayHeight / pixelRatioY / divisor));
 

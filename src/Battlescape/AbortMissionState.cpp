@@ -55,7 +55,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 
 	// Set palette
 	_battleGame->setPaletteByDepth(this);
-	
+
 	add(_window, "messageWindowBorder", "battlescape");
 	add(_txtInExit, "messageWindows", "battlescape");
 	add(_txtOutsideExit, "messageWindows", "battlescape");

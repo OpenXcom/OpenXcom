@@ -54,10 +54,10 @@ namespace OpenXcom
 {
 
 // UFO blobs graphics ...
-const int DogfightState::_ufoBlobs[8][13][13] = 
+const int DogfightState::_ufoBlobs[8][13][13] =
 {
-		/*0 STR_VERY_SMALL */ 
-	{ 
+		/*0 STR_VERY_SMALL */
+	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -187,7 +187,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 };
 
 // Projectile blobs
-const int DogfightState::_projectileBlobs[4][6][3] = 
+const int DogfightState::_projectileBlobs[4][6][3] =
 {
 		/*0 STR_STINGRAY_MISSILE ?*/
 	{
@@ -247,7 +247,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_weapon2 = new InteractiveSurface(15, 17, _x + 64, _y + 52);
 	_range2 = new Surface(21, 74, _x + 43, _y + 3);
 	_damage = new Surface(22, 25, _x + 93, _y + 40);
-	
+
 	_btnMinimize = new InteractiveSurface(12, 12, _x, _y);
 	_preview = new InteractiveSurface(160, 96, _x, _y);
 	_btnStandoff = new ImageButton(36, 15, _x + 83, _y + 4);
@@ -267,7 +267,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_craftDamageAnimTimer = new Timer(500);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE");
+	setInterface("dogfight");
 
 	add(_window);
 	add(_battle);
@@ -421,7 +421,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 
 		// Draw weapon icon
 		frame = set->getFrame(w->getRules()->getSprite() + 5);
-		
+
 		frame->setX(0);
 		frame->setY(0);
 		frame->blit(weapon);
@@ -681,7 +681,7 @@ void DogfightState::animate()
 	{
 		drawProjectile((*it));
 	}
-	
+
 	// Clears text after a while
 	if (_timeout == 0)
 	{
@@ -799,7 +799,7 @@ void DogfightState::update()
 			// If UFOs ever fire anything but beams, those positions need to be adjust here though.
 		}
 
-		_currentDist += distanceChange; 
+		_currentDist += distanceChange;
 
 		std::wostringstream ss;
 		ss << _currentDist;
@@ -889,7 +889,7 @@ void DogfightState::update()
 				}
 			}
 		}
-		
+
 		// Remove projectiles that hit or missed their target.
 		for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end();)
 		{
@@ -923,7 +923,7 @@ void DogfightState::update()
 			}
 
 			// Handle weapon firing
-			if (wTimer == 0 && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
+			if (wTimer == 0 && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff
 				&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
 				if (i == 0)
@@ -1014,7 +1014,7 @@ void DogfightState::update()
 			_destroyCraft = true;
 			_ufo->setShootingAt(0);
 		}
-	
+
 		// End dogfight if UFO is crashed or destroyed.
 		if (_ufo->isCrashed())
 		{
@@ -1490,7 +1490,7 @@ void DogfightState::drawUfo()
 /*
  * Draws projectiles on the radar screen.
  * Depending on what type of projectile it is, it's
- * shape will be different. Currently works for 
+ * shape will be different. Currently works for
  * original sized blobs 3 x 6 pixels.
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
@@ -1680,7 +1680,7 @@ void DogfightState::calculateWindowPosition()
 
 	_minimizedIconX = 5;
 	_minimizedIconY = (5 * _interceptionNumber) + (16 * (_interceptionNumber - 1));
-	
+
 	if (_interceptionsCount == 1)
 	{
 		_x = 80;

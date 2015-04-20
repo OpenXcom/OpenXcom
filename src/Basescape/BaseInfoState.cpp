@@ -102,15 +102,7 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 	_barLongRange = new Bar(150, 5, 166, Options::storageLimitsEnforced ? 169 : 165);
 
 	// Set palette
-	Element *element = _game->getRuleset()->getInterface("baseInfo")->getElement("palette");
-	if (element && element->TFTDMode)
-	{
-		setPalette("PAL_GEOSCAPE");
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE");
-	}
+	setInterface("baseInfo");
 
 	add(_bg);
 	add(_mini, "miniBase", "basescape");
@@ -203,7 +195,7 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)&BaseInfoState::edtBaseChange);
-	
+
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));

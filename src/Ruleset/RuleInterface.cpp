@@ -42,6 +42,8 @@ RuleInterface::~RuleInterface()
  */
 void RuleInterface::load(const YAML::Node& node)
 {
+	_palette = node["palette"].as<std::string>(_palette);
+	_parent = node["parent"].as<std::string>(_parent);
 	for (YAML::const_iterator i = node["elements"].begin(); i != node["elements"].end(); ++i)
 	{
 		Element element;
@@ -83,6 +85,16 @@ Element *RuleInterface::getElement(const std::string id)
 {
 	std::map<std::string, Element>::iterator i = _elements.find(id);
 	if (_elements.end() != i) return &i->second; else return 0;
+}
+
+const std::string &RuleInterface::getPalette() const
+{
+	return _palette;
+}
+
+const std::string &RuleInterface::getParent() const
+{
+	return _parent;
 }
 
 }

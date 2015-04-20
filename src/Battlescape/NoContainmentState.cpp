@@ -41,7 +41,7 @@ NoContainmentState::NoContainmentState()
 	_txtTitle = new Text(220, 64, 50, 8);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("noContainment")->getElement("palette")->color);
+	setInterface("noContainment");
 
 	add(_window, "window", "noContainment");
 	add(_btnOk, "button", "noContainment");

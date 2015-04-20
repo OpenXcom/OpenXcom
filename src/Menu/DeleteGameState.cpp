@@ -51,14 +51,7 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color);
-	}
+	setInterface("saveMenus", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "confirmDelete", "saveMenus");
 	add(_btnYes, "confirmDelete", "saveMenus");

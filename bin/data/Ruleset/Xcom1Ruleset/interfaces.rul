@@ -237,6 +237,7 @@ interfaces:
       - id: button
         color: 133   # minty green
   - type: baseDefense
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 2     # red/orange
@@ -367,6 +368,7 @@ interfaces:
       - id: button
         color: 239   # bright green
   - type: psiTraining
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 7     # violet
@@ -379,6 +381,7 @@ interfaces:
       - id: button2
         color: 218   # light blue
   - type: allocatePsi
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 7     # violet
@@ -409,6 +412,7 @@ interfaces:
       - id: button
         color: 239   # bright green
   - type: graphs
+    palette: PAL_GRAPHS
     elements:
       - id: text
         color: 135   # red
@@ -500,8 +504,9 @@ interfaces:
         color: 133   # minty green
   - type: geoscape
     elements:
-      - id: loadPalette
-        color: 6
+      - id: palette
+        color: 0     # brown
+        color2: 6
       - id: textLoad
         color: 133   # minty green
       - id: button
@@ -509,8 +514,6 @@ interfaces:
         color2: 245  # slightly lighter blue
       - id: text
         color: 244   # even lighter blue
-      - id: genericPalette
-        color: 0     # brown
       - id: genericWindow
         color: 239   # bright green
       - id: genericText
@@ -532,6 +535,7 @@ interfaces:
       - id: victoryText
         color: 249
   - type: sellMenu
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 0     # brown
@@ -548,6 +552,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: buyMenu
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 0     # brown
@@ -568,6 +573,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: manageContainment
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 1     # burgundy
@@ -587,6 +593,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: transferBaseSelect
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 4     # dark green
@@ -601,6 +608,7 @@ interfaces:
         color: 241   # pink
         color2: 213  # gold
   - type: transferMenu
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 0     # brown
@@ -620,6 +628,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: transferConfirm
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -631,6 +640,7 @@ interfaces:
         color: 218   # blue
         color2: 241  # pink
   - type: transferInfo
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -644,6 +654,7 @@ interfaces:
         color: 218   # blue
         border: 246  # purple
   - type: selectFacility
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -656,6 +667,7 @@ interfaces:
       - id: list
         color: 213   # gold
   - type: placeFacility
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -672,6 +684,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: dismantleFacility
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -682,6 +695,7 @@ interfaces:
       - id: text
         color: 218   # blue
   - type: manufactureMenu
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -698,6 +712,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: selectNewManufacture
+    parent: manufactureMenu
     elements:
       - id: window
         color: 241   # pink
@@ -711,6 +726,7 @@ interfaces:
       - id: catBox
         color: 241   # pink
   - type: allocateManufacture
+    parent: manufactureMenu
     elements:
       - id: window
         color: 218   # blue
@@ -723,6 +739,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: manufactureInfo
+    parent: manufactureMenu
     elements:
       - id: window
         color: 241   # pink
@@ -737,6 +754,7 @@ interfaces:
       - id: button2
         color: 246   # purple
   - type: researchMenu
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 1     # burgundy
@@ -751,6 +769,7 @@ interfaces:
       - id: button
         color: 246   # purple
   - type: selectNewResearch
+    parent: researchMenu
     elements:
       - id: window
         color: 218   # blue
@@ -762,6 +781,7 @@ interfaces:
       - id: button
         color: 246   # purple
   - type: allocateResearch
+    parent: researchMenu
     elements:
       - id: window
         color: 213   # gold
@@ -773,6 +793,7 @@ interfaces:
       - id: button2
         color: 218   # blue
   - type: baseInfo
+    palette: PAL_BASESCAPE
     elements:
       - id: text1
         color: 241   # pink
@@ -791,6 +812,7 @@ interfaces:
       - id: detectionBars
         color: 128   # pale blue
   - type: storesInfo
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 0     # brown
@@ -803,6 +825,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: costsInfo
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -818,6 +841,7 @@ interfaces:
       - id: button
         color: 241   # pink
   - type: soldierList
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 2     # orange
@@ -834,6 +858,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: soldierInfo
+    palette: PAL_BASESCAPE
     elements:
       - id: text1
         color: 218   # blue
@@ -893,6 +918,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: sackSoldier
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 6     # oxide
@@ -903,6 +929,7 @@ interfaces:
       - id: button
         color: 246   # purple
   - type: soldierArmor
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 4     # green
@@ -916,6 +943,7 @@ interfaces:
       - id: button
         color: 213   # gold
   - type: soldierMemorial
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 7     # violet
@@ -930,6 +958,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: craftEquipment
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 2     # orange
@@ -951,6 +980,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: craftArmor
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 4     # aqua
@@ -966,6 +996,7 @@ interfaces:
       - id: otherCraft
         color: 246   # purple
   - type: craftInfo
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 3     # pink
@@ -980,6 +1011,7 @@ interfaces:
       - id: button
         color: 218   # blue
   - type: craftWeapons
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 4     # aqua
@@ -992,6 +1024,7 @@ interfaces:
       - id: button
         color: 246   # purple
   - type: craftSoldiers
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 2     # orange
@@ -1009,6 +1042,7 @@ interfaces:
       - id: otherCraft
         color: 246   # purple
   - type: craftSelect
+    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 3     # pink
@@ -1026,6 +1060,7 @@ interfaces:
       - id: errorMessage
         color: 241   # pink
   - type: basescape
+    palette: PAL_BASESCAPE
     elements:
       - id: button
         color: 213   # gold
@@ -1048,6 +1083,7 @@ interfaces:
         color: 48    # green
         color2: 32   # red
   - type: battlescape
+    palette: PAL_BATTLESCAPE
     elements:
       - id: textLoad
         color: 15

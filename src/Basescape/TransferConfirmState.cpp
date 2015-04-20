@@ -51,22 +51,7 @@ TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state
 	_txtTotal = new Text(100, 17, 170, 95);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("transferConfirm")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("transferConfirm");
 
 	add(_window, "window", "transferConfirm");
 	add(_btnCancel, "button", "transferConfirm");

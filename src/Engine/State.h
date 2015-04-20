@@ -53,6 +53,9 @@ protected:
 	std::vector<Surface*> _surfaces;
 	bool _screen;
 	InteractiveSurface *_modal;
+	RuleInterface *_ruleInterface;
+	RuleInterface *_ruleInterfaceParent;
+
 	SDL_Color _palette[256];
 	Uint8 _cursorColor;
 public:
@@ -60,10 +63,12 @@ public:
 	State();
 	/// Cleans up the state.
 	virtual ~State();
+	/// Set interface rules.
+	void setInterface(const std::string &s, bool alterPal = false, bool battlescape = false);
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Adds a child element to the state.
-	void add(Surface *surface, const std::string id, const std::string category, Surface *parent = 0);
+	void add(Surface *surface, const std::string &id, const std::string &category, Surface *parent = 0);
 	/// Gets whether the state is a full-screen.
 	bool isScreen() const;
 	/// Toggles whether the state is a full-screen.

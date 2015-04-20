@@ -58,22 +58,7 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 4; // aqua by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("craftArmor")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("craftArmor");
 
 	add(_window, "window", "craftArmor");
 	add(_btnOk, "button", "craftArmor");
@@ -168,7 +153,7 @@ void CraftArmorState::btnOkClick(Action *)
  * @param action Pointer to an action.
  */
 void CraftArmorState::lstSoldiersClick(Action *action)
-{	
+{
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
 	{
@@ -193,7 +178,7 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 					{
 						_base->getItems()->removeItem(a->getStoreItem());
 					}
-					
+
 					s->setArmor(a);
 					_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 				}

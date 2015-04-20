@@ -54,7 +54,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Base *base, Globe *globe) : _base(base)
 	_txtArea = new Text(120, 9, 68, 90);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
+	setInterface("geoscape");
 
 	add(_window, "genericWindow", "geoscape");
 	add(_btnOk, "genericButton2", "geoscape");
@@ -113,7 +113,7 @@ void ConfirmNewBaseState::btnOkClick(Action *)
 	}
 	else
 	{
-		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, _game->getRuleset()->getInterface("geoscape")->getElement("genericWindow")->color, "BACK01.SCR", _game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color));
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_MONEY"), _palette, _game->getRuleset()->getInterface("geoscape")->getElement("genericWindow")->color, "BACK01.SCR", _game->getRuleset()->getInterface("geoscape")->getElement("palette")->color));
 	}
 }
 

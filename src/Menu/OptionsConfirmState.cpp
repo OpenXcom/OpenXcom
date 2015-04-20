@@ -51,14 +51,7 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin)
 	_timer = new Timer(1000);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
-	}
+	setInterface("mainMenu", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "confirmVideo", "mainMenu");
 	add(_btnYes, "confirmVideo", "mainMenu");

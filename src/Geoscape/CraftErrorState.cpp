@@ -47,7 +47,7 @@ CraftErrorState::CraftErrorState(GeoscapeState *state, const std::wstring &msg) 
 	_txtMessage = new Text(246, 96, 37, 42);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window, "window", "geoCraftScreens");
 	add(_btnOk, "button", "geoCraftScreens");

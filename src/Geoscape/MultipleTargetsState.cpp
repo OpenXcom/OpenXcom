@@ -61,7 +61,7 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 		_window = new Window(this, 136, winHeight, 60, winY, POPUP_VERTICAL);
 
 		// Set palette
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
+		setInterface("UFOInfo");
 
 		add(_window, "window", "UFOInfo");
 
