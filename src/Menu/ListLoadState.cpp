@@ -88,9 +88,9 @@ void ListLoadState::lstSavesPress(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		bool confirm = false;
-		for (std::vector<std::string>::const_iterator i = _saves[_lstSaves->getSelectedRow()].rulesets.begin(); i != _saves[_lstSaves->getSelectedRow()].rulesets.end(); ++i)
+		for (std::vector<std::string>::const_iterator i = _saves[_lstSaves->getSelectedRow()].mods.begin(); i != _saves[_lstSaves->getSelectedRow()].mods.end(); ++i)
 		{
-			if (std::find(Options::rulesets.begin(), Options::rulesets.end(), *i) == Options::rulesets.end())
+			if (std::find(Options::mods.begin(), Options::mods.end(), std::pair<std::string, bool>(*i, true)) == Options::mods.end())
 			{
 				confirm = true;
 				break;

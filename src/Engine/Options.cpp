@@ -295,18 +295,20 @@ static bool _tftdIsInstalled()
 	return CrossPlatform::fileExists(CrossPlatform::getDataFile("TFTD/TERRAIN/SEA.PCK"));
 }
 
-static void _setDefaultRuleset()
+static void _setDefaultMods()
 {
 	// try to find xcom1
 	if (_ufoIsInstalled())
 	{
 		Log(LOG_DEBUG) << "detected UFO";
-		rulesets.push_back("xcom1");
+		mods.push_back(std::pair<std::string, bool>("xcom1", true));
+		mods.push_back(std::pair<std::string, bool>("xcom2", false));
 	}
 	else if (_tftdIsInstalled())
 	{
 		Log(LOG_DEBUG) << "detected TFTD";
-		rulesets.push_back("xcom2");
+		mods.push_back(std::pair<std::string, bool>("xcom1", false));
+		mods.push_back(std::pair<std::string, bool>("xcom2", true));
 	}
 	else
 	{
@@ -325,10 +327,10 @@ void resetDefault()
 	}
 	backupDisplay();
 
-	rulesets.clear();
+	mods.clear();
 	if (!_dataList.empty())
 	{
-		_setDefaultRuleset();
+		_setDefaultMods();
 	}
 
 	purchaseExclusions.clear();
@@ -490,7 +492,7 @@ bool init(int argc, char *argv[])
 	resetDefault();
 	loadArgs(argc, argv);
 	setFolders();
-	_setDefaultRuleset();
+	_setDefaultMods();
 	updateOptions();
 
 	std::string s = getUserFolder();
@@ -517,19 +519,59 @@ bool init(int argc, char *argv[])
 	_scanMods("standard");
 	Log(LOG_INFO) << "Scanning user mods...";
 	_scanMods("mods");
-	Log(LOG_INFO) << "Mapping resource files...";
-	for (std::vector<std::string>::reverse_iterator i = Options::rulesets.rbegin(); i != Options::rulesets.rend(); ++i)
+
+	// remove mods from list that no longer exist
+	for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); )
 	{
-		std::map<std::string, ModInfo>::const_iterator modIt = Options::getModInfos().find(*i);
-		if (Options::getModInfos().end() == modIt)
+		std::map<std::string, ModInfo>::const_iterator modIt = _modInfos.find(i->first);
+		if (_modInfos.end() == modIt)
 		{
-			Log(LOG_WARNING) << "mod not found: " << *i;
-			Options::badMods.push_back(*i);
-			Options::badMods.push_back("not found");
+			Log(LOG_INFO) << "removing references to missing mod: " << i->first;
+			i = mods.erase(i);
+			continue;
+		}
+		++i;
+	}
+
+	mapResources();
+
+	// add in any new mods picked up from the scan
+	for (std::map<std::string, ModInfo>::const_iterator i = _modInfos.begin(); i != _modInfos.end(); ++i)
+	{
+		bool found = false;
+		for (std::vector< std::pair<std::string, bool> >::iterator j = mods.begin(); j != mods.end(); ++j)
+		{
+			if (i->first == j->first)
+			{
+				found = true;
+				break;
+			}
+		}
+		if (found)
+		{
 			continue;
 		}
 
-		ModInfo modInfo = modIt->second;
+		// not active by default
+		mods.push_back(std::pair<std::string, bool>(i->first, false));
+	}
+
+	return true;
+}
+
+void mapResources()
+{
+	Log(LOG_INFO) << "Mapping resource files...";
+	FileMap::clear();
+	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = mods.rbegin(); i != mods.rend(); ++i)
+	{
+		if (!i->second)
+		{
+			Log(LOG_DEBUG) << "skipping inactive mod: " << i->first;
+			continue;
+		}
+
+		ModInfo modInfo = _modInfos.find(i->first)->second;
 		FileMap::load(modInfo.getPath());
 		for (std::vector<std::string>::const_iterator j = modInfo.getExternalResourceDirs().begin(); j != modInfo.getExternalResourceDirs().end(); ++j)
 		{
@@ -538,8 +580,6 @@ bool init(int argc, char *argv[])
 	}
 	// pick up stuff in common
 	FileMap::load(CrossPlatform::searchDataFolders("common"), true);
-
-	return true;
 }
 
 /**
@@ -642,7 +682,18 @@ void load(const std::string &filename)
 			i->load(doc["options"]);
 		}
 		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
-		rulesets = doc["rulesets"].as< std::vector<std::string> >(rulesets);
+
+		mods.clear();
+		for (YAML::const_iterator i = doc["mods"].begin(); i != doc["mods"].end(); ++i)
+		{
+			std::string id = (*i)["id"].as<std::string>();
+			bool active = (*i)["active"].as<bool>(false);
+			mods.push_back(std::pair<std::string, bool>(id, active));
+		}
+		if (mods.empty())
+		{
+			_setDefaultMods();
+		}
 	}
 	catch (YAML::Exception e)
 	{
@@ -674,7 +725,15 @@ void save(const std::string &filename)
 		}
 		doc["options"] = node;
 		doc["purchaseexclusions"] = purchaseExclusions;
-		doc["rulesets"] = rulesets;
+
+		for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); ++i)
+		{
+			YAML::Node mod;
+			mod["id"] = i->first;
+			mod["active"] = i->second;
+			doc["mods"].push_back(mod);
+		}
+
 		out << doc;
 
 		sav << out.c_str();

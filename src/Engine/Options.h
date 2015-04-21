@@ -95,6 +95,8 @@ namespace Options
 	void backupDisplay();
 	/// Switches display options.
 	void switchDisplay();
+	/// Maps resources in active mods to the virtual file system
+	void mapResources();
 	/// Gets the map of mod ids to mod infos
 	const std::map<std::string, ModInfo> &getModInfos();
 }

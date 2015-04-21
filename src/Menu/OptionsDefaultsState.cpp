@@ -98,11 +98,11 @@ OptionsDefaultsState::~OptionsDefaultsState()
  */
 void OptionsDefaultsState::btnYesClick(Action *action)
 {
-	std::vector<std::string> prevRulesets(Options::rulesets);
+	std::vector< std::pair<std::string, bool> > prevMods(Options::mods);
 	Options::resetDefault();
 	_game->defaultLanguage();
 
-	if (_origin == OPT_MENU && prevRulesets != Options::rulesets)
+	if (_origin == OPT_MENU && prevMods != Options::mods)
 	{
 		Options::reload = true;
 	}

@@ -50,6 +50,9 @@ namespace FileMap
 	/// will be last in the returned vector.
 	const std::vector< std::vector<std::string> > &getRulesets();
 
+	/// clears FileMap state
+	void clear();
+
 	/// Scans a directory tree rooted at the specified filesystem path.  Any files it encounters that have already
 	/// been mapped will be ignored.  Therefore, load files from mods with the highest priority first.  If
 	/// ignoreRulesets is false (the default), it will add any rulesets it finds to the front of the vector

@@ -275,9 +275,9 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 	}
 	save.details = details.str();
 
-	if (doc["rulesets"])
+	if (doc["mods"])
 	{
-		save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
+		save.mods = doc["mods"].as<std::vector<std::string> >();
 	}
 
 	return save;
@@ -482,7 +482,16 @@ void SavedGame::save(const std::string &filename) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
-	brief["rulesets"] = Options::rulesets;
+
+	std::vector<std::string> activeMods;
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		if (i->second)
+		{
+			activeMods.push_back(i->first);
+		}
+	}
+	brief["mods"] = activeMods;
 	if (_ironman)
 		brief["ironman"] = _ironman;
 	out << brief;

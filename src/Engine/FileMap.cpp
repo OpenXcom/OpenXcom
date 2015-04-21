@@ -168,6 +168,13 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 	}
 }
 
+void clear()
+{
+	_rulesets.clear();
+	_resources.clear();
+	_vdirs.clear();
+}
+
 void load(const std::string &path, bool ignoreRulesets)
 {
 	Log(LOG_INFO) << "  mapping resources in: " << path;
