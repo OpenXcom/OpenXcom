@@ -93,6 +93,8 @@ public:
 	int getColumnX(size_t column) const;
 	/// Gets the Y position of a certain row.
 	int getRowY(size_t row) const;
+	/// Gets the height of the row text in pixels
+	int getTextHeight(size_t row) const;
 	/// Gets the amount of text in the list.
 	size_t getTexts() const;
 	/// Gets the amount of rows in the list.
