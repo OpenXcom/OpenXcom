@@ -62,7 +62,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window, "window", "geoCraftScreens");
 	add(_btnCancel, "button", "geoCraftScreens");

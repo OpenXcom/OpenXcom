@@ -58,22 +58,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 4; // aqua by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("craftWeapons")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("craftWeapons");
 
 	add(_window, "window", "craftWeapons");
 	add(_btnCancel, "button", "craftWeapons");

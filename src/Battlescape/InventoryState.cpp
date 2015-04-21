@@ -140,7 +140,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	centerAllSurfaces();
 
 
-	
+
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
@@ -736,7 +736,7 @@ void InventoryState::_refreshMouse()
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	SDL_WarpMouse(x+1, y);
-	
+
 	// move the mouse back to avoid cursor creep
 	SDL_WarpMouse(x, y);
 }

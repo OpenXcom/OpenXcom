@@ -47,14 +47,7 @@ ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, const std::string &file
 	_txtText = new Text(204, 58, 58, 60);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color);
-	}
+	setInterface("saveMenus", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "confirmLoad", "saveMenus");
 	add(_btnYes, "confirmLoad", "saveMenus");
@@ -78,7 +71,7 @@ ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, const std::string &file
 	_txtText->setBig();
 	_txtText->setWordWrap(true);
 	_txtText->setText(tr("STR_MISSING_CONTENT_PROMPT"));
-	
+
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		applyBattlescapeTheme();

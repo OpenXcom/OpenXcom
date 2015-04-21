@@ -56,22 +56,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 	_cbxCategory = new ComboBox(this, 146, 16, 166, 46);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("selectNewManufacture");
 
 	add(_window, "window", "selectNewManufacture");
 	add(_btnOk, "button", "selectNewManufacture");

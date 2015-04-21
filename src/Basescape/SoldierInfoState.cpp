@@ -142,17 +142,9 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_txtPsiSkill = new Text(120, 9, 6, yPos);
 	_numPsiSkill = new Text(18, 9, 131, yPos);
 	_barPsiSkill = new Bar(170, 7, 150, yPos);
-	
+
 	// Set palette
-	Element *element = _game->getRuleset()->getInterface("soldierInfo")->getElement("palette");
-	if (element && element->TFTDMode)
-	{
-		setPalette("PAL_GEOSCAPE");
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE");
-	}
+	setInterface("soldierInfo");
 
 	add(_bg);
 	add(_rank);

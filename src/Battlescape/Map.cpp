@@ -80,7 +80,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false), _flashScreen(false)
 {
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
@@ -1203,26 +1203,41 @@ void Map::drawTerrain(Surface *surface)
 	// check if we got big explosions
 	if (_explosionInFOV)
 	{
-		for (std::list<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+		// big explosions cause the screen to flash as bright as possible before any explosions are actually drawn.
+		// this causes everything to look like EGA for a single frame.
+		if (_flashScreen)
 		{
-			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
-			if ((*i)->isBig())
+			for (int x = 0, y = 0; x < surface->getWidth() && y < surface->getHeight();)
 			{
-				if ((*i)->getCurrentFrame() >= 0)
+				Uint8 pixel = surface->getPixel(x, y);
+				pixel = (pixel / 16) * 16;
+				surface->setPixelIterative(&x, &y, pixel);
+			}
+			_flashScreen = false;
+		}
+		else
+		{
+			for (std::list<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+			{
+				_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
+				if ((*i)->isBig())
 				{
-					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+					if ((*i)->getCurrentFrame() >= 0)
+					{
+						tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+						tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+					}
 				}
-			}
-			else if ((*i)->isHit())
-			{
-				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 25, 0);
-			}
-			else
-			{
-				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
+				else if ((*i)->isHit())
+				{
+					tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 25, 0);
+				}
+				else
+				{
+					tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
+				}
 			}
 		}
 	}
@@ -1744,4 +1759,23 @@ void Map::resetCameraSmoothing()
 {
 	_smoothingEngaged = false;
 }
+
+/**
+ * Set the "explosion flash" bool.
+ * @param flash should the screen be rendered in EGA this frame?
+ */
+void Map::setBlastFlash(bool flash)
+{
+	_flashScreen = flash;
+}
+
+/**
+ * Checks if the screen is still being rendered in EGA.
+ * @return if we are still in EGA mode.
+ */
+bool Map::getBlastFlash()
+{
+	return _flashScreen;
+}
+
 }

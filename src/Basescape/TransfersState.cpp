@@ -53,22 +53,7 @@ TransfersState::TransfersState(Base *base) : _base(base)
 	_lstTransfers = new TextList(273, 112, 14, 50);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("transferInfo")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("transferInfo");
 
 	add(_window, "window", "transferInfo");
 	add(_btnOk, "button", "transferInfo");

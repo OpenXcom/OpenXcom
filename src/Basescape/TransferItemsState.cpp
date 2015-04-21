@@ -68,22 +68,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 0; // brown by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("transferMenu")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("transferMenu");
 
 	_ammoColor = _game->getRuleset()->getInterface("transferMenu")->getElement("ammoColor")->color;
 

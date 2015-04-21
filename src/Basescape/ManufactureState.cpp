@@ -61,24 +61,9 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	_txtCost = new Text(44, 27, 222, 44);
 	_txtTimeLeft = new Text(60, 27, 260, 44);
 	_lstManufacture = new TextList(288, 90, 8, 80);
-	
+
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("manufactureMenu");
 
 	add(_window, "window", "manufactureMenu");
 	add(_btnNew, "button", "manufactureMenu");
@@ -120,7 +105,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
 	_txtProduced->setWordWrap(true);
-	
+
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
 	_txtCost->setWordWrap(true);
 

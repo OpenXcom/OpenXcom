@@ -68,7 +68,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_txtTitle = new Text(100, 16, 10 + dx, 6);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
+	setInterface("geoscape");
 
 	add(_btnRotateLeft);
 	add(_btnRotateRight);

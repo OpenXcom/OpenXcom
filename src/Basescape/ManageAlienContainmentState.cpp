@@ -76,22 +76,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	_lstAliens = new TextList(280, 112, 8, 53);
 
 	// Set palette
-	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 1; // burgundy by default in ufo palette
-	Element *element = _game->getRuleset()->getInterface("manageContainment")->getElement("palette");
-	if (element)
-	{
-		if (element->TFTDMode)
-		{
-			pal = "PAL_GEOSCAPE";
-		}
-		if (element->color != INT_MAX)
-		{
-			color = element->color;
-		}
-	}
-	
-	setPalette(pal, color);
+	setInterface("manageContainment");
 
 	add(_window, "window", "manageContainment");
 	add(_btnOk, "button", "manageContainment");
@@ -212,7 +197,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 				_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(_aliens[i])->getSellCost() * _qtys[i]);
 			}
 			else
-			{				
+			{
 				// add the corpses
 				_base->getItems()->addItem(
 					_game->getRuleset()->getArmor(
