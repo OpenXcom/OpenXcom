@@ -67,10 +67,10 @@ State::~State()
 }
 
 /**
- * Set interface data form ruleset.
- * @param category From witch load palette and backpals colors.
- * @param alterPal Do use alternative backpal colors?
- * @param battlescape Do use battlescape palette?
+ * Set interface data from the ruleset, also sets the palette for the state.
+ * @param category Name of the interface set.
+ * @param alterPal Should we swap out the backpal colors?
+ * @param battlescape Should we use battlescape palette? (this only applies to options screens)
  */
 void State::setInterface(const std::string& category, bool alterPal, bool battlescape)
 {
