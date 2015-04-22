@@ -45,7 +45,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 
 	// Create objects
 	_txtMaster = new Text(114, 9, 94, 8);
-	_cbxMasters = new ComboBox(this, 104, 16, 94, 18);
+	_cbxMasters = new ComboBox(this, 218, 16, 94, 18);
 	_lstMods = new TextList(200, 104, 94, 40);
 
 	add(_txtMaster, "text", "modsMenu");
@@ -97,9 +97,12 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	_cbxMasters->setOptions(masterNames);
 	_cbxMasters->setSelected(curMasterIdx);
 	_cbxMasters->onChange((ActionHandler)&OptionsModsState::cbxMasterChange);
-	_cbxMasters->setTooltip("STR_GAME_TYPE_DESC");
 	_cbxMasters->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
 	_cbxMasters->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
+	_cbxMasters->onMouseOver((ActionHandler)&OptionsModsState::cbxMasterHover);
+	_cbxMasters->onListMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
+	_cbxMasters->onListMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
+	_cbxMasters->onListMouseOver((ActionHandler)&OptionsModsState::cbxMasterHover);
 
 	_lstMods->setAlign(ALIGN_RIGHT, 1);
 	_lstMods->setArrowColumn(leftcol + 1, ARROW_VERTICAL);
@@ -107,19 +110,29 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	_lstMods->setWordWrap(true);
 	_lstMods->setSelectable(true);
 	_lstMods->setBackground(_window);
-	_lstMods->setTooltip("STR_MODS_DESC");
 	_lstMods->onMouseClick((ActionHandler)&OptionsModsState::lstModsClick);
 	_lstMods->onLeftArrowClick((ActionHandler)&OptionsModsState::lstModsLeftArrowClick);
 	_lstMods->onRightArrowClick((ActionHandler)&OptionsModsState::lstModsRightArrowClick);
 	_lstMods->onMousePress((ActionHandler)&OptionsModsState::lstModsMousePress);
 	_lstMods->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
 	_lstMods->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
+	_lstMods->onMouseOver((ActionHandler)&OptionsModsState::lstModsHover);
 	lstModsRefresh(0);
 }
 
 OptionsModsState::~OptionsModsState()
 {
 
+}
+
+std::wstring OptionsModsState::makeTooltip(const ModInfo &modInfo)
+{
+	return tr("STR_MODS_TOOLTIP").arg(modInfo.getVersion()).arg(modInfo.getAuthor()).arg(modInfo.getUrl()).arg(modInfo.getDescription());
+}
+
+void OptionsModsState::cbxMasterHover(Action *)
+{
+	_txtTooltip->setText(makeTooltip(*_masters[_cbxMasters->getHoveredListIdx()]));
 }
 
 void OptionsModsState::cbxMasterChange(Action *)
@@ -163,6 +176,16 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 	}
 
 	_lstMods->scrollTo(scrollLoc);
+}
+
+void OptionsModsState::lstModsHover(Action *)
+{
+	size_t selectedRow = _lstMods->getSelectedRow();
+	if ((unsigned int)-1 != selectedRow)
+	{
+		_txtTooltip->setText(makeTooltip(Options::getModInfos().at(_mods[selectedRow].first)));
+
+	}
 }
 
 void OptionsModsState::lstModsClick(Action *action)

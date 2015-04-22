@@ -49,10 +49,13 @@ public:
 	OptionsModsState(OptionsOrigin origin);
 	/// Cleans up the Advanced state.
 	~OptionsModsState();
+	std::wstring makeTooltip(const ModInfo &modInfo);
+	void cbxMasterHover(Action *action);
 	void cbxMasterChange(Action *action);
+	void lstModsRefresh(size_t scrollLoc);
+	void lstModsHover(Action *action);
 	/// Handler for clicking an item on the menu.
 	void lstModsClick(Action *action);
-	void lstModsRefresh(size_t scrollLoc);
 	/// Handler for clicking the reordering button.
 	void lstModsLeftArrowClick(Action *action);
 	/// Moves a soldier up.
