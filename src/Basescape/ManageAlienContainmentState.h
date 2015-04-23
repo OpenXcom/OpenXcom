@@ -51,7 +51,7 @@ private:
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
 	size_t _sel;
-	int _aliensSold, _researchedAliens;
+	int _aliensSold;
 	bool _overCrowded;
 	/// Gets selected quantity.
 	int getQuantity();
