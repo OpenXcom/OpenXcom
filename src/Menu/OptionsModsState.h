@@ -56,13 +56,13 @@ public:
 	void lstModsHover(Action *action);
 	/// Handler for clicking an item on the menu.
 	void lstModsClick(Action *action);
-	/// Handler for clicking the reordering button.
+	/// Handler for clicking the left reordering button.
 	void lstModsLeftArrowClick(Action *action);
-	/// Moves a soldier up.
+	/// Moves a mod up.
 	void moveModUp(Action *action, unsigned int row, bool max = false);
-	/// Handler for clicking the Soldiers reordering button.
+	/// Handler for clicking the right reordering button.
 	void lstModsRightArrowClick(Action *action);
-	/// Moves a soldier down.
+	/// Moves a mod down.
 	void moveModDown(Action *action, unsigned int row, bool max = false);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstModsMousePress(Action *action);

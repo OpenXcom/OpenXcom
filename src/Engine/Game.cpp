@@ -527,7 +527,7 @@ Ruleset *Game::getRuleset() const
 }
 
 /**
- * Loads the specified list of rulesets
+ * Loads the rulesets specified in the game options.
  */
 void Game::loadRulesets()
 {

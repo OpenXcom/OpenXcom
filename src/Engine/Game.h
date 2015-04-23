@@ -99,7 +99,7 @@ public:
 	void setSavedGame(SavedGame *save);
 	/// Gets the currently loaded ruleset.
 	Ruleset *getRuleset() const;
-	/// Loads the specified list of rulesets for the game.
+	/// Loads the rulesets specified in the game options.
 	void loadRulesets();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
