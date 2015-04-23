@@ -62,7 +62,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_btnStart = new TextButton(136, 16, 168, 155);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
+	setInterface("allocateManufacture");
 
 	add(_window, "window", "allocateManufacture");
 	add(_txtTitle, "text", "allocateManufacture");
@@ -116,7 +116,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 
 	_lstRequiredItems->setColumns(3, 140, 75, 55);
 	_lstRequiredItems->setBackground(_window);
-	
+
 	ItemContainer * itemContainer (base->getItems());
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();

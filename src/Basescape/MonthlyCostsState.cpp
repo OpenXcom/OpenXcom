@@ -58,7 +58,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_lstTotal = new TextList(100, 9, 205, 150);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color);
+	setInterface("costsInfo");
 
 	add(_window, "window", "costsInfo");
 	add(_btnOk, "button", "costsInfo");

@@ -16,3 +16,6 @@ initialFunding: 6000
 maxViewDistance: 20
 maxDarknessToSeeUnits: 9
 alienFuel: STR_ELERIUM_115
+alienFuel: STR_ELERIUM_115
+turnAIUseGrenade: 3
+turnAIUseBlaster: 3

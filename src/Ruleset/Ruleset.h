@@ -108,8 +108,8 @@ protected:
 	std::vector<StatString*> _statStrings;
 	std::map<std::string, RuleMusic *> _musics;
 	RuleGlobe *_globe;
-	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
 	int _maxViewDistance, _maxDarknessToSeeUnits;
+	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
 	std::string _alienFuel;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
@@ -252,6 +252,10 @@ public:
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
 	const std::string getAlienFuel() const;
+	/// Gets first turn when AI can use grenade.
+	int getTurnAIUseGrenade() const {return _turnAIUseGrenade;}
+	/// Gets first turn when AI can use Blaster launcher.
+	int getTurnAIUseBlaster() const {return _turnAIUseBlaster;}
 	/// Gets the minimum radar's range.
 	int getMinRadarRange() const;
 	/// Gets information on an interface element.

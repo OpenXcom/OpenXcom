@@ -78,7 +78,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftEquipment")->getElement("palette")->color);
+	setInterface("craftEquipment");
 
 	_ammoColor = _game->getRuleset()->getInterface("craftEquipment")->getElement("ammoColor")->color;
 

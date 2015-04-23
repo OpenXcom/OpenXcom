@@ -80,7 +80,7 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_equip = new Surface(220, 18, 85, 121);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftInfo")->getElement("palette")->color);
+	setInterface("craftInfo");
 
 	add(_window, "window", "craftInfo");
 	add(_btnOk, "button", "craftInfo");
@@ -298,7 +298,7 @@ void CraftInfoState::init()
 /**
  * Turns an amount of time into a
  * day/hour string.
- * @param total 
+ * @param total
  */
 std::wstring CraftInfoState::formatTime(int total)
 {

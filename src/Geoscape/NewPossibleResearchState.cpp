@@ -51,7 +51,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_lstPossibilities = new TextList(288, 80, 16, 56);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color);
+	setInterface("geoResearch");
 
 	add(_window, "window", "geoResearch");
 	add(_btnOk, "button", "geoResearch");

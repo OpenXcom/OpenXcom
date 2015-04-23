@@ -58,7 +58,7 @@ CraftsState::CraftsState(Base *base) : _base(base)
 	_lstCrafts = new TextList(288, 118, 8, 58);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftSelect")->getElement("palette")->color);
+	setInterface("craftSelect");
 
 	add(_window, "window", "craftSelect");
 	add(_btnOk, "button", "craftSelect");

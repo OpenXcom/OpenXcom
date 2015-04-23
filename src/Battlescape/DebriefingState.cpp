@@ -96,7 +96,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_lstTotal = new TextList(290, 9, 16, 12);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("debriefing")->getElement("palette")->color);
+	setInterface("debriefing");
 
 	add(_window, "window", "debriefing");
 	add(_btnOk, "button", "debriefing");

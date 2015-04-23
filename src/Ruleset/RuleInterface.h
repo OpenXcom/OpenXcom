@@ -39,6 +39,9 @@ class RuleInterface
 {
 private:
 	std::string _type;
+	std::string _palette;
+	std::string _parent;
+
 	std::map <std::string, Element> _elements;
 public:
 	/// Consructor.
@@ -49,6 +52,10 @@ public:
 	void load(const YAML::Node& node);
 	/// Get an element.
 	Element *getElement(const std::string id);
+	/// Get palette.
+	const std::string &getPalette() const;
+	/// Get parent interface rule.
+	const std::string &getParent() const;
 };
 
 }

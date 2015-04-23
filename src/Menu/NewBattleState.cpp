@@ -104,7 +104,7 @@ NewBattleState::NewBattleState() : _craft(0)
 	_btnRandom = new TextButton(100, 16, 212, 176);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("newBattleMenu")->getElement("palette")->color);
+	setInterface("newBattleMenu");
 
 	add(_window, "window", "newBattleMenu");
 	add(_txtTitle, "heading", "newBattleMenu");
@@ -657,7 +657,12 @@ void NewBattleState::cbxTerrainChange(Action *)
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 	int minDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth();
 	int maxDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
-	if (!ruleDeploy->getTerrains().empty())
+	if (ruleDeploy->getMaxDepth() > 0)
+	{
+		minDepth = ruleDeploy->getMinDepth();
+		maxDepth = ruleDeploy->getMaxDepth();
+	}
+	else if (!ruleDeploy->getTerrains().empty())
 	{
 		minDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMinDepth();
 		maxDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMaxDepth();

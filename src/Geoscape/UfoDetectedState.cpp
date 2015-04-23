@@ -94,14 +94,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	}
 
 	// Set palette
-	if (hyperwave)
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color2);
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
-	}
+	setInterface("UFOInfo", hyperwave);
 
 	add(_window, "window", "UFOInfo");
 	add(_btnIntercept, "button", "UFOInfo");

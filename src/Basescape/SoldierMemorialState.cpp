@@ -57,7 +57,7 @@ SoldierMemorialState::SoldierMemorialState()
 	_lstSoldiers = new TextList(288, 120, 8, 44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierMemorial")->getElement("palette")->color);
+	setInterface("soldierMemorial");
 
 	_game->getResourcePack()->playMusic("GMLOSE");
 

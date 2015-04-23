@@ -63,7 +63,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	_lstManufacture = new TextList(288, 90, 8, 80);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
+	setInterface("manufactureMenu");
 
 	add(_window, "window", "manufactureMenu");
 	add(_btnNew, "button", "manufactureMenu");
@@ -105,7 +105,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
 	_txtProduced->setWordWrap(true);
-	
+
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
 	_txtCost->setWordWrap(true);
 

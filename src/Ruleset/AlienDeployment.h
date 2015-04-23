@@ -71,8 +71,7 @@ private:
 	std::string _alert;
 	BriefingData _briefingData;
 	std::string _markerName;
-	int _markerIcon;
-	int _durationMin, _durationMax;
+	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -118,6 +117,10 @@ public:
 	int getDurationMax() const;
 	/// Gets the list of music to pick from.
 	std::vector<std::string> &getMusic();
+	/// Gets the minimum depth.
+	int getMinDepth();
+	/// Gets the maximum depth.
+	int getMaxDepth();
 };
 
 }

@@ -55,7 +55,7 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	_lstArmor = new TextList(160, 40, 73, 88);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color);
+	setInterface("soldierArmor");
 
 	add(_window, "window", "soldierArmor");
 	add(_btnCancel, "button", "soldierArmor");
@@ -152,7 +152,7 @@ void SoldierArmorState::lstArmorClick(Action *)
 	SavedGame *_save;
 	_save = _game->getSavedGame();
 	_save->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
-	
+
 	_game->popState();
 }
 

@@ -35,7 +35,7 @@ class Bar : public Surface
 private:
 	Uint8 _color, _color2, _borderColor;
 	double _scale, _max, _value, _value2;
-	bool _invert, _secondOnTop;
+	bool _secondOnTop;
 public:
 	/// Creates a new bar with the specified size and position.
 	Bar(int width, int height, int x = 0, int y = 0);
@@ -67,8 +67,6 @@ public:
 	double getValue2() const;
 	/// Defines whether the second value should be drawn on top.
 	void setSecondValueOnTop(bool onTop);
-	/// Sets the bar's color invert setting.
-	void setInvert(bool invert);
 	/// Draws the bar.
 	void draw();
 	/// set the outline color for the bar.

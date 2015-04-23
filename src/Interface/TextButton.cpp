@@ -37,7 +37,7 @@ Sound *TextButton::soundPress = 0;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false), _comboBox(0)
+TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false), _geoscapeButton(false), _comboBox(0)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
@@ -242,6 +242,13 @@ void TextButton::draw()
 		case 3:
 			color = _color + 3 * mul;
 			break;
+		case 4:
+			if (_geoscapeButton)
+			{
+				setPixel(0, 0, _color);
+				setPixel(1, 1, _color);
+			}
+			break;
 		}
 	}
 
@@ -253,7 +260,14 @@ void TextButton::draw()
 
 	if (press)
 	{
-		this->invert(_color + 3 * mul);
+		if (_geoscapeButton)
+		{
+			this->invert(_color + 2 * mul);
+		}
+		else
+		{
+			this->invert(_color + 3 * mul);
+		}
 	}
 	_text->setInvert(press);
 
@@ -344,5 +358,9 @@ void TextButton::setSecondaryColor(Uint8 color)
 {
 	_text->setColor(color);
 	_redraw = true;
+}
+void TextButton::setGeoscapeButton(bool geo)
+{
+	_geoscapeButton = geo;
 }
 }

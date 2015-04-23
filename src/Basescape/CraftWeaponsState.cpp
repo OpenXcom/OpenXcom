@@ -58,7 +58,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftWeapons")->getElement("palette")->color);
+	setInterface("craftWeapons");
 
 	add(_window, "window", "craftWeapons");
 	add(_btnCancel, "button", "craftWeapons");

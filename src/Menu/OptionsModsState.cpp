@@ -71,18 +71,24 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	_lstMods->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
 	_lstMods->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
 
-	std::vector<std::string> rulesets = CrossPlatform::getDataContents("Ruleset/", "rul");
+	std::vector<std::string> rulesets = CrossPlatform::getDataContents("Ruleset/");
 	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
 	{
-		std::string mod = CrossPlatform::noExt(*i);
-		std::wstring modName = Language::fsToWstr(mod);
-		Language::replace(modName, L"_", L" ");
-		// ignore default ruleset
-		if (mod != "Xcom1Ruleset")
+		std::string filename = *i;
+		std::transform(filename.begin(), filename.end(), filename.begin(), tolower);
+
+		if ((filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".rul") || !CrossPlatform::getDataContents("Ruleset/" + *i, "rul").empty())
 		{
-			bool modEnabled = (std::find(Options::rulesets.begin(), Options::rulesets.end(), mod) != Options::rulesets.end());
-			_lstMods->addRow(2, modName.c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
-			_mods.push_back(mod);
+			std::string mod = CrossPlatform::noExt(*i);
+			std::wstring modName = Language::fsToWstr(mod);
+			Language::replace(modName, L"_", L" ");
+			// ignore default ruleset
+			if (mod != "Xcom1Ruleset")
+			{
+				bool modEnabled = (std::find(Options::rulesets.begin(), Options::rulesets.end(), mod) != Options::rulesets.end());
+				_lstMods->addRow(2, modName.c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+				_mods.push_back(mod);
+			}
 		}
 	}
 }

@@ -71,8 +71,9 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	_txtSell = new Text(96, 9, 180, Options::storageLimitsEnforced? 44:33);
 	_txtValue = new Text(40, 9, 260, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44);
+
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color);
+	setInterface("sellMenu");
 
 	_ammoColor = _game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color;
 

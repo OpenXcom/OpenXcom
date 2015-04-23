@@ -51,7 +51,7 @@ CraftPatrolState::CraftPatrolState(Craft *craft, Globe *globe) : _craft(craft), 
 	_txtPatrolling = new Text(224, 17, 16, 120);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window, "window", "geoCraftScreens");
 	add(_btnOk, "button", "geoCraftScreens");
