@@ -478,7 +478,8 @@ void Projectile::addVaporCloud()
 		_save->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(_trajectory.at(_position), &voxelPos);
 		for (int i = 0; i != _vaporDensity; ++i)
 		{
-			Particle *particle = new Particle(voxelPos.x - tilePos.x + RNG::generate(0, 6) - 3, voxelPos.y - tilePos.y + RNG::generate(0, 6) - 3, RNG::generate(64, 214), _vaporColor, 19);
+			Particle *particle = new Particle(voxelPos.x - tilePos.x + RNG::seedless(0, 6) - 3, voxelPos.y - tilePos.y + RNG::seedless(0, 6) - 3, RNG::seedless(64, 214), _vaporColor, 19);
+
 			tile->addParticle(particle);
 		}
 	}
