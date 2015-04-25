@@ -143,8 +143,11 @@ void AlienDeployment::load(const YAML::Node &node)
 	_briefingData = node["briefing"].as<BriefingData>(_briefingData);
 	_markerName = node["markerName"].as<std::string>(_markerName);
 	_markerIcon = node["markerIcon"].as<int>(_markerIcon);
-	_minDepth = node["minDepth"].as<int>(_minDepth);
-	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
+	if (node["depth"])
+	{
+		_minDepth = node["depth"][0].as<int>(_minDepth);
+		_maxDepth = node["depth"][1].as<int>(_maxDepth);
+	}
 	if (node["duration"])
 	{
 		_durationMin = node["duration"][0].as<int>(_durationMin);
