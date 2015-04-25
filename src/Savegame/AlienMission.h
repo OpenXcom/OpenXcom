@@ -35,6 +35,8 @@ class RuleRegion;
 struct MissionWave;
 class UfoTrajectory;
 class AlienBase;
+class MissionSite;
+struct MissionArea;
 
 /**
  * Represents an ongoing alien mission.
@@ -116,6 +118,9 @@ private:
 	std::pair<double, double> getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region);
 	/// Get a random landing point inside the given region zone.
 	std::pair<double, double> getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone);
+	/// Spawns a MissionSite at a specific location.
+	MissionSite *spawnMissionSite(SavedGame &game, const Ruleset &rules, const MissionArea &area);
+
 };
 
 }
