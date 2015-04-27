@@ -560,7 +560,17 @@ bool init(int argc, char *argv[])
 		}
 
 		// not active by default
-		mods.push_back(std::pair<std::string, bool>(i->first, false));
+		std::pair<std::string, bool> newMod(i->first, false);
+		if (i->second.isMaster())
+		{
+			// it doesn't matter what order the masters are in since
+			// only one can be active at a time anyway
+			mods.insert(mods.begin(), newMod);
+		}
+		else
+		{
+			mods.push_back(newMod);
+		}
 	}
 
 	return true;
