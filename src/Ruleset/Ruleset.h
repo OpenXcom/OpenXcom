@@ -108,6 +108,7 @@ protected:
 	std::vector<StatString*> _statStrings;
 	std::map<std::string, RuleMusic *> _musics;
 	RuleGlobe *_globe;
+	int _maxViewDistance, _maxDarknessToSeeUnits;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
 	std::string _alienFuel;
 	YAML::Node _startingBase;
@@ -239,6 +240,10 @@ public:
 	std::vector<StatString *> getStatStrings() const;    
 	/// Sorts all our lists according to their weight.
 	void sortLists();
+	/// Gets max view distance in BattleScape.
+	inline int getMaxViewDistance() const {return _maxViewDistance;}
+	/// Gets threshold of darkness for LoS calculation.
+	inline int getMaxDarknessToSeeUnits() const {return _maxDarknessToSeeUnits;}
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 	std::vector<std::string> getPsiRequirements() const;
 	/// Returns the sorted list of inventories.

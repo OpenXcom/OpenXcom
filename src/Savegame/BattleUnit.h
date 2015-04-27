@@ -108,7 +108,7 @@ private:
 	UnitStats _stats;
 	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
-	int _intelligence, _aggression;
+	int _intelligence, _aggression, _maxViewDistanceAtDarkSqr;
 	SpecialAbility _specab;
 	Armor *_armor;
 	SoldierGender _gender;
@@ -362,6 +362,8 @@ public:
 	int getIntelligence() const;
 	/// Get the unit's aggression.
 	int getAggression() const;
+	/// Get square of maximum view distance at dark.
+	inline int getMaxViewDistanceAtDarkSqr() const {return _maxViewDistanceAtDarkSqr;}
 	/// Get the units's special ability.
 	int getSpecialAbility() const;
 	/// Set the units's respawn flag.

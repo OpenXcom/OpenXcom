@@ -86,6 +86,9 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 		}
 	}
 	_stats += *_armor->getStats();	// armors may modify effective stats
+	// max view distance at dark is 9 tiles for humans by default, but can be overridden
+	_maxViewDistanceAtDarkSqr = (_armor->getVisibilityAtDark() > 0) ? _armor->getVisibilityAtDark() : 9;
+	_maxViewDistanceAtDarkSqr *= _maxViewDistanceAtDarkSqr;
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
@@ -206,6 +209,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	{
 		adjustStats(diff);
 	}
+	// defaults of max view distance at dark is 9 tiles for humans and 20 tiles for aliens, but can be overridden
+	_maxViewDistanceAtDarkSqr = (_armor->getVisibilityAtDark() > 0) ? _armor->getVisibilityAtDark() : (faction == FACTION_HOSTILE) ? 20 : 9;
+	_maxViewDistanceAtDarkSqr *= _maxViewDistanceAtDarkSqr;
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -277,7 +283,7 @@ BattleUnit::~BattleUnit()
 void BattleUnit::load(const YAML::Node &node)
 {
 	_id = node["id"].as<int>(_id);
-	_faction = _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
+	_faction = (UnitFaction)node["faction"].as<int>(_faction);
 	_status = (UnitStatus)node["status"].as<int>(_status);
 	_pos = node["position"].as<Position>(_pos);
 	_direction = _toDirection = node["direction"].as<int>(_direction);
