@@ -223,7 +223,7 @@ MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
 	if (zone < _missionZones.size())
 	{
 		std::vector<MissionArea> randomSelection = _missionZones[zone].areas;
-		for (std::vector<MissionArea>::const_iterator i = randomSelection.begin(); i != randomSelection.end();)
+		for (std::vector<MissionArea>::iterator i = randomSelection.begin(); i != randomSelection.end();)
 		{
 			if (!i->isPoint())
 			{
