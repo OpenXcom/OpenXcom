@@ -51,7 +51,9 @@ private:
 	int _totalItems;
 	Uint8 _ammoColor;
 	/// Updates quantities of item.
-	void updateQuantity();
+	void updateQuantity(size_t sel);
+	/// Gets an index of item in _items list.
+	int getIdxItems(const std::string &id) const;
 public:
 	/// Creates the Craft Equipment state.
 	CraftEquipmentState(Base *base, size_t craft);
