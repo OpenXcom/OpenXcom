@@ -298,19 +298,19 @@ static bool _tftdIsInstalled()
 static void _setDefaultMods()
 {
 	// try to find xcom1
-	if (_ufoIsInstalled())
+	bool haveUfo = _ufoIsInstalled();
+	if (haveUfo)
 	{
 		Log(LOG_DEBUG) << "detected UFO";
 		mods.push_back(std::pair<std::string, bool>("xcom1", true));
-		mods.push_back(std::pair<std::string, bool>("xcom2", false));
 	}
-	else if (_tftdIsInstalled())
+
+	if (_tftdIsInstalled())
 	{
 		Log(LOG_DEBUG) << "detected TFTD";
-		mods.push_back(std::pair<std::string, bool>("xcom1", false));
-		mods.push_back(std::pair<std::string, bool>("xcom2", true));
+		mods.push_back(std::pair<std::string, bool>("xcom2", !haveUfo));
 	}
-	else
+	else if (!haveUfo)
 	{
 		Log(LOG_ERROR) << "neither UFO or TFTD data was detected";
 	}
@@ -472,6 +472,13 @@ static void _scanMods(const std::string &modsDir)
 			Log(LOG_DEBUG) << "    " << *j;
 		}
 		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
+
+		if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
+		 || ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
+		{
+			Log(LOG_DEBUG) << "skipping " << modInfo.getId() << " since related game data isn't installed";
+			continue;
+		}
 
 		_modInfos.insert(std::pair<std::string, ModInfo>(modInfo.getId(), modInfo));
 	}
