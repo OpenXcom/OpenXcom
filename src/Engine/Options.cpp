@@ -531,7 +531,9 @@ bool init(int argc, char *argv[])
 	for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); )
 	{
 		std::map<std::string, ModInfo>::const_iterator modIt = _modInfos.find(i->first);
-		if (_modInfos.end() == modIt)
+		if (_modInfos.end() == modIt
+		 || (i->first == "xcom1" && !_ufoIsInstalled())
+		 || (i->first == "xcom2" && !_tftdIsInstalled()))
 		{
 			Log(LOG_INFO) << "removing references to missing mod: " << i->first;
 			i = mods.erase(i);
@@ -540,9 +542,10 @@ bool init(int argc, char *argv[])
 		++i;
 	}
 
-	mapResources();
-
-	// add in any new mods picked up from the scan
+	// add in any new mods picked up from the scan and ensure there is but a single
+	// master active
+	std::string activeMaster;
+	std::string inactiveMaster;
 	for (std::map<std::string, ModInfo>::const_iterator i = _modInfos.begin(); i != _modInfos.end(); ++i)
 	{
 		bool found = false;
@@ -551,6 +554,29 @@ bool init(int argc, char *argv[])
 			if (i->first == j->first)
 			{
 				found = true;
+				if (i->second.isMaster())
+				{
+					if (j->second)
+					{
+						if (!activeMaster.empty())
+						{
+							Log(LOG_WARNING) << "too many active masters detected; turning off " << j->first;
+							j->second = false;
+						}
+						else
+						{
+							activeMaster = j->first;
+						}
+					}
+					else
+					{
+						if (inactiveMaster.empty())
+						{
+							inactiveMaster = j->first;
+						}
+					}
+				}
+
 				break;
 			}
 		}
@@ -566,6 +592,11 @@ bool init(int argc, char *argv[])
 			// it doesn't matter what order the masters are in since
 			// only one can be active at a time anyway
 			mods.insert(mods.begin(), newMod);
+
+			if (inactiveMaster.empty())
+			{
+				inactiveMaster = i->first;
+			}
 		}
 		else
 		{
@@ -573,13 +604,57 @@ bool init(int argc, char *argv[])
 		}
 	}
 
+	if (activeMaster.empty())
+	{
+		if (inactiveMaster.empty())
+		{
+			Log(LOG_ERROR) << "no mod masters available";
+		}
+		else
+		{
+			Log(LOG_INFO) << "no master already active; activating " << inactiveMaster;
+			std::find(mods.begin(), mods.end(), std::pair<std::string, bool>(inactiveMaster, false))->second = true;
+		}
+	}
+
+	mapResources();
+
 	return true;
+}
+
+std::string getActiveMaster()
+{
+	std::string curMaster;
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = mods.begin(); i != mods.end(); ++i)
+	{
+		if (!i->second)
+		{
+			// we're only looking for active mods
+			continue;
+		}
+
+		ModInfo modInfo = _modInfos.find(i->first)->second;
+		if (!modInfo.isMaster())
+		{
+			continue;
+		}
+
+		curMaster = modInfo.getId();
+		break;
+	}
+	if (curMaster.empty())
+	{
+		Log(LOG_ERROR) << "cannot determine current active master";
+	}
+	return curMaster;
 }
 
 void mapResources()
 {
 	Log(LOG_INFO) << "Mapping resource files...";
 	FileMap::clear();
+
+	std::string curMaster = getActiveMaster();
 	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = mods.rbegin(); i != mods.rend(); ++i)
 	{
 		if (!i->second)
@@ -589,9 +664,16 @@ void mapResources()
 		}
 
 		ModInfo modInfo = _modInfos.find(i->first)->second;
+		if (!modInfo.isMaster() && 1 != modInfo.getMasters().count(curMaster))
+		{
+			Log(LOG_DEBUG) << "skipping mod for non-current mater: " << i->first;
+			continue;
+		}
+
 		FileMap::load(modInfo.getPath());
 		for (std::vector<std::string>::const_iterator j = modInfo.getExternalResourceDirs().begin(); j != modInfo.getExternalResourceDirs().end(); ++j)
 		{
+			// always ignore ruleset files in external resource dirs
 			FileMap::load(CrossPlatform::searchDataFolders(*j), true);
 		}
 	}

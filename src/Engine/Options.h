@@ -95,6 +95,8 @@ namespace Options
 	void backupDisplay();
 	/// Switches display options.
 	void switchDisplay();
+	/// returns the id of the active master mod
+	std::string getActiveMaster();
 	/// Maps resources in active mods to the virtual file system
 	void mapResources();
 	/// Gets the map of mod ids to mod infos
