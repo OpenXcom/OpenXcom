@@ -26,8 +26,8 @@ namespace OpenXcom
 
 ModInfo::ModInfo(const std::string &path) :
 	 _path(path), _name(FileMap::noExt(FileMap::baseFilename(path))),
-	_desc("No description"), _version("1.0"), _author("unknown"),
-	_url("unknown"), _id(_name), _isMaster(false)
+	_desc("No description"), _version("1.0"), _author("unknown author"),
+	_url("unknown url"), _id(_name), _isMaster(false)
 {
 	// if not specified, assume a UFO mod
 	_masters.insert("xcom1");

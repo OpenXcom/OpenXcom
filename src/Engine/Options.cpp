@@ -441,17 +441,18 @@ static void _scanMods(const std::string &modsDir)
 			continue;
 		}
 
+		Log(LOG_INFO) << "- " << modPath;
+		ModInfo modInfo(modPath);
+
 		std::string metadataPath = CrossPlatform::getDataFile(modPath + "/metadata.yaml");
 		if (!CrossPlatform::fileExists(metadataPath))
 		{
-			Log(LOG_WARNING) << metadataPath << " not found; skipping " << *i;
-			continue;
+			Log(LOG_WARNING) << metadataPath << " not found; using default values " << *i;
 		}
-
-		Log(LOG_INFO) << "- " << modPath;
-		
-		ModInfo modInfo(modPath);
-		modInfo.load(metadataPath);
+		else
+		{
+			modInfo.load(metadataPath);
+		}
 
 		Log(LOG_DEBUG) << "  id: " << modInfo.getId();
 		Log(LOG_DEBUG) << "  name: " << modInfo.getName();

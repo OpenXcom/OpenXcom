@@ -139,7 +139,12 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 		if (CrossPlatform::folderExists(fullpath))
 		{
 			Log(LOG_DEBUG) << "  recursing into: " << fullpath;
-			_mapFiles(basePath, _combinePath(relPath, *i), true);
+			// allow old mod directory format -- if the top-level subdir
+			// is named "Ruleset" and no top-level ruleset files were found,
+			// record ruleset files in that subdirectory, otherwise ignore them
+			bool ignoreRulesetsRecurse =
+				!rulesetFiles.empty() || !relPath.empty() || _lcase(*i) != "ruleset";
+			_mapFiles(basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
 			continue;
 		}
 
