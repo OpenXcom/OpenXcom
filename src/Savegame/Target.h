@@ -36,6 +36,7 @@ class Target
 {
 protected:
 	double _lon, _lat;
+	int _depth;
 	std::vector<Target*> _followers;
 	/// Creates a target.
 	Target();
@@ -64,6 +65,10 @@ public:
 	std::vector<Target*> *getFollowers();
 	/// Gets the distance to another target.
 	double getDistance(const Target *target) const;
+	/// Gets the depth of the target.
+	int getSiteDepth();
+	/// Sets the depth of the target.
+	void setSiteDepth(int depth);
 };
 
 }
