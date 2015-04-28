@@ -86,4 +86,5 @@ globe:
       terrain:
         - name: POLAR
     - id: -1
-      deployment: STR_TERROR_MISSION
+      deployments:
+        STR_TERROR_MISSION: 100

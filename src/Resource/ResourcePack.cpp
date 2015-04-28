@@ -23,6 +23,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Music.h"
+#include "../Engine/RNG.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
@@ -177,7 +178,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[SDL_GetTicks() % music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
+			return music[RNG::seedless(0, music.size()-1)];
 	}
 }
 

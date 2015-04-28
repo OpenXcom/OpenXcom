@@ -83,8 +83,11 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	{
 		_music.push_back((*i).as<std::string>(""));
 	}
-	_minDepth = node["minDepth"].as<int>(_minDepth);
-	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
+	if (node["depth"])
+	{
+		_minDepth = node["depth"][0].as<int>(_minDepth);
+		_maxDepth = node["depth"][1].as<int>(_maxDepth);
+	}
 	_ambience = node["ambience"].as<int>(_ambience);
 	_script = node["script"].as<std::string>(_script);
 }

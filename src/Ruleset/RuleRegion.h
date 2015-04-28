@@ -112,6 +112,8 @@ public:
 	std::pair<double, double> getRandomPoint(size_t zone) const;
 	/// Gets the mission area for the corresponding target.
 	MissionArea getMissionPoint(size_t zone, Target *target) const;
+	/// Gets a random mission area.
+	MissionArea getRandomMissionPoint(size_t zone) const;
 	/// Gets the maximum longitude.
 	const std::vector<double> &getLonMax() const { return _lonMax; }
 	/// Gets the minimum longitude.
@@ -120,6 +122,7 @@ public:
 	const std::vector<double> &getLatMax() const { return _latMax; }
 	/// Gets the minimum latitude.
 	const std::vector<double> &getLatMin() const { return _latMin; }
+	/// Gets a list of MissionZones.
 	const std::vector<MissionZone> &getMissionZones() const;
 };
 

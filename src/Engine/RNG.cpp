@@ -93,6 +93,19 @@ double generate(double min, double max)
 }
 
 /**
+ * Generates a random integer number within a certain range.
+ * Distinct from "generate" in that it doesn't touch the seed.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
+ * @return Generated number.
+ */
+int seedless(int min, int max)
+{
+	return (int)(rand() % (max - min + 1) + min);
+}
+
+
+/**
  * Normal random variate generator
  * @param m mean
  * @param s standard deviation
