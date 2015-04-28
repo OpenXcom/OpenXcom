@@ -72,7 +72,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	// scan for masters
 	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
 	size_t curMasterIdx = 0;
-	std::vector<std::string> masterNames;
+	std::vector<std::wstring> masterNames;
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		std::string modId = i->first;
@@ -91,7 +91,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 			++curMasterIdx;
 		}
 		_masters.push_back(&modInfos.at(modId));
-		masterNames.push_back(modInfo.getName());
+		masterNames.push_back(Language::utf8ToWstr(modInfo.getName()));
 	}
 
 	_cbxMasters->setOptions(masterNames);
