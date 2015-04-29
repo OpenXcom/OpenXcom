@@ -234,16 +234,22 @@ void OptionsModsState::lstModsLeftArrowClick(Action *action)
 
 static void _moveAbove(const std::pair<std::string, bool> &srcMod, const std::pair<std::string, bool> &destMod)
 {
+	// insert copy of srcMod above destMod
 	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		if (destMod.first == i->first)
 		{
-			// ++ so we don't detect the destMod and insert multiple times
-			Options::mods.insert(i++, srcMod);
+			Options::mods.insert(i, srcMod);
+			break;
 		}
-		else if (srcMod.first == i->first)
+	}
+
+	// remove old copy of srcMod in separate loop since the insert above invalidated the iterator
+	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = Options::mods.rbegin(); i != Options::mods.rend(); ++i)
+	{
+		if (srcMod.first == i->first)
 		{
-			Options::mods.erase(i);
+			Options::mods.erase(i.base() - 1);
 			break;
 		}
 	}
@@ -295,15 +301,21 @@ void OptionsModsState::lstModsRightArrowClick(Action *action)
 
 static void _moveBelow(const std::pair<std::string, bool> &srcMod, const std::pair<std::string, bool> &destMod)
 {
+	// insert copy of srcMod below destMod
 	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = Options::mods.rbegin(); i != Options::mods.rend(); ++i)
 	{
 		if (destMod.first == i->first)
 		{
 			Options::mods.insert(i.base(), srcMod);
 		}
-		else if (srcMod.first == i->first)
+	}
+	
+	// remove old copy of srcMod in separate loop since the insert above invalidated the iterator
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		if (srcMod.first == i->first)
 		{
-			Options::mods.erase(i.base() - 1);
+			Options::mods.erase(i);
 			break;
 		}
 	}
