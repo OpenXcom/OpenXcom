@@ -25,7 +25,7 @@ namespace OpenXcom
 {
 
 ModInfo::ModInfo(const std::string &path) :
-	 _path(path), _name(CrossPlatform::noExt(CrossPlatform::baseFilename(path))),
+	 _path(path), _name(CrossPlatform::baseFilename(path)),
 	_desc("No description"), _version("1.0"), _author("unknown author"),
 	_url("unknown url"), _id(_name), _isMaster(false)
 {
