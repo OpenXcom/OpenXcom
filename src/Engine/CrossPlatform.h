@@ -59,8 +59,12 @@ namespace CrossPlatform
 	bool fileExists(const std::string &path);
 	/// Deletes the specified file.
 	bool deleteFile(const std::string &path);
+	/// Gets the pathless filename of a file.
+	std::string baseFilename(const std::string &path);
 	/// Sanitizes the characters in a filename.
 	std::string sanitizeFilename(const std::string &filename);
+	/// Removes the extension from a file.
+	std::string noExt(const std::string &file);
 	/// Gets the system locale.
 	std::string getLocale();
 	/// Checks if an event is a quit shortcut.

@@ -649,6 +649,25 @@ bool deleteFile(const std::string &path)
 #endif
 }
 
+std::string baseFilename(const std::string &path)
+{
+	size_t sep = path.find_last_of(PATH_SEPARATOR);
+	std::string filename;
+	if (sep == std::string::npos)
+	{
+		filename = path;
+	}
+	else if (sep == path.size() - 1)
+	{
+		return baseFilename(path.substr(0, path.size() - 1));
+	}
+	else
+	{
+		filename = path.substr(sep + 1);
+	}
+	return filename;
+}
+
 /**
  * Replaces invalid filesystem characters with _.
  * @param filename Original filename.
@@ -671,6 +690,16 @@ std::string sanitizeFilename(const std::string &filename)
 		}
 	}
 	return newFilename;
+}
+
+std::string noExt(const std::string &filename)
+{
+	size_t dot = filename.find_last_of('.');
+	if (dot == std::string::npos)
+	{
+		return filename;
+	}
+	return filename.substr(0, dot);
 }
 
 /**

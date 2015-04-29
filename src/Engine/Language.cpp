@@ -21,6 +21,7 @@
 #include <locale>
 #include <fstream>
 #include <cassert>
+#include "CrossPlatform.h"
 #include "FileMap.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -353,7 +354,7 @@ void Language::getList(std::vector<std::string> &files, std::vector<std::wstring
 
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
-		*i = FileMap::noExt(*i);
+		*i = CrossPlatform::noExt(*i);
 		std::wstring name;
 		std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
 		if (lang != _names.end())

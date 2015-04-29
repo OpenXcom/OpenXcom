@@ -58,12 +58,6 @@ namespace FileMap
 	/// ignoreRulesets is false (the default), it will add any rulesets it finds to the front of the vector
 	/// returned by getRulesets().
 	void load(const std::string &path, bool ignoreRulesets = false);
-
-	/// Removes the extension from a file.
-	std::string noExt(const std::string &file);
-
-	/// Gets the basename of a file.
-	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
 }
 
 }

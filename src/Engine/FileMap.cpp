@@ -33,7 +33,7 @@ static std::map<std::string, std::string>             _resources;
 static std::map< std::string, std::set<std::string> > _vdirs;
 static std::set<std::string>                          _emptySet;
 
-static std::string _lcase(const std::string &in)
+static std::string _canonicalize(const std::string &in)
 {
 	std::string ret = in;
 	std::transform(in.begin(), in.end(), ret.begin(), tolower);
@@ -42,10 +42,10 @@ static std::string _lcase(const std::string &in)
 
 const std::string &getFilePath(const std::string &relativeFilePath)
 {
-	std::string canonicalRelativeFilePath = _lcase(relativeFilePath);
+	std::string canonicalRelativeFilePath = _canonicalize(relativeFilePath);
 	if (_resources.find(canonicalRelativeFilePath) == _resources.end())
 	{
-		Log(LOG_WARNING) << "file not found: " << relativeFilePath;
+		Log(LOG_INFO) << "requested file not found: " << relativeFilePath;
 		return relativeFilePath;
 	}
 
@@ -54,7 +54,7 @@ const std::string &getFilePath(const std::string &relativeFilePath)
 
 const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 {
-	std::string canonicalRelativePath = _lcase(relativePath);
+	std::string canonicalRelativePath = _canonicalize(relativePath);
 	
 	// trim of trailing '/' characters
 	while (!canonicalRelativePath.empty() && "/" == canonicalRelativePath.substr(canonicalRelativePath.length() - 1, 1))
@@ -75,16 +75,15 @@ std::set<std::string> _filterFiles(const T &files, const std::string &ext)
 {
 	std::set<std::string> ret;
 	size_t extLen = ext.length() + 1; // +1 for the '.'
-	std::string lcaseExt = _lcase(ext);
+	std::string canonicalExt = _canonicalize(ext);
 	for (typename T::const_iterator i = files.begin(); i != files.end(); ++i)
 	{
-		// < not <= since we should have at least one character in the filename that is
-		// not part of the extention
-		if (extLen < i->length() && 0 == _lcase(i->substr(i->length() - (extLen - 1))).compare(lcaseExt))
+		// less-than not less-than-or-equal since we should have at least
+		// one character in the filename that is not part of the extention
+		if (extLen < i->length() && 0 == _canonicalize(i->substr(i->length() - (extLen - 1))).compare(canonicalExt))
 		{
 			ret.insert(*i);
 		}
-
 	}
 	return ret;
 }
@@ -129,7 +128,7 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 	{
 		std::string fullpath = fullDir + "/" + *i;
 		
-		if (_lcase(*i) == "metadata.yaml" || rulesetFiles.find(*i) != rulesetFiles.end())
+		if (_canonicalize(*i) == "metadata.yaml" || rulesetFiles.find(*i) != rulesetFiles.end())
 		{
 			// no need to map mod metadata files or ruleset files
 			Log(LOG_DEBUG) << "  ignoring non-resource file: " << fullpath;
@@ -143,13 +142,13 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 			// is named "Ruleset" and no top-level ruleset files were found,
 			// record ruleset files in that subdirectory, otherwise ignore them
 			bool ignoreRulesetsRecurse =
-				!rulesetFiles.empty() || !relPath.empty() || _lcase(*i) != "ruleset";
+				!rulesetFiles.empty() || !relPath.empty() || _canonicalize(*i) != "ruleset";
 			_mapFiles(basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
 			continue;
 		}
 
 		// populate resource map
-		std::string canonicalRelativeFilePath = _lcase(_combinePath(relPath, *i));
+		std::string canonicalRelativeFilePath = _canonicalize(_combinePath(relPath, *i));
 		if (_resources.insert(std::pair<std::string, std::string>(canonicalRelativeFilePath, fullpath)).second)
 		{
 			Log(LOG_DEBUG) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
@@ -160,15 +159,15 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 		}
 
 		// populate vdir map
-		std::string canonicalRelativePath = _lcase(relPath);
-		std::string lcaseFile = _lcase(*i);
+		std::string canonicalRelativePath = _canonicalize(relPath);
+		std::string canonicalFile = _canonicalize(*i);
 		if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
 		{
 			_vdirs.insert(std::pair< std::string, std::set<std::string> >(canonicalRelativePath, std::set<std::string>()));
 		}
-		if (_vdirs.at(canonicalRelativePath).insert(lcaseFile).second)
+		if (_vdirs.at(canonicalRelativePath).insert(canonicalFile).second)
 		{
-			Log(LOG_DEBUG) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << lcaseFile;
+			Log(LOG_DEBUG) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << canonicalFile;
 		}
 	}
 }
@@ -184,39 +183,6 @@ void load(const std::string &path, bool ignoreRulesets)
 {
 	Log(LOG_INFO) << "  mapping resources in: " << path;
 	_mapFiles(path, "", ignoreRulesets);
-}
-
-std::string noExt(const std::string &filename)
-{
-	size_t dot = filename.find_last_of('.');
-	if (dot == std::string::npos)
-	{
-		return filename;
-	}
-	return filename.substr(0, dot);
-}
-
-std::string baseFilename(const std::string &path, int (*transform)(int))
-{
-	size_t sep = path.find_last_of("/");
-	std::string filename;
-	if (sep == std::string::npos)
-	{
-		filename = path;
-	}
-	else if (sep == path.size() - 1)
-	{
-		return baseFilename(path.substr(0, path.size() - 1), transform);
-	}
-	else
-	{
-		filename = path.substr(sep + 1);
-	}
-	if (transform != 0)
-	{
-		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
-	}
-	return filename;
 }
 
 }

@@ -258,7 +258,7 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 		}
 		else
 		{
-			save.displayName = Language::fsToWstr(FileMap::noExt(file));
+			save.displayName = Language::fsToWstr(CrossPlatform::noExt(file));
 		}
 		save.reserved = false;
 	}

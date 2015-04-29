@@ -19,6 +19,7 @@
 #include "XcomResourcePack.h"
 #include <sstream>
 #include <climits>
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
@@ -317,7 +318,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		std::string ext = sets[i].substr(sets[i].find_last_of('.')+1, sets[i].length());
 		if (ext == "PCK")
 		{
-			std::string tab = FileMap::noExt(sets[i]) + ".TAB";
+			std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
 			std::ostringstream s2;
 			s2 << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
@@ -770,7 +771,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	for (std::set<std::string>::iterator i = usets.begin(); i != usets.end(); ++i)
 	{
 		std::string path = FileMap::getFilePath("UNITS/" + *i);
-		std::string tab = FileMap::getFilePath("UNITS/" + FileMap::noExt(*i) + ".TAB");
+		std::string tab = FileMap::getFilePath("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
 		std::string fname = *i;
 		std::transform(i->begin(), i->end(), fname.begin(), toupper);
 		if (fname != "BIGOBS.PCK")
