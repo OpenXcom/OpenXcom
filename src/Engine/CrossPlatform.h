@@ -43,7 +43,7 @@ namespace CrossPlatform
 	std::string findConfigFolder();
 	/// Gets the path for a data file when given a relative path, like "units/zombie.pck".
 	std::string getDataFile(const std::string &filename);
-    /// searches the data folders for the specified relative path
+	/// searches the data folders for the specified relative path
 	std::string searchDataFolders(const std::string &foldername);
 	/// Creates a folder.
 	bool createFolder(const std::string &path);

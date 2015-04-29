@@ -431,10 +431,16 @@ const std::map<std::string, ModInfo> &getModInfos() { return _modInfos; }
 
 static void _scanMods(const std::string &modsDir)
 {
-	std::vector<std::string> contents = CrossPlatform::getDataContents(modsDir);
+	if (!CrossPlatform::folderExists(modsDir))
+	{
+		Log(LOG_INFO) << "skipping non-existent mod directory: '" << modsDir << "'";
+		return;
+	}
+
+	std::vector<std::string> contents = CrossPlatform::getFolderContents(modsDir);
 	for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
 	{
-		std::string modPath = CrossPlatform::searchDataFolders(modsDir + "/" + *i);
+		std::string modPath = modsDir + "/" + *i;
 		if (!CrossPlatform::folderExists(modPath))
 		{
 			// skip non-directories (e.g. README.txt)
@@ -444,7 +450,7 @@ static void _scanMods(const std::string &modsDir)
 		Log(LOG_INFO) << "- " << modPath;
 		ModInfo modInfo(modPath);
 
-		std::string metadataPath = CrossPlatform::getDataFile(modPath + "/metadata.yaml");
+		std::string metadataPath = modPath + "/metadata.yaml";
 		if (!CrossPlatform::fileExists(metadataPath))
 		{
 			Log(LOG_WARNING) << metadataPath << " not found; using default values for mod: " << *i;
@@ -523,10 +529,12 @@ bool init(int argc, char *argv[])
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
 
-	Log(LOG_INFO) << "Scanning standard mods...";
-	_scanMods("standard");
-	Log(LOG_INFO) << "Scanning user mods...";
-	_scanMods("mods");
+	std::string modPath = CrossPlatform::searchDataFolders("standard");
+	Log(LOG_INFO) << "Scanning standard mods in '" << modPath << "'...";
+	_scanMods(modPath);
+	modPath = _userFolder + "mods";
+	Log(LOG_INFO) << "Scanning user mods in '" << modPath << "'...";
+	_scanMods(modPath);
 
 	// remove mods from list that no longer exist
 	for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); )
@@ -690,17 +698,17 @@ void mapResources()
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-    if (!_dataFolder.empty())
-    {
+	if (!_dataFolder.empty())
+	{
 		_dataList.insert(_dataList.begin(), _dataFolder);
-    }
-    if (_userFolder.empty())
-    {
-        std::vector<std::string> user = CrossPlatform::findUserFolders();
-        _configFolder = CrossPlatform::findConfigFolder();
+	}
+	if (_userFolder.empty())
+	{
+		std::vector<std::string> user = CrossPlatform::findUserFolders();
+		_configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-        for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
+		for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
@@ -719,6 +727,22 @@ void setFolders()
 					_userFolder = *i;
 					break;
 				}
+			}
+		}
+	}
+	if (!_userFolder.empty())
+	{
+		// create mods subfolder and readme if they don't already exist
+		std::string modsFolder = _userFolder + "mods";
+		if (!CrossPlatform::folderExists(modsFolder))
+		{
+			if (CrossPlatform::createFolder(modsFolder))
+			{
+				Log(LOG_INFO) << "created mods folder: '" << modsFolder << "'";
+			}
+			else
+			{
+				Log(LOG_WARNING) << "failed to create mods folder: '" << modsFolder << "'";
 			}
 		}
 	}

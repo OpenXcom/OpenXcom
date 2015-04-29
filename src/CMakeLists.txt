@@ -764,7 +764,7 @@ if ( WIN32 )
 endif ()
 target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} ${OPENGL_gl_LIBRARY} )
 
-set ( bin_data_dirs TFTD UFO common mods standard )
+set ( bin_data_dirs TFTD UFO common standard )
 foreach ( binpath ${bin_data_dirs} )
   add_custom_command ( TARGET openxcom
     POST_BUILD
