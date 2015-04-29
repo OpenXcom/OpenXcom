@@ -64,7 +64,7 @@ IntroState::IntroState(bool wasLetterBoxed) : _wasLetterBoxed(wasLetterBoxed)
 		std::vector<std::string>::const_iterator it;
 		for(it = videos->begin(); it != videos->end(); ++it)
 		{
-			_introFiles.push_back(FileMap::getFilePath(*it));
+			_introFiles.push_back(*it);
 		}
 	}
 
