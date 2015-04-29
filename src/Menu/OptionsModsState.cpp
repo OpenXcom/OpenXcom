@@ -307,6 +307,7 @@ static void _moveBelow(const std::pair<std::string, bool> &srcMod, const std::pa
 		if (destMod.first == i->first)
 		{
 			Options::mods.insert(i.base(), srcMod);
+			break;
 		}
 	}
 	
