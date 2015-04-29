@@ -104,12 +104,12 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	_cbxMasters->onListMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
 	_cbxMasters->onListMouseOver((ActionHandler)&OptionsModsState::cbxMasterHover);
 
-	_lstMods->setAlign(ALIGN_RIGHT, 1);
 	_lstMods->setArrowColumn(leftcol + 1, ARROW_VERTICAL);
 	_lstMods->setColumns(3, leftcol, arrowCol, rightcol);
-	_lstMods->setWordWrap(true);
+	_lstMods->setAlign(ALIGN_RIGHT, 1);
 	_lstMods->setSelectable(true);
 	_lstMods->setBackground(_window);
+	_lstMods->setWordWrap(true);
 	_lstMods->onMouseClick((ActionHandler)&OptionsModsState::lstModsClick);
 	_lstMods->onLeftArrowClick((ActionHandler)&OptionsModsState::lstModsLeftArrowClick);
 	_lstMods->onRightArrowClick((ActionHandler)&OptionsModsState::lstModsRightArrowClick);
@@ -171,7 +171,7 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 
 		std::string  modId   = modInfo.getId();
 		std::wstring modName = Language::fsToWstr(modInfo.getName());
-		_lstMods->addRow(3, modName.c_str(), "", (i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+		_lstMods->addRow(3, modName.c_str(), L"", (i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
 		_mods.push_back(*i);
 	}
 
