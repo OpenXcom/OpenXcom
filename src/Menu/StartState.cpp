@@ -185,18 +185,6 @@ void StartState::think()
 			_game->getScreen()->resetDisplay(false);
 			State *state = new MainMenuState;
 			_game->setState(state);
-			// Check for mod loading errors
-			if (!Options::badMods.empty())
-			{
-				std::wostringstream error;
-				error << tr("STR_MOD_UNSUCCESSFUL") << L'\x02';
-				for (std::vector<std::string>::iterator i = Options::badMods.begin(); i != Options::badMods.end(); ++i)
-				{
-					error << Language::fsToWstr(*i) << L'\n';
-				}
-				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(error.str(), state->getPalette(), _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
-			}
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);
@@ -314,13 +302,7 @@ int StartState::load(void *game_ptr)
 		Log(LOG_INFO) << "Language loaded successfully.";
 		loading = LOADING_SUCCESSFUL;
 	}
-	catch (Exception &e)
-	{
-		error = e.what();
-		Log(LOG_ERROR) << error;
-		loading = LOADING_FAILED;
-	}
-	catch (YAML::Exception &e)
+	catch (std::exception &e)
 	{
 		error = e.what();
 		Log(LOG_ERROR) << error;
