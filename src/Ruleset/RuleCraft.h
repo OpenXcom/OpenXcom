@@ -46,7 +46,7 @@ private:
 	int _repairRate, _refuelRate, _radarRange, _sightRange, _transferTime, _score;
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
-	int _listOrder, _maxItems;
+	int _listOrder, _maxItems, _maxDepth;
 	std::vector<std::vector <int> > _deployment;
 public:
 	/// Creates a blank craft ruleset.
@@ -107,6 +107,8 @@ public:
 	std::vector<std::vector<int> > &getDeployment();
 	/// Gets the item limit for this craft.
 	int getMaxItems() const;
+	/// checks how deep this craft can go.
+	int getMaxDepth() const;
 };
 
 }

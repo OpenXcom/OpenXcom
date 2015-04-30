@@ -822,6 +822,13 @@ void GeoscapeState::time5Seconds()
 			}
 			if ((*j)->reachedDestination())
 			{
+				if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
+				{
+					std::wstring msg = tr("STR_SITE_TOO_DEEP").arg((*j)->getName(_game->getLanguage()));
+					(*j)->returnToBase();
+					popup(new CraftErrorState(this, msg));
+					continue;
+				}
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
