@@ -3,7 +3,7 @@
 
 name: "XcomUtil: Fighter Transports"
 version: 1.0
-description: Adds weapon pods to troop transport vehicles 
+description: "Allows fighter craft (Interceptor and Firestorm) to carry soldiers and tanks to ground missions."
 author: the OpenXcom team
 url: http://openxcom.org/
 

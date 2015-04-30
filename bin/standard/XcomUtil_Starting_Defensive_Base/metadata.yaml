@@ -3,7 +3,7 @@
 
 name: "XcomUtil: Starting Defensive Base"
 version: 1.0
-description: Rearranges the standard starting base layout to be more defensive-minded
+description: "Moves the starting 3 Hangars to the top to make the base easier to defend in Base Defense missions."
 author: the OpenXcom team
 url: http://openxcom.org/
 

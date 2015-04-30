@@ -3,7 +3,7 @@
 
 name: Aliens Pick Up Weapons
 version: 1.0
-description: Allows aliens to pick up dropped weapons
+description: "The AI will try to pick up weapons they dropped if they find themselves unarmed (e.g. from panic or mind control)."
 author: the OpenXcom team
 url: http://openxcom.org/
 

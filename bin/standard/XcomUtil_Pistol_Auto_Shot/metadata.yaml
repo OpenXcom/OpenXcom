@@ -3,7 +3,7 @@
 
 name: "XcomUtil: Pistol Auto Shot"
 version: 1.0
-description: Adds auto-fire capabilities to the pistol
+description: "Gives the standard-issue Pistol an auto shot."
 author: the OpenXcom team
 url: http://openxcom.org/
 

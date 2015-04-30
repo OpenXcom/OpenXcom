@@ -3,7 +3,7 @@
 
 name: "UFOextender: Psionic Line Of Fire"
 version: 1.0
-description: Limits psi attacks to targets within the attacker's line of sight
+description: "Psionic weapons (both X-COM and aliens) can only be used with direct line-of-sight to the target."
 author: the OpenXcom team
 url: http://openxcom.org/
 

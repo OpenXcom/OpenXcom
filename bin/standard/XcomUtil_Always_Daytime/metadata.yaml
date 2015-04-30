@@ -3,7 +3,7 @@
 
 name: "XcomUtil: Always Daytime"
 version: 1.0
-description: Forces daylight lighting for all battles
+description: "Forces all ground missions to daytime."
 author: the OpenXcom team
 url: http://openxcom.org/
 

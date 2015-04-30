@@ -3,7 +3,7 @@
 
 name: "UFOextender: Gun Melee"
 version: 1.0
-description: Adds melee attack options to weapons
+description: Adds a stun melee attack to every weapon (called Stun Fest in UFOextender). The TU/Damage is based on the weapon's class.
 author: the OpenXcom team
 url: http://openxcom.org/
 

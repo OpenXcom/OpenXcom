@@ -3,7 +3,7 @@
 
 name: "XcomUtil: Always Nighttime"
 version: 1.0
-description: Forces night lighting for all battles
+description: "Forces all ground missions to nighttime."
 author: the OpenXcom team
 url: http://openxcom.org/
 
