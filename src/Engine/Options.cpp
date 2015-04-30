@@ -292,7 +292,9 @@ static bool _ufoIsInstalled()
 
 static bool _tftdIsInstalled()
 {
-	return CrossPlatform::fileExists(CrossPlatform::getDataFile("TFTD/TERRAIN/SEA.PCK"));
+	// ensure both the resource data and the mod data is in place
+	return CrossPlatform::fileExists(CrossPlatform::getDataFile("TFTD/TERRAIN/SEA.PCK"))
+		&& CrossPlatform::fileExists(CrossPlatform::getDataFile("standard/xcom2/Language/en-US.yml"));
 }
 
 static void _setDefaultMods()
