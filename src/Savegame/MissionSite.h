@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class RuleAlienMission;
+class AlienDeployment;
 
 /**
  * Represents an alien mission site on the world.
@@ -35,13 +36,14 @@ class MissionSite : public Target
 {
 private:
 	const RuleAlienMission *_rules;
-	int _id;
+	const AlienDeployment *_deployment;
+	int _id, _texture;
 	size_t _secondsRemaining;
-	std::string _race;
+	std::string _race, _city;
 	bool _inBattlescape;
 public:
 	/// Creates a mission site.
-	MissionSite(const RuleAlienMission *rules);
+	MissionSite(const RuleAlienMission *rules, const AlienDeployment *deployment);
 	/// Cleans up the mission site.
 	~MissionSite();
 	/// Loads the mission site from YAML.
@@ -52,6 +54,8 @@ public:
 	YAML::Node saveId() const;
 	/// Gets the mission site's ruleset.
 	const RuleAlienMission *getRules() const;
+	/// Gets the mission site's deployment.
+	const AlienDeployment *getDeployment() const;
 	/// Gets the mission site's ID.
 	int getId() const;
 	/// Sets the mission site's ID.
@@ -72,6 +76,14 @@ public:
 	void setInBattlescape(bool inbattle);
 	/// Gets if the mission site is in battlescape.
 	bool isInBattlescape() const;
+	/// Gets the mission site's texture.
+	int getTexture() const;
+	/// Sets the mission site's texture.
+	void setTexture(int texture);
+	/// Gets the mission site's city.
+	std::string getCity() const;
+	/// Sets the mission site's city.
+	void setCity(const std::string &city);
 };
 
 }

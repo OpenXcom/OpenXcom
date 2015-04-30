@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -66,7 +66,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
-	_deathSound = 0; // this one is hardcoded
+	_deathSound = -1; // this one is hardcoded
 	_aggroSound = -1;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
@@ -126,6 +126,11 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	deriveRank();
+
+	int look = soldier->getGender() + 2 * soldier->getLook();
+	setRecolor(look, look, _rankInt);
 }
 
 /**
@@ -222,6 +227,36 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	int generalRank = 0;
+	if (faction == FACTION_HOSTILE)
+	{
+		const int max = 7;
+		const char* rankList[max] =
+		{
+			"STR_LIVE_SOLDIER",
+			"STR_LIVE_ENGINEER",
+			"STR_LIVE_MEDIC",
+			"STR_LIVE_NAVIGATOR",
+			"STR_LIVE_LEADER",
+			"STR_LIVE_COMMANDER",
+			"STR_LIVE_TERRORIST",
+		};
+		for (int i = 0; i < max; ++i)
+		{
+			if (_rank.compare(rankList[i]) == 0)
+			{
+				generalRank = i;
+				break;
+			}
+		}
+	}
+	else if (faction == FACTION_NEUTRAL)
+	{
+		generalRank = std::rand() % 8;
+	}
+
+	setRecolor(std::rand() % 8, std::rand() % 8, generalRank);
 }
 
 
@@ -280,6 +315,15 @@ void BattleUnit::load(const YAML::Node &node)
 	_motionPoints = node["motionPoints"].as<int>(0);
 	_respawn = node["respawn"].as<bool>(_respawn);
 	_activeHand = node["activeHand"].as<std::string>(_activeHand);
+
+	if (const YAML::Node& p = node["recolor"])
+	{
+		_recolor.clear();
+		for (size_t i = 0; i < p.size(); ++i)
+		{
+			_recolor.push_back(std::make_pair(p[i][0].as<int>(), p[i][1].as<int>()));
+		}
+	}
 }
 
 /**
@@ -339,7 +383,41 @@ YAML::Node BattleUnit::save() const
 	node["respawn"] = _respawn;
 	node["activeHand"] = _activeHand;
 
+	for (size_t i = 0; i < _recolor.size(); ++i)
+	{
+		YAML::Node p;
+		p.push_back((int)_recolor[i].first);
+		p.push_back((int)_recolor[i].second);
+		node["recolor"].push_back(p);
+	}
+
 	return node;
+}
+
+/**
+ * Prepare vector values for recolor.
+ * @param basicLook select index for hair and face color.
+ * @param utileLook select index for utile color.
+ * @param rankLook select index for rank color.
+ */
+void BattleUnit::setRecolor(int basicLook, int utileLook, int rankLook)
+{
+	const int colorsMax = 4;
+	std::pair<int, int> colors[colorsMax] =
+	{
+		std::make_pair(_armor->getFaceColorGroup(), _armor->getFaceColor(basicLook)),
+		std::make_pair(_armor->getHairColorGroup(), _armor->getHairColor(basicLook)),
+		std::make_pair(_armor->getUtileColorGroup(), _armor->getUtileColor(utileLook)),
+		std::make_pair(_armor->getRankColorGroup(), _armor->getRankColor(rankLook)),
+	};
+
+	for (int i = 0; i < colorsMax; ++i)
+	{
+		if (colors[i].first > 0 && colors[i].second > 0)
+		{
+			_recolor.push_back(std::make_pair(colors[i].first << 4, colors[i].second));
+		}
+	}
 }
 
 /**
@@ -505,6 +583,11 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 	_lastPos = _pos;
 	_cacheInvalid = cache;
 	_kneeled = false;
+	if (_breathFrame >= 0)
+	{
+		_breathing = false;
+		_breathFrame = 0;
+	}
 }
 
 /**
@@ -798,6 +881,16 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
 }
 
 /**
+ * Gets values used for recoloring sprites.
+ * @param i what value choose.
+ * @return Pairs of value, where first is color group to replace and second is new color group with shade.
+ */
+const std::vector<std::pair<Uint8, Uint8> > &BattleUnit::getRecolor() const
+{
+	return _recolor;
+}
+
+/**
  * Kneel down.
  * @param kneeled to kneel or to stand up
  */
@@ -1035,7 +1128,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 
 			if (type != DT_IN)
 			{
-				if (_armor->getSize() == 1)
+				if (_armor->getDamageModifier(DT_STUN) > 0.0)
 				{
 					// conventional weapons can cause additional stun damage
 					_stunlevel += RNG::generate(0, power / 4);
@@ -1184,7 +1277,6 @@ int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 		case BA_SNAPSHOT:
 			cost = item->getTUSnap();
 			break;
-		case BA_STUN:
 		case BA_HIT:
 			cost = item->getTUMelee();
 			break;
@@ -1354,7 +1446,7 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 		weaponAcc = item->getRules()->getAccuracyAimed();
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
-	else if (actionType == BA_HIT || actionType == BA_STUN)
+	else if (actionType == BA_HIT)
 	{
 		if (item->getRules()->isSkillApplied())
 		{
@@ -1611,7 +1703,7 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFire(int fire)
 {
-	if (_specab == SPECAB_BURNFLOOR || _specab == SPECAB_BURN_AND_EXPLODE)
+	if (_specab != SPECAB_BURNFLOOR && _specab != SPECAB_BURN_AND_EXPLODE)
 		_fire = fire;
 }
 
@@ -2019,7 +2111,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 
 	UnitStats *stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
-	int healthLoss = stats->health - _health;
+	int healthLoss = _stats.health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 
@@ -2761,12 +2853,12 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
 
 /**
  * Checks if this unit has an inventory. Large units and/or
- * terror units don't have inventories.
+ * terror units generally don't have inventories.
  * @return True if an inventory is available, false otherwise.
  */
 bool BattleUnit::hasInventory() const
 {
-	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+	return (_armor->hasInventory());
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,7 +51,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	_lstItems = new TextList(288, 112, 8, 58);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("cannotReequip")->getElement("palette")->color);
+	setInterface("cannotReequip");
 
 	add(_window, "window", "cannotReequip");
 	add(_btnOk, "button", "cannotReequip");

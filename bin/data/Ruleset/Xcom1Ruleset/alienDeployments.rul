@@ -832,9 +832,12 @@ alienDeployments:
     civilians: 16
     terrains:
       - URBAN
+    alert: STR_ALIENS_TERRORISE
     briefing:
       palette: 2
-      music: GMENBASE
+      music: GMENBASE    
+    markerName: STR_TERROR_SITE
+    duration: [4, 10]
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6
@@ -1147,7 +1150,8 @@ alienDeployments:
       - XBASE
     shade: 5
     briefing:
-      palette: 2
+      palette: 0
+      background: BACK01.SCR
       music: GMENBASE
   - type: STR_MARS_CYDONIA_LANDING
     data:
@@ -1225,6 +1229,7 @@ alienDeployments:
       textOffset: -16
       palette: 6
       music: GMNEWMAR
+      showTarget: false
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0

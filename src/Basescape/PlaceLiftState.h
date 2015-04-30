@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,7 @@ class Base;
 class BaseView;
 class Text;
 class Globe;
+class RuleBaseFacility;
 
 /**
  * Screen shown when the player has to
@@ -41,6 +42,7 @@ private:
 	BaseView *_view;
 	Text *_txtTitle;
 	bool _first;
+	RuleBaseFacility *_lift;
 public:
 	/// Creates the Place Lift state.
 	PlaceLiftState(Base *base, Globe *globe, bool first);

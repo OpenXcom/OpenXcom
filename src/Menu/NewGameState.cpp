@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -54,7 +54,7 @@ NewGameState::NewGameState()
 	_difficulty = _btnBeginner;
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("newGameMenu")->getElement("palette")->color);
+	setInterface("newGameMenu");
 
 	add(_window, "window", "newGameMenu");
 	add(_btnBeginner, "button", "newGameMenu");

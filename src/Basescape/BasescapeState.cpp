@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -83,8 +83,8 @@ BasescapeState::BasescapeState(Base *base, Globe *globe) : _base(base), _globe(g
 	_btnGeoscape = new TextButton(128, 12, 192, 188);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE");
-	
+	setInterface("basescape");
+
 	add(_view, "baseView", "basescape");
 	add(_mini, "miniBase", "basescape");
 	add(_txtFacility, "textTooltip", "basescape");

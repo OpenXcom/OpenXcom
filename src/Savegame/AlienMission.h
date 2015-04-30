@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,9 +32,11 @@ class Game;
 class SavedGame;
 class Ruleset;
 class RuleRegion;
-class RuleUfo;
+struct MissionWave;
 class UfoTrajectory;
 class AlienBase;
+class MissionSite;
+struct MissionArea;
 
 /**
  * Represents an ongoing alien mission.
@@ -64,8 +66,8 @@ public:
 	void load(const YAML::Node& node, SavedGame &game);
 	/// Saves the mission to YAML.
 	YAML::Node save() const;
-	/// Gets the mission's type.
-	const std::string &getType() const;
+	/// Gets the mission's ruleset.
+	const RuleAlienMission &getRules() const { return _rule; }
 	/// Gets the mission's region.
 	const std::string &getRegion() const { return _region; }
 	/// Sets the mission's region.
@@ -102,20 +104,23 @@ public:
 	/// Handle UFO reaching a waypoint.
 	void ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, Game &engine, const Globe &globe);
+	void ufoLifting(Ufo &ufo, SavedGame &game, const Globe &globe);
 	/// Handle UFO shot down.
-	void ufoShotDown(Ufo &ufo, Game &engine, const Globe &globe);
+	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.
-	void addScore(const double lon, const double lat, Game &engine);
+	void addScore(const double lon, const double lat, SavedGame &game);
 private:
 	/// Spawns a UFO, based on mission rules.
-	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
+	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory);
 	/// Spawn an alien base
-	void spawnAlienBase(const Globe &globe, Game &engine);
+	void spawnAlienBase(const Globe &globe, Game &engine, int zone);
 	/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
 	std::pair<double, double> getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region);
 	/// Get a random landing point inside the given region zone.
 	std::pair<double, double> getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone);
+	/// Spawns a MissionSite at a specific location.
+	MissionSite *spawnMissionSite(SavedGame &game, const Ruleset &rules, const MissionArea &area);
+
 };
 
 }

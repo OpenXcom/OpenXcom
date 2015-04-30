@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -291,6 +291,11 @@ void Text::setSecondaryColor(Uint8 color)
 Uint8 Text::getSecondaryColor() const
 {
 	return _color2;
+}
+
+int Text::getNumLines() const
+{
+	return _wrap ? _lineHeight.size() : 1;
 }
 
 /**

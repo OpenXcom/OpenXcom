@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -69,6 +69,7 @@
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"
 #include "RuleVideo.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -76,7 +77,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_globe = new RuleGlobe();
 
@@ -458,6 +459,8 @@ void Ruleset::loadFile(const std::string &filename)
 	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
 	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
 	_alienFuel = doc["alienFuel"].as<std::string>(_alienFuel);
+	_turnAIUseGrenade = doc["turnAIUseGrenade"].as<int>(_turnAIUseGrenade);
+	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
 	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
@@ -604,6 +607,8 @@ void Ruleset::loadFile(const std::string &filename)
 		ResourcePack::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(ResourcePack::BATTLESCAPE_CURSOR);
 		ResourcePack::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(ResourcePack::UFOPAEDIA_CURSOR);
 		ResourcePack::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(ResourcePack::GRAPHS_CURSOR);
+		ResourcePack::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(ResourcePack::DEBRIEF_MUSIC_GOOD);
+		ResourcePack::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(ResourcePack::DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
 	{
@@ -1247,52 +1252,40 @@ const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
 }
 
 /**
+ * Returns the rules for a random alien mission based on a specific objective.
+ * @param objective Alien mission objective.
+ * @return Rules for the alien mission.
+ */
+const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective, size_t monthsPassed) const
+{
+	int totalWeight = 0;
+	std::map<int, RuleAlienMission*> possibilities;
+	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
+	{
+		if (i->second->getObjective() == objective && i->second->getWeight(monthsPassed) > 0)
+		{
+			totalWeight += i->second->getWeight(monthsPassed);
+			possibilities[totalWeight] = i->second;
+		}
+	}
+	int pick = RNG::generate(1, totalWeight);
+	for (std::map<int, RuleAlienMission*>::const_iterator i = possibilities.begin(); i != possibilities.end(); ++i)
+	{
+		if (pick <= i->first)
+		{
+			return i->second;
+		}
+	}
+	return 0;
+}
+
+/**
  * Returns the list of alien mission types.
  * @return The list of alien mission types.
  */
 const std::vector<std::string> &Ruleset::getAlienMissionList() const
 {
 	return _alienMissionsIndex;
-}
-
-#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
-
-/**
- * @brief Match a city based on coordinates.
- * This function object compares a city's coordinates with the stored coordinates.
- */
-class EqualCoordinates: std::unary_function<const City *, bool>
-{
-public:
-	/// Remembers the coordinates.
-	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
-	/// Compares with stored coordinates.
-	//bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
-	bool operator()(const City *city) const { return (fabs(city->getLongitude() - _lon) < CITY_EPSILON) &&
-	                                                 (fabs(city->getLatitude() - _lat) < CITY_EPSILON); }
-private:
-	double _lon, _lat;
-};
-
-/**
- * Finds the city at coordinates @a lon, @a lat.
- * The search will only match exact coordinates.
- * @param lon The longtitude.
- * @param lat The latitude.
- * @return A pointer to the city information, or 0 if no city was found.
- */
-const City *Ruleset::locateCity(double lon, double lat) const
-{
-	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
-	{
-		const std::vector<City*> &cities = *rr->second->getCities();
-		std::vector<City *>::const_iterator citer = std::find_if (cities.begin(), cities.end(), EqualCoordinates(lon, lat));
-		if (citer != cities.end())
-		{
-			return *citer;
-		}
-	}
-	return 0;
 }
 
 /**

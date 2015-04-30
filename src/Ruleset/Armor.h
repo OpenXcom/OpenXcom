@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,7 +27,7 @@
 
 namespace OpenXcom
 {
-	
+
 enum ForcedTorso{ TORSO_USE_GENDER, TORSO_ALWAYS_MALE, TORSO_ALWAYS_FEMALE };
 /**
  * Represents a specific type of armor.
@@ -36,7 +36,7 @@ enum ForcedTorso{ TORSO_USE_GENDER, TORSO_ALWAYS_MALE, TORSO_ALWAYS_FEMALE };
  */
 class Armor
 {
-public:	
+public:
 	static const int DAMAGE_TYPES = 10;
 private:
 	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem, _specWeapon;
@@ -48,9 +48,10 @@ private:
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
 	int _deathFrames;
-	bool _constantAnimation;
-	bool _canHoldWeapon;
+	bool _constantAnimation, _canHoldWeapon, _hasInventory;
 	ForcedTorso _forcedTorso;
+	int _faceColorGroup, _hairColorGroup, _utileColorGroup, _rankColorGroup;
+	std::vector<int> _faceColor, _hairColor, _utileColor, _rankColor;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -87,21 +88,39 @@ public:
 	/// Gets whether this is a normal or big unit.
 	int getSize() const;
 	/// Gets damage modifier.
-	float getDamageModifier(ItemDamageType dt);
+	float getDamageModifier(ItemDamageType dt) const;
 	/// Gets loftempSet
-	std::vector<int> getLoftempsSet() const;
+	const std::vector<int>& getLoftempsSet() const;
 	/// Gets the armor's stats.
-	UnitStats *getStats();
+	const UnitStats *getStats() const;
 	/// Gets the armor's weight.
-	int getWeight();
+	int getWeight() const;
 	/// Gets number of death frames.
-	int getDeathFrames();
+	int getDeathFrames() const;
 	/// Gets if armor uses constant animation.
-	bool getConstantAnimation();
+	bool getConstantAnimation() const;
 	/// Gets if armor can hold weapon.
-	bool getCanHoldWeapon();
+	bool getCanHoldWeapon() const;
 	/// Checks if this armor ignores gender (power suit/flying suit).
-	ForcedTorso getForcedTorso();
+	ForcedTorso getForcedTorso() const;
+	/// Get face base color
+	int getFaceColorGroup() const;
+	/// Get hair base color
+	int getHairColorGroup() const;
+	/// Get utile base color
+	int getUtileColorGroup() const;
+	/// Get rank base color
+	int getRankColorGroup() const;
+	/// Get face base color
+	int getFaceColor(int i) const;
+	/// Get hair base color
+	int getHairColor(int i) const;
+	/// Get utile base color
+	int getUtileColor(int i) const;
+	/// Get rank base color
+	int getRankColor(int i) const;
+	/// can we access this unit's inventory?
+	bool hasInventory() const;
 };
 
 }

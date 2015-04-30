@@ -169,12 +169,16 @@ set ( battlescape_src
   Battlescape/MedikitState.h
   Battlescape/MedikitView.cpp
   Battlescape/MedikitView.h
+  Battlescape/MeleeAttackBState.cpp
+  Battlescape/MeleeAttackBState.h
   Battlescape/ScannerState.cpp
   Battlescape/ScannerState.h
   Battlescape/ScannerView.cpp
   Battlescape/ScannerView.h
   Battlescape/PromotionsState.cpp
   Battlescape/PromotionsState.h
+  Battlescape/PsiAttackBState.cpp
+  Battlescape/PsiAttackBState.h
   Battlescape/BattlescapeGame.cpp
   Battlescape/BattlescapeGame.h
   Battlescape/CannotReequipState.cpp
@@ -526,6 +530,8 @@ set ( ruleset_src
   Ruleset/RuleVideo.cpp
   Ruleset/RuleMusic.h
   Ruleset/RuleMusic.cpp
+  Ruleset/Texture.h
+  Ruleset/Texture.cpp
 )
 
 set ( savegame_src

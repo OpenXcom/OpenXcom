@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -91,6 +91,19 @@ double generate(double min, double max)
 	double num = next();
 	return (double)(num / ((double)UINT64_MAX / (max - min)) + min);
 }
+
+/**
+ * Generates a random integer number within a certain range.
+ * Distinct from "generate" in that it doesn't touch the seed.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
+ * @return Generated number.
+ */
+int seedless(int min, int max)
+{
+	return (int)(rand() % (max - min + 1) + min);
+}
+
 
 /**
  * Normal random variate generator

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,7 +52,7 @@ StoresState::StoresState(Base *base) : _base(base)
 	_lstStores = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("storesInfo")->getElement("palette")->color);
+	setInterface("storesInfo");
 
 	add(_window, "window", "storesInfo");
 	add(_btnOk, "button", "storesInfo");

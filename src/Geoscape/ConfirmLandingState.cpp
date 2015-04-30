@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,6 +41,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -52,7 +53,7 @@ namespace OpenXcom
  * @param texture Texture of the landing site.
  * @param shade Shade of the landing site.
  */
-ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) : _craft(craft), _texture(texture), _shade(shade)
+ConfirmLandingState::ConfirmLandingState(Craft *craft, Texture *texture, int shade) : _craft(craft), _texture(texture), _shade(shade)
 {
 	_screen = false;
 
@@ -64,7 +65,7 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, int texture, int shade) :
 	_txtBegin = new Text(206, 17, 25, 130);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color);
+	setInterface("confirmLanding");
 
 	add(_window, "window", "confirmLanding");
 	add(_btnYes, "button", "confirmLanding");
@@ -146,7 +147,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 	}
 	else if (m != 0)
 	{
-		bgame->setMissionType(m->getRules()->getDeployment());
+		bgame->setMissionType(m->getDeployment()->getType());
 		bgen.setMissionSite(m);
 		bgen.setAlienRace(m->getAlienRace());
 	}
@@ -155,6 +156,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgame->setMissionType("STR_ALIEN_BASE_ASSAULT");
 		bgen.setAlienBase(b);
 		bgen.setAlienRace(b->getAlienRace());
+		bgen.setWorldTexture(0);
 	}
 	else
 	{

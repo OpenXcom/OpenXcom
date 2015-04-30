@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Music.h"
+#include "../Engine/RNG.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
@@ -58,6 +59,8 @@ int ResourcePack::BASESCAPE_CURSOR = 252;
 int ResourcePack::BATTLESCAPE_CURSOR = 144;
 int ResourcePack::UFOPAEDIA_CURSOR = 252;
 int ResourcePack::GRAPHS_CURSOR = 252;
+std::string ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
+std::string ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
 /**
  * Initializes a blank resource set pointing to a folder.
  */
@@ -175,7 +178,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[SDL_GetTicks() % music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
+			return music[RNG::seedless(0, music.size()-1)];
 	}
 }
 

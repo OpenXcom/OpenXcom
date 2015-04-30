@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #include <sstream>
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -27,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a mission site.
  */
-MissionSite::MissionSite(const RuleAlienMission *rules) : Target(), _rules(rules), _id(0), _secondsRemaining(0), _inBattlescape(false)
+MissionSite::MissionSite(const RuleAlienMission *rules, const AlienDeployment *deployment) : Target(), _rules(rules), _deployment(deployment), _id(0), _texture(-1), _secondsRemaining(0), _inBattlescape(false)
 {
 }
 
@@ -46,6 +47,7 @@ void MissionSite::load(const YAML::Node &node)
 {
 	Target::load(node);
 	_id = node["id"].as<int>(_id);
+	_texture = node["texture"].as<int>(_texture);
 	_secondsRemaining = node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_race = node["race"].as<std::string>(_race);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
@@ -59,7 +61,9 @@ YAML::Node MissionSite::save() const
 {
 	YAML::Node node = Target::save();
 	node["type"] = _rules->getType();
+	node["deployment"] = _deployment->getType();
 	node["id"] = _id;
+	node["texture"] = _texture;
 	if (_secondsRemaining)
 		node["secondsRemaining"] = _secondsRemaining;
 	node["race"] = _race;
@@ -75,7 +79,7 @@ YAML::Node MissionSite::save() const
 YAML::Node MissionSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = _rules->getType();
+	node["type"] = _deployment->getMarkerName();
 	node["id"] = _id;
 	return node;
 }
@@ -87,6 +91,15 @@ YAML::Node MissionSite::saveId() const
 const RuleAlienMission *MissionSite::getRules() const
 {
 	return _rules;
+}
+
+/**
+ * Returns the ruleset for the mission's deployment.
+ * @return Pointer to deployment rules.
+ */
+const AlienDeployment *MissionSite::getDeployment() const
+{
+	return _deployment;
 }
 
 /**
@@ -114,7 +127,7 @@ void MissionSite::setId(int id)
  */
 std::wstring MissionSite::getName(Language *lang) const
 {
-	return lang->getString(_rules->getMarkerName()).arg(_id);
+	return lang->getString(_deployment->getMarkerName()).arg(_id);
 }
 
 /**
@@ -123,9 +136,9 @@ std::wstring MissionSite::getName(Language *lang) const
  */
 int MissionSite::getMarker() const
 {
-	if (_rules->getMarkerIcon() == -1)
+	if (_deployment->getMarkerIcon() == -1)
 		return 5;
-	return _rules->getMarkerIcon();
+	return _deployment->getMarkerIcon();
 }
 
 /**
@@ -166,7 +179,7 @@ void MissionSite::setAlienRace(const std::string &race)
 
 /**
  * Gets the mission site's battlescape status.
- * @return bool
+ * @return Is the mission currently in battle?
  */
 bool MissionSite::isInBattlescape() const
 {
@@ -175,11 +188,47 @@ bool MissionSite::isInBattlescape() const
 
 /**
  * Sets the mission site's battlescape status.
- * @param inbattle .
+ * @param inbattle True if it's in battle, False otherwise.
  */
 void MissionSite::setInBattlescape(bool inbattle)
 {
 	_inBattlescape = inbattle;
+}
+
+/**
+ * Gets the mission site's associated texture.
+ * @return Texture ID.
+ */
+int MissionSite::getTexture() const
+{
+	return _texture;
+}
+
+/**
+ * Sets the mission site's associated texture.
+ * @param texture Texture ID.
+ */
+void MissionSite::setTexture(int texture)
+{
+	_texture = texture;
+}
+
+/**
+ * Gets the mission site's associated city, if any.
+ * @return String ID for the city, "" if none.
+ */
+std::string MissionSite::getCity() const
+{
+	return _city;
+}
+
+/**
+ * Sets the mission site's associated city, if any.
+ * @param city String ID for the city, "" if none.
+ */
+void MissionSite::setCity(const std::string &city)
+{
+	_city = city;
 }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -110,6 +110,7 @@ void AdlibMusic::load(const std::string &filename)
 void AdlibMusic::load(const void *data, int size)
 {
 	_data = (char*)data;
+	if (*(unsigned char*)_data<=56) size+=*(unsigned char*)_data;
 	_size = (size_t)(size);
 }
 

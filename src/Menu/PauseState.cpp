@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -66,14 +66,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	_txtTitle = new Text(206, 17, x+5, 32);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("pauseMenu")->getElement("palette")->color);
-	}
+	setInterface("pauseMenu", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "window", "pauseMenu");
 	add(_btnLoad, "button", "pauseMenu");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -60,7 +60,7 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_numMaintenance = new Text(110, 17, 202, 126);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("placeFacility")->getElement("palette")->color);
+	setInterface("placeFacility");
 
 	add(_window, "window", "placeFacility");
 	add(_view, "baseView", "basescape");

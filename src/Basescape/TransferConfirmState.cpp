@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,7 +51,7 @@ TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state
 	_txtTotal = new Text(100, 17, 170, 95);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferConfirm")->getElement("palette")->color);
+	setInterface("transferConfirm");
 
 	add(_window, "window", "transferConfirm");
 	add(_btnCancel, "button", "transferConfirm");
