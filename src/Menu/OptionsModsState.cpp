@@ -127,7 +127,7 @@ OptionsModsState::~OptionsModsState()
 
 std::wstring OptionsModsState::makeTooltip(const ModInfo &modInfo)
 {
-	return tr("STR_MODS_TOOLTIP").arg(modInfo.getVersion()).arg(modInfo.getAuthor()).arg(modInfo.getUrl()).arg(modInfo.getDescription());
+	return tr("STR_MODS_TOOLTIP").arg(modInfo.getVersion()).arg(modInfo.getAuthor()).arg(modInfo.getDescription());
 }
 
 void OptionsModsState::cbxMasterHover(Action *)

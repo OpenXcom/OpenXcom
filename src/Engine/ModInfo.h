@@ -54,8 +54,6 @@ public:
 	const std::string &getVersion() const;
 	/// Gets the author of this mod.
 	const std::string &getAuthor() const;
-	/// Gets the url for this mod.
-	const std::string &getUrl() const;
 	/// Gets the id for this mod.
 	const std::string &getId() const;
 	/// Gets whether this mod is a master (i.e. a vanilla game/total conversion)

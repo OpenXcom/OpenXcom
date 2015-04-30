@@ -5,6 +5,5 @@ name: "XcomUtil: Pistol Auto Shot"
 version: 1.0
 description: "Gives the standard-issue Pistol an auto shot."
 author: the OpenXcom team
-url: http://openxcom.org/
 
 master: xcom1

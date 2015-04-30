@@ -26,8 +26,8 @@ namespace OpenXcom
 
 ModInfo::ModInfo(const std::string &path) :
 	 _path(path), _name(CrossPlatform::baseFilename(path)),
-	_desc("No description"), _version("1.0"), _author("unknown author"),
-	_url("unknown url"), _id(_name), _isMaster(false)
+	_desc("No description."), _version("1.0"), _author("unknown author"),
+	_id(_name), _isMaster(false)
 {
 	// if not specified, assume a UFO mod
 	_masters.insert("xcom1");
@@ -45,7 +45,6 @@ void ModInfo::load(const std::string &filename)
 	_desc     = doc["description"].as<std::string>(_desc);
 	_version  = doc["version"].as<std::string>(_version);
 	_author   = doc["author"].as<std::string>(_author);
-	_url      = doc["url"].as<std::string>(_url);
 	_id       = doc["id"].as<std::string>(_id);
 	_isMaster = doc["isMaster"].as<bool>(_isMaster);
 
@@ -76,7 +75,6 @@ const std::string &ModInfo::getName()        const { return _name;     }
 const std::string &ModInfo::getDescription() const { return _desc;     }
 const std::string &ModInfo::getVersion()     const { return _version;  }
 const std::string &ModInfo::getAuthor()      const { return _author;   }
-const std::string &ModInfo::getUrl()         const { return _url;      }
 const std::string &ModInfo::getId()          const { return _id;       }
 bool               ModInfo::isMaster()       const { return _isMaster; }
 

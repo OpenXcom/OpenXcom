@@ -5,6 +5,5 @@ name: "XcomUtil: No Psionics"
 version: 1.0
 description: "Removes all Psi tech and items from the game, both X-COM and alien."
 author: the OpenXcom team
-url: http://openxcom.org/
 
 master: xcom1
