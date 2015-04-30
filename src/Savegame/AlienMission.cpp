@@ -703,6 +703,7 @@ MissionSite *AlienMission::spawnMissionSite(SavedGame &game, const Ruleset &rule
 		missionSite->setAlienRace(_race);
 		missionSite->setTexture(area.texture);
 		missionSite->setCity(area.name);
+		missionSite->setSiteDepth(RNG::generate(deployment->getMinSiteDepth(), deployment->getMaxSiteDepth()));
 		return missionSite;
 	}
 	return 0;

@@ -108,7 +108,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _noRetreat(false), _finalDestination(false), _finalMission(false), _markerIcon(-1), _durationMin(0), _durationMax(0), _minDepth(0), _maxDepth(0)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _noRetreat(false), _finalDestination(false), _finalMission(false), _markerIcon(-1), _durationMin(0), _durationMax(0), _minDepth(0), _maxDepth(0), _minSiteDepth(0), _maxSiteDepth(0)
 {
 }
 
@@ -147,6 +147,11 @@ void AlienDeployment::load(const YAML::Node &node)
 	{
 		_minDepth = node["depth"][0].as<int>(_minDepth);
 		_maxDepth = node["depth"][1].as<int>(_maxDepth);
+	}
+	if (node["siteDepth"])
+	{
+		_minSiteDepth = node["siteDepth"][0].as<int>(_minSiteDepth);
+		_maxSiteDepth = node["siteDepth"][1].as<int>(_maxSiteDepth);
 	}
 	if (node["duration"])
 	{
@@ -351,6 +356,24 @@ int AlienDeployment::getMinDepth()
 int AlienDeployment::getMaxDepth()
 {
 	return _maxDepth;
+}
+
+/**
+ * Gets The minimum depth for this deployment's mission site.
+ * @return The minimum depth.
+ */
+int AlienDeployment::getMinSiteDepth()
+{
+	return _minSiteDepth;
+}
+
+/**
+ * Gets The maximum depth for this deployment's mission site.
+ * @return The maximum depth.
+ */
+int AlienDeployment::getMaxSiteDepth()
+{
+	return _maxSiteDepth;
 }
 
 }

@@ -71,7 +71,7 @@ private:
 	std::string _alert;
 	BriefingData _briefingData;
 	std::string _markerName;
-	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth;
+	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -121,6 +121,10 @@ public:
 	int getMinDepth();
 	/// Gets the maximum depth.
 	int getMaxDepth();
+	/// Gets the minimum site depth.
+	int getMinSiteDepth();
+	/// Gets the maximum site depth.
+	int getMaxSiteDepth();
 };
 
 }
