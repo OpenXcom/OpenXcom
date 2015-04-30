@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -57,7 +57,7 @@ SoldierMemorialState::SoldierMemorialState()
 	_lstSoldiers = new TextList(288, 120, 8, 44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierMemorial")->getElement("palette")->color);
+	setInterface("soldierMemorial");
 
 	_game->getResourcePack()->playMusic("GMLOSE");
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,7 +53,7 @@ DismantleFacilityState::DismantleFacilityState(Base *base, BaseView *view, BaseF
 	_txtFacility = new Text(142, 9, 25, 85);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("dismantleFacility")->getElement("palette")->color);
+	setInterface("dismantleFacility");
 
 	add(_window, "window", "dismantleFacility");
 	add(_btnOk, "button", "dismantleFacility");

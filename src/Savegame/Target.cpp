@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #include <cmath>
 #include "../Engine/Language.h"
 #include "Craft.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {
@@ -28,7 +29,7 @@ namespace OpenXcom
 /**
  * Initializes a target with blank coordinates.
  */
-Target::Target() : _lon(0.0), _lat(0.0)
+Target::Target() : _lon(0.0), _lat(0.0), _depth(0)
 {
 }
 
@@ -55,6 +56,7 @@ void Target::load(const YAML::Node &node)
 {
 	_lon = node["lon"].as<double>(_lon);
 	_lat = node["lat"].as<double>(_lat);
+	_depth = node["depth"].as<int>(_depth);
 }
 
 /**
@@ -64,8 +66,10 @@ void Target::load(const YAML::Node &node)
 YAML::Node Target::save() const
 {
 	YAML::Node node;
-	node["lon"] = _lon;
-	node["lat"] = _lat;
+	node["lon"] = serializeDouble(_lon);
+	node["lat"] = serializeDouble(_lat);
+	if (_depth)
+		node["depth"] = _depth;
 	return node;
 }
 
@@ -76,8 +80,8 @@ YAML::Node Target::save() const
 YAML::Node Target::saveId() const
 {
 	YAML::Node node;
-	node["lon"] = _lon;
-	node["lat"] = _lat;
+	node["lon"] = serializeDouble(_lon);
+	node["lat"] = serializeDouble(_lat);
 	return node;
 }
 
@@ -155,4 +159,21 @@ double Target::getDistance(const Target *target) const
 	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
 }
 
+/**
+ * Gets the mission site's depth.
+ * @return the depth of the site.
+ */
+int Target::getSiteDepth()
+{
+	return _depth;
+}
+
+/**
+ * Sets the mission site's depth.
+ * @param depth the depth we want.
+ */
+void Target::setSiteDepth(int depth)
+{
+	_depth = depth;
+}
 }

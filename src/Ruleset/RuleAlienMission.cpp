@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,6 +31,7 @@ namespace YAML
 			node["count"] = rhs.ufoCount;
 			node["trajectory"] = rhs.trajectory;
 			node["timer"] = rhs.spawnTimer;
+			node["objective"] = rhs.objective;
 			return node;
 		}
 
@@ -43,6 +44,7 @@ namespace YAML
 			rhs.ufoCount = node["count"].as<size_t>();
 			rhs.trajectory = node["trajectory"].as<std::string>();
 			rhs.spawnTimer = node["timer"].as<size_t>();
+			rhs.objective = node["objective"].as<bool>(false);
 			return true;
 		}
 	};
@@ -51,8 +53,19 @@ namespace YAML
 namespace OpenXcom
 {
 
-RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _markerIcon(-1)
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _objective(OBJECTIVE_SCORE), _spawnZone(-1)
 {
+}
+
+/**
+ * Ensures the allocated memory is released.
+ */
+RuleAlienMission::~RuleAlienMission()
+{
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
+	{
+		delete ii->second;
+	}
 }
 
 /**
@@ -64,10 +77,10 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_points = node["points"].as<int>(_points);
 	_waves = node["waves"].as< std::vector<MissionWave> >(_waves);
-	_specialUfo = node["specialUfo"].as<std::string>(_specialUfo);
-	_deployment = node["deployment"].as<std::string>(_deployment);
-	_markerName = node["markerName"].as<std::string>(_markerName);
-	_markerIcon = node["markerIcon"].as<int>(_markerIcon);
+	_objective = (MissionObjective)node["objective"].as<int>(_objective);
+	_spawnUfo = node["spawnUfo"].as<std::string>(_spawnUfo);
+	_spawnZone = node["spawnZone"].as<int>(_spawnZone);
+	_weights = node["missionWeights"].as< std::map<size_t, int> >(_weights);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
@@ -133,22 +146,16 @@ const std::string RuleAlienMission::generateRace(const size_t monthsPassed) cons
 	return rc->second->choose();
 }
 
-
+/**
+ * Chooses the most likely race for this mission.
+ * The racial distribution may vary based on the current game date.
+ * @param monthsPassed The number of months that have passed in the game world.
+ * @return The string id of the race.
+ */
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
 	return rc->second->top();
-}
-
-/**
- * Ensures the allocated memory is released.
- */
-RuleAlienMission::~RuleAlienMission()
-{
-	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin(); ii != _raceDistribution.end(); ++ii)
-	{
-		delete ii->second;
-	}
 }
 
 /**
@@ -161,30 +168,26 @@ int RuleAlienMission::getPoints() const
 }
 
 /**
- * Returns the alien deployment for this mission.
- * @return String ID for deployment.
+ * Returns the chances of this mission being generated based on the current game date.
+ * @param monthsPassed The number of months that have passed in the game world.
+ * @return The weight.
  */
-std::string RuleAlienMission::getDeployment() const
+int RuleAlienMission::getWeight(const size_t monthsPassed) const
 {
-	return _deployment;
-}
-
-/**
- * Returns the globe marker name for this mission.
- * @return String ID for marker name.
- */
-std::string RuleAlienMission::getMarkerName() const
-{
-	return _markerName;
-}
-
-/**
- * Returns the globe marker icon for this mission.
- * @return Marker sprite, -1 if none.
- */
-int RuleAlienMission::getMarkerIcon() const
-{
-	return _markerIcon;
+	if (_weights.empty())
+	{
+		return 1;
+	}
+	int weight = 0;
+	for (std::map<size_t, int>::const_iterator i = _weights.begin(); i != _weights.end(); ++i)
+	{
+		if (i->first > monthsPassed)
+		{
+			break;
+		}
+		weight = i->second;
+	}
+	return weight;
 }
 
 }

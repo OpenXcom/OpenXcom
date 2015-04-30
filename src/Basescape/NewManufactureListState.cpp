@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,7 +56,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 	_cbxCategory = new ComboBox(this, 146, 16, 166, 46);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
+	setInterface("selectNewManufacture");
 
 	add(_window, "window", "selectNewManufacture");
 	add(_btnOk, "button", "selectNewManufacture");

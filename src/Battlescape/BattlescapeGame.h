@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,7 +41,7 @@ class Ruleset;
 class InfoboxOKState;
 class SoldierDiary;
 
-enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_STUN, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC, BA_RETHINK };
+enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC, BA_RETHINK };
 
 struct BattleAction
 {
@@ -77,7 +77,8 @@ private:
 	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
-	bool _AISecondMove;
+	bool _AISecondMove, _playedAggroSound;
+	bool _endTurnRequested, _endTurnProcessed;
 
 	/// Ends the turn.
 	void endTurn();
@@ -90,8 +91,10 @@ private:
 	std::vector<InfoboxOKState*> _infoboxQueue;
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
-	bool _playedAggroSound, _endTurnRequested;
 public:
+	/// is debug mode enabled in the battlescape?
+	static bool _debugPlay;
+
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
 	/// Cleans up the BattlescapeGame state.
@@ -164,7 +167,6 @@ public:
 	ResourcePack *getResourcePack();
 	/// Gets the ruleset.
 	const Ruleset *getRuleset() const;
-	static bool _debugPlay;
 	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
 	/// Tries to find an item and pick it up if possible.
@@ -180,7 +182,8 @@ public:
 	/// Returns the type of action that is reserved.
 	BattleActionType getReservedAction();
 	/// Tallies the living units, converting them if necessary.
-	void tallyUnits(int &liveAliens, int &liveSoldiers, bool convert);
+	void tallyUnits(int &liveAliens, int &liveSoldiers);
+	bool convertInfected();
 	/// Sets the kneel reservation setting.
 	void setKneelReserved(bool reserved);
 	/// Checks the kneel reservation setting.

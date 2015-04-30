@@ -824,7 +824,7 @@ items:
     compatibleAmmo:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
-    tuAimed: 80
+    tuAimed: 66
     battleType: 1
     twoHanded: true
     waypoint: true
@@ -1254,12 +1254,13 @@ items:
     invWidth: 2
     invHeight: 3
     recover: false
+    flatRate: true
   - type: CHRYSSALID_WEAPON
     weight: 3
     bigSprite: -1
     floorSprite: 31
     handSprite: 104
-    meleeSound: 48
+    meleeSound: 49
     clipSize: -1
     strengthApplied: true
     damageType: 7
@@ -1271,6 +1272,7 @@ items:
     invHeight: 3
     recover: false
     zombieUnit: STR_ZOMBIE
+    flatRate: true
   - type: CELATID_WEAPON
     weight: 3
     bigSprite: -2
@@ -1298,7 +1300,7 @@ items:
     bigSprite: -4
     floorSprite: 31
     handSprite: 104
-    meleeSound: 48
+    meleeSound: 50
     strengthApplied: true
     damageType: 7
     accuracyMelee: 100
@@ -1309,6 +1311,7 @@ items:
     invWidth: 2
     invHeight: 3
     recover: false
+    flatRate: true
   - type: SECTOPOD_WEAPON
     weight: 3
     bigSprite: -2
@@ -1346,6 +1349,7 @@ items:
     invHeight: 3
     clipSize: -1
     recover: false
+    flatRate: true
   - type: STR_SECTOID_COMMANDER
     size: 0.0
     recover: true

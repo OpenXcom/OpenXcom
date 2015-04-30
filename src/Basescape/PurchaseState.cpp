@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -69,7 +69,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("buyMenu")->getElement("palette")->color);
+	setInterface("buyMenu");
 
 	_ammoColor = _game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,6 +24,7 @@
 #include "../Engine/Exception.h"
 #include "Polygon.h"
 #include "Polyline.h"
+#include "Texture.h"
 #include "../Engine/Palette.h"
 #include "../Geoscape/Globe.h"
 #include "../Engine/CrossPlatform.h"
@@ -50,6 +51,10 @@ RuleGlobe::~RuleGlobe()
 	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
 	{
 		delete *i;
+	}
+	for (std::map<int, Texture*>::iterator i = _textures.begin(); i != _textures.end(); ++i)
+	{
+		delete i->second;
 	}
 }
 
@@ -96,14 +101,29 @@ void RuleGlobe::load(const YAML::Node &node)
 			_polylines.push_back(polyline);
 		}
 	}
-	Globe::COUNTRY_LABEL_COLOR = node["countryColor"].as<Uint8>(Globe::COUNTRY_LABEL_COLOR);
-	Globe::CITY_LABEL_COLOR = node["cityColor"].as<Uint8>(Globe::CITY_LABEL_COLOR);
-	Globe::BASE_LABEL_COLOR = node["baseColor"].as<Uint8>(Globe::BASE_LABEL_COLOR);
-	Globe::LINE_COLOR = node["lineColor"].as<Uint8>(Globe::LINE_COLOR);
+	if (node["textures"])
+	{
+		for (std::map<int, Texture*>::iterator i = _textures.begin(); i != _textures.end(); ++i)
+		{
+			delete i->second;
+		}
+		_textures.clear();
+		for (YAML::const_iterator i = node["textures"].begin(); i != node["textures"].end(); ++i)
+		{
+			int id = (*i)["id"].as<int>();
+			Texture *texture = new Texture(id);
+			texture->load(*i);
+			_textures[id] = texture;
+		}
+	}
+	Globe::COUNTRY_LABEL_COLOR = node["countryColor"].as<int>(Globe::COUNTRY_LABEL_COLOR);
+	Globe::CITY_LABEL_COLOR = node["cityColor"].as<int>(Globe::CITY_LABEL_COLOR);
+	Globe::BASE_LABEL_COLOR = node["baseColor"].as<int>(Globe::BASE_LABEL_COLOR);
+	Globe::LINE_COLOR = node["lineColor"].as<int>(Globe::LINE_COLOR);
 	
 	if (node["oceanPalette"])
 	{
-		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<Uint8>(12));
+		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<int>(Globe::OCEAN_COLOR));
 	}
 }
 
@@ -182,6 +202,38 @@ void RuleGlobe::loadDat(const std::string &filename)
 	}
 
 	mapFile.close();
+}
+
+/**
+ * Returns the rules for the specified texture.
+ * @param id Texture ID.
+ * @return Rules for the texture.
+ */
+Texture *RuleGlobe::getTexture(int id) const
+{
+	std::map<int, Texture*>::const_iterator i = _textures.find(id);
+	if (_textures.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns a list of all globe terrains associated with this deployment.
+ * @param deployment Deployment name.
+ * @return List of terrains.
+ */
+std::vector<std::string> RuleGlobe::getTerrains(const std::string &deployment) const
+{
+	std::vector<std::string> terrains;
+	for (std::map<int, Texture*>::const_iterator i = _textures.begin(); i != _textures.end(); ++i)
+	{
+		if ((deployment == "" && i->second->getDeployments().empty()) || i->second->getDeployments().find(deployment) != i->second->getDeployments().end())
+		{
+			for (std::vector<TerrainCriteria>::const_iterator j = i->second->getTerrain()->begin(); j != i->second->getTerrain()->end(); ++j)
+			{
+				terrains.push_back(j->name);
+			}
+		}
+	}
+	return terrains;
 }
 
 }

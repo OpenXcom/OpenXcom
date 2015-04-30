@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -103,7 +103,7 @@ private:
 	/// Draw flight path.
 	void drawPath(Surface *surface, double lon1, double lat1, double lon2, double lat2);
 	/// Draw target marker.
-	void drawTarget(Target *target);
+	void drawTarget(Target *target, Surface *surface);
 public:
 
 	static Uint8 COUNTRY_LABEL_COLOR;

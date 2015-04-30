@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,7 +55,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 
 	// Set palette
 	_battleGame->setPaletteByDepth(this);
-	
+
 	add(_window, "messageWindowBorder", "battlescape");
 	add(_txtInExit, "messageWindows", "battlescape");
 	add(_txtOutsideExit, "messageWindows", "battlescape");

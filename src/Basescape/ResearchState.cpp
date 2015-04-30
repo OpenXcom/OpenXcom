@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,7 +58,7 @@ ResearchState::ResearchState(Base *base) : _base(base)
 	_lstResearch = new TextList(288, 112, 8, 62);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
+	setInterface("researchMenu");
 
 	add(_window, "window", "researchMenu");
 	add(_btnNew, "button", "researchMenu");

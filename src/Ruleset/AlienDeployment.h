@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -64,11 +64,14 @@ private:
 	std::string _type;
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
-	std::vector<std::string> _terrains;
+	std::vector<std::string> _terrains, _music;
 	int _shade;
 	std::string _nextStage, _race, _script;
 	bool _noRetreat, _finalDestination, _finalMission;
+	std::string _alert;
 	BriefingData _briefingData;
+	std::string _markerName;
+	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -100,8 +103,28 @@ public:
 	bool isFinalDestination() const;
 	/// Checks if winning this mission will complete the game (mars stage 2, t'leth stage 3).
 	bool isFinalMission() const;
+	/// Gets the alert message for this mission type.
+	std::string getAlertMessage() const;
 	/// Gets the briefing data for this mission type.
 	BriefingData getBriefingData() const;
+	/// Gets the marker name for this mission.
+	std::string getMarkerName() const;
+	/// Gets the marker icon for this mission.
+	int getMarkerIcon() const;
+	/// Gets the minimum duration for this mission.
+	int getDurationMin() const;
+	/// Gets the maximum duration for this mission.
+	int getDurationMax() const;
+	/// Gets the list of music to pick from.
+	std::vector<std::string> &getMusic();
+	/// Gets the minimum depth.
+	int getMinDepth();
+	/// Gets the maximum depth.
+	int getMaxDepth();
+	/// Gets the minimum site depth.
+	int getMinSiteDepth();
+	/// Gets the maximum site depth.
+	int getMaxSiteDepth();
 };
 
 }

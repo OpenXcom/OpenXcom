@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,7 +58,7 @@ CraftsState::CraftsState(Base *base) : _base(base)
 	_lstCrafts = new TextList(288, 118, 8, 58);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftSelect")->getElement("palette")->color);
+	setInterface("craftSelect");
 
 	add(_window, "window", "craftSelect");
 	add(_btnOk, "button", "craftSelect");

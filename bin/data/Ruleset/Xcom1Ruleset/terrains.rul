@@ -5,7 +5,6 @@ terrains:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [1, 2, 3, 4]
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -71,7 +70,6 @@ terrains:
     mapDataSets:
       - BLANKS
       - DESERT
-    textures: [7, 8]
     script: DESERT
     mapBlocks:
       - name: DESERT00
@@ -117,8 +115,6 @@ terrains:
     mapDataSets:
       - BLANKS
       - FOREST
-    textures: [0, 6, 10, 11]
-    hemisphere: -1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -162,9 +158,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - JUNGLE
-    textures: [0, 6, 10, 11]
     script: JUNGLE
-    hemisphere: 1
     mapBlocks:
       - name: JUNGLE00
         width: 10
@@ -251,7 +245,6 @@ terrains:
     mapDataSets:
       - BLANKS
       - MOUNT
-    textures: [5]
     mapBlocks:
       - name: MOUNT00
         width: 10
@@ -299,7 +292,6 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLAR
-    textures: [9, 12]
     script: POLAR
     mapBlocks:
       - name: POLAR00

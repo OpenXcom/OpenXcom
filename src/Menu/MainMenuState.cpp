@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -54,7 +54,7 @@ MainMenuState::MainMenuState()
 	_txtTitle = new Text(256, 30, 32, 45);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
+	setInterface("mainMenu");
 
 	add(_window, "window", "mainMenu");
 	add(_btnNewGame, "button", "mainMenu");

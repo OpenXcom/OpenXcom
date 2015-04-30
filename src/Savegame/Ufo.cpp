@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,6 +30,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
+#include "../Ruleset/RuleAlienMission.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
 
@@ -44,7 +45,8 @@ Ufo::Ufo(const RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _mission(0), _trajectory(0)
-  , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _shootingAt(0), _hitFrame(0)
+  , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _processedIntercept(false), _shootingAt(0), _hitFrame(0)
+  , _fireCountdown(0), _escapeCountdown(0)
 {
 }
 
@@ -163,6 +165,8 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 		_trajectory = ruleset.getUfoTrajectory(tid);
 		_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
 	}
+	_fireCountdown = node["fireCountdown"].as<int>(_fireCountdown);
+	_escapeCountdown = node["escapeCountdown"].as<int>(_escapeCountdown);
 	if (_inBattlescape)
 		setSpeed(0);
 }
@@ -202,6 +206,9 @@ YAML::Node Ufo::save(bool newBattle) const
 		node["trajectory"] = _trajectory->getID();
 		node["trajectoryPoint"] = _trajectoryPoint;
 	}
+	
+	node["fireCountdown"] = _fireCountdown;
+	node["escapeCountdown"] = _escapeCountdown;
 	return node;
 }
 
@@ -540,7 +547,7 @@ void Ufo::think()
 
 /**
  * Gets the UFO's battlescape status.
- * @return bool
+ * @return Is the UFO currently in battle?
  */
 bool Ufo::isInBattlescape() const
 {
@@ -549,7 +556,7 @@ bool Ufo::isInBattlescape() const
 
 /**
  * Sets the UFO's battlescape status.
- * @param inbattle .
+ * @param inbattle True if it's in battle, False otherwise.
  */
 void Ufo::setInBattlescape(bool inbattle)
 {
@@ -620,7 +627,7 @@ int Ufo::getVisibility() const
  */
 const std::string &Ufo::getMissionType() const
 {
-	return _mission->getType();
+	return _mission->getRules().getType();
 }
 
 /**
@@ -669,43 +676,132 @@ void Ufo::setDestination(Target *dest)
 	delete old;
 }
 
+/**
+ * Gets which interception window the UFO is active in.
+ * @return which interception window the UFO is active in.
+ */
 int Ufo::getShootingAt() const
 {
 	return _shootingAt;
 }
 
+/**
+ * Sets which interception window the UFO is active in.
+ * @param target the window the UFO is active in.
+ */
 void Ufo::setShootingAt(int target)
 {
 	_shootingAt = target;
 }
-/// Gets the UFO's landing site ID.
+
+/**
+ * Gets the UFO's landing site ID.
+ * @return landing site ID.
+ */
 int Ufo::getLandId() const
 {
 	return _landId;
 }
-/// Sets the UFO's landing site ID.
+
+/**
+ * Sets the UFO's landing site ID.
+ * @param id landing site ID.
+ */
 void Ufo::setLandId(int id)
 {
 	_landId = id;
 }
-/// Gets the UFO's crash site ID.
+
+/**
+ * Gets the UFO's crash site ID.
+ * @return the UFO's crash site ID.
+ */
 int Ufo::getCrashId() const
 {
 	return _crashId;
 }
-/// Sets the UFO's crash site ID.
+
+/**
+ * Sets the UFO's crash site ID.
+ * @param id the UFO's crash site ID.
+ */
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
 }
-/// Sets the UFO's hit frame.
+
+/**
+ * Sets the UFO's hit frame.
+ * @param frame the hit frame.
+ */
 void Ufo::setHitFrame(int frame)
 {
 	_hitFrame = frame;
 }
-/// Gets the UFO's hit frame.
+
+/**
+ * Gets the UFO's hit frame.
+ * @return the hit frame.
+ */
+///
 int Ufo::getHitFrame()
 {
 	return _hitFrame;
+}
+
+/**
+ * Sets the countdown timer for escaping a dogfight.
+ * @param time how many ticks until the ship attempts to escape.
+ */
+void Ufo::setEscapeCountdown(int time)
+{
+	_escapeCountdown = time;
+}
+
+/**
+ * Gets the escape timer for dogfights.
+ * @return how many ticks until the ship tries to leave.
+ */
+int Ufo::getEscapeCountdown()
+{
+	return _escapeCountdown;
+}
+
+/**
+ * Sets the number of ticks until the ufo fires its weapon.
+ * @param time number of ticks until refire.
+ */
+void Ufo::setFireCountdown(int time)
+{
+	_fireCountdown = time;
+}
+
+/**
+ * Gets the number of ticks until the ufo is ready to fire.
+ * @return ticks until weapon is ready.
+ */
+int Ufo::getFireCountdown()
+{
+	return _fireCountdown;
+}
+
+/**
+ * Sets a flag denoting that this ufo has had its timers decremented.
+ * prevents multiple interceptions from decrementing or resetting an already running timer.
+ * this flag is reset in advance each time the geoscape processes the dogfights.
+ * @param processed whether or not we've had our timers processed.
+ */
+void Ufo::setInterceptionProcessed(bool processed)
+{
+	_processedIntercept = processed;
+}
+
+/**
+ * Gets if the ufo has had its timers decremented on this cycle of interception updates.
+ * @return if this ufo has already been processed.
+ */
+bool Ufo::getInterceptionProcessed()
+{
+	return _processedIntercept;
 }
 }

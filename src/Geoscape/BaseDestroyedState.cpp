@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,14 +46,14 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_txtMessage = new Text(224, 48, 48, 76);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
-	
+	setInterface("UFOInfo");
+
 	add(_window, "window", "UFOInfo");
 	add(_btnOk, "button", "UFOInfo");
 	add(_txtMessage, "text", "UFOInfo");
 
 	centerAllSurfaces();
-	
+
 	// Set up objects
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
@@ -61,7 +61,7 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, Options::keyCancel);
-		
+
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
@@ -77,7 +77,7 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 		}
 	}
 
-	AlienMission* am = _game->getSavedGame()->getAlienMission((*k)->getRules()->getType(), "STR_ALIEN_RETALIATION");
+	AlienMission* am = _game->getSavedGame()->findAlienMission((*k)->getRules()->getType(), OBJECTIVE_RETALIATION);
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
 		if ((*i)->getMission() == am)

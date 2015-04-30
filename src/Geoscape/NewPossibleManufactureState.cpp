@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,7 +49,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	_lstPossibilities = new TextList(260, 80, 21, 56);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoManufacture")->getElement("palette")->color);
+	setInterface("geoManufacture");
 
 	add(_window, "window", "geoManufacture");
 	add(_btnOk, "button", "geoManufacture");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _hemisphere(0), _minDepth(0), _maxDepth(0), _ambience(-1)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _minDepth(0), _maxDepth(0), _ambience(-1)
 {
 }
 
@@ -70,8 +70,6 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		}
 	}
 	_name = node["name"].as<std::string>(_name);
-	_textures = node["textures"].as< std::vector<int> >(_textures);
-	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
 	if (const YAML::Node &civs = node["civilianTypes"])
 	{
 		_civilianTypes = civs.as<std::vector<std::string> >(_civilianTypes);
@@ -81,8 +79,15 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_civilianTypes.push_back("MALE_CIVILIAN");
 		_civilianTypes.push_back("FEMALE_CIVILIAN");
 	}
-	_minDepth = node["minDepth"].as<int>(_minDepth);
-	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
+	for (YAML::const_iterator i = node["music"].begin(); i != node["music"].end(); ++i)
+	{
+		_music.push_back((*i).as<std::string>(""));
+	}
+	if (node["depth"])
+	{
+		_minDepth = node["depth"][0].as<int>(_minDepth);
+		_maxDepth = node["depth"][1].as<int>(_maxDepth);
+	}
 	_ambience = node["ambience"].as<int>(_ambience);
 	_script = node["script"].as<std::string>(_script);
 }
@@ -191,25 +196,6 @@ MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 }
 
 /**
- * Gets the array of globe texture IDs this terrain is loaded on.
- * @return Pointer to the array of texture IDs.
- */
-std::vector<int> *RuleTerrain::getTextures()
-{
-	return &_textures;
-}
-
-/**
- * Gets the hemishpere this terrain occurs on.
- * -1 = northern, 0 = either, 1 = southern.
- * @return The hemisphere.
- */
-int RuleTerrain::getHemisphere() const
-{
-	return _hemisphere;
-}
-
-/**
  * Gets the list of civilian types to use on this terrain (default MALE_CIVILIAN and FEMALE_CIVILIAN)
  * @return list of civilian types to use.
  */
@@ -252,5 +238,14 @@ const int RuleTerrain::getAmbience() const
 const std::string RuleTerrain::getScript()
 {
 	return _script;
+}
+
+/**
+ * Gets The list of musics this terrain has to choose from.
+ * @return The list of track names.
+ */
+const std::vector<std::string> &RuleTerrain::getMusic()
+{
+	return _music;
 }
 }

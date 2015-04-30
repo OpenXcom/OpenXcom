@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,7 @@ namespace OpenXcom
 		_lstSelection = new TextList(224, 104, 40, 50);
 
 		// Set palette
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color);
+		setInterface("ufopaedia");
 
 		add(_window, "window", "ufopaedia");
 		add(_txtTitle, "text", "ufopaedia");

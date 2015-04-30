@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -54,14 +54,7 @@ ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) :
 	_txtTarget = new Text(212, 32, 22, 72);
 
 	// Set palette
-	if (w != 0 && w->getId() == 0)
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color2);
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color);
-	}
+	setInterface("confirmDestination", w != 0 && w->getId() == 0);
 
 	add(_window, "window", "confirmDestination");
 	add(_btnOk, "button", "confirmDestination");
