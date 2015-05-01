@@ -6,6 +6,4 @@ version: 1.0
 description: "Adds abbreviated notations to the end of a soldier's name to highlight the soldier's notable statistics"
 author: the OpenXcom team
 
-masters:
-  - xcom1
-  - xcom2
+master: "*"

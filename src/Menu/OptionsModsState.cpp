@@ -164,7 +164,7 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		ModInfo modInfo = Options::getModInfos().find(i->first)->second;
-		if (modInfo.isMaster() || modInfo.getMasters().end() == modInfo.getMasters().find(_curMasterId))
+		if (modInfo.isMaster() || (!modInfo.getMaster().empty() && modInfo.getMaster() != _curMasterId))
 		{
 			continue;
 		}

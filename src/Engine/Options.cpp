@@ -467,20 +467,14 @@ static void _scanMods(const std::string &modsDir)
 		Log(LOG_DEBUG) << "  version: " << modInfo.getVersion();
 		Log(LOG_DEBUG) << "  description: " << modInfo.getDescription();
 		Log(LOG_DEBUG) << "  author: " << modInfo.getAuthor();
-		Log(LOG_DEBUG) << "  url: " << modInfo.getUrl();
+		Log(LOG_DEBUG) << "  master: " << modInfo.getMaster();
+		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
 		Log(LOG_DEBUG) << "  loadResources:";
 		std::vector<std::string> externals = modInfo.getExternalResourceDirs();
 		for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
 		{
 			Log(LOG_DEBUG) << "    " << *j;
 		}
-		Log(LOG_DEBUG) << "  masters:";
-		std::set<std::string> masters = modInfo.getMasters();
-		for (std::set<std::string>::iterator j = masters.begin(); j != masters.end(); ++j)
-		{
-			Log(LOG_DEBUG) << "    " << *j;
-		}
-		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
 
 		if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
 		 || ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
@@ -675,7 +669,7 @@ void mapResources()
 		}
 
 		ModInfo modInfo = _modInfos.find(i->first)->second;
-		if (!modInfo.isMaster() && 1 != modInfo.getMasters().count(curMaster))
+		if (!modInfo.isMaster() && (modInfo.getMaster().empty() || modInfo.getMaster() == curMaster))
 		{
 			Log(LOG_DEBUG) << "skipping mod for non-current mater: " << i->first;
 			continue;

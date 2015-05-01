@@ -27,14 +27,14 @@ namespace OpenXcom
 ModInfo::ModInfo(const std::string &path) :
 	 _path(path), _name(CrossPlatform::baseFilename(path)),
 	_desc("No description."), _version("1.0"), _author("unknown author"),
-	_id(_name), _isMaster(false)
+	_id(_name), _master("xcom1"), _isMaster(false)
 {
-	// if not specified, assume a UFO mod
-	_masters.insert("xcom1");
+	// empty
 }
 
 ModInfo::~ModInfo()
 {
+	// empty
 }
 
 void ModInfo::load(const std::string &filename)
@@ -50,23 +50,17 @@ void ModInfo::load(const std::string &filename)
 
 	if (_isMaster)
 	{
-		// masters can't have masters
-		_masters.clear();
-
-		// but they can load external resource dirs
+		_master = "";
+		// only masters can load external resource dirs
 		_externalResourceDirs = doc["loadResources"].as< std::vector<std::string> >(_externalResourceDirs);
 	}
-	else if (doc["masters"].IsDefined())
+	else
 	{
-		_masters.clear();
-		std::vector<std::string> masterVector;
-		masterVector = doc["masters"].as< std::vector<std::string> >(masterVector);
-		_masters.insert(masterVector.begin(), masterVector.end());
-	}
-	else if (doc["master"].IsDefined())
-	{
-		_masters.clear();
-		_masters.insert(doc["master"].as<std::string>(""));
+		_master = doc["master"].as<std::string>(_master);
+		if (_master == "*")
+		{
+			_master = "";
+		}
 	}
 }
 
@@ -76,8 +70,8 @@ const std::string &ModInfo::getDescription() const { return _desc;     }
 const std::string &ModInfo::getVersion()     const { return _version;  }
 const std::string &ModInfo::getAuthor()      const { return _author;   }
 const std::string &ModInfo::getId()          const { return _id;       }
+const std::string &ModInfo::getMaster()      const { return _master;   }
 bool               ModInfo::isMaster()       const { return _isMaster; }
 
-const std::set<std::string>    &ModInfo::getMasters()              const { return _masters;              }
 const std::vector<std::string> &ModInfo::getExternalResourceDirs() const { return _externalResourceDirs; }
 }

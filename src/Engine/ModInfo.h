@@ -33,9 +33,8 @@ class ModInfo
 {
 private:
 	const std::string _path;
-	std::string _name, _desc, _version, _author, _url, _id;
+	std::string _name, _desc, _version, _author, _url, _id, _master;
 	bool _isMaster;
-	std::set<std::string> _masters;
 	std::vector<std::string> _externalResourceDirs;
 public:
 	/// Creates default metadata for a mod at the specified path.
@@ -56,10 +55,11 @@ public:
 	const std::string &getAuthor() const;
 	/// Gets the id for this mod.
 	const std::string &getId() const;
+	/// Gets the master this mod can load under.  If it can load under any
+	/// master (or if this mod is a master itself), the return value is empty.
+	const std::string &getMaster() const;
 	/// Gets whether this mod is a master (i.e. a vanilla game/total conversion)
 	bool isMaster() const;
-	/// Gets the list of masters this mod can load under.
-	const std::set<std::string> &getMasters() const;
 	/// Gets the list of external resource dirs to load for this mod.
 	const std::vector<std::string> &getExternalResourceDirs() const;
 };
