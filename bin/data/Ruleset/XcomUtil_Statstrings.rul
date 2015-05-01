@@ -1,6 +1,7 @@
 # Based on XcomUtil by Scott Jones and BladeFireLight
 # See http://ufopaedia.org/index.php?title=Statstrings
 # These are the default statStrings from XcomUtil.
+# Melee has been added as a value that can be reported by statstrings.  Use "melee:" as the criteria.
   statStrings:
   - string: "x"
     psiStrength: [~, 30]
