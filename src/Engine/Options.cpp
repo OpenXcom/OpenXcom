@@ -287,14 +287,14 @@ void create()
 // files that exist in one game but not the other
 static bool _ufoIsInstalled()
 {
-	return CrossPlatform::fileExists(CrossPlatform::getDataFile("UFO/TERRAIN/UFO1.PCK"));
+	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("UFO/TERRAIN/UFO1.PCK"));
 }
 
 static bool _tftdIsInstalled()
 {
 	// ensure both the resource data and the mod data is in place
-	return CrossPlatform::fileExists(CrossPlatform::getDataFile("TFTD/TERRAIN/SEA.PCK"))
-		&& CrossPlatform::fileExists(CrossPlatform::getDataFile("standard/xcom2/Language/en-US.yml"));
+	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("TFTD/TERRAIN/SEA.PCK"))
+		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Language/en-US.yml"));
 }
 
 static void _setDefaultMods()
@@ -525,7 +525,7 @@ bool init(int argc, char *argv[])
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
 
-	std::string modPath = CrossPlatform::searchDataFolders("standard");
+	std::string modPath = CrossPlatform::searchDataFolder("standard");
 	Log(LOG_INFO) << "Scanning standard mods in '" << modPath << "'...";
 	_scanMods(modPath);
 	modPath = _userFolder + "mods";
@@ -679,11 +679,11 @@ void mapResources()
 		for (std::vector<std::string>::const_iterator j = modInfo.getExternalResourceDirs().begin(); j != modInfo.getExternalResourceDirs().end(); ++j)
 		{
 			// always ignore ruleset files in external resource dirs
-			FileMap::load(CrossPlatform::searchDataFolders(*j), true);
+			FileMap::load(CrossPlatform::searchDataFolder(*j), true);
 		}
 	}
 	// pick up stuff in common
-	FileMap::load(CrossPlatform::searchDataFolders("common"), true);
+	FileMap::load(CrossPlatform::searchDataFolder("common"), true);
 }
 
 /**

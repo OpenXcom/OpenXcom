@@ -296,93 +296,7 @@ std::string findConfigFolder()
 #endif
 }
 
-/**
- * Takes a path and tries to find it based on the
- * system's case-sensitivity.
- * @param base Base unaltered path.
- * @param path Full path to check for casing.
- * @return Correct filename or "" if it doesn't exist.
- * @note There's no actual method for figuring out the correct
- * filename on case-sensitive systems, this is just a workaround.
- */
-std::string caseInsensitive(const std::string &base, const std::string &path)
-{
-	std::string fullPath = base + path, newPath = path;
-
-	// Try all various case mutations
-	// Normal unmangled
-	if (fileExists(fullPath.c_str()))
-	{
-		return fullPath;
-	}
-
-	// UPPERCASE
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
-	fullPath = base + newPath;
-	if (fileExists(fullPath.c_str()))
-	{
-		return fullPath;
-	}
-
-	// lowercase
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
-	fullPath = base + newPath;
-	if (fileExists(fullPath.c_str()))
-	{
-		return fullPath;
-	}
-
-	// If we got here nothing can help us
-	return "";
-}
-
-/**
- * Takes a path and tries to find it based on the
- * system's case-sensitivity.
- * @param base Base unaltered path.
- * @param path Full path to check for casing.
- * @return Correct foldername or "" if it doesn't exist.
- * @note There's no actual method for figuring out the correct
- * foldername on case-sensitive systems, this is just a workaround.
- */
-std::string caseInsensitiveFolder(const std::string &base, const std::string &path)
-{
-	std::string fullPath = base + path, newPath = path;
-
-	// Try all various case mutations
-	// Normal unmangled
-	if (folderExists(fullPath.c_str()))
-	{
-		return fullPath;
-	}
-
-	// UPPERCASE
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
-	fullPath = base + newPath;
-	if (folderExists(fullPath.c_str()))
-	{
-		return fullPath;
-	}
-
-	// lowercase
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
-	fullPath = base + newPath;
-	if (folderExists(fullPath.c_str()))
-	{
-		return fullPath;
-	}
-
-	// If we got here nothing can help us
-	return "";
-}
-
-/**
- * Takes a filename and tries to find it in the game's Data folders,
- * accounting for the system's case-sensitivity and path style.
- * @param filename Original filename.
- * @return Correct filename or "" if it doesn't exist.
- */
-std::string getDataFile(const std::string &filename)
+std::string searchDataFile(const std::string &filename)
 {
 	// Correct folder separator
 	std::string name = filename;
@@ -391,8 +305,8 @@ std::string getDataFile(const std::string &filename)
 #endif
 
 	// Check current data path
-	std::string path = caseInsensitive(Options::getDataFolder(), name);
-	if (!path.empty())
+	std::string path = Options::getDataFolder() + name;
+	if (fileExists(path))
 	{
 		return path;
 	}
@@ -400,8 +314,8 @@ std::string getDataFile(const std::string &filename)
 	// Check every other path
 	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
-		std::string path = caseInsensitive(*i, name);
-		if (!path.empty())
+		path = *i + name;
+		if (fileExists(path))
 		{
 			Options::setDataFolder(*i);
 			return path;
@@ -412,13 +326,7 @@ std::string getDataFile(const std::string &filename)
 	return filename;
 }
 
-/**
- * Takes a foldername and tries to find it in the game's Data folders,
- * accounting for the system's case-sensitivity and path style.
- * @param foldername Original foldername.
- * @return Correct foldername or "" if it doesn't exist.
- */
-std::string searchDataFolders(const std::string &foldername)
+std::string searchDataFolder(const std::string &foldername)
 {
 	// Correct folder separator
 	std::string name = foldername;
@@ -427,8 +335,8 @@ std::string searchDataFolders(const std::string &foldername)
 #endif
 
 	// Check current data path
-	std::string path = caseInsensitiveFolder(Options::getDataFolder(), name);
-	if (!path.empty())
+	std::string path = Options::getDataFolder() + name;
+	if (folderExists(path))
 	{
 		return path;
 	}
@@ -436,8 +344,8 @@ std::string searchDataFolders(const std::string &foldername)
 	// Check every other path
 	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
-		std::string path = caseInsensitiveFolder(*i, name);
-		if (!path.empty())
+		path = *i + name;
+		if (folderExists(path))
 		{
 			Options::setDataFolder(*i);
 			return path;
@@ -539,52 +447,6 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	}
 	closedir(dp);
 	std::sort(files.begin(), files.end());
-	return files;
-}
-
-/**
- * Gets the name of all the files
- * contained in a Data subfolder.
- * Repeated files are ignored.
- * @param folder Path to the data folder.
- * @param ext Extension of files ("" if it doesn't matter).
- * @return Ordered list of all the files.
- */
-std::vector<std::string> getDataContents(const std::string &folder, const std::string &ext)
-{
-	std::set<std::string> unique;
-	std::vector<std::string> files;
-
-	// Check current data path
-	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
-	if (!current.empty())
-	{
-		std::vector<std::string> contents = getFolderContents(current, ext);
-		for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
-		{
-			unique.insert(*file);
-		}
-	}
-
-	// Check every other path
-	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
-	{
-		std::string path = caseInsensitiveFolder(*i, folder);
-		if (path == current)
-		{
-			continue;
-		}
-		if (!path.empty())
-		{
-			std::vector<std::string> contents = getFolderContents(path, ext);
-			for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
-			{
-				unique.insert(*file);
-			}
-		}
-	}
-
-	files = std::vector<std::string>(unique.begin(), unique.end());
 	return files;
 }
 
