@@ -1,8 +1,8 @@
 # OpenXcom 1.0
 
 OpenXcom is an open-source clone of the popular "UFO: Enemy Unknown" ("X-COM:
-UFO Defense" in USA) and "X-COM: Terror From the Deep" videogames by Microprose,
-licensed under the GPL and written in C++ / SDL.
+UFO Defense" in the USA release) and "X-COM: Terror From the Deep" videogames
+by Microprose, licensed under the GPL and written in C++ / SDL.
 
 See more info at the [website](http://openxcom.org)
 and the [wiki](http://ufopaedia.org/index.php?title=OpenXcom).
@@ -16,14 +16,15 @@ of the original games.  If you own the games on Steam, the Windows installer
 will automatically detect it and copy the resources over for you.
 
 If you want to copy things over manually, you can find the Steam game folders
-at "Steam\SteamApps\common\XCom UFO Defense\XCOM" and
-"Steam\SteamApps\common\X-COM Terror from the Deep\TFD".  Do not use modded
-versions (e.g. with XcomUtil) as they may cause bugs and crashes.  Copy the UFO
-subfolders (GEODATA, GEOGRAPH, MAPS, ROUTES, SOUND, TERRAIN, UFOGRAPH,
-UFOINTRO, and UNITS) to the UFO subdirectory in OpenXcom's data folder and/or
-the TFTD subfolders (FLOP\_INT, GEODATA, GEOGRAPH, MAPS, MISSDAT, ROUTES,
-SOUND, TERRAIN, UFOGRAPH, and UNITS) to the TFTD subdirectory in OpenXcom's
-data folder (see below for data folder locations).
+at:
+
+    UFO: "Steam\SteamApps\common\XCom UFO Defense\XCOM"
+    TFTD: "Steam\SteamApps\common\X-COM Terror from the Deep\TFD".
+
+Do not use modded versions (e.g. with XcomUtil) as they may cause bugs and
+crashes.  Copy the UFO subfolders to the UFO subdirectory in OpenXcom's data
+folder and/or the TFTD subfolders to the TFTD subdirectory in OpenXcom's data
+folder (see below for data folder locations).
 
 ## Mods
 
@@ -33,18 +34,22 @@ There is also a [mod portal website](http://www.openxcom.com) with a thriving
 mod community with hundreds of innovative mods to choose from.
 
 To install a mod, go to the mods subdirectory in your user directory (see below
-for folder locations on various operating systems).  Extract the mod into a new
-subdirectory.  WinZip has an "Extract to" option that creates a directory whose
-name is based on the archive name.  It doesn't really matter what the directory
-name is as long as it is unique.  Some mods are packed with extra directories at
-the top, so you may need to move files around inside the new mod directory to
-get things straighted out.  For example, if you extract a mod to mods/LulzMod
-and you see something like:
+for folder locations).  Extract the mod into a new subdirectory.  WinZip has an
+"Extract to" option that creates a directory whose name is based on the archive
+name.  It doesn't really matter what the directory name is as long as it is
+unique.  Some mods are packed with extra directories at the top, so you may
+need to move files around inside the new mod directory to get things straighted
+out.  For example, if you extract a mod to mods/LulzMod and you see something
+like:
+
     mods/LulzMod/data/TERRAIN/
     mods/LulzMod/data/Rulesets/
+
 and so on, just move everything up a level so it looks like:
+
     mods/LulzMod/TERRAIN/
     mods/LulzMod/Rulesets/
+
 and you're good to go!  Enable your new mod on the Options -> Mods page in-game.
 
 ## Directory Locations
@@ -74,7 +79,8 @@ Each of these default to different paths on different operating systems (shown
 below).  For the user and config directories, OpenXcom will search a list of
 directories and use the first one that already exists.  If none exist, it will
 create a directory and use that.  When searching for files in the data
-directory, OpenXcom will search through all of the named directories, giving
+directory, OpenXcom will search through all of the named directories, so some
+files can be installed in one directory and others in another.  This gives
 you some flexibility in case you can't copy UFO or TFTD resource files to some
 system locations.  You can also specify your own path for each of these by
 passing a commandline argument when running OpenXcom.  For example:
@@ -84,15 +90,15 @@ passing a commandline argument when running OpenXcom.  For example:
 ### Windows
 
 User and Config folder:
-- C:\Documents and Settings\<user>\My Documents\OpenXcom (Windows 2000/XP)
-- C:\Users\<user>\Documents\OpenXcom (Windows Vista/7)
-- <game directory>\user
+- C:\Documents and Settings\\\<user\>\My Documents\OpenXcom (Windows 2000/XP)
+- C:\Users\\\<user\>\Documents\OpenXcom (Windows Vista/7)
+- \<game directory\>\user
 - .\user
 
 Data folders:
-- C:\Documents and Settings\<user>\My Documents\OpenXcom\data (Windows 2000/XP)
-- C:\Users\<user>\Documents\OpenXcom\data (Windows Vista/7/8)
-- <game directory>
+- C:\Documents and Settings\\\<user\>\My Documents\OpenXcom\data (Windows 2000/XP)
+- C:\Users\\\<user\>\Documents\OpenXcom\data (Windows Vista/7/8)
+- \<game directory\>
 - . (the current directory)
 
 ### Mac OS X
