@@ -260,21 +260,33 @@ void OptionsModsState::moveModUp(Action *action, unsigned int row, bool max)
 	if (max)
 	{
 		_moveAbove(_mods.at(row), _mods.at(0));
-		lstModsRefresh(0);
+		// don't change the scroll position
+		lstModsRefresh(_lstMods->getScroll());
 	}
 	else
 	{
-		_moveAbove(_mods.at(row), _mods.at(row - 1));
-		// TODO: fix this for lists with wrapped text items
-		if (row != _lstMods->getScroll())
+		// calculate target scroll pos
+		int curScrollPos = _lstMods->getScroll();
+		int targetScrollPos = 0;
+		for (size_t i = 0; i < row - 1; ++i)
+		{
+			targetScrollPos += _lstMods->getNumTextLines(i);
+		}
+		if (curScrollPos < targetScrollPos)
 		{
 			int ydiff = _lstMods->getTextHeight(row - 1);
-			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(ydiff * action->getYScale()));
+			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(),
+				 action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(ydiff * action->getYScale()));
 		}
 		else
 		{
-			_lstMods->scrollUp(false);
+			int ydiff = _lstMods->getRowY(row) - _lstMods->getY();
+			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(),
+				 action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(ydiff * action->getYScale()));
+			_lstMods->scrollTo(targetScrollPos);
 		}
+
+		_moveAbove(_mods.at(row), _mods.at(row - 1));
 		lstModsRefresh(_lstMods->getScroll());
 	}
 	Options::reload = true;
@@ -327,21 +339,38 @@ void OptionsModsState::moveModDown(Action *action, unsigned int row, bool max)
 	if (max)
 	{
 		_moveBelow(_mods.at(row), _mods.back());
-		lstModsRefresh(std::max(0, (int)(_lstMods->getRows() - _lstMods->getVisibleRows())));
+		// don't change the scroll position
+		lstModsRefresh(_lstMods->getScroll());
 	}
 	else
 	{
-		_moveBelow(_mods.at(row), _mods.at(row + 1));
-		// TODO: fix this for lists with wrapped text items
-		if (row != _lstMods->getVisibleRows() - 1 + _lstMods->getScroll())
+		// calculate target scroll pos
+		int curScrollPos = _lstMods->getScroll();
+		int targetScrollPos = 0;
+		for (size_t i = 0; i <= row + 1; ++i)
+		{
+			if (i == row)
+			{
+				// don't count the current row -- it will be moved down
+				continue;
+			}
+			targetScrollPos += _lstMods->getNumTextLines(i);
+		}
+		if (curScrollPos + _lstMods->getVisibleRows() > targetScrollPos)
 		{
 			int ydiff = _lstMods->getTextHeight(row + 1);
-			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(ydiff * action->getYScale()));
+			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(),
+				 action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(ydiff * action->getYScale()));
 		}
 		else
 		{
-			_lstMods->scrollDown(false);
+			int ydiff = _lstMods->getY() + _lstMods->getHeight() - (_lstMods->getRowY(row) + _lstMods->getTextHeight(row));
+			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(),
+				 action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(ydiff * action->getYScale()));
+			_lstMods->scrollTo(targetScrollPos - _lstMods->getVisibleRows() + 1);
 		}
+
+		_moveBelow(_mods.at(row), _mods.at(row + 1));
 		lstModsRefresh(_lstMods->getScroll());
 	}
 	Options::reload = true;

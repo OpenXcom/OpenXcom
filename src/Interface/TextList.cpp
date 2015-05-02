@@ -223,6 +223,16 @@ int TextList::getTextHeight(size_t row) const
 }
 
 /**
+ * Returns the height of a specific text row in the list.
+ * @param row Row number.
+ * @return height in pixels.
+ */
+int TextList::getNumTextLines(size_t row) const
+{
+	return _texts[row].front()->getNumLines();
+}
+
+/**
  * Returns the amount of text rows stored in the list.
  * @return Number of rows.
  */
@@ -988,7 +998,7 @@ void TextList::handle(Action *action, State *state)
 			++startArrowIdx;
 		}
 		size_t endArrowIdx = startArrowIdx + 1;
-		size_t endRow = std::min(_texts.size(), _rows[_scroll] + _visibleRows);
+		size_t endRow = std::min(_rows.size(), _scroll + _visibleRows);
 		for (size_t i = std::max((size_t)1, _scroll); i < endRow; ++i)
 		{
 			if (_rows[i] != _rows[i - 1])
