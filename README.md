@@ -19,7 +19,7 @@ If you want to copy things over manually, you can find the Steam game folders
 at:
 
     UFO: "Steam\SteamApps\common\XCom UFO Defense\XCOM"
-    TFTD: "Steam\SteamApps\common\X-COM Terror from the Deep\TFD".
+    TFTD: "Steam\SteamApps\common\X-COM Terror from the Deep\TFD"
 
 Do not use modded versions (e.g. with XcomUtil) as they may cause bugs and
 crashes.  Copy the UFO subfolders to the UFO subdirectory in OpenXcom's data
