@@ -728,7 +728,7 @@ void setFolders()
 	}
 	if (!_userFolder.empty())
 	{
-		// create mods subfolder and readme if they don't already exist
+		// create mods subfolder if it doesn't already exist
 		std::string modsFolder = _userFolder + "mods";
 		if (!CrossPlatform::folderExists(modsFolder))
 		{

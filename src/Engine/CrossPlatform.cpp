@@ -173,8 +173,7 @@ std::vector<std::string> findDataFolders()
 		}
 	}
 #ifdef __APPLE__
-	snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/", home);
-	list.push_back(path);
+	list.push_back("Users/Shared/OpenXcom/");
 #else
 	list.push_back("/usr/local/share/openxcom/");
 #ifndef __FreeBSD__

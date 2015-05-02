@@ -1,4 +1,4 @@
-Copy all the UFO: Enemy Unknown / X-Com: UFO Defense subfolders to this directory!
+Copy all the UFO: Enemy Unknown / X-COM: UFO Defense subfolders to this directory!
 
 After the copy, this directory should contain at least the following items:
   GEODATA
