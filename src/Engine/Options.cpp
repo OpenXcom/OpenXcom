@@ -669,9 +669,9 @@ void mapResources()
 		}
 
 		ModInfo modInfo = _modInfos.find(i->first)->second;
-		if (!modInfo.isMaster() && (modInfo.getMaster().empty() || modInfo.getMaster() == curMaster))
+		if (!modInfo.isMaster() && !modInfo.getMaster().empty() && modInfo.getMaster() != curMaster)
 		{
-			Log(LOG_DEBUG) << "skipping mod for non-current mater: " << i->first;
+			Log(LOG_DEBUG) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
 			continue;
 		}
 
