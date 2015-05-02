@@ -6,7 +6,7 @@ EAPI=5
 
 EGIT_REPO_URI="https://github.com/SupSuper/OpenXcom.git"
 
-inherit git-2 autotools
+inherit git-2 cmake-utils
 
 DESCRIPTION="OpenXcom is an open-source clone of the popular UFO: Enemy Unknown"
 HOMEPAGE="http://openxcom.org/"
@@ -15,7 +15,7 @@ SRC_URI=""
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="clang"
 
 DEPEND="
 	dev-cpp/yaml-cpp
@@ -27,13 +27,17 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-src_prepare() {
-	eautoreconf
+src_configure() {
+	if use clang; then
+		export CC=clang
+		export CXX=clang++
+	fi
+	cmake-utils_src_configure
 }
 
 pkg_postinst() {
-    einfo "You will need to install the Xcom data files in:"
-    einfo "\$XDG_DATA_HOME/openxcom/data or \$XDG_CONFIG_HOME/openxcom/data"
+    einfo "You will need to manually the original XCOM game data files to:"
+    einfo "/usr/share/openxcom/UFO/ and/or /usr/share/openxcom/TFTD/"
 	einfo "see http://ufopaedia.org/index.php?title=Installing_(OpenXcom)"
 	einfo "for more info."
 }
