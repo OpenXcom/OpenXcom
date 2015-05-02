@@ -151,7 +151,7 @@ ${Else}
 ${EndIf}
 	File "..\..\LICENSE.txt"
 	File "..\..\CHANGELOG.txt"
-	File "..\..\README.txt"
+	File "..\..\README.md"
 	
 	;Copy UFO files
 	IfFileExists "$UFODIR\*.*" 0 ufo_no
@@ -374,7 +374,7 @@ Section "-un.Main"
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\*.dll"
 	Delete "$INSTDIR\LICENSE.txt"
-	Delete "$INSTDIR\README.txt"
+	Delete "$INSTDIR\README.md"
 	Delete "$INSTDIR\CHANGELOG.txt"
 	
 	Delete "$INSTDIR\data\*.*"
