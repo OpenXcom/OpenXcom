@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = docs
 
 doc_DATA = \
-	README.txt \
+	README.md \
 	CHANGELOG.txt \
 	LICENSE.txt
 

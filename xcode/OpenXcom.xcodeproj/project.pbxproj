@@ -12,7 +12,7 @@
 		6BACF61419350F9700E1A981 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BACF61319350F9700E1A981 /* Images.xcassets */; };
 		6BACF63119350FF800E1A981 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BACF63019350FF800E1A981 /* SDLMain.m */; };
 		6BB58D4D1936FADC00DF3F68 /* CHANGELOG.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BB58D4B1936FADC00DF3F68 /* CHANGELOG.txt */; };
-		6BB58D4E1936FADC00DF3F68 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BB58D4C1936FADC00DF3F68 /* README.txt */; };
+		6BB58D4E1936FADC00DF3F68 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6BB58D4C1936FADC00DF3F68 /* README.md */; };
 		6BB58D541936FB7500DF3F68 /* libSDL_gfx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D4F1936FB7500DF3F68 /* libSDL_gfx.a */; };
 		6BB58D551936FB7500DF3F68 /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D501936FB7500DF3F68 /* libSDL_image.a */; };
 		6BB58D561936FB7500DF3F68 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D511936FB7500DF3F68 /* libSDL_mixer.a */; };
@@ -34,7 +34,7 @@
 		6BACF62F19350FF800E1A981 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
 		6BACF63019350FF800E1A981 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
 		6BB58D4B1936FADC00DF3F68 /* CHANGELOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.txt; path = ../../CHANGELOG.txt; sourceTree = "<group>"; };
-		6BB58D4C1936FADC00DF3F68 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = ../../README.txt; sourceTree = "<group>"; };
+		6BB58D4C1936FADC00DF3F68 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		6BB58D4F1936FB7500DF3F68 /* libSDL_gfx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_gfx.a; path = ../../../../../../../../../usr/local/lib/libSDL_gfx.a; sourceTree = SDKROOT; };
 		6BB58D501936FB7500DF3F68 /* libSDL_image.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_image.a; path = ../../../../../../../../../usr/local/lib/libSDL_image.a; sourceTree = SDKROOT; };
 		6BB58D511936FB7500DF3F68 /* libSDL_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_mixer.a; path = ../../../../../../../../../usr/local/lib/libSDL_mixer.a; sourceTree = SDKROOT; };
@@ -119,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				6BB58D4B1936FADC00DF3F68 /* CHANGELOG.txt */,
-				6BB58D4C1936FADC00DF3F68 /* README.txt */,
+				6BB58D4C1936FADC00DF3F68 /* README.md */,
 				6BACF60319350F9700E1A981 /* OpenXcom-Info.plist */,
 				6BACF60919350F9700E1A981 /* OpenXcom-Prefix.pch */,
 			);
@@ -179,7 +179,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BACF61419350F9700E1A981 /* Images.xcassets in Resources */,
-				6BB58D4E1936FADC00DF3F68 /* README.txt in Resources */,
+				6BB58D4E1936FADC00DF3F68 /* README.md in Resources */,
 				6BB590D71937A60800DF3F68 /* data in Resources */,
 				6BB58D4D1936FADC00DF3F68 /* CHANGELOG.txt in Resources */,
 			);
