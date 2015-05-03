@@ -27,7 +27,7 @@
 namespace OpenXcom
 {
 
-Sound *TextButton::soundPress = 0;
+Sound *TextButton::soundPress;
 
 /**
  * Sets up a text button with the specified size and position.
