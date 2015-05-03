@@ -999,7 +999,7 @@ void TextList::handle(Action *action, State *state)
 		}
 		size_t endArrowIdx = startArrowIdx + 1;
 		size_t endRow = std::min(_rows.size(), _scroll + _visibleRows);
-		for (size_t i = std::max((size_t)1, _scroll); i < endRow; ++i)
+		for (size_t i = std::max((size_t)1, _scroll + 1); i < endRow; ++i)
 		{
 			if (_rows[i] != _rows[i - 1])
 			{
