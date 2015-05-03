@@ -32,12 +32,9 @@
 #include "../Engine/Font.h"
 #include "../Engine/Timer.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Geoscape/Globe.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
 #include "IntroState.h"
@@ -50,58 +47,6 @@ namespace OpenXcom
 
 LoadingPhase StartState::loading;
 std::string StartState::error;
-
-static void _resetGlobalStatics()
-{
-	ResourcePack::DOOR_OPEN = 3;
-	ResourcePack::SLIDING_DOOR_OPEN = 20;
-	ResourcePack::SLIDING_DOOR_CLOSE = 21;
-	ResourcePack::SMALL_EXPLOSION = 2;
-	ResourcePack::LARGE_EXPLOSION = 5;
-	ResourcePack::EXPLOSION_OFFSET = 0;
-	ResourcePack::SMOKE_OFFSET = 8;
-	ResourcePack::UNDERWATER_SMOKE_OFFSET = 0;
-	ResourcePack::ITEM_DROP = 38;
-	ResourcePack::ITEM_THROW = 39;
-	ResourcePack::ITEM_RELOAD = 17;
-	ResourcePack::WALK_OFFSET = 22;
-	ResourcePack::FLYING_SOUND = 15;
-	ResourcePack::MALE_SCREAM[0] = 41;
-	ResourcePack::MALE_SCREAM[1] = 42;
-	ResourcePack::MALE_SCREAM[2] = 43;
-	ResourcePack::FEMALE_SCREAM[0] = 44;
-	ResourcePack::FEMALE_SCREAM[1] = 45;
-	ResourcePack::FEMALE_SCREAM[2] = 46;
-	ResourcePack::BUTTON_PRESS = 0;
-	ResourcePack::WINDOW_POPUP[0] = 1;
-	ResourcePack::WINDOW_POPUP[1] = 2;
-	ResourcePack::WINDOW_POPUP[2] = 3;
-	ResourcePack::UFO_FIRE = 8;
-	ResourcePack::UFO_HIT = 12;
-	ResourcePack::UFO_CRASH = 10;
-	ResourcePack::UFO_EXPLODE = 11;
-	ResourcePack::INTERCEPTOR_HIT = 10;
-	ResourcePack::INTERCEPTOR_EXPLODE = 13;
-	ResourcePack::GEOSCAPE_CURSOR = 252;
-	ResourcePack::BASESCAPE_CURSOR = 252;
-	ResourcePack::BATTLESCAPE_CURSOR = 144;
-	ResourcePack::UFOPAEDIA_CURSOR = 252;
-	ResourcePack::GRAPHS_CURSOR = 252;
-	ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
-	ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
-
-	Globe::OCEAN_COLOR = Palette::blockOffset(12);
-	Globe::COUNTRY_LABEL_COLOR = 239;
-	Globe::LINE_COLOR = 162;
-	Globe::CITY_LABEL_COLOR = 138;
-	Globe::BASE_LABEL_COLOR = 133;
-
-	TextButton::soundPress = 0;
-
-	Window::soundPopup[0] = 0;
-	Window::soundPopup[1] = 0;
-	Window::soundPopup[2] = 0;
-}
 
 /**
  * Initializes all the elements in the Loading screen.
@@ -346,7 +291,6 @@ int StartState::load(void *game_ptr)
 	Game *game = (Game*)game_ptr;
 	try
 	{
-		_resetGlobalStatics();
 		Log(LOG_INFO) << "Loading rulesets...";
 		game->loadRulesets();
 		Log(LOG_INFO) << "Rulesets loaded successfully.";

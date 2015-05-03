@@ -531,6 +531,7 @@ Ruleset *Game::getRuleset() const
  */
 void Game::loadRulesets()
 {
+	Ruleset::resetGlobalStatics();
 	delete _rules;
 	_rules = new Ruleset();
 	const std::vector< std::vector<std::string> > &rulesets(FileMap::getRulesets());
