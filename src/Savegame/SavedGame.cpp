@@ -157,16 +157,19 @@ SavedGame::~SavedGame()
 
 static bool _isCurrentGameType(const SaveInfo &saveInfo, const std::string &curMaster)
 {
+	std::string gameMaster;
 	if (saveInfo.mods.empty())
 	{
 		// if no mods listed in the savegame, this is an old-style
-		// savegame.  don't skip it so people can still play them.  it's
-		// up to them to make sure the same mods are loaded
-		Log(LOG_DEBUG) << "old-style savegame detected.  allowing: " << saveInfo.fileName;
-		return true;
+		// savegame.  assume "xcom1" as the game type.
+		gameMaster = "xcom1";
+	}
+	else
+	{
+		gameMaster = saveInfo.mods[0];
 	}
 
-	if (saveInfo.mods[0] != curMaster)
+	if (gameMaster != curMaster)
 	{
 		Log(LOG_DEBUG) << "skipping save from inactive master: " << saveInfo.fileName;
 		return false;
