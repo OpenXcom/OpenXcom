@@ -155,6 +155,26 @@ SavedGame::~SavedGame()
 	delete _battleGame;
 }
 
+static bool _isCurrentGameType(const SaveInfo &saveInfo, const std::string &curMaster)
+{
+	if (saveInfo.mods.empty())
+	{
+		// if no mods listed in the savegame, this is an old-style
+		// savegame.  don't skip it so people can still play them.  it's
+		// up to them to make sure the same mods are loaded
+		Log(LOG_DEBUG) << "old-style savegame detected.  allowing: " << saveInfo.fileName;
+		return true;
+	}
+
+	if (saveInfo.mods[0] != curMaster)
+	{
+		Log(LOG_DEBUG) << "skipping save from inactive master: " << saveInfo.fileName;
+		return false;
+	}
+
+	return true;
+}
+
 /**
  * Gets all the info of the saves found in the user folder.
  * @param lang Loaded language.
@@ -174,9 +194,8 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 			try
 			{
 				SaveInfo saveInfo = getSaveInfo(*i, lang);
-				if (saveInfo.mods.empty() || saveInfo.mods[0] != curMaster)
+				if (!_isCurrentGameType(saveInfo, curMaster))
 				{
-					Log(LOG_DEBUG) << "skipping save from inactive master: " << saveInfo.fileName;
 					continue;
 				}
 				info.push_back(saveInfo);
@@ -200,9 +219,8 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 		try
 		{
 			SaveInfo saveInfo = getSaveInfo(*i, lang);
-			if (saveInfo.mods.empty() || saveInfo.mods[0] != curMaster)
+			if (!_isCurrentGameType(saveInfo, curMaster))
 			{
-				Log(LOG_DEBUG) << "skipping save from inactive master: " << saveInfo.fileName;
 				continue;
 			}
 			info.push_back(saveInfo);
@@ -267,10 +285,13 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
 	save.isoDate = str.first;
 	save.isoTime = str.second;
-        save.mods = doc["mods"].as<std::vector<std::string> >();
+        save.mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
 
 	std::wostringstream details;
-        details << Language::utf8ToWstr(save.mods[0]) << L" ";
+	if (!save.mods.empty())
+	{
+		details << Language::utf8ToWstr(save.mods[0]) << L" ";
+	}
 	if (doc["turn"])
 	{
 		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
