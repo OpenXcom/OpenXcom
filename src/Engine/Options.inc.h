@@ -14,7 +14,7 @@ OPT SaveSort saveOrder;
 OPT MusicFormat preferredMusic;
 OPT SoundFormat preferredSound;
 OPT SDL_GrabMode captureMouse;
-OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave;
+OPT SDLKey keyOk, keyCancel, keyScreenshot, keyFps, keyQuickLoad, keyQuickSave, keyPrev, keyNext;
 
 // Geoscape options
 OPT int geoClockSpeed, dogfightSpeed, geoScrollSpeed, geoDragScrollButton, geoscapeScale;
