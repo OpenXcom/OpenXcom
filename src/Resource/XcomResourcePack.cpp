@@ -212,7 +212,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	}
 
 	// Load fonts
-	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/Font.dat"));
+	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/" + Options::font + ".dat"));
 	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
 	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
 	{

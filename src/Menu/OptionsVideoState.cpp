@@ -19,6 +19,7 @@
 #include "OptionsVideoState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -59,24 +60,27 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnDisplayResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
 	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
-	_txtLanguage = new Text(114, 9, 94, 52);
-	_cbxLanguage = new ComboBox(this, 104, 16, 94, 62);
+	_txtLanguage = new Text(114, 9, 94, 56);
+	_cbxLanguage = new ComboBox(this, 104, 16, 94, 66);
 
-	_txtFilter = new Text(114, 9, 206, 52);
-	_cbxFilter = new ComboBox(this, 104, 16, 206, 62);
+	_txtFilter = new Text(114, 9, 206, 86);//
+	_cbxFilter = new ComboBox(this, 104, 16, 206, 96);
 
-	_txtMode = new Text(114, 9, 206, 22);
-	_cbxDisplayMode = new ComboBox(this, 104, 16, 206, 32);
+	_txtFont = new Text(114, 9, 206, 116);//
+	_cbxFont = new ComboBox(this, 104, 16, 206, 126);
+
+	_txtMode = new Text(114, 9, 206, 56);//
+	_cbxDisplayMode = new ComboBox(this, 104, 16, 206, 66);
 	
-	_txtGeoScale = new Text(114, 9, 94, 82);
-	_cbxGeoScale = new ComboBox(this, 104, 16, 94, 92);
+	_txtGeoScale = new Text(114, 9, 94, 86);
+	_cbxGeoScale = new ComboBox(this, 104, 16, 94, 96);
 	
-	_txtBattleScale = new Text(114, 9, 94, 112);
-	_cbxBattleScale = new ComboBox(this, 104, 16, 94, 122);
+	_txtBattleScale = new Text(114, 9, 94, 116);
+	_cbxBattleScale = new ComboBox(this, 104, 16, 94, 126);
 
-	_txtOptions = new Text(114, 9, 206, 82);
-	_btnLetterbox = new ToggleTextButton(104, 16, 206, 92);
-	_btnLockMouse = new ToggleTextButton(104, 16, 206, 110);
+	_txtOptions = new Text(114, 9, 206, 8);//
+	_btnLetterbox = new ToggleTextButton(104, 16, 206, 18);//
+	_btnLockMouse = new ToggleTextButton(104, 16, 206, 36);//
 
 	// Get available fullscreen modes
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
@@ -112,6 +116,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_btnDisplayResolutionDown, "button", "videoMenu");
 
 	add(_txtLanguage, "text", "videoMenu");
+	add(_txtFont, "text", "videoMenu");
+
 	add(_txtFilter, "text", "videoMenu");
 
 	add(_txtMode, "text", "videoMenu");
@@ -120,7 +126,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_btnLetterbox, "button", "videoMenu");
 	add(_btnLockMouse, "button", "videoMenu");
 
-
+	add(_cbxFont, "button", "videoMenu");
 	add(_cbxFilter, "button", "videoMenu");
 	add(_cbxDisplayMode, "button", "videoMenu");
 	
@@ -165,6 +171,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtMode->setText(tr("STR_DISPLAY_MODE"));
 
+	_txtFont->setText(tr("STR_FONT"));
+
 	_txtOptions->setText(tr("STR_DISPLAY_OPTIONS"));
 
 	_btnLetterbox->setText(tr("STR_LETTERBOXED"));
@@ -198,6 +206,26 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxLanguage->setTooltip("STR_DISPLAY_LANGUAGE_DESC");
 	_cbxLanguage->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxLanguage->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+
+	std::vector<std::string> font;
+	Font::getList(_fonts, font);
+	_cbxFont->setOptions(font);
+	for (size_t i = 0; i < font.size(); ++i)
+	{
+		if (_fonts[i] == Options::font)
+		{
+			_cbxFont->setSelected(i);
+			break;
+		}
+	}
+	_cbxFont->onChange((ActionHandler)&OptionsVideoState::cbxFontChange);
+	_cbxFont->setTooltip("STR_FONT_DESC");
+	_cbxFont->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_cbxFont->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+
+	// Hide these options during gameplay as they require to reload game
+	_cbxFont->setVisible(_origin == OPT_MENU);
+	_txtFont->setVisible(_origin == OPT_MENU);
 
 	std::vector<std::wstring> filterNames;
 	filterNames.push_back(tr("STR_DISABLED"));
@@ -256,8 +284,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
 	_cbxFilter->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxFilter->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
-	
+
 	std::vector<std::string> displayModes;
 	displayModes.push_back("STR_WINDOWED");
 	displayModes.push_back("STR_FULLSCREEN");
@@ -286,7 +313,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxDisplayMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 	
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
-	
+
 	std::vector<std::string> scales;
 	scales.push_back("STR_ORIGINAL");
 	scales.push_back("STR_1_5X");
@@ -477,6 +504,17 @@ void OptionsVideoState::cbxFilterChange(Action *)
 		break;
 	}
 }
+
+/**
+ * Changes the Font option.
+ * @param action Pointer to an action.
+ */
+void OptionsVideoState::cbxFontChange(Action *)
+{
+	Options::font = _fonts[_cbxFont->getSelected()];
+	Options::reload = true;
+}
+
 
 /**
  * Changes the Display Mode options.
