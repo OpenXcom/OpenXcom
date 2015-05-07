@@ -22,6 +22,7 @@
 #include <fstream>
 #include <cassert>
 #include "CrossPlatform.h"
+#include "FileMap.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
@@ -346,7 +347,9 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
  */
 void Language::getList(std::vector<std::string> &files, std::vector<std::wstring> &names)
 {
-	files = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
+	std::set<std::string> contents = FileMap::getVFolderContents("Language");
+	std::set<std::string> ymlContents = FileMap::filterFiles(contents, "yml");
+	files.insert(files.end(), ymlContents.begin(), ymlContents.end());
 	names.clear();
 
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)

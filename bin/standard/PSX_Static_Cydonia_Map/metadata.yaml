@@ -1,0 +1,9 @@
+#
+# metadata.yaml for PSX Static Cydonia Map
+
+name: "PSX Static Cydonia Map"
+version: 1.0
+description: "Uses the Cydonia map from the PSX version of X-Com: UFO Defense."
+author: the OpenXcom team
+
+master: xcom1

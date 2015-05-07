@@ -213,6 +213,26 @@ int TextList::getRowY(size_t row) const
 }
 
 /**
+ * Returns the height of a specific text row in the list.
+ * @param row Row number.
+ * @return height in pixels.
+ */
+int TextList::getTextHeight(size_t row) const
+{
+	return _texts[row].front()->getTextHeight();
+}
+
+/**
+ * Returns the height of a specific text row in the list.
+ * @param row Row number.
+ * @return height in pixels.
+ */
+int TextList::getNumTextLines(size_t row) const
+{
+	return _texts[row].front()->getNumLines();
+}
+
+/**
  * Returns the amount of text rows stored in the list.
  * @return Number of rows.
  */
@@ -924,12 +944,32 @@ void TextList::blit(Surface *surface)
 	{
 		if (_arrowPos != -1 && !_rows.empty())
 		{
-			for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
+			int y = getY();
+			for (int row = _scroll; row > 0 && _rows[row] == _rows[row - 1]; --row)
 			{
-				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
-				_arrowLeft[i]->blit(surface);
-				_arrowRight[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
-				_arrowRight[i]->blit(surface);
+				y -= _font->getHeight() + _font->getSpacing();
+			}
+			int maxY = getY() + getHeight();
+			for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows && y < maxY; ++i)
+			{
+				_arrowLeft[i]->setY(y);
+				_arrowRight[i]->setY(y);
+
+				if (y >= getY())
+				{
+					// only blit arrows that belong to texts that have their first row on-screen
+					_arrowLeft[i]->blit(surface);
+					_arrowRight[i]->blit(surface);
+				}
+
+				if (!_texts[i].empty())
+				{
+					y += _texts[i].front()->getHeight() + _font->getSpacing();
+				}
+				else
+				{
+					y += _font->getHeight() + _font->getSpacing();
+				}
 			}
 		}
 		_up->blit(surface);
@@ -949,15 +989,27 @@ void TextList::handle(Action *action, State *state)
 	_up->handle(action, state);
 	_down->handle(action, state);
 	_scrollbar->handle(action, state);
-	if (_arrowPos != -1)
+	if (_arrowPos != -1 && !_rows.empty())
 	{
-		if (!_rows.empty())
+		size_t startArrowIdx = _rows[_scroll];
+		if (0 < _scroll && _rows[_scroll] == _rows[_scroll - 1])
 		{
-			for (size_t i = _rows[_scroll]; i < _texts.size() && i < _rows[_scroll] + _visibleRows; ++i)
+			// arrows for first partially-visible line of text are off-screen; don't process them
+			++startArrowIdx;
+		}
+		size_t endArrowIdx = startArrowIdx + 1;
+		size_t endRow = std::min(_rows.size(), _scroll + _visibleRows);
+		for (size_t i = std::max((size_t)1, _scroll + 1); i < endRow; ++i)
+		{
+			if (_rows[i] != _rows[i - 1])
 			{
-				_arrowLeft[i]->handle(action, state);
-				_arrowRight[i]->handle(action, state);
+				++endArrowIdx;
 			}
+		}
+		for (size_t i = startArrowIdx; i < endArrowIdx; ++i)
+		{
+			_arrowLeft[i]->handle(action, state);
+			_arrowRight[i]->handle(action, state);
 		}
 	}
 }

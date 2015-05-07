@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Starting Defensive Base
+
+name: "XcomUtil: Starting Defensive Base"
+version: 1.0
+description: "Moves the starting 3 Hangars to the top to make the base easier to defend in Base Defense missions."
+author: the OpenXcom team
+
+master: xcom1

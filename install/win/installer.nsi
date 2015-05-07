@@ -151,35 +151,38 @@ ${Else}
 ${EndIf}
 	File "..\..\LICENSE.txt"
 	File "..\..\CHANGELOG.txt"
-	File "..\..\README.txt"
+	File "..\..\README.md"
 	
 	;Copy UFO files
 	IfFileExists "$UFODIR\*.*" 0 ufo_no
 	
-	CreateDirectory "$INSTDIR\data\GEODATA"
-	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\data\GEODATA" 361
-	CreateDirectory "$INSTDIR\data\GEOGRAPH"
-	CopyFiles /SILENT "$UFODIR\GEOGRAPH\*.*" "$INSTDIR\data\GEOGRAPH" 2770
-	CreateDirectory "$INSTDIR\data\MAPS"
-	CopyFiles /SILENT "$UFODIR\MAPS\*.*" "$INSTDIR\data\MAPS" 278
-	CreateDirectory "$INSTDIR\data\ROUTES"
-	CopyFiles /SILENT "$UFODIR\ROUTES\*.*" "$INSTDIR\data\ROUTES" 27
-	CreateDirectory "$INSTDIR\data\SOUND"
-	CopyFiles /SILENT "$UFODIR\SOUND\*.*" "$INSTDIR\data\SOUND" 2386
-	CreateDirectory "$INSTDIR\data\TERRAIN"
-	CopyFiles /SILENT "$UFODIR\TERRAIN\*.*" "$INSTDIR\data\TERRAIN" 620
-	CreateDirectory "$INSTDIR\data\UFOGRAPH"
-	CopyFiles /SILENT "$UFODIR\UFOGRAPH\*.*" "$INSTDIR\data\UFOGRAPH" 437
-	CreateDirectory "$INSTDIR\data\UFOINTRO"
-	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\data\UFOINTRO" 2736
-	CreateDirectory "$INSTDIR\data\UNITS"
-	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\data\UNITS" 467
+	CreateDirectory "$INSTDIR\UFO\GEODATA"
+	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\UFO\GEODATA" 361
+	CreateDirectory "$INSTDIR\UFO\GEOGRAPH"
+	CopyFiles /SILENT "$UFODIR\GEOGRAPH\*.*" "$INSTDIR\UFO\GEOGRAPH" 2770
+	CreateDirectory "$INSTDIR\UFO\MAPS"
+	CopyFiles /SILENT "$UFODIR\MAPS\*.*" "$INSTDIR\UFO\MAPS" 278
+	CreateDirectory "$INSTDIR\UFO\ROUTES"
+	CopyFiles /SILENT "$UFODIR\ROUTES\*.*" "$INSTDIR\UFO\ROUTES" 27
+	CreateDirectory "$INSTDIR\UFO\SOUND"
+	CopyFiles /SILENT "$UFODIR\SOUND\*.*" "$INSTDIR\UFO\SOUND" 2386
+	CreateDirectory "$INSTDIR\UFO\TERRAIN"
+	CopyFiles /SILENT "$UFODIR\TERRAIN\*.*" "$INSTDIR\UFO\TERRAIN" 620
+	CreateDirectory "$INSTDIR\UFO\UFOGRAPH"
+	CopyFiles /SILENT "$UFODIR\UFOGRAPH\*.*" "$INSTDIR\UFO\UFOGRAPH" 437
+	CreateDirectory "$INSTDIR\UFO\UFOINTRO"
+	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\UFO\UFOINTRO" 2736
+	CreateDirectory "$INSTDIR\UFO\UNITS"
+	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\UFO\UNITS" 467
 	
 	ufo_no:
 	
-	SetOutPath "$INSTDIR\data"
+	SetOutPath "$INSTDIR"
 	
-	File /r "..\..\bin\data\*.*"
+	File /r "..\..\bin\TFTD"
+	File /r "..\..\bin\UFO"
+	File /r "..\..\bin\common"
+	File /r "..\..\bin\standard"
 
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
@@ -204,7 +207,7 @@ ${EndIf}
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_DataFolder).lnk" "$INSTDIR\data"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_DataFolder).lnk" "$INSTDIR"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${GAME_NAME}.lnk" "$INSTDIR\OpenXcom.exe"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_Readme).lnk" "$INSTDIR\README.TXT"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_Uninstall).lnk" "$INSTDIR\Uninstall.exe"
@@ -226,7 +229,7 @@ Section "$(NAME_SecPatch)" SecPatch
 	success1:
 
 	;(uses nsisunz.dll)
-	nsisunz::UnzipToLog "$TEMP\universal-patch.zip" "$INSTDIR\data"
+	nsisunz::UnzipToLog "$TEMP\universal-patch.zip" "$INSTDIR\UFO"
 	Pop $0
 	StrCmp $0 "success" success2
 		SetDetailsView show
@@ -353,7 +356,10 @@ FunctionEnd
 ;Uninstaller Sections
 
 Section /o "un.$(NAME_UnData)" UnData
-	RMDir /r "$INSTDIR\data"
+	RMDir /r "$INSTDIR\TFTD"
+	RMDir /r "$INSTDIR\UFO"
+	RMDir /r "$INSTDIR\common"
+	RMDir /r "$INSTDIR\standard"
 SectionEnd
 
 Section /o "un.$(NAME_UnUser)" UnUser
@@ -368,7 +374,7 @@ Section "-un.Main"
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\*.dll"
 	Delete "$INSTDIR\LICENSE.txt"
-	Delete "$INSTDIR\README.txt"
+	Delete "$INSTDIR\README.md"
 	Delete "$INSTDIR\CHANGELOG.txt"
 	
 	Delete "$INSTDIR\data\*.*"
@@ -393,6 +399,79 @@ Section "-un.Main"
 	Delete "$INSTDIR\data\Shaders\*.*"
 	RMDir "$INSTDIR\data\Shaders"
 	RMDir "$INSTDIR\data"
+
+	Delete  "$INSTDIR\TFTD\README.txt"
+	RMDir  "$INSTDIR\TFTD"
+	Delete  "$INSTDIR\UFO\README.txt"
+	RMDir  "$INSTDIR\UFO"
+	Delete  "$INSTDIR\common\*.*"
+	Delete  "$INSTDIR\common\Language\*.*"
+	RMDir  "$INSTDIR\common\Language"
+	Delete  "$INSTDIR\common\Resources\BulletSprites\*.*"
+	RMDir  "$INSTDIR\common\Resources\BulletSprites"
+	Delete  "$INSTDIR\common\Resources\Pathfinding\*.*"
+	RMDir  "$INSTDIR\common\Resources\Pathfinding"
+	Delete  "$INSTDIR\common\Resources\UI\*.*"
+	RMDir  "$INSTDIR\common\Resources\UI"
+	Delete  "$INSTDIR\common\Resources\Weapons\*.*"
+	RMDir  "$INSTDIR\common\Resources\Weapons"
+	RMDir  "$INSTDIR\common\Resources"
+	Delete  "$INSTDIR\common\Shaders\*.*"
+	RMDir  "$INSTDIR\common\Shaders"
+	Delete  "$INSTDIR\common\SoldierName\*.*"
+	RMDir  "$INSTDIR\common\SoldierName"
+	RMDir  "$INSTDIR\common"
+	Delete  "$INSTDIR\standard\Aliens_Pick_Up_Weapons\*.*"
+	RMDir  "$INSTDIR\standard\Aliens_Pick_Up_Weapons"
+	Delete  "$INSTDIR\standard\Limit_Craft_Item_Capacities\*.*"
+	RMDir  "$INSTDIR\standard\Limit_Craft_Item_Capacities"
+	Delete  "$INSTDIR\standard\PSX_Static_Cydonia_Map\*.*"
+	RMDir  "$INSTDIR\standard\PSX_Static_Cydonia_Map"
+	Delete  "$INSTDIR\standard\UFOextender_Gun_Melee\*.*"
+	RMDir  "$INSTDIR\standard\UFOextender_Gun_Melee"
+	Delete  "$INSTDIR\standard\UFOextender_Psionic_Line_Of_Fire\*.*"
+	RMDir  "$INSTDIR\standard\UFOextender_Psionic_Line_Of_Fire"
+	Delete  "$INSTDIR\standard\UFOextender_Starting_Avalanches\*.*"
+	RMDir  "$INSTDIR\standard\UFOextender_Starting_Avalanches"
+	Delete  "$INSTDIR\standard\XcomUtil_Always_Daytime\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Always_Daytime"
+	Delete  "$INSTDIR\standard\XcomUtil_Always_Nighttime\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Always_Nighttime"
+	Delete  "$INSTDIR\standard\XcomUtil_Fighter_Transports\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Fighter_Transports"
+	Delete  "$INSTDIR\standard\XcomUtil_High_Explosive_Damage\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_High_Explosive_Damage"
+	Delete  "$INSTDIR\standard\XcomUtil_Improved_Ground_Tanks\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Improved_Ground_Tanks"
+	Delete  "$INSTDIR\standard\XcomUtil_Improved_Heavy_Laser\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Improved_Heavy_Laser"
+	Delete  "$INSTDIR\standard\XcomUtil_No_Psionics\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_No_Psionics"
+	Delete  "$INSTDIR\standard\XcomUtil_Pistol_Auto_Shot\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Pistol_Auto_Shot"
+	Delete  "$INSTDIR\standard\XcomUtil_Skyranger_Weapon_Slot\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Skyranger_Weapon_Slot"
+	Delete  "$INSTDIR\standard\XcomUtil_Starting_Defensive_Base\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Starting_Defensive_Base"
+	Delete  "$INSTDIR\standard\XcomUtil_Starting_Defensive_Improved_Base\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Starting_Defensive_Improved_Base"
+	Delete  "$INSTDIR\standard\XcomUtil_Starting_Improved_Base\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Starting_Improved_Base"
+	Delete  "$INSTDIR\standard\XcomUtil_Statstrings\*.*"
+	RMDir  "$INSTDIR\standard\XcomUtil_Statstrings"
+	Delete  "$INSTDIR\standard\xcom1\*.*"
+	Delete  "$INSTDIR\standard\xcom1\Language\*.*"
+	RMDir  "$INSTDIR\standard\xcom1\Language"
+	Delete  "$INSTDIR\standard\xcom1\MAPS\*.*"
+	RMDir  "$INSTDIR\standard\xcom1\MAPS"
+	Delete  "$INSTDIR\standard\xcom1\ROUTES\*.*"
+	RMDir  "$INSTDIR\standard\xcom1\ROUTES"
+	RMDir  "$INSTDIR\standard\xcom1"
+	Delete  "$INSTDIR\standard\xcom2\*.*"
+	Delete  "$INSTDIR\standard\xcom2\Language\*.*"
+	RMDir  "$INSTDIR\standard\xcom2\Language"
+	RMDir  "$INSTDIR\standard\xcom2"
+	RMDir  "$INSTDIR\standard"
 
 	Delete "$INSTDIR\Uninstall.exe"
 	RMDir "$INSTDIR"	

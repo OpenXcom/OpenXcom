@@ -36,7 +36,7 @@
 #include "../Savegame/Node.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
@@ -1344,7 +1344,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	unsigned int terrainObjectID;
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (FileMap::getFilePath(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename.str() + " not found");
@@ -1467,7 +1467,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (FileMap::getFilePath(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename.str() + " not found");

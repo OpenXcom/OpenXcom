@@ -117,22 +117,23 @@ protected:
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	std::vector<SDL_Color> _transparencies;
-	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
+	int _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 	/// Loads a ruleset from a YAML file.
-	void loadFile(const std::string &filename);
-	/// Loads all ruleset files from a directory.
-	void loadFiles(const std::string &dirname);
+	void loadFile(const std::string &filename, size_t spriteOffset);
 	/// Loads a ruleset element.
 	template <typename T>
 	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
 public:
+	// reset all the statics in all classes to default values
+	static void resetGlobalStatics();
 	/// Creates a blank ruleset.
 	Ruleset();
 	/// Cleans up the ruleset.
 	~Ruleset();
-	/// Loads a ruleset from the given source.
-	void load(const std::string &source);
+	/// Loads a list of rulesets from YAML files for the mod at the specified index.  The first
+	// mod loaded should be the master at index 0, then 1, and so on.
+	void loadModRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx);
 	/// Generates the starting saved game.
 	SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.

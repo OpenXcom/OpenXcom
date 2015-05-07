@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Statstrings
+
+name: "XcomUtil: Statstrings"
+version: 1.0
+description: "Adds abbreviated notations to the end of a soldier's name to highlight the soldier's notable statistics"
+author: the OpenXcom team
+
+master: "*"

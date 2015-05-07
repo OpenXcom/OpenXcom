@@ -24,6 +24,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/FlcPlayer.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
@@ -63,12 +64,12 @@ IntroState::IntroState(bool wasLetterBoxed) : _wasLetterBoxed(wasLetterBoxed)
 		std::vector<std::string>::const_iterator it;
 		for(it = videos->begin(); it != videos->end(); ++it)
 		{
-			_introFiles.push_back(CrossPlatform::getDataFile(*it));
+			_introFiles.push_back(*it);
 		}
 	}
 
-	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
-	_introSoundFileWin = CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
+	_introSoundFileDOS = FileMap::getFilePath("SOUND/INTRO.CAT");
+	_introSoundFileWin = FileMap::getFilePath("SOUND/SAMPLE3.CAT");
 }
 
 /**
@@ -438,15 +439,15 @@ void IntroState::init()
 
 		if(oldVideoFile)
 		{
-			std::string videoFileName = _introFiles[0];
+			std::string videoFileName = FileMap::getFilePath(_introFiles[0]);
 			if (CrossPlatform::fileExists(videoFileName))
 			{
-				_flcPlayer = new FlcPlayer();
-				audioSequence = new AudioSequence(_game->getResourcePack(), _flcPlayer);
-				_flcPlayer->init(videoFileName.c_str(), &audioHandler, _game, dx, dy);
-				_flcPlayer->play(true);
-				_flcPlayer->delay(10000);
-				delete _flcPlayer;
+				FlcPlayer *flcPlayer = new FlcPlayer();
+				audioSequence = new AudioSequence(_game->getResourcePack(), flcPlayer);
+				flcPlayer->init(videoFileName.c_str(), &audioHandler, _game, dx, dy);
+				flcPlayer->play(true);
+				flcPlayer->delay(10000);
+				delete flcPlayer;
 				delete audioSequence;
 				end();
 			}
@@ -454,23 +455,36 @@ void IntroState::init()
 		else
 		{
 			std::vector<std::string>::const_iterator it;
-			_flcPlayer = new FlcPlayer();
-			for(it = _introFiles.begin(); it != _introFiles.end(); ++it)
+			FlcPlayer *flcPlayer = NULL;
+			for (it = _introFiles.begin(); it != _introFiles.end(); ++it)
 			{
-				std::string videoFileName = *it;
+				std::string videoFileName = FileMap::getFilePath(*it);
 
-				if (CrossPlatform::fileExists(videoFileName))
+				if (!CrossPlatform::fileExists(videoFileName))
 				{
-					_flcPlayer->init(videoFileName.c_str(), 0, _game, dx, dy);
-					_flcPlayer->play(false);
-					_flcPlayer->deInit();
+					continue;
 				}
-				if (_flcPlayer->wasSkipped())
+
+				if (!flcPlayer)
+				{
+					flcPlayer = new FlcPlayer();
+				}
+
+				flcPlayer->init(videoFileName.c_str(), 0, _game, dx, dy);
+				flcPlayer->play(false);
+				flcPlayer->deInit();
+
+				if (flcPlayer->wasSkipped())
 				{
 					break;
 				}
 			}
-			delete _flcPlayer;
+
+			if (flcPlayer)
+			{
+				delete flcPlayer;
+			}
+			
 			end();
 		}
 	}

@@ -99,6 +99,10 @@ interfaces:
       - id: optionLists
         color: 138   # yellow
         border: 133  # minty green
+      - id: text
+        color: 138   # yellow
+      - id: button
+        color: 239   # bright green
   - type: saveMenus
     elements:
       - id: palette

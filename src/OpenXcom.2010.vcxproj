@@ -305,6 +305,7 @@
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
     <ClCompile Include="Engine\FastLineClip.cpp" />
+    <ClCompile Include="Engine\FileMap.cpp" />
     <ClCompile Include="Engine\FlcPlayer.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
@@ -313,6 +314,7 @@
     <ClCompile Include="Engine\Language.cpp" />
     <ClCompile Include="Engine\LanguagePlurality.cpp" />
     <ClCompile Include="Engine\LocalizedText.cpp" />
+    <ClCompile Include="Engine\ModInfo.cpp" />
     <ClCompile Include="Engine\Music.cpp" />
     <ClCompile Include="Engine\OpenGL.cpp" />
     <ClCompile Include="Engine\OptionInfo.cpp" />
@@ -620,6 +622,7 @@
     <ClInclude Include="Engine\DosFont.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\FastLineClip.h" />
+    <ClInclude Include="Engine\FileMap.h" />
     <ClInclude Include="Engine\FlcPlayer.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
@@ -630,6 +633,7 @@
     <ClInclude Include="Engine\LanguagePlurality.h" />
     <ClInclude Include="Engine\LocalizedText.h" />
     <ClInclude Include="Engine\Logger.h" />
+    <ClInclude Include="Engine\ModInfo.h" />
     <ClInclude Include="Engine\Music.h" />
     <ClInclude Include="Engine\OpenGL.h" />
     <ClInclude Include="Engine\OptionInfo.h" />

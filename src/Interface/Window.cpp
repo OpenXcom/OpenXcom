@@ -29,7 +29,7 @@ namespace OpenXcom
 
 const double Window::POPUP_SPEED = 0.05;
 
-Sound *Window::soundPopup[3] = {0, 0, 0};
+Sound *Window::soundPopup[3];
 
 /**
  * Sets up a blank window with the specified size and position.

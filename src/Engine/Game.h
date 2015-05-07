@@ -21,6 +21,7 @@
 
 #include <list>
 #include <string>
+#include <vector>
 #include <SDL.h>
 
 namespace OpenXcom
@@ -98,8 +99,8 @@ public:
 	void setSavedGame(SavedGame *save);
 	/// Gets the currently loaded ruleset.
 	Ruleset *getRuleset() const;
-	/// Loads a new ruleset for the game.
-	void loadRuleset();
+	/// Loads the rulesets specified in the game options.
+	void loadRulesets();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
 	/// Returns whether current state is the param state

@@ -22,7 +22,7 @@
 #include "../fmath.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
@@ -49,6 +49,9 @@
 #include "RuleInterface.h"
 #include "SoundDefinition.h"
 #include "RuleMusic.h"
+#include "../Geoscape/Globe.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -70,27 +73,75 @@
 #include "../Resource/ResourcePack.h"
 #include "RuleVideo.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Palette.h"
 
 namespace OpenXcom
 {
 
+void Ruleset::resetGlobalStatics()
+{
+	ResourcePack::DOOR_OPEN = 3;
+	ResourcePack::SLIDING_DOOR_OPEN = 20;
+	ResourcePack::SLIDING_DOOR_CLOSE = 21;
+	ResourcePack::SMALL_EXPLOSION = 2;
+	ResourcePack::LARGE_EXPLOSION = 5;
+	ResourcePack::EXPLOSION_OFFSET = 0;
+	ResourcePack::SMOKE_OFFSET = 8;
+	ResourcePack::UNDERWATER_SMOKE_OFFSET = 0;
+	ResourcePack::ITEM_DROP = 38;
+	ResourcePack::ITEM_THROW = 39;
+	ResourcePack::ITEM_RELOAD = 17;
+	ResourcePack::WALK_OFFSET = 22;
+	ResourcePack::FLYING_SOUND = 15;
+	ResourcePack::MALE_SCREAM[0] = 41;
+	ResourcePack::MALE_SCREAM[1] = 42;
+	ResourcePack::MALE_SCREAM[2] = 43;
+	ResourcePack::FEMALE_SCREAM[0] = 44;
+	ResourcePack::FEMALE_SCREAM[1] = 45;
+	ResourcePack::FEMALE_SCREAM[2] = 46;
+	ResourcePack::BUTTON_PRESS = 0;
+	ResourcePack::WINDOW_POPUP[0] = 1;
+	ResourcePack::WINDOW_POPUP[1] = 2;
+	ResourcePack::WINDOW_POPUP[2] = 3;
+	ResourcePack::UFO_FIRE = 8;
+	ResourcePack::UFO_HIT = 12;
+	ResourcePack::UFO_CRASH = 10;
+	ResourcePack::UFO_EXPLODE = 11;
+	ResourcePack::INTERCEPTOR_HIT = 10;
+	ResourcePack::INTERCEPTOR_EXPLODE = 13;
+	ResourcePack::GEOSCAPE_CURSOR = 252;
+	ResourcePack::BASESCAPE_CURSOR = 252;
+	ResourcePack::BATTLESCAPE_CURSOR = 144;
+	ResourcePack::UFOPAEDIA_CURSOR = 252;
+	ResourcePack::GRAPHS_CURSOR = 252;
+	ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
+	ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
+
+	Globe::OCEAN_COLOR = Palette::blockOffset(12);
+	Globe::COUNTRY_LABEL_COLOR = 239;
+	Globe::LINE_COLOR = 162;
+	Globe::CITY_LABEL_COLOR = 138;
+	Globe::BASE_LABEL_COLOR = 133;
+
+	TextButton::soundPress = 0;
+
+	Window::soundPopup[0] = 0;
+	Window::soundPopup[1] = 0;
+	Window::soundPopup[2] = 0;
+}
+
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_globe = new RuleGlobe();
 
-    // Check in which data dir the folder is stored
-    std::string path = CrossPlatform::getDataFolder("SoldierName/");
-	// Add soldier names
-	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam");
-
-	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	std::set<std::string> names = FileMap::filterFiles(FileMap::getVFolderContents("SoldierName"), "nam");
+	for (std::set<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
-		std::string file = CrossPlatform::noExt(*i);
 		SoldierNamePool *pool = new SoldierNamePool();
-		pool->load(file);
+		pool->load(FileMap::getFilePath("SoldierName/" + *i));
 		_names.push_back(pool);
 	}
 }
@@ -223,19 +274,15 @@ Ruleset::~Ruleset()
 	}
 }
 
-/**
- * Loads a ruleset's contents from the given source.
- * @param source The source to use.
- */
-void Ruleset::load(const std::string &source)
+void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 {
-	std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
-	if (!CrossPlatform::folderExists(dirname))
-		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
-	else
-		loadFiles(dirname);
+	size_t spriteOffset = 1000000 * modIdx;
 
-	_modIndex += 1000;
+	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
+	{
+		Log(LOG_INFO) << "- " << *i;
+		loadFile(*i, spriteOffset);
+	}
 }
 
 /**
@@ -243,7 +290,7 @@ void Ruleset::load(const std::string &source)
  * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
  */
-void Ruleset::loadFile(const std::string &filename)
+void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 {
 	YAML::Node doc = YAML::LoadFile(filename);
 
@@ -269,7 +316,7 @@ void Ruleset::loadFile(const std::string &filename)
 		if (rule != 0)
 		{
 			_facilityListOrder += 100;
-			rule->load(*i, _modIndex, _facilityListOrder);
+			rule->load(*i, spriteOffset, _facilityListOrder);
 		}
 	}
 	for (YAML::const_iterator i = doc["crafts"].begin(); i != doc["crafts"].end(); ++i)
@@ -278,7 +325,7 @@ void Ruleset::loadFile(const std::string &filename)
 		if (rule != 0)
 		{
 			_craftListOrder += 100;
-			rule->load(*i, this, _modIndex, _craftListOrder);
+			rule->load(*i, this, spriteOffset, _craftListOrder);
 		}
 	}
 	for (YAML::const_iterator i = doc["craftWeapons"].begin(); i != doc["craftWeapons"].end(); ++i)
@@ -286,7 +333,7 @@ void Ruleset::loadFile(const std::string &filename)
 		RuleCraftWeapon *rule = loadRule(*i, &_craftWeapons, &_craftWeaponsIndex);
 		if (rule != 0)
 		{
-			rule->load(*i, _modIndex);
+			rule->load(*i, spriteOffset);
 		}
 	}
 	for (YAML::const_iterator i = doc["items"].begin(); i != doc["items"].end(); ++i)
@@ -295,7 +342,7 @@ void Ruleset::loadFile(const std::string &filename)
 		if (rule != 0)
 		{
 			_itemListOrder += 100;
-			rule->load(*i, _modIndex, _itemListOrder);
+			rule->load(*i, spriteOffset, _itemListOrder);
 		}
 	}
 	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
@@ -344,7 +391,7 @@ void Ruleset::loadFile(const std::string &filename)
 		Unit *rule = loadRule(*i, &_units);
 		if (rule != 0)
 		{
-			rule->load(*i, _modIndex);
+			rule->load(*i, spriteOffset);
 		}
 	}
 	for (YAML::const_iterator i = doc["alienRaces"].begin(); i != doc["alienRaces"].end(); ++i)
@@ -499,7 +546,7 @@ void Ruleset::loadFile(const std::string &filename)
 		std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
 		// doesn't support modIndex
 		if (type != "TEXTURE.DAT")
-			extraSprites->load(*i, _modIndex);
+			extraSprites->load(*i, spriteOffset);
 		else
 			extraSprites->load(*i, 0);
 		_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
@@ -509,7 +556,7 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
-		extraSounds->load(*i, _modIndex);
+		extraSounds->load(*i, spriteOffset);
 		_extraSounds.push_back(std::make_pair(type, extraSounds.release()));
 		_extraSoundsIndex.push_back(type);
 	}
@@ -667,20 +714,6 @@ void Ruleset::loadFile(const std::string &filename)
 		{
 			rule->load(*i);
 		}
-	}
-}
-
-/**
- * Loads the contents of all the rule files in the given directory.
- * @param dirname The name of an existing directory containing rule files.
- */
-void Ruleset::loadFiles(const std::string &dirname)
-{
-	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
-
-	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
-	{
-		loadFile(dirname + *i);
 	}
 }
 
